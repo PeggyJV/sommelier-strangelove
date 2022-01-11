@@ -21,6 +21,6 @@ let nextConfig = {
 nextConfig = withBundleAnalyzer(nextConfig)
 
 // https://github.com/getsentry/sentry-webpack-plugin#options
-nextConfig = withSentryConfig(nextConfig, SentryOptions)
+// nextConfig = withSentryConfig(nextConfig, SentryOptions)
 
 module.exports = nextConfig
