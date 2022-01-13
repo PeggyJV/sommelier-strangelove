@@ -4,9 +4,9 @@ import Layout from 'components/Layout'
 import useEthereum from 'hooks/useEthereum'
 
 const PageHome: NextPage = () => {
-  const { data } = useEthereum()
+  const ethereum = useEthereum()
 
-  console.log({ data })
+  console.log({ ethereum })
 
   return (
     <Layout>

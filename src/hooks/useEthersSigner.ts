@@ -1,13 +1,18 @@
-import { useQuery } from 'react-query'
+import { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 
-const useEthersSigner = () =>
-  useQuery('ethers', () => {
+const useEthersSigner = () => {
+  const [signer, setSigner] = useState()
+
+  useEffect(() => {
     const ethereum = window.ethereum
     const provider = new ethers.providers.Web3Provider(ethereum)
-    const signer = provider.getSigner()
+    const ethSigner = provider.getSigner()
 
-    return signer
-  })
+    setSigner(ethSigner)
+  }, [])
+
+  return signer
+}
 
 export default useEthersSigner

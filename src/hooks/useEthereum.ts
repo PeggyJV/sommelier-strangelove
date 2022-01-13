@@ -1,10 +1,14 @@
-import { useQuery } from 'react-query'
+import { useEffect, useState } from 'react'
 
-const useEthereum = () =>
-  useQuery('ethereum', () => {
+const useEthereum = () => {
+  const [eth, setEth] = useState()
+  useEffect(() => {
     const ethereum = window.ethereum
 
-    return ethereum
-  })
+    setEth(ethereum)
+  }, [])
+
+  return eth
+}
 
 export default useEthereum
