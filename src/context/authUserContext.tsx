@@ -1,11 +1,16 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, FC } from 'react'
 
-const authUserContext = createContext({
+interface authUserContextInterface {
+  authUser: any
+  isLoading: boolean
+}
+
+const authUserContext = createContext<authUserContextInterface>({
   authUser: null,
   isLoading: true
 })
 
-export const AuthUserProvider = ({ children }) => {
+export const AuthUserProvider: FC = ({ children }) => {
   const auth = { authUser: 'bob', isLoading: false }
 
   return (

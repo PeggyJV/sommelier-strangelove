@@ -23,7 +23,7 @@
     },
     "target": "es5",
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "resolveJsonModule": true
   },
   "exclude": ["node_modules"],
