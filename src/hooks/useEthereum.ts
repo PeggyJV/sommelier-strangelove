@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import { ethers } from 'ethers'
 
 const useEthereum = () => {
-  const [eth, setEth] = useState<any>(null)
+  const [eth, setEth] = useState<ethers.providers.ExternalProvider>()
 
   useEffect(() => {
     const ethereum = window.ethereum
