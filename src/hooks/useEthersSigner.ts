@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 
 const useEthersSigner = () => {
-  const [signer, setSigner] = useState()
+  const [signer, setSigner] = useState<any>(null)
 
   useEffect(() => {
     const ethereum = window.ethereum

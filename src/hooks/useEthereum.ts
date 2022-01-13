@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
 const useEthereum = () => {
-  const [eth, setEth] = useState()
+  const [eth, setEth] = useState<any>(null)
+
   useEffect(() => {
     const ethereum = window.ethereum
 

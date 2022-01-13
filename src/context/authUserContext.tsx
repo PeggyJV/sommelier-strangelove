@@ -1,3 +1,5 @@
+import useEthereum from 'hooks/useEthereum'
+import useWallet from 'hooks/useWallet'
 import { createContext, useContext, FC } from 'react'
 
 interface authUserContextInterface {
@@ -11,6 +13,9 @@ const authUserContext = createContext<authUserContextInterface>({
 })
 
 export const AuthUserProvider: FC = ({ children }) => {
+  const account = useWallet()
+  console.log({ account })
+
   const auth = { authUser: 'bob', isLoading: false }
 
   return (
