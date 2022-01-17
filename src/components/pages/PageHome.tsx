@@ -1,17 +1,18 @@
 import { NextPage } from 'next'
-import { Container, Heading } from '@chakra-ui/react'
+import { Button, Container, Heading } from '@chakra-ui/react'
 import Layout from 'components/Layout'
-import useEthereum from 'hooks/useEthereum'
+import useEthersProvider from 'hooks/useEthersProvider'
 
 const PageHome: NextPage = () => {
-  const ethereum = useEthereum()
+  const provider = useEthersProvider()
 
-  console.log({ ethereum })
+  console.log({ provider })
 
   return (
     <Layout>
       <Container maxW='container.lg'>
         <Heading>Welcome Home</Heading>
+        <Button>MetaMask is: {false}</Button>
       </Container>
     </Layout>
   )

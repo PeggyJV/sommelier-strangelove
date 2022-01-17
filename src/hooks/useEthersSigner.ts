@@ -1,16 +1,8 @@
-import { useEffect, useState } from 'react'
-import { ethers } from 'ethers'
+import useEthersProvider from './useEthersProvider'
 
 const useEthersSigner = () => {
-  const [signer, setSigner] = useState<any>(null)
-
-  useEffect(() => {
-    const ethereum = window.ethereum
-    const provider = new ethers.providers.Web3Provider(ethereum)
-    const ethSigner = provider.getSigner()
-
-    setSigner(ethSigner)
-  }, [])
+  const provider = useEthersProvider()
+  const signer = provider?.getSigner()
 
   return signer
 }
