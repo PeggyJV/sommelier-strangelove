@@ -6,8 +6,12 @@ const useAddress = () => {
   const signer = useEthersSigner()
 
   const getAddress = async () => {
-    const address = await signer?.getAddress()
-    setAddress(address)
+    try {
+      const address = await signer?.getAddress()
+      setAddress(address)
+    } catch (err) {
+      console.error("Please verify you're logged in on MetaMask")
+    }
   }
 
   useEffect(() => {
