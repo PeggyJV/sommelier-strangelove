@@ -2,13 +2,10 @@ import useEthereum from 'hooks/useEthereum'
 
 const useConnectWallet = () => {
   const ethereum = useEthereum()
-  const getAccounts = () => {
-    const accounts = ethereum?.request!({ method: 'eth_requestAccounts' })
+  const connectToWallet = () =>
+    ethereum?.request!({ method: 'eth_requestAccounts' })
 
-    return accounts
-  }
-
-  return { getAccounts }
+  return { connectToWallet }
 }
 
 export default useConnectWallet

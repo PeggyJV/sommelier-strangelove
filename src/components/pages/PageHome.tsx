@@ -4,13 +4,13 @@ import Layout from 'components/Layout'
 import useConnectWallet from 'hooks/useConnectWallet'
 
 const PageHome: NextPage = () => {
-  const { getAccounts } = useConnectWallet()
+  const { connectToWallet } = useConnectWallet()
 
   return (
     <Layout>
       <Container maxW='container.lg'>
         <Heading>Welcome Home</Heading>
-        <Button onClick={getAccounts}>Connect with MetaMask</Button>
+        <Button onClick={connectToWallet}>Connect with MetaMask</Button>
       </Container>
     </Layout>
   )
