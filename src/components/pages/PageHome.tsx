@@ -1,18 +1,16 @@
 import { NextPage } from 'next'
 import { Button, Container, Heading } from '@chakra-ui/react'
 import Layout from 'components/Layout'
-import useEthersProvider from 'hooks/useEthersProvider'
+import useConnectWallet from 'hooks/useConnectWallet'
 
 const PageHome: NextPage = () => {
-  const provider = useEthersProvider()
-
-  console.log({ provider })
+  const { getAccounts } = useConnectWallet()
 
   return (
     <Layout>
       <Container maxW='container.lg'>
         <Heading>Welcome Home</Heading>
-        <Button>MetaMask is: {false}</Button>
+        <Button onClick={getAccounts}>Connect with MetaMask</Button>
       </Container>
     </Layout>
   )
