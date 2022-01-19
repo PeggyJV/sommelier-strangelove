@@ -40,6 +40,6 @@ export const DialogProvider: FC = ({ children }) => {
   )
 }
 
-export const useDialog = useContext(DialogContext)
+export const useDialog = () => useContext(DialogContext)
 
 export default DialogContext
