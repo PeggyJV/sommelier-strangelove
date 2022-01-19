@@ -21,8 +21,8 @@ export const MetaMaskProvider: FC = ({ children }) => {
   // we have to use this pattern because the window object is inaccessible on the server.
   useEffect(() => {
     const ethereum = window.ethereum
+
     if (ethereum) {
-      setEthereum(ethereum)
       const provider = new providers.Web3Provider(ethereum)
       const signer = provider?.getSigner()
       const getAddress = async () => {
@@ -33,6 +33,8 @@ export const MetaMaskProvider: FC = ({ children }) => {
           console.error("Please verify you're logged in on MetaMask")
         }
       }
+
+      setEthereum(ethereum)
       getAddress()
       setProvider(provider)
       setSigner(signer)
