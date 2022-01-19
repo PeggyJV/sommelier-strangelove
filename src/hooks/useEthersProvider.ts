@@ -6,9 +6,11 @@ const useEthersProvider = () => {
 
   useEffect(() => {
     const ethereum = window.ethereum
-    const provider = new providers.Web3Provider(ethereum)
+    if (ethereum) {
+      const provider = new providers.Web3Provider(ethereum)
 
-    setProvider(provider)
+      setProvider(provider)
+    }
   }, [])
 
   return provider
