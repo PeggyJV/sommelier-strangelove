@@ -1,10 +1,15 @@
-import useEthereum from 'hooks/useEthereum'
+import { useMetaMask } from 'context/metaMaskContext'
 
 const useConnectWallet = () => {
-  const ethereum = useEthereum()
-  const connectToWallet = () =>
-    ethereum?.request!({ method: 'eth_requestAccounts' })
+  const { ethereum } = useMetaMask()
 
+  const connectToWallet = () => {
+    if (ethereum === false) {
+      console.error('Please make sure you have MetaMask installed.')
+    } else {
+      ethereum?.request!({ method: 'eth_requestAccounts' })
+    }
+  }
   return { connectToWallet }
 }
 

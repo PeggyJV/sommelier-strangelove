@@ -15,17 +15,17 @@ const tx: utils.Deferrable<providers.TransactionRequest> = {
 
 const PageHome: NextPage = () => {
   const { connectToWallet } = useConnectWallet()
-  const { address, provider, signer } = useMetaMask()
+  const { ethereum, address, provider, signer } = useMetaMask()
 
   const handleTx = async () => {
     const txCount = await provider?.getTransactionCount(address as string)
 
     console.log({ txCount })
 
-    signer?.signTransaction(tx)
+    // signer?.signTransaction(tx)
   }
 
-  console.log({ address, provider, signer })
+  console.log({ ethereum, address, provider, signer })
 
   return (
     <Layout>
