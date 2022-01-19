@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { createContext, FC, useState, useEffect } from 'react'
+import { createContext, FC, useState, useEffect, useContext } from 'react'
 
 interface DialogContextProps {
   currentDialog: string | null
@@ -39,5 +39,7 @@ export const DialogProvider: FC = ({ children }) => {
     <DialogContext.Provider value={values}>{children}</DialogContext.Provider>
   )
 }
+
+export const useDialog = useContext(DialogContext)
 
 export default DialogContext
