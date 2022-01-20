@@ -68,3 +68,34 @@ const simpleSignature = async () => {
   let signature = await signer.sign(message)
 }
 ```
+
+### Transactions
+
+```tsx
+import { providers, utils } from 'ethers'
+import { useMetaMask } from 'context/metaMaskContext'
+
+const { ethereum, address, provider, signer } = useMetaMask()
+
+const tx: utils.Deferrable<providers.TransactionRequest> = {
+  chainId: 0,
+  data: '',
+  gasLimit: utils.parseUnits('10000000'),
+  nonce: 892374982734982734,
+  value: utils.parseUnits('10000000')
+}
+
+  const handleTx = async () => {
+    const txCount = await provider?.getTransactionCount(address as string)
+
+    console.log({ txCount })
+
+    signer?.signTransaction(tx)
+  }
+
+  console.log({ ethereum, address, provider, signer })
+
+  <Button colorScheme='green' onClick={handleTx}>
+    Make a transaction
+  </Button>
+```
