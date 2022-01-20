@@ -19,6 +19,7 @@
     "@emotion/styled": "^11",
     "@next/bundle-analyzer": "^12",
     "@sentry/nextjs": "^6",
+    "ethers": "^5.5.3",
     "framer-motion": "^5",
     "next": "^12",
     "next-plausible": "^3",

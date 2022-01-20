@@ -1,4 +1,4 @@
-import PageHome from 'components/pages/PageHome'
+import PageHome from 'components/_pages/PageHome'
 import type { NextPage } from 'next'
 
 const Home: NextPage = () => {

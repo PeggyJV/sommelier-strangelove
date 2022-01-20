@@ -15,6 +15,7 @@
     "paths": {
       "components/*": ["src/components/*"],
       "context/*": ["src/context/*"],
+      "hooks/*": ["src/hooks/*"],
       "pages/*": ["src/pages/*"],
       "public/*": ["src/public/*"],
       "theme/*": ["src/theme/*"],
@@ -22,7 +23,7 @@
     },
     "target": "es5",
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "resolveJsonModule": true
   },
   "exclude": ["node_modules"],

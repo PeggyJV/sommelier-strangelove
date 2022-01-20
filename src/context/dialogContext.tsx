@@ -1,43 +1,46 @@
-import { useRouter } from 'next/router'
-import { createContext, FC, useState, useEffect } from 'react'
+import { createContext, FC, useContext, useState } from 'react'
 
-interface DialogContextProps {
-  currentDialog: string | null
-  dialogData?: any
-  closeDialog?: () => void
-  openDialog?: (dialog: string, data?: any) => void
+export interface DialogContext {
+  title?: string
+  body?: any
+  isOpen?: boolean
+  openDialog: (title?: string, body?: any) => void
+  onClose: () => void
 }
 
-const DialogContext = createContext<DialogContextProps | null>(null)
+const defaultContext: DialogContext = {
+  title: '',
+  body: '',
+  onClose: () => {},
+  openDialog: () => {}
+}
+
+export const dialogContext = createContext<DialogContext>(defaultContext)
 
 export const DialogProvider: FC = ({ children }) => {
-  const [currentDialog, setCurrentDialog] = useState<string | null>(null)
-  const [dialogData, setDialogData] = useState<any>(null)
-  const router = useRouter()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [title, setTitle] = useState<string>()
+  const [body, setBody] = useState<string>()
 
-  /**
-   * When the route changes, close the dialog.
-   */
-  useEffect(() => {
-    closeDialog()
-  }, [router])
-
-  const closeDialog = () => setCurrentDialog(null)
-
-  const openDialog = (dialog: string, data?: any) => {
-    setCurrentDialog(dialog)
-    if (data) setDialogData(data)
+  const openDialog = (title?: string, body?: any) => {
+    setIsOpen(true)
+    setTitle(title)
+    if (body) setBody(body)
   }
 
-  const values: DialogContextProps = {
-    currentDialog,
-    dialogData,
-    closeDialog,
-    openDialog
+  const onClose = () => setIsOpen(false)
+
+  const value = {
+    title,
+    body,
+    isOpen,
+    openDialog,
+    onClose
   }
+
   return (
-    <DialogContext.Provider value={values}>{children}</DialogContext.Provider>
+    <dialogContext.Provider value={value}>{children}</dialogContext.Provider>
   )
 }
 
-export default DialogContext
+export const useDialog = () => useContext(dialogContext)
