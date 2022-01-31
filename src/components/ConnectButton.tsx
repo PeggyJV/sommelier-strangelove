@@ -47,7 +47,7 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
         onClick={handleClick}
         {...rest}
       >
-        Connect with {c.ready ? c.name : 'MetaMask'}
+        {c.ready ? `Connect with ${c.name}` : `Please install MetaMask`}
       </Button>
     </ClientOnly>
   )
