@@ -24,29 +24,31 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
   }, [error, toast])
 
   /**
-   * Connect to given connector, else, open MetaMask download page
+   * - If connector is ready (window.ethereum exists), it'll detect the connector
+   *   color scheme and attempt to connect on click.
+   *
+   * - If connector is not ready (window.ethereum does not exist), it'll render
+   *   as an anchor and opens MetaMask download page in a new tab
    */
-  const handleClick = () =>
-    c.ready
-      ? connect(c)
-      : window.open('https://metamask.io/download/', '_blank')
-
-  /**
-   * Resolve button color scheme by detecting known connectors, fallbacks to
-   * default color if connector is unknown, and defaults to orange if there
-   * are no connectors.
-   */
-  const colorScheme = c.ready ? getConnectorScheme(c.name) : 'orange'
+  const conditionalProps = React.useMemo<ButtonProps>(() => {
+    return c.ready
+      ? // connector ready props
+        {
+          colorScheme: getConnectorScheme(c.name),
+          onClick: () => connect(c)
+        }
+      : // connector not ready props
+        {
+          as: 'a',
+          colorScheme: 'orange',
+          href: 'https://metamask.io/download',
+          target: '_blank'
+        }
+  }, [c, connect])
 
   return (
     <ClientOnly>
-      <Button
-        colorScheme={colorScheme}
-        isLoading={loading}
-        key={c.id}
-        onClick={handleClick}
-        {...rest}
-      >
+      <Button isLoading={loading} key={c.id} {...conditionalProps} {...rest}>
         {c.ready ? `Connect with ${c.name}` : `Please install MetaMask`}
       </Button>
     </ClientOnly>
