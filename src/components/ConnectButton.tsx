@@ -23,18 +23,31 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
     }
   }, [error, toast])
 
+  /**
+   * Connect to given connector, else, open MetaMask download page
+   */
+  const handleClick = () =>
+    c.ready
+      ? connect(c)
+      : window.open('https://metamask.io/download/', '_blank')
+
+  /**
+   * Resolve button color scheme by detecting known connectors, fallbacks to
+   * default color if connector is unknown, and defaults to orange if there
+   * are no connectors.
+   */
+  const colorScheme = c.ready ? getConnectorScheme(c.name) : 'orange'
+
   return (
     <ClientOnly>
       <Button
-        colorScheme={getConnectorScheme(c.name)}
-        isDisabled={!c.ready}
+        colorScheme={colorScheme}
         isLoading={loading}
         key={c.id}
-        onClick={() => connect(c)}
+        onClick={handleClick}
         {...rest}
       >
-        Connect with {c.name}
-        {!c.ready && ' (unsupported)'}
+        Connect with {c.ready ? c.name : 'MetaMask'}
       </Button>
     </ClientOnly>
   )
