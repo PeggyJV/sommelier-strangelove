@@ -27,6 +27,8 @@ export const MetaMaskProvider: FC = ({ children }) => {
     const ethereum = window.ethereum
 
     if (ethereum) {
+      // TODO: resolve window.ethereum types
+      // @ts-expect-error mismatch window.ethereum typings
       const provider = new providers.Web3Provider(ethereum)
       const signer = provider?.getSigner()
       const getAddress = async () => {
@@ -38,6 +40,8 @@ export const MetaMaskProvider: FC = ({ children }) => {
         }
       }
 
+      // TODO: resolve window.ethereum types
+      // @ts-expect-error mismatch window.ethereum typings
       setEthereum(ethereum)
       getAddress()
       setProvider(provider)
