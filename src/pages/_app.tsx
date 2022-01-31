@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app'
 import PlausibleProvider from 'next-plausible'
 import theme from 'theme/index'
 import { QueryClientProvider, QueryClient } from 'react-query'
-import { MetaMaskProvider } from 'context/metaMaskContext'
+import { WagmiProvider } from 'context/wagmiContext'
 import AlertDialog from 'components/AlertDialog'
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -15,10 +15,10 @@ const App = ({ Component, pageProps }: AppProps) => {
       <PlausibleProvider domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}>
         <ChakraProvider theme={theme}>
           <DialogProvider>
-            <MetaMaskProvider>
+            <WagmiProvider>
               <Component {...pageProps} />
               <AlertDialog />
-            </MetaMaskProvider>
+            </WagmiProvider>
           </DialogProvider>
         </ChakraProvider>
       </PlausibleProvider>
