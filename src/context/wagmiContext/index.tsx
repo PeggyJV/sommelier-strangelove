@@ -3,7 +3,7 @@ import { Provider } from 'wagmi'
 
 export const WagmiProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Provider autoConnect>
+    <Provider autoConnect={false}>
       {children}
       {/*  */}
     </Provider>
