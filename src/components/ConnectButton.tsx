@@ -1,14 +1,14 @@
 import * as React from 'react'
-import { Button, useToast } from '@chakra-ui/react'
+import { Button, ButtonProps, useToast } from '@chakra-ui/react'
 import { Connector, useConnect } from 'wagmi'
 import ClientOnly from 'components/ClientOnly'
 import { getConnectorScheme } from 'src/utils/chakra'
 
-export interface ConnectButtonProps {
+export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
   connector: Connector
 }
 
-const ConnectButton = ({ connector: c }: ConnectButtonProps) => {
+const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
   const [{ error, loading }, connect] = useConnect()
   const toast = useToast()
 
@@ -31,6 +31,7 @@ const ConnectButton = ({ connector: c }: ConnectButtonProps) => {
         isLoading={loading}
         key={c.id}
         onClick={() => connect(c)}
+        {...rest}
       >
         Connect with {c.name}
         {!c.ready && ' (unsupported)'}
