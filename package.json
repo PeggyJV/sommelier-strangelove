@@ -29,7 +29,8 @@
     "react-hook-form": "^7",
     "react-icons": "^4",
     "react-query": "^3",
-    "wagmi": "^0"
+    "wagmi": "^0",
+    "zustand": "^3"
   },
   "devDependencies": {
     "@types/node": "17",
