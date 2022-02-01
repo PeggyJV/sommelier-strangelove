@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useEffect, useMemo } from 'react'
 import { Button, ButtonProps, useToast } from '@chakra-ui/react'
 import { Connector, useConnect } from 'wagmi'
 import ClientOnly from 'components/ClientOnly'
@@ -12,7 +12,7 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
   const [{ error, loading }, connect] = useConnect()
   const toast = useToast()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (error) {
       toast({
         title: 'Connection failed!',
@@ -30,7 +30,7 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
    * - If connector is not ready (window.ethereum does not exist), it'll render
    *   as an anchor and opens MetaMask download page in a new tab
    */
-  const conditionalProps = React.useMemo<ButtonProps>(() => {
+  const conditionalProps = useMemo<ButtonProps>(() => {
     return c.ready
       ? // connector ready props
         {
