@@ -1,24 +1,23 @@
-import React, { ReactElement } from 'react'
+import * as React from 'react'
 
-import NavLinks from './Navlinks'
-
-import { Box, Container, Flex } from '@chakra-ui/react'
+import { Box, Container, HStack, Icon, Link, Spacer } from '@chakra-ui/react'
 import { AiOutlineSmile } from 'react-icons/ai'
+import links from './links'
+import ConnectButton from 'components/ConnectButton'
 
-const Navbar = (): ReactElement => {
+const Navbar = () => {
   return (
-    <Container
-      as='nav'
-      display='flex'
-      px={4}
-      py={2}
-      maxW='container.lg'
-      justifyContent='space-between'
-      fontSize='xl'
-      textTransform='uppercase'
-    >
-      <Box as={AiOutlineSmile} boxSize={8} />
-      <NavLinks />
+    <Container alignItems='center' as='nav' maxW='container.lg' px={4} py={2}>
+      <HStack align='center' spacing={4}>
+        <Box as={AiOutlineSmile} boxSize={8} />
+        <Spacer />
+        {links.map(({ href, title }, i) => (
+          <Link key={i} href={href} textTransform='uppercase'>
+            {title}
+          </Link>
+        ))}
+        <ConnectButton />
+      </HStack>
     </Container>
   )
 }
