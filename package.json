@@ -1,17 +1,17 @@
 {
   "name": "somm-boilerplate",
   "scripts": {
-    "dev": "next dev",
-    "start": "next start",
-    "build": "next build",
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
     "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
+    "build": "next build",
     "cy:open": "cypress open",
     "cy:record": "cypress run --record",
     "cy:run": "cypress run",
     "deadcode": "ts-prune",
-    "lint": "next lint"
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
   },
   "dependencies": {
     "@chakra-ui/react": "^1",

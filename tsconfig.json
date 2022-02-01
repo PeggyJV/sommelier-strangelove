@@ -17,14 +17,14 @@
       "context/*": ["src/context/*"],
       "hooks/*": ["src/hooks/*"],
       "pages/*": ["src/pages/*"],
-      "public/*": ["src/public/*"],
+      "public/*": ["public/*"],
       "theme/*": ["src/theme/*"],
       "types/*": ["src/types/*"]
     },
-    "target": "es5",
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "resolveJsonModule": true
+    "target": "es5"
   },
   "exclude": ["node_modules"],
   "include": ["next-env.d.ts", "env.d.ts", "src/**/*.ts", "src/**/*.tsx"]
