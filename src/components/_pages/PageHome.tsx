@@ -1,7 +1,6 @@
 import { NextPage } from 'next'
 import {
   Avatar,
-  Box,
   Button,
   Container,
   Heading,
@@ -11,14 +10,13 @@ import {
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { useAccount, useConnect } from 'wagmi'
-import ClientOnly from 'components/ClientOnly'
-import { getConnectorScheme } from 'src/utils/chakra'
+import ConnectButton from 'components/ConnectButton'
 
 const PageHome: NextPage = () => {
   const [account, disconnect] = useAccount({
     fetchEns: true
   })
-  const [auth, connect] = useConnect()
+  const [auth] = useConnect()
 
   return (
     <Layout>
@@ -46,22 +44,10 @@ const PageHome: NextPage = () => {
           </HStack>
         )}
 
-        {!auth.data.connected && (
-          <ClientOnly>
-            {auth.data.connectors.map(c => (
-              <Button
-                colorScheme={getConnectorScheme(c.name)}
-                isDisabled={!c.ready}
-                isLoading={auth.loading}
-                key={c.id}
-                onClick={() => connect(c)}
-              >
-                Connect with {c.name}
-                {!c.ready && ' (unsupported)'}
-              </Button>
-            ))}
-          </ClientOnly>
-        )}
+        {!auth.data.connected &&
+          auth.data.connectors.map(c => (
+            <ConnectButton connector={c} key={c.id} />
+          ))}
       </Container>
     </Layout>
   )
