@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import { Box, Container, HStack, Icon, Link, Spacer } from '@chakra-ui/react'
 import { AiOutlineSmile } from 'react-icons/ai'
 import links from './links'
