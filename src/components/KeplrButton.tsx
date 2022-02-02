@@ -1,15 +1,15 @@
-import * as Chakra from '@chakra-ui/react'
+import { ButtonProps, useToast, Button } from '@chakra-ui/react'
 import { useCosmWasm } from 'hooks/cosmwasm'
 import { useEffect, useMemo } from 'react'
 
-export interface KeplrButtonProps extends Omit<Chakra.ButtonProps, 'children'> {
+export interface KeplrButtonProps extends Omit<ButtonProps, 'children'> {
   chainId?: string
   rpcEndpoint?: string
 }
 
 const KeplrButton = ({ chainId, rpcEndpoint, ...rest }: KeplrButtonProps) => {
   const cosmwasm = useCosmWasm()
-  const toast = Chakra.useToast()
+  const toast = useToast()
 
   useEffect(() => {
     if (cosmwasm.error) {
@@ -32,7 +32,7 @@ const KeplrButton = ({ chainId, rpcEndpoint, ...rest }: KeplrButtonProps) => {
    * - If wallet is not connected, clicking will attempt to connect with Keplr
    *   and attempt to instantiate signing client. (see {@link useCosmWasm})
    */
-  const conditionalProps = useMemo<Chakra.ButtonProps>(() => {
+  const conditionalProps = useMemo<ButtonProps>(() => {
     return cosmwasm.isSupported
       ? {
           // keplr supported props
@@ -53,7 +53,7 @@ const KeplrButton = ({ chainId, rpcEndpoint, ...rest }: KeplrButtonProps) => {
   }, [chainId, cosmwasm, rpcEndpoint])
 
   return (
-    <Chakra.Button
+    <Button
       colorScheme='purple'
       isDisabled={!cosmwasm.isSupported}
       isLoading={cosmwasm.isLoading}
@@ -65,7 +65,7 @@ const KeplrButton = ({ chainId, rpcEndpoint, ...rest }: KeplrButtonProps) => {
           ? `Disconnect ${cosmwasm.walletAddress?.slice(0, 8)}...`
           : 'Connect with Keplr'
         : 'Please install Keplr'}
-    </Chakra.Button>
+    </Button>
   )
 }
 
