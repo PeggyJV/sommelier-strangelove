@@ -8,24 +8,42 @@
 
 import create, { State } from 'zustand'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { useEffect } from 'react'
 
 // TODO: either fill default values or remove defaults
 export const DEFAULT_PUBLIC_CHAIN_ID = ''
 export const DEFAULT_PUBLIC_RPC_ENDPOINT = ''
 
+/**
+ * useCosmWasm store types, includes method to connect/disconnect and previous
+ * connected chainId and rpcEndpoint
+ *
+ * @see https://github.com/cosmos/cosmjs/tree/main/packages/stargate
+ */
 export interface CosmWasmStore extends State {
   error: any
-  loading: boolean
+  isLoading: boolean
+  isSupported: boolean
   signingClient: SigningCosmWasmClient | null
   walletAddress: string | null
+
+  _chainId?: string
+  _rpcEndpoint?: string
 
   connect: (chainId?: string, rpcEndpoint?: string) => void | Promise<void>
   disconnect: () => void | Promise<void>
 }
 
-export const useCosmWasm = create<CosmWasmStore>((set, get) => ({
+/**
+ * Main store hook for {@link useCosmWasm} (only directly use this for
+ * advanced use cases, e.g. directly mutate states or subscribing effects)
+ *
+ * @see {@link useCosmWasm}
+ */
+export const useCosmWasmStore = create<CosmWasmStore>((set, get) => ({
   error: null,
-  loading: true,
+  isLoading: false,
+  isSupported: false,
   signingClient: null,
   walletAddress: null,
 
@@ -34,12 +52,12 @@ export const useCosmWasm = create<CosmWasmStore>((set, get) => ({
     rpcEndpoint = DEFAULT_PUBLIC_RPC_ENDPOINT
   ) => {
     try {
-      set({ loading: true })
+      set({ isLoading: true })
       if (!window.keplr || !window.getOfflineSigner) {
         throw new Error('keplr instance not found')
       }
 
-      await window?.keplr.enable(chainId)
+      await window.keplr.enable(chainId)
 
       const offlineSigner = window.getOfflineSigner(chainId)
       const signingClient = await SigningCosmWasmClient.connectWithSigner(
@@ -48,12 +66,17 @@ export const useCosmWasm = create<CosmWasmStore>((set, get) => ({
       )
       const [{ address }] = await offlineSigner.getAccounts()
 
-      set({ signingClient, walletAddress: address })
+      set({
+        signingClient,
+        walletAddress: address,
+        _chainId: chainId,
+        _rpcEndpoint: rpcEndpoint
+      })
     } catch (error: unknown) {
       console.log(error)
       set({ error })
     } finally {
-      set({ loading: false })
+      set({ isLoading: false })
     }
   },
   disconnect: async () => {
@@ -62,9 +85,24 @@ export const useCosmWasm = create<CosmWasmStore>((set, get) => ({
     store.signingClient?.disconnect()
     set({
       error: null,
-      loading: false,
+      isLoading: false,
       signingClient: null,
       walletAddress: null
     })
   }
 }))
+
+/**
+ * Main store hook with side effect checking supported state (for advanced use
+ * cases, use the main store {@link useCosmWasmStore})
+ *
+ * @see {@link useCosmWasmStore}
+ */
+export const useCosmWasm = () => {
+  useEffect(() => {
+    useCosmWasmStore.setState({
+      isSupported: Boolean(window.keplr)
+    })
+  }, [])
+  return useCosmWasmStore()
+}
