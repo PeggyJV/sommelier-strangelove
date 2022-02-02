@@ -47,16 +47,11 @@ const MetaMaskButton = ({
    *   as an anchor and opens MetaMask download page in a new tab
    */
   const conditionalProps = useMemo<ButtonProps>(() => {
-    return isConnected
-      ? {
-          colorScheme: 'red',
-          onClick: disconnect
-        }
-      : isReady
+    return isReady
       ? {
           // connector ready props
           colorScheme: getConnectorScheme(c?.name),
-          onClick: () => connect(c)
+          onClick: isConnected ? disconnect : () => connect(c)
         }
       : {
           // connector not ready props
