@@ -48,7 +48,13 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
 
   return (
     <ClientOnly>
-      <Button isLoading={loading} key={c.id} {...conditionalProps} {...rest}>
+      <Button
+        isLoading={loading}
+        key={c.id}
+        {...conditionalProps}
+        {...rest}
+        minW='max-content'
+      >
         {c.ready ? `Connect with ${c.name}` : `Please install MetaMask`}
       </Button>
     </ClientOnly>

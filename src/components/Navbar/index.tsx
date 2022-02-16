@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react'
-
-import NavLinks from './Navlinks'
-
-import { Box, Container } from '@chakra-ui/react'
-import { AiOutlineSmile } from 'react-icons/ai'
+import { Button, Container, Heading, HStack, Text } from '@chakra-ui/react'
 import { useAccount, useConnect } from 'wagmi'
 import ConnectButton from 'components/ConnectButton'
+import NavLinks from './Navlinks'
+import { ChainSelector } from 'components/ChainSelector'
+
+const placeholderChains = ['Ethereum', 'Atom', 'Somm']
 
 const Navbar = (): ReactElement => {
   const [account, disconnect] = useAccount({
@@ -13,23 +13,42 @@ const Navbar = (): ReactElement => {
   })
   const [auth] = useConnect()
 
+  const isConnected = auth.data.connected
+
   return (
     <Container
       as='nav'
-      display='flex'
-      px={4}
-      py={2}
+      py={8}
       maxW='container.lg'
+      display='flex'
       justifyContent='space-between'
       fontSize='xl'
-      textTransform='uppercase'
     >
-      <Box as={AiOutlineSmile} boxSize={8} />
-      <NavLinks />
-      {!auth.data.connected &&
-        auth.data.connectors.map(c => (
-          <ConnectButton connector={c} key={c.id} />
-        ))}
+      <Heading>Welcome</Heading>
+      <HStack spacing={4}>
+        {/* <NavLinks /> */}
+        <ChainSelector chains={placeholderChains} />
+
+        {isConnected
+          ? account.data && (
+              <HStack>
+                <Text maxW='12ch' isTruncated>
+                  {account?.data?.address}
+                </Text>
+                <Button
+                  minW='max-content'
+                  colorScheme='red'
+                  onClick={disconnect}
+                  isLoading={account.loading}
+                >
+                  Disconnect
+                </Button>
+              </HStack>
+            )
+          : auth.data.connectors.map(c => (
+              <ConnectButton connector={c} key={c.id} />
+            ))}
+      </HStack>
     </Container>
   )
 }
