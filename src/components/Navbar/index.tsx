@@ -2,10 +2,17 @@ import React, { ReactElement } from 'react'
 
 import NavLinks from './Navlinks'
 
-import { Box, Container, Flex } from '@chakra-ui/react'
+import { Box, Container } from '@chakra-ui/react'
 import { AiOutlineSmile } from 'react-icons/ai'
+import { useAccount, useConnect } from 'wagmi'
+import ConnectButton from 'components/ConnectButton'
 
 const Navbar = (): ReactElement => {
+  const [account, disconnect] = useAccount({
+    fetchEns: true
+  })
+  const [auth] = useConnect()
+
   return (
     <Container
       as='nav'
@@ -19,6 +26,10 @@ const Navbar = (): ReactElement => {
     >
       <Box as={AiOutlineSmile} boxSize={8} />
       <NavLinks />
+      {!auth.data.connected &&
+        auth.data.connectors.map(c => (
+          <ConnectButton connector={c} key={c.id} />
+        ))}
     </Container>
   )
 }

@@ -21,7 +21,7 @@ const PageHome: NextPage = () => {
   return (
     <Layout>
       <Container maxW='container.lg'>
-        <Heading>Welcome Home</Heading>
+        <Heading>Welcome</Heading>
 
         {auth.data.connected && account.data && (
           <HStack p={4} rounded='md' borderWidth={1} spacing={4}>
@@ -44,10 +44,7 @@ const PageHome: NextPage = () => {
           </HStack>
         )}
 
-        {!auth.data.connected &&
-          auth.data.connectors.map(c => (
-            <ConnectButton connector={c} key={c.id} />
-          ))}
+
       </Container>
     </Layout>
   )
