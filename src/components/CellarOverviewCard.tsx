@@ -19,7 +19,7 @@ export const CellarOverviewCard = () => {
       <Grid
         p={4}
         gap={4}
-        templateRows='repeat(6, 1fr)'
+        templateRows='repeat(5, 1fr)'
         templateColumns='repeat(5, 1fr)'
       >
         {/* Left-hand rows */}
