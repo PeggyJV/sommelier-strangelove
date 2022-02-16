@@ -50,7 +50,7 @@ export const CellarOverviewCard = () => {
         >
           <Box>
             <Text>Depositors</Text>
-            <HStack>
+            <HStack align='center'>
               <Icon as={IoPersonCircleOutline} boxSize={7} />
               <Text fontSize='xl' fontWeight='medium'>
                 345
@@ -59,8 +59,8 @@ export const CellarOverviewCard = () => {
           </Box>
           <Flex direction='column' align='center'>
             <Text>Asset</Text>
-            <HStack>
-              <Icon as={BsCircleFill} boxSize={6} />
+            <HStack align='center'>
+              <Icon as={BsCircleFill} boxSize={6} color='gray.300' />
               <Text fontSize='xl'>ETH</Text>
             </HStack>
           </Flex>
