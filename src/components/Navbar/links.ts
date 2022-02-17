@@ -1,6 +1,6 @@
 interface Link {
-  href?: string
-  title?: string
+  href: string
+  title: string
 }
 
 const links: Link[] = [
