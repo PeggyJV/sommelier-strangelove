@@ -1,22 +1,24 @@
 {
   "name": "somm-boilerplate",
   "scripts": {
-    "dev": "next dev",
-    "start": "next start",
-    "build": "next build",
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
     "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
+    "build": "next build",
     "cy:open": "cypress open",
     "cy:record": "cypress run --record",
     "cy:run": "cypress run",
     "deadcode": "ts-prune",
-    "lint": "next lint"
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
   },
   "dependencies": {
     "@chakra-ui/react": "^1",
+    "@cosmjs/cosmwasm-stargate": "^0.27.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@keplr-wallet/types": "^0.9.10",
     "@next/bundle-analyzer": "^12",
     "@sentry/nextjs": "^6",
     "ethers": "^5.5.3",
@@ -28,7 +30,8 @@
     "react-hook-form": "^7",
     "react-icons": "^4",
     "react-query": "^3",
-    "wagmi": "^0"
+    "wagmi": "^0",
+    "zustand": "^3"
   },
   "devDependencies": {
     "@types/node": "17",
@@ -46,5 +49,9 @@
     "typescript": "^4",
     "url": "^0"
   },
-  "private": true
+  "private": true,
+  "volta": {
+    "node": "16.14.0",
+    "yarn": "1.22.17"
+  }
 }

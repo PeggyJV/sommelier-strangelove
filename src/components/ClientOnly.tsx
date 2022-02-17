@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { ReactNode, useState, useEffect } from 'react'
 
 /**
  * Component wrapper to render children only when mounted (client-side)
@@ -6,10 +6,10 @@ import * as React from 'react'
  * - rendering wagmi related components
  * - rendering components using `window`
  */
-const ClientOnly = ({ children }: { children: React.ReactNode }) => {
-  const [mounted, setMounted] = React.useState(false)
+const ClientOnly = ({ children }: { children: ReactNode }) => {
+  const [mounted, setMounted] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true)
   }, [])
 
