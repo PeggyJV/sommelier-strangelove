@@ -1,9 +1,64 @@
-import MetaMaskButton, { MetaMaskButtonProps } from './MetaMaskButton'
+import * as React from 'react'
+import { Button, ButtonProps, useToast } from '@chakra-ui/react'
+import { Connector, useConnect } from 'wagmi'
+import ClientOnly from 'components/ClientOnly'
+import { getConnectorScheme } from 'src/utils/chakra'
 
-/** @deprecated use {@link MetaMaskButtonProps} */
-export type ConnectButtonProps = MetaMaskButtonProps
+export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
+  connector: Connector
+}
 
-/** @deprecated use {@link MetaMaskButton} */
-const ConnectButton = MetaMaskButton
+const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
+  const [{ error, loading }, connect] = useConnect()
+  const toast = useToast()
+
+  React.useEffect(() => {
+    if (error) {
+      toast({
+        title: 'Connection failed!',
+        description: error.message,
+        status: 'error',
+        isClosable: true
+      })
+    }
+  }, [error, toast])
+
+  /**
+   * - If connector is ready (window.ethereum exists), it'll detect the connector
+   *   color scheme and attempt to connect on click.
+   *
+   * - If connector is not ready (window.ethereum does not exist), it'll render
+   *   as an anchor and opens MetaMask download page in a new tab
+   */
+  const conditionalProps = React.useMemo<ButtonProps>(() => {
+    return c.ready
+      ? // connector ready props
+        {
+          colorScheme: getConnectorScheme(c.name),
+          onClick: () => connect(c)
+        }
+      : // connector not ready props
+        {
+          as: 'a',
+          colorScheme: 'orange',
+          href: 'https://metamask.io/download',
+          target: '_blank'
+        }
+  }, [c, connect])
+
+  return (
+    <ClientOnly>
+      <Button
+        isLoading={loading}
+        key={c.id}
+        {...conditionalProps}
+        {...rest}
+        minW='max-content'
+      >
+        {c.ready ? `Connect with ${c.name}` : `Please install MetaMask`}
+      </Button>
+    </ClientOnly>
+  )
+}
 
 export default ConnectButton
