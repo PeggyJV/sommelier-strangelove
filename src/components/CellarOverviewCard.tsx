@@ -10,9 +10,12 @@ import {
 } from '@chakra-ui/react'
 import { IoPersonCircleOutline } from 'react-icons/io5'
 import { BsCircleFill } from 'react-icons/bs'
+import { useConnect } from 'wagmi'
 
 export const CellarOverviewCard = () => {
-  const placeholderDate = new Date().toLocaleDateString()
+  const [auth] = useConnect()
+
+  const isConnected = auth.data.connected
 
   return (
     <Box borderRadius={10} bg='gray.100' color='gray.500' overflow='hidden'>
@@ -20,31 +23,25 @@ export const CellarOverviewCard = () => {
         p={4}
         gap={4}
         templateRows='repeat(5, 1fr)'
-        templateColumns='repeat(5, 1fr)'
+        templateColumns='repeat(7, 1fr)'
       >
         {/* Left-hand rows */}
-        <GridItem rowSpan={2} colSpan={3} display='flex'>
+        <GridItem rowSpan={2} colSpan={4} display='flex'>
           <Img src='/placeholders/aave.svg' boxSize={14} mr={4} />
           <Box flex={1}>
-            <Flex justify='space-between'>
-              <Text>AAVE</Text>
-              <Text>{placeholderDate}</Text>
-            </Flex>
-            <Flex justify='space-between'>
-              <Text fontSize='xl' fontWeight='medium' color='gray.600'>
-                Cellar name
-              </Text>
-              <Text color='green.400'>+5.41%</Text>
-            </Flex>
+            <Text>AAVE</Text>
+            <Text fontSize='xl' fontWeight='medium' color='gray.600'>
+              Cellar name
+            </Text>
           </Box>
         </GridItem>
-        <GridItem rowSpan={3} colSpan={3} bg='gray.500' borderRadius={5} />
+        <GridItem rowSpan={3} colSpan={4} bg='gray.500' borderRadius={5} />
         {/* Right-hand rows */}
         <GridItem
           rowStart={1}
           rowSpan={2}
-          colStart={4}
-          colSpan={2}
+          colStart={5}
+          colSpan={3}
           display='flex'
           justifyContent='space-between'
         >
@@ -68,20 +65,20 @@ export const CellarOverviewCard = () => {
         <GridItem
           rowStart={3}
           rowSpan={3}
-          colStart={4}
-          colSpan={2}
+          colStart={5}
+          colSpan={3}
           display='flex'
           flexDir='column'
           justifyContent='center'
         >
           <Flex justify='space-between'>
-            <Text fontWeight='medium'>Net Asset Value</Text>
-            <Text color='gray.600'>2,000</Text>
+            <Text>1D TVL</Text>
+            <Text color='gray.600'>$1,234,567.89</Text>
           </Flex>
           <Box borderTopWidth={1} borderColor='gray.400' my={2} />
           <Flex justify='space-between'>
-            <Text fontWeight='medium'>Net Returns</Text>
-            <Text color='gray.600'>478.34</Text>
+            <Text>1D APY</Text>
+            <Text color='gray.600'>+6.34%</Text>
           </Flex>
         </GridItem>
       </Grid>
@@ -92,7 +89,7 @@ export const CellarOverviewCard = () => {
         textAlign='center'
         fontFamily='mono'
       >
-        Add Deposit
+        {isConnected ? 'Add Deposit' : 'View Cellar'}
       </Text>
     </Box>
   )
