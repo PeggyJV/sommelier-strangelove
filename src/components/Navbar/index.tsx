@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { Button, Container, Heading, HStack, Text } from '@chakra-ui/react'
+import { Container, Heading, HStack } from '@chakra-ui/react'
 import { useAccount, useConnect } from 'wagmi'
 import ConnectButton from 'components/ConnectButton'
 import { ChainSelector } from 'components/ChainSelector'
@@ -27,26 +27,10 @@ const Navbar = (): ReactElement => {
       <Heading>Welcome</Heading>
       <HStack spacing={4}>
         {/* <NavLinks /> */}
-        {isConnected
-          ? account.data && (
-              <HStack spacing={6}>
-                <ChainSelector chains={placeholderChains} />
-                <Text maxW='12ch' isTruncated>
-                  {account?.data?.address}
-                </Text>
-                <Button
-                  minW='max-content'
-                  colorScheme='red'
-                  onClick={disconnect}
-                  isLoading={account.loading}
-                >
-                  Disconnect
-                </Button>
-              </HStack>
-            )
-          : auth.data.connectors.map(c => (
-              <ConnectButton connector={c} key={c.id} />
-            ))}
+        {isConnected && <ChainSelector chains={placeholderChains} />}
+        {auth.data.connectors.map(c => (
+          <ConnectButton connector={c} key={c.id} />
+        ))}
       </HStack>
     </Container>
   )
