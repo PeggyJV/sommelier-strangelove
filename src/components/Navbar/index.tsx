@@ -2,8 +2,8 @@ import React, { ReactElement } from 'react'
 import { Button, Container, Heading, HStack, Text } from '@chakra-ui/react'
 import { useAccount, useConnect } from 'wagmi'
 import ConnectButton from 'components/ConnectButton'
-import NavLinks from './Navlinks'
 import { ChainSelector } from 'components/ChainSelector'
+// import NavLinks from './Navlinks'
 
 const placeholderChains = ['Ethereum', 'Atom', 'Somm']
 
