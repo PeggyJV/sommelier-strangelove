@@ -27,11 +27,10 @@ const Navbar = (): ReactElement => {
       <Heading>Welcome</Heading>
       <HStack spacing={4}>
         {/* <NavLinks /> */}
-        <ChainSelector chains={placeholderChains} />
-
         {isConnected
           ? account.data && (
-              <HStack>
+              <HStack spacing={6}>
+                <ChainSelector chains={placeholderChains} />
                 <Text maxW='12ch' isTruncated>
                   {account?.data?.address}
                 </Text>
