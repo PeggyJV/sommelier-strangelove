@@ -1,16 +1,21 @@
 import * as React from 'react'
 import { Button, ButtonProps, useToast } from '@chakra-ui/react'
-import { Connector, useConnect } from 'wagmi'
+import { Connector, useAccount, useConnect } from 'wagmi'
 import ClientOnly from 'components/ClientOnly'
 import { getConnectorScheme } from 'src/utils/chakra'
+import { ConnectedPopover } from './ConnectedPopover'
 
 export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
   connector: Connector
 }
 
 const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
-  const [{ error, loading }, connect] = useConnect()
+  const [account] = useAccount({
+    fetchEns: true
+  })
+  const [{ error, loading, data }, connect] = useConnect()
   const toast = useToast()
+  const isConnected = data.connected
 
   React.useEffect(() => {
     if (error) {
@@ -48,15 +53,19 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
 
   return (
     <ClientOnly>
-      <Button
-        isLoading={loading}
-        key={c.id}
-        {...conditionalProps}
-        {...rest}
-        minW='max-content'
-      >
-        {c.ready ? `Connect with ${c.name}` : `Please install MetaMask`}
-      </Button>
+      {isConnected ? (
+        account.data && <ConnectedPopover />
+      ) : (
+        <Button
+          isLoading={loading}
+          key={c.id}
+          {...conditionalProps}
+          {...rest}
+          minW='max-content'
+        >
+          {c.ready ? `Connect with ${c.name}` : `Please install MetaMask`}
+        </Button>
+      )}
     </ClientOnly>
   )
 }
