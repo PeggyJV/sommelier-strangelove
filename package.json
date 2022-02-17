@@ -46,5 +46,9 @@
     "typescript": "^4",
     "url": "^0"
   },
-  "private": true
+  "private": true,
+  "volta": {
+    "node": "16.14.0",
+    "yarn": "1.22.17"
+  }
 }
