@@ -10,16 +10,28 @@ import {
   VStack
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
-import { Hero } from 'components/Hero'
 import { CellarOverviewCard } from 'components/CellarOverviewCard'
-import Link from 'components/Link'
 
 const PageHome: NextPage = () => {
   return (
     <Layout>
       <Container maxW='container.lg'>
         <VStack spacing={6} align='flex-start'>
-          <Hero />
+          <Grid templateColumns='1fr 1fr' gap={6} alignItems='center'>
+            <VStack align='flex-start' spacing={4} maxW='70ch'>
+              <Heading>Sommelier DeFi</Heading>
+              <Text>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+                quae ab illo inventore veritatis et quasi architecto beatae
+                vitae dicta sunt explicabo nemo
+              </Text>
+              <Button px={14} bg='white' color='black'>
+                Explore More
+              </Button>
+            </VStack>
+            <Box h={330} bg='gray.800' />
+          </Grid>
           <Flex w='100%' as='section' direction='column'>
             <Box pb={4}>
               <Heading>Cellar</Heading>
@@ -30,19 +42,16 @@ const PageHome: NextPage = () => {
               <Flex
                 align='center'
                 justify='center'
-                bg='black'
+                bg='gray.800'
                 borderRadius={10}
               >
                 <Flex direction='column' align='center'>
                   <Text fontSize='2xl' fontWeight='medium'>
-                    Lorem more on the way
+                    More Cellars on the Way
                   </Text>
-                  <Text fontSize='lg' color='whiteAlpha.800' pb={6}>
-                    Lorem ipsum dolor iram servus
+                  <Text color='whiteAlpha.800' pb={6}>
+                    Additional Cellar information
                   </Text>
-                  <Button w='100%' bg='white' color='black'>
-                    Connect Wallet
-                  </Button>
                 </Flex>
               </Flex>
             </Grid>
@@ -50,26 +59,23 @@ const PageHome: NextPage = () => {
           <Grid
             w='100%'
             as='section'
-            p={4}
+            p={6}
             gap={6}
-            templateColumns='1fr 1fr'
+            templateColumns='0.65fr 1fr'
             bg='gray.800'
+            borderRadius={10}
           >
-            <Flex align='center' justify='center' bg='gray.900'>
+            <Flex h={272} align='center' justify='center' bg='gray.900'>
               <Text color='whiteAlpha.700'>Illustration</Text>
             </Flex>
-            <VStack spacing={2} align='flex-start' maxW='50ch'>
-              <Text>Sommelier Selects</Text>
-              <Heading>
-                About <br /> AAVE Strategy
-              </Heading>
+            <VStack spacing={2} align='flex-start' justify='center' maxW='50ch'>
+              <Heading>About AAVE Strategy</Heading>
               <Text>
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem
                 accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
                 quae ab illo inventore veritatis et quasi architecto beatae
                 vitae dicta sunt explicabo. Nemo enim ipsam voluptate.
               </Text>
-              <Link>Expand</Link>
             </VStack>
           </Grid>
         </VStack>
