@@ -7,6 +7,8 @@ import { QueryClientProvider, QueryClient } from 'react-query'
 import { WagmiProvider } from 'context/wagmiContext'
 import AlertDialog from 'components/AlertDialog'
 
+import '@fontsource/oswald/700.css'
+
 const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient()
 
