@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import { VFC } from 'react'
 import { Container, Heading, HStack } from '@chakra-ui/react'
 import { useConnect } from 'wagmi'
 import ConnectButton from 'components/ConnectButton'
@@ -6,7 +6,7 @@ import { ChainSelector } from 'components/ChainSelector'
 
 const placeholderChains = ['Ethereum', 'Atom', 'Somm']
 
-export const TopNav = (): ReactElement => {
+export const TopNav: VFC = () => {
   const [auth] = useConnect()
 
   const isConnected = auth.data.connected

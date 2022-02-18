@@ -12,7 +12,9 @@ const Layout = ({ children, ...rest }: Props): ReactElement => {
         <SideNav />
         <Flex px={6} direction='column'>
           <TopNav />
-          <Box flex={1}>{children}</Box>
+          <Box as='main' flex={1}>
+            {children}
+          </Box>
         </Flex>
       </Grid>
     </Container>
