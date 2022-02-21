@@ -16,6 +16,7 @@ import Layout from 'components/Layout'
 import { MinimalOverviewCard } from 'components/MinimalOverviewCard'
 
 const gridProps: GridProps = {
+  as: 'section',
   py: 6,
   gap: 6,
   templateColumns: 'repeat(6, 1fr)'
