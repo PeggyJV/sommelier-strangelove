@@ -2,21 +2,26 @@ import { VFC } from 'react'
 import {
   Grid,
   GridItem,
-  GridItemProps,
+  GridProps,
   HStack,
   Icon,
-  Text
+  Text,
+  TextProps,
+  VStack
 } from '@chakra-ui/react'
 import { BsCircleFill } from 'react-icons/bs'
 import { IoPersonCircleOutline } from 'react-icons/io5'
 
-const sharedProps: GridItemProps = {
-  display: 'flex',
-  flexDir: 'column',
-  alignItems: 'center'
+const headingProps: TextProps = {
+  color: 'gray.400',
+  fontSize: 'sm'
 }
 
-export const MinimalOverviewCard: VFC = () => {
+const textProps: TextProps = {
+  fontSize: 'xl'
+}
+
+export const MinimalOverviewCard: VFC<GridProps> = props => {
   return (
     <Grid
       p={6}
@@ -24,28 +29,33 @@ export const MinimalOverviewCard: VFC = () => {
       templateColumns='repeat(3, 1fr)'
       bg='gray.800'
       borderRadius={10}
+      {...props}
     >
-      <GridItem {...sharedProps}>
-        <Text>ID</Text>
-        <Text maxW='10ch' isTruncated>
-          12a2452abcdefghijklmnop
-        </Text>
-      </GridItem>
-      <GridItem {...sharedProps}>
-        <Text>Depositors</Text>
-        <HStack align='center'>
-          <Icon as={IoPersonCircleOutline} boxSize={7} />
-          <Text fontSize='xl' fontWeight='medium'>
-            345
+      <GridItem>
+        <VStack>
+          <Text {...headingProps}>ID</Text>
+          <Text maxW='10ch' isTruncated {...textProps}>
+            12a2452abcdefghijklmnop
           </Text>
-        </HStack>
+        </VStack>
       </GridItem>
-      <GridItem {...sharedProps}>
-        <Text>Asset</Text>
-        <HStack align='center'>
-          <Icon as={BsCircleFill} boxSize={6} color='gray.300' />
-          <Text fontSize='xl'>ETH</Text>
-        </HStack>
+      <GridItem>
+        <VStack>
+          <Text {...headingProps}>Depositors</Text>
+          <HStack>
+            <Icon as={IoPersonCircleOutline} boxSize={7} />
+            <Text {...textProps}>345</Text>
+          </HStack>
+        </VStack>
+      </GridItem>
+      <GridItem>
+        <VStack>
+          <Text {...headingProps}>Asset</Text>
+          <HStack>
+            <Icon as={BsCircleFill} boxSize={6} color='gray.300' />
+            <Text {...textProps}>ETH</Text>
+          </HStack>
+        </VStack>
       </GridItem>
     </Grid>
   )

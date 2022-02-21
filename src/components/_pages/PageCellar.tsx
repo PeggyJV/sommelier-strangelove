@@ -10,8 +10,10 @@ import {
   ListItem,
   Text,
   TextProps,
-  UnorderedList
+  UnorderedList,
+  VStack
 } from '@chakra-ui/react'
+import { DepositStatusCard } from 'components/DepositStatusCard'
 import Layout from 'components/Layout'
 import { MinimalOverviewCard } from 'components/MinimalOverviewCard'
 
@@ -69,7 +71,10 @@ const PageCellar = () => {
           </UnorderedList>
         </GridItem>
         <GridItem>
-          <MinimalOverviewCard />
+          <VStack spacing={6}>
+            <MinimalOverviewCard w='100%' />
+            <DepositStatusCard w='100%' />
+          </VStack>
         </GridItem>
       </Grid>
       <Divider />
