@@ -11,6 +11,7 @@ import {
 import { IoPersonCircleOutline } from 'react-icons/io5'
 import { BsCircleFill } from 'react-icons/bs'
 import { VFC } from 'react'
+import { Card } from './Card'
 
 interface Props {
   isConnected: boolean
@@ -18,7 +19,7 @@ interface Props {
 
 export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
   return (
-    <Box borderRadius={10} bg='gray.100' color='gray.500' overflow='hidden'>
+    <Card bg='gray.100' color='gray.500'>
       <Grid
         p={4}
         gap={4}
@@ -91,6 +92,6 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
       >
         {isConnected ? 'Add Deposit' : 'View Cellar'}
       </Text>
-    </Box>
+    </Card>
   )
 }

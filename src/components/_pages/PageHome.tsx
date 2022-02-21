@@ -9,7 +9,7 @@ import {
   VStack
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
-import { CellarOverviewCard } from 'components/CellarOverviewCard'
+import { CellarOverviewCard } from 'components/_cards/CellarOverviewCard'
 import { useConnect } from 'wagmi'
 
 const PageHome: NextPage = () => {

@@ -13,9 +13,9 @@ import {
   UnorderedList,
   VStack
 } from '@chakra-ui/react'
-import { DepositStatusCard } from 'components/DepositStatusCard'
 import Layout from 'components/Layout'
-import { MinimalOverviewCard } from 'components/MinimalOverviewCard'
+import { DepositStatusCard } from 'components/_cards/DepositStatusCard'
+import { MinimalOverviewCard } from 'components/_cards/MinimalOverviewCard'
 import { useConnect } from 'wagmi'
 
 const gridProps: GridProps = {
