@@ -4,7 +4,7 @@ import { useConnect } from 'wagmi'
 import ConnectButton from 'components/ConnectButton'
 import { ChainSelector } from 'components/ChainSelector'
 
-const placeholderChains = ['Ethereum', 'Atom', 'Somm']
+const placeholderChains = ['Ethereum', 'Cosmos']
 
 export const TopNav: VFC = () => {
   const [auth] = useConnect()
