@@ -19,9 +19,9 @@ interface Props {
 
 export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
   return (
-    <Card bg='gray.100' color='gray.500'>
+    <Card p={0} bg='gray.100' color='gray.500'>
       <Grid
-        p={4}
+        p={6}
         gap={4}
         templateRows='repeat(5, 1fr)'
         templateColumns='repeat(7, 1fr)'

@@ -20,7 +20,7 @@ const textProps: TextProps = {
 
 export const DepositStatusCard: VFC<GridProps> = props => {
   return (
-    <Card p={6} bg='gray.800' {...props}>
+    <Card bg='gray.800' {...props}>
       <Grid gap={6} templateColumns='repeat(2, 1fr)'>
         <GridItem>
           <VStack>

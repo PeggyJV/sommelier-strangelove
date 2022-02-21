@@ -14,6 +14,7 @@ import {
   VStack
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
+import { PerformanceChart } from 'components/PerformanceChart'
 import { DepositStatusCard } from 'components/_cards/DepositStatusCard'
 import { MinimalOverviewCard } from 'components/_cards/MinimalOverviewCard'
 import { useConnect } from 'wagmi'
@@ -83,7 +84,9 @@ const PageCellar = () => {
         </GridItem>
       </Grid>
       <Divider />
-      <Grid {...gridProps}></Grid>
+      <Grid {...gridProps}>
+        <PerformanceChart />
+      </Grid>
     </Layout>
   )
 }
