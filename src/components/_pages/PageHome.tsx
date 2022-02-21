@@ -10,8 +10,13 @@ import {
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { CellarOverviewCard } from 'components/CellarOverviewCard'
+import { useConnect } from 'wagmi'
 
 const PageHome: NextPage = () => {
+  const [auth] = useConnect()
+
+  const isConnected = auth.data.connected
+
   return (
     <Layout>
       <VStack spacing={6} align='flex-start'>
@@ -36,7 +41,7 @@ const PageHome: NextPage = () => {
             <Text>Lorem Ipsum dolor iram servus</Text>
           </Box>
           <Grid gap={6} templateColumns='1fr 1fr'>
-            <CellarOverviewCard />
+            <CellarOverviewCard isConnected={isConnected} />
             <Flex
               align='center'
               justify='center'

@@ -16,6 +16,7 @@ import {
 import { DepositStatusCard } from 'components/DepositStatusCard'
 import Layout from 'components/Layout'
 import { MinimalOverviewCard } from 'components/MinimalOverviewCard'
+import { useConnect } from 'wagmi'
 
 const gridProps: GridProps = {
   as: 'section',
@@ -35,6 +36,10 @@ const h2Props: HeadingProps = {
 }
 
 const PageCellar = () => {
+  const [auth] = useConnect()
+
+  const isConnected = auth.data.connected
+
   return (
     <Layout>
       <Grid {...gridProps}>
@@ -73,7 +78,7 @@ const PageCellar = () => {
         <GridItem>
           <VStack spacing={6}>
             <MinimalOverviewCard w='100%' />
-            <DepositStatusCard w='100%' />
+            {isConnected && <DepositStatusCard w='100%' />}
           </VStack>
         </GridItem>
       </Grid>
