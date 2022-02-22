@@ -15,13 +15,13 @@ const headingProps: TextProps = {
 }
 
 const textProps: TextProps = {
-  fontSize: 'xl'
+  fontSize: 'lg'
 }
 
 export const DepositStatusCard: VFC<GridProps> = props => {
   return (
     <Card bg='gray.800' {...props}>
-      <Grid gap={6} templateColumns='repeat(2, 1fr)'>
+      <Grid gap={6} templateColumns='repeat(2, minmax(0, 1fr))'>
         <GridItem>
           <VStack>
             <Text {...headingProps}>Deposited</Text>

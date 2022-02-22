@@ -19,13 +19,13 @@ const headingProps: TextProps = {
 }
 
 const textProps: TextProps = {
-  fontSize: 'xl'
+  fontSize: 'lg'
 }
 
 export const MinimalOverviewCard: VFC<GridProps> = props => {
   return (
     <Card bg='gray.800' {...props}>
-      <Grid gap={6} templateColumns='repeat(3, 1fr)'>
+      <Grid gap={6} templateColumns='repeat(3, minmax(0, 1fr))'>
         <GridItem>
           <VStack>
             <Text {...headingProps}>ID</Text>

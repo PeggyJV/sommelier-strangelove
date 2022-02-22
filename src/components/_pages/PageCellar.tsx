@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { PerformanceChart } from 'components/PerformanceChart'
+import { CellarTxCard } from 'components/_cards/CellarTxCard'
 import { DepositStatusCard } from 'components/_cards/DepositStatusCard'
 import { MinimalOverviewCard } from 'components/_cards/MinimalOverviewCard'
 import { useConnect } from 'wagmi'
@@ -44,7 +45,7 @@ const PageCellar = () => {
   return (
     <Layout>
       <Grid {...gridProps}>
-        <GridItem colSpan={5}>
+        <GridItem colSpan={4}>
           <HStack pb={4} spacing={3}>
             <Img src='/placeholders/aave.svg' boxSize={14} />
             <Text fontSize='4xl' textTransform='uppercase'>
@@ -76,7 +77,7 @@ const PageCellar = () => {
             </ListItem>
           </UnorderedList>
         </GridItem>
-        <GridItem>
+        <GridItem colSpan={2}>
           <VStack spacing={6}>
             <MinimalOverviewCard w='100%' />
             {isConnected && <DepositStatusCard w='100%' />}
@@ -85,7 +86,12 @@ const PageCellar = () => {
       </Grid>
       <Divider />
       <Grid {...gridProps}>
-        <PerformanceChart />
+        <GridItem colSpan={4}>
+          <PerformanceChart />
+        </GridItem>
+        <GridItem colSpan={2}>
+          <CellarTxCard isConnected={isConnected} />
+        </GridItem>
       </Grid>
     </Layout>
   )
