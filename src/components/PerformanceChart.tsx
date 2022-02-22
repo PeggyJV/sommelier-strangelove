@@ -24,7 +24,7 @@ export const PerformanceChart: VFC<BoxProps> = props => {
             <HStack flex={1}>
               <Text>Performance</Text>
               <Select>
-                <Box as='option'>Total Value Locked1</Box>
+                <Box as='option'>Total Value Locked</Box>
               </Select>
             </HStack>
             <Flex
