@@ -23,6 +23,8 @@
     "@fontsource/oswald": "^4.5.4",
     "@keplr-wallet/types": "^0.9.12",
     "@next/bundle-analyzer": "^12.1.0",
+    "@nivo/core": "^0.79.0",
+    "@nivo/line": "^0.79.1",
     "@sentry/nextjs": "^6.17.9",
     "ethers": "^5.5.4",
     "framer-motion": "^6.2.6",
