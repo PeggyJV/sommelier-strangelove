@@ -14,17 +14,19 @@ export const SideNav = () => {
       borderColor='gray.200'
       fontFamily='mono'
     >
-      <VStack pb={6} align='flex-start'>
-        <Img src='/placeholders/sommelier.svg' boxSize={10} />
-        <Text
-          fontSize='lg'
-          fontWeight='bold'
-          fontFamily='brand'
-          textTransform='uppercase'
-        >
-          Sommelier
-        </Text>
-      </VStack>
+      <Link href='/'>
+        <VStack pb={6} align='flex-start'>
+          <Img src='/placeholders/sommelier.svg' boxSize={10} />
+          <Text
+            fontSize='lg'
+            fontWeight='bold'
+            fontFamily='brand'
+            textTransform='uppercase'
+          >
+            Sommelier
+          </Text>
+        </VStack>
+      </Link>
       <VStack pb={16} align='flex-start'>
         {links.map((link, i) => {
           const { href, title } = link

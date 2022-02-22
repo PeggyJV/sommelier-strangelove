@@ -10,17 +10,18 @@ import {
 } from '@chakra-ui/react'
 import { IoPersonCircleOutline } from 'react-icons/io5'
 import { BsCircleFill } from 'react-icons/bs'
-import { useConnect } from 'wagmi'
+import { VFC } from 'react'
+import { Card } from './Card'
 
-export const CellarOverviewCard = () => {
-  const [auth] = useConnect()
+interface Props {
+  isConnected: boolean
+}
 
-  const isConnected = auth.data.connected
-
+export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
   return (
-    <Box borderRadius={10} bg='gray.100' color='gray.500' overflow='hidden'>
+    <Card p={0} bg='gray.100' color='gray.500'>
       <Grid
-        p={4}
+        p={6}
         gap={4}
         templateRows='repeat(5, 1fr)'
         templateColumns='repeat(7, 1fr)'
@@ -45,7 +46,7 @@ export const CellarOverviewCard = () => {
           display='flex'
           justifyContent='space-between'
         >
-          <Box>
+          <Flex direction='column' align='center'>
             <Text>Depositors</Text>
             <HStack align='center'>
               <Icon as={IoPersonCircleOutline} boxSize={7} />
@@ -53,7 +54,7 @@ export const CellarOverviewCard = () => {
                 345
               </Text>
             </HStack>
-          </Box>
+          </Flex>
           <Flex direction='column' align='center'>
             <Text>Asset</Text>
             <HStack align='center'>
@@ -91,6 +92,6 @@ export const CellarOverviewCard = () => {
       >
         {isConnected ? 'Add Deposit' : 'View Cellar'}
       </Text>
-    </Box>
+    </Card>
   )
 }

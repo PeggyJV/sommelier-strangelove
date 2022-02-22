@@ -1,0 +1,40 @@
+import {
+  Grid,
+  GridItem,
+  GridProps,
+  Text,
+  TextProps,
+  VStack
+} from '@chakra-ui/react'
+import { VFC } from 'react'
+import { Card } from './Card'
+
+const headingProps: TextProps = {
+  color: 'gray.400',
+  fontSize: 'sm'
+}
+
+const textProps: TextProps = {
+  fontSize: 'lg'
+}
+
+export const DepositStatusCard: VFC<GridProps> = props => {
+  return (
+    <Card bg='gray.800' {...props}>
+      <Grid gap={6} templateColumns='repeat(2, minmax(0, 1fr))'>
+        <GridItem>
+          <VStack>
+            <Text {...headingProps}>Deposited</Text>
+            <Text {...textProps}>209.3214 ETH</Text>
+          </VStack>
+        </GridItem>
+        <GridItem>
+          <VStack>
+            <Text {...headingProps}>All Time Yield</Text>
+            <Text {...textProps}>+23.45%</Text>
+          </VStack>
+        </GridItem>
+      </Grid>
+    </Card>
+  )
+}
