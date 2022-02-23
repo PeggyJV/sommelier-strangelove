@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import {
   Box,
   BoxProps,
@@ -10,12 +11,35 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
+import { Serie } from '@nivo/line'
 import { VFC } from 'react'
 import { Card } from './_cards/Card'
+const LineChart = dynamic(() => import('./_charts/LineChart'), { ssr: false })
 
 const placeholderButtons = ['1D', '1W', '30D', '3M', '6M', '1Y']
 
-export const PerformanceChart: VFC<BoxProps> = props => {
+interface Props extends BoxProps {
+  data?: Serie[]
+}
+
+const data: Serie[] = [
+  {
+    id: 1,
+    data: [
+      { x: 'beep', y: 10 },
+      { x: 'boop', y: 24 },
+      { x: 'bingus', y: 5 },
+      { x: 'dingus', y: 33 },
+      { x: 'tingus', y: 15 },
+      { x: 'singus', y: 40 },
+      { x: 'lingus', y: 5 },
+      { x: 'pingus', y: 25 },
+      { x: 'shmingus', y: 18 }
+    ]
+  }
+]
+
+export const PerformanceChart: VFC<Props> = props => {
   return (
     <Card bg='gray.800' {...props}>
       <Grid templateRows='repeat(7, 1fr)'>
@@ -54,7 +78,9 @@ export const PerformanceChart: VFC<BoxProps> = props => {
           </HStack>
         </GridItem>
         {/* Chart goes here */}
-        <GridItem rowSpan={4}></GridItem>
+        <GridItem rowSpan={4}>
+          <LineChart data={data} />
+        </GridItem>
         <GridItem rowSpan={2}>
           <Divider />
           <Flex justify='space-around' align='center'>
