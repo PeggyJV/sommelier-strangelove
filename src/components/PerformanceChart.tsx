@@ -31,7 +31,10 @@ const data: Serie[] = [
       { x: 'bingus', y: 5 },
       { x: 'dingus', y: 33 },
       { x: 'tingus', y: 15 },
-      { x: 'singus', y: 40 }
+      { x: 'singus', y: 40 },
+      { x: 'lingus', y: 5 },
+      { x: 'pingus', y: 25 },
+      { x: 'shmingus', y: 18 }
     ]
   }
 ]
