@@ -1,6 +1,13 @@
-import { extendTheme, ThemeConfig } from '@chakra-ui/react'
+import {
+  extendTheme,
+  ThemeConfig,
+  withDefaultColorScheme,
+  withDefaultVariant
+} from '@chakra-ui/react'
 import { styles } from './styles'
 import { fonts } from './fonts'
+import { colors } from './colors'
+import { components } from './components'
 
 // https://chakra-ui.com/docs/theming/theme#config
 export const config: ThemeConfig = {
@@ -12,7 +19,9 @@ export const config: ThemeConfig = {
 const theme = extendTheme({
   config,
   styles,
-  fonts
+  fonts,
+  colors,
+  components
 })
 
 export default theme

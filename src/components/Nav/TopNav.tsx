@@ -1,7 +1,7 @@
 import { VFC } from 'react'
 import { Box, Heading, HStack } from '@chakra-ui/react'
 import { useConnect } from 'wagmi'
-import ConnectButton from 'components/ConnectButton'
+import ConnectButton from 'components/_buttons/ConnectButton'
 import { ChainSelector } from 'components/ChainSelector'
 
 const placeholderChains = ['Ethereum', 'Cosmos']

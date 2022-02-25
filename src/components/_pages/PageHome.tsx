@@ -11,6 +11,7 @@ import {
 import Layout from 'components/Layout'
 import { CellarOverviewCard } from 'components/_cards/CellarOverviewCard'
 import { useConnect } from 'wagmi'
+import { Card } from 'components/_cards/Card'
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
@@ -37,50 +38,36 @@ const PageHome: NextPage = () => {
         </Grid>
         <Flex w='100%' as='section' direction='column'>
           <Box pb={4}>
-            <Heading>Cellar</Heading>
-            <Text>Lorem Ipsum dolor iram servus</Text>
+            <Heading>Cellars</Heading>
+            <Text color='whiteAlpha.800'>
+              At vero eos et accusamus et iusto odio dignissimos ducimus qui
+              blanditiis praesentium voluptatum deleniti atque corrupti quos
+              dolores et quas molestias excepturi sint.
+            </Text>
           </Box>
           <Grid gap={6} templateColumns='1fr 1fr'>
             <CellarOverviewCard isConnected={isConnected} />
-            <Flex
-              align='center'
-              justify='center'
-              bg='gray.800'
-              borderRadius={10}
+            <Card
+              display='flex'
+              flexDir='column'
+              justifyContent='center'
+              alignItems='center'
+              textAlign='center'
+              bgColor='violentViolet.900'
             >
               <Flex direction='column' align='center'>
                 <Text fontSize='2xl' fontWeight='medium'>
-                  More Cellars on the Way
+                  More Coming Soon
                 </Text>
                 <Text color='whiteAlpha.800' pb={6}>
-                  Additional Cellar information
+                  At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                  blanditiis praesentium voluptatum deleniti atque corrupti quos
+                  dolores et quas molestias excepturi sint.
                 </Text>
               </Flex>
-            </Flex>
+            </Card>
           </Grid>
         </Flex>
-        <Grid
-          w='100%'
-          as='section'
-          p={6}
-          gap={6}
-          templateColumns='0.65fr 1fr'
-          bg='gray.800'
-          borderRadius={10}
-        >
-          <Flex h={272} align='center' justify='center' bg='gray.900'>
-            <Text color='whiteAlpha.700'>Illustration</Text>
-          </Flex>
-          <VStack spacing={2} align='flex-start' justify='center' maxW='50ch'>
-            <Heading>About AAVE Strategy</Heading>
-            <Text>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo. Nemo enim ipsam voluptate.
-            </Text>
-          </VStack>
-        </Grid>
       </VStack>
     </Layout>
   )

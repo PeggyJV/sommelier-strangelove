@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Button, ButtonProps, useToast } from '@chakra-ui/react'
 import { Connector, useAccount, useConnect } from 'wagmi'
 import ClientOnly from 'components/ClientOnly'
-import { getConnectorScheme } from 'src/utils/chakra'
 import { ConnectedPopover } from './ConnectedPopover'
 
 export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
@@ -39,13 +38,11 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
     return c.ready
       ? // connector ready props
         {
-          colorScheme: getConnectorScheme(c.name),
           onClick: () => connect(c)
         }
       : // connector not ready props
         {
           as: 'a',
-          colorScheme: 'orange',
           href: 'https://metamask.io/download',
           target: '_blank'
         }
@@ -59,11 +56,11 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
         <Button
           isLoading={loading}
           key={c.id}
+          minW='max-content'
           {...conditionalProps}
           {...rest}
-          minW='max-content'
         >
-          {c.ready ? `Connect with ${c.name}` : `Please install MetaMask`}
+          {c.ready ? `Connect Wallet` : `Please install MetaMask`}
         </Button>
       )}
     </ClientOnly>
