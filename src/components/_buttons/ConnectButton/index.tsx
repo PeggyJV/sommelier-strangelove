@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { Button, ButtonProps, useToast } from '@chakra-ui/react'
+import { ButtonProps, useToast } from '@chakra-ui/react'
 import { Connector, useAccount, useConnect } from 'wagmi'
 import ClientOnly from 'components/ClientOnly'
 import { ConnectedPopover } from './ConnectedPopover'
+import BaseButton from '../BaseButton'
 
 export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
   connector: Connector
@@ -53,7 +54,7 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
       {isConnected ? (
         account.data && <ConnectedPopover />
       ) : (
-        <Button
+        <BaseButton
           isLoading={loading}
           key={c.id}
           minW='max-content'
@@ -61,7 +62,7 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
           {...rest}
         >
           {c.ready ? `Connect Wallet` : `Please install MetaMask`}
-        </Button>
+        </BaseButton>
       )}
     </ClientOnly>
   )
