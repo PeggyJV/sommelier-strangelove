@@ -4,7 +4,7 @@ export const styles: Styles = {
   global: {
     'html, body': {
       bg: 'black',
-      color: 'white'
+      color: 'light'
     }
   }
 }

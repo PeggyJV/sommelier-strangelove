@@ -10,5 +10,10 @@ export const components: ThemeComponents = {
       colorScheme: 'electricIndigo',
       variant: 'outline'
     }
+  },
+  Heading: {
+    baseStyle: {
+      color: 'white'
+    }
   }
 }

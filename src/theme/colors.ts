@@ -47,19 +47,10 @@ export const colors = {
     800: '#007573',
     900: '#004E4F'
   },
-  violentViolet: {
-    50: '#efe4f2',
-    100: '#d8bcdf',
-    200: '#bf90cb',
-    300: '#a667b6',
-    400: '#9449a6',
-    500: '#822f97',
-    600: '#762b91',
-    700: '#652588',
-    800: '#55217f',
-    900: '#39196d'
-  },
+  violentViolet: '#39196d',
+  darker: '#1f0b40',
   black: '#141414',
+  offBlack: '#281144',
   light: '#FAF6F0',
   success: '#04DA9A',
   danger: '#E92660',
