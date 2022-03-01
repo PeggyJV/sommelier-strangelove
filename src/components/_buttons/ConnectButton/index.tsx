@@ -3,7 +3,7 @@ import { ButtonProps, useToast } from '@chakra-ui/react'
 import { Connector, useAccount, useConnect } from 'wagmi'
 import ClientOnly from 'components/ClientOnly'
 import { ConnectedPopover } from './ConnectedPopover'
-import BaseButton from '../BaseButton'
+import { BaseButton } from '../BaseButton'
 
 export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
   connector: Connector
