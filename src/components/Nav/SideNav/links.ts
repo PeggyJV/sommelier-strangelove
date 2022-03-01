@@ -10,10 +10,6 @@ export const links: Link[] = [
   },
   {
     href: '/',
-    title: 'Portfolio'
-  },
-  {
-    href: '/',
     title: 'Governance'
   },
   {
