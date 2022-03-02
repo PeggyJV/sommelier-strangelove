@@ -12,7 +12,9 @@ import {
   Icon,
   TextProps,
   StackDivider,
-  StackDividerProps
+  StackDividerProps,
+  StackProps,
+  Box
 } from '@chakra-ui/react'
 import { VFC } from 'react'
 import { Card } from './Card'
@@ -34,16 +36,23 @@ const topRow: GridItemProps = {
 
 const cardProps: BoxProps = {
   bg: 'backgrounds.darker',
-  flex: 1
+  flex: 1,
+  display: 'flex',
+  flexDir: 'column'
 }
 
 const cardHeading: TextProps = {
   textTransform: 'uppercase',
-  color: 'text.body.lightMuted'
+  color: 'text.body.lightMuted',
+  fontSize: '10px'
 }
 
 const stackDivider: StackDividerProps = {
   borderColor: 'uiChrome.dataBorder'
+}
+
+const bottomRowCells: StackProps = {
+  align: 'flex-start'
 }
 
 export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
@@ -54,7 +63,7 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
           <Circle size={8} bg='deepSkyBlue.400' />
           <Text>Strategist Name</Text>
         </HStack>
-        <Heading>Cellar Presentation Name</Heading>
+        <Heading fontSize='4xl'>Cellar Presentation Name</Heading>
         <Grid
           flex={1}
           gap={4}
@@ -63,17 +72,30 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
         >
           <GridItem {...topRow}>
             <Card {...cardProps}>
-              <Text {...cardHeading}>24 hour volume</Text>
-              <HStack spacing={2}>
-                <Icon boxSize={4} />
-                <Text>+420,000 USD</Text>
-              </HStack>
+              <VStack flex={1} spacing={4} align='flex-start'>
+                <Box>
+                  <Text {...cardHeading}>24 hour volume</Text>
+                  <HStack spacing={2}>
+                    <Icon boxSize={4} />
+                    <Text>+420,000 USD</Text>
+                  </HStack>
+                </Box>
+                <Box
+                  flex={1}
+                  maxH='100%'
+                  minW='100%'
+                  borderRadius={10}
+                  bg='brilliantRose.600'
+                />
+              </VStack>
             </Card>
           </GridItem>
           <GridItem {...topRow}>
             <Card {...cardProps}>
               <VStack
+                flex={1}
                 align='stretch'
+                justify='space-between'
                 divider={<StackDivider {...stackDivider} />}
               >
                 <VStack align='stretch'>
@@ -85,7 +107,7 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
                     <Text>12.3M USD</Text>
                   </HStack>
                 </VStack>
-                <VStack align='stretch'>
+                <VStack align='flex-start' justify='space-between'>
                   <Text {...cardHeading}>
                     apy <Icon boxSize={3} />
                   </Text>
@@ -96,22 +118,25 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
           </GridItem>
           <GridItem colSpan={2}>
             <Card {...cardProps}>
-              <HStack divider={<StackDivider {...stackDivider} />}>
-                <VStack>
+              <HStack
+                divider={<StackDivider {...stackDivider} />}
+                justify='space-between'
+              >
+                <VStack {...bottomRowCells}>
                   <Text {...cardHeading}>depositors</Text>
                   <Text>2000</Text>
                 </VStack>
-                <VStack>
+                <VStack {...bottomRowCells}>
                   <Text {...cardHeading}>
                     class <Icon boxSize={3} />
                   </Text>
                   <Text>Stablecoin</Text>
                 </VStack>
-                <VStack>
+                <VStack {...bottomRowCells}>
                   <Text {...cardHeading}>asset</Text>
                   <Text>ETH</Text>
                 </VStack>
-                <VStack>
+                <VStack {...bottomRowCells}>
                   <Text {...cardHeading}>protocal</Text>
                   <Text>AAVE</Text>
                 </VStack>
