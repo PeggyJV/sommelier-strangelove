@@ -1,7 +1,6 @@
 import {
   HStack,
   Icon,
-  Img,
   List,
   ListIcon,
   ListItem,
@@ -15,27 +14,7 @@ import { Card } from 'components/_cards/Card'
 
 export const SideNav = () => {
   return (
-    <VStack
-      as='nav'
-      px={6}
-      py={8}
-      align='flex-start'
-      borderRight='2px solid'
-      borderColor='violentViolet'
-    >
-      <Link href='/' w='100%'>
-        <HStack pb={6} borderBottom='2px solid' borderColor='violentViolet'>
-          <Img src='/placeholders/logomark.png' boxSize={10} />
-          <Text
-            fontSize='lg'
-            fontWeight='bold'
-            fontFamily='brand'
-            textTransform='uppercase'
-          >
-            Sommelier
-          </Text>
-        </HStack>
-      </Link>
+    <VStack as='nav' px={6} py={8} align='flex-start'>
       <List fontFamily='brand' pb={16}>
         {links.map((link, i) => {
           const { href, title } = link

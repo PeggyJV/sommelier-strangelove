@@ -13,7 +13,7 @@ export const components: ThemeComponents = {
   },
   Heading: {
     baseStyle: {
-      color: 'white'
+      color: 'text.headlines.light'
     }
   }
 }

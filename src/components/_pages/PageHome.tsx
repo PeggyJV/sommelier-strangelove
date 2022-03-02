@@ -44,7 +44,12 @@ const PageHome: NextPage = () => {
             </Box>
             <Grid gap={6} templateColumns='1fr 1fr'>
               <CellarOverviewCard isConnected={isConnected} />
-              <Card bgColor='darker' textAlign='center'>
+              <Card
+                display='flex'
+                alignItems='center'
+                bgColor='backgrounds.darker'
+                textAlign='center'
+              >
                 <VStack spacing={4}>
                   <Img
                     src='/placeholders/img-placeholder.png'

@@ -1,23 +1,51 @@
 import React, { ReactElement } from 'react'
 import { TopNav } from './Nav/TopNav'
 import { SideNav } from './Nav/SideNav'
-import { Box, Container, Flex, Grid, GridProps } from '@chakra-ui/react'
+import {
+  Box,
+  Container,
+  Grid,
+  GridItem,
+  GridItemProps,
+  GridProps
+} from '@chakra-ui/react'
+import Brand from './Nav/Brand'
+
+const gridCellProps: GridItemProps = {
+  bg: 'black'
+}
+
+const topRowProps: GridItemProps = {
+  alignSelf: 'center',
+  ...gridCellProps
+}
 
 const Layout = ({ children, ...rest }: GridProps): ReactElement => {
   return (
-    <>
-      <TopNav />
-      <Container maxW='container.xl' py={6}>
-        <Grid minH='100vh' templateColumns='1fr 5fr' {...rest}>
+    <Container maxW='container.xl'>
+      <Grid
+        minH='100vh'
+        templateColumns='1fr 5fr'
+        bg='violentViolet'
+        gap='2px'
+        {...rest}
+      >
+        <GridItem h='100%' display='flex' alignItems='center' {...topRowProps}>
+          <Brand />
+        </GridItem>
+        <GridItem {...topRowProps}>
+          <TopNav />
+        </GridItem>
+        <GridItem {...gridCellProps}>
           <SideNav />
-          <Flex px={6} direction='column'>
-            <Box as='main' flex={1}>
-              {children}
-            </Box>
-          </Flex>
-        </Grid>
-      </Container>
-    </>
+        </GridItem>
+        <GridItem display='flex' px={6} flexDir='column' {...gridCellProps}>
+          <Box as='main' flex={1}>
+            {children}
+          </Box>
+        </GridItem>
+      </Grid>
+    </Container>
   )
 }
 
