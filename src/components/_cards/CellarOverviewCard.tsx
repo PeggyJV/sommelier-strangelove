@@ -17,7 +17,7 @@ import { VFC } from 'react'
 import { Card } from './Card'
 import { FaArrowRight } from 'react-icons/fa'
 import { CardDivider } from 'components/_layout/CardDivider'
-import { CardHeading } from 'components/_typography/cardHeading'
+import { CardHeading } from 'components/_typography/CardHeading'
 
 interface Props {
   isConnected: boolean

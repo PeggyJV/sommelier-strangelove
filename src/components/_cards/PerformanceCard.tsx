@@ -16,7 +16,7 @@ import {
 import { Serie } from '@nivo/line'
 import { VFC } from 'react'
 import { Card } from './Card'
-import { CardHeading } from 'components/_typography/cardHeading'
+import { CardHeading } from 'components/_typography/CardHeading'
 import { CardDivider } from 'components/_layout/CardDivider'
 const LineChart = dynamic(() => import('components/_charts/LineChart'), {
   ssr: false

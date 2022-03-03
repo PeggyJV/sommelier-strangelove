@@ -8,7 +8,7 @@ import {
   VStack
 } from '@chakra-ui/react'
 import { CardDivider } from 'components/_layout/CardDivider'
-import { CardHeading } from 'components/_typography/cardHeading'
+import { CardHeading } from 'components/_typography/CardHeading'
 import { VFC } from 'react'
 import { Card } from './Card'
 
