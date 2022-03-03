@@ -4,7 +4,7 @@ import React from 'react'
 
 const Brand = () => {
   return (
-    <Link href='/'>
+    <Link px={5} href='/'>
       <HStack>
         <Img src='/placeholders/logomark.png' boxSize={10} />
         <Text
