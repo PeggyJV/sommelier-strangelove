@@ -10,15 +10,14 @@ import {
   Text,
   VStack,
   Icon,
-  TextProps,
-  StackDivider,
-  StackDividerProps,
   StackProps,
   Box
 } from '@chakra-ui/react'
 import { VFC } from 'react'
 import { Card } from './Card'
 import { FaArrowRight } from 'react-icons/fa'
+import { CardDivider } from 'components/_layout/CardDivider'
+import { CardHeading } from 'components/_typography/cardHeading'
 
 interface Props {
   isConnected: boolean
@@ -39,16 +38,6 @@ const cardProps: BoxProps = {
   flex: 1,
   display: 'flex',
   flexDir: 'column'
-}
-
-const cardHeading: TextProps = {
-  textTransform: 'uppercase',
-  color: 'text.body.lightMuted',
-  fontSize: '10px'
-}
-
-const stackDivider: StackDividerProps = {
-  borderColor: 'uiChrome.dataBorder'
 }
 
 const bottomRowCells: StackProps = {
@@ -74,7 +63,7 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
             <Card {...cardProps}>
               <VStack flex={1} spacing={4} align='flex-start'>
                 <Box>
-                  <Text {...cardHeading}>24 hour volume</Text>
+                  <CardHeading>24 hour volume</CardHeading>
                   <HStack spacing={2}>
                     <Icon boxSize={4} />
                     <Text>+420,000 USD</Text>
@@ -96,21 +85,21 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
                 flex={1}
                 align='stretch'
                 justify='space-between'
-                divider={<StackDivider {...stackDivider} />}
+                divider={<CardDivider />}
               >
                 <VStack align='stretch'>
-                  <Text {...cardHeading}>
+                  <CardHeading>
                     total value locked <Icon boxSize={3} />
-                  </Text>
+                  </CardHeading>
                   <HStack spacing={2}>
                     <Icon boxSize={4} />
                     <Text>12.3M USD</Text>
                   </HStack>
                 </VStack>
                 <VStack align='flex-start' justify='space-between'>
-                  <Text {...cardHeading}>
+                  <CardHeading>
                     apy <Icon boxSize={3} />
-                  </Text>
+                  </CardHeading>
                   <Text>8.3%</Text>
                 </VStack>
               </VStack>
@@ -118,26 +107,23 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
           </GridItem>
           <GridItem colSpan={2}>
             <Card {...cardProps}>
-              <HStack
-                divider={<StackDivider {...stackDivider} />}
-                justify='space-between'
-              >
+              <HStack divider={<CardDivider />} justify='space-between'>
                 <VStack {...bottomRowCells}>
-                  <Text {...cardHeading}>depositors</Text>
+                  <CardHeading>depositors</CardHeading>
                   <Text>2000</Text>
                 </VStack>
                 <VStack {...bottomRowCells}>
-                  <Text {...cardHeading}>
+                  <CardHeading>
                     class <Icon boxSize={3} />
-                  </Text>
+                  </CardHeading>
                   <Text>Stablecoin</Text>
                 </VStack>
                 <VStack {...bottomRowCells}>
-                  <Text {...cardHeading}>asset</Text>
+                  <CardHeading>asset</CardHeading>
                   <Text>ETH</Text>
                 </VStack>
                 <VStack {...bottomRowCells}>
-                  <Text {...cardHeading}>protocal</Text>
+                  <CardHeading>protocal</CardHeading>
                   <Text>AAVE</Text>
                 </VStack>
               </HStack>
