@@ -22,7 +22,7 @@ const topRowProps: GridItemProps = {
 
 const Layout = ({ children, ...rest }: GridProps): ReactElement => {
   return (
-    <Container maxW='1400px'>
+    <Container maxW='87.5rem'>
       <Grid
         minH='100vh'
         templateColumns='1fr 5fr'
