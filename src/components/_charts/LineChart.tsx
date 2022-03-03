@@ -1,17 +1,8 @@
 import { VFC } from 'react'
 import { linearGradientDef } from '@nivo/core'
-import { ResponsiveLine, LineSvgProps, PointTooltipProps } from '@nivo/line'
-import { Box, BoxProps, useTheme } from '@chakra-ui/react'
-
-const CustomToolTip: VFC<BoxProps & PointTooltipProps> = ({ point }) => {
-  const { data } = point
-
-  return (
-    <Box as='span' px={3} py={1} bg='gray.600' borderRadius={4}>
-      {data.xFormatted}
-    </Box>
-  )
-}
+import { ResponsiveLine, LineSvgProps } from '@nivo/line'
+import { useTheme } from '@chakra-ui/react'
+import { ToolTip } from './ToolTip'
 
 const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
   const { colors } = useTheme()
@@ -27,15 +18,16 @@ const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
       ]}
       fill={[{ match: '*', id: 'gradient' }]}
       useMesh
-      tooltip={CustomToolTip}
+      enableGridX={false}
+      enableGridY={false}
+      tooltip={ToolTip}
       motionConfig={{
         clamp: true,
         duration: 220
       }}
       enableArea
       enablePoints={false}
-      colors={[colors.cyan[400]]}
-      curve='natural'
+      colors={[colors.brilliantRose[400]]}
       {...rest}
     />
   )
