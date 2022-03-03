@@ -16,6 +16,9 @@ const gridCellProps: GridItemProps = {
 }
 
 const topRowProps: GridItemProps = {
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
   alignSelf: 'center',
   ...gridCellProps
 }
@@ -26,11 +29,12 @@ const Layout = ({ children, ...rest }: GridProps): ReactElement => {
       <Grid
         minH='100vh'
         templateColumns='1fr 5fr'
+        templateRows='80px 1fr'
         bg='violentViolet'
         gap='2px'
         {...rest}
       >
-        <GridItem h='100%' display='flex' alignItems='center' {...topRowProps}>
+        <GridItem display='flex' alignItems='center' {...topRowProps}>
           <Brand />
         </GridItem>
         <GridItem {...topRowProps}>

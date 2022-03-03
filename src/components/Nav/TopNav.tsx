@@ -12,7 +12,7 @@ export const TopNav: VFC = () => {
   const isConnected = auth.data.connected
 
   return (
-    <Flex py={8} px={6} fontSize='xl' justify='space-between'>
+    <Flex flex={1} py={8} px={6} fontSize='xl' justify='space-between'>
       <Text fontFamily='brand' color='light'>
         Overview
       </Text>
