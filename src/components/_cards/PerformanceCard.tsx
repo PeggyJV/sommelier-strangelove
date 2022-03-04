@@ -41,6 +41,13 @@ const data: Serie[] = [
       { x: 'pingus', y: 25 },
       { x: 'shmingus', y: 18 }
     ]
+  },
+  {
+    id: 2,
+    data: [
+      {x: 'bingus', y: 40},
+      {x: 'shmingus', y: 5},
+    ],
   }
 ]
 
@@ -85,7 +92,14 @@ export const PerformanceCard: VFC<Props> = props => {
         <Card overflow='visible' {...cardProps}>
           <VStack spacing={6} align='stretch' divider={<CardDivider />}>
             <Box h='10rem'>
-              <LineChart data={data} colors={lineChartTheme} />
+              <LineChart
+                data={data}
+                colors={lineChartTheme}
+                yScale={{
+                  type: 'linear',
+                  max: 60
+                }}
+              />
             </Box>
             <HStack justify='space-between'>
               <CardHeading>12am</CardHeading>
