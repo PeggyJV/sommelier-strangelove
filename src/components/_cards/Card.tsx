@@ -7,7 +7,7 @@ export const Card: CardProps = props => {
   return (
     <Box
       direction='column'
-      p={6}
+      p={4}
       borderRadius={10}
       overflow='hidden'
       {...props}
