@@ -2,13 +2,8 @@ import dynamic from 'next/dynamic'
 import {
   Box,
   BoxProps,
-  Divider,
-  Flex,
-  Grid,
-  GridItem,
   HStack,
   Icon,
-  Select,
   StackProps,
   Text,
   VStack
@@ -84,7 +79,7 @@ export const PerformanceCard: VFC<Props> = props => {
             </VStack>
           </HStack>
         </Card>
-        <Card {...cardProps}>
+        <Card overflow='visible' {...cardProps}>
           <VStack spacing={6} align='stretch' divider={<CardDivider />}>
             <Box h='10rem'>
               <LineChart data={data} />

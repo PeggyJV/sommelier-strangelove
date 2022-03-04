@@ -46,7 +46,7 @@ const bottomRowCells: StackProps = {
 
 export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
   return (
-    <Card px={4} py={8} bg='violentViolet'>
+    <Card py={8} bg='violentViolet'>
       <VStack spacing={6} align='stretch'>
         <HStack>
           <Circle size={8} bg='deepSkyBlue.400' />
