@@ -22,7 +22,7 @@ import { Section } from 'components/_layout/Section'
 import { useConnect } from 'wagmi'
 
 const gridProps: GridProps = {
-  gap: 6,
+  gap: 4,
   templateColumns: 'repeat(6, 1fr)'
 }
 
