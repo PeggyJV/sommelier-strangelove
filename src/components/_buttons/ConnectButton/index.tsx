@@ -4,6 +4,7 @@ import { Connector, useAccount, useConnect } from 'wagmi'
 import ClientOnly from 'components/ClientOnly'
 import { ConnectedPopover } from './ConnectedPopover'
 import { BaseButton } from '../BaseButton'
+import { BiWalletAlt } from 'react-icons/bi'
 
 export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
   connector: Connector
@@ -58,6 +59,7 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
           isLoading={loading}
           key={c.id}
           minW='max-content'
+          icon={BiWalletAlt}
           {...conditionalProps}
           {...rest}
         >

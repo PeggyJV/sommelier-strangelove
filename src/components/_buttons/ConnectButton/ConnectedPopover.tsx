@@ -1,16 +1,17 @@
 import {
   Button,
-  Divider,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  Text
+  VStack
 } from '@chakra-ui/react'
 import Link from 'components/Link'
 import truncateWalletAddress from 'src/utils/truncateWalletAddress'
 import { useAccount } from 'wagmi'
 import { BaseButton } from '../BaseButton'
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import { CardDivider } from 'components/_layout/CardDivider'
 
 export const ConnectedPopover = () => {
   const [account, disconnect] = useAccount({
@@ -19,31 +20,36 @@ export const ConnectedPopover = () => {
   const walletAddress = account?.data?.address
 
   return (
-    <Popover>
+    <Popover placement='bottom-end'>
       <PopoverTrigger>
-        <BaseButton  minW='max-content' isLoading={account.loading}>
+        <BaseButton
+          icon={BsThreeDotsVertical}
+          minW='max-content'
+          isLoading={account.loading}
+        >
           {truncateWalletAddress(walletAddress)}
         </BaseButton>
       </PopoverTrigger>
-      <PopoverContent color='black'>
+      <PopoverContent border='none' maxW='max-content' bg='backgrounds.dark'>
         <PopoverBody>
-          <Link
-            href={`https://etherscan.io/address/${walletAddress}`}
-            isExternal
-          >
-            View on Etherscan
-          </Link>
-          <Divider my={1} />
-          <Text>Switch Wallet Provider</Text>
-          <Divider my={1} />
-          <Button
-            minW='max-content'
-            colorScheme='red'
-            onClick={disconnect}
-            isLoading={account.loading}
-          >
-            Disconnect Wallet
-          </Button>
+          <VStack align='flex-start' divider={<CardDivider />}>
+            <Link
+              href={`https://etherscan.io/address/${walletAddress}`}
+              isExternal
+            >
+              View on Etherscan
+            </Link>
+            <Button
+              variant='unstyled'
+              _hover={{
+                textDecoration: 'underline'
+              }}
+              onClick={disconnect}
+              isLoading={account.loading}
+            >
+              Disconnect Wallet
+            </Button>
+          </VStack>
         </PopoverBody>
       </PopoverContent>
     </Popover>
