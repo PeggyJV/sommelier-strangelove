@@ -1,6 +1,16 @@
 import { VFC } from 'react'
 import { Box, BoxProps } from '@chakra-ui/react'
 
-export const Card: VFC<BoxProps> = props => {
-  return <Box p={6} borderRadius={10} overflow='hidden' {...props} />
+export type CardProps = VFC<BoxProps>
+
+export const Card: CardProps = props => {
+  return (
+    <Box
+      direction='column'
+      p={4}
+      borderRadius={10}
+      overflow='hidden'
+      {...props}
+    />
+  )
 }

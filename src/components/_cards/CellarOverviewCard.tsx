@@ -1,97 +1,157 @@
 import {
-  Box,
-  Flex,
+  BoxProps,
+  Circle,
   Grid,
   GridItem,
+  GridItemProps,
+  Heading,
   HStack,
+  Text,
+  VStack,
   Icon,
-  Img,
-  Text
+  StackProps,
+  Box
 } from '@chakra-ui/react'
-import { IoPersonCircleOutline } from 'react-icons/io5'
-import { BsCircleFill } from 'react-icons/bs'
 import { VFC } from 'react'
 import { Card } from './Card'
+import { FaArrowRight } from 'react-icons/fa'
+import { CardDivider } from 'components/_layout/CardDivider'
+import { CardHeading } from 'components/_typography/CardHeading'
+import { BaseButton } from 'components/_buttons/BaseButton'
+import { Serie } from '@nivo/line'
+import { useNivoThemes } from 'hooks/nivo'
+import dynamic from 'next/dynamic'
+const LineChartArea = dynamic(
+  () => import('components/_charts/LineChartArea'),
+  { ssr: false }
+)
 
 interface Props {
   isConnected: boolean
 }
 
+const gridItemProps: GridItemProps = {
+  display: 'flex'
+}
+
+const topRow: GridItemProps = {
+  ...gridItemProps,
+  rowSpan: 2,
+  colSpan: 1
+}
+
+const cardProps: BoxProps = {
+  bg: 'backgrounds.darker',
+  flex: 1,
+  display: 'flex',
+  flexDir: 'column'
+}
+
+const bottomRowCells: StackProps = {
+  align: 'flex-start'
+}
+
+const data: Serie[] = [
+  {
+    id: 1,
+    data: [
+      { x: 'bingus', y: 5 },
+      { x: 'pingus', y: 10 },
+      { x: 'dingus', y: 7 },
+      { x: 'lingus', y: 15 },
+      { x: 'gingus', y: 12 }
+    ]
+  }
+]
+
 export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
+  const { lineChartTheme } = useNivoThemes()
+
   return (
-    <Card p={0} bg='gray.100' color='gray.500'>
-      <Grid
-        p={6}
-        gap={4}
-        templateRows='repeat(5, 1fr)'
-        templateColumns='repeat(7, 1fr)'
-      >
-        {/* Left-hand rows */}
-        <GridItem rowSpan={2} colSpan={4} display='flex'>
-          <Img src='/placeholders/aave.svg' boxSize={14} mr={4} />
-          <Box flex={1}>
-            <Text>AAVE</Text>
-            <Text fontSize='xl' fontWeight='medium' color='gray.600'>
-              Cellar name
-            </Text>
-          </Box>
-        </GridItem>
-        <GridItem rowSpan={3} colSpan={4} bg='gray.500' borderRadius={5} />
-        {/* Right-hand rows */}
-        <GridItem
-          rowStart={1}
-          rowSpan={2}
-          colStart={5}
-          colSpan={3}
-          display='flex'
-          justifyContent='space-between'
+    <Card py={8} bg='violentViolet'>
+      <VStack spacing={6} align='stretch'>
+        <HStack>
+          <Circle size={8} bg='deepSkyBlue.400' />
+          <Text>Strategist Name</Text>
+        </HStack>
+        <Heading fontSize='4xl'>Cellar Presentation Name</Heading>
+        <Grid
+          flex={1}
+          gap={4}
+          templateColumns='repeat(2, 1fr)'
+          templateRows='repeat(3, 1fr)'
         >
-          <Flex direction='column' align='center'>
-            <Text>Depositors</Text>
-            <HStack align='center'>
-              <Icon as={IoPersonCircleOutline} boxSize={7} />
-              <Text fontSize='xl' fontWeight='medium'>
-                345
-              </Text>
-            </HStack>
-          </Flex>
-          <Flex direction='column' align='center'>
-            <Text>Asset</Text>
-            <HStack align='center'>
-              <Icon as={BsCircleFill} boxSize={6} color='gray.300' />
-              <Text fontSize='xl'>ETH</Text>
-            </HStack>
-          </Flex>
-        </GridItem>
-        <GridItem
-          rowStart={3}
-          rowSpan={3}
-          colStart={5}
-          colSpan={3}
-          display='flex'
-          flexDir='column'
-          justifyContent='center'
-        >
-          <Flex justify='space-between'>
-            <Text>1D TVL</Text>
-            <Text color='gray.600'>$1,234,567.89</Text>
-          </Flex>
-          <Box borderTopWidth={1} borderColor='gray.400' my={2} />
-          <Flex justify='space-between'>
-            <Text>1D APY</Text>
-            <Text color='gray.600'>+6.34%</Text>
-          </Flex>
-        </GridItem>
-      </Grid>
-      <Text
-        py={3}
-        bg='black'
-        color='white'
-        textAlign='center'
-        fontFamily='mono'
-      >
-        {isConnected ? 'Add Deposit' : 'View Cellar'}
-      </Text>
+          <GridItem {...topRow}>
+            <Card {...cardProps}>
+              <VStack flex={1} spacing={4} align='flex-start'>
+                <Box>
+                  <CardHeading>24 hour volume</CardHeading>
+                  <HStack spacing={2}>
+                    <Icon boxSize={4} />
+                    <Text>+420,000 USD</Text>
+                  </HStack>
+                </Box>
+                <Box flex={1} maxH='100%' minW='100%'>
+                  <LineChartArea data={data} colors={lineChartTheme} />
+                </Box>
+              </VStack>
+            </Card>
+          </GridItem>
+          <GridItem {...topRow}>
+            <Card {...cardProps}>
+              <VStack
+                flex={1}
+                align='stretch'
+                justify='space-between'
+                divider={<CardDivider />}
+              >
+                <VStack align='stretch'>
+                  <CardHeading>
+                    total value locked <Icon boxSize={3} />
+                  </CardHeading>
+                  <HStack spacing={2}>
+                    <Icon boxSize={4} />
+                    <Text>12.3M USD</Text>
+                  </HStack>
+                </VStack>
+                <VStack align='flex-start' justify='space-between'>
+                  <CardHeading>
+                    apy <Icon boxSize={3} />
+                  </CardHeading>
+                  <Text>8.3%</Text>
+                </VStack>
+              </VStack>
+            </Card>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <Card {...cardProps}>
+              <HStack divider={<CardDivider />} justify='space-between'>
+                <VStack {...bottomRowCells}>
+                  <CardHeading>depositors</CardHeading>
+                  <Text>2000</Text>
+                </VStack>
+                <VStack {...bottomRowCells}>
+                  <CardHeading>
+                    class <Icon boxSize={3} />
+                  </CardHeading>
+                  <Text>Stablecoin</Text>
+                </VStack>
+                <VStack {...bottomRowCells}>
+                  <CardHeading>asset</CardHeading>
+                  <Text>ETH</Text>
+                </VStack>
+                <VStack {...bottomRowCells}>
+                  <CardHeading>protocal</CardHeading>
+                  <Text>AAVE</Text>
+                </VStack>
+              </HStack>
+            </Card>
+          </GridItem>
+        </Grid>
+        <BaseButton variant='solid' icon={FaArrowRight}>
+          {isConnected ? 'add deposit' : 'view cellar'}
+        </BaseButton>
+      </VStack>
     </Card>
   )
 }
