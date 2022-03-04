@@ -68,6 +68,7 @@ const CellarMetaCard: VFC<BoxProps> = () => {
                 profit split <Icon boxSize={3} />
               </CardHeading>
               <Box w='100%' h='6px'>
+                {/* @ts-ignore */}
                 <BarChart
                   layout='horizontal'
                   colors={colorPalette}
