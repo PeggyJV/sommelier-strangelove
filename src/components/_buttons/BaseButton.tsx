@@ -1,13 +1,17 @@
-import { Button, ButtonProps, Icon } from '@chakra-ui/react'
+import { Button, ButtonProps, forwardRef, Icon } from '@chakra-ui/react'
 import { VFC } from 'react'
 
 interface BaseButtonProps extends Omit<ButtonProps, 'icon'> {
   icon?: any
 }
 
-export const BaseButton: VFC<BaseButtonProps> = ({ icon, ...rest }) => {
+export const BaseButton: VFC<BaseButtonProps> = forwardRef<
+  BaseButtonProps,
+  'button'
+>(({ icon, ...rest }, ref) => {
   return (
     <Button
+      ref={ref}
       variant='outline'
       color='white'
       borderColor='electricIndigo.400'
@@ -33,4 +37,4 @@ export const BaseButton: VFC<BaseButtonProps> = ({ icon, ...rest }) => {
       {...rest}
     />
   )
-}
+})

@@ -10,6 +10,7 @@ import {
 import Link from 'components/Link'
 import truncateWalletAddress from 'src/utils/truncateWalletAddress'
 import { useAccount } from 'wagmi'
+import { BaseButton } from '../BaseButton'
 
 export const ConnectedPopover = () => {
   const [account, disconnect] = useAccount({
@@ -20,9 +21,9 @@ export const ConnectedPopover = () => {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button color='black' minW='max-content' isLoading={account.loading}>
+        <BaseButton  minW='max-content' isLoading={account.loading}>
           {truncateWalletAddress(walletAddress)}
-        </Button>
+        </BaseButton>
       </PopoverTrigger>
       <PopoverContent color='black'>
         <PopoverBody>

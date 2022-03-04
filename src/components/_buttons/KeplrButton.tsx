@@ -55,7 +55,6 @@ const KeplrButton = ({ chainId, rpcEndpoint, ...rest }: KeplrButtonProps) => {
 
   return (
     <BaseButton
-      colorScheme='purple'
       isDisabled={!cosmwasm.isSupported}
       isLoading={cosmwasm.isLoading}
       {...conditionalProps}
