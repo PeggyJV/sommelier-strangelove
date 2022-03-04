@@ -1,6 +1,7 @@
-import { ButtonProps, useToast, Button } from '@chakra-ui/react'
+import { ButtonProps, useToast } from '@chakra-ui/react'
 import { useCosmWasm } from 'hooks/cosmwasm'
 import { useEffect, useMemo } from 'react'
+import { BaseButton } from './BaseButton'
 
 export interface KeplrButtonProps extends Omit<ButtonProps, 'children'> {
   chainId?: string
@@ -53,8 +54,7 @@ const KeplrButton = ({ chainId, rpcEndpoint, ...rest }: KeplrButtonProps) => {
   }, [chainId, cosmwasm, rpcEndpoint])
 
   return (
-    <Button
-      colorScheme='purple'
+    <BaseButton
       isDisabled={!cosmwasm.isSupported}
       isLoading={cosmwasm.isLoading}
       {...conditionalProps}
@@ -65,7 +65,7 @@ const KeplrButton = ({ chainId, rpcEndpoint, ...rest }: KeplrButtonProps) => {
           ? `Disconnect ${cosmwasm.walletAddress?.slice(0, 8)}...`
           : 'Connect with Keplr'
         : 'Please install Keplr'}
-    </Button>
+    </BaseButton>
   )
 }
 

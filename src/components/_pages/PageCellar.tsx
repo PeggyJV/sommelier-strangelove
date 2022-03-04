@@ -1,29 +1,28 @@
 import {
-  Divider,
+  Box,
+  Flex,
   Grid,
   GridItem,
   GridProps,
   Heading,
   HeadingProps,
   HStack,
-  Img,
-  ListItem,
+  StackDivider,
   Text,
   TextProps,
-  UnorderedList,
   VStack
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
-import { PerformanceChart } from 'components/PerformanceChart'
+import { PerformanceCard } from 'components/_cards/PerformanceCard'
+import CellarMetaCard from 'components/_cards/CellarMetaCard'
 import { CellarTxCard } from 'components/_cards/CellarTxCard'
-import { DepositStatusCard } from 'components/_cards/DepositStatusCard'
-import { MinimalOverviewCard } from 'components/_cards/MinimalOverviewCard'
+// import { DepositStatusCard } from 'components/_cards/DepositStatusCard'
+// import { MinimalOverviewCard } from 'components/_cards/MinimalOverviewCard'
+import { Section } from 'components/_layout/Section'
 import { useConnect } from 'wagmi'
 
 const gridProps: GridProps = {
-  as: 'section',
-  py: 6,
-  gap: 6,
+  gap: 4,
   templateColumns: 'repeat(6, 1fr)'
 }
 
@@ -32,10 +31,13 @@ const textProps: TextProps = {
 }
 
 const h2Props: HeadingProps = {
+  color: 'brilliantRose.500',
   as: 'h2',
   fontSize: '3xl',
   pb: 2
 }
+
+const placeholderButtons = ['1D', '1W', '30D', '3M', '6M', '1Y', 'All Time']
 
 const PageCellar = () => {
   const [auth] = useConnect()
@@ -44,55 +46,75 @@ const PageCellar = () => {
 
   return (
     <Layout>
-      <Grid {...gridProps}>
-        <GridItem colSpan={4}>
-          <HStack pb={4} spacing={3}>
-            <Img src='/placeholders/aave.svg' boxSize={14} />
-            <Text fontSize='4xl' textTransform='uppercase'>
-              aave
+      <Section>
+        <Grid {...gridProps}>
+          <GridItem colSpan={3}>
+            <Heading pb={4}>Strategy Presentation Name</Heading>
+            <Heading {...h2Props}>Goals</Heading>
+            <Text {...textProps}>
+              At vero eos et accusamus et iusto odio dignissimos ducimus qui
+              blanditiis praesentium voluptatum deleniti atque corrupti quos
+              dolores et quas molestias excepturi sint occaecati cupiditate non
+              provident, similique sunt in culpa qui officia deserunt mollitia
+              animi, id est laborum et dolorum fuga.
             </Text>
-          </HStack>
-          <Heading pb={4}>Cellar Name</Heading>
-          <Heading {...h2Props}>Goal</Heading>
-          <Text {...textProps}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-            consectetur adipiscing elit iram ka onsectetur adipiscing elit, sed
-            do eiusm incididunt ut labore et dolore{' '}
-          </Text>
-          <Heading {...h2Props}>Strategy</Heading>
-          <Text {...textProps}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris varus ver
-            ka irama consectetur adipiscing elit lit, sed do eiusam ad
-            minionsectetur adipiscing elit, sed do eiusm adipiscing elit, sed do
-            eiusmod tempor ver kama
-          </Text>
-          <UnorderedList>
-            <ListItem>Deposit ETH into AAVE</ListItem>
-            <ListItem>
-              Deposit Eth into Compound/AAVE and then borrow lorem to deposit in
-              to vault.
-            </ListItem>
-          </UnorderedList>
-        </GridItem>
-        <GridItem colSpan={2}>
-          <VStack spacing={6}>
-            <MinimalOverviewCard w='100%' />
-            {isConnected && <DepositStatusCard w='100%' />}
-          </VStack>
-        </GridItem>
-      </Grid>
-      <Divider />
-      <Grid {...gridProps}>
-        <GridItem colSpan={4}>
-          <PerformanceChart />
-        </GridItem>
-        <GridItem colSpan={2}>
-          <CellarTxCard isConnected={isConnected} />
-        </GridItem>
-      </Grid>
+            <Heading {...h2Props}>Strategy</Heading>
+            <Text {...textProps}>
+              At vero eos et accusamus et iusto odio dignissimos ducimus qui
+              blanditiis praesentium voluptatum deleniti atque corrupti quos
+              dolores et quas molestias excepturi sint occaecati cupiditate non
+              provident, similique sunt in culpa qui officia deserunt mollitia
+              animi, id est laborum et dolorum fuga.
+            </Text>
+          </GridItem>
+          <GridItem colSpan={3}>
+            {/* <VStack spacing={6}>
+              <MinimalOverviewCard w='100%' />
+              {isConnected && <DepositStatusCard w='100%' />}
+            </VStack> */}
+            <CellarMetaCard />
+          </GridItem>
+        </Grid>
+      </Section>
+      <Section>
+        <Grid {...gridProps}>
+          <GridItem colSpan={4}>
+            <VStack spacing={5} align='stretch'>
+              <HStack justify='space-between'>
+                <Heading fontSize='1.75rem'>Performance</Heading>
+                <HStack
+                  border='1px solid'
+                  borderColor='electricIndigo.500'
+                  borderRadius='2rem'
+                  overflow='hidden'
+                  justify='space-around'
+                  spacing={0}
+                  divider={<StackDivider borderColor='electricIndigo.500' />}
+                >
+                  {placeholderButtons.map((button, i) => (
+                    <Box
+                      flex={1}
+                      px={4}
+                      py={2}
+                      key={i}
+                      as='button'
+                      bg={i === 0 ? 'electricIndigo.500' : ''}
+                      fontSize='sm'
+                      whiteSpace='nowrap'
+                    >
+                      {button}
+                    </Box>
+                  ))}
+                </HStack>
+              </HStack>
+              <PerformanceCard />
+            </VStack>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <CellarTxCard isConnected={isConnected} />
+          </GridItem>
+        </Grid>
+      </Section>
     </Layout>
   )
 }

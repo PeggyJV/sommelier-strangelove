@@ -1,16 +1,12 @@
 import { NextPage } from 'next'
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  Heading,
-  Text,
-  VStack
-} from '@chakra-ui/react'
+import { Box, Flex, Grid, Heading, Img, Text, VStack } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { CellarOverviewCard } from 'components/_cards/CellarOverviewCard'
 import { useConnect } from 'wagmi'
+import { Card } from 'components/_cards/Card'
+import { BaseButton } from 'components/_buttons/BaseButton'
+import { FaArrowRight } from 'react-icons/fa'
+import { Section } from 'components/_layout/Section'
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
@@ -20,67 +16,60 @@ const PageHome: NextPage = () => {
   return (
     <Layout>
       <VStack spacing={6} align='flex-start'>
-        <Grid templateColumns='1fr 1fr' gap={6} alignItems='center'>
-          <VStack align='flex-start' spacing={4} maxW='70ch'>
-            <Heading>Sommelier DeFi</Heading>
-            <Text>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo nemo
-            </Text>
-            <Button px={14} bg='white' color='black'>
-              Explore More
-            </Button>
-          </VStack>
-          <Box h={330} bg='gray.800' />
-        </Grid>
-        <Flex w='100%' as='section' direction='column'>
-          <Box pb={4}>
-            <Heading>Cellar</Heading>
-            <Text>Lorem Ipsum dolor iram servus</Text>
-          </Box>
-          <Grid gap={6} templateColumns='1fr 1fr'>
-            <CellarOverviewCard isConnected={isConnected} />
-            <Flex
-              align='center'
-              justify='center'
-              bg='gray.800'
-              borderRadius={10}
-            >
-              <Flex direction='column' align='center'>
-                <Text fontSize='2xl' fontWeight='medium'>
-                  More Cellars on the Way
-                </Text>
-                <Text color='whiteAlpha.800' pb={6}>
-                  Additional Cellar information
-                </Text>
-              </Flex>
-            </Flex>
+        <Section>
+          <Grid templateColumns='1fr 1fr' gap={6} justifyItems='center'>
+            <VStack align='flex-start' spacing={4} maxW='70ch'>
+              <Heading>Sommelier DeFi</Heading>
+              <Text>
+                At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                blanditiis praesentium voluptatum deleniti atque corrupti quos
+                dolores et quas molestias excepturi sint occaecati cupiditate
+                non provident, similique sunt in culpa qui officia deserunt
+                mollitia animi, id est laborum et dolorum fuga.
+              </Text>
+              <BaseButton icon={FaArrowRight}>Learn More</BaseButton>
+            </VStack>
+            <Img src='/placeholders/img-placeholder.png' />
           </Grid>
-        </Flex>
-        <Grid
-          w='100%'
-          as='section'
-          p={6}
-          gap={6}
-          templateColumns='0.65fr 1fr'
-          bg='gray.800'
-          borderRadius={10}
-        >
-          <Flex h={272} align='center' justify='center' bg='gray.900'>
-            <Text color='whiteAlpha.700'>Illustration</Text>
+        </Section>
+        <Section>
+          <Flex w='100%' direction='column'>
+            <Box pb={4}>
+              <Heading>Cellars</Heading>
+              <Text maxW='70ch'>
+                At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                blanditiis praesentium voluptatum deleniti atque corrupti quos
+                dolores et quas molestias excepturi sint.
+              </Text>
+            </Box>
+            <Grid gap={6} templateColumns='1fr 1fr'>
+              <CellarOverviewCard isConnected={isConnected} />
+              <Card
+                display='flex'
+                alignItems='center'
+                bgColor='backgrounds.darker'
+                textAlign='center'
+              >
+                <VStack spacing={4}>
+                  <Img
+                    src='/placeholders/img-placeholder.png'
+                    boxSize={40}
+                    objectFit='contain'
+                    pb={4}
+                  />
+                  <Text fontSize='2xl' fontWeight='medium'>
+                    More Coming Soon
+                  </Text>
+                  <Text pb={6}>
+                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                    qui blanditiis praesentium voluptatum deleniti atque
+                    corrupti quos dolores et quas molestias excepturi sint.
+                  </Text>
+                </VStack>
+              </Card>
+            </Grid>
           </Flex>
-          <VStack spacing={2} align='flex-start' justify='center' maxW='50ch'>
-            <Heading>About AAVE Strategy</Heading>
-            <Text>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo. Nemo enim ipsam voluptate.
-            </Text>
-          </VStack>
-        </Grid>
+        </Section>
       </VStack>
     </Layout>
   )
