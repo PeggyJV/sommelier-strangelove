@@ -1,7 +1,7 @@
 import { ButtonProps, useToast } from '@chakra-ui/react'
 import { useCosmWasm } from 'hooks/cosmwasm'
 import { useEffect, useMemo } from 'react'
-import BaseButton from './BaseButton'
+import { BaseButton } from './BaseButton'
 
 export interface KeplrButtonProps extends Omit<ButtonProps, 'children'> {
   chainId?: string
