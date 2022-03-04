@@ -18,6 +18,9 @@ import { FaArrowRight } from 'react-icons/fa'
 import { CardDivider } from 'components/_layout/CardDivider'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { BaseButton } from 'components/_buttons/BaseButton'
+import { LineChartArea } from 'components/_charts/LineChartArea'
+import { Serie } from '@nivo/line'
+import { useNivoThemes } from 'hooks/nivo'
 
 interface Props {
   isConnected: boolean
@@ -44,7 +47,22 @@ const bottomRowCells: StackProps = {
   align: 'flex-start'
 }
 
+const data: Serie[] = [
+  {
+    id: 1,
+    data: [
+      { x: 'bingus', y: 5 },
+      { x: 'pingus', y: 10 },
+      { x: 'dingus', y: 7 },
+      { x: 'lingus', y: 15 },
+      { x: 'gingus', y: 12 }
+    ]
+  }
+]
+
 export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
+  const { lineChartTheme } = useNivoThemes()
+
   return (
     <Card py={8} bg='violentViolet'>
       <VStack spacing={6} align='stretch'>
@@ -69,13 +87,9 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
                     <Text>+420,000 USD</Text>
                   </HStack>
                 </Box>
-                <Box
-                  flex={1}
-                  maxH='100%'
-                  minW='100%'
-                  borderRadius={10}
-                  bg='brilliantRose.600'
-                />
+                <Box flex={1} maxH='100%' minW='100%'>
+                  <LineChartArea data={data} colors={lineChartTheme} />
+                </Box>
               </VStack>
             </Card>
           </GridItem>
