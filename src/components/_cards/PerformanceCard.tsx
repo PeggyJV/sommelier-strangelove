@@ -13,6 +13,7 @@ import { VFC } from 'react'
 import { Card } from './Card'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { CardDivider } from 'components/_layout/CardDivider'
+import { useNivoThemes } from 'hooks/nivo'
 const LineChart = dynamic(() => import('components/_charts/LineChart'), {
   ssr: false
 })
@@ -44,6 +45,8 @@ const data: Serie[] = [
 ]
 
 export const PerformanceCard: VFC<Props> = props => {
+  const { lineChartTheme } = useNivoThemes()
+
   return (
     <Card bg='backgrounds.dark' overflow='visible' {...props}>
       <VStack spacing={4} align='stretch'>
@@ -82,7 +85,7 @@ export const PerformanceCard: VFC<Props> = props => {
         <Card overflow='visible' {...cardProps}>
           <VStack spacing={6} align='stretch' divider={<CardDivider />}>
             <Box h='10rem'>
-              <LineChart data={data} />
+              <LineChart data={data} colors={lineChartTheme} />
             </Box>
             <HStack justify='space-between'>
               <CardHeading>12am</CardHeading>

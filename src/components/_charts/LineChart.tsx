@@ -1,11 +1,8 @@
 import { VFC } from 'react'
 import { ResponsiveLine, LineSvgProps } from '@nivo/line'
-import { useTheme } from '@chakra-ui/react'
 import { ToolTip } from './LineToolTip'
 
 const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
-  const { colors } = useTheme()
-
   return (
     <ResponsiveLine
       data={data}
@@ -18,7 +15,6 @@ const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
         duration: 220
       }}
       enablePoints={false}
-      colors={[colors.brilliantRose[400]]}
       {...rest}
     />
   )

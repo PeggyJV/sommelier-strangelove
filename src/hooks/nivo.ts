@@ -12,5 +12,11 @@ export const useNivoThemes = () => {
     colors.brilliantRose[500]
   ]
 
-  return { barChartTheme }
+  const lineChartTheme: string[] = [
+    colors.brilliantRose[500],
+    colors.electricIndigo[500],
+    colors.deepSkyBlue[500]
+  ]
+
+  return { barChartTheme, lineChartTheme }
 }
