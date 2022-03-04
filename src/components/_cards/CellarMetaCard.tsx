@@ -8,13 +8,13 @@ import {
   Icon,
   StackProps,
   Text,
-  useTheme,
   VStack
 } from '@chakra-ui/react'
 import { CardDivider } from 'components/_layout/CardDivider'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { VFC } from 'react'
 import { Card } from './Card'
+import { useNivoThemes } from 'hooks/nivo'
 const BarChart = dynamic(() => import('components/_charts/BarChart'), {
   ssr: false
 })
@@ -33,13 +33,7 @@ const placeholderData = [
 ]
 
 const CellarMetaCard: VFC<BoxProps> = () => {
-  const { colors } = useTheme()
-
-  const colorPalette = [
-    colors.electricIndigo[500],
-    colors.deepSkyBlue[500],
-    colors.brilliantRose[500]
-  ]
+  const { barChartTheme } = useNivoThemes()
 
   return (
     <Card bg='backgrounds.dark'>
@@ -71,7 +65,7 @@ const CellarMetaCard: VFC<BoxProps> = () => {
                 {/* @ts-ignore */}
                 <BarChart
                   layout='horizontal'
-                  colors={colorPalette}
+                  colors={barChartTheme}
                   keys={['platform', 'protocol', 'depositors']}
                   data={placeholderData}
                 />
@@ -80,7 +74,7 @@ const CellarMetaCard: VFC<BoxProps> = () => {
                 {Object.entries(placeholderData[0]).map(([key, value], i) => {
                   return (
                     <HStack key={i}>
-                      <Circle size={4} bg={colorPalette[i]} />
+                      <Circle size={4} bg={barChartTheme[i]} />
                       <Text fontSize='sm'>
                         {key}: {value}%
                       </Text>
