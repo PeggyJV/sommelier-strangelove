@@ -18,9 +18,13 @@ import { FaArrowRight } from 'react-icons/fa'
 import { CardDivider } from 'components/_layout/CardDivider'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { BaseButton } from 'components/_buttons/BaseButton'
-import { LineChartArea } from 'components/_charts/LineChartArea'
 import { Serie } from '@nivo/line'
 import { useNivoThemes } from 'hooks/nivo'
+import dynamic from 'next/dynamic'
+const LineChartArea = dynamic(
+  () => import('components/_charts/LineChartArea'),
+  { ssr: false }
+)
 
 interface Props {
   isConnected: boolean

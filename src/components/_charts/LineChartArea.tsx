@@ -3,7 +3,7 @@ import { LineSvgProps } from '@nivo/line'
 import React, { VFC } from 'react'
 import LineChart from './LineChart'
 
-export const LineChartArea: VFC<LineSvgProps> = ({ data, ...rest }) => {
+const LineChartArea: VFC<LineSvgProps> = ({ data, ...rest }) => {
   return (
     <LineChart
       data={data}
@@ -19,3 +19,5 @@ export const LineChartArea: VFC<LineSvgProps> = ({ data, ...rest }) => {
     />
   )
 }
+
+export default LineChartArea
