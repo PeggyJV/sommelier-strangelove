@@ -7,8 +7,7 @@ export const components: ThemeComponents = {
       color: 'white'
     },
     defaultProps: {
-      colorScheme: 'electricIndigo',
-      // variant: 'outline'
+      colorScheme: 'electricIndigo'
     }
   },
   Heading: {
