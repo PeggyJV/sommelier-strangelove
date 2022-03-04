@@ -8,18 +8,19 @@ interface BaseButtonProps extends Omit<ButtonProps, 'icon'> {
 export const BaseButton: VFC<BaseButtonProps> = forwardRef<
   BaseButtonProps,
   'button'
->(({ icon, ...rest }, ref) => {
+>(({ icon, variant, ...rest }, ref) => {
   return (
     <Button
       ref={ref}
-      variant='outline'
+      variant={variant || 'outline'}
       color='white'
-      borderColor='electricIndigo.400'
+      borderColor='electricIndigo.500'
       rightIcon={
         icon && (
           <Icon
             as={icon}
-            bgColor='electricIndigo.400'
+            color={variant === 'solid' ? 'electricIndigo.500' : 'white'}
+            bgColor={variant === 'solid' ? 'white' : 'electricIndigo.500'}
             borderRadius='50%'
             boxSize={6}
             p={1}
@@ -27,7 +28,7 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
         )
       }
       _hover={{
-        color: 'electricIndigo.400',
+        color: 'electricIndigo.500',
         bgColor: 'white',
         borderColor: 'white',
         span: {

@@ -18,6 +18,7 @@ import { Card } from './Card'
 import { FaArrowRight } from 'react-icons/fa'
 import { CardDivider } from 'components/_layout/CardDivider'
 import { CardHeading } from 'components/_typography/CardHeading'
+import { BaseButton } from 'components/_buttons/BaseButton'
 
 interface Props {
   isConnected: boolean
@@ -130,9 +131,9 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
             </Card>
           </GridItem>
         </Grid>
-        <Button variant='solid' rightIcon={<FaArrowRight />}>
+        <BaseButton variant='solid' icon={FaArrowRight}>
           {isConnected ? 'add deposit' : 'view cellar'}
-        </Button>
+        </BaseButton>
       </VStack>
     </Card>
   )
