@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, VFC } from 'react'
 import { TopNav } from './Nav/TopNav'
 import { SideNav } from './Nav/SideNav'
 import {
@@ -23,7 +23,7 @@ const topRowProps: GridItemProps = {
   ...gridCellProps
 }
 
-const Layout = ({ children, ...rest }: GridProps): ReactElement => {
+const Layout: VFC<GridProps> = ({ children, ...rest }) => {
   return (
     <Container maxW='87.5rem'>
       <Grid
