@@ -1,25 +1,48 @@
+import dynamic from 'next/dynamic'
 import {
   Box,
   BoxProps,
+  Circle,
+  Grid,
   HStack,
   Icon,
   StackProps,
   Text,
+  useTheme,
   VStack
 } from '@chakra-ui/react'
 import { CardDivider } from 'components/_layout/CardDivider'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { VFC } from 'react'
 import { Card } from './Card'
+const BarChart = dynamic(() => import('components/_charts/BarChart'), {
+  ssr: false
+})
 
 const bottomRowCells: StackProps = {
   align: 'flex-start',
   flex: 1
 }
 
+const placeholderData = [
+  {
+    platform: 10,
+    protocol: 10,
+    depositors: 80
+  }
+]
+
 const CellarMetaCard: VFC<BoxProps> = () => {
+  const { colors } = useTheme()
+
+  const colorPalette = [
+    colors.electricIndigo[500],
+    colors.deepSkyBlue[500],
+    colors.brilliantRose[500]
+  ]
+
   return (
-    <Card p={4} bg='backgrounds.dark'>
+    <Card bg='backgrounds.dark'>
       <VStack spacing={4} align='stretch'>
         <Card p={4} bg='backgrounds.darker'>
           <HStack spacing={4} divider={<CardDivider />}>
@@ -40,10 +63,30 @@ const CellarMetaCard: VFC<BoxProps> = () => {
                 <Text>8.3%</Text>
               </VStack>
             </VStack>
-            <VStack flex={1} align='flex-start'>
+            <VStack flex={1} spacing={6} align='flex-start'>
               <CardHeading>
                 profit split <Icon boxSize={3} />
               </CardHeading>
+              <Box w='100%' h='6px'>
+                <BarChart
+                  layout='horizontal'
+                  colors={colorPalette}
+                  keys={['platform', 'protocol', 'depositors']}
+                  data={placeholderData}
+                />
+              </Box>
+              <Grid templateColumns='repeat(2, 1fr)' gap={2}>
+                {Object.entries(placeholderData[0]).map(([key, value], i) => {
+                  return (
+                    <HStack key={i}>
+                      <Circle size={4} bg={colorPalette[i]} />
+                      <Text fontSize='sm'>
+                        {key}: {value}%
+                      </Text>
+                    </HStack>
+                  )
+                })}
+              </Grid>
             </VStack>
           </HStack>
         </Card>
