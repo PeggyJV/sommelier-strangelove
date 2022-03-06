@@ -1,0 +1,12 @@
+schema: './src/generated/schema.json'
+documents: './src/**/*.graphql'
+generates:
+  ./src/generated/subgraph.ts:
+    config:
+      withHooks: true
+    plugins:
+      - add:
+          content: '// THIS FILE IS AUTO GENERATED, DO NOT EDIT!'
+      - typescript
+      - typescript-operations
+      - typescript-urql
