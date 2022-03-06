@@ -1,0 +1,5 @@
+query GetWallet($walletAddress: ID!) {
+  wallet(id: $walletAddress) {
+    id
+  }
+}
