@@ -136,6 +136,7 @@ export type Block_Height = {
 export type Cellar = {
   __typename?: 'Cellar';
   addedLiquidityAllTime: Scalars['BigInt'];
+  dayDatas: Array<CellarDayData>;
   denom: Denom;
   depositWithdraws: Array<DepositWithdrawEvent>;
   id: Scalars['ID'];
@@ -143,9 +144,19 @@ export type Cellar = {
   numWalletsActive: Scalars['Int'];
   numWalletsAllTime: Scalars['Int'];
   removedLiquidityAllTime: Scalars['BigInt'];
+  sharesTotal: Scalars['BigInt'];
   tvlActive: Scalars['BigInt'];
   tvlInactive: Scalars['BigInt'];
   tvlTotal: Scalars['BigInt'];
+};
+
+
+export type CellarDayDatasArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<CellarDayData_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CellarDayData_Filter>;
 };
 
 
@@ -494,6 +505,14 @@ export type Cellar_Filter = {
   removedLiquidityAllTime_lte?: InputMaybe<Scalars['BigInt']>;
   removedLiquidityAllTime_not?: InputMaybe<Scalars['BigInt']>;
   removedLiquidityAllTime_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sharesTotal?: InputMaybe<Scalars['BigInt']>;
+  sharesTotal_gt?: InputMaybe<Scalars['BigInt']>;
+  sharesTotal_gte?: InputMaybe<Scalars['BigInt']>;
+  sharesTotal_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sharesTotal_lt?: InputMaybe<Scalars['BigInt']>;
+  sharesTotal_lte?: InputMaybe<Scalars['BigInt']>;
+  sharesTotal_not?: InputMaybe<Scalars['BigInt']>;
+  sharesTotal_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   tvlActive?: InputMaybe<Scalars['BigInt']>;
   tvlActive_gt?: InputMaybe<Scalars['BigInt']>;
   tvlActive_gte?: InputMaybe<Scalars['BigInt']>;
@@ -522,6 +541,7 @@ export type Cellar_Filter = {
 
 export enum Cellar_OrderBy {
   AddedLiquidityAllTime = 'addedLiquidityAllTime',
+  DayDatas = 'dayDatas',
   Denom = 'denom',
   DepositWithdraws = 'depositWithdraws',
   Id = 'id',
@@ -529,6 +549,7 @@ export enum Cellar_OrderBy {
   NumWalletsActive = 'numWalletsActive',
   NumWalletsAllTime = 'numWalletsAllTime',
   RemovedLiquidityAllTime = 'removedLiquidityAllTime',
+  SharesTotal = 'sharesTotal',
   TvlActive = 'tvlActive',
   TvlInactive = 'tvlInactive',
   TvlTotal = 'tvlTotal'
@@ -1055,8 +1076,8 @@ export type Wallet = {
   addRemoveEvents: Array<AddRemoveEvent>;
   cellarShareTransferEvents: Array<CellarShareTransferEvent>;
   cellarShares: Array<CellarShare>;
+  dayDatas: Array<WalletDayData>;
   id: Scalars['ID'];
-  walletDayDatas: Array<WalletDayData>;
 };
 
 
@@ -1087,7 +1108,7 @@ export type WalletCellarSharesArgs = {
 };
 
 
-export type WalletWalletDayDatasArgs = {
+export type WalletDayDatasArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<WalletDayData_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
@@ -1176,8 +1197,8 @@ export enum Wallet_OrderBy {
   AddRemoveEvents = 'addRemoveEvents',
   CellarShareTransferEvents = 'cellarShareTransferEvents',
   CellarShares = 'cellarShares',
-  Id = 'id',
-  WalletDayDatas = 'walletDayDatas'
+  DayDatas = 'dayDatas',
+  Id = 'id'
 }
 
 export type _Block_ = {
@@ -1212,22 +1233,61 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type GetWalletQueryVariables = Exact<{
-  walletAddress: Scalars['ID'];
+export type GetCellarQueryVariables = Exact<{
+  cellarAddress: Scalars['ID'];
 }>;
 
 
-export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string } | null };
+export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, tvlActive: string, tvlInactive: string, tvlTotal: string, addedLiquidityAllTime: string, removedLiquidityAllTime: string, numWalletsAllTime: number, numWalletsActive: number, denom: { __typename?: 'Denom', id: string, symbol: string }, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number }> } | null };
+
+export type GetPositionQueryVariables = Exact<{
+  walletAddress: Scalars['ID'];
+  cellarAddress: Scalars['String'];
+}>;
 
 
-export const GetWalletDocument = gql`
-    query GetWallet($walletAddress: ID!) {
-  wallet(id: $walletAddress) {
+export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
+
+
+export const GetCellarDocument = gql`
+    query GetCellar($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
     id
+    denom {
+      id
+      symbol
+    }
+    tvlActive
+    tvlInactive
+    tvlTotal
+    addedLiquidityAllTime
+    removedLiquidityAllTime
+    numWalletsAllTime
+    numWalletsActive
+    dayDatas(first: 7, orderBy: date, orderDirection: desc) {
+      date
+      addedLiquidity
+      removedLiquidity
+      numWallets
+    }
   }
 }
     `;
 
-export function useGetWalletQuery(options: Omit<Urql.UseQueryArgs<GetWalletQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetWalletQuery>({ query: GetWalletDocument, ...options });
+export function useGetCellarQuery(options: Omit<Urql.UseQueryArgs<GetCellarQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetCellarQuery>({ query: GetCellarDocument, ...options });
+};
+export const GetPositionDocument = gql`
+    query GetPosition($walletAddress: ID!, $cellarAddress: String!) {
+  wallet(id: $walletAddress) {
+    id
+    cellarShares(where: {cellar: $cellarAddress}) {
+      balance
+    }
+  }
+}
+    `;
+
+export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetPositionQuery>({ query: GetPositionDocument, ...options });
 };

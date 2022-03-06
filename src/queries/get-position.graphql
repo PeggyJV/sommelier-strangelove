@@ -1,0 +1,8 @@
+query GetPosition($walletAddress: ID!, $cellarAddress: String!) {
+  wallet(id: $walletAddress) {
+    id
+    cellarShares(where: { cellar: $cellarAddress}) {
+      balance
+    }
+  }
+}

@@ -8,5 +8,7 @@ generates:
       - add:
           content: '// THIS FILE IS AUTO GENERATED, DO NOT EDIT!'
       - typescript
-      - typescript-operations
+      - typescript-operations:
+          scalars:
+            BigInt: string
       - typescript-urql
