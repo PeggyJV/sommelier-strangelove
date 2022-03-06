@@ -9,6 +9,10 @@ generates:
           content: '// THIS FILE IS AUTO GENERATED, DO NOT EDIT!'
       - typescript
       - typescript-operations:
+          strictScalars: true
           scalars:
             BigInt: string
+            BigDecimal: string
+            Bytes: string
+          useTypeImports: true
       - typescript-urql
