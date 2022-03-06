@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { useGetCellarQuery, useGetPositionQuery } from 'generated/subgraph'
 
 import type { GetCellarQuery, GetPositionQuery } from 'generated/subgraph'
@@ -15,14 +16,14 @@ const renderCellar = (cellar: CellarResult) => {
   }
 
   const renderDay = (day: DayData) => {
-    const added = parseInt(day.addedLiquidity, 10)
-    const removed = parseInt(day.removedLiquidity, 10)
+    const added = BigNumber.from(day.addedLiquidity)
+    const removed = BigNumber.from(day.removedLiquidity)
     const date = new Date(day.date * 1000).toISOString()
 
     return (
       <div key={cellar.id + date}>
         <div>Date: {date}</div>
-        <div>Volume: {added - removed}</div>
+        <div>Volume: {added.sub(removed).toString()}</div>
         <div>Wallets: {day.numWallets}</div>
       </div>
     )
