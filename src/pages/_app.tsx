@@ -6,6 +6,8 @@ import theme from 'theme/index'
 import { QueryClientProvider, QueryClient } from 'react-query'
 import { WagmiProvider } from 'context/wagmiContext'
 import AlertDialog from 'components/AlertDialog'
+import { Provider as GraphQLProvider } from 'urql'
+import { client as urqlClient } from 'queries/client'
 
 import '@fontsource/oswald/700.css'
 
@@ -14,16 +16,18 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PlausibleProvider domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}>
-        <ChakraProvider theme={theme}>
-          <DialogProvider>
-            <WagmiProvider>
-              <Component {...pageProps} />
-              <AlertDialog />
-            </WagmiProvider>
-          </DialogProvider>
-        </ChakraProvider>
-      </PlausibleProvider>
+      <GraphQLProvider value={urqlClient}>
+        <PlausibleProvider domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}>
+          <ChakraProvider theme={theme}>
+            <DialogProvider>
+              <WagmiProvider>
+                <Component {...pageProps} />
+                <AlertDialog />
+              </WagmiProvider>
+            </DialogProvider>
+          </ChakraProvider>
+        </PlausibleProvider>
+      </GraphQLProvider>
     </QueryClientProvider>
   )
 }

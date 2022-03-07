@@ -1,0 +1,24 @@
+query GetCellar($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    id,
+    denom {
+      id
+      symbol
+    },
+    tvlActive,
+    tvlInactive,
+    tvlTotal,
+    addedLiquidityAllTime,
+    removedLiquidityAllTime,
+    numWalletsAllTime,
+    numWalletsActive,
+
+    # There could be missing days. Data for a missing day should equal the previous day.
+    dayDatas(first: 7, orderBy: date, orderDirection: desc) {
+      date,
+      addedLiquidity,
+      removedLiquidity,
+      numWallets,
+    }
+  }
+}
