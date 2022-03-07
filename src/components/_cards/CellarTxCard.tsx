@@ -12,6 +12,7 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
+import { BaseButton } from 'components/_buttons/BaseButton'
 import { VFC } from 'react'
 import { BsCircleFill } from 'react-icons/bs'
 import { Card } from './Card'
@@ -22,21 +23,20 @@ interface Props extends BoxProps {
 
 export const CellarTxCard: VFC<Props> = ({ isConnected }) => {
   return (
-    <Card display='flex' flexDir='column' p={0} h='100%' bg='gray.800'>
-      <Tabs flex={1} isFitted pt={1} colorScheme='cyan'>
-        <TabList>
+    <Card display='flex' flexDir='column' bg='backgrounds.dark'>
+      <Tabs flex={1} isFitted pt={1} colorScheme='brilliantRose'>
+        <TabList color='white'>
           <Tab>Deposit</Tab>
           <Tab>Withdraw</Tab>
         </TabList>
-        <TabPanels p={6}>
-          <TabPanel p={0}>
+        <TabPanels>
+          <TabPanel px={0}>
             <Card
               p={4}
               display='flex'
               justifyContent='space-between'
               alignItems='center'
-              bg='gray.600'
-              color='gray.300'
+              bg='backgrounds.darker'
             >
               <VStack spacing={1}>
                 <Icon as={BsCircleFill} boxSize={14} color='gray.500' />
@@ -72,9 +72,9 @@ export const CellarTxCard: VFC<Props> = ({ isConnected }) => {
           </TabPanel>
         </TabPanels>
       </Tabs>
-      <Flex as='button' p={3} justify='center' bg='black' fontFamily='mono'>
+      <BaseButton variant='solid'>
         {isConnected ? 'Add Deposit' : 'Connect Wallet'}
-      </Flex>
+      </BaseButton>
     </Card>
   )
 }
