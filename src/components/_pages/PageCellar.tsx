@@ -1,6 +1,5 @@
 import {
   Box,
-  Flex,
   Grid,
   GridItem,
   GridProps,
@@ -9,21 +8,24 @@ import {
   HStack,
   StackDivider,
   Text,
-  TextProps,
-  VStack
+  TextProps
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { PerformanceCard } from 'components/_cards/PerformanceCard'
 import CellarMetaCard from 'components/_cards/CellarMetaCard'
 import { CellarTxCard } from 'components/_cards/CellarTxCard'
-// import { DepositStatusCard } from 'components/_cards/DepositStatusCard'
-// import { MinimalOverviewCard } from 'components/_cards/MinimalOverviewCard'
 import { Section } from 'components/_layout/Section'
 import { useConnect } from 'wagmi'
 
 const gridProps: GridProps = {
-  gap: 4,
+  gap: 6,
   templateColumns: 'repeat(6, 1fr)'
+}
+
+const bottomGridProps: GridProps = {
+  ...gridProps,
+  rowGap: 7,
+  templateRows: '30px 1fr'
 }
 
 const textProps: TextProps = {
@@ -68,47 +70,46 @@ const PageCellar = () => {
             </Text>
           </GridItem>
           <GridItem colSpan={3}>
-            {/* <VStack spacing={6}>
-              <MinimalOverviewCard w='100%' />
-              {isConnected && <DepositStatusCard w='100%' />}
-            </VStack> */}
             <CellarMetaCard />
           </GridItem>
         </Grid>
       </Section>
       <Section>
-        <Grid {...gridProps}>
+        <Grid {...bottomGridProps}>
           <GridItem colSpan={4}>
-            <VStack spacing={5} align='stretch'>
-              <HStack justify='space-between'>
-                <Heading fontSize='1.75rem'>Performance</Heading>
-                <HStack
-                  border='1px solid'
-                  borderColor='electricIndigo.500'
-                  borderRadius='2rem'
-                  overflow='hidden'
-                  justify='space-around'
-                  spacing={0}
-                  divider={<StackDivider borderColor='electricIndigo.500' />}
-                >
-                  {placeholderButtons.map((button, i) => (
-                    <Box
-                      flex={1}
-                      px={4}
-                      py={2}
-                      key={i}
-                      as='button'
-                      bg={i === 0 ? 'electricIndigo.500' : ''}
-                      fontSize='sm'
-                      whiteSpace='nowrap'
-                    >
-                      {button}
-                    </Box>
-                  ))}
-                </HStack>
+            <HStack justify='space-between'>
+              <Heading fontSize='1.75rem'>Performance</Heading>
+              <HStack
+                border='1px solid'
+                borderColor='electricIndigo.500'
+                borderRadius='2rem'
+                overflow='hidden'
+                justify='space-around'
+                spacing={0}
+                divider={<StackDivider borderColor='electricIndigo.500' />}
+              >
+                {placeholderButtons.map((button, i) => (
+                  <Box
+                    flex={1}
+                    px={4}
+                    py={2}
+                    key={i}
+                    as='button'
+                    bg={i === 0 ? 'electricIndigo.500' : ''}
+                    fontSize='sm'
+                    whiteSpace='nowrap'
+                  >
+                    {button}
+                  </Box>
+                ))}
               </HStack>
-              <PerformanceCard />
-            </VStack>
+            </HStack>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <Heading fontSize='1.75rem'>Deposits</Heading>
+          </GridItem>
+          <GridItem colSpan={4}>
+            <PerformanceCard />
           </GridItem>
           <GridItem colSpan={2}>
             <CellarTxCard isConnected={isConnected} />
