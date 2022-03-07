@@ -18,6 +18,8 @@
       "hooks/*": ["src/hooks/*"],
       "pages/*": ["src/pages/*"],
       "public/*": ["public/*"],
+      "generated/*": ["src/generated/*"],
+      "queries/*": ["src/queries/*"],
       "theme/*": ["src/theme/*"],
       "types/*": ["src/types/*"]
     },
