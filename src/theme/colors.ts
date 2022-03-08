@@ -67,7 +67,13 @@ const backgrounds = {
   brand: electricIndigo[500],
   dark: violentViolet,
   darker: '#1f0b40',
-  offBlack: '#281144'
+  offBlack: '#281144',
+  primaryGradient:
+    'linear-gradient(90deg, rgba(53,11,112,0.9) 0%, rgba(31,11,64,0.9) 50%)',
+  successGradient:
+    'linear-gradient(90deg, rgba(23,66,99,0.9) 0%, rgba(31,11,64,0.9) 50%)',
+  dangerGradient:
+    'linear-gradient(90deg, rgba(82,18,72,0.9) 0%, rgba(31,11,64,0.9) 50%)'
 }
 const uiChrome = {
   darkest: black,
