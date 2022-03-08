@@ -22,11 +22,7 @@ import {
 } from './styles'
 import { TxInput } from './TxInput'
 
-interface Props {
-  isConnected: boolean
-}
-
-export const ConnectedCard: VFC<Props> = ({ isConnected }) => {
+export const ConnectedCard: VFC = () => {
   return (
     <Card
       display='flex'
@@ -59,7 +55,7 @@ export const ConnectedCard: VFC<Props> = ({ isConnected }) => {
                   </HStack>
                 </VStack>
               </Card>
-              <TxInput isConnected={isConnected} />
+              <TxInput />
               <BaseButton disabled={false} {...disabledButtonProps}>
                 Add Deposit
               </BaseButton>
@@ -83,7 +79,7 @@ export const ConnectedCard: VFC<Props> = ({ isConnected }) => {
                   </HStack>
                 </VStack>
               </Card>
-              <TxInput isConnected={isConnected} />
+              <TxInput />
               <BaseButton disabled={false} {...disabledButtonProps}>
                 Withdraw
               </BaseButton>

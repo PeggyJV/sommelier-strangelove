@@ -9,10 +9,6 @@ import {
 import { BaseButton } from 'components/_buttons/BaseButton'
 import { VFC } from 'react'
 
-interface Props extends InputGroupProps {
-  isConnected: boolean
-}
-
 const disabledProps: BoxProps = {
   _disabled: {
     color: 'text.body.light',
@@ -28,11 +24,11 @@ const disabledProps: BoxProps = {
   }
 }
 
-export const TxInput: VFC<Props> = ({ isConnected, ...rest }) => {
+export const TxInput: VFC<InputGroupProps> = props => {
   return (
-    <InputGroup variant='unstyled' color='text.body.dark' {...rest}>
+    <InputGroup variant='unstyled' color='text.body.dark' {...props}>
       <Input
-        isDisabled={isConnected === false}
+        isDisabled={false}
         {...disabledProps}
         _placeholder={{ color: 'text.body.dark' }}
         placeholder='12345.678'
@@ -44,7 +40,7 @@ export const TxInput: VFC<Props> = ({ isConnected, ...rest }) => {
       <InputRightAddon>
         <BaseButton
           variant='solid'
-          isDisabled={isConnected === false}
+          isDisabled={false}
           {...(disabledProps as ButtonProps)}
           pl={2}
           pr={4}

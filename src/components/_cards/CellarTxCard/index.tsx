@@ -8,9 +8,5 @@ interface Props extends BoxProps {
 }
 
 export const CellarTxCard: VFC<Props> = ({ isConnected }) => {
-  return isConnected ? (
-    <ConnectedCard isConnected={isConnected} />
-  ) : (
-    <UnconnectedCard />
-  )
+  return isConnected ? <ConnectedCard /> : <UnconnectedCard />
 }
