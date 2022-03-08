@@ -6,7 +6,6 @@ import {
   Grid,
   HStack,
   Icon,
-  StackProps,
   Text,
   VStack
 } from '@chakra-ui/react'
@@ -15,14 +14,13 @@ import { CardHeading } from 'components/_typography/CardHeading'
 import { VFC } from 'react'
 import { Card } from './Card'
 import { useNivoThemes } from 'hooks/nivo'
+import { CardStat } from 'components/CardStat'
+import { BsCurrencyDollar } from 'react-icons/bs'
+import { FaEthereum } from 'react-icons/fa'
+import { CardStatRow } from 'components/CardStatRow'
 const BarChart = dynamic(() => import('components/_charts/BarChart'), {
   ssr: false
 })
-
-const bottomRowCells: StackProps = {
-  align: 'flex-start',
-  flex: 1
-}
 
 const placeholderData = [
   {
@@ -39,25 +37,18 @@ const CellarMetaCard: VFC<BoxProps> = () => {
     <Card bg='backgrounds.dark'>
       <VStack spacing={4} align='stretch'>
         <Card p={4} bg='backgrounds.darker'>
-          <HStack spacing={4} divider={<CardDivider />}>
-            <VStack align='stretch' divider={<CardDivider />}>
-              <Box>
-                <CardHeading>
-                  tvl <Icon boxSize={3} />
-                </CardHeading>
-                <HStack spacing={2}>
-                  <Icon boxSize={4} />
-                  <Text>12.3M USD</Text>
-                </HStack>
-              </Box>
-              <VStack align='flex-start' justify='space-between'>
-                <CardHeading>
-                  apy <Icon boxSize={3} />
-                </CardHeading>
-                <Text>8.3%</Text>
-              </VStack>
-            </VStack>
-            <VStack flex={1} spacing={6} align='flex-start'>
+          <VStack spacing={4} divider={<CardDivider />} align='stretch'>
+            <CardStatRow>
+              <CardStat
+                label='tvl'
+                labelIcon
+                stat='12.3M USD'
+                statIcon={BsCurrencyDollar}
+              />
+              <CardStat label='management fee' labelIcon stat='8.35%' />
+              <CardStat label='apy' labelIcon stat='8.35%' />
+            </CardStatRow>
+            <VStack flex={1} spacing={6} align='stretch'>
               <CardHeading>
                 profit split <Icon boxSize={3} />
               </CardHeading>
@@ -83,37 +74,40 @@ const CellarMetaCard: VFC<BoxProps> = () => {
                 })}
               </Grid>
             </VStack>
-          </HStack>
+          </VStack>
         </Card>
         <Card p={4} bg='backgrounds.darker'>
-          <HStack justify='space-between' divider={<CardDivider />}>
-            <VStack align='flex-start'>
-              <CardHeading>minimum deposit</CardHeading>
-              <Text>100 USD</Text>
-            </VStack>
-            <VStack align='flex-end'>
-              <CardHeading>deposit cap</CardHeading>
-              <Text>2M USD</Text>
-            </VStack>
-          </HStack>
+          <CardStatRow>
+            <CardStat
+              label='minimum deposit'
+              stat='100 USD'
+              statIcon={BsCurrencyDollar}
+            />
+            <CardStat label='deposit asset' stat='ETH' statIcon={FaEthereum} />
+            <CardStat
+              label='deposit cap'
+              stat='2M USD'
+              statIcon={BsCurrencyDollar}
+              align='flex-end'
+            />
+          </CardStatRow>
         </Card>
         <Card p={4} bg='backgrounds.darker'>
-          <HStack spacing={4} justify='space-around' divider={<CardDivider />}>
-            <VStack {...bottomRowCells}>
-              <CardHeading>
-                class <Icon boxSize={3} />
-              </CardHeading>
-              <Text>Stablecoin</Text>
-            </VStack>
-            <VStack {...bottomRowCells}>
-              <CardHeading>asset</CardHeading>
-              <Text>ETH</Text>
-            </VStack>
-            <VStack {...bottomRowCells}>
-              <CardHeading>protocol</CardHeading>
-              <Text>AAVE</Text>
-            </VStack>
-          </HStack>
+          <CardStatRow>
+            <CardStat label='class' labelIcon stat='Stablecoin' />
+            <CardStat
+              label='strategy asset'
+              labelIcon
+              stat='ETH'
+              statIcon={FaEthereum}
+            />
+            <CardStat
+              label='protocol'
+              labelIcon
+              stat='AAVE'
+              statIcon={FaEthereum}
+            />
+          </CardStatRow>
         </Card>
       </VStack>
     </Card>
