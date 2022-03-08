@@ -42,7 +42,7 @@
     "react-icons": "^4",
     "react-query": "3.34.16",
     "urql": "^2.2.0",
-    "wagmi": "^0.2.12",
+    "wagmi": "0.2.18",
     "zustand": "3.7.1"
   },
   "devDependencies": {
