@@ -25,7 +25,7 @@ const topRowProps: GridItemProps = {
 
 const Layout: VFC<GridProps> = ({ children, ...rest }) => {
   return (
-    <Container maxW='87.5rem'>
+    <Container maxW='92.5rem'>
       <Grid
         minH='100vh'
         templateColumns='1fr 5fr'
