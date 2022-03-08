@@ -604,12 +604,12 @@
     "@chakra-ui/utils" "1.10.2"
     "@chakra-ui/visually-hidden" "1.1.4"
 
-"@chakra-ui/cli@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@chakra-ui/cli/-/cli-1.8.1.tgz#16b63cbc54f610e9800edf5393b13f75722398ed"
-  integrity sha512-XlW/3mBSLEVedMR5j3RuH/wpy5GCO569PVw9NRMR4fjPC/ZNZda6hYaX7ZSEwpUtqOP9RVA4/Rf0ethojMJRZQ==
+"@chakra-ui/cli@1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/cli/-/cli-1.9.0.tgz#99fbab4b2cd075ceddc575dd23e9a119bd5c376f"
+  integrity sha512-ahZ+ugz2ceMJwrCkQy1RqtWrKbKlChvL71+QplcsqPyyvQmDXIGUBXvo8d3/JEsb0SkFlHwzoDxqHw1k2tO9SA==
   dependencies:
-    "@chakra-ui/utils" "^1.10.2"
+    "@chakra-ui/utils" "^1.10.4"
     cli-check-node "^1.3.4"
     cli-handle-unhandled "^1.1.1"
     cli-welcome "^2.2.2"
@@ -1093,6 +1093,16 @@
   version "1.10.2"
   resolved "https://registry.yarnpkg.com/@chakra-ui/utils/-/utils-1.10.2.tgz#e79a8923d2779b1698a34d978bb9e9bc9f37f499"
   integrity sha512-V4nGBkebZpz6P7AgbZBiXi2Pn3RNSuzR1A6VsQCzAvxYU2+csqZGLqmC07pvCSACNB75sT1en+Xd3XT0QKr0sA==
+  dependencies:
+    "@types/lodash.mergewith" "4.6.6"
+    css-box-model "1.2.1"
+    framesync "5.3.0"
+    lodash.mergewith "4.6.2"
+
+"@chakra-ui/utils@^1.10.4":
+  version "1.10.4"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/utils/-/utils-1.10.4.tgz#40a32d4efd8684b2e7432a40b285796383eacfd3"
+  integrity sha512-AM91VQQxw8F4F1WDA28mqKY6NFIOuzc2Ekkna88imy2OiqqmYH0xkq8J16L2qj4cLiLozpYqba3C79pWioy6FA==
   dependencies:
     "@types/lodash.mergewith" "4.6.6"
     css-box-model "1.2.1"
