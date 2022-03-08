@@ -1,19 +1,14 @@
 import dynamic from 'next/dynamic'
-import {
-  Box,
-  BoxProps,
-  HStack,
-  Icon,
-  StackProps,
-  Text,
-  VStack
-} from '@chakra-ui/react'
+import { Box, BoxProps, HStack, VStack } from '@chakra-ui/react'
 import { Serie } from '@nivo/line'
 import { VFC } from 'react'
 import { Card } from './Card'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { CardDivider } from 'components/_layout/CardDivider'
 import { useNivoThemes } from 'hooks/nivo'
+import { CardStatRow } from 'components/CardStatRow'
+import { CardStat } from 'components/CardStat'
+import { BsCurrencyDollar } from 'react-icons/bs'
 const LineChart = dynamic(() => import('components/_charts/LineChart'), {
   ssr: false
 })
@@ -25,10 +20,6 @@ interface Props extends BoxProps {
 const cardProps: BoxProps = {
   p: 4,
   bg: 'backgrounds.darker'
-}
-
-const topRowCells: StackProps = {
-  align: 'flex-start'
 }
 
 const data: Serie[] = [
@@ -45,9 +36,9 @@ const data: Serie[] = [
   {
     id: 2,
     data: [
-      {x: 'bingus', y: 40},
-      {x: 'shmingus', y: 5},
-    ],
+      { x: 'bingus', y: 40 },
+      { x: 'shmingus', y: 5 }
+    ]
   }
 ]
 
@@ -58,36 +49,27 @@ export const PerformanceCard: VFC<Props> = props => {
     <Card bg='backgrounds.dark' overflow='visible' {...props}>
       <VStack spacing={4} align='stretch'>
         <Card {...cardProps}>
-          <HStack spacing={6} justify='space-between' divider={<CardDivider />}>
-            <VStack {...topRowCells}>
-              <CardHeading>
-                24h cellar apy <Icon boxSize={3} />
-              </CardHeading>
-              <Text>+3.75%</Text>
-            </VStack>
-            <VStack {...topRowCells}>
-              <CardHeading>
-                24h volume <Icon boxSize={3} />
-              </CardHeading>
-              <Text>
-                <Icon boxSize={5} /> +12.5K USD
-              </Text>
-            </VStack>
-            <VStack {...topRowCells}>
-              <CardHeading>my 24h returns</CardHeading>
-              <Text>
-                <Icon boxSize={5} /> -
-              </Text>
-            </VStack>
-            <VStack {...topRowCells}>
-              <CardHeading>
-                my 24h rewards <Icon boxSize={3} />
-              </CardHeading>
-              <Text>
-                <Icon boxSize={5} /> -
-              </Text>
-            </VStack>
-          </HStack>
+          <CardStatRow>
+            <CardStat label='24h cellar apy' labelIcon stat='+3.75%' />
+            <CardStat
+              label='24h volume'
+              labelIcon
+              stat='+12.5K USD'
+              statIcon={BsCurrencyDollar}
+            />
+            <CardStat
+              label='my 24h returns'
+              labelIcon
+              stat='-'
+              statIcon={BsCurrencyDollar}
+            />
+            <CardStat
+              label='my 24h rewards'
+              labelIcon
+              stat='-'
+              statIcon={BsCurrencyDollar}
+            />
+          </CardStatRow>
         </Card>
         <Card overflow='visible' {...cardProps}>
           <VStack spacing={6} align='stretch' divider={<CardDivider />}>
