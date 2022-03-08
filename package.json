@@ -65,7 +65,7 @@
     "get-graphql-schema": "^2.1.2",
     "prettier": "^2",
     "ts-prune": "^0",
-    "typescript": "^4",
+    "typescript": "4.6.2",
     "url": "^0"
   },
   "private": true,
