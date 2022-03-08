@@ -1,14 +1,11 @@
 import {
   BoxProps,
-  ButtonProps,
   HStack,
   Icon,
   Tab,
   TabList,
   TabPanel,
-  TabPanelProps,
   TabPanels,
-  TabProps,
   Tabs,
   Text,
   VStack
@@ -21,43 +18,15 @@ import { FaEthereum } from 'react-icons/fa'
 import { TxInput } from './TxInput'
 import ConnectButton from 'components/_buttons/ConnectButton'
 import { useConnect } from 'wagmi'
+import {
+  cardProps,
+  disabledButtonProps,
+  tabPanelProps,
+  tabProps
+} from './styles'
 
 interface Props extends BoxProps {
   isConnected: boolean
-}
-
-const tabProps: TabProps = {
-  pb: 4,
-  borderColor: 'uiChrome.dataBorder',
-  _selected: {
-    color: 'white',
-    borderColor: 'brilliantRose.500'
-  }
-}
-
-const tabPanelProps: TabPanelProps = {
-  px: 0
-}
-
-const cardProps: BoxProps = {
-  p: 4,
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  bg: 'backgrounds.darker'
-}
-
-const disabledButtonProps: ButtonProps = {
-  variant: 'solid',
-  _disabled: {
-    color: 'text.body.light',
-    bg: 'text.body.darkMuted',
-    cursor: 'not-allowed',
-    _hover: {
-      color: 'text.body.light',
-      bg: 'text.body.darkMuted'
-    }
-  }
 }
 
 export const CellarTxCard: VFC<Props> = ({ isConnected }) => {
