@@ -7,10 +7,13 @@ import {
   TabPanels,
   Tabs,
   Text,
+  useToast,
   VStack
 } from '@chakra-ui/react'
 import { BaseButton } from 'components/_buttons/BaseButton'
+import { BaseToast } from 'components/_toasts/BaseToast'
 import { CardHeading } from 'components/_typography/CardHeading'
+import { useBrandedToast } from 'hooks/chakra'
 import { VFC } from 'react'
 import { FaEthereum } from 'react-icons/fa'
 import { Card } from '../../Card'
@@ -23,6 +26,8 @@ import {
 import { TxInput } from './TxInput'
 
 export const ConnectedCard: VFC = () => {
+  const { addToast } = useBrandedToast()
+
   return (
     <Card
       display='flex'
@@ -56,7 +61,11 @@ export const ConnectedCard: VFC = () => {
                 </VStack>
               </Card>
               <TxInput />
-              <BaseButton disabled={false} {...disabledButtonProps}>
+              <BaseButton
+                disabled={false}
+                onClick={addToast}
+                {...disabledButtonProps}
+              >
                 Add Deposit
               </BaseButton>
             </VStack>
