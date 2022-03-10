@@ -41,6 +41,11 @@ export const BaseToast: VFC<BaseToastProps> = forwardRef<BaseToastProps, 'div'>(
           border='2px solid'
           borderColor='text.body.lightMuted'
           color='text.body.lightMuted'
+          _hover={{
+            bgColor: 'white',
+            borderColor: 'white',
+            color: 'text.body.dark'
+          }}
           onClick={closeHandler}
         />
       </HStack>
