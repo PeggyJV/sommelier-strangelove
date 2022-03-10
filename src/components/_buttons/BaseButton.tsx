@@ -12,6 +12,7 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
   return (
     <Button
       ref={ref}
+      role='group'
       variant={variant || 'outline'}
       color='white'
       borderColor='electricIndigo.500'
@@ -24,16 +25,17 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
             borderRadius='50%'
             boxSize={6}
             p={1}
+            _groupHover={{
+              color: 'brilliantRose.500',
+              bgColor: 'white'
+            }}
           />
         )
       }
       _hover={{
-        color: 'electricIndigo.500',
-        bgColor: 'white',
-        borderColor: 'white',
-        span: {
-          color: 'white'
-        }
+        color: 'white',
+        bgColor: 'brilliantRose.500',
+        borderColor: 'brilliantRose.500'
       }}
       {...rest}
     />
