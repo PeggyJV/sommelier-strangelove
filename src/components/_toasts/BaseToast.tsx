@@ -1,5 +1,6 @@
 import {
   CloseButton,
+  Flex,
   forwardRef,
   HStack,
   Icon,
@@ -13,10 +14,11 @@ interface BaseToastProps extends StackProps {
   closeHandler: () => void
   status?: Status
   isLoading?: boolean
+  icon?: any
 }
 
 export const BaseToast: VFC<BaseToastProps> = forwardRef<BaseToastProps, 'div'>(
-  ({ children, status, closeHandler, isLoading }, ref) => {
+  ({ children, status, closeHandler, isLoading, icon }, ref) => {
     return (
       <HStack
         ref={ref}
@@ -32,9 +34,30 @@ export const BaseToast: VFC<BaseToastProps> = forwardRef<BaseToastProps, 'div'>(
             ? 'backgrounds.dangerGradient'
             : 'backgrounds.primaryGradient'
         }
-        borderRadius={6}
+        borderRadius={16}
       >
-        {isLoading ? <Spinner boxSize={8} /> : <Icon boxSize={8} />}
+        {isLoading ? (
+          <Flex
+            boxSize={8}
+            align='center'
+            justify='center'
+            bg='white'
+            color='text.body.dark'
+            borderRadius='50%'
+          >
+            <Spinner size='sm' />
+          </Flex>
+        ) : (
+          <Icon
+            boxSize={8}
+            p={2}
+            bg='white'
+            color='text.body.dark'
+            borderRadius='50%'
+            as={icon}
+          />
+        )}
+
         {children}
         <CloseButton
           borderRadius='50%'
