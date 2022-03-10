@@ -1,5 +1,4 @@
 import {
-  Box,
   HStack,
   Icon,
   Tab,
@@ -23,28 +22,68 @@ import {
   tabProps
 } from './styles'
 import { TxInput } from './TxInput'
+import { ImCheckmark } from 'react-icons/im'
+import { AiOutlineInfo } from 'react-icons/ai'
+import { BiError } from 'react-icons/bi'
 
 export const ConnectedCard: VFC = () => {
   const [isDisabled, setDisabled] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const { addToast, update, closeAll } = useBrandedToast()
+  const { addToast, update, close, closeAll } = useBrandedToast()
 
   // placeholder submit handler
-  const handleSubmit = () => {
+  const handleDepositSubmit = () => {
     setDisabled(true)
     setLoading(true)
     addToast({
-      body: <Box>Hello</Box>,
+      body: <Text>Depositing 10.125 ETH into Cellar</Text>,
       isLoading: true,
-      closeHandler: closeAll
+      closeHandler: close,
+      duration: null
     })
     setTimeout(() => {
       setDisabled(false)
       setLoading(false)
       update({
-        body: <Box>Goodbye!</Box>,
+        body: <Text>12345.678 ETH deposited into Cellar View on ETHScan</Text>,
         status: 'success',
-        closeHandler: closeAll
+        closeHandler: closeAll,
+        icon: ImCheckmark
+      })
+      addToast({
+        body: (
+          <VStack align='flex-start'>
+            <Text>
+              You now have 12345.678 LP tokens available in this cellar. Lock
+              your LP tokens for certain period of time to earn SOMM token
+              rewards.
+            </Text>
+            <BaseButton variant='solid'>Start Earning</BaseButton>
+          </VStack>
+        ),
+        duration: null,
+        icon: AiOutlineInfo
+      })
+    }, 2000)
+  }
+
+  const handleWithdrawSubmit = () => {
+    setDisabled(true)
+    setLoading(true)
+    addToast({
+      body: <Text>Withdrawing 10.125 ETH from Cellar</Text>,
+      isLoading: true,
+      closeHandler: close,
+      duration: null
+    })
+    setTimeout(() => {
+      setDisabled(false)
+      setLoading(false)
+      update({
+        body: <Text>We're keeping your money 😈</Text>,
+        status: 'error',
+        closeHandler: closeAll,
+        icon: BiError
       })
     }, 2000)
   }
@@ -85,7 +124,7 @@ export const ConnectedCard: VFC = () => {
               <BaseButton
                 isLoading={loading}
                 disabled={isDisabled}
-                onClick={handleSubmit}
+                onClick={handleDepositSubmit}
                 {...disabledButtonProps}
               >
                 Add Deposit
@@ -114,7 +153,7 @@ export const ConnectedCard: VFC = () => {
               <BaseButton
                 isLoading={loading}
                 disabled={isDisabled}
-                onClick={handleSubmit}
+                onClick={handleWithdrawSubmit}
                 {...disabledButtonProps}
               >
                 Withdraw
