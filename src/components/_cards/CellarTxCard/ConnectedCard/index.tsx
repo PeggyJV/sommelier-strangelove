@@ -27,17 +27,25 @@ import { TxInput } from './TxInput'
 export const ConnectedCard: VFC = () => {
   const [isDisabled, setDisabled] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const { addToast, update } = useBrandedToast()
+  const { addToast, update, closeAll } = useBrandedToast()
 
   // placeholder submit handler
   const handleSubmit = () => {
     setDisabled(true)
     setLoading(true)
-    addToast({ body: <Box>Hello</Box>, isLoading: true })
+    addToast({
+      body: <Box>Hello</Box>,
+      isLoading: true,
+      closeHandler: closeAll
+    })
     setTimeout(() => {
       setDisabled(false)
       setLoading(false)
-      update({ body: <Box>Goodbye!</Box>, status: 'success' })
+      update({
+        body: <Box>Goodbye!</Box>,
+        status: 'success',
+        closeHandler: closeAll
+      })
     }, 2000)
   }
 
