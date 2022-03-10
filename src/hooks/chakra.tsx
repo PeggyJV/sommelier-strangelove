@@ -1,12 +1,12 @@
 import { BaseToast } from 'components/_toasts/BaseToast'
-import { ToastId, useToast, Status } from '@chakra-ui/react'
+import { ToastId, useToast, ToastOptions } from '@chakra-ui/react'
 import { ReactNode, useRef } from 'react'
 
-interface BaseToast {
+interface BaseToast extends Partial<ToastOptions> {
   body: ReactNode
-  status?: Status
   closeHandler?: () => void
   isLoading?: boolean
+  icon?: any
 }
 
 export const useBrandedToast = () => {
@@ -23,7 +23,14 @@ export const useBrandedToast = () => {
     toast.closeAll()
   }
 
-  const update = ({ body, closeHandler, isLoading, status }: BaseToast) => {
+  const update = ({
+    body,
+    closeHandler,
+    isLoading,
+    status,
+    icon,
+    ...rest
+  }: BaseToast) => {
     if (toastIdRef.current) {
       toast.update(toastIdRef.current, {
         render: () => (
@@ -31,15 +38,24 @@ export const useBrandedToast = () => {
             status={status}
             closeHandler={closeHandler ?? close}
             isLoading={isLoading}
+            icon={icon}
           >
             {body}
           </BaseToast>
-        )
+        ),
+        ...rest
       })
     }
   }
 
-  const addToast = ({ body, closeHandler, isLoading, status }: BaseToast) => {
+  const addToast = ({
+    body,
+    closeHandler,
+    isLoading,
+    status,
+    icon,
+    ...rest
+  }: BaseToast) => {
     toastIdRef.current = toast({
       position: 'bottom-right',
       render: () => (
@@ -47,10 +63,12 @@ export const useBrandedToast = () => {
           status={status}
           closeHandler={closeHandler ?? close}
           isLoading={isLoading}
+          icon={icon}
         >
           {body}
         </BaseToast>
-      )
+      ),
+      ...rest
     })
   }
 
