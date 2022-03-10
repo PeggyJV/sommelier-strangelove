@@ -1,4 +1,5 @@
 import {
+  Box,
   HStack,
   Icon,
   Tab,
@@ -7,16 +8,14 @@ import {
   TabPanels,
   Tabs,
   Text,
-  useToast,
   VStack
 } from '@chakra-ui/react'
 import { BaseButton } from 'components/_buttons/BaseButton'
-import { BaseToast } from 'components/_toasts/BaseToast'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { useBrandedToast } from 'hooks/chakra'
-import { VFC } from 'react'
+import { useState, VFC } from 'react'
 import { FaEthereum } from 'react-icons/fa'
-import { Card } from '../../Card'
+import { Card } from 'components/_cards/Card'
 import {
   cardProps,
   disabledButtonProps,
@@ -26,7 +25,21 @@ import {
 import { TxInput } from './TxInput'
 
 export const ConnectedCard: VFC = () => {
-  const { addToast } = useBrandedToast()
+  const [isDisabled, setDisabled] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
+  const { addToast, update } = useBrandedToast()
+
+  // placeholder submit handler
+  const handleSubmit = () => {
+    setDisabled(true)
+    setLoading(true)
+    addToast({ body: <Box>Hello</Box>, isLoading: true })
+    setTimeout(() => {
+      setDisabled(false)
+      setLoading(false)
+      update({ body: <Box>Goodbye!</Box>, status: 'success' })
+    }, 2000)
+  }
 
   return (
     <Card
@@ -62,8 +75,9 @@ export const ConnectedCard: VFC = () => {
               </Card>
               <TxInput />
               <BaseButton
-                disabled={false}
-                onClick={addToast}
+                isLoading={loading}
+                disabled={isDisabled}
+                onClick={handleSubmit}
                 {...disabledButtonProps}
               >
                 Add Deposit
@@ -88,8 +102,13 @@ export const ConnectedCard: VFC = () => {
                   </HStack>
                 </VStack>
               </Card>
-              <TxInput />
-              <BaseButton disabled={false} {...disabledButtonProps}>
+              <TxInput disabled={isDisabled} />
+              <BaseButton
+                isLoading={loading}
+                disabled={isDisabled}
+                onClick={handleSubmit}
+                {...disabledButtonProps}
+              >
                 Withdraw
               </BaseButton>
             </VStack>

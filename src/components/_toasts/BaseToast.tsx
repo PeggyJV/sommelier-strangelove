@@ -3,20 +3,20 @@ import {
   forwardRef,
   HStack,
   Icon,
+  Spinner,
   StackProps,
-  ToastOptions
+  Status
 } from '@chakra-ui/react'
-import { useBrandedToast } from 'hooks/chakra'
 import { VFC } from 'react'
 
-interface BaseToastProps
-  extends StackProps,
-    Partial<Pick<ToastOptions, 'status'>> {}
+interface BaseToastProps extends StackProps {
+  closeHandler: () => void
+  status?: Status
+  isLoading?: boolean
+}
 
 export const BaseToast: VFC<BaseToastProps> = forwardRef<BaseToastProps, 'div'>(
-  ({ children, status }, ref) => {
-    const { close } = useBrandedToast()
-
+  ({ children, status, closeHandler, isLoading }, ref) => {
     return (
       <HStack
         ref={ref}
@@ -34,14 +34,14 @@ export const BaseToast: VFC<BaseToastProps> = forwardRef<BaseToastProps, 'div'>(
         }
         borderRadius={6}
       >
-        <Icon boxSize={8} />
+        {isLoading ? <Spinner boxSize={8} /> : <Icon boxSize={8} />}
         {children}
         <CloseButton
           borderRadius='50%'
           border='2px solid'
           borderColor='text.body.lightMuted'
           color='text.body.lightMuted'
-          onClick={close}
+          onClick={closeHandler}
         />
       </HStack>
     )
