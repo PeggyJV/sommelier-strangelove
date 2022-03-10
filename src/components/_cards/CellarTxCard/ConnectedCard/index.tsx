@@ -80,7 +80,7 @@ export const ConnectedCard: VFC = () => {
       setDisabled(false)
       setLoading(false)
       update({
-        body: <Text>We're keeping your money 😈</Text>,
+        body: <Text>Sorry, something wen't wrong with this withdrawal. Please, try again.</Text>,
         status: 'error',
         closeHandler: closeAll,
         icon: BiError
