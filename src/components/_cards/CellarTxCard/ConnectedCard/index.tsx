@@ -13,7 +13,7 @@ import { BaseButton } from 'components/_buttons/BaseButton'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { VFC } from 'react'
 import { FaEthereum } from 'react-icons/fa'
-import { Card } from '../../Card'
+import { Card } from 'components/_cards/Card'
 import {
   cardProps,
   disabledButtonProps,
@@ -21,8 +21,11 @@ import {
   tabProps
 } from './styles'
 import { TxInput } from './TxInput'
+import { useSubmitTx } from 'hooks/useSubmitTx'
 
 export const ConnectedCard: VFC = () => {
+  const { isDisabled, loading, handleDeposit, handleWithdraw } = useSubmitTx()
+
   return (
     <Card
       display='flex'
@@ -56,7 +59,12 @@ export const ConnectedCard: VFC = () => {
                 </VStack>
               </Card>
               <TxInput />
-              <BaseButton disabled={false} {...disabledButtonProps}>
+              <BaseButton
+                isLoading={loading}
+                disabled={isDisabled}
+                onClick={handleDeposit}
+                {...disabledButtonProps}
+              >
                 Add Deposit
               </BaseButton>
             </VStack>
@@ -79,8 +87,13 @@ export const ConnectedCard: VFC = () => {
                   </HStack>
                 </VStack>
               </Card>
-              <TxInput />
-              <BaseButton disabled={false} {...disabledButtonProps}>
+              <TxInput disabled={isDisabled} />
+              <BaseButton
+                isLoading={loading}
+                disabled={isDisabled}
+                onClick={handleWithdraw}
+                {...disabledButtonProps}
+              >
                 Withdraw
               </BaseButton>
             </VStack>
