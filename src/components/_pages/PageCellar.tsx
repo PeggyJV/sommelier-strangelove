@@ -8,7 +8,8 @@ import {
   HStack,
   StackDivider,
   Text,
-  TextProps
+  TextProps,
+  VStack
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { PerformanceCard } from 'components/_cards/PerformanceCard'
@@ -16,6 +17,8 @@ import CellarMetaCard from 'components/_cards/CellarMetaCard'
 import { CellarTxCard } from 'components/_cards/CellarTxCard'
 import { Section } from 'components/_layout/Section'
 import { useConnect } from 'wagmi'
+import { UserPerformanceCard } from 'components/_cards/UserPerformanceCard'
+import { BaseButton } from 'components/_buttons/BaseButton'
 
 const gridProps: GridProps = {
   gap: 6,
@@ -49,9 +52,25 @@ const PageCellar = () => {
   return (
     <Layout>
       <Section>
+        <VStack spacing={6} align='stretch'>
+          <HStack spacing={4} justify='space-between'>
+            <Heading pb={4}>Cellar Presentation Name</Heading>
+            <HStack>
+              <BaseButton flex={1} px={8} variant='solid'>
+                Deposit/Withdraw
+              </BaseButton>
+              <BaseButton flex={1} px={8} variant='solid'>
+                Bond Liquidity
+              </BaseButton>
+            </HStack>
+          </HStack>
+          <UserPerformanceCard />
+        </VStack>
+      </Section>
+      <Section>
+        <Heading>Overview</Heading>
         <Grid {...gridProps}>
           <GridItem colSpan={3}>
-            <Heading pb={4}>Strategy Presentation Name</Heading>
             <Heading {...h2Props}>Goals</Heading>
             <Text {...textProps}>
               The Aave stablecoin strategy aims to select the optimal stablecoin
