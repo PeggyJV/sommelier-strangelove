@@ -15,6 +15,7 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
       role='group'
       variant={variant || 'outline'}
       color='white'
+      border='1.5px solid'
       borderColor='electricIndigo.500'
       rightIcon={
         icon && (

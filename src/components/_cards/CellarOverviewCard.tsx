@@ -44,7 +44,8 @@ const cardProps: BoxProps = {
   bg: 'backgrounds.darker',
   flex: 1,
   display: 'flex',
-  flexDir: 'column'
+  flexDir: 'column',
+  overflow: 'visible'
 }
 
 const bottomRowCells: StackProps = {
