@@ -1,4 +1,4 @@
-import React, { VFC } from 'react'
+import { VFC } from 'react'
 import {
   Breadcrumb as ChBreadcrumb,
   BreadcrumbItem,
@@ -20,15 +20,11 @@ export const BreadCrumb: VFC<BreadcrumbProps> = props => {
         const hrefSlices = asPathNestedRoutes.slice(0, i + 1)
         const hrefMap = hrefSlices.map(path => `/${path}`)
         const href = hrefMap.join('')
-
         const currentPage = href === router.asPath
+        const color = currentPage ? 'text.body.lightMuted' : 'text.body.light'
 
         return (
-          <BreadcrumbItem
-            key={i}
-            isCurrentPage={currentPage}
-            color={currentPage ? 'text.body.lightMuted' : 'text.body.light'}
-          >
+          <BreadcrumbItem key={i} isCurrentPage={currentPage} color={color}>
             <BreadcrumbLink href={href}>{path}</BreadcrumbLink>
           </BreadcrumbItem>
         )
