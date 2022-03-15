@@ -1,7 +1,7 @@
 import PageCellar from 'components/_pages/PageCellar'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { GetAllCellarsDocument } from 'generated/subgraph'
-import { client } from 'queries/client'
+import { ssrClient } from 'queries/client'
 import { ParsedUrlQuery } from 'querystring'
 import slugify from 'slugify'
 
@@ -14,7 +14,7 @@ const CellarPage: NextPage = () => {
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const { data } = await client.query(GetAllCellarsDocument).toPromise()
+  const { data } = await ssrClient.query(GetAllCellarsDocument).toPromise()
   const { cellars } = data
   const paths = cellars.map((cellar: any) => {
     const { name } = cellar
