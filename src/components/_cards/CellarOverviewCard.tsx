@@ -21,6 +21,7 @@ import { BaseButton } from 'components/_buttons/BaseButton'
 import { Serie } from '@nivo/line'
 import { useNivoThemes } from 'hooks/nivo'
 import dynamic from 'next/dynamic'
+import Link from 'components/Link'
 const LineChartArea = dynamic(
   () => import('components/_charts/LineChartArea'),
   { ssr: false }
@@ -149,9 +150,12 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
             </Card>
           </GridItem>
         </Grid>
-        <BaseButton variant='solid' icon={FaArrowRight}>
-          {isConnected ? 'add deposit' : 'view cellar'}
-        </BaseButton>
+        {/* This link will change with the gql branch */}
+        <Link href='/cellars/cellar' maxW='max-content'>
+          <BaseButton variant='solid' icon={FaArrowRight}>
+            {isConnected ? 'add deposit' : 'view cellar'}
+          </BaseButton>
+        </Link>
       </VStack>
     </Card>
   )

@@ -9,11 +9,11 @@ export const links: Link[] = [
     title: 'Overview'
   },
   {
-    href: '/',
+    href: '/governance',
     title: 'Governance'
   },
   {
-    href: '/',
+    href: '/farming',
     title: 'Farming'
   }
 ]
