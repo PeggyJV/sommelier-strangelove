@@ -50,7 +50,7 @@ export const PerformanceCard: VFC<Props> = props => {
       <HStack spacing={4} align='stretch'>
         <Card flex={1} overflow='visible' {...cardProps}>
           <VStack spacing={6} align='stretch' divider={<CardDivider />}>
-            <Box h='10rem'>
+            <Box h='20rem'>
               <LineChart
                 data={data}
                 colors={lineChartTheme}
@@ -68,7 +68,7 @@ export const PerformanceCard: VFC<Props> = props => {
             </HStack>
           </VStack>
         </Card>
-        <Card {...cardProps}>
+        <Card display='flex' alignItems='center' {...cardProps}>
           <CardStatColumn spacing={6}>
             <CardStat label='24h cellar apy' labelIcon stat='+3.75%' />
             <CardStat
