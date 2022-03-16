@@ -1,38 +1,54 @@
-import { BoxProps } from '@chakra-ui/react'
+import { BoxProps, VStack } from '@chakra-ui/react'
 import { CardStat } from 'components/CardStat'
 import { CardStatRow } from 'components/CardStatRow'
 import React, { VFC } from 'react'
 import { Card } from './Card'
 import { BsCurrencyDollar } from 'react-icons/bs'
+import { BaseButton } from 'components/_buttons/BaseButton'
 
 export const UserPerformanceCard: VFC<BoxProps> = () => {
   return (
     <Card bg='backgrounds.dark'>
       <Card bg='backgrounds.darker'>
         <CardStatRow>
-          <CardStat
-            label='your principal'
-            labelIcon=''
-            stat='12.5K USDC'
-            statIcon={BsCurrencyDollar}
-          />
-          <CardStat
-            label='your net asset value'
-            labelIcon=''
-            stat='23.34K USDC'
-            statIcon={BsCurrencyDollar}
-          />
-          <CardStat label='your yield' labelIcon='' stat='3.7%' />
+          <VStack>
+            <CardStat
+              label='your principal'
+              labelIcon=''
+              stat='0 USDC'
+              statIcon={BsCurrencyDollar}
+            />
+            <BaseButton variant='solid' size='sm'>
+              Add Liquidity
+            </BaseButton>
+          </VStack>
+          <VStack>
+            <CardStat
+              label='your net asset value'
+              labelIcon=''
+              stat='23.34K USDC'
+              statIcon={BsCurrencyDollar}
+            />
+            <BaseButton variant='solid' size='sm' disabled>
+              Remove Liquidity
+            </BaseButton>
+          </VStack>
+          <VStack>
+            <CardStat
+              label='lp tokens'
+              labelIcon=''
+              stat='0 USDC'
+              statIcon={BsCurrencyDollar}
+            />
+            <BaseButton variant='solid' size='sm' disabled>
+              Bond LP Tokens
+            </BaseButton>
+          </VStack>
+          <CardStat label='your yield' labelIcon='' stat='0%' />
           <CardStat
             label='your rewards'
             labelIcon=''
-            stat='0.28K USDC'
-            statIcon={BsCurrencyDollar}
-          />
-          <CardStat
-            label='lp tokens'
-            labelIcon=''
-            stat='0.28K USDC'
+            stat='0 SOMM'
             statIcon={BsCurrencyDollar}
           />
           <CardStat
