@@ -29,7 +29,7 @@ const gridProps: GridProps = {
 
 const investGridProps: GridProps = {
   ...gridProps,
-  rowGap: 4,
+  rowGap: 4
 }
 
 const placeholderButtons = ['1D', '1W', 'All Time']
@@ -44,17 +44,7 @@ const PageCellar: VFC = () => {
       <Section>
         <VStack spacing={4} align='stretch'>
           <BreadCrumb fontSize='xl' />
-          <HStack spacing={4} justify='space-between'>
-            <Heading pb={4}>Cellar Presentation Name</Heading>
-            <HStack>
-              <BaseButton flex={1} px={8} variant='solid'>
-                Deposit/Withdraw
-              </BaseButton>
-              <BaseButton flex={1} px={8} variant='solid'>
-                Bond Liquidity
-              </BaseButton>
-            </HStack>
-          </HStack>
+          <Heading pb={4}>Cellar Presentation Name</Heading>
           <UserPerformanceCard />
         </VStack>
       </Section>
