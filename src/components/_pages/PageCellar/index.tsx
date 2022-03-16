@@ -20,16 +20,16 @@ import { BaseButton } from 'components/_buttons/BaseButton'
 import { BreadCrumb } from 'components/BreadCrumb'
 import { Copy } from './Copy'
 import { VFC } from 'react'
+import { BondingTable } from 'components/_tables/BondingTable'
 
 const gridProps: GridProps = {
   gap: 6,
   templateColumns: 'repeat(6, 1fr)'
 }
 
-const bottomGridProps: GridProps = {
+const investGridProps: GridProps = {
   ...gridProps,
-  rowGap: 7,
-  templateRows: '30px 1fr'
+  rowGap: 4,
 }
 
 const placeholderButtons = ['1D', '1W', 'All Time']
@@ -73,6 +73,40 @@ const PageCellar: VFC = () => {
       </Section>
       <Section>
         <VStack spacing={4} align='stretch'>
+          <Heading>Invest</Heading>
+          <Text>
+            Deposit funds into this Cellar in order to become a Liquidity
+            Provider and earn profits from the Cellar performance APY.
+          </Text>
+          <Grid {...investGridProps}>
+            <GridItem colSpan={2}>
+              <Heading fontSize='1.75rem'>Manage Liquidity</Heading>
+            </GridItem>
+            <GridItem colSpan={4}>
+              <HStack justify='space-between' align='flex-end'>
+                <VStack align='flex-start'>
+                  <Heading fontSize='1.75rem'>Bonding Periods</Heading>
+                  <Text>
+                    Earn additional rewards after locking your LP tokens for a
+                    specific period of time.
+                  </Text>
+                </VStack>
+                <BaseButton variant='solid' disabled>
+                  Unbond
+                </BaseButton>
+              </HStack>
+            </GridItem>
+            <GridItem colSpan={2}>
+              <CellarTxCard isConnected={isConnected} />
+            </GridItem>
+            <GridItem colSpan={4}>
+              <BondingTable />
+            </GridItem>
+          </Grid>
+        </VStack>
+      </Section>
+      <Section>
+        <VStack spacing={4} align='stretch'>
           <HStack justify='space-between'>
             <Heading fontSize='1.75rem'>Performance</Heading>
             <HStack
@@ -101,21 +135,6 @@ const PageCellar: VFC = () => {
             </HStack>
           </HStack>
           <PerformanceCard />
-        </VStack>
-      </Section>
-      <Section>
-        <VStack spacing={4} align='stretch'>
-          <Heading>Investments</Heading>
-          <Text></Text>
-          <Grid {...bottomGridProps}>
-            <GridItem colSpan={2}>
-              <Heading fontSize='1.75rem'>Deposits</Heading>
-            </GridItem>
-            <GridItem colSpan={4} />
-            <GridItem colSpan={2}>
-              <CellarTxCard isConnected={isConnected} />
-            </GridItem>
-          </Grid>
         </VStack>
       </Section>
     </Layout>
