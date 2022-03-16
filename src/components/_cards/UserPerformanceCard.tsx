@@ -10,7 +10,7 @@ export const UserPerformanceCard: VFC<BoxProps> = () => {
   return (
     <Card bg='backgrounds.dark'>
       <Card bg='backgrounds.darker'>
-        <CardStatRow>
+        <CardStatRow align='flex-start'>
           <VStack>
             <CardStat
               label='your principal'
