@@ -1,0 +1,24 @@
+query GetAllCellars {
+  cellars {
+    id
+    name
+    denom {
+      id
+      symbol
+      decimals
+    }
+    tvlActive
+    tvlInactive
+    tvlTotal
+    dayDatas(first: 7, orderBy: date, orderDirection: desc) {
+      id
+      date
+      cellar {
+        id
+      }
+      addedLiquidity
+      removedLiquidity
+      numWallets
+    }
+  }
+}

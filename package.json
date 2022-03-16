@@ -41,6 +41,7 @@
     "react-hook-form": "7.27.1",
     "react-icons": "^4",
     "react-query": "3.34.16",
+    "slugify": "^1.6.5",
     "urql": "^2.2.0",
     "wagmi": "0.2.18",
     "zustand": "3.7.1"
