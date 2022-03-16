@@ -1,5 +1,6 @@
 query GetAllCellars {
   cellars {
+    id
     name
     denom {
       id

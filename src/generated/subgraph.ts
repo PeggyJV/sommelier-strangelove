@@ -1236,7 +1236,7 @@ export enum _SubgraphErrorPolicy_ {
 export type GetAllCellarsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', name: string, tvlActive: string, tvlInactive: string, tvlTotal: string, denom: { __typename?: 'Denom', id: string, symbol: string, decimals: number }, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number, cellar: { __typename?: 'Cellar', id: string } }> }> };
+export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, tvlActive: string, tvlInactive: string, tvlTotal: string, denom: { __typename?: 'Denom', id: string, symbol: string, decimals: number }, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number, cellar: { __typename?: 'Cellar', id: string } }> }> };
 
 export type GetCellarRoutesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1262,6 +1262,7 @@ export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: '
 export const GetAllCellarsDocument = gql`
     query GetAllCellars {
   cellars {
+    id
     name
     denom {
       id
