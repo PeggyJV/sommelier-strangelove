@@ -6,9 +6,9 @@ import { Card } from './Card'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { CardDivider } from 'components/_layout/CardDivider'
 import { useNivoThemes } from 'hooks/nivo'
-import { CardStatRow } from 'components/CardStatRow'
 import { CardStat } from 'components/CardStat'
 import { BsCurrencyDollar } from 'react-icons/bs'
+import { CardStatColumn } from 'components/CardStatColumn'
 const LineChart = dynamic(() => import('components/_charts/LineChart'), {
   ssr: false
 })
@@ -47,31 +47,8 @@ export const PerformanceCard: VFC<Props> = props => {
 
   return (
     <Card bg='backgrounds.dark' overflow='visible' {...props}>
-      <VStack spacing={4} align='stretch'>
-        <Card {...cardProps}>
-          <CardStatRow>
-            <CardStat label='24h cellar apy' labelIcon stat='+3.75%' />
-            <CardStat
-              label='24h volume'
-              labelIcon
-              stat='+12.5K USD'
-              statIcon={BsCurrencyDollar}
-            />
-            <CardStat
-              label='my 24h returns'
-              labelIcon
-              stat='-'
-              statIcon={BsCurrencyDollar}
-            />
-            <CardStat
-              label='my 24h rewards'
-              labelIcon
-              stat='-'
-              statIcon={BsCurrencyDollar}
-            />
-          </CardStatRow>
-        </Card>
-        <Card overflow='visible' {...cardProps}>
+      <HStack spacing={4} align='stretch'>
+        <Card flex={1} overflow='visible' {...cardProps}>
           <VStack spacing={6} align='stretch' divider={<CardDivider />}>
             <Box h='10rem'>
               <LineChart
@@ -91,7 +68,30 @@ export const PerformanceCard: VFC<Props> = props => {
             </HStack>
           </VStack>
         </Card>
-      </VStack>
+        <Card {...cardProps}>
+          <CardStatColumn spacing={6}>
+            <CardStat label='24h cellar apy' labelIcon stat='+3.75%' />
+            <CardStat
+              label='24h volume'
+              labelIcon
+              stat='+12.5K USD'
+              statIcon={BsCurrencyDollar}
+            />
+            <CardStat
+              label='my 24h returns'
+              labelIcon
+              stat='-'
+              statIcon={BsCurrencyDollar}
+            />
+            <CardStat
+              label='my 24h rewards'
+              labelIcon
+              stat='-'
+              statIcon={BsCurrencyDollar}
+            />
+          </CardStatColumn>
+        </Card>
+      </HStack>
     </Card>
   )
 }
