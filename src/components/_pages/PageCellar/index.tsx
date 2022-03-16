@@ -19,6 +19,7 @@ import { UserPerformanceCard } from 'components/_cards/UserPerformanceCard'
 import { BaseButton } from 'components/_buttons/BaseButton'
 import { BreadCrumb } from 'components/BreadCrumb'
 import { Copy } from './Copy'
+import { VFC } from 'react'
 
 const gridProps: GridProps = {
   gap: 6,
@@ -33,7 +34,7 @@ const bottomGridProps: GridProps = {
 
 const placeholderButtons = ['1D', '1W', 'All Time']
 
-const PageCellar = () => {
+const PageCellar: VFC = () => {
   const [auth] = useConnect()
 
   const isConnected = auth.data.connected
