@@ -57,10 +57,11 @@ const MyComponent = () => {
 The subgraph is written in AssemblyScript and supports representing 256 bit integers. These scalars are represented as strings when sent to the front end and must be parsed using a BigNumber library such as `@ethersproject/bignumber` in order to perform mathematical operations. See the `@ethersproject/bignumber` [docs](https://docs.ethers.io/v5/api/utils/bignumber/) for more information. Do not use `parseInt` on BigInt strings, the value could be greater than `MAX_SAFE_INTEGER`.
 
 ### Learn more about graphql-codegen & urql
+
 - [GraphQL Codgen React](https://www.graphql-code-generator.com/docs/getting-started)
 - [The Guild Best Practices](https://www.the-guild.dev/blog/graphql-codegen-best-practices)
 - [urql Basics](https://formidable.com/open-source/urql/docs/basics/react-preact/)
-
+- [urql SSR with NextJS](https://formidable.com/open-source/urql/docs/advanced/server-side-rendering/#using-getstaticprops-or-getserversideprops)
 
 ## Learn More
 

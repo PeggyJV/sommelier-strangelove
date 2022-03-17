@@ -1233,12 +1233,22 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
+export type GetAllCellarsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, tvlActive: string, tvlInactive: string, tvlTotal: string, denom: { __typename?: 'Denom', id: string, symbol: string, decimals: number }, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number, cellar: { __typename?: 'Cellar', id: string } }> }> };
+
+export type GetCellarRoutesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCellarRoutesQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', name: string }> };
+
 export type GetCellarQueryVariables = Exact<{
   cellarAddress: Scalars['ID'];
 }>;
 
 
-export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, tvlActive: BigInt, tvlInactive: BigInt, tvlTotal: BigInt, addedLiquidityAllTime: BigInt, removedLiquidityAllTime: BigInt, numWalletsAllTime: number, numWalletsActive: number, denom: { __typename?: 'Denom', id: string, symbol: string }, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, addedLiquidity: BigInt, removedLiquidity: BigInt, numWallets: number }> } | null };
+export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, tvlActive: string, tvlInactive: string, tvlTotal: string, addedLiquidityAllTime: string, removedLiquidityAllTime: string, numWalletsAllTime: number, numWalletsActive: number, denom: { __typename?: 'Denom', id: string, symbol: string }, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number }> } | null };
 
 export type GetPositionQueryVariables = Exact<{
   walletAddress: Scalars['ID'];
@@ -1246,9 +1256,50 @@ export type GetPositionQueryVariables = Exact<{
 }>;
 
 
-export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: BigInt }> } | null };
+export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
 
 
+export const GetAllCellarsDocument = gql`
+    query GetAllCellars {
+  cellars {
+    id
+    name
+    denom {
+      id
+      symbol
+      decimals
+    }
+    tvlActive
+    tvlInactive
+    tvlTotal
+    dayDatas(first: 7, orderBy: date, orderDirection: desc) {
+      id
+      date
+      cellar {
+        id
+      }
+      addedLiquidity
+      removedLiquidity
+      numWallets
+    }
+  }
+}
+    `;
+
+export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCellarsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllCellarsQuery>({ query: GetAllCellarsDocument, ...options });
+};
+export const GetCellarRoutesDocument = gql`
+    query GetCellarRoutes {
+  cellars {
+    name
+  }
+}
+    `;
+
+export function useGetCellarRoutesQuery(options?: Omit<Urql.UseQueryArgs<GetCellarRoutesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetCellarRoutesQuery>({ query: GetCellarRoutesDocument, ...options });
+};
 export const GetCellarDocument = gql`
     query GetCellar($cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
