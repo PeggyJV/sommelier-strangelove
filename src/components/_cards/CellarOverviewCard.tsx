@@ -151,7 +151,7 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
           </GridItem>
         </Grid>
         {/* This link will change with the gql branch */}
-        <Link href='/cellars/cellar' maxW='max-content'>
+        <Link href='/cellars/aave-stablecoin-cellar' maxW='max-content'>
           <BaseButton variant='solid' icon={FaArrowRight}>
             {isConnected ? 'add deposit' : 'view cellar'}
           </BaseButton>
