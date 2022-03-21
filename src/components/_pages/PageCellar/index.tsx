@@ -21,6 +21,8 @@ import { BreadCrumb } from 'components/BreadCrumb'
 import { Copy } from './Copy'
 import { VFC } from 'react'
 import { BondingTable } from 'components/_tables/BondingTable'
+import { CellarPageProps } from 'pages/cellars/[id]'
+import { useGetCellarQuery } from 'generated/subgraph'
 
 const gridProps: GridProps = {
   gap: 6,
@@ -34,17 +36,26 @@ const investGridProps: GridProps = {
 
 const placeholderButtons = ['1D', '1W', 'All Time']
 
-const PageCellar: VFC = () => {
+const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const [auth] = useConnect()
-
   const isConnected = auth.data.connected
+  const { cellar: staticCellar } = staticData
+  const { id, name } = staticCellar!
+  const [cellarResult] = useGetCellarQuery({
+    variables: {
+      cellarAddress: id
+    }
+  })
+  const { data } = cellarResult
+
+  const { cellar } = data || {}
 
   return (
     <Layout>
       <Section>
         <VStack spacing={4} align='stretch'>
           <BreadCrumb fontSize='xl' />
-          <Heading pb={4}>Cellar Presentation Name</Heading>
+          <Heading pb={4}>{name}</Heading>
           <UserPerformanceCard />
         </VStack>
       </Section>
