@@ -1238,17 +1238,24 @@ export type GetAllCellarsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, tvlActive: string, tvlInactive: string, tvlTotal: string, denom: { __typename?: 'Denom', id: string, symbol: string, decimals: number }, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number, cellar: { __typename?: 'Cellar', id: string } }> }> };
 
+export type GetCellarRouteStaticQueryVariables = Exact<{
+  cellarAddress: Scalars['ID'];
+}>;
+
+
+export type GetCellarRouteStaticQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, name: string } | null };
+
 export type GetCellarRoutesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCellarRoutesQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', name: string }> };
+export type GetCellarRoutesQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', name: string, id: string }> };
 
 export type GetCellarQueryVariables = Exact<{
   cellarAddress: Scalars['ID'];
 }>;
 
 
-export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, tvlActive: string, tvlInactive: string, tvlTotal: string, addedLiquidityAllTime: string, removedLiquidityAllTime: string, numWalletsAllTime: number, numWalletsActive: number, denom: { __typename?: 'Denom', id: string, symbol: string }, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number }> } | null };
+export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, name: string, tvlActive: string, tvlInactive: string, tvlTotal: string, addedLiquidityAllTime: string, removedLiquidityAllTime: string, numWalletsAllTime: number, numWalletsActive: number, denom: { __typename?: 'Denom', id: string, symbol: string }, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number }> } | null };
 
 export type GetPositionQueryVariables = Exact<{
   walletAddress: Scalars['ID'];
@@ -1289,10 +1296,23 @@ export const GetAllCellarsDocument = gql`
 export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCellarsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllCellarsQuery>({ query: GetAllCellarsDocument, ...options });
 };
+export const GetCellarRouteStaticDocument = gql`
+    query GetCellarRouteStatic($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    id
+    name
+  }
+}
+    `;
+
+export function useGetCellarRouteStaticQuery(options: Omit<Urql.UseQueryArgs<GetCellarRouteStaticQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetCellarRouteStaticQuery>({ query: GetCellarRouteStaticDocument, ...options });
+};
 export const GetCellarRoutesDocument = gql`
     query GetCellarRoutes {
   cellars {
     name
+    id
   }
 }
     `;
@@ -1304,6 +1324,7 @@ export const GetCellarDocument = gql`
     query GetCellar($cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
     id
+    name
     denom {
       id
       symbol

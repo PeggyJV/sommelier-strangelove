@@ -1,6 +1,7 @@
 query GetCellar($cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
     id,
+    name,
     denom {
       id
       symbol
