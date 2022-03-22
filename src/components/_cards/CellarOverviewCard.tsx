@@ -22,12 +22,13 @@ import { Serie } from '@nivo/line'
 import { useNivoThemes } from 'hooks/nivo'
 import dynamic from 'next/dynamic'
 import Link from 'components/Link'
+import { Cellar } from 'generated/subgraph'
 const LineChartArea = dynamic(
   () => import('components/_charts/LineChartArea'),
   { ssr: false }
 )
 
-interface Props {
+interface Props extends Partial<Cellar> {
   isConnected: boolean
 }
 
@@ -66,7 +67,7 @@ const data: Serie[] = [
   }
 ]
 
-export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
+export const CellarOverviewCard: VFC<Props> = ({ isConnected, name }) => {
   const { lineChartTheme } = useNivoThemes()
 
   return (
@@ -74,9 +75,9 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
       <VStack spacing={6} align='stretch'>
         <HStack>
           <Circle size={8} bg='deepSkyBlue.400' />
-          <Text>Strategist Name</Text>
+          <Text>{name}</Text>
         </HStack>
-        <Heading fontSize='4xl'>Cellar Presentation Name</Heading>
+        <Heading fontSize='4xl'>{name}</Heading>
         <Grid
           flex={1}
           gap={4}

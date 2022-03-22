@@ -7,9 +7,12 @@ import { Card } from 'components/_cards/Card'
 import { BaseButton } from 'components/_buttons/BaseButton'
 import { FaArrowRight } from 'react-icons/fa'
 import { Section } from 'components/_layout/Section'
+import { useGetAllCellarsQuery } from 'generated/subgraph'
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
+  const [cellarsResult] = useGetAllCellarsQuery()
+  const { data } = cellarsResult
 
   const isConnected = auth.data.connected
 
@@ -43,7 +46,18 @@ const PageHome: NextPage = () => {
               </Text>
             </Box>
             <Grid gap={6} templateColumns='1fr 1fr'>
-              <CellarOverviewCard isConnected={isConnected} />
+              {data?.cellars.map(cellar => {
+                const { id, name } = cellar
+                console.log({ cellar })
+
+                return (
+                  <CellarOverviewCard
+                    key={id}
+                    isConnected={isConnected}
+                    name={name}
+                  />
+                )
+              })}
               <Card
                 display='flex'
                 alignItems='center'
