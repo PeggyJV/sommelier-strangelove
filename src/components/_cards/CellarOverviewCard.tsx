@@ -67,8 +67,15 @@ const data: Serie[] = [
   }
 ]
 
-export const CellarOverviewCard: VFC<Props> = ({ isConnected, name }) => {
+export const CellarOverviewCard: VFC<Props> = ({
+  isConnected,
+  name,
+  id,
+  dayDatas,
+  numWalletsActive
+}) => {
   const { lineChartTheme } = useNivoThemes()
+  console.log({ dayDatas })
 
   return (
     <Card py={8} bg='violentViolet'>
@@ -131,7 +138,7 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected, name }) => {
               <HStack divider={<CardDivider />} justify='space-between'>
                 <VStack {...bottomRowCells}>
                   <CardHeading>depositors</CardHeading>
-                  <Text>2000</Text>
+                  <Text>{numWalletsActive}</Text>
                 </VStack>
                 <VStack {...bottomRowCells}>
                   <CardHeading>
@@ -152,7 +159,7 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected, name }) => {
           </GridItem>
         </Grid>
         {/* This link will change with the gql branch */}
-        <Link href='/cellars/aave-stablecoin-cellar' maxW='max-content'>
+        <Link href={`/cellars/${id}`} maxW='max-content'>
           <BaseButton variant='solid' icon={FaArrowRight}>
             {isConnected ? 'add deposit' : 'view cellar'}
           </BaseButton>
