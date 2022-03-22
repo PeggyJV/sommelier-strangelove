@@ -47,14 +47,16 @@ const PageHome: NextPage = () => {
             </Box>
             <Grid gap={6} templateColumns='1fr 1fr'>
               {data?.cellars.map(cellar => {
-                const { id, name } = cellar
-                console.log({ cellar })
+                const { id, name, dayDatas, numWalletsActive } = cellar
 
                 return (
                   <CellarOverviewCard
                     key={id}
+                    id={id}
                     isConnected={isConnected}
                     name={name}
+                    dayDatas={dayDatas}
+                    numWalletsActive={numWalletsActive}
                   />
                 )
               })}
