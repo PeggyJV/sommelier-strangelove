@@ -10,6 +10,9 @@ query GetAllCellars {
     tvlActive
     tvlInactive
     tvlTotal
+    numWalletsActive
+    numWalletsAllTime
+    sharesTotal
     dayDatas(first: 7, orderBy: date, orderDirection: desc) {
       id
       date

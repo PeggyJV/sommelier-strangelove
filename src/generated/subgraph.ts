@@ -1236,7 +1236,7 @@ export enum _SubgraphErrorPolicy_ {
 export type GetAllCellarsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, tvlActive: string, tvlInactive: string, tvlTotal: string, denom: { __typename?: 'Denom', id: string, symbol: string, decimals: number }, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number, cellar: { __typename?: 'Cellar', id: string } }> }> };
+export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, tvlActive: string, tvlInactive: string, tvlTotal: string, numWalletsActive: number, numWalletsAllTime: number, sharesTotal: string, denom: { __typename?: 'Denom', id: string, symbol: string, decimals: number }, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number, cellar: { __typename?: 'Cellar', id: string } }> }> };
 
 export type GetCellarRouteStaticQueryVariables = Exact<{
   cellarAddress: Scalars['ID'];
@@ -1279,6 +1279,9 @@ export const GetAllCellarsDocument = gql`
     tvlActive
     tvlInactive
     tvlTotal
+    numWalletsActive
+    numWalletsAllTime
+    sharesTotal
     dayDatas(first: 7, orderBy: date, orderDirection: desc) {
       id
       date
