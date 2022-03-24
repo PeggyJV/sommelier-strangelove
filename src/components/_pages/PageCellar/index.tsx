@@ -43,12 +43,14 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const { id, name } = staticCellar!
   const [cellarResult] = useGetCellarQuery({
     variables: {
-      cellarAddress: id
+      cellarAddress: id,
+      cellarString: id
     }
   })
   const { data } = cellarResult
 
   const { cellar } = data || {}
+  console.log({ cellar })
 
   return (
     <Layout>
