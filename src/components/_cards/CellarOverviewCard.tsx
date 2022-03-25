@@ -22,12 +22,13 @@ import { Serie } from '@nivo/line'
 import { useNivoThemes } from 'hooks/nivo'
 import dynamic from 'next/dynamic'
 import Link from 'components/Link'
+import { Cellar } from 'generated/subgraph'
 const LineChartArea = dynamic(
   () => import('components/_charts/LineChartArea'),
   { ssr: false }
 )
 
-interface Props {
+interface Props extends Partial<Cellar> {
   isConnected: boolean
 }
 
@@ -66,17 +67,24 @@ const data: Serie[] = [
   }
 ]
 
-export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
+export const CellarOverviewCard: VFC<Props> = ({
+  isConnected,
+  name,
+  id,
+  dayDatas,
+  numWalletsActive
+}) => {
   const { lineChartTheme } = useNivoThemes()
+  console.log({ dayDatas })
 
   return (
     <Card py={8} bg='violentViolet'>
       <VStack spacing={6} align='stretch'>
         <HStack>
           <Circle size={8} bg='deepSkyBlue.400' />
-          <Text>Strategist Name</Text>
+          <Text>{name}</Text>
         </HStack>
-        <Heading fontSize='4xl'>Cellar Presentation Name</Heading>
+        <Heading fontSize='4xl'>{name}</Heading>
         <Grid
           flex={1}
           gap={4}
@@ -130,7 +138,7 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
               <HStack divider={<CardDivider />} justify='space-between'>
                 <VStack {...bottomRowCells}>
                   <CardHeading>depositors</CardHeading>
-                  <Text>2000</Text>
+                  <Text>{numWalletsActive}</Text>
                 </VStack>
                 <VStack {...bottomRowCells}>
                   <CardHeading>
@@ -151,7 +159,7 @@ export const CellarOverviewCard: VFC<Props> = ({ isConnected }) => {
           </GridItem>
         </Grid>
         {/* This link will change with the gql branch */}
-        <Link href='/cellars/aave-stablecoin-cellar' maxW='max-content'>
+        <Link href={`/cellars/${id}`} maxW='max-content'>
           <BaseButton variant='solid' icon={FaArrowRight}>
             {isConnected ? 'add deposit' : 'view cellar'}
           </BaseButton>

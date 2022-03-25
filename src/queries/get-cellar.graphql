@@ -1,24 +1,47 @@
-query GetCellar($cellarAddress: ID!) {
+query GetCellar($cellarAddress: ID!, $cellarString: String!) {
   cellar(id: $cellarAddress) {
-    id,
+    id
+    apy
     denom {
       id
       symbol
-    },
-    tvlActive,
-    tvlInactive,
-    tvlTotal,
-    addedLiquidityAllTime,
-    removedLiquidityAllTime,
-    numWalletsAllTime,
-    numWalletsActive,
+    }
+    feePlatform
+    feeCommunity
+    feeStakers
+    maxDeposits
+    name
+    numWalletsActive
+    numWalletsAllTime
+    staker {
+      id
+      bondingPeriods
+      bondingPeriodAPRs
+      bondingPeriodBoosts
+    }
+    tvlActive
+    tvlInactive
+    tvlTotal
+    addedLiquidityAllTime
+    removedLiquidityAllTime
 
     # There could be missing days. Data for a missing day should equal the previous day.
     dayDatas(first: 7, orderBy: date, orderDirection: desc) {
-      date,
-      addedLiquidity,
-      removedLiquidity,
-      numWallets,
+      date
+      addedLiquidity
+      removedLiquidity
+      numWallets
+    }
+  }
+  wallets {
+    id
+    cellarShares(where: { cellar: $cellarString }) {
+      id
+      balance
+    }
+    depositWithdraws(where: { cellar: $cellarString }) {
+      deposits
+      withdrawals
     }
   }
 }

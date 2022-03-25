@@ -1,5 +1,6 @@
 query GetCellarRoutes {
   cellars {
     name
+    id
   }
 }
