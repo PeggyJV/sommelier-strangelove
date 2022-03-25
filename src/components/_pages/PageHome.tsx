@@ -7,7 +7,7 @@ import { Card } from 'components/_cards/Card'
 import { BaseButton } from 'components/_buttons/BaseButton'
 import { FaArrowRight } from 'react-icons/fa'
 import { Section } from 'components/_layout/Section'
-import { useGetAllCellarsQuery } from 'generated/subgraph'
+import { Cellar, useGetAllCellarsQuery } from 'generated/subgraph'
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
@@ -47,7 +47,8 @@ const PageHome: NextPage = () => {
             </Box>
             <Grid gap={6} templateColumns='1fr 1fr'>
               {data?.cellars.map(cellar => {
-                const { id, name, dayDatas, numWalletsActive } = cellar
+                const { id, name, dayDatas, numWalletsActive } =
+                  cellar as Cellar
 
                 return (
                   <CellarOverviewCard
