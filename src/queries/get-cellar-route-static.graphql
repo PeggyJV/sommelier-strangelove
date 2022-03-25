@@ -1,0 +1,6 @@
+query GetCellarRouteStatic($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    id
+    name
+  }
+}
