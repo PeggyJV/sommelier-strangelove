@@ -68,7 +68,8 @@ export default function QueryDemo() {
 
   const [cellarResult] = useGetCellarQuery({
     variables: {
-      cellarAddress
+      cellarAddress,
+      cellarString: cellarAddress
     }
   })
   const { data: cellarData, fetching: cellarFetching } = cellarResult
