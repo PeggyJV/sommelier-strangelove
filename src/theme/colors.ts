@@ -47,11 +47,13 @@ const brightTurquoise = {
   900: '#004E4F'
 }
 const violentViolet = '#39196d'
+const energyYellow = '#e8d37c'
+const sunsetOrange = '#f26057'
 const black = '#141414'
 const white = '#FFFFFF'
 const light = '#FAF6F0'
 const functional = {
-  primary: electricIndigo[500],
+  primary: energyYellow,
   secondary: deepSkyBlue[500],
   accent: brilliantRose[500],
   warning: '#F2893B',
@@ -64,16 +66,19 @@ const backgrounds = {
   white: white,
   black: black,
   light: light,
-  brand: electricIndigo[500],
+  brand: energyYellow,
   dark: violentViolet,
   darker: '#1f0b40',
   offBlack: '#281144',
+  loadingGradient: 'linear-gradient(90deg, #E8D37C 0%, #60509B 50%)',
   primaryGradient:
     'linear-gradient(90deg, rgba(53,11,112,0.9) 0%, rgba(31,11,64,0.9) 50%)',
   successGradient:
     'linear-gradient(90deg, rgba(23,66,99,0.9) 0%, rgba(31,11,64,0.9) 50%)',
   dangerGradient:
-    'linear-gradient(90deg, rgba(82,18,72,0.9) 0%, rgba(31,11,64,0.9) 50%)'
+    'linear-gradient(90deg, rgba(82,18,72,0.9) 0%, rgba(31,11,64,0.9) 50%)',
+  brandGradient:
+    'linear-gradient(90deg, #E8D37C 0%, #F6851B 58.33%, #EC3275 100%)'
 }
 const uiChrome = {
   darkest: black,
@@ -86,7 +91,7 @@ const uiChrome = {
 const text = {
   headlines: {
     dark: black,
-    brand: electricIndigo[500],
+    brand: energyYellow,
     light: white
   },
   body: {
@@ -109,6 +114,8 @@ export const colors = {
   deepSkyBlue,
   brightTurquoise,
   violentViolet,
+  energyYellow,
+  sunsetOrange,
   black,
   white,
   light,
