@@ -115,12 +115,12 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             <Heading fontSize='1.75rem'>Performance</Heading>
             <HStack
               border='1px solid'
-              borderColor='electricIndigo.500'
+              borderColor='energyYellow'
               borderRadius='2rem'
               overflow='hidden'
               justify='space-around'
               spacing={0}
-              divider={<StackDivider borderColor='electricIndigo.500' />}
+              divider={<StackDivider borderColor='energyYellow' />}
             >
               {placeholderButtons.map((button, i) => (
                 <Box
@@ -129,7 +129,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
                   py={2}
                   key={i}
                   as='button'
-                  bg={i === 0 ? 'electricIndigo.500' : ''}
+                  color={i === 0 ? 'black' : ''}
+                  bg={i === 0 ? 'energyYellow' : ''}
                   fontSize='sm'
                   whiteSpace='nowrap'
                 >
