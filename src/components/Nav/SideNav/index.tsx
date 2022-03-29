@@ -1,6 +1,7 @@
 import {
   HStack,
   Icon,
+  IconProps,
   List,
   ListIcon,
   ListItem,
@@ -9,8 +10,20 @@ import {
 } from '@chakra-ui/react'
 import Link from 'components/Link'
 import { links } from './links'
-import { BsCircleFill, BsDiamondFill, BsFillSquareFill } from 'react-icons/bs'
+import { BsDiamondFill } from 'react-icons/bs'
+import { FaTelegramPlane, FaDiscord, FaTwitter } from 'react-icons/fa'
 import { Card } from 'components/_cards/Card'
+
+const iconStyles: IconProps = {
+  boxSize: 9,
+  p: 2,
+  color: 'white',
+  bg: 'backgrounds.black',
+  borderRadius: '50%',
+  _hover: {
+    bg: 'sunsetOrange'
+  }
+}
 
 export const SideNav = () => {
   return (
@@ -29,21 +42,23 @@ export const SideNav = () => {
             )
           })}
         </List>
-        <Card minW='28ch' bg='violentViolet'>
+        <Card minW='28ch' bg='backgrounds.purpleGlassGradient'>
           <VStack align='flex-start'>
             <Text fontFamily='brand'>Join Our Community</Text>
             <Text pb={6}>
               Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
               consectetur.
             </Text>
-            <HStack spacing={6}>
-              <Icon
-                as={BsFillSquareFill}
-                boxSize={6}
-                color='brilliantRose.500'
-              />
-              <Icon as={BsCircleFill} boxSize={6} color='deepSkyBlue.400' />
-              <Icon as={BsDiamondFill} boxSize={6} color='electricIndigo.400' />
+            <HStack spacing={4}>
+              <Link href='https://t.me/getsomm' isExternal>
+                <Icon as={FaTelegramPlane} {...iconStyles} />
+              </Link>
+              <Link href='https://discord.com/invite/ZcAYgSBxvY' isExternal>
+                <Icon as={FaDiscord} {...iconStyles} />
+              </Link>
+              <Link href='https://twitter.com/sommfinance' isExternal>
+                <Icon as={FaTwitter} {...iconStyles} />
+              </Link>
             </HStack>
           </VStack>
         </Card>
