@@ -4,10 +4,11 @@ export const components: ThemeComponents = {
   Button: {
     baseStyle: {
       borderRadius: 25,
-      color: 'white'
+      color: 'text.body.dark',
+      bgColor: 'energyYellow'
     },
     defaultProps: {
-      colorScheme: 'electricIndigo'
+      colorScheme: 'electricIndigo',
     }
   },
   Heading: {
