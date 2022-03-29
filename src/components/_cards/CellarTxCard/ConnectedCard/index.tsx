@@ -32,7 +32,7 @@ export const ConnectedCard: VFC = () => {
       flexDir='column'
       justifyContent='center'
       h='auto'
-      bg='backgrounds.dark'
+      bg='backgrounds.purpleGlassGradient'
     >
       <Tabs flex={1} isFitted pt={1}>
         <TabList color='white'>

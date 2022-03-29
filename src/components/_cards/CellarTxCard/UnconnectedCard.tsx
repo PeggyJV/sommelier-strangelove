@@ -13,7 +13,7 @@ export const UnconnectedCard: VFC = () => {
       flexDir='column'
       justifyContent='center'
       h='100%'
-      bg='backgrounds.darker'
+      bg='backgrounds.purpleGlassGradient'
     >
       <VStack spacing={8} justify='center'>
         <Text color='text.body.lightMuted' maxW='30ch' textAlign='center'>
