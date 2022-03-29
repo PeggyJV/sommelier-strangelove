@@ -5,6 +5,7 @@ import ClientOnly from 'components/ClientOnly'
 import { ConnectedPopover } from './ConnectedPopover'
 import { BaseButton } from '../BaseButton'
 import { BiWalletAlt } from 'react-icons/bi'
+import { GradientButton } from '../GradientButton'
 
 export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
   connector: Connector
@@ -55,7 +56,7 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
       {isConnected ? (
         account.data && <ConnectedPopover />
       ) : (
-        <BaseButton
+        <GradientButton
           isLoading={loading}
           key={c.id}
           minW='max-content'
@@ -64,7 +65,7 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
           {...rest}
         >
           {c.ready ? `Connect Wallet` : `Please install MetaMask`}
-        </BaseButton>
+        </GradientButton>
       )}
     </ClientOnly>
   )

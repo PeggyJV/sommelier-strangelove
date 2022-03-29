@@ -1,42 +1,47 @@
-import { Button, ButtonProps, forwardRef, Icon } from '@chakra-ui/react'
+import {
+  Button,
+  ButtonProps,
+  forwardRef,
+  Icon,
+  IconProps
+} from '@chakra-ui/react'
 import { VFC } from 'react'
 
-interface BaseButtonProps extends Omit<ButtonProps, 'icon'> {
+export interface BaseButtonProps extends Omit<ButtonProps, 'icon'> {
   icon?: any
+  iconProps?: IconProps
 }
 
 export const BaseButton: VFC<BaseButtonProps> = forwardRef<
   BaseButtonProps,
   'button'
->(({ icon, variant, ...rest }, ref) => {
+>(({ icon, variant, iconProps, ...rest }, ref) => {
   return (
     <Button
       ref={ref}
       role='group'
-      variant={variant || 'outline'}
-      color='white'
-      border='1.5px solid'
-      borderColor='electricIndigo.500'
+      color='black'
+      bg='energyYellow'
       rightIcon={
         icon && (
           <Icon
             as={icon}
-            color={variant === 'solid' ? 'electricIndigo.500' : 'white'}
-            bgColor={variant === 'solid' ? 'white' : 'electricIndigo.500'}
+            color='energyYellow'
+            bgColor='black'
             borderRadius='50%'
             boxSize={6}
             p={1}
             _groupHover={{
-              color: 'brilliantRose.500',
+              color: 'sunsetOrange',
               bgColor: 'white'
             }}
+            {...iconProps}
           />
         )
       }
       _hover={{
         color: 'white',
-        bgColor: 'brilliantRose.500',
-        borderColor: 'brilliantRose.500'
+        bg: 'sunsetOrange'
       }}
       {...rest}
     />
