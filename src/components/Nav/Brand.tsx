@@ -1,4 +1,4 @@
-import { HStack, Img, Text } from '@chakra-ui/react'
+import { HStack } from '@chakra-ui/react'
 import Link from 'components/Link'
 import { LogoTextIcon } from 'components/_icons'
 import React from 'react'
