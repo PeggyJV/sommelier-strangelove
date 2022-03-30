@@ -10,7 +10,7 @@ export const tabProps: TabProps = {
   borderColor: 'uiChrome.dataBorder',
   _selected: {
     color: 'white',
-    borderColor: 'brilliantRose.500'
+    borderColor: 'sunsetOrange'
   }
 }
 
@@ -23,7 +23,7 @@ export const cardProps: BoxProps = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  bg: 'backgrounds.darker'
+  bg: 'backgrounds.black'
 }
 
 export const disabledButtonProps: ButtonProps = {

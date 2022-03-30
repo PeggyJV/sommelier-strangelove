@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react'
 import Link from 'components/Link'
 import { links } from './links'
-import { BsCircleFill, BsDiamondFill, BsFillSquareFill } from 'react-icons/bs'
 import { Card } from 'components/_cards/Card'
+import { socials } from './socials'
 
 export const SideNav = () => {
   return (
@@ -18,32 +18,43 @@ export const SideNav = () => {
       <VStack as='nav' py={8} align='flex-start'>
         <List fontFamily='brand' pb={16}>
           {links.map((link, i) => {
-            const { href, title } = link
+            const { href, title, icon } = link
             return (
               <Link key={i} href={href}>
                 <ListItem>
-                  <ListIcon as={BsDiamondFill} color='electricIndigo.400' />
+                  {icon && <ListIcon as={icon} />}
                   {title}
                 </ListItem>
               </Link>
             )
           })}
         </List>
-        <Card minW='28ch' bg='violentViolet'>
+        <Card minW='28ch' bg='backgrounds.purpleGlassGradient'>
           <VStack align='flex-start'>
             <Text fontFamily='brand'>Join Our Community</Text>
             <Text pb={6}>
               Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
               consectetur.
             </Text>
-            <HStack spacing={6}>
-              <Icon
-                as={BsFillSquareFill}
-                boxSize={6}
-                color='brilliantRose.500'
-              />
-              <Icon as={BsCircleFill} boxSize={6} color='deepSkyBlue.400' />
-              <Icon as={BsDiamondFill} boxSize={6} color='electricIndigo.400' />
+            <HStack spacing={4}>
+              {socials.map((social, i) => {
+                const { href, icon } = social
+                return (
+                  <Link key={i} href={href} isExternal>
+                    <Icon
+                      as={icon}
+                      boxSize={9}
+                      p={2}
+                      color='white'
+                      bg='backgrounds.black'
+                      borderRadius='50%'
+                      _hover={{
+                        bg: 'sunsetOrange'
+                      }}
+                    />
+                  </Link>
+                )
+              })}
             </HStack>
           </VStack>
         </Card>

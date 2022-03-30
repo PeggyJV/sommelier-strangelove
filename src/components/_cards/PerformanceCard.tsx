@@ -19,7 +19,7 @@ interface Props extends BoxProps {
 
 const cardProps: BoxProps = {
   p: 4,
-  bg: 'backgrounds.darker'
+  bg: 'backgrounds.black'
 }
 
 const data: Serie[] = [
@@ -46,7 +46,7 @@ export const PerformanceCard: VFC<Props> = props => {
   const { lineChartTheme } = useNivoThemes()
 
   return (
-    <Card bg='backgrounds.dark' overflow='visible' {...props}>
+    <Card bg='backgrounds.purpleGlassGradient' overflow='visible' {...props}>
       <HStack spacing={4} align='stretch'>
         <Card flex={1} overflow='visible' {...cardProps}>
           <VStack spacing={6} align='stretch' divider={<CardDivider />}>
@@ -57,7 +57,7 @@ export const PerformanceCard: VFC<Props> = props => {
                   <Text fontSize='xs'>Apy</Text>
                 </HStack>
                 <HStack spacing={1}>
-                  <Circle bg='brilliantRose.500' size={3} />
+                  <Circle bg='sunsetOrange' size={3} />
                   <Text fontSize='xs'>Volume</Text>
                 </HStack>
               </HStack>

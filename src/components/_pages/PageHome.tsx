@@ -64,7 +64,7 @@ const PageHome: NextPage = () => {
               <Card
                 display='flex'
                 alignItems='center'
-                bgColor='backgrounds.darker'
+                bgColor='backgrounds.black'
                 textAlign='center'
               >
                 <VStack spacing={4}>

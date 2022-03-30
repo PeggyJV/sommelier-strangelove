@@ -7,7 +7,7 @@ const textProps: TextProps = {
 }
 
 const h2Props: HeadingProps = {
-  color: 'brilliantRose.500',
+  color: 'energyYellow',
   as: 'h2',
   fontSize: '3xl',
   pb: 2

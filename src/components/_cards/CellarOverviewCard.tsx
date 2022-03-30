@@ -43,7 +43,7 @@ const topRow: GridItemProps = {
 }
 
 const cardProps: BoxProps = {
-  bg: 'backgrounds.darker',
+  bg: 'backgrounds.black',
   flex: 1,
   display: 'flex',
   flexDir: 'column',
@@ -78,7 +78,7 @@ export const CellarOverviewCard: VFC<Props> = ({
   console.log({ dayDatas })
 
   return (
-    <Card py={8} bg='violentViolet'>
+    <Card py={8} bg='backgrounds.purpleGlassGradient'>
       <VStack spacing={6} align='stretch'>
         <HStack>
           <Circle size={8} bg='deepSkyBlue.400' />
@@ -159,8 +159,8 @@ export const CellarOverviewCard: VFC<Props> = ({
           </GridItem>
         </Grid>
         {/* This link will change with the gql branch */}
-        <Link href={`/cellars/${id}`} maxW='max-content'>
-          <BaseButton variant='solid' icon={FaArrowRight}>
+        <Link href={`/cellars/${id}`}>
+          <BaseButton variant='solid' w='100%' icon={FaArrowRight}>
             {isConnected ? 'add deposit' : 'view cellar'}
           </BaseButton>
         </Link>
