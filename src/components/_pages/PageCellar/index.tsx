@@ -34,7 +34,7 @@ const investGridProps: GridProps = {
   rowGap: 4
 }
 
-const placeholderButtons = ['1D', '1W', 'All Time']
+const placeholderButtons = ['24H', '1W', 'All Time']
 
 const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const [auth] = useConnect()
@@ -84,12 +84,16 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </Text>
           <Grid {...investGridProps}>
             <GridItem colSpan={2}>
-              <Heading fontSize='1.75rem'>Manage Liquidity</Heading>
+              <Heading as='h2' fontSize='1.75rem' color='energyYellow'>
+                Manage Liquidity
+              </Heading>
             </GridItem>
             <GridItem colSpan={4}>
               <HStack justify='space-between' align='flex-end'>
                 <VStack align='flex-start'>
-                  <Heading fontSize='1.75rem'>Bonding Periods</Heading>
+                  <Heading as='h2' fontSize='1.75rem' color='energyYellow'>
+                    Bonding Periods
+                  </Heading>
                   <Text>
                     Earn additional rewards after locking your LP tokens for a
                     specific period of time.
@@ -115,12 +119,12 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             <Heading fontSize='1.75rem'>Performance</Heading>
             <HStack
               border='1px solid'
-              borderColor='electricIndigo.500'
+              borderColor='energyYellow'
               borderRadius='2rem'
               overflow='hidden'
               justify='space-around'
               spacing={0}
-              divider={<StackDivider borderColor='electricIndigo.500' />}
+              divider={<StackDivider borderColor='energyYellow' />}
             >
               {placeholderButtons.map((button, i) => (
                 <Box
@@ -129,7 +133,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
                   py={2}
                   key={i}
                   as='button'
-                  bg={i === 0 ? 'electricIndigo.500' : ''}
+                  color={i === 0 ? 'black' : ''}
+                  bg={i === 0 ? 'energyYellow' : ''}
                   fontSize='sm'
                   whiteSpace='nowrap'
                 >

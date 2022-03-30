@@ -6,7 +6,13 @@ const Link = ({ children, href, ...rest }: LinkProps) => {
   return (
     <NLink href={href || ''} passHref>
       {/* @ts-ignore */}
-      <ChLink {...rest}>{children}</ChLink>
+      <ChLink
+        textDecoration='none'
+        _hover={{ textDecoration: 'none' }}
+        {...rest}
+      >
+        {children}
+      </ChLink>
     </NLink>
   )
 }

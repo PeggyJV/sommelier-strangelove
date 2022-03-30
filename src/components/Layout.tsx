@@ -11,16 +11,11 @@ import {
 } from '@chakra-ui/react'
 import Brand from './Nav/Brand'
 
-const gridCellProps: GridItemProps = {
-  bg: 'black'
-}
-
 const topRowProps: GridItemProps = {
   height: '100%',
   display: 'flex',
   alignItems: 'center',
-  alignSelf: 'center',
-  ...gridCellProps
+  alignSelf: 'center'
 }
 
 const Layout: VFC<GridProps> = ({ children, ...rest }) => {
@@ -30,8 +25,6 @@ const Layout: VFC<GridProps> = ({ children, ...rest }) => {
         minH='100vh'
         templateColumns='1fr 5fr'
         templateRows='80px 1fr'
-        bg='violentViolet'
-        gap='2px'
         {...rest}
       >
         <GridItem display='flex' alignItems='center' {...topRowProps}>
@@ -40,10 +33,10 @@ const Layout: VFC<GridProps> = ({ children, ...rest }) => {
         <GridItem {...topRowProps}>
           <TopNav />
         </GridItem>
-        <GridItem {...gridCellProps}>
+        <GridItem>
           <SideNav />
         </GridItem>
-        <GridItem display='flex' px={6} flexDir='column' {...gridCellProps}>
+        <GridItem display='flex' px={6} flexDir='column'>
           <Box as='main' flex={1}>
             {children}
           </Box>

@@ -34,9 +34,9 @@ const CellarMetaCard: VFC<BoxProps> = () => {
   const { barChartTheme } = useNivoThemes()
 
   return (
-    <Card bg='backgrounds.dark' overflow='visible'>
+    <Card bg='backgrounds.purpleGlassGradient' overflow='visible'>
       <VStack spacing={4} align='stretch'>
-        <Card p={4} bg='backgrounds.darker' overflow='visible'>
+        <Card p={4} bg='backgrounds.black' overflow='visible'>
           <VStack spacing={4} divider={<CardDivider />} align='stretch'>
             <CardStatRow>
               <CardStat
@@ -76,7 +76,7 @@ const CellarMetaCard: VFC<BoxProps> = () => {
             </VStack>
           </VStack>
         </Card>
-        <Card p={4} bg='backgrounds.darker'>
+        <Card p={4} bg='backgrounds.black'>
           <CardStatRow>
             <CardStat
               label='minimum deposit'
@@ -92,7 +92,7 @@ const CellarMetaCard: VFC<BoxProps> = () => {
             />
           </CardStatRow>
         </Card>
-        <Card p={4} bg='backgrounds.darker'>
+        <Card p={4} bg='backgrounds.black'>
           <CardStatRow>
             <CardStat label='class' labelIcon stat='Stablecoin' />
             <CardStat

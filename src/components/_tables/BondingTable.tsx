@@ -1,10 +1,31 @@
-import { Table, TableProps, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import {
+  Table,
+  TableProps,
+  TableRowProps,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from '@chakra-ui/react'
 import { VFC } from 'react'
+
+const BorderTr: VFC<TableRowProps> = props => {
+  return (
+    <Tr
+      _notLast={{
+        borderBottom: '1px solid',
+        borderColor: 'text.body.lightMuted'
+      }}
+      {...props}
+    />
+  )
+}
 
 export const BondingTable: VFC<TableProps> = () => {
   return (
-    <Table>
-      <Thead>
+    <Table variant='unstyled'>
+      <Thead color='text.body.lightMuted'>
         <Tr>
           <Th>bonding period</Th>
           <Th>amount</Th>
@@ -14,27 +35,27 @@ export const BondingTable: VFC<TableProps> = () => {
         </Tr>
       </Thead>
       <Tbody>
-        <Tr>
+        <BorderTr>
           <Td>21 Days</Td>
           <Td>-</Td>
           <Td>150%</Td>
           <Td>1.5x SOMM</Td>
           <Td>-</Td>
-        </Tr>
-        <Tr>
+        </BorderTr>
+        <BorderTr>
           <Td>14 Days</Td>
           <Td>-</Td>
           <Td>100%</Td>
           <Td>1.25x SOMM</Td>
           <Td>-</Td>
-        </Tr>
-        <Tr>
+        </BorderTr>
+        <BorderTr>
           <Td>7 Days</Td>
           <Td>-</Td>
           <Td>50%</Td>
           <Td>1.125x SOMM</Td>
           <Td>-</Td>
-        </Tr>
+        </BorderTr>
       </Tbody>
     </Table>
   )
