@@ -1,7 +1,6 @@
 import {
   HStack,
   Icon,
-  IconProps,
   List,
   ListIcon,
   ListItem,
@@ -10,20 +9,8 @@ import {
 } from '@chakra-ui/react'
 import Link from 'components/Link'
 import { links } from './links'
-import { BsDiamondFill } from 'react-icons/bs'
-import { FaTelegramPlane, FaDiscord, FaTwitter } from 'react-icons/fa'
 import { Card } from 'components/_cards/Card'
-
-const iconStyles: IconProps = {
-  boxSize: 9,
-  p: 2,
-  color: 'white',
-  bg: 'backgrounds.black',
-  borderRadius: '50%',
-  _hover: {
-    bg: 'sunsetOrange'
-  }
-}
+import { socials } from './socials'
 
 export const SideNav = () => {
   return (
@@ -31,11 +18,11 @@ export const SideNav = () => {
       <VStack as='nav' py={8} align='flex-start'>
         <List fontFamily='brand' pb={16}>
           {links.map((link, i) => {
-            const { href, title } = link
+            const { href, title, icon } = link
             return (
               <Link key={i} href={href}>
                 <ListItem>
-                  <ListIcon as={BsDiamondFill} color='electricIndigo.400' />
+                  {icon && <ListIcon as={icon} />}
                   {title}
                 </ListItem>
               </Link>
@@ -50,15 +37,24 @@ export const SideNav = () => {
               consectetur.
             </Text>
             <HStack spacing={4}>
-              <Link href='https://t.me/getsomm' isExternal>
-                <Icon as={FaTelegramPlane} {...iconStyles} />
-              </Link>
-              <Link href='https://discord.com/invite/ZcAYgSBxvY' isExternal>
-                <Icon as={FaDiscord} {...iconStyles} />
-              </Link>
-              <Link href='https://twitter.com/sommfinance' isExternal>
-                <Icon as={FaTwitter} {...iconStyles} />
-              </Link>
+              {socials.map((social, i) => {
+                const { href, icon } = social
+                return (
+                  <Link key={i} href={href} isExternal>
+                    <Icon
+                      as={icon}
+                      boxSize={9}
+                      p={2}
+                      color='white'
+                      bg='backgrounds.black'
+                      borderRadius='50%'
+                      _hover={{
+                        bg: 'sunsetOrange'
+                      }}
+                    />
+                  </Link>
+                )
+              })}
             </HStack>
           </VStack>
         </Card>
