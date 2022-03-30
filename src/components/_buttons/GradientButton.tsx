@@ -17,6 +17,9 @@ export const GradientButton: VFC<BaseButtonProps> = forwardRef<
           color: 'white',
           bg: 'backgrounds.brandGradient'
         }}
+        _disabled={{
+          bg: 'backgrounds.brandGradient'
+        }}
         iconProps={{
           color: 'black',
           bgColor: 'white'

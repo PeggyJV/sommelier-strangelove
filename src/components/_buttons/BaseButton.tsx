@@ -43,6 +43,10 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
         color: 'white',
         bg: 'sunsetOrange'
       }}
+      _disabled={{
+        color: 'text.body.lightMuted',
+        bg: 'uiChrome.dataBorder'
+      }}
       {...rest}
     />
   )
