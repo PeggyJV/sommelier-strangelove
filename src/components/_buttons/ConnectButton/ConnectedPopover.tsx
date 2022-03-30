@@ -30,7 +30,12 @@ export const ConnectedPopover = () => {
           {truncateWalletAddress(walletAddress)}
         </GradientButton>
       </PopoverTrigger>
-      <PopoverContent border='none' maxW='max-content' bg='backgrounds.dark'>
+      <PopoverContent
+        border='none'
+        maxW='max-content'
+        bg='energyYellow'
+        color='black'
+      >
         <PopoverBody>
           <VStack align='flex-start' divider={<CardDivider />}>
             <Link
@@ -40,10 +45,10 @@ export const ConnectedPopover = () => {
               View on Etherscan
             </Link>
             <Button
+              p={0}
               variant='unstyled'
-              _hover={{
-                textDecoration: 'underline'
-              }}
+              fontWeight='normal'
+              fontSize='lg'
               onClick={disconnect}
               isLoading={account.loading}
             >
