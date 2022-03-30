@@ -34,7 +34,7 @@ const investGridProps: GridProps = {
   rowGap: 4
 }
 
-const placeholderButtons = ['1D', '1W', 'All Time']
+const placeholderButtons = ['24H', '1W', 'All Time']
 
 const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const [auth] = useConnect()
@@ -84,12 +84,16 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </Text>
           <Grid {...investGridProps}>
             <GridItem colSpan={2}>
-              <Heading fontSize='1.75rem'>Manage Liquidity</Heading>
+              <Heading as='h2' fontSize='1.75rem' color='energyYellow'>
+                Manage Liquidity
+              </Heading>
             </GridItem>
             <GridItem colSpan={4}>
               <HStack justify='space-between' align='flex-end'>
                 <VStack align='flex-start'>
-                  <Heading fontSize='1.75rem'>Bonding Periods</Heading>
+                  <Heading as='h2' fontSize='1.75rem' color='energyYellow'>
+                    Bonding Periods
+                  </Heading>
                   <Text>
                     Earn additional rewards after locking your LP tokens for a
                     specific period of time.
