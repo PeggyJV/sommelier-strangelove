@@ -17,7 +17,6 @@ import { Section } from 'components/_layout/Section'
 import { useConnect } from 'wagmi'
 import { UserPerformanceCard } from 'components/_cards/UserPerformanceCard'
 import { BaseButton } from 'components/_buttons/BaseButton'
-import { BreadCrumb } from 'components/BreadCrumb'
 import { Copy } from './Copy'
 import { VFC } from 'react'
 import { BondingTable } from 'components/_tables/BondingTable'
@@ -48,16 +47,11 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     }
   })
   const { data } = cellarResult
-  const { cellar } = data || {}
-  const { apy } = cellar || {}
-
-  console.log({ cellar })
 
   return (
     <Layout>
       <Section>
         <VStack spacing={4} align='stretch'>
-          <BreadCrumb fontSize='xl' />
           <Heading pb={4}>{name}</Heading>
           <UserPerformanceCard />
         </VStack>

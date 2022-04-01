@@ -31,75 +31,78 @@ export const ConnectedCard: VFC = () => {
       display='flex'
       flexDir='column'
       justifyContent='center'
+      p={2}
       h='auto'
-      bg='backgrounds.purpleGlassGradient'
+      bg='backgrounds.glassy'
     >
-      <Tabs flex={1} isFitted pt={1}>
-        <TabList color='white'>
-          <Tab {...tabProps}>Deposit</Tab>
-          <Tab {...tabProps}>Withdraw</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel {...tabPanelProps}>
-            <VStack align='stretch' spacing={4}>
-              <Card {...cardProps}>
-                <VStack align='flex-start-'>
-                  <CardHeading>wallet balance</CardHeading>
-                  <HStack spacing={1}>
-                    <Icon
-                      as={FaEthereum}
-                      boxSize={6}
-                      color='text.body.dark'
-                      bg='white'
-                      p={1}
-                      borderRadius='50%'
-                    />{' '}
-                    <Text>12345.678 ETH</Text>
-                  </HStack>
-                </VStack>
-              </Card>
-              <TxInput />
-              <BaseButton
-                isLoading={loading}
-                disabled={isDisabled}
-                onClick={handleDeposit}
-                {...disabledButtonProps}
-              >
-                Add Deposit
-              </BaseButton>
-            </VStack>
-          </TabPanel>
-          <TabPanel {...tabPanelProps}>
-            <VStack align='stretch' spacing={4}>
-              <Card {...cardProps}>
-                <VStack align='flex-start-'>
-                  <CardHeading>wallet balance</CardHeading>
-                  <HStack spacing={1}>
-                    <Icon
-                      as={FaEthereum}
-                      boxSize={6}
-                      color='text.body.dark'
-                      bg='white'
-                      p={1}
-                      borderRadius='50%'
-                    />{' '}
-                    <Text>12345.678 ETH</Text>
-                  </HStack>
-                </VStack>
-              </Card>
-              <TxInput disabled={isDisabled} />
-              <BaseButton
-                isLoading={loading}
-                disabled={isDisabled}
-                onClick={handleWithdraw}
-                {...disabledButtonProps}
-              >
-                Withdraw
-              </BaseButton>
-            </VStack>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <Card bg='backgrounds.black'>
+        <Tabs flex={1} isFitted pt={1}>
+          <TabList color='white'>
+            <Tab {...tabProps}>Deposit</Tab>
+            <Tab {...tabProps}>Withdraw</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel {...tabPanelProps}>
+              <VStack align='stretch' spacing={4}>
+                <Card {...cardProps}>
+                  <VStack align='flex-start-'>
+                    <CardHeading>wallet balance</CardHeading>
+                    <HStack spacing={1}>
+                      <Icon
+                        as={FaEthereum}
+                        boxSize={6}
+                        color='text.body.dark'
+                        bg='white'
+                        p={1}
+                        borderRadius='50%'
+                      />{' '}
+                      <Text>12345.678 ETH</Text>
+                    </HStack>
+                  </VStack>
+                </Card>
+                <TxInput />
+                <BaseButton
+                  isLoading={loading}
+                  disabled={isDisabled}
+                  onClick={handleDeposit}
+                  {...disabledButtonProps}
+                >
+                  Add Deposit
+                </BaseButton>
+              </VStack>
+            </TabPanel>
+            <TabPanel {...tabPanelProps}>
+              <VStack align='stretch' spacing={4}>
+                <Card {...cardProps}>
+                  <VStack align='flex-start-'>
+                    <CardHeading>wallet balance</CardHeading>
+                    <HStack spacing={1}>
+                      <Icon
+                        as={FaEthereum}
+                        boxSize={6}
+                        color='text.body.dark'
+                        bg='white'
+                        p={1}
+                        borderRadius='50%'
+                      />{' '}
+                      <Text>12345.678 ETH</Text>
+                    </HStack>
+                  </VStack>
+                </Card>
+                <TxInput disabled={isDisabled} />
+                <BaseButton
+                  isLoading={loading}
+                  disabled={isDisabled}
+                  onClick={handleWithdraw}
+                  {...disabledButtonProps}
+                >
+                  Withdraw
+                </BaseButton>
+              </VStack>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Card>
     </Card>
   )
 }
