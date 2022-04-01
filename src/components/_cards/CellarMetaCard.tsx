@@ -34,7 +34,7 @@ const CellarMetaCard: VFC<BoxProps> = () => {
   const { barChartTheme } = useNivoThemes()
 
   return (
-    <Card p={2} bg='backgrounds.glassGradient' overflow='visible'>
+    <Card p={2} bg='backgrounds.glassy' overflow='visible'>
       <VStack spacing={2} align='stretch'>
         <Card p={4} bg='backgrounds.black' overflow='visible'>
           <VStack spacing={4} divider={<CardDivider />} align='stretch'>

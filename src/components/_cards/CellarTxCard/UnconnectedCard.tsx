@@ -14,7 +14,7 @@ export const UnconnectedCard: VFC = () => {
       justifyContent='center'
       p={2}
       h='auto'
-      bg='backgrounds.glassGradient'
+      bg='backgrounds.glassy'
     >
       <Card bg='backgrounds.black'>
         <VStack spacing={8} justify='center'>

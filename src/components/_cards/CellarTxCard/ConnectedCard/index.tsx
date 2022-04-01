@@ -33,7 +33,7 @@ export const ConnectedCard: VFC = () => {
       justifyContent='center'
       p={2}
       h='auto'
-      bg='backgrounds.glassGradient'
+      bg='backgrounds.glassy'
     >
       <Card bg='backgrounds.black'>
         <Tabs flex={1} isFitted pt={1}>
