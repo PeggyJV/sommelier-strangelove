@@ -46,8 +46,8 @@ export const PerformanceCard: VFC<Props> = props => {
   const { lineChartTheme } = useNivoThemes()
 
   return (
-    <Card bg='backgrounds.purpleGlassGradient' overflow='visible' {...props}>
-      <HStack spacing={4} align='stretch'>
+    <Card bg='backgrounds.purpleGlassGradient'  {...props}>
+      <HStack spacing={4} align='stretch' justify='stretch'>
         <Card flex={1} overflow='visible' {...cardProps}>
           <VStack spacing={6} align='stretch' divider={<CardDivider />}>
             <Box h='20rem'>
@@ -78,8 +78,8 @@ export const PerformanceCard: VFC<Props> = props => {
             </HStack>
           </VStack>
         </Card>
-        <Card display='flex' alignItems='center' {...cardProps}>
-          <CardStatColumn spacing={6}>
+        <Card {...cardProps}>
+          <CardStatColumn h='100%' align='flex-start' spacing={6}>
             <CardStat label='24h cellar apy' labelIcon stat='50%' />
             <CardStat
               label='24h volume'

@@ -5,12 +5,11 @@ import { BaseButton, BaseButtonProps } from './BaseButton'
 export const GradientButton: VFC<BaseButtonProps> = forwardRef<
   BaseButtonProps,
   'button'
->(({ icon, variant, ...rest }, ref) => {
+>(({ icon, ...rest }, ref) => {
   return (
-    <Box ref={ref} bg='backgrounds.brandGradient' p='1.5px' borderRadius={25}>
+    <Box ref={ref} p='1.5px' bg='backgrounds.brandGradient' borderRadius={25} h='fit-content'>
       <BaseButton
         icon={icon}
-        variant={variant}
         color='white'
         bg='backgrounds.offBlack'
         _hover={{

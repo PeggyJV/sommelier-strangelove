@@ -6,7 +6,7 @@ export interface Social {
   icon: IconType
 }
 
-export const socials: Social[] = [
+export const links: Social[] = [
   {
     href: 'https://t.me/getsomm',
     icon: FaTelegramPlane

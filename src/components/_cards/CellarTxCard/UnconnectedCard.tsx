@@ -12,17 +12,20 @@ export const UnconnectedCard: VFC = () => {
       display='flex'
       flexDir='column'
       justifyContent='center'
-      h='100%'
-      bg='backgrounds.purpleGlassGradient'
+      p={2}
+      h='auto'
+      bg='backgrounds.glassy'
     >
-      <VStack spacing={8} justify='center'>
-        <Text color='text.body.lightMuted' maxW='30ch' textAlign='center'>
-          Please connect your wallet to start investing.
-        </Text>
-        {auth.data.connectors.map(c => (
-          <ConnectButton connector={c} key={c.id} />
-        ))}
-      </VStack>
+      <Card bg='backgrounds.black'>
+        <VStack spacing={8} justify='center'>
+          <Text color='text.body.lightMuted' maxW='30ch' textAlign='center'>
+            Please connect your wallet to start investing.
+          </Text>
+          {auth.data.connectors.map(c => (
+            <ConnectButton connector={c} key={c.id} />
+          ))}
+        </VStack>
+      </Card>
     </Card>
   )
 }
