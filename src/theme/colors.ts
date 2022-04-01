@@ -47,7 +47,7 @@ const brightTurquoise = {
   900: '#004E4F'
 }
 const violentViolet = '#39196d'
-const energyYellow = '#e8d37c'
+const energyYellow = '#F7DF58'
 const sunsetOrange = '#f26057'
 const black = '#1f1f2d'
 const offBlack = '#1f1f1d'
@@ -82,7 +82,8 @@ const backgrounds = {
   brandGradient:
     'linear-gradient(90deg, #E8D37C 0%, #F6851B 58.33%, #EC3275 100%)',
   purpleGlassGradient:
-    'linear-gradient(180deg, rgba(96, 80, 155, 0.75) 0%, rgba(31, 31, 45, 0.75) 100%)'
+    'linear-gradient(180deg, rgba(96, 80, 155, 0.75) 0%, rgba(31, 31, 45, 0.75) 100%)',
+  glassGradient: 'rgba(96, 80, 155, 0.1)'
 }
 const uiChrome = {
   darkest: black,
