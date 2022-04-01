@@ -1,48 +1,42 @@
 import { VFC } from 'react'
-import { TopNav } from './Nav/TopNav'
-import { SideNav } from './Nav/SideNav'
-import {
-  Box,
-  Container,
-  Grid,
-  GridItem,
-  GridItemProps,
-  GridProps
-} from '@chakra-ui/react'
-import Brand from './Nav/Brand'
+import { Nav } from './Nav'
+import { Box, Container, Flex, FlexProps } from '@chakra-ui/react'
+import Footer from './Footer'
 
-const topRowProps: GridItemProps = {
-  height: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  alignSelf: 'center'
-}
-
-const Layout: VFC<GridProps> = ({ children, ...rest }) => {
+const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   return (
-    <Container maxW='92.5rem'>
-      <Grid
-        minH='100vh'
-        templateColumns='1fr 5fr'
-        templateRows='80px 1fr'
-        {...rest}
-      >
-        <GridItem display='flex' alignItems='center' {...topRowProps}>
-          <Brand />
-        </GridItem>
-        <GridItem {...topRowProps}>
-          <TopNav />
-        </GridItem>
-        <GridItem>
-          <SideNav />
-        </GridItem>
-        <GridItem display='flex' px={6} flexDir='column'>
+    <>
+      <Box
+        pos='absolute'
+        w='50%'
+        h='100%'
+        bgImage='url("/assets/top-left-bg.png")'
+        bgRepeat='no-repeat'
+        bgSize='contain'
+        zIndex='hide'
+      />
+      <Box
+        pos='absolute'
+        top='40rem'
+        right={0}
+        w='50%'
+        h='956px'
+        bgImage='url("/assets/hexagon.png")'
+        bgRepeat='no-repeat'
+        bgSize='contain'
+        bgPos='right'
+        zIndex='hide'
+      />
+      <Container maxW='92.5rem' zIndex={10}>
+        <Flex minH='100vh' flexDir='column' {...rest}>
+          <Nav />
           <Box as='main' flex={1}>
             {children}
           </Box>
-        </GridItem>
-      </Grid>
-    </Container>
+          <Footer />
+        </Flex>
+      </Container>
+    </>
   )
 }
 
