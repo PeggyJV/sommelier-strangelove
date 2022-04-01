@@ -8,7 +8,7 @@ import { BaseButton } from 'components/_buttons/BaseButton'
 
 export const UserPerformanceCard: VFC<BoxProps> = () => {
   return (
-    <Card bg='backgrounds.purpleGlassGradient'>
+    <Card p={2} bg='backgrounds.glassGradient'>
       <Card bg='backgrounds.black'>
         <CardStatRow align='flex-start'>
           <VStack>
