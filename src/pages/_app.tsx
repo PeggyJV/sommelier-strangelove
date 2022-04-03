@@ -10,6 +10,7 @@ import { Provider as GraphQLProvider } from 'urql'
 import { client as urqlClient } from 'queries/client'
 
 import '@fontsource/oswald/700.css'
+import { GlobalFonts } from 'theme/GlobalFonts'
 
 const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient()
@@ -19,6 +20,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       <GraphQLProvider value={urqlClient}>
         <PlausibleProvider domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}>
           <ChakraProvider theme={theme}>
+            <GlobalFonts />
             <DialogProvider>
               <WagmiProvider>
                 <Component {...pageProps} />
