@@ -1,5 +1,6 @@
 import {
   Button,
+  HStack,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -11,7 +12,7 @@ import truncateWalletAddress from 'src/utils/truncateWalletAddress'
 import { useAccount } from 'wagmi'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { CardDivider } from 'components/_layout/CardDivider'
-import { GradientButton } from '../GradientButton'
+import { BaseButton } from '../BaseButton'
 
 export const ConnectedPopover = () => {
   const [account, disconnect] = useAccount({
@@ -21,15 +22,28 @@ export const ConnectedPopover = () => {
 
   return (
     <Popover placement='bottom-end'>
-      <PopoverTrigger>
-        <GradientButton
+      <HStack spacing={2}>
+        <BaseButton
+          bg='black'
+          borderColor='backgrounds.glassy'
           icon={BsThreeDotsVertical}
           minW='max-content'
           isLoading={account.loading}
         >
           {truncateWalletAddress(walletAddress)}
-        </GradientButton>
-      </PopoverTrigger>
+        </BaseButton>
+        <PopoverTrigger>
+          <BaseButton
+            p={3}
+            bg='black'
+            borderColor='backgrounds.glassy'
+            minW='max-content'
+            isLoading={account.loading}
+          >
+            ...
+          </BaseButton>
+        </PopoverTrigger>
+      </HStack>
       <PopoverContent
         border='none'
         maxW='max-content'
