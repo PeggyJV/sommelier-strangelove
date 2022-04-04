@@ -4,6 +4,7 @@ import {
   GridItem,
   GridProps,
   Heading,
+  HeadingProps,
   HStack,
   StackDivider,
   Text,
@@ -11,21 +12,27 @@ import {
 } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { PerformanceCard } from 'components/_cards/PerformanceCard'
-import CellarMetaCard from 'components/_cards/CellarMetaCard'
 import { CellarTxCard } from 'components/_cards/CellarTxCard'
 import { Section } from 'components/_layout/Section'
 import { useConnect } from 'wagmi'
 import { PortfolioCard } from 'components/_cards/PortfolioCard'
 import { BaseButton } from 'components/_buttons/BaseButton'
-import { Copy } from './Copy'
 import { VFC } from 'react'
 import { BondingTable } from 'components/_tables/BondingTable'
 import { CellarPageProps } from 'pages/cellars/[id]'
 import { useGetCellarQuery } from 'generated/subgraph'
+import StrategyBreakdownCard from 'components/_cards/StrategyBreakdownCard'
+import CellarDetailsCard from 'components/_cards/CellarDetailsCard'
 
 const gridProps: GridProps = {
   gap: 6,
   templateColumns: 'repeat(6, 1fr)'
+}
+
+const h2Styles: HeadingProps = {
+  as: 'h2',
+  fontSize: 'lg',
+  color: 'text.body.lightMuted'
 }
 
 const investGridProps: GridProps = {
@@ -53,23 +60,15 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
       <Section>
         <Heading pb={12}>{name}</Heading>
         <VStack spacing={4} align='stretch'>
-          <Heading as='h2' fontSize='lg' color='text.body.lightMuted'>
-            Your Portfolio
-          </Heading>
+          <Heading {...h2Styles}>Your Portfolio</Heading>
           <PortfolioCard />
         </VStack>
       </Section>
       <Section>
         <VStack spacing={4} align='stretch'>
-          <Heading>Overview</Heading>
-          <Grid {...gridProps}>
-            <GridItem colSpan={3}>
-              <Copy />
-            </GridItem>
-            <GridItem colSpan={3}>
-              <CellarMetaCard />
-            </GridItem>
-          </Grid>
+          <Heading {...h2Styles}>Cellar Details</Heading>
+          <CellarDetailsCard />
+          <StrategyBreakdownCard />
         </VStack>
       </Section>
       <Section>
