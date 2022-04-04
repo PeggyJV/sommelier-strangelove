@@ -15,7 +15,7 @@ import CellarMetaCard from 'components/_cards/CellarMetaCard'
 import { CellarTxCard } from 'components/_cards/CellarTxCard'
 import { Section } from 'components/_layout/Section'
 import { useConnect } from 'wagmi'
-import { UserPerformanceCard } from 'components/_cards/UserPerformanceCard'
+import { PortfolioCard } from 'components/_cards/PortfolioCard'
 import { BaseButton } from 'components/_buttons/BaseButton'
 import { Copy } from './Copy'
 import { VFC } from 'react'
@@ -51,9 +51,12 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   return (
     <Layout>
       <Section>
+        <Heading pb={12}>{name}</Heading>
         <VStack spacing={4} align='stretch'>
-          <Heading pb={4}>{name}</Heading>
-          <UserPerformanceCard />
+          <Heading as='h2' fontSize='lg' color='text.body.lightMuted'>
+            Your Portfolio
+          </Heading>
+          <PortfolioCard />
         </VStack>
       </Section>
       <Section>
