@@ -20,19 +20,25 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
     <Button
       ref={ref}
       role='group'
-      color='black'
-      bg='energyYellow'
+      py={3}
+      px={6}
+      color='white'
+      bg='backgrounds.buttonGradient'
+      border='4px solid'
+      borderColor='aubergine'
+      borderRadius='100px'
+      overflow='hidden'
       rightIcon={
         icon && (
           <Icon
             as={icon}
-            color='energyYellow'
-            bgColor='black'
+            color='black'
+            bgColor='white'
             borderRadius='50%'
             boxSize={6}
             p={1}
             _groupHover={{
-              color: 'sunsetOrange',
+              color: 'burntPink',
               bgColor: 'white'
             }}
             {...iconProps}
@@ -41,11 +47,12 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
       }
       _hover={{
         color: 'white',
-        bg: 'sunsetOrange'
+        bg: 'backgrounds.buttonHoverGradient',
+        borderColor: 'burntPink'
       }}
       _disabled={{
         color: 'text.body.lightMuted',
-        bg: 'uiChrome.dataBorder'
+        bg: 'darkPlum'
       }}
       {...rest}
     />

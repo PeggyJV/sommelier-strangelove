@@ -14,7 +14,7 @@ export const Nav: VFC = () => {
       <Link href='/'>
         <LogoTextIcon w='9rem' h='2rem' _hover={{ color: 'sunsetOrange' }} />
       </Link>
-      <List display='flex' fontFamily='brand'>
+      <List display='flex'>
         {links.map((link, i) => {
           const { href, title, icon } = link
           return (

@@ -46,6 +46,10 @@ const brightTurquoise = {
   800: '#007573',
   900: '#004E4F'
 }
+const warmPink = '#D3426F'
+const burntPink = '#af3b62'
+const aubergine = '#43263a'
+const darkPlum = '#322436'
 const violentViolet = '#39196d'
 const energyYellow = '#F7DF58'
 const sunsetOrange = '#f26057'
@@ -84,7 +88,10 @@ const backgrounds = {
     'linear-gradient(90deg, #E8D37C 0%, #F6851B 58.33%, #EC3275 100%)',
   purpleGlassGradient:
     'linear-gradient(180deg, rgba(96, 80, 155, 0.75) 0%, rgba(31, 31, 45, 0.75) 100%)',
-  overlayGradient: `linear-gradient(transparent 60%, ${offBlack} 90%)`
+  overlayGradient: `linear-gradient(transparent 60%, ${offBlack} 90%)`,
+  buttonGradient: `linear-gradient(180deg, transparent, rgba(96, 80, 155, 0.48)), ${warmPink}
+  `,
+  buttonHoverGradient: `linear-gradient(180deg, transparent, rgba(96, 80, 155, 0.2304)), rgba(211, 66, 111, 0.48);`
 }
 const uiChrome = {
   darkest: black,
@@ -122,6 +129,10 @@ export const colors = {
   violentViolet,
   energyYellow,
   sunsetOrange,
+  warmPink,
+  burntPink,
+  aubergine,
+  darkPlum,
   black,
   offBlack,
   white,

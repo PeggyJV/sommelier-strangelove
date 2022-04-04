@@ -4,7 +4,7 @@ import { Connector, useAccount, useConnect } from 'wagmi'
 import ClientOnly from 'components/ClientOnly'
 import { ConnectedPopover } from './ConnectedPopover'
 import { BiWalletAlt } from 'react-icons/bi'
-import { GradientButton } from '../GradientButton'
+import { BaseButton } from '../BaseButton'
 
 export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
   connector: Connector
@@ -55,16 +55,18 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
       {isConnected ? (
         account.data && <ConnectedPopover />
       ) : (
-        <GradientButton
+        <BaseButton
           isLoading={loading}
           key={c.id}
+          bg='black'
+          borderColor='backgrounds.glassy'
           minW='max-content'
           icon={BiWalletAlt}
           {...conditionalProps}
           {...rest}
         >
           {c.ready ? `Connect Wallet` : `Please install MetaMask`}
-        </GradientButton>
+        </BaseButton>
       )}
     </ClientOnly>
   )
