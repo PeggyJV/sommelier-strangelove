@@ -9,7 +9,7 @@ const Footer: VFC<ContainerProps> = props => {
       display='flex'
       justifyContent='space-between'
       alignItems='center'
-      py={8}
+      py={10}
       borderTop='1px solid'
       borderColor='rgba(203, 198, 209, 0.25)'
       maxW='container.lg'

@@ -53,6 +53,7 @@ const darkPlum = '#322436'
 const violentViolet = '#39196d'
 const energyYellow = '#F7DF58'
 const sunsetOrange = '#f26057'
+const lime = '#D4EC8D'
 const black = '#1f1f2d'
 const offBlack = '#1f1f1d'
 const white = '#FFFFFF'
@@ -129,6 +130,7 @@ export const colors = {
   violentViolet,
   energyYellow,
   sunsetOrange,
+  lime,
   warmPink,
   burntPink,
   aubergine,
