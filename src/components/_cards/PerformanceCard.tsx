@@ -1,25 +1,25 @@
 import dynamic from 'next/dynamic'
-import { Box, BoxProps, Circle, HStack, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  BoxProps,
+  Circle,
+  HStack,
+  StackDivider,
+  Text,
+  VStack
+} from '@chakra-ui/react'
 import { Serie } from '@nivo/line'
-import { VFC } from 'react'
+import { useState, VFC } from 'react'
 import { Card } from './Card'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { CardDivider } from 'components/_layout/CardDivider'
 import { useNivoThemes } from 'hooks/nivo'
-import { CardStat } from 'components/CardStat'
-import { BsCurrencyDollar } from 'react-icons/bs'
-import { CardStatColumn } from 'components/CardStatColumn'
 const LineChart = dynamic(() => import('components/_charts/LineChart'), {
   ssr: false
 })
 
 interface Props extends BoxProps {
   data?: Serie[]
-}
-
-const cardProps: BoxProps = {
-  p: 4,
-  bg: 'backgrounds.black'
 }
 
 const data: Serie[] = [
@@ -42,66 +42,83 @@ const data: Serie[] = [
   }
 ]
 
+const timeButtons = ['24H', '1W', 'All Time']
+
 export const PerformanceCard: VFC<Props> = props => {
   const { lineChartTheme } = useNivoThemes()
+  const [timeline, setTimeline] = useState<string>('24H')
 
   return (
-    <Card bg='backgrounds.purpleGlassGradient'  {...props}>
-      <HStack spacing={4} align='stretch' justify='stretch'>
-        <Card flex={1} overflow='visible' {...cardProps}>
-          <VStack spacing={6} align='stretch' divider={<CardDivider />}>
-            <Box h='20rem'>
-              <HStack spacing={6}>
-                <HStack spacing={1}>
-                  <Circle bg='deepSkyBlue.500' size={3} />
-                  <Text fontSize='xs'>Apy</Text>
-                </HStack>
-                <HStack spacing={1}>
-                  <Circle bg='sunsetOrange' size={3} />
-                  <Text fontSize='xs'>Volume</Text>
-                </HStack>
-              </HStack>
-              <LineChart
-                data={data}
-                colors={lineChartTheme}
-                yScale={{
-                  type: 'linear',
-                  max: 60
-                }}
-              />
-            </Box>
+    <Card p={2} bg='backgrounds.glassy' {...props}>
+      <Card p={4} bg='backgrounds.black' overflow='visible'>
+        <VStack spacing={6} align='stretch' divider={<CardDivider />}>
+          <Box h='20rem'>
             <HStack justify='space-between'>
-              <CardHeading>12am</CardHeading>
-              <CardHeading>6am</CardHeading>
-              <CardHeading>12pm</CardHeading>
-              <CardHeading>6pm</CardHeading>
+              <HStack spacing={8}>
+                <VStack align='flex-start'>
+                  <HStack spacing={1}>
+                    <Circle bg='deepSkyBlue.500' size={3} />
+                    <CardHeading>{timeline} cellar apy</CardHeading>
+                  </HStack>
+                  <Text fontSize='xl' fontWeight='bold'>50%</Text>
+                </VStack>
+                <VStack align='flex-start'>
+                  <HStack spacing={1}>
+                    <Circle bg='sunsetOrange' size={3} />
+                    <CardHeading>{timeline} Volume</CardHeading>
+                  </HStack>
+                  <Text fontSize='xl' fontWeight='bold'>12.25K USDC</Text>
+                </VStack>
+              </HStack>
+              <HStack
+                border='1px solid'
+                borderColor='rgba(203, 198, 209, 0.25)'
+                borderRadius='2rem'
+                overflow='hidden'
+                justify='space-around'
+                spacing={0}
+                divider={
+                  <StackDivider borderColor='rgba(203, 198, 209, 0.25)' />
+                }
+              >
+                {timeButtons.map((button, i) => {
+                  const isSelected = button === timeline
+                  return (
+                    <Box
+                      flex={1}
+                      px={4}
+                      py={0.5}
+                      key={i}
+                      as='button'
+                      bg={isSelected ? 'rgba(203, 198, 209, 0.25)' : ''}
+                      fontSize='sm'
+                      fontWeight='bold'
+                      whiteSpace='nowrap'
+                      onClick={() => setTimeline(button)}
+                    >
+                      {button}
+                    </Box>
+                  )
+                })}
+              </HStack>
             </HStack>
-          </VStack>
-        </Card>
-        <Card {...cardProps}>
-          <CardStatColumn h='100%' align='flex-start' spacing={6}>
-            <CardStat label='24h cellar apy' labelIcon stat='50%' />
-            <CardStat
-              label='24h volume'
-              labelIcon
-              stat='+12.5K USDC'
-              statIcon={BsCurrencyDollar}
+            <LineChart
+              data={data}
+              colors={lineChartTheme}
+              yScale={{
+                type: 'linear',
+                max: 60
+              }}
             />
-            <CardStat
-              label='my 24h returns'
-              labelIcon
-              stat='-'
-              statIcon={BsCurrencyDollar}
-            />
-            <CardStat
-              label='my 24h rewards'
-              labelIcon
-              stat='-'
-              statIcon={BsCurrencyDollar}
-            />
-          </CardStatColumn>
-        </Card>
-      </HStack>
+          </Box>
+          <HStack justify='space-between'>
+            <CardHeading>12am</CardHeading>
+            <CardHeading>6am</CardHeading>
+            <CardHeading>12pm</CardHeading>
+            <CardHeading>6pm</CardHeading>
+          </HStack>
+        </VStack>
+      </Card>
     </Card>
   )
 }
