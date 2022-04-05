@@ -35,7 +35,7 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
             color='black'
             bgColor='white'
             borderRadius='50%'
-            boxSize={6}
+            boxSize={5}
             p={1}
             _groupHover={{
               color: 'burntPink',
