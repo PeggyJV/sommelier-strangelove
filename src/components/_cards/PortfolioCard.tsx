@@ -10,12 +10,12 @@ export const PortfolioCard: VFC<BoxProps> = () => {
     <Card p={2} bg='backgrounds.glassy'>
       <Card px={10} py={6} bg='backgrounds.black'>
         <CardStatRow spacing={14} align='flex-start' justify='flex-start'>
-          <HStack align='flex-start'>
-            <VStack>
+          <HStack spacing={6} align='flex-start'>
+            <VStack align='flex-start'>
               <CardStat label='net value' labelIcon='' stat='$0.00' />
               <CardStat label='apy' labelIcon='' stat='%0.00' />
             </VStack>
-            <VStack>
+            <VStack align='flex-start'>
               <CardStat label='deposit strategy' labelIcon='' stat='$0.00' />
               <HStack>
                 <BaseButton variant='solid'>Deposit</BaseButton>
@@ -25,19 +25,19 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               </HStack>
             </VStack>
           </HStack>
-          <HStack>
-            <VStack>
+          <HStack spacing={6} align='flex-start'>
+            <VStack align='flex-start'>
               <CardStat label='lp tokens' stat='0' />
               <BaseButton isDisabled>Bond</BaseButton>
             </VStack>
-            <VStack>
+            <VStack align='flex-start'>
               <CardStat label='bonded lp tokens' stat='0' />
               <Button variant='unstyled' color='warmPink' isDisabled>
                 Unbond
               </Button>
             </VStack>
           </HStack>
-          <VStack>
+          <VStack align='flex-start'>
             <CardStat label='rewards' stat='0' />
             <BaseButton isDisabled>Claim</BaseButton>
           </VStack>
