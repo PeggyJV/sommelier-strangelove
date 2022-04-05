@@ -1,16 +1,31 @@
 import { VFC } from 'react'
-import { Flex, List, ListIcon, ListItem } from '@chakra-ui/react'
+import {
+  Container,
+  ContainerProps,
+  List,
+  ListIcon,
+  ListItem
+} from '@chakra-ui/react'
 import { useConnect } from 'wagmi'
 import ConnectButton from 'components/_buttons/ConnectButton'
 import { links } from './links'
 import Link from 'components/Link'
 import { LogoTextIcon } from 'components/_icons'
 
-export const Nav: VFC = () => {
+export const Nav: VFC<ContainerProps> = props => {
   const [auth] = useConnect()
 
   return (
-    <Flex as='nav' py={4} fontSize='xl' justify='space-between' align='center'>
+    <Container
+      display='flex'
+      as='nav'
+      py={4}
+      fontSize='xl'
+      justifyContent='space-between'
+      alignItems='center'
+      maxW='container.xl'
+      {...props}
+    >
       <Link href='/'>
         <LogoTextIcon w='9rem' h='2rem' _hover={{ color: 'sunsetOrange' }} />
       </Link>
@@ -30,6 +45,6 @@ export const Nav: VFC = () => {
       {auth.data.connectors.map(c => (
         <ConnectButton connector={c} key={c.id} />
       ))}
-    </Flex>
+    </Container>
   )
 }
