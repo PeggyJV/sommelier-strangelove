@@ -27,15 +27,13 @@ const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
         bgPos='right'
         zIndex='hide'
       />
-      <Container maxW='92.5rem' zIndex={10}>
-        <Flex minH='100vh' flexDir='column' {...rest}>
-          <Nav />
-          <Box as='main' flex={1}>
-            {children}
-          </Box>
-          <Footer />
-        </Flex>
-      </Container>
+      <Flex minH='100vh' flexDir='column' {...rest}>
+        <Nav />
+        <Container as='main' flex={1} maxW='container.lg'>
+          {children}
+        </Container>
+        <Footer />
+      </Flex>
     </>
   )
 }
