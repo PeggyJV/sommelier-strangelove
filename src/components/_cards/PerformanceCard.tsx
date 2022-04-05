@@ -49,7 +49,7 @@ export const PerformanceCard: VFC<Props> = props => {
   const [timeline, setTimeline] = useState<string>('24H')
 
   return (
-    <Card p={2} bg='backgrounds.glassy' {...props}>
+    <Card p={2} bg='backgrounds.glassy' overflow='visible' {...props}>
       <Card p={4} bg='backgrounds.black' overflow='visible'>
         <VStack spacing={6} align='stretch' divider={<CardDivider />}>
           <Box h='20rem'>
@@ -60,14 +60,18 @@ export const PerformanceCard: VFC<Props> = props => {
                     <Circle bg='deepSkyBlue.500' size={3} />
                     <CardHeading>{timeline} cellar apy</CardHeading>
                   </HStack>
-                  <Text fontSize='xl' fontWeight='bold'>50%</Text>
+                  <Text fontSize='xl' fontWeight='bold'>
+                    50%
+                  </Text>
                 </VStack>
                 <VStack align='flex-start'>
                   <HStack spacing={1}>
                     <Circle bg='sunsetOrange' size={3} />
                     <CardHeading>{timeline} Volume</CardHeading>
                   </HStack>
-                  <Text fontSize='xl' fontWeight='bold'>12.25K USDC</Text>
+                  <Text fontSize='xl' fontWeight='bold'>
+                    12.25K USDC
+                  </Text>
                 </VStack>
               </HStack>
               <HStack
