@@ -1,9 +1,6 @@
 import { Text, VStack } from '@chakra-ui/react'
 import { BaseButton } from 'components/_buttons/BaseButton'
 import { useState } from 'react'
-import { AiOutlineInfo } from 'react-icons/ai'
-import { BiError } from 'react-icons/bi'
-import { ImCheckmark } from 'react-icons/im'
 import { useBrandedToast } from './chakra'
 
 /**
@@ -14,16 +11,30 @@ export const useSubmitTx = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const { addToast, update, close, closeAll } = useBrandedToast()
 
+  const handleDeposit = () => {
+    setDisabled(true)
+    setLoading(true)
+    addToast({
+      heading: 'CAave Stablecoin Cellar deposit',
+      body: <Text>Depositing 10.125 ETH into Cellar</Text>,
+      isLoading: true,
+      closeHandler: close,
+      duration: null
+    })
+    setTimeout(handleDepositSuccess, 2000)
+  }
+
   const handleDepositSuccess = () => {
     setDisabled(false)
     setLoading(false)
     update({
+      heading: 'Success!',
       body: <Text>12345.678 ETH deposited into Cellar View on ETHScan</Text>,
       status: 'success',
-      closeHandler: closeAll,
-      icon: ImCheckmark
+      closeHandler: closeAll
     })
     addToast({
+      heading: 'For your records',
       body: (
         <VStack align='flex-start'>
           <Text>
@@ -33,8 +44,8 @@ export const useSubmitTx = () => {
           <BaseButton variant='solid'>Start Earning</BaseButton>
         </VStack>
       ),
-      duration: null,
-      icon: AiOutlineInfo
+      status: 'info',
+      duration: null
     })
   }
 
@@ -42,33 +53,22 @@ export const useSubmitTx = () => {
     setDisabled(false)
     setLoading(false)
     update({
+      heading: 'Withdrawal failed',
       body: (
         <Text>
           Sorry, something went wrong with this withdrawal. Please try again.
         </Text>
       ),
       status: 'error',
-      closeHandler: closeAll,
-      icon: BiError
+      closeHandler: closeAll
     })
-  }
-
-  const handleDeposit = () => {
-    setDisabled(true)
-    setLoading(true)
-    addToast({
-      body: <Text>Depositing 10.125 ETH into Cellar</Text>,
-      isLoading: true,
-      closeHandler: close,
-      duration: null
-    })
-    setTimeout(handleDepositSuccess, 2000)
   }
 
   const handleWithdraw = () => {
     setDisabled(true)
     setLoading(true)
     addToast({
+      heading: 'CAave Stablecoin Cellar withdrawal',
       body: <Text>Withdrawing 10.125 ETH from Cellar</Text>,
       isLoading: true,
       closeHandler: close,

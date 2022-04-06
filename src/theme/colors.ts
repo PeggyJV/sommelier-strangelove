@@ -52,8 +52,17 @@ const aubergine = '#43263a'
 const darkPlum = '#322436'
 const violentViolet = '#39196d'
 const energyYellow = '#F7DF58'
+const darkYellow = '#3D3716'
+const transparentYellow = 'rgba(247, 223, 88, 0.08)'
 const sunsetOrange = '#f26057'
+const darkOrange = '#3D1816'
+const transparentOrange = 'rgba(242, 96, 87, 0.08)'
 const lime = '#D4EC8D'
+const transparentLime = 'rgba(212, 236, 141, 0.08)'
+const darkLime = '#373D25'
+const turquoise = '#DDFFDE'
+const darkTurquoise = '#353D35'
+const transparentTurquoise = 'rgba(221, 255, 222, 0.08)'
 const black = '#1f1f2d'
 const offBlack = '#1f1f1d'
 const white = '#FFFFFF'
@@ -78,15 +87,6 @@ const backgrounds = {
   darker: '#1f0b40',
   deepPurple: '#281144',
   glassy: 'rgba(96, 80, 155, 0.1)',
-  loadingGradient: 'linear-gradient(90deg, #E8D37C 0%, #60509B 50%)',
-  primaryGradient:
-    'linear-gradient(90deg, rgba(53,11,112,0.9) 0%, rgba(31,11,64,0.9) 50%)',
-  successGradient:
-    'linear-gradient(90deg, rgba(23,66,99,0.9) 0%, rgba(31,11,64,0.9) 50%)',
-  dangerGradient:
-    'linear-gradient(90deg, rgba(82,18,72,0.9) 0%, rgba(31,11,64,0.9) 50%)',
-  brandGradient:
-    'linear-gradient(90deg, #E8D37C 0%, #F6851B 58.33%, #EC3275 100%)',
   purpleGlassGradient:
     'linear-gradient(180deg, rgba(96, 80, 155, 0.75) 0%, rgba(31, 31, 45, 0.75) 100%)',
   overlayGradient: `linear-gradient(transparent 60%, ${offBlack} 90%)`,
@@ -129,8 +129,17 @@ export const colors = {
   brightTurquoise,
   violentViolet,
   energyYellow,
+  transparentYellow,
+  darkYellow,
   sunsetOrange,
+  transparentOrange,
+  darkOrange,
   lime,
+  transparentLime,
+  turquoise,
+  transparentTurquoise,
+  darkTurquoise,
+  darkLime,
   warmPink,
   burntPink,
   aubergine,
