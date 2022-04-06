@@ -1,12 +1,24 @@
 import { BaseToast } from 'components/_toasts/BaseToast'
-import { ToastId, useToast, ToastOptions } from '@chakra-ui/react'
+import {
+  ToastId,
+  useToast,
+  ToastOptions,
+  Status,
+  BoxProps,
+  StackProps,
+  HeadingProps,
+  IconProps
+} from '@chakra-ui/react'
 import { ReactNode, useRef } from 'react'
+import { AiOutlineInfo } from 'react-icons/ai'
+import { ImCheckmark } from 'react-icons/im'
+import { IconType } from 'react-icons'
 
 interface BaseToast extends Partial<ToastOptions> {
   body: ReactNode
   closeHandler?: () => void
   isLoading?: boolean
-  icon?: any
+  heading?: string
 }
 
 export const useBrandedToast = () => {
@@ -28,7 +40,7 @@ export const useBrandedToast = () => {
     closeHandler,
     isLoading,
     status,
-    icon,
+    heading,
     ...rest
   }: BaseToast) => {
     if (toastIdRef.current) {
@@ -38,7 +50,7 @@ export const useBrandedToast = () => {
             status={status}
             closeHandler={closeHandler ?? close}
             isLoading={isLoading}
-            icon={icon}
+            heading={heading}
           >
             {body}
           </BaseToast>
@@ -53,7 +65,7 @@ export const useBrandedToast = () => {
     closeHandler,
     isLoading,
     status,
-    icon,
+    heading,
     ...rest
   }: BaseToast) => {
     toastIdRef.current = toast({
@@ -63,7 +75,7 @@ export const useBrandedToast = () => {
           status={status}
           closeHandler={closeHandler ?? close}
           isLoading={isLoading}
-          icon={icon}
+          heading={heading}
         >
           {body}
         </BaseToast>
@@ -73,4 +85,95 @@ export const useBrandedToast = () => {
   }
 
   return { close, closeAll, update, addToast }
+}
+
+export const useToastStyles = (status?: Status) => {
+  const dynamicBoxStyles: BoxProps =
+    status === 'info'
+      ? {
+          bg: 'darkYellow'
+        }
+      : status === 'success'
+      ? {
+          bg: 'darkLime'
+        }
+      : status === 'error'
+      ? {
+          bg: 'darkOrange'
+        }
+      : {
+          bg: 'darkTurquoise'
+        }
+
+  const dynamicStackStyles: StackProps =
+    status === 'info'
+      ? {
+          bg: 'transparentYellow'
+        }
+      : status === 'success'
+      ? {
+          bg: 'transparentLime'
+        }
+      : status === 'error'
+      ? {
+          bg: 'transparentOrange'
+        }
+      : {
+          bg: 'transparentTurquoise'
+        }
+
+  const dynamicHeadingStyles: HeadingProps =
+    status === 'info'
+      ? {
+          color: 'energyYellow'
+        }
+      : status === 'success'
+      ? {
+          color: 'lime'
+        }
+      : status === 'error'
+      ? {
+          color: 'sunsetOrange'
+        }
+      : {
+          color: 'turquoise'
+        }
+
+  const dynamicIconStyles: IconProps =
+    status === 'info'
+      ? {
+          color: 'energyYellow',
+          borderColor: 'energyYellow'
+        }
+      : status === 'success'
+      ? {
+          color: 'lime',
+          borderColor: 'lime'
+        }
+      : status === 'error'
+      ? {
+          color: 'sunsetOrange',
+          borderColor: 'sunsetOrange'
+        }
+      : {
+          color: 'turquoise',
+          borderColor: 'turquoise'
+        }
+
+  const dynamicIcon: IconType | undefined =
+    status === 'info'
+      ? AiOutlineInfo
+      : status === 'success'
+      ? ImCheckmark
+      : status === 'error'
+      ? AiOutlineInfo
+      : AiOutlineInfo
+
+  return {
+    dynamicBoxStyles,
+    dynamicStackStyles,
+    dynamicHeadingStyles,
+    dynamicIconStyles,
+    dynamicIcon
+  }
 }
