@@ -87,15 +87,6 @@ const backgrounds = {
   darker: '#1f0b40',
   deepPurple: '#281144',
   glassy: 'rgba(96, 80, 155, 0.1)',
-  loadingGradient: 'linear-gradient(90deg, #E8D37C 0%, #60509B 50%)',
-  primaryGradient:
-    'linear-gradient(90deg, rgba(53,11,112,0.9) 0%, rgba(31,11,64,0.9) 50%)',
-  successGradient:
-    'linear-gradient(90deg, rgba(23,66,99,0.9) 0%, rgba(31,11,64,0.9) 50%)',
-  dangerGradient:
-    'linear-gradient(90deg, rgba(82,18,72,0.9) 0%, rgba(31,11,64,0.9) 50%)',
-  brandGradient:
-    'linear-gradient(90deg, #E8D37C 0%, #F6851B 58.33%, #EC3275 100%)',
   purpleGlassGradient:
     'linear-gradient(180deg, rgba(96, 80, 155, 0.75) 0%, rgba(31, 31, 45, 0.75) 100%)',
   overlayGradient: `linear-gradient(transparent 60%, ${offBlack} 90%)`,
