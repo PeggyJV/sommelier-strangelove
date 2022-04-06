@@ -11,6 +11,7 @@ import StrategyBreakdownCard from 'components/_cards/StrategyBreakdownCard'
 import CellarDetailsCard from 'components/_cards/CellarDetailsCard'
 import Link from 'components/Link'
 import { CellarStats } from 'components/CellarStats'
+import { CellarTxCard } from 'components/_cards/CellarTxCard'
 
 const h2Styles: HeadingProps = {
   as: 'h2',
@@ -34,6 +35,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   return (
     <Layout>
       <Section>
+        <CellarTxCard isConnected={isConnected} />
         <HStack spacing={4} pb={12} justify='space-between'>
           <HStack spacing={4}>
             <Link href='/'>

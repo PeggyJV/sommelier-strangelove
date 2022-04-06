@@ -52,8 +52,17 @@ const aubergine = '#43263a'
 const darkPlum = '#322436'
 const violentViolet = '#39196d'
 const energyYellow = '#F7DF58'
+const darkYellow = '#3D3716'
+const transparentYellow = 'rgba(247, 223, 88, 0.08)'
 const sunsetOrange = '#f26057'
+const darkOrange = '#3D1816'
+const transparentOrange = 'rgba(242, 96, 87, 0.08)'
 const lime = '#D4EC8D'
+const transparentLime = 'rgba(212, 236, 141, 0.08)'
+const darkLime = '#373D25'
+const turquoise = '#DDFFDE'
+const darkTurquoise = '#353D35'
+const transparentTurquoise = 'rgba(221, 255, 222, 0.08)'
 const black = '#1f1f2d'
 const offBlack = '#1f1f1d'
 const white = '#FFFFFF'
@@ -129,8 +138,17 @@ export const colors = {
   brightTurquoise,
   violentViolet,
   energyYellow,
+  transparentYellow,
+  darkYellow,
   sunsetOrange,
+  transparentOrange,
+  darkOrange,
   lime,
+  transparentLime,
+  turquoise,
+  transparentTurquoise,
+  darkTurquoise,
+  darkLime,
   warmPink,
   burntPink,
   aubergine,
