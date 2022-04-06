@@ -8,12 +8,18 @@ export const components: ThemeComponents = {
       bgColor: 'energyYellow'
     },
     defaultProps: {
-      colorScheme: 'electricIndigo',
+      colorScheme: 'electricIndigo'
     }
   },
   Heading: {
     baseStyle: {
       color: 'text.headlines.light'
+    }
+  },
+  ModalContent: {
+    baseStyle: {
+      bg: 'black',
+      color: 'text.body.light'
     }
   }
 }
