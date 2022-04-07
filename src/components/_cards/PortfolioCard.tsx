@@ -4,6 +4,7 @@ import { CardStatRow } from 'components/CardStatRow'
 import React, { VFC } from 'react'
 import { Card } from './Card'
 import { BaseButton } from 'components/_buttons/BaseButton'
+import { DepositButton } from 'components/_buttons/DepositButton'
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   return (
@@ -18,7 +19,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
             <VStack align='flex-start'>
               <CardStat label='deposit strategy' labelIcon='' stat='$0.00' />
               <HStack>
-                <BaseButton variant='solid'>Deposit</BaseButton>
+                <DepositButton />
                 <Button variant='unstyled' color='warmPink' isDisabled>
                   Withdraw
                 </Button>
