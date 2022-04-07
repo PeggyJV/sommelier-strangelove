@@ -1,10 +1,11 @@
-import { BoxProps, Button, HStack, VStack } from '@chakra-ui/react'
+import { BoxProps, HStack, VStack } from '@chakra-ui/react'
 import { CardStat } from 'components/CardStat'
 import { CardStatRow } from 'components/CardStatRow'
 import React, { VFC } from 'react'
 import { Card } from './Card'
 import { BaseButton } from 'components/_buttons/BaseButton'
 import { DepositButton } from 'components/_buttons/DepositButton'
+import { TertiaryButton } from 'components/_buttons/TertiaryButton'
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   return (
@@ -20,9 +21,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               <CardStat label='deposit strategy' labelIcon='' stat='$0.00' />
               <HStack>
                 <DepositButton />
-                <Button variant='unstyled' color='warmPink' isDisabled>
-                  Withdraw
-                </Button>
+                <TertiaryButton isDisabled>Withdraw</TertiaryButton>
               </HStack>
             </VStack>
           </HStack>
@@ -33,9 +32,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
             </VStack>
             <VStack align='flex-start'>
               <CardStat label='bonded lp tokens' stat='0' />
-              <Button variant='unstyled' color='warmPink' isDisabled>
-                Unbond
-              </Button>
+              <TertiaryButton isDisabled>Unbond</TertiaryButton>
             </VStack>
           </HStack>
           <VStack align='flex-start'>
