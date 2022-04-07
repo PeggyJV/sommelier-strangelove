@@ -4,22 +4,12 @@ export const components: ThemeComponents = {
   Button: {
     baseStyle: {
       borderRadius: 25,
-      color: 'text.body.dark',
-      bgColor: 'energyYellow'
-    },
-    defaultProps: {
-      colorScheme: 'electricIndigo'
+      color: 'text.body.dark'
     }
   },
   Heading: {
     baseStyle: {
       color: 'text.headlines.light'
-    }
-  },
-  ModalContent: {
-    baseStyle: {
-      bg: 'black',
-      color: 'text.body.light'
     }
   }
 }

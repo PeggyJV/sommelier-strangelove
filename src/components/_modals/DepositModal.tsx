@@ -1,8 +1,14 @@
-import {VFC} from 'react'
+import { Box, ModalProps } from '@chakra-ui/react'
+import { VFC } from 'react'
+import BaseModal from './BaseModal'
 
-const DepositModal: VFC = () => {
+type DepositModalProps = Pick<ModalProps, 'isOpen' | 'onClose'>
+
+const DepositModal: VFC<DepositModalProps> = props => {
   return (
-    <div>DepositModal</div>
+    <BaseModal heading='Deposit' {...props}>
+      <Box>DepositModal</Box>
+    </BaseModal>
   )
 }
 
