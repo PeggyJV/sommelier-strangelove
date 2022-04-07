@@ -19,8 +19,8 @@ const BaseModal: VFC<BaseModalProps> = ({ children, heading, ...rest }) => {
     <Modal {...rest}>
       <ModalOverlay />
       <ModalContent
-        px={5}
-        py={8}
+        px={8}
+        py={10}
         bg='black'
         color='text.body.light'
         border='1px solid'
@@ -31,7 +31,7 @@ const BaseModal: VFC<BaseModalProps> = ({ children, heading, ...rest }) => {
           {heading && <Heading fontSize='4xl'>{heading}</Heading>}
           <ModalCloseButton position='static' size='lg' />
         </HStack>
-        <Divider my={2} borderColor='text.body.lightMuted' />
+        <Divider mt={2} mb={6} borderColor='text.body.lightMuted' />
         {children}
       </ModalContent>
     </Modal>
