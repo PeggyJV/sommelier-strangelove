@@ -1,4 +1,4 @@
-import { Box, HStack, ModalProps, Text, VStack } from '@chakra-ui/react'
+import { HStack, ModalProps, Text, VStack } from '@chakra-ui/react'
 import { DepositForm } from 'components/_forms/DepositForm'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { VFC } from 'react'
