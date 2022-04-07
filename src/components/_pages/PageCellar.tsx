@@ -1,4 +1,4 @@
-import { Button, Heading, HeadingProps, HStack, VStack } from '@chakra-ui/react'
+import { Heading, HeadingProps, HStack, VStack } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { PerformanceCard } from 'components/_cards/PerformanceCard'
 import { Section } from 'components/_layout/Section'
@@ -11,6 +11,7 @@ import StrategyBreakdownCard from 'components/_cards/StrategyBreakdownCard'
 import CellarDetailsCard from 'components/_cards/CellarDetailsCard'
 import Link from 'components/Link'
 import { CellarStats } from 'components/CellarStats'
+import { SecondaryButton } from 'components/_buttons/SecondaryButton'
 
 const h2Styles: HeadingProps = {
   as: 'h2',
@@ -37,15 +38,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
         <HStack spacing={4} pb={12} justify='space-between'>
           <HStack spacing={4}>
             <Link href='/'>
-              <Button
-                variant='outline'
-                color='white'
-                border='2px solid'
-                borderColor='warmPink'
-                _hover={{ bg: 'warmPink' }}
-              >
-                Back
-              </Button>
+              <SecondaryButton>Back</SecondaryButton>
             </Link>
             <Heading>C{name}</Heading>
           </HStack>
