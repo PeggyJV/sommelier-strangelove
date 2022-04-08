@@ -50,9 +50,16 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
         bg: 'backgrounds.buttonHoverGradient',
         borderColor: 'burntPink'
       }}
+      _active={{
+        bg: 'backgrounds.buttonGradient'
+      }}
       _disabled={{
         color: 'text.body.lightMuted',
-        bg: 'darkPlum'
+        bg: 'darkPlum',
+        cursor: 'not-allowed',
+        _active: {
+          bg: 'darkOrange'
+        }
       }}
       {...rest}
     />
