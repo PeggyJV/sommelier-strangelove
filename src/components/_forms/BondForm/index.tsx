@@ -87,7 +87,7 @@ export const BondForm: VFC = () => {
           py={6}
           px={12}
         >
-          Deposit Liquidity
+          Bond LP Tokens
         </BaseButton>
       </VStack>
     </FormProvider>
