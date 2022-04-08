@@ -2,11 +2,11 @@ import { HStack, ModalProps, Text, VStack } from '@chakra-ui/react'
 import { DepositForm } from 'components/_forms/DepositForm'
 import { CardHeading } from 'components/_typography/CardHeading'
 import { VFC } from 'react'
-import BaseModal from './BaseModal'
+import { BaseModal } from './BaseModal'
 
 type DepositModalProps = Pick<ModalProps, 'isOpen' | 'onClose'>
 
-const DepositModal: VFC<DepositModalProps> = props => {
+export const DepositModal: VFC<DepositModalProps> = props => {
   return (
     <BaseModal heading='Deposit' {...props}>
       <VStack pb={10} spacing={6} align='stretch'>
@@ -33,5 +33,3 @@ const DepositModal: VFC<DepositModalProps> = props => {
     </BaseModal>
   )
 }
-
-export default DepositModal

@@ -5,8 +5,10 @@ import React, { VFC } from 'react'
 import { Card } from './Card'
 import { BaseButton } from 'components/_buttons/BaseButton'
 import { DepositButton } from 'components/_buttons/DepositButton'
-import { TertiaryButton } from 'components/_buttons/TertiaryButton'
 import { BondButton } from 'components/_buttons/BondButton'
+import { WithdrawButton } from 'components/_buttons/WithdrawButton'
+import { UnbdondButton } from 'components/_buttons/UnbondButton'
+import { ClaimButton } from 'components/_buttons/ClaimButton'
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   return (
@@ -22,6 +24,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               <CardStat label='deposit strategy' labelIcon='' stat='$0.00' />
               <HStack>
                 <DepositButton />
+                <WithdrawButton />
               </HStack>
             </VStack>
           </HStack>
@@ -32,12 +35,12 @@ export const PortfolioCard: VFC<BoxProps> = () => {
             </VStack>
             <VStack align='flex-start'>
               <CardStat label='bonded lp tokens' stat='0' />
-              <TertiaryButton isDisabled>Unbond</TertiaryButton>
+              <UnbdondButton />
             </VStack>
           </HStack>
           <VStack align='flex-start'>
             <CardStat label='rewards' stat='0' />
-            <BaseButton isDisabled>Claim</BaseButton>
+            <ClaimButton />
           </VStack>
         </CardStatRow>
       </Card>

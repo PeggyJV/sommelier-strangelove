@@ -14,7 +14,11 @@ interface BaseModalProps extends ModalProps {
   heading?: string
 }
 
-const BaseModal: VFC<BaseModalProps> = ({ children, heading, ...rest }) => {
+export const BaseModal: VFC<BaseModalProps> = ({
+  children,
+  heading,
+  ...rest
+}) => {
   return (
     <Modal {...rest}>
       <ModalOverlay />
@@ -37,5 +41,3 @@ const BaseModal: VFC<BaseModalProps> = ({ children, heading, ...rest }) => {
     </Modal>
   )
 }
-
-export default BaseModal

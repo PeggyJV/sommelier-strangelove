@@ -1,6 +1,10 @@
 import { HStack, StackDivider, Text, VStack } from '@chakra-ui/react'
 import { VFC } from 'react'
-import { useFormContext } from 'react-hook-form'
+
+interface Props {
+  onClick?: () => void
+  bondVal?: number
+}
 
 interface BondingPeriod {
   title: string
@@ -29,10 +33,7 @@ const bondingPeriodOptions: BondingPeriod[] = [
 ]
 
 // TODO: solve for multiple renders
-export const BondingPeriodOptions: VFC = () => {
-  const { setValue, getValues } = useFormContext()
-  const bondingValue = getValues('bondingPeriod')
-
+export const BondingPeriodOptions: VFC<Props> = ({ bondVal, onClick }) => {
   return (
     <HStack
       spacing={0}
@@ -40,20 +41,21 @@ export const BondingPeriodOptions: VFC = () => {
       border='1px solid'
       borderRadius={12}
       borderColor='text.body.lightMuted'
+      overflow='hidden'
       divider={<StackDivider borderColor='inherit' />}
     >
       {bondingPeriodOptions.map(({ title, amount, value }, i) => {
-        const bg = value === bondingValue ? 'rgba(96, 80, 155, 0.4)' : ''
+        const bg = value === bondVal ? 'rgba(96, 80, 155, 0.4)' : ''
 
         return (
           <VStack
-            key={i}
+            key={value + i}
             as='button'
             flex={1}
             px={4}
             py={2}
             bg={bg}
-            onClick={() => setValue('bondingPeriod', value)}
+            onClick={onClick}
           >
             <Text as='span' fontWeight='bold'>
               {title}

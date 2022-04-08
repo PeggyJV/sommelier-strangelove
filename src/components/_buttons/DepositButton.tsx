@@ -1,5 +1,5 @@
 import { useDisclosure } from '@chakra-ui/react'
-import DepositModal from 'components/_modals/DepositModal'
+import { DepositModal } from 'components/_modals/DepositModal'
 import { VFC } from 'react'
 import { BaseButton } from './BaseButton'
 

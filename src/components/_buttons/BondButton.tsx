@@ -1,5 +1,5 @@
 import { useDisclosure } from '@chakra-ui/react'
-import BondModal from 'components/_modals/BondModal'
+import { BondModal } from 'components/_modals/BondModal'
 import { VFC } from 'react'
 import { BaseButton } from './BaseButton'
 

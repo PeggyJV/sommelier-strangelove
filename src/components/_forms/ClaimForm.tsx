@@ -14,10 +14,10 @@ import { SecondaryButton } from 'components/_buttons/SecondaryButton'
 import { ModalInput } from 'components/_inputs/ModalInput'
 
 interface FormValues {
-  depositAmount: number
+  claimAmount: number
 }
 
-export const DepositForm: VFC = () => {
+export const ClaimForm: VFC = () => {
   const {
     register,
     watch,
@@ -26,10 +26,10 @@ export const DepositForm: VFC = () => {
     formState: { errors, isSubmitting }
   } = useForm<FormValues>()
   const [data, setData] = useState<any>()
-  const watchDepositAmount = watch('depositAmount')
-  const isDisabled = isNaN(watchDepositAmount) || watchDepositAmount <= 0
-  const isError = errors.depositAmount
-  const setMax = () => setValue('depositAmount', 100000)
+  const watchClaimAmount = watch('claimAmount')
+  const isDisabled = isNaN(watchClaimAmount) || watchClaimAmount <= 0
+  const isError = errors.claimAmount
+  const setMax = () => setValue('claimAmount', 100000)
 
   // need to do something meaningful with this data
   console.log({ data })
@@ -46,7 +46,7 @@ export const DepositForm: VFC = () => {
           <ModalInput
             type='number'
             step='any'
-            {...register('depositAmount', {
+            {...register('claimAmount', {
               required: 'Enter amount',
               valueAsNumber: true,
               validate: {
@@ -69,7 +69,7 @@ export const DepositForm: VFC = () => {
             borderRadius='50%'
             as={AiOutlineInfo}
           />{' '}
-          {errors.depositAmount?.message}
+          {errors.claimAmount?.message}
         </FormErrorMessage>
       </FormControl>
       <BaseButton
@@ -80,7 +80,7 @@ export const DepositForm: VFC = () => {
         py={6}
         px={12}
       >
-        Deposit Liquidity
+        Claim Liquidity
       </BaseButton>
     </VStack>
   )
