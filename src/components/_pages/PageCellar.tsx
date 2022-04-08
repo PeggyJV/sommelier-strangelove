@@ -31,6 +31,9 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     }
   })
   const { data } = cellarResult
+  const { cellar } = data || {}
+  const { tvlTotal } = cellar || {}
+  const tvm = tvlTotal && (parseInt(tvlTotal) / 1000000).toFixed(2)
 
   return (
     <Layout>
@@ -42,7 +45,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             </Link>
             <Heading>C{name}</Heading>
           </HStack>
-          <CellarStats tvm='$1.60M USDC' apy='8.88' trending='up' />
+          <CellarStats tvm={`$${tvm}M USDC`} apy='8.88' trending='up' />
         </HStack>
         <VStack spacing={4} align='stretch'>
           <Heading {...h2Styles}>Your Portfolio</Heading>
