@@ -6,6 +6,7 @@ import { Card } from './Card'
 import { BaseButton } from 'components/_buttons/BaseButton'
 import { DepositButton } from 'components/_buttons/DepositButton'
 import { TertiaryButton } from 'components/_buttons/TertiaryButton'
+import { BondButton } from 'components/_buttons/BondButton'
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   return (
@@ -21,14 +22,13 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               <CardStat label='deposit strategy' labelIcon='' stat='$0.00' />
               <HStack>
                 <DepositButton />
-                <TertiaryButton isDisabled>Withdraw</TertiaryButton>
               </HStack>
             </VStack>
           </HStack>
           <HStack spacing={6} align='flex-start'>
             <VStack align='flex-start'>
               <CardStat label='lp tokens' stat='0' />
-              <BaseButton isDisabled>Bond</BaseButton>
+              <BondButton />
             </VStack>
             <VStack align='flex-start'>
               <CardStat label='bonded lp tokens' stat='0' />
