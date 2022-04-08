@@ -7,7 +7,7 @@ import { BaseButton } from 'components/_buttons/BaseButton'
 import { DepositButton } from 'components/_buttons/DepositButton'
 import { BondButton } from 'components/_buttons/BondButton'
 import { WithdrawButton } from 'components/_buttons/WithdrawButton'
-import { UnbdondButton } from 'components/_buttons/UnbondButton'
+import { UnbondButton } from 'components/_buttons/UnbondButton'
 import { ClaimButton } from 'components/_buttons/ClaimButton'
 
 export const PortfolioCard: VFC<BoxProps> = () => {
@@ -35,7 +35,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
             </VStack>
             <VStack align='flex-start'>
               <CardStat label='bonded lp tokens' stat='0' />
-              <UnbdondButton />
+              <UnbondButton />
             </VStack>
           </HStack>
           <VStack align='flex-start'>

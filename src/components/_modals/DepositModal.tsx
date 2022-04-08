@@ -16,7 +16,7 @@ export const DepositModal: VFC<DepositModalProps> = props => {
             <Text as='span'>CAave</Text>
           </VStack>
           <VStack align='flex-start'>
-            <CardHeading>minimum deposit</CardHeading>
+            <CardHeading>maximum deposit</CardHeading>
             <Text as='span'>$10 USDC</Text>
           </VStack>
           <VStack align='flex-start'>

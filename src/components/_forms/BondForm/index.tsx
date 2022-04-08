@@ -1,4 +1,4 @@
-import { useState, VFC } from 'react'
+import { VFC } from 'react'
 import {
   FormControl,
   FormErrorMessage,
@@ -21,21 +21,18 @@ interface FormValues {
 }
 
 export const BondForm: VFC = () => {
-  const methods = useForm<FormValues>()
+  const methods = useForm<FormValues>({ defaultValues: { bondingPeriod: 1.1 } })
   const {
     register,
     watch,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting, isSubmitted }
+    formState: { errors, isSubmitting }
   } = methods
   const watchDepositAmount = watch('depositAmount')
   const isDisabled = isNaN(watchDepositAmount) || watchDepositAmount <= 0
   const isError = errors.depositAmount
   const setMax = () => setValue('depositAmount', 100000)
-
-  // need to do something meaningful with this data
-  console.log({ isSubmitted })
 
   return (
     <FormProvider {...methods}>

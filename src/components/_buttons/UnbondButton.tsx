@@ -3,12 +3,12 @@ import { UnbondModal } from 'components/_modals/UnbondModal'
 import { VFC } from 'react'
 import { TertiaryButton } from './TertiaryButton'
 
-export const UnbdondButton: VFC = () => {
+export const UnbondButton: VFC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
-      <TertiaryButton onClick={onOpen}>Unbdond</TertiaryButton>
+      <TertiaryButton onClick={onOpen}>Unbond</TertiaryButton>
       <UnbondModal isOpen={isOpen} onClose={onClose} />
     </>
   )
