@@ -1,9 +1,14 @@
-import { BoxProps, Button, HStack, VStack } from '@chakra-ui/react'
+import { BoxProps, HStack, VStack } from '@chakra-ui/react'
 import { CardStat } from 'components/CardStat'
 import { CardStatRow } from 'components/CardStatRow'
 import React, { VFC } from 'react'
 import { Card } from './Card'
 import { BaseButton } from 'components/_buttons/BaseButton'
+import { DepositButton } from 'components/_buttons/DepositButton'
+import { BondButton } from 'components/_buttons/BondButton'
+import { WithdrawButton } from 'components/_buttons/WithdrawButton'
+import { UnbondButton } from 'components/_buttons/UnbondButton'
+import { ClaimButton } from 'components/_buttons/ClaimButton'
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   return (
@@ -18,28 +23,24 @@ export const PortfolioCard: VFC<BoxProps> = () => {
             <VStack align='flex-start'>
               <CardStat label='deposit strategy' labelIcon='' stat='$0.00' />
               <HStack>
-                <BaseButton variant='solid'>Deposit</BaseButton>
-                <Button variant='unstyled' color='warmPink' isDisabled>
-                  Withdraw
-                </Button>
+                <DepositButton />
+                <WithdrawButton />
               </HStack>
             </VStack>
           </HStack>
           <HStack spacing={6} align='flex-start'>
             <VStack align='flex-start'>
               <CardStat label='lp tokens' stat='0' />
-              <BaseButton isDisabled>Bond</BaseButton>
+              <BondButton />
             </VStack>
             <VStack align='flex-start'>
               <CardStat label='bonded lp tokens' stat='0' />
-              <Button variant='unstyled' color='warmPink' isDisabled>
-                Unbond
-              </Button>
+              <UnbondButton />
             </VStack>
           </HStack>
           <VStack align='flex-start'>
             <CardStat label='rewards' stat='0' />
-            <BaseButton isDisabled>Claim</BaseButton>
+            <ClaimButton />
           </VStack>
         </CardStatRow>
       </Card>

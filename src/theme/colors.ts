@@ -49,6 +49,7 @@ const brightTurquoise = {
 const warmPink = '#D3426F'
 const burntPink = '#af3b62'
 const aubergine = '#43263a'
+const transparentPurple = 'rgba(96, 80, 155, 0.1)'
 const darkPlum = '#322436'
 const violentViolet = '#39196d'
 const energyYellow = '#F7DF58'
@@ -144,6 +145,7 @@ export const colors = {
   burntPink,
   aubergine,
   darkPlum,
+  transparentPurple,
   black,
   offBlack,
   white,
