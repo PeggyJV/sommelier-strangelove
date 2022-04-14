@@ -12,6 +12,7 @@ import CellarDetailsCard from 'components/_cards/CellarDetailsCard'
 import Link from 'components/Link'
 import { CellarStats } from 'components/CellarStats'
 import { SecondaryButton } from 'components/_buttons/SecondaryButton'
+import { formatTvl } from 'utils/formatTvl'
 
 const h2Styles: HeadingProps = {
   as: 'h2',
@@ -33,12 +34,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const { data } = cellarResult
   const { cellar } = data || {}
   const { tvlTotal } = cellar || {}
-  const tvmVal =
-    tvlTotal &&
-    Intl.NumberFormat('en-US', {
-      notation: 'compact',
-      maximumFractionDigits: 2
-    }).format(parseInt(tvlTotal))
+  const tvmVal = formatTvl(tvlTotal)
 
   return (
     <Layout>
