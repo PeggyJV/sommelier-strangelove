@@ -9,7 +9,7 @@ import {
 } from 'generated/subgraph'
 import { ssrClient } from 'queries/client'
 import { ParsedUrlQuery } from 'querystring'
-
+import { AaveV2CellarProvider } from 'context/aaveV2StablecoinCellar'
 export interface CellarPageProps {
   data: GetCellarQuery
 }
@@ -17,7 +17,11 @@ export interface CellarPageProps {
 type Params = ParsedUrlQuery & { id: string }
 
 const CellarPage: NextPage<CellarPageProps> = ({ data }) => {
-  return <PageCellar data={data} />
+  return (
+    <AaveV2CellarProvider>
+      <PageCellar data={data} />
+    </AaveV2CellarProvider>
+  )
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
