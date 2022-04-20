@@ -13,7 +13,7 @@ export const DepositModal: VFC<DepositModalProps> = props => {
         <HStack spacing={6}>
           <VStack align='flex-start'>
             <CardHeading>cellar</CardHeading>
-            <Text as='span'>CAave</Text>
+            <Text as='span'>aave2-CLR-S</Text>
           </VStack>
           <VStack align='flex-start'>
             <CardHeading>maximum deposit</CardHeading>
@@ -24,10 +24,6 @@ export const DepositModal: VFC<DepositModalProps> = props => {
             <Text as='span'>6d 4h 23m</Text>
           </VStack>
         </HStack>
-        <VStack align='flex-start'>
-          <CardHeading>available</CardHeading>
-          <Text as='span'>10,000 USDC</Text>
-        </VStack>
       </VStack>
       <DepositForm />
     </BaseModal>
