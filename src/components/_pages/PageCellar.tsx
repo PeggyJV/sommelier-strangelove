@@ -1,10 +1,10 @@
+import { VFC } from 'react'
 import { Heading, HeadingProps, HStack, VStack } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { PerformanceCard } from 'components/_cards/PerformanceCard'
 import { Section } from 'components/_layout/Section'
 import { useConnect } from 'wagmi'
 import { PortfolioCard } from 'components/_cards/PortfolioCard'
-import { VFC } from 'react'
 import { CellarPageProps } from 'pages/cellars/[id]'
 import { useGetCellarQuery } from 'generated/subgraph'
 import StrategyBreakdownCard from 'components/_cards/StrategyBreakdownCard'
@@ -12,6 +12,7 @@ import CellarDetailsCard from 'components/_cards/CellarDetailsCard'
 import Link from 'components/Link'
 import { CellarStats } from 'components/CellarStats'
 import { SecondaryButton } from 'components/_buttons/SecondaryButton'
+import { formatTvl } from 'utils/formatTvl'
 
 const h2Styles: HeadingProps = {
   as: 'h2',
@@ -31,6 +32,9 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     }
   })
   const { data } = cellarResult
+  const { cellar } = data || {}
+  const { tvlTotal } = cellar || {}
+  const tvmVal = formatTvl(tvlTotal)
 
   return (
     <Layout>
@@ -42,7 +46,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             </Link>
             <Heading>C{name}</Heading>
           </HStack>
-          <CellarStats tvm='$1.60M USDC' apy='8.88' trending='up' />
+          <CellarStats tvm={`$${tvmVal} USDC`} apy='8.88' trending='up' />
         </HStack>
         <VStack spacing={4} align='stretch'>
           <Heading {...h2Styles}>Your Portfolio</Heading>
