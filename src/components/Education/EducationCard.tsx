@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react"
+import { Flex, Heading, Text } from "@chakra-ui/react"
 import Link from "components/Link"
 import LinkProps from "types/LinkProps"
 import { EduItem } from "./types"
@@ -22,8 +22,10 @@ export const EducationCard: React.FC<Props> = ({
         border="8px solid rgba(78, 56, 156, 0.08)"
         padding="0 1rem"
       >
-        <Text>{title}</Text>
-        <Text>Read more</Text>
+        <Heading as="h3" size="sm">
+          {title}
+        </Heading>
+        <Text fontSize="0.75rem">Read more</Text>
       </Flex>
     </Link>
   )

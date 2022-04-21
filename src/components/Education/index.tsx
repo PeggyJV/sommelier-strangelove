@@ -6,7 +6,7 @@ import { EduItem } from "./types"
 export const Education: React.FC = () => {
   return (
     <Box>
-      <Heading as="h3" my="h5">
+      <Heading as="h3" size="md" mb={10}>
         Education
       </Heading>
       <List display="grid" gridAutoFlow="column">
