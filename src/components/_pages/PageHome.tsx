@@ -8,6 +8,7 @@ import { BaseButton } from 'components/_buttons/BaseButton'
 import { FaArrowRight } from 'react-icons/fa'
 import { Section } from 'components/_layout/Section'
 import { Cellar, useGetAllCellarsQuery } from 'generated/subgraph'
+import { Education } from 'components/Education'
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
@@ -18,6 +19,7 @@ const PageHome: NextPage = () => {
 
   return (
     <Layout>
+      <Education />
       <VStack spacing={6} align='flex-start'>
         <Section>
           <Grid templateColumns='1fr 1fr' gap={6} justifyItems='center'>
