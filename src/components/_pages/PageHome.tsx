@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import { Box, Flex, Grid, Heading, Img, Text, VStack } from '@chakra-ui/react'
-import Layout from 'components/Layout'
+import { Layout } from 'components/Layout'
 import { CellarOverviewCard } from 'components/_cards/CellarOverviewCard'
 import { useConnect } from 'wagmi'
 import { Card } from 'components/_cards/Card'
