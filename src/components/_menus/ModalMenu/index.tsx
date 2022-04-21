@@ -13,12 +13,12 @@ import { useState, VFC } from 'react'
 import { FaChevronDown } from 'react-icons/fa'
 import { Token, tokenConfig } from './tokenConfig'
 
-export const ModalMenu: VFC<MenuProps> = props => {
+export const ModalMenu: VFC = () => {
   const [value, setValue] = useState<Token>()
 
   return (
     //@ts-ignore using string where number is expected. This is to ensure popover is always placed at the top of button, no matter the height value.
-    <Menu offset={[0, '100%']} placement='bottom' matchWidth {...props}>
+    <Menu offset={[0, '100%']} placement='bottom' matchWidth>
       <MenuButton
         as={Box}
         p={4}
