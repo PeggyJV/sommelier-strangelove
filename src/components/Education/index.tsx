@@ -9,7 +9,7 @@ export const Education: React.FC = () => {
       <Heading as="h3" my="h5">
         Education
       </Heading>
-      <List>
+      <List display="grid" gridAutoFlow="column">
         {eduItems.map((eduItem: EduItem) => {
           return (
             <ListItem key={eduItem.title}>
