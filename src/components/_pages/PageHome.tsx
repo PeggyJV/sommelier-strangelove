@@ -26,16 +26,10 @@ const PageHome: NextPage = () => {
       <VStack spacing={6} align="flex-start">
         <Section>
           <Flex w="100%" direction="column">
-            <Box pb={4}>
+            <Box mb={12}>
               <Heading>Cellars</Heading>
-              <Text maxW="70ch">
-                At vero eos et accusamus et iusto odio dignissimos
-                ducimus qui blanditiis praesentium voluptatum deleniti
-                atque corrupti quos dolores et quas molestias
-                excepturi sint.
-              </Text>
             </Box>
-            <Grid gap={6} templateColumns="1fr 1fr">
+            <Grid gap={6} templateColumns="1fr 1fr 1fr">
               {data?.cellars.map((cellar) => {
                 const { id, name, dayDatas, numWalletsActive } =
                   cellar as Cellar
