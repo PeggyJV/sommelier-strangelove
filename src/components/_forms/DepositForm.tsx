@@ -29,7 +29,7 @@ export const DepositForm: VFC = () => {
     watch,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting, isSubmitted }
   } = methods
   const [data, setData] = useState<any>()
   const watchDepositAmount = watch('depositAmount')
@@ -37,16 +37,16 @@ export const DepositForm: VFC = () => {
   const isError = errors.depositAmount
   const setMax = () => setValue('depositAmount', 100000)
 
-  // need to do something meaningful with this data
-  console.log({ data })
-
   return (
     <FormProvider {...methods}>
       <VStack
         as='form'
         spacing={8}
         align='stretch'
-        onSubmit={handleSubmit(data => setData(data))}
+        onSubmit={handleSubmit(data => {
+          setData(data)
+          console.log({ data })
+        })}
       >
         <FormControl>
           <ModalMenu />
