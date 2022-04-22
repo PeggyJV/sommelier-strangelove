@@ -6,15 +6,20 @@ import {
   MenuButton,
   MenuItemOption,
   MenuList,
-  MenuOptionGroup,
-  MenuProps
+  MenuOptionGroup
 } from '@chakra-ui/react'
-import { useState, VFC } from 'react'
+import { useEffect, useState, VFC } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { FaChevronDown } from 'react-icons/fa'
 import { Token, tokenConfig } from './tokenConfig'
 
 export const ModalMenu: VFC = () => {
-  const [value, setValue] = useState<Token>()
+  const [selectedToken, setSelectedToken] = useState<Token>()
+  const { setValue } = useFormContext()
+
+  useEffect(() => {
+    setValue('selectedToken', selectedToken)
+  }, [selectedToken, setValue])
 
   return (
     //@ts-ignore using string where number is expected. This is to ensure popover is always placed at the top of button, no matter the height value.
@@ -37,9 +42,9 @@ export const ModalMenu: VFC = () => {
           }
         }}
       >
-        {value ? (
+        {selectedToken ? (
           <HStack>
-            {value.icon} <span>{value.symbol}</span>
+            {selectedToken.icon} <span>{selectedToken.symbol}</span>
           </HStack>
         ) : (
           'Select deposit asset'
@@ -62,7 +67,7 @@ export const ModalMenu: VFC = () => {
                 value={symbol}
                 borderRadius={8}
                 _hover={{ bg: 'rgba(96, 80, 155, 0.4)' }}
-                onClick={() => setValue(token)}
+                onClick={() => setSelectedToken(token)}
               >
                 <HStack>
                   {icon}
