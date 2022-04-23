@@ -130,6 +130,7 @@ const surface = {
 
 const neutral = {
   300: "#D9D7E0",
+  500: "#73717A",
   800: "#252429",
 }
 

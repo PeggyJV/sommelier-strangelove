@@ -1,9 +1,15 @@
-import { Text, TextProps } from "@chakra-ui/react"
+import { Heading, TextProps } from "@chakra-ui/react"
 
 export const Label: React.FC<TextProps> = ({ children, ...rest }) => {
   return (
-    <Text fontSize="10px" color="rgba(115, 113, 122, 1)" {...rest}>
+    <Heading
+      as="p"
+      fontSize="10px"
+      color="neutral.500"
+      fontWeight="600"
+      {...rest}
+    >
       {children}
-    </Text>
+    </Heading>
   )
 }

@@ -32,6 +32,14 @@ export const GlobalFonts = () => (
 
       @font-face {
         font-family: 'HafferXH';
+        font-weight: 600;
+        font-display: swap;
+        src: url('/assets/fonts/HafferXH-SemiBold.woff') format('woff'),
+             url('/assets/fonts/HafferXH-SemiBold.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'HafferXH';
         font-style: bold;
         font-weight: 700;
         font-display: swap;
