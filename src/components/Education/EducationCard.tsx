@@ -19,7 +19,6 @@ export const EducationCard: React.FC<Props> = ({
         justifyContent="space-between"
         alignItems="center"
         borderRadius="16px"
-        width="320px"
         height="96px"
         border="8px solid rgba(78, 56, 156, 0.08)"
         padding="0 1rem"
