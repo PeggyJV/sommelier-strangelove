@@ -4,7 +4,7 @@ import { Container, Flex, FlexProps } from '@chakra-ui/react'
 import Footer from './Footer'
 import { BackgroundAssets } from './BackgroundAssets'
 
-const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
+export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   return (
     <>
       <BackgroundAssets />
@@ -18,5 +18,3 @@ const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
     </>
   )
 }
-
-export default Layout
