@@ -1,4 +1,5 @@
-import { Box, Heading, List, ListItem } from "@chakra-ui/react"
+import { Box, Grid, Heading, List, ListItem } from "@chakra-ui/react"
+import { GridHome } from "components/GridHome"
 import { EducationCard } from "./EducationCard"
 import { eduItems } from "./eduItems"
 import { EduItem } from "./types"
@@ -9,19 +10,13 @@ export const Education: React.FC = () => {
       <Heading as="h3" size="md" mb={10}>
         Education
       </Heading>
-      <List
-        display="grid"
-        gap={6}
-        gridAutoFlow={{ base: "row", md: "column" }}
-      >
+      <GridHome>
         {eduItems.map((eduItem: EduItem) => {
           return (
-            <ListItem key={eduItem.title}>
-              <EducationCard {...eduItem} />
-            </ListItem>
+            <EducationCard key={eduItem.title} as="li" {...eduItem} />
           )
         })}
-      </List>
+      </GridHome>
     </Box>
   )
 }

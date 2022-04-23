@@ -1,11 +1,9 @@
-import { Flex, Heading, Img, Text } from "@chakra-ui/react"
+import { Flex, Heading, Img, Text, FlexProps } from "@chakra-ui/react"
 import Link from "components/Link"
-import LinkProps from "types/LinkProps"
 import { EduItem } from "./types"
 import { imageStyles } from "./imageStyles"
-import { FaRegIdBadge } from "react-icons/fa"
 
-type Props = EduItem & LinkProps
+type Props = EduItem & FlexProps
 
 export const EducationCard: React.FC<Props> = ({
   title,
@@ -14,7 +12,7 @@ export const EducationCard: React.FC<Props> = ({
   ...rest
 }) => {
   return (
-    <Link href={url} {...rest}>
+    <Link href={url}>
       <Flex
         justifyContent="space-between"
         alignItems="center"
@@ -29,6 +27,7 @@ export const EducationCard: React.FC<Props> = ({
           backgroundColor: "rgba(78, 56, 156, 0.04)",
           border: "8px solid rgba(78, 56, 156, 0.12)",
         }}
+        {...rest}
       >
         <Img
           src="assets/images/burst.png"

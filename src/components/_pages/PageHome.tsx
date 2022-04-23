@@ -8,44 +8,43 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
-import { CellarOverviewCard } from "components/_cards/CellarOverviewCard"
+import { CellarCard } from "components/_cards/CellarCard"
 import { useConnect } from "wagmi"
 import { Section } from "components/_layout/Section"
 import { Cellar, useGetAllCellarsQuery } from "generated/subgraph"
 import { Education } from "components/Education"
+import { GridHome } from "components/GridHome"
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
   const [cellarsResult] = useGetAllCellarsQuery()
   const { data } = cellarsResult
+  const totalCellars = data?.cellars?.length ?? 0
+  const numPlaceholderCards = 3 - totalCellars
+  const placeholderCardsArray = Array.from(
+    Array(numPlaceholderCards).keys()
+  )
 
   const isConnected = auth.data.connected
 
   return (
     <Layout>
       <VStack spacing={6} align="flex-start">
-        <Section>
+        <Section w="100%">
           <Flex w="100%" direction="column">
             <Box mb={12}>
               <Heading>Cellars</Heading>
             </Box>
-            <Grid gap={6} templateColumns="1fr 1fr 1fr">
+            <GridHome>
               {data?.cellars.map((cellar) => {
-                const { id, name, dayDatas, numWalletsActive } =
-                  cellar as Cellar
-
                 return (
-                  <CellarOverviewCard
-                    key={id}
-                    id={id}
-                    isConnected={isConnected}
-                    name={name}
-                    dayDatas={dayDatas}
-                    numWalletsActive={numWalletsActive}
-                  />
+                  <CellarCard key={cellar.id} data={cellar} as="li" />
                 )
               })}
-            </Grid>
+              {placeholderCardsArray.map((index) => {
+                return <CellarCard key={index} as="li" />
+              })}
+            </GridHome>
           </Flex>
         </Section>
       </VStack>
