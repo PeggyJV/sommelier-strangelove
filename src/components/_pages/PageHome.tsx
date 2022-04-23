@@ -1,12 +1,5 @@
 import { NextPage } from "next"
-import {
-  Box,
-  Flex,
-  Grid,
-  Heading,
-  Text,
-  VStack,
-} from "@chakra-ui/react"
+import { Box, Flex, Heading, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import {
   CellarCard,

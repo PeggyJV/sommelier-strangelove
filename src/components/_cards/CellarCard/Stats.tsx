@@ -3,11 +3,13 @@ import { Label } from "./Label"
 
 export const Stats: React.FC<FlexProps> = ({ children, ...rest }) => {
   return (
-    <Flex
+    <Grid
+      gridAutoFlow="column"
+      gridAutoColumns="min-content"
+      gridGap={4}
       background="surface.tertiary"
       padding="12px 16px"
       borderRadius={16}
-      justifyContent="space-between"
       {...rest}
     >
       <Box>
@@ -28,6 +30,6 @@ export const Stats: React.FC<FlexProps> = ({ children, ...rest }) => {
         </Heading>
         <Label>Rewards</Label>
       </Grid>
-    </Flex>
+    </Grid>
   )
 }
