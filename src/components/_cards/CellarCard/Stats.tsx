@@ -1,7 +1,7 @@
-import { Heading, Box, Flex, Grid } from "@chakra-ui/react"
+import { Heading, Box, Flex, Grid, FlexProps } from "@chakra-ui/react"
 import { Label } from "./Label"
 
-export const Stats: React.FC = ({ children, ...rest }) => {
+export const Stats: React.FC<FlexProps> = ({ children, ...rest }) => {
   return (
     <Flex
       background="surface.tertiary"

@@ -8,9 +8,9 @@ import {
 } from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
-import { Label } from "./Label"
 import { Stats } from "./Stats"
 import { ValueManaged } from "./ValueManaged"
+import { Burst } from "./Burst"
 
 interface CellarCardProps extends BoxProps {
   data?: any
@@ -31,34 +31,30 @@ export const CellarCard: React.FC<CellarCardProps> = ({
       position="relative"
       {...rest}
     >
-      <Img
-        src="/assets/images/burst.png"
-        width="160px"
-        position="absolute"
-        right="-33px"
-        top="-58px"
-        zIndex="1"
-      />
+      <Burst />
       <Box
         border="1px solid rgba(237, 74, 125, 1)"
         borderRadius={24}
-        padding="1rem"
         zIndex="2"
       >
-        <Img src="/assets/images/coin.png" width="40px" />
-        <Heading>aave2</Heading>
-        <Flex>
-          <Tag>Stable</Tag>
-          <Tag>Stable</Tag>
-          <Tag>Stable</Tag>
-        </Flex>
-        <ValueManaged />
-        <Text mb={6} mt={6}>
-          The Aave stablecoin strategy aims to select the optimal
-          stablecoin lending position available to lend across Aave
-          markets on a continuous basis.
-        </Text>
-        <Stats />
+        <Box p={4} ml={2} mr={2}>
+          <Img src="/assets/images/coin.png" width="40px" />
+          <Heading>aave2</Heading>
+          <Flex>
+            <Tag>Stable</Tag>
+            <Tag ml={2}>5.0%</Tag>
+            <Tag ml={2}>AAVE</Tag>
+          </Flex>
+        </Box>
+        <Box p={4} backgroundColor="surface.primary">
+          <ValueManaged ml={2} mr={2} />
+          <Text mb={6} mt={6} ml={2} mr={2}>
+            The Aave stablecoin strategy aims to select the optimal
+            stablecoin lending position available to lend across Aave
+            markets on a continuous basis.
+          </Text>
+          <Stats mb={2} />
+        </Box>
       </Box>
     </Card>
   )

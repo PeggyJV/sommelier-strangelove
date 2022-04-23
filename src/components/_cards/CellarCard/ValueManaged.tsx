@@ -1,10 +1,10 @@
-import { Flex, Heading, Box } from "@chakra-ui/react"
+import { Flex, Heading, Box, BoxProps } from "@chakra-ui/react"
 import { FillLine } from "./FillLine"
 import { Label } from "./Label"
 
-export const ValueManaged = () => {
+export const ValueManaged: React.FC<BoxProps> = ({ ...rest }) => {
   return (
-    <Box>
+    <Box {...rest}>
       <Flex alignItems="baseline" mb={1}>
         <Heading size="md">$49.25M</Heading>
         <Label ml={1}>TVM</Label>
