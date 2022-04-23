@@ -127,6 +127,10 @@ const surface = {
   tertiary: "rgba(78, 56, 156, 0.24)",
 }
 
+const neutral = {
+  800: "#252429",
+}
+
 export const colors = {
   electricIndigo,
   brilliantRose,
@@ -159,4 +163,5 @@ export const colors = {
   uiChrome,
   text,
   surface,
+  neutral,
 }

@@ -10,6 +10,7 @@ import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { Label } from "./Label"
 import { Stats } from "./Stats"
+import { ValueManaged } from "./ValueManaged"
 
 interface CellarCardProps extends BoxProps {
   data?: any
@@ -51,14 +52,7 @@ export const CellarCard: React.FC<CellarCardProps> = ({
           <Tag>Stable</Tag>
           <Tag>Stable</Tag>
         </Flex>
-        <Flex>
-          <Heading>$49.25M</Heading>
-          <Label>TVM</Label>
-        </Flex>
-        <Flex>
-          <Text>$2,012,394.79 (4.08%)</Text>
-          <Label>Past Week</Label>
-        </Flex>
+        <ValueManaged />
         <Text mb={6} mt={6}>
           The Aave stablecoin strategy aims to select the optimal
           stablecoin lending position available to lend across Aave
