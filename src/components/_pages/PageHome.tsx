@@ -1,16 +1,16 @@
 import { NextPage } from "next"
 import { Box, Flex, Heading, Spinner, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
-import {
-  CellarCard,
-  CellarCardData,
-} from "components/_cards/CellarCard"
+import { CellarCard } from "components/_cards/CellarCard"
 import { useConnect } from "wagmi"
 import { Section } from "components/_layout/Section"
 import { useGetAllCellarsQuery } from "generated/subgraph"
 import { Education } from "components/Education"
 import { GridHome } from "components/GridHome"
-import { CellarCardDisplay } from "components/_cards/CellarCard/CellarCardDisplay"
+import {
+  CellarCardDisplay,
+  CellarCardData,
+} from "components/_cards/CellarCard/CellarCardDisplay"
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
@@ -40,9 +40,11 @@ const PageHome: NextPage = () => {
         {placeholderCardsArray.map((index) => {
           const cellarCardData: CellarCardData = {
             name: "-",
+            description: "",
             strategyType: "-",
             managementFee: "-",
             protocols: "-",
+            apy: "",
           }
           return (
             <CellarCardDisplay
