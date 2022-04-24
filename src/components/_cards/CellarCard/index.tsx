@@ -1,84 +1,47 @@
+import { BoxProps, Heading, Spinner } from "@chakra-ui/react"
 import {
-  Box,
-  BoxProps,
-  Heading,
-  Img,
-  Flex,
-  Text,
-} from "@chakra-ui/react"
-import { Card } from "components/_cards/Card"
-import { Tag } from "components/Tag"
-import { AboutCellar } from "./AboutCellar"
-import { Burst } from "./Burst"
-import { ComingSoon } from "./ComingSoon"
-
-export interface CellarCardData {
-  name: string
-  tvm?: string
-  coinType: string
-  percent: string
-  symbol: string
-}
+  CellarCardDisplay,
+  CellarCardData,
+} from "./CellarCardDisplay"
+import { useGetCellarQuery } from "generated/subgraph"
+import { cellarDataMap } from "src/data/cellarDataMap"
 
 interface CellarCardProps extends BoxProps {
-  data: CellarCardData
-  isPlaceholder?: boolean
+  cellarAddress: string
   index?: number
 }
 
 export const CellarCard: React.FC<CellarCardProps> = ({
-  data,
-  isPlaceholder,
+  cellarAddress,
   index,
   ...rest
 }) => {
-  return (
-    <Card
-      borderRadius={32}
-      border="8px solid rgba(78, 56, 156, 0.08)"
-      padding="0"
-      position="relative"
-      display="flex"
-      {...rest}
-    >
-      <Burst />
-      <Flex
-        flexDirection="column"
-        border="1px solid rgba(237, 74, 125, 1)"
-        borderRadius={24}
-        zIndex="2"
-      >
-        <Box p={4} ml={2} mr={2}>
-          <Img src="/assets/images/coin.png" width="40px" mb={3} />
-          <Flex mb={2}>
-            <Heading size="lg" mr={1} lineHeight="100%">
-              {data.name}
-            </Heading>
-            <Heading size="sm" as="p" color="neutral.300" mt="auto">
-              CLR-S
-            </Heading>
-          </Flex>
-          <Flex>
-            <Tag>{data.coinType}</Tag>
-            <Tag ml={2}>{data.percent}</Tag>
-            <Tag ml={2}>{data.symbol}</Tag>
-          </Flex>
-        </Box>
-        <Flex
-          p={4}
-          backgroundColor="surface.primary"
-          position="relative"
-          flexGrow="1"
-          flexDirection="column"
-          paddingTop={isPlaceholder ? 0 : 4}
-        >
-          {isPlaceholder ? (
-            <ComingSoon index={index} />
-          ) : (
-            <AboutCellar />
-          )}
-        </Flex>
-      </Flex>
-    </Card>
-  )
+  const [cellarResult] = useGetCellarQuery({
+    variables: {
+      cellarAddress,
+      cellarString: cellarAddress,
+    },
+  })
+
+  const { data, fetching } = cellarResult
+
+  if (fetching) {
+    return <Spinner />
+  }
+
+  if (data?.cellar === null || data?.cellar === undefined) {
+    return <Heading>Cellar not found</Heading>
+  }
+
+  const cellarCardData: CellarCardData = {
+    name: cellarDataMap[cellarAddress].name,
+    description: cellarDataMap[cellarAddress].description,
+    tvm: "",
+    strategyType: cellarDataMap[cellarAddress].strategyType,
+    managementFee: `${parseFloat(data.cellar.feePlatform) * 100}%`,
+    protocols: cellarDataMap[cellarAddress].protocols,
+    apy: (parseFloat(data.cellar.apy) * 100).toFixed(2),
+  }
+
+  return <CellarCardDisplay data={cellarCardData} {...rest} />
 }

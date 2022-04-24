@@ -1,5 +1,5 @@
 import { NextPage } from "next"
-import { Box, Flex, Heading, VStack } from "@chakra-ui/react"
+import { Box, Flex, Heading, Spinner, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import {
   CellarCard,
@@ -7,31 +7,56 @@ import {
 } from "components/_cards/CellarCard"
 import { useConnect } from "wagmi"
 import { Section } from "components/_layout/Section"
-import { Cellar, useGetAllCellarsQuery } from "generated/subgraph"
+import { useGetAllCellarsQuery } from "generated/subgraph"
 import { Education } from "components/Education"
 import { GridHome } from "components/GridHome"
-
-interface CellarDataMap {
-  [key: string]: string
-}
-
-const cellarNameMap: CellarDataMap = {
-  "0xc3761EB917CD790B30dAD99f6Cc5b4Ff93C4F9eA": "aave2",
-}
+import { CellarCardDisplay } from "components/_cards/CellarCard/CellarCardDisplay"
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
   const [cellarsResult] = useGetAllCellarsQuery()
-  const { data } = cellarsResult
+  const { data, fetching } = cellarsResult
   const totalCellars = data?.cellars?.length ?? 0
   const numPlaceholderCards = 3 - totalCellars
   const placeholderCardsArray = Array.from(
     Array(numPlaceholderCards).keys()
   )
 
-  console.log("data", data)
-
-  const isConnected = auth.data.connected
+  const CellarGridItems = () => {
+    if (fetching) {
+      return <Spinner />
+    }
+    return (
+      <>
+        {data?.cellars.map((cellar) => {
+          return (
+            <CellarCard
+              key={cellar.id}
+              cellarAddress={cellar.id}
+              as="li"
+            />
+          )
+        })}
+        {placeholderCardsArray.map((index) => {
+          const cellarCardData: CellarCardData = {
+            name: "-",
+            strategyType: "-",
+            managementFee: "-",
+            protocols: "-",
+          }
+          return (
+            <CellarCardDisplay
+              key={index}
+              data={cellarCardData}
+              as="li"
+              isPlaceholder
+              index={index}
+            />
+          )
+        })}
+      </>
+    )
+  }
 
   return (
     <Layout>
@@ -42,39 +67,7 @@ const PageHome: NextPage = () => {
               <Heading>Cellars</Heading>
             </Box>
             <GridHome>
-              {data?.cellars.map((cellar) => {
-                const cellarCardData: CellarCardData = {
-                  name: cellarNameMap[cellar.id],
-                  tvm: "",
-                  coinType: "Stable",
-                  percent: "5%",
-                  symbol: "AAVE",
-                }
-                return (
-                  <CellarCard
-                    key={cellar.id}
-                    data={cellarCardData}
-                    as="li"
-                  />
-                )
-              })}
-              {placeholderCardsArray.map((index) => {
-                const cellarCardData: CellarCardData = {
-                  name: "-",
-                  coinType: "-",
-                  percent: "-",
-                  symbol: "-",
-                }
-                return (
-                  <CellarCard
-                    key={index}
-                    data={cellarCardData}
-                    as="li"
-                    isPlaceholder
-                    index={index}
-                  />
-                )
-              })}
+              <CellarGridItems />
             </GridHome>
           </Flex>
         </Section>

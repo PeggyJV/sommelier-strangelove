@@ -1,7 +1,16 @@
 import { Heading, Box, Flex, Grid, FlexProps } from "@chakra-ui/react"
+import { CellarCardData } from "./CellarCardDisplay"
 import { Label } from "./Label"
 
-export const Stats: React.FC<FlexProps> = ({ children, ...rest }) => {
+interface Props extends FlexProps {
+  data: CellarCardData
+}
+
+export const Stats: React.FC<Props> = ({
+  data,
+  children,
+  ...rest
+}) => {
   return (
     <Grid
       gridAutoFlow="column"
@@ -20,7 +29,7 @@ export const Stats: React.FC<FlexProps> = ({ children, ...rest }) => {
       </Box>
       <Box>
         <Heading as="p" size="sm" fontWeight="bold" color="lime">
-          $1.00%
+          {data.apy}%
         </Heading>
         <Label>APY</Label>
       </Box>
