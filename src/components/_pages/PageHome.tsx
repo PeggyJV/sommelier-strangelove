@@ -35,6 +35,7 @@ const PageHome: NextPage = () => {
               href={`/cellars/${cellar.id}`}
               key={cellar.id}
               display="flex"
+              borderRadius={28}
             >
               <CellarCard cellarAddress={cellar.id} as="li" />
             </Link>

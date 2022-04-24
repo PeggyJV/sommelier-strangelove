@@ -9,6 +9,14 @@ export const Link = ({ children, href, ...rest }: LinkProps) => {
       <ChLink
         textDecoration="none"
         _hover={{ textDecoration: "none" }}
+        sx={{
+          "&:not(:focus-visible)": {
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            boxShadow: "0 0 0 3px default",
+          },
+        }}
         {...rest}
       >
         {children}
