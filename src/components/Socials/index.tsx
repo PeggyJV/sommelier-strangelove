@@ -9,7 +9,7 @@ export const Socials: VFC<StackProps> = () => {
       {links.map((social, i) => {
         const { href, icon } = social
         return (
-          <Link key={i} href={href} isExternal>
+          <Link key={i} href={href} display="flex" isExternal>
             <Icon
               as={icon}
               boxSize={9}
