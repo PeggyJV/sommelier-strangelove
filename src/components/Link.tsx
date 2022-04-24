@@ -1,14 +1,14 @@
-import { Link as ChLink } from '@chakra-ui/react'
-import NLink from 'next/link'
-import LinkProps from 'types/LinkProps'
+import { Link as ChLink } from "@chakra-ui/react"
+import NLink from "next/link"
+import LinkProps from "types/LinkProps"
 
-const Link = ({ children, href, ...rest }: LinkProps) => {
+export const Link = ({ children, href, ...rest }: LinkProps) => {
   return (
-    <NLink href={href || ''} passHref>
+    <NLink href={href || ""} passHref>
       {/* @ts-ignore */}
       <ChLink
-        textDecoration='none'
-        _hover={{ textDecoration: 'none' }}
+        textDecoration="none"
+        _hover={{ textDecoration: "none" }}
         {...rest}
       >
         {children}
@@ -16,5 +16,3 @@ const Link = ({ children, href, ...rest }: LinkProps) => {
     </NLink>
   )
 }
-
-export default Link
