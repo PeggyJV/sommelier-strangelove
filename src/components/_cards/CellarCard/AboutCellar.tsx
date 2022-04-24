@@ -1,10 +1,11 @@
 import { Text } from "@chakra-ui/react"
+import { CellarCardData } from "./CellarCardDisplay"
 
 import { Stats } from "./Stats"
 import { ValueManaged } from "./ValueManaged"
 
 interface Props {
-  data?: any
+  data: CellarCardData
 }
 
 export const AboutCellar: React.FC<Props> = ({ data }) => {
@@ -12,11 +13,9 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
     <>
       <ValueManaged ml={2} mr={2} />
       <Text mb={6} mt={6} ml={2} mr={2}>
-        The Aave stablecoin strategy aims to select the optimal
-        stablecoin lending position available to lend across Aave
-        markets on a continuous basis.
+        {data.description}
       </Text>
-      <Stats mb={2} />
+      <Stats mb={2} data={data} />
     </>
   )
 }
