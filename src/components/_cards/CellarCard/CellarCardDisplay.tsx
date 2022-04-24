@@ -34,6 +34,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
       padding="0"
       position="relative"
       display="flex"
+      maxW="400px"
       {...rest}
     >
       <Burst />

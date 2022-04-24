@@ -15,11 +15,12 @@ const Footer: VFC<ContainerProps> = (props) => {
       as="footer"
       display="flex"
       maxW="container.lg"
+      mt={20}
       {...props}
     >
       <Flex
-        ml={4}
-        mr={4}
+        ml={2}
+        mr={2}
         borderTop="1px solid"
         borderColor="rgba(203, 198, 209, 0.25)"
         justifyContent="space-between"
