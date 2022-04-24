@@ -1,4 +1,4 @@
-import Link from "components/Link"
+import { Link } from "components/Link"
 import LinkProps from "types/LinkProps"
 import { Text } from "@chakra-ui/react"
 

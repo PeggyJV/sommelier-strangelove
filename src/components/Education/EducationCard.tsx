@@ -1,5 +1,5 @@
 import { Flex, Heading, Img, Text, FlexProps } from "@chakra-ui/react"
-import Link from "components/Link"
+import { Link } from "components/Link"
 import { EduItem } from "./types"
 import { imageStyles } from "./imageStyles"
 

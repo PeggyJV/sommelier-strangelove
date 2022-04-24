@@ -5,7 +5,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 import React, { VFC } from "react"
-import Socials from "components/Socials"
+import { Socials } from "components/Socials"
 import { FooterLink } from "./FooterLink"
 
 const Footer: VFC<ContainerProps> = (props) => {

@@ -1,9 +1,9 @@
-import { HStack, Icon, StackProps } from '@chakra-ui/react'
-import Link from 'components/Link'
-import { VFC } from 'react'
-import { links } from './links'
+import { HStack, Icon, StackProps } from "@chakra-ui/react"
+import { Link } from "components/Link"
+import { VFC } from "react"
+import { links } from "./links"
 
-const Socials: VFC<StackProps> = () => {
+export const Socials: VFC<StackProps> = () => {
   return (
     <HStack spacing={4}>
       {links.map((social, i) => {
@@ -14,11 +14,11 @@ const Socials: VFC<StackProps> = () => {
               as={icon}
               boxSize={9}
               p={2}
-              color='white'
-              bg='backgrounds.black'
-              borderRadius='50%'
+              color="white"
+              bg="backgrounds.black"
+              borderRadius="50%"
               _hover={{
-                bg: 'sunsetOrange'
+                bg: "sunsetOrange",
               }}
             />
           </Link>
@@ -27,5 +27,3 @@ const Socials: VFC<StackProps> = () => {
     </HStack>
   )
 }
-
-export default Socials

@@ -5,7 +5,7 @@ import PlausibleProvider from "next-plausible"
 import theme from "theme/index"
 import { QueryClientProvider, QueryClient } from "react-query"
 import { WagmiProvider } from "context/wagmiContext"
-import AlertDialog from "components/AlertDialog"
+import { AlertDialog } from "components/AlertDialog"
 import { Provider as GraphQLProvider } from "urql"
 import { client as urqlClient } from "queries/client"
 
