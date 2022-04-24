@@ -1887,11 +1887,6 @@
     "@ethersproject/properties" "^5.5.0"
     "@ethersproject/strings" "^5.5.0"
 
-"@fontsource/oswald@^4.5.4":
-  version "4.5.4"
-  resolved "https://registry.yarnpkg.com/@fontsource/oswald/-/oswald-4.5.4.tgz#c121e0d45fb955b56e83a302887e48d1a994f1f9"
-  integrity sha512-C405io55LzyB0Ak/pBpUubBFQ71l3Jy/3y21uJqwj0vGHzGxEL/y6ggEypcmtCSbhYc5H+wVendOaKOY/bmiKQ==
-
 "@graphql-codegen/add@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-3.1.1.tgz#e161ff1c7cdf74ce20b32f75f640f9592b9a18ca"
