@@ -24,7 +24,6 @@
     "@emotion/react": "11.8.1",
     "@emotion/styled": "11.8.1",
     "@ethersproject/bignumber": "^5.6.0",
-    "@fontsource/oswald": "^4.5.4",
     "@keplr-wallet/types": "^0.9.12",
     "@next/bundle-analyzer": "^12.1.0",
     "@nivo/bar": "^0.79.1",
@@ -73,5 +72,12 @@
   "volta": {
     "node": "16.14.0",
     "yarn": "1.22.17"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 70,
+    "tabWidth": 2,
+    "useTabs": false,
+    "bracketSpacing": true
   }
 }

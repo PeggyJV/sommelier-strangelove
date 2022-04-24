@@ -1,93 +1,84 @@
-import { NextPage } from 'next'
-import { Box, Flex, Grid, Heading, Img, Text, VStack } from '@chakra-ui/react'
-import Layout from 'components/Layout'
-import { CellarOverviewCard } from 'components/_cards/CellarOverviewCard'
-import { useConnect } from 'wagmi'
-import { Card } from 'components/_cards/Card'
-import { BaseButton } from 'components/_buttons/BaseButton'
-import { FaArrowRight } from 'react-icons/fa'
-import { Section } from 'components/_layout/Section'
-import { Cellar, useGetAllCellarsQuery } from 'generated/subgraph'
+import { NextPage } from "next"
+import { Box, Flex, Heading, Spinner, VStack } from "@chakra-ui/react"
+import { Layout } from "components/Layout"
+import { CellarCard } from "components/_cards/CellarCard"
+import { useConnect } from "wagmi"
+import { Section } from "components/_layout/Section"
+import { useGetAllCellarsQuery } from "generated/subgraph"
+import { Education } from "components/Education"
+import { GridHome } from "components/GridHome"
+import {
+  CellarCardDisplay,
+  CellarCardData,
+} from "components/_cards/CellarCard/CellarCardDisplay"
+import { Link } from "components/Link"
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
   const [cellarsResult] = useGetAllCellarsQuery()
-  const { data } = cellarsResult
+  const { data, fetching } = cellarsResult
+  const totalCellars = data?.cellars?.length ?? 0
+  const numPlaceholderCards = 3 - totalCellars
+  const placeholderCardsArray = Array.from(
+    Array(numPlaceholderCards).keys()
+  )
 
-  const isConnected = auth.data.connected
+  const CellarGridItems = () => {
+    if (fetching) {
+      return <Spinner />
+    }
+    return (
+      <>
+        {data?.cellars.map((cellar) => {
+          return (
+            <Link
+              href={`/cellars/${cellar.id}`}
+              key={cellar.id}
+              display="flex"
+              borderRadius={28}
+            >
+              <CellarCard cellarAddress={cellar.id} as="li" />
+            </Link>
+          )
+        })}
+        {placeholderCardsArray.map((index) => {
+          const cellarCardData: CellarCardData = {
+            name: "-",
+            description: "",
+            strategyType: "-",
+            managementFee: "-",
+            protocols: "-",
+            apy: "",
+          }
+          return (
+            <CellarCardDisplay
+              key={index}
+              data={cellarCardData}
+              as="li"
+              isPlaceholder
+              index={index}
+            />
+          )
+        })}
+      </>
+    )
+  }
 
   return (
     <Layout>
-      <VStack spacing={6} align='flex-start'>
-        <Section>
-          <Grid templateColumns='1fr 1fr' gap={6} justifyItems='center'>
-            <VStack align='flex-start' spacing={4} maxW='70ch'>
-              <Heading>Sommelier DeFi</Heading>
-              <Text>
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                blanditiis praesentium voluptatum deleniti atque corrupti quos
-                dolores et quas molestias excepturi sint occaecati cupiditate
-                non provident, similique sunt in culpa qui officia deserunt
-                mollitia animi, id est laborum et dolorum fuga.
-              </Text>
-              <BaseButton icon={FaArrowRight}>Learn More</BaseButton>
-            </VStack>
-            <Img src='/placeholders/img-placeholder.png' />
-          </Grid>
-        </Section>
-        <Section>
-          <Flex w='100%' direction='column'>
-            <Box pb={4}>
+      <VStack spacing={6} align="flex-start">
+        <Section w="100%">
+          <Flex w="100%" direction="column">
+            <Box mb={12}>
               <Heading>Cellars</Heading>
-              <Text maxW='70ch'>
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                blanditiis praesentium voluptatum deleniti atque corrupti quos
-                dolores et quas molestias excepturi sint.
-              </Text>
             </Box>
-            <Grid gap={6} templateColumns='1fr 1fr'>
-              {data?.cellars.map(cellar => {
-                const { id, name, dayDatas, numWalletsActive } =
-                  cellar as Cellar
-
-                return (
-                  <CellarOverviewCard
-                    key={id}
-                    id={id}
-                    isConnected={isConnected}
-                    name={name}
-                    dayDatas={dayDatas}
-                    numWalletsActive={numWalletsActive}
-                  />
-                )
-              })}
-              <Card
-                display='flex'
-                alignItems='center'
-                bgColor='backgrounds.black'
-                textAlign='center'
-              >
-                <VStack spacing={4}>
-                  <Img
-                    src='/placeholders/img-placeholder.png'
-                    boxSize={40}
-                    objectFit='contain'
-                    pb={4}
-                  />
-                  <Text fontSize='2xl' fontWeight='medium'>
-                    More Coming Soon
-                  </Text>
-                  <Text pb={6}>
-                    At vero eos et accusamus et iusto odio dignissimos ducimus
-                    qui blanditiis praesentium voluptatum deleniti atque
-                    corrupti quos dolores et quas molestias excepturi sint.
-                  </Text>
-                </VStack>
-              </Card>
-            </Grid>
+            <GridHome>
+              <CellarGridItems />
+            </GridHome>
           </Flex>
         </Section>
       </VStack>
+      <Education />
     </Layout>
   )
 }

@@ -1,13 +1,14 @@
-import { extendTheme, ThemeConfig } from '@chakra-ui/react'
-import { styles } from './styles'
-import { fonts } from './fonts'
-import { colors } from './colors'
-import { components } from './components'
+import { extendTheme, ThemeConfig } from "@chakra-ui/react"
+import { styles } from "./styles"
+import { fonts } from "./fonts"
+import { colors } from "./colors"
+import { components } from "./components"
+import { sizes } from "./sizes"
 
 // https://chakra-ui.com/docs/theming/theme#config
 export const config: ThemeConfig = {
-  initialColorMode: 'light',
-  useSystemColorMode: false
+  initialColorMode: "light",
+  useSystemColorMode: false,
 }
 
 // https://chakra-ui.com/docs/theming/customize-theme
@@ -16,7 +17,8 @@ const theme = extendTheme({
   styles,
   fonts,
   colors,
-  components
+  components,
+  sizes,
 })
 
 export default theme

@@ -5,12 +5,12 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  Button
-} from '@chakra-ui/react'
-import { useDialog } from 'context/dialogContext'
-import { useRef } from 'react'
+  Button,
+} from "@chakra-ui/react"
+import { useDialog } from "context/dialogContext"
+import { useRef } from "react"
 
-const AlertDialog = () => {
+export const AlertDialog = () => {
   const { title, body, isOpen, onClose } = useDialog()
   const closeRef = useRef<HTMLButtonElement>(null)
 
@@ -19,10 +19,16 @@ const AlertDialog = () => {
   }
 
   return (
-    <ChDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={closeRef}>
+    <ChDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      leastDestructiveRef={closeRef}
+    >
       <AlertDialogOverlay>
         <AlertDialogContent>
-          <AlertDialogHeader>{title ? title : 'Hello'}</AlertDialogHeader>
+          <AlertDialogHeader>
+            {title ? title : "Hello"}
+          </AlertDialogHeader>
           <AlertDialogBody>{body}</AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={closeRef} onClick={onClose}>
@@ -34,5 +40,3 @@ const AlertDialog = () => {
     </ChDialog>
   )
 }
-
-export default AlertDialog

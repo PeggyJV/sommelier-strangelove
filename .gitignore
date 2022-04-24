@@ -2,7 +2,6 @@
 .DS_Store
 .env*
 .vercel
-.vscode/
 /.next/
 /.pnp
 /build
