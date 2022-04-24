@@ -27,14 +27,28 @@ const Footer: VFC<ContainerProps> = (props) => {
         alignItems="center"
         width="100%"
         py={10}
+        flexDirection={{ base: "column", sm: "row" }}
       >
-        <Text fontSize="xs">
+        <Text fontSize="xs" mb={{ base: 6, sm: 0 }}>
           &copy; {new Date().getFullYear()} Sommelier
         </Text>
-        <HStack spacing={4} justify="center" align="center">
-          <FooterLink href="/">Documentation</FooterLink>
-          <FooterLink href="/terms">Terms</FooterLink>
-          <FooterLink href="/privacy">Privacy</FooterLink>
+        <HStack
+          spacing={4}
+          justify="center"
+          align="center"
+          flexDirection={{ base: "column-reverse", sm: "row" }}
+        >
+          <HStack
+            spacing={4}
+            justify="center"
+            align="center"
+            mt={{ base: 6, sm: 0 }}
+            mb={{ base: 6, sm: 0 }}
+          >
+            <FooterLink href="/">Documentation</FooterLink>
+            <FooterLink href="/terms">Terms</FooterLink>
+            <FooterLink href="/privacy">Privacy</FooterLink>
+          </HStack>
           <Socials />
         </HStack>
       </Flex>

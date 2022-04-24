@@ -31,7 +31,11 @@ const PageHome: NextPage = () => {
       <>
         {data?.cellars.map((cellar) => {
           return (
-            <Link href={`/cellars/${cellar.id}`} key={cellar.id}>
+            <Link
+              href={`/cellars/${cellar.id}`}
+              key={cellar.id}
+              display="flex"
+            >
               <CellarCard cellarAddress={cellar.id} as="li" />
             </Link>
           )

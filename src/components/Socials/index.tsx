@@ -3,9 +3,9 @@ import { Link } from "components/Link"
 import { VFC } from "react"
 import { links } from "./links"
 
-export const Socials: VFC<StackProps> = () => {
+export const Socials: VFC<StackProps> = ({ ...rest }) => {
   return (
-    <HStack spacing={4}>
+    <HStack spacing={4} {...rest}>
       {links.map((social, i) => {
         const { href, icon } = social
         return (
