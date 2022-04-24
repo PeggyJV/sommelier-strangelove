@@ -124,10 +124,13 @@ const text = {
 }
 
 const surface = {
+  primary: "rgba(78, 56, 156, 0.08)",
   tertiary: "rgba(78, 56, 156, 0.24)",
 }
 
 const neutral = {
+  300: "#D9D7E0",
+  500: "#73717A",
   800: "#252429",
 }
 
