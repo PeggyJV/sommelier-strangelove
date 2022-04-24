@@ -11,6 +11,7 @@ import {
   CellarCardDisplay,
   CellarCardData,
 } from "components/_cards/CellarCard/CellarCardDisplay"
+import { Link } from "components/Link"
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
@@ -30,11 +31,9 @@ const PageHome: NextPage = () => {
       <>
         {data?.cellars.map((cellar) => {
           return (
-            <CellarCard
-              key={cellar.id}
-              cellarAddress={cellar.id}
-              as="li"
-            />
+            <Link href={`/cellars/${cellar.id}`} key={cellar.id}>
+              <CellarCard cellarAddress={cellar.id} as="li" />
+            </Link>
           )
         })}
         {placeholderCardsArray.map((index) => {
