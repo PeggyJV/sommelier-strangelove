@@ -19,8 +19,8 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
   cellarCap,
 }) => {
   const theme = useTheme()
-  const dataPresent = currentDeposits && cellarCap
-  const data = dataPresent
+  const dataIsPresent = currentDeposits && cellarCap
+  const data = dataIsPresent
     ? [{ currentDeposits: parseInt(currentDeposits) }]
     : []
 
@@ -41,7 +41,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           colors={theme.colors.lime}
           keys={["currentDeposits"]}
           data={data}
-          maxValue={dataPresent ? parseInt(cellarCap) : "auto"}
+          maxValue={dataIsPresent ? parseInt(cellarCap) : "auto"}
           enableLabel={false}
           enableGridX={false}
           enableGridY={false}
