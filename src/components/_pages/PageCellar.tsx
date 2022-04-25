@@ -18,6 +18,7 @@ import { Link } from "components/Link"
 import { CellarStats } from "components/CellarStats"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { formatTvl } from "utils/formatTvl"
+import { formatApy } from "utils/formatApy"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -38,8 +39,9 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   })
   const { data } = cellarResult
   const { cellar } = data || {}
-  const { tvlTotal } = cellar || {}
+  const { apy, tvlTotal } = cellar || {}
   const tvmVal = formatTvl(tvlTotal)
+  const apyVal = formatApy(apy)
 
   return (
     <Layout>
@@ -53,7 +55,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </HStack>
           <CellarStats
             tvm={`$${tvmVal} USDC`}
-            apy="8.88"
+            apy={apyVal}
             trending="up"
           />
         </HStack>
