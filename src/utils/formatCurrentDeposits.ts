@@ -5,8 +5,10 @@ export const formatCurrentDeposits = (
   const definedVals = addedLiquidityAllTime && removedLiquidityAllTime
   const currentDepositsVal =
     definedVals &&
-    parseInt(addedLiquidityAllTime) -
+    (
+      parseInt(addedLiquidityAllTime) -
       parseInt(removedLiquidityAllTime)
+    ).toString()
 
   return currentDepositsVal
 }
