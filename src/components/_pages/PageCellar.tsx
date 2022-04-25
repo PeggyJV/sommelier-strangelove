@@ -17,7 +17,7 @@ import CellarDetailsCard from "components/_cards/CellarDetailsCard"
 import { Link } from "components/Link"
 import { CellarStats } from "components/CellarStats"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { formatTvl } from "utils/formatTvl"
+import { formatCurrency } from "utils/formatCurrency"
 import { formatApy } from "utils/formatApy"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 
@@ -47,7 +47,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     addedLiquidityAllTime,
     removedLiquidityAllTime,
   } = cellar || {}
-  const tvmVal = formatTvl(tvlTotal)
+  const tvmVal = formatCurrency(tvlTotal)
   const apyVal = formatApy(apy)
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
