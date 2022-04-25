@@ -1,37 +1,60 @@
-import { VFC } from 'react'
-import { Heading, HStack, StackProps, VStack } from '@chakra-ui/react'
-import { CardDivider } from './_layout/CardDivider'
-import { CardHeading } from './_typography/CardHeading'
+import { VFC } from "react"
+import { Heading, HStack, StackProps, VStack } from "@chakra-ui/react"
+import { CardDivider } from "./_layout/CardDivider"
+import { CardHeading } from "./_typography/CardHeading"
+import { CurrentDeposits } from "./CurrentDeposits"
 
 interface CellarStatsProps extends StackProps {
-  tvm: string
-  apy: string
-  trending: 'up' | 'down'
+  tvm?: string
+  apy?: string
+  trending?: "up" | "down"
+  currentDeposits?: string
+  cellarCap?: string
 }
 
 export const CellarStats: VFC<CellarStatsProps> = ({
   tvm,
   apy,
   trending,
+  currentDeposits,
+  cellarCap,
   ...rest
 }) => {
   const apyColor =
-    trending === 'up' ? 'lime' : trending === 'down' ? 'sunsetOrange' : ''
+    trending === "up"
+      ? "lime"
+      : trending === "down"
+      ? "sunsetOrange"
+      : ""
 
   return (
-    <HStack spacing={8} divider={<CardDivider />} {...rest}>
-      <VStack spacing={1} align='flex-start'>
-        <Heading as='span' fontSize='3xl' fontWeight='bold'>
+    <HStack
+      spacing={8}
+      align="flex-start"
+      divider={<CardDivider />}
+      {...rest}
+    >
+      <VStack spacing={1} align="flex-start">
+        <Heading as="span" fontSize="21px" fontWeight="bold">
           {tvm}
         </Heading>
         <CardHeading>TVM</CardHeading>
       </VStack>
-      <VStack spacing={1} align='flex-start'>
-        <Heading as='span' fontSize='3xl' fontWeight='bold' color={apyColor}>
+      <VStack spacing={1} align="flex-start">
+        <Heading
+          as="span"
+          fontSize="21px"
+          fontWeight="bold"
+          color={apyColor}
+        >
           {apy}%
         </Heading>
         <CardHeading>APY</CardHeading>
       </VStack>
+      <CurrentDeposits
+        currentDeposits={currentDeposits}
+        cellarCap={cellarCap}
+      />
     </HStack>
   )
 }

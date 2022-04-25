@@ -17,7 +17,9 @@ import CellarDetailsCard from "components/_cards/CellarDetailsCard"
 import { Link } from "components/Link"
 import { CellarStats } from "components/CellarStats"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { formatTvl } from "utils/formatTvl"
+import { formatCurrency } from "utils/formatCurrency"
+import { formatApy } from "utils/formatApy"
+import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -38,13 +40,29 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   })
   const { data } = cellarResult
   const { cellar } = data || {}
-  const { tvlTotal } = cellar || {}
-  const tvmVal = formatTvl(tvlTotal)
+  const {
+    apy,
+    tvlTotal,
+    maxDeposits,
+    addedLiquidityAllTime,
+    removedLiquidityAllTime,
+  } = cellar || {}
+  const tvmVal = formatCurrency(tvlTotal)
+  const apyVal = formatApy(apy)
+  const currentDepositsVal = formatCurrentDeposits(
+    addedLiquidityAllTime,
+    removedLiquidityAllTime
+  )
 
   return (
     <Layout>
       <Section>
-        <HStack spacing={4} pb={12} justify="space-between">
+        <HStack
+          spacing={4}
+          pb={12}
+          justify="space-between"
+          align="flex-end"
+        >
           <HStack spacing={4}>
             <Link href="/">
               <SecondaryButton>Back</SecondaryButton>
@@ -53,8 +71,10 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </HStack>
           <CellarStats
             tvm={`$${tvmVal} USDC`}
-            apy="8.88"
+            apy={apyVal}
             trending="up"
+            currentDeposits={currentDepositsVal}
+            cellarCap={maxDeposits}
           />
         </HStack>
         <VStack spacing={4} align="stretch">
