@@ -24,7 +24,6 @@ query GetCellar($cellarAddress: ID!, $cellarString: String!) {
     tvlTotal
     addedLiquidityAllTime
     removedLiquidityAllTime
-
     # There could be missing days. Data for a missing day should equal the previous day.
     dayDatas(first: 7, orderBy: date, orderDirection: desc) {
       date
