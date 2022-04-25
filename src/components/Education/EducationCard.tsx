@@ -12,7 +12,7 @@ export const EducationCard: React.FC<Props> = ({
   ...rest
 }) => {
   return (
-    <Link href={url}>
+    <Link href={url} isExternal>
       <Flex
         justifyContent="space-between"
         alignItems="center"
