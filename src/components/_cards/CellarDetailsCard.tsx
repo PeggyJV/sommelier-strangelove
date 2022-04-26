@@ -16,6 +16,8 @@ import { useNivoThemes } from "hooks/nivo"
 import { CardStat } from "components/CardStat"
 import { FaEthereum } from "react-icons/fa"
 import { CardStatRow } from "components/CardStatRow"
+import { UsdcIcon } from "components/_icons/UsdcIcon"
+import { AaveIcon } from "components/_icons/AaveIcon"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -38,23 +40,62 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
     <Card p={2} bg="backgrounds.glassy" overflow="visible">
       <Card p={4} bg="backgrounds.black" overflow="visible">
         <VStack spacing={4} divider={<CardDivider />} align="stretch">
-          <CardStatRow>
+          <CardStatRow align="flex-start">
             <CardStat label="strategy type" labelIcon>
               Stablecoin
             </CardStat>
-            <CardStat
-              label="strategy assets"
-              labelIcon
-              statIcon={FaEthereum}
-            />
-            <CardStat
-              label="protocols"
-              labelIcon
-              statIcon={FaEthereum}
-            >
+            <CardStat label="strategy assets">
+              <HStack spacing={-1.5}>
+                <Icon
+                  as={FaEthereum}
+                  boxSize={6}
+                  color="violentViolet"
+                  bg="white"
+                  borderWidth={2}
+                  borderColor="black"
+                  borderRadius="full"
+                  p={1}
+                />
+                <Icon
+                  as={FaEthereum}
+                  boxSize={6}
+                  color="violentViolet"
+                  bg="sunsetOrange"
+                  borderWidth={2}
+                  borderColor="black"
+                  borderRadius="full"
+                  p={1}
+                />
+                <Icon
+                  as={FaEthereum}
+                  boxSize={6}
+                  color="violentViolet"
+                  bg="energyYellow"
+                  borderWidth={2}
+                  borderColor="black"
+                  borderRadius="full"
+                  p={1}
+                />
+              </HStack>
+            </CardStat>
+            <CardStat label="protocols">
+              <AaveIcon
+                color="violentViolet"
+                bg="white"
+                borderRadius="full"
+                p={1}
+                mr={2}
+              />
               AAVE
             </CardStat>
-            <CardStat label="mgmt fee" labelIcon>
+            <CardStat label="mgmt fee">
+              <UsdcIcon
+                color="violentViolet"
+                bg="white"
+                borderRadius="full"
+                p={1}
+                mr={2}
+              />
               5%
             </CardStat>
             <VStack spacing={2} align="stretch">
