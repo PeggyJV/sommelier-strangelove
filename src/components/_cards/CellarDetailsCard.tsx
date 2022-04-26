@@ -39,24 +39,24 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
       <Card p={4} bg="backgrounds.black" overflow="visible">
         <VStack spacing={4} divider={<CardDivider />} align="stretch">
           <CardStatRow>
-            <CardStat
-              label="strategy type"
-              labelIcon
-              stat="Stablecoin"
-            />
+            <CardStat label="strategy type" labelIcon>
+              Stablecoin
+            </CardStat>
             <CardStat
               label="strategy assets"
               labelIcon
-              stat=""
               statIcon={FaEthereum}
             />
             <CardStat
               label="protocols"
               labelIcon
-              stat="AAVE"
               statIcon={FaEthereum}
-            />
-            <CardStat label="mgmt fee" labelIcon stat="5%" />
+            >
+              AAVE
+            </CardStat>
+            <CardStat label="mgmt fee" labelIcon>
+              5%
+            </CardStat>
             <VStack spacing={2} align="stretch">
               <CardHeading>
                 performance split <Icon boxSize={3} />

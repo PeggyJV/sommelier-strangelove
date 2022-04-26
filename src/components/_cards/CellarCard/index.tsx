@@ -4,7 +4,7 @@ import {
   CellarCardData,
 } from "./CellarCardDisplay"
 import { useGetCellarQuery } from "generated/subgraph"
-import { cellarDataMap } from "src/data/cellarDataMap"
+import { cellarDataMap } from "data/cellarDataMap"
 import { formatApy } from "utils/formatApy"
 
 interface CellarCardProps extends BoxProps {
