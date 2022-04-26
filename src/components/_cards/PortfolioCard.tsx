@@ -1,9 +1,7 @@
 import {
   Avatar,
-  AvatarGroup,
   BoxProps,
   HStack,
-  Image,
   SimpleGrid,
   VStack,
 } from "@chakra-ui/react"
@@ -17,6 +15,7 @@ import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import { UnbondButton } from "components/_buttons/UnbondButton"
 import { ClaimButton } from "components/_buttons/ClaimButton"
 import { tokenConfig } from "data/tokenConfig"
+import { InlineImage } from "components/InlineImage"
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   return (
@@ -48,6 +47,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
                       borderWidth={2}
                       borderColor="black"
                       bg="black"
+                      _notLast={{
+                        opacity: 0.65,
+                      }}
                     />
                   )
                 })}
@@ -67,11 +69,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           >
             <VStack align="flex-start">
               <CardStat label="available tokens">
-                <Image
-                  display="inline-block"
+                <InlineImage
                   src="/assets/icons/aave.svg"
                   alt="aave logo"
-                  mr={2}
                 />
                 0
               </CardStat>
@@ -79,11 +79,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
             </VStack>
             <VStack align="flex-start">
               <CardStat label="bonded tokens">
-                <Image
-                  display="inline-block"
+                <InlineImage
                   src="/assets/icons/aave.svg"
                   alt="aave logo"
-                  mr={2}
                 />
                 0
               </CardStat>
@@ -92,11 +90,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           </SimpleGrid>
           <VStack align="flex-start">
             <CardStat label="rewards">
-              <Image
-                display="inline-block"
+              <InlineImage
                 src="/assets/icons/somm.svg"
                 alt="aave logo"
-                mr={2}
               />
               0
             </CardStat>

@@ -1,9 +1,9 @@
 import { VFC } from "react"
 import {
+  Flex,
   HStack,
   Icon,
   StackProps,
-  Text,
   VStack,
 } from "@chakra-ui/react"
 import { CardHeading } from "./_typography/CardHeading"
@@ -43,9 +43,14 @@ export const CardStat: VFC<CardStatProps> = ({
             as={statIcon}
           />
         )}
-        <Text whiteSpace="nowrap" fontSize="21px" fontWeight="bold">
+        <Flex
+          align="center"
+          whiteSpace="nowrap"
+          fontSize="21px"
+          fontWeight="bold"
+        >
           {children}
-        </Text>
+        </Flex>
       </HStack>
     </VStack>
   )
