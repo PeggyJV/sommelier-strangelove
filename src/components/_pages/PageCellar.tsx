@@ -1,5 +1,6 @@
 import { VFC } from "react"
 import {
+  Box,
   Heading,
   HeadingProps,
   HStack,
@@ -67,7 +68,16 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             <Link href="/">
               <SecondaryButton>Back</SecondaryButton>
             </Link>
-            <Heading>C{name}</Heading>
+            <Heading fontSize="2.5rem">
+              aave2{" "}
+              <Box
+                as="span"
+                textTransform="uppercase"
+                fontSize="21px"
+              >
+                clr-s
+              </Box>
+            </Heading>
           </HStack>
           <CellarStats
             tvm={`$${tvmVal} USDC`}
