@@ -16,8 +16,7 @@ import { useNivoThemes } from "hooks/nivo"
 import { CardStat } from "components/CardStat"
 import { FaEthereum } from "react-icons/fa"
 import { CardStatRow } from "components/CardStatRow"
-import { UsdcIcon } from "components/_icons/UsdcIcon"
-import { AaveIcon } from "components/_icons/AaveIcon"
+import { AaveIcon, UsdcIcon } from "components/_icons"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {

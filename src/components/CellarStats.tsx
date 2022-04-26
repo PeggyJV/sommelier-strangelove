@@ -3,6 +3,7 @@ import { Heading, HStack, StackProps, VStack } from "@chakra-ui/react"
 import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { CurrentDeposits } from "./CurrentDeposits"
+import { TriangleDownIcon, TriangleUpIcon } from "./_icons"
 
 interface CellarStatsProps extends StackProps {
   tvm?: string
@@ -47,6 +48,11 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           fontWeight="bold"
           color={apyColor}
         >
+          {trending === "up" ? (
+            <TriangleUpIcon boxSize={3} />
+          ) : (
+            <TriangleDownIcon boxSize={3} />
+          )}{" "}
           {apy}%
         </Heading>
         <CardHeading>APY</CardHeading>
