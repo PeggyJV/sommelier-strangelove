@@ -88,6 +88,7 @@ const backgrounds = {
   darker: "#1f0b40",
   deepPurple: "#281144",
   glassy: "rgba(96, 80, 155, 0.1)",
+  glassyPurple: "rgba(96, 80, 155, 0.08)",
   purpleGlassGradient:
     "linear-gradient(180deg, rgba(96, 80, 155, 0.75) 0%, rgba(31, 31, 45, 0.75) 100%)",
   overlayGradient: `linear-gradient(transparent 60%, ${offBlack} 90%)`,
