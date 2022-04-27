@@ -1,5 +1,5 @@
 import {
-  Button,
+  Box,
   HStack,
   Popover,
   PopoverBody,
@@ -50,32 +50,40 @@ export const ConnectedPopover = () => {
         </PopoverTrigger>
       </HStack>
       <PopoverContent
-        border="none"
+        p={2}
         maxW="max-content"
-        bg="black"
-        borderWidth={8}
-        borderColor="backgrounds.glassy"
+        border="none"
+        borderRadius={8}
+        bg="backgrounds.glassy"
         fontWeight="semibold"
       >
-        <PopoverBody>
-          <VStack align="flex-start" divider={<CardDivider />}>
+        <PopoverBody p={0} bg="black" borderRadius="inherit">
+          <VStack
+            align="flex-start"
+            divider={<CardDivider p={0} m={0} />}
+          >
             <Link
               href={`https://etherscan.io/address/${walletAddress}`}
               isExternal
+              py={2}
+              px={4}
               fontSize="sm"
             >
               <ExternalLinkIcon mr={2} />
               View on Etherscan
             </Link>
-            <Button
-              p={0}
-              variant="unstyled"
+            <Box
+              h="auto"
+              py={2}
+              px={4}
               fontSize="sm"
               onClick={disconnect}
-              isLoading={account.loading}
+              _hover={{
+                cursor: "pointer",
+              }}
             >
               <LogoutIcon mr={2} /> Disconnect Wallet
-            </Button>
+            </Box>
           </VStack>
         </PopoverBody>
       </PopoverContent>
