@@ -12,11 +12,13 @@ export const Socials: VFC<StackProps> = ({ ...rest }) => {
           <Link key={i} href={href} display="flex" isExternal>
             <Icon
               as={icon}
-              boxSize={9}
+              boxSize={10}
               p={2}
               color="white"
-              bg="backgrounds.black"
-              borderRadius="50%"
+              bg="backgrounds.glassyPurple"
+              borderWidth={4}
+              borderRadius={16}
+              borderColor="backgrounds.glassy"
               _hover={{
                 bg: "sunsetOrange",
               }}
