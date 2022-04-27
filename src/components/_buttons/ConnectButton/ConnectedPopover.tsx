@@ -13,6 +13,11 @@ import { useAccount } from "wagmi"
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { CardDivider } from "components/_layout/CardDivider"
 import { BaseButton } from "../BaseButton"
+import {
+  ControlsIcon,
+  ExternalLinkIcon,
+  LogoutIcon,
+} from "components/_icons"
 
 export const ConnectedPopover = () => {
   const [account, disconnect] = useAccount({
@@ -40,33 +45,36 @@ export const ConnectedPopover = () => {
             minW="max-content"
             isLoading={account.loading}
           >
-            ...
+            <ControlsIcon />
           </BaseButton>
         </PopoverTrigger>
       </HStack>
       <PopoverContent
         border="none"
         maxW="max-content"
-        bg="energyYellow"
-        color="black"
+        bg="black"
+        borderWidth={8}
+        borderColor="backgrounds.glassy"
+        fontWeight="semibold"
       >
         <PopoverBody>
           <VStack align="flex-start" divider={<CardDivider />}>
             <Link
               href={`https://etherscan.io/address/${walletAddress}`}
               isExternal
+              fontSize="sm"
             >
+              <ExternalLinkIcon mr={2} />
               View on Etherscan
             </Link>
             <Button
               p={0}
               variant="unstyled"
-              fontWeight="normal"
-              fontSize="lg"
+              fontSize="sm"
               onClick={disconnect}
               isLoading={account.loading}
             >
-              Disconnect Wallet
+              <LogoutIcon mr={2} /> Disconnect Wallet
             </Button>
           </VStack>
         </PopoverBody>
