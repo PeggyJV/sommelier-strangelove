@@ -16,8 +16,7 @@ import { useNivoThemes } from "hooks/nivo"
 import { CardStat } from "components/CardStat"
 import { FaEthereum } from "react-icons/fa"
 import { CardStatRow } from "components/CardStatRow"
-import { UsdcIcon } from "components/_icons/UsdcIcon"
-import { AaveIcon } from "components/_icons/AaveIcon"
+import { AaveIcon, UsdcIcon } from "components/_icons"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -37,98 +36,103 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
   const { barChartTheme } = useNivoThemes()
 
   return (
-    <Card p={2} bg="backgrounds.glassy" overflow="visible">
-      <Card p={4} bg="backgrounds.black" overflow="visible">
-        <VStack spacing={4} divider={<CardDivider />} align="stretch">
-          <CardStatRow align="flex-start">
-            <CardStat label="strategy type" labelIcon>
-              Stablecoin
-            </CardStat>
-            <CardStat label="strategy assets">
-              <HStack spacing={-1.5}>
-                <Icon
-                  as={FaEthereum}
-                  boxSize={6}
-                  color="violentViolet"
-                  bg="white"
-                  borderWidth={2}
-                  borderColor="black"
-                  borderRadius="full"
-                  p={1}
-                />
-                <Icon
-                  as={FaEthereum}
-                  boxSize={6}
-                  color="violentViolet"
-                  bg="sunsetOrange"
-                  borderWidth={2}
-                  borderColor="black"
-                  borderRadius="full"
-                  p={1}
-                />
-                <Icon
-                  as={FaEthereum}
-                  boxSize={6}
-                  color="violentViolet"
-                  bg="energyYellow"
-                  borderWidth={2}
-                  borderColor="black"
-                  borderRadius="full"
-                  p={1}
-                />
-              </HStack>
-            </CardStat>
-            <CardStat label="protocols">
-              <AaveIcon
+    <Card
+      p={4}
+      overflow="visible"
+      bg="backgrounds.glassyPurple"
+      borderWidth={8}
+      borderRadius={16}
+      borderColor="backgrounds.glassy"
+    >
+      <VStack spacing={4} divider={<CardDivider />} align="stretch">
+        <CardStatRow align="flex-start">
+          <CardStat label="strategy type" labelIcon>
+            Stablecoin
+          </CardStat>
+          <CardStat label="strategy assets">
+            <HStack spacing={-1.5}>
+              <Icon
+                as={FaEthereum}
+                boxSize={6}
                 color="violentViolet"
                 bg="white"
+                borderWidth={2}
+                borderColor="black"
                 borderRadius="full"
                 p={1}
-                mr={2}
               />
-              AAVE
-            </CardStat>
-            <CardStat label="mgmt fee">
-              <UsdcIcon
+              <Icon
+                as={FaEthereum}
+                boxSize={6}
                 color="violentViolet"
-                bg="white"
+                bg="sunsetOrange"
+                borderWidth={2}
+                borderColor="black"
                 borderRadius="full"
                 p={1}
-                mr={2}
               />
-              5%
-            </CardStat>
-            <VStack spacing={2} align="stretch">
-              <CardHeading>
-                performance split <Icon boxSize={3} />
-              </CardHeading>
-              <Box w="100%" h="6px">
-                {/* @ts-ignore */}
-                <BarChart
-                  layout="horizontal"
-                  colors={barChartTheme}
-                  keys={["platform", "protocol", "depositors"]}
-                  data={placeholderData}
-                />
-              </Box>
-              <HStack spacing={8}>
-                {Object.entries(placeholderData[0]).map(
-                  ([key, value], i) => {
-                    return (
-                      <HStack key={i}>
-                        <Circle size={4} bg={barChartTheme[i]} />
-                        <Text fontSize="sm">
-                          {value}% {key}
-                        </Text>
-                      </HStack>
-                    )
-                  }
-                )}
-              </HStack>
-            </VStack>
-          </CardStatRow>
-        </VStack>
-      </Card>
+              <Icon
+                as={FaEthereum}
+                boxSize={6}
+                color="violentViolet"
+                bg="energyYellow"
+                borderWidth={2}
+                borderColor="black"
+                borderRadius="full"
+                p={1}
+              />
+            </HStack>
+          </CardStat>
+          <CardStat label="protocols">
+            <AaveIcon
+              color="violentViolet"
+              bg="white"
+              borderRadius="full"
+              p={1}
+              mr={2}
+            />
+            AAVE
+          </CardStat>
+          <CardStat label="mgmt fee">
+            <UsdcIcon
+              color="violentViolet"
+              bg="white"
+              borderRadius="full"
+              p={1}
+              mr={2}
+            />
+            5%
+          </CardStat>
+          <VStack spacing={2} align="stretch">
+            <CardHeading>
+              performance split <Icon boxSize={3} />
+            </CardHeading>
+            <Box w="100%" h="6px">
+              {/* @ts-ignore */}
+              <BarChart
+                layout="horizontal"
+                colors={barChartTheme}
+                keys={["platform", "protocol", "depositors"]}
+                data={placeholderData}
+              />
+            </Box>
+            <HStack spacing={8}>
+              {Object.entries(placeholderData[0]).map(
+                ([key, value], i) => {
+                  return (
+                    <HStack key={i}>
+                      <Circle size={4} bg={barChartTheme[i]} />
+                      <Text fontSize="sm">
+                        {value}% {key}
+                      </Text>
+                    </HStack>
+                  )
+                }
+              )}
+            </HStack>
+          </VStack>
+        </CardStatRow>
+      </VStack>
     </Card>
   )
 }

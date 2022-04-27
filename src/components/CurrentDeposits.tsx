@@ -42,6 +42,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           keys={["currentDeposits"]}
           data={data}
           maxValue={isDataPresent ? parseInt(cellarCap) : "auto"}
+          valueScale={{ type: "linear" }}
           enableLabel={false}
           enableGridX={false}
           enableGridY={false}

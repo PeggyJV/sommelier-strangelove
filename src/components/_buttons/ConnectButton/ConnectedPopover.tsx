@@ -1,5 +1,5 @@
 import {
-  Button,
+  Box,
   HStack,
   Popover,
   PopoverBody,
@@ -13,6 +13,11 @@ import { useAccount } from "wagmi"
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { CardDivider } from "components/_layout/CardDivider"
 import { BaseButton } from "../BaseButton"
+import {
+  ControlsIcon,
+  ExternalLinkIcon,
+  LogoutIcon,
+} from "components/_icons"
 
 export const ConnectedPopover = () => {
   const [account, disconnect] = useAccount({
@@ -40,34 +45,45 @@ export const ConnectedPopover = () => {
             minW="max-content"
             isLoading={account.loading}
           >
-            ...
+            <ControlsIcon />
           </BaseButton>
         </PopoverTrigger>
       </HStack>
       <PopoverContent
-        border="none"
+        p={2}
         maxW="max-content"
-        bg="energyYellow"
-        color="black"
+        border="none"
+        borderRadius={8}
+        bg="backgrounds.glassy"
+        fontWeight="semibold"
       >
-        <PopoverBody>
-          <VStack align="flex-start" divider={<CardDivider />}>
+        <PopoverBody p={0} bg="black" borderRadius="inherit">
+          <VStack
+            align="flex-start"
+            divider={<CardDivider p={0} m={0} />}
+          >
             <Link
               href={`https://etherscan.io/address/${walletAddress}`}
               isExternal
+              py={2}
+              px={4}
+              fontSize="sm"
             >
+              <ExternalLinkIcon mr={2} />
               View on Etherscan
             </Link>
-            <Button
-              p={0}
-              variant="unstyled"
-              fontWeight="normal"
-              fontSize="lg"
+            <Box
+              h="auto"
+              py={2}
+              px={4}
+              fontSize="sm"
               onClick={disconnect}
-              isLoading={account.loading}
+              _hover={{
+                cursor: "pointer",
+              }}
             >
-              Disconnect Wallet
-            </Button>
+              <LogoutIcon mr={2} /> Disconnect Wallet
+            </Box>
           </VStack>
         </PopoverBody>
       </PopoverContent>

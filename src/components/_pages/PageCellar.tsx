@@ -21,6 +21,8 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { formatCurrency } from "utils/formatCurrency"
 import { formatApy } from "utils/formatApy"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
+import { ArrowLeftIcon } from "components/_icons"
+import { BreadCrumb } from "components/BreadCrumb"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -64,21 +66,26 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           justify="space-between"
           align="flex-end"
         >
-          <HStack spacing={4}>
-            <Link href="/">
-              <SecondaryButton>Back</SecondaryButton>
-            </Link>
-            <Heading fontSize="2.5rem">
-              aave2{" "}
-              <Box
-                as="span"
-                textTransform="uppercase"
-                fontSize="21px"
-              >
-                clr-s
-              </Box>
-            </Heading>
-          </HStack>
+          <VStack spacing={6} align="flex-start">
+            <BreadCrumb cellarName={name} />
+            <HStack spacing={4}>
+              <Link href="/">
+                <SecondaryButton>
+                  <ArrowLeftIcon />
+                </SecondaryButton>
+              </Link>
+              <Heading fontSize="2.5rem">
+                aave2{" "}
+                <Box
+                  as="span"
+                  textTransform="uppercase"
+                  fontSize="21px"
+                >
+                  clr-s
+                </Box>
+              </Heading>
+            </HStack>
+          </VStack>
           <CellarStats
             tvm={`$${tvmVal} USDC`}
             apy={apyVal}
