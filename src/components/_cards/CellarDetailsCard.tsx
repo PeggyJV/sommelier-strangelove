@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic"
 import {
+  Avatar,
   Box,
   BoxProps,
   Circle,
@@ -13,15 +14,29 @@ import { CardHeading } from "components/_typography/CardHeading"
 import { VFC } from "react"
 import { useNivoThemes } from "hooks/nivo"
 import { CardStat } from "components/CardStat"
-import { FaEthereum } from "react-icons/fa"
 import { CardStatRow } from "components/CardStatRow"
 import { AaveIcon, UsdcIcon } from "components/_icons"
 import TransparentCard from "./TransparentCard"
+import { tokenConfig } from "data/tokenConfig"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
     ssr: false,
   }
+)
+
+const supportedChains = [
+  "DAI",
+  "USDC",
+  "USDT",
+  "FEI",
+  "TUSD",
+  "BUSD",
+  "GUSD",
+]
+
+const strategyAssets = tokenConfig.filter((token) =>
+  supportedChains.includes(token.symbol)
 )
 
 const placeholderData = [
@@ -44,36 +59,21 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
           </CardStat>
           <CardStat label="strategy assets">
             <HStack spacing={-1.5}>
-              <Icon
-                as={FaEthereum}
-                boxSize={6}
-                color="violentViolet"
-                bg="white"
-                borderWidth={2}
-                borderColor="black"
-                borderRadius="full"
-                p={1}
-              />
-              <Icon
-                as={FaEthereum}
-                boxSize={6}
-                color="violentViolet"
-                bg="sunsetOrange"
-                borderWidth={2}
-                borderColor="black"
-                borderRadius="full"
-                p={1}
-              />
-              <Icon
-                as={FaEthereum}
-                boxSize={6}
-                color="violentViolet"
-                bg="energyYellow"
-                borderWidth={2}
-                borderColor="black"
-                borderRadius="full"
-                p={1}
-              />
+              {strategyAssets.map((asset) => {
+                const { src, alt, address } = asset
+
+                return (
+                  <Avatar
+                    key={address}
+                    size="xs"
+                    src={src}
+                    name={alt}
+                    borderWidth={2}
+                    borderColor="black"
+                    bg="black"
+                  />
+                )
+              })}
             </HStack>
           </CardStat>
           <CardStat label="protocols">
