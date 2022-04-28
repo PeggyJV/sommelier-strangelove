@@ -98,7 +98,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles}>Your Portfolio</Heading>
           <PortfolioCard />
-          <BondingTableCard />
+          {isConnected && <BondingTableCard />}
         </VStack>
       </Section>
       <Section>
