@@ -10,10 +10,10 @@ import {
 } from "@chakra-ui/react"
 import { Serie } from "@nivo/line"
 import { useState, VFC } from "react"
-import { Card } from "./Card"
 import { CardHeading } from "components/_typography/CardHeading"
 import { CardDivider } from "components/_layout/CardDivider"
 import { useNivoThemes } from "hooks/nivo"
+import TransparentCard from "./TransparentCard"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -52,15 +52,7 @@ export const PerformanceCard: VFC<Props> = (props) => {
   const [timeline, setTimeline] = useState<string>("24H")
 
   return (
-    <Card
-      p={4}
-      overflow="visible"
-      bg="backgrounds.glassyPurple"
-      borderWidth={8}
-      borderRadius={16}
-      borderColor="backgrounds.glassy"
-      {...props}
-    >
+    <TransparentCard p={4} overflow="visible" {...props}>
       <VStack spacing={6} align="stretch" divider={<CardDivider />}>
         <Box h="20rem">
           <HStack justify="space-between">
@@ -132,6 +124,6 @@ export const PerformanceCard: VFC<Props> = (props) => {
           <CardHeading>6pm</CardHeading>
         </HStack>
       </VStack>
-    </Card>
+    </TransparentCard>
   )
 }
