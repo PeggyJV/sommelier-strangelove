@@ -34,7 +34,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           </CardStat>
           <CardStat label="deposit assets">
             <HStack spacing={-1.5}>
-              {tokenConfig.reverse().map((token) => {
+              {tokenConfig.map((token) => {
                 const { src, alt, address } = token
 
                 return (
