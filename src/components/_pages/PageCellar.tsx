@@ -23,6 +23,7 @@ import { formatApy } from "utils/formatApy"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
+import BondingTableCard from "components/_cards/BondingTableCard"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -97,6 +98,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles}>Your Portfolio</Heading>
           <PortfolioCard />
+          <BondingTableCard />
         </VStack>
       </Section>
       <Section>
