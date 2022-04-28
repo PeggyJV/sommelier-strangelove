@@ -6,6 +6,7 @@ import {
   BreadcrumbProps,
 } from "@chakra-ui/react"
 import { useRouter } from "next/router"
+import { ChevronRightIcon } from "./_icons"
 
 interface CustomBCProps extends BreadcrumbProps {
   cellarName?: string
@@ -22,7 +23,10 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
   //   .filter((v) => v.length > 0)
 
   return (
-    <ChBreadcrumb {...rest}>
+    <ChBreadcrumb
+      separator={<ChevronRightIcon boxSize={3} color="white" />}
+      {...rest}
+    >
       <BreadcrumbItem color="text.body.lightMuted">
         <BreadcrumbLink href="/">Overview</BreadcrumbLink>
       </BreadcrumbItem>
