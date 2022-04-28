@@ -11,12 +11,12 @@ import {
 import { CardDivider } from "components/_layout/CardDivider"
 import { CardHeading } from "components/_typography/CardHeading"
 import { VFC } from "react"
-import { Card } from "./Card"
 import { useNivoThemes } from "hooks/nivo"
 import { CardStat } from "components/CardStat"
 import { FaEthereum } from "react-icons/fa"
 import { CardStatRow } from "components/CardStatRow"
 import { AaveIcon, UsdcIcon } from "components/_icons"
+import TransparentCard from "./TransparentCard"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -36,14 +36,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
   const { barChartTheme } = useNivoThemes()
 
   return (
-    <Card
-      p={4}
-      overflow="visible"
-      bg="backgrounds.glassyPurple"
-      borderWidth={8}
-      borderRadius={16}
-      borderColor="backgrounds.glassy"
-    >
+    <TransparentCard p={4} overflow="visible">
       <VStack spacing={4} divider={<CardDivider />} align="stretch">
         <CardStatRow align="flex-start">
           <CardStat label="strategy type" labelIcon>
@@ -133,7 +126,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
           </VStack>
         </CardStatRow>
       </VStack>
-    </Card>
+    </TransparentCard>
   )
 }
 

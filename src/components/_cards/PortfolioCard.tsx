@@ -8,7 +8,6 @@ import {
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { VFC } from "react"
-import { Card } from "./Card"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { BondButton } from "components/_buttons/BondButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
@@ -16,17 +15,11 @@ import { UnbondButton } from "components/_buttons/UnbondButton"
 import { ClaimButton } from "components/_buttons/ClaimButton"
 import { tokenConfig } from "data/tokenConfig"
 import { InlineImage } from "components/InlineImage"
+import TransparentCard from "./TransparentCard"
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   return (
-    <Card
-      px={10}
-      py={6}
-      bg="backgrounds.glassyPurple"
-      borderWidth={8}
-      borderRadius={16}
-      borderColor="backgrounds.glassy"
-    >
+    <TransparentCard px={10} py={6}>
       <CardStatRow
         spacing={14}
         align="flex-start"
@@ -105,6 +98,6 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           <ClaimButton />
         </VStack>
       </CardStatRow>
-    </Card>
+    </TransparentCard>
   )
 }
