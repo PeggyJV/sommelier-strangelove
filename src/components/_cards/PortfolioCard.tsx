@@ -29,10 +29,16 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           templateColumns="repeat(2, max-content)"
           spacing={4}
         >
-          <CardStat label="net value" labelIcon="">
+          <CardStat
+            label="net value"
+            tooltip="Current value of your assets in Cellar"
+          >
             $0.00
           </CardStat>
-          <CardStat label="deposit assets">
+          <CardStat
+            label="deposit assets"
+            tooltip="Accepted deposit assets"
+          >
             <HStack spacing={-1.5}>
               {tokenConfig.map((token) => {
                 const { src, alt, address } = token
@@ -54,7 +60,10 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               })}
             </HStack>
           </CardStat>
-          <CardStat label="apy" labelIcon="">
+          <CardStat
+            label="apy"
+            tooltip="APY earned on your Principal since initial investment from Strategy"
+          >
             0.00%
           </CardStat>
           <HStack>
@@ -67,7 +76,10 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           spacing={4}
         >
           <VStack align="flex-start">
-            <CardStat label="available tokens">
+            <CardStat
+              label="available tokens"
+              tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
+            >
               <InlineImage
                 src="/assets/icons/aave.svg"
                 alt="aave logo"
@@ -77,7 +89,10 @@ export const PortfolioCard: VFC<BoxProps> = () => {
             <BondButton />
           </VStack>
           <VStack align="flex-start">
-            <CardStat label="bonded tokens">
+            <CardStat
+              label="bonded tokens"
+              tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
+            >
               <InlineImage
                 src="/assets/icons/aave.svg"
                 alt="aave logo"
@@ -88,7 +103,10 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           </VStack>
         </SimpleGrid>
         <VStack align="flex-start">
-          <CardStat label="rewards">
+          <CardStat
+            label="rewards"
+            tooltip="Amount of SOMM earned and available to be claimed"
+          >
             <InlineImage
               src="/assets/icons/somm.svg"
               alt="aave logo"

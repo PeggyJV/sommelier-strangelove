@@ -14,6 +14,7 @@ import { CardHeading } from "components/_typography/CardHeading"
 import { CardDivider } from "components/_layout/CardDivider"
 import { useNivoThemes } from "hooks/nivo"
 import TransparentCard from "./TransparentCard"
+import { CardStat } from "components/CardStat"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -57,23 +58,34 @@ export const PerformanceCard: VFC<Props> = (props) => {
         <Box h="20rem">
           <HStack justify="space-between">
             <HStack spacing={8}>
-              <VStack align="flex-start">
-                <HStack spacing={1}>
-                  <Circle bg="deepSkyBlue.500" size={3} />
-                  <CardHeading>{timeline} cellar apy</CardHeading>
-                </HStack>
+              <CardStat
+                label={
+                  <HStack spacing={1}>
+                    <Circle bg="deepSkyBlue.500" size={3} />
+                    <CardHeading>{timeline} cellar apy</CardHeading>
+                  </HStack>
+                }
+                tooltip="Change in Cellar assets value in selected time period"
+              >
                 <Text fontSize="xl" fontWeight="bold">
                   50%
                 </Text>
-              </VStack>
+              </CardStat>
               <VStack align="flex-start">
-                <HStack spacing={1}>
-                  <Circle bg="sunsetOrange" size={3} />
-                  <CardHeading>{timeline} Volume</CardHeading>
-                </HStack>
-                <Text fontSize="xl" fontWeight="bold">
-                  12.25K USDC
-                </Text>
+                <CardStat
+                  label={
+                    <HStack>
+                      <Circle bg="sunsetOrange" size={3} />
+                      <CardHeading>{timeline} Volume</CardHeading>
+                    </HStack>
+                  }
+                  tooltip="The annual percentage yield in selected time period"
+                  spacing={1}
+                >
+                  <Text fontSize="xl" fontWeight="bold">
+                    12.25K USDC
+                  </Text>
+                </CardStat>
               </VStack>
             </HStack>
             <HStack
