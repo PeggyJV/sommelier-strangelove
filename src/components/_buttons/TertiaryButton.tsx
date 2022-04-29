@@ -1,9 +1,18 @@
-import { Button, ButtonProps, forwardRef } from '@chakra-ui/react'
-import { VFC } from 'react'
+import { Button, ButtonProps, forwardRef } from "@chakra-ui/react"
+import { VFC } from "react"
 
 export const TertiaryButton: VFC<ButtonProps> = forwardRef<
   ButtonProps,
-  'button'
+  "button"
 >((props, ref) => {
-  return <Button ref={ref} variant='unstyled' color='warmPink' {...props} />
+  return (
+    <Button
+      ref={ref}
+      variant="unstyled"
+      display="flex"
+      p={4}
+      color="warmPink"
+      {...props}
+    />
+  )
 })
