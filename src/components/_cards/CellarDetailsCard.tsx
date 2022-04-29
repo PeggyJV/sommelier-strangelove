@@ -7,6 +7,7 @@ import {
   HStack,
   Icon,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react"
 import { CardDivider } from "components/_layout/CardDivider"
@@ -54,10 +55,16 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
     <TransparentCard p={4} overflow="visible">
       <VStack spacing={4} divider={<CardDivider />} align="stretch">
         <CardStatRow align="flex-start">
-          <CardStat label="strategy type" labelIcon>
+          <CardStat
+            label="strategy type"
+            tooltip="Cellar uses Stablecoin lending"
+          >
             Stablecoin
           </CardStat>
-          <CardStat label="strategy assets">
+          <CardStat
+            label="strategy assets"
+            tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
+          >
             <HStack spacing={-1.5}>
               {strategyAssets.map((asset) => {
                 const { src, alt, address } = asset
@@ -76,7 +83,10 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               })}
             </HStack>
           </CardStat>
-          <CardStat label="protocols">
+          <CardStat
+            label="protocols"
+            tooltip="Protocols in which Cellar operates"
+          >
             <AaveIcon
               color="violentViolet"
               bg="white"
@@ -86,7 +96,10 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             />
             AAVE
           </CardStat>
-          <CardStat label="mgmt fee">
+          <CardStat
+            label="mgmt fee"
+            tooltip="Platform management fee"
+          >
             <UsdcIcon
               color="violentViolet"
               bg="white"
@@ -97,9 +110,15 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             5%
           </CardStat>
           <VStack spacing={2} align="stretch">
-            <CardHeading>
-              performance split <Icon boxSize={3} />
-            </CardHeading>
+            <Tooltip
+              label="Cellar earned performance split"
+              placement="top-start"
+            >
+              <HStack align="center">
+                <CardHeading>performance split</CardHeading>
+                <Icon color="text.body.lightMuted" boxSize={3} />
+              </HStack>
+            </Tooltip>
             <Box w="100%" h="6px">
               {/* @ts-ignore */}
               <BarChart

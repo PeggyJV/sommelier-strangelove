@@ -1,48 +1,41 @@
-import { VFC } from "react"
+import { ReactNode, VFC } from "react"
 import {
   Flex,
   HStack,
   Icon,
   StackProps,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react"
 import { CardHeading } from "./_typography/CardHeading"
 
 interface CardStatProps extends StackProps {
-  label: string
-  labelIcon?: any
+  label?: ReactNode
+  tooltip?: ReactNode
   statIcon?: any
 }
 
 export const CardStat: VFC<CardStatProps> = ({
   label,
-  labelIcon,
+  tooltip,
   statIcon,
   children,
   ...rest
 }) => {
   return (
     <VStack flex={1} align="flex-start" {...rest}>
-      <CardHeading>
-        {label}
-        {labelIcon && (
-          <>
-            {" "}
-            <Icon boxSize={3} />
-          </>
-        )}
-      </CardHeading>
+      <Tooltip label={tooltip} placement="top">
+        <HStack align="center">
+          <CardHeading>{label}</CardHeading>
+          {tooltip && (
+            <>
+              {" "}
+              <Icon color="text.body.lightMuted" boxSize={3} />
+            </>
+          )}
+        </HStack>
+      </Tooltip>
       <HStack spacing={1} align="center">
-        {statIcon && (
-          <Icon
-            boxSize={5}
-            color="text.body.dark"
-            bg="white"
-            p={1}
-            borderRadius="50%"
-            as={statIcon}
-          />
-        )}
         <Flex
           align="center"
           whiteSpace="nowrap"
