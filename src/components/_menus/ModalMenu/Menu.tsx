@@ -42,7 +42,7 @@ export const Menu: VFC<MenuProps> = ({ value, onChange }) => {
       >
         {value ? (
           <HStack>
-            <Image src={value.src} alt={value.alt} />{" "}
+            <Image boxSize={5} src={value.src} alt={value.alt} />{" "}
             <span>{value.symbol}</span>
           </HStack>
         ) : (
@@ -73,7 +73,7 @@ export const Menu: VFC<MenuProps> = ({ value, onChange }) => {
                 onClick={() => onChange(token)}
               >
                 <HStack>
-                  <Image src={src} alt={alt} />
+                  <Image boxSize={5} src={src} alt={alt} />
                   <span>{symbol}</span>
                 </HStack>
               </MenuItemOption>
