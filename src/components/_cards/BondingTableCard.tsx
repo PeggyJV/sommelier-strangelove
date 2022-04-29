@@ -10,7 +10,7 @@ import {
   TableProps,
 } from "@chakra-ui/react"
 import TransparentCard from "./TransparentCard"
-import { BaseButton } from "components/_buttons/BaseButton"
+import { TertiaryButton } from "components/_buttons/TertiaryButton"
 
 interface BondingTableCardProps extends TableProps {
   data?: any
@@ -78,7 +78,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   <Td>{bondingPeriod}</Td>
                   <Td>{amount.toFixed(2)}</Td>
                   <Td>
-                    <BaseButton
+                    <TertiaryButton
                       size="sm"
                       onClick={() =>
                         window.alert(
@@ -87,7 +87,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                       }
                     >
                       Unbond
-                    </BaseButton>
+                    </TertiaryButton>
                   </Td>
                 </Tr>
               )
