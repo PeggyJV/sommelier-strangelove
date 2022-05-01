@@ -19,6 +19,7 @@ import { CardStatRow } from "components/CardStatRow"
 import { AaveIcon, UsdcIcon } from "components/_icons"
 import TransparentCard from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
+import { TokenAssets } from "components/TokenAssets"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -65,23 +66,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             label="strategy assets"
             tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
           >
-            <HStack spacing={-1.5}>
-              {strategyAssets.map((asset) => {
-                const { src, alt, address } = asset
-
-                return (
-                  <Avatar
-                    key={address}
-                    size="xs"
-                    src={src}
-                    name={alt}
-                    borderWidth={2}
-                    borderColor="black"
-                    bg="black"
-                  />
-                )
-              })}
-            </HStack>
+            <TokenAssets tokens={strategyAssets} />
           </CardStat>
           <CardStat
             label="protocols"
