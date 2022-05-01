@@ -85,7 +85,9 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           </Box>
         </Tooltip>
       </HStack>
-      <Text>{tokensCropped[tokensCropped.length - 1].symbol}</Text>
+      <Text as="span">
+        {tokensCropped[tokensCropped.length - 1].symbol}
+      </Text>
     </HStack>
   ) : (
     <HStack>
@@ -108,7 +110,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           )
         })}
       </HStack>
-      <Text>{tokens[tokens.length - 1].symbol}</Text>
+      <Text as="span">{tokens[tokens.length - 1].symbol}</Text>
     </HStack>
   )
 }
