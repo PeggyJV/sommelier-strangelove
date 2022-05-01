@@ -9,12 +9,15 @@ import {
   TableContainer,
   TableProps,
   Flex,
-  Text,
   Box,
+  Tooltip,
+  HStack,
+  Text,
 } from "@chakra-ui/react"
 import TransparentCard from "./TransparentCard"
 import { TertiaryButton } from "components/_buttons/TertiaryButton"
 import { InlineImage } from "components/InlineImage"
+import { InformationIcon } from "components/_icons"
 
 interface BondingTableCardProps extends TableProps {
   data?: any
@@ -59,15 +62,43 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
         <Table variant="unstyled" {...rest}>
           <Thead>
             <Tr color="text.body.lightMuted">
-              <Th fontSize={10} fontWeight="normal">
-                Bonded Tokens
-              </Th>
+              <Tooltip
+                hasArrow
+                arrowShadowColor="violentViolet"
+                label="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
+                placement="top"
+                bg="black"
+              >
+                <Th fontSize={10} fontWeight="normal">
+                  <HStack spacing={1} align="center">
+                    <Text as="span">Bonded Tokens</Text>
+                    <InformationIcon
+                      color="text.body.lightMuted"
+                      boxSize={3}
+                    />
+                  </HStack>
+                </Th>
+              </Tooltip>
               <Th fontSize={10} fontWeight="normal">
                 Bonding Period
               </Th>
-              <Th fontSize={10} fontWeight="normal">
-                Rewards
-              </Th>
+              <Tooltip
+                hasArrow
+                arrowShadowColor="violentViolet"
+                label="Amount of SOMM earned and available to be claimed"
+                placement="top"
+                bg="black"
+              >
+                <Th fontSize={10} fontWeight="normal">
+                  <HStack spacing={1} align="center">
+                    <Text as="span">Rewards</Text>
+                    <InformationIcon
+                      color="text.body.lightMuted"
+                      boxSize={3}
+                    />
+                  </HStack>
+                </Th>
+              </Tooltip>
               <Th />
             </Tr>
           </Thead>
