@@ -76,14 +76,19 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           borderRadius={8}
           borderColor="violentViolet"
         >
-          <Box as="span" opacity={0.65}>
-            <ControlsIcon
-              p={0.5}
-              borderRadius="full"
-              borderWidth={2}
-              borderColor="black"
-              bg="#6C4ED9"
-            />
+          <Box
+            as="span"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            boxSize="24px"
+            borderRadius="full"
+            borderWidth={2}
+            borderColor="black"
+            overflow="hidden"
+            opacity={0.65}
+          >
+            <ControlsIcon p={1.5} boxSize="inherit" bg="#6C4ED9" />
           </Box>
         </Tooltip>
       </HStack>

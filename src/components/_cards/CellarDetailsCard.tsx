@@ -1,11 +1,9 @@
 import dynamic from "next/dynamic"
 import {
-  Avatar,
   Box,
   BoxProps,
   Circle,
   HStack,
-  Icon,
   Text,
   Tooltip,
   VStack,
@@ -16,7 +14,11 @@ import { VFC } from "react"
 import { useNivoThemes } from "hooks/nivo"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
-import { AaveIcon, UsdcIcon } from "components/_icons"
+import {
+  AaveIcon,
+  InformationIcon,
+  UsdcIcon,
+} from "components/_icons"
 import TransparentCard from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
@@ -101,7 +103,10 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             >
               <HStack align="center">
                 <CardHeading>performance split</CardHeading>
-                <Icon color="text.body.lightMuted" boxSize={3} />
+                <InformationIcon
+                  color="text.body.lightMuted"
+                  boxSize={3}
+                />
               </HStack>
             </Tooltip>
             <Box w="100%" h="6px">
