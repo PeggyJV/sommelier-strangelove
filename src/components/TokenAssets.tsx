@@ -13,10 +13,12 @@ import { ControlsIcon } from "./_icons"
 
 interface TokenAssetsProps extends StackProps {
   tokens: Token[]
+  displaySymbol?: boolean
 }
 
 export const TokenAssets: VFC<TokenAssetsProps> = ({
   tokens,
+  displaySymbol,
   ...rest
 }) => {
   const tokensCropped = tokens.slice(0, 6)
@@ -85,9 +87,11 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           </Box>
         </Tooltip>
       </HStack>
-      <Text as="span">
-        {tokensCropped[tokensCropped.length - 1].symbol}
-      </Text>
+      {displaySymbol && (
+        <Text as="span">
+          {tokensCropped[tokensCropped.length - 1].symbol}
+        </Text>
+      )}
     </HStack>
   ) : (
     <HStack>
@@ -110,7 +114,9 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           )
         })}
       </HStack>
-      <Text as="span">{tokens[tokens.length - 1].symbol}</Text>
+      {displaySymbol && (
+        <Text as="span">{tokens[tokens.length - 1].symbol}</Text>
+      )}
     </HStack>
   )
 }
