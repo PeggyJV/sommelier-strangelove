@@ -1,5 +1,4 @@
 import {
-  Avatar,
   BoxProps,
   HStack,
   SimpleGrid,
@@ -16,6 +15,7 @@ import { ClaimButton } from "components/_buttons/ClaimButton"
 import { tokenConfig } from "data/tokenConfig"
 import { InlineImage } from "components/InlineImage"
 import TransparentCard from "./TransparentCard"
+import { TokenAssets } from "components/TokenAssets"
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   return (
@@ -39,26 +39,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
             label="deposit assets"
             tooltip="Accepted deposit assets"
           >
-            <HStack spacing={-1.5}>
-              {tokenConfig.map((token) => {
-                const { src, alt, address } = token
-
-                return (
-                  <Avatar
-                    key={address}
-                    size="xs"
-                    src={src}
-                    name={alt}
-                    borderWidth={2}
-                    borderColor="black"
-                    bg="black"
-                    _notLast={{
-                      opacity: 0.65,
-                    }}
-                  />
-                )
-              })}
-            </HStack>
+            <TokenAssets tokens={tokenConfig} />
           </CardStat>
           <CardStat
             label="apy"
