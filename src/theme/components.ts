@@ -12,4 +12,13 @@ export const components: ThemeComponents = {
       color: "text.headlines.light",
     },
   },
+  Tooltip: {
+    baseStyle: {
+      px: 3,
+      py: 3,
+      borderWidth: 1,
+      borderRadius: 8,
+      borderColor: "violentViolet",
+    },
+  },
 }
