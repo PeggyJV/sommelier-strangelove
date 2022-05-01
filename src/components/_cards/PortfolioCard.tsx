@@ -39,7 +39,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
             label="deposit assets"
             tooltip="Accepted deposit assets"
           >
-            <TokenAssets tokens={tokenConfig} />
+            <TokenAssets tokens={tokenConfig} displaySymbol />
           </CardStat>
           <CardStat
             label="apy"
