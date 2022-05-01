@@ -10,7 +10,6 @@ import { VFC } from "react"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { BondButton } from "components/_buttons/BondButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
-import { UnbondButton } from "components/_buttons/UnbondButton"
 import { ClaimButton } from "components/_buttons/ClaimButton"
 import { tokenConfig } from "data/tokenConfig"
 import { InlineImage } from "components/InlineImage"
@@ -80,7 +79,6 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               />
               0
             </CardStat>
-            <UnbondButton />
           </VStack>
         </SimpleGrid>
         <VStack align="flex-start">
