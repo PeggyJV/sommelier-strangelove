@@ -60,7 +60,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
       <TableContainer>
         <Table variant="unstyled" {...rest}>
           <Thead>
-            <Tr color="neutral.400">
+            <Tr color="neutral.300">
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
@@ -72,7 +72,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   <HStack spacing={1} align="center">
                     <Text as="span">Bonded Tokens</Text>
                     <InformationIcon
-                      color="neutral.400"
+                      color="neutral.300"
                       boxSize={3}
                     />
                   </HStack>
@@ -92,7 +92,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   <HStack spacing={1} align="center">
                     <Text as="span">Rewards</Text>
                     <InformationIcon
-                      color="neutral.400"
+                      color="neutral.300"
                       boxSize={3}
                     />
                   </HStack>
@@ -107,7 +107,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
               return (
                 <Tr
                   borderBottom="1px solid"
-                  borderColor="rgba(203, 198, 209, 0.25)"
+                  borderColor="neutral.700"
                   key={i}
                   _last={{
                     border: "none",
