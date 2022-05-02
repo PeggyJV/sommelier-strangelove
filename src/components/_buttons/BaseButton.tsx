@@ -3,63 +3,60 @@ import {
   ButtonProps,
   forwardRef,
   Icon,
-  IconProps
-} from '@chakra-ui/react'
-import { VFC } from 'react'
+  IconProps,
+} from "@chakra-ui/react"
+import { VFC } from "react"
 
-export interface BaseButtonProps extends Omit<ButtonProps, 'icon'> {
+export interface BaseButtonProps extends Omit<ButtonProps, "icon"> {
   icon?: any
   iconProps?: IconProps
 }
 
 export const BaseButton: VFC<BaseButtonProps> = forwardRef<
   BaseButtonProps,
-  'button'
+  "button"
 >(({ icon, variant, iconProps, ...rest }, ref) => {
   return (
     <Button
       ref={ref}
-      role='group'
+      role="group"
       py={3}
       px={6}
-      color='white'
-      bg='backgrounds.buttonGradient'
-      border='4px solid'
-      borderColor='aubergine'
-      borderRadius='100px'
-      overflow='hidden'
+      color="white"
+      bg="gradient.primary"
+      borderWidth={2}
+      borderColor="purple.base"
+      overflow="hidden"
       rightIcon={
         icon && (
           <Icon
             as={icon}
-            color='black'
-            bgColor='white'
-            borderRadius='50%'
+            color="surface.bg"
+            bgColor="white"
+            borderRadius="50%"
             boxSize={5}
             p={1}
             _groupHover={{
-              color: 'burntPink',
-              bgColor: 'white'
+              color: "purple.dark",
+              bgColor: "white",
             }}
             {...iconProps}
           />
         )
       }
       _hover={{
-        color: 'white',
-        bg: 'backgrounds.buttonHoverGradient',
-        borderColor: 'burntPink'
-      }}
-      _active={{
-        bg: 'backgrounds.buttonGradient'
+        color: "white",
+        bg: "purple.dark",
       }}
       _disabled={{
-        color: 'text.body.lightMuted',
-        bg: 'darkPlum',
-        cursor: 'not-allowed',
+        color: "neutral.400",
+        bg: "purple.dark",
+        borderColor: "purple.dark",
+        cursor: "not-allowed",
         _active: {
-          bg: 'darkOrange'
-        }
+          bg: "red.dark",
+          borderColor: "red.dark",
+        },
       }}
       {...rest}
     />

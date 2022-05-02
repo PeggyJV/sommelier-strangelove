@@ -84,8 +84,8 @@ export const DepositForm: VFC = () => {
             <Icon
               p={0.5}
               mr={1}
-              color="black"
-              bg="energyYellow"
+              color="surface.bg"
+              bg="red.base"
               borderRadius="50%"
               as={AiOutlineInfo}
             />{" "}

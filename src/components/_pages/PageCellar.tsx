@@ -28,7 +28,7 @@ import BondingTableCard from "components/_cards/BondingTableCard"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "lg",
-  color: "text.body.lightMuted",
+  color: "neutral.300",
 }
 
 const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {

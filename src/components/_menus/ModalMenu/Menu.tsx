@@ -27,7 +27,7 @@ export const Menu: VFC<MenuProps> = ({ value, onChange }) => {
         p={4}
         justifyContent="space-between"
         w="100%"
-        bg="transparentPurple"
+        bg="surface.secondary"
         border="none"
         borderRadius={16}
         appearance="none"
@@ -52,8 +52,8 @@ export const Menu: VFC<MenuProps> = ({ value, onChange }) => {
       </MenuButton>
       <MenuList
         px={1}
-        bg="black"
-        borderColor="burntPink"
+        bg="surface.bg"
+        borderColor="purple.base"
         borderRadius={16}
         zIndex="overlay"
       >

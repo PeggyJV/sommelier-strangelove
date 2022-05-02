@@ -10,7 +10,7 @@ export const ValueManaged: React.FC<BoxProps> = ({ ...rest }) => {
         <Label ml={1}>TVM</Label>
       </Flex>
       <Flex alignItems="center" mb={4}>
-        <Heading size="sm" color="lime">
+        <Heading size="sm" color="lime.base">
           $2,012,394.79 (4.08%)
         </Heading>
         <Label ml={1}>Past Week</Label>

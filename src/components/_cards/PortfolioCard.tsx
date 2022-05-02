@@ -46,7 +46,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           >
             0.00%
           </CardStat>
-          <HStack>
+          <HStack spacing={3}>
             <DepositButton />
             <WithdrawButton />
           </HStack>

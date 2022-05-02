@@ -28,7 +28,7 @@ export const Stats: React.FC<Props> = ({
         <Label>Net Value</Label>
       </Box>
       <Box>
-        <Heading as="p" size="sm" fontWeight="bold" color="lime">
+        <Heading as="p" size="sm" fontWeight="bold" color="lime.base">
           {data.apy}%
         </Heading>
         <Label>APY</Label>

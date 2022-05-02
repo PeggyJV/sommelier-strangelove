@@ -1,4 +1,4 @@
-import { BaseToast } from 'components/_toasts/BaseToast'
+import { BaseToast } from "components/_toasts/BaseToast"
 import {
   ToastId,
   useToast,
@@ -7,12 +7,12 @@ import {
   BoxProps,
   StackProps,
   HeadingProps,
-  IconProps
-} from '@chakra-ui/react'
-import { ReactNode, useRef } from 'react'
-import { AiOutlineInfo } from 'react-icons/ai'
-import { ImCheckmark } from 'react-icons/im'
-import { IconType } from 'react-icons'
+  IconProps,
+} from "@chakra-ui/react"
+import { ReactNode, useRef } from "react"
+import { AiOutlineInfo } from "react-icons/ai"
+import { ImCheckmark } from "react-icons/im"
+import { IconType } from "react-icons"
 
 interface BaseToast extends Partial<ToastOptions> {
   body: ReactNode
@@ -55,7 +55,7 @@ export const useBrandedToast = () => {
             {body}
           </BaseToast>
         ),
-        ...rest
+        ...rest,
       })
     }
   }
@@ -69,7 +69,7 @@ export const useBrandedToast = () => {
     ...rest
   }: BaseToast) => {
     toastIdRef.current = toast({
-      position: 'bottom-right',
+      position: "bottom-right",
       render: () => (
         <BaseToast
           status={status}
@@ -80,7 +80,7 @@ export const useBrandedToast = () => {
           {body}
         </BaseToast>
       ),
-      ...rest
+      ...rest,
     })
   }
 
@@ -89,83 +89,83 @@ export const useBrandedToast = () => {
 
 export const useToastStyles = (status?: Status) => {
   const dynamicBoxStyles: BoxProps =
-    status === 'info'
+    status === "info"
       ? {
-          bg: 'darkYellow'
+          bg: "darkYellow",
         }
-      : status === 'success'
+      : status === "success"
       ? {
-          bg: 'darkLime'
+          bg: "darkLime",
         }
-      : status === 'error'
+      : status === "error"
       ? {
-          bg: 'darkOrange'
+          bg: "darkOrange",
         }
       : {
-          bg: 'darkTurquoise'
+          bg: "darkTurquoise",
         }
 
   const dynamicStackStyles: StackProps =
-    status === 'info'
+    status === "info"
       ? {
-          bg: 'transparentYellow'
+          bg: "transparentYellow",
         }
-      : status === 'success'
+      : status === "success"
       ? {
-          bg: 'transparentLime'
+          bg: "transparentLime",
         }
-      : status === 'error'
+      : status === "error"
       ? {
-          bg: 'transparentOrange'
+          bg: "transparentOrange",
         }
       : {
-          bg: 'transparentTurquoise'
+          bg: "transparentTurquoise",
         }
 
   const dynamicHeadingStyles: HeadingProps =
-    status === 'info'
+    status === "info"
       ? {
-          color: 'energyYellow'
+          color: "energyYellow",
         }
-      : status === 'success'
+      : status === "success"
       ? {
-          color: 'lime'
+          color: "lime.base",
         }
-      : status === 'error'
+      : status === "error"
       ? {
-          color: 'sunsetOrange'
+          color: "red.base",
         }
       : {
-          color: 'turquoise'
+          color: "turquoise",
         }
 
   const dynamicIconStyles: IconProps =
-    status === 'info'
+    status === "info"
       ? {
-          color: 'energyYellow',
-          borderColor: 'energyYellow'
+          color: "energyYellow",
+          borderColor: "energyYellow",
         }
-      : status === 'success'
+      : status === "success"
       ? {
-          color: 'lime',
-          borderColor: 'lime'
+          color: "lime.base",
+          borderColor: "lime.base",
         }
-      : status === 'error'
+      : status === "error"
       ? {
-          color: 'sunsetOrange',
-          borderColor: 'sunsetOrange'
+          color: "red.base",
+          borderColor: "red.base",
         }
       : {
-          color: 'turquoise',
-          borderColor: 'turquoise'
+          color: "turquoise",
+          borderColor: "turquoise",
         }
 
   const dynamicIcon: IconType | undefined =
-    status === 'info'
+    status === "info"
       ? AiOutlineInfo
-      : status === 'success'
+      : status === "success"
       ? ImCheckmark
-      : status === 'error'
+      : status === "error"
       ? AiOutlineInfo
       : AiOutlineInfo
 
@@ -174,6 +174,6 @@ export const useToastStyles = (status?: Status) => {
     dynamicStackStyles,
     dynamicHeadingStyles,
     dynamicIconStyles,
-    dynamicIcon
+    dynamicIcon,
   }
 }

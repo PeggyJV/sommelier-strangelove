@@ -75,7 +75,6 @@ export const CellarOverviewCard: VFC<Props> = ({
   numWalletsActive,
 }) => {
   const { lineChartTheme } = useNivoThemes()
-  console.log({ dayDatas })
 
   return (
     <Card py={8} bg="backgrounds.purpleGlassGradient">

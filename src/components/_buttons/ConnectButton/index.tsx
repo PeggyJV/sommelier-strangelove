@@ -1,18 +1,22 @@
-import * as React from 'react'
-import { ButtonProps, useToast } from '@chakra-ui/react'
-import { Connector, useAccount, useConnect } from 'wagmi'
-import ClientOnly from 'components/ClientOnly'
-import { ConnectedPopover } from './ConnectedPopover'
-import { BiWalletAlt } from 'react-icons/bi'
-import { BaseButton } from '../BaseButton'
+import * as React from "react"
+import { ButtonProps, useToast } from "@chakra-ui/react"
+import { Connector, useAccount, useConnect } from "wagmi"
+import ClientOnly from "components/ClientOnly"
+import { ConnectedPopover } from "./ConnectedPopover"
+import { BiWalletAlt } from "react-icons/bi"
+import { BaseButton } from "../BaseButton"
 
-export interface ConnectButtonProps extends Omit<ButtonProps, 'children'> {
+export interface ConnectButtonProps
+  extends Omit<ButtonProps, "children"> {
   connector: Connector
 }
 
-const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
+const ConnectButton = ({
+  connector: c,
+  ...rest
+}: ConnectButtonProps) => {
   const [account] = useAccount({
-    fetchEns: true
+    fetchEns: true,
   })
   const [{ error, loading, data }, connect] = useConnect()
   const toast = useToast()
@@ -21,10 +25,10 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
   React.useEffect(() => {
     if (error) {
       toast({
-        title: 'Connection failed!',
+        title: "Connection failed!",
         description: error.message,
-        status: 'error',
-        isClosable: true
+        status: "error",
+        isClosable: true,
       })
     }
   }, [error, toast])
@@ -40,13 +44,13 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
     return c.ready
       ? // connector ready props
         {
-          onClick: () => connect(c)
+          onClick: () => connect(c),
         }
       : // connector not ready props
         {
-          as: 'a',
-          href: 'https://metamask.io/download',
-          target: '_blank'
+          as: "a",
+          href: "https://metamask.io/download",
+          target: "_blank",
         }
   }, [c, connect])
 
@@ -58,10 +62,16 @@ const ConnectButton = ({ connector: c, ...rest }: ConnectButtonProps) => {
         <BaseButton
           isLoading={loading}
           key={c.id}
-          bg='black'
-          borderColor='backgrounds.glassy'
-          minW='max-content'
+          p={3}
+          bg="surface.bg"
+          borderWidth={8}
+          borderColor="surface.primary"
+          minW="max-content"
           icon={BiWalletAlt}
+          _hover={{
+            bg: "purple.dark",
+            borderColor: "surface.primary",
+          }}
           {...conditionalProps}
           {...rest}
         >

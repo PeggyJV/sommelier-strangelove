@@ -6,9 +6,9 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
-  ModalProps
-} from '@chakra-ui/react'
-import React, { VFC } from 'react'
+  ModalProps,
+} from "@chakra-ui/react"
+import React, { VFC } from "react"
 
 interface BaseModalProps extends ModalProps {
   heading?: string
@@ -25,17 +25,17 @@ export const BaseModal: VFC<BaseModalProps> = ({
       <ModalContent
         px={8}
         py={10}
-        bg='black'
-        color='text.body.light'
-        border='1px solid'
-        borderColor='warmPink'
+        bg="surface.bg"
+        color="neutral.100"
+        border="1px solid"
+        borderColor="purple.base"
         borderRadius={24}
       >
-        <HStack justify='space-between'>
-          {heading && <Heading fontSize='4xl'>{heading}</Heading>}
-          <ModalCloseButton position='static' size='lg' />
+        <HStack justify="space-between">
+          {heading && <Heading fontSize="4xl">{heading}</Heading>}
+          <ModalCloseButton position="static" size="lg" />
         </HStack>
-        <Divider mt={2} mb={6} borderColor='text.body.lightMuted' />
+        <Divider mt={2} mb={6} borderColor="neutral.400" />
         {children}
       </ModalContent>
     </Modal>

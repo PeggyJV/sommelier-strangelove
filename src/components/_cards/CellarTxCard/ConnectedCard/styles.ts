@@ -2,39 +2,39 @@ import {
   BoxProps,
   ButtonProps,
   TabPanelProps,
-  TabProps
-} from '@chakra-ui/react'
+  TabProps,
+} from "@chakra-ui/react"
 
 export const tabProps: TabProps = {
   pb: 4,
-  borderColor: 'uiChrome.dataBorder',
+  borderColor: "uiChrome.dataBorder",
   _selected: {
-    color: 'white',
-    borderColor: 'sunsetOrange'
-  }
+    color: "white",
+    borderColor: "red.base",
+  },
 }
 
 export const tabPanelProps: TabPanelProps = {
-  px: 0
+  px: 0,
 }
 
 export const cardProps: BoxProps = {
   p: 4,
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  bg: 'backgrounds.black'
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  bg: "backgrounds.black",
 }
 
 export const disabledButtonProps: ButtonProps = {
-  variant: 'solid',
+  variant: "solid",
   _disabled: {
-    color: 'text.body.light',
-    bg: 'text.body.darkMuted',
-    cursor: 'not-allowed',
+    color: "neutral.100",
+    bg: "text.body.darkMuted",
+    cursor: "not-allowed",
     _hover: {
-      color: 'text.body.light',
-      bg: 'text.body.darkMuted'
-    }
-  }
+      color: "neutral.100",
+      bg: "text.body.darkMuted",
+    },
+  },
 }

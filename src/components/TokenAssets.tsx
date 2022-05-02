@@ -35,8 +35,8 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
               src={src}
               name={alt}
               borderWidth={2}
-              borderColor="black"
-              bg="black"
+              borderColor="surface.bg"
+              bg="surface.bg"
               _notFirst={{
                 opacity: 0.65,
               }}
@@ -45,7 +45,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
         })}
         <Tooltip
           hasArrow
-          arrowShadowColor="violentViolet"
+          arrowShadowColor="purple.base"
           label={
             <VStack align="flex-start" minW={120}>
               {tokens.map((token) => {
@@ -57,8 +57,8 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
                       src={src}
                       name={alt}
                       borderWidth={2}
-                      borderColor="black"
-                      bg="black"
+                      borderColor="surface.bg"
+                      bg="surface.bg"
                       _notLast={{
                         opacity: 0.65,
                       }}
@@ -71,10 +71,10 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           }
           py={3}
           px={5}
-          bg="black"
+          bg="surface.bg"
           borderWidth={1}
           borderRadius={8}
-          borderColor="violentViolet"
+          borderColor="purple.base"
         >
           <Box
             as="span"
@@ -84,7 +84,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
             boxSize="24px"
             borderRadius="full"
             borderWidth={2}
-            borderColor="black"
+            borderColor="surface.bg"
             overflow="hidden"
             opacity={0.65}
           >
@@ -110,8 +110,8 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
               src={src}
               name={alt}
               borderWidth={2}
-              borderColor="black"
-              bg="black"
+              borderColor="surface.bg"
+              bg="surface.bg"
               _notLast={{
                 opacity: 0.65,
               }}

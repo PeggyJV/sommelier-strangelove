@@ -3,7 +3,7 @@ import { Heading, HStack, StackProps, VStack } from "@chakra-ui/react"
 import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { CurrentDeposits } from "./CurrentDeposits"
-import { TriangleDownIcon, TriangleUpIcon } from "./_icons"
+import { ArrowDownIcon, ArrowUpIcon } from "./_icons"
 
 interface CellarStatsProps extends StackProps {
   tvm?: string
@@ -23,9 +23,9 @@ export const CellarStats: VFC<CellarStatsProps> = ({
 }) => {
   const apyColor =
     trending === "up"
-      ? "lime"
+      ? "lime.base"
       : trending === "down"
-      ? "sunsetOrange"
+      ? "red.base"
       : ""
 
   return (
@@ -42,19 +42,16 @@ export const CellarStats: VFC<CellarStatsProps> = ({
         <CardHeading>TVM</CardHeading>
       </VStack>
       <VStack spacing={1} align="flex-start">
-        <Heading
-          as="span"
-          fontSize="21px"
-          fontWeight="bold"
-          color={apyColor}
-        >
+        <HStack color={apyColor} align="center">
           {trending === "up" ? (
-            <TriangleUpIcon boxSize={3} />
+            <ArrowUpIcon boxSize={4} />
           ) : (
-            <TriangleDownIcon boxSize={3} />
-          )}{" "}
-          {apy}%
-        </Heading>
+            <ArrowDownIcon boxSize={4} />
+          )}
+          <Heading as="span" fontSize="21px" fontWeight="bold">
+            {apy}%
+          </Heading>
+        </HStack>
         <CardHeading>APY</CardHeading>
       </VStack>
       <CurrentDeposits

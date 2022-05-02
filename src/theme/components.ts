@@ -3,7 +3,7 @@ import { ThemeComponents } from "@chakra-ui/react"
 export const components: ThemeComponents = {
   Button: {
     baseStyle: {
-      borderRadius: 25,
+      borderRadius: 64,
       color: "text.body.dark",
     },
   },
@@ -18,7 +18,7 @@ export const components: ThemeComponents = {
       py: 3,
       borderWidth: 1,
       borderRadius: 8,
-      borderColor: "violentViolet",
+      borderColor: "purple.base",
     },
   },
 }

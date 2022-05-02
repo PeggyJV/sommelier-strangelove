@@ -12,7 +12,7 @@ export const ChainSelector: VFC<Props> = ({
   return (
     <Select borderRadius={25} fontWeight='medium' {...rest}>
       {chains.map((chain, i) => (
-        <Box as='option' color='black' key={i} value={chain}>
+        <Box as='option' color=surface.bg key={i} value={chain}>
           {chain}
         </Box>
       ))}
