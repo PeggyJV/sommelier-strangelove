@@ -8,9 +8,9 @@ import {
 } from 'wagmi'
 import { config } from '../../utils/config'
 import { useEffect, useState, useCallback } from 'react'
-// import { BigNumber } from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 // import { toEther } from '../utils'
-import { BigNumber } from 'ethers'
+import { BigNumber as BigNumberE } from 'ethers'
 
 type CellarState = {
   loading: boolean
@@ -24,7 +24,8 @@ type Balances = {
 type UserState = {
   loading: boolean
   balances?: Balances
-  maxDeposit?: BigNumber
+  maxDeposit?: BigNumberE
+  netValue?: BigNumberE
 }
 
 const initialUserData: UserState = {
@@ -100,11 +101,19 @@ export const AaveV2CellarProvider = ({ children }: { children: ReactNode }) => {
   const fetchUserData = useCallback(async () => {
     setUserData(state => ({ ...state, loading: true }))
     try {
+      var { userActiveAssets, userInactiveAssets } =
+        await aaveV2CellarContract.depositBalances(account?.address)
+
+      const netValue = userInactiveAssets.toString()
+      console.log('Net Value ', netValue)
+
+      console.log({ userActiveAssets, userInactiveAssets })
       const maxDeposit = await aaveV2CellarContract.maxDeposit(account?.address)
       setUserData(state => ({
         ...state,
         balances: { ...state.balances, dai: daiBalance?.formatted },
         maxDeposit: maxDeposit,
+        netValue: netValue,
         loading: false
       }))
     } catch (e) {
