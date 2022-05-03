@@ -9,10 +9,8 @@ import {
   HeadingProps,
   IconProps,
 } from "@chakra-ui/react"
-import { ReactNode, useRef } from "react"
-import { AiOutlineInfo } from "react-icons/ai"
-import { ImCheckmark } from "react-icons/im"
-import { IconType } from "react-icons"
+import { ReactElement, ReactNode, useRef } from "react"
+import { InformationIcon, WarningIcon } from "components/_icons"
 
 interface BaseToast extends Partial<ToastOptions> {
   body: ReactNode
@@ -92,17 +90,25 @@ export const useToastStyles = (status?: Status) => {
     status === "info"
       ? {
           bg: "orange.dark",
+          borderWidth: 1,
+          borderColor: "orange.base",
         }
       : status === "success"
       ? {
           bg: "lime.dark",
+          borderWidth: 1,
+          borderColor: "lime.base",
         }
       : status === "error"
       ? {
           bg: "red.dark",
+          borderWidth: 1,
+          borderColor: "red.base",
         }
       : {
           bg: "turquoise.dark",
+          borderWidth: 1,
+          borderColor: "turquoise.base",
         }
 
   const dynamicStackStyles: StackProps =
@@ -125,18 +131,18 @@ export const useToastStyles = (status?: Status) => {
   const dynamicHeadingStyles: HeadingProps =
     status === "info"
       ? {
-          color: "orange.base",
+          color: "orange.light",
         }
       : status === "success"
       ? {
-          color: "lime.base",
+          color: "lime.light",
         }
       : status === "error"
       ? {
-          color: "red.base",
+          color: "red.light",
         }
       : {
-          color: "turquoise.base",
+          color: "turquoise.light",
         }
 
   const dynamicIconStyles: IconProps =
@@ -160,14 +166,14 @@ export const useToastStyles = (status?: Status) => {
           borderColor: "turquoise.base",
         }
 
-  const dynamicIcon: IconType | undefined =
+  const dynamicIcon =
     status === "info"
-      ? AiOutlineInfo
+      ? InformationIcon
       : status === "success"
-      ? ImCheckmark
+      ? WarningIcon
       : status === "error"
-      ? AiOutlineInfo
-      : AiOutlineInfo
+      ? InformationIcon
+      : InformationIcon
 
   return {
     dynamicBoxStyles,

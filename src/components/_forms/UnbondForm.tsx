@@ -66,7 +66,7 @@ export const UnbondForm: VFC = () => {
             </SecondaryButton>
           </InputRightElement>
         </InputGroup>
-        <FormErrorMessage color="energyYellow">
+        <FormErrorMessage color="orange.base">
           <Icon
             p={0.5}
             mr={1}
