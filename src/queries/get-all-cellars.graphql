@@ -2,11 +2,7 @@ query GetAllCellars {
   cellars {
     id
     name
-    denom {
-      id
-      symbol
-      decimals
-    }
+    asset
     tvlActive
     tvlInactive
     tvlTotal

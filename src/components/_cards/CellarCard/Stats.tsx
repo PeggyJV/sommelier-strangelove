@@ -27,12 +27,12 @@ export const Stats: React.FC<Props> = ({
         </Heading>
         <Label>Net Value</Label>
       </Box>
-      <Box>
+      {/* <Box>
         <Heading as="p" size="sm" fontWeight="bold" color="lime.base">
           {data.apy}%
         </Heading>
         <Label>APY</Label>
-      </Box>
+      </Box> */}
       <Grid backgroundColor="">
         <Heading as="p" size="sm" fontWeight="bold">
           0

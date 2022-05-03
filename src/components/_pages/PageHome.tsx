@@ -46,9 +46,9 @@ const PageHome: NextPage = () => {
             name: "-",
             description: "",
             strategyType: "-",
-            managementFee: "-",
+            // managementFee: "-",
             protocols: "-",
-            apy: "",
+            // apy: "",
           }
           return (
             <CellarCardDisplay
