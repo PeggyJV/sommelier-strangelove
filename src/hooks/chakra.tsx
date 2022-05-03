@@ -91,41 +91,41 @@ export const useToastStyles = (status?: Status) => {
   const dynamicBoxStyles: BoxProps =
     status === "info"
       ? {
-          bg: "darkYellow",
+          bg: "orange.dark",
         }
       : status === "success"
       ? {
-          bg: "darkLime",
+          bg: "lime.dark",
         }
       : status === "error"
       ? {
-          bg: "darkOrange",
+          bg: "red.dark",
         }
       : {
-          bg: "darkTurquoise",
+          bg: "turquoise.dark",
         }
 
   const dynamicStackStyles: StackProps =
     status === "info"
       ? {
-          bg: "transparentYellow",
+          bg: "orange.dark",
         }
       : status === "success"
       ? {
-          bg: "transparentLime",
+          bg: "lime.dark",
         }
       : status === "error"
       ? {
-          bg: "transparentOrange",
+          bg: "red.dark",
         }
       : {
-          bg: "transparentTurquoise",
+          bg: "turquoise.dark",
         }
 
   const dynamicHeadingStyles: HeadingProps =
     status === "info"
       ? {
-          color: "energyYellow",
+          color: "orange.base",
         }
       : status === "success"
       ? {
@@ -136,14 +136,14 @@ export const useToastStyles = (status?: Status) => {
           color: "red.base",
         }
       : {
-          color: "turquoise",
+          color: "turquoise.base",
         }
 
   const dynamicIconStyles: IconProps =
     status === "info"
       ? {
-          color: "energyYellow",
-          borderColor: "energyYellow",
+          color: "orange.base",
+          borderColor: "orange.base",
         }
       : status === "success"
       ? {
@@ -156,8 +156,8 @@ export const useToastStyles = (status?: Status) => {
           borderColor: "red.base",
         }
       : {
-          color: "turquoise",
-          borderColor: "turquoise",
+          color: "turquoise.base",
+          borderColor: "turquoise.base",
         }
 
   const dynamicIcon: IconType | undefined =
