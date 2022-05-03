@@ -39,7 +39,7 @@ export const CellarCard: React.FC<CellarCardProps> = ({
     description: cellarDataMap[cellarAddress].description,
     tvm: "",
     strategyType: cellarDataMap[cellarAddress].strategyType,
-    managementFee: `${parseFloat(data.cellar.feePlatform) * 100}%`,
+    // managementFee: `${parseFloat(data.cellar.feePlatform) * 100}%`,
     protocols: cellarDataMap[cellarAddress].protocols,
     apy: formatApy(data.cellar.apy)!,
   }
