@@ -1,19 +1,19 @@
-import { VFC } from 'react'
+import { VFC } from "react"
 import {
   FormControl,
   FormErrorMessage,
   Icon,
   InputGroup,
   InputRightElement,
-  VStack
-} from '@chakra-ui/react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { BaseButton } from 'components/_buttons/BaseButton'
-import { AiOutlineInfo } from 'react-icons/ai'
-import { SecondaryButton } from 'components/_buttons/SecondaryButton'
-import { ModalInput } from 'components/_inputs/ModalInput'
-import { CardHeading } from 'components/_typography/CardHeading'
-import { BondingPeriodOptions } from './BondingPeriodOptions'
+  VStack,
+} from "@chakra-ui/react"
+import { FormProvider, useForm } from "react-hook-form"
+import { BaseButton } from "components/_buttons/BaseButton"
+import { AiOutlineInfo } from "react-icons/ai"
+import { SecondaryButton } from "components/_buttons/SecondaryButton"
+import { ModalInput } from "components/_inputs/ModalInput"
+import { CardHeading } from "components/_typography/CardHeading"
+import { BondingPeriodOptions } from "./BondingPeriodOptions"
 
 interface FormValues {
   depositAmount: number
@@ -21,64 +21,72 @@ interface FormValues {
 }
 
 export const BondForm: VFC = () => {
-  const methods = useForm<FormValues>({ defaultValues: { bondingPeriod: 1.1 } })
+  const methods = useForm<FormValues>({
+    defaultValues: { bondingPeriod: 1.1 },
+  })
   const {
     register,
     watch,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = methods
-  const watchDepositAmount = watch('depositAmount')
-  const isDisabled = isNaN(watchDepositAmount) || watchDepositAmount <= 0
+  const watchDepositAmount = watch("depositAmount")
+  const isDisabled =
+    isNaN(watchDepositAmount) || watchDepositAmount <= 0
   const isError = errors.depositAmount
-  const setMax = () => setValue('depositAmount', 100000)
+  const setMax = () => setValue("depositAmount", 100000)
 
   return (
     <FormProvider {...methods}>
       <VStack
-        as='form'
+        as="form"
         spacing={8}
-        align='stretch'
-        onSubmit={handleSubmit(data => console.log({ data }))}
+        align="stretch"
+        onSubmit={handleSubmit((data) => console.log({ data }))}
       >
-        <VStack align='stretch'>
+        <VStack align="stretch">
           <CardHeading>Bonding Period</CardHeading>
           <BondingPeriodOptions />
         </VStack>
         <FormControl isInvalid={isError as boolean | undefined}>
-          <InputGroup display='flex' alignItems='center'>
+          <InputGroup display="flex" alignItems="center">
             <ModalInput
-              type='number'
-              step='any'
-              {...register('depositAmount', {
-                required: 'Enter amount',
+              type="number"
+              step="any"
+              {...register("depositAmount", {
+                required: "Enter amount",
                 valueAsNumber: true,
                 validate: {
-                  positive: v => v > 0 || 'You must submit a positive amount.'
-                }
+                  positive: (v) =>
+                    v > 0 || "You must submit a positive amount.",
+                },
               })}
             />
-            <InputRightElement h='100%' mr={3}>
-              <SecondaryButton size='sm' borderRadius={8} onClick={setMax}>
+            <InputRightElement h="100%" mr={3}>
+              <SecondaryButton
+                size="sm"
+                borderRadius={8}
+                onClick={setMax}
+              >
                 Max
               </SecondaryButton>
             </InputRightElement>
           </InputGroup>
-          <FormErrorMessage color='energyYellow'>
+          <FormErrorMessage color="energyYellow">
             <Icon
               p={0.5}
               mr={1}
-              color='black'
-              bg='energyYellow'
-              borderRadius='50%'
+              color="surface.bg"
+              bg="red.base"
+              borderRadius="50%"
               as={AiOutlineInfo}
-            />{' '}
+            />{" "}
             {errors.depositAmount?.message}
           </FormErrorMessage>
         </FormControl>
         <BaseButton
-          type='submit'
+          type="submit"
           isDisabled={isDisabled}
           isLoading={isSubmitting}
           fontSize={21}

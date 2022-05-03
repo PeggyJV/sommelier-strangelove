@@ -61,7 +61,7 @@ export const PerformanceCard: VFC<Props> = (props) => {
               <CardStat
                 label={
                   <HStack spacing={1}>
-                    <Circle bg="deepSkyBlue.500" size={3} />
+                    <Circle bg="turquoise.base" size={3} />
                     <CardHeading>{timeline} cellar apy</CardHeading>
                   </HStack>
                 }
@@ -75,7 +75,7 @@ export const PerformanceCard: VFC<Props> = (props) => {
                 <CardStat
                   label={
                     <HStack>
-                      <Circle bg="sunsetOrange" size={3} />
+                      <Circle bg="red.base" size={3} />
                       <CardHeading>{timeline} Volume</CardHeading>
                     </HStack>
                   }

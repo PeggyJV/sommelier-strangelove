@@ -11,7 +11,7 @@ export const TertiaryButton: VFC<ButtonProps> = forwardRef<
       variant="unstyled"
       display="flex"
       p={4}
-      color="warmPink"
+      color="purple.base"
       {...props}
     />
   )

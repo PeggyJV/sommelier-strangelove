@@ -24,7 +24,7 @@ export const Nav: VFC<FlexProps> = (props) => {
     bg: "rgba(26, 26, 26, 0.5)",
     backdropFilter: "blur(8px)",
     borderBottom: "1px solid",
-    borderColor: "violentViolet",
+    borderColor: "purple.base",
   }
 
   return (
@@ -50,7 +50,7 @@ export const Nav: VFC<FlexProps> = (props) => {
           <LogoTextIcon
             w="9rem"
             h="2rem"
-            _hover={{ color: "sunsetOrange" }}
+            _hover={{ color: "red.base" }}
           />
         </Link>
         {auth.data.connectors.map((c) => (

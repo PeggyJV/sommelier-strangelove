@@ -75,7 +75,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             tooltip="Protocols in which Cellar operates"
           >
             <AaveIcon
-              color="violentViolet"
+              color="purple.base"
               bg="white"
               borderRadius="full"
               p={1}
@@ -88,7 +88,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             tooltip="Platform management fee"
           >
             <UsdcIcon
-              color="violentViolet"
+              color="purple.base"
               bg="white"
               borderRadius="full"
               p={1}
@@ -97,19 +97,18 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             5%
           </CardStat>
           <VStack spacing={2} align="stretch">
-            <Tooltip
-              label="Cellar earned performance split"
-              placement="top-start"
-            >
-              <HStack align="center">
+            <HStack align="center">
+              <Tooltip
+                hasArrow
+                placement="top"
+                label="Cellar earned performance split"
+                bg="surface.bg"
+              >
                 <CardHeading>performance split</CardHeading>
-                <InformationIcon
-                  color="text.body.lightMuted"
-                  boxSize={3}
-                />
-              </HStack>
-            </Tooltip>
-            <Box w="100%" h="6px">
+              </Tooltip>
+              <InformationIcon color="neutral.300" boxSize={3} />
+            </HStack>
+            <Box w="100%" h="4px">
               {/* @ts-ignore */}
               <BarChart
                 layout="horizontal"

@@ -29,8 +29,9 @@ export const ConnectedPopover = () => {
     <Popover placement="bottom-end">
       <HStack spacing={2}>
         <BaseButton
-          bg="black"
-          borderColor="backgrounds.glassy"
+          bg="surface.bg"
+          borderWidth={8}
+          borderColor="surface.primary"
           icon={BsThreeDotsVertical}
           minW="max-content"
           isLoading={account.loading}
@@ -40,8 +41,9 @@ export const ConnectedPopover = () => {
         <PopoverTrigger>
           <BaseButton
             p={3}
-            bg="black"
-            borderColor="backgrounds.glassy"
+            bg="surface.bg"
+            borderWidth={8}
+            borderColor="surface.primary"
             minW="max-content"
             isLoading={account.loading}
           >
@@ -54,10 +56,10 @@ export const ConnectedPopover = () => {
         maxW="max-content"
         border="none"
         borderRadius={8}
-        bg="backgrounds.glassy"
+        bg="surface.secondary"
         fontWeight="semibold"
       >
-        <PopoverBody p={0} bg="black" borderRadius="inherit">
+        <PopoverBody p={0} bg="surface.bg" borderRadius="inherit">
           <VStack
             align="flex-start"
             divider={<CardDivider p={0} m={0} />}

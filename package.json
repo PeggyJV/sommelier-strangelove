@@ -11,6 +11,7 @@
     "deadcode": "ts-prune",
     "dev": "next dev",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "start": "next start",
     "chakra:gen": "chakra-cli tokens ./src/theme/index.ts",
     "postinstall": "yarn chakra:gen",
