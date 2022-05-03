@@ -17,7 +17,8 @@
     "postinstall": "yarn chakra:gen",
     "generate": "graphql-codegen",
     "generate:watch": "yarn generate --watch",
-    "generate:schema": "get-graphql-schema https://api.thegraph.com/subgraphs/name/elkdao/cellars > src/generated/schema.json --json"
+    "generate:schema": "get-graphql-schema https://api.thegraph.com/subgraphs/name/elkdao/cellars > src/generated/schema.json --json",
+    "generate:schema:pending": "get-graphql-schema https://api.thegraph.com/subgraphs/id/QmaTfJ2wZ6bp7hZUUjiEeJ7ZJbEgABMJTFuS51zv9AWVfg > src/generated/schema.json --json"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.6",

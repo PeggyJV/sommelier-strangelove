@@ -45,14 +45,14 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const { data } = cellarResult
   const { cellar } = data || {}
   const {
-    apy,
     tvlTotal,
-    maxDeposits,
+    liquidityLimit,
     addedLiquidityAllTime,
     removedLiquidityAllTime,
   } = cellar || {}
   const tvmVal = formatCurrency(tvlTotal)
-  const apyVal = formatApy(apy)
+  // TODO: this value needs to be calculated differently now.
+  // const apyVal = formatApy(apy)
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
     removedLiquidityAllTime
@@ -89,10 +89,10 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </VStack>
           <CellarStats
             tvm={`$${tvmVal} USDC`}
-            apy={apyVal}
+            apy={"3.71"}
             trending="up"
             currentDeposits={currentDepositsVal}
-            cellarCap={maxDeposits}
+            cellarCap={liquidityLimit}
           />
         </HStack>
         <VStack spacing={4} align="stretch">
