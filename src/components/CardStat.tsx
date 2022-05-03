@@ -26,20 +26,17 @@ export const CardStat: VFC<CardStatProps> = ({
     <VStack flex={1} align="flex-start" {...rest}>
       <Tooltip
         hasArrow
-        arrowShadowColor="violentViolet"
+        arrowShadowColor="purple.base"
         label={tooltip}
         placement="top"
-        bg="black"
+        bg="surface.bg"
       >
         <HStack align="center">
           <CardHeading>{label}</CardHeading>
           {tooltip && (
             <>
               {" "}
-              <InformationIcon
-                color="text.body.lightMuted"
-                boxSize={3}
-              />
+              <InformationIcon color="neutral.300" boxSize={3} />
             </>
           )}
         </HStack>

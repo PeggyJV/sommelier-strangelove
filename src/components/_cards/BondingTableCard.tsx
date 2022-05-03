@@ -9,13 +9,12 @@ import {
   TableContainer,
   TableProps,
   Flex,
-  Box,
   Tooltip,
   HStack,
   Text,
 } from "@chakra-ui/react"
 import TransparentCard from "./TransparentCard"
-import { TertiaryButton } from "components/_buttons/TertiaryButton"
+import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { InlineImage } from "components/InlineImage"
 import { InformationIcon } from "components/_icons"
 
@@ -61,19 +60,19 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
       <TableContainer>
         <Table variant="unstyled" {...rest}>
           <Thead>
-            <Tr color="text.body.lightMuted">
+            <Tr color="neutral.300">
               <Tooltip
                 hasArrow
-                arrowShadowColor="violentViolet"
+                arrowShadowColor="purple.base"
                 label="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
                 placement="top"
-                bg="black"
+                bg="surface.bg"
               >
                 <Th fontSize={10} fontWeight="normal">
                   <HStack spacing={1} align="center">
                     <Text as="span">Bonded Tokens</Text>
                     <InformationIcon
-                      color="text.body.lightMuted"
+                      color="neutral.300"
                       boxSize={3}
                     />
                   </HStack>
@@ -84,16 +83,16 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
               </Th>
               <Tooltip
                 hasArrow
-                arrowShadowColor="violentViolet"
+                arrowShadowColor="purple.base"
                 label="Amount of SOMM earned and available to be claimed"
                 placement="top"
-                bg="black"
+                bg="surface.bg"
               >
                 <Th fontSize={10} fontWeight="normal">
                   <HStack spacing={1} align="center">
                     <Text as="span">Rewards</Text>
                     <InformationIcon
-                      color="text.body.lightMuted"
+                      color="neutral.300"
                       boxSize={3}
                     />
                   </HStack>
@@ -108,7 +107,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
               return (
                 <Tr
                   borderBottom="1px solid"
-                  borderColor="rgba(203, 198, 209, 0.25)"
+                  borderColor="neutral.700"
                   key={i}
                   _last={{
                     border: "none",
@@ -131,7 +130,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   <Td>{value}x SOMM</Td>
                   <Td>
                     {canUnbond ? (
-                      <TertiaryButton
+                      <SecondaryButton
                         size="sm"
                         onClick={() =>
                           window.alert(
@@ -140,9 +139,9 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                         }
                       >
                         Unbond
-                      </TertiaryButton>
+                      </SecondaryButton>
                     ) : (
-                      <Box px={4}>Unbonding in N days</Box>
+                      <>Unbonding in N days</>
                     )}
                   </Td>
                 </Tr>

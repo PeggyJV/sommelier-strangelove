@@ -27,7 +27,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
   return (
     <VStack minW={240} align="stretch">
       <HStack justify="space-between" align="flex-end">
-        <Text fontSize="0.625rem" color="text.body.lightMuted">
+        <Text fontSize="0.625rem" color="neutral3400">
           Current Deposits
         </Text>
         <Text fontSize="xs" fontWeight="semibold">
@@ -38,7 +38,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
         {/* @ts-ignore */}
         <BarChart
           layout="horizontal"
-          colors={theme.colors.lime}
+          colors={theme.colors.lime.base}
           keys={["currentDeposits"]}
           data={data}
           maxValue={isDataPresent ? parseInt(cellarCap) : "auto"}
@@ -49,7 +49,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
         />
       </Box>
       <HStack justify="space-between" align="flex-end">
-        <Text fontSize="0.625rem" color="text.body.lightMuted">
+        <Text fontSize="0.625rem" color="neutral3400">
           Cellar Cap
         </Text>
         <Text fontSize="xs" fontWeight="semibold">

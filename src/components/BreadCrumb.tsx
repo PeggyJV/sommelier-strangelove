@@ -27,7 +27,7 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
       separator={<ChevronRightIcon boxSize={3} color="white" />}
       {...rest}
     >
-      <BreadcrumbItem color="text.body.lightMuted">
+      <BreadcrumbItem color="neutral.300">
         <BreadcrumbLink href="/">Overview</BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem>
@@ -44,8 +44,8 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
         const href = hrefMap.join("")
         const currentPage = href === router.asPath
         const color = currentPage
-          ? "text.body.light"
-          : "text.body.lightMuted"
+          ? "neutral.100"
+          : "neutral.400"
 
         return (
           <BreadcrumbItem

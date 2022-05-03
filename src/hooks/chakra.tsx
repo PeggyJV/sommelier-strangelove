@@ -1,4 +1,4 @@
-import { BaseToast } from 'components/_toasts/BaseToast'
+import { BaseToast } from "components/_toasts/BaseToast"
 import {
   ToastId,
   useToast,
@@ -7,12 +7,10 @@ import {
   BoxProps,
   StackProps,
   HeadingProps,
-  IconProps
-} from '@chakra-ui/react'
-import { ReactNode, useRef } from 'react'
-import { AiOutlineInfo } from 'react-icons/ai'
-import { ImCheckmark } from 'react-icons/im'
-import { IconType } from 'react-icons'
+  IconProps,
+} from "@chakra-ui/react"
+import { ReactElement, ReactNode, useRef } from "react"
+import { InformationIcon, WarningIcon } from "components/_icons"
 
 interface BaseToast extends Partial<ToastOptions> {
   body: ReactNode
@@ -55,7 +53,7 @@ export const useBrandedToast = () => {
             {body}
           </BaseToast>
         ),
-        ...rest
+        ...rest,
       })
     }
   }
@@ -69,7 +67,7 @@ export const useBrandedToast = () => {
     ...rest
   }: BaseToast) => {
     toastIdRef.current = toast({
-      position: 'bottom-right',
+      position: "bottom-right",
       render: () => (
         <BaseToast
           status={status}
@@ -80,7 +78,7 @@ export const useBrandedToast = () => {
           {body}
         </BaseToast>
       ),
-      ...rest
+      ...rest,
     })
   }
 
@@ -89,91 +87,99 @@ export const useBrandedToast = () => {
 
 export const useToastStyles = (status?: Status) => {
   const dynamicBoxStyles: BoxProps =
-    status === 'info'
+    status === "info"
       ? {
-          bg: 'darkYellow'
+          bg: "orange.dark",
+          borderWidth: 1,
+          borderColor: "orange.base",
         }
-      : status === 'success'
+      : status === "success"
       ? {
-          bg: 'darkLime'
+          bg: "lime.dark",
+          borderWidth: 1,
+          borderColor: "lime.base",
         }
-      : status === 'error'
+      : status === "error"
       ? {
-          bg: 'darkOrange'
+          bg: "red.dark",
+          borderWidth: 1,
+          borderColor: "red.base",
         }
       : {
-          bg: 'darkTurquoise'
+          bg: "turquoise.dark",
+          borderWidth: 1,
+          borderColor: "turquoise.base",
         }
 
   const dynamicStackStyles: StackProps =
-    status === 'info'
+    status === "info"
       ? {
-          bg: 'transparentYellow'
+          bg: "orange.dark",
         }
-      : status === 'success'
+      : status === "success"
       ? {
-          bg: 'transparentLime'
+          bg: "lime.dark",
         }
-      : status === 'error'
+      : status === "error"
       ? {
-          bg: 'transparentOrange'
+          bg: "red.dark",
         }
       : {
-          bg: 'transparentTurquoise'
+          bg: "turquoise.dark",
         }
 
   const dynamicHeadingStyles: HeadingProps =
-    status === 'info'
+    status === "info"
       ? {
-          color: 'energyYellow'
+          color: "orange.light",
         }
-      : status === 'success'
+      : status === "success"
       ? {
-          color: 'lime'
+          color: "lime.light",
         }
-      : status === 'error'
+      : status === "error"
       ? {
-          color: 'sunsetOrange'
+          color: "red.light",
         }
       : {
-          color: 'turquoise'
+          color: "turquoise.light",
         }
 
   const dynamicIconStyles: IconProps =
-    status === 'info'
+    status === "info"
       ? {
-          color: 'energyYellow',
-          borderColor: 'energyYellow'
+          color: "orange.base",
+          borderColor: "orange.base",
         }
-      : status === 'success'
+      : status === "success"
       ? {
-          color: 'lime',
-          borderColor: 'lime'
+          color: "lime.base",
+          borderColor: "lime.base",
         }
-      : status === 'error'
+      : status === "error"
       ? {
-          color: 'sunsetOrange',
-          borderColor: 'sunsetOrange'
+          color: "red.base",
+          borderColor: "red.base",
         }
       : {
-          color: 'turquoise',
-          borderColor: 'turquoise'
+          color: "turquoise.base",
+          borderColor: "turquoise.base",
         }
 
-  const dynamicIcon: IconType | undefined =
-    status === 'info'
-      ? AiOutlineInfo
-      : status === 'success'
-      ? ImCheckmark
-      : status === 'error'
-      ? AiOutlineInfo
-      : AiOutlineInfo
+  const dynamicIcon =
+    status === "info"
+      ? InformationIcon
+      : status === "success"
+      ? WarningIcon
+      : status === "error"
+      ? InformationIcon
+      : InformationIcon
 
   return {
     dynamicBoxStyles,
     dynamicStackStyles,
     dynamicHeadingStyles,
     dynamicIconStyles,
-    dynamicIcon
+    dynamicIcon,
   }
 }

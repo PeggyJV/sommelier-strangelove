@@ -15,12 +15,12 @@ export const Socials: VFC<StackProps> = ({ ...rest }) => {
               boxSize={10}
               p={2}
               color="white"
-              bg="backgrounds.glassyPurple"
+              bg="surface.primary"
               borderWidth={4}
               borderRadius={16}
-              borderColor="backgrounds.glassy"
+              borderColor="surface.secondary"
               _hover={{
-                bg: "sunsetOrange",
+                bg: "red.base",
               }}
             />
           </Link>

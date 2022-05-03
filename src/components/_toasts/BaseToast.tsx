@@ -9,10 +9,10 @@ import {
   Spinner,
   StackProps,
   Status,
-  VStack
-} from '@chakra-ui/react'
-import { useToastStyles } from 'hooks/chakra'
-import { VFC } from 'react'
+  VStack,
+} from "@chakra-ui/react"
+import { useToastStyles } from "hooks/chakra"
+import { VFC } from "react"
 
 interface BaseToastProps extends StackProps {
   closeHandler: () => void
@@ -21,58 +21,60 @@ interface BaseToastProps extends StackProps {
   heading?: string
 }
 
-export const BaseToast: VFC<BaseToastProps> = forwardRef<BaseToastProps, 'div'>(
-  ({ children, heading, status, closeHandler, isLoading }, ref) => {
-    const {
-      dynamicBoxStyles,
-      dynamicHeadingStyles,
-      dynamicStackStyles,
-      dynamicIconStyles,
-      dynamicIcon
-    } = useToastStyles(status)
+export const BaseToast: VFC<BaseToastProps> = forwardRef<
+  BaseToastProps,
+  "div"
+>(({ children, heading, status, closeHandler, isLoading }, ref) => {
+  const {
+    dynamicBoxStyles,
+    dynamicHeadingStyles,
+    dynamicStackStyles,
+    dynamicIconStyles,
+    dynamicIcon,
+  } = useToastStyles(status)
 
-    return (
-      <Box p={2} borderRadius={12} {...dynamicBoxStyles} zIndex='toast'>
+  return (
+    <Box
+      ref={ref}
+      borderRadius={12}
+      w="26.25rem"
+      p={8}
+      {...dynamicBoxStyles}
+      zIndex="toast"
+    >
+      <HStack justify="space-between" align="flex-start">
         <HStack
-          ref={ref}
-          w='26.25rem'
-          p={8}
-          spacing={6}
-          justify='space-between'
-          align='flex-start'
-          borderRadius={8}
+          spacing={3}
+          align="flex-start"
           {...dynamicStackStyles}
         >
           {isLoading ? (
             <Flex
               boxSize={8}
-              align='center'
-              justify='center'
-              borderRadius='50%'
+              align="center"
+              justify="center"
+              borderRadius="50%"
             >
-              <Spinner size='sm' />
+              <Spinner size="sm" />
             </Flex>
           ) : (
             <Icon
               boxSize={5}
-              p={0.5}
-              border='2px solid'
-              borderRadius='50%'
               as={dynamicIcon}
               {...dynamicIconStyles}
             />
           )}
-          <VStack align='flex-start'>
+          <VStack align="flex-start">
             {heading && (
-              <Heading size='sm' {...dynamicHeadingStyles}>
+              <Heading size="sm" {...dynamicHeadingStyles}>
                 {heading}
               </Heading>
             )}
             {children}
           </VStack>
-          <CloseButton size='lg' color='white' onClick={closeHandler} />
         </HStack>
-      </Box>
-    )
-  }
-)
+        <CloseButton size="lg" color="white" onClick={closeHandler} />
+      </HStack>
+    </Box>
+  )
+})

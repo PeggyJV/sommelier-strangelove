@@ -20,7 +20,7 @@ export const FillLine: React.FC<Props> = ({
     >
       <Box
         height="2px"
-        backgroundColor="lime"
+        backgroundColor="lime.base"
         width={width}
         borderRadius="2px"
         ml="1px"
