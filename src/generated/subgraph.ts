@@ -1668,7 +1668,9 @@ export enum _SubgraphErrorPolicy_ {
 export type GetAllCellarsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, asset: string, tvlActive: string, tvlInactive: string, tvlTotal: string, numWalletsActive: number, numWalletsAllTime: number, sharesTotal: string, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number, cellar: { __typename?: 'Cellar', id: string } }> }> };
+export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, asset: string, tvlActive: string, tvlInactive: string, tvlTotal: string, numWalletsActive: number, numWalletsAllTime: number, sharesTotal: string, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> }>, cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
+
+export type CellarDayDatasFragment = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
 
 export type GetCellarRouteStaticQueryVariables = Exact<{
   cellarAddress: Scalars['ID'];
@@ -1688,7 +1690,7 @@ export type GetCellarQueryVariables = Exact<{
 }>;
 
 
-export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, asset: string, liquidityLimit: string, name: string, numWalletsActive: number, numWalletsAllTime: number, tvlActive: string, tvlInactive: string, tvlTotal: string, addedLiquidityAllTime: string, removedLiquidityAllTime: string, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, addedLiquidity: string, removedLiquidity: string, numWallets: number }> } | null, wallets: Array<{ __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', id: string, balance: string }>, depositWithdrawEvents: Array<{ __typename?: 'DepositWithdrawEvent', id: string, txId: string, amount: string }> }> };
+export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, asset: string, liquidityLimit: string, name: string, numWalletsActive: number, numWalletsAllTime: number, tvlActive: string, tvlInactive: string, tvlTotal: string, addedLiquidityAllTime: string, removedLiquidityAllTime: string, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> } | null, wallets: Array<{ __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', id: string, balance: string }>, depositWithdrawEvents: Array<{ __typename?: 'DepositWithdrawEvent', id: string, txId: string, amount: string }> }> };
 
 export type GetPositionQueryVariables = Exact<{
   walletAddress: Scalars['ID'];
@@ -1698,7 +1700,17 @@ export type GetPositionQueryVariables = Exact<{
 
 export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
 
-
+export const CellarDayDatasFragmentDoc = gql`
+    fragment CellarDayDatas on Query {
+  cellarDayDatas(orderBy: date, orderDirection: asc) {
+    id
+    date
+    tvlActive
+    tvlInvested
+    earnings
+  }
+}
+    `;
 export const GetAllCellarsDocument = gql`
     query GetAllCellars {
   cellars {
@@ -1711,19 +1723,17 @@ export const GetAllCellarsDocument = gql`
     numWalletsActive
     numWalletsAllTime
     sharesTotal
-    dayDatas(first: 7, orderBy: date, orderDirection: desc) {
+    dayDatas(first: 7, orderBy: date, orderDirection: asc) {
       id
       date
-      cellar {
-        id
-      }
-      addedLiquidity
-      removedLiquidity
-      numWallets
+      tvlActive
+      tvlInvested
+      earnings
     }
   }
+  ...CellarDayDatas
 }
-    `;
+    ${CellarDayDatasFragmentDoc}`;
 
 export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCellarsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllCellarsQuery>({ query: GetAllCellarsDocument, ...options });
@@ -1766,11 +1776,12 @@ export const GetCellarDocument = gql`
     tvlTotal
     addedLiquidityAllTime
     removedLiquidityAllTime
-    dayDatas(first: 7, orderBy: date, orderDirection: desc) {
+    dayDatas(first: 7, orderBy: date, orderDirection: asc) {
+      id
       date
-      addedLiquidity
-      removedLiquidity
-      numWallets
+      tvlActive
+      tvlInvested
+      earnings
     }
   }
   wallets {
