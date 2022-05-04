@@ -10,9 +10,9 @@ export interface CellarCardData {
   description: string
   tvm?: string
   strategyType: string
-  // managementFee: string
+  managementFee: string
   protocols: string
-  // apy: string
+  apy: string
 }
 
 interface CellarCardProps extends BoxProps {
@@ -56,7 +56,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
           </Flex>
           <Flex>
             <Tag>{data.strategyType}</Tag>
-            {/* <Tag ml={2}>{data.managementFee}</Tag> */}
+            <Tag ml={2}>{data.managementFee}</Tag>
             <Tag ml={2}>{data.protocols}</Tag>
           </Flex>
         </Box>
