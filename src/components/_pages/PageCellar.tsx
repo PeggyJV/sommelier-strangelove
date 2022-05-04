@@ -24,6 +24,7 @@ import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
 import BondingTableCard from "components/_cards/BondingTableCard"
+import { cellarDataMap } from "data/cellarDataMap"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -57,6 +58,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     addedLiquidityAllTime,
     removedLiquidityAllTime
   )
+  const { name: nameAbbreviated } = cellarDataMap[id]
 
   return (
     <Layout>
@@ -76,7 +78,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
                 </SecondaryButton>
               </Link>
               <Heading fontSize="2.5rem">
-                aave2{" "}
+                {nameAbbreviated}{" "}
                 <Box
                   as="span"
                   textTransform="uppercase"

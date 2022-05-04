@@ -35,7 +35,6 @@ export type Cellar = {
   accruedPlatformFees: Scalars['BigInt'];
   addedLiquidityAllTime: Scalars['BigInt'];
   asset: Scalars['String'];
-  assetAToken: TokenErc20;
   burntPerformanceFees: Scalars['BigInt'];
   dayDatas: Array<CellarDayData>;
   depositLimit: Scalars['BigInt'];
@@ -83,6 +82,7 @@ export type CellarDayData = {
   removedLiquidity: Scalars['BigInt'];
   tvlActive: Scalars['BigInt'];
   tvlInactive: Scalars['BigInt'];
+  tvlInvested: Scalars['BigInt'];
   tvlTotal: Scalars['BigInt'];
   updatedAt: Scalars['Int'];
 };
@@ -194,6 +194,14 @@ export type CellarDayData_Filter = {
   tvlInactive_lte?: InputMaybe<Scalars['BigInt']>;
   tvlInactive_not?: InputMaybe<Scalars['BigInt']>;
   tvlInactive_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  tvlInvested?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_gt?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_gte?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  tvlInvested_lt?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_lte?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_not?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   tvlTotal?: InputMaybe<Scalars['BigInt']>;
   tvlTotal_gt?: InputMaybe<Scalars['BigInt']>;
   tvlTotal_gte?: InputMaybe<Scalars['BigInt']>;
@@ -223,6 +231,7 @@ export enum CellarDayData_OrderBy {
   RemovedLiquidity = 'removedLiquidity',
   TvlActive = 'tvlActive',
   TvlInactive = 'tvlInactive',
+  TvlInvested = 'tvlInvested',
   TvlTotal = 'tvlTotal',
   UpdatedAt = 'updatedAt'
 }
@@ -236,6 +245,7 @@ export type CellarHourData = {
   id: Scalars['ID'];
   tvlActive: Scalars['BigInt'];
   tvlInactive: Scalars['BigInt'];
+  tvlInvested: Scalars['BigInt'];
   tvlTotal: Scalars['BigInt'];
   updatedAt: Scalars['Int'];
 };
@@ -323,6 +333,14 @@ export type CellarHourData_Filter = {
   tvlInactive_lte?: InputMaybe<Scalars['BigInt']>;
   tvlInactive_not?: InputMaybe<Scalars['BigInt']>;
   tvlInactive_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  tvlInvested?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_gt?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_gte?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  tvlInvested_lt?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_lte?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_not?: InputMaybe<Scalars['BigInt']>;
+  tvlInvested_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   tvlTotal?: InputMaybe<Scalars['BigInt']>;
   tvlTotal_gt?: InputMaybe<Scalars['BigInt']>;
   tvlTotal_gte?: InputMaybe<Scalars['BigInt']>;
@@ -349,6 +367,7 @@ export enum CellarHourData_OrderBy {
   Id = 'id',
   TvlActive = 'tvlActive',
   TvlInactive = 'tvlInactive',
+  TvlInvested = 'tvlInvested',
   TvlTotal = 'tvlTotal',
   UpdatedAt = 'updatedAt'
 }
@@ -619,26 +638,6 @@ export type Cellar_Filter = {
   addedLiquidityAllTime_not?: InputMaybe<Scalars['BigInt']>;
   addedLiquidityAllTime_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   asset?: InputMaybe<Scalars['String']>;
-  assetAToken?: InputMaybe<Scalars['String']>;
-  assetAToken_contains?: InputMaybe<Scalars['String']>;
-  assetAToken_contains_nocase?: InputMaybe<Scalars['String']>;
-  assetAToken_ends_with?: InputMaybe<Scalars['String']>;
-  assetAToken_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  assetAToken_gt?: InputMaybe<Scalars['String']>;
-  assetAToken_gte?: InputMaybe<Scalars['String']>;
-  assetAToken_in?: InputMaybe<Array<Scalars['String']>>;
-  assetAToken_lt?: InputMaybe<Scalars['String']>;
-  assetAToken_lte?: InputMaybe<Scalars['String']>;
-  assetAToken_not?: InputMaybe<Scalars['String']>;
-  assetAToken_not_contains?: InputMaybe<Scalars['String']>;
-  assetAToken_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  assetAToken_not_ends_with?: InputMaybe<Scalars['String']>;
-  assetAToken_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  assetAToken_not_in?: InputMaybe<Array<Scalars['String']>>;
-  assetAToken_not_starts_with?: InputMaybe<Scalars['String']>;
-  assetAToken_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  assetAToken_starts_with?: InputMaybe<Scalars['String']>;
-  assetAToken_starts_with_nocase?: InputMaybe<Scalars['String']>;
   asset_contains?: InputMaybe<Scalars['String']>;
   asset_contains_nocase?: InputMaybe<Scalars['String']>;
   asset_ends_with?: InputMaybe<Scalars['String']>;
@@ -781,7 +780,6 @@ export enum Cellar_OrderBy {
   AccruedPlatformFees = 'accruedPlatformFees',
   AddedLiquidityAllTime = 'addedLiquidityAllTime',
   Asset = 'asset',
-  AssetAToken = 'assetAToken',
   BurntPerformanceFees = 'burntPerformanceFees',
   DayDatas = 'dayDatas',
   DepositLimit = 'depositLimit',
