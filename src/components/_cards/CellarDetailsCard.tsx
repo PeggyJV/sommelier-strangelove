@@ -6,6 +6,7 @@ import {
   HStack,
   Text,
   Tooltip,
+  useMediaQuery,
   VStack,
 } from "@chakra-ui/react"
 import { CardDivider } from "components/_layout/CardDivider"
@@ -53,11 +54,24 @@ const placeholderData = [
 
 const CellarDetailsCard: VFC<BoxProps> = () => {
   const { barChartTheme } = useNivoThemes()
+  const [isLessThan594] = useMediaQuery("(max-width: 594px)")
+  const [isLessThan953] = useMediaQuery("(max-width: 953px)")
 
   return (
     <TransparentCard p={4} overflow="visible">
-      <VStack spacing={4} divider={<CardDivider />} align="stretch">
-        <CardStatRow align="flex-start">
+      <VStack
+        spacing={4}
+        divider={<CardDivider />}
+        align={isLessThan594 ? "unset" : "stretch"}
+      >
+        <CardStatRow
+          justify={isLessThan594 ? "space-around" : "flex-start"}
+          align="flex-start"
+          direction={isLessThan594 ? "column" : "row"}
+          rowGap={isLessThan594 ? 0 : 4}
+          wrap="wrap"
+          id="caller"
+        >
           <CardStat
             label="strategy type"
             tooltip="Cellar uses Stablecoin lending"
@@ -72,7 +86,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
           </CardStat>
           <CardStat
             label="protocols"
-            tooltip="Protocols in which Cellar operates"
+            tooltip="Protocols in which Cellar operates"
           >
             <AaveIcon
               color="purple.base"
@@ -96,7 +110,11 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             />
             5%
           </CardStat>
-          <VStack spacing={2} align="stretch">
+          <VStack
+            width={isLessThan953 ? "100%" : "unset"}
+            spacing={2}
+            align="stretch"
+          >
             <HStack align="center">
               <Tooltip
                 hasArrow
@@ -108,7 +126,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               </Tooltip>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
-            <Box w="100%" h="4px">
+            <Box h="4px">
               {/* @ts-ignore */}
               <BarChart
                 layout="horizontal"

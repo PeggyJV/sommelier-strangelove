@@ -30,8 +30,11 @@ export const CellarStats: VFC<CellarStatsProps> = ({
 
   return (
     <HStack
+      id="cellarStats"
       spacing={8}
       align="flex-start"
+      wrap="wrap"
+      rowGap={4}
       divider={<CardDivider />}
       {...rest}
     >

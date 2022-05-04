@@ -6,6 +6,7 @@ import {
   HStack,
   StackDivider,
   Text,
+  useMediaQuery,
   VStack,
 } from "@chakra-ui/react"
 import { Serie } from "@nivo/line"
@@ -51,12 +52,13 @@ const timeButtons = ["24H", "1W", "All Time"]
 export const PerformanceCard: VFC<Props> = (props) => {
   const { lineChartTheme } = useNivoThemes()
   const [timeline, setTimeline] = useState<string>("24H")
+  const [isLargerThan553] = useMediaQuery("(min-width: 552px)")
 
   return (
     <TransparentCard p={4} overflow="visible" {...props}>
       <VStack spacing={6} align="stretch" divider={<CardDivider />}>
-        <Box h="20rem">
-          <HStack justify="space-between">
+        <Box h="20rem" mb={isLargerThan553 ? "0rem" : "2.2rem"}>
+          <HStack justify="space-between" wrap="wrap" rowGap={2}>
             <HStack spacing={8}>
               <CardStat
                 label={
@@ -95,6 +97,9 @@ export const PerformanceCard: VFC<Props> = (props) => {
               overflow="hidden"
               justify="space-around"
               spacing={0}
+              marginInlineStart={
+                isLargerThan553 ? "0.5rem" : "0rem !important"
+              }
               divider={
                 <StackDivider borderColor="rgba(203, 198, 209, 0.25)" />
               }

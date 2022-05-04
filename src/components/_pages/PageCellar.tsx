@@ -19,7 +19,6 @@ import { Link } from "components/Link"
 import { CellarStats } from "components/CellarStats"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { formatCurrency } from "utils/formatCurrency"
-import { formatApy } from "utils/formatApy"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
@@ -66,6 +65,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           pb={12}
           justify="space-between"
           align="flex-end"
+          wrap="wrap"
+          rowGap={4}
         >
           <VStack spacing={6} align="flex-start">
             <BreadCrumb cellarName={name} />
