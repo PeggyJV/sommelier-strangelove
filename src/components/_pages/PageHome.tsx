@@ -12,10 +12,14 @@ import {
   CellarCardData,
 } from "components/_cards/CellarCard/CellarCardDisplay"
 import { Link } from "components/Link"
+import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 
 const PageHome: NextPage = () => {
   const [auth] = useConnect()
   const [cellarsResult] = useGetAllCellarsQuery()
+  const { cellarData, userData, aaveCellarSigner } = useAaveV2Cellar()
+  console.log({ cellarData, userData, aaveCellarSigner })
+
   const { data, fetching } = cellarsResult
   const totalCellars = data?.cellars?.length ?? 0
   const numPlaceholderCards = 3 - totalCellars

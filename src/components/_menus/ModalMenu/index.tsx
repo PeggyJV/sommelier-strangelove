@@ -4,7 +4,6 @@ import { Menu } from "./Menu"
 
 export const ModalMenu: VFC = () => {
   const { control } = useFormContext()
-
   return (
     <Controller
       control={control}
