@@ -22,7 +22,7 @@ export const ToolTip: VFC<StackProps & BarTooltipProps<any>> =
         borderRadius={4}
       >
         <Circle size={4} bgColor={color} />
-        <Text>
+        <Text textTransform="capitalize">
           {id}: {value}%
         </Text>
       </HStack>

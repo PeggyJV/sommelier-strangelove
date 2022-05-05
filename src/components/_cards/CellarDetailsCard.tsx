@@ -46,7 +46,7 @@ const strategyAssets = tokenConfig.filter((token) =>
 
 const placeholderData = [
   {
-    platform: 5,
+    "strategy provider": 5,
     protocol: 5,
     depositors: 90,
   },
@@ -74,7 +74,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
           </CardStat>
           <CardStat
             label="protocols"
-            tooltip="Protocols in which Cellar operates"
+            tooltip="Protocols in which Cellar operates"
           >
             <AaveIcon
               color="purple.base"
@@ -118,7 +118,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
                 borderColor={theme.colors.neutral[800]}
                 borderWidth={1}
                 borderRadius={2}
-                keys={["platform", "protocol", "depositors"]}
+                keys={["strategy provider", "protocol", "depositors"]}
                 data={placeholderData}
               />
             </Box>
@@ -128,7 +128,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
                   return (
                     <HStack key={i}>
                       <Circle size={4} bg={barChartTheme[i]} />
-                      <Text fontSize="sm">
+                      <Text fontSize="sm" textTransform="capitalize">
                         {value}% {key}
                       </Text>
                     </HStack>

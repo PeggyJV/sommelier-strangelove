@@ -16,6 +16,7 @@ export const ToolTip: VFC<BoxProps & PointTooltipProps> = forwardRef(
         borderWidth={1}
         borderColor="purple.base"
         borderRadius={4}
+        textTransform="capitalize"
       >
         {data.xFormatted}
       </Box>
