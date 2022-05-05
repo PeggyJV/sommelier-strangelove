@@ -51,10 +51,10 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
       <Flex
         flexDirection="column"
         borderWidth={1}
-        borderColor="violet.base"
+        borderColor="purple.base"
         boxShadow={`
-          0 0 1px 0 ${theme.colors.violet.base} inset,
-          0 0 1px 0 ${theme.colors.violet.base}
+          0 0 1px 0 ${theme.colors.purple.base} inset,
+          0 0 1px 0 ${theme.colors.purple.base}
         `}
         borderRadius={24}
         zIndex="2"
