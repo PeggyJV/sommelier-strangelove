@@ -92,7 +92,6 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           <CellarStats
             tvm={`$${tvmVal} USDC`}
             apy={apy}
-            trending="up"
             currentDeposits={currentDepositsVal}
             cellarCap={liquidityLimit}
           />

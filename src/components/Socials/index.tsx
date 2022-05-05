@@ -20,7 +20,7 @@ export const Socials: VFC<StackProps> = ({ ...rest }) => {
               borderRadius={16}
               borderColor="surface.secondary"
               _hover={{
-                bg: "red.base",
+                bg: "purple.dark",
               }}
             />
           </Link>
