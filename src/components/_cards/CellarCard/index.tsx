@@ -5,7 +5,7 @@ import {
 } from "./CellarCardDisplay"
 import { useGetCellarQuery } from "generated/subgraph"
 import { cellarDataMap } from "data/cellarDataMap"
-import { formatApy } from "utils/formatApy"
+import { averageApy } from "utils/cellarApy"
 
 interface CellarCardProps extends BoxProps {
   cellarAddress: string
@@ -34,14 +34,17 @@ export const CellarCard: React.FC<CellarCardProps> = ({
     return <Heading>Cellar not found</Heading>
   }
 
+  const apy = data && averageApy(data.cellar.dayDatas).toFixed(2)
+
   const cellarCardData: CellarCardData = {
     name: cellarDataMap[cellarAddress].name,
     description: cellarDataMap[cellarAddress].description,
     tvm: "",
     strategyType: cellarDataMap[cellarAddress].strategyType,
     // managementFee: `${parseFloat(data.cellar.feePlatform) * 100}%`,
+    managementFee: "1%",
     protocols: cellarDataMap[cellarAddress].protocols,
-    // apy: formatApy(data.cellar.apy)!,
+    apy,
   }
 
   return <CellarCardDisplay data={cellarCardData} {...rest} />
