@@ -68,7 +68,11 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                 placement="top"
                 bg="surface.bg"
               >
-                <Th fontSize={10} fontWeight="normal">
+                <Th
+                  fontSize={10}
+                  fontWeight="normal"
+                  textTransform="capitalize"
+                >
                   <HStack spacing={1} align="center">
                     <Text as="span">Bonded Tokens</Text>
                     <InformationIcon
@@ -78,7 +82,11 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   </HStack>
                 </Th>
               </Tooltip>
-              <Th fontSize={10} fontWeight="normal">
+              <Th
+                fontSize={10}
+                fontWeight="normal"
+                textTransform="capitalize"
+              >
                 Bonding Period
               </Th>
               <Tooltip
@@ -88,7 +96,11 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                 placement="top"
                 bg="surface.bg"
               >
-                <Th fontSize={10} fontWeight="normal">
+                <Th
+                  fontSize={10}
+                  fontWeight="normal"
+                  textTransform="capitalize"
+                >
                   <HStack spacing={1} align="center">
                     <Text as="span">Rewards</Text>
                     <InformationIcon

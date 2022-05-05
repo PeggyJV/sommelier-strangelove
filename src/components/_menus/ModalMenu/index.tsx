@@ -1,6 +1,6 @@
-import { VFC } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
-import { Menu } from './Menu'
+import { VFC } from "react"
+import { Controller, useFormContext } from "react-hook-form"
+import { Menu } from "./Menu"
 
 export const ModalMenu: VFC = () => {
   const { control } = useFormContext()
@@ -8,7 +8,7 @@ export const ModalMenu: VFC = () => {
   return (
     <Controller
       control={control}
-      name='selectedToken'
+      name="selectedToken"
       render={({ field: { value, onChange } }) => {
         return <Menu value={value} onChange={onChange} />
       }}

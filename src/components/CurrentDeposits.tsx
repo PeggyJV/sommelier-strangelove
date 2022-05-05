@@ -34,7 +34,13 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           ${formatCurrency(currentDeposits)} USDC
         </Text>
       </HStack>
-      <Box w="100%" h="4px" bg="#252429" overflow="hidden">
+      <Box
+        w="100%"
+        h="4px"
+        bg="#252429"
+        borderRadius={2}
+        overflow="hidden"
+      >
         {/* @ts-ignore */}
         <BarChart
           layout="horizontal"
@@ -42,6 +48,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           keys={["currentDeposits"]}
           data={data}
           maxValue={isDataPresent ? parseInt(cellarCap) : "auto"}
+          borderRadius={2}
           valueScale={{ type: "linear" }}
           enableLabel={false}
           enableGridX={false}

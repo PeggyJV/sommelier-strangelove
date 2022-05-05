@@ -1,4 +1,11 @@
-import { Box, BoxProps, Heading, Img, Flex } from "@chakra-ui/react"
+import {
+  Box,
+  BoxProps,
+  Heading,
+  Img,
+  Flex,
+  useTheme,
+} from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
@@ -27,10 +34,13 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   index,
   ...rest
 }) => {
+  const theme = useTheme()
+
   return (
     <Card
       borderRadius={32}
-      border="8px solid rgba(78, 56, 156, 0.08)"
+      borderWidth={8}
+      borderColor="surface.primary"
       padding="0"
       position="relative"
       display="flex"
@@ -40,7 +50,12 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
       <Burst />
       <Flex
         flexDirection="column"
-        border="1px solid rgba(237, 74, 125, 1)"
+        borderWidth={1}
+        borderColor="purple.base"
+        boxShadow={`
+          0 0 1px 0 ${theme.colors.purple.base} inset,
+          0 0 1px 0 ${theme.colors.purple.base}
+        `}
         borderRadius={24}
         zIndex="2"
       >
