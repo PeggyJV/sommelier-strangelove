@@ -19,11 +19,12 @@ import { Link } from "components/Link"
 import { CellarStats } from "components/CellarStats"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { formatCurrency } from "utils/formatCurrency"
-import { formatApy } from "utils/formatApy"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
 import BondingTableCard from "components/_cards/BondingTableCard"
+import { cellarDataMap } from "data/cellarDataMap"
+import { averageApy } from "utils/cellarApy"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -45,18 +46,19 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const { data } = cellarResult
   const { cellar } = data || {}
   const {
+    dayDatas,
     tvlTotal,
     liquidityLimit,
     addedLiquidityAllTime,
     removedLiquidityAllTime,
   } = cellar || {}
   const tvmVal = formatCurrency(tvlTotal)
-  // TODO: this value needs to be calculated differently now.
-  // const apyVal = formatApy(apy)
+  const apy = data && averageApy(dayDatas!).toFixed(2)
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
     removedLiquidityAllTime
   )
+  const { name: nameAbbreviated } = cellarDataMap[id]
 
   return (
     <Layout>
@@ -76,7 +78,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
                 </SecondaryButton>
               </Link>
               <Heading fontSize="2.5rem">
-                aave2{" "}
+                {nameAbbreviated}{" "}
                 <Box
                   as="span"
                   textTransform="uppercase"
@@ -89,7 +91,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </VStack>
           <CellarStats
             tvm={`$${tvmVal} USDC`}
-            apy={"3.71"}
+            apy={apy}
             trending="up"
             currentDeposits={currentDepositsVal}
             cellarCap={liquidityLimit}
