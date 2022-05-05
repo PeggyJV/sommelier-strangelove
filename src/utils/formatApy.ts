@@ -1,4 +1,5 @@
 import { CellarDayData } from "generated/subgraph"
+import { BigNumber, FixedNumber } from "@ethersproject/bignumber"
 
 export const formatApy = (
   dayDatas?: Partial<CellarDayData>[]
@@ -6,25 +7,38 @@ export const formatApy = (
   if (!dayDatas) {
     return undefined
   }
+  console.log({ dayDatas })
 
-  const totalEarnings: number = dayDatas.reduce((acc, dayData, i) => {
-    const previousDayData = i > 0 ? dayDatas[i - 1] : undefined
-    const rebalance: boolean = dayData.date === previousDayData?.date
-    const rebalanceEarnings: number =
-      dayData.earnings + previousDayData?.earnings
+  const totalEarnings: BigNumber = dayDatas.reduce(
+    (acc, dayData, i) => {
+      const previousDayData = i > 0 ? dayDatas[i - 1] : undefined
+      const rebalance: boolean =
+        dayData.date === previousDayData?.date
 
-    return rebalance
-      ? acc + rebalanceEarnings
-      : acc + dayData.earnings
-  }, 0)
-  const tvlInvested: number =
+      const rebalanceEarnings = rebalance
+        ? BigNumber.from(dayData.earnings).add(
+            BigNumber.from(previousDayData?.earnings)
+          )
+        : undefined
+
+      return rebalance
+        ? acc.add(rebalanceEarnings!)
+        : acc.add(BigNumber.from(dayData.earnings))
+    },
+    BigNumber.from(0)
+  )
+  const tvlInvested: BigNumber = BigNumber.from(
     dayDatas[dayDatas.length - 1].tvlInvested
-  const totalYield: number = totalEarnings / tvlInvested
+  )
+  const totalYield: BigNumber = totalEarnings.div(tvlInvested)
   const days: number = dayDatas.length
   const periodsInYear: number = 365 / days
-  const apy: number = ((1 + totalYield) ^ (periodsInYear - 1)) * 100
+  const apy: BigNumber = BigNumber.from(1)
+    .add(totalYield)
+    .pow(FixedNumber.from(periodsInYear).subUnsafe(1))
+    .mul(100)
 
-  const apyVal: string = (apy * 100).toFixed(2)
+  const apyVal: any = apy.mul(100)
 
   console.log({
     totalEarnings,
