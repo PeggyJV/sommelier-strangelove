@@ -7,10 +7,9 @@ import {
   useBalance,
 } from "wagmi"
 import { Balance } from "wagmi-core"
-import { config } from "../../utils/config"
+import { config } from "utils/config"
 import { useEffect, useState, useCallback } from "react"
 import { BigNumber } from "bignumber.js"
-// import { toEther } from '../utils'
 import { BigNumber as BigNumberE } from "ethers"
 
 type CellarState = {
@@ -46,9 +45,9 @@ const initialCellarData: CellarState = {
   loading: false,
   name: "",
 }
-const AaveV2CellarContext = createContext<SharedState>({
-  cellarData: initialCellarData,
-  userData: initialUserData,
+const SommStakingContext = createContext<SharedState>({
+  stakingData: initialCellarData,
+  userStakes: initialUserData,
 })
 
 export const AaveV2CellarProvider = ({

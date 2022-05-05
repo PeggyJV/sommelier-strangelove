@@ -15,8 +15,11 @@ import { tokenConfig } from "data/tokenConfig"
 import { InlineImage } from "components/InlineImage"
 import TransparentCard from "./TransparentCard"
 import { TokenAssets } from "components/TokenAssets"
+import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { toEther } from "./../../utils/formatCurrency"
 
 export const PortfolioCard: VFC<BoxProps> = () => {
+  const { userData, fetchUserData } = useAaveV2Cellar()
   return (
     <TransparentCard px={10} py={6}>
       <CardStatRow
@@ -68,7 +71,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
                 src="/assets/icons/aave.svg"
                 alt="aave logo"
               />
-              0
+              {toEther(userData?.balances?.aaveClr)}
             </CardStat>
           </VStack>
           <VStack align="flex-start">

@@ -29,6 +29,7 @@ import { ethers } from "ethers"
 import { BigNumber } from "bignumber.js"
 import { useBrandedToast } from "hooks/chakra"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { toEther } from "utils/formatCurrency"
 interface FormValues {
   depositAmount: number
   selectedToken: Token
@@ -43,9 +44,12 @@ export const DepositForm: VFC = () => {
     setValue,
     formState: { errors, isSubmitting, isSubmitted },
   } = useForm<FormValues>()
-
+  console.log("deposit form")
   // const [data, setData] = useState<any>()
   const watchDepositAmount = watch("depositAmount")
+  const watchToken = watch("selectedToken")
+
+  console.log({ watchDepositAmount, watchToken })
   const isError = errors.depositAmount
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
@@ -233,8 +237,15 @@ export const DepositForm: VFC = () => {
                 validate: {
                   positive: (v) =>
                     v > 0 || "You must submit a positive amount.",
-                  lessThanBalance: (v) =>
-                    v < 50 || "Insufficient balance",
+                  lessThanBalance: (v) => {
+                    console.log("lessThank Balance ", v)
+                    return (
+                      v <
+                        parseFloat(
+                          toEther(userData?.balances?.dai || "")
+                        ) || "Insufficient balance"
+                    )
+                  },
                 },
               })}
             />

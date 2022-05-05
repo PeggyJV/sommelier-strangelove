@@ -20,5 +20,11 @@
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#460644",
+    "statusBar.foreground": "#FEFAF1",
+    "titleBar.activeBackground": "#460644",
+    "titleBar.activeForeground": "#FEFAF1"
   }
 }

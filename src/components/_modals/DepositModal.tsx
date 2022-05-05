@@ -12,26 +12,9 @@ import { BaseModal } from "./BaseModal"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { ethers } from "ethers"
 import { BigNumber } from "bignumber.js"
+import { toEther } from "./../../utils/formatCurrency"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
-
-export const toEther = (
-  val: ethers.BigNumberish | undefined,
-  decimals = 18,
-  format = true,
-  precision = 3
-) => {
-  if (!val || val === "--") return "--"
-  try {
-    const fmt = ethers.utils.formatUnits(val, decimals)
-    const result = new BigNumber(fmt)
-    if (format) return result.toFormat(2)
-    return result.toFixed(precision, 1)
-  } catch (e) {
-    console.log(e)
-    return "--"
-  }
-}
 
 export const DepositModal: VFC<DepositModalProps> = (props) => {
   const { cellarData, userData, aaveCellarSigner } = useAaveV2Cellar()

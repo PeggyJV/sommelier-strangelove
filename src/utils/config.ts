@@ -1,5 +1,6 @@
 import aaveV2CellarAbi from "../abi/aaveV2Cellar-v2.json"
 import cellarRouter from "../abi/cellarRouter.json"
+import sommStaking from "../abi/sommStaking.json"
 import { erc20ABI } from "wagmi"
 
 /** Ensure Checksum Address  */
@@ -13,6 +14,10 @@ export const config = {
     CELLAR_ROUTER: {
       ADDRESS: "0xE03B91176B7F109Fb32f3c5C507DBf23D85bdE95",
       ABI: cellarRouter,
+    },
+    SOMM_STAKING: {
+      ADDRESS: "0xCEe04d9b75C282A630bA10583a3aC2C3c3599939",
+      ABI: sommStaking,
     },
     USDC: {
       ADDRESS: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
