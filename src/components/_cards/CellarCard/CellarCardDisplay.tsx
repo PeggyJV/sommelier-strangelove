@@ -35,10 +35,12 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   ...rest
 }) => {
   const theme = useTheme()
+
   return (
     <Card
       borderRadius={32}
-      border="8px solid rgba(78, 56, 156, 0.08)"
+      borderWidth={8}
+      borderColor="surface.primary"
       padding="0"
       position="relative"
       display="flex"
@@ -48,8 +50,12 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
       <Burst />
       <Flex
         flexDirection="column"
-        border={`1px solid ${theme.colors.violet.base}`}
-        boxShadow={`0 0 1px 0 ${theme.colors.violet.base} inset, 0 0 1px 0 ${theme.colors.violet.base}`}
+        borderWidth={1}
+        borderColor="violet.base"
+        boxShadow={`
+          0 0 1px 0 ${theme.colors.violet.base} inset,
+          0 0 1px 0 ${theme.colors.violet.base}
+        `}
         borderRadius={24}
         zIndex="2"
       >
