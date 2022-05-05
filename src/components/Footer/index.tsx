@@ -22,7 +22,7 @@ const Footer: VFC<ContainerProps> = (props) => {
         ml={2}
         mr={2}
         borderTop="1px solid"
-        borderColor="rgba(203, 198, 209, 0.25)"
+        borderColor="neutral.700"
         justifyContent="space-between"
         alignItems="center"
         width="100%"
