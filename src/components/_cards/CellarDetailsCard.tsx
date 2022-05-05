@@ -6,6 +6,7 @@ import {
   HStack,
   Text,
   Tooltip,
+  useTheme,
   VStack,
 } from "@chakra-ui/react"
 import { CardDivider } from "components/_layout/CardDivider"
@@ -53,6 +54,7 @@ const placeholderData = [
 
 const CellarDetailsCard: VFC<BoxProps> = () => {
   const { barChartTheme } = useNivoThemes()
+  const theme = useTheme()
 
   return (
     <TransparentCard p={4} overflow="visible">
@@ -113,6 +115,9 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               <BarChart
                 layout="horizontal"
                 colors={barChartTheme}
+                borderColor={theme.colors.neutral[800]}
+                borderWidth={1}
+                borderRadius={2}
                 keys={["platform", "protocol", "depositors"]}
                 data={placeholderData}
               />

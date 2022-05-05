@@ -8,11 +8,11 @@ export const styles: Styles = {
     },
     body: {
       zIndex: "hide",
-      "-webkit-font-smoothing": "antialiased" /* Chrome, Safari */,
-      "-moz-osx-font-smoothing": "grayscale" /* Firefox */,
+      WebkitFontSmoothing: "antialiased",
+      MozOsxFontSmoothing: "grayscale",
     },
     a: {
-      "-webkit-tap-highlight-color": "rgba(0,0,0,0)",
+      WebkitTapHighlightColor: "rgba(0,0,0,0)",
     },
   },
 }

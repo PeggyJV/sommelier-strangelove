@@ -26,7 +26,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
       >
         <SimpleGrid
           templateColumns="repeat(2, max-content)"
+          templateRows="repeat(2, 1fr)"
           spacing={4}
+          alignItems="flex-end"
         >
           <CardStat
             label="net value"
@@ -53,7 +55,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
         </SimpleGrid>
         <SimpleGrid
           templateColumns="repeat(2, max-content)"
+          templateRows="repeat(2, 1fr)"
           spacing={4}
+          alignItems="flex-end"
         >
           <VStack align="flex-start">
             <CardStat
@@ -66,7 +70,6 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               />
               0
             </CardStat>
-            <BondButton />
           </VStack>
           <VStack align="flex-start">
             <CardStat
@@ -80,20 +83,28 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               0
             </CardStat>
           </VStack>
+          <BondButton />
         </SimpleGrid>
-        <VStack align="flex-start">
-          <CardStat
-            label="rewards"
-            tooltip="Amount of SOMM earned and available to be claimed"
-          >
-            <InlineImage
-              src="/assets/icons/somm.svg"
-              alt="aave logo"
-            />
-            0
-          </CardStat>
+        <SimpleGrid
+          templateColumns="max-content"
+          templateRows="repeat(2, 1fr)"
+          spacing={4}
+          alignItems="flex-end"
+        >
+          <VStack align="flex-start">
+            <CardStat
+              label="rewards"
+              tooltip="Amount of SOMM earned and available to be claimed"
+            >
+              <InlineImage
+                src="/assets/icons/somm.svg"
+                alt="aave logo"
+              />
+              0
+            </CardStat>
+          </VStack>
           <ClaimButton />
-        </VStack>
+        </SimpleGrid>
       </CardStatRow>
     </TransparentCard>
   )

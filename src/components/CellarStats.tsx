@@ -8,7 +8,6 @@ import { ArrowDownIcon, ArrowUpIcon } from "./_icons"
 interface CellarStatsProps extends StackProps {
   tvm?: string
   apy?: string
-  trending?: "up" | "down"
   currentDeposits?: string
   cellarCap?: string
 }
@@ -16,17 +15,12 @@ interface CellarStatsProps extends StackProps {
 export const CellarStats: VFC<CellarStatsProps> = ({
   tvm,
   apy,
-  trending,
   currentDeposits,
   cellarCap,
   ...rest
 }) => {
-  const apyColor =
-    trending === "up"
-      ? "lime.base"
-      : trending === "down"
-      ? "red.base"
-      : ""
+  const positiveApy = apy && parseInt(apy) > 0
+  const apyColor = positiveApy ? "lime.base" : "red.base"
 
   return (
     <HStack
@@ -43,7 +37,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
       </VStack>
       <VStack spacing={1} align="flex-start">
         <HStack color={apyColor} align="center">
-          {trending === "up" ? (
+          {positiveApy ? (
             <ArrowUpIcon boxSize={4} />
           ) : (
             <ArrowDownIcon boxSize={4} />

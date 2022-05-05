@@ -6,7 +6,7 @@ export const CardHeading: VFC<TextProps> = forwardRef(
     return (
       <Text
         ref={ref}
-        textTransform="uppercase"
+        textTransform="capitalize"
         color="neutral.300"
         fontSize="0.625rem"
         {...props}
