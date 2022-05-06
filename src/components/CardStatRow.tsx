@@ -1,12 +1,12 @@
-import { HStack, StackProps } from '@chakra-ui/react'
-import { VFC } from 'react'
-import { CardDivider } from './_layout/CardDivider'
+import { Stack, StackProps } from "@chakra-ui/react"
+import { VFC } from "react"
+import { CardDivider } from "./_layout/CardDivider"
 
-export const CardStatRow: VFC<StackProps> = props => {
+export const CardStatRow: VFC<StackProps> = (props) => {
   return (
-    <HStack
+    <Stack
       spacing={3}
-      justify='space-around'
+      justify="space-around"
       divider={<CardDivider />}
       {...props}
     />

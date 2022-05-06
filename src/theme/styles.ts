@@ -14,5 +14,10 @@ export const styles: Styles = {
     a: {
       WebkitTapHighlightColor: "rgba(0,0,0,0)",
     },
+    // "a:focus:not(:focus-visible), div:focus:not(:focus-visible), button:focus:not(:focus-visible)":
+    //   {
+    //     outline: "unset",
+    //     boxShadow: "unset",
+    //   },
   },
 }

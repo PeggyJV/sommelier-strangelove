@@ -23,7 +23,7 @@ export const CardStat: VFC<CardStatProps> = ({
   ...rest
 }) => {
   return (
-    <VStack flex={1} align="flex-start" {...rest}>
+    <VStack flex={1} align="flex-start" whiteSpace="nowrap" {...rest}>
       <Tooltip
         hasArrow
         arrowShadowColor="purple.base"

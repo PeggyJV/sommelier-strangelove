@@ -1,5 +1,11 @@
 import { VFC } from "react"
-import { Heading, HStack, StackProps, VStack } from "@chakra-ui/react"
+import {
+  Heading,
+  HStack,
+  StackProps,
+  useBreakpointValue,
+  VStack,
+} from "@chakra-ui/react"
 import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { CurrentDeposits } from "./CurrentDeposits"
@@ -21,12 +27,26 @@ export const CellarStats: VFC<CellarStatsProps> = ({
 }) => {
   const positiveApy = apy && parseInt(apy) > 0
   const apyColor = positiveApy ? "lime.base" : "red.base"
+  const borderColor = useBreakpointValue({
+    sm: "transparent",
+    md: "neutral.700",
+  })
 
   return (
     <HStack
       spacing={8}
       align="flex-start"
-      divider={<CardDivider />}
+      wrap="wrap"
+      rowGap={4}
+      divider={
+        <CardDivider
+          css={{
+            "&:nth-last-child(2)": {
+              borderColor,
+            },
+          }}
+        />
+      }
       {...rest}
     >
       <VStack spacing={1} align="flex-start">
