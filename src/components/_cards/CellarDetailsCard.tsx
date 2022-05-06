@@ -6,6 +6,7 @@ import {
   HStack,
   Text,
   Tooltip,
+  useBreakpointValue,
   useTheme,
   VStack,
 } from "@chakra-ui/react"
@@ -55,11 +56,35 @@ const placeholderData = [
 const CellarDetailsCard: VFC<BoxProps> = () => {
   const { barChartTheme } = useNivoThemes()
   const theme = useTheme()
+  const borderColor = useBreakpointValue({
+    sm: "neutral.700",
+    md: "transparent",
+    lg: "neutral.700",
+  })
 
   return (
     <TransparentCard p={4} overflow="visible">
-      <VStack spacing={4} divider={<CardDivider />} align="stretch">
-        <CardStatRow align="flex-start">
+      <VStack
+        spacing={4}
+        divider={<CardDivider />}
+        align={{ sm: "unset", md: "stretch" }}
+      >
+        <CardStatRow
+          justify={{ sm: "space-around", md: "flex-start" }}
+          align="flex-start"
+          direction={{ sm: "column", md: "row" }}
+          rowGap={{ sm: 0, md: 4 }}
+          wrap="wrap"
+          divider={
+            <CardDivider
+              css={{
+                "&:nth-last-child(2)": {
+                  borderColor,
+                },
+              }}
+            />
+          }
+        >
           <CardStat
             label="strategy type"
             tooltip="Cellar uses Stablecoin lending"
@@ -98,7 +123,11 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             />
             5%
           </CardStat>
-          <VStack spacing={2} align="stretch">
+          <VStack
+            width={{ sm: "100%", lg: "unset" }}
+            spacing={2}
+            align="stretch"
+          >
             <HStack align="center">
               <Tooltip
                 hasArrow
@@ -110,7 +139,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               </Tooltip>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
-            <Box w="100%" h="4px">
+            <Box h="4px">
               {/* @ts-ignore */}
               <BarChart
                 layout="horizontal"

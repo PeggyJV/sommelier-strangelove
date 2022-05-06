@@ -68,6 +68,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           pb={12}
           justify="space-between"
           align="flex-end"
+          wrap="wrap"
+          rowGap={4}
         >
           <VStack spacing={6} align="flex-start">
             <BreadCrumb cellarName={name} />
