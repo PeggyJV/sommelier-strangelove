@@ -14,21 +14,10 @@ export const styles: Styles = {
     a: {
       WebkitTapHighlightColor: "rgba(0,0,0,0)",
     },
-    "a:focus:not(:focus-visible), div:focus:not(:focus-visible), button:focus:not(:focus-visible)":
-      {
-        outline: "unset",
-        boxShadow: "unset",
-      },
-    "@media only screen and (min-width: 595px) and (max-width: 953px)":
-      {
-        "#caller > div:nth-last-child(2)": {
-          borderColor: "transparent",
-        },
-      },
-    "@media only screen and (max-width: 591px)": {
-      "#cellarStats > div:nth-last-child(2)": {
-        borderColor: "transparent",
-      },
-    },
+    // "a:focus:not(:focus-visible), div:focus:not(:focus-visible), button:focus:not(:focus-visible)":
+    //   {
+    //     outline: "unset",
+    //     boxShadow: "unset",
+    //   },
   },
 }

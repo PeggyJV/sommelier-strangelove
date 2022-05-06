@@ -6,7 +6,7 @@ import {
   HStack,
   Text,
   Tooltip,
-  useMediaQuery,
+  useBreakpointValue,
   useTheme,
   VStack,
 } from "@chakra-ui/react"
@@ -55,24 +55,35 @@ const placeholderData = [
 
 const CellarDetailsCard: VFC<BoxProps> = () => {
   const { barChartTheme } = useNivoThemes()
-  const [isLessThan594] = useMediaQuery("(max-width: 594px)")
-  const [isLessThan953] = useMediaQuery("(max-width: 953px)")
   const theme = useTheme()
+  const borderColor = useBreakpointValue({
+    sm: "neutral.700",
+    md: "transparent",
+    lg: "neutral.700",
+  })
 
   return (
     <TransparentCard p={4} overflow="visible">
       <VStack
         spacing={4}
         divider={<CardDivider />}
-        align={isLessThan594 ? "unset" : "stretch"}
+        align={{ sm: "unset", md: "stretch" }}
       >
         <CardStatRow
-          justify={isLessThan594 ? "space-around" : "flex-start"}
+          justify={{ sm: "space-around", md: "flex-start" }}
           align="flex-start"
-          direction={isLessThan594 ? "column" : "row"}
-          rowGap={isLessThan594 ? 0 : 4}
+          direction={{ sm: "column", md: "row" }}
+          rowGap={{ sm: 0, md: 4 }}
           wrap="wrap"
-          id="caller"
+          divider={
+            <CardDivider
+              css={{
+                "&:nth-last-child(2)": {
+                  borderColor,
+                },
+              }}
+            />
+          }
         >
           <CardStat
             label="strategy type"
@@ -113,7 +124,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             5%
           </CardStat>
           <VStack
-            width={isLessThan953 ? "100%" : "unset"}
+            width={{ sm: "100%", lg: "unset" }}
             spacing={2}
             align="stretch"
           >

@@ -1,10 +1,4 @@
-import {
-  BoxProps,
-  SimpleGrid,
-  Stack,
-  useMediaQuery,
-  VStack,
-} from "@chakra-ui/react"
+import { BoxProps, SimpleGrid, Stack, VStack } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { VFC } from "react"
@@ -18,33 +12,21 @@ import TransparentCard from "./TransparentCard"
 import { TokenAssets } from "components/TokenAssets"
 
 export const PortfolioCard: VFC<BoxProps> = () => {
-  const [isLargerThan628] = useMediaQuery("(min-width: 628px)")
-  const [isLessThan594] = useMediaQuery("(max-width: 594px)")
-  const [isBetween444And595] = useMediaQuery(
-    "(max-width: 444px) and (max-width: 595px)"
-  )
-  const [isBetween595And829] = useMediaQuery(
-    "(min-width: 595px) and (max-width: 829px)"
-  )
-  const templateColumns = isBetween444And595
-    ? "repeat(1, max-content)"
-    : isBetween595And829
-    ? "repeat(1, max-content)"
-    : "repeat(2, max-content)"
-
   return (
     <TransparentCard px={10} py={6}>
       <CardStatRow
-        spacing={14}
+        spacing={{ sm: 4, md: 8, lg: 14 }}
         align="flex-start"
         justify="flex-start"
-        direction={isLessThan594 ? "column" : "row"}
+        direction={{ sm: "column", md: "row" }}
         wrap="wrap"
-        id="portfolio"
       >
         <SimpleGrid
-          templateColumns={templateColumns}
-          templateRows="repeat(2, 1fr)"
+          templateColumns={{
+            sm: "max-content",
+            lg: "repeat(2, max-content)",
+          }}
+          templateRows="1fr 1fr"
           spacing={4}
           alignItems="flex-end"
         >
@@ -68,20 +50,17 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           </CardStat>
           <Stack
             spacing={3}
-            direction={
-              isLargerThan628
-                ? "row"
-                : isLessThan594
-                ? "row"
-                : "column"
-            }
+            direction={{ sm: "row", md: "column", lg: "row" }}
           >
             <DepositButton />
             <WithdrawButton />
           </Stack>
         </SimpleGrid>
         <SimpleGrid
-          templateColumns={templateColumns}
+          templateColumns={{
+            sm: "max-content",
+            md: "repeat(2, max-content)",
+          }}
           templateRows="repeat(2, 1fr)"
           spacing={4}
           alignItems="flex-end"
