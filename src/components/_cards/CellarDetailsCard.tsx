@@ -7,6 +7,7 @@ import {
   Text,
   Tooltip,
   useMediaQuery,
+  useTheme,
   VStack,
 } from "@chakra-ui/react"
 import { CardDivider } from "components/_layout/CardDivider"
@@ -46,7 +47,7 @@ const strategyAssets = tokenConfig.filter((token) =>
 
 const placeholderData = [
   {
-    platform: 5,
+    "strategy provider": 5,
     protocol: 5,
     depositors: 90,
   },
@@ -56,6 +57,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
   const { barChartTheme } = useNivoThemes()
   const [isLessThan594] = useMediaQuery("(max-width: 594px)")
   const [isLessThan953] = useMediaQuery("(max-width: 953px)")
+  const theme = useTheme()
 
   return (
     <TransparentCard p={4} overflow="visible">
@@ -131,7 +133,10 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               <BarChart
                 layout="horizontal"
                 colors={barChartTheme}
-                keys={["platform", "protocol", "depositors"]}
+                borderColor={theme.colors.neutral[800]}
+                borderWidth={1}
+                borderRadius={2}
+                keys={["strategy provider", "protocol", "depositors"]}
                 data={placeholderData}
               />
             </Box>
@@ -141,7 +146,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
                   return (
                     <HStack key={i}>
                       <Circle size={4} bg={barChartTheme[i]} />
-                      <Text fontSize="sm">
+                      <Text fontSize="sm" textTransform="capitalize">
                         {value}% {key}
                       </Text>
                     </HStack>

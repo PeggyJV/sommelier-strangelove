@@ -26,6 +26,11 @@ export const PortfolioCard: VFC<BoxProps> = () => {
   const [isBetween595And829] = useMediaQuery(
     "(min-width: 595px) and (max-width: 829px)"
   )
+  const templateColumns = isBetween444And595
+    ? "repeat(1, max-content)"
+    : isBetween595And829
+    ? "repeat(1, max-content)"
+    : "repeat(2, max-content)"
 
   return (
     <TransparentCard px={10} py={6}>
@@ -38,14 +43,10 @@ export const PortfolioCard: VFC<BoxProps> = () => {
         id="portfolio"
       >
         <SimpleGrid
-          templateColumns={
-            isBetween444And595
-              ? "repeat(1, max-content)"
-              : isBetween595And829
-              ? "repeat(1, max-content)"
-              : "repeat(2, max-content)"
-          }
+          templateColumns={templateColumns}
+          templateRows="repeat(2, 1fr)"
           spacing={4}
+          alignItems="flex-end"
         >
           <CardStat
             label="net value"
@@ -80,14 +81,10 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           </Stack>
         </SimpleGrid>
         <SimpleGrid
-          templateColumns={
-            isBetween444And595
-              ? "repeat(1, max-content)"
-              : isBetween595And829
-              ? "repeat(1, max-content)"
-              : "repeat(2, max-content)"
-          }
+          templateColumns={templateColumns}
+          templateRows="repeat(2, 1fr)"
           spacing={4}
+          alignItems="flex-end"
         >
           <VStack align="flex-start">
             <CardStat
@@ -115,19 +112,26 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           </VStack>
           <BondButton />
         </SimpleGrid>
-        <VStack align="flex-start" spacing={4}>
-          <CardStat
-            label="rewards"
-            tooltip="Amount of SOMM earned and available to be claimed"
-          >
-            <InlineImage
-              src="/assets/icons/somm.svg"
-              alt="aave logo"
-            />
-            0
-          </CardStat>
+        <SimpleGrid
+          templateColumns="max-content"
+          templateRows="repeat(2, 1fr)"
+          spacing={4}
+          alignItems="flex-end"
+        >
+          <VStack align="flex-start">
+            <CardStat
+              label="rewards"
+              tooltip="Amount of SOMM earned and available to be claimed"
+            >
+              <InlineImage
+                src="/assets/icons/somm.svg"
+                alt="aave logo"
+              />
+              0
+            </CardStat>
+          </VStack>
           <ClaimButton />
-        </VStack>
+        </SimpleGrid>
       </CardStatRow>
     </TransparentCard>
   )
