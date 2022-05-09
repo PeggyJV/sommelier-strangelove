@@ -132,8 +132,9 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                       fontWeight={700}
                     >
                       <InlineImage
-                        src="/assets/icons/aave.svg"
+                        src="/assets/icons/aave.png"
                         alt="Aave logo"
+                        boxSize={5}
                       />{" "}
                       {amount.toFixed(2)}
                     </Flex>

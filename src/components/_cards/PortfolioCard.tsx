@@ -71,8 +71,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
             >
               <InlineImage
-                src="/assets/icons/aave.svg"
+                src="/assets/icons/aave.png"
                 alt="aave logo"
+                boxSize={5}
               />
               0
             </CardStat>
@@ -83,8 +84,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
             >
               <InlineImage
-                src="/assets/icons/aave.svg"
+                src="/assets/icons/aave.png"
                 alt="aave logo"
+                boxSize={5}
               />
               0
             </CardStat>
@@ -105,6 +107,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               <InlineImage
                 src="/assets/icons/somm.svg"
                 alt="aave logo"
+                boxSize={5}
               />
               0
             </CardStat>
