@@ -3,19 +3,16 @@ import {
   ssrExchange,
   dedupExchange,
   cacheExchange,
-  fetchExchange
-} from 'urql'
+  fetchExchange,
+} from "urql"
 
-const url = 'https://api.thegraph.com/subgraphs/name/elkdao/cellars' // subject to change
+const url = process.env.NEXT_PUBLIC_GRAPH_ENDPOINT!
 
-export const client = createClient({
-  // TODO: Pull this from config / env
-  url
-})
+export const client = createClient({ url })
 
 const ssrCache = ssrExchange({ isClient: false })
 
 export const ssrClient = createClient({
   url,
-  exchanges: [dedupExchange, cacheExchange, ssrCache, fetchExchange]
+  exchanges: [dedupExchange, cacheExchange, ssrCache, fetchExchange],
 })
