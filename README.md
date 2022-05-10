@@ -26,7 +26,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 ## The Graph / Cellars Subgraph
 
-There is a subgraph (elkdao/cellars) currently deployed on the hosted service at [https://api.thegraph.com/subgraphs/name/elkdao/cellars](https://api.thegraph.com/subgraphs/name/elkdao/cellars/graphql). You can view the schema and query the subgraph directly in a GraphQL playground by clicking the link. This is a great way to familiarize yourself with the data model exposed by the subgraph.
+There is a subgraph (elkdao/cellars) currently deployed on the hosted service at [https://api.thegraph.com/subgraphs/name/peggyjv/cellars](https://api.thegraph.com/subgraphs/name/peggyjv/cellars). You can view the schema and query the subgraph directly in a GraphQL playground by clicking the link. This is a great way to familiarize yourself with the data model exposed by the subgraph.
 
 ### GraphQL Codegen
 
