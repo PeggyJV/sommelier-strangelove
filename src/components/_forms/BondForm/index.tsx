@@ -16,6 +16,7 @@ import { ModalInput } from "components/_inputs/ModalInput"
 import { CardHeading } from "components/_typography/CardHeading"
 import { BondingPeriodOptions } from "./BondingPeriodOptions"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "utils/formatCurrency"
 import { useBrandedToast } from "hooks/chakra"
 import { BigNumber } from "bignumber.js"
@@ -30,8 +31,9 @@ interface FormValues {
 
 export const BondForm: VFC = () => {
   const { userData } = useAaveV2Cellar()
+  const { fetchUserStakes } = useAaveStaker()
   const methods = useForm<FormValues>({
-    defaultValues: { bondingPeriod: 1.1 },
+    defaultValues: { bondingPeriod: 0 },
   })
   const {
     register,
@@ -41,26 +43,30 @@ export const BondForm: VFC = () => {
     formState: { errors, isSubmitting },
   } = methods
   const { addToast, update, close, closeAll } = useBrandedToast()
-  const { AAVE_V2_STABLE_CELLAR, SOMM_STAKING } = config.CONTRACT
+  const { AAVE_V2_STABLE_CELLAR, AAVE_STAKER } = config.CONTRACT
   const [{ data: signer }] = useSigner()
   const { doApprove } = useApproveERC20({
     tokenAddress: AAVE_V2_STABLE_CELLAR?.ADDRESS,
-    spender: SOMM_STAKING?.ADDRESS,
+    spender: AAVE_STAKER?.ADDRESS,
   })
   const { doHandleTransaction } = useHandleTransaction()
   const sommStakingContract = useContract({
-    addressOrName: config.CONTRACT.SOMM_STAKING.ADDRESS,
-    contractInterface: config.CONTRACT.SOMM_STAKING.ABI,
+    addressOrName: config.CONTRACT.AAVE_STAKER.ADDRESS,
+    contractInterface: config.CONTRACT.AAVE_STAKER.ABI,
     signerOrProvider: signer,
   })
   const watchDepositAmount = watch("depositAmount")
+  const bondPeriod = watch("bondingPeriod")
+
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0
   const isError = errors.depositAmount
   const setMax = () =>
     setValue(
       "depositAmount",
-      parseFloat(toEther(userData?.balances?.aaveClr) || "")
+      parseFloat(
+        toEther(userData?.balances?.aaveClr, 18, false) || ""
+      )
     )
 
   const onSubmit = async (data: any, e: any) => {
@@ -71,12 +77,13 @@ export const BondForm: VFC = () => {
       18
     )
     try {
-      console.log(`stake :: `, depositAmtInWei)
       const { hash: bondConf } = await sommStakingContract.stake(
         depositAmtInWei,
-        0
+        bondPeriod,
+        { gasLimit: 1000000 }
       )
-      doHandleTransaction({ hash: bondConf })
+      await doHandleTransaction({ hash: bondConf })
+      fetchUserStakes()
     } catch (e) {
       addToast({
         heading: "Staking LP Tokens",

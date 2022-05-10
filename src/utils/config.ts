@@ -15,7 +15,7 @@ export const config = {
       ADDRESS: "0xE03B91176B7F109Fb32f3c5C507DBf23D85bdE95",
       ABI: cellarRouter,
     },
-    SOMM_STAKING: {
+    AAVE_STAKER: {
       ADDRESS: "0xCEe04d9b75C282A630bA10583a3aC2C3c3599939",
       ABI: sommStaking,
     },
@@ -33,6 +33,14 @@ export const config = {
     },
     UST: {
       ADDRESS: "0xa693B19d2931d498c5B318dF961919BB4aee87a5",
+      ABI: erc20ABI,
+    },
+    DEFI_PULSE: {
+      ADDRESS: "0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b",
+      ABI: erc20ABI,
+    },
+    FEI: {
+      ADDRESS: "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
       ABI: erc20ABI,
     },
   },

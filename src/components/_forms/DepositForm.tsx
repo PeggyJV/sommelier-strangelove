@@ -42,19 +42,20 @@ export const DepositForm: VFC = () => {
     watch,
     handleSubmit,
     setValue,
+    getValues,
+    control,
     formState: { errors, isSubmitting, isSubmitted },
   } = useForm<FormValues>()
-  console.log("deposit form")
   // const [data, setData] = useState<any>()
   const watchDepositAmount = watch("depositAmount")
-  const watchToken = watch("selectedToken")
-
-  console.log({ watchDepositAmount, watchToken })
   const isError = errors.depositAmount
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
   const setMax = () => setValue("depositAmount", 100000)
-
+  const [selectedToken, setSelectedToken] = useState<Token | null>(
+    null
+  )
+  console.log(selectedToken)
   const { addToast, update, close, closeAll } = useBrandedToast()
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
@@ -145,13 +146,14 @@ export const DepositForm: VFC = () => {
           [
             config.CONTRACT.DAI.ADDRESS,
             config.CONTRACT.WETH.ADDRESS,
-            config.CONTRACT.UST.ADDRESS,
+            config.CONTRACT.DEFI_PULSE.ADDRESS,
+            config.CONTRACT.FEI.ADDRESS,
           ],
           amtInWei,
           0,
           account?.address,
-          account?.address
-          // { gasLimit: '1000000' }
+          account?.address,
+          { gasLimit: "1000000" }
         )
 
       addToast({
@@ -273,7 +275,7 @@ export const DepositForm: VFC = () => {
         </FormControl>
 
         <FormControl>
-          <ModalMenu />
+          <ModalMenu setSelectedToken={setSelectedToken} />
         </FormControl>
         <BaseButton
           type="submit"

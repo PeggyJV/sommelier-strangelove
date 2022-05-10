@@ -16,10 +16,25 @@ import { InlineImage } from "components/InlineImage"
 import TransparentCard from "./TransparentCard"
 import { TokenAssets } from "components/TokenAssets"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "./../../utils/formatCurrency"
+import { ethers } from "ethers"
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   const { userData, fetchUserData } = useAaveV2Cellar()
+  const { userStakeData } = useAaveStaker()
+  console.log({ userStakeData })
+  const totalRewards = userStakeData?.totalRewards?.toFixed()
+  console.log("total Rewards ", totalRewards)
+  console.log(
+    "Bonded Tokens ",
+    userStakeData?.totalBondedAmount?.toFixed()
+  )
+  // const totalBondedAmtInWei = ethers.utils.parseUnits(
+  //   userStakeData?.totalBondedAmount?.toFixed() || "",
+  //   18
+  // )
+
   return (
     <TransparentCard px={10} py={6}>
       <CardStatRow
@@ -71,7 +86,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
                 src="/assets/icons/aave.svg"
                 alt="aave logo"
               />
-              {toEther(userData?.balances?.aaveClr)}
+              {toEther(userData?.balances?.aaveClr, 18, false)}
             </CardStat>
           </VStack>
           <VStack align="flex-start">
@@ -83,7 +98,13 @@ export const PortfolioCard: VFC<BoxProps> = () => {
                 src="/assets/icons/aave.svg"
                 alt="aave logo"
               />
-              0
+              {toEther(
+                ethers.utils.parseUnits(
+                  userStakeData?.totalBondedAmount?.toFixed() || "0",
+                  0
+                )
+              )}
+              {/* {toEther("11420000000000000000")} */}
             </CardStat>
           </VStack>
           <BondButton />
@@ -103,7 +124,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
                 src="/assets/icons/somm.svg"
                 alt="aave logo"
               />
-              0
+              {userStakeData?.totalRewards?.toFixed()}
             </CardStat>
           </VStack>
           <ClaimButton />

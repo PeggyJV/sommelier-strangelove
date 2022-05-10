@@ -17,7 +17,8 @@ import TransparentCard from "./TransparentCard"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { InlineImage } from "components/InlineImage"
 import { InformationIcon } from "components/_icons"
-
+import { useAaveStaker } from "context/aaveStakerContext"
+import { toEther } from "utils/formatCurrency"
 interface BondingTableCardProps extends TableProps {
   data?: any
 }
@@ -55,6 +56,9 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
   data,
   ...rest
 }) => {
+  const { userStakeData } = useAaveStaker()
+  const { userStakes } = userStakeData
+  console.log(userStakes)
   return (
     <TransparentCard>
       <TableContainer>
@@ -102,7 +106,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text as="span">Rewards</Text>
+                    <Text as="span">SOMM Rewards</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -114,51 +118,67 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
             </Tr>
           </Thead>
           <Tbody>
-            {placeholderData.map((data, i) => {
-              const { amount, bondingPeriod, value, canUnbond } = data
-              return (
-                <Tr
-                  borderBottom="1px solid"
-                  borderColor="neutral.700"
-                  key={i}
-                  _last={{
-                    border: "none",
-                  }}
-                >
-                  <Td>
-                    <Flex
-                      align="center"
-                      fontSize="21px"
-                      fontWeight={700}
-                    >
-                      <InlineImage
-                        src="/assets/icons/aave.svg"
-                        alt="Aave logo"
-                      />{" "}
-                      {amount.toFixed(2)}
-                    </Flex>
-                  </Td>
-                  <Td>{bondingPeriod}</Td>
-                  <Td>{value}x SOMM</Td>
-                  <Td>
-                    {canUnbond ? (
-                      <SecondaryButton
-                        size="sm"
-                        onClick={() =>
-                          window.alert(
-                            `You've bonded for ${bondingPeriod}. You earned at a rate of ${value}x.`
-                          )
-                        }
+            {userStakes?.length &&
+              userStakes.map((data, i) => {
+                const { amount, lock, rewards } = data
+
+                return (
+                  <Tr
+                    borderBottom="1px solid"
+                    borderColor="neutral.700"
+                    key={i}
+                    _last={{
+                      border: "none",
+                    }}
+                  >
+                    <Td>
+                      <Flex
+                        align="center"
+                        fontSize="21px"
+                        fontWeight={700}
                       >
-                        Unbond
-                      </SecondaryButton>
-                    ) : (
-                      <>Unbonding in N days</>
-                    )}
-                  </Td>
-                </Tr>
-              )
-            })}
+                        <InlineImage
+                          src="/assets/icons/aave.svg"
+                          alt="Aave logo"
+                        />{" "}
+                        {toEther(amount)}
+                      </Flex>
+                    </Td>
+                    <Td>
+                      {lock?.toString() === "0" && "7 days"}
+                      {lock?.toString() === "1" && "14 days"}
+                      {lock?.toString() === "2" && "21 days"}
+                    </Td>
+                    <Td>{toEther(rewards)}</Td>
+                    {/* <Td>
+                      {canUnbond ? (
+                        <SecondaryButton
+                          size="sm"
+                          onClick={() =>
+                            window.alert(
+                              `You've bonded for ${bondingPeriod}. You earned at a rate of ${value}x.`
+                            )
+                          }
+                        >
+                          Unbond
+                        </SecondaryButton>
+                      ) : (
+                        <>Unbonding in N days</>
+                      )}
+                    </Td> */}
+                    <SecondaryButton
+                      size="sm"
+                      onClick={() =>
+                        window.alert(
+                          `You've bonded for ${bondingPeriod}. You earned at a rate of ${value}x.`
+                        )
+                      }
+                    >
+                      Unbond
+                    </SecondaryButton>
+                  </Tr>
+                )
+              })}
           </Tbody>
         </Table>
       </TableContainer>
