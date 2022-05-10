@@ -1,6 +1,6 @@
-import { VFC } from 'react'
-import { ResponsiveLine, LineSvgProps } from '@nivo/line'
-import { ToolTip } from './LineToolTip'
+import { VFC } from "react"
+import { ResponsiveLine, LineSvgProps } from "@nivo/line"
+import { ToolTip } from "./LineToolTip"
 
 const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
   return (
@@ -12,7 +12,7 @@ const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
       tooltip={ToolTip}
       motionConfig={{
         clamp: true,
-        duration: 220
+        duration: 220,
       }}
       enablePoints={false}
       {...rest}
