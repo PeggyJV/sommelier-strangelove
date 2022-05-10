@@ -7,7 +7,6 @@ import {
   Spinner,
   StackDivider,
   Text,
-  useMediaQuery,
   VStack,
 } from "@chakra-ui/react"
 import { Serie } from "@nivo/line"
@@ -34,7 +33,6 @@ const timeButtons = ["24H", "1W", "All Time"]
 export const PerformanceCard: VFC<BoxProps> = (props) => {
   const { lineChartTheme } = useNivoThemes()
   const [timeline, setTimeline] = useState<string>("24H")
-  const [isLargerThan553] = useMediaQuery("(min-width: 552px)")
   const [{ fetching: hourlyIsFetching, data: hourlyData }] =
     useGetHourlyTvlQuery({
       variables: { epoch },
@@ -59,7 +57,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
   return (
     <TransparentCard p={4} overflow="visible" {...props}>
       <VStack spacing={6} align="stretch" divider={<CardDivider />}>
-        <Box h="20rem" mb={isLargerThan553 ? "0rem" : "2.2rem"}>
+        <Box h="20rem" mb={{ sm: "2.2rem", md: 0 }}>
           <HStack justify="space-between" wrap="wrap" rowGap={2}>
             <HStack spacing={8}>
               <CardStat
@@ -99,9 +97,10 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
               overflow="hidden"
               justify="space-around"
               spacing={0}
-              marginInlineStart={
-                isLargerThan553 ? "0.5rem" : "0rem !important"
-              }
+              marginInlineStart={{
+                sm: "0rem !important",
+                md: "0.5rem",
+              }}
               divider={
                 <StackDivider borderColor="rgba(203, 198, 209, 0.25)" />
               }
