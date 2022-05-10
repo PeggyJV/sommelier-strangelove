@@ -1692,6 +1692,13 @@ export type GetCellarQueryVariables = Exact<{
 
 export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, asset: string, liquidityLimit: string, name: string, numWalletsActive: number, numWalletsAllTime: number, tvlActive: string, tvlInactive: string, tvlTotal: string, addedLiquidityAllTime: string, removedLiquidityAllTime: string, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> } | null, wallets: Array<{ __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', id: string, balance: string }>, depositWithdrawEvents: Array<{ __typename?: 'DepositWithdrawEvent', id: string, txId: string, amount: string }> }> };
 
+export type GetHourlyTvlQueryVariables = Exact<{
+  epoch?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetHourlyTvlQuery = { __typename?: 'Query', cellarHourDatas: Array<{ __typename?: 'CellarHourData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> };
+
 export type GetPositionQueryVariables = Exact<{
   walletAddress: Scalars['ID'];
   cellarAddress: Scalars['String'];
@@ -1801,6 +1808,22 @@ export const GetCellarDocument = gql`
 
 export function useGetCellarQuery(options: Omit<Urql.UseQueryArgs<GetCellarQueryVariables>, 'query'>) {
   return Urql.useQuery<GetCellarQuery>({ query: GetCellarDocument, ...options });
+};
+export const GetHourlyTvlDocument = gql`
+    query GetHourlyTVL($epoch: Int) {
+  cellarHourDatas(orderDirection: asc, orderBy: date, where: {date_gte: $epoch}) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}
+    `;
+
+export function useGetHourlyTvlQuery(options?: Omit<Urql.UseQueryArgs<GetHourlyTvlQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetHourlyTvlQuery>({ query: GetHourlyTvlDocument, ...options });
 };
 export const GetPositionDocument = gql`
     query GetPosition($walletAddress: ID!, $cellarAddress: String!) {
