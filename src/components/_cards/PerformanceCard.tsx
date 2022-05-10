@@ -19,6 +19,7 @@ import TransparentCard from "./TransparentCard"
 import { CardStat } from "components/CardStat"
 import { getPrevious24Hours } from "utils/getPrevious24Hours"
 import { useGetHourlyTvlQuery } from "generated/subgraph"
+import { BigNumber } from "bignumber.js"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -39,15 +40,19 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
       variables: { epoch },
     })
 
-  const data: Serie[] = [
+  const data: Serie[] | undefined = hourlyData && [
     {
       id: "tvl",
-      data: hourlyData?.cellarHourDatas.map(({ date, tvlTotal }) => {
-        return {
-          x: new Date(date).toLocaleString(),
-          y: tvlTotal,
+      data: hourlyData?.cellarHourDatas.map(
+        ({ date, tvlTotal, asset }) => {
+          return {
+            x: new Date(date * 1000),
+            y: new BigNumber(tvlTotal)
+              .decimalPlaces(asset.decimals)
+              .toString(),
+          }
         }
-      })!,
+      ),
     },
   ]
 
@@ -126,23 +131,22 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
             <Spinner />
           ) : (
             <LineChart
-              data={data}
+              data={data!}
               colors={lineChartTheme}
-              // xScale={{
-              //   type: "time",
-              //   format: "%Y-%m-%d",
-              //   useUTC: false,
-              //   precision: "hour",
-              // }}
+              xScale={{
+                type: "time",
+                format: "%Y-%m-%d %H:%M",
+                useUTC: false,
+                precision: "hour",
+              }}
+              xFormat="time:%Y-%m-%d %H:%M"
+              axisBottom={{
+                format: "%Y-%m-%d %H",
+                tickValues: "every hour",
+              }}
             />
           )}
         </Box>
-        <HStack justify="space-between">
-          <CardHeading>12am</CardHeading>
-          <CardHeading>6am</CardHeading>
-          <CardHeading>12pm</CardHeading>
-          <CardHeading>6pm</CardHeading>
-        </HStack>
       </VStack>
     </TransparentCard>
   )

@@ -1811,7 +1811,7 @@ export function useGetCellarQuery(options: Omit<Urql.UseQueryArgs<GetCellarQuery
 };
 export const GetHourlyTvlDocument = gql`
     query GetHourlyTVL($epoch: Int) {
-  cellarHourDatas(where: {date_gte: $epoch}) {
+  cellarHourDatas(orderDirection: asc, orderBy: date, where: {date_gte: $epoch}) {
     date
     asset {
       symbol
