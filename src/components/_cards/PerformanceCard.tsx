@@ -31,12 +31,10 @@ const epoch = getPrevious24Hours()
 const timeButtons = ["24H", "1W", "All Time"]
 
 export const PerformanceCard: VFC<BoxProps> = (props) => {
-  const { lineChartTheme } = useNivoThemes()
+  const { lineChartTheme, chartTheme } = useNivoThemes()
   const [timeline, setTimeline] = useState<string>("24H")
   const [{ fetching: hourlyIsFetching, data: hourlyData }] =
-    useGetHourlyTvlQuery({
-      variables: { epoch },
-    })
+    useGetHourlyTvlQuery({ variables: { epoch } })
 
   const data: Serie[] | undefined = hourlyData && [
     {
@@ -132,6 +130,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
             <LineChart
               data={data!}
               colors={lineChartTheme}
+              margin={{ bottom: 20, left: 20, right: 20, top: 20 }}
               xScale={{
                 type: "time",
                 format: "%Y-%m-%d %H:%M",
@@ -140,9 +139,10 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
               }}
               xFormat="time:%Y-%m-%d %H:%M"
               axisBottom={{
-                format: "%Y-%m-%d %H",
-                tickValues: "every hour",
+                format: "%H:%M",
+                tickValues: "every 2 hours",
               }}
+              theme={chartTheme}
             />
           )}
         </Box>
