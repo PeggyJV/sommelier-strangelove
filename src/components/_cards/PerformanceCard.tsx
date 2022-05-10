@@ -4,6 +4,7 @@ import {
   BoxProps,
   Circle,
   HStack,
+  Spinner,
   StackDivider,
   Text,
   useMediaQuery,
@@ -16,6 +17,8 @@ import { CardDivider } from "components/_layout/CardDivider"
 import { useNivoThemes } from "hooks/nivo"
 import TransparentCard from "./TransparentCard"
 import { CardStat } from "components/CardStat"
+import { getPrevious24Hours } from "utils/getPrevious24Hours"
+import { useGetHourlyTvlQuery } from "generated/subgraph"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -23,36 +26,30 @@ const LineChart = dynamic(
   }
 )
 
-interface Props extends BoxProps {
-  data?: Serie[]
-}
-
-const data: Serie[] = [
-  {
-    id: 1,
-    data: [
-      { x: "bingus", y: 5 },
-      { x: "tingus", y: 15 },
-      { x: "lingus", y: 5 },
-      { x: "pingus", y: 25 },
-      { x: "shmingus", y: 18 },
-    ],
-  },
-  {
-    id: 2,
-    data: [
-      { x: "bingus", y: 40 },
-      { x: "shmingus", y: 5 },
-    ],
-  },
-]
+const epoch = getPrevious24Hours()
 
 const timeButtons = ["24H", "1W", "All Time"]
 
-export const PerformanceCard: VFC<Props> = (props) => {
+export const PerformanceCard: VFC<BoxProps> = (props) => {
   const { lineChartTheme } = useNivoThemes()
   const [timeline, setTimeline] = useState<string>("24H")
   const [isLargerThan553] = useMediaQuery("(min-width: 552px)")
+  const [{ fetching: hourlyIsFetching, data: hourlyData }] =
+    useGetHourlyTvlQuery({
+      variables: { epoch },
+    })
+
+  const data: Serie[] = [
+    {
+      id: "tvl",
+      data: hourlyData?.cellarHourDatas.map(({ date, tvlTotal }) => {
+        return {
+          x: new Date(date).toLocaleString(),
+          y: tvlTotal,
+        }
+      })!,
+    },
+  ]
 
   return (
     <TransparentCard p={4} overflow="visible" {...props}>
@@ -125,14 +122,20 @@ export const PerformanceCard: VFC<Props> = (props) => {
               })}
             </HStack>
           </HStack>
-          <LineChart
-            data={data}
-            colors={lineChartTheme}
-            yScale={{
-              type: "linear",
-              max: 60,
-            }}
-          />
+          {hourlyIsFetching ? (
+            <Spinner />
+          ) : (
+            <LineChart
+              data={data}
+              colors={lineChartTheme}
+              // xScale={{
+              //   type: "time",
+              //   format: "%Y-%m-%d",
+              //   useUTC: false,
+              //   precision: "hour",
+              // }}
+            />
+          )}
         </Box>
         <HStack justify="space-between">
           <CardHeading>12am</CardHeading>

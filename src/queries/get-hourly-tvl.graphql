@@ -1,0 +1,10 @@
+query GetHourlyTVL($epoch: Int) {
+  cellarHourDatas(where: { date_gte: $epoch }) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}
