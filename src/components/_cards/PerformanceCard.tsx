@@ -28,14 +28,18 @@ const LineChart = dynamic(
 
 const epoch = getPrevious24Hours()
 
-const timeButtons = ["24H", "1W", "All Time"]
-
 export const PerformanceCard: VFC<BoxProps> = (props) => {
   const { lineChartTheme, chartTheme } = useNivoThemes()
   const [timeline, setTimeline] = useState<string>("24H")
-  const [{ fetching: hourlyIsFetching, data: hourlyData }] =
-    useGetHourlyTvlQuery({ variables: { epoch } })
-
+  const [
+    { fetching: hourlyIsFetching, data: hourlyData },
+    reexecuteHourly,
+  ] = useGetHourlyTvlQuery({ variables: { epoch } })
+  const timeButtons = [
+    { title: "24H", onClick: reexecuteHourly },
+    { title: "1W", onClick: reexecuteHourly },
+    { title: "All Time", onClick: reexecuteHourly },
+  ]
   const data: Serie[] | undefined = hourlyData && [
     {
       id: "tvl",
@@ -104,7 +108,9 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
               }
             >
               {timeButtons.map((button, i) => {
-                const isSelected = button === timeline
+                const { title, onClick } = button
+                const isSelected = title === timeline
+
                 return (
                   <Box
                     flex={1}
@@ -116,9 +122,12 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
                     fontSize="sm"
                     fontWeight="bold"
                     whiteSpace="nowrap"
-                    onClick={() => setTimeline(button)}
+                    onClick={() => {
+                      setTimeline(title)
+                      onClick
+                    }}
                   >
-                    {button}
+                    {title}
                   </Box>
                 )
               })}
