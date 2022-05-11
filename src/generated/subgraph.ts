@@ -1672,6 +1672,13 @@ export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __type
 
 export type CellarDayDatasFragment = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
 
+export type GetAllTimeTvlQueryVariables = Exact<{
+  epoch?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetAllTimeTvlQuery = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> };
+
 export type GetCellarRouteStaticQueryVariables = Exact<{
   cellarAddress: Scalars['ID'];
 }>;
@@ -1706,6 +1713,13 @@ export type GetPositionQueryVariables = Exact<{
 
 
 export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
+
+export type GetWeeklyTvlQueryVariables = Exact<{
+  epoch?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetWeeklyTvlQuery = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> };
 
 export const CellarDayDatasFragmentDoc = gql`
     fragment CellarDayDatas on Query {
@@ -1744,6 +1758,22 @@ export const GetAllCellarsDocument = gql`
 
 export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCellarsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllCellarsQuery>({ query: GetAllCellarsDocument, ...options });
+};
+export const GetAllTimeTvlDocument = gql`
+    query GetAllTimeTVL($epoch: Int) {
+  cellarDayDatas(orderDirection: asc, where: {date_gte: $epoch}) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}
+    `;
+
+export function useGetAllTimeTvlQuery(options?: Omit<Urql.UseQueryArgs<GetAllTimeTvlQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllTimeTvlQuery>({ query: GetAllTimeTvlDocument, ...options });
 };
 export const GetCellarRouteStaticDocument = gql`
     query GetCellarRouteStatic($cellarAddress: ID!) {
@@ -1838,4 +1868,20 @@ export const GetPositionDocument = gql`
 
 export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQueryVariables>, 'query'>) {
   return Urql.useQuery<GetPositionQuery>({ query: GetPositionDocument, ...options });
+};
+export const GetWeeklyTvlDocument = gql`
+    query GetWeeklyTVL($epoch: Int) {
+  cellarDayDatas(first: 7, orderDirection: asc, where: {date_gte: $epoch}) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}
+    `;
+
+export function useGetWeeklyTvlQuery(options?: Omit<Urql.UseQueryArgs<GetWeeklyTvlQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetWeeklyTvlQuery>({ query: GetWeeklyTvlDocument, ...options });
 };
