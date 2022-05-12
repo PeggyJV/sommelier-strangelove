@@ -1,5 +1,5 @@
-query GetAllTimeTVL($epoch: Int) {
-  cellarDayDatas(orderDirection: asc, where: { date_gte: $epoch }) {
+query GetAllTimeTVL {
+  cellarDayDatas(orderDirection: asc) {
     date
     asset {
       symbol

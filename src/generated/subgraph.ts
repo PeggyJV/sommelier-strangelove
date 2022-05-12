@@ -1672,9 +1672,7 @@ export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __type
 
 export type CellarDayDatasFragment = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
 
-export type GetAllTimeTvlQueryVariables = Exact<{
-  epoch?: InputMaybe<Scalars['Int']>;
-}>;
+export type GetAllTimeTvlQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllTimeTvlQuery = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> };
@@ -1714,9 +1712,7 @@ export type GetPositionQueryVariables = Exact<{
 
 export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
 
-export type GetWeeklyTvlQueryVariables = Exact<{
-  epoch?: InputMaybe<Scalars['Int']>;
-}>;
+export type GetWeeklyTvlQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetWeeklyTvlQuery = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> };
@@ -1760,8 +1756,8 @@ export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCel
   return Urql.useQuery<GetAllCellarsQuery>({ query: GetAllCellarsDocument, ...options });
 };
 export const GetAllTimeTvlDocument = gql`
-    query GetAllTimeTVL($epoch: Int) {
-  cellarDayDatas(orderDirection: asc, where: {date_gte: $epoch}) {
+    query GetAllTimeTVL {
+  cellarDayDatas(orderDirection: asc) {
     date
     asset {
       symbol
@@ -1870,8 +1866,8 @@ export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQ
   return Urql.useQuery<GetPositionQuery>({ query: GetPositionDocument, ...options });
 };
 export const GetWeeklyTvlDocument = gql`
-    query GetWeeklyTVL($epoch: Int) {
-  cellarDayDatas(first: 7, orderDirection: asc, where: {date_gte: $epoch}) {
+    query GetWeeklyTVL {
+  cellarDayDatas(first: 7, orderDirection: asc) {
     date
     asset {
       symbol

@@ -1,9 +1,5 @@
-query GetWeeklyTVL($epoch: Int) {
-  cellarDayDatas(
-    first: 7
-    orderDirection: asc
-    where: { date_gte: $epoch }
-  ) {
+query GetWeeklyTVL {
+  cellarDayDatas(first: 7, orderDirection: asc) {
     date
     asset {
       symbol
