@@ -40,7 +40,7 @@ const PageHome: NextPage = () => {
         })}
         {placeholderCardsArray.map((index) => {
           const cellarCardData: CellarCardData = {
-            id: "-",
+            id: "",
             name: "-",
             description: "",
             strategyType: "-",
