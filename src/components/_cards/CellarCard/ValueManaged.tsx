@@ -1,4 +1,11 @@
-import { Flex, Heading, Box, BoxProps, Tooltip, HStack } from "@chakra-ui/react"
+import {
+  Flex,
+  Heading,
+  Box,
+  BoxProps,
+  Tooltip,
+  HStack,
+} from "@chakra-ui/react"
 import { CurrentDeposits } from "components/CurrentDeposits"
 import { Label } from "./Label"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
@@ -6,23 +13,29 @@ import { useGetCellarQuery } from "generated/subgraph"
 import { ArrowUpIcon, InformationIcon } from "components/_icons"
 
 interface Props extends BoxProps {
-  id: string
+  cellarId: string
 }
 
-export const ValueManaged: React.FC<Props> = ({ id, ...rest }) => {
+export const ValueManaged: React.FC<Props> = ({
+  cellarId,
+  ...rest
+}) => {
   const [cellarResult] = useGetCellarQuery({
     variables: {
-      cellarAddress: id,
-      cellarString: id,
+      cellarAddress: cellarId,
+      cellarString: cellarId,
     },
   })
   const { data } = cellarResult
   const { cellar } = data || {}
-  const { liquidityLimit, addedLiquidityAllTime, removedLiquidityAllTime } =
-    cellar || {}
-  const currentDepositsVal = formatCurrentDeposits(
+  const {
+    liquidityLimit,
     addedLiquidityAllTime,
     removedLiquidityAllTime,
+  } = cellar || {}
+  const currentDepositsVal = formatCurrentDeposits(
+    addedLiquidityAllTime,
+    removedLiquidityAllTime
   )
 
   return (

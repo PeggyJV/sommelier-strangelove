@@ -1,6 +1,9 @@
 import { BoxProps, Heading, Spinner } from "@chakra-ui/react"
-import { CellarCardDisplay, CellarCardData } from "./CellarCardDisplay"
-import { CellarDayData, useGetCellarQuery } from "generated/subgraph"
+import {
+  CellarCardDisplay,
+  CellarCardData,
+} from "./CellarCardDisplay"
+import { useGetCellarQuery } from "generated/subgraph"
 import { cellarDataMap } from "data/cellarDataMap"
 import { averageApy, averageTvlActive } from "utils/cellarApy"
 import { BigNumber } from "bignumber.js"
@@ -43,7 +46,7 @@ export const CellarCard: React.FC<CellarCardProps> = ({
   const avgTvlActive = averageTvlActive(dayDatas, tvlActive)
 
   const cellarCardData: CellarCardData = {
-    id: cellarAddress,
+    cellarId: cellarAddress,
     name: cellarDataMap[cellarAddress].name,
     description: cellarDataMap[cellarAddress].description,
     tvm: "",

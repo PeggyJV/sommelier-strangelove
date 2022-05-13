@@ -2,7 +2,6 @@ import { NextPage } from "next"
 import { Box, Flex, Heading, Spinner, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { CellarCard } from "components/_cards/CellarCard"
-import { useConnect } from "wagmi"
 import { Section } from "components/_layout/Section"
 import { useGetAllCellarsQuery } from "generated/subgraph"
 import { Education } from "components/Education"
@@ -18,7 +17,9 @@ const PageHome: NextPage = () => {
   const { data, fetching } = cellarsResult
   const totalCellars = data?.cellars?.length ?? 0
   const numPlaceholderCards = 3 - totalCellars
-  const placeholderCardsArray = Array.from(Array(numPlaceholderCards).keys())
+  const placeholderCardsArray = Array.from(
+    Array(numPlaceholderCards).keys()
+  )
 
   const CellarGridItems = () => {
     if (fetching) {
@@ -40,7 +41,7 @@ const PageHome: NextPage = () => {
         })}
         {placeholderCardsArray.map((index) => {
           const cellarCardData: CellarCardData = {
-            id: "",
+            cellarId: "",
             name: "-",
             description: "",
             strategyType: "-",
