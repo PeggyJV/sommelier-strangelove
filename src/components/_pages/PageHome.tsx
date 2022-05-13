@@ -14,14 +14,11 @@ import {
 import { Link } from "components/Link"
 
 const PageHome: NextPage = () => {
-  const [auth] = useConnect()
   const [cellarsResult] = useGetAllCellarsQuery()
   const { data, fetching } = cellarsResult
   const totalCellars = data?.cellars?.length ?? 0
   const numPlaceholderCards = 3 - totalCellars
-  const placeholderCardsArray = Array.from(
-    Array(numPlaceholderCards).keys()
-  )
+  const placeholderCardsArray = Array.from(Array(numPlaceholderCards).keys())
 
   const CellarGridItems = () => {
     if (fetching) {
@@ -43,6 +40,7 @@ const PageHome: NextPage = () => {
         })}
         {placeholderCardsArray.map((index) => {
           const cellarCardData: CellarCardData = {
+            id: "-",
             name: "-",
             description: "",
             strategyType: "-",

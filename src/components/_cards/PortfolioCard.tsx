@@ -36,10 +36,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           >
             $0.00
           </CardStat>
-          <CardStat
-            label="deposit assets"
-            tooltip="Accepted deposit assets"
-          >
+          <CardStat label="deposit assets" tooltip="Accepted deposit assets">
             <TokenAssets tokens={tokenConfig} displaySymbol />
           </CardStat>
           <CardStat
@@ -48,10 +45,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           >
             0.00%
           </CardStat>
-          <Stack
-            spacing={3}
-            direction={{ sm: "row", md: "column", lg: "row" }}
-          >
+          <Stack spacing={3} direction={{ sm: "row", md: "column", lg: "row" }}>
             <DepositButton />
             <WithdrawButton />
           </Stack>

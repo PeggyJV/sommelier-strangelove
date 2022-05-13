@@ -1,7 +1,10 @@
 query GetCellar($cellarAddress: ID!, $cellarString: String!) {
   cellar(id: $cellarAddress) {
     id
-    asset
+    asset {
+      symbol
+      decimals
+    }
     liquidityLimit
     name
     numWalletsActive

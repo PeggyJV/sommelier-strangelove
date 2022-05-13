@@ -1,18 +1,14 @@
-import {
-  Box,
-  BoxProps,
-  Heading,
-  Img,
-  Flex,
-  useTheme,
-} from "@chakra-ui/react"
+import { Box, BoxProps, Heading, Img, Flex, useTheme } from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
 import { Burst } from "./Burst"
 import { ComingSoon } from "./ComingSoon"
+import { useMemo } from "react"
+import { InlineImage } from "components/InlineImage"
 
 export interface CellarCardData {
+  id: string
   name: string
   description: string
   tvm?: string
@@ -28,6 +24,10 @@ interface CellarCardProps extends BoxProps {
   index?: number
 }
 
+enum Protocols {
+  avve = "AAVE",
+}
+
 export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   data,
   isPlaceholder,
@@ -35,6 +35,13 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   ...rest
 }) => {
   const theme = useTheme()
+
+  const protocolIcon = useMemo(() => {
+    switch (data.protocols) {
+      case Protocols.avve:
+        return "aave"
+    }
+  }, [data.protocols])
 
   return (
     <Card
@@ -71,8 +78,19 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
           </Flex>
           <Flex>
             <Tag>{data.strategyType}</Tag>
-            <Tag ml={2}>{data.managementFee}</Tag>
-            <Tag ml={2}>{data.protocols}</Tag>
+            <Tag ml={2}>
+              {data.managementFee} {data.managementFee !== "-" && "Fee"}
+            </Tag>
+            <Tag ml={2} display="flex" alignItems="center">
+              {protocolIcon && (
+                <InlineImage
+                  src={`/assets/icons/${protocolIcon}.png`}
+                  alt="aave logo"
+                  boxSize={4}
+                />
+              )}
+              {data.protocols}
+            </Tag>
           </Flex>
         </Box>
         <Flex

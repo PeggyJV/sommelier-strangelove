@@ -11,7 +11,7 @@ interface Props {
 export const AboutCellar: React.FC<Props> = ({ data }) => {
   return (
     <>
-      <ValueManaged ml={2} mr={2} />
+      <ValueManaged ml={2} mr={2} id={data.id} />
       <Text mb={6} mt={6} ml={2} mr={2}>
         {data.description}
       </Text>
