@@ -18,7 +18,7 @@ export const mutateHourlyData = (
             return {
               x: new Date(date * 1000),
               y: new BigNumber(tvlTotal)
-                .decimalPlaces(asset.decimals)
+                .decimalPlaces(asset?.decimals!)
                 .toString(),
             }
           }
@@ -39,7 +39,7 @@ export const mutateDayData = (
           return {
             x: new Date(date * 1000),
             y: new BigNumber(tvlTotal)
-              .decimalPlaces(asset.decimals)
+              .decimalPlaces(asset?.decimals!)
               .toString(),
           }
         }),
