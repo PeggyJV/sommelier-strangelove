@@ -6,13 +6,38 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react"
-import { VFC } from "react"
+import { useState, VFC } from "react"
 import { CardDivider } from "components/_layout/CardDivider"
 import TransparentCard from "./TransparentCard"
 import { CardStat } from "components/CardStat"
 import { TVLChart } from "components/_charts/TVLChart"
+import { useTVLQueries } from "hooks/urql"
+import { getPrevious24Hours } from "utils/getPrevious24Hours"
+
+const epoch = getPrevious24Hours()
 
 export const PerformanceCard: VFC<BoxProps> = (props) => {
+  const {
+    fetching,
+    data,
+    setDataHourly,
+    setDataWeekly,
+    setDataAllTime,
+  } = useTVLQueries(epoch)
+  const [timeline, setTimeline] = useState<string>("24H")
+
+  const timeButtons = [
+    {
+      title: "24H",
+      onClick: setDataHourly,
+    },
+    {
+      title: "1W",
+      onClick: setDataWeekly,
+    },
+    { title: "All Time", onClick: setDataAllTime },
+  ]
+
   return (
     <TransparentCard p={4} overflow="visible" {...props}>
       <VStack spacing={6} align="stretch" divider={<CardDivider />}>
@@ -26,7 +51,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
                 <Text></Text>
               </CardStat>
             </HStack>
-            {/* <HStack
+            <HStack
               border="1px solid"
               borderColor="rgba(203, 198, 209, 0.25)"
               borderRadius="2rem"
@@ -58,16 +83,20 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
                     whiteSpace="nowrap"
                     onClick={() => {
                       setTimeline(title)
-                      onClick
+                      onClick()
                     }}
                   >
                     {title}
                   </Box>
                 )
               })}
-            </HStack> */}
+            </HStack>
           </HStack>
-          <TVLChart />
+          <TVLChart
+            data={data.series}
+            fetching={fetching}
+            {...data.chartProps}
+          />
         </Box>
       </VStack>
     </TransparentCard>
