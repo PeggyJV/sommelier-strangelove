@@ -1,9 +1,4 @@
-import {
-  BoxProps,
-  HStack,
-  SimpleGrid,
-  VStack,
-} from "@chakra-ui/react"
+import { BoxProps, SimpleGrid, Stack, VStack } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { VFC } from "react"
@@ -38,13 +33,18 @@ export const PortfolioCard: VFC<BoxProps> = () => {
   return (
     <TransparentCard px={10} py={6}>
       <CardStatRow
-        spacing={14}
+        spacing={{ sm: 4, md: 8, lg: 14 }}
         align="flex-start"
         justify="flex-start"
+        direction={{ sm: "column", md: "row" }}
+        wrap="wrap"
       >
         <SimpleGrid
-          templateColumns="repeat(2, max-content)"
-          templateRows="repeat(2, 1fr)"
+          templateColumns={{
+            sm: "max-content",
+            lg: "repeat(2, max-content)",
+          }}
+          templateRows="1fr 1fr"
           spacing={4}
           alignItems="flex-end"
         >
@@ -54,10 +54,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           >
             $0.00
           </CardStat>
-          <CardStat
-            label="deposit assets"
-            tooltip="Accepted deposit assets"
-          >
+          <CardStat label="deposit assets" tooltip="Accepted deposit assets">
             <TokenAssets tokens={tokenConfig} displaySymbol />
           </CardStat>
           <CardStat
@@ -66,13 +63,16 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           >
             0.00%
           </CardStat>
-          <HStack spacing={3}>
+          <Stack spacing={3} direction={{ sm: "row", md: "column", lg: "row" }}>
             <DepositButton />
             <WithdrawButton />
-          </HStack>
+          </Stack>
         </SimpleGrid>
         <SimpleGrid
-          templateColumns="repeat(2, max-content)"
+          templateColumns={{
+            sm: "max-content",
+            md: "repeat(2, max-content)",
+          }}
           templateRows="repeat(2, 1fr)"
           spacing={4}
           alignItems="flex-end"
@@ -83,8 +83,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
             >
               <InlineImage
-                src="/assets/icons/aave.svg"
+                src="/assets/icons/aave.png"
                 alt="aave logo"
+                boxSize={5}
               />
               {toEther(userData?.balances?.aaveClr, 18, false)}
             </CardStat>
@@ -95,8 +96,9 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
             >
               <InlineImage
-                src="/assets/icons/aave.svg"
+                src="/assets/icons/aave.png"
                 alt="aave logo"
+                boxSize={5}
               />
               {toEther(
                 ethers.utils.parseUnits(
@@ -123,6 +125,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               <InlineImage
                 src="/assets/icons/somm.svg"
                 alt="aave logo"
+                boxSize={5}
               />
               {userStakeData?.totalRewards?.toFixed()}
             </CardStat>

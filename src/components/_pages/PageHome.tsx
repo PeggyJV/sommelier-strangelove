@@ -2,7 +2,6 @@ import { NextPage } from "next"
 import { Box, Flex, Heading, Spinner, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { CellarCard } from "components/_cards/CellarCard"
-import { useConnect } from "wagmi"
 import { Section } from "components/_layout/Section"
 import { useGetAllCellarsQuery } from "generated/subgraph"
 import { Education } from "components/Education"
@@ -15,7 +14,6 @@ import { Link } from "components/Link"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 
 const PageHome: NextPage = () => {
-  const [auth] = useConnect()
   const [cellarsResult] = useGetAllCellarsQuery()
   const { cellarData, userData, aaveCellarSigner } = useAaveV2Cellar()
   console.log({ cellarData, userData, aaveCellarSigner })
@@ -47,6 +45,7 @@ const PageHome: NextPage = () => {
         })}
         {placeholderCardsArray.map((index) => {
           const cellarCardData: CellarCardData = {
+            cellarId: "",
             name: "-",
             description: "",
             strategyType: "-",

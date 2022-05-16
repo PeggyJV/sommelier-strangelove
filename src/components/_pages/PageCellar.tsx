@@ -1,11 +1,5 @@
 import { VFC } from "react"
-import {
-  Box,
-  Heading,
-  HeadingProps,
-  HStack,
-  VStack,
-} from "@chakra-ui/react"
+import { Box, Heading, HeadingProps, HStack, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { PerformanceCard } from "components/_cards/PerformanceCard"
 import { Section } from "components/_layout/Section"
@@ -57,7 +51,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const apy = data && averageApy(dayDatas!).toFixed(2)
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
-    removedLiquidityAllTime
+    removedLiquidityAllTime,
   )
   const { name: nameAbbreviated } = cellarDataMap[id]
 
@@ -69,6 +63,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           pb={12}
           justify="space-between"
           align="flex-end"
+          wrap="wrap"
+          rowGap={4}
         >
           <VStack spacing={6} align="flex-start">
             <BreadCrumb cellarName={name} />
@@ -80,11 +76,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
               </Link>
               <Heading fontSize="2.5rem">
                 {nameAbbreviated}{" "}
-                <Box
-                  as="span"
-                  textTransform="uppercase"
-                  fontSize="21px"
-                >
+                <Box as="span" textTransform="uppercase" fontSize="21px">
                   clr-s
                 </Box>
               </Heading>

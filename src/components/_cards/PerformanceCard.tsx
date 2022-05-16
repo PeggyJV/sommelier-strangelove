@@ -4,6 +4,7 @@ import {
   BoxProps,
   Circle,
   HStack,
+  Spinner,
   StackDivider,
   Text,
   VStack,
@@ -15,6 +16,9 @@ import { CardDivider } from "components/_layout/CardDivider"
 import { useNivoThemes } from "hooks/nivo"
 import TransparentCard from "./TransparentCard"
 import { CardStat } from "components/CardStat"
+import { getPrevious24Hours } from "utils/getPrevious24Hours"
+import { useGetHourlyTvlQuery } from "generated/subgraph"
+import { BigNumber } from "bignumber.js"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -22,41 +26,37 @@ const LineChart = dynamic(
   }
 )
 
-interface Props extends BoxProps {
-  data?: Serie[]
-}
-
-const data: Serie[] = [
-  {
-    id: 1,
-    data: [
-      { x: "bingus", y: 5 },
-      { x: "tingus", y: 15 },
-      { x: "lingus", y: 5 },
-      { x: "pingus", y: 25 },
-      { x: "shmingus", y: 18 },
-    ],
-  },
-  {
-    id: 2,
-    data: [
-      { x: "bingus", y: 40 },
-      { x: "shmingus", y: 5 },
-    ],
-  },
-]
+const epoch = getPrevious24Hours()
 
 const timeButtons = ["24H", "1W", "All Time"]
 
-export const PerformanceCard: VFC<Props> = (props) => {
-  const { lineChartTheme } = useNivoThemes()
+export const PerformanceCard: VFC<BoxProps> = (props) => {
+  const { lineChartTheme, chartTheme } = useNivoThemes()
   const [timeline, setTimeline] = useState<string>("24H")
+  const [{ fetching: hourlyIsFetching, data: hourlyData }] =
+    useGetHourlyTvlQuery({ variables: { epoch } })
+
+  const data: Serie[] | undefined = hourlyData && [
+    {
+      id: "tvl",
+      data: hourlyData?.cellarHourDatas.map(
+        ({ date, tvlTotal, asset }) => {
+          return {
+            x: new Date(date * 1000),
+            y: new BigNumber(tvlTotal)
+              .decimalPlaces(asset?.decimals!)
+              .toString(),
+          }
+        }
+      ),
+    },
+  ]
 
   return (
     <TransparentCard p={4} overflow="visible" {...props}>
       <VStack spacing={6} align="stretch" divider={<CardDivider />}>
-        <Box h="20rem">
-          <HStack justify="space-between">
+        <Box h="20rem" mb={{ sm: "2.2rem", md: 0 }}>
+          <HStack justify="space-between" wrap="wrap" rowGap={2}>
             <HStack spacing={8}>
               <CardStat
                 label={
@@ -95,6 +95,10 @@ export const PerformanceCard: VFC<Props> = (props) => {
               overflow="hidden"
               justify="space-around"
               spacing={0}
+              marginInlineStart={{
+                sm: "0rem !important",
+                md: "0.5rem",
+              }}
               divider={
                 <StackDivider borderColor="rgba(203, 198, 209, 0.25)" />
               }
@@ -120,21 +124,28 @@ export const PerformanceCard: VFC<Props> = (props) => {
               })}
             </HStack>
           </HStack>
-          <LineChart
-            data={data}
-            colors={lineChartTheme}
-            yScale={{
-              type: "linear",
-              max: 60,
-            }}
-          />
+          {hourlyIsFetching ? (
+            <Spinner />
+          ) : (
+            <LineChart
+              data={data!}
+              colors={lineChartTheme}
+              margin={{ bottom: 20, left: 20, right: 20, top: 20 }}
+              xScale={{
+                type: "time",
+                format: "%Y-%m-%d %H:%M",
+                useUTC: false,
+                precision: "hour",
+              }}
+              xFormat="time:%Y-%m-%d %H:%M"
+              axisBottom={{
+                format: "%H:%M",
+                tickValues: "every 2 hours",
+              }}
+              theme={chartTheme}
+            />
+          )}
         </Box>
-        <HStack justify="space-between">
-          <CardHeading>12am</CardHeading>
-          <CardHeading>6am</CardHeading>
-          <CardHeading>12pm</CardHeading>
-          <CardHeading>6pm</CardHeading>
-        </HStack>
       </VStack>
     </TransparentCard>
   )
