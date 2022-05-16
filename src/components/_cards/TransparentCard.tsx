@@ -6,7 +6,7 @@ const TransparentCard: VFC<BoxProps> = (props) => {
   return (
     <Card
       bg="surface.primary"
-      borderWidth={8}
+      borderWidth={1}
       borderRadius={16}
       borderColor="surface.secondary"
       {...props}

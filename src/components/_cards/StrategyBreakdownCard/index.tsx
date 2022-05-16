@@ -17,7 +17,7 @@ const StrategyBreakdownCard: VFC<BoxProps> = () => {
     <TransparentCard>
       <CardHeading pb={4}>strategy breakdown</CardHeading>
       <Tabs>
-        <TabList borderColor="rgba(203, 198, 209, 0.25)">
+        <TabList borderBottomWidth={1} borderColor="purple.base">
           <Tab {...tabProps}>Goals</Tab>
           <Tab {...tabProps}>Strategy</Tab>
           <Tab {...tabProps}>Somm Alpha</Tab>

@@ -9,11 +9,11 @@ export const tabProps: TabProps = {
     _after: {
       content: '""',
       position: "absolute",
-      bottom: -0.5,
+      bottom: -0.75,
       left: 0,
       height: "4px",
       width: "100%",
-      bg: "red.base",
+      bg: "purple.base",
       borderRadius: "2px",
     },
   },

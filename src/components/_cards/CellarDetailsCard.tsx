@@ -24,6 +24,7 @@ import {
 import TransparentCard from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
+import StrategyBreakdownCard from "./StrategyBreakdownCard"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -63,12 +64,8 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
   })
 
   return (
-    <TransparentCard p={4} overflow="visible">
-      <VStack
-        spacing={4}
-        divider={<CardDivider />}
-        align={{ sm: "unset", md: "stretch" }}
-      >
+    <TransparentCard p={6} overflow="visible">
+      <VStack spacing={8} align={{ sm: "unset", md: "stretch" }}>
         <CardStatRow
           justify={{ sm: "space-around", md: "flex-start" }}
           align="flex-start"
@@ -167,6 +164,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             </HStack>
           </VStack>
         </CardStatRow>
+        <StrategyBreakdownCard />
       </VStack>
     </TransparentCard>
   )
