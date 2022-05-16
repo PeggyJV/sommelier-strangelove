@@ -1,4 +1,6 @@
-import { Heading, Box, Flex, Grid, FlexProps } from "@chakra-ui/react"
+import { Heading, Box, Grid, FlexProps, Img } from "@chakra-ui/react"
+import { InlineImage } from "components/InlineImage"
+import { ArrowUpIcon } from "components/_icons"
 import { CellarCardData } from "./CellarCardDisplay"
 import { Label } from "./Label"
 
@@ -6,11 +8,7 @@ interface Props extends FlexProps {
   data: CellarCardData
 }
 
-export const Stats: React.FC<Props> = ({
-  data,
-  children,
-  ...rest
-}) => {
+export const Stats: React.FC<Props> = ({ data, children, ...rest }) => {
   return (
     <Grid
       gridAutoFlow="column"
@@ -25,19 +23,41 @@ export const Stats: React.FC<Props> = ({
         <Heading as="p" size="sm" fontWeight="bold">
           $10,105.00
         </Heading>
-        <Label>Net Value</Label>
+        <Label color="neutral.300">Your Portfolio</Label>
       </Box>
       <Box>
-        <Heading as="p" size="sm" fontWeight="bold" color="lime.base">
+        <Heading
+          as="p"
+          size="sm"
+          fontWeight="bold"
+          color="lime.base"
+          display="flex"
+          alignItems="center"
+          columnGap="5px"
+        >
+          <ArrowUpIcon boxSize={3} />
           {data.apy}%
         </Heading>
-        <Label>APY</Label>
+        <Label color="neutral.300" whiteSpace="nowrap">
+          Past Week
+        </Label>
       </Box>
       <Grid backgroundColor="">
-        <Heading as="p" size="sm" fontWeight="bold">
+        <Heading
+          as="p"
+          size="sm"
+          fontWeight="bold"
+          display="flex"
+          alignItems="baseline"
+        >
+          <InlineImage
+            src="/assets/images/coin.png"
+            alt="coin logo"
+            boxSize={3}
+          />
           0
         </Heading>
-        <Label>Rewards</Label>
+        <Label color="neutral.300">Rewards</Label>
       </Grid>
     </Grid>
   )

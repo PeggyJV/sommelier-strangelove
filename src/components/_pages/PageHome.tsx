@@ -2,7 +2,6 @@ import { NextPage } from "next"
 import { Box, Flex, Heading, Spinner, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { CellarCard } from "components/_cards/CellarCard"
-import { useConnect } from "wagmi"
 import { Section } from "components/_layout/Section"
 import { useGetAllCellarsQuery } from "generated/subgraph"
 import { Education } from "components/Education"
@@ -14,7 +13,6 @@ import {
 import { Link } from "components/Link"
 
 const PageHome: NextPage = () => {
-  const [auth] = useConnect()
   const [cellarsResult] = useGetAllCellarsQuery()
   const { data, fetching } = cellarsResult
   const totalCellars = data?.cellars?.length ?? 0
@@ -43,6 +41,7 @@ const PageHome: NextPage = () => {
         })}
         {placeholderCardsArray.map((index) => {
           const cellarCardData: CellarCardData = {
+            cellarId: "",
             name: "-",
             description: "",
             strategyType: "-",
