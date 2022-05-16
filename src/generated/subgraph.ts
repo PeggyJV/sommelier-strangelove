@@ -1760,7 +1760,7 @@ export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCel
 };
 export const GetAllTimeTvlDocument = gql`
     query GetAllTimeTVL {
-  cellarDayDatas(orderDirection: asc) {
+  cellarDayDatas(orderDirection: asc, where: {tvlActive_gt: 0}) {
     date
     asset {
       symbol
@@ -1843,7 +1843,11 @@ export function useGetCellarQuery(options: Omit<Urql.UseQueryArgs<GetCellarQuery
 };
 export const GetHourlyTvlDocument = gql`
     query GetHourlyTVL($epoch: Int) {
-  cellarHourDatas(orderDirection: asc, orderBy: date, where: {date_gte: $epoch}) {
+  cellarHourDatas(
+    orderDirection: asc
+    orderBy: date
+    where: {date_gte: $epoch, tvlActive_gt: 0}
+  ) {
     date
     asset {
       symbol
@@ -1873,7 +1877,7 @@ export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQ
 };
 export const GetWeeklyTvlDocument = gql`
     query GetWeeklyTVL {
-  cellarDayDatas(first: 7, orderDirection: asc) {
+  cellarDayDatas(first: 7, orderDirection: asc, where: {tvlActive_gt: 0}) {
     date
     asset {
       symbol

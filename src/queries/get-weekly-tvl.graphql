@@ -1,5 +1,9 @@
 query GetWeeklyTVL {
-  cellarDayDatas(first: 7, orderDirection: asc) {
+  cellarDayDatas(
+    first: 7
+    orderDirection: asc
+    where: { tvlActive_gt: 0 }
+  ) {
     date
     asset {
       symbol

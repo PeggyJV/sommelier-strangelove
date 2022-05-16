@@ -2,7 +2,7 @@ query GetHourlyTVL($epoch: Int) {
   cellarHourDatas(
     orderDirection: asc
     orderBy: date
-    where: { date_gte: $epoch }
+    where: { date_gte: $epoch, tvlActive_gt: 0 }
   ) {
     date
     asset {
