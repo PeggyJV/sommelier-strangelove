@@ -19,6 +19,7 @@ import { BreadCrumb } from "components/BreadCrumb"
 import BondingTableCard from "components/_cards/BondingTableCard"
 import { cellarDataMap } from "data/cellarDataMap"
 import { averageApy } from "utils/cellarApy"
+import BigNumber from "bignumber.js"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -42,11 +43,18 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const {
     dayDatas,
     tvlTotal,
+    asset,
     liquidityLimit,
     addedLiquidityAllTime,
     removedLiquidityAllTime,
   } = cellar || {}
-  const tvmVal = formatCurrency(tvlTotal)
+
+  const calculatedTvl =
+    tvlTotal &&
+    asset &&
+    new BigNumber(tvlTotal).dividedBy(10 ^ asset?.decimals).toString()
+
+  const tvmVal = formatCurrency(calculatedTvl)
   const apy = data && averageApy(dayDatas!).toFixed(2)
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
