@@ -38,6 +38,19 @@ const dayChartProps: Partial<LineProps> = {
     precision: "day",
   },
 }
+const allTimeChartProps: Partial<LineProps> = {
+  axisBottom: {
+    format: "%Y-%m-%d",
+    tickValues: "every 2 days",
+  },
+  xFormat: "time:%Y-%m-%d",
+  xScale: {
+    type: "time",
+    format: "%Y-%m-%d",
+    useUTC: false,
+    precision: "day",
+  },
+}
 
 export const useTVLQueries = (epoch: number) => {
   // GQL Queries
@@ -88,7 +101,7 @@ export const useTVLQueries = (epoch: number) => {
   const setDataAllTime = () =>
     setData({
       series: mutateDayData(allTimeData),
-      chartProps: dayChartProps,
+      chartProps: allTimeChartProps,
     })
 
   return {
