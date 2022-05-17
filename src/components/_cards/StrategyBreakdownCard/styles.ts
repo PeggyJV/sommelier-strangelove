@@ -21,5 +21,6 @@ export const tabProps: TabProps = {
 
 export const tabPanelProps: TabPanelProps = {
   px: 0,
+  pt: 6,
   maxW: "78ch",
 }

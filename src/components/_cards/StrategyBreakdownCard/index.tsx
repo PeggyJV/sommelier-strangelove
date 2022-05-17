@@ -7,7 +7,6 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react"
-import { CardHeading } from "components/_typography/CardHeading"
 import { VFC } from "react"
 import TransparentCard from "../TransparentCard"
 import { tabPanelProps, tabProps } from "./styles"
@@ -15,7 +14,6 @@ import { tabPanelProps, tabProps } from "./styles"
 const StrategyBreakdownCard: VFC<BoxProps> = () => {
   return (
     <TransparentCard>
-      <CardHeading pb={4}>strategy breakdown</CardHeading>
       <Tabs>
         <TabList borderBottomWidth={1} borderColor="purple.base">
           <Tab {...tabProps}>Goals</Tab>
