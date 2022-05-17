@@ -12,11 +12,13 @@ import {
   Tooltip,
   HStack,
   Text,
+  Heading,
 } from "@chakra-ui/react"
 import TransparentCard from "./TransparentCard"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { InlineImage } from "components/InlineImage"
-import { InformationIcon } from "components/_icons"
+import { ExternalLinkIcon, InformationIcon } from "components/_icons"
+import { Link } from "components/Link"
 
 interface BondingTableCardProps extends TableProps {
   data?: any
@@ -51,16 +53,36 @@ const placeholderData: BondingPeriod[] = [
   },
 ]
 
+const formatTrancheNumber = (number: number): string => {
+  if (number < 10) {
+    const modifiedNumber = number.toString().padStart(2, "0")
+
+    return modifiedNumber
+  }
+
+  return number.toString()
+}
+
 const BondingTableCard: VFC<BondingTableCardProps> = ({
   data,
   ...rest
 }) => {
   return (
-    <TransparentCard>
+    <TransparentCard pb={6}>
       <TableContainer>
+        <Heading fontSize="lg" pl={6} py={4}>
+          Active Bonds
+        </Heading>
         <Table variant="unstyled" {...rest}>
           <Thead>
             <Tr color="neutral.300">
+              <Th
+                fontSize={10}
+                fontWeight="normal"
+                textTransform="capitalize"
+              >
+                Tranche
+              </Th>
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
@@ -74,7 +96,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text as="span">Bonded Tokens</Text>
+                    <Text as="span">LP Tokens</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -87,7 +109,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                 fontWeight="normal"
                 textTransform="capitalize"
               >
-                Bonding Period
+                Period
               </Th>
               <Tooltip
                 hasArrow
@@ -102,7 +124,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text as="span">Rewards</Text>
+                    <Text as="span">Reward Multiplier</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -113,24 +135,30 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
               <Th />
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody fontWeight="bold">
             {placeholderData.map((data, i) => {
               const { amount, bondingPeriod, value, canUnbond } = data
               return (
                 <Tr
-                  borderBottom="1px solid"
-                  borderColor="neutral.700"
                   key={i}
+                  _hover={{
+                    bg: "surface.secondary",
+                    "td:first-of-type": {
+                      borderRadius: "32px 0 0 32px",
+                      overflow: "hidden",
+                    },
+                    "td:last-of-type": {
+                      borderRadius: "0 32px 32px 0",
+                      overflow: "hidden",
+                    },
+                  }}
                   _last={{
                     border: "none",
                   }}
                 >
+                  <Td>#{formatTrancheNumber(i + 1)}</Td>
                   <Td>
-                    <Flex
-                      align="center"
-                      fontSize="21px"
-                      fontWeight={700}
-                    >
+                    <Flex align="center">
                       <InlineImage
                         src="/assets/icons/aave.png"
                         alt="Aave logo"
@@ -140,22 +168,37 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                     </Flex>
                   </Td>
                   <Td>{bondingPeriod}</Td>
-                  <Td>{value}x SOMM</Td>
-                  <Td>
-                    {canUnbond ? (
-                      <SecondaryButton
-                        size="sm"
-                        onClick={() =>
-                          window.alert(
-                            `You've bonded for ${bondingPeriod}. You earned at a rate of ${value}x.`
-                          )
-                        }
+                  <Td>{value}x</Td>
+                  <Td fontWeight="normal">
+                    <HStack spacing={6}>
+                      <Link
+                        href="https://wallet.keplr.app/#/dashboard" // TODO: update this href to point to tx
+                        isExternal
+                        display="flex"
+                        alignItems="center"
+                        _hover={{
+                          textDecor: "underline",
+                        }}
                       >
-                        Unbond
-                      </SecondaryButton>
-                    ) : (
-                      <>Unbonding in N days</>
-                    )}
+                        <Text as="span">View on Keplr</Text>
+                        <ExternalLinkIcon
+                          ml={2}
+                          color="purple.base"
+                        />
+                      </Link>
+                      {canUnbond && (
+                        <SecondaryButton
+                          size="sm"
+                          onClick={() =>
+                            window.alert(
+                              `You've bonded for ${bondingPeriod}. You earned at a rate of ${value}x.`
+                            )
+                          }
+                        >
+                          Unbond
+                        </SecondaryButton>
+                      )}
+                    </HStack>
                   </Td>
                 </Tr>
               )

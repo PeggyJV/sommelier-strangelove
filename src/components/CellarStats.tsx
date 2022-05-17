@@ -41,7 +41,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
       divider={
         <CardDivider
           css={{
-            "&:nth-last-child(2)": {
+            "&:nth-last-of-type(2)": {
               borderColor,
             },
           }}

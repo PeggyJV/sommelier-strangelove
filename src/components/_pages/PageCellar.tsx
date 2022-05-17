@@ -1,5 +1,11 @@
 import { VFC } from "react"
-import { Box, Heading, HeadingProps, HStack, VStack } from "@chakra-ui/react"
+import {
+  Box,
+  Heading,
+  HeadingProps,
+  HStack,
+  VStack,
+} from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { PerformanceCard } from "components/_cards/PerformanceCard"
 import { Section } from "components/_layout/Section"
@@ -7,7 +13,6 @@ import { useConnect } from "wagmi"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/cellars/[id]"
 import { useGetCellarQuery } from "generated/subgraph"
-import StrategyBreakdownCard from "components/_cards/StrategyBreakdownCard"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"
 import { Link } from "components/Link"
 import { CellarStats } from "components/CellarStats"
@@ -16,7 +21,6 @@ import { formatCurrency } from "utils/formatCurrency"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
-import BondingTableCard from "components/_cards/BondingTableCard"
 import { cellarDataMap } from "data/cellarDataMap"
 import { averageApy } from "utils/cellarApy"
 import BigNumber from "bignumber.js"
@@ -58,7 +62,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const apy = data && averageApy(dayDatas!).toFixed(2)
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
-    removedLiquidityAllTime,
+    removedLiquidityAllTime
   )
   const { name: nameAbbreviated } = cellarDataMap[id]
 
@@ -83,7 +87,12 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
               </Link>
               <Heading fontSize="2.5rem">
                 {nameAbbreviated}{" "}
-                <Box as="span" textTransform="uppercase" fontSize="21px">
+                <Box
+                  as="span"
+                  textTransform="uppercase"
+                  fontSize="21px"
+                  color="neutral.300"
+                >
                   clr-s
                 </Box>
               </Heading>
@@ -98,15 +107,16 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
         </HStack>
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles}>Your Portfolio</Heading>
-          <PortfolioCard />
-          {isConnected && <BondingTableCard />}
+          <PortfolioCard isConnected={isConnected} />
         </VStack>
       </Section>
       <Section>
         <VStack spacing={6} align="stretch">
           <Heading {...h2Styles}>Cellar Details</Heading>
-          <CellarDetailsCard />
-          <StrategyBreakdownCard />
+          <CellarDetailsCard
+            cellarDataMap={cellarDataMap}
+            cellarId={id}
+          />
           <PerformanceCard />
         </VStack>
       </Section>

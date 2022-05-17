@@ -1,4 +1,5 @@
 import { Spinner } from "@chakra-ui/react"
+import { linearGradientDef } from "@nivo/core"
 import { Serie } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
@@ -28,6 +29,14 @@ export const TVLChart: VFC<TVLChartProps> = ({
     <LineChart
       data={data!}
       colors={lineChartTheme}
+      enableArea={true}
+      defs={[
+        linearGradientDef("gradientA", [
+          { offset: 0, color: "inherit" },
+          { offset: 100, color: "inherit", opacity: 0 },
+        ]),
+      ]}
+      fill={[{ match: "*", id: "gradientA" }]}
       margin={{ bottom: 20, left: 20, right: 20, top: 20 }}
       axisLeft={null}
       theme={chartTheme}
