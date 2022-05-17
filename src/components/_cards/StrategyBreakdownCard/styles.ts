@@ -3,6 +3,10 @@ import { TabPanelProps, TabProps } from "@chakra-ui/react"
 export const tabProps: TabProps = {
   color: "neutral.400",
   fontWeight: "bold",
+  borderRadius: 8,
+  _active: {
+    bg: "surface.primary",
+  },
   _selected: {
     color: "white",
     position: "relative",
