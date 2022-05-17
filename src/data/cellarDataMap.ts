@@ -6,6 +6,9 @@ export interface CellarDataMap {
     managementFee: string
     protocols: string
     supportedChains: string[]
+    performanceSplit: {
+      [key: string]: number
+    }
   }
 }
 
@@ -26,5 +29,10 @@ export const cellarDataMap: CellarDataMap = {
       "BUSD",
       "GUSD",
     ],
+    performanceSplit: {
+      "strategy provider": 5,
+      protocol: 5,
+      depositors: 90,
+    },
   },
 }

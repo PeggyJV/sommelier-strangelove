@@ -38,14 +38,6 @@ interface CellarDetailsProps extends BoxProps {
   cellarDataMap: CellarDataMap
 }
 
-const placeholderData = [
-  {
-    "strategy provider": 5,
-    protocol: 5,
-    depositors: 90,
-  },
-]
-
 const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   cellarId,
   cellarDataMap,
@@ -57,8 +49,13 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     md: "transparent",
     lg: "purple.dark",
   })
-  const { protocols, strategyType, managementFee, supportedChains } =
-    cellarDataMap[cellarId]
+  const {
+    protocols,
+    strategyType,
+    managementFee,
+    supportedChains,
+    performanceSplit,
+  } = cellarDataMap[cellarId]
   const strategyAssets = tokenConfig.filter((token) =>
     supportedChains?.includes(token.symbol)
   )
@@ -145,11 +142,11 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 borderWidth={1}
                 borderRadius={2}
                 keys={["strategy provider", "protocol", "depositors"]}
-                data={placeholderData}
+                data={[performanceSplit]}
               />
             </Box>
             <HStack spacing={8}>
-              {Object.entries(placeholderData[0]).map(
+              {Object.entries(performanceSplit).map(
                 ([key, value], i) => {
                   return (
                     <HStack key={i}>
