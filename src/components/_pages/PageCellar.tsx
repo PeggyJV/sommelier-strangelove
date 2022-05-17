@@ -91,6 +91,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
                   as="span"
                   textTransform="uppercase"
                   fontSize="21px"
+                  color="neutral.300"
                 >
                   clr-s
                 </Box>
