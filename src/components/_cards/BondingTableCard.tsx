@@ -12,6 +12,7 @@ import {
   Tooltip,
   HStack,
   Text,
+  Heading,
 } from "@chakra-ui/react"
 import TransparentCard from "./TransparentCard"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
@@ -67,8 +68,11 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
   ...rest
 }) => {
   return (
-    <TransparentCard>
+    <TransparentCard pb={6}>
       <TableContainer>
+        <Heading fontSize="lg" pl={6} py={4}>
+          Active Bonds
+        </Heading>
         <Table variant="unstyled" {...rest}>
           <Thead>
             <Tr color="neutral.300">
