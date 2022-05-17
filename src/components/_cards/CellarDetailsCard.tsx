@@ -164,7 +164,10 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             </HStack>
           </VStack>
         </CardStatRow>
-        <StrategyBreakdownCard />
+        <StrategyBreakdownCard
+          cellarDataMap={cellarDataMap}
+          cellarId={cellarId}
+        />
       </VStack>
     </TransparentCard>
   )

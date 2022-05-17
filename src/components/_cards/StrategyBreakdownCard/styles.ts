@@ -2,6 +2,7 @@ import { TabPanelProps, TabProps } from "@chakra-ui/react"
 
 export const tabProps: TabProps = {
   color: "neutral.400",
+  textTransform: "capitalize",
   fontWeight: "bold",
   borderRadius: 8,
   _active: {
