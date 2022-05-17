@@ -25,6 +25,7 @@ import TransparentCard from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import StrategyBreakdownCard from "./StrategyBreakdownCard"
+import { CellarDataMap } from "data/cellarDataMap"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -32,19 +33,10 @@ const BarChart = dynamic(
   }
 )
 
-const supportedChains = [
-  "DAI",
-  "USDC",
-  "USDT",
-  "FEI",
-  "TUSD",
-  "BUSD",
-  "GUSD",
-]
-
-const strategyAssets = tokenConfig.filter((token) =>
-  supportedChains.includes(token.symbol)
-)
+interface CellarDetailsProps extends BoxProps {
+  cellarId: string
+  cellarDataMap: CellarDataMap
+}
 
 const placeholderData = [
   {
@@ -54,14 +46,22 @@ const placeholderData = [
   },
 ]
 
-const CellarDetailsCard: VFC<BoxProps> = () => {
+const CellarDetailsCard: VFC<CellarDetailsProps> = ({
+  cellarId,
+  cellarDataMap,
+}) => {
   const { barChartTheme } = useNivoThemes()
   const theme = useTheme()
   const borderColor = useBreakpointValue({
-    sm: "neutral.700",
+    sm: "purple.dark",
     md: "transparent",
-    lg: "neutral.700",
+    lg: "purple.dark",
   })
+  const { protocols, strategyType, managementFee, supportedChains } =
+    cellarDataMap[cellarId]
+  const strategyAssets = tokenConfig.filter((token) =>
+    supportedChains?.includes(token.symbol)
+  )
 
   return (
     <TransparentCard p={6} overflow="visible">
@@ -75,7 +75,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
           divider={
             <CardDivider
               css={{
-                "&:nth-last-child(2)": {
+                "&:nth-last-of-type(2)": {
                   borderColor,
                 },
               }}
@@ -86,7 +86,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             label="strategy type"
             tooltip="Cellar uses Stablecoin lending"
           >
-            Stablecoin
+            {strategyType}
           </CardStat>
           <CardStat
             label="strategy assets"
@@ -105,7 +105,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               p={1}
               mr={2}
             />
-            AAVE
+            {protocols}
           </CardStat>
           <CardStat
             label="mgmt fee"
@@ -118,7 +118,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               p={1}
               mr={2}
             />
-            5%
+            {managementFee}
           </CardStat>
           <VStack
             width={{ sm: "100%", lg: "unset" }}

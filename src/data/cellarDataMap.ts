@@ -1,9 +1,11 @@
-interface CellarDataMap {
+export interface CellarDataMap {
   [key: string]: {
     name: string
     description: string
     strategyType: string
+    managementFee: string
     protocols: string
+    supportedChains: string[]
   }
 }
 
@@ -12,7 +14,17 @@ export const cellarDataMap: CellarDataMap = {
     name: "aave2",
     description:
       "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
-    strategyType: "Stable",
+    strategyType: "Stablecoin",
+    managementFee: "1%",
     protocols: "AAVE",
+    supportedChains: [
+      "DAI",
+      "USDC",
+      "USDT",
+      "FEI",
+      "TUSD",
+      "BUSD",
+      "GUSD",
+    ],
   },
 }
