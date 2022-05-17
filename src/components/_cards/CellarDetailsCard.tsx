@@ -86,12 +86,6 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             {strategyType}
           </CardStat>
           <CardStat
-            label="strategy assets"
-            tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
-          >
-            <TokenAssets tokens={strategyAssets} />
-          </CardStat>
-          <CardStat
             label="protocols"
             tooltip="Protocols in which Cellar operates"
           >
@@ -116,6 +110,12 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               mr={2}
             />
             {managementFee}
+          </CardStat>
+          <CardStat
+            label="strategy assets"
+            tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
+          >
+            <TokenAssets tokens={strategyAssets} displaySymbol />
           </CardStat>
           <VStack
             width={{ sm: "100%", lg: "unset" }}
