@@ -21,4 +21,9 @@ export const components: ThemeComponents = {
       borderColor: "purple.base",
     },
   },
+  Input: {
+    defaultProps: {
+      focusBorderColor: "purple.base",
+    },
+  },
 }
