@@ -1,6 +1,7 @@
 import {
   Box,
   BoxProps,
+  Button,
   HStack,
   StackDivider,
   Text,
@@ -28,14 +29,14 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
 
   const timeButtons = [
     {
-      title: "24H",
+      title: "Day",
       onClick: setDataHourly,
     },
     {
-      title: "1W",
+      title: "Week",
       onClick: setDataWeekly,
     },
-    { title: "All Time", onClick: setDataAllTime },
+    { title: "All", onClick: setDataAllTime },
   ]
 
   return (
@@ -51,43 +52,32 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
                 <Text></Text>
               </CardStat>
             </HStack>
-            <HStack
-              border="1px solid"
-              borderColor="rgba(203, 198, 209, 0.25)"
-              borderRadius="2rem"
-              overflow="hidden"
-              justify="space-around"
-              spacing={0}
-              marginInlineStart={{
-                sm: "0rem !important",
-                md: "0.5rem",
-              }}
-              divider={
-                <StackDivider borderColor="rgba(203, 198, 209, 0.25)" />
-              }
-            >
+            <HStack spacing={4}>
               {timeButtons.map((button, i) => {
                 const { title, onClick } = button
                 const isSelected = title === timeline
 
                 return (
-                  <Box
-                    flex={1}
-                    px={4}
-                    py={0.5}
+                  <Button
                     key={i}
-                    as="button"
-                    bg={isSelected ? "rgba(203, 198, 209, 0.25)" : ""}
+                    variant="unstyled"
+                    p={3}
+                    py={1}
+                    bg={
+                      isSelected
+                        ? "surface.tertiary"
+                        : "surface.primary"
+                    }
+                    borderRadius={8}
                     fontSize="sm"
-                    fontWeight="bold"
-                    whiteSpace="nowrap"
+                    fontWeight="semibold"
                     onClick={() => {
                       setTimeline(title)
                       onClick()
                     }}
                   >
                     {title}
-                  </Box>
+                  </Button>
                 )
               })}
             </HStack>
