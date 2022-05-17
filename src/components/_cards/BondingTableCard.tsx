@@ -144,11 +144,11 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   _hover={{
                     bg: "surface.secondary",
                     "td:first-of-type": {
-                      borderRadius: "8px 0 0 8px",
+                      borderRadius: "32px 0 0 32px",
                       overflow: "hidden",
                     },
                     "td:last-of-type": {
-                      borderRadius: "0 8px 8px 0",
+                      borderRadius: "0 32px 32px 0",
                       overflow: "hidden",
                     },
                   }}
