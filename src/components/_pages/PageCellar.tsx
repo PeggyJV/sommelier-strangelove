@@ -21,7 +21,6 @@ import { formatCurrency } from "utils/formatCurrency"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
-import BondingTableCard from "components/_cards/BondingTableCard"
 import { cellarDataMap } from "data/cellarDataMap"
 import { averageApy } from "utils/cellarApy"
 import BigNumber from "bignumber.js"
@@ -113,7 +112,10 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
       <Section>
         <VStack spacing={6} align="stretch">
           <Heading {...h2Styles}>Cellar Details</Heading>
-          <CellarDetailsCard />
+          <CellarDetailsCard
+            cellarDataMap={cellarDataMap}
+            cellarId={id}
+          />
           <PerformanceCard />
         </VStack>
       </Section>
