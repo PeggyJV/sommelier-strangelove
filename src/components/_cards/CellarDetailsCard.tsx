@@ -149,9 +149,12 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               {Object.entries(performanceSplit).map(
                 ([key, value], i) => {
                   return (
-                    <HStack key={i}>
-                      <Circle size={4} bg={barChartTheme[i]} />
-                      <Text fontSize="sm" textTransform="capitalize">
+                    <HStack key={i} spacing={1}>
+                      <Circle size={2} bg={barChartTheme[i]} />
+                      <Text
+                        fontSize="0.625rem"
+                        textTransform="capitalize"
+                      >
                         {value}% {key}
                       </Text>
                     </HStack>
