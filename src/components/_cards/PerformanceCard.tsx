@@ -25,7 +25,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
     setDataWeekly,
     setDataAllTime,
   } = useTVLQueries(epoch)
-  const [timeline, setTimeline] = useState<string>("24H")
+  const [timeline, setTimeline] = useState<string>("Day")
 
   const timeButtons = [
     {
@@ -69,6 +69,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
                         : "surface.primary"
                     }
                     borderRadius={8}
+                    backdropFilter="blur(8px)"
                     fontSize="sm"
                     fontWeight="semibold"
                     onClick={() => {
