@@ -5,6 +5,7 @@ import {
   useGetWeeklyTvlQuery,
 } from "generated/subgraph"
 import { useEffect, useState } from "react"
+import { getPreviousWeek } from "utils/calculateTime"
 import { mutateDayData, mutateHourlyData } from "utils/urql"
 
 interface DataProps {
@@ -15,7 +16,7 @@ interface DataProps {
 const hourlyChartProps: Partial<LineProps> = {
   axisBottom: {
     format: "%m/%d: %H:%M",
-    tickValues: "every 2 hours",
+    tickValues: "every 6 hours",
   },
   xFormat: "time:%m/%d: %H:%M",
   xScale: {
@@ -27,13 +28,13 @@ const hourlyChartProps: Partial<LineProps> = {
 }
 const dayChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%d",
+    format: "%m/%d/%y",
     tickValues: "every day",
   },
-  xFormat: "time:%d",
+  xFormat: "time:%m/%d/%y",
   xScale: {
     type: "time",
-    format: "%d",
+    format: "%m/%d/%y",
     useUTC: false,
     precision: "day",
   },
@@ -61,7 +62,9 @@ export const useTVLQueries = (epoch: number) => {
   const [
     { fetching: weeklyIsFetching, data: weeklyData },
     reexecuteWeekly,
-  ] = useGetWeeklyTvlQuery()
+  ] = useGetWeeklyTvlQuery({
+    variables: { epoch: getPreviousWeek() },
+  })
   const [
     { fetching: allTimeIsFetching, data: allTimeData },
     reexecuteAllTime,

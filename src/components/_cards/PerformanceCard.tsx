@@ -12,7 +12,7 @@ import { TransparentCard } from "./TransparentCard"
 import { CardStat } from "components/CardStat"
 import { TVLChart } from "components/_charts/TVLChart"
 import { useTVLQueries } from "hooks/urql"
-import { getPrevious24Hours } from "utils/getPrevious24Hours"
+import { getPrevious24Hours } from "utils/calculateTime"
 
 const epoch = getPrevious24Hours()
 
