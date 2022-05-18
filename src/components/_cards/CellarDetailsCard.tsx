@@ -21,10 +21,10 @@ import {
   InformationIcon,
   UsdcIcon,
 } from "components/_icons"
-import TransparentCard from "./TransparentCard"
+import { TransparentCard } from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
-import StrategyBreakdownCard from "./StrategyBreakdownCard"
+import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { CellarDataMap } from "data/cellarDataMap"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),

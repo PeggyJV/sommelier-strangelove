@@ -14,11 +14,11 @@ import {
   Text,
   Heading,
 } from "@chakra-ui/react"
-import TransparentCard from "./TransparentCard"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { InlineImage } from "components/InlineImage"
 import { ExternalLinkIcon, InformationIcon } from "components/_icons"
 import { Link } from "components/Link"
+import { InnerCard } from "./InnerCard"
 
 interface BondingTableCardProps extends TableProps {
   data?: any
@@ -68,7 +68,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
   ...rest
 }) => {
   return (
-    <TransparentCard pb={6}>
+    <InnerCard pb={6}>
       <TableContainer>
         <Heading fontSize="lg" pl={6} py={4}>
           Active Bonds
@@ -206,7 +206,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
           </Tbody>
         </Table>
       </TableContainer>
-    </TransparentCard>
+    </InnerCard>
   )
 }
 

@@ -5,7 +5,7 @@ import {
   HStack,
   Text,
 } from "@chakra-ui/react"
-import React, { VFC } from "react"
+import { VFC } from "react"
 import { Socials } from "components/Socials"
 import { FooterLink } from "./FooterLink"
 

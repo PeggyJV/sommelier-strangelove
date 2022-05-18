@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react"
 import { CellarDataMap } from "data/cellarDataMap"
 import { VFC } from "react"
-import TransparentCard from "../TransparentCard"
+import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
 
 interface StrategyBreakdownProps extends BoxProps {
@@ -17,14 +17,14 @@ interface StrategyBreakdownProps extends BoxProps {
   cellarId: string
 }
 
-const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
+export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
   cellarId,
   cellarDataMap,
 }) => {
   const { strategyBreakdown } = cellarDataMap[cellarId]
 
   return (
-    <TransparentCard>
+    <InnerCard>
       <Tabs>
         <TabList borderBottomWidth={1} borderColor="purple.base">
           {Object.keys(strategyBreakdown).map((key) => {
@@ -45,8 +45,6 @@ const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
           })}
         </TabPanels>
       </Tabs>
-    </TransparentCard>
+    </InnerCard>
   )
 }
-
-export default StrategyBreakdownCard
