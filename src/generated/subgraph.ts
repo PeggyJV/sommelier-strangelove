@@ -1712,7 +1712,9 @@ export type GetPositionQueryVariables = Exact<{
 
 export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
 
-export type GetWeeklyTvlQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetWeeklyTvlQueryVariables = Exact<{
+  epoch: Scalars['Int'];
+}>;
 
 
 export type GetWeeklyTvlQuery = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> };
@@ -1876,12 +1878,12 @@ export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQ
   return Urql.useQuery<GetPositionQuery>({ query: GetPositionDocument, ...options });
 };
 export const GetWeeklyTvlDocument = gql`
-    query GetWeeklyTVL {
+    query GetWeeklyTVL($epoch: Int!) {
   cellarDayDatas(
     first: 7
     orderDirection: asc
     orderBy: date
-    where: {tvlActive_gt: 0}
+    where: {tvlActive_gt: 0, date_gte: $epoch}
   ) {
     date
     asset {
@@ -1893,6 +1895,6 @@ export const GetWeeklyTvlDocument = gql`
 }
     `;
 
-export function useGetWeeklyTvlQuery(options?: Omit<Urql.UseQueryArgs<GetWeeklyTvlQueryVariables>, 'query'>) {
+export function useGetWeeklyTvlQuery(options: Omit<Urql.UseQueryArgs<GetWeeklyTvlQueryVariables>, 'query'>) {
   return Urql.useQuery<GetWeeklyTvlQuery>({ query: GetWeeklyTvlDocument, ...options });
 };
