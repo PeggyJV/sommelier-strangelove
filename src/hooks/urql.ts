@@ -5,7 +5,10 @@ import {
   useGetWeeklyTvlQuery,
 } from "generated/subgraph"
 import { useEffect, useState } from "react"
-import { getPreviousWeek } from "utils/calculateTime"
+import {
+  getPrevious24Hours,
+  getPreviousWeek,
+} from "utils/calculateTime"
 import { mutateDayData, mutateHourlyData } from "utils/urql"
 
 interface DataProps {
@@ -53,12 +56,14 @@ const allTimeChartProps: Partial<LineProps> = {
   },
 }
 
-export const useTVLQueries = (epoch: number) => {
+export const useTVLQueries = () => {
   // GQL Queries
   const [
     { fetching: hourlyIsFetching, data: hourlyData },
     reexecuteHourly,
-  ] = useGetHourlyTvlQuery({ variables: { epoch } })
+  ] = useGetHourlyTvlQuery({
+    variables: { epoch: getPrevious24Hours() },
+  })
   const [
     { fetching: weeklyIsFetching, data: weeklyData },
     reexecuteWeekly,
