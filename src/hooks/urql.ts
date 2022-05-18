@@ -14,26 +14,26 @@ interface DataProps {
 
 const hourlyChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%H:%M",
+    format: "%m/%d: %H:%M",
     tickValues: "every 2 hours",
   },
-  xFormat: "time:%Y-%m-%d %H:%M",
+  xFormat: "time:%m/%d: %H:%M",
   xScale: {
     type: "time",
-    format: "%Y-%m-%d %H:%M",
+    format: "%H:%M",
     useUTC: false,
     precision: "hour",
   },
 }
 const dayChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%Y-%m-%d",
+    format: "%d",
     tickValues: "every day",
   },
-  xFormat: "time:%Y-%m-%d",
+  xFormat: "time:%d",
   xScale: {
     type: "time",
-    format: "%Y-%m-%d",
+    format: "%d",
     useUTC: false,
     precision: "day",
   },
