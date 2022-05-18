@@ -3,14 +3,12 @@ import {
   GetWeeklyTvlQuery,
   GetAllTimeTvlQuery,
 } from "generated/subgraph"
-import { BigNumber } from "bignumber.js"
 import { Serie } from "@nivo/line"
 import { formatCurrency } from "./formatCurrency"
+import { getCalulatedTvl } from "./bigNumber"
 
 const formatTvl = (tvlTotal: string, asset: any) => {
-  const total = new BigNumber(tvlTotal)
-    .dividedBy(asset?.decimals! ^ 10)
-    .toString()
+  const total = getCalulatedTvl(tvlTotal, asset)
 
   const totalString = `${formatCurrency(total)} ${asset?.symbol}`
   return totalString
