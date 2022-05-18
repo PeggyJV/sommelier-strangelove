@@ -40,13 +40,13 @@ const dayChartProps: Partial<LineProps> = {
 }
 const allTimeChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%Y-%m-%d",
+    format: "%m/%d/%y",
     tickValues: "every 2 days",
   },
-  xFormat: "time:%Y-%m-%d",
+  xFormat: "time:%m/%d/%y",
   xScale: {
     type: "time",
-    format: "%Y-%m-%d",
+    format: "%m/%d/%y",
     useUTC: false,
     precision: "day",
   },

@@ -1,4 +1,4 @@
-import { Box, BoxProps, forwardRef } from "@chakra-ui/react"
+import { Box, BoxProps, forwardRef, Text } from "@chakra-ui/react"
 import { PointTooltipProps } from "@nivo/line"
 import { VFC } from "react"
 
@@ -9,7 +9,6 @@ export const ToolTip: VFC<BoxProps & PointTooltipProps> = forwardRef(
     return (
       <Box
         ref={ref}
-        as="span"
         px={3}
         py={1}
         bg="surface.bg"
@@ -18,7 +17,8 @@ export const ToolTip: VFC<BoxProps & PointTooltipProps> = forwardRef(
         borderRadius={4}
         textTransform="capitalize"
       >
-        {data.xFormatted}
+        <Text>date: {data.xFormatted}</Text>
+        <Text>TVM: {data.yFormatted}</Text>
       </Box>
     )
   }
