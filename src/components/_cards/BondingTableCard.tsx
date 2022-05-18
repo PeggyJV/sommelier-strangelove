@@ -170,35 +170,37 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   <Td>{bondingPeriod}</Td>
                   <Td>{value}x</Td>
                   <Td fontWeight="normal">
-                    <HStack spacing={6}>
-                      <Link
-                        href="https://wallet.keplr.app/#/dashboard" // TODO: update this href to point to tx
-                        isExternal
-                        display="flex"
-                        alignItems="center"
-                        _hover={{
-                          textDecor: "underline",
-                        }}
-                      >
-                        <Text as="span">View on Keplr</Text>
-                        <ExternalLinkIcon
-                          ml={2}
-                          color="purple.base"
-                        />
-                      </Link>
-                      {canUnbond && (
-                        <SecondaryButton
-                          size="sm"
-                          onClick={() =>
-                            window.alert(
-                              `You've bonded for ${bondingPeriod}. You earned at a rate of ${value}x.`
-                            )
-                          }
+                    <Flex justify="flex-end">
+                      <HStack spacing={6} minW={230}>
+                        <Link
+                          href="https://wallet.keplr.app/#/dashboard" // TODO: update this href to point to tx
+                          isExternal
+                          display="flex"
+                          alignItems="center"
+                          _hover={{
+                            textDecor: "underline",
+                          }}
                         >
-                          Unbond
-                        </SecondaryButton>
-                      )}
-                    </HStack>
+                          <Text as="span">View on Keplr</Text>
+                          <ExternalLinkIcon
+                            ml={2}
+                            color="purple.base"
+                          />
+                        </Link>
+                        {canUnbond && (
+                          <SecondaryButton
+                            size="sm"
+                            onClick={() =>
+                              window.alert(
+                                `You've bonded for ${bondingPeriod}. You earned at a rate of ${value}x.`
+                              )
+                            }
+                          >
+                            Unbond
+                          </SecondaryButton>
+                        )}
+                      </HStack>
+                    </Flex>
                   </Td>
                 </Tr>
               )
