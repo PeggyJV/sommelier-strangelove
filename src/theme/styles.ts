@@ -2,9 +2,9 @@ import { Styles } from "@chakra-ui/theme-tools"
 
 export const styles: Styles = {
   global: {
-    MozSelection: { background: "purple.base" },
-    WebKitSelection: { background: "purple.base" },
-    "::selection": { background: "purple.base" },
+    MozSelection: { background: "purple.dark" },
+    WebKitSelection: { background: "purple.dark" },
+    "::selection": { background: "purple.dark" },
     "html, body": {
       bgColor: "surface.bg",
       color: "neutral.100",

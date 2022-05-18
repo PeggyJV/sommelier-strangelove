@@ -18,12 +18,12 @@ export const components: ThemeComponents = {
       py: 3,
       borderWidth: 1,
       borderRadius: 8,
-      borderColor: "purple.base",
+      borderColor: "purple.dark",
     },
   },
   Input: {
     defaultProps: {
-      focusBorderColor: "purple.base",
+      focusBorderColor: "purple.dark",
     },
   },
 }
