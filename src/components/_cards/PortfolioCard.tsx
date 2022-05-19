@@ -14,11 +14,20 @@ import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "./../../utils/formatCurrency"
 import { ethers } from "ethers"
+import { BaseButton } from "components/_buttons/BaseButton"
+import { useHandleTransaction } from "hooks/web3"
 
 export const PortfolioCard: VFC<BoxProps> = () => {
   const { userData, fetchUserData } = useAaveV2Cellar()
+  const { aaveStakerSigner, fetchUserStakes } = useAaveStaker()
+  const { doHandleTransaction } = useHandleTransaction()
   const { userStakeData } = useAaveStaker()
 
+  const handleClaimAll = async () => {
+    const tx = await aaveStakerSigner.claimAll()
+    await doHandleTransaction(tx)
+    fetchUserStakes()
+  }
   return (
     <TransparentCard px={10} py={6}>
       <CardStatRow
@@ -124,7 +133,8 @@ export const PortfolioCard: VFC<BoxProps> = () => {
               {toEther(userStakeData?.totalRewards?.toFixed())}
             </CardStat>
           </VStack>
-          <ClaimButton />
+          {/* <ClaimButton /> */}
+          <BaseButton onClick={handleClaimAll}>Claim All</BaseButton>
         </SimpleGrid>
       </CardStatRow>
     </TransparentCard>
