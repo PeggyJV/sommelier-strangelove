@@ -37,7 +37,7 @@ export const TVLChart: VFC<TVLChartProps> = ({
         ]),
       ]}
       fill={[{ match: "*", id: "gradientA" }]}
-      margin={{ bottom: 20, left: 20, right: 20, top: 20 }}
+      margin={{ bottom: 70, left: 10, right: 10, top: 20 }}
       axisLeft={null}
       theme={chartTheme}
       {...rest}

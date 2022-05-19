@@ -1,15 +1,15 @@
 import { VFC } from "react"
 import {
-  Heading,
   HStack,
   StackProps,
+  Text,
   useBreakpointValue,
   VStack,
 } from "@chakra-ui/react"
 import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { CurrentDeposits } from "./CurrentDeposits"
-import { ArrowDownIcon, ArrowUpIcon } from "./_icons"
+import { Apy } from "./Apy"
 
 interface CellarStatsProps extends StackProps {
   tvm?: string
@@ -25,8 +25,6 @@ export const CellarStats: VFC<CellarStatsProps> = ({
   cellarCap,
   ...rest
 }) => {
-  const positiveApy = apy && parseInt(apy) > 0
-  const apyColor = positiveApy ? "lime.base" : "red.base"
   const borderColor = useBreakpointValue({
     sm: "transparent",
     md: "neutral.700",
@@ -50,22 +48,13 @@ export const CellarStats: VFC<CellarStatsProps> = ({
       {...rest}
     >
       <VStack spacing={1} align="flex-start">
-        <Heading as="span" fontSize="21px" fontWeight="bold">
+        <Text as="span" fontSize="21px" fontWeight="bold">
           {tvm}
-        </Heading>
+        </Text>
         <CardHeading>TVM</CardHeading>
       </VStack>
       <VStack spacing={1} align="flex-start">
-        <HStack color={apyColor} align="center">
-          {positiveApy ? (
-            <ArrowUpIcon boxSize={4} />
-          ) : (
-            <ArrowDownIcon boxSize={4} />
-          )}
-          <Heading as="span" fontSize="21px" fontWeight="bold">
-            {apy}%
-          </Heading>
-        </HStack>
+        <Apy apy={apy} />
         <CardHeading>APY</CardHeading>
       </VStack>
       <CurrentDeposits

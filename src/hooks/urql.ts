@@ -5,6 +5,10 @@ import {
   useGetWeeklyTvlQuery,
 } from "generated/subgraph"
 import { useEffect, useState } from "react"
+import {
+  getPrevious24Hours,
+  getPreviousWeek,
+} from "utils/calculateTime"
 import { mutateDayData, mutateHourlyData } from "utils/urql"
 
 interface DataProps {
@@ -14,74 +18,83 @@ interface DataProps {
 
 const hourlyChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%H:%M",
-    tickValues: "every 2 hours",
+    format: "%m/%d: %H:%M",
+    tickValues: "every 6 hours",
   },
-  xFormat: "time:%Y-%m-%d %H:%M",
+  xFormat: "time:%m/%d: %H:%M",
   xScale: {
     type: "time",
-    format: "%Y-%m-%d %H:%M",
+    format: "%H:%M",
     useUTC: false,
     precision: "hour",
   },
 }
 const dayChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%Y-%m-%d",
+    format: "%m/%d/%y",
     tickValues: "every day",
   },
-  xFormat: "time:%Y-%m-%d",
+  xFormat: "time:%m/%d/%y",
   xScale: {
     type: "time",
-    format: "%Y-%m-%d",
+    format: "%m/%d/%y",
     useUTC: false,
     precision: "day",
   },
 }
 const allTimeChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%Y-%m-%d",
+    format: "%m/%d/%y",
     tickValues: "every 2 days",
   },
-  xFormat: "time:%Y-%m-%d",
+  xFormat: "time:%m/%d/%y",
   xScale: {
     type: "time",
-    format: "%Y-%m-%d",
+    format: "%m/%d/%y",
     useUTC: false,
     precision: "day",
   },
 }
 
-export const useTVLQueries = (epoch: number) => {
+export const useTVLQueries = () => {
   // GQL Queries
   const [
     { fetching: hourlyIsFetching, data: hourlyData },
     reexecuteHourly,
-  ] = useGetHourlyTvlQuery({ variables: { epoch } })
+  ] = useGetHourlyTvlQuery({
+    variables: { epoch: getPrevious24Hours() },
+  })
   const [
     { fetching: weeklyIsFetching, data: weeklyData },
     reexecuteWeekly,
-  ] = useGetWeeklyTvlQuery()
+  ] = useGetWeeklyTvlQuery({
+    variables: { epoch: getPreviousWeek() },
+  })
   const [
     { fetching: allTimeIsFetching, data: allTimeData },
     reexecuteAllTime,
   ] = useGetAllTimeTvlQuery()
 
+  const defaultSerieId = "default"
+
   // Set data to be returned by hook
   const [data, setData] = useState<DataProps>({
-    series: [{ id: "tvl", data: [{ x: new Date(), y: 0 }] }],
+    series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   })
 
   // Set hourly data by default
   useEffect(() => {
-    if (hourlyData) {
+    const idIsDefault: boolean =
+      data?.series![0].id === defaultSerieId
+
+    if (hourlyData && idIsDefault) {
       setData({
         series: mutateHourlyData(hourlyData),
         chartProps: hourlyChartProps,
       })
     }
-  }, [hourlyData])
+  }, [hourlyData, data])
 
   // Grouped loading state
   const fetching =

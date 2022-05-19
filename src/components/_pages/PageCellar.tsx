@@ -23,7 +23,7 @@ import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
 import { averageApy } from "utils/cellarApy"
-import BigNumber from "bignumber.js"
+import { getCalulatedTvl } from "utils/bigNumber"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -54,9 +54,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   } = cellar || {}
 
   const calculatedTvl =
-    tvlTotal &&
-    asset &&
-    new BigNumber(tvlTotal).dividedBy(10 ^ asset?.decimals).toString()
+    tvlTotal && asset && getCalulatedTvl(tvlTotal, asset)
 
   const tvmVal = formatCurrency(calculatedTvl)
   const apy = data && averageApy(dayDatas!).toFixed(2)

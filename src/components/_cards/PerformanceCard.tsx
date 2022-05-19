@@ -3,19 +3,15 @@ import {
   BoxProps,
   Button,
   HStack,
-  StackDivider,
   Text,
   VStack,
 } from "@chakra-ui/react"
 import { useState, VFC } from "react"
 import { CardDivider } from "components/_layout/CardDivider"
-import TransparentCard from "./TransparentCard"
+import { TransparentCard } from "./TransparentCard"
 import { CardStat } from "components/CardStat"
 import { TVLChart } from "components/_charts/TVLChart"
 import { useTVLQueries } from "hooks/urql"
-import { getPrevious24Hours } from "utils/getPrevious24Hours"
-
-const epoch = getPrevious24Hours()
 
 export const PerformanceCard: VFC<BoxProps> = (props) => {
   const {
@@ -24,7 +20,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
     setDataHourly,
     setDataWeekly,
     setDataAllTime,
-  } = useTVLQueries(epoch)
+  } = useTVLQueries()
   const [timeline, setTimeline] = useState<string>("Day")
 
   const timeButtons = [
@@ -52,7 +48,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
                 <Text></Text>
               </CardStat>
             </HStack>
-            <HStack spacing={4}>
+            <HStack spacing={2}>
               {timeButtons.map((button, i) => {
                 const { title, onClick } = button
                 const isSelected = title === timeline
@@ -61,14 +57,19 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
                   <Button
                     key={i}
                     variant="unstyled"
-                    p={3}
+                    p={4}
                     py={1}
+                    color={isSelected ? "white" : "neutral.400"}
                     bg={
                       isSelected
                         ? "surface.tertiary"
-                        : "surface.primary"
+                        : "surface.secondary"
                     }
                     borderRadius={8}
+                    borderWidth={1}
+                    borderColor={
+                      isSelected ? "purple.dark" : "surface.tertiary"
+                    }
                     backdropFilter="blur(8px)"
                     fontSize="sm"
                     fontWeight="semibold"

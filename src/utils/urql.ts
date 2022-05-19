@@ -3,8 +3,16 @@ import {
   GetWeeklyTvlQuery,
   GetAllTimeTvlQuery,
 } from "generated/subgraph"
-import { BigNumber } from "bignumber.js"
 import { Serie } from "@nivo/line"
+import { formatCurrency } from "./formatCurrency"
+import { getCalulatedTvl } from "./bigNumber"
+
+const formatTvl = (tvlTotal: string, asset: any) => {
+  const total = getCalulatedTvl(tvlTotal, asset)
+
+  const totalString = `${formatCurrency(total)} ${asset?.symbol}`
+  return totalString
+}
 
 export const mutateHourlyData = (
   data?: GetHourlyTvlQuery
@@ -17,9 +25,7 @@ export const mutateHourlyData = (
           ({ date, tvlTotal, asset }) => {
             return {
               x: new Date(date * 1000),
-              y: new BigNumber(tvlTotal)
-                .decimalPlaces(asset?.decimals!)
-                .toString(),
+              y: formatTvl(tvlTotal, asset),
             }
           }
         ),
@@ -38,9 +44,7 @@ export const mutateDayData = (
         data: data.cellarDayDatas.map(({ date, tvlTotal, asset }) => {
           return {
             x: new Date(date * 1000),
-            y: new BigNumber(tvlTotal)
-              .decimalPlaces(asset?.decimals!)
-              .toString(),
+            y: formatTvl(tvlTotal, asset),
           }
         }),
       },

@@ -1,22 +1,19 @@
-import { IconType } from 'react-icons'
-import { FaDiscord, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
-
 export interface Social {
   href: string
-  icon: IconType
+  title: string
 }
 
 export const links: Social[] = [
   {
-    href: 'https://t.me/getsomm',
-    icon: FaTelegramPlane
+    href: "https://t.me/getsomm",
+    title: "telegram",
   },
   {
-    href: 'https://discord.com/invite/ZcAYgSBxvY',
-    icon: FaDiscord
+    href: "https://discord.com/invite/ZcAYgSBxvY",
+    title: "discord",
   },
   {
-    href: 'https://twitter.com/sommfinance',
-    icon: FaTwitter
-  }
+    href: "https://twitter.com/sommfinance",
+    title: "twitter",
+  },
 ]

@@ -21,10 +21,10 @@ import {
   InformationIcon,
   UsdcIcon,
 } from "components/_icons"
-import TransparentCard from "./TransparentCard"
+import { TransparentCard } from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
-import StrategyBreakdownCard from "./StrategyBreakdownCard"
+import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { CellarDataMap } from "data/cellarDataMap"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
@@ -68,7 +68,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           align="flex-start"
           direction={{ sm: "column", md: "row" }}
           rowGap={{ sm: 0, md: 4 }}
-          wrap="wrap"
+          wrap={{ sm: "wrap", lg: "nowrap" }}
           divider={
             <CardDivider
               css={{
@@ -133,7 +133,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               </Tooltip>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
-            <Box h="4px">
+            <Box h="4px" maxW={{ lg: 318 }}>
               {/* @ts-ignore */}
               <BarChart
                 layout="horizontal"

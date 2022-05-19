@@ -8,9 +8,10 @@ import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import { ClaimButton } from "components/_buttons/ClaimButton"
 import { tokenConfig } from "data/tokenConfig"
 import { InlineImage } from "components/InlineImage"
-import TransparentCard from "./TransparentCard"
+import { TransparentCard } from "./TransparentCard"
 import { TokenAssets } from "components/TokenAssets"
 import BondingTableCard from "./BondingTableCard"
+import { Apy } from "components/Apy"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -56,7 +57,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               label="apy"
               tooltip="APY earned on your Principal since initial investment from Strategy"
             >
-              0.00%
+              <Apy apy={`0.00`} />
             </CardStat>
             <Stack
               spacing={3}

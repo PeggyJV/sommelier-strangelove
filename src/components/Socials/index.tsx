@@ -1,28 +1,26 @@
-import { HStack, Icon, StackProps } from "@chakra-ui/react"
+import { HStack, StackProps, Text } from "@chakra-ui/react"
 import { Link } from "components/Link"
+import { ExternalLinkIcon } from "components/_icons"
 import { VFC } from "react"
 import { links } from "./links"
 
 export const Socials: VFC<StackProps> = ({ ...rest }) => {
   return (
-    <HStack spacing={4} {...rest}>
+    <HStack spacing={8} {...rest}>
       {links.map((social, i) => {
-        const { href, icon } = social
+        const { href, title } = social
         return (
-          <Link key={i} href={href} display="flex" isExternal>
-            <Icon
-              as={icon}
-              boxSize={10}
-              p={2}
-              color="white"
-              bg="surface.primary"
-              borderWidth={4}
-              borderRadius={16}
-              borderColor="surface.secondary"
-              _hover={{
-                bg: "purple.dark",
-              }}
-            />
+          <Link
+            key={i}
+            href={href}
+            display="flex"
+            isExternal
+            _hover={{ textDecoration: "underline" }}
+          >
+            <HStack align="center">
+              <Text as="span">{title}</Text>
+              <ExternalLinkIcon color="purple.base" />
+            </HStack>
           </Link>
         )
       })}
