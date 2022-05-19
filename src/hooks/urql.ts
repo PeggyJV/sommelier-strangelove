@@ -75,21 +75,26 @@ export const useTVLQueries = () => {
     reexecuteAllTime,
   ] = useGetAllTimeTvlQuery()
 
+  const defaultSerieId = "default"
+
   // Set data to be returned by hook
   const [data, setData] = useState<DataProps>({
-    series: [{ id: "tvl", data: [{ x: new Date(), y: 0 }] }],
+    series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   })
 
   // Set hourly data by default
   useEffect(() => {
-    if (hourlyData) {
+    const idIsDefault: boolean =
+      data?.series![0].id === defaultSerieId
+
+    if (hourlyData && idIsDefault) {
       setData({
         series: mutateHourlyData(hourlyData),
         chartProps: hourlyChartProps,
       })
     }
-  }, [hourlyData])
+  }, [hourlyData, data])
 
   // Grouped loading state
   const fetching =
