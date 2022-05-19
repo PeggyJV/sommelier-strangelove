@@ -32,11 +32,13 @@ export const useHandleTransaction = (): {
     toastBody,
   }: TxParams) => {
     const infoBody = toastBody?.info || <Text>In Progress...</Text>
-    const successBody = toastBody?.info || <Text>Tx Successful</Text>
-    const errorBody = toastBody?.info || <Text>Tx Failed</Text>
+    const successBody = toastBody?.success || (
+      <Text>Tx Successful</Text>
+    )
+    const errorBody = toastBody?.error || <Text>Tx Failed</Text>
 
     addToast({
-      heading: "ERC20 Approval",
+      heading: "Transaction",
       status: "default",
       body: infoBody,
       isLoading: true,
@@ -48,7 +50,7 @@ export const useHandleTransaction = (): {
     console.log({ result })
     result?.data?.transactionHash &&
       update({
-        heading: "ERC20 Approval",
+        heading: "Transaction",
         body: successBody,
         status: "success",
         closeHandler: closeAll,
@@ -56,7 +58,7 @@ export const useHandleTransaction = (): {
 
     result?.error &&
       update({
-        heading: "ERC20 Approval",
+        heading: "Transaction",
         body: errorBody,
         status: "error",
         closeHandler: closeAll,

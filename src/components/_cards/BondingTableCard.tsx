@@ -19,6 +19,7 @@ import { InlineImage } from "components/InlineImage"
 import { InformationIcon } from "components/_icons"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "utils/formatCurrency"
+import { useHandleTransaction } from "hooks/web3"
 
 interface BondingTableCardProps extends TableProps {
   data?: any
@@ -57,9 +58,16 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
   data,
   ...rest
 }) => {
-  const { userStakeData } = useAaveStaker()
+  const { userStakeData, aaveStakerSigner, fetchUserStakes } =
+    useAaveStaker()
+  const { doHandleTransaction } = useHandleTransaction()
   const { userStakes } = userStakeData
-  console.log(userStakes)
+
+  const handleUnBond = async (id: number) => {
+    const tx = await aaveStakerSigner.unbond(id)
+    await doHandleTransaction(tx)
+    fetchUserStakes()
+  }
 
   return (
     <TransparentCard>
@@ -122,7 +130,8 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
           <Tbody>
             {userStakes?.length &&
               userStakes.map((data, i) => {
-                const { amount, lock, rewards } = data
+                const { amount, lock, rewards, unbondTimestamp } =
+                  data
 
                 return (
                   <Tr
@@ -152,32 +161,22 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                       {lock?.toString() === "2" && "21 days"}
                     </Td>
                     <Td>{toEther(rewards)}</Td>
-                    {/* <Td>
-                      {canUnbond ? (
+                    {unbondTimestamp.toString() === "0" ? (
+                      <Td>
                         <SecondaryButton
                           size="sm"
-                          onClick={() =>
-                            window.alert(
-                              `You've bonded for ${bondingPeriod}. You earned at a rate of ${value}x.`
-                            )
-                          }
+                          onClick={() => handleUnBond(i)}
                         >
                           Unbond
                         </SecondaryButton>
-                      ) : (
-                        <>Unbonding in N days</>
-                      )}
-                    </Td> */}
-                    <SecondaryButton
-                      size="sm"
-                      // onClick={() =>
-                      //   window.alert(
-                      //     `You've bonded for ${bondingPeriod}. You earned at a rate of ${value}x.`
-                      //   )
-                      // }
-                    >
-                      Unbond
-                    </SecondaryButton>
+                      </Td>
+                    ) : (
+                      <Td>
+                        {new Date(
+                          unbondTimestamp.toNumber() * 1000
+                        ).toLocaleDateString()}
+                      </Td>
+                    )}
                   </Tr>
                 )
               })}

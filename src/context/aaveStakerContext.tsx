@@ -96,9 +96,10 @@ export const AaveStakerProvider = ({
           account?.address,
           i
         )
+        const reward = await aaveStakerContract.callStatic.claim(i)
 
         totalRewards = totalRewards.plus(
-          new BigNumber(userStake?.rewards?.toString())
+          new BigNumber(reward?.toString())
         )
 
         totalBondedAmount = totalBondedAmount.plus(
@@ -108,7 +109,7 @@ export const AaveStakerProvider = ({
           amount: userStake?.amount,
           amountWithBoost: userStake?.amountWithBoost,
           rewardPerTokenPaid: userStake?.rewardPerTokenPaid,
-          rewards: userStake?.rewards,
+          rewards: reward,
           unbondTimestamp: userStake?.unbondTimestamp,
           lock: userStake?.lock,
         })
@@ -134,9 +135,7 @@ export const AaveStakerProvider = ({
 
   // user data
   useEffect(() => {
-    console.log("user staker effect")
     if (!aaveStakerContract || !account?.address) return
-    console.log("calling functions ######")
     fetchUserStakes()
   }, [aaveStakerContract, account?.address, fetchUserStakes])
 

@@ -18,17 +18,6 @@ import { ethers } from "ethers"
 export const PortfolioCard: VFC<BoxProps> = () => {
   const { userData, fetchUserData } = useAaveV2Cellar()
   const { userStakeData } = useAaveStaker()
-  console.log({ userStakeData })
-  const totalRewards = userStakeData?.totalRewards?.toFixed()
-  console.log("total Rewards ", totalRewards)
-  console.log(
-    "Bonded Tokens ",
-    userStakeData?.totalBondedAmount?.toFixed()
-  )
-  // const totalBondedAmtInWei = ethers.utils.parseUnits(
-  //   userStakeData?.totalBondedAmount?.toFixed() || "",
-  //   18
-  // )
 
   return (
     <TransparentCard px={10} py={6}>
@@ -54,7 +43,10 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           >
             $0.00
           </CardStat>
-          <CardStat label="deposit assets" tooltip="Accepted deposit assets">
+          <CardStat
+            label="deposit assets"
+            tooltip="Accepted deposit assets"
+          >
             <TokenAssets tokens={tokenConfig} displaySymbol />
           </CardStat>
           <CardStat
@@ -63,7 +55,10 @@ export const PortfolioCard: VFC<BoxProps> = () => {
           >
             0.00%
           </CardStat>
-          <Stack spacing={3} direction={{ sm: "row", md: "column", lg: "row" }}>
+          <Stack
+            spacing={3}
+            direction={{ sm: "row", md: "column", lg: "row" }}
+          >
             <DepositButton />
             <WithdrawButton />
           </Stack>
@@ -106,7 +101,6 @@ export const PortfolioCard: VFC<BoxProps> = () => {
                   0
                 )
               )}
-              {/* {toEther("11420000000000000000")} */}
             </CardStat>
           </VStack>
           <BondButton />
@@ -127,7 +121,7 @@ export const PortfolioCard: VFC<BoxProps> = () => {
                 alt="aave logo"
                 boxSize={5}
               />
-              {userStakeData?.totalRewards?.toFixed()}
+              {toEther(userStakeData?.totalRewards?.toFixed())}
             </CardStat>
           </VStack>
           <ClaimButton />
