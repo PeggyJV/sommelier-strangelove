@@ -13,7 +13,7 @@ import { BigNumber } from "bignumber.js"
 import { BigNumber as BigNumberE } from "ethers"
 import { ethers } from "ethers"
 
-type UserStake = {
+export interface UserStake {
   amount: BigNumberE
   amountWithBoost: BigNumberE
   rewardPerTokenPaid: BigNumberE
@@ -23,7 +23,7 @@ type UserStake = {
   // maxDeposit?: BigNumberE
 }
 
-type UserStakeData = {
+export interface UserStakeData {
   loading: boolean
   error: boolean
   totalRewards?: BigNumber
