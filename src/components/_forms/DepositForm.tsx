@@ -13,11 +13,10 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { ModalInput } from "components/_inputs/ModalInput"
-import { CardHeading } from "components/_typography/CardHeading"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import { Token } from "data/tokenConfig"
 import { Link } from "components/Link"
-import { config } from "../../utils/config"
+import { config } from "utils/config"
 import {
   erc20ABI,
   useSigner,
@@ -48,14 +47,14 @@ export const DepositForm: VFC = () => {
   } = useForm<FormValues>()
   // const [data, setData] = useState<any>()
   const watchDepositAmount = watch("depositAmount")
-  const isError = errors.depositAmount
+  const isError = errors.depositAmount !== undefined
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
   const setMax = () => setValue("depositAmount", 100000)
   const [selectedToken, setSelectedToken] = useState<Token | null>(
     null
   )
-  console.log(selectedToken)
+  // console.log(selectedToken)
   const { addToast, update, close, closeAll } = useBrandedToast()
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
@@ -73,7 +72,7 @@ export const DepositForm: VFC = () => {
   })
 
   const onSubmit = async (data: any, e: any) => {
-    console.log(data, e)
+    // console.log(data, e)
     // check if approval exists
     const allowance = await erc20Contract.allowance(
       account?.address,
@@ -92,7 +91,7 @@ export const DepositForm: VFC = () => {
       console.error("Invalid Input")
       return
     }
-    console.log(needsApproval)
+    // console.log(needsApproval)
     if (needsApproval) {
       try {
         const { hash } = await erc20Contract.approve(
@@ -109,7 +108,7 @@ export const DepositForm: VFC = () => {
         })
         const waitForApproval = wait({ confirmations: 1, hash })
         const result = await waitForApproval
-        console.log({ result })
+        // console.log({ result })
         result?.data?.transactionHash &&
           update({
             heading: "ERC20 Approval",
@@ -137,7 +136,7 @@ export const DepositForm: VFC = () => {
 
     // deposit
     let depositConf
-    console.log(amtInWei, account?.address)
+    // console.log(amtInWei, account?.address)
 
     try {
       const { hash: depositConf } =
@@ -170,7 +169,7 @@ export const DepositForm: VFC = () => {
       })
 
       const depositResult = await waitForDeposit
-      console.log({ depositResult })
+      // console.log({ depositResult })
       depositResult?.data?.transactionHash &&
         update({
           heading: "Aave V2 Cellar Deposit",
@@ -208,7 +207,7 @@ export const DepositForm: VFC = () => {
   }
 
   const onError = (errors: any, e: any) => {
-    console.log(errors, e)
+    // console.log(errors, e)
     // try and handle basic cases
     // gasFailure
     // onChain assert
@@ -240,7 +239,7 @@ export const DepositForm: VFC = () => {
                   positive: (v) =>
                     v > 0 || "You must submit a positive amount.",
                   lessThanBalance: (v) => {
-                    console.log("lessThank Balance ", v)
+                    // console.log("lessThank Balance ", v)
                     return (
                       v <
                         parseFloat(

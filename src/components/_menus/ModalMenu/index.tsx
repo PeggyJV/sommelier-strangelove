@@ -1,10 +1,10 @@
-import { VFC } from "react"
-import { Controller, useFormContext, Control } from "react-hook-form"
+import { VFC, Dispatch, SetStateAction } from "react"
+import { Controller, useFormContext } from "react-hook-form"
 import { Menu } from "./Menu"
 import { Token } from "data/tokenConfig"
 
 type Props = {
-  setSelectedToken: React.Dispatch<React.SetStateAction<Token>>
+  setSelectedToken: Dispatch<SetStateAction<Token | null>>
 }
 export const ModalMenu: VFC<Props> = ({ setSelectedToken }) => {
   const { control } = useFormContext()
