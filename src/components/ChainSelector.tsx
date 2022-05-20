@@ -1,4 +1,4 @@
-import React, { ReactElement, VFC } from "react"
+import { ReactElement, VFC } from "react"
 import { Box, Select, SelectProps } from "@chakra-ui/react"
 
 interface Props extends SelectProps {

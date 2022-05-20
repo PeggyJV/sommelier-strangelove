@@ -1,8 +1,9 @@
-query GetHourlyTVL($epoch: Int) {
-  cellarHourDatas(
+query GetWeeklyTVL($epoch: Int!) {
+  cellarDayDatas(
+    first: 7
     orderDirection: asc
     orderBy: date
-    where: { date_gte: $epoch, tvlActive_gt: 0 }
+    where: { tvlActive_gt: 0, date_gte: $epoch }
   ) {
     date
     asset {

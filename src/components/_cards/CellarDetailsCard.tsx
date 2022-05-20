@@ -21,9 +21,11 @@ import {
   InformationIcon,
   UsdcIcon,
 } from "components/_icons"
-import TransparentCard from "./TransparentCard"
+import { TransparentCard } from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
+import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
+import { CellarDataMap } from "data/cellarDataMap"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -31,54 +33,46 @@ const BarChart = dynamic(
   }
 )
 
-const supportedChains = [
-  "DAI",
-  "USDC",
-  "USDT",
-  "FEI",
-  "TUSD",
-  "BUSD",
-  "GUSD",
-]
+interface CellarDetailsProps extends BoxProps {
+  cellarId: string
+  cellarDataMap: CellarDataMap
+}
 
-const strategyAssets = tokenConfig.filter((token) =>
-  supportedChains.includes(token.symbol)
-)
-
-const placeholderData = [
-  {
-    "strategy provider": 5,
-    protocol: 5,
-    depositors: 90,
-  },
-]
-
-const CellarDetailsCard: VFC<BoxProps> = () => {
+const CellarDetailsCard: VFC<CellarDetailsProps> = ({
+  cellarId,
+  cellarDataMap,
+}) => {
   const { barChartTheme } = useNivoThemes()
   const theme = useTheme()
   const borderColor = useBreakpointValue({
-    sm: "neutral.700",
+    sm: "purple.dark",
     md: "transparent",
-    lg: "neutral.700",
+    lg: "purple.dark",
   })
+  const {
+    protocols,
+    strategyType,
+    managementFee,
+    supportedChains,
+    performanceSplit,
+  } = cellarDataMap[cellarId]
+  const strategyAssets = tokenConfig.filter((token) =>
+    supportedChains?.includes(token.symbol)
+  )
 
   return (
-    <TransparentCard p={4} overflow="visible">
-      <VStack
-        spacing={4}
-        divider={<CardDivider />}
-        align={{ sm: "unset", md: "stretch" }}
-      >
+    <TransparentCard p={6} overflow="visible">
+      <VStack spacing={8} align={{ sm: "unset", md: "stretch" }}>
         <CardStatRow
           justify={{ sm: "space-around", md: "flex-start" }}
           align="flex-start"
           direction={{ sm: "column", md: "row" }}
           rowGap={{ sm: 0, md: 4 }}
-          wrap="wrap"
+          wrap={{ sm: "wrap", lg: "nowrap" }}
           divider={
             <CardDivider
               css={{
-                "&:nth-last-child(2)": {
+                "&:nth-last-of-type(2)": {
                   borderColor,
                 },
               }}
@@ -89,13 +83,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             label="strategy type"
             tooltip="Cellar uses Stablecoin lending"
           >
-            Stablecoin
-          </CardStat>
-          <CardStat
-            label="strategy assets"
-            tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
-          >
-            <TokenAssets tokens={strategyAssets} />
+            {strategyType}
           </CardStat>
           <CardStat
             label="protocols"
@@ -108,7 +96,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               p={1}
               mr={2}
             />
-            AAVE
+            {protocols}
           </CardStat>
           <CardStat
             label="mgmt fee"
@@ -121,7 +109,13 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               p={1}
               mr={2}
             />
-            5%
+            {managementFee}
+          </CardStat>
+          <CardStat
+            label="strategy assets"
+            tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
+          >
+            <TokenAssets tokens={strategyAssets} displaySymbol />
           </CardStat>
           <VStack
             width={{ sm: "100%", lg: "unset" }}
@@ -139,7 +133,7 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
               </Tooltip>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
-            <Box h="4px">
+            <Box h="4px" maxW={{ lg: 318 }}>
               {/* @ts-ignore */}
               <BarChart
                 layout="horizontal"
@@ -148,16 +142,19 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
                 borderWidth={1}
                 borderRadius={2}
                 keys={["strategy provider", "protocol", "depositors"]}
-                data={placeholderData}
+                data={[performanceSplit]}
               />
             </Box>
             <HStack spacing={8}>
-              {Object.entries(placeholderData[0]).map(
+              {Object.entries(performanceSplit).map(
                 ([key, value], i) => {
                   return (
-                    <HStack key={i}>
-                      <Circle size={4} bg={barChartTheme[i]} />
-                      <Text fontSize="sm" textTransform="capitalize">
+                    <HStack key={i} spacing={1}>
+                      <Circle size={2} bg={barChartTheme[i]} />
+                      <Text
+                        fontSize="0.625rem"
+                        textTransform="capitalize"
+                      >
                         {value}% {key}
                       </Text>
                     </HStack>
@@ -167,6 +164,10 @@ const CellarDetailsCard: VFC<BoxProps> = () => {
             </HStack>
           </VStack>
         </CardStatRow>
+        <StrategyBreakdownCard
+          cellarDataMap={cellarDataMap}
+          cellarId={cellarId}
+        />
       </VStack>
     </TransparentCard>
   )

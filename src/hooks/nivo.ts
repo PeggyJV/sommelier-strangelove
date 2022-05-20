@@ -14,9 +14,9 @@ export const useNivoThemes = () => {
   ]
 
   const lineChartTheme: string[] = [
-    colors.red.base,
+    colors.purple.base,
     colors.turquoise.base,
-    colors.violet.base,
+    colors.red.base,
   ]
 
   const chartTheme: Theme = {

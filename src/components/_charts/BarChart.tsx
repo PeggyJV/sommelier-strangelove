@@ -1,4 +1,4 @@
-import React, { VFC } from "react"
+import { VFC } from "react"
 import { BarSvgProps, ResponsiveBar } from "@nivo/bar"
 import { ToolTip } from "./BarToolTip"
 

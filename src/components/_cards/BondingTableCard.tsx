@@ -12,52 +12,28 @@ import {
   Tooltip,
   HStack,
   Text,
+  Heading,
 } from "@chakra-ui/react"
-import TransparentCard from "./TransparentCard"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { InlineImage } from "components/InlineImage"
-import { InformationIcon } from "components/_icons"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "utils/formatCurrency"
 import { useHandleTransaction } from "hooks/web3"
+import { ExternalLinkIcon, InformationIcon } from "components/_icons"
+import { Link } from "components/Link"
+import { InnerCard } from "./InnerCard"
 
-interface BondingTableCardProps extends TableProps {
-  data?: any
+const formatTrancheNumber = (number: number): string => {
+  if (number < 10) {
+    const modifiedNumber = number.toString().padStart(2, "0")
+
+    return modifiedNumber
+  }
+
+  return number.toString()
 }
 
-// interface BondingPeriod {
-//   bondingPeriod: "7 Days" | "14 Days" | "21 Days"
-//   amount: number
-//   value: 1.1 | 1.25 | 1.5
-//   checked?: boolean
-//   canUnbond: boolean
-// }
-
-// const placeholderData: BondingPeriod[] = [
-//   {
-//     bondingPeriod: "14 Days",
-//     amount: 20.01,
-//     value: 1.25,
-//     canUnbond: false,
-//   },
-//   {
-//     bondingPeriod: "7 Days",
-//     amount: 63.99,
-//     value: 1.1,
-//     canUnbond: true,
-//   },
-//   {
-//     bondingPeriod: "21 Days",
-//     amount: 40,
-//     value: 1.5,
-//     canUnbond: false,
-//   },
-// ]
-
-const BondingTableCard: VFC<BondingTableCardProps> = ({
-  data,
-  ...rest
-}) => {
+const BondingTableCard: VFC<TableProps> = (props) => {
   const { userStakeData, aaveStakerSigner, fetchUserStakes } =
     useAaveStaker()
   const { doHandleTransaction } = useHandleTransaction()
@@ -70,11 +46,21 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
   }
 
   return (
-    <TransparentCard>
+    <InnerCard pb={6}>
       <TableContainer>
-        <Table variant="unstyled" {...rest}>
+        <Heading fontSize="lg" pl={6} py={4}>
+          Active Bonds
+        </Heading>
+        <Table variant="unstyled" {...props}>
           <Thead>
             <Tr color="neutral.300">
+              <Th
+                fontSize={10}
+                fontWeight="normal"
+                textTransform="capitalize"
+              >
+                Tranche
+              </Th>
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
@@ -88,7 +74,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text as="span">Bonded Tokens</Text>
+                    <Text as="span">LP Tokens</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -101,7 +87,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                 fontWeight="normal"
                 textTransform="capitalize"
               >
-                Bonding Period
+                Period
               </Th>
               <Tooltip
                 hasArrow
@@ -117,6 +103,7 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
                 >
                   <HStack spacing={1} align="center">
                     <Text as="span">SOMM Rewards</Text>
+                    <Text as="span">Reward Multiplier</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -127,63 +114,89 @@ const BondingTableCard: VFC<BondingTableCardProps> = ({
               <Th />
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody fontWeight="bold">
             {userStakes?.length &&
               userStakes.map((data, i) => {
                 const { amount, lock, rewards, unbondTimestamp } =
                   data
+                const lockMap: { [key: string]: string } = {
+                  "0": "7 days",
+                  "1": "14 days",
+                  "2": "21 days",
+                }
+                const unbondTime = new Date(
+                  unbondTimestamp.toNumber() * 1000
+                ).toLocaleDateString()
 
                 return (
                   <Tr
-                    borderBottom="1px solid"
-                    borderColor="neutral.700"
                     key={i}
+                    _hover={{
+                      bg: "surface.secondary",
+                      "td:first-of-type": {
+                        borderRadius: "32px 0 0 32px",
+                        overflow: "hidden",
+                      },
+                      "td:last-of-type": {
+                        borderRadius: "0 32px 32px 0",
+                        overflow: "hidden",
+                      },
+                    }}
                     _last={{
                       border: "none",
                     }}
                   >
+                    <Td>#{formatTrancheNumber(i + 1)}</Td>
                     <Td>
-                      <Flex
-                        align="center"
-                        fontSize="21px"
-                        fontWeight={700}
-                      >
+                      <Flex align="center">
                         <InlineImage
-                          src="/assets/icons/aave.svg"
+                          src="/assets/icons/aave.png"
                           alt="Aave logo"
+                          boxSize={5}
                         />{" "}
                         {toEther(amount)}
                       </Flex>
                     </Td>
-                    <Td>
-                      {lock?.toString() === "0" && "7 days"}
-                      {lock?.toString() === "1" && "14 days"}
-                      {lock?.toString() === "2" && "21 days"}
-                    </Td>
+                    <Td>{lockMap[lock?.toString()]}</Td>
                     <Td>{toEther(rewards)}</Td>
-                    {unbondTimestamp.toString() === "0" ? (
-                      <Td>
-                        <SecondaryButton
-                          size="sm"
-                          onClick={() => handleUnBond(i)}
-                        >
-                          Unbond
-                        </SecondaryButton>
-                      </Td>
-                    ) : (
-                      <Td>
-                        {new Date(
-                          unbondTimestamp.toNumber() * 1000
-                        ).toLocaleDateString()}
-                      </Td>
-                    )}
+                    <Td fontWeight="normal">
+                      <Flex justify="flex-end">
+                        {unbondTimestamp.toString() === "0" ? (
+                          <HStack spacing={6} minW={230}>
+                            <Link
+                              href="https://wallet.keplr.app/#/dashboard" // TODO: update this href to point to tx
+                              isExternal
+                              display="flex"
+                              alignItems="center"
+                              _hover={{
+                                textDecor: "underline",
+                              }}
+                            >
+                              <Text as="span">View on Keplr</Text>
+                              <ExternalLinkIcon
+                                ml={2}
+                                color="purple.base"
+                              />
+                            </Link>
+                            <SecondaryButton
+                              size="sm"
+                              onClick={() => handleUnBond(i)}
+                            >
+                              Unbond
+                            </SecondaryButton>
+                          </HStack>
+                        ) : (
+                          <Text>{unbondTime}</Text>
+                        )}
+                      </Flex>
+                    </Td>
                   </Tr>
                 )
               })}
           </Tbody>
         </Table>
       </TableContainer>
-    </TransparentCard>
+    </InnerCard>
   )
 }
 
