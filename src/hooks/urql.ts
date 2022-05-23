@@ -21,7 +21,7 @@ const hourlyChartProps: Partial<LineProps> = {
     format: "%m/%d: %H:%M",
     tickValues: "every 6 hours",
   },
-  xFormat: "time:%m/%d: %H:%M",
+  xFormat: "time:%H:%M",
   xScale: {
     type: "time",
     format: "%H:%M",
@@ -31,26 +31,26 @@ const hourlyChartProps: Partial<LineProps> = {
 }
 const dayChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%m/%d/%y",
+    format: "%d",
     tickValues: "every day",
   },
-  xFormat: "time:%m/%d/%y",
+  xFormat: "time:%b %d, %Y",
   xScale: {
     type: "time",
-    format: "%m/%d/%y",
+    format: "%d",
     useUTC: false,
     precision: "day",
   },
 }
 const allTimeChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%m/%d/%y",
+    format: "%d",
     tickValues: "every 2 days",
   },
-  xFormat: "time:%m/%d/%y",
+  xFormat: "time:%b %d, %Y",
   xScale: {
     type: "time",
-    format: "%m/%d/%y",
+    format: "%d",
     useUTC: false,
     precision: "day",
   },
