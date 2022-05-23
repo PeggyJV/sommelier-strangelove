@@ -1,9 +1,15 @@
-import { Spinner } from "@chakra-ui/react"
+import { Circle, Spinner } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
-import { Serie } from "@nivo/line"
+import { Point, PointTooltipProps, Serie } from "@nivo/line"
+import { TvlData } from "components/_cards/PerformanceCard"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
-import { VFC } from "react"
+import {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  VFC,
+} from "react"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -14,11 +20,28 @@ const LineChart = dynamic(
 interface TVLChartProps {
   fetching?: boolean
   data?: Serie[]
+  setTvl: Dispatch<SetStateAction<TvlData | undefined>>
+}
+
+const ToolTip: FunctionComponent<PointTooltipProps> = ({ point }) => {
+  const { color } = point
+
+  return (
+    <Circle
+      position="relative"
+      top="20px"
+      size="12px"
+      bg={color}
+      borderWidth={1}
+      borderColor="neutral.100"
+    />
+  )
 }
 
 export const TVLChart: VFC<TVLChartProps> = ({
   fetching,
   data,
+  setTvl,
   ...rest
 }) => {
   const { lineChartTheme, chartTheme } = useNivoThemes()
@@ -30,6 +53,13 @@ export const TVLChart: VFC<TVLChartProps> = ({
       data={data!}
       colors={lineChartTheme}
       enableArea={true}
+      onMouseMove={({ data }) =>
+        setTvl({
+          xFormatted: data.xFormatted,
+          yFormatted: data.yFormatted,
+        })
+      }
+      crosshairType="x"
       defs={[
         linearGradientDef("gradientA", [
           { offset: 0, color: "inherit" },
@@ -37,9 +67,10 @@ export const TVLChart: VFC<TVLChartProps> = ({
         ]),
       ]}
       fill={[{ match: "*", id: "gradientA" }]}
-      margin={{ bottom: 70, left: 10, right: 10, top: 20 }}
+      margin={{ bottom: 110, left: 6, right: 6, top: 20 }}
       axisLeft={null}
       theme={chartTheme}
+      tooltip={ToolTip}
       {...rest}
     />
   )
