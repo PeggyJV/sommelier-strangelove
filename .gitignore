@@ -15,5 +15,5 @@ studio/.env.*
 studio/dist
 studio/node_modules
 *.log
-
+.vscode/
 !.env.example

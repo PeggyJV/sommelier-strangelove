@@ -5,11 +5,16 @@ import { VFC } from "react"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { BondButton } from "components/_buttons/BondButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
-import { ClaimButton } from "components/_buttons/ClaimButton"
 import { tokenConfig } from "data/tokenConfig"
 import { InlineImage } from "components/InlineImage"
 import { TransparentCard } from "./TransparentCard"
 import { TokenAssets } from "components/TokenAssets"
+import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { useAaveStaker } from "context/aaveStakerContext"
+import { toEther } from "./../../utils/formatCurrency"
+import { ethers } from "ethers"
+import { BaseButton } from "components/_buttons/BaseButton"
+import { useHandleTransaction } from "hooks/web3"
 import BondingTableCard from "./BondingTableCard"
 import { Apy } from "components/Apy"
 
@@ -21,6 +26,18 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   isConnected,
   ...rest
 }) => {
+  const { userData, fetchUserData } = useAaveV2Cellar()
+  const { aaveStakerSigner, fetchUserStakes } = useAaveStaker()
+  const { doHandleTransaction } = useHandleTransaction()
+  const { userStakeData } = useAaveStaker()
+  const { userStakes, totalBondedAmount, totalRewards } =
+    userStakeData
+
+  const handleClaimAll = async () => {
+    const tx = await aaveStakerSigner.claimAll()
+    await doHandleTransaction(tx)
+    fetchUserStakes()
+  }
   return (
     <TransparentCard px={6} py={6} {...rest}>
       <VStack align="stretch" spacing={8}>
@@ -86,7 +103,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   alt="aave logo"
                   boxSize={5}
                 />
-                0
+                {toEther(userData?.balances?.aaveClr, 18, false)}
               </CardStat>
             </VStack>
             <VStack align="flex-start">
@@ -99,7 +116,12 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   alt="aave logo"
                   boxSize={5}
                 />
-                0
+                {toEther(
+                  ethers.utils.parseUnits(
+                    totalBondedAmount?.toFixed() || "0",
+                    0
+                  )
+                )}
               </CardStat>
             </VStack>
             <BondButton />
@@ -120,13 +142,15 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   alt="aave logo"
                   boxSize={5}
                 />
-                0
+                {toEther(totalRewards?.toFixed())}
               </CardStat>
             </VStack>
-            <ClaimButton />
+            <BaseButton onClick={handleClaimAll}>
+              Claim All
+            </BaseButton>
           </SimpleGrid>
         </CardStatRow>
-        {isConnected && <BondingTableCard />}
+        {isConnected && userStakes.length && <BondingTableCard />}
       </VStack>
     </TransparentCard>
   )

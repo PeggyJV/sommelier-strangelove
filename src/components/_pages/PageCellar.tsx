@@ -42,6 +42,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
       cellarString: id,
     },
   })
+
   const { data } = cellarResult
   const { cellar } = data || {}
   const {
