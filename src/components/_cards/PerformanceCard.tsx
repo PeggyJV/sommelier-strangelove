@@ -9,9 +9,14 @@ import {
 import { useState, VFC } from "react"
 import { CardDivider } from "components/_layout/CardDivider"
 import { TransparentCard } from "./TransparentCard"
-import { CardStat } from "components/CardStat"
 import { TVLChart } from "components/_charts/TVLChart"
 import { useTVLQueries } from "hooks/urql"
+import { CardHeading } from "components/_typography/CardHeading"
+
+export interface TvlData {
+  yFormatted: string | number
+  xFormatted: string | number
+}
 
 export const PerformanceCard: VFC<BoxProps> = (props) => {
   const {
@@ -22,6 +27,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
     setDataAllTime,
   } = useTVLQueries()
   const [timeline, setTimeline] = useState<string>("Day")
+  const [tvl, setTvl] = useState<TvlData>()
 
   const timeButtons = [
     {
@@ -36,17 +42,25 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
   ]
 
   return (
-    <TransparentCard p={4} overflow="visible" {...props}>
+    <TransparentCard p={8} overflow="visible" {...props}>
       <VStack spacing={6} align="stretch" divider={<CardDivider />}>
         <Box h="20rem" mb={{ sm: "2.2rem", md: 0 }}>
-          <HStack justify="space-between" wrap="wrap" rowGap={2}>
+          <HStack
+            justify="space-between"
+            align="flex-start"
+            wrap="wrap"
+            rowGap={2}
+          >
             <HStack spacing={8}>
-              <CardStat label="TVM" spacing={1}>
-                <Text fontSize="xl" fontWeight="bold">
-                  50%
+              <VStack spacing={0} align="flex-start">
+                <CardHeading>TVM</CardHeading>
+                <Text fontSize="2.5rem" fontWeight="bold">
+                  ${tvl?.yFormatted}
                 </Text>
-                <Text></Text>
-              </CardStat>
+                <Text color="neutral.400" fontSize="0.625rem">
+                  {tvl?.xFormatted}
+                </Text>
+              </VStack>
             </HStack>
             <HStack spacing={2}>
               {timeButtons.map((button, i) => {
@@ -87,6 +101,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
           <TVLChart
             data={data.series}
             fetching={fetching}
+            setTvl={setTvl}
             {...data.chartProps}
           />
         </Box>
