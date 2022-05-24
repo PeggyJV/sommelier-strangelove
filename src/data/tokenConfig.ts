@@ -78,10 +78,4 @@ export const tokenConfig: Token[] = [
     symbol: "USDT",
     address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
   },
-  {
-    src: "/assets/icons/ust.png",
-    alt: "TerraUSD logo",
-    symbol: "UST",
-    address: "0xa47c8bf37f92aBed4A126BDA807A7b7498661acD",
-  },
 ]
