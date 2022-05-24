@@ -4,6 +4,7 @@ import {
   Button,
   HStack,
   Text,
+  useMediaQuery,
   VStack,
 } from "@chakra-ui/react"
 import { useState, VFC } from "react"
