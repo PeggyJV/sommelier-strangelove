@@ -4,6 +4,7 @@ import { fonts } from "./fonts"
 import { colors } from "./colors"
 import { components } from "./components"
 import { sizes } from "./sizes"
+import { shadows } from "./shadows"
 
 // https://chakra-ui.com/docs/theming/theme#config
 export const config: ThemeConfig = {
@@ -19,6 +20,7 @@ const theme = extendTheme({
   colors,
   components,
   sizes,
+  shadows,
 })
 
 export default theme

@@ -5,6 +5,7 @@ import {
   Icon,
   InputGroup,
   InputRightElement,
+  Text,
   VStack,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
@@ -14,15 +15,25 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { ModalInput } from "components/_inputs/ModalInput"
 import { CardHeading } from "components/_typography/CardHeading"
 import { BondingPeriodOptions } from "./BondingPeriodOptions"
-
+import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { useAaveStaker } from "context/aaveStakerContext"
+import { toEther } from "utils/formatCurrency"
+import { useBrandedToast } from "hooks/chakra"
+import { BigNumber } from "bignumber.js"
+import { useApproveERC20, useHandleTransaction } from "hooks/web3"
+import { config } from "utils/config"
+import { useContract, useSigner } from "wagmi"
+import { ethers } from "ethers"
 interface FormValues {
   depositAmount: number
   bondingPeriod: number
 }
 
 export const BondForm: VFC = () => {
+  const { userData } = useAaveV2Cellar()
+  const { fetchUserStakes } = useAaveStaker()
   const methods = useForm<FormValues>({
-    defaultValues: { bondingPeriod: 1.1 },
+    defaultValues: { bondingPeriod: 0 },
   })
   const {
     register,
@@ -31,19 +42,74 @@ export const BondForm: VFC = () => {
     setValue,
     formState: { errors, isSubmitting },
   } = methods
+  const { addToast, update, close, closeAll } = useBrandedToast()
+  const { AAVE_V2_STABLE_CELLAR, AAVE_STAKER } = config.CONTRACT
+  const [{ data: signer }] = useSigner()
+  const { doApprove } = useApproveERC20({
+    tokenAddress: AAVE_V2_STABLE_CELLAR?.ADDRESS,
+    spender: AAVE_STAKER?.ADDRESS,
+  })
+  const { doHandleTransaction } = useHandleTransaction()
+  const sommStakingContract = useContract({
+    addressOrName: config.CONTRACT.AAVE_STAKER.ADDRESS,
+    contractInterface: config.CONTRACT.AAVE_STAKER.ABI,
+    signerOrProvider: signer,
+  })
   const watchDepositAmount = watch("depositAmount")
+  const bondPeriod = watch("bondingPeriod")
+
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0
   const isError = errors.depositAmount
-  const setMax = () => setValue("depositAmount", 100000)
+  const setMax = () =>
+    setValue(
+      "depositAmount",
+      parseFloat(
+        toEther(userData?.balances?.aaveClr, 18, false) || ""
+      )
+    )
 
+  const onSubmit = async (data: any, e: any) => {
+    doApprove(data?.depositAmount)
+    const amtInBigNumber = new BigNumber(data?.depositAmount)
+    const depositAmtInWei = ethers.utils.parseUnits(
+      amtInBigNumber.toFixed(),
+      18
+    )
+    try {
+      const { hash: bondConf } = await sommStakingContract.stake(
+        depositAmtInWei,
+        bondPeriod,
+        { gasLimit: 1000000 }
+      )
+      await doHandleTransaction({ hash: bondConf })
+      fetchUserStakes()
+    } catch (e) {
+      addToast({
+        heading: "Staking LP Tokens",
+        body: <Text>Tx Cancelled</Text>,
+        status: "warning",
+        closeHandler: closeAll,
+      })
+    }
+  }
+
+  const onError = (errors: any, e: any) => {
+    console.log(errors, e)
+    addToast({
+      heading: "Bonding LP Token",
+      body: <Text>Bonding Failed</Text>,
+      status: "error",
+      closeHandler: closeAll,
+    })
+  }
   return (
     <FormProvider {...methods}>
       <VStack
         as="form"
         spacing={8}
         align="stretch"
-        onSubmit={handleSubmit((data) => console.log({ data }))}
+        onSubmit={handleSubmit(onSubmit, onError)}
       >
         <VStack align="stretch">
           <CardHeading>Bonding Period</CardHeading>
@@ -60,6 +126,11 @@ export const BondForm: VFC = () => {
                 validate: {
                   positive: (v) =>
                     v > 0 || "You must submit a positive amount.",
+                  lessThanBalance: (v) =>
+                    v <=
+                      parseFloat(
+                        toEther(userData?.balances?.aaveClr)
+                      ) || "Insufficient balance",
                 },
               })}
             />

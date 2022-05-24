@@ -5,7 +5,7 @@ import {
   HStack,
   Text,
 } from "@chakra-ui/react"
-import React, { VFC } from "react"
+import { VFC } from "react"
 import { Socials } from "components/Socials"
 import { FooterLink } from "./FooterLink"
 
@@ -28,18 +28,21 @@ const Footer: VFC<ContainerProps> = (props) => {
         width="100%"
         py={10}
         flexDirection={{ base: "column", sm: "row" }}
+        fontSize="xs"
       >
-        <Text fontSize="xs" mb={{ base: 6, sm: 0 }}>
+        <Text mb={{ base: 6, sm: 0 }} color="neutral.300">
           &copy; {new Date().getFullYear()} Sommelier
         </Text>
         <HStack
-          spacing={4}
+          spacing={8}
           justify="center"
           align="center"
           flexDirection={{ base: "column-reverse", sm: "row" }}
+          fontWeight="semibold"
+          color="neutral.100"
         >
           <HStack
-            spacing={4}
+            spacing={8}
             justify="center"
             align="center"
             mt={{ base: 6, sm: 0 }}

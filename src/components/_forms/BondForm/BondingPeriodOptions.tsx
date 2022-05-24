@@ -15,28 +15,30 @@ interface BondingPeriod {
   checked?: boolean
 }
 
-type BondingValueOptions = 1.1 | 1.25 | 1.5
+type BondingValueOptions = 0 | 1 | 2
 
 export const bondingPeriodOptions: BondingPeriod[] = [
   {
     title: "7 Days",
     amount: "1.1x SOMM",
-    value: 1.1,
+    value: 0,
   },
   {
     title: "14 Days",
     amount: "1.25x SOMM",
-    value: 1.25,
+    value: 1,
   },
   {
     title: "21 Days",
     amount: "1.5x SOMM",
-    value: 1.5,
+    value: 2,
   },
 ]
 
 export const BondingPeriodOptions: VFC = () => {
-  const { register } = useFormContext()
+  const { register, getValues } = useFormContext()
+  const bondingPeriod = getValues("bondingPeriod")
+  console.log(bondingPeriod)
 
   return (
     <HStack
@@ -49,6 +51,8 @@ export const BondingPeriodOptions: VFC = () => {
       divider={<StackDivider borderColor="inherit" />}
     >
       {bondingPeriodOptions.map(({ title, amount, value }, i) => {
+        console.log(value === bondingPeriod)
+
         return (
           <Flex
             direction="column"
@@ -63,17 +67,26 @@ export const BondingPeriodOptions: VFC = () => {
             <Box
               pos="absolute"
               as="input"
+              border="1px solid red"
               w={0}
               h={0}
               m={0}
               opacity={0}
               type="radio"
               value={value}
-              css={{
-                "&:checked + div": {
-                  backgroundColor: "rgba(96, 80, 155, 0.4)",
-                },
-              }}
+              css={
+                value === bondingPeriod
+                  ? {
+                      "+ div": {
+                        backgroundColor: "rgba(96, 80, 155, 0.4)",
+                      },
+                    }
+                  : {
+                      "&:checked + div": {
+                        backgroundColor: "rgba(96, 80, 155, 0.4)",
+                      },
+                    }
+              }
               {...register("bondingPeriod")}
             />
             <Box

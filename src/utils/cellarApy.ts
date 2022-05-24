@@ -14,14 +14,12 @@ export function dailyApy(day: Partial<CellarDayData>): BigNumber {
   return apy
 }
 
-export function averageApy(
-  days: Partial<CellarDayData>[]
-): BigNumber {
+export function averageApy(days: Partial<CellarDayData>[]): BigNumber {
   const apy = days
     .map(dailyApy)
     .reduce(
       (total: BigNumber, apy: BigNumber) => total.plus(apy),
-      new BigNumber(0)
+      new BigNumber(0),
     )
     .div(days.length)
 
@@ -42,11 +40,23 @@ export function filterToday(day: Partial<CellarDayData>): boolean {
   return todayFiltered
 }
 
-export function calculateApy(
-  days: Partial<CellarDayData>[]
-): BigNumber {
+export function calculateApy(days: Partial<CellarDayData>[]): BigNumber {
   const filtered = days.filter(filterToday)
   const apy = averageApy(filtered)
 
   return apy
+}
+
+export function averageTvlActive(
+  days: Partial<CellarDayData>[],
+  tvlActive: string,
+) {
+  return days
+    .reduce(
+      (total: BigNumber, day: Partial<CellarDayData>) =>
+        total.plus(day.tvlActive),
+      new BigNumber(0),
+    )
+    .div(tvlActive)
+    .toNumber()
 }

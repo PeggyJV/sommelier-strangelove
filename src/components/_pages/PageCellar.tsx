@@ -13,7 +13,6 @@ import { useConnect } from "wagmi"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/cellars/[id]"
 import { useGetCellarQuery } from "generated/subgraph"
-import StrategyBreakdownCard from "components/_cards/StrategyBreakdownCard"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"
 import { Link } from "components/Link"
 import { CellarStats } from "components/CellarStats"
@@ -22,9 +21,9 @@ import { formatCurrency } from "utils/formatCurrency"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
-import BondingTableCard from "components/_cards/BondingTableCard"
 import { cellarDataMap } from "data/cellarDataMap"
 import { averageApy } from "utils/cellarApy"
+import { getCalulatedTvl } from "utils/bigNumber"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -43,16 +42,22 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
       cellarString: id,
     },
   })
+
   const { data } = cellarResult
   const { cellar } = data || {}
   const {
     dayDatas,
     tvlTotal,
+    asset,
     liquidityLimit,
     addedLiquidityAllTime,
     removedLiquidityAllTime,
   } = cellar || {}
-  const tvmVal = formatCurrency(tvlTotal)
+
+  const calculatedTvl =
+    tvlTotal && asset && getCalulatedTvl(tvlTotal, asset)
+
+  const tvmVal = formatCurrency(calculatedTvl)
   const apy = data && averageApy(dayDatas!).toFixed(2)
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
@@ -85,6 +90,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
                   as="span"
                   textTransform="uppercase"
                   fontSize="21px"
+                  color="neutral.300"
                 >
                   clr-s
                 </Box>
@@ -100,15 +106,16 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
         </HStack>
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles}>Your Portfolio</Heading>
-          <PortfolioCard />
-          {isConnected && <BondingTableCard />}
+          <PortfolioCard isConnected={isConnected} />
         </VStack>
       </Section>
       <Section>
         <VStack spacing={6} align="stretch">
           <Heading {...h2Styles}>Cellar Details</Heading>
-          <CellarDetailsCard />
-          <StrategyBreakdownCard />
+          <CellarDetailsCard
+            cellarDataMap={cellarDataMap}
+            cellarId={id}
+          />
           <PerformanceCard />
         </VStack>
       </Section>

@@ -1,0 +1,15 @@
+query GetWeeklyTVL($epoch: Int!) {
+  cellarDayDatas(
+    first: 7
+    orderDirection: asc
+    orderBy: date
+    where: { tvlActive_gt: 0, date_gte: $epoch }
+  ) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}

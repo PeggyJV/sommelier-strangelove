@@ -11,8 +11,10 @@ import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
 import { Burst } from "./Burst"
 import { ComingSoon } from "./ComingSoon"
+import { InlineImage } from "components/InlineImage"
 
 export interface CellarCardData {
+  cellarId: string
   name: string
   description: string
   tvm?: string
@@ -28,6 +30,11 @@ interface CellarCardProps extends BoxProps {
   index?: number
 }
 
+const baseIconPath = "/assets/icons"
+const protocols: { [key: string]: string } = {
+  AAVE: `${baseIconPath}/aave.png`,
+}
+
 export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   data,
   isPlaceholder,
@@ -35,6 +42,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   ...rest
 }) => {
   const theme = useTheme()
+  const protocolIcon = protocols[data.protocols]
 
   return (
     <Card
@@ -71,8 +79,20 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
           </Flex>
           <Flex>
             <Tag>{data.strategyType}</Tag>
-            <Tag ml={2}>{data.managementFee}</Tag>
-            <Tag ml={2}>{data.protocols}</Tag>
+            <Tag ml={2}>
+              {data.managementFee}{" "}
+              {data.managementFee !== "-" && "Fee"}
+            </Tag>
+            <Tag ml={2} display="flex" alignItems="center">
+              {protocolIcon && (
+                <InlineImage
+                  src={protocolIcon}
+                  alt="aave logo"
+                  boxSize={4}
+                />
+              )}
+              {data.protocols}
+            </Tag>
           </Flex>
         </Box>
         <Flex

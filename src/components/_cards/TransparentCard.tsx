@@ -1,17 +1,16 @@
 import { BoxProps } from "@chakra-ui/react"
-import React, { VFC } from "react"
+import { VFC } from "react"
 import { Card } from "./Card"
 
-const TransparentCard: VFC<BoxProps> = (props) => {
+export const TransparentCard: VFC<BoxProps> = (props) => {
   return (
     <Card
       bg="surface.primary"
-      borderWidth={8}
-      borderRadius={16}
+      borderWidth={1}
+      borderRadius={24}
       borderColor="surface.secondary"
+      backdropFilter="blur(8px)"
       {...props}
     />
   )
 }
-
-export default TransparentCard

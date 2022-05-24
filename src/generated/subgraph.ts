@@ -34,7 +34,7 @@ export type Cellar = {
   accruedPerformanceFees: Scalars['BigInt'];
   accruedPlatformFees: Scalars['BigInt'];
   addedLiquidityAllTime: Scalars['BigInt'];
-  asset: Scalars['String'];
+  asset: TokenErc20;
   burntPerformanceFees: Scalars['BigInt'];
   dayDatas: Array<CellarDayData>;
   depositLimit: Scalars['BigInt'];
@@ -238,7 +238,7 @@ export enum CellarDayData_OrderBy {
 
 export type CellarHourData = {
   __typename?: 'CellarHourData';
-  asset: TokenErc20;
+  asset?: Maybe<TokenErc20>;
   cellar: Cellar;
   date: Scalars['Int'];
   earnings: Scalars['BigInt'];
@@ -1668,9 +1668,14 @@ export enum _SubgraphErrorPolicy_ {
 export type GetAllCellarsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, asset: string, tvlActive: string, tvlInactive: string, tvlTotal: string, numWalletsActive: number, numWalletsAllTime: number, sharesTotal: string, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> }>, cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
+export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, tvlActive: string, tvlInactive: string, tvlTotal: string, numWalletsActive: number, numWalletsAllTime: number, sharesTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number }, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> }>, cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
 
 export type CellarDayDatasFragment = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
+
+export type GetAllTimeTvlQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllTimeTvlQuery = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> };
 
 export type GetCellarRouteStaticQueryVariables = Exact<{
   cellarAddress: Scalars['ID'];
@@ -1690,7 +1695,14 @@ export type GetCellarQueryVariables = Exact<{
 }>;
 
 
-export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, asset: string, liquidityLimit: string, name: string, numWalletsActive: number, numWalletsAllTime: number, tvlActive: string, tvlInactive: string, tvlTotal: string, addedLiquidityAllTime: string, removedLiquidityAllTime: string, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> } | null, wallets: Array<{ __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', id: string, balance: string }>, depositWithdrawEvents: Array<{ __typename?: 'DepositWithdrawEvent', id: string, txId: string, amount: string }> }> };
+export type GetCellarQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, liquidityLimit: string, name: string, numWalletsActive: number, numWalletsAllTime: number, tvlActive: string, tvlInactive: string, tvlTotal: string, addedLiquidityAllTime: string, removedLiquidityAllTime: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number }, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> } | null, wallets: Array<{ __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', id: string, balance: string }>, depositWithdrawEvents: Array<{ __typename?: 'DepositWithdrawEvent', id: string, txId: string, amount: string }> }> };
+
+export type GetHourlyTvlQueryVariables = Exact<{
+  epoch?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetHourlyTvlQuery = { __typename?: 'Query', cellarHourDatas: Array<{ __typename?: 'CellarHourData', date: number, tvlTotal: string, asset?: { __typename?: 'TokenERC20', symbol: string, decimals: number } | null }> };
 
 export type GetPositionQueryVariables = Exact<{
   walletAddress: Scalars['ID'];
@@ -1699,6 +1711,13 @@ export type GetPositionQueryVariables = Exact<{
 
 
 export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
+
+export type GetWeeklyTvlQueryVariables = Exact<{
+  epoch: Scalars['Int'];
+}>;
+
+
+export type GetWeeklyTvlQuery = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> };
 
 export const CellarDayDatasFragmentDoc = gql`
     fragment CellarDayDatas on Query {
@@ -1716,7 +1735,10 @@ export const GetAllCellarsDocument = gql`
   cellars {
     id
     name
-    asset
+    asset {
+      symbol
+      decimals
+    }
     tvlActive
     tvlInactive
     tvlTotal
@@ -1737,6 +1759,22 @@ export const GetAllCellarsDocument = gql`
 
 export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCellarsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllCellarsQuery>({ query: GetAllCellarsDocument, ...options });
+};
+export const GetAllTimeTvlDocument = gql`
+    query GetAllTimeTVL {
+  cellarDayDatas(orderDirection: asc, orderBy: date, where: {tvlActive_gt: 0}) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}
+    `;
+
+export function useGetAllTimeTvlQuery(options?: Omit<Urql.UseQueryArgs<GetAllTimeTvlQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllTimeTvlQuery>({ query: GetAllTimeTvlDocument, ...options });
 };
 export const GetCellarRouteStaticDocument = gql`
     query GetCellarRouteStatic($cellarAddress: ID!) {
@@ -1766,7 +1804,10 @@ export const GetCellarDocument = gql`
     query GetCellar($cellarAddress: ID!, $cellarString: String!) {
   cellar(id: $cellarAddress) {
     id
-    asset
+    asset {
+      symbol
+      decimals
+    }
     liquidityLimit
     name
     numWalletsActive
@@ -1802,6 +1843,26 @@ export const GetCellarDocument = gql`
 export function useGetCellarQuery(options: Omit<Urql.UseQueryArgs<GetCellarQueryVariables>, 'query'>) {
   return Urql.useQuery<GetCellarQuery>({ query: GetCellarDocument, ...options });
 };
+export const GetHourlyTvlDocument = gql`
+    query GetHourlyTVL($epoch: Int) {
+  cellarHourDatas(
+    orderDirection: asc
+    orderBy: date
+    where: {date_gte: $epoch, tvlActive_gt: 0}
+  ) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}
+    `;
+
+export function useGetHourlyTvlQuery(options?: Omit<Urql.UseQueryArgs<GetHourlyTvlQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetHourlyTvlQuery>({ query: GetHourlyTvlDocument, ...options });
+};
 export const GetPositionDocument = gql`
     query GetPosition($walletAddress: ID!, $cellarAddress: String!) {
   wallet(id: $walletAddress) {
@@ -1815,4 +1876,25 @@ export const GetPositionDocument = gql`
 
 export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQueryVariables>, 'query'>) {
   return Urql.useQuery<GetPositionQuery>({ query: GetPositionDocument, ...options });
+};
+export const GetWeeklyTvlDocument = gql`
+    query GetWeeklyTVL($epoch: Int!) {
+  cellarDayDatas(
+    first: 7
+    orderDirection: asc
+    orderBy: date
+    where: {tvlActive_gt: 0, date_gte: $epoch}
+  ) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}
+    `;
+
+export function useGetWeeklyTvlQuery(options: Omit<Urql.UseQueryArgs<GetWeeklyTvlQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetWeeklyTvlQuery>({ query: GetWeeklyTvlDocument, ...options });
 };

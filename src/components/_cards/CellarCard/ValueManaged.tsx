@@ -1,25 +1,86 @@
-import { Flex, Heading, Box, BoxProps } from "@chakra-ui/react"
-import { FillLine } from "./FillLine"
+import {
+  Flex,
+  Heading,
+  Box,
+  BoxProps,
+  Tooltip,
+  HStack,
+} from "@chakra-ui/react"
+import { CurrentDeposits } from "components/CurrentDeposits"
 import { Label } from "./Label"
+import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
+import { useGetCellarQuery } from "generated/subgraph"
+import { ArrowUpIcon, InformationIcon } from "components/_icons"
 
-export const ValueManaged: React.FC<BoxProps> = ({ ...rest }) => {
+interface Props extends BoxProps {
+  cellarId: string
+}
+
+export const ValueManaged: React.FC<Props> = ({
+  cellarId,
+  ...rest
+}) => {
+  const [cellarResult] = useGetCellarQuery({
+    variables: {
+      cellarAddress: cellarId,
+      cellarString: cellarId,
+    },
+  })
+  const { data } = cellarResult
+  const { cellar } = data || {}
+  const {
+    liquidityLimit,
+    addedLiquidityAllTime,
+    removedLiquidityAllTime,
+  } = cellar || {}
+  const currentDepositsVal = formatCurrentDeposits(
+    addedLiquidityAllTime,
+    removedLiquidityAllTime
+  )
+
   return (
     <Box {...rest}>
       <Flex alignItems="baseline" mb={1}>
         <Heading size="md">$49.25M</Heading>
-        <Label ml={1}>TVM</Label>
+        <Label
+          ml={1}
+          color="neutral.300"
+          display="flex"
+          alignItems="center"
+          columnGap="4px"
+        >
+          TVM
+          <Tooltip
+            hasArrow
+            arrowShadowColor="purple.base"
+            label="Total value managed by Cellar"
+            placement="top"
+            bg="surface.bg"
+          >
+            <HStack align="center">
+              <InformationIcon color="neutral.300" boxSize={3} />
+            </HStack>
+          </Tooltip>
+        </Label>
       </Flex>
       <Flex alignItems="center" mb={4}>
-        <Heading size="sm" color="lime.base">
-          $2,012,394.79 (4.08%)
+        <Heading
+          size="sm"
+          color="lime.base"
+          display="flex"
+          alignItems="center"
+          columnGap="3px"
+        >
+          <ArrowUpIcon boxSize={3} /> $2,012,394.79 (4.08%)
         </Heading>
-        <Label ml={1}>Past Week</Label>
+        <Label ml={1} color="neutral.300">
+          Past Week
+        </Label>
       </Flex>
-      <FillLine percentage={46} mb={3} />
-      <Flex justifyContent="space-between">
-        <Label>Cellar Cap</Label>
-        <Heading size="xs">$100M USDC</Heading>
-      </Flex>
+      <CurrentDeposits
+        currentDeposits={currentDepositsVal}
+        cellarCap={liquidityLimit}
+      />
     </Box>
   )
 }

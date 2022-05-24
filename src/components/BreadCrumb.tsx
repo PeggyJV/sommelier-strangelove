@@ -24,7 +24,9 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
 
   return (
     <ChBreadcrumb
-      separator={<ChevronRightIcon boxSize={3} color="white" />}
+      separator={
+        <ChevronRightIcon boxSize={3} color="neautral.300" />
+      }
       {...rest}
     >
       <BreadcrumbItem color="neutral.300">
@@ -34,6 +36,7 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
         <BreadcrumbLink
           isCurrentPage
           href={`/cellars/${router.query.id}`}
+          color="purple.light"
         >
           {cellarName}
         </BreadcrumbLink>

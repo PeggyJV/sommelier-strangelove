@@ -8,7 +8,7 @@ import {
   ModalOverlay,
   ModalProps,
 } from "@chakra-ui/react"
-import React, { VFC } from "react"
+import { VFC } from "react"
 
 interface BaseModalProps extends ModalProps {
   heading?: string

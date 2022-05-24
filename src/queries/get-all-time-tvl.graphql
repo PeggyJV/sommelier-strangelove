@@ -1,0 +1,14 @@
+query GetAllTimeTVL {
+  cellarDayDatas(
+    orderDirection: asc
+    orderBy: date
+    where: { tvlActive_gt: 0 }
+  ) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}

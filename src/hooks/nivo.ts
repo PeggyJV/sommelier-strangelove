@@ -1,4 +1,5 @@
 import { useTheme } from "@chakra-ui/react"
+import { Theme } from "@nivo/core"
 
 /**
  * @returns different Arrays of color strings for nivo charts.
@@ -13,10 +14,21 @@ export const useNivoThemes = () => {
   ]
 
   const lineChartTheme: string[] = [
-    colors.red.base,
+    colors.purple.base,
     colors.turquoise.base,
-    colors.violet.base,
+    colors.red.base,
   ]
 
-  return { barChartTheme, lineChartTheme }
+  const chartTheme: Theme = {
+    textColor: colors.neutral[200],
+    axis: {
+      ticks: {
+        line: {
+          stroke: colors.neutral[200],
+        },
+      },
+    },
+  }
+
+  return { barChartTheme, lineChartTheme, chartTheme }
 }
