@@ -11,9 +11,14 @@ import {
 } from "utils/calculateTime"
 import { mutateDayData, mutateHourlyData } from "utils/urql"
 
-interface DataProps {
+export interface DataProps {
   series?: Serie[]
   chartProps: Partial<LineProps>
+}
+
+export interface TvlData {
+  yFormatted: string | number
+  xFormatted: string | number
 }
 
 const hourlyChartProps: Partial<LineProps> = {
@@ -83,6 +88,9 @@ export const useTVLQueries = () => {
     chartProps: hourlyChartProps,
   })
 
+  // Set tvl value
+  const [tvl, setTvl] = useState<TvlData>()
+
   // Set hourly data by default
   useEffect(() => {
     const idIsDefault: boolean =
@@ -117,6 +125,18 @@ export const useTVLQueries = () => {
       chartProps: allTimeChartProps,
     })
 
+  const timeArray = [
+    {
+      title: "Day",
+      onClick: setDataHourly,
+    },
+    {
+      title: "Week",
+      onClick: setDataWeekly,
+    },
+    { title: "All", onClick: setDataAllTime },
+  ]
+
   return {
     fetching,
     data,
@@ -126,5 +146,8 @@ export const useTVLQueries = () => {
     reexecuteHourly,
     reexecuteWeekly,
     reexecuteAllTime,
+    timeArray,
+    tvl,
+    setTvl,
   }
 }

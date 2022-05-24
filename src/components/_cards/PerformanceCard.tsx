@@ -4,7 +4,6 @@ import {
   Button,
   HStack,
   Text,
-  useMediaQuery,
   VStack,
 } from "@chakra-ui/react"
 import { useState, VFC } from "react"
@@ -14,33 +13,9 @@ import { TVLChart } from "components/_charts/TVLChart"
 import { useTVLQueries } from "hooks/urql"
 import { CardHeading } from "components/_typography/CardHeading"
 
-export interface TvlData {
-  yFormatted: string | number
-  xFormatted: string | number
-}
-
 export const PerformanceCard: VFC<BoxProps> = (props) => {
-  const {
-    fetching,
-    data,
-    setDataHourly,
-    setDataWeekly,
-    setDataAllTime,
-  } = useTVLQueries()
+  const { fetching, data, timeArray, tvl, setTvl } = useTVLQueries()
   const [timeline, setTimeline] = useState<string>("Day")
-  const [tvl, setTvl] = useState<TvlData>()
-
-  const timeButtons = [
-    {
-      title: "Day",
-      onClick: setDataHourly,
-    },
-    {
-      title: "Week",
-      onClick: setDataWeekly,
-    },
-    { title: "All", onClick: setDataAllTime },
-  ]
 
   return (
     <TransparentCard p={8} overflow="visible" {...props}>
@@ -64,7 +39,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
               </VStack>
             </HStack>
             <HStack spacing={2}>
-              {timeButtons.map((button, i) => {
+              {timeArray.map((button, i) => {
                 const { title, onClick } = button
                 const isSelected = title === timeline
 

@@ -1,8 +1,8 @@
 import { Circle, Spinner } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
 import { PointTooltipProps, Serie } from "@nivo/line"
-import { TvlData } from "components/_cards/PerformanceCard"
 import { useNivoThemes } from "hooks/nivo"
+import { TvlData } from "hooks/urql"
 import dynamic from "next/dynamic"
 import {
   Dispatch,
