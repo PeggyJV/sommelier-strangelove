@@ -24,6 +24,7 @@ import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
 import { averageApy } from "utils/cellarApy"
 import { getCalulatedTvl } from "utils/bigNumber"
+import { PerformanceChartProvider } from "context/performanceChartContext"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -116,7 +117,9 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             cellarDataMap={cellarDataMap}
             cellarId={id}
           />
-          <PerformanceCard />
+          <PerformanceChartProvider>
+            <PerformanceCard />
+          </PerformanceChartProvider>
         </VStack>
       </Section>
     </Layout>

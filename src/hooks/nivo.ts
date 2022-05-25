@@ -28,6 +28,13 @@ export const useNivoThemes = () => {
         },
       },
     },
+    crosshair: {
+      line: {
+        stroke: colors.purple.dark,
+        strokeWidth: 2,
+        strokeDasharray: "solid",
+      },
+    },
   }
 
   return { barChartTheme, lineChartTheme, chartTheme }
