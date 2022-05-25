@@ -3,6 +3,7 @@ import {
   BoxProps,
   Button,
   HStack,
+  Spinner,
   Text,
   VStack,
 } from "@chakra-ui/react"
@@ -10,11 +11,11 @@ import { useState, VFC } from "react"
 import { CardDivider } from "components/_layout/CardDivider"
 import { TransparentCard } from "./TransparentCard"
 import { TVLChart } from "components/_charts/TVLChart"
-import { useTVLQueries } from "hooks/urql"
 import { CardHeading } from "components/_typography/CardHeading"
+import { usePerformanceChart } from "context/performanceChartContext"
 
 export const PerformanceCard: VFC<BoxProps> = (props) => {
-  const { fetching, data, timeArray, tvl, setTvl } = useTVLQueries()
+  const { fetching, timeArray, tvl } = usePerformanceChart()
   const [timeline, setTimeline] = useState<string>("Day")
 
   return (
@@ -74,12 +75,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
               })}
             </HStack>
           </HStack>
-          <TVLChart
-            data={data.series}
-            fetching={fetching}
-            setTvl={setTvl}
-            {...data.chartProps}
-          />
+          {fetching ? <Spinner /> : <TVLChart />}
         </Box>
       </VStack>
     </TransparentCard>

@@ -4,7 +4,16 @@ import {
   useGetHourlyTvlQuery,
   useGetWeeklyTvlQuery,
 } from "generated/subgraph"
-import { useEffect, useState } from "react"
+import {
+  createContext,
+  Dispatch,
+  FC,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
+import { OperationContext } from "urql"
 import {
   getPrevious24Hours,
   getPreviousWeek,
@@ -19,6 +28,29 @@ export interface DataProps {
 export interface TvlData {
   yFormatted: string | number
   xFormatted: string | number
+}
+
+export interface PerformanceChartContext {
+  fetching: boolean
+  data: DataProps
+  setDataHourly: () => void
+  setDataWeekly: () => void
+  setDataAllTime: () => void
+  reexecuteHourly: (
+    opts?: Partial<OperationContext> | undefined
+  ) => void
+  reexecuteWeekly: (
+    opts?: Partial<OperationContext> | undefined
+  ) => void
+  reexecuteAllTime: (
+    opts?: Partial<OperationContext> | undefined
+  ) => void
+  timeArray: {
+    title: string
+    onClick: () => void
+  }[]
+  tvl: TvlData
+  setTvl: Dispatch<SetStateAction<TvlData>>
 }
 
 const hourlyChartProps: Partial<LineProps> = {
@@ -61,7 +93,37 @@ const allTimeChartProps: Partial<LineProps> = {
   },
 }
 
-export const useTVLQueries = () => {
+const defaultSerieId = "default"
+
+const initialData: PerformanceChartContext = {
+  data: {
+    series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
+    chartProps: hourlyChartProps,
+  },
+  fetching: true,
+  reexecuteHourly: () => null,
+  reexecuteWeekly: () => null,
+  reexecuteAllTime: () => null,
+  setDataAllTime: () => null,
+  setDataHourly: () => null,
+  setDataWeekly: () => null,
+  setTvl: () => null,
+  tvl: {
+    xFormatted: "",
+    yFormatted: "",
+  },
+  timeArray: [
+    {
+      title: "",
+      onClick: () => null,
+    },
+  ],
+}
+
+const performanceChartContext =
+  createContext<PerformanceChartContext>(initialData)
+
+export const PerformanceChartProvider: FC = ({ children }) => {
   // GQL Queries
   const [
     { fetching: hourlyIsFetching, data: hourlyData },
@@ -80,8 +142,6 @@ export const useTVLQueries = () => {
     reexecuteAllTime,
   ] = useGetAllTimeTvlQuery()
 
-  const defaultSerieId = "default"
-
   // Set data to be returned by hook
   const [data, setData] = useState<DataProps>({
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
@@ -89,7 +149,10 @@ export const useTVLQueries = () => {
   })
 
   // Set tvl value
-  const [tvl, setTvl] = useState<TvlData>()
+  const [tvl, setTvl] = useState<TvlData>({
+    xFormatted: "",
+    yFormatted: "",
+  })
 
   // Set hourly data by default
   useEffect(() => {
@@ -137,17 +200,35 @@ export const useTVLQueries = () => {
     { title: "All", onClick: setDataAllTime },
   ]
 
-  return {
-    fetching,
-    data,
-    setDataHourly,
-    setDataWeekly,
-    setDataAllTime,
-    reexecuteHourly,
-    reexecuteWeekly,
-    reexecuteAllTime,
-    timeArray,
-    tvl,
-    setTvl,
+  return (
+    <performanceChartContext.Provider
+      value={{
+        fetching,
+        data,
+        setDataHourly,
+        setDataWeekly,
+        setDataAllTime,
+        reexecuteHourly,
+        reexecuteWeekly,
+        reexecuteAllTime,
+        timeArray,
+        tvl,
+        setTvl,
+      }}
+    >
+      {children}
+    </performanceChartContext.Provider>
+  )
+}
+
+export const usePerformanceChart = () => {
+  const context = useContext(performanceChartContext)
+
+  if (context === undefined) {
+    throw new Error(
+      "This hook must be used within a PerformanceChartProvider."
+    )
   }
+
+  return context
 }

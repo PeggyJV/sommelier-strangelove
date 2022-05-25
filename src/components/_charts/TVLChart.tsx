@@ -1,27 +1,16 @@
-import { Circle, Spinner } from "@chakra-ui/react"
+import { Circle } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
-import { PointTooltipProps, Serie } from "@nivo/line"
+import { PointTooltipProps } from "@nivo/line"
+import { usePerformanceChart } from "context/performanceChartContext"
 import { useNivoThemes } from "hooks/nivo"
-import { TvlData } from "hooks/urql"
 import dynamic from "next/dynamic"
-import {
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-  VFC,
-} from "react"
+import { FunctionComponent, VFC } from "react"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
     ssr: false,
   }
 )
-
-interface TVLChartProps {
-  fetching?: boolean
-  data?: Serie[]
-  setTvl: Dispatch<SetStateAction<TvlData | undefined>>
-}
 
 const ToolTip: FunctionComponent<PointTooltipProps> = ({ point }) => {
   const { color } = point
@@ -38,19 +27,13 @@ const ToolTip: FunctionComponent<PointTooltipProps> = ({ point }) => {
   )
 }
 
-export const TVLChart: VFC<TVLChartProps> = ({
-  fetching,
-  data,
-  setTvl,
-  ...rest
-}) => {
+export const TVLChart: VFC = () => {
+  const { data, setTvl } = usePerformanceChart()
   const { lineChartTheme, chartTheme } = useNivoThemes()
 
-  return fetching ? (
-    <Spinner />
-  ) : (
+  return (
     <LineChart
-      data={data!}
+      data={data.series!}
       colors={lineChartTheme}
       enableArea={true}
       onMouseMove={({ data }) =>
@@ -71,7 +54,7 @@ export const TVLChart: VFC<TVLChartProps> = ({
       axisLeft={null}
       theme={chartTheme}
       tooltip={ToolTip}
-      {...rest}
+      {...data.chartProps}
     />
   )
 }
