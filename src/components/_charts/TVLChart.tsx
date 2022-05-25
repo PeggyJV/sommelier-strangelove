@@ -1,9 +1,11 @@
-import { Spinner } from "@chakra-ui/react"
+import { Circle } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
-import { Serie } from "@nivo/line"
+import { PointTooltipProps, Point } from "@nivo/line"
+import { usePerformanceChart } from "context/performanceChartContext"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
-import { VFC } from "react"
+import { FunctionComponent, VFC } from "react"
+import { debounce } from "lodash"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -11,25 +13,39 @@ const LineChart = dynamic(
   }
 )
 
-interface TVLChartProps {
-  fetching?: boolean
-  data?: Serie[]
+const ToolTip: FunctionComponent<PointTooltipProps> = ({ point }) => {
+  const { color } = point
+
+  return (
+    <Circle
+      position="relative"
+      top="20px"
+      size="12px"
+      bg={color}
+      borderWidth={1}
+      borderColor="neutral.100"
+    />
+  )
 }
 
-export const TVLChart: VFC<TVLChartProps> = ({
-  fetching,
-  data,
-  ...rest
-}) => {
+export const TVLChart: VFC = () => {
+  const { data, setTvl } = usePerformanceChart()
   const { lineChartTheme, chartTheme } = useNivoThemes()
+  const updateTvl = ({ data }: Point) => {
+    setTvl({
+      xFormatted: data.xFormatted,
+      yFormatted: data.yFormatted,
+    })
+  }
+  const debouncedTvl = debounce(updateTvl, 100)
 
-  return fetching ? (
-    <Spinner />
-  ) : (
+  return (
     <LineChart
-      data={data!}
+      data={data.series!}
       colors={lineChartTheme}
       enableArea={true}
+      onMouseMove={debouncedTvl}
+      crosshairType="x"
       defs={[
         linearGradientDef("gradientA", [
           { offset: 0, color: "inherit" },
@@ -37,10 +53,11 @@ export const TVLChart: VFC<TVLChartProps> = ({
         ]),
       ]}
       fill={[{ match: "*", id: "gradientA" }]}
-      margin={{ bottom: 70, left: 10, right: 10, top: 20 }}
+      margin={{ bottom: 110, left: 6, right: 6, top: 20 }}
       axisLeft={null}
       theme={chartTheme}
-      {...rest}
+      tooltip={ToolTip}
+      {...data.chartProps}
     />
   )
 }
