@@ -14,7 +14,7 @@ import { CardHeading } from "components/_typography/CardHeading"
 import { usePerformanceChart } from "context/performanceChartContext"
 
 export const PerformanceCard: VFC<BoxProps> = (props) => {
-  const { fetching, timeArray, tvl } = usePerformanceChart()
+  const { timeArray, tvl } = usePerformanceChart()
   const [timeline, setTimeline] = useState<string>("Day")
 
   return (
