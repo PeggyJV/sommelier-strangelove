@@ -1,10 +1,11 @@
 import { Circle } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
-import { PointTooltipProps } from "@nivo/line"
+import { PointTooltipProps, Point } from "@nivo/line"
 import { usePerformanceChart } from "context/performanceChartContext"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
 import { FunctionComponent, VFC } from "react"
+import { debounce } from "lodash"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -30,18 +31,20 @@ const ToolTip: FunctionComponent<PointTooltipProps> = ({ point }) => {
 export const TVLChart: VFC = () => {
   const { data, setTvl } = usePerformanceChart()
   const { lineChartTheme, chartTheme } = useNivoThemes()
+  const updateTvl = ({ data }: Point) => {
+    setTvl({
+      xFormatted: data.xFormatted,
+      yFormatted: data.yFormatted,
+    })
+  }
+  const debouncedTvl = debounce(updateTvl, 100)
 
   return (
     <LineChart
       data={data.series!}
       colors={lineChartTheme}
       enableArea={true}
-      onMouseMove={({ data }) =>
-        setTvl({
-          xFormatted: data.xFormatted,
-          yFormatted: data.yFormatted,
-        })
-      }
+      onMouseMove={debouncedTvl}
       crosshairType="x"
       defs={[
         linearGradientDef("gradientA", [
