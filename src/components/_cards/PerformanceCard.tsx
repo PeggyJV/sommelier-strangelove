@@ -3,7 +3,6 @@ import {
   BoxProps,
   Button,
   HStack,
-  Spinner,
   Text,
   VStack,
 } from "@chakra-ui/react"
@@ -75,7 +74,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
               })}
             </HStack>
           </HStack>
-          {fetching ? <Spinner /> : <TVLChart />}
+          <TVLChart />
         </Box>
       </VStack>
     </TransparentCard>
