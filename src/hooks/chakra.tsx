@@ -9,7 +9,7 @@ import {
   HeadingProps,
   IconProps,
 } from "@chakra-ui/react"
-import { ReactElement, ReactNode, useRef } from "react"
+import { ReactNode, useRef } from "react"
 import { InformationIcon, WarningIcon } from "components/_icons"
 
 interface BaseToast extends Partial<ToastOptions> {

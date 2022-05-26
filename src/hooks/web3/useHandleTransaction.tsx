@@ -1,14 +1,6 @@
-import {
-  useSigner,
-  useContract,
-  erc20ABI,
-  useAccount,
-  useWaitForTransaction,
-} from "wagmi"
+import { useWaitForTransaction } from "wagmi"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
-import { ethers } from "ethers"
-import { BigNumber } from "bignumber.js"
 
 type TxParams = {
   hash: string
