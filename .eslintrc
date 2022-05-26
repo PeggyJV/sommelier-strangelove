@@ -2,7 +2,7 @@
   "env": {
     "cypress/globals": true
   },
-  "plugins": ["cypress", "jsx-a11y"],
+  "plugins": ["cypress", "jsx-a11y", "unused-imports"],
   "extends": [
     "next",
     "next/core-web-vitals",
@@ -15,6 +15,7 @@
     "cypress/no-unnecessary-waiting": "error",
     "cypress/assertion-before-screenshot": "warn",
     "cypress/no-force": "warn",
-    "cypress/no-async-tests": "error"
+    "cypress/no-async-tests": "error",
+    "unused-imports/no-unused-imports-ts": 1
   }
 }
