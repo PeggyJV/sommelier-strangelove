@@ -47,7 +47,6 @@ export const useHandleTransaction = (): {
     })
     const waitForApproval = wait({ confirmations: 1, hash })
     const result = await waitForApproval
-    console.log({ result })
     result?.data?.transactionHash &&
       update({
         heading: "Transaction",

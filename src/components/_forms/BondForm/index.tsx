@@ -95,7 +95,6 @@ export const BondForm: VFC = () => {
   }
 
   const onError = (errors: any, e: any) => {
-    console.log(errors, e)
     addToast({
       heading: "Bonding LP Token",
       body: <Text>Bonding Failed</Text>,

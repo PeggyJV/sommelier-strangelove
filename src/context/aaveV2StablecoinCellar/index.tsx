@@ -6,11 +6,8 @@ import {
   useSigner,
   useBalance,
 } from "wagmi"
-import { Balance } from "wagmi-core"
-import { config } from "../../utils/config"
+import { config } from "utils/config"
 import { useEffect, useState, useCallback } from "react"
-import { BigNumber } from "bignumber.js"
-// import { toEther } from '../utils'
 import { BigNumber as BigNumberE } from "ethers"
 
 type CellarState = {
@@ -60,7 +57,6 @@ export const AaveV2CellarProvider = ({
   const provider = useProvider()
   const [{ data: account }] = useAccount()
   const { CONTRACT } = config
-  console.log({ account })
   const [cellarData, setCellarData] = useState(initialCellarData)
   const [userData, setUserData] = useState(initialUserData)
 
@@ -107,7 +103,6 @@ export const AaveV2CellarProvider = ({
   // cellar data
   useEffect(() => {
     if (!aaveV2CellarContract) return
-    console.log("running effect")
     const fn = async () => {
       setCellarData((state) => ({ ...state, loading: true }))
       try {
@@ -133,9 +128,7 @@ export const AaveV2CellarProvider = ({
         await aaveV2CellarContract.getUserBalances(account?.address)
       const aaveClrBalance = await refetch()
       const netValue = userInactiveAssets.toString()
-      console.log("Net Value ", netValue)
 
-      console.log({ userActiveAssets, userInactiveAssets })
       const maxDeposit = await aaveV2CellarContract.maxDeposit(
         account?.address
       )
