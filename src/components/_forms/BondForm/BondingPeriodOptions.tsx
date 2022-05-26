@@ -38,7 +38,6 @@ export const bondingPeriodOptions: BondingPeriod[] = [
 export const BondingPeriodOptions: VFC = () => {
   const { register, getValues } = useFormContext()
   const bondingPeriod = getValues("bondingPeriod")
-  console.log(bondingPeriod)
 
   return (
     <HStack
@@ -51,8 +50,6 @@ export const BondingPeriodOptions: VFC = () => {
       divider={<StackDivider borderColor="inherit" />}
     >
       {bondingPeriodOptions.map(({ title, amount, value }, i) => {
-        console.log(value === bondingPeriod)
-
         return (
           <Flex
             direction="column"

@@ -32,7 +32,6 @@ export const useApproveERC20 = ({
   })
 
   const doApprove = async (amount: number) => {
-    console.log(`approving ${spender} to spend ${tokenAddress}`)
     const allowance = await erc20Contract.allowance(
       account?.address,
       spender
@@ -47,10 +46,8 @@ export const useApproveERC20 = ({
     try {
       needsApproval = allowance.lt(amtInWei)
     } catch (e) {
-      console.error("Invalid Input")
       return
     }
-    console.log(needsApproval)
     if (needsApproval) {
       try {
         const { hash } = await erc20Contract.approve(

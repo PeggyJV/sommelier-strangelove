@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, List, ListItem } from "@chakra-ui/react"
+import { Box, Heading } from "@chakra-ui/react"
 import { GridHome } from "components/GridHome"
 import { EducationCard } from "./EducationCard"
 import { eduItems } from "./eduItems"
