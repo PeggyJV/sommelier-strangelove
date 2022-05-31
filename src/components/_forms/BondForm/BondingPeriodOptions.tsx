@@ -25,7 +25,7 @@ export const bondingPeriodOptions: BondingPeriod[] = [
   },
   {
     title: "14 Days",
-    amount: "1.25x SOMM",
+    amount: "1.3x SOMM",
     value: 1,
   },
   {
