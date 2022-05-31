@@ -110,7 +110,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
             <VStack align="flex-start">
               <CardStat
                 label="bonded tokens"
-                tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
+                tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
               >
                 <InlineImage
                   src="/assets/icons/aave.png"
