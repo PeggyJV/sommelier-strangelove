@@ -129,7 +129,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 tooltip="Amount of SOMM earned and available to be claimed"
               >
                 <InlineImage
-                  src="/assets/icons/somm.svg"
+                  src="/assets/icons/somm.png"
                   alt="aave logo"
                   boxSize={5}
                 />
