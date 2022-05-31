@@ -96,14 +96,9 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
           >
             <VStack align="flex-start">
               <CardStat
-                label="available tokens"
+                label="tokens"
                 tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
               >
-                <InlineImage
-                  src="/assets/icons/aave.png"
-                  alt="aave logo"
-                  boxSize={5}
-                />
                 {toEther(userData?.balances?.aaveClr, 18, false)}
               </CardStat>
             </VStack>
@@ -112,11 +107,6 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 label="bonded tokens"
                 tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
               >
-                <InlineImage
-                  src="/assets/icons/aave.png"
-                  alt="aave logo"
-                  boxSize={5}
-                />
                 {toEther(
                   ethers.utils.parseUnits(
                     totalBondedAmount?.toFixed() || "0",
@@ -139,7 +129,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 tooltip="Amount of SOMM earned and available to be claimed"
               >
                 <InlineImage
-                  src="/assets/icons/somm.svg"
+                  src="/assets/icons/somm.png"
                   alt="aave logo"
                   boxSize={5}
                 />
