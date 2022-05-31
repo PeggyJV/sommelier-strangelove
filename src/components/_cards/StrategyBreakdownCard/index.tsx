@@ -39,7 +39,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
           {Object.values(strategyBreakdown).map((value, i) => {
             return (
               <TabPanel key={i} {...tabPanelProps}>
-                <Text>{value}</Text>
+                <Text whiteSpace="pre-line">{value}</Text>
               </TabPanel>
             )
           })}
