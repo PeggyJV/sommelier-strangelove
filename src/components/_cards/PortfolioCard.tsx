@@ -38,6 +38,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
     await doHandleTransaction(tx)
     fetchUserStakes()
   }
+
   return (
     <TransparentCard px={6} py={6} {...rest}>
       <VStack align="stretch" spacing={8}>
@@ -80,8 +81,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               spacing={3}
               direction={{ sm: "row", md: "column", lg: "row" }}
             >
-              <DepositButton />
-              <WithdrawButton />
+              <DepositButton disabled={!isConnected} />
+              <WithdrawButton disabled={!isConnected} />
             </Stack>
           </SimpleGrid>
           <SimpleGrid
@@ -124,7 +125,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 )}
               </CardStat>
             </VStack>
-            <BondButton />
+            <BondButton disabled={!isConnected} />
           </SimpleGrid>
           <SimpleGrid
             templateColumns="max-content"
@@ -145,7 +146,10 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 {toEther(totalRewards?.toFixed())}
               </CardStat>
             </VStack>
-            <BaseButton onClick={handleClaimAll}>
+            <BaseButton
+              disabled={!isConnected}
+              onClick={handleClaimAll}
+            >
               Claim All
             </BaseButton>
           </SimpleGrid>
