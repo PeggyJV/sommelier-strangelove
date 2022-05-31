@@ -10,15 +10,12 @@ import { CardHeading } from "components/_typography/CardHeading"
 import { VFC } from "react"
 import { BaseModal } from "./BaseModal"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
-import { ethers } from "ethers"
-import { BigNumber } from "bignumber.js"
 import { toEther } from "./../../utils/formatCurrency"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
 export const DepositModal: VFC<DepositModalProps> = (props) => {
   const { cellarData, userData, aaveCellarSigner } = useAaveV2Cellar()
-  console.log({ cellarData, userData, aaveCellarSigner })
 
   return (
     <BaseModal heading="Deposit" {...props}>

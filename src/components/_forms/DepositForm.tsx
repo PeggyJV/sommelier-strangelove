@@ -54,7 +54,6 @@ export const DepositForm: VFC = () => {
   const [selectedToken, setSelectedToken] = useState<Token | null>(
     null
   )
-  // console.log(selectedToken)
   const { addToast, update, close, closeAll } = useBrandedToast()
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
@@ -72,7 +71,6 @@ export const DepositForm: VFC = () => {
   })
 
   const onSubmit = async (data: any, e: any) => {
-    // console.log(data, e)
     // check if approval exists
     const allowance = await erc20Contract.allowance(
       account?.address,
@@ -91,7 +89,6 @@ export const DepositForm: VFC = () => {
       console.error("Invalid Input")
       return
     }
-    // console.log(needsApproval)
     if (needsApproval) {
       try {
         const { hash } = await erc20Contract.approve(
@@ -108,7 +105,6 @@ export const DepositForm: VFC = () => {
         })
         const waitForApproval = wait({ confirmations: 1, hash })
         const result = await waitForApproval
-        // console.log({ result })
         result?.data?.transactionHash &&
           update({
             heading: "ERC20 Approval",
@@ -136,7 +132,6 @@ export const DepositForm: VFC = () => {
 
     // deposit
     let depositConf
-    // console.log(amtInWei, account?.address)
 
     try {
       const { hash: depositConf } =
@@ -169,7 +164,6 @@ export const DepositForm: VFC = () => {
       })
 
       const depositResult = await waitForDeposit
-      // console.log({ depositResult })
       depositResult?.data?.transactionHash &&
         update({
           heading: "Aave V2 Cellar Deposit",
@@ -207,7 +201,6 @@ export const DepositForm: VFC = () => {
   }
 
   const onError = (errors: any, e: any) => {
-    // console.log(errors, e)
     // try and handle basic cases
     // gasFailure
     // onChain assert
@@ -239,7 +232,6 @@ export const DepositForm: VFC = () => {
                   positive: (v) =>
                     v > 0 || "You must submit a positive amount.",
                   lessThanBalance: (v) => {
-                    // console.log("lessThank Balance ", v)
                     return (
                       v <
                         parseFloat(

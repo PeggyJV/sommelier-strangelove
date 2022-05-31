@@ -1,4 +1,4 @@
-import { Heading, Box, Grid, FlexProps, Img } from "@chakra-ui/react"
+import { Heading, Box, Grid, FlexProps } from "@chakra-ui/react"
 import { InlineImage } from "components/InlineImage"
 import { ArrowUpIcon } from "components/_icons"
 import { CellarCardData } from "./CellarCardDisplay"

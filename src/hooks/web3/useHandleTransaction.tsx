@@ -1,14 +1,6 @@
-import {
-  useSigner,
-  useContract,
-  erc20ABI,
-  useAccount,
-  useWaitForTransaction,
-} from "wagmi"
+import { useWaitForTransaction } from "wagmi"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
-import { ethers } from "ethers"
-import { BigNumber } from "bignumber.js"
 
 type TxParams = {
   hash: string
@@ -47,7 +39,6 @@ export const useHandleTransaction = (): {
     })
     const waitForApproval = wait({ confirmations: 1, hash })
     const result = await waitForApproval
-    console.log({ result })
     result?.data?.transactionHash &&
       update({
         heading: "Transaction",
