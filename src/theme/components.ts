@@ -1,4 +1,6 @@
-import { ThemeComponents } from "@chakra-ui/react"
+import { cssVar, ThemeComponents } from "@chakra-ui/react"
+
+const $arrowShadow = cssVar("popper-arrow-shadow-color")
 
 export const components: ThemeComponents = {
   Button: {
@@ -19,6 +21,7 @@ export const components: ThemeComponents = {
       borderWidth: 1,
       borderRadius: 8,
       borderColor: "purple.base",
+      [$arrowShadow.variable]: "colors.purple.base",
     },
   },
   Input: {
