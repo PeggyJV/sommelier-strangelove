@@ -11,12 +11,13 @@ import { TransparentCard } from "./TransparentCard"
 import { TokenAssets } from "components/TokenAssets"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
-import { toEther } from "./../../utils/formatCurrency"
+import { toEther } from "utils/formatCurrency"
 import { ethers } from "ethers"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useHandleTransaction } from "hooks/web3"
 import BondingTableCard from "./BondingTableCard"
 import { Apy } from "components/Apy"
+import BigNumber from "bignumber.js"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -32,6 +33,11 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const { userStakeData } = useAaveStaker()
   const { userStakes, totalBondedAmount, totalRewards } =
     userStakeData
+  const userRewards =
+    userStakeData?.totalRewards &&
+    new BigNumber(userStakeData?.totalRewards).toString()
+  const claimAllDisabled =
+    !isConnected || !userRewards || parseInt(userRewards) <= 0
 
   const handleClaimAll = async () => {
     const tx = await aaveStakerSigner.claimAll()
@@ -137,7 +143,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               </CardStat>
             </VStack>
             <BaseButton
-              disabled={!isConnected}
+              disabled={claimAllDisabled}
               onClick={handleClaimAll}
             >
               Claim All
