@@ -60,6 +60,9 @@ export const BondingPeriodOptions: VFC = () => {
             flex={1}
             px={4}
             py={2}
+            _hover={{
+              cursor: "pointer",
+            }}
           >
             <Box
               pos="absolute"
