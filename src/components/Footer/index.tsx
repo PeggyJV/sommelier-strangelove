@@ -8,6 +8,7 @@ import {
 import { VFC } from "react"
 import { Socials } from "components/Socials"
 import { FooterLink } from "./FooterLink"
+import { ExternalLinkIcon } from "components/_icons"
 
 const Footer: VFC<ContainerProps> = (props) => {
   return (
@@ -48,7 +49,15 @@ const Footer: VFC<ContainerProps> = (props) => {
             mt={{ base: 6, sm: 0 }}
             mb={{ base: 6, sm: 0 }}
           >
-            <FooterLink href="/">Documentation</FooterLink>
+            <FooterLink
+              href="https://www.notion.so/Sommelier-Documentation-006e748753e34a1299f9b1d6ae3a4544"
+              isExternal
+            >
+              <HStack align="center">
+                <Text as="span">Documentation</Text>
+                <ExternalLinkIcon color="purple.base" />
+              </HStack>
+            </FooterLink>
             <FooterLink href="/terms">Terms</FooterLink>
             <FooterLink href="/privacy">Privacy</FooterLink>
           </HStack>
