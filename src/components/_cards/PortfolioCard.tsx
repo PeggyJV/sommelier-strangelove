@@ -39,6 +39,10 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const claimAllDisabled =
     !isConnected || !userRewards || parseInt(userRewards) <= 0
 
+  const lpTokenDisabled =
+    !isConnected ||
+    parseInt(toEther(userData?.balances?.aaveClr, 18)) <= 0
+
   const handleClaimAll = async () => {
     const tx = await aaveStakerSigner.claimAll()
     await doHandleTransaction(tx)
@@ -88,7 +92,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               direction={{ sm: "row", md: "column", lg: "row" }}
             >
               <DepositButton disabled={!isConnected} />
-              <WithdrawButton disabled={!isConnected} />
+              <WithdrawButton disabled={lpTokenDisabled} />
             </Stack>
           </SimpleGrid>
           <SimpleGrid
@@ -105,7 +109,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 label="tokens"
                 tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
               >
-                {toEther(userData?.balances?.aaveClr, 18, false)}
+                {toEther(userData?.balances?.aaveClr, 18)}
               </CardStat>
             </VStack>
             <VStack align="flex-start">
@@ -121,7 +125,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 )}
               </CardStat>
             </VStack>
-            <BondButton disabled={!isConnected} />
+            <BondButton disabled={lpTokenDisabled} />
           </SimpleGrid>
           <SimpleGrid
             templateColumns="max-content"
