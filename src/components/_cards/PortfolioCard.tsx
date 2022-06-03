@@ -143,7 +143,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   alt="aave logo"
                   boxSize={5}
                 />
-                {toEther(totalRewards?.toFixed())}
+                {toEther(totalRewards?.toFixed() || "0")}
               </CardStat>
             </VStack>
             <BaseButton
