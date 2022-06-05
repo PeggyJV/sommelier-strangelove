@@ -58,7 +58,7 @@ export const useApproveERC20 = ({
         addToast({
           heading: "ERC20 Approval",
           status: "default",
-          body: <Text>Approving DAI</Text>,
+          body: <Text>Approving ERC20</Text>,
           isLoading: true,
           closeHandler: close,
           duration: null,
@@ -69,7 +69,7 @@ export const useApproveERC20 = ({
         result?.data?.transactionHash &&
           update({
             heading: "ERC20 Approval",
-            body: <Text>DAI Approved</Text>,
+            body: <Text>ERC20 Approved</Text>,
             status: "success",
             closeHandler: closeAll,
           })
