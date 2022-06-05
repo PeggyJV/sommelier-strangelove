@@ -22,6 +22,8 @@ import {
   useSigner,
   useContract,
   useAccount,
+  useBalance,
+  useToken,
   useWaitForTransaction,
 } from "wagmi"
 import { ethers } from "ethers"
@@ -54,6 +56,7 @@ export const DepositForm: VFC = () => {
   const [selectedToken, setSelectedToken] = useState<Token | null>(
     null
   )
+
   const { addToast, update, close, closeAll } = useBrandedToast()
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
@@ -64,8 +67,15 @@ export const DepositForm: VFC = () => {
     skip: true,
   })
 
+  const [erc20Balance, getBalance] = useBalance({
+    addressOrName: account?.address,
+    token: selectedToken?.address,
+    formatUnits: "wei",
+  })
+  console.log({ erc20Balance })
+
   const erc20Contract = useContract({
-    addressOrName: config.CONTRACT.DAI.ADDRESS,
+    addressOrName: selectedToken?.address,
     contractInterface: erc20ABI,
     signerOrProvider: signer,
   })
