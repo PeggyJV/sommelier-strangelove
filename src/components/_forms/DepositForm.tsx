@@ -74,8 +74,10 @@ export const DepositForm: VFC = () => {
   })
   console.log({ erc20Balance })
 
+  // default sholdn't be necessary once we update wagmi
   const erc20Contract = useContract({
-    addressOrName: selectedToken?.address,
+    addressOrName:
+      selectedToken?.address || config.CONTRACT.USDC.ADDRESS,
     contractInterface: erc20ABI,
     signerOrProvider: signer,
   })
