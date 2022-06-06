@@ -5,6 +5,7 @@ import {
   useProvider,
   useSigner,
   useBalance,
+  useToken,
 } from "wagmi"
 import { config } from "utils/config"
 import { useEffect, useState, useCallback } from "react"
@@ -13,10 +14,12 @@ import { BigNumber as BigNumberE } from "ethers"
 type CellarState = {
   loading: boolean
   name: string
+  activeAsset: string
 }
 
 type Balances = {
   dai?: string
+  aAsset?: any
   aaveClr?: string
 }
 
@@ -42,6 +45,7 @@ type SharedState = {
 const initialCellarData: CellarState = {
   loading: false,
   name: "",
+  activeAsset: "",
 }
 const AaveV2CellarContext = createContext<SharedState>({
   cellarData: initialCellarData,
@@ -59,13 +63,21 @@ export const AaveV2CellarProvider = ({
   const { CONTRACT } = config
   const [cellarData, setCellarData] = useState(initialCellarData)
   const [userData, setUserData] = useState(initialUserData)
+  const aAsset = cellarData?.activeAsset
+  const [{ data: aAssetToken }, getToken] = useToken({
+    address: aAsset,
+  })
 
   const [
-    { data: daiBalance, error, loading: daiLoading },
+    {
+      data: aAssetBalance,
+      error: aAssetError,
+      loading: aAssetLoading,
+    },
     getBalance,
   ] = useBalance({
     addressOrName: account?.address,
-    token: CONTRACT.DAI.ADDRESS,
+    token: aAsset,
     formatUnits: "wei",
   })
 
@@ -107,9 +119,12 @@ export const AaveV2CellarProvider = ({
       setCellarData((state) => ({ ...state, loading: true }))
       try {
         const name = await aaveV2CellarContract.name()
+        const activeAsset = await aaveV2CellarContract.asset()
         setCellarData((state) => ({
           ...state,
           name: name,
+          activeAsset,
+          aAssetToken,
           loading: false,
         }))
       } catch (e) {
@@ -120,6 +135,8 @@ export const AaveV2CellarProvider = ({
 
     void fn()
   }, [aaveV2CellarContract])
+
+  const fetchERC20Balance = useCallback(async () => {}, [])
 
   const fetchUserData = useCallback(async () => {
     setUserData((state) => ({ ...state, loading: true }))
@@ -136,7 +153,7 @@ export const AaveV2CellarProvider = ({
         ...state,
         balances: {
           ...state.balances,
-          dai: daiBalance?.formatted,
+          aAsset: aAssetBalance,
           aaveClr: aaveClrBalance?.data?.formatted,
         },
         maxDeposit: maxDeposit,
@@ -147,24 +164,13 @@ export const AaveV2CellarProvider = ({
       console.warn("Cannot read user data", e)
       setUserData((state) => ({ ...state, loading: false }))
     }
-  }, [
-    aaveV2CellarContract,
-    account?.address,
-    daiBalance?.formatted,
-    refetch,
-  ])
+  }, [aaveV2CellarContract, account?.address, aAssetBalance, refetch])
 
   // user data
   useEffect(() => {
-    if (!aaveV2CellarContract || !daiBalance || !account?.address)
-      return
+    if (!aaveV2CellarContract || !account?.address) return
     fetchUserData()
-  }, [
-    aaveV2CellarContract,
-    account?.address,
-    daiBalance,
-    fetchUserData,
-  ])
+  }, [aaveV2CellarContract, account?.address, fetchUserData])
 
   return (
     <AaveV2CellarContext.Provider

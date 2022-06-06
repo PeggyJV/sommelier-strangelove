@@ -102,6 +102,7 @@ export const BondForm: VFC = () => {
       closeHandler: closeAll,
     })
   }
+
   return (
     <FormProvider {...methods}>
       <VStack
@@ -125,11 +126,6 @@ export const BondForm: VFC = () => {
                 validate: {
                   positive: (v) =>
                     v > 0 || "You must submit a positive amount.",
-                  lessThanBalance: (v) =>
-                    v <=
-                      parseFloat(
-                        toEther(userData?.balances?.aaveClr)
-                      ) || "Insufficient balance",
                 },
               })}
             />
