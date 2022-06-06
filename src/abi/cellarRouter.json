@@ -2,8 +2,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract ISushiSwapRouter",
-        "name": "_sushiswapRouter",
+        "internalType": "contract ISwapRouter",
+        "name": "_swapRouter",
         "type": "address"
       }
     ],
@@ -13,23 +13,7 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "assetOut",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "currentAsset",
-        "type": "address"
-      }
-    ],
-    "name": "USR_InvalidSwap",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract ICellar",
+        "internalType": "contract ERC4626",
         "name": "cellar",
         "type": "address"
       },
@@ -45,7 +29,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "minAssetsOut",
+        "name": "assetsOutMin",
         "type": "uint256"
       },
       {
@@ -73,7 +57,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract ICellar",
+        "internalType": "contract ERC4626",
         "name": "cellar",
         "type": "address"
       },
@@ -89,7 +73,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "minAssetsOut",
+        "name": "assetsOutMin",
         "type": "uint256"
       },
       {
@@ -125,7 +109,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract ICellar",
+        "internalType": "contract ERC4626",
         "name": "cellar",
         "type": "address"
       },
@@ -166,10 +150,10 @@
   },
   {
     "inputs": [],
-    "name": "sushiswapRouter",
+    "name": "swapRouter",
     "outputs": [
       {
-        "internalType": "contract ISushiSwapRouter",
+        "internalType": "contract ISwapRouter",
         "name": "",
         "type": "address"
       }
