@@ -4,6 +4,7 @@ import {
   FormErrorMessage,
   Icon,
   InputGroup,
+  Text,
   InputRightElement,
   VStack,
 } from "@chakra-ui/react"
@@ -12,7 +13,13 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { ModalInput } from "components/_inputs/ModalInput"
-
+import { useAaveStaker } from "context/aaveStakerContext"
+import { useBrandedToast } from "hooks/chakra"
+import { useAccount } from "wagmi"
+import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { toEther } from "utils/formatCurrency"
+import { ethers } from "ethers"
+import { useHandleTransaction } from "hooks/web3"
 interface FormValues {
   withdrawAmount: number
 }
@@ -22,25 +29,53 @@ export const WithdrawForm: VFC = () => {
     register,
     watch,
     handleSubmit,
+    getValues,
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
-  const [data, setData] = useState<any>()
+  const { aaveCellarSigner, userData, fetchUserData } =
+    useAaveV2Cellar()
+  const { addToast, update, close, closeAll } = useBrandedToast()
+  const [{ data: account }] = useAccount()
+  const { doHandleTransaction } = useHandleTransaction()
   const watchWithdrawAmount = watch("withdrawAmount")
   const isDisabled =
     isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
   const isError = errors.withdrawAmount
-  const setMax = () => setValue("withdrawAmount", 100000)
+  const setMax = () =>
+    setValue(
+      "withdrawAmount",
+      parseFloat(toEther(userData?.balances?.aaveClr, 18, false))
+    )
 
-  // need to do something meaningful with this data
-  console.log({ data })
+  const onSubmit = async ({ withdrawAmount }: FormValues) => {
+    if (withdrawAmount <= 0) return
+    if (!account?.address) {
+      addToast({
+        heading: "Withdraw Position",
+        status: "default",
+        body: <Text>Connect Wallet</Text>,
+        closeHandler: close,
+        duration: null,
+      })
+    }
+    const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
+    const tx = await aaveCellarSigner.withdraw(
+      amtInWei,
+      account?.address,
+      account?.address
+    )
+    await doHandleTransaction(tx)
+    await fetchUserData()
+    setValue("withdrawAmount", 0)
+  }
 
   return (
     <VStack
       as="form"
       spacing={8}
       align="stretch"
-      onSubmit={handleSubmit((data) => setData(data))}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <FormControl isInvalid={isError as boolean | undefined}>
         <InputGroup display="flex" alignItems="center">
