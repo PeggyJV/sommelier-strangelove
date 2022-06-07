@@ -72,7 +72,6 @@ export const DepositForm: VFC = () => {
     token: selectedToken?.address,
     formatUnits: "wei",
   })
-  console.log({ erc20Balance })
 
   // default sholdn't be necessary once we update wagmi
   const erc20Contract = useContract({
