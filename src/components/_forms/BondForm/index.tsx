@@ -70,7 +70,7 @@ export const BondForm: VFC = () => {
     )
 
   const onSubmit = async (data: any, e: any) => {
-    doApprove(data?.depositAmount)
+    await doApprove(data?.depositAmount)
     const amtInBigNumber = new BigNumber(data?.depositAmount)
     const depositAmtInWei = ethers.utils.parseUnits(
       amtInBigNumber.toFixed(),
