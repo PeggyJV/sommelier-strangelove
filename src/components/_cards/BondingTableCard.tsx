@@ -15,7 +15,6 @@ import {
   Heading,
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { InlineImage } from "components/InlineImage"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "utils/formatCurrency"
 import { useHandleTransaction } from "hooks/web3"
@@ -64,7 +63,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
-                label="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
+                label="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
                 placement="top"
                 bg="surface.bg"
               >
@@ -74,7 +73,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text as="span">LP Tokens</Text>
+                    <Text as="span">Bonded Tokens</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -147,16 +146,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     }}
                   >
                     <Td>#{formatTrancheNumber(i + 1)}</Td>
-                    <Td>
-                      <Flex align="center">
-                        <InlineImage
-                          src="/assets/icons/aave.png"
-                          alt="Aave logo"
-                          boxSize={5}
-                        />{" "}
-                        {toEther(amount)}
-                      </Flex>
-                    </Td>
+                    <Td>{toEther(amount)}</Td>
                     <Td>{lockMap[lock?.toString()]}</Td>
                     <Td>{toEther(rewards)}</Td>
                     <Td fontWeight="normal">
