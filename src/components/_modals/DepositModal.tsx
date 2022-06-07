@@ -27,7 +27,6 @@ import {
   useContract,
   useAccount,
   useBalance,
-  useToken,
   useProvider,
   useWaitForTransaction,
 } from "wagmi"
@@ -54,10 +53,8 @@ interface FormValues {
   depositAmount: number
   selectedToken: TokenType
 }
-import { DepositForm } from "components/_forms/DepositForm"
 import { CardHeading } from "components/_typography/CardHeading"
 import { BaseModal } from "./BaseModal"
-import { BaseProvider } from "@ethersproject/providers"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 

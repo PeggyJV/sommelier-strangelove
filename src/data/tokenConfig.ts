@@ -16,7 +16,7 @@ export const tokenConfig: Token[] = [
     src: "/assets/icons/busd.png",
     alt: "Binance USD logo",
     symbol: "BUSD",
-    address: "BUSD-BD1",
+    address: "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
   },
   {
     src: "/assets/icons/dai.png",
@@ -64,7 +64,7 @@ export const tokenConfig: Token[] = [
     src: "/assets/icons/tusd.png",
     alt: "TrueUSD logo",
     symbol: "TUSD",
-    address: "TUSDB-888",
+    address: "0x0000000000085d4780B73119b644AE5ecd22b376",
   },
   {
     src: "/assets/icons/usdc.png",
