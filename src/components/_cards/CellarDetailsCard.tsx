@@ -26,6 +26,7 @@ import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { CellarDataMap } from "data/cellarDataMap"
+import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -59,6 +60,9 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const strategyAssets = tokenConfig.filter((token) =>
     supportedChains?.includes(token.symbol)
   )
+
+  const { cellarData } = useAaveV2Cellar()
+  const { activeAsset } = cellarData
 
   return (
     <TransparentCard p={6} overflow="visible">
@@ -115,7 +119,11 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             label="strategy assets"
             tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
           >
-            <TokenAssets tokens={strategyAssets} displaySymbol />
+            <TokenAssets
+              tokens={strategyAssets}
+              displaySymbol
+              activeAsset={activeAsset}
+            />
           </CardStat>
           <VStack
             width={{ sm: "100%", lg: "unset" }}
