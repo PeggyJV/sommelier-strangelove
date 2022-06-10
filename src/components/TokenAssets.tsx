@@ -14,14 +14,20 @@ import { ControlsIcon } from "./_icons"
 interface TokenAssetsProps extends StackProps {
   tokens: Token[]
   displaySymbol?: boolean
+  activeAsset?: string
 }
 
 export const TokenAssets: VFC<TokenAssetsProps> = ({
   tokens,
   displaySymbol,
+  activeAsset,
   ...rest
 }) => {
   const tokensCropped = tokens.slice(0, 6)
+  const currentAsset = tokens.findIndex(
+    (token) =>
+      token.address.toUpperCase() === activeAsset?.toUpperCase()
+  )
 
   return tokens.length > 6 ? (
     <HStack>
@@ -94,7 +100,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
       </HStack>
       {displaySymbol && (
         <Text as="span">
-          {tokensCropped[tokensCropped.length - 1].symbol}
+          {currentAsset !== -1 && tokens[currentAsset].symbol}
         </Text>
       )}
     </HStack>
@@ -120,7 +126,9 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
         })}
       </HStack>
       {displaySymbol && (
-        <Text as="span">{tokens[tokens.length - 1].symbol}</Text>
+        <Text as="span">
+          {currentAsset !== -1 && tokens[currentAsset].symbol}
+        </Text>
       )}
     </HStack>
   )

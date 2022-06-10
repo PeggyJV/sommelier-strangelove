@@ -27,7 +27,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   isConnected,
   ...rest
 }) => {
-  const { userData, fetchUserData } = useAaveV2Cellar()
+  const { userData, fetchUserData, cellarData } = useAaveV2Cellar()
   const { aaveStakerSigner, fetchUserStakes } = useAaveStaker()
   const { doHandleTransaction } = useHandleTransaction()
   const { userStakeData } = useAaveStaker()
@@ -48,6 +48,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
     await doHandleTransaction(tx)
     fetchUserStakes()
   }
+
+  const { activeAsset } = cellarData
 
   return (
     <TransparentCard px={6} py={6} {...rest}>
@@ -79,7 +81,11 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               label="deposit assets"
               tooltip="Accepted deposit assets"
             >
-              <TokenAssets tokens={tokenConfig} displaySymbol />
+              <TokenAssets
+                tokens={tokenConfig}
+                displaySymbol
+                activeAsset={activeAsset}
+              />
             </CardStat>
             <CardStat
               label="apy"
