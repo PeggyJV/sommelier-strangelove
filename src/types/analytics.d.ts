@@ -16,3 +16,14 @@ declare module "@analytics/google-tag-manager" {
   ): AnalyticsPlugin
   export default googleTagManager
 }
+
+declare module "@analytics/mixpanel" {
+  type AnalyticsPlugin = import("analytics").AnalyticsPlugin
+
+  type MixpanelConfig = {
+    token: string
+  }
+
+  function mixpanelPlugin(config: MixpanelConfig): AnalyticsPlugin
+  export default mixpanelPlugin
+}
