@@ -8,11 +8,26 @@ import { WagmiProvider } from "context/wagmiContext"
 import { AlertDialog } from "components/AlertDialog"
 import { Provider as GraphQLProvider } from "urql"
 import { client as urqlClient } from "queries/client"
+import { useEffect } from "react"
+import TagManager from "react-gtm-module"
+
+const gtmId = process.env.NEXT_PUBLIC_GTM_ID
+const gtmAuth = process.env.NEXT_PUBLIC_GTM_AUTH
+const gtmPreview = process.env.NEXT_PUBLIC_GTM_PREVIEW
 
 import { GlobalFonts } from "theme/GlobalFonts"
 
 const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient()
+  useEffect(() => {
+    if (gtmId != null) {
+      TagManager.initialize({
+        gtmId,
+        auth: gtmAuth,
+        preview: gtmPreview,
+      })
+    }
+  }, [])
 
   return (
     <QueryClientProvider client={queryClient}>
