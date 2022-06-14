@@ -1,5 +1,4 @@
 import {
-  Divider,
   Heading,
   HStack,
   Modal,
@@ -31,11 +30,10 @@ export const BaseModal: VFC<BaseModalProps> = ({
         borderColor="purple.base"
         borderRadius={24}
       >
-        <HStack justify="space-between">
+        <HStack pb={10} justify="space-between">
           {heading && <Heading fontSize="4xl">{heading}</Heading>}
           <ModalCloseButton position="static" size="lg" />
         </HStack>
-        <Divider mt={2} mb={6} borderColor="neutral.400" />
         {children}
       </ModalContent>
     </Modal>
