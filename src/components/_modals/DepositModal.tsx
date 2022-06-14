@@ -10,6 +10,7 @@ import {
   InputRightElement,
   Spinner,
   Flex,
+  Avatar,
 } from "@chakra-ui/react"
 import { useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
@@ -18,7 +19,7 @@ import { AiOutlineInfo } from "react-icons/ai"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { ModalInput } from "components/_inputs/ModalInput"
 import { ModalMenu } from "components/_menus/ModalMenu"
-import { Token as TokenType } from "data/tokenConfig"
+import { Token as TokenType, tokenConfig } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
 import {
@@ -55,6 +56,7 @@ interface FormValues {
 }
 import { CardHeading } from "components/_typography/CardHeading"
 import { BaseModal } from "./BaseModal"
+import { getCurrentAsset } from "utils/getCurrentAsset"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -312,34 +314,49 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     })
   }
 
+  const { loading, maxDeposit } = userData || {}
+  const { activeAsset } = cellarData || {}
+  const currentAsset = getCurrentAsset(tokenConfig, activeAsset)
+
   return (
     <BaseModal heading="Deposit" {...props}>
       <VStack pb={10} spacing={6} align="stretch">
-        <HStack spacing={6}>
-          <VStack align="flex-start">
-            <CardHeading>cellar</CardHeading>
+        <VStack align="stretch">
+          <CardHeading>cellar details</CardHeading>
+          <HStack justify="space-between">
+            <Text as="span">Cellar</Text>
             <Text as="span">aave2-CLR-S</Text>
-          </VStack>
-          <VStack align="flex-start">
-            <CardHeading>maximum deposit</CardHeading>
-            <Text as="span">
-              {userData?.loading ? (
-                <Spinner size="xs" />
-              ) : (
-                toEther(userData?.maxDeposit, 6)
-              )}
-            </Text>
-          </VStack>
-          <VStack align="flex-start">
-            <CardHeading>deposit clears in</CardHeading>
-            <Text as="span">6d 4h 23m</Text>
-          </VStack>
-        </HStack>
+          </HStack>
+          <HStack justify="space-between">
+            <Text as="span">Active token strategy</Text>
+            {loading ? (
+              <Spinner size="xs" />
+            ) : (
+              <HStack spacing={1}>
+                <Avatar
+                  boxSize={6}
+                  src={currentAsset?.src}
+                  name={currentAsset?.alt}
+                  borderWidth={2}
+                  borderColor="surface.bg"
+                  bg="surface.bg"
+                />
+                <Text as="span">{currentAsset?.symbol}</Text>
+              </HStack>
+            )}
+          </HStack>
+        </VStack>
+        <VStack align="flex-start">
+          <CardHeading>maximum deposit</CardHeading>
+          <Text as="span">
+            {loading ? <Spinner size="xs" /> : toEther(maxDeposit, 6)}
+          </Text>
+        </VStack>
         <Flex justifyContent={"space-between"}>
           <VStack align="flex-start">
             <CardHeading>available</CardHeading>
             <Text as="span">
-              {userData?.loading ? (
+              {loading ? (
                 <Spinner size="xs" />
               ) : (
                 toEther(
@@ -366,7 +383,6 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           </VStack>
         </Flex>
       </VStack>
-      {/* <DepositForm /> */}
       <FormProvider {...methods}>
         <VStack
           as="form"
