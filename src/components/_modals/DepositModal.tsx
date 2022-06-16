@@ -265,6 +265,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           ),
           status: "success",
           closeHandler: closeAll,
+          duration: null, // toast won't close until user presses close button
         })
 
       fetchUserData()
