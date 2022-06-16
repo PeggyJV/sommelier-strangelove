@@ -18,8 +18,7 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "utils/formatCurrency"
 import { useHandleTransaction } from "hooks/web3"
-import { ExternalLinkIcon, InformationIcon } from "components/_icons"
-import { Link } from "components/Link"
+import { InformationIcon } from "components/_icons"
 import { InnerCard } from "./InnerCard"
 
 const formatTrancheNumber = (number: number): string => {
@@ -102,7 +101,6 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 >
                   <HStack spacing={1} align="center">
                     <Text as="span">SOMM Rewards</Text>
-                    <Text as="span">Reward Multiplier</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -152,29 +150,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     <Td fontWeight="normal">
                       <Flex justify="flex-end">
                         {unbondTimestamp.toString() === "0" ? (
-                          <HStack spacing={6} minW={230}>
-                            <Link
-                              href="https://wallet.keplr.app/#/dashboard" // TODO: update this href to point to tx
-                              isExternal
-                              display="flex"
-                              alignItems="center"
-                              _hover={{
-                                textDecor: "underline",
-                              }}
-                            >
-                              <Text as="span">View on Keplr</Text>
-                              <ExternalLinkIcon
-                                ml={2}
-                                color="purple.base"
-                              />
-                            </Link>
-                            <SecondaryButton
-                              size="sm"
-                              onClick={() => handleUnBond(i)}
-                            >
-                              Unbond
-                            </SecondaryButton>
-                          </HStack>
+                          <SecondaryButton
+                            size="sm"
+                            onClick={() => handleUnBond(i)}
+                          >
+                            Unbond
+                          </SecondaryButton>
                         ) : (
                           <Text>{unbondTime}</Text>
                         )}
