@@ -6,18 +6,13 @@ import {
   FormControl,
   FormErrorMessage,
   Icon,
-  InputGroup,
-  InputRightElement,
   Spinner,
-  Flex,
   Avatar,
 } from "@chakra-ui/react"
 import { useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
-import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { ModalInput } from "components/_inputs/ModalInput"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import { Token as TokenType, tokenConfig } from "data/tokenConfig"
 import { Link } from "components/Link"
@@ -35,7 +30,6 @@ import { ethers } from "ethers"
 import { BigNumber } from "bignumber.js"
 import { useBrandedToast } from "hooks/chakra"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
-import { toEther } from "utils/formatCurrency"
 import {
   AlphaRouter,
   AlphaRouterParams,
@@ -70,7 +64,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     getValues,
     control,
     formState: { errors, isSubmitting, isSubmitted },
-  } = useForm<FormValues>()
+  } = methods
   const provider = useProvider()
   const p = new ethers.providers.Web3Provider(
     (window as any)?.ethereum
@@ -81,20 +75,10 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   })
 
   const watchDepositAmount = watch("depositAmount")
+  console.log({ watchDepositAmount })
   const isError = errors.depositAmount !== undefined
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
-  const setMax = () =>
-    setValue(
-      "depositAmount",
-      parseFloat(
-        toEther(
-          selectedTokenBalance?.data?.value,
-          selectedTokenBalance?.data?.decimals,
-          false
-        )
-      )
-    )
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
 
@@ -346,42 +330,12 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
             )}
           </HStack>
         </VStack>
-        <VStack align="flex-start">
+        {/* <VStack align="flex-start">
           <CardHeading>maximum deposit</CardHeading>
           <Text as="span">
             {loading ? <Spinner size="xs" /> : toEther(maxDeposit, 6)}
           </Text>
-        </VStack>
-        <Flex justifyContent={"space-between"}>
-          <VStack align="flex-start">
-            <CardHeading>available</CardHeading>
-            <Text as="span">
-              {loading ? (
-                <Spinner size="xs" />
-              ) : (
-                toEther(
-                  selectedTokenBalance?.data?.value,
-                  selectedTokenBalance?.data?.decimals
-                )
-              )}{" "}
-              {selectedTokenBalance?.data?.symbol}
-            </Text>
-          </VStack>
-          <VStack align="flex-start">
-            <CardHeading>Active Asset</CardHeading>
-            <Text as="span">
-              {userData?.loading ? (
-                <Spinner size="xs" />
-              ) : (
-                toEther(
-                  userData?.balances?.aAsset?.value,
-                  userData?.balances?.aAsset?.decimals
-                )
-              )}{" "}
-              {userData?.balances?.aAsset?.symbol}
-            </Text>
-          </VStack>
-        </Flex>
+        </VStack> */}
       </VStack>
       <FormProvider {...methods}>
         <VStack
@@ -391,37 +345,12 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <FormControl isInvalid={isError as boolean | undefined}>
-            <InputGroup display="flex" alignItems="center">
-              <ModalInput
-                type="number"
-                step="any"
-                {...register("depositAmount", {
-                  required: "Enter amount",
-                  valueAsNumber: true,
-                  validate: {
-                    positive: (v) =>
-                      v > 0 || "You must submit a positive amount.",
-                    // lessThanBalance: (v) => {
-                    //   return (
-                    //     v <
-                    //       parseFloat(
-                    //         toEther(userData?.balances?.dai || "")
-                    //       ) || "Insufficient balance"
-                    //   )
-                    // },
-                  },
-                })}
-              />
-              <InputRightElement h="100%" mr={3}>
-                <SecondaryButton
-                  size="sm"
-                  borderRadius={8}
-                  onClick={setMax}
-                >
-                  Max
-                </SecondaryButton>
-              </InputRightElement>
-            </InputGroup>
+            <CardHeading pb={2}>enter amount</CardHeading>
+            <ModalMenu
+              setSelectedToken={setSelectedToken}
+              activeAsset={activeAsset}
+              selectedTokenBalance={selectedTokenBalance}
+            />
             <FormErrorMessage color="energyYellow">
               <Icon
                 p={0.5}
@@ -434,19 +363,15 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
               {errors.depositAmount?.message}
             </FormErrorMessage>
           </FormControl>
-
-          <FormControl>
-            <ModalMenu setSelectedToken={setSelectedToken} />
-          </FormControl>
           <BaseButton
             type="submit"
             isDisabled={isDisabled}
             isLoading={isSubmitting}
             fontSize={21}
-            py={6}
+            py={8}
             px={12}
           >
-            Deposit Liquidity
+            Deposit
           </BaseButton>
         </VStack>
       </FormProvider>
