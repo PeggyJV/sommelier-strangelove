@@ -240,7 +240,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       addToast({
         heading: "Aave V2 Cellar Deposit",
         status: "default",
-        body: <Text>Depositing DAI</Text>,
+        body: <Text>Depositing {selectedToken?.symbol}</Text>,
         isLoading: true,
         closeHandler: close,
         duration: null,
@@ -261,6 +261,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
                 display="flex"
                 alignItems="center"
                 href={`https://etherscan.io/tx/${depositResult?.data?.transactionHash}`}
+                isExternal
               >
                 <Text as="span">View on Etherscan</Text>
                 <ExternalLinkIcon ml={2} />
