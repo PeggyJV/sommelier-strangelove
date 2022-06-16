@@ -51,6 +51,7 @@ interface FormValues {
 import { CardHeading } from "components/_typography/CardHeading"
 import { BaseModal } from "./BaseModal"
 import { getCurrentAsset } from "utils/getCurrentAsset"
+import { ExternalLinkIcon } from "components/_icons"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -257,14 +258,18 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
             <>
               <Text>Deposit Success</Text>
               <Link
+                display="flex"
+                alignItems="center"
                 href={`https://etherscan.io/tx/${depositResult?.data?.transactionHash}`}
               >
-                View on Etherscan
+                <Text as="span">View on Etherscan</Text>
+                <ExternalLinkIcon ml={2} />
               </Link>
             </>
           ),
           status: "success",
           closeHandler: closeAll,
+          duration: null, // toast won't close until user presses close button
         })
 
       fetchUserData()
