@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react"
 import { Token } from "data/tokenConfig"
 import { VFC } from "react"
+import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ControlsIcon } from "./_icons"
 
 interface TokenAssetsProps extends StackProps {
@@ -24,10 +25,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
   ...rest
 }) => {
   const tokensCropped = tokens.slice(0, 6)
-  const currentAsset = tokens.findIndex(
-    (token) =>
-      token.address.toUpperCase() === activeAsset?.toUpperCase()
-  )
+  const currentAsset = getCurrentAsset(tokens, activeAsset)
 
   return tokens.length > 6 ? (
     <HStack>
@@ -98,11 +96,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           </Box>
         </Tooltip>
       </HStack>
-      {displaySymbol && (
-        <Text as="span">
-          {currentAsset !== -1 && tokens[currentAsset].symbol}
-        </Text>
-      )}
+      {displaySymbol && <Text as="span">{currentAsset?.symbol}</Text>}
     </HStack>
   ) : (
     <HStack>
@@ -125,11 +119,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           )
         })}
       </HStack>
-      {displaySymbol && (
-        <Text as="span">
-          {currentAsset !== -1 && tokens[currentAsset].symbol}
-        </Text>
-      )}
+      {displaySymbol && <Text as="span">{currentAsset?.symbol}</Text>}
     </HStack>
   )
 }
