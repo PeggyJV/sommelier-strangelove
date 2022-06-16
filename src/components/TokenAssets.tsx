@@ -119,11 +119,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           )
         })}
       </HStack>
-      {displaySymbol && (
-        <Text as="span">
-          {currentAsset !== -1 && tokens[currentAsset].symbol}
-        </Text>
-      )}
+      {displaySymbol && <Text as="span">{currentAsset?.symbol}</Text>}
     </HStack>
   )
 }
