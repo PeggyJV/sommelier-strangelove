@@ -21,6 +21,8 @@
     "generate:schema:pending": "get-graphql-schema https://api.thegraph.com/subgraphs/id/QmaTfJ2wZ6bp7hZUUjiEeJ7ZJbEgABMJTFuS51zv9AWVfg > src/generated/schema.json --json"
   },
   "dependencies": {
+    "@analytics/google-tag-manager": "^0.5.2",
+    "@analytics/mixpanel": "^0.4.0",
     "@chakra-ui/react": "^1.8.6",
     "@cosmjs/cosmwasm-stargate": "^0.27.1",
     "@emotion/react": "11.8.1",
@@ -33,6 +35,7 @@
     "@sentry/nextjs": "6.18.2",
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/smart-order-router": "^2.5.30",
+    "analytics": "^0.8.1",
     "bignumber.js": "^9.0.2",
     "ethers": "^5.5.4",
     "framer-motion": "6.2.8",

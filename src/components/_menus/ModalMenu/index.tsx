@@ -2,11 +2,30 @@ import { VFC, Dispatch, SetStateAction } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Menu } from "./Menu"
 import { Token } from "data/tokenConfig"
+import { BigNumber } from "ethers"
 
-type Props = {
+export interface ModalMenuProps {
   setSelectedToken: Dispatch<SetStateAction<Token | null>>
+  activeAsset?: string
+  selectedTokenBalance: {
+    readonly data:
+      | {
+          decimals: number
+          formatted: string
+          symbol: string
+          value: BigNumber
+        }
+      | undefined
+    readonly error: Error | undefined
+    readonly loading: boolean | undefined
+  }
 }
-export const ModalMenu: VFC<Props> = ({ setSelectedToken }) => {
+
+export const ModalMenu: VFC<ModalMenuProps> = ({
+  activeAsset,
+  selectedTokenBalance,
+  setSelectedToken,
+}) => {
   const { control } = useFormContext()
 
   return (
@@ -17,6 +36,8 @@ export const ModalMenu: VFC<Props> = ({ setSelectedToken }) => {
         return (
           <Menu
             value={value}
+            activeAsset={activeAsset}
+            selectedTokenBalance={selectedTokenBalance}
             onChange={(data) => {
               // Todo: shouldn't need to do this hack
               setSelectedToken(data)

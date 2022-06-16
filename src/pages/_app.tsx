@@ -8,6 +8,7 @@ import { WagmiProvider } from "context/wagmiContext"
 import { AlertDialog } from "components/AlertDialog"
 import { Provider as GraphQLProvider } from "urql"
 import { client as urqlClient } from "queries/client"
+import "utils/analytics"
 
 import { GlobalFonts } from "theme/GlobalFonts"
 
