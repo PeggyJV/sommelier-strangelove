@@ -119,11 +119,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             label="strategy assets"
             tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
           >
-            <TokenAssets
-              tokens={strategyAssets}
-              displaySymbol
-              activeAsset={activeAsset}
-            />
+            <TokenAssets tokens={strategyAssets} displaySymbol />
           </CardStat>
           <VStack
             width={{ sm: "100%", lg: "unset" }}

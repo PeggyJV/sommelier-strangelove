@@ -83,11 +83,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               alignSelf="flex-start"
               spacing={0}
             >
-              <TokenAssets
-                tokens={tokenConfig}
-                displaySymbol
-                activeAsset={activeAsset}
-              />
+              <TokenAssets tokens={tokenConfig} displaySymbol />
             </CardStat>
             <CardStat
               label="apy"

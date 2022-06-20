@@ -9,23 +9,19 @@ import {
 } from "@chakra-ui/react"
 import { Token } from "data/tokenConfig"
 import { useState, VFC } from "react"
-import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ControlsIcon } from "./_icons"
 
 interface TokenAssetsProps extends StackProps {
   tokens: Token[]
   displaySymbol?: boolean
-  activeAsset?: string
 }
 
 export const TokenAssets: VFC<TokenAssetsProps> = ({
   tokens,
   displaySymbol,
-  activeAsset,
   ...rest
 }) => {
   const tokensCropped = tokens.slice(0, 6)
-  const currentAsset = getCurrentAsset(tokens, activeAsset)
   const [displayedAsset, setDisplayedAsset] = useState<string | null>(
     null
   )
@@ -109,9 +105,9 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
     </HStack>
   ) : (
     <HStack>
-      <HStack spacing={-1.5} {...rest}>
+      <HStack pt={2} spacing={-1.5} {...rest}>
         {tokens.map((token) => {
-          const { src, alt, address } = token
+          const { src, alt, address, symbol } = token
           return (
             <Avatar
               key={address}
@@ -124,11 +120,17 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
               _notLast={{
                 opacity: 0.65,
               }}
+              onMouseEnter={() => setDisplayedAsset(symbol)}
+              onMouseLeave={() => setDisplayedAsset(null)}
             />
           )
         })}
       </HStack>
-      {displaySymbol && <Text as="span">{currentAsset?.symbol}</Text>}
+      {displaySymbol && (
+        <Text as="span" minW="5ch">
+          {displayedAsset}
+        </Text>
+      )}
     </HStack>
   )
 }
