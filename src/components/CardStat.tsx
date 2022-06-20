@@ -31,7 +31,7 @@ export const CardStat: VFC<CardStatProps> = ({
         placement="top"
         bg="surface.bg"
       >
-        <HStack align="center">
+        <HStack spacing={1} align="center">
           <CardHeading>{label}</CardHeading>
           {tooltip && (
             <>

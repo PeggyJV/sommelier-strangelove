@@ -80,6 +80,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
             <CardStat
               label="deposit assets"
               tooltip="Accepted deposit assets"
+              alignSelf="flex-start"
+              spacing={0}
             >
               <TokenAssets
                 tokens={tokenConfig}

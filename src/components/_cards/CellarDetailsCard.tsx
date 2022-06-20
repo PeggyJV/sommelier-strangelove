@@ -130,7 +130,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             spacing={2}
             align="stretch"
           >
-            <HStack align="center">
+            <HStack spacing={1} align="center">
               <Tooltip
                 hasArrow
                 placement="top"
