@@ -8,7 +8,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { Token } from "data/tokenConfig"
-import { VFC } from "react"
+import { useState, VFC } from "react"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ControlsIcon } from "./_icons"
 
@@ -26,16 +26,19 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
 }) => {
   const tokensCropped = tokens.slice(0, 6)
   const currentAsset = getCurrentAsset(tokens, activeAsset)
+  const [displayedAsset, setDisplayedAsset] = useState<string | null>(
+    null
+  )
 
   return tokens.length > 6 ? (
-    <HStack>
-      <HStack spacing={-1.5} {...rest}>
+    <HStack align="center">
+      <HStack pt={2} spacing={-1.5} {...rest}>
         {tokensCropped.map((token) => {
-          const { src, alt, address } = token
+          const { src, alt, address, symbol } = token
           return (
             <Avatar
               key={address}
-              size="xs"
+              boxSize="24px"
               src={src}
               name={alt}
               borderWidth={2}
@@ -44,6 +47,8 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
               _notFirst={{
                 opacity: 0.65,
               }}
+              onMouseEnter={() => setDisplayedAsset(symbol)}
+              onMouseLeave={() => setDisplayedAsset(null)}
             />
           )
         })}
@@ -57,7 +62,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
                 return (
                   <HStack key={address}>
                     <Avatar
-                      size="xs"
+                      boxSize="24px"
                       src={src}
                       name={alt}
                       borderWidth={2}
@@ -96,7 +101,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           </Box>
         </Tooltip>
       </HStack>
-      {displaySymbol && <Text as="span">{currentAsset?.symbol}</Text>}
+      {displaySymbol && <Text as="span">{displayedAsset}</Text>}
     </HStack>
   ) : (
     <HStack>
@@ -106,7 +111,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           return (
             <Avatar
               key={address}
-              size="xs"
+              boxSize="24px"
               src={src}
               name={alt}
               borderWidth={2}
