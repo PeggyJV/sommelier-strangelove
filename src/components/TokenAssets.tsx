@@ -101,7 +101,11 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           </Box>
         </Tooltip>
       </HStack>
-      {displaySymbol && <Text as="span">{displayedAsset}</Text>}
+      {displaySymbol && (
+        <Text as="span" minW="5ch">
+          {displayedAsset}
+        </Text>
+      )}
     </HStack>
   ) : (
     <HStack>
