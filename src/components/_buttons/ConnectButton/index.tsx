@@ -3,8 +3,8 @@ import { ButtonProps, useToast } from "@chakra-ui/react"
 import { Connector, useAccount, useConnect } from "wagmi"
 import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
-import { BiWalletAlt } from "react-icons/bi"
 import { BaseButton } from "../BaseButton"
+import { MoneyWalletIcon } from "components/_icons"
 
 export interface ConnectButtonProps
   extends Omit<ButtonProps, "children"> {
@@ -63,14 +63,22 @@ const ConnectButton = ({
           isLoading={loading}
           key={c.id}
           p={3}
-          bg="surface.bg"
-          borderWidth={8}
-          borderColor="surface.primary"
+          bg="surface.primary"
+          borderWidth={1}
+          borderRadius={12}
+          borderColor="surface.secondary"
           minW="max-content"
-          icon={BiWalletAlt}
+          icon={MoneyWalletIcon}
+          iconProps={{
+            bgColor: "unset",
+            borderRadius: "unset",
+            _groupHover: {
+              bgColor: "unset",
+            },
+          }}
           _hover={{
             bg: "purple.dark",
-            borderColor: "surface.primary",
+            borderColor: "surface.tertiary",
           }}
           {...conditionalProps}
           {...rest}
