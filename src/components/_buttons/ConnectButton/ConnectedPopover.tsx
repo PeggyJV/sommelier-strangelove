@@ -5,6 +5,7 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Tooltip,
   useToast,
   VStack,
 } from "@chakra-ui/react"
@@ -24,7 +25,7 @@ export const ConnectedPopover = () => {
     fetchEns: true,
   })
   const walletAddress = account?.data?.address
-  const walletIcon = () => {
+  const walletAddressIcon = () => {
     if (walletAddress) {
       return (
         <Jazzicon
@@ -50,22 +51,30 @@ export const ConnectedPopover = () => {
   return (
     <Popover placement="bottom-end">
       <HStack spacing={2}>
-        <BaseButton
-          bg="surface.primary"
-          borderWidth={1}
-          borderColor="surface.secondary"
-          borderRadius={12}
-          icon={walletIcon}
-          minW="max-content"
-          isLoading={account.loading}
-          onClick={handleCopyAddressToClipboard}
-          _hover={{
-            bg: "purple.dark",
-            borderColor: "surface.tertiary",
-          }}
+        <Tooltip
+          hasArrow
+          arrowShadowColor="purple.base"
+          label="Copy to clipboard"
+          placement="bottom"
+          bg="surface.bg"
         >
-          {truncateWalletAddress(walletAddress)}
-        </BaseButton>
+          <BaseButton
+            bg="surface.primary"
+            borderWidth={1}
+            borderColor="surface.secondary"
+            borderRadius={12}
+            icon={walletAddressIcon}
+            minW="max-content"
+            isLoading={account.loading}
+            onClick={handleCopyAddressToClipboard}
+            _hover={{
+              bg: "purple.dark",
+              borderColor: "surface.tertiary",
+            }}
+          >
+            {truncateWalletAddress(walletAddress)}
+          </BaseButton>
+        </Tooltip>
         <PopoverTrigger>
           <BaseButton
             p={3}
@@ -90,8 +99,7 @@ export const ConnectedPopover = () => {
         borderWidth={1}
         borderColor="purple.dark"
         borderRadius={12}
-        outline="unset"
-        bg="surface.bg"
+        bg="surface.primary"
         fontWeight="semibold"
         _focus={{
           outline: "unset",
