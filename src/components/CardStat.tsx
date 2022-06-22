@@ -3,6 +3,7 @@ import {
   Flex,
   HStack,
   StackProps,
+  TextProps,
   Tooltip,
   VStack,
 } from "@chakra-ui/react"
@@ -11,19 +12,27 @@ import { InformationIcon } from "./_icons"
 
 interface CardStatProps extends StackProps {
   label?: ReactNode
+  labelProps?: TextProps
   tooltip?: ReactNode
   statIcon?: any
 }
 
 export const CardStat: VFC<CardStatProps> = ({
   label,
+  labelProps,
   tooltip,
   statIcon,
   children,
   ...rest
 }) => {
   return (
-    <VStack flex={1} align="flex-start" whiteSpace="nowrap" {...rest}>
+    <VStack
+      flex={1}
+      align="flex-start"
+      whiteSpace="nowrap"
+      spacing={0}
+      {...rest}
+    >
       <Tooltip
         hasArrow
         arrowShadowColor="purple.base"
@@ -32,7 +41,7 @@ export const CardStat: VFC<CardStatProps> = ({
         bg="surface.bg"
       >
         <HStack spacing={1} align="center">
-          <CardHeading>{label}</CardHeading>
+          <CardHeading {...labelProps}>{label}</CardHeading>
           {tooltip && (
             <>
               {" "}
