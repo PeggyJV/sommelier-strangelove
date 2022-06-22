@@ -83,10 +83,17 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               alignSelf="flex-start"
               spacing={0}
             >
-              <TokenAssets tokens={tokenConfig} displaySymbol />
+              <TokenAssets
+                tokens={tokenConfig}
+                activeAsset={activeAsset}
+                displaySymbol
+              />
             </CardStat>
             <CardStat
               label="apy"
+              labelProps={{
+                textTransform: "uppercase",
+              }}
               tooltip="APY earned on your Principal since initial investment from Strategy"
             >
               <Apy apy={`0.00`} />

@@ -119,7 +119,11 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             label="strategy assets"
             tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
           >
-            <TokenAssets tokens={strategyAssets} displaySymbol />
+            <TokenAssets
+              tokens={strategyAssets}
+              activeAsset={activeAsset}
+              displaySymbol
+            />
           </CardStat>
           <VStack
             width={{ sm: "100%", lg: "unset" }}
@@ -133,9 +137,11 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 label="Cellar earned performance split"
                 bg="surface.bg"
               >
-                <CardHeading>performance split</CardHeading>
+                <HStack align="center" spacing={1}>
+                  <CardHeading>performance split</CardHeading>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
               </Tooltip>
-              <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
             <Box h="4px" maxW={{ lg: 318 }}>
               {/* @ts-ignore */}
