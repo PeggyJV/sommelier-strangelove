@@ -8,28 +8,51 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { Token } from "data/tokenConfig"
-import { useState, VFC } from "react"
+import { useEffect, useState, VFC } from "react"
 import { ControlsIcon } from "./_icons"
 
 interface TokenAssetsProps extends StackProps {
   tokens: Token[]
+  activeAsset: string
   displaySymbol?: boolean
 }
 
 export const TokenAssets: VFC<TokenAssetsProps> = ({
   tokens,
+  activeAsset,
   displaySymbol,
   ...rest
 }) => {
-  const tokensCropped = tokens.slice(0, 6)
+  const [activeToken, setActiveToken] = useState<Token | null>(null)
+  const [tokensCropped, setTokensCropped] = useState<Token[] | null>(
+    null
+  )
+  // const tokensCropped = tokens.slice(0, 6)
   const [displayedAsset, setDisplayedAsset] = useState<string | null>(
     null
   )
 
+  // set active strategy asset as first in tokens array
+  useEffect(() => {
+    const activeIndex = tokens.findIndex(
+      (token) =>
+        token.address.toUpperCase() === activeAsset.toUpperCase()
+    )
+
+    setActiveToken(tokens[activeIndex])
+
+    activeToken &&
+      tokens.indexOf(activeToken) > 0 &&
+      tokens.splice(activeIndex, 1)
+    activeToken && tokens.unshift(activeToken)
+
+    setTokensCropped(tokens.slice(0, 6))
+  }, [tokens, activeAsset, activeToken])
+
   return tokens.length > 6 ? (
-    <HStack align="center">
-      <HStack pt={2} spacing={-1.5} {...rest}>
-        {tokensCropped.map((token) => {
+    <HStack align="flex-start">
+      <HStack pt={1} spacing={-1.5} {...rest}>
+        {tokensCropped?.map((token) => {
           const { src, alt, address, symbol } = token
           return (
             <Avatar
@@ -42,6 +65,9 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
               bg="surface.bg"
               _notFirst={{
                 opacity: 0.65,
+              }}
+              _hover={{
+                opacity: 1,
               }}
               onMouseEnter={() => setDisplayedAsset(symbol)}
               onMouseLeave={() => setDisplayedAsset(null)}
@@ -105,7 +131,7 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
     </HStack>
   ) : (
     <HStack>
-      <HStack pt={2} spacing={-1.5} {...rest}>
+      <HStack pt={1} spacing={-1.5} {...rest}>
         {tokens.map((token) => {
           const { src, alt, address, symbol } = token
           return (
