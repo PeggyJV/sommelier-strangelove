@@ -52,11 +52,11 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
   return tokens.length > 6 ? (
     <HStack align="flex-start">
       <HStack pt={1} spacing={-1.5} {...rest}>
-        {tokensCropped?.map((token) => {
+        {tokensCropped?.map((token, i) => {
           const { src, alt, address, symbol } = token
           return (
             <Avatar
-              key={address}
+              key={address + i}
               boxSize="24px"
               src={src}
               name={alt}
@@ -132,11 +132,11 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
   ) : (
     <HStack>
       <HStack pt={1} spacing={-1.5} {...rest}>
-        {tokens.map((token) => {
+        {tokens.map((token, i) => {
           const { src, alt, address, symbol } = token
           return (
             <Avatar
-              key={address}
+              key={address + i}
               boxSize="24px"
               src={src}
               name={alt}
