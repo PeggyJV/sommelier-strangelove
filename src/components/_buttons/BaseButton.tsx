@@ -20,8 +20,8 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
     <Button
       ref={ref}
       role="group"
-      py={3}
-      px={6}
+      py={2}
+      px={4}
       color="white"
       bg="gradient.primary"
       borderWidth={2}
