@@ -65,7 +65,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const { activeAsset } = cellarData
 
   return (
-    <TransparentCard p={6} overflow="visible">
+    <TransparentCard p={8} overflow="visible">
       <VStack spacing={8} align={{ sm: "unset", md: "stretch" }}>
         <CardStatRow
           justify={{ sm: "space-around", md: "flex-start" }}

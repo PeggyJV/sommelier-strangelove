@@ -52,10 +52,10 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const { activeAsset } = cellarData
 
   return (
-    <TransparentCard px={6} py={6} {...rest}>
+    <TransparentCard p={8} {...rest}>
       <VStack align="stretch" spacing={8}>
         <CardStatRow
-          px={{ md: 10 }}
+          // px={{ md: 10 }}
           spacing={{ sm: 4, md: 8, lg: 14 }}
           align="flex-start"
           justify="flex-start"
