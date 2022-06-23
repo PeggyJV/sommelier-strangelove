@@ -7,51 +7,28 @@ import {
   Tooltip,
   VStack,
 } from "@chakra-ui/react"
+import { ControlsIcon } from "components/_icons"
 import { Token } from "data/tokenConfig"
-import { useEffect, useState, VFC } from "react"
-import { ControlsIcon } from "./_icons"
+import { useState, VFC } from "react"
 
-interface TokenAssetsProps extends StackProps {
+interface CroppedMapProps extends StackProps {
   tokens: Token[]
-  activeAsset: string
   displaySymbol?: boolean
 }
 
-export const TokenAssets: VFC<TokenAssetsProps> = ({
+export const CroppedMap: VFC<CroppedMapProps> = ({
   tokens,
-  activeAsset,
   displaySymbol,
   ...rest
 }) => {
-  const [activeToken, setActiveToken] = useState<Token | null>(null)
-  const [tokensCropped, setTokensCropped] = useState<Token[] | null>(
-    null
-  )
-  // const tokensCropped = tokens.slice(0, 6)
   const [displayedAsset, setDisplayedAsset] = useState<string | null>(
     null
   )
+  const tokensCropped = tokens.slice(0, 6)
 
-  // set active strategy asset as first in tokens array
-  useEffect(() => {
-    const activeIndex = tokens.findIndex(
-      (token) =>
-        token.address.toUpperCase() === activeAsset.toUpperCase()
-    )
-
-    setActiveToken(tokens[activeIndex])
-
-    activeToken &&
-      tokens.indexOf(activeToken) > 0 &&
-      tokens.splice(activeIndex, 1)
-    activeToken && tokens.unshift(activeToken)
-
-    setTokensCropped(tokens.slice(0, 6))
-  }, [tokens, activeAsset, activeToken])
-
-  return tokens.length > 6 ? (
+  return (
     <HStack align="flex-start">
-      <HStack pt={1} spacing={-1.5} {...rest}>
+      <HStack role="group" pt={1} spacing={-1.5} {...rest}>
         {tokensCropped?.map((token, i) => {
           const { src, alt, address, symbol } = token
           return (
@@ -69,6 +46,16 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
               _hover={{
                 opacity: 1,
               }}
+              _groupHover={{
+                _first: {
+                  opacity: 0.65,
+                },
+              }}
+              _first={{
+                _hover: {
+                  opacity: "1 !important",
+                },
+              }}
               onMouseEnter={() => setDisplayedAsset(symbol)}
               onMouseLeave={() => setDisplayedAsset(null)}
             />
@@ -79,10 +66,11 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           arrowShadowColor="purple.base"
           label={
             <VStack align="flex-start" minW={120}>
-              {tokens.map((token) => {
+              {tokens.map((token, i) => {
                 const { src, alt, address, symbol } = token
+
                 return (
-                  <HStack key={address}>
+                  <HStack key={address + i}>
                     <Avatar
                       boxSize="24px"
                       src={src}
@@ -90,9 +78,6 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
                       borderWidth={2}
                       borderColor="surface.bg"
                       bg="surface.bg"
-                      _notLast={{
-                        opacity: 0.65,
-                      }}
                     />
                     <Text>{symbol}</Text>
                   </HStack>
@@ -112,45 +97,20 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
             display="flex"
             alignItems="center"
             justifyContent="center"
-            boxSize="25px"
+            boxSize="24px"
             borderRadius="full"
             borderWidth={2}
             borderColor="surface.bg"
             overflow="hidden"
+            zIndex="popover"
             opacity={0.65}
+            _hover={{
+              opacity: 1,
+            }}
           >
             <ControlsIcon p={1.5} boxSize="inherit" bg="#6C4ED9" />
           </Box>
         </Tooltip>
-      </HStack>
-      {displaySymbol && (
-        <Text as="span" minW="5ch">
-          {displayedAsset}
-        </Text>
-      )}
-    </HStack>
-  ) : (
-    <HStack>
-      <HStack pt={1} spacing={-1.5} {...rest}>
-        {tokens.map((token, i) => {
-          const { src, alt, address, symbol } = token
-          return (
-            <Avatar
-              key={address + i}
-              boxSize="24px"
-              src={src}
-              name={alt}
-              borderWidth={2}
-              borderColor="surface.bg"
-              bg="surface.bg"
-              _notLast={{
-                opacity: 0.65,
-              }}
-              onMouseEnter={() => setDisplayedAsset(symbol)}
-              onMouseLeave={() => setDisplayedAsset(null)}
-            />
-          )
-        })}
       </HStack>
       {displaySymbol && (
         <Text as="span" minW="5ch">
