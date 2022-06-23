@@ -12,6 +12,7 @@ import { TransparentCard } from "./TransparentCard"
 import { TVLChart } from "components/_charts/TVLChart"
 import { CardHeading } from "components/_typography/CardHeading"
 import { usePerformanceChart } from "context/performanceChartContext"
+import { analytics } from "utils/analytics"
 
 export const PerformanceCard: VFC<BoxProps> = (props) => {
   const { timeArray, tvl } = usePerformanceChart()
@@ -64,6 +65,8 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
                     fontSize="sm"
                     fontWeight="semibold"
                     onClick={() => {
+                      const eventName = `cellar.tvm-${title}`
+                      analytics.safeTrack(eventName.toLowerCase())
                       setTimeline(title)
                       onClick()
                     }}
