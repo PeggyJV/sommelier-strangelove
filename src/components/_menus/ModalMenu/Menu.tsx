@@ -21,6 +21,7 @@ import { Token, tokenConfig } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
 import { toEther } from "utils/formatCurrency"
 import { ModalMenuProps } from "."
+import { analytics } from "utils/analytics"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -42,8 +43,12 @@ export const Menu: VFC<MenuProps> = ({
     selectedTokenBalance?.data?.value,
     selectedTokenBalance?.data?.decimals
   )}`
-  const setMax = () =>
-    setValue(
+  const setMax = () => {
+    analytics.track("deposit.stable-max", {
+      value: selectedTokenBalance?.data?.value?.toString(),
+    })
+
+    return setValue(
       "depositAmount",
       parseFloat(
         toEther(
@@ -53,6 +58,7 @@ export const Menu: VFC<MenuProps> = ({
         )
       )
     )
+  }
 
   return (
     <HStack
@@ -147,6 +153,13 @@ export const Menu: VFC<MenuProps> = ({
           fontWeight={700}
           textAlign="right"
           {...register("depositAmount", {
+            onChange: (event) => {
+              if (event && event.target) {
+                analytics.track("deposit.stable-value", {
+                  value: event.target.value,
+                })
+              }
+            },
             required: "Enter amount",
             valueAsNumber: true,
             validate: {

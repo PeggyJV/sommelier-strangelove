@@ -52,6 +52,7 @@ import { CardHeading } from "components/_typography/CardHeading"
 import { BaseModal } from "./BaseModal"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
+import { analytics } from "utils/analytics"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -82,6 +83,16 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
+
+  function trackedSetSelectedToken(value: TokenType | null) {
+    if (value && value !== selectedToken) {
+      analytics.track("deposit.stable-select", {
+        stable: value.symbol,
+      })
+    }
+
+    setSelectedToken(value)
+  }
 
   const { addToast, update, close, closeAll } = useBrandedToast()
   const [{ data: signer }] = useSigner()
@@ -158,6 +169,12 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   }
 
   const onSubmit = async (data: any, e: any) => {
+    const tokenSymbol = data?.selectedToken?.symbol
+    const depositAmount = data?.depositAmount
+    analytics.track("deposit.continue", {
+      stable: tokenSymbol,
+      value: depositAmount,
+    })
     // const route = await getSwapRoute()
 
     // check if approval exists
@@ -180,6 +197,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     }
 
     if (needsApproval) {
+      analytics.track("deposit.approval-required", {
+        stable: tokenSymbol,
+        value: depositAmount,
+      })
+
       try {
         const { hash } = await erc20Contract.approve(
           config.CONTRACT.CELLAR_ROUTER.ADDRESS,
@@ -195,22 +217,37 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         })
         const waitForApproval = wait({ confirmations: 1, hash })
         const result = await waitForApproval
-        result?.data?.transactionHash &&
+        if (result?.data?.transactionHash) {
+          analytics.track("deposit.approval-granted", {
+            stable: tokenSymbol,
+            value: depositAmount,
+          })
+
           update({
             heading: "ERC20 Approval",
             body: <Text>ERC20 Approved</Text>,
             status: "success",
             closeHandler: closeAll,
           })
+        } else if (result?.error) {
+          analytics.track("deposit.approval-failed", {
+            stable: tokenSymbol,
+            value: depositAmount,
+          })
 
-        result?.error &&
           update({
             heading: "ERC20 Approval",
             body: <Text>Approval Failed</Text>,
             status: "error",
             closeHandler: closeAll,
           })
+        }
       } catch (e) {
+        analytics.track("deposit.approval-cancelled", {
+          stable: tokenSymbol,
+          value: depositAmount,
+        })
+
         addToast({
           heading: "ERC20 Approval",
           body: <Text>Approval Cancelled</Text>,
@@ -251,7 +288,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       })
 
       const depositResult = await waitForDeposit
-      depositResult?.data?.transactionHash &&
+      if (depositResult?.data?.transactionHash) {
+        analytics.track("deposit.success", {
+          stable: tokenSymbol,
+          value: depositAmount,
+        })
         update({
           heading: "Aave V2 Cellar Deposit",
           body: (
@@ -272,15 +313,23 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           closeHandler: closeAll,
           duration: null, // toast won't close until user presses close button
         })
+      }
 
       fetchUserData()
-      depositResult?.error &&
+
+      if (depositResult?.error) {
+        analytics.track("deposit.failed", {
+          stable: tokenSymbol,
+          value: depositAmount,
+        })
+
         update({
           heading: "Aave V2 Cellar Deposit",
           body: <Text>Deposit Failed</Text>,
           status: "error",
           closeHandler: closeAll,
         })
+      }
     } catch (e) {
       addToast({
         heading: "Aave V2 Cellar Deposit",
@@ -353,7 +402,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           <FormControl isInvalid={isError as boolean | undefined}>
             <CardHeading pb={2}>enter amount</CardHeading>
             <ModalMenu
-              setSelectedToken={setSelectedToken}
+              setSelectedToken={trackedSetSelectedToken}
               activeAsset={activeAsset}
               selectedTokenBalance={selectedTokenBalance}
             />

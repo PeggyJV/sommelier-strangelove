@@ -5,6 +5,7 @@ import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
 import { BaseButton } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
+import { analytics } from "utils/analytics"
 
 export interface ConnectButtonProps
   extends Omit<ButtonProps, "children"> {
@@ -44,7 +45,10 @@ const ConnectButton = ({
     return c.ready
       ? // connector ready props
         {
-          onClick: () => connect(c),
+          onClick: () => {
+            analytics.track("wallet.connect-start")
+            connect(c)
+          },
         }
       : // connector not ready props
         {
