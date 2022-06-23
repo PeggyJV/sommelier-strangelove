@@ -28,8 +28,9 @@ import { PerformanceChartProvider } from "context/performanceChartContext"
 
 const h2Styles: HeadingProps = {
   as: "h2",
-  fontSize: "lg",
+  fontSize: "2xl",
   color: "neutral.300",
+  pl: 8,
 }
 
 const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {

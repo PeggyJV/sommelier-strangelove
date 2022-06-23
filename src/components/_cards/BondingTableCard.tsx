@@ -44,12 +44,24 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   }
 
   return (
-    <InnerCard pb={6}>
+    <InnerCard pt={6} px={4} pb={4}>
       <TableContainer>
-        <Heading fontSize="lg" pl={6} py={4}>
+        <Heading fontSize="lg" pl={4} pt={2} pb={4}>
           Active Bonds
         </Heading>
-        <Table variant="unstyled" {...props}>
+        <Table
+          variant="unstyled"
+          css={{
+            "td, th": {
+              padding: "12px 16px",
+              height: "56px",
+            },
+            th: {
+              height: "max-content",
+            },
+          }}
+          {...props}
+        >
           <Thead>
             <Tr color="neutral.300">
               <Th
