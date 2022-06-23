@@ -13,6 +13,17 @@ export const SecondaryButton: VFC<ButtonProps> = forwardRef<
       borderWidth={2}
       borderColor="purple.base"
       _hover={{ bg: "purple.dark" }}
+      _disabled={{
+        color: "neutral.400",
+        borderColor: "purple.dark",
+        cursor: "auto",
+        _hover: {
+          bg: "transparent",
+        },
+        _active: {
+          bg: "transparent",
+        },
+      }}
       {...props}
     />
   )

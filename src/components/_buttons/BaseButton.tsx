@@ -20,8 +20,8 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
     <Button
       ref={ref}
       role="group"
-      py={3}
-      px={6}
+      py={2}
+      px={4}
       color="white"
       bg="gradient.primary"
       borderWidth={2}
@@ -52,10 +52,13 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
         color: "neutral.400",
         bg: "purple.dark",
         borderColor: "purple.dark",
-        cursor: "not-allowed",
+        cursor: "auto",
+        _hover: {
+          color: "neutral.400",
+        },
         _active: {
-          bg: "red.dark",
-          borderColor: "red.dark",
+          bg: "purple.dark",
+          borderColor: "purple.dark",
         },
       }}
       {...rest}

@@ -59,7 +59,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           label="Total value managed by Cellar"
           bg="surface.bg"
         >
-          <HStack align="center">
+          <HStack spacing={1} align="center">
             <CardHeading>TVM</CardHeading>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>
@@ -73,7 +73,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           label="APY earned on Principal since initial investment from Strategy"
           bg="surface.bg"
         >
-          <HStack align="center">
+          <HStack spacing={1} align="center">
             <CardHeading>APY</CardHeading>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>

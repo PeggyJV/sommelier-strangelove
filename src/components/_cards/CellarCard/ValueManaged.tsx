@@ -57,7 +57,7 @@ export const ValueManaged: React.FC<Props> = ({
             placement="top"
             bg="surface.bg"
           >
-            <HStack align="center">
+            <HStack spacing={1} align="center">
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>

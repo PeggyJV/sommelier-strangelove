@@ -7,35 +7,34 @@ import {
   Tooltip,
   VStack,
 } from "@chakra-ui/react"
+import { ControlsIcon } from "components/_icons"
 import { Token } from "data/tokenConfig"
-import { VFC } from "react"
-import { getCurrentAsset } from "utils/getCurrentAsset"
-import { ControlsIcon } from "./_icons"
+import { useState, VFC } from "react"
 
-interface TokenAssetsProps extends StackProps {
+interface CroppedMapProps extends StackProps {
   tokens: Token[]
   displaySymbol?: boolean
-  activeAsset?: string
 }
 
-export const TokenAssets: VFC<TokenAssetsProps> = ({
+export const CroppedMap: VFC<CroppedMapProps> = ({
   tokens,
   displaySymbol,
-  activeAsset,
   ...rest
 }) => {
+  const [displayedAsset, setDisplayedAsset] = useState<string | null>(
+    null
+  )
   const tokensCropped = tokens.slice(0, 6)
-  const currentAsset = getCurrentAsset(tokens, activeAsset)
 
-  return tokens.length > 6 ? (
-    <HStack>
-      <HStack spacing={-1.5} {...rest}>
-        {tokensCropped.map((token) => {
-          const { src, alt, address } = token
+  return (
+    <HStack align="flex-start">
+      <HStack role="group" pt={1} spacing={-1.5} {...rest}>
+        {tokensCropped?.map((token, i) => {
+          const { src, alt, address, symbol } = token
           return (
             <Avatar
-              key={address}
-              size="xs"
+              key={address + i}
+              boxSize="24px"
               src={src}
               name={alt}
               borderWidth={2}
@@ -44,6 +43,21 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
               _notFirst={{
                 opacity: 0.65,
               }}
+              _hover={{
+                opacity: 1,
+              }}
+              _groupHover={{
+                _first: {
+                  opacity: 0.65,
+                },
+              }}
+              _first={{
+                _hover: {
+                  opacity: "1 !important",
+                },
+              }}
+              onMouseEnter={() => setDisplayedAsset(symbol)}
+              onMouseLeave={() => setDisplayedAsset(null)}
             />
           )
         })}
@@ -52,20 +66,18 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
           arrowShadowColor="purple.base"
           label={
             <VStack align="flex-start" minW={120}>
-              {tokens.map((token) => {
+              {tokens.map((token, i) => {
                 const { src, alt, address, symbol } = token
+
                 return (
-                  <HStack key={address}>
+                  <HStack key={address + i}>
                     <Avatar
-                      size="xs"
+                      boxSize="24px"
                       src={src}
                       name={alt}
                       borderWidth={2}
                       borderColor="surface.bg"
                       bg="surface.bg"
-                      _notLast={{
-                        opacity: 0.65,
-                      }}
                     />
                     <Text>{symbol}</Text>
                   </HStack>
@@ -85,41 +97,26 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
             display="flex"
             alignItems="center"
             justifyContent="center"
-            boxSize="25px"
+            boxSize="24px"
             borderRadius="full"
             borderWidth={2}
             borderColor="surface.bg"
             overflow="hidden"
+            zIndex="popover"
             opacity={0.65}
+            _hover={{
+              opacity: 1,
+            }}
           >
             <ControlsIcon p={1.5} boxSize="inherit" bg="#6C4ED9" />
           </Box>
         </Tooltip>
       </HStack>
-      {displaySymbol && <Text as="span">{currentAsset?.symbol}</Text>}
-    </HStack>
-  ) : (
-    <HStack>
-      <HStack spacing={-1.5} {...rest}>
-        {tokens.map((token) => {
-          const { src, alt, address } = token
-          return (
-            <Avatar
-              key={address}
-              size="xs"
-              src={src}
-              name={alt}
-              borderWidth={2}
-              borderColor="surface.bg"
-              bg="surface.bg"
-              _notLast={{
-                opacity: 0.65,
-              }}
-            />
-          )
-        })}
-      </HStack>
-      {displaySymbol && <Text as="span">{currentAsset?.symbol}</Text>}
+      {displaySymbol && (
+        <Text as="span" minW="5ch">
+          {displayedAsset}
+        </Text>
+      )}
     </HStack>
   )
 }
