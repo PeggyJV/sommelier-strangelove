@@ -1,4 +1,10 @@
-import { BoxProps, SimpleGrid, Stack, VStack } from "@chakra-ui/react"
+import {
+  Box,
+  BoxProps,
+  SimpleGrid,
+  Stack,
+  VStack,
+} from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { VFC } from "react"
@@ -89,7 +95,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 activeAsset={activeAsset}
               />
             </CardStat>
-            <div
+            <Box
               onMouseEnter={debounce(() => {
                 analytics.track("cellar.apy-check")
               }, 1000)}
@@ -100,7 +106,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               >
                 <Apy apy={`0.00`} />
               </CardStat>
-            </div>
+            </Box>
             <Stack
               spacing={3}
               direction={{ sm: "row", md: "column", lg: "row" }}

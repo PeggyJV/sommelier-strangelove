@@ -1,5 +1,6 @@
 import { VFC } from "react"
 import {
+  Box,
   HStack,
   StackProps,
   Text,
@@ -69,7 +70,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
       </VStack>
       <VStack spacing={1} align="flex-start">
         <Apy apy={apy} />
-        <div
+        <Box
           onMouseEnter={debounce(() => {
             analytics.track("user.apy-check")
           }, 1000)}
@@ -85,7 +86,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>
-        </div>
+        </Box>
       </VStack>
       <CurrentDeposits
         currentDeposits={currentDeposits}
