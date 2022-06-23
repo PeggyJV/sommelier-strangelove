@@ -18,6 +18,8 @@ import { useHandleTransaction } from "hooks/web3"
 import BondingTableCard from "./BondingTableCard"
 import { Apy } from "components/Apy"
 import BigNumber from "bignumber.js"
+import { analytics } from "utils/analytics"
+import { debounce } from "lodash"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -87,12 +89,18 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 activeAsset={activeAsset}
               />
             </CardStat>
-            <CardStat
-              label="apy"
-              tooltip="APY earned on your Principal since initial investment from Strategy"
+            <div
+              onMouseEnter={debounce(() => {
+                analytics.track("cellar.apy-check")
+              }, 1000)}
             >
-              <Apy apy={`0.00`} />
-            </CardStat>
+              <CardStat
+                label="apy"
+                tooltip="APY earned on your Principal since initial investment from Strategy"
+              >
+                <Apy apy={`0.00`} />
+              </CardStat>
+            </div>
             <Stack
               spacing={3}
               direction={{ sm: "row", md: "column", lg: "row" }}

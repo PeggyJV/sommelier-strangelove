@@ -12,6 +12,8 @@ import { CardHeading } from "./_typography/CardHeading"
 import { CurrentDeposits } from "./CurrentDeposits"
 import { Apy } from "./Apy"
 import { InformationIcon } from "./_icons"
+import { analytics } from "utils/analytics"
+import { debounce } from "lodash"
 
 interface CellarStatsProps extends StackProps {
   tvm?: string
@@ -67,17 +69,23 @@ export const CellarStats: VFC<CellarStatsProps> = ({
       </VStack>
       <VStack spacing={1} align="flex-start">
         <Apy apy={apy} />
-        <Tooltip
-          hasArrow
-          placement="top"
-          label="APY earned on Principal since initial investment from Strategy"
-          bg="surface.bg"
+        <div
+          onMouseEnter={debounce(() => {
+            analytics.track("user.apy-check")
+          }, 1000)}
         >
-          <HStack align="center">
-            <CardHeading>APY</CardHeading>
-            <InformationIcon color="neutral.300" boxSize={3} />
-          </HStack>
-        </Tooltip>
+          <Tooltip
+            hasArrow
+            placement="top"
+            label="APY earned on Principal since initial investment from Strategy"
+            bg="surface.bg"
+          >
+            <HStack align="center">
+              <CardHeading>APY</CardHeading>
+              <InformationIcon color="neutral.300" boxSize={3} />
+            </HStack>
+          </Tooltip>
+        </div>
       </VStack>
       <CurrentDeposits
         currentDeposits={currentDeposits}
