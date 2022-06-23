@@ -11,6 +11,7 @@ import { CellarDataMap } from "data/cellarDataMap"
 import { VFC } from "react"
 import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
+import { analytics } from "utils/analytics"
 
 interface StrategyBreakdownProps extends BoxProps {
   cellarDataMap: CellarDataMap
@@ -29,7 +30,14 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
         <TabList borderBottomWidth={1} borderColor="purple.base">
           {Object.keys(strategyBreakdown).map((key) => {
             return (
-              <Tab key={key} {...tabProps}>
+              <Tab
+                key={key}
+                {...tabProps}
+                onClick={() => {
+                  const eventName = `cellar.details-${key}`
+                  analytics.safeTrack(eventName.toLowerCase())
+                }}
+              >
                 {key}
               </Tab>
             )
