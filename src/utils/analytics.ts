@@ -45,6 +45,8 @@ if (isBrowser && mixpanelToken && mixpanelToken.length > 0) {
   plugins.push(mixpanel({ token: mixpanelToken }))
 }
 
+export const invalidEventCharRex = /[^(\w|.|\-)]*/g
+
 export class AnalyticsWrapper {
   client: ReturnType<typeof Analytics>
   enabled: boolean
@@ -67,6 +69,12 @@ export class AnalyticsWrapper {
 
   track(eventName: string, payload?: Record<string, unknown>) {
     this.enabled && this.client.track(eventName, payload)
+  }
+
+  // strips invalid characters
+  safeTrack(eventName: string, payload?: Record<string, unknown>) {
+    const clean = eventName.replace(invalidEventCharRex, "")
+    this.track(clean, payload)
   }
 
   identify(id: string) {
