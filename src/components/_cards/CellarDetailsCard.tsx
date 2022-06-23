@@ -65,7 +65,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const { activeAsset } = cellarData
 
   return (
-    <TransparentCard p={6} overflow="visible">
+    <TransparentCard p={8} overflow="visible">
       <VStack spacing={8} align={{ sm: "unset", md: "stretch" }}>
         <CardStatRow
           justify={{ sm: "space-around", md: "flex-start" }}
@@ -121,8 +121,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           >
             <TokenAssets
               tokens={strategyAssets}
-              displaySymbol
               activeAsset={activeAsset}
+              displaySymbol
             />
           </CardStat>
           <VStack
@@ -130,16 +130,18 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             spacing={2}
             align="stretch"
           >
-            <HStack align="center">
+            <HStack spacing={1} align="center">
               <Tooltip
                 hasArrow
                 placement="top"
                 label="Cellar earned performance split"
                 bg="surface.bg"
               >
-                <CardHeading>performance split</CardHeading>
+                <HStack align="center" spacing={1}>
+                  <CardHeading>performance split</CardHeading>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
               </Tooltip>
-              <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
             <Box h="4px" maxW={{ lg: 318 }}>
               {/* @ts-ignore */}

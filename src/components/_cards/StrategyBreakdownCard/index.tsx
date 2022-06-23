@@ -25,7 +25,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
   const { strategyBreakdown } = cellarDataMap[cellarId]
 
   return (
-    <InnerCard>
+    <InnerCard pt={4} px={6} pb={8}>
       <Tabs>
         <TabList borderBottomWidth={1} borderColor="purple.base">
           {Object.keys(strategyBreakdown).map((key) => {
