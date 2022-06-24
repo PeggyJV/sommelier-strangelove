@@ -1,4 +1,4 @@
-import { useState, VFC } from "react"
+import { useEffect, VFC } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -13,13 +13,13 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { ModalInput } from "components/_inputs/ModalInput"
-import { useAaveStaker } from "context/aaveStakerContext"
 import { useBrandedToast } from "hooks/chakra"
 import { useAccount } from "wagmi"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { toEther } from "utils/formatCurrency"
 import { ethers } from "ethers"
 import { useHandleTransaction } from "hooks/web3"
+import { analytics } from "utils/analytics"
 interface FormValues {
   withdrawAmount: number
 }
@@ -42,14 +42,30 @@ export const WithdrawForm: VFC = () => {
   const isDisabled =
     isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
   const isError = errors.withdrawAmount
-  const setMax = () =>
-    setValue(
-      "withdrawAmount",
-      parseFloat(toEther(userData?.balances?.aaveClr, 18, false))
+  const setMax = () => {
+    const amount = parseFloat(
+      toEther(userData?.balances?.aaveClr, 18, false)
     )
+    setValue("withdrawAmount", amount)
+
+    analytics.track("withdraw.max-selected", {
+      account: account?.address,
+      amount,
+    })
+  }
+
+  useEffect(() => {
+    if (watchWithdrawAmount != null) {
+      analytics.track("withdraw.amount-selected", {
+        account: account?.address,
+        amount: watchWithdrawAmount,
+      })
+    }
+  }, [watchWithdrawAmount, account])
 
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (withdrawAmount <= 0) return
+
     if (!account?.address) {
       addToast({
         heading: "Withdraw Position",
@@ -58,15 +74,44 @@ export const WithdrawForm: VFC = () => {
         closeHandler: close,
         duration: null,
       })
+
+      return
     }
+
+    const analyticsData = {
+      account: account.address,
+      amount: withdrawAmount,
+    }
+
+    analytics.track("withdraw.started", analyticsData)
+
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
     const tx = await aaveCellarSigner.withdraw(
       amtInWei,
-      account?.address,
-      account?.address
+      account.address,
+      account.address
     )
-    await doHandleTransaction(tx)
+
+    function onSuccess() {
+      analytics.track("withdraw.succeeded", analyticsData)
+    }
+
+    function onError(error: Error) {
+      analytics.track("withdraw.failed", {
+        ...analyticsData,
+        error: error.name,
+        message: error.message,
+      })
+    }
+
+    await doHandleTransaction({
+      ...tx,
+      onSuccess,
+      onError,
+    })
+
     await fetchUserData()
+
     setValue("withdrawAmount", 0)
   }
 
