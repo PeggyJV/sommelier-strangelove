@@ -76,7 +76,6 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   })
 
   const watchDepositAmount = watch("depositAmount")
-  console.log({ watchDepositAmount })
   const isError = errors.depositAmount !== undefined
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
@@ -100,11 +99,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     formatUnits: "wei",
   })
 
-  // defaulting to using ENS address, this sholdn't be necessary once we upgrade wagmi which has the prop as not required
+  // defaulting to using active asset address, this sholdn't be necessary once we upgrade wagmi which has the prop as not required
   const erc20Contract = useContract({
     addressOrName:
       selectedToken?.address ||
-      "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     contractInterface: erc20ABI,
     signerOrProvider: signer,
   })
@@ -130,7 +129,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
     const inputAmt = CurrencyAmount.fromRawAmount(
       inputToken as Currency,
-      JSBI.BigInt(amtInWei) as unknown as BigintIsh
+      JSBI.BigInt(amtInWei)
     )
 
     const outputToken =
@@ -138,6 +137,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       new Token(
         1, // chainId
         cellarData?.activeAsset,
+        // "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
         userData?.balances?.aAsset?.decimals,
         userData?.balances?.aAsset?.symbol,
         userData?.balances?.aAsset?.symbol
@@ -158,7 +158,8 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   }
 
   const onSubmit = async (data: any, e: any) => {
-    // const route = await getSwapRoute()
+    const route = await getSwapRoute()
+    console.log("route ", route)
 
     // check if approval exists
     const allowance = await erc20Contract.allowance(
