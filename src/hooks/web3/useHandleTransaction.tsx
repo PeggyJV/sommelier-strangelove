@@ -9,6 +9,8 @@ type TxParams = {
     success?: React.ReactNode
     error?: React.ReactNode
   }
+  onSuccess?: () => void
+  onError?: (error: Error) => void
 }
 export const useHandleTransaction = (): {
   doHandleTransaction: (T: TxParams) => Promise<void>
@@ -22,6 +24,8 @@ export const useHandleTransaction = (): {
   const doHandleTransaction = async ({
     hash,
     toastBody,
+    onSuccess,
+    onError,
   }: TxParams) => {
     const infoBody = toastBody?.info || <Text>In Progress...</Text>
     const successBody = toastBody?.success || (
@@ -39,7 +43,8 @@ export const useHandleTransaction = (): {
     })
     const waitForApproval = wait({ confirmations: 1, hash })
     const result = await waitForApproval
-    result?.data?.transactionHash &&
+
+    if (result?.data?.transactionHash) {
       update({
         heading: "Transaction",
         body: successBody,
@@ -47,13 +52,23 @@ export const useHandleTransaction = (): {
         closeHandler: closeAll,
       })
 
-    result?.error &&
+      if (onSuccess && typeof onSuccess === "function") {
+        onSuccess()
+      }
+    }
+
+    if (result?.error) {
       update({
         heading: "Transaction",
         body: errorBody,
         status: "error",
         closeHandler: closeAll,
       })
+
+      if (onError && typeof onError === "function") {
+        onError(result.error)
+      }
+    }
   }
 
   return { doHandleTransaction }

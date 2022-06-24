@@ -18,12 +18,21 @@ import {
   LogoutCircleIcon,
   SettingsSliderIcon,
 } from "components/_icons"
+import { analytics } from "utils/analytics"
 
 export const ConnectedPopover = () => {
   const toast = useToast()
   const [account, disconnect] = useAccount({
     fetchEns: true,
   })
+
+  function onDisconnect() {
+    analytics.track("wallet.disconnected", {
+      account: account?.data?.address,
+    })
+
+    disconnect()
+  }
   const walletAddress = account?.data?.address
   const walletAddressIcon = () => {
     if (walletAddress) {
@@ -128,7 +137,7 @@ export const ConnectedPopover = () => {
               py={2}
               px={4}
               fontSize="sm"
-              onClick={disconnect}
+              onClick={onDisconnect}
               _hover={{
                 cursor: "pointer",
                 bg: "purple.dark",
