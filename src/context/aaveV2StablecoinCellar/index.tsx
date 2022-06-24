@@ -141,10 +141,11 @@ export const AaveV2CellarProvider = ({
   const fetchUserData = useCallback(async () => {
     setUserData((state) => ({ ...state, loading: true }))
     try {
-      const { userActiveAssets, userInactiveAssets } =
-        await aaveV2CellarContract.getUserBalances(account?.address)
+      const userBalance = await aaveV2CellarContract.balanceOf(
+        account?.address
+      )
       const aaveClrBalance = await refetch()
-      const netValue = userInactiveAssets.toString()
+      const netValue = userBalance.toString()
 
       const maxDeposit = await aaveV2CellarContract.maxDeposit(
         account?.address
