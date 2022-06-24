@@ -23,6 +23,7 @@ const ConnectButton = ({
   const toast = useToast()
   const isConnected = data.connected
 
+  // on wallet connect error
   React.useEffect(() => {
     if (error) {
       toast({
@@ -31,8 +32,22 @@ const ConnectButton = ({
         status: "error",
         isClosable: true,
       })
+
+      analytics.track("wallet.connect-failed", {
+        error: error.name,
+        message: error.message,
+      })
     }
   }, [error, toast])
+
+  // on wallet connect succes, must be separate from previous useEffect
+  React.useEffect(() => {
+    if (isConnected) {
+      analytics.track("wallet.connect-succeeded", {
+        account: account?.data?.address,
+      })
+    }
+  }, [isConnected])
 
   /**
    * - If connector is ready (window.ethereum exists), it'll detect the connector
