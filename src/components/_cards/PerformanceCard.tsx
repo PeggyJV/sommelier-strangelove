@@ -65,7 +65,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
                     fontSize="sm"
                     fontWeight="semibold"
                     onClick={() => {
-                      const eventName = `cellar.tvm-${title}`
+                      const eventName = `cellar.tvm-selected-${title}`
                       analytics.safeTrack(eventName.toLowerCase())
                       setTimeline(title)
                       onClick()

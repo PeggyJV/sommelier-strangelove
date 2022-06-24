@@ -34,7 +34,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
                 key={key}
                 {...tabProps}
                 onClick={() => {
-                  const eventName = `cellar.details-${key}`
+                  const eventName = `cellar.details-selected-${key}`
                   analytics.safeTrack(eventName.toLowerCase())
                 }}
               >

@@ -72,7 +72,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
         <Apy apy={apy} />
         <Box
           onMouseEnter={debounce(() => {
-            analytics.track("user.apy-check")
+            analytics.track("user.tooltip-opened-apy")
           }, 1000)}
         >
           <Tooltip

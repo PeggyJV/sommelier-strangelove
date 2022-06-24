@@ -9,8 +9,11 @@ export const DepositButton: VFC<ButtonProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function onClick() {
-    analytics.track("deposit.start")
     onOpen()
+
+    if (!isOpen) {
+      analytics.track("deposit.modal-opened")
+    }
   }
 
   return (

@@ -42,17 +42,10 @@ const BondingTableCard: VFC<TableProps> = (props) => {
     analytics.track("unbond.started")
     const tx = await aaveStakerSigner.unbond(id)
 
-    function onSuccess() {
-      analytics.track("unbond.succeeded")
-    }
-
-    function onError() {
-      analytics.track("unbond.failed")
-    }
     await doHandleTransaction({
       ...tx,
-      onSuccess,
-      onError,
+      onSuccess: () => analytics.track("unbond.succeeded"),
+      onError: () => analytics.track("unbond.failed"),
     })
     fetchUserStakes()
   }

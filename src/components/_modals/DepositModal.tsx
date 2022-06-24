@@ -84,7 +84,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
   function trackedSetSelectedToken(value: TokenType | null) {
     if (value && value !== selectedToken) {
-      analytics.track("deposit.stable-select", {
+      analytics.track("deposit.stable-selected", {
         stable: value.symbol,
       })
     }
@@ -170,7 +170,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const onSubmit = async (data: any, e: any) => {
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
-    analytics.track("deposit.continue", {
+    analytics.track("deposit.started", {
       stable: tokenSymbol,
       value: depositAmount,
     })
@@ -288,7 +288,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
       const depositResult = await waitForDeposit
       if (depositResult?.data?.transactionHash) {
-        analytics.track("deposit.success", {
+        analytics.track("deposit.succeeded", {
           stable: tokenSymbol,
           value: depositAmount,
         })

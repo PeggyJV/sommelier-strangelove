@@ -44,7 +44,7 @@ export const Menu: VFC<MenuProps> = ({
     selectedTokenBalance?.data?.decimals
   )}`
   const setMax = () => {
-    analytics.track("deposit.stable-max", {
+    analytics.track("deposit.max-selected", {
       value: selectedTokenBalance?.data?.value?.toString(),
     })
 
@@ -155,7 +155,7 @@ export const Menu: VFC<MenuProps> = ({
           {...register("depositAmount", {
             onChange: (event) => {
               if (event && event.target) {
-                analytics.track("deposit.stable-value", {
+                analytics.track("deposit.amount-selected", {
                   value: event.target.value,
                 })
               }

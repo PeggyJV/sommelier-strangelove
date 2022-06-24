@@ -61,7 +61,7 @@ const ConnectButton = ({
       ? // connector ready props
         {
           onClick: () => {
-            analytics.track("wallet.connect-start")
+            analytics.track("wallet.connect-started")
             connect(c)
           },
         }

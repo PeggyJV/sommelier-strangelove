@@ -99,7 +99,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
             </CardStat>
             <Box
               onMouseEnter={debounce(() => {
-                analytics.track("cellar.apy-check")
+                analytics.track("cellar.tooltip-opened-apy")
               }, 1000)}
             >
               <CardStat
