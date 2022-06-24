@@ -66,10 +66,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     formState: { errors, isSubmitting, isSubmitted },
   } = methods
   const provider = useProvider()
-  // I won't delete this code, but it's unused and was crashing browsers without a wallet extension installed
-  // const p = new ethers.providers.Web3Provider(
-  //   (window as any)?.ethereum
-  // )
+  const p =
+    (window as any)?.ethereum &&
+    new ethers.providers.Web3Provider((window as any)?.ethereum)
   const router = new AlphaRouter({
     chainId: 1,
     provider: provider as unknown as AlphaRouterParams["provider"],
