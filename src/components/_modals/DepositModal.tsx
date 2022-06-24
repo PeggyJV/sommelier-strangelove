@@ -168,7 +168,6 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   }
 
   const onSubmit = async (data: any, e: any) => {
-<<<<<<< HEAD
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
     analytics.track("deposit.continue", {
@@ -176,10 +175,6 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       value: depositAmount,
     })
     // const route = await getSwapRoute()
-=======
-    const route = await getSwapRoute()
-    console.log("route ", route)
->>>>>>> staging
 
     // check if approval exists
     const allowance = await erc20Contract.allowance(
