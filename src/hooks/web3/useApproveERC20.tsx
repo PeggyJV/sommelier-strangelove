@@ -31,7 +31,13 @@ export const useApproveERC20 = ({
     skip: true,
   })
 
-  const doApprove = async (amount: number) => {
+  const doApprove = async (
+    amount: number,
+    options?: {
+      onSuccess?: () => void
+      onError?: (error: Error) => void
+    }
+  ) => {
     const allowance = await erc20Contract.allowance(
       account?.address,
       spender
@@ -66,7 +72,7 @@ export const useApproveERC20 = ({
 
         const waitForApproval = wait({ confirmations: 1, hash })
         const result = await waitForApproval
-        result?.data?.transactionHash &&
+        if (result?.data?.transactionHash) {
           update({
             heading: "ERC20 Approval",
             body: <Text>ERC20 Approved</Text>,
@@ -74,13 +80,29 @@ export const useApproveERC20 = ({
             closeHandler: closeAll,
           })
 
-        result?.error &&
+          if (
+            options?.onSuccess &&
+            typeof options.onSuccess === "function"
+          ) {
+            options.onSuccess()
+          }
+        }
+
+        if (result?.error) {
           update({
             heading: "ERC20 Approval",
             body: <Text>Approval Failed</Text>,
             status: "error",
             closeHandler: closeAll,
           })
+
+          if (
+            options?.onError &&
+            typeof options?.onError === "function"
+          ) {
+            options.onError(result.error)
+          }
+        }
       } catch (e) {
         addToast({
           heading: "ERC20 Approval",

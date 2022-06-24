@@ -5,8 +5,9 @@ import {
   StackDivider,
   Text,
 } from "@chakra-ui/react"
-import { VFC } from "react"
+import { VFC, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
+import { analytics } from "utils/analytics"
 
 interface BondingPeriod {
   title: string
@@ -38,6 +39,14 @@ export const bondingPeriodOptions: BondingPeriod[] = [
 export const BondingPeriodOptions: VFC = () => {
   const { register, getValues } = useFormContext()
   const bondingPeriod = getValues("bondingPeriod")
+
+  useEffect(() => {
+    if (bondingPeriod != null) {
+      analytics.track("bond.duration-selected", {
+        duration: bondingPeriod.title,
+      })
+    }
+  }, [bondingPeriod])
 
   return (
     <HStack

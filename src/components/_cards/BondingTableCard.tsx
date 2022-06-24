@@ -20,6 +20,7 @@ import { toEther } from "utils/formatCurrency"
 import { useHandleTransaction } from "hooks/web3"
 import { InformationIcon } from "components/_icons"
 import { InnerCard } from "./InnerCard"
+import { analytics } from "utils/analytics"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -38,8 +39,14 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const { userStakes } = userStakeData
 
   const handleUnBond = async (id: number) => {
+    analytics.track("unbond.started")
     const tx = await aaveStakerSigner.unbond(id)
-    await doHandleTransaction(tx)
+
+    await doHandleTransaction({
+      ...tx,
+      onSuccess: () => analytics.track("unbond.succeeded"),
+      onError: () => analytics.track("unbond.failed"),
+    })
     fetchUserStakes()
   }
 

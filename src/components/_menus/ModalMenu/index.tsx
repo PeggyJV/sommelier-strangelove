@@ -1,11 +1,10 @@
-import { VFC, Dispatch, SetStateAction } from "react"
+import { VFC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Menu } from "./Menu"
-import { Token } from "data/tokenConfig"
 import { BigNumber } from "ethers"
 
 export interface ModalMenuProps {
-  setSelectedToken: Dispatch<SetStateAction<Token | null>>
+  setSelectedToken: (value: any) => void
   activeAsset?: string
   selectedTokenBalance: {
     readonly data:

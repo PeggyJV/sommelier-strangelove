@@ -24,6 +24,8 @@ import { useApproveERC20, useHandleTransaction } from "hooks/web3"
 import { config } from "utils/config"
 import { useContract, useSigner } from "wagmi"
 import { ethers } from "ethers"
+import { analytics } from "utils/analytics"
+import { bondingPeriodOptions } from "./BondingPeriodOptions"
 interface FormValues {
   depositAmount: number
   bondingPeriod: number
@@ -70,7 +72,16 @@ export const BondForm: VFC = () => {
     )
 
   const onSubmit = async (data: any, e: any) => {
-    await doApprove(data?.depositAmount)
+    const analyticsData = {
+      duration: bondingPeriodOptions[bondPeriod],
+    }
+    analytics.track("bond.started", analyticsData)
+
+    await doApprove(data?.depositAmount, {
+      onSuccess: () => analytics.track("bond.approval-succeeded"),
+      onError: () => analytics.track("bond.approval-failed"),
+    })
+
     const amtInBigNumber = new BigNumber(data?.depositAmount)
     const depositAmtInWei = ethers.utils.parseUnits(
       amtInBigNumber.toFixed(),
@@ -82,7 +93,13 @@ export const BondForm: VFC = () => {
         bondPeriod,
         { gasLimit: 1000000 }
       )
-      await doHandleTransaction({ hash: bondConf })
+
+      await doHandleTransaction({
+        hash: bondConf,
+        onSuccess: () =>
+          analytics.track("bond.succeeded", analyticsData),
+        onError: () => analytics.track("bond.failed", analyticsData),
+      })
       fetchUserStakes()
     } catch (e) {
       addToast({

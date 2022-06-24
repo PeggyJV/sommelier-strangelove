@@ -5,6 +5,7 @@ import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
 import { BaseButton } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
+import { analytics } from "utils/analytics"
 
 export interface ConnectButtonProps
   extends Omit<ButtonProps, "children"> {
@@ -22,6 +23,7 @@ const ConnectButton = ({
   const toast = useToast()
   const isConnected = data.connected
 
+  // on wallet connect error
   React.useEffect(() => {
     if (error) {
       toast({
@@ -30,8 +32,22 @@ const ConnectButton = ({
         status: "error",
         isClosable: true,
       })
+
+      analytics.track("wallet.connect-failed", {
+        error: error.name,
+        message: error.message,
+      })
     }
   }, [error, toast])
+
+  // on wallet connect succes, must be separate from previous useEffect
+  React.useEffect(() => {
+    if (isConnected) {
+      analytics.track("wallet.connect-succeeded", {
+        account: account?.data?.address,
+      })
+    }
+  }, [isConnected])
 
   /**
    * - If connector is ready (window.ethereum exists), it'll detect the connector
@@ -44,7 +60,10 @@ const ConnectButton = ({
     return c.ready
       ? // connector ready props
         {
-          onClick: () => connect(c),
+          onClick: () => {
+            analytics.track("wallet.connect-started")
+            connect(c)
+          },
         }
       : // connector not ready props
         {

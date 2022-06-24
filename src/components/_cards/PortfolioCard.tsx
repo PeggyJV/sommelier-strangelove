@@ -1,4 +1,10 @@
-import { BoxProps, SimpleGrid, Stack, VStack } from "@chakra-ui/react"
+import {
+  Box,
+  BoxProps,
+  SimpleGrid,
+  Stack,
+  VStack,
+} from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { VFC } from "react"
@@ -18,6 +24,8 @@ import { useHandleTransaction } from "hooks/web3"
 import BondingTableCard from "./BondingTableCard"
 import { Apy } from "components/Apy"
 import BigNumber from "bignumber.js"
+import { analytics } from "utils/analytics"
+import { debounce } from "lodash"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -89,15 +97,18 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 displaySymbol
               />
             </CardStat>
-            <CardStat
-              label="apy"
-              labelProps={{
-                textTransform: "uppercase",
-              }}
-              tooltip="APY earned on your Principal since initial investment from Strategy"
+            <Box
+              onMouseEnter={debounce(() => {
+                analytics.track("cellar.tooltip-opened-apy")
+              }, 1000)}
             >
-              <Apy apy={`0.00`} />
-            </CardStat>
+              <CardStat
+                label="apy"
+                tooltip="APY earned on your Principal since initial investment from Strategy"
+              >
+                <Apy apy={`0.00`} />
+              </CardStat>
+            </Box>
             <Stack
               spacing={3}
               direction={{ sm: "row", md: "column", lg: "row" }}
