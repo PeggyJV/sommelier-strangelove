@@ -46,28 +46,27 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
 
   return (
     <Card
-      borderRadius={32}
-      borderWidth={8}
-      borderColor="surface.primary"
       padding="0"
       position="relative"
       display="flex"
       maxW="400px"
+      boxShadow="0 0 0 1px rgba(78, 56, 156, 0.16)"
+      borderRadius={24}
+      _hover={{
+        backgroundColor: "surface.tertiary",
+        boxShadow: "0 0 0 2px #6C4ED9",
+      }}
       {...rest}
     >
       <Burst />
-      <Flex
-        flexDirection="column"
-        borderWidth={1}
-        borderColor="purple.base"
-        boxShadow={`
-          0 0 1px 0 ${theme.colors.purple.base} inset,
-          0 0 1px 0 ${theme.colors.purple.base}
-        `}
-        borderRadius={24}
-        zIndex="2"
-      >
-        <Box p={4} ml={2} mr={2}>
+      <Flex flexDirection="column" borderRadius={24} zIndex="2">
+        <Box
+          p={4}
+          ml={2}
+          bg="radial-gradient(104.22% 1378.1% at 0% 0%, rgba(194, 34, 194, 0) 0%, rgba(210, 37, 204, 0.16) 100%)"
+          borderTopRightRadius={24}
+          borderTopLeftRadius={24}
+        >
           <Img src="/assets/images/coin.png" width="40px" mb={3} />
           <Flex mb={2}>
             <Heading size="lg" mr={1} lineHeight="100%">
@@ -96,12 +95,14 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
           </Flex>
         </Box>
         <Flex
-          p={4}
+          p="16px 16px 24px"
           backgroundColor="surface.primary"
+          borderBottomRightRadius={24}
+          borderBottomLeftRadius={24}
           position="relative"
           flexGrow="1"
           flexDirection="column"
-          paddingTop={isPlaceholder ? 0 : 4}
+          justifyContent="space-evenly"
         >
           {isPlaceholder ? (
             <ComingSoon index={index} />
