@@ -15,7 +15,14 @@ export const BackgroundAssets: VFC = () => {
       />
       <Box
         pos="absolute"
-        top="40rem"
+        top={{
+          base: "40rem",
+          lg: "unset",
+        }}
+        bottom={{
+          base: "unset",
+          lg: "6.3rem",
+        }}
         right={0}
         w="50%"
         h={{
