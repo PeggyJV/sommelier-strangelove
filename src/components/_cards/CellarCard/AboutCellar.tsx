@@ -15,7 +15,12 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
       <Text mb={6} mt={6} ml={2} mr={2}>
         {data.description}
       </Text>
-      <Stats mb={2} data={data} />
+      <Stats
+        data={data}
+        bg="surface.secondary"
+        borderWidth={1}
+        borderColor="surface.tertiary"
+      />
     </>
   )
 }

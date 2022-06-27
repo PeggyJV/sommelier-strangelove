@@ -1,14 +1,26 @@
-import { ColorModeScript } from '@chakra-ui/react'
-import NextDocument, { Head, Html, Main, NextScript } from 'next/document'
-import { config } from 'theme/index'
+import { ColorModeScript } from "@chakra-ui/react"
+import NextDocument, {
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from "next/document"
+import { config } from "theme/index"
 
 class Document extends NextDocument {
   render() {
     return (
-      <Html lang='en'>
-        <Head />
+      <Html lang="en">
+        <Head>
+          <link
+            href="http://fonts.cdnfonts.com/css/sf-mono"
+            rel="stylesheet"
+          />
+        </Head>
         <body>
-          <ColorModeScript initialColorMode={config.initialColorMode} />
+          <ColorModeScript
+            initialColorMode={config.initialColorMode}
+          />
           <Main />
           <NextScript />
         </body>

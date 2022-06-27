@@ -1,8 +1,8 @@
 import { Heading, Img, Flex } from "@chakra-ui/react"
 
 const imageUrls = [
-  "/assets/images/comingSoonA.png",
   "/assets/images/comingSoonB.png",
+  "/assets/images/comingSoonA.png",
 ]
 
 interface Props {
@@ -14,7 +14,7 @@ export const ComingSoon: React.FC<Props> = ({ index = 0 }) => {
 
   return (
     <>
-      <Img src={imageUrl} mb={2} />
+      <Img src={imageUrl} />
       <Flex
         alignItems="center"
         justifyContent="center"
