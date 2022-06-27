@@ -14,12 +14,20 @@ export const Socials: VFC<StackProps> = ({ ...rest }) => {
             key={i}
             href={href}
             display="flex"
+            role="group"
             isExternal
             _hover={{ textDecoration: "underline" }}
           >
             <HStack align="center">
-              <Text as="span">{title}</Text>
-              <ExternalLinkIcon color="purple.base" />
+              <Text as="span" textTransform="capitalize">
+                {title}
+              </Text>
+              <ExternalLinkIcon
+                color="purple.base"
+                _groupHover={{
+                  color: "neutral.100",
+                }}
+              />
             </HStack>
           </Link>
         )

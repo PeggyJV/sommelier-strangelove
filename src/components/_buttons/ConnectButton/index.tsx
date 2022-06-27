@@ -87,6 +87,8 @@ const ConnectButton = ({
           borderRadius={12}
           borderColor="surface.secondary"
           minW="max-content"
+          fontFamily="SF Mono"
+          fontSize={12}
           icon={MoneyWalletIcon}
           iconProps={{
             bgColor: "unset",

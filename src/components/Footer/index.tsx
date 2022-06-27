@@ -53,9 +53,14 @@ const Footer: VFC<ContainerProps> = (props) => {
               href="https://www.notion.so/Sommelier-Documentation-006e748753e34a1299f9b1d6ae3a4544"
               isExternal
             >
-              <HStack align="center">
+              <HStack align="center" role="group">
                 <Text as="span">Documentation</Text>
-                <ExternalLinkIcon color="purple.base" />
+                <ExternalLinkIcon
+                  color="purple.base"
+                  _groupHover={{
+                    color: "neutral.100",
+                  }}
+                />
               </HStack>
             </FooterLink>
             <FooterLink href="/terms">Terms</FooterLink>

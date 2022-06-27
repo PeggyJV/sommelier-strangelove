@@ -76,6 +76,8 @@ export const ConnectedPopover = () => {
             minW="max-content"
             isLoading={account.loading}
             onClick={handleCopyAddressToClipboard}
+            fontFamily="SF Mono"
+            fontSize={12}
             _hover={{
               bg: "purple.dark",
               borderColor: "surface.tertiary",
