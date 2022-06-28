@@ -165,14 +165,17 @@ export const Menu: VFC<MenuProps> = ({
             validate: {
               positive: (v) =>
                 v > 0 || "You must submit a positive amount.",
-              // lessThanBalance: (v) => {
-              //   return (
-              //     v <
-              //       parseFloat(
-              //         toEther(userData?.balances?.dai || "")
-              //       ) || "Insufficient balance"
-              //   )
-              // },
+              lessThanBalance: (v) => {
+                return (
+                  v <
+                    parseFloat(
+                      toEther(
+                        selectedTokenBalance.data?.value || "",
+                        selectedTokenBalance.data?.decimals
+                      )
+                    ) || "Insufficient balance"
+                )
+              },
             },
           })}
         />
