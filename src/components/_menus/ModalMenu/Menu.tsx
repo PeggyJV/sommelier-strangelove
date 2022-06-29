@@ -167,7 +167,7 @@ export const Menu: VFC<MenuProps> = ({
                 v > 0 || "You must submit a positive amount.",
               lessThanBalance: (v) => {
                 return (
-                  v <
+                  v <=
                     parseFloat(
                       toEther(
                         selectedTokenBalance.data?.value || "",
