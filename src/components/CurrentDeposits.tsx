@@ -2,9 +2,12 @@ import { VFC } from "react"
 import dynamic from "next/dynamic"
 import { Box, HStack, Text, useTheme, VStack } from "@chakra-ui/react"
 import { formatCurrency } from "utils/formatCurrency"
-const BarChart = dynamic(() => import("components/_charts/BarChart"), {
-  ssr: false,
-})
+const BarChart = dynamic(
+  () => import("components/_charts/BarChart"),
+  {
+    ssr: false,
+  }
+)
 
 interface CurrentDepositsProps {
   currentDeposits?: string
@@ -31,7 +34,13 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           ${formatCurrency(currentDeposits)} USDC
         </Text>
       </HStack>
-      <Box w="100%" h="4px" bg="#252429" borderRadius={2} overflow="hidden">
+      <Box
+        w="100%"
+        h="4px"
+        bg="#252429"
+        borderRadius={2}
+        overflow="hidden"
+      >
         {/* @ts-ignore */}
         <BarChart
           layout="horizontal"

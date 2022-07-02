@@ -8,7 +8,7 @@ import { formatCurrency } from "./formatCurrency"
 import { getCalulatedTvl } from "./bigNumber"
 
 const formatTvl = (tvlTotal: string, asset: any) => {
-  const total = getCalulatedTvl(tvlTotal, asset)
+  const total = getCalulatedTvl(tvlTotal, asset?.decimals)
 
   const totalString = `${formatCurrency(total)} ${asset?.symbol}`
   return totalString
@@ -21,14 +21,12 @@ export const mutateHourlyData = (
     return [
       {
         id: "tvl",
-        data: data.cellarHourDatas.map(
-          ({ date, tvlTotal, asset }) => {
-            return {
-              x: new Date(date * 1000),
-              y: formatTvl(tvlTotal, asset),
-            }
+        data: data.cellarHourDatas.map(({ date, tvlTotal }) => {
+          return {
+            x: new Date(date * 1000),
+            y: formatTvl(tvlTotal, 18),
           }
-        ),
+        }),
       },
     ]
   }
