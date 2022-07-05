@@ -25,6 +25,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { averageApy } from "utils/cellarApy"
 import { getCalulatedTvl } from "utils/bigNumber"
 import { PerformanceChartProvider } from "context/performanceChartContext"
+import BigNumber from "bignumber.js"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -44,27 +45,26 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
       cellarString: id,
     },
   })
-
   const { data } = cellarResult
   const { cellar } = data || {}
   const {
     dayDatas,
     tvlTotal,
-    asset,
     liquidityLimit,
     addedLiquidityAllTime,
     removedLiquidityAllTime,
   } = cellar || {}
 
-  const calculatedTvl =
-    tvlTotal && asset && getCalulatedTvl(tvlTotal, asset)
-
+  const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
   const tvmVal = formatCurrency(calculatedTvl)
   const apy = data && averageApy(dayDatas!).toFixed(2)
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
     removedLiquidityAllTime
   )
+  const cellarCap =
+    liquidityLimit &&
+    new BigNumber(liquidityLimit).dividedBy(10 ** 6).toString()
   const { name: nameAbbreviated } = cellarDataMap[id]
 
   return (
@@ -103,7 +103,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             tvm={`$${tvmVal} USDC`}
             apy={apy}
             currentDeposits={currentDepositsVal}
-            cellarCap={liquidityLimit}
+            cellarCap={cellarCap}
           />
         </HStack>
         <VStack spacing={4} align="stretch">
