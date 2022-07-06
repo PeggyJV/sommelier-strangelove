@@ -5,7 +5,7 @@ import {
 } from "./CellarCardDisplay"
 import { useGetCellarQuery } from "generated/subgraph"
 import { cellarDataMap } from "data/cellarDataMap"
-import { averageApy, averageTvlActive } from "utils/cellarApy"
+import { averageTvlActive } from "utils/cellarApy"
 import { BigNumber } from "bignumber.js"
 
 interface CellarCardProps extends BoxProps {
@@ -37,24 +37,31 @@ export const CellarCard: React.FC<CellarCardProps> = ({
 
   const { asset, dayDatas, tvlActive, tvlTotal } = data.cellar
 
-  const apy = data && averageApy(dayDatas).toFixed(2)
+  // const apy = data && averageApy(dayDatas).toFixed(2)
   const tvm =
     tvlTotal &&
     asset &&
     new BigNumber(tvlTotal).dividedBy(10 ^ asset?.decimals).toString()
 
   const avgTvlActive = averageTvlActive(dayDatas, tvlActive)
+  const {
+    name,
+    description,
+    apy,
+    strategyType,
+    managementFee,
+    protocols,
+  } = cellarDataMap[cellarAddress]
 
   const cellarCardData: CellarCardData = {
     cellarId: cellarAddress,
-    name: cellarDataMap[cellarAddress].name,
-    description: cellarDataMap[cellarAddress].description,
+    name,
+    description,
     tvm: "",
-    strategyType: cellarDataMap[cellarAddress].strategyType,
-    // managementFee: `${parseFloat(data.cellar.feePlatform) * 100}%`,
-    managementFee: cellarDataMap[cellarAddress].managementFee,
-    protocols: cellarDataMap[cellarAddress].protocols,
     apy,
+    strategyType,
+    managementFee,
+    protocols,
   }
 
   return <CellarCardDisplay data={cellarCardData} {...rest} />
