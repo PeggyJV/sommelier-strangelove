@@ -22,7 +22,6 @@ import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
-import { averageApy } from "utils/cellarApy"
 import { getCalulatedTvl } from "utils/bigNumber"
 import { PerformanceChartProvider } from "context/performanceChartContext"
 import BigNumber from "bignumber.js"
@@ -57,7 +56,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
 
   const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
   const tvmVal = formatCurrency(calculatedTvl)
-  const apy = data && averageApy(dayDatas!).toFixed(2)
+  // const apy = data && averageApy(dayDatas!).toFixed(2)
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
     removedLiquidityAllTime
@@ -65,7 +64,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const cellarCap =
     liquidityLimit &&
     new BigNumber(liquidityLimit).dividedBy(10 ** 6).toString()
-  const { name: nameAbbreviated } = cellarDataMap[id]
+  const { name: nameAbbreviated, apy } = cellarDataMap[id]
 
   return (
     <Layout>
