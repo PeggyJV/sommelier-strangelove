@@ -52,10 +52,21 @@ import { BaseModal } from "./BaseModal"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
+import { useRouter } from "next/router"
+import { useGetCellarQuery } from "generated/subgraph"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
 export const DepositModal: VFC<DepositModalProps> = (props) => {
+  const { query } = useRouter()
+  const { id } = query
+  const [{ data }, refetch] = useGetCellarQuery({
+    variables: {
+      cellarAddress: id as string,
+      cellarString: id as string,
+    },
+    pause: typeof id === "undefined",
+  })
   const methods = useForm<FormValues>()
   const {
     register,
@@ -221,6 +232,8 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
             stable: tokenSymbol,
             value: depositAmount,
           })
+          refetch()
+          props.onClose()
 
           update({
             heading: "ERC20 Approval",

@@ -4,6 +4,7 @@ export interface CellarDataMap {
     description: string
     strategyType: string
     managementFee: string
+    apy: string
     protocols: string
     supportedChains: string[]
     performanceSplit: {
@@ -22,6 +23,7 @@ export const cellarDataMap: CellarDataMap = {
       "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
     strategyType: "Stablecoin",
     managementFee: "1%",
+    apy: "1.5",
     protocols: "AAVE",
     supportedChains: [
       "DAI",
