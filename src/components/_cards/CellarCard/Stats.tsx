@@ -1,6 +1,6 @@
 import { Heading, Box, Grid, FlexProps } from "@chakra-ui/react"
+import { Apy } from "components/Apy"
 import { InlineImage } from "components/InlineImage"
-import { ArrowUpIcon } from "components/_icons"
 import { CellarCardData } from "./CellarCardDisplay"
 import { Label } from "./Label"
 
@@ -8,7 +8,11 @@ interface Props extends FlexProps {
   data: CellarCardData
 }
 
-export const Stats: React.FC<Props> = ({ data, children, ...rest }) => {
+export const Stats: React.FC<Props> = ({
+  data,
+  children,
+  ...rest
+}) => {
   return (
     <Grid
       gridAutoFlow="column"
@@ -30,13 +34,11 @@ export const Stats: React.FC<Props> = ({ data, children, ...rest }) => {
           as="p"
           size="sm"
           fontWeight="bold"
-          color="lime.base"
           display="flex"
           alignItems="center"
           columnGap="5px"
         >
-          <ArrowUpIcon boxSize={3} />
-          {data.apy}%
+          <Apy apy={data.apy} fontSize="inherit" />
         </Heading>
         <Label color="neutral.300" whiteSpace="nowrap">
           Past Week

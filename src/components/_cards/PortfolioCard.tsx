@@ -105,6 +105,9 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               <CardStat
                 label="apy"
                 tooltip="APY earned on your Principal since initial investment from Strategy"
+                labelProps={{
+                  textTransform: "uppercase",
+                }}
               >
                 <Apy apy={`0.00`} />
               </CardStat>
