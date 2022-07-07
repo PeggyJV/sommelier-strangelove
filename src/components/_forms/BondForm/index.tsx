@@ -32,7 +32,7 @@ interface FormValues {
 }
 
 export const BondForm: VFC = () => {
-  const { userData } = useAaveV2Cellar()
+  const { userData, fetchUserData } = useAaveV2Cellar()
   const { fetchUserStakes } = useAaveStaker()
   const methods = useForm<FormValues>({
     defaultValues: { bondingPeriod: 0 },
@@ -96,8 +96,10 @@ export const BondForm: VFC = () => {
 
       await doHandleTransaction({
         hash: bondConf,
-        onSuccess: () =>
-          analytics.track("bond.succeeded", analyticsData),
+        onSuccess: () => {
+          analytics.track("bond.succeeded", analyticsData)
+          fetchUserData()
+        },
         onError: () => analytics.track("bond.failed", analyticsData),
       })
       fetchUserStakes()
