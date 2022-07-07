@@ -22,7 +22,7 @@ export const cellarDataMap: CellarDataMap = {
     description:
       "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
     strategyType: "Stablecoin",
-    managementFee: "1%",
+    managementFee: "0.25%",
     apy: "1.5",
     protocols: "AAVE",
     supportedChains: [
