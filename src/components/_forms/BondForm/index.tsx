@@ -5,6 +5,7 @@ import {
   Icon,
   InputGroup,
   InputRightElement,
+  ModalProps,
   Text,
   VStack,
 } from "@chakra-ui/react"
@@ -26,12 +27,15 @@ import { useContract, useSigner } from "wagmi"
 import { ethers } from "ethers"
 import { analytics } from "utils/analytics"
 import { bondingPeriodOptions } from "./BondingPeriodOptions"
+
 interface FormValues {
   depositAmount: number
   bondingPeriod: number
 }
 
-export const BondForm: VFC = () => {
+type BondFormProps = Pick<ModalProps, "onClose">
+
+export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   const { userData, fetchUserData } = useAaveV2Cellar()
   const { fetchUserStakes } = useAaveStaker()
   const methods = useForm<FormValues>({
@@ -99,6 +103,7 @@ export const BondForm: VFC = () => {
         onSuccess: () => {
           analytics.track("bond.succeeded", analyticsData)
           fetchUserData()
+          onClose()
         },
         onError: () => analytics.track("bond.failed", analyticsData),
       })
