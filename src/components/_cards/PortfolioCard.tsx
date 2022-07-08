@@ -26,6 +26,8 @@ import { Apy } from "components/Apy"
 import BigNumber from "bignumber.js"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
+import { useGetPositionQuery } from "generated/subgraph"
+import { useAccount } from "wagmi"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -58,6 +60,41 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   }
 
   const { activeAsset } = cellarData
+
+  // PNL
+  const [{ data: account }] = useAccount()
+  const [{ fetching: isFetchingGetPosition, data: positionData }] =
+    useGetPositionQuery({
+      variables: {
+        walletAddress:
+          account?.address ??
+          "0xf07ba2229b4da47895ce0a4ab4298ad7f8cb3a4d",
+      },
+      pause: false,
+    })
+
+  const totalAssets = new BigNumber(cellarData.totalAssets)
+  const totalHoldings = new BigNumber(cellarData.totalHoldings)
+  const totalShares = new BigNumber(cellarData.totalSupply ?? "0")
+  const userShares = new BigNumber(fetchUserData.userBalance ?? "0")
+  const currentUserDeposits = new BigNumber(
+    positionData?.wallet?.currentDeposits ?? "0"
+  )
+
+  // ((user share ratio) * tvlTotal - currentDeposits) / currentDeposits * 100
+  let pnl = new BigNumber("0")
+  if (
+    !isFetchingGetPosition &&
+    totalShares.isGreaterThan(0) &&
+    currentUserDeposits.isGreaterThan(0)
+  ) {
+    const shareRatio = userShares.div(totalShares)
+    const tvlTotal = totalAssets.plus(totalHoldings)
+    const gains = shareRatio
+      .multipliedBy(tvlTotal)
+      .minus(currentUserDeposits)
+    pnl = gains.div(currentUserDeposits).multipliedBy(100)
+  }
 
   return (
     <TransparentCard p={8} {...rest}>
@@ -109,7 +146,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   textTransform: "uppercase",
                 }}
               >
-                <Apy apy={`0.00`} />
+                <Apy apy={pnl.toFixed(2, 0)} />
               </CardStat>
             </Box>
             <Stack
