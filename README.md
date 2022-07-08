@@ -63,6 +63,10 @@ The subgraph is written in AssemblyScript and supports representing 256 bit inte
 - [urql Basics](https://formidable.com/open-source/urql/docs/basics/react-preact/)
 - [urql SSR with NextJS](https://formidable.com/open-source/urql/docs/advanced/server-side-rendering/#using-getstaticprops-or-getserversideprops)
 
+### IP Detection and Maxmind
+
+In order to block access to the app from sanctioned and restricted countries we are using the Maxmind database to detect IP addresses. This is setup via a Next.js API route which reads the file from disk and performs a lookup against the IP. See `src/pages/api/geo.ts`. To download the Maxmind database, sign up for an account at [maxmind.com](https://maxmind.com) and create a license key. Export the key as an env var `MAXMIND_KEY` and run `./maxmind.sh` to pull the database.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
