@@ -50,7 +50,8 @@ const PageHome: NextPage = () => {
             strategyType: "-",
             managementFee: "-",
             protocols: "-",
-            apy: "",
+            individualApy: "",
+            cellarApy: "",
           }
           return (
             <CellarCardDisplay
