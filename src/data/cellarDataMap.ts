@@ -1,3 +1,5 @@
+import { config } from "utils/config"
+
 export interface CellarDataMap {
   [key: string]: {
     name: string
@@ -18,7 +20,7 @@ export interface CellarDataMap {
 }
 
 export const cellarDataMap: CellarDataMap = {
-  "0xd15135141f1217b8863cb1431ad71309ef22ceda": {
+  [config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS]: {
     name: "aave2",
     description:
       "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
