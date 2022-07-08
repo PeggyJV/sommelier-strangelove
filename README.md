@@ -65,7 +65,7 @@ The subgraph is written in AssemblyScript and supports representing 256 bit inte
 
 ### IP Detection and Maxmind
 
-In order to block access to the app from sanctioned and restricted countries we are using the Maxmind database to detect IP addresses. This is setup via a Next.js API route which reads the file from disk and performs a lookup against the IP. See `src/pages/api/geo.ts`. To download the Maxmind database, sign up for an account at [maxmind.com](https://maxmind.com) and create a license key. Export the key as an env var `MAXMIND_KEY` and run `./maxmind.sh` to pull the database.
+In order to block access to the app from sanctioned and restricted countries we are using the Maxmind database to detect IP addresses. This is setup via a Next.js API route which reads the file from disk and performs a lookup against the IP. See `src/pages/api/geo.ts`. To download the Maxmind database, sign up for an account at [maxmind.com](https://maxmind.com) and create a license key. Export the key as an env var `MAXMIND_KEY` and run `./maxmind.sh` to pull the database. Maxmind updates their database once a week on Tuesdays so we should be deploying to Vercel at least once a week.
 
 ## Learn More
 

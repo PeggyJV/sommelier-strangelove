@@ -15,6 +15,7 @@ const loadMaxmind = new Promise<Reader<CityResponse>>((resolve) =>
 const unknownResponse = {
   isRestricted: false,
   country: "NO_RESULT",
+  region: "NO_RESULT",
 }
 
 export default async function getGeo(
@@ -48,6 +49,7 @@ export default async function getGeo(
   return res.status(200).json({
     isRestricted: isRestricted(geo),
     country: country.iso_code,
+    region: geo.subdivisions?.[0]?.iso_code ?? "",
   })
 }
 
