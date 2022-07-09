@@ -31,11 +31,9 @@ export type Block_Height = {
 
 export type Cellar = {
   __typename?: 'Cellar';
-  accruedPerformanceFees: Scalars['BigInt'];
-  accruedPlatformFees: Scalars['BigInt'];
   addedLiquidityAllTime: Scalars['BigInt'];
   asset: TokenErc20;
-  burntPerformanceFees: Scalars['BigInt'];
+  currentDeposits: Scalars['BigInt'];
   dayDatas: Array<CellarDayData>;
   depositLimit: Scalars['BigInt'];
   depositWithdrawEvents: Array<DepositWithdrawAaveEvent>;
@@ -99,6 +97,7 @@ export type CellarDayData_Filter = {
   addedLiquidity_not?: InputMaybe<Scalars['BigInt']>;
   addedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   asset?: InputMaybe<Scalars['String']>;
+  asset_?: InputMaybe<TokenErc20_Filter>;
   asset_contains?: InputMaybe<Scalars['String']>;
   asset_contains_nocase?: InputMaybe<Scalars['String']>;
   asset_ends_with?: InputMaybe<Scalars['String']>;
@@ -119,6 +118,7 @@ export type CellarDayData_Filter = {
   asset_starts_with?: InputMaybe<Scalars['String']>;
   asset_starts_with_nocase?: InputMaybe<Scalars['String']>;
   cellar?: InputMaybe<Scalars['String']>;
+  cellar_?: InputMaybe<Cellar_Filter>;
   cellar_contains?: InputMaybe<Scalars['String']>;
   cellar_contains_nocase?: InputMaybe<Scalars['String']>;
   cellar_ends_with?: InputMaybe<Scalars['String']>;
@@ -238,11 +238,14 @@ export enum CellarDayData_OrderBy {
 
 export type CellarHourData = {
   __typename?: 'CellarHourData';
+  addedLiquidity: Scalars['BigInt'];
   asset?: Maybe<TokenErc20>;
   cellar: Cellar;
   date: Scalars['Int'];
   earnings: Scalars['BigInt'];
   id: Scalars['ID'];
+  numWallets: Scalars['Int'];
+  removedLiquidity: Scalars['BigInt'];
   tvlActive: Scalars['BigInt'];
   tvlInactive: Scalars['BigInt'];
   tvlInvested: Scalars['BigInt'];
@@ -253,7 +256,16 @@ export type CellarHourData = {
 export type CellarHourData_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  addedLiquidity?: InputMaybe<Scalars['BigInt']>;
+  addedLiquidity_gt?: InputMaybe<Scalars['BigInt']>;
+  addedLiquidity_gte?: InputMaybe<Scalars['BigInt']>;
+  addedLiquidity_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  addedLiquidity_lt?: InputMaybe<Scalars['BigInt']>;
+  addedLiquidity_lte?: InputMaybe<Scalars['BigInt']>;
+  addedLiquidity_not?: InputMaybe<Scalars['BigInt']>;
+  addedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   asset?: InputMaybe<Scalars['String']>;
+  asset_?: InputMaybe<TokenErc20_Filter>;
   asset_contains?: InputMaybe<Scalars['String']>;
   asset_contains_nocase?: InputMaybe<Scalars['String']>;
   asset_ends_with?: InputMaybe<Scalars['String']>;
@@ -274,6 +286,7 @@ export type CellarHourData_Filter = {
   asset_starts_with?: InputMaybe<Scalars['String']>;
   asset_starts_with_nocase?: InputMaybe<Scalars['String']>;
   cellar?: InputMaybe<Scalars['String']>;
+  cellar_?: InputMaybe<Cellar_Filter>;
   cellar_contains?: InputMaybe<Scalars['String']>;
   cellar_contains_nocase?: InputMaybe<Scalars['String']>;
   cellar_ends_with?: InputMaybe<Scalars['String']>;
@@ -317,6 +330,22 @@ export type CellarHourData_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  numWallets?: InputMaybe<Scalars['Int']>;
+  numWallets_gt?: InputMaybe<Scalars['Int']>;
+  numWallets_gte?: InputMaybe<Scalars['Int']>;
+  numWallets_in?: InputMaybe<Array<Scalars['Int']>>;
+  numWallets_lt?: InputMaybe<Scalars['Int']>;
+  numWallets_lte?: InputMaybe<Scalars['Int']>;
+  numWallets_not?: InputMaybe<Scalars['Int']>;
+  numWallets_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  removedLiquidity?: InputMaybe<Scalars['BigInt']>;
+  removedLiquidity_gt?: InputMaybe<Scalars['BigInt']>;
+  removedLiquidity_gte?: InputMaybe<Scalars['BigInt']>;
+  removedLiquidity_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  removedLiquidity_lt?: InputMaybe<Scalars['BigInt']>;
+  removedLiquidity_lte?: InputMaybe<Scalars['BigInt']>;
+  removedLiquidity_not?: InputMaybe<Scalars['BigInt']>;
+  removedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   tvlActive?: InputMaybe<Scalars['BigInt']>;
   tvlActive_gt?: InputMaybe<Scalars['BigInt']>;
   tvlActive_gte?: InputMaybe<Scalars['BigInt']>;
@@ -360,11 +389,14 @@ export type CellarHourData_Filter = {
 };
 
 export enum CellarHourData_OrderBy {
+  AddedLiquidity = 'addedLiquidity',
   Asset = 'asset',
   Cellar = 'cellar',
   Date = 'date',
   Earnings = 'earnings',
   Id = 'id',
+  NumWallets = 'numWallets',
+  RemovedLiquidity = 'removedLiquidity',
   TvlActive = 'tvlActive',
   TvlInactive = 'tvlInactive',
   TvlInvested = 'tvlInvested',
@@ -413,6 +445,7 @@ export type CellarShareTransfer_Filter = {
   block_not?: InputMaybe<Scalars['Int']>;
   block_not_in?: InputMaybe<Array<Scalars['Int']>>;
   cellar?: InputMaybe<Scalars['String']>;
+  cellar_?: InputMaybe<Cellar_Filter>;
   cellar_contains?: InputMaybe<Scalars['String']>;
   cellar_contains_nocase?: InputMaybe<Scalars['String']>;
   cellar_ends_with?: InputMaybe<Scalars['String']>;
@@ -509,6 +542,7 @@ export type CellarShareTransfer_Filter = {
   txId_starts_with?: InputMaybe<Scalars['String']>;
   txId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   wallet?: InputMaybe<Scalars['String']>;
+  wallet_?: InputMaybe<Wallet_Filter>;
   wallet_contains?: InputMaybe<Scalars['String']>;
   wallet_contains_nocase?: InputMaybe<Scalars['String']>;
   wallet_ends_with?: InputMaybe<Scalars['String']>;
@@ -554,6 +588,7 @@ export type CellarShare_Filter = {
   balance_not?: InputMaybe<Scalars['BigInt']>;
   balance_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   cellar?: InputMaybe<Scalars['String']>;
+  cellar_?: InputMaybe<Cellar_Filter>;
   cellar_contains?: InputMaybe<Scalars['String']>;
   cellar_contains_nocase?: InputMaybe<Scalars['String']>;
   cellar_ends_with?: InputMaybe<Scalars['String']>;
@@ -582,6 +617,7 @@ export type CellarShare_Filter = {
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   wallet?: InputMaybe<Scalars['String']>;
+  wallet_?: InputMaybe<Wallet_Filter>;
   wallet_contains?: InputMaybe<Scalars['String']>;
   wallet_contains_nocase?: InputMaybe<Scalars['String']>;
   wallet_ends_with?: InputMaybe<Scalars['String']>;
@@ -613,22 +649,6 @@ export enum CellarShare_OrderBy {
 export type Cellar_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
-  accruedPerformanceFees?: InputMaybe<Scalars['BigInt']>;
-  accruedPerformanceFees_gt?: InputMaybe<Scalars['BigInt']>;
-  accruedPerformanceFees_gte?: InputMaybe<Scalars['BigInt']>;
-  accruedPerformanceFees_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  accruedPerformanceFees_lt?: InputMaybe<Scalars['BigInt']>;
-  accruedPerformanceFees_lte?: InputMaybe<Scalars['BigInt']>;
-  accruedPerformanceFees_not?: InputMaybe<Scalars['BigInt']>;
-  accruedPerformanceFees_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  accruedPlatformFees?: InputMaybe<Scalars['BigInt']>;
-  accruedPlatformFees_gt?: InputMaybe<Scalars['BigInt']>;
-  accruedPlatformFees_gte?: InputMaybe<Scalars['BigInt']>;
-  accruedPlatformFees_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  accruedPlatformFees_lt?: InputMaybe<Scalars['BigInt']>;
-  accruedPlatformFees_lte?: InputMaybe<Scalars['BigInt']>;
-  accruedPlatformFees_not?: InputMaybe<Scalars['BigInt']>;
-  accruedPlatformFees_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   addedLiquidityAllTime?: InputMaybe<Scalars['BigInt']>;
   addedLiquidityAllTime_gt?: InputMaybe<Scalars['BigInt']>;
   addedLiquidityAllTime_gte?: InputMaybe<Scalars['BigInt']>;
@@ -638,6 +658,7 @@ export type Cellar_Filter = {
   addedLiquidityAllTime_not?: InputMaybe<Scalars['BigInt']>;
   addedLiquidityAllTime_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   asset?: InputMaybe<Scalars['String']>;
+  asset_?: InputMaybe<TokenErc20_Filter>;
   asset_contains?: InputMaybe<Scalars['String']>;
   asset_contains_nocase?: InputMaybe<Scalars['String']>;
   asset_ends_with?: InputMaybe<Scalars['String']>;
@@ -657,14 +678,15 @@ export type Cellar_Filter = {
   asset_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   asset_starts_with?: InputMaybe<Scalars['String']>;
   asset_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  burntPerformanceFees?: InputMaybe<Scalars['BigInt']>;
-  burntPerformanceFees_gt?: InputMaybe<Scalars['BigInt']>;
-  burntPerformanceFees_gte?: InputMaybe<Scalars['BigInt']>;
-  burntPerformanceFees_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  burntPerformanceFees_lt?: InputMaybe<Scalars['BigInt']>;
-  burntPerformanceFees_lte?: InputMaybe<Scalars['BigInt']>;
-  burntPerformanceFees_not?: InputMaybe<Scalars['BigInt']>;
-  burntPerformanceFees_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  currentDeposits?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_gt?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_gte?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  currentDeposits_lt?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_lte?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_not?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  dayDatas_?: InputMaybe<CellarDayData_Filter>;
   depositLimit?: InputMaybe<Scalars['BigInt']>;
   depositLimit_gt?: InputMaybe<Scalars['BigInt']>;
   depositLimit_gte?: InputMaybe<Scalars['BigInt']>;
@@ -673,6 +695,7 @@ export type Cellar_Filter = {
   depositLimit_lte?: InputMaybe<Scalars['BigInt']>;
   depositLimit_not?: InputMaybe<Scalars['BigInt']>;
   depositLimit_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  depositWithdrawEvents_?: InputMaybe<DepositWithdrawAaveEvent_Filter>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -776,11 +799,9 @@ export type Cellar_Filter = {
 };
 
 export enum Cellar_OrderBy {
-  AccruedPerformanceFees = 'accruedPerformanceFees',
-  AccruedPlatformFees = 'accruedPlatformFees',
   AddedLiquidityAllTime = 'addedLiquidityAllTime',
   Asset = 'asset',
-  BurntPerformanceFees = 'burntPerformanceFees',
+  CurrentDeposits = 'currentDeposits',
   DayDatas = 'dayDatas',
   DepositLimit = 'depositLimit',
   DepositWithdrawEvents = 'depositWithdrawEvents',
@@ -827,6 +848,7 @@ export type DepositWithdrawAaveEvent_Filter = {
   block_not?: InputMaybe<Scalars['Int']>;
   block_not_in?: InputMaybe<Array<Scalars['Int']>>;
   cellar?: InputMaybe<Scalars['String']>;
+  cellar_?: InputMaybe<Cellar_Filter>;
   cellar_contains?: InputMaybe<Scalars['String']>;
   cellar_contains_nocase?: InputMaybe<Scalars['String']>;
   cellar_ends_with?: InputMaybe<Scalars['String']>;
@@ -924,6 +946,7 @@ export type DepositWithdrawEvent_Filter = {
   block_not?: InputMaybe<Scalars['Int']>;
   block_not_in?: InputMaybe<Array<Scalars['Int']>>;
   cellar?: InputMaybe<Scalars['String']>;
+  cellar_?: InputMaybe<Cellar_Filter>;
   cellar_contains?: InputMaybe<Scalars['String']>;
   cellar_contains_nocase?: InputMaybe<Scalars['String']>;
   cellar_ends_with?: InputMaybe<Scalars['String']>;
@@ -980,6 +1003,7 @@ export type DepositWithdrawEvent_Filter = {
   txId_starts_with?: InputMaybe<Scalars['String']>;
   txId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   wallet?: InputMaybe<Scalars['String']>;
+  wallet_?: InputMaybe<Wallet_Filter>;
   wallet_contains?: InputMaybe<Scalars['String']>;
   wallet_contains_nocase?: InputMaybe<Scalars['String']>;
   wallet_ends_with?: InputMaybe<Scalars['String']>;
@@ -1497,9 +1521,12 @@ export type Wallet = {
   __typename?: 'Wallet';
   cellarShareTransferEvents: Array<CellarShareTransfer>;
   cellarShares: Array<CellarShare>;
+  currentDeposits: Scalars['BigInt'];
   dayDatas: Array<WalletDayData>;
   depositWithdrawEvents: Array<DepositWithdrawEvent>;
   id: Scalars['ID'];
+  totalDeposits: Scalars['BigInt'];
+  totalWithdrawals: Scalars['BigInt'];
 };
 
 
@@ -1583,6 +1610,7 @@ export type WalletDayData_Filter = {
   removedLiquidity_not?: InputMaybe<Scalars['BigInt']>;
   removedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   wallet?: InputMaybe<Scalars['String']>;
+  wallet_?: InputMaybe<Wallet_Filter>;
   wallet_contains?: InputMaybe<Scalars['String']>;
   wallet_contains_nocase?: InputMaybe<Scalars['String']>;
   wallet_ends_with?: InputMaybe<Scalars['String']>;
@@ -1615,6 +1643,18 @@ export enum WalletDayData_OrderBy {
 export type Wallet_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  cellarShareTransferEvents_?: InputMaybe<CellarShareTransfer_Filter>;
+  cellarShares_?: InputMaybe<CellarShare_Filter>;
+  currentDeposits?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_gt?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_gte?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  currentDeposits_lt?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_lte?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_not?: InputMaybe<Scalars['BigInt']>;
+  currentDeposits_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  dayDatas_?: InputMaybe<WalletDayData_Filter>;
+  depositWithdrawEvents_?: InputMaybe<DepositWithdrawEvent_Filter>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -1623,14 +1663,33 @@ export type Wallet_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  totalDeposits?: InputMaybe<Scalars['BigInt']>;
+  totalDeposits_gt?: InputMaybe<Scalars['BigInt']>;
+  totalDeposits_gte?: InputMaybe<Scalars['BigInt']>;
+  totalDeposits_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalDeposits_lt?: InputMaybe<Scalars['BigInt']>;
+  totalDeposits_lte?: InputMaybe<Scalars['BigInt']>;
+  totalDeposits_not?: InputMaybe<Scalars['BigInt']>;
+  totalDeposits_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalWithdrawals?: InputMaybe<Scalars['BigInt']>;
+  totalWithdrawals_gt?: InputMaybe<Scalars['BigInt']>;
+  totalWithdrawals_gte?: InputMaybe<Scalars['BigInt']>;
+  totalWithdrawals_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalWithdrawals_lt?: InputMaybe<Scalars['BigInt']>;
+  totalWithdrawals_lte?: InputMaybe<Scalars['BigInt']>;
+  totalWithdrawals_not?: InputMaybe<Scalars['BigInt']>;
+  totalWithdrawals_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
 };
 
 export enum Wallet_OrderBy {
   CellarShareTransferEvents = 'cellarShareTransferEvents',
   CellarShares = 'cellarShares',
+  CurrentDeposits = 'currentDeposits',
   DayDatas = 'dayDatas',
   DepositWithdrawEvents = 'depositWithdrawEvents',
-  Id = 'id'
+  Id = 'id',
+  TotalDeposits = 'totalDeposits',
+  TotalWithdrawals = 'totalWithdrawals'
 }
 
 export type _Block_ = {
@@ -1706,11 +1765,10 @@ export type GetHourlyTvlQuery = { __typename?: 'Query', cellarHourDatas: Array<{
 
 export type GetPositionQueryVariables = Exact<{
   walletAddress: Scalars['ID'];
-  cellarAddress: Scalars['String'];
 }>;
 
 
-export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
+export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, currentDeposits: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
 
 export type GetWeeklyTvlQueryVariables = Exact<{
   epoch: Scalars['Int'];
@@ -1864,10 +1922,11 @@ export function useGetHourlyTvlQuery(options?: Omit<Urql.UseQueryArgs<GetHourlyT
   return Urql.useQuery<GetHourlyTvlQuery>({ query: GetHourlyTvlDocument, ...options });
 };
 export const GetPositionDocument = gql`
-    query GetPosition($walletAddress: ID!, $cellarAddress: String!) {
+    query GetPosition($walletAddress: ID!) {
   wallet(id: $walletAddress) {
     id
-    cellarShares(where: {cellar: $cellarAddress}) {
+    currentDeposits
+    cellarShares {
       balance
     }
   }

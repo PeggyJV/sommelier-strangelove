@@ -15,6 +15,9 @@ type CellarState = {
   loading: boolean
   name: string
   activeAsset: string
+  totalSupply: BigNumberE
+  totalBalance: BigNumberE
+  totalHoldings: BigNumberE
 }
 
 type Balances = {
@@ -46,6 +49,9 @@ const initialCellarData: CellarState = {
   loading: false,
   name: "",
   activeAsset: "",
+  totalSupply: BigNumberE.from(0),
+  totalBalance: BigNumberE.from(0),
+  totalHoldings: BigNumberE.from(0),
 }
 const AaveV2CellarContext = createContext<SharedState>({
   cellarData: initialCellarData,
@@ -120,12 +126,20 @@ export const AaveV2CellarProvider = ({
       try {
         const name = await aaveV2CellarContract.name()
         const activeAsset = await aaveV2CellarContract.asset()
+        const totalSupply = await aaveV2CellarContract.totalSupply()
+        const totalBalance = await aaveV2CellarContract.totalBalance()
+        const totalHoldings =
+          await aaveV2CellarContract.totalHoldings()
+
         setCellarData((state) => ({
           ...state,
           name: name,
           activeAsset,
           aAssetToken,
           loading: false,
+          totalSupply,
+          totalBalance,
+          totalHoldings,
         }))
       } catch (e) {
         console.warn("Cannot read cellar data", e)

@@ -232,6 +232,22 @@
             "deprecationReason": null
           },
           {
+            "name": "currentDeposits",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "addedLiquidityAllTime",
             "description": null,
             "args": [],
@@ -297,54 +313,6 @@
           },
           {
             "name": "sharesTotal",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "BigInt",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "accruedPlatformFees",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "BigInt",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "accruedPerformanceFees",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "BigInt",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "burntPerformanceFees",
             "description": null,
             "args": [],
             "type": {
@@ -1181,6 +1149,16 @@
             "defaultValue": null
           },
           {
+            "name": "cellar_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Cellar_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "asset",
             "description": null,
             "type": {
@@ -1392,6 +1370,16 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "asset_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "TokenERC20_filter",
               "ofType": null
             },
             "defaultValue": null
@@ -2446,6 +2434,54 @@
             "deprecationReason": null
           },
           {
+            "name": "addedLiquidity",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "removedLiquidity",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "numWallets",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "tvlActive",
             "description": null,
             "args": [],
@@ -2946,6 +2982,16 @@
             "defaultValue": null
           },
           {
+            "name": "cellar_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Cellar_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "asset",
             "description": null,
             "type": {
@@ -3162,6 +3208,16 @@
             "defaultValue": null
           },
           {
+            "name": "asset_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "TokenERC20_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "updatedAt",
             "description": null,
             "type": {
@@ -3241,6 +3297,294 @@
           },
           {
             "name": "updatedAt_not_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "addedLiquidity",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "addedLiquidity_not",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "addedLiquidity_gt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "addedLiquidity_lt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "addedLiquidity_gte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "addedLiquidity_lte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "addedLiquidity_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "addedLiquidity_not_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "removedLiquidity",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "removedLiquidity_not",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "removedLiquidity_gt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "removedLiquidity_lt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "removedLiquidity_gte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "removedLiquidity_lte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "removedLiquidity_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "removedLiquidity_not_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "numWallets",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "numWallets_not",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "numWallets_gt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "numWallets_lt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "numWallets_gte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "numWallets_lte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "numWallets_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "numWallets_not_in",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -3786,6 +4130,24 @@
           },
           {
             "name": "updatedAt",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "addedLiquidity",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "removedLiquidity",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "numWallets",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -4804,6 +5166,16 @@
             "defaultValue": null
           },
           {
+            "name": "cellar_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Cellar_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "wallet",
             "description": null,
             "type": {
@@ -5015,6 +5387,16 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "wallet_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Wallet_filter",
               "ofType": null
             },
             "defaultValue": null
@@ -5922,6 +6304,16 @@
             "defaultValue": null
           },
           {
+            "name": "cellar_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Cellar_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "wallet",
             "description": null,
             "type": {
@@ -6133,6 +6525,16 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "wallet_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Wallet_filter",
               "ofType": null
             },
             "defaultValue": null
@@ -6818,6 +7220,16 @@
             "defaultValue": null
           },
           {
+            "name": "asset_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "TokenERC20_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "tvlActive",
             "description": null,
             "type": {
@@ -7185,6 +7597,102 @@
           },
           {
             "name": "tvlTotal_not_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_not",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_gt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_lt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_gte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_lte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_not_in",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -7682,294 +8190,6 @@
             "defaultValue": null
           },
           {
-            "name": "accruedPlatformFees",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPlatformFees_not",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPlatformFees_gt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPlatformFees_lt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPlatformFees_gte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPlatformFees_lte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPlatformFees_in",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "BigInt",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPlatformFees_not_in",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "BigInt",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPerformanceFees",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPerformanceFees_not",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPerformanceFees_gt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPerformanceFees_lt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPerformanceFees_gte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPerformanceFees_lte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPerformanceFees_in",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "BigInt",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "accruedPerformanceFees_not_in",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "BigInt",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "burntPerformanceFees",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "burntPerformanceFees_not",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "burntPerformanceFees_gt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "burntPerformanceFees_lt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "burntPerformanceFees_gte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "burntPerformanceFees_lte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "BigInt",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "burntPerformanceFees_in",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "BigInt",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "burntPerformanceFees_not_in",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "BigInt",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null
-          },
-          {
             "name": "depositLimit",
             "description": null,
             "type": {
@@ -8162,6 +8382,26 @@
             "defaultValue": null
           },
           {
+            "name": "dayDatas_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CellarDayData_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "depositWithdrawEvents_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "DepositWithdrawAaveEvent_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "_change_block",
             "description": "Filter for the block changed event.",
             "type": {
@@ -8227,6 +8467,12 @@
             "deprecationReason": null
           },
           {
+            "name": "currentDeposits",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "addedLiquidityAllTime",
             "description": null,
             "isDeprecated": false,
@@ -8252,24 +8498,6 @@
           },
           {
             "name": "sharesTotal",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "accruedPlatformFees",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "accruedPerformanceFees",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "burntPerformanceFees",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -8722,6 +8950,16 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "cellar_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Cellar_filter",
               "ofType": null
             },
             "defaultValue": null
@@ -9734,6 +9972,16 @@
             "defaultValue": null
           },
           {
+            "name": "cellar_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Cellar_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "wallet",
             "description": null,
             "type": {
@@ -9945,6 +10193,16 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "wallet_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Wallet_filter",
               "ofType": null
             },
             "defaultValue": null
@@ -14191,6 +14449,54 @@
             "deprecationReason": null
           },
           {
+            "name": "currentDeposits",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "totalDeposits",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "totalWithdrawals",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "cellarShares",
             "description": null,
             "args": [
@@ -15002,6 +15308,16 @@
             "defaultValue": null
           },
           {
+            "name": "wallet_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Wallet_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "addedLiquidity",
             "description": null,
             "type": {
@@ -15352,6 +15668,334 @@
             "defaultValue": null
           },
           {
+            "name": "currentDeposits",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_not",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_gt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_lt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_gte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_lte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "currentDeposits_not_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalDeposits",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalDeposits_not",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalDeposits_gt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalDeposits_lt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalDeposits_gte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalDeposits_lte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalDeposits_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalDeposits_not_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalWithdrawals",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalWithdrawals_not",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalWithdrawals_gt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalWithdrawals_lt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalWithdrawals_gte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalWithdrawals_lte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "BigInt",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalWithdrawals_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "totalWithdrawals_not_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "cellarShares_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CellarShare_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "cellarShareTransferEvents_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CellarShareTransfer_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "dayDatas_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "WalletDayData_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "depositWithdrawEvents_",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "DepositWithdrawEvent_filter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "_change_block",
             "description": "Filter for the block changed event.",
             "type": {
@@ -15376,6 +16020,24 @@
         "enumValues": [
           {
             "name": "id",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "currentDeposits",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "totalDeposits",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "totalWithdrawals",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

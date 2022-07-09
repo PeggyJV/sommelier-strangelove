@@ -1,7 +1,8 @@
-query GetPosition($walletAddress: ID!, $cellarAddress: String!) {
+query GetPosition($walletAddress: ID!) {
   wallet(id: $walletAddress) {
     id
-    cellarShares(where: { cellar: $cellarAddress}) {
+    currentDeposits
+    cellarShares {
       balance
     }
   }

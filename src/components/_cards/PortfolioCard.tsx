@@ -26,6 +26,9 @@ import { Apy } from "components/Apy"
 import BigNumber from "bignumber.js"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
+import { useGetPositionQuery } from "generated/subgraph"
+import { useAccount } from "wagmi"
+import { BigNumber as BigNumberE } from "ethers"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -58,6 +61,47 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   }
 
   const { activeAsset } = cellarData
+
+  // PNL
+  const [{ data: account }] = useAccount()
+  const [{ fetching: isFetchingGetPosition, data: positionData }] =
+    useGetPositionQuery({
+      variables: {
+        walletAddress: account?.address ?? "",
+      },
+      pause: false,
+    })
+
+  // Normalized to 6 decimals
+  const totalBalance = cellarData.totalBalance
+  const totalHoldings = cellarData.totalHoldings
+  const totalShares = cellarData.totalSupply
+  const userShares = BigNumberE.from(fetchUserData.userBalance ?? "0")
+
+  let currentUserDeposits = BigNumberE.from(
+    positionData?.wallet?.currentDeposits ?? "0"
+  )
+
+  // ((user share ratio) * tvlTotal - currentDeposits) / currentDeposits * 100
+  let pnl = new BigNumber("0")
+  if (
+    !isFetchingGetPosition &&
+    totalShares.gt(0) &&
+    currentUserDeposits.gt(0)
+  ) {
+    // 18 decimals, must be normalized to 6
+    const deposits = currentUserDeposits.div(
+      BigNumberE.from(10).pow(18 - 6)
+    )
+    const shareRatio = userShares.div(totalShares)
+    const tvlTotal = totalBalance.add(totalHoldings)
+    const gains = shareRatio.mul(tvlTotal).sub(deposits)
+
+    // Convert back to JS number because BigNumber doesn't handle float division well
+    const pnlNumber = (gains.toNumber() / deposits.toNumber()) * 100
+
+    pnl = new BigNumber(pnlNumber)
+  }
 
   return (
     <TransparentCard p={8} {...rest}>
@@ -103,13 +147,13 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               }, 1000)}
             >
               <CardStat
-                label="apy"
-                tooltip="APY earned on your Principal since initial investment from Strategy"
+                label="pnl"
+                tooltip="This represents percentage gains compared to current deposits"
                 labelProps={{
                   textTransform: "uppercase",
                 }}
               >
-                <Apy apy={`0.00`} />
+                <Apy apy={pnl.toFixed(2, 0)} />
               </CardStat>
             </Box>
             <Stack
