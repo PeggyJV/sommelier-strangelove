@@ -21,6 +21,7 @@ interface CellarStatsProps extends StackProps {
   apy?: string
   currentDeposits?: string
   cellarCap?: string
+  asset?: string
 }
 
 export const CellarStats: VFC<CellarStatsProps> = ({
@@ -28,6 +29,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
   apy,
   currentDeposits,
   cellarCap,
+  asset,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
@@ -78,11 +80,11 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label="APY earned on Principal since initial investment from Strategy"
+            label="Expected APY earned on Principal since initial investment from Strategy"
             bg="surface.bg"
           >
             <HStack spacing={1} align="center">
-              <CardHeading>APY</CardHeading>
+              <CardHeading>Expected APY</CardHeading>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>
@@ -91,6 +93,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
       <CurrentDeposits
         currentDeposits={currentDeposits}
         cellarCap={cellarCap}
+        asset={asset}
       />
     </HStack>
   )
