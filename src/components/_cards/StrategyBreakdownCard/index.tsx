@@ -1,5 +1,6 @@
 import {
   BoxProps,
+  Image,
   Tab,
   TabList,
   TabPanel,
@@ -22,7 +23,8 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
   cellarId,
   cellarDataMap,
 }) => {
-  const { strategyBreakdown } = cellarDataMap[cellarId]
+  const { strategyBreakdown, strategyImgSrc } =
+    cellarDataMap[cellarId]
 
   return (
     <InnerCard pt={4} px={6} pb={8}>
@@ -48,6 +50,9 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
             return (
               <TabPanel key={i} {...tabPanelProps}>
                 <Text whiteSpace="pre-line">{value}</Text>
+                {strategyImgSrc && i === 1 && (
+                  <Image src={strategyImgSrc} alt="" mt={4} />
+                )}
               </TabPanel>
             )
           })}
