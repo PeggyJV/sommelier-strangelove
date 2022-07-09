@@ -110,6 +110,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             apy={cellarApy}
             currentDeposits={currentDepositsVal}
             cellarCap={cellarCap}
+            asset={activeSymbol}
           />
         </HStack>
         <VStack spacing={4} align="stretch">

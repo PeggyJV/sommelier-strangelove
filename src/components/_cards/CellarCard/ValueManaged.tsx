@@ -10,7 +10,10 @@ import { CurrentDeposits } from "components/CurrentDeposits"
 import { Label } from "./Label"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { useGetCellarQuery } from "generated/subgraph"
-import { ArrowUpIcon, InformationIcon } from "components/_icons"
+import { InformationIcon } from "components/_icons"
+import BigNumber from "bignumber.js"
+import { cellarDataMap } from "data/cellarDataMap"
+import { formatCurrency } from "utils/formatCurrency"
 
 interface Props extends BoxProps {
   cellarId: string
@@ -32,16 +35,27 @@ export const ValueManaged: React.FC<Props> = ({
     liquidityLimit,
     addedLiquidityAllTime,
     removedLiquidityAllTime,
+    tvlTotal,
   } = cellar || {}
   const currentDepositsVal = formatCurrentDeposits(
     addedLiquidityAllTime,
     removedLiquidityAllTime
   )
 
+  const cellarCap =
+    liquidityLimit &&
+    new BigNumber(liquidityLimit).dividedBy(10 ** 6).toString()
+
+  const tvlString =
+    tvlTotal && new BigNumber(tvlTotal).dividedBy(10 ** 18).toString()
+  const tvm = formatCurrency(tvlString)
+
+  const { cellarApy } = cellarDataMap[cellarId]
+
   return (
     <Box {...rest}>
       <Flex alignItems="baseline" mb={1}>
-        <Heading size="md">$49.25M</Heading>
+        <Heading size="md">{tvm}</Heading>
         <Label
           ml={1}
           color="neutral.300"
@@ -66,20 +80,19 @@ export const ValueManaged: React.FC<Props> = ({
       <Flex alignItems="center" mb={4}>
         <Heading
           size="sm"
-          color="lime.base"
           display="flex"
           alignItems="center"
           columnGap="3px"
         >
-          <ArrowUpIcon boxSize={3} /> $2,012,394.79 (4.08%)
+          {cellarApy}%
         </Heading>
         <Label ml={1} color="neutral.300">
-          Past Week
+          Expected APY
         </Label>
       </Flex>
       <CurrentDeposits
         currentDeposits={currentDepositsVal}
-        cellarCap={liquidityLimit}
+        cellarCap={cellarCap}
       />
     </Box>
   )
