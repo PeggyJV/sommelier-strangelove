@@ -12,11 +12,13 @@ const BarChart = dynamic(
 interface CurrentDepositsProps {
   currentDeposits?: string
   cellarCap?: string
+  asset?: string
 }
 
 export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
   currentDeposits,
   cellarCap,
+  asset,
 }) => {
   const theme = useTheme()
   const isDataPresent = currentDeposits && cellarCap
@@ -31,7 +33,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           Current Deposits
         </Text>
         <Text fontSize="xs" fontWeight="semibold">
-          ${formatCurrency(currentDeposits)} USDC
+          ${formatCurrency(currentDeposits)} {asset}
         </Text>
       </HStack>
       <Box
@@ -60,7 +62,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           Cellar Cap
         </Text>
         <Text fontSize="xs" fontWeight="semibold">
-          ${formatCurrency(cellarCap)} USDC
+          ${formatCurrency(cellarCap)} {asset}
         </Text>
       </HStack>
     </VStack>
