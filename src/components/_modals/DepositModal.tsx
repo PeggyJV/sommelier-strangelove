@@ -33,6 +33,7 @@ import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import {
   AlphaRouter,
   AlphaRouterParams,
+  V3Route,
 } from "@uniswap/smart-order-router"
 import {
   Token,
@@ -121,13 +122,17 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   })
 
   // defaulting to using active asset address, this sholdn't be necessary once we upgrade wagmi which has the prop as not required
-  const erc20Contract = useContract({
-    addressOrName:
-      selectedToken?.address ||
-      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-    contractInterface: erc20ABI,
-    signerOrProvider: signer,
-  })
+  // const erc20Contract = useContract({
+  //   addressOrName:
+  //     selectedToken?.address ||
+  //     "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+  //   contractInterface: erc20ABI,
+  //   signerOrProvider: signer,
+  // })
+
+  const erc20Contract =
+    selectedToken?.address &&
+    new ethers.Contract(selectedToken?.address, erc20ABI, signer)
 
   const getSwapRoute = async () => {
     const inputToken =
@@ -158,34 +163,70 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       new Token(
         1, // chainId
         cellarData?.activeAsset,
-        // "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
         userData?.balances?.aAsset?.decimals,
         userData?.balances?.aAsset?.symbol,
         userData?.balances?.aAsset?.symbol
       )
 
-    const route = await router.route(
+    const swapRoute = await router.route(
       inputAmt,
       outputToken as Currency,
       TradeType.EXACT_INPUT,
       {
         recipient: account?.address as string,
-        slippageTolerance: new Percent(5, 100),
+        slippageTolerance: new Percent(config.SWAP.SLIPPAGE, 100),
         deadline: Math.floor(Date.now() / 1000 + 1800),
       }
     )
 
-    return route
+    // if (swapRoute && swapRoute?.route[0].tokenPath.length) return []
+    const tokenPath = swapRoute?.route[0].tokenPath.map(
+      (token) => token?.address
+    )
+
+    const v3Route = swapRoute?.route[0]?.route as V3Route
+    const fee = v3Route?.pools[0]?.fee
+    const poolFees =
+      swapRoute?.route[0]?.protocol === "V3" ? [fee] : []
+
+    return { route: swapRoute, tokenPath, poolFees }
   }
 
   const onSubmit = async (data: any, e: any) => {
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
+
+    if (!erc20Contract) return
+
     analytics.track("deposit.started", {
       stable: tokenSymbol,
       value: depositAmount,
     })
-    // const route = await getSwapRoute()
+    const swapRoute = await getSwapRoute()
+
+    if (!swapRoute?.route) {
+      console.warn("Failed Uniswap Swap data")
+      addToast({
+        heading: "Aave V2 Cellar Deposit",
+        body: <Text>Unable to fetch swap data</Text>,
+        status: "warning",
+        closeHandler: closeAll,
+      })
+      return
+    }
+
+    const minAmountOut = swapRoute.route.quote
+      .subtract(
+        swapRoute.route.quote
+          .multiply(config.SWAP.SLIPPAGE)
+          .divide(100)
+      )
+      .toExact()
+    const minAmountOutInBigNumber = new BigNumber(minAmountOut)
+    const minAmountOutInWei = ethers.utils.parseUnits(
+      minAmountOutInBigNumber.toFixed(),
+      userData?.balances?.aAsset?.decimals
+    )
 
     // check if approval exists
     const allowance = await erc20Contract.allowance(
@@ -276,12 +317,12 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       const { hash: depositConf } =
         await cellarRouterSigner.depositAndSwapIntoCellar(
           config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-          [inputToken, outputToken],
+          // [inputToken, outputToken],
+          swapRoute.tokenPath,
+          swapRoute.poolFees,
           amtInWei,
-          0,
-          account?.address,
-          account?.address,
-          { gasLimit: "1000000" }
+          minAmountOutInWei,
+          account?.address
         )
 
       addToast({
@@ -355,7 +396,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     }
   }
 
-  const onError = (errors: any, e: any) => {
+  const onError = async (errors: any, e: any) => {
     // try and handle basic cases
     // gasFailure
     // onChain assert
