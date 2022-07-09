@@ -70,7 +70,7 @@ export const tokenConfig: Token[] = [
     src: "/assets/icons/usdc.png",
     alt: "USD Coin logo",
     symbol: "USDC",
-    address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
   },
   {
     src: "/assets/icons/usdt.png",
