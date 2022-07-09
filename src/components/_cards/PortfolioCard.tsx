@@ -67,9 +67,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const [{ fetching: isFetchingGetPosition, data: positionData }] =
     useGetPositionQuery({
       variables: {
-        walletAddress:
-          account?.address ??
-          "0xf07ba2229b4da47895ce0a4ab4298ad7f8cb3a4d",
+        walletAddress: account?.address ?? "",
       },
       pause: false,
     })
@@ -80,10 +78,9 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const totalShares = cellarData.totalSupply
   const userShares = BigNumberE.from(fetchUserData.userBalance ?? "0")
 
-  // 18 decimals, must be normalized to 6
-  const currentUserDeposits = BigNumberE.from(
+  let currentUserDeposits = BigNumberE.from(
     positionData?.wallet?.currentDeposits ?? "0"
-  ).div(BigNumberE.from(10).pow(18 - 6))
+  )
 
   // ((user share ratio) * tvlTotal - currentDeposits) / currentDeposits * 100
   let pnl = new BigNumber("0")
@@ -92,13 +89,16 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
     totalShares.gt(0) &&
     currentUserDeposits.gt(0)
   ) {
+    // 18 decimals, must be normalized to 6
+    const deposits = currentUserDeposits.div(
+      BigNumberE.from(10).pow(18 - 6)
+    )
     const shareRatio = userShares.div(totalShares)
     const tvlTotal = totalBalance.add(totalHoldings)
-    const gains = shareRatio.mul(tvlTotal).sub(currentUserDeposits)
+    const gains = shareRatio.mul(tvlTotal).sub(deposits)
 
     // Convert back to JS number because BigNumber doesn't handle float division well
-    const pnlNumber =
-      (gains.toNumber() / currentUserDeposits.toNumber()) * 100
+    const pnlNumber = (gains.toNumber() / deposits.toNumber()) * 100
 
     pnl = new BigNumber(pnlNumber)
   }
