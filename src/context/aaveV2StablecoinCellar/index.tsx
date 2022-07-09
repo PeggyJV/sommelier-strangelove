@@ -15,9 +15,9 @@ type CellarState = {
   loading: boolean
   name: string
   activeAsset: string
-  totalSupply: string
-  totalAssets: string
-  totalHoldings: string
+  totalSupply: BigNumberE
+  totalBalance: BigNumberE
+  totalHoldings: BigNumberE
 }
 
 type Balances = {
@@ -49,9 +49,9 @@ const initialCellarData: CellarState = {
   loading: false,
   name: "",
   activeAsset: "",
-  totalSupply: "0",
-  totalAssets: "0",
-  totalHoldings: "0",
+  totalSupply: BigNumberE.from(0),
+  totalBalance: BigNumberE.from(0),
+  totalHoldings: BigNumberE.from(0),
 }
 const AaveV2CellarContext = createContext<SharedState>({
   cellarData: initialCellarData,
@@ -127,9 +127,10 @@ export const AaveV2CellarProvider = ({
         const name = await aaveV2CellarContract.name()
         const activeAsset = await aaveV2CellarContract.asset()
         const totalSupply = await aaveV2CellarContract.totalSupply()
-        const totalAssets = await aaveV2CellarContract.totalAssets()
+        const totalBalance = await aaveV2CellarContract.totalBalance()
         const totalHoldings =
           await aaveV2CellarContract.totalHoldings()
+
         setCellarData((state) => ({
           ...state,
           name: name,
@@ -137,7 +138,7 @@ export const AaveV2CellarProvider = ({
           aAssetToken,
           loading: false,
           totalSupply,
-          totalAssets,
+          totalBalance,
           totalHoldings,
         }))
       } catch (e) {

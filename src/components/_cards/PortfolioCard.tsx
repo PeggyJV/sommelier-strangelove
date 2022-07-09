@@ -28,6 +28,7 @@ import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
 import { useGetPositionQuery } from "generated/subgraph"
 import { useAccount } from "wagmi"
+import { BigNumber as BigNumberE } from "ethers"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -73,27 +74,33 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
       pause: false,
     })
 
-  const totalAssets = new BigNumber(cellarData.totalAssets)
-  const totalHoldings = new BigNumber(cellarData.totalHoldings)
-  const totalShares = new BigNumber(cellarData.totalSupply ?? "0")
-  const userShares = new BigNumber(fetchUserData.userBalance ?? "0")
-  const currentUserDeposits = new BigNumber(
+  // Normalized to 6 decimals
+  const totalBalance = cellarData.totalBalance
+  const totalHoldings = cellarData.totalHoldings
+  const totalShares = cellarData.totalSupply
+  const userShares = BigNumberE.from(fetchUserData.userBalance ?? "0")
+
+  // 18 decimals, must be normalized to 6
+  const currentUserDeposits = BigNumberE.from(
     positionData?.wallet?.currentDeposits ?? "0"
-  )
+  ).div(BigNumberE.from(10).pow(18 - 6))
 
   // ((user share ratio) * tvlTotal - currentDeposits) / currentDeposits * 100
   let pnl = new BigNumber("0")
   if (
     !isFetchingGetPosition &&
-    totalShares.isGreaterThan(0) &&
-    currentUserDeposits.isGreaterThan(0)
+    totalShares.gt(0) &&
+    currentUserDeposits.gt(0)
   ) {
     const shareRatio = userShares.div(totalShares)
-    const tvlTotal = totalAssets.plus(totalHoldings)
-    const gains = shareRatio
-      .multipliedBy(tvlTotal)
-      .minus(currentUserDeposits)
-    pnl = gains.div(currentUserDeposits).multipliedBy(100)
+    const tvlTotal = totalBalance.add(totalHoldings)
+    const gains = shareRatio.mul(tvlTotal).sub(currentUserDeposits)
+
+    // Convert back to JS number because BigNumber doesn't handle float division well
+    const pnlNumber =
+      (gains.toNumber() / currentUserDeposits.toNumber()) * 100
+
+    pnl = new BigNumber(pnlNumber)
   }
 
   return (
@@ -140,8 +147,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               }, 1000)}
             >
               <CardStat
-                label="apy"
-                tooltip="APY earned on your Principal since initial investment from Strategy"
+                label="pnl"
+                tooltip="This represents percentage gains compared to current deposits"
                 labelProps={{
                   textTransform: "uppercase",
                 }}
