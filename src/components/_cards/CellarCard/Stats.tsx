@@ -38,10 +38,10 @@ export const Stats: React.FC<Props> = ({
           alignItems="center"
           columnGap="5px"
         >
-          <Apy apy={data.apy} fontSize="inherit" />
+          <Apy apy={data.individualApy} fontSize="inherit" />
         </Heading>
         <Label color="neutral.300" whiteSpace="nowrap">
-          Past Week
+          PNL
         </Label>
       </Box>
       <Grid backgroundColor="">

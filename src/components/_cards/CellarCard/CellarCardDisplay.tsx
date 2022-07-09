@@ -1,11 +1,4 @@
-import {
-  Box,
-  BoxProps,
-  Heading,
-  Img,
-  Flex,
-  useTheme,
-} from "@chakra-ui/react"
+import { Box, BoxProps, Heading, Img, Flex } from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
@@ -21,7 +14,8 @@ export interface CellarCardData {
   strategyType: string
   managementFee: string
   protocols: string
-  apy: string
+  individualApy: string
+  cellarApy: string
 }
 
 interface CellarCardProps extends BoxProps {
@@ -41,7 +35,6 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   index,
   ...rest
 }) => {
-  const theme = useTheme()
   const protocolIcon = protocols[data.protocols]
 
   return (

@@ -232,8 +232,6 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
             stable: tokenSymbol,
             value: depositAmount,
           })
-          refetch()
-          props.onClose()
 
           update({
             heading: "ERC20 Approval",
@@ -305,6 +303,10 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           stable: tokenSymbol,
           value: depositAmount,
         })
+
+        refetch()
+        props.onClose()
+
         update({
           heading: "Aave V2 Cellar Deposit",
           body: (
@@ -397,12 +399,6 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
             )}
           </HStack>
         </VStack>
-        {/* <VStack align="flex-start">
-          <CardHeading>maximum deposit</CardHeading>
-          <Text as="span">
-            {loading ? <Spinner size="xs" /> : toEther(maxDeposit, 6)}
-          </Text>
-        </VStack> */}
       </VStack>
       <FormProvider {...methods}>
         <VStack

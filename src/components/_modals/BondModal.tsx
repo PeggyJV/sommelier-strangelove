@@ -21,7 +21,7 @@ export const BondModal: VFC<BondModalProps> = (props) => {
           </Text>
         </VStack>
       </VStack>
-      <BondForm />
+      <BondForm onClose={props.onClose} />
     </BaseModal>
   )
 }

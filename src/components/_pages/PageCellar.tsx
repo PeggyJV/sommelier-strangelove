@@ -25,6 +25,9 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { getCalulatedTvl } from "utils/bigNumber"
 import { PerformanceChartProvider } from "context/performanceChartContext"
 import BigNumber from "bignumber.js"
+import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { tokenConfig } from "data/tokenConfig"
+import { getCurrentAsset } from "utils/getCurrentAsset"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -37,6 +40,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const [auth] = useConnect()
   const isConnected = auth.data.connected
   const { cellar: staticCellar } = staticData
+  const { cellarData } = useAaveV2Cellar()
   const { id, name } = staticCellar!
   const [cellarResult] = useGetCellarQuery({
     variables: {
@@ -53,6 +57,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     addedLiquidityAllTime,
     removedLiquidityAllTime,
   } = cellar || {}
+  const { activeAsset } = cellarData || {}
 
   const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
   const tvmVal = formatCurrency(calculatedTvl)
@@ -64,7 +69,9 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const cellarCap =
     liquidityLimit &&
     new BigNumber(liquidityLimit).dividedBy(10 ** 6).toString()
-  const { name: nameAbbreviated, apy } = cellarDataMap[id]
+  const { name: nameAbbreviated, cellarApy } = cellarDataMap[id]
+  const activeSymbol =
+    activeAsset && getCurrentAsset(tokenConfig, activeAsset)?.symbol
 
   return (
     <Layout>
@@ -99,10 +106,11 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             </HStack>
           </VStack>
           <CellarStats
-            tvm={`$${tvmVal} USDC`}
-            apy={apy}
+            tvm={`$${tvmVal} ${activeSymbol}`}
+            apy={cellarApy}
             currentDeposits={currentDepositsVal}
             cellarCap={cellarCap}
+            asset={activeSymbol}
           />
         </HStack>
         <VStack spacing={4} align="stretch">
