@@ -13,7 +13,7 @@ class Document extends NextDocument {
       <Html lang="en">
         <Head>
           <link
-            href="http://fonts.cdnfonts.com/css/sf-mono"
+            href="https://fonts.cdnfonts.com/css/sf-mono"
             rel="stylesheet"
           />
         </Head>
