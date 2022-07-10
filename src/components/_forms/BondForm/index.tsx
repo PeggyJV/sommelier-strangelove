@@ -112,7 +112,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       addToast({
         heading: "Staking LP Tokens",
         body: <Text>Tx Cancelled</Text>,
-        status: "warning",
+        status: "info",
         closeHandler: closeAll,
       })
     }

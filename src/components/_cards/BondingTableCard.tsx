@@ -141,7 +141,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   "2": "21 days",
                 }
                 const unbondTime = new Date(
-                  unbondTimestamp.toNumber() * 1000
+                  unbondTimestamp * 1000
                 ).toLocaleDateString()
 
                 return (
