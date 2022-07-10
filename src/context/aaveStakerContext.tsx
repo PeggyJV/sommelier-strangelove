@@ -18,7 +18,7 @@ export interface UserStake {
   amountWithBoost: BigNumberE
   rewardPerTokenPaid: BigNumberE
   rewards: BigNumberE
-  unbondTimestamp: BigNumberE
+  unbondTimestamp: number
   lock: BigNumberE
   // maxDeposit?: BigNumberE
 }
@@ -76,10 +76,14 @@ export const AaveStakerProvider = ({
   const fetchUserStakes = useCallback(async () => {
     setUserStakeData((state) => ({ ...state, loading: true }))
     let numStakes
+    let userStakes
     try {
-      numStakes = await aaveStakerContract.numStakes(account?.address)
+      userStakes = await aaveStakerContract.getUserStakes(
+        account?.address
+      )
+      numStakes = userStakes.length
     } catch (e) {
-      console.warn("failed to read deposit id", e)
+      console.warn("failed to read userStakes", e)
       setUserStakeData((state) => ({
         ...state,
         loading: false,
@@ -92,26 +96,30 @@ export const AaveStakerProvider = ({
       let totalRewards = new BigNumber(0)
       let totalBondedAmount = new BigNumber(0)
       for (let i = 0; i < numStakes; i++) {
-        const userStake = await aaveStakerContract.stakes(
-          account?.address,
-          i
-        )
-        const reward = await aaveStakerContract.callStatic.claim(i)
+        const [
+          amount,
+          amountWithBoost,
+          unbondTimestamp,
+          rewardPerTokenPaid,
+          rewards,
+          lock,
+        ] = userStakes[i]
 
         totalRewards = totalRewards.plus(
-          new BigNumber(reward?.toString())
+          new BigNumber(rewards?.toString())
         )
 
         totalBondedAmount = totalBondedAmount.plus(
-          new BigNumber(userStake?.amount?.toString())
+          new BigNumber(amount?.toString())
         )
+
         userStakesArray.push({
-          amount: userStake?.amount,
-          amountWithBoost: userStake?.amountWithBoost,
-          rewardPerTokenPaid: userStake?.rewardPerTokenPaid,
-          rewards: reward,
-          unbondTimestamp: userStake?.unbondTimestamp,
-          lock: userStake?.lock,
+          amount,
+          amountWithBoost,
+          rewardPerTokenPaid,
+          rewards,
+          unbondTimestamp,
+          lock,
         })
 
         setUserStakeData((state) => ({

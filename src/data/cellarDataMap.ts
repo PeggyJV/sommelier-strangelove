@@ -1,5 +1,4 @@
 import { config } from "utils/config"
-
 export interface CellarDataMap {
   [key: string]: {
     name: string

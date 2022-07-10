@@ -33,6 +33,7 @@ import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import {
   AlphaRouter,
   AlphaRouterParams,
+  V3Route,
 } from "@uniswap/smart-order-router"
 import {
   Token,
@@ -120,72 +121,83 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     formatUnits: "wei",
   })
 
-  // defaulting to using active asset address, this sholdn't be necessary once we upgrade wagmi which has the prop as not required
-  const erc20Contract = useContract({
-    addressOrName:
-      selectedToken?.address ||
-      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-    contractInterface: erc20ABI,
-    signerOrProvider: signer,
-  })
+  const erc20Contract =
+    selectedToken?.address &&
+    new ethers.Contract(selectedToken?.address, erc20ABI, signer)
 
   const getSwapRoute = async () => {
-    const inputToken =
-      selectedToken?.address &&
-      new Token(
-        1, // chainId
-        selectedToken?.address,
-        selectedTokenBalance?.data?.decimals || 18,
-        selectedToken?.symbol,
-        selectedToken?.symbol
+    let error = false
+    let swapRoute
+    try {
+      const inputToken =
+        selectedToken?.address &&
+        new Token(
+          1, // chainId
+          selectedToken?.address,
+          selectedTokenBalance?.data?.decimals || 18,
+          selectedToken?.symbol,
+          selectedToken?.symbol
+        )
+
+      const amtInBigNumber = new BigNumber(watchDepositAmount)
+      const amtInWei = ethers.utils
+        .parseUnits(
+          amtInBigNumber.toFixed(),
+          selectedTokenBalance?.data?.decimals
+        )
+        .toString()
+
+      const inputAmt = CurrencyAmount.fromRawAmount(
+        inputToken as Currency,
+        JSBI.BigInt(amtInWei)
       )
 
-    const amtInBigNumber = new BigNumber(watchDepositAmount)
-    const amtInWei = ethers.utils
-      .parseUnits(
-        amtInBigNumber.toFixed(),
-        selectedTokenBalance?.data?.decimals
-      )
-      .toString()
-
-    const inputAmt = CurrencyAmount.fromRawAmount(
-      inputToken as Currency,
-      JSBI.BigInt(amtInWei)
-    )
-
-    const outputToken =
-      cellarData?.activeAsset &&
-      new Token(
+      const outputToken = new Token(
         1, // chainId
         cellarData?.activeAsset,
-        // "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
         userData?.balances?.aAsset?.decimals,
         userData?.balances?.aAsset?.symbol,
         userData?.balances?.aAsset?.symbol
       )
+      console.log({ inputToken, outputToken })
 
-    const route = await router.route(
-      inputAmt,
-      outputToken as Currency,
-      TradeType.EXACT_INPUT,
-      {
-        recipient: account?.address as string,
-        slippageTolerance: new Percent(5, 100),
-        deadline: Math.floor(Date.now() / 1000 + 1800),
-      }
+      swapRoute = await router.route(
+        inputAmt,
+        outputToken,
+        TradeType.EXACT_INPUT,
+        {
+          recipient: account?.address as string,
+          slippageTolerance: new Percent(config.SWAP.SLIPPAGE, 100),
+          deadline: Math.floor(Date.now() / 1000 + 1800),
+        }
+      )
+    } catch (e) {
+      console.warn("Error Occured ", e)
+      error = true
+    }
+
+    const tokenPath = swapRoute?.route[0].tokenPath.map(
+      (token) => token?.address
     )
 
-    return route
+    const v3Route = swapRoute?.route[0]?.route as V3Route
+    const fee = v3Route?.pools[0]?.fee
+    const poolFees =
+      swapRoute?.route[0]?.protocol === "V3" ? [fee] : []
+
+    return { route: swapRoute, tokenPath, poolFees, error }
   }
 
   const onSubmit = async (data: any, e: any) => {
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
+
+    if (!erc20Contract) return
+
     analytics.track("deposit.started", {
       stable: tokenSymbol,
       value: depositAmount,
     })
-    // const route = await getSwapRoute()
 
     // check if approval exists
     const allowance = await erc20Contract.allowance(
@@ -269,19 +281,61 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
     // deposit
     let depositConf
+    let depositParams
 
+    if (
+      selectedToken?.address?.toLowerCase() ===
+      cellarData?.activeAsset?.toLowerCase()
+    ) {
+      depositParams = [
+        config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+        [selectedToken?.address],
+        [0],
+        amtInWei,
+        amtInWei,
+        account?.address,
+      ]
+    } else {
+      const swapRoute = await getSwapRoute()
+
+      if (!swapRoute?.route || swapRoute?.error) {
+        addToast({
+          heading: "Aave V2 Cellar Deposit",
+          body: <Text>Failed to fetch Swap Data</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+        return
+      }
+
+      const minAmountOut = swapRoute.route.quote
+        .subtract(
+          swapRoute.route.quote
+            .multiply(config.SWAP.SLIPPAGE)
+            .divide(100)
+        )
+        .toExact()
+      const minAmountOutInBigNumber = new BigNumber(minAmountOut)
+      const minAmountOutInWei = ethers.utils.parseUnits(
+        minAmountOutInBigNumber.toFixed(),
+        userData?.balances?.aAsset?.decimals
+      )
+
+      depositParams = [
+        config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+        swapRoute.tokenPath,
+        swapRoute.poolFees,
+        amtInWei,
+        minAmountOutInWei,
+        account?.address,
+      ]
+    }
     try {
       const inputToken = selectedToken?.address
       const outputToken = cellarData?.activeAsset
       const { hash: depositConf } =
         await cellarRouterSigner.depositAndSwapIntoCellar(
-          config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-          [inputToken, outputToken],
-          amtInWei,
-          0,
-          account?.address,
-          account?.address,
-          { gasLimit: "1000000" }
+          ...depositParams
         )
 
       addToast({
@@ -355,7 +409,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     }
   }
 
-  const onError = (errors: any, e: any) => {
+  const onError = async (errors: any, e: any) => {
     // try and handle basic cases
     // gasFailure
     // onChain assert
