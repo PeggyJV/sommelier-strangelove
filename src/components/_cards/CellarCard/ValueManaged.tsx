@@ -14,6 +14,7 @@ import { InformationIcon } from "components/_icons"
 import BigNumber from "bignumber.js"
 import { cellarDataMap } from "data/cellarDataMap"
 import { formatCurrency } from "utils/formatCurrency"
+import { tooltipCopy } from "data/tooltipCopy"
 
 interface Props extends BoxProps {
   cellarId: string
@@ -86,9 +87,19 @@ export const ValueManaged: React.FC<Props> = ({
         >
           {cellarApy}%
         </Heading>
-        <Label ml={1} color="neutral.300">
-          Expected APY
-        </Label>
+        <Tooltip
+          hasArrow
+          placement="top"
+          label={tooltipCopy.APY}
+          bg="surface.bg"
+        >
+          <HStack spacing={1} align="center">
+            <Label ml={1} color="neutral.300">
+              Expected APY
+            </Label>
+            <InformationIcon color="neutral.300" boxSize={3} />
+          </HStack>
+        </Tooltip>
       </Flex>
       <CurrentDeposits
         currentDeposits={currentDepositsVal}
