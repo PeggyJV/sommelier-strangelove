@@ -80,7 +80,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label="Expected APY earned on Principal since initial investment from Strategy"
+            label="Expected APY is calculated by combining the Base Cellar APY (1.5%) and Liquidity Mining Reward"
             bg="surface.bg"
           >
             <HStack spacing={1} align="center">
