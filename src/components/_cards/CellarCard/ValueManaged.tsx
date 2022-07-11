@@ -14,6 +14,7 @@ import { InformationIcon } from "components/_icons"
 import BigNumber from "bignumber.js"
 import { cellarDataMap } from "data/cellarDataMap"
 import { formatCurrency } from "utils/formatCurrency"
+import { useAaveStaker } from "context/aaveStakerContext"
 
 interface Props extends BoxProps {
   cellarId: string
@@ -51,6 +52,13 @@ export const ValueManaged: React.FC<Props> = ({
   const tvm = formatCurrency(tvlString)
 
   const { cellarApy } = cellarDataMap[cellarId]
+
+  // Staker Info
+  const { stakerData } = useAaveStaker()
+  const { totalDepositsWithBoost, rewardRate } = stakerData
+  console.log("tdwb", totalDepositsWithBoost.toString())
+  console.log("rate", rewardRate.toString())
+  const expectedDeposit = new BigNumber(10000 * 10 ** 6)
 
   return (
     <Box {...rest}>

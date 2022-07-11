@@ -67,7 +67,9 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const [{ fetching: isFetchingGetPosition, data: positionData }] =
     useGetPositionQuery({
       variables: {
-        walletAddress: account?.address ?? "",
+        walletAddress:
+          account?.address ??
+          "0xf07ba2229b4da47895ce0a4ab4298ad7f8cb3a4d",
       },
       pause: false,
     })
@@ -76,7 +78,9 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const totalBalance = cellarData.totalBalance
   const totalHoldings = cellarData.totalHoldings
   const totalShares = cellarData.totalSupply
-  const userShares = BigNumberE.from(fetchUserData.userBalance ?? "0")
+  const userShares = BigNumberE.from(
+    fetchUserData.userBalance ?? "1250000000000000000000"
+  )
 
   let currentUserDeposits = BigNumberE.from(
     positionData?.wallet?.currentDeposits ?? "0"

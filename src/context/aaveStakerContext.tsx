@@ -4,14 +4,11 @@ import {
   useAccount,
   useProvider,
   useSigner,
-  useBalance,
 } from "wagmi"
-import { Balance } from "wagmi-core"
 import { config } from "utils/config"
 import { useEffect, useState, useCallback } from "react"
 import { BigNumber } from "bignumber.js"
 import { BigNumber as BigNumberE } from "ethers"
-import { ethers } from "ethers"
 
 export interface UserStake {
   amount: BigNumberE
@@ -37,15 +34,29 @@ const initialStakeState = {
   userStakes: [],
 }
 
+type StakerData = {
+  loading: boolean
+  rewardRate: BigNumber
+  totalDepositsWithBoost: BigNumber
+}
+
+const initialStakerState = {
+  loading: false,
+  rewardRate: new BigNumber(0),
+  totalDepositsWithBoost: new BigNumber(0),
+}
+
 type SharedState = {
-  // stakerData: StakerData
+  stakerData: StakerData
   userStakeData: UserStakeData
   aaveStakerSigner?: any
   fetchUserStakes?: any
+  fetchStakerData?: any
 }
 
 const AaveStakerContext = createContext<SharedState>({
   userStakeData: initialStakeState,
+  stakerData: initialStakerState,
 })
 
 export const AaveStakerProvider = ({
@@ -60,6 +71,10 @@ export const AaveStakerProvider = ({
 
   const [userStakeData, setUserStakeData] =
     useState<UserStakeData>(initialStakeState)
+
+  const [stakerData, setStakerData] = useState<StakerData>(
+    initialStakerState
+  )
 
   const aaveStakerSigner = useContract({
     addressOrName: CONTRACT.AAVE_STAKER.ADDRESS,
@@ -147,11 +162,44 @@ export const AaveStakerProvider = ({
     fetchUserStakes()
   }, [aaveStakerContract, account?.address, fetchUserStakes])
 
+  const fetchStakerData = useCallback(async () => {
+    console.log("HAS STAKER CONTRACT?", aaveStakerContract)
+    // setStakerData((state) => ({
+    //   ...state,
+    //   loading: true,
+    // }))
+
+    try {
+      // const rewardRate = await aaveStakerContract.rewardRate()
+      // const totalDepositsWithBoost =
+      //   await aaveStakerContract.totalDepositsWithBoost()
+      // console.log("reward rate fetch", rewardRate)
+      // const s = await aaveStakerContract.owner()
+    } catch (error) {
+      console.log(error)
+    }
+
+    // setStakerData((state) => ({
+    //   ...state,
+    //   loading: false,
+    //   // rewardRate,
+    //   totalDepositsWithBoost,
+    // }))
+  }, [aaveStakerContract])
+
+  useEffect(() => {
+    if (!aaveStakerContract) return
+    console.log("calling")
+    fetchStakerData()
+  }, [aaveStakerContract, fetchStakerData])
+
   return (
     <AaveStakerContext.Provider
       value={{
         userStakeData,
+        stakerData,
         fetchUserStakes,
+        fetchStakerData,
         aaveStakerSigner,
       }}
     >
