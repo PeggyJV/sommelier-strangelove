@@ -29,6 +29,7 @@ export interface UserStakeData {
   totalRewards?: BigNumber
   totalBondedAmount?: BigNumber
   userStakes: UserStake[]
+  totalClaimAllRewards?: BigNumber
 }
 
 const initialStakeState = {
@@ -70,18 +71,20 @@ export const AaveStakerProvider = ({
   const aaveStakerContract = useContract({
     addressOrName: CONTRACT.AAVE_STAKER.ADDRESS,
     contractInterface: CONTRACT.AAVE_STAKER.ABI,
-    signerOrProvider: signer,
+    signerOrProvider: provider,
   })
 
   const fetchUserStakes = useCallback(async () => {
     setUserStakeData((state) => ({ ...state, loading: true }))
     let numStakes
     let userStakes
+    let claimAllRewards
     try {
       userStakes = await aaveStakerContract.getUserStakes(
         account?.address
       )
       numStakes = userStakes.length
+      claimAllRewards = await aaveStakerSigner.callStatic.claimAll()
     } catch (e) {
       console.warn("failed to read userStakes", e)
       setUserStakeData((state) => ({
@@ -90,6 +93,12 @@ export const AaveStakerProvider = ({
         error: true,
       }))
     }
+
+    let totalClaimAllRewards = new BigNumber(0)
+    claimAllRewards &&
+      claimAllRewards.forEach((reward: any) => {
+        totalClaimAllRewards.plus(new BigNumber(reward.toString()))
+      })
 
     try {
       let userStakesArray: UserStake[] = []
@@ -129,6 +138,7 @@ export const AaveStakerProvider = ({
           userStakes: userStakesArray,
           totalRewards: totalRewards,
           totalBondedAmount: totalBondedAmount,
+          totalClaimAllRewards: totalClaimAllRewards,
         }))
       }
     } catch (e) {
@@ -139,7 +149,11 @@ export const AaveStakerProvider = ({
         error: true,
       }))
     }
-  }, [aaveStakerContract, account?.address])
+  }, [
+    aaveStakerContract,
+    aaveStakerSigner.callStatic,
+    account?.address,
+  ])
 
   // user data
   useEffect(() => {

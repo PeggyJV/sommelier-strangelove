@@ -86,7 +86,7 @@ export const WithdrawForm: VFC = () => {
     analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
-    const tx = await aaveCellarSigner.withdraw(
+    const tx = await aaveCellarSigner.redeem(
       amtInWei,
       account.address,
       account.address
