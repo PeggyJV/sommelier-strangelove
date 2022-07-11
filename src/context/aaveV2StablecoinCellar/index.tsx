@@ -164,6 +164,11 @@ export const AaveV2CellarProvider = ({
       const maxDeposit = await aaveV2CellarContract.maxDeposit(
         account?.address
       )
+
+      const maxWithdraw = await aaveV2CellarContract.maxWithdraw(
+        account?.address
+      )
+
       setUserData((state) => ({
         ...state,
         balances: {

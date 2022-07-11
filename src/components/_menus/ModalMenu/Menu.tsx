@@ -171,7 +171,8 @@ export const Menu: VFC<MenuProps> = ({
                     parseFloat(
                       toEther(
                         selectedTokenBalance.data?.value || "",
-                        selectedTokenBalance.data?.decimals
+                        selectedTokenBalance.data?.decimals,
+                        false
                       )
                     ) || "Insufficient balance"
                 )

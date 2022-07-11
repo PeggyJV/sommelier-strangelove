@@ -95,8 +95,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
     )
     const shareRatio = userShares.div(totalShares)
     const tvlTotal = totalBalance.add(totalHoldings)
-    const gains = shareRatio.mul(tvlTotal).sub(deposits)
 
+    const gains = shareRatio.mul(tvlTotal).sub(deposits)
     // Convert back to JS number because BigNumber doesn't handle float division well
     const pnlNumber = (gains.toNumber() / deposits.toNumber()) * 100
 

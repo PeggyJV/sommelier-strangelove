@@ -26,8 +26,10 @@ import { getCalulatedTvl } from "utils/bigNumber"
 import { PerformanceChartProvider } from "context/performanceChartContext"
 import BigNumber from "bignumber.js"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { useAaveStaker } from "context/aaveStakerContext"
 import { tokenConfig } from "data/tokenConfig"
 import { getCurrentAsset } from "utils/getCurrentAsset"
+import { toEther } from "utils/formatCurrency"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -40,7 +42,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const [auth] = useConnect()
   const isConnected = auth.data.connected
   const { cellar: staticCellar } = staticData
-  const { cellarData } = useAaveV2Cellar()
+  const { cellarData, userData } = useAaveV2Cellar()
+  const { userStakeData } = useAaveStaker()
   const { id, name } = staticCellar!
   const [cellarResult] = useGetCellarQuery({
     variables: {
@@ -58,6 +61,14 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     removedLiquidityAllTime,
   } = cellar || {}
   const { activeAsset } = cellarData || {}
+
+  console.log({ userData, userStakeData })
+  const totalPortfolio = new BigNumber(
+    userData?.balances?.aaveClr || 0
+  ).plus(
+    new BigNumber(userStakeData?.totalBondedAmount?.toString() || 0)
+  )
+  console.log("total :: ", toEther(totalPortfolio.toFixed()))
 
   const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
   const tvmVal = formatCurrency(calculatedTvl)
