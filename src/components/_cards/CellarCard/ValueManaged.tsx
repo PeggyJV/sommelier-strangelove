@@ -58,7 +58,7 @@ export const ValueManaged: React.FC<Props> = ({
   const { potentialStakingApy } = stakerData
 
   let expectedApy = parseFloat(cellarApy)
-  let apyLabel = "Expected APY"
+  let apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (%)`
   if (potentialStakingApy != null) {
     expectedApy = expectedApy + potentialStakingApy
     apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${potentialStakingApy.toFixed(
