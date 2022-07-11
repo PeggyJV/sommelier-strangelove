@@ -15,6 +15,7 @@ import { Apy } from "./Apy"
 import { InformationIcon } from "./_icons"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
+import { tooltipCopy } from "data/tooltipCopy"
 
 interface CellarStatsProps extends StackProps {
   tvm?: string
@@ -80,7 +81,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label="Expected APY earned on Principal since initial investment from Strategy"
+            label={tooltipCopy.APY}
             bg="surface.bg"
           >
             <HStack spacing={1} align="center">
