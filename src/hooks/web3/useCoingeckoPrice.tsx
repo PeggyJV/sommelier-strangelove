@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useBlockNumber } from "@usedapp/core"
 
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 
@@ -8,7 +7,6 @@ export const useCoingeckoPrice = (
   quote = "usd"
 ): string | undefined => {
   const [price, setPrice] = useState<string | undefined>(undefined)
-  const blockNo = useBlockNumber()
 
   useEffect(() => {
     async function getPrice() {
@@ -17,7 +15,7 @@ export const useCoingeckoPrice = (
     }
 
     void getPrice()
-  }, [base, quote, blockNo])
+  }, [base, quote])
 
   return price
 }

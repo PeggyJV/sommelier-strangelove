@@ -4,14 +4,11 @@ import {
   useAccount,
   useProvider,
   useSigner,
-  useBalance,
 } from "wagmi"
-import { Balance } from "wagmi-core"
 import { config } from "utils/config"
 import { useEffect, useState, useCallback } from "react"
 import { BigNumber } from "bignumber.js"
 import { BigNumber as BigNumberE } from "ethers"
-import { ethers } from "ethers"
 
 export interface UserStake {
   amount: BigNumberE
