@@ -10,6 +10,9 @@ import { Provider as GraphQLProvider } from "urql"
 import { client as urqlClient } from "queries/client"
 import "utils/analytics"
 
+// TODO: consider separating user and global staker context
+import { AaveStakerProvider } from "context/aaveStakerContext"
+
 import { GlobalFonts } from "theme/GlobalFonts"
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -25,7 +28,9 @@ const App = ({ Component, pageProps }: AppProps) => {
             <GlobalFonts />
             <DialogProvider>
               <WagmiProvider>
-                <Component {...pageProps} />
+                <AaveStakerProvider>
+                  <Component {...pageProps} />
+                </AaveStakerProvider>
                 <AlertDialog />
               </WagmiProvider>
             </DialogProvider>

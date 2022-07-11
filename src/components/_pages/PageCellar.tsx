@@ -28,6 +28,7 @@ import BigNumber from "bignumber.js"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { tokenConfig } from "data/tokenConfig"
 import { getCurrentAsset } from "utils/getCurrentAsset"
+import { useAaveStaker } from "context/aaveStakerContext"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -73,6 +74,15 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const activeSymbol =
     activeAsset && getCurrentAsset(tokenConfig, activeAsset)?.symbol
 
+  // Staker Info
+  const { stakerData } = useAaveStaker()
+  const { potentialStakingApy } = stakerData
+
+  let expectedApy = parseFloat(cellarApy)
+  if (potentialStakingApy != null) {
+    expectedApy = expectedApy + potentialStakingApy
+  }
+
   return (
     <Layout>
       <Section>
@@ -107,7 +117,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </VStack>
           <CellarStats
             tvm={`$${tvmVal} ${activeSymbol}`}
-            apy={cellarApy}
+            apy={expectedApy.toFixed(2).toString()}
             currentDeposits={currentDepositsVal}
             cellarCap={cellarCap}
             asset={activeSymbol}

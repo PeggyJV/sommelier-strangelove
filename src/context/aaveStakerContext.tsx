@@ -36,14 +36,12 @@ const initialStakeState = {
 
 type StakerData = {
   loading: boolean
-  rewardRate: BigNumber
-  totalDepositsWithBoost: BigNumber
+  rewardRate?: BigNumber
+  potentialStakingApy?: number
 }
 
 const initialStakerState = {
   loading: false,
-  rewardRate: new BigNumber(0),
-  totalDepositsWithBoost: new BigNumber(0),
 }
 
 type SharedState = {
@@ -69,6 +67,9 @@ export const AaveStakerProvider = ({
   const [{ data: account }] = useAccount()
   const { CONTRACT } = config
 
+  // TODO get from CG
+  const sommPrice = 0.285414
+
   const [userStakeData, setUserStakeData] =
     useState<UserStakeData>(initialStakeState)
 
@@ -85,7 +86,7 @@ export const AaveStakerProvider = ({
   const aaveStakerContract = useContract({
     addressOrName: CONTRACT.AAVE_STAKER.ADDRESS,
     contractInterface: CONTRACT.AAVE_STAKER.ABI,
-    signerOrProvider: signer,
+    signerOrProvider: provider,
   })
 
   const fetchUserStakes = useCallback(async () => {
@@ -163,28 +164,66 @@ export const AaveStakerProvider = ({
   }, [aaveStakerContract, account?.address, fetchUserStakes])
 
   const fetchStakerData = useCallback(async () => {
-    console.log("HAS STAKER CONTRACT?", aaveStakerContract)
-    // setStakerData((state) => ({
-    //   ...state,
-    //   loading: true,
-    // }))
+    setStakerData((state) => ({
+      ...state,
+      loading: true,
+    }))
 
     try {
-      // const rewardRate = await aaveStakerContract.rewardRate()
-      // const totalDepositsWithBoost =
-      //   await aaveStakerContract.totalDepositsWithBoost()
-      // console.log("reward rate fetch", rewardRate)
-      // const s = await aaveStakerContract.owner()
-    } catch (error) {
-      console.log(error)
-    }
+      // Somm rewards emitted per epoch
+      let rewardRate = await aaveStakerContract.rewardRate()
+      rewardRate = new BigNumber(rewardRate.toString())
 
-    // setStakerData((state) => ({
-    //   ...state,
-    //   loading: false,
-    //   // rewardRate,
-    //   totalDepositsWithBoost,
-    // }))
+      // Current deposits in the staker
+      let totalDepositsWithBoost =
+        await aaveStakerContract.totalDepositsWithBoost()
+      totalDepositsWithBoost = new BigNumber(
+        totalDepositsWithBoost.toString()
+      )
+
+      let currentEpochDuration =
+        await aaveStakerContract.currentEpochDuration()
+      currentEpochDuration = new BigNumber(
+        currentEpochDuration.toString()
+      )
+
+      // Reward emissions per day
+      const rewardPerEpoch = rewardRate
+        .multipliedBy(currentEpochDuration)
+        .dividedBy(new BigNumber(10 ** 6))
+      const epochDays = currentEpochDuration.dividedBy(
+        new BigNumber(60 * 60 * 24)
+      )
+      const dailyEmissions = rewardPerEpoch
+        .dividedBy(epochDays)
+        .toNumber()
+
+      // Add potential deposit of $10,000 to totalDepositsWithBoost
+      const potential = 10000
+      const convertedTotalDeposits = totalDepositsWithBoost.div(
+        new BigNumber(10).exponentiatedBy(18)
+      )
+      const potentialTotalDeposits =
+        convertedTotalDeposits.toNumber() + potential
+
+      // Daily rewards in USD
+      const dailyEmissionsUSD = sommPrice * dailyEmissions
+      const potentialRewardsUSD =
+        (dailyEmissionsUSD * potential) / potentialTotalDeposits
+
+      // APR & potential APY
+      const apr = (potentialRewardsUSD / potential) * 100
+      const potentialStakingApy = (1 + apr / 365) ** 365
+
+      setStakerData((state) => ({
+        ...state,
+        loading: false,
+        potentialStakingApy,
+      }))
+    } catch (error) {
+      // TODO
+      console.log("oops", error)
+    }
   }, [aaveStakerContract])
 
   useEffect(() => {

@@ -55,10 +55,16 @@ export const ValueManaged: React.FC<Props> = ({
 
   // Staker Info
   const { stakerData } = useAaveStaker()
-  const { totalDepositsWithBoost, rewardRate } = stakerData
-  console.log("tdwb", totalDepositsWithBoost.toString())
-  console.log("rate", rewardRate.toString())
-  const expectedDeposit = new BigNumber(10000 * 10 ** 6)
+  const { potentialStakingApy } = stakerData
+
+  let expectedApy = parseFloat(cellarApy)
+  let apyLabel = "Expected APY"
+  if (potentialStakingApy != null) {
+    expectedApy = expectedApy + potentialStakingApy
+    apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${potentialStakingApy.toFixed(
+      1
+    )}%)`
+  }
 
   return (
     <Box {...rest}>
@@ -92,10 +98,27 @@ export const ValueManaged: React.FC<Props> = ({
           alignItems="center"
           columnGap="3px"
         >
-          {cellarApy}%
+          {expectedApy.toFixed(1)}%
         </Heading>
-        <Label ml={1} color="neutral.300">
+        <Label
+          ml={1}
+          display="flex"
+          alignItems="center"
+          columnGap="4px"
+          color="neutral.300"
+        >
           Expected APY
+          <Tooltip
+            hasArrow
+            arrowShadowColor="purple.base"
+            label={apyLabel}
+            placement="top"
+            bg="surface.bg"
+          >
+            <HStack spacing={1} align="center">
+              <InformationIcon color="neutral.300" boxSize={3} />
+            </HStack>
+          </Tooltip>
         </Label>
       </Flex>
       <CurrentDeposits
