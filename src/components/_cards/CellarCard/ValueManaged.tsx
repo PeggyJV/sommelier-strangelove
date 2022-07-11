@@ -100,26 +100,19 @@ export const ValueManaged: React.FC<Props> = ({
         >
           {expectedApy.toFixed(1)}%
         </Heading>
-        <Label
-          ml={1}
-          display="flex"
-          alignItems="center"
-          columnGap="4px"
-          color="neutral.300"
+        <Tooltip
+          hasArrow
+          placement="top"
+          label={apyLabel}
+          bg="surface.bg"
         >
-          Expected APY
-          <Tooltip
-            hasArrow
-            arrowShadowColor="purple.base"
-            label={apyLabel}
-            placement="top"
-            bg="surface.bg"
-          >
-            <HStack spacing={1} align="center">
-              <InformationIcon color="neutral.300" boxSize={3} />
-            </HStack>
-          </Tooltip>
-        </Label>
+          <HStack spacing={1} align="center">
+            <Label ml={1} color="neutral.300">
+              Expected APY
+            </Label>
+            <InformationIcon color="neutral.300" boxSize={3} />
+          </HStack>
+        </Tooltip>
       </Flex>
       <CurrentDeposits
         currentDeposits={currentDepositsVal}

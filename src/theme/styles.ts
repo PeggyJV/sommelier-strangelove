@@ -9,6 +9,9 @@ export const styles: Styles = {
       bgColor: "surface.bg",
       color: "neutral.100",
     },
+    ":root": {
+      colorScheme: "dark",
+    },
     body: {
       zIndex: "hide",
       WebkitFontSmoothing: "antialiased",

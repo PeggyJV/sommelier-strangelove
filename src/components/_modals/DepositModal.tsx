@@ -20,7 +20,6 @@ import { config } from "utils/config"
 import {
   erc20ABI,
   useSigner,
-  useContract,
   useAccount,
   useBalance,
   useProvider,

@@ -26,9 +26,9 @@ import { getCalulatedTvl } from "utils/bigNumber"
 import { PerformanceChartProvider } from "context/performanceChartContext"
 import BigNumber from "bignumber.js"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { useAaveStaker } from "context/aaveStakerContext"
 import { tokenConfig } from "data/tokenConfig"
 import { getCurrentAsset } from "utils/getCurrentAsset"
-import { useAaveStaker } from "context/aaveStakerContext"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -41,7 +41,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const [auth] = useConnect()
   const isConnected = auth.data.connected
   const { cellar: staticCellar } = staticData
-  const { cellarData } = useAaveV2Cellar()
+  const { cellarData, userData } = useAaveV2Cellar()
+  const { userStakeData } = useAaveStaker()
   const { id, name } = staticCellar!
   const [cellarResult] = useGetCellarQuery({
     variables: {
@@ -59,6 +60,12 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     removedLiquidityAllTime,
   } = cellar || {}
   const { activeAsset } = cellarData || {}
+
+  const totalPortfolio = new BigNumber(
+    userData?.balances?.aaveClr || 0
+  ).plus(
+    new BigNumber(userStakeData?.totalBondedAmount?.toString() || 0)
+  )
 
   const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
   const tvmVal = formatCurrency(calculatedTvl)
@@ -79,8 +86,12 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const { potentialStakingApy } = stakerData
 
   let expectedApy = parseFloat(cellarApy)
+  let apyLabel = "Expected APY"
   if (potentialStakingApy != null) {
     expectedApy = expectedApy + potentialStakingApy
+    apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${potentialStakingApy.toFixed(
+      1
+    )}%)`
   }
 
   return (
@@ -117,7 +128,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </VStack>
           <CellarStats
             tvm={`$${tvmVal} ${activeSymbol}`}
-            apy={expectedApy.toFixed(2).toString()}
+            apy={expectedApy.toFixed(1)}
+            apyTooltip={apyLabel}
             currentDeposits={currentDepositsVal}
             cellarCap={cellarCap}
             asset={activeSymbol}

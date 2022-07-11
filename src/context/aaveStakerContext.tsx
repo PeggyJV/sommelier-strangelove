@@ -9,6 +9,7 @@ import { config } from "utils/config"
 import { useEffect, useState, useCallback } from "react"
 import { BigNumber } from "bignumber.js"
 import { BigNumber as BigNumberE } from "ethers"
+import { useCoingeckoPrice } from "hooks/web3/useCoingeckoPrice"
 
 export interface UserStake {
   amount: BigNumberE
@@ -26,6 +27,7 @@ export interface UserStakeData {
   totalRewards?: BigNumber
   totalBondedAmount?: BigNumber
   userStakes: UserStake[]
+  totalClaimAllRewards?: BigNumber
 }
 
 const initialStakeState = {
@@ -36,12 +38,14 @@ const initialStakeState = {
 
 type StakerData = {
   loading: boolean
+  error: boolean
   rewardRate?: BigNumber
   potentialStakingApy?: number
 }
 
 const initialStakerState = {
   loading: false,
+  error: false,
 }
 
 type SharedState = {
@@ -67,8 +71,11 @@ export const AaveStakerProvider = ({
   const [{ data: account }] = useAccount()
   const { CONTRACT } = config
 
-  // TODO get from CG
-  const sommPrice = 0.285414
+  const sommPriceResponse = useCoingeckoPrice("sommelier")
+  let sommPrice = 0
+  if (sommPriceResponse) {
+    sommPrice = parseFloat(sommPriceResponse)
+  }
 
   const [userStakeData, setUserStakeData] =
     useState<UserStakeData>(initialStakeState)
@@ -93,11 +100,13 @@ export const AaveStakerProvider = ({
     setUserStakeData((state) => ({ ...state, loading: true }))
     let numStakes
     let userStakes
+    let claimAllRewards
     try {
       userStakes = await aaveStakerContract.getUserStakes(
         account?.address
       )
       numStakes = userStakes.length
+      claimAllRewards = await aaveStakerSigner.callStatic.claimAll()
     } catch (e) {
       console.warn("failed to read userStakes", e)
       setUserStakeData((state) => ({
@@ -106,6 +115,12 @@ export const AaveStakerProvider = ({
         error: true,
       }))
     }
+
+    let totalClaimAllRewards = new BigNumber(0)
+    claimAllRewards &&
+      claimAllRewards.forEach((reward: any) => {
+        totalClaimAllRewards.plus(new BigNumber(reward.toString()))
+      })
 
     try {
       let userStakesArray: UserStake[] = []
@@ -145,6 +160,7 @@ export const AaveStakerProvider = ({
           userStakes: userStakesArray,
           totalRewards: totalRewards,
           totalBondedAmount: totalBondedAmount,
+          totalClaimAllRewards: totalClaimAllRewards,
         }))
       }
     } catch (e) {
@@ -155,7 +171,11 @@ export const AaveStakerProvider = ({
         error: true,
       }))
     }
-  }, [aaveStakerContract, account?.address])
+  }, [
+    aaveStakerContract,
+    aaveStakerSigner.callStatic,
+    account?.address,
+  ])
 
   // user data
   useEffect(() => {
@@ -221,16 +241,19 @@ export const AaveStakerProvider = ({
         potentialStakingApy,
       }))
     } catch (error) {
-      // TODO
-      console.log("oops", error)
+      console.warn("Failed to calculate potential APY")
+      setStakerData((state) => ({
+        ...state,
+        loading: false,
+        error: true,
+      }))
     }
-  }, [aaveStakerContract])
+  }, [aaveStakerContract, sommPrice])
 
   useEffect(() => {
-    if (!aaveStakerContract) return
-    console.log("calling")
+    if (!aaveStakerContract && !sommPrice) return
     fetchStakerData()
-  }, [aaveStakerContract, fetchStakerData])
+  }, [aaveStakerContract, sommPrice, fetchStakerData])
 
   return (
     <AaveStakerContext.Provider

@@ -19,6 +19,7 @@ import { debounce } from "lodash"
 interface CellarStatsProps extends StackProps {
   tvm?: string
   apy?: string
+  apyTooltip?: string
   currentDeposits?: string
   cellarCap?: string
   asset?: string
@@ -27,6 +28,7 @@ interface CellarStatsProps extends StackProps {
 export const CellarStats: VFC<CellarStatsProps> = ({
   tvm,
   apy,
+  apyTooltip,
   currentDeposits,
   cellarCap,
   asset,
@@ -80,7 +82,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label="Expected APY earned on Principal since initial investment from Strategy"
+            label={apyTooltip}
             bg="surface.bg"
           >
             <HStack spacing={1} align="center">
