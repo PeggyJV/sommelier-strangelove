@@ -8,6 +8,9 @@ import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { BigNumber } from "bignumber.js"
 import { toEther, formatUSD } from "utils/formatCurrency"
+import { useGetPositionQuery } from "generated/subgraph"
+import { useAccount } from "wagmi"
+import { getPNL } from "utils/pnl"
 interface Props extends FlexProps {
   data: CellarCardData
 }
@@ -17,27 +20,22 @@ export const Stats: React.FC<Props> = ({
   children,
   ...rest
 }) => {
-  const { cellarData, userData, aaveV2CellarContract } =
-    useAaveV2Cellar()
+  const { userData, aaveV2CellarContract } = useAaveV2Cellar()
   const { userStakeData } = useAaveStaker()
-  const [netValue, setNetValue] = useState<string>("--")
+  const { claimAllRewardsUSD } = userStakeData
+  const [cellarShareBalance, setCellarShareBalance] =
+    useState<BigNumber>(new BigNumber(0))
 
   useEffect(() => {
     const fn = async () => {
       try {
-        const netValue = await aaveV2CellarContract.convertToAssets(
-          new BigNumber(userData?.balances?.aaveClr || 0)
-            .plus(userStakeData?.totalBondedAmount?.toString() || 0)
-            .toFixed()
-        )
-
-        const formattedNetValue = toEther(
-          netValue.toString(),
-          userData?.balances?.aAsset?.decimals,
-          false,
-          2
-        )
-        setNetValue(formattedNetValue)
+        const cellarShareBalance =
+          await aaveV2CellarContract.convertToAssets(
+            new BigNumber(userData?.balances?.aaveClr || 0)
+              .plus(userStakeData?.totalBondedAmount?.toString() || 0)
+              .toFixed()
+          )
+        setCellarShareBalance(cellarShareBalance)
       } catch (e) {
         console.warn("Error converting shares to assets", e)
       }
@@ -51,6 +49,42 @@ export const Stats: React.FC<Props> = ({
     userStakeData?.totalBondedAmount,
   ])
 
+  // PNL
+  const [{ data: account }] = useAccount()
+  const [{ data: positionData }] = useGetPositionQuery({
+    variables: {
+      walletAddress: account?.address ?? "",
+    },
+    pause: false,
+  })
+
+  const userTvl = new BigNumber(cellarShareBalance?.toString() ?? 0)
+
+  const currentUserDeposits = new BigNumber(
+    positionData?.wallet?.currentDeposits ?? 0
+  )
+  // always 18 decimals from subgraph, must be normalized to 6
+  const deposits = currentUserDeposits.div(
+    new BigNumber(10).pow(18 - 6)
+  )
+
+  const pnl = getPNL(userTvl, deposits)
+
+  // netValue = cellarValue + rewardValue
+  let netValue = new BigNumber(
+    toEther(
+      cellarShareBalance?.toString(),
+      userData?.balances?.aAsset?.decimals,
+      false,
+      2
+    )
+  )
+  if (claimAllRewardsUSD) {
+    netValue = netValue.plus(claimAllRewardsUSD)
+  }
+
+  const formattedNetValue = netValue.toFixed(2, 0)
+
   return (
     <Grid
       gridAutoFlow="column"
@@ -63,7 +97,7 @@ export const Stats: React.FC<Props> = ({
     >
       <Box>
         <Heading as="p" size="sm" fontWeight="bold">
-          {formatUSD(netValue)}
+          {formatUSD(formattedNetValue)}
         </Heading>
         <Label color="neutral.300">Your Portfolio</Label>
       </Box>
@@ -76,7 +110,7 @@ export const Stats: React.FC<Props> = ({
           alignItems="center"
           columnGap="5px"
         >
-          <Apy apy={data.individualApy} fontSize="inherit" />
+          <Apy apy={pnl.toFixed(1, 0)} fontSize="inherit" />
         </Heading>
         <Label color="neutral.300" whiteSpace="nowrap">
           PNL
