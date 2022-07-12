@@ -115,8 +115,13 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const { addToast, update, close, closeAll } = useBrandedToast()
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
-  const { cellarRouterSigner, cellarData, userData, fetchUserData } =
-    useAaveV2Cellar()
+  const {
+    cellarRouterSigner,
+    aaveCellarSigner,
+    cellarData,
+    userData,
+    fetchUserData,
+  } = useAaveV2Cellar()
 
   // eslint-disable-next-line no-unused-vars
   const [_, wait] = useWaitForTransaction({
@@ -211,10 +216,16 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       value: depositAmount,
     })
 
+    const isActiveAsset =
+      selectedToken?.address?.toLowerCase() ===
+      cellarData?.activeAsset?.toLowerCase()
+
     // check if approval exists
     const allowance = await erc20Contract.allowance(
       account?.address,
-      config.CONTRACT.CELLAR_ROUTER.ADDRESS
+      isActiveAsset
+        ? config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS
+        : config.CONTRACT.CELLAR_ROUTER.ADDRESS
     )
 
     const amtInWei = ethers.utils.parseUnits(
@@ -238,7 +249,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
       try {
         const { hash } = await erc20Contract.approve(
-          config.CONTRACT.CELLAR_ROUTER.ADDRESS,
+          isActiveAsset
+            ? config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS
+            : config.CONTRACT.CELLAR_ROUTER.ADDRESS,
           ethers.constants.MaxUint256
         )
         addToast({
@@ -295,18 +308,8 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     let depositConf
     let depositParams
 
-    if (
-      selectedToken?.address?.toLowerCase() ===
-      cellarData?.activeAsset?.toLowerCase()
-    ) {
-      depositParams = [
-        config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-        [selectedToken?.address],
-        [0],
-        amtInWei,
-        amtInWei,
-        account?.address,
-      ]
+    if (isActiveAsset) {
+      depositParams = [amtInWei, account?.address]
     } else {
       const swapRoute = await getSwapRoute()
 
@@ -344,10 +347,15 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     try {
       const inputToken = selectedToken?.address
       const outputToken = cellarData?.activeAsset
-      const { hash: depositConf } =
-        await cellarRouterSigner.depositAndSwapIntoCellar(
-          ...depositParams
-        )
+
+      // If selected token is cellar's current asset, it is cheapter to deposit into the cellar
+      // directly rather than through the router. Should only use router when swapping into the
+      // cellar's current asset.
+      const { hash: depositConf } = isActiveAsset
+        ? await aaveCellarSigner.deposit(...depositParams)
+        : await cellarRouterSigner.depositAndSwapIntoCellar(
+            ...depositParams
+          )
 
       addToast({
         heading: "Aave V2 Cellar Deposit",
