@@ -9,11 +9,8 @@ import { AlertDialog } from "components/AlertDialog"
 import { Provider as GraphQLProvider } from "urql"
 import { client as urqlClient } from "queries/client"
 import "utils/analytics"
-
 import { AaveV2CellarProvider } from "context/aaveV2StablecoinCellar"
-// TODO: consider separating user and global staker context
 import { AaveStakerProvider } from "context/aaveStakerContext"
-
 import { GlobalFonts } from "theme/GlobalFonts"
 
 const App = ({ Component, pageProps }: AppProps) => {

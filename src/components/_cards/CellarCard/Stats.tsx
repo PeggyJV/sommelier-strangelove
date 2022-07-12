@@ -3,7 +3,11 @@ import { Apy } from "components/Apy"
 import { InlineImage } from "components/InlineImage"
 import { CellarCardData } from "./CellarCardDisplay"
 import { Label } from "./Label"
-
+import { useEffect, useState } from "react"
+import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { useAaveStaker } from "context/aaveStakerContext"
+import { BigNumber } from "bignumber.js"
+import { toEther, formatUSD } from "utils/formatCurrency"
 interface Props extends FlexProps {
   data: CellarCardData
 }
@@ -13,6 +17,40 @@ export const Stats: React.FC<Props> = ({
   children,
   ...rest
 }) => {
+  const { cellarData, userData, aaveV2CellarContract } =
+    useAaveV2Cellar()
+  const { userStakeData } = useAaveStaker()
+  const [netValue, setNetValue] = useState<string>("--")
+
+  useEffect(() => {
+    const fn = async () => {
+      try {
+        const netValue = await aaveV2CellarContract.convertToAssets(
+          new BigNumber(userData?.balances?.aaveClr || 0)
+            .plus(userStakeData?.totalBondedAmount?.toString() || 0)
+            .toFixed()
+        )
+
+        const formattedNetValue = toEther(
+          netValue.toString(),
+          userData?.balances?.aAsset?.decimals,
+          false,
+          2
+        )
+        setNetValue(formattedNetValue)
+      } catch (e) {
+        console.warn("Error converting shares to assets", e)
+      }
+    }
+
+    void fn()
+  }, [
+    aaveV2CellarContract,
+    userData?.balances?.aAsset?.decimals,
+    userData?.balances?.aaveClr,
+    userStakeData?.totalBondedAmount,
+  ])
+
   return (
     <Grid
       gridAutoFlow="column"
@@ -25,7 +63,7 @@ export const Stats: React.FC<Props> = ({
     >
       <Box>
         <Heading as="p" size="sm" fontWeight="bold">
-          $10,105.00
+          {formatUSD(netValue)}
         </Heading>
         <Label color="neutral.300">Your Portfolio</Label>
       </Box>

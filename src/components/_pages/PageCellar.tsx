@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { useEffect, useState, VFC } from "react"
 import {
   Box,
   Heading,
@@ -29,6 +29,8 @@ import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { tokenConfig } from "data/tokenConfig"
 import { getCurrentAsset } from "utils/getCurrentAsset"
+import { toEther } from "utils/formatCurrency"
+import { ethers } from "ethers"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -41,7 +43,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const [auth] = useConnect()
   const isConnected = auth.data.connected
   const { cellar: staticCellar } = staticData
-  const { cellarData, userData } = useAaveV2Cellar()
+  const { cellarData, userData, aaveV2CellarContract } =
+    useAaveV2Cellar()
   const { userStakeData } = useAaveStaker()
   const { id, name } = staticCellar!
   const [cellarResult] = useGetCellarQuery({
@@ -60,12 +63,36 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     removedLiquidityAllTime,
   } = cellar || {}
   const { activeAsset } = cellarData || {}
+  const [netValue, setNetValue] = useState<string>("--")
 
-  const totalPortfolio = new BigNumber(
-    userData?.balances?.aaveClr || 0
-  ).plus(
-    new BigNumber(userStakeData?.totalBondedAmount?.toString() || 0)
-  )
+  useEffect(() => {
+    const fn = async () => {
+      try {
+        const netValue = await aaveV2CellarContract.convertToAssets(
+          new BigNumber(userData?.balances?.aaveClr || 0)
+            .plus(userStakeData?.totalBondedAmount?.toString() || 0)
+            .toFixed()
+        )
+
+        const formattedNetValue = toEther(
+          netValue.toString(),
+          userData?.balances?.aAsset?.decimals,
+          false,
+          2
+        )
+        setNetValue(formattedNetValue)
+      } catch (e) {
+        console.warn("Error converting shares to assets", e)
+      }
+    }
+
+    void fn()
+  }, [
+    aaveV2CellarContract,
+    userData?.balances?.aAsset?.decimals,
+    userData?.balances?.aaveClr,
+    userStakeData?.totalBondedAmount,
+  ])
 
   const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
   const tvmVal = formatCurrency(calculatedTvl)
@@ -137,7 +164,10 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
         </HStack>
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles}>Your Portfolio</Heading>
-          <PortfolioCard isConnected={isConnected} />
+          <PortfolioCard
+            isConnected={isConnected}
+            netValue={netValue}
+          />
         </VStack>
       </Section>
       <Section>
