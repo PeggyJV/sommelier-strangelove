@@ -166,7 +166,7 @@ export const AaveStakerProvider = ({
           totalBondedAmount: totalBondedAmount,
           totalClaimAllRewards: totalClaimAllRewards,
           claimAllRewardsUSD: totalClaimAllRewards
-            .div(new BigNumber(10).toExponential(6)) // convert from 6 decimals
+            .div(new BigNumber(10).pow(6)) // convert from 6 decimals
             .multipliedBy(new BigNumber(sommPrice)),
         }))
       }
