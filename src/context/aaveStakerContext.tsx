@@ -29,6 +29,7 @@ export interface UserStakeData {
   userStakes: UserStake[]
   totalClaimAllRewards?: BigNumber
   claimAllRewardsUSD?: BigNumber
+  claimAllRewards: BigNumberE[]
 }
 
 const initialStakeState = {
@@ -102,7 +103,7 @@ export const AaveStakerProvider = ({
     setUserStakeData((state) => ({ ...state, loading: true }))
     let numStakes
     let userStakes
-    let claimAllRewards
+    let claimAllRewards: BigNumberE[]
     try {
       userStakes = await aaveStakerContract.getUserStakes(
         account?.address
@@ -157,6 +158,10 @@ export const AaveStakerProvider = ({
           lock,
         })
 
+        const claimAllRewardsUSD = totalClaimAllRewards
+          .div(new BigNumber(10).pow(6)) // convert from 6 decimals
+          .multipliedBy(new BigNumber(sommPrice))
+
         setUserStakeData((state) => ({
           ...state,
           loading: false,
@@ -165,9 +170,8 @@ export const AaveStakerProvider = ({
           totalRewards: totalRewards,
           totalBondedAmount: totalBondedAmount,
           totalClaimAllRewards: totalClaimAllRewards,
-          claimAllRewardsUSD: totalClaimAllRewards
-            .div(new BigNumber(10).pow(6)) // convert from 6 decimals
-            .multipliedBy(new BigNumber(sommPrice)),
+          claimAllRewardsUSD: claimAllRewardsUSD,
+          claimAllRewards: claimAllRewards,
         }))
       }
     } catch (e) {
@@ -182,6 +186,7 @@ export const AaveStakerProvider = ({
     aaveStakerContract,
     aaveStakerSigner.callStatic,
     account?.address,
+    sommPrice,
   ])
 
   // user data
