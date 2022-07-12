@@ -95,7 +95,12 @@ export const Stats: React.FC<Props> = ({
             alt="coin logo"
             boxSize={3}
           />
-          0
+          {toEther(
+            userStakeData?.totalClaimAllRewards?.toFixed() || "0",
+            6,
+            false,
+            2
+          )}
         </Heading>
         <Label color="neutral.300">Rewards</Label>
       </Grid>
