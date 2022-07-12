@@ -8,11 +8,14 @@ import {
   Icon,
   Spinner,
   Avatar,
+  Flex,
+  IconButton,
 } from "@chakra-ui/react"
-import { useState, VFC } from "react"
+import { useEffect, useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
+import { FiSettings } from "react-icons/fi"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import { Token as TokenType, tokenConfig } from "data/tokenConfig"
 import { Link } from "components/Link"
@@ -26,7 +29,6 @@ import {
   useWaitForTransaction,
 } from "wagmi"
 import { ethers } from "ethers"
-import { BigNumber } from "bignumber.js"
 import { useBrandedToast } from "hooks/chakra"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import {
@@ -45,6 +47,7 @@ import JSBI from "jsbi"
 
 interface FormValues {
   depositAmount: number
+  slippage: number
   selectedToken: TokenType
 }
 import { CardHeading } from "components/_typography/CardHeading"
@@ -54,10 +57,12 @@ import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { useGetCellarQuery } from "generated/subgraph"
+import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
 export const DepositModal: VFC<DepositModalProps> = (props) => {
+  const [showSwapSettings, setShowSwapSettings] = useState(false)
   const { query } = useRouter()
   const { id } = query
   const [{ data }, refetch] = useGetCellarQuery({
@@ -67,7 +72,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     },
     pause: typeof id === "undefined",
   })
-  const methods = useForm<FormValues>()
+  const methods = useForm<FormValues>({
+    defaultValues: { slippage: config.SWAP.SLIPPAGE },
+  })
   const {
     register,
     watch,
@@ -87,7 +94,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   })
 
   const watchDepositAmount = watch("depositAmount")
-  const isError = errors.depositAmount !== undefined
+  const isError =
+    errors.depositAmount !== undefined ||
+    errors.slippage !== undefined
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
   const [selectedToken, setSelectedToken] =
@@ -138,13 +147,10 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           selectedToken?.symbol
         )
 
-      const amtInBigNumber = new BigNumber(watchDepositAmount)
-      const amtInWei = ethers.utils
-        .parseUnits(
-          amtInBigNumber.toFixed(),
-          selectedTokenBalance?.data?.decimals
-        )
-        .toString()
+      const amtInWei = ethers.utils.parseUnits(
+        watchDepositAmount.toString(),
+        selectedTokenBalance?.data?.decimals
+      )
 
       const inputAmt = CurrencyAmount.fromRawAmount(
         inputToken as Currency,
@@ -166,7 +172,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         TradeType.EXACT_INPUT,
         {
           recipient: account?.address as string,
-          slippageTolerance: new Percent(config.SWAP.SLIPPAGE, 100),
+          slippageTolerance: new Percent(
+            // this is done because value must be an integer (eg. 0.5 -> 50)
+            config.SWAP.SLIPPAGE * 100,
+            100_00
+          ),
           deadline: Math.floor(Date.now() / 1000 + 1800),
         }
       )
@@ -191,6 +201,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
 
+    // if swap slippage is not set, use default value
+    const slippage = data?.slippage
+
     if (!erc20Contract) return
 
     analytics.track("deposit.started", {
@@ -203,9 +216,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       account?.address,
       config.CONTRACT.CELLAR_ROUTER.ADDRESS
     )
-    const amtInBigNumber = new BigNumber(data?.depositAmount)
+
     const amtInWei = ethers.utils.parseUnits(
-      amtInBigNumber.toFixed(),
+      depositAmount.toString(),
       selectedTokenBalance?.data?.decimals
     )
 
@@ -308,15 +321,13 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       }
 
       const minAmountOut = swapRoute.route.quote
-        .subtract(
-          swapRoute.route.quote
-            .multiply(config.SWAP.SLIPPAGE)
-            .divide(100)
+        .multiply(
+          // must multiply slippage by 100 because value must be an integer (eg. 0.5 -> 50)
+          100_00 - slippage * 100
         )
-        .toExact()
-      const minAmountOutInBigNumber = new BigNumber(minAmountOut)
+        .divide(100_00)
       const minAmountOutInWei = ethers.utils.parseUnits(
-        minAmountOutInBigNumber.toFixed(),
+        minAmountOut.toExact(),
         userData?.balances?.aAsset?.decimals
       )
 
@@ -329,6 +340,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         account?.address,
       ]
     }
+
     try {
       const inputToken = selectedToken?.address
       const outputToken = cellarData?.activeAsset
@@ -424,6 +436,12 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const { activeAsset } = cellarData || {}
   const currentAsset = getCurrentAsset(tokenConfig, activeAsset)
 
+  // Close swap settings card if user changed current asset to active asset.
+  useEffect(() => {
+    if (selectedToken?.address === currentAsset?.address)
+      setShowSwapSettings(false)
+  }, [currentAsset?.address, selectedToken?.address])
+
   return (
     <BaseModal heading="Deposit" {...props}>
       <VStack pb={10} spacing={6} align="stretch">
@@ -461,7 +479,26 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <FormControl isInvalid={isError as boolean | undefined}>
-            <CardHeading pb={2}>enter amount</CardHeading>
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              position="relative" // anchors the swap settings card, which is positioned as absolute
+            >
+              <CardHeading pb={2}>enter amount</CardHeading>
+              {selectedToken?.address !== currentAsset?.address && (
+                <IconButton
+                  aria-label="swap settings"
+                  colorScheme="transparent"
+                  icon={<FiSettings />}
+                  onClick={() => {
+                    setShowSwapSettings(!showSwapSettings)
+                  }}
+                />
+              )}
+
+              {showSwapSettings && <SwapSettingsCard />}
+            </Flex>
+
             <ModalMenu
               setSelectedToken={trackedSetSelectedToken}
               activeAsset={activeAsset}
@@ -475,8 +512,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
                 bg="red.base"
                 borderRadius="50%"
                 as={AiOutlineInfo}
-              />{" "}
-              {errors.depositAmount?.message}
+              />
+              {errors.depositAmount?.message ??
+                errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
           <BaseButton

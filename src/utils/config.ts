@@ -6,7 +6,8 @@ import { erc20ABI } from "wagmi"
 /** Ensure Checksum Address  */
 export const config = {
   SWAP: {
-    SLIPPAGE: 5,
+    // Do not set to a value less than 0.01.
+    SLIPPAGE: 0.5,
   },
   CONTRACT: {
     AAVE_V2_STABLE_CELLAR: {
