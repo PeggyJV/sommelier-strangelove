@@ -117,9 +117,11 @@ export const AaveStakerProvider = ({
     }
 
     let totalClaimAllRewards = new BigNumber(0)
-    claimAllRewards &&
+    claimAllRewards?.length &&
       claimAllRewards.forEach((reward: any) => {
-        totalClaimAllRewards.plus(new BigNumber(reward.toString()))
+        totalClaimAllRewards = totalClaimAllRewards.plus(
+          new BigNumber(reward.toString())
+        )
       })
 
     try {

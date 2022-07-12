@@ -41,9 +41,9 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   ...rest
 }) => {
   const { userData, fetchUserData, cellarData } = useAaveV2Cellar()
-  const { aaveStakerSigner, fetchUserStakes } = useAaveStaker()
+  const { aaveStakerSigner, fetchUserStakes, userStakeData } =
+    useAaveStaker()
   const { doHandleTransaction } = useHandleTransaction()
-  const { userStakeData } = useAaveStaker()
   const { userStakes, totalBondedAmount, totalRewards } =
     userStakeData
   const userRewards =
@@ -223,7 +223,13 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   alt="aave logo"
                   boxSize={5}
                 />
-                {toEther(totalRewards?.toFixed() || "0")}
+                {toEther(
+                  userStakeData?.totalClaimAllRewards?.toFixed() ||
+                    "0",
+                  6,
+                  false,
+                  2
+                )}
               </CardStat>
             </VStack>
             <BaseButton
