@@ -436,6 +436,21 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const { activeAsset } = cellarData || {}
   const currentAsset = getCurrentAsset(tokenConfig, activeAsset)
 
+  // Move active asset to top of token list.
+  useEffect(() => {
+    if (currentAsset == undefined) return
+
+    const indexOfActiveAsset = tokenConfig.findIndex(
+      (token) => token === currentAsset
+    )
+
+    tokenConfig.splice(
+      0,
+      0,
+      tokenConfig.splice(indexOfActiveAsset, 1)[0]
+    )
+  }, [activeAsset, currentAsset])
+
   // Close swap settings card if user changed current asset to active asset.
   useEffect(() => {
     if (selectedToken?.address === currentAsset?.address)

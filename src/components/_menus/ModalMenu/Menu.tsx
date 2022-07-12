@@ -110,7 +110,7 @@ export const Menu: VFC<MenuProps> = ({
           w={menuDims?.borderBox.width}
         >
           <MenuOptionGroup
-            defaultValue={tokenConfig[0].symbol}
+            defaultValue={activeAsset && tokenConfig[0].symbol}
             type="radio"
           >
             {tokenConfig.map((token) => {
@@ -118,6 +118,9 @@ export const Menu: VFC<MenuProps> = ({
               const isActiveAsset =
                 token.address.toUpperCase() ===
                 activeAsset?.toUpperCase()
+
+              // Set default selected token to active asset.
+              if (isActiveAsset && !value) onChange(token)
 
               return (
                 <MenuItemOption
