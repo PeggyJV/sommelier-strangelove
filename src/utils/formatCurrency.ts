@@ -7,7 +7,20 @@ export const formatCurrency = (tvlTotal?: string) => {
     Intl.NumberFormat("en-US", {
       notation: "compact",
       maximumFractionDigits: 2,
-    }).format(parseInt(tvlTotal))
+    }).format(parseFloat(tvlTotal))
+
+  return tvmVal
+}
+
+export const formatUSD = (tvlTotal?: string) => {
+  const tvmVal =
+    tvlTotal &&
+    Intl.NumberFormat("en-US", {
+      notation: "compact",
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 2,
+    }).format(parseFloat(tvlTotal))
 
   return tvmVal
 }

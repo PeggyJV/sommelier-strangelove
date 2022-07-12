@@ -17,7 +17,7 @@ import { TransparentCard } from "./TransparentCard"
 import { TokenAssets } from "components/TokenAssets"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
-import { toEther } from "utils/formatCurrency"
+import { formatUSD, toEther } from "utils/formatCurrency"
 import { ethers } from "ethers"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useHandleTransaction } from "hooks/web3"
@@ -32,10 +32,12 @@ import { BigNumber as BigNumberE } from "ethers"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
+  netValue?: string
 }
 
 export const PortfolioCard: VFC<PortfolioCardProps> = ({
   isConnected,
+  netValue,
   ...rest
 }) => {
   const { userData, fetchUserData, cellarData } = useAaveV2Cellar()
@@ -53,6 +55,12 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const lpTokenDisabled =
     !isConnected ||
     parseInt(toEther(userData?.balances?.aaveClr, 18)) <= 0
+
+  const totalPortfolio = new BigNumber(
+    userData?.balances?.aaveClr || 0
+  ).plus(
+    new BigNumber(userStakeData?.totalBondedAmount?.toString() || 0)
+  )
 
   const handleClaimAll = async () => {
     const tx = await aaveStakerSigner.claimAll()
@@ -127,7 +135,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               label="net value"
               tooltip="Current value of your assets in Cellar"
             >
-              $0.00
+              {formatUSD(netValue)}
             </CardStat>
             <CardStat
               label="deposit assets"
@@ -178,7 +186,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 label="tokens"
                 tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
               >
-                {toEther(userData?.balances?.aaveClr, 18)}
+                {toEther(userData?.balances?.aaveClr, 18, false, 2)}
               </CardStat>
             </VStack>
             <VStack align="flex-start">
@@ -190,7 +198,10 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   ethers.utils.parseUnits(
                     totalBondedAmount?.toFixed() || "0",
                     0
-                  )
+                  ),
+                  18,
+                  false,
+                  2
                 )}
               </CardStat>
             </VStack>

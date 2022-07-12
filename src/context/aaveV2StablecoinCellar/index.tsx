@@ -30,6 +30,7 @@ type UserState = {
   loading: boolean
   balances?: Balances
   maxDeposit?: BigNumberE
+  maxWithdraw?: BigNumberE
   netValue?: BigNumberE
 }
 
@@ -41,6 +42,7 @@ type SharedState = {
   cellarData: CellarState
   userData: UserState
   aaveCellarSigner?: any
+  aaveV2CellarContract?: any
   cellarRouterSigner?: any
   fetchUserData?: any
 }
@@ -177,6 +179,7 @@ export const AaveV2CellarProvider = ({
           aaveClr: aaveClrBalance?.data?.formatted,
         },
         maxDeposit: maxDeposit,
+        maxWithdraw: maxWithdraw,
         netValue: netValue,
         loading: false,
       }))
@@ -198,6 +201,7 @@ export const AaveV2CellarProvider = ({
         cellarData,
         userData,
         aaveCellarSigner,
+        aaveV2CellarContract,
         cellarRouterSigner,
         fetchUserData,
       }}
