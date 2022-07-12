@@ -29,8 +29,6 @@ import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { tokenConfig } from "data/tokenConfig"
 import { getCurrentAsset } from "utils/getCurrentAsset"
-import { toEther } from "utils/formatCurrency"
-import { ethers } from "ethers"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -63,24 +61,20 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     removedLiquidityAllTime,
   } = cellar || {}
   const { activeAsset } = cellarData || {}
-  const [netValue, setNetValue] = useState<string>("--")
+  const [cellarShareBalance, setCellarSharesBalance] =
+    useState<BigNumber>(new BigNumber("0"))
 
   useEffect(() => {
     const fn = async () => {
       try {
-        const netValue = await aaveV2CellarContract.convertToAssets(
-          new BigNumber(userData?.balances?.aaveClr || 0)
-            .plus(userStakeData?.totalBondedAmount?.toString() || 0)
-            .toFixed()
-        )
+        const cellarShareBalance =
+          await aaveV2CellarContract.convertToAssets(
+            new BigNumber(userData?.balances?.aaveClr || 0)
+              .plus(userStakeData?.totalBondedAmount?.toString() || 0)
+              .toFixed()
+          )
 
-        const formattedNetValue = toEther(
-          netValue.toString(),
-          userData?.balances?.aAsset?.decimals,
-          false,
-          2
-        )
-        setNetValue(formattedNetValue)
+        setCellarSharesBalance(cellarShareBalance)
       } catch (e) {
         console.warn("Error converting shares to assets", e)
       }
@@ -166,7 +160,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           <Heading {...h2Styles}>Your Portfolio</Heading>
           <PortfolioCard
             isConnected={isConnected}
-            netValue={netValue}
+            cellarShareBalance={cellarShareBalance}
           />
         </VStack>
       </Section>

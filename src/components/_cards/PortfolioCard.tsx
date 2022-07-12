@@ -28,24 +28,23 @@ import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
 import { useGetPositionQuery } from "generated/subgraph"
 import { useAccount } from "wagmi"
-import { BigNumber as BigNumberE } from "ethers"
+import { getPNL } from "utils/pnl"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
-  netValue?: string
+  cellarShareBalance?: BigNumber
 }
 
 export const PortfolioCard: VFC<PortfolioCardProps> = ({
   isConnected,
-  netValue,
+  cellarShareBalance,
   ...rest
 }) => {
-  const { userData, fetchUserData, cellarData } = useAaveV2Cellar()
+  const { userData, cellarData } = useAaveV2Cellar()
   const { aaveStakerSigner, fetchUserStakes, userStakeData } =
     useAaveStaker()
   const { doHandleTransaction } = useHandleTransaction()
-  const { userStakes, totalBondedAmount, totalRewards } =
-    userStakeData
+  const { userStakes, totalBondedAmount } = userStakeData
   const userRewards =
     userStakeData?.totalRewards &&
     new BigNumber(userStakeData?.totalRewards).toString()
@@ -55,12 +54,6 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const lpTokenDisabled =
     !isConnected ||
     parseInt(toEther(userData?.balances?.aaveClr, 18)) <= 0
-
-  const totalPortfolio = new BigNumber(
-    userData?.balances?.aaveClr || 0
-  ).plus(
-    new BigNumber(userStakeData?.totalBondedAmount?.toString() || 0)
-  )
 
   const handleClaimAll = async () => {
     const tx = await aaveStakerSigner.claimAll()
@@ -72,44 +65,32 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
 
   // PNL
   const [{ data: account }] = useAccount()
-  const [{ fetching: isFetchingGetPosition, data: positionData }] =
-    useGetPositionQuery({
-      variables: {
-        walletAddress: account?.address ?? "",
-      },
-      pause: false,
-    })
+  const [{ data: positionData }] = useGetPositionQuery({
+    variables: {
+      walletAddress: account?.address ?? "",
+    },
+    pause: false,
+  })
 
-  // Normalized to 6 decimals
-  const totalBalance = cellarData.totalBalance
-  const totalHoldings = cellarData.totalHoldings
-  const totalShares = cellarData.totalSupply
-  const userShares = BigNumberE.from(fetchUserData.userBalance ?? "0")
+  const userTvl = new BigNumber(cellarShareBalance?.toString() ?? 0)
 
-  let currentUserDeposits = BigNumberE.from(
-    positionData?.wallet?.currentDeposits ?? "0"
+  const currentUserDeposits = new BigNumber(
+    positionData?.wallet?.currentDeposits ?? 0
+  )
+  // always 18 decimals from subgraph, must be normalized to 6
+  const deposits = currentUserDeposits.div(
+    new BigNumber(10).pow(18 - 6)
   )
 
-  // ((user share ratio) * tvlTotal - currentDeposits) / currentDeposits * 100
-  let pnl = new BigNumber("0")
-  if (
-    !isFetchingGetPosition &&
-    totalShares.gt(0) &&
-    currentUserDeposits.gt(0)
-  ) {
-    // 18 decimals, must be normalized to 6
-    const deposits = currentUserDeposits.div(
-      BigNumberE.from(10).pow(18 - 6)
-    )
-    const shareRatio = userShares.div(totalShares)
-    const tvlTotal = totalBalance.add(totalHoldings)
+  const pnl = getPNL(userTvl, deposits)
 
-    const gains = shareRatio.mul(tvlTotal).sub(deposits)
-    // Convert back to JS number because BigNumber doesn't handle float division well
-    const pnlNumber = (gains.toNumber() / deposits.toNumber()) * 100
-
-    pnl = new BigNumber(pnlNumber)
-  }
+  // format net value
+  const formattedNetValue = toEther(
+    cellarShareBalance?.toString(),
+    userData?.balances?.aAsset?.decimals,
+    false,
+    2
+  )
 
   return (
     <TransparentCard p={8} {...rest}>
@@ -135,7 +116,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               label="net value"
               tooltip="Current value of your assets in Cellar"
             >
-              {formatUSD(netValue)}
+              {formatUSD(formattedNetValue)}
             </CardStat>
             <CardStat
               label="deposit assets"
@@ -161,7 +142,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   textTransform: "uppercase",
                 }}
               >
-                <Apy apy={pnl.toFixed(2, 0)} />
+                <Apy apy={pnl.toFixed(1, 0)} />
               </CardStat>
             </Box>
             <Stack
