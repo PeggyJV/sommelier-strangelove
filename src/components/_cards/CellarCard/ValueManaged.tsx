@@ -14,7 +14,7 @@ import { InformationIcon } from "components/_icons"
 import BigNumber from "bignumber.js"
 import { cellarDataMap } from "data/cellarDataMap"
 import { formatCurrency } from "utils/formatCurrency"
-import { tooltipCopy } from "data/tooltipCopy"
+import { useAaveStaker } from "context/aaveStakerContext"
 
 interface Props extends BoxProps {
   cellarId: string
@@ -53,6 +53,19 @@ export const ValueManaged: React.FC<Props> = ({
 
   const { cellarApy } = cellarDataMap[cellarId]
 
+  // Staker Info
+  const { stakerData } = useAaveStaker()
+  const { potentialStakingApy } = stakerData
+
+  let expectedApy = parseFloat(cellarApy)
+  let apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (%)`
+  if (potentialStakingApy != null) {
+    expectedApy = expectedApy + potentialStakingApy
+    apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${potentialStakingApy.toFixed(
+      1
+    )}%)`
+  }
+
   return (
     <Box {...rest}>
       <Flex alignItems="baseline" mb={1}>
@@ -85,12 +98,12 @@ export const ValueManaged: React.FC<Props> = ({
           alignItems="center"
           columnGap="3px"
         >
-          {cellarApy}%
+          {expectedApy.toFixed(1)}%
         </Heading>
         <Tooltip
           hasArrow
           placement="top"
-          label={tooltipCopy.APY}
+          label={apyLabel}
           bg="surface.bg"
         >
           <HStack spacing={1} align="center">

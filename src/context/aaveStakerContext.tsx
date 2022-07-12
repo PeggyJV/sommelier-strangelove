@@ -9,6 +9,7 @@ import { config } from "utils/config"
 import { useEffect, useState, useCallback } from "react"
 import { BigNumber } from "bignumber.js"
 import { BigNumber as BigNumberE } from "ethers"
+import { useCoingeckoPrice } from "hooks/web3/useCoingeckoPrice"
 
 export interface UserStake {
   amount: BigNumberE
@@ -35,15 +36,29 @@ const initialStakeState = {
   userStakes: [],
 }
 
+type StakerData = {
+  loading: boolean
+  error: boolean
+  rewardRate?: BigNumber
+  potentialStakingApy?: number
+}
+
+const initialStakerState = {
+  loading: false,
+  error: false,
+}
+
 type SharedState = {
-  // stakerData: StakerData
+  stakerData: StakerData
   userStakeData: UserStakeData
   aaveStakerSigner?: any
   fetchUserStakes?: any
+  fetchStakerData?: any
 }
 
 const AaveStakerContext = createContext<SharedState>({
   userStakeData: initialStakeState,
+  stakerData: initialStakerState,
 })
 
 export const AaveStakerProvider = ({
@@ -56,8 +71,18 @@ export const AaveStakerProvider = ({
   const [{ data: account }] = useAccount()
   const { CONTRACT } = config
 
+  const sommPriceResponse = useCoingeckoPrice("sommelier")
+  let sommPrice = 0
+  if (sommPriceResponse) {
+    sommPrice = parseFloat(sommPriceResponse)
+  }
+
   const [userStakeData, setUserStakeData] =
     useState<UserStakeData>(initialStakeState)
+
+  const [stakerData, setStakerData] = useState<StakerData>(
+    initialStakerState
+  )
 
   const aaveStakerSigner = useContract({
     addressOrName: CONTRACT.AAVE_STAKER.ADDRESS,
@@ -158,11 +183,85 @@ export const AaveStakerProvider = ({
     fetchUserStakes()
   }, [aaveStakerContract, account?.address, fetchUserStakes])
 
+  const fetchStakerData = useCallback(async () => {
+    setStakerData((state) => ({
+      ...state,
+      loading: true,
+    }))
+
+    try {
+      // Somm rewards emitted per epoch
+      let rewardRate = await aaveStakerContract.rewardRate()
+      rewardRate = new BigNumber(rewardRate.toString())
+
+      // Current deposits in the staker
+      let totalDepositsWithBoost =
+        await aaveStakerContract.totalDepositsWithBoost()
+      totalDepositsWithBoost = new BigNumber(
+        totalDepositsWithBoost.toString()
+      )
+
+      let currentEpochDuration =
+        await aaveStakerContract.currentEpochDuration()
+      currentEpochDuration = new BigNumber(
+        currentEpochDuration.toString()
+      )
+
+      // Reward emissions per day
+      const rewardPerEpoch = rewardRate
+        .multipliedBy(currentEpochDuration)
+        .dividedBy(new BigNumber(10 ** 6))
+      const epochDays = currentEpochDuration.dividedBy(
+        new BigNumber(60 * 60 * 24)
+      )
+      const dailyEmissions = rewardPerEpoch
+        .dividedBy(epochDays)
+        .toNumber()
+
+      // Add potential deposit of $10,000 to totalDepositsWithBoost
+      const potential = 10000
+      const convertedTotalDeposits = totalDepositsWithBoost.div(
+        new BigNumber(10).exponentiatedBy(18)
+      )
+      const potentialTotalDeposits =
+        convertedTotalDeposits.toNumber() + potential
+
+      // Daily rewards in USD
+      const dailyEmissionsUSD = sommPrice * dailyEmissions
+      const potentialRewardsUSD =
+        (dailyEmissionsUSD * potential) / potentialTotalDeposits
+
+      // APR & potential APY
+      const apr = (potentialRewardsUSD / potential) * 100
+      const potentialStakingApy = (1 + apr / 365) ** 365
+
+      setStakerData((state) => ({
+        ...state,
+        loading: false,
+        potentialStakingApy,
+      }))
+    } catch (error) {
+      console.warn("Failed to calculate potential APY")
+      setStakerData((state) => ({
+        ...state,
+        loading: false,
+        error: true,
+      }))
+    }
+  }, [aaveStakerContract, sommPrice])
+
+  useEffect(() => {
+    if (!aaveStakerContract && !sommPrice) return
+    fetchStakerData()
+  }, [aaveStakerContract, sommPrice, fetchStakerData])
+
   return (
     <AaveStakerContext.Provider
       value={{
         userStakeData,
+        stakerData,
         fetchUserStakes,
+        fetchStakerData,
         aaveStakerSigner,
       }}
     >

@@ -29,7 +29,6 @@ import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { tokenConfig } from "data/tokenConfig"
 import { getCurrentAsset } from "utils/getCurrentAsset"
-import { toEther } from "utils/formatCurrency"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -62,13 +61,11 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   } = cellar || {}
   const { activeAsset } = cellarData || {}
 
-  console.log({ userData, userStakeData })
   const totalPortfolio = new BigNumber(
     userData?.balances?.aaveClr || 0
   ).plus(
     new BigNumber(userStakeData?.totalBondedAmount?.toString() || 0)
   )
-  console.log("total :: ", toEther(totalPortfolio.toFixed()))
 
   const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
   const tvmVal = formatCurrency(calculatedTvl)
@@ -83,6 +80,19 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const { name: nameAbbreviated, cellarApy } = cellarDataMap[id]
   const activeSymbol =
     activeAsset && getCurrentAsset(tokenConfig, activeAsset)?.symbol
+
+  // Staker Info
+  const { stakerData } = useAaveStaker()
+  const { potentialStakingApy } = stakerData
+
+  let expectedApy = parseFloat(cellarApy)
+  let apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (%)`
+  if (potentialStakingApy != null) {
+    expectedApy = expectedApy + potentialStakingApy
+    apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${potentialStakingApy.toFixed(
+      1
+    )}%)`
+  }
 
   return (
     <Layout>
@@ -118,7 +128,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </VStack>
           <CellarStats
             tvm={`$${tvmVal} ${activeSymbol}`}
-            apy={cellarApy}
+            apy={expectedApy.toFixed(1)}
+            apyTooltip={apyLabel}
             currentDeposits={currentDepositsVal}
             cellarCap={cellarCap}
             asset={activeSymbol}

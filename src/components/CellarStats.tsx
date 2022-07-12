@@ -15,11 +15,11 @@ import { Apy } from "./Apy"
 import { InformationIcon } from "./_icons"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
-import { tooltipCopy } from "data/tooltipCopy"
 
 interface CellarStatsProps extends StackProps {
   tvm?: string
   apy?: string
+  apyTooltip?: string
   currentDeposits?: string
   cellarCap?: string
   asset?: string
@@ -28,6 +28,7 @@ interface CellarStatsProps extends StackProps {
 export const CellarStats: VFC<CellarStatsProps> = ({
   tvm,
   apy,
+  apyTooltip,
   currentDeposits,
   cellarCap,
   asset,
@@ -81,7 +82,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label={tooltipCopy.APY}
+            label={apyTooltip}
             bg="surface.bg"
           >
             <HStack spacing={1} align="center">
