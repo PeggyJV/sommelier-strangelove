@@ -166,12 +166,14 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     <Td>{toEther(amount)}</Td>
                     <Td>{lockMap[lock?.toString()]}</Td>
                     <Td>
-                      {toEther(
-                        claimAllRewards[i].toString() || "0",
-                        6,
-                        false,
-                        2
-                      )}
+                      {claimAllRewards
+                        ? toEther(
+                            claimAllRewards[i]?.toString() || "0",
+                            6,
+                            false,
+                            2
+                          )
+                        : "0.00"}
                     </Td>
                     <Td fontWeight="normal">
                       <Flex justify="flex-end">

@@ -29,7 +29,7 @@ export interface UserStakeData {
   userStakes: UserStake[]
   totalClaimAllRewards?: BigNumber
   claimAllRewardsUSD?: BigNumber
-  claimAllRewards: BigNumberE[]
+  claimAllRewards?: BigNumberE[]
 }
 
 const initialStakeState = {
@@ -103,7 +103,8 @@ export const AaveStakerProvider = ({
     setUserStakeData((state) => ({ ...state, loading: true }))
     let numStakes
     let userStakes
-    let claimAllRewards: BigNumberE[]
+    let claimAllRewards: BigNumberE[] = []
+
     try {
       userStakes = await aaveStakerContract.getUserStakes(
         account?.address
