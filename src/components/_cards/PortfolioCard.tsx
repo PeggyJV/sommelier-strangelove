@@ -44,7 +44,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const { aaveStakerSigner, fetchUserStakes, userStakeData } =
     useAaveStaker()
   const { doHandleTransaction } = useHandleTransaction()
-  const { userStakes, totalBondedAmount } = userStakeData
+  const { userStakes, totalBondedAmount, claimAllRewardsUSD } =
+    userStakeData
   const userRewards =
     userStakeData?.totalRewards &&
     new BigNumber(userStakeData?.totalRewards).toString()
@@ -84,13 +85,20 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
 
   const pnl = getPNL(userTvl, deposits)
 
-  // format net value
-  const formattedNetValue = toEther(
-    cellarShareBalance?.toString(),
-    userData?.balances?.aAsset?.decimals,
-    false,
-    2
+  // netValue = cellarValue + rewardValue
+  let netValue = new BigNumber(
+    toEther(
+      cellarShareBalance?.toString(),
+      userData?.balances?.aAsset?.decimals,
+      false,
+      2
+    )
   )
+  if (claimAllRewardsUSD) {
+    netValue = netValue.plus(claimAllRewardsUSD)
+  }
+
+  const formattedNetValue = netValue.toFixed(2, 0)
 
   return (
     <TransparentCard p={8} {...rest}>

@@ -28,6 +28,7 @@ export interface UserStakeData {
   totalBondedAmount?: BigNumber
   userStakes: UserStake[]
   totalClaimAllRewards?: BigNumber
+  claimAllRewardsUSD?: BigNumber
 }
 
 const initialStakeState = {
@@ -41,6 +42,7 @@ type StakerData = {
   error: boolean
   rewardRate?: BigNumber
   potentialStakingApy?: number
+  sommPrice?: number
 }
 
 const initialStakerState = {
@@ -163,6 +165,9 @@ export const AaveStakerProvider = ({
           totalRewards: totalRewards,
           totalBondedAmount: totalBondedAmount,
           totalClaimAllRewards: totalClaimAllRewards,
+          claimAllRewardsUSD: totalClaimAllRewards.multipliedBy(
+            new BigNumber(sommPrice)
+          ),
         }))
       }
     } catch (e) {
@@ -241,6 +246,7 @@ export const AaveStakerProvider = ({
         ...state,
         loading: false,
         potentialStakingApy,
+        sommPrice,
       }))
     } catch (error) {
       console.warn("Failed to calculate potential APY")

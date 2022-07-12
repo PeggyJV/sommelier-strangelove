@@ -22,6 +22,7 @@ export const Stats: React.FC<Props> = ({
 }) => {
   const { userData, aaveV2CellarContract } = useAaveV2Cellar()
   const { userStakeData } = useAaveStaker()
+  const { claimAllRewardsUSD } = userStakeData
   const [cellarShareBalance, setCellarShareBalance] =
     useState<BigNumber>(new BigNumber(0))
 
@@ -69,12 +70,20 @@ export const Stats: React.FC<Props> = ({
 
   const pnl = getPNL(userTvl, deposits)
 
-  const formattedNetValue = toEther(
-    cellarShareBalance.toString(),
-    userData?.balances?.aAsset?.decimals,
-    false,
-    2
+  // netValue = cellarValue + rewardValue
+  let netValue = new BigNumber(
+    toEther(
+      cellarShareBalance?.toString(),
+      userData?.balances?.aAsset?.decimals,
+      false,
+      2
+    )
   )
+  if (claimAllRewardsUSD) {
+    netValue = netValue.plus(claimAllRewardsUSD)
+  }
+
+  const formattedNetValue = netValue.toFixed(2, 0)
 
   return (
     <Grid
