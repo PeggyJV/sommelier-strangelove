@@ -137,7 +137,7 @@ export const AaveV2CellarProvider = ({
     }
 
     void fn()
-  }, [aaveV2CellarContract])
+  }, [aaveV2CellarContract, aAssetToken])
 
   const fetchUserData = useCallback(async () => {
     setUserData((state) => ({ ...state, loading: true }))

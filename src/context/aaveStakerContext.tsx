@@ -165,9 +165,9 @@ export const AaveStakerProvider = ({
           totalRewards: totalRewards,
           totalBondedAmount: totalBondedAmount,
           totalClaimAllRewards: totalClaimAllRewards,
-          claimAllRewardsUSD: totalClaimAllRewards.multipliedBy(
-            new BigNumber(sommPrice)
-          ),
+          claimAllRewardsUSD: totalClaimAllRewards
+            .div(new BigNumber(10).toExponential(6)) // convert from 6 decimals
+            .multipliedBy(new BigNumber(sommPrice)),
         }))
       }
     } catch (e) {
@@ -182,6 +182,7 @@ export const AaveStakerProvider = ({
     aaveStakerContract,
     aaveStakerSigner.callStatic,
     account?.address,
+    sommPrice,
   ])
 
   // user data
