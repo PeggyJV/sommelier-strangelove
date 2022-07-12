@@ -10,6 +10,7 @@ import { Provider as GraphQLProvider } from "urql"
 import { client as urqlClient } from "queries/client"
 import "utils/analytics"
 
+import { AaveV2CellarProvider } from "context/aaveV2StablecoinCellar"
 // TODO: consider separating user and global staker context
 import { AaveStakerProvider } from "context/aaveStakerContext"
 
@@ -28,9 +29,11 @@ const App = ({ Component, pageProps }: AppProps) => {
             <GlobalFonts />
             <DialogProvider>
               <WagmiProvider>
-                <AaveStakerProvider>
-                  <Component {...pageProps} />
-                </AaveStakerProvider>
+                <AaveV2CellarProvider>
+                  <AaveStakerProvider>
+                    <Component {...pageProps} />
+                  </AaveStakerProvider>
+                </AaveV2CellarProvider>
                 <AlertDialog />
               </WagmiProvider>
             </DialogProvider>
