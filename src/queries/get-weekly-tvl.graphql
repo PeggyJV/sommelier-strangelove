@@ -3,7 +3,7 @@ query GetWeeklyTVL($epoch: Int!) {
     first: 7
     orderDirection: asc
     orderBy: date
-    where: { tvlActive_gt: 0, date_gte: $epoch }
+    where: { date_gte: $epoch }
   ) {
     date
     asset {
