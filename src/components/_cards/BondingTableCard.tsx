@@ -36,7 +36,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const { userStakeData, aaveStakerSigner, fetchUserStakes } =
     useAaveStaker()
   const { doHandleTransaction } = useHandleTransaction()
-  const { userStakes } = userStakeData
+  const { userStakes, claimAllRewards } = userStakeData
 
   const handleUnBond = async (id: number) => {
     analytics.track("unbond.started")
@@ -165,7 +165,16 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     <Td>#{formatTrancheNumber(i + 1)}</Td>
                     <Td>{toEther(amount)}</Td>
                     <Td>{lockMap[lock?.toString()]}</Td>
-                    <Td>{toEther(rewards)}</Td>
+                    <Td>
+                      {claimAllRewards
+                        ? toEther(
+                            claimAllRewards[i]?.toString() || "0",
+                            6,
+                            false,
+                            2
+                          )
+                        : "0.00"}
+                    </Td>
                     <Td fontWeight="normal">
                       <Flex justify="flex-end">
                         {unbondTimestamp.toString() === "0" ? (

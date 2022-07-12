@@ -47,8 +47,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const { userStakes, totalBondedAmount, claimAllRewardsUSD } =
     userStakeData
   const userRewards =
-    userStakeData?.totalRewards &&
-    new BigNumber(userStakeData?.totalRewards).toString()
+    userStakeData?.totalClaimAllRewards &&
+    new BigNumber(userStakeData?.totalClaimAllRewards).toString()
   const claimAllDisabled =
     !isConnected || !userRewards || parseInt(userRewards) <= 0
 
