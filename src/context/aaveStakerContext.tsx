@@ -182,7 +182,6 @@ export const AaveStakerProvider = ({
     aaveStakerContract,
     aaveStakerSigner.callStatic,
     account?.address,
-    sommPrice,
   ])
 
   // user data
