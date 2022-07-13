@@ -9,7 +9,7 @@ import { useAaveStaker } from "context/aaveStakerContext"
 import { BigNumber } from "bignumber.js"
 import { toEther, formatUSD } from "utils/formatCurrency"
 import { useGetPositionQuery } from "generated/subgraph"
-import { useAccount } from "wagmi"
+import { useAccount, useConnect } from "wagmi"
 import { getPNL } from "utils/pnl"
 interface Props extends FlexProps {
   data: CellarCardData
@@ -20,6 +20,8 @@ export const Stats: React.FC<Props> = ({
   children,
   ...rest
 }) => {
+  const [{ data: connectData }] = useConnect()
+  const isConnected = connectData.connected
   const { userData, aaveV2CellarContract } = useAaveV2Cellar()
   const { userStakeData } = useAaveStaker()
   const { claimAllRewardsUSD } = userStakeData
@@ -97,7 +99,7 @@ export const Stats: React.FC<Props> = ({
     >
       <Box>
         <Heading as="p" size="sm" fontWeight="bold">
-          {formatUSD(formattedNetValue)}
+          {isConnected ? formatUSD(formattedNetValue) : "--"}
         </Heading>
         <Label color="neutral.300">Your Portfolio</Label>
       </Box>
@@ -110,7 +112,11 @@ export const Stats: React.FC<Props> = ({
           alignItems="center"
           columnGap="5px"
         >
-          <Apy apy={pnl.toFixed(1, 0)} fontSize="inherit" />
+          {isConnected ? (
+            <Apy apy={pnl.toFixed(1, 0)} fontSize="inherit" />
+          ) : (
+            "--"
+          )}
         </Heading>
         <Label color="neutral.300" whiteSpace="nowrap">
           PNL
@@ -129,12 +135,14 @@ export const Stats: React.FC<Props> = ({
             alt="coin logo"
             boxSize={3}
           />
-          {toEther(
-            userStakeData?.totalClaimAllRewards?.toFixed() || "0",
-            6,
-            false,
-            2
-          )}
+          {isConnected
+            ? toEther(
+                userStakeData?.totalClaimAllRewards?.toFixed() || "0",
+                6,
+                false,
+                2
+              )
+            : "--"}
         </Heading>
         <Label color="neutral.300">Rewards</Label>
       </Grid>
