@@ -97,7 +97,9 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   )
   const cellarCap =
     liquidityLimit &&
-    new BigNumber(liquidityLimit).dividedBy(10 ** 6).toString()
+    new BigNumber(liquidityLimit)
+      .dividedBy(10 ** userData?.balances?.aAsset?.decimals)
+      .toString()
   const { name: nameAbbreviated, cellarApy } = cellarDataMap[id]
   const activeSymbol =
     activeAsset && getCurrentAsset(tokenConfig, activeAsset)?.symbol
