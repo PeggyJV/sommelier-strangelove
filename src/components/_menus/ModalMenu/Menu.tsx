@@ -148,6 +148,7 @@ export const Menu: VFC<MenuProps> = ({
       <VStack spacing={0} align="flex-end">
         <Input
           variant="unstyled"
+          pr="2"
           type="number"
           step="any"
           defaultValue="0.00"
