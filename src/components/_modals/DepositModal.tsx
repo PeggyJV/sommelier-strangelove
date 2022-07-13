@@ -202,6 +202,10 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     return { route: swapRoute, tokenPath, poolFees, error }
   }
 
+  const isActiveAsset =
+    selectedToken?.address?.toLowerCase() ===
+    cellarData?.activeAsset?.toLowerCase()
+
   const onSubmit = async (data: any, e: any) => {
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
@@ -215,10 +219,6 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       stable: tokenSymbol,
       value: depositAmount,
     })
-
-    const isActiveAsset =
-      selectedToken?.address?.toLowerCase() ===
-      cellarData?.activeAsset?.toLowerCase()
 
     // check if approval exists
     const allowance = await erc20Contract.allowance(
@@ -508,16 +508,15 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
               position="relative" // anchors the swap settings card, which is positioned as absolute
             >
               <CardHeading pb={2}>enter amount</CardHeading>
-              {selectedToken?.address !== currentAsset?.address && (
-                <IconButton
-                  aria-label="swap settings"
-                  colorScheme="transparent"
-                  icon={<FiSettings />}
-                  onClick={() => {
-                    setShowSwapSettings(!showSwapSettings)
-                  }}
-                />
-              )}
+              <IconButton
+                aria-label="swap settings"
+                colorScheme="transparent"
+                disabled={isActiveAsset}
+                icon={<FiSettings />}
+                onClick={() => {
+                  setShowSwapSettings(!showSwapSettings)
+                }}
+              />
 
               {showSwapSettings && <SwapSettingsCard />}
             </Flex>
