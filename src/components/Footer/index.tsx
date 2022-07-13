@@ -63,8 +63,6 @@ const Footer: VFC<ContainerProps> = (props) => {
                 />
               </HStack>
             </FooterLink>
-            <FooterLink href="/terms">Terms</FooterLink>
-            <FooterLink href="/privacy">Privacy</FooterLink>
           </HStack>
           <Socials />
         </HStack>
