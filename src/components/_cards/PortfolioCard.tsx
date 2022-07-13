@@ -68,7 +68,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   const [{ data: account }] = useAccount()
   const [{ data: positionData }] = useGetPositionQuery({
     variables: {
-      walletAddress: account?.address ?? "",
+      walletAddress: (account?.address ?? "").toLowerCase(),
     },
     pause: false,
   })
@@ -145,12 +145,15 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
             >
               <CardStat
                 label="pnl"
-                tooltip="This represents percentage gains compared to current deposits"
+                tooltip={`${pnl.toFixed(
+                  5,
+                  0
+                )}%: This represents percentage gains compared to current deposits`}
                 labelProps={{
                   textTransform: "uppercase",
                 }}
               >
-                <Apy apy={pnl.toFixed(1, 0)} />
+                <Apy apy={pnl.toFixed(2, 1)} />
               </CardStat>
             </Box>
             <Stack
