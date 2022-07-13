@@ -124,7 +124,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               label="net value"
               tooltip="Current value of your assets in Cellar"
             >
-              {formatUSD(formattedNetValue)}
+              {isConnected ? formatUSD(formattedNetValue) : "--"}
             </CardStat>
             <CardStat
               label="deposit assets"
@@ -153,7 +153,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   textTransform: "uppercase",
                 }}
               >
-                <Apy apy={pnl.toFixed(2, 1)} />
+                {isConnected ? <Apy apy={pnl.toFixed(2, 1)} /> : "--"}
               </CardStat>
             </Box>
             <Stack
@@ -178,7 +178,9 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 label="tokens"
                 tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
               >
-                {toEther(userData?.balances?.aaveClr, 18, false, 2)}
+                {isConnected
+                  ? toEther(userData?.balances?.aaveClr, 18, false, 2)
+                  : "--"}
               </CardStat>
             </VStack>
             <VStack align="flex-start">
@@ -186,15 +188,17 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 label="bonded tokens"
                 tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
               >
-                {toEther(
-                  ethers.utils.parseUnits(
-                    totalBondedAmount?.toFixed() || "0",
-                    0
-                  ),
-                  18,
-                  false,
-                  2
-                )}
+                {isConnected
+                  ? toEther(
+                      ethers.utils.parseUnits(
+                        totalBondedAmount?.toFixed() || "0",
+                        0
+                      ),
+                      18,
+                      false,
+                      2
+                    )
+                  : "--"}
               </CardStat>
             </VStack>
             <BondButton disabled={lpTokenDisabled} />
@@ -215,13 +219,15 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   alt="aave logo"
                   boxSize={5}
                 />
-                {toEther(
-                  userStakeData?.totalClaimAllRewards?.toFixed() ||
-                    "0",
-                  6,
-                  false,
-                  2
-                )}
+                {isConnected
+                  ? toEther(
+                      userStakeData?.totalClaimAllRewards?.toFixed() ||
+                        "0",
+                      6,
+                      false,
+                      2
+                    )
+                  : "--"}
               </CardStat>
             </VStack>
             <BaseButton
