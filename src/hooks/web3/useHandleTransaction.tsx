@@ -28,10 +28,8 @@ export const useHandleTransaction = (): {
     onError,
   }: TxParams) => {
     const infoBody = toastBody?.info || <Text>In Progress...</Text>
-    const successBody = toastBody?.success || (
-      <Text>Tx Successful</Text>
-    )
-    const errorBody = toastBody?.error || <Text>Tx Failed</Text>
+    const successBody = toastBody?.success || <Text>Successful</Text>
+    const errorBody = toastBody?.error || <Text>Failed</Text>
 
     addToast({
       heading: "Transaction",
