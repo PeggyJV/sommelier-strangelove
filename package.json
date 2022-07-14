@@ -4,8 +4,8 @@
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
     "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
-    "build": "./get-maxmind.sh && next build",
-    "build:maxmind": "./get-maxmind.sh && next build",
+    "build": "next build",
+    "build:maxmind": "env-cmd -f .env.* ./get-maxmind.sh && next build",
     "cy:open": "cypress open",
     "cy:record": "cypress run --record",
     "cy:run": "cypress run",
@@ -19,7 +19,8 @@
     "generate": "graphql-codegen",
     "generate:watch": "yarn generate --watch",
     "generate:schema": "get-graphql-schema https://api.thegraph.com/subgraphs/name/peggyjv/cellars > src/generated/schema.json --json",
-    "generate:schema:pending": "get-graphql-schema https://api.thegraph.com/subgraphs/id/QmaTfJ2wZ6bp7hZUUjiEeJ7ZJbEgABMJTFuS51zv9AWVfg > src/generated/schema.json --json"
+    "generate:schema:pending": "get-graphql-schema https://api.thegraph.com/subgraphs/id/QmaTfJ2wZ6bp7hZUUjiEeJ7ZJbEgABMJTFuS51zv9AWVfg > src/generated/schema.json --json",
+    "maxmind:pull": "env-cmd -f .env.* ./get-maxmind.sh"
   },
   "dependencies": {
     "@analytics/google-tag-manager": "^0.5.2",
@@ -70,6 +71,7 @@
     "@typescript-eslint/eslint-plugin": "5.14.0",
     "@typescript-eslint/parser": "5.14.0",
     "cypress": "9.5.1",
+    "env-cmd": "^10.1.0",
     "eslint": "8.10.0",
     "eslint-config-next": "^12.1.0",
     "eslint-plugin-cypress": "^2.12.1",
