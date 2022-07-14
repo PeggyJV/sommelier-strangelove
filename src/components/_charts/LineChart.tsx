@@ -11,8 +11,7 @@ const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
       enableGridY={false}
       tooltip={ToolTip}
       motionConfig={{
-        clamp: true,
-        duration: 220,
+        duration: 0, // Disable animation upon changing views.
       }}
       enablePoints={false}
       {...rest}
