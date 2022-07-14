@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react"
 import { ReactNode, useRef } from "react"
 import { InformationIcon, WarningIcon } from "components/_icons"
+import { SuccessIcon } from "components/_icons/SuccessIcon"
 
 interface BaseToast extends Partial<ToastOptions> {
   body: ReactNode
@@ -170,9 +171,9 @@ export const useToastStyles = (status?: Status) => {
     status === "info"
       ? InformationIcon
       : status === "success"
-      ? WarningIcon
+      ? SuccessIcon
       : status === "error"
-      ? InformationIcon
+      ? WarningIcon
       : InformationIcon
 
   return {
