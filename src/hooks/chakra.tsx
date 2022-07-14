@@ -95,9 +95,9 @@ export const useToastStyles = (status?: Status) => {
         }
       : status === "success"
       ? {
-          bg: "lime.dark",
+          bg: "turquoise.dark",
           borderWidth: 1,
-          borderColor: "lime.base",
+          borderColor: "turquoise.base",
         }
       : status === "error"
       ? {
@@ -106,9 +106,9 @@ export const useToastStyles = (status?: Status) => {
           borderColor: "red.base",
         }
       : {
-          bg: "turquoise.dark",
+          bg: "lime.dark",
           borderWidth: 1,
-          borderColor: "turquoise.base",
+          borderColor: "lime.base",
         }
 
   const dynamicStackStyles: StackProps =
@@ -118,14 +118,14 @@ export const useToastStyles = (status?: Status) => {
         }
       : status === "success"
       ? {
-          bg: "lime.dark",
+          bg: "turquoise.dark",
         }
       : status === "error"
       ? {
           bg: "red.dark",
         }
       : {
-          bg: "turquoise.dark",
+          bg: "lime.dark",
         }
 
   const dynamicHeadingStyles: HeadingProps =
@@ -135,14 +135,14 @@ export const useToastStyles = (status?: Status) => {
         }
       : status === "success"
       ? {
-          color: "lime.light",
+          color: "turquoise.light",
         }
       : status === "error"
       ? {
           color: "red.light",
         }
       : {
-          color: "turquoise.light",
+          color: "lime.light",
         }
 
   const dynamicIconStyles: IconProps =
@@ -153,8 +153,8 @@ export const useToastStyles = (status?: Status) => {
         }
       : status === "success"
       ? {
-          color: "lime.base",
-          borderColor: "lime.base",
+          color: "turquoise.base",
+          borderColor: "turquoise.base",
         }
       : status === "error"
       ? {
@@ -162,8 +162,8 @@ export const useToastStyles = (status?: Status) => {
           borderColor: "red.base",
         }
       : {
-          color: "turquoise.base",
-          borderColor: "turquoise.base",
+          color: "lime.base",
+          borderColor: "lime.base",
         }
 
   const dynamicIcon =
