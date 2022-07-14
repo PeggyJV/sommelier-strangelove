@@ -49,7 +49,7 @@ const ConnectButton = ({
         account: account?.data?.address,
       })
     }
-  }, [isConnected])
+  }, [isConnected, account?.data?.address])
 
   /**
    * - If connector is ready (window.ethereum exists), it'll detect the connector
@@ -75,6 +75,7 @@ const ConnectButton = ({
         }
   }, [c, connect])
 
+  // Pass custom connect button styles if unstyled prop is not passed to component
   const styles: BaseButtonProps | false = !unstyled && {
     p: 3,
     bg: "surface.primary",
