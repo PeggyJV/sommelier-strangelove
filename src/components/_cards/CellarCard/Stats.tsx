@@ -1,5 +1,4 @@
 import { Heading, Box, Grid, FlexProps } from "@chakra-ui/react"
-import { Apy } from "components/Apy"
 import { InlineImage } from "components/InlineImage"
 import { CellarCardData } from "./CellarCardDisplay"
 import { Label } from "./Label"
@@ -103,7 +102,8 @@ export const Stats: React.FC<Props> = ({
         </Heading>
         <Label color="neutral.300">Your Portfolio</Label>
       </Box>
-      <Box>
+      {/* TODO: fix PNL bug: https://github.com/strangelove-ventures/sommelier/issues/131 */}
+      {/* <Box>
         <Heading
           as="p"
           size="sm"
@@ -121,7 +121,7 @@ export const Stats: React.FC<Props> = ({
         <Label color="neutral.300" whiteSpace="nowrap">
           PNL
         </Label>
-      </Box>
+      </Box> */}
       <Grid backgroundColor="">
         <Heading
           as="p"
