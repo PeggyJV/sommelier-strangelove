@@ -71,7 +71,11 @@ const PageHome: NextPage = () => {
     <Layout>
       <VStack spacing={6} align="flex-start">
         <Section w="100%">
-          <Flex w="100%" direction="column">
+          <Flex
+            w="100%"
+            direction="column"
+            align={{ base: "center", md: "initial" }}
+          >
             <Box mb={12}>
               <Heading>Cellars</Heading>
             </Box>
