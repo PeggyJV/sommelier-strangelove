@@ -17,7 +17,11 @@ export const WithdrawButton: VFC<ButtonProps> = (props) => {
       <SecondaryButton onClick={onOpen} {...props}>
         Withdraw
       </SecondaryButton>
-      <WithdrawModal isOpen={isOpen} onClose={closeModal} />
+      <WithdrawModal
+        isOpen={isOpen}
+        onClose={closeModal}
+        onCloseProp={onClose}
+      />
     </>
   )
 }

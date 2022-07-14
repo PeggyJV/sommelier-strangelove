@@ -8,11 +8,14 @@ import {
   Icon,
   Spinner,
   Avatar,
+  Flex,
+  IconButton,
 } from "@chakra-ui/react"
-import { useState, VFC } from "react"
+import { useEffect, useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
+import { FiSettings } from "react-icons/fi"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import { Token as TokenType, tokenConfig } from "data/tokenConfig"
 import { Link } from "components/Link"
@@ -20,19 +23,18 @@ import { config } from "utils/config"
 import {
   erc20ABI,
   useSigner,
-  useContract,
   useAccount,
   useBalance,
   useProvider,
   useWaitForTransaction,
 } from "wagmi"
 import { ethers } from "ethers"
-import { BigNumber } from "bignumber.js"
 import { useBrandedToast } from "hooks/chakra"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import {
   AlphaRouter,
   AlphaRouterParams,
+  V3Route,
 } from "@uniswap/smart-order-router"
 import {
   Token,
@@ -45,6 +47,7 @@ import JSBI from "jsbi"
 
 interface FormValues {
   depositAmount: number
+  slippage: number
   selectedToken: TokenType
 }
 import { CardHeading } from "components/_typography/CardHeading"
@@ -54,10 +57,12 @@ import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { useGetCellarQuery } from "generated/subgraph"
+import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
 export const DepositModal: VFC<DepositModalProps> = (props) => {
+  const [showSwapSettings, setShowSwapSettings] = useState(false)
   const { query } = useRouter()
   const { id } = query
   const [{ data }, refetch] = useGetCellarQuery({
@@ -67,7 +72,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     },
     pause: typeof id === "undefined",
   })
-  const methods = useForm<FormValues>()
+  const methods = useForm<FormValues>({
+    defaultValues: { slippage: config.SWAP.SLIPPAGE },
+  })
   const {
     register,
     watch,
@@ -87,7 +94,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   })
 
   const watchDepositAmount = watch("depositAmount")
-  const isError = errors.depositAmount !== undefined
+  const isError =
+    errors.depositAmount !== undefined ||
+    errors.slippage !== undefined
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
   const [selectedToken, setSelectedToken] =
@@ -106,8 +115,13 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const { addToast, update, close, closeAll } = useBrandedToast()
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
-  const { cellarRouterSigner, cellarData, userData, fetchUserData } =
-    useAaveV2Cellar()
+  const {
+    cellarRouterSigner,
+    aaveCellarSigner,
+    cellarData,
+    userData,
+    fetchUserData,
+  } = useAaveV2Cellar()
 
   // eslint-disable-next-line no-unused-vars
   const [_, wait] = useWaitForTransaction({
@@ -120,81 +134,102 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     formatUnits: "wei",
   })
 
-  // defaulting to using active asset address, this sholdn't be necessary once we upgrade wagmi which has the prop as not required
-  const erc20Contract = useContract({
-    addressOrName:
-      selectedToken?.address ||
-      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-    contractInterface: erc20ABI,
-    signerOrProvider: signer,
-  })
+  const erc20Contract =
+    selectedToken?.address &&
+    new ethers.Contract(selectedToken?.address, erc20ABI, signer)
 
   const getSwapRoute = async () => {
-    const inputToken =
-      selectedToken?.address &&
-      new Token(
-        1, // chainId
-        selectedToken?.address,
-        selectedTokenBalance?.data?.decimals || 18,
-        selectedToken?.symbol,
-        selectedToken?.symbol
-      )
+    let error = false
+    let swapRoute
+    try {
+      const inputToken =
+        selectedToken?.address &&
+        new Token(
+          1, // chainId
+          selectedToken?.address,
+          selectedTokenBalance?.data?.decimals || 18,
+          selectedToken?.symbol,
+          selectedToken?.symbol
+        )
 
-    const amtInBigNumber = new BigNumber(watchDepositAmount)
-    const amtInWei = ethers.utils
-      .parseUnits(
-        amtInBigNumber.toFixed(),
+      const amtInWei = ethers.utils.parseUnits(
+        watchDepositAmount.toString(),
         selectedTokenBalance?.data?.decimals
       )
-      .toString()
 
-    const inputAmt = CurrencyAmount.fromRawAmount(
-      inputToken as Currency,
-      JSBI.BigInt(amtInWei)
-    )
+      const inputAmt = CurrencyAmount.fromRawAmount(
+        inputToken as Currency,
+        JSBI.BigInt(amtInWei)
+      )
 
-    const outputToken =
-      cellarData?.activeAsset &&
-      new Token(
+      const outputToken = new Token(
         1, // chainId
         cellarData?.activeAsset,
-        // "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
         userData?.balances?.aAsset?.decimals,
         userData?.balances?.aAsset?.symbol,
         userData?.balances?.aAsset?.symbol
       )
+      console.log({ inputToken, outputToken })
 
-    const route = await router.route(
-      inputAmt,
-      outputToken as Currency,
-      TradeType.EXACT_INPUT,
-      {
-        recipient: account?.address as string,
-        slippageTolerance: new Percent(5, 100),
-        deadline: Math.floor(Date.now() / 1000 + 1800),
-      }
+      swapRoute = await router.route(
+        inputAmt,
+        outputToken,
+        TradeType.EXACT_INPUT,
+        {
+          recipient: account?.address as string,
+          slippageTolerance: new Percent(
+            // this is done because value must be an integer (eg. 0.5 -> 50)
+            config.SWAP.SLIPPAGE * 100,
+            100_00
+          ),
+          deadline: Math.floor(Date.now() / 1000 + 1800),
+        }
+      )
+    } catch (e) {
+      console.warn("Error Occured ", e)
+      error = true
+    }
+
+    const tokenPath = swapRoute?.route[0].tokenPath.map(
+      (token) => token?.address
     )
 
-    return route
+    const v3Route = swapRoute?.route[0]?.route as V3Route
+    const fee = v3Route?.pools[0]?.fee
+    const poolFees =
+      swapRoute?.route[0]?.protocol === "V3" ? [fee] : []
+
+    return { route: swapRoute, tokenPath, poolFees, error }
   }
+
+  const isActiveAsset =
+    selectedToken?.address?.toLowerCase() ===
+    cellarData?.activeAsset?.toLowerCase()
 
   const onSubmit = async (data: any, e: any) => {
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
+
+    // if swap slippage is not set, use default value
+    const slippage = data?.slippage
+
+    if (!erc20Contract) return
+
     analytics.track("deposit.started", {
       stable: tokenSymbol,
       value: depositAmount,
     })
-    // const route = await getSwapRoute()
 
     // check if approval exists
     const allowance = await erc20Contract.allowance(
       account?.address,
-      config.CONTRACT.CELLAR_ROUTER.ADDRESS
+      isActiveAsset
+        ? config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS
+        : config.CONTRACT.CELLAR_ROUTER.ADDRESS
     )
-    const amtInBigNumber = new BigNumber(data?.depositAmount)
+
     const amtInWei = ethers.utils.parseUnits(
-      amtInBigNumber.toFixed(),
+      depositAmount.toString(),
       selectedTokenBalance?.data?.decimals
     )
 
@@ -214,7 +249,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
       try {
         const { hash } = await erc20Contract.approve(
-          config.CONTRACT.CELLAR_ROUTER.ADDRESS,
+          isActiveAsset
+            ? config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS
+            : config.CONTRACT.CELLAR_ROUTER.ADDRESS,
           ethers.constants.MaxUint256
         )
         addToast({
@@ -269,20 +306,56 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
     // deposit
     let depositConf
+    let depositParams
+
+    if (isActiveAsset) {
+      depositParams = [amtInWei, account?.address]
+    } else {
+      const swapRoute = await getSwapRoute()
+
+      if (!swapRoute?.route || swapRoute?.error) {
+        addToast({
+          heading: "Aave V2 Cellar Deposit",
+          body: <Text>Failed to fetch Swap Data</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+        return
+      }
+
+      const minAmountOut = swapRoute.route.quote
+        .multiply(
+          // must multiply slippage by 100 because value must be an integer (eg. 0.5 -> 50)
+          100_00 - slippage * 100
+        )
+        .divide(100_00)
+      const minAmountOutInWei = ethers.utils.parseUnits(
+        minAmountOut.toExact(),
+        userData?.balances?.aAsset?.decimals
+      )
+
+      depositParams = [
+        config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+        swapRoute.tokenPath,
+        swapRoute.poolFees,
+        amtInWei,
+        minAmountOutInWei,
+        account?.address,
+      ]
+    }
 
     try {
       const inputToken = selectedToken?.address
       const outputToken = cellarData?.activeAsset
-      const { hash: depositConf } =
-        await cellarRouterSigner.depositAndSwapIntoCellar(
-          config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-          [inputToken, outputToken],
-          amtInWei,
-          0,
-          account?.address,
-          account?.address,
-          { gasLimit: "1000000" }
-        )
+
+      // If selected token is cellar's current asset, it is cheapter to deposit into the cellar
+      // directly rather than through the router. Should only use router when swapping into the
+      // cellar's current asset.
+      const { hash: depositConf } = isActiveAsset
+        ? await aaveCellarSigner.deposit(...depositParams)
+        : await cellarRouterSigner.depositAndSwapIntoCellar(
+            ...depositParams
+          )
 
       addToast({
         heading: "Aave V2 Cellar Deposit",
@@ -355,7 +428,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     }
   }
 
-  const onError = (errors: any, e: any) => {
+  const onError = async (errors: any, e: any) => {
     // try and handle basic cases
     // gasFailure
     // onChain assert
@@ -370,6 +443,27 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const { loading, maxDeposit } = userData || {}
   const { activeAsset } = cellarData || {}
   const currentAsset = getCurrentAsset(tokenConfig, activeAsset)
+
+  // Move active asset to top of token list.
+  useEffect(() => {
+    if (currentAsset == undefined) return
+
+    const indexOfActiveAsset = tokenConfig.findIndex(
+      (token) => token === currentAsset
+    )
+
+    tokenConfig.splice(
+      0,
+      0,
+      tokenConfig.splice(indexOfActiveAsset, 1)[0]
+    )
+  }, [activeAsset, currentAsset])
+
+  // Close swap settings card if user changed current asset to active asset.
+  useEffect(() => {
+    if (selectedToken?.address === currentAsset?.address)
+      setShowSwapSettings(false)
+  }, [currentAsset?.address, selectedToken?.address])
 
   return (
     <BaseModal heading="Deposit" {...props}>
@@ -408,7 +502,25 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <FormControl isInvalid={isError as boolean | undefined}>
-            <CardHeading pb={2}>enter amount</CardHeading>
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              position="relative" // anchors the swap settings card, which is positioned as absolute
+            >
+              <CardHeading pb={2}>enter amount</CardHeading>
+              <IconButton
+                aria-label="swap settings"
+                colorScheme="transparent"
+                disabled={isActiveAsset}
+                icon={<FiSettings />}
+                onClick={() => {
+                  setShowSwapSettings(!showSwapSettings)
+                }}
+              />
+
+              {showSwapSettings && <SwapSettingsCard />}
+            </Flex>
+
             <ModalMenu
               setSelectedToken={trackedSetSelectedToken}
               activeAsset={activeAsset}
@@ -422,8 +534,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
                 bg="red.base"
                 borderRadius="50%"
                 as={AiOutlineInfo}
-              />{" "}
-              {errors.depositAmount?.message}
+              />
+              {errors.depositAmount?.message ??
+                errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
           <BaseButton

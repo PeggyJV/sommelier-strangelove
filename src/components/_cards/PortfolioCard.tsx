@@ -17,7 +17,7 @@ import { TransparentCard } from "./TransparentCard"
 import { TokenAssets } from "components/TokenAssets"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
-import { toEther } from "utils/formatCurrency"
+import { formatUSD, toEther } from "utils/formatCurrency"
 import { ethers } from "ethers"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useHandleTransaction } from "hooks/web3"
@@ -26,24 +26,29 @@ import { Apy } from "components/Apy"
 import BigNumber from "bignumber.js"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
+import { useGetPositionQuery } from "generated/subgraph"
+import { useAccount } from "wagmi"
+import { getPNL } from "utils/pnl"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
+  cellarShareBalance?: BigNumber
 }
 
 export const PortfolioCard: VFC<PortfolioCardProps> = ({
   isConnected,
+  cellarShareBalance,
   ...rest
 }) => {
-  const { userData, fetchUserData, cellarData } = useAaveV2Cellar()
-  const { aaveStakerSigner, fetchUserStakes } = useAaveStaker()
+  const { userData, cellarData } = useAaveV2Cellar()
+  const { aaveStakerSigner, fetchUserStakes, userStakeData } =
+    useAaveStaker()
   const { doHandleTransaction } = useHandleTransaction()
-  const { userStakeData } = useAaveStaker()
-  const { userStakes, totalBondedAmount, totalRewards } =
+  const { userStakes, totalBondedAmount, claimAllRewardsUSD } =
     userStakeData
   const userRewards =
-    userStakeData?.totalRewards &&
-    new BigNumber(userStakeData?.totalRewards).toString()
+    userStakeData?.totalClaimAllRewards &&
+    new BigNumber(userStakeData?.totalClaimAllRewards).toString()
   const claimAllDisabled =
     !isConnected || !userRewards || parseInt(userRewards) <= 0
 
@@ -58,6 +63,42 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   }
 
   const { activeAsset } = cellarData
+
+  // PNL
+  const [{ data: account }] = useAccount()
+  const [{ data: positionData }] = useGetPositionQuery({
+    variables: {
+      walletAddress: (account?.address ?? "").toLowerCase(),
+    },
+    pause: false,
+  })
+
+  const userTvl = new BigNumber(cellarShareBalance?.toString() ?? 0)
+
+  const currentUserDeposits = new BigNumber(
+    positionData?.wallet?.currentDeposits ?? 0
+  )
+  // always 18 decimals from subgraph, must be normalized to 6
+  const deposits = currentUserDeposits.div(
+    new BigNumber(10).pow(18 - 6)
+  )
+
+  const pnl = getPNL(userTvl, deposits)
+
+  // netValue = cellarValue + rewardValue
+  let netValue = new BigNumber(
+    toEther(
+      cellarShareBalance?.toString(),
+      userData?.balances?.aAsset?.decimals,
+      false,
+      2
+    )
+  )
+  if (claimAllRewardsUSD) {
+    netValue = netValue.plus(claimAllRewardsUSD)
+  }
+
+  const formattedNetValue = netValue.toFixed(2, 0)
 
   return (
     <TransparentCard p={8} {...rest}>
@@ -83,7 +124,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               label="net value"
               tooltip="Current value of your assets in Cellar"
             >
-              $0.00
+              {isConnected ? formatUSD(formattedNetValue) : "--"}
             </CardStat>
             <CardStat
               label="deposit assets"
@@ -103,13 +144,16 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               }, 1000)}
             >
               <CardStat
-                label="apy"
-                tooltip="APY earned on your Principal since initial investment from Strategy"
+                label="pnl"
+                tooltip={`${pnl.toFixed(
+                  5,
+                  0
+                )}%: This represents percentage gains compared to current deposits`}
                 labelProps={{
                   textTransform: "uppercase",
                 }}
               >
-                <Apy apy={`0.00`} />
+                {isConnected ? <Apy apy={pnl.toFixed(2, 1)} /> : "--"}
               </CardStat>
             </Box>
             <Stack
@@ -134,7 +178,9 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 label="tokens"
                 tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
               >
-                {toEther(userData?.balances?.aaveClr, 18)}
+                {isConnected
+                  ? toEther(userData?.balances?.aaveClr, 18, false, 2)
+                  : "--"}
               </CardStat>
             </VStack>
             <VStack align="flex-start">
@@ -142,12 +188,17 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 label="bonded tokens"
                 tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
               >
-                {toEther(
-                  ethers.utils.parseUnits(
-                    totalBondedAmount?.toFixed() || "0",
-                    0
-                  )
-                )}
+                {isConnected
+                  ? toEther(
+                      ethers.utils.parseUnits(
+                        totalBondedAmount?.toFixed() || "0",
+                        0
+                      ),
+                      18,
+                      false,
+                      2
+                    )
+                  : "--"}
               </CardStat>
             </VStack>
             <BondButton disabled={lpTokenDisabled} />
@@ -168,7 +219,15 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   alt="aave logo"
                   boxSize={5}
                 />
-                {toEther(totalRewards?.toFixed() || "0")}
+                {isConnected
+                  ? toEther(
+                      userStakeData?.totalClaimAllRewards?.toFixed() ||
+                        "0",
+                      6,
+                      false,
+                      2
+                    )
+                  : "--"}
               </CardStat>
             </VStack>
             <BaseButton

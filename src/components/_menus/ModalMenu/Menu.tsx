@@ -110,7 +110,7 @@ export const Menu: VFC<MenuProps> = ({
           w={menuDims?.borderBox.width}
         >
           <MenuOptionGroup
-            defaultValue={tokenConfig[0].symbol}
+            defaultValue={activeAsset && tokenConfig[0].symbol}
             type="radio"
           >
             {tokenConfig.map((token) => {
@@ -118,6 +118,9 @@ export const Menu: VFC<MenuProps> = ({
               const isActiveAsset =
                 token.address.toUpperCase() ===
                 activeAsset?.toUpperCase()
+
+              // Set default selected token to active asset.
+              if (isActiveAsset && !value) onChange(token)
 
               return (
                 <MenuItemOption
@@ -145,6 +148,7 @@ export const Menu: VFC<MenuProps> = ({
       <VStack spacing={0} align="flex-end">
         <Input
           variant="unstyled"
+          pr="2"
           type="number"
           step="any"
           defaultValue="0.00"
@@ -171,7 +175,8 @@ export const Menu: VFC<MenuProps> = ({
                     parseFloat(
                       toEther(
                         selectedTokenBalance.data?.value || "",
-                        selectedTokenBalance.data?.decimals
+                        selectedTokenBalance.data?.decimals,
+                        false
                       )
                     ) || "Insufficient balance"
                 )

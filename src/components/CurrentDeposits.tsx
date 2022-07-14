@@ -22,9 +22,16 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
 }) => {
   const theme = useTheme()
   const isDataPresent = currentDeposits && cellarCap
-  const data = isDataPresent
-    ? [{ currentDeposits: parseInt(currentDeposits) }]
-    : []
+
+  const getData = () => {
+    if (!isDataPresent) return []
+
+    const minValue = parseInt(cellarCap) * 0.01
+    const value = parseInt(currentDeposits)
+
+    // Show a line even if value is very small.
+    return [{ currentDeposits: value > minValue ? value : minValue }]
+  }
 
   return (
     <VStack minW={240} align="stretch">
@@ -48,7 +55,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           layout="horizontal"
           colors={theme.colors.lime.base}
           keys={["currentDeposits"]}
-          data={data}
+          data={getData()}
           maxValue={isDataPresent ? parseInt(cellarCap) : "auto"}
           borderRadius={2}
           valueScale={{ type: "linear" }}

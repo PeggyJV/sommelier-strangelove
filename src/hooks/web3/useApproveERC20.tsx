@@ -107,7 +107,7 @@ export const useApproveERC20 = ({
         addToast({
           heading: "ERC20 Approval",
           body: <Text>Approval Cancelled</Text>,
-          status: "warning",
+          status: "info",
           closeHandler: closeAll,
         })
       }

@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { useEffect, useState, VFC } from "react"
 import {
   Box,
   Heading,
@@ -26,6 +26,7 @@ import { getCalulatedTvl } from "utils/bigNumber"
 import { PerformanceChartProvider } from "context/performanceChartContext"
 import BigNumber from "bignumber.js"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { useAaveStaker } from "context/aaveStakerContext"
 import { tokenConfig } from "data/tokenConfig"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 
@@ -40,7 +41,9 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const [auth] = useConnect()
   const isConnected = auth.data.connected
   const { cellar: staticCellar } = staticData
-  const { cellarData } = useAaveV2Cellar()
+  const { cellarData, userData, aaveV2CellarContract } =
+    useAaveV2Cellar()
+  const { userStakeData } = useAaveStaker()
   const { id, name } = staticCellar!
   const [cellarResult] = useGetCellarQuery({
     variables: {
@@ -58,6 +61,32 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     removedLiquidityAllTime,
   } = cellar || {}
   const { activeAsset } = cellarData || {}
+  const [cellarShareBalance, setCellarSharesBalance] =
+    useState<BigNumber>(new BigNumber("0"))
+
+  useEffect(() => {
+    const fn = async () => {
+      try {
+        const cellarShareBalance =
+          await aaveV2CellarContract.convertToAssets(
+            new BigNumber(userData?.balances?.aaveClr || 0)
+              .plus(userStakeData?.totalBondedAmount?.toString() || 0)
+              .toFixed()
+          )
+
+        setCellarSharesBalance(cellarShareBalance)
+      } catch (e) {
+        console.warn("Error converting shares to assets", e)
+      }
+    }
+
+    void fn()
+  }, [
+    aaveV2CellarContract,
+    userData?.balances?.aAsset?.decimals,
+    userData?.balances?.aaveClr,
+    userStakeData?.totalBondedAmount,
+  ])
 
   const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
   const tvmVal = formatCurrency(calculatedTvl)
@@ -68,10 +97,25 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   )
   const cellarCap =
     liquidityLimit &&
-    new BigNumber(liquidityLimit).dividedBy(10 ** 6).toString()
+    new BigNumber(liquidityLimit)
+      .dividedBy(10 ** userData?.balances?.aAsset?.decimals)
+      .toString()
   const { name: nameAbbreviated, cellarApy } = cellarDataMap[id]
   const activeSymbol =
     activeAsset && getCurrentAsset(tokenConfig, activeAsset)?.symbol
+
+  // Staker Info
+  const { stakerData } = useAaveStaker()
+  const { potentialStakingApy } = stakerData
+
+  let expectedApy = parseFloat(cellarApy)
+  let apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (%)`
+  if (potentialStakingApy != null) {
+    expectedApy = expectedApy + potentialStakingApy
+    apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${potentialStakingApy.toFixed(
+      1
+    )}%)`
+  }
 
   return (
     <Layout>
@@ -107,7 +151,8 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           </VStack>
           <CellarStats
             tvm={`$${tvmVal} ${activeSymbol}`}
-            apy={cellarApy}
+            apy={expectedApy.toFixed(1)}
+            apyTooltip={apyLabel}
             currentDeposits={currentDepositsVal}
             cellarCap={cellarCap}
             asset={activeSymbol}
@@ -115,7 +160,10 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
         </HStack>
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles}>Your Portfolio</Heading>
-          <PortfolioCard isConnected={isConnected} />
+          <PortfolioCard
+            isConnected={isConnected}
+            cellarShareBalance={cellarShareBalance}
+          />
         </VStack>
       </Section>
       <Section>

@@ -27,6 +27,7 @@ type UserState = {
   loading: boolean
   balances?: Balances
   maxDeposit?: BigNumberE
+  maxWithdraw?: BigNumberE
   netValue?: BigNumberE
 }
 
@@ -38,6 +39,7 @@ type SharedState = {
   cellarData: CellarState
   userData: UserState
   aaveCellarSigner?: any
+  aaveV2CellarContract?: any
   cellarRouterSigner?: any
   fetchUserData?: any
 }
@@ -120,6 +122,7 @@ export const AaveV2CellarProvider = ({
       try {
         const name = await aaveV2CellarContract.name()
         const activeAsset = await aaveV2CellarContract.asset()
+
         setCellarData((state) => ({
           ...state,
           name: name,
@@ -136,8 +139,6 @@ export const AaveV2CellarProvider = ({
     void fn()
   }, [aaveV2CellarContract])
 
-  const fetchERC20Balance = useCallback(async () => {}, [])
-
   const fetchUserData = useCallback(async () => {
     setUserData((state) => ({ ...state, loading: true }))
     try {
@@ -150,6 +151,11 @@ export const AaveV2CellarProvider = ({
       const maxDeposit = await aaveV2CellarContract.maxDeposit(
         account?.address
       )
+
+      const maxWithdraw = await aaveV2CellarContract.maxWithdraw(
+        account?.address
+      )
+
       setUserData((state) => ({
         ...state,
         balances: {
@@ -158,6 +164,7 @@ export const AaveV2CellarProvider = ({
           aaveClr: aaveClrBalance?.data?.formatted,
         },
         maxDeposit: maxDeposit,
+        maxWithdraw: maxWithdraw,
         netValue: netValue,
         loading: false,
       }))
@@ -179,6 +186,7 @@ export const AaveV2CellarProvider = ({
         cellarData,
         userData,
         aaveCellarSigner,
+        aaveV2CellarContract,
         cellarRouterSigner,
         fetchUserData,
       }}

@@ -1,5 +1,4 @@
 import { config } from "utils/config"
-
 export interface CellarDataMap {
   [key: string]: {
     name: string
@@ -28,7 +27,7 @@ export const cellarDataMap: CellarDataMap = {
     strategyType: "Stablecoin",
     managementFee: "0.25%",
     individualApy: "1.5",
-    cellarApy: "5.4",
+    cellarApy: "1.5",
     protocols: "AAVE",
     supportedChains: [
       "DAI",

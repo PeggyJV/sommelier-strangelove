@@ -24,7 +24,11 @@ interface FormValues {
   withdrawAmount: number
 }
 
-export const WithdrawForm: VFC = () => {
+interface WithdrawFormProps {
+  onClose: () => void
+}
+
+export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const {
     register,
     watch,
@@ -86,7 +90,7 @@ export const WithdrawForm: VFC = () => {
     analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
-    const tx = await aaveCellarSigner.withdraw(
+    const tx = await aaveCellarSigner.redeem(
       amtInWei,
       account.address,
       account.address
@@ -94,6 +98,7 @@ export const WithdrawForm: VFC = () => {
 
     function onSuccess() {
       analytics.track("withdraw.succeeded", analyticsData)
+      onClose() // Close modal after successful withdraw.
     }
 
     function onError(error: Error) {
