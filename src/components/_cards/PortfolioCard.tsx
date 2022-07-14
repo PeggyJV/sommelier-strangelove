@@ -1,20 +1,10 @@
-import {
-  Box,
-  BoxProps,
-  SimpleGrid,
-  Stack,
-  VStack,
-} from "@chakra-ui/react"
+import { BoxProps, SimpleGrid, Stack, VStack } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { VFC } from "react"
-import { DepositButton } from "components/_buttons/DepositButton"
 import { BondButton } from "components/_buttons/BondButton"
-import { WithdrawButton } from "components/_buttons/WithdrawButton"
-import { tokenConfig } from "data/tokenConfig"
 import { InlineImage } from "components/InlineImage"
 import { TransparentCard } from "./TransparentCard"
-import { TokenAssets } from "components/TokenAssets"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { formatUSD, toEther } from "utils/formatCurrency"
@@ -22,13 +12,15 @@ import { ethers } from "ethers"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useHandleTransaction } from "hooks/web3"
 import BondingTableCard from "./BondingTableCard"
-import { Apy } from "components/Apy"
 import BigNumber from "bignumber.js"
-import { analytics } from "utils/analytics"
-import { debounce } from "lodash"
 import { useGetPositionQuery } from "generated/subgraph"
-import { useAccount } from "wagmi"
+import { useAccount, useConnect } from "wagmi"
 import { getPNL } from "utils/pnl"
+import { tokenConfig } from "data/tokenConfig"
+import { TokenAssets } from "components/TokenAssets"
+import { DepositButton } from "components/_buttons/DepositButton"
+import { WithdrawButton } from "components/_buttons/WithdrawButton"
+import ConnectButton from "components/_buttons/ConnectButton"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -66,6 +58,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
 
   // PNL
   const [{ data: account }] = useAccount()
+  const [auth] = useConnect()
   const [{ data: positionData }] = useGetPositionQuery({
     variables: {
       walletAddress: (account?.address ?? "").toLowerCase(),
@@ -138,7 +131,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 displaySymbol
               />
             </CardStat>
-            <Box
+            {/* TODO: fix PNL bug: https://github.com/strangelove-ventures/sommelier/issues/131 */}
+            {/* <Box
               onMouseEnter={debounce(() => {
                 analytics.track("cellar.tooltip-opened-apy")
               }, 1000)}
@@ -155,13 +149,21 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               >
                 {isConnected ? <Apy apy={pnl.toFixed(2, 1)} /> : "--"}
               </CardStat>
-            </Box>
+            </Box> */}
             <Stack
               spacing={3}
               direction={{ sm: "row", md: "column", lg: "row" }}
             >
-              <DepositButton disabled={!isConnected} />
-              <WithdrawButton disabled={lpTokenDisabled} />
+              {isConnected ? (
+                <>
+                  <DepositButton disabled={!isConnected} />
+                  <WithdrawButton disabled={lpTokenDisabled} />
+                </>
+              ) : (
+                auth.data.connectors.map((c) => (
+                  <ConnectButton connector={c} key={c.id} unstyled />
+                ))
+              )}
             </Stack>
           </SimpleGrid>
           <SimpleGrid
