@@ -27,8 +27,9 @@ import BigNumber from "bignumber.js"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
 import { useGetPositionQuery } from "generated/subgraph"
-import { useAccount } from "wagmi"
+import { useAccount, useConnect } from "wagmi"
 import { getPNL } from "utils/pnl"
+import ConnectButton from "components/_buttons/ConnectButton"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -66,6 +67,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
 
   // PNL
   const [{ data: account }] = useAccount()
+  const [auth] = useConnect()
   const [{ data: positionData }] = useGetPositionQuery({
     variables: {
       walletAddress: (account?.address ?? "").toLowerCase(),
@@ -160,8 +162,16 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               spacing={3}
               direction={{ sm: "row", md: "column", lg: "row" }}
             >
-              <DepositButton disabled={!isConnected} />
-              <WithdrawButton disabled={lpTokenDisabled} />
+              {isConnected ? (
+                <>
+                  <DepositButton disabled={!isConnected} />
+                  <WithdrawButton disabled={lpTokenDisabled} />
+                </>
+              ) : (
+                auth.data.connectors.map((c) => (
+                  <ConnectButton connector={c} key={c.id} unstyled />
+                ))
+              )}
             </Stack>
           </SimpleGrid>
           <SimpleGrid
