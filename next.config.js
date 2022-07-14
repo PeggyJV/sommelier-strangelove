@@ -1,10 +1,10 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true'
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 })
-const { withSentryConfig } = require('@sentry/nextjs')
+const { withSentryConfig } = require("@sentry/nextjs")
 
 const SentryOptions = {
-  silent: true
+  silent: true,
 }
 
 /**
@@ -14,7 +14,8 @@ const SentryOptions = {
  * @type {import('next').NextConfig} */
 let nextConfig = {
   reactStrictMode: true,
-  outputFileTracing: false // Temporary fix for Sentry + Next 12 bug
+  outputFileTracing: false, // Temporary fix for Sentry + Next 12 bug
+  unstable_includeFiles: ["./maxmind/GeoLite2-City.mmdb"],
 }
 
 // https://github.com/vercel/next.js/tree/canary/packages/next-bundle-analyzer
@@ -24,3 +25,4 @@ nextConfig = withBundleAnalyzer(nextConfig)
 // nextConfig = withSentryConfig(nextConfig, SentryOptions)
 
 module.exports = nextConfig
+
