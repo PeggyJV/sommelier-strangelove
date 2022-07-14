@@ -3,17 +3,19 @@ import { ButtonProps, useToast } from "@chakra-ui/react"
 import { Connector, useAccount, useConnect } from "wagmi"
 import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
-import { BaseButton } from "../BaseButton"
+import { BaseButton, BaseButtonProps } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 
 export interface ConnectButtonProps
   extends Omit<ButtonProps, "children"> {
   connector: Connector
+  unstyled?: boolean
 }
 
 const ConnectButton = ({
   connector: c,
+  unstyled,
   ...rest
 }: ConnectButtonProps) => {
   const [account] = useAccount({
@@ -73,6 +75,29 @@ const ConnectButton = ({
         }
   }, [c, connect])
 
+  const styles: BaseButtonProps | false = !unstyled && {
+    p: 3,
+    bg: "surface.primary",
+    borderWidth: 1,
+    borderRadius: 12,
+    borderColor: "surface.secondary",
+    minW: "max-content",
+    fontFamily: "SF Mono",
+    fontSize: 12,
+    icon: MoneyWalletIcon,
+    iconProps: {
+      bgColor: "unset",
+      borderRadius: "unset",
+      _groupHover: {
+        bgColor: "unset",
+      },
+    },
+    _hover: {
+      bg: "purple.dark",
+      borderColor: "surface.tertiary",
+    },
+  }
+
   return (
     <ClientOnly>
       {isConnected ? (
@@ -81,26 +106,7 @@ const ConnectButton = ({
         <BaseButton
           isLoading={loading}
           key={c.id}
-          p={3}
-          bg="surface.primary"
-          borderWidth={1}
-          borderRadius={12}
-          borderColor="surface.secondary"
-          minW="max-content"
-          fontFamily="SF Mono"
-          fontSize={12}
-          icon={MoneyWalletIcon}
-          iconProps={{
-            bgColor: "unset",
-            borderRadius: "unset",
-            _groupHover: {
-              bgColor: "unset",
-            },
-          }}
-          _hover={{
-            bg: "purple.dark",
-            borderColor: "surface.tertiary",
-          }}
+          {...styles}
           {...conditionalProps}
           {...rest}
         >
