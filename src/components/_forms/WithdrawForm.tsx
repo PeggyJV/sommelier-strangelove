@@ -24,7 +24,11 @@ interface FormValues {
   withdrawAmount: number
 }
 
-export const WithdrawForm: VFC = () => {
+interface WithdrawFormProps {
+  onClose: () => void
+}
+
+export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const {
     register,
     watch,
@@ -94,6 +98,7 @@ export const WithdrawForm: VFC = () => {
 
     function onSuccess() {
       analytics.track("withdraw.succeeded", analyticsData)
+      onClose() // Close modal after successful withdraw.
     }
 
     function onError(error: Error) {
