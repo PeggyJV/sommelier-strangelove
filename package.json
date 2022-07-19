@@ -42,7 +42,6 @@
     "graphql": "^16.3.0",
     "jsbi": "^3.1.4",
     "lodash": "^4.17.21",
-    "maxmind": "^4.3.6",
     "next": "^12.1.0",
     "next-plausible": "3.1.5",
     "react": "^17",
