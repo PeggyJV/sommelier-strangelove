@@ -17,5 +17,3 @@ studio/node_modules
 *.log
 .vscode/
 !.env.example
-maxmind
-maxmind.tar.gz
