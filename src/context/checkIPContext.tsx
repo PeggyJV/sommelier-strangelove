@@ -15,14 +15,14 @@ type CheckIPContext =
     }
   | undefined
 
-const checkIPContext = createContext<CheckIPContext | null>(null)
+const geoContext = createContext<CheckIPContext | null>(null)
 
-export const CheckIPProvider: FC<ReactNode> = ({ children }) => {
+export const GeoProvider: FC<ReactNode> = ({ children }) => {
   const [ctx, setCtx] = useState<CheckIPContext>()
 
   useEffect(() => {
     const getRegionData = async () => {
-      const res = await fetch("http://localhost:3000/api/test-geo", {
+      const res = await fetch("http://localhost:3000/api/geo", {
         method: "GET",
       })
       const data = await res.json()
@@ -33,10 +33,8 @@ export const CheckIPProvider: FC<ReactNode> = ({ children }) => {
   }, [])
 
   return (
-    <checkIPContext.Provider value={ctx}>
-      {children}
-    </checkIPContext.Provider>
+    <geoContext.Provider value={ctx}>{children}</geoContext.Provider>
   )
 }
 
-export const useCheckIP = () => useContext(checkIPContext)
+export const useGeo = () => useContext(geoContext)

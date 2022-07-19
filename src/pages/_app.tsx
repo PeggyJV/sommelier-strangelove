@@ -12,7 +12,7 @@ import "utils/analytics"
 import { AaveV2CellarProvider } from "context/aaveV2StablecoinCellar"
 import { AaveStakerProvider } from "context/aaveStakerContext"
 import { GlobalFonts } from "theme/GlobalFonts"
-import { CheckIPProvider } from "context/checkIPContext"
+import { GeoProvider } from "context/checkIPContext"
 
 const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient()
@@ -23,7 +23,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <PlausibleProvider
           domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
         >
-          <CheckIPProvider>
+          <GeoProvider>
             <ChakraProvider theme={theme}>
               <GlobalFonts />
               <DialogProvider>
@@ -37,7 +37,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 </WagmiProvider>
               </DialogProvider>
             </ChakraProvider>
-          </CheckIPProvider>
+          </GeoProvider>
         </PlausibleProvider>
       </GraphQLProvider>
     </QueryClientProvider>

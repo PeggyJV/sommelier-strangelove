@@ -1,100 +1,64 @@
-import path from "path"
-import { NextApiRequest, NextApiResponse } from "next"
-import maxmind, { Reader, CityResponse } from "maxmind"
+import type { NextApiRequest, NextApiResponse } from "next"
 
-const maxmindPath = path.resolve(
-  process.cwd(),
-  "maxmind/GeoLite2-City.mmdb"
-)
-const loadMaxmind = new Promise<Reader<CityResponse>>((resolve) =>
-  maxmind.open<CityResponse>(maxmindPath).then((fn) => {
-    resolve(fn)
-  })
-)
+const testGeo = (req: NextApiRequest, res: NextApiResponse) => {
+  const { headers } = req
 
-const unknownResponse = {
-  isRestricted: false,
-  country: "NO_RESULT",
-  region: "NO_RESULT",
-}
-
-export default async function getGeo(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const forwardedFor = req.headers["x-forwarded-for"]
-
-  function replyUnknown() {
-    return res.status(200).json(unknownResponse)
+  if (process.env.NODE_ENV === "development") {
+    headers["x-vercel-ip-country"] = "UA"
+    headers["x-vercel-ip-country-region"] = "14"
   }
 
-  if (forwardedFor == null || forwardedFor.length === 0) {
-    return replyUnknown()
+  let country = headers["x-vercel-ip-country"] ?? "NO_RESULT"
+  let region = headers["x-vercel-ip-country-region"] ?? "NO_RESULT"
+
+  if (Array.isArray(country)) {
+    country = country[0]
+  }
+  if (Array.isArray(region)) {
+    region = region[0]
   }
 
-  let ip = forwardedFor
-  if (Array.isArray(ip)) {
-    ip = ip[0]
-  }
+  const isRestricted = (country: string, region: string): boolean => {
+    // https://orpa.princeton.edu/export-controls/sanctioned-countries
+    // Updated as of March 10, 2022
+    const restricted: { [key: string]: string[] } = {
+      CU: ["*"], // Cuba
+      IR: ["*"], // Iran
+      KP: ["*"], // North Korea
+      RU: ["*"], // Russia
+      SY: ["*"], // Syria
+      UA: ["43", "14", "09"], // Ukraine: Crimea, Donetsk, Luhansk
+    }
 
-  const lookup = await loadMaxmind
-  const geo = lookup.get(ip)
+    const restrictedRegions = restricted[country] ?? null
+    const restrictedKeys = Object.keys(restricted)
 
-  if (geo == null || geo.country == null) {
-    return replyUnknown()
-  }
+    // Not on restricted list
+    if (restrictedRegions === null) {
+      return false
+    }
 
-  const country = geo.country
-
-  return res.status(200).json({
-    isRestricted: isRestricted(geo),
-    country: country.iso_code,
-    region: geo.subdivisions?.[0]?.iso_code ?? "",
-  })
-}
-
-// https://orpa.princeton.edu/export-controls/sanctioned-countries
-// Updated as of March 10, 2022
-const restricted = new Map<string, Set<string>>()
-restricted.set("CU", new Set(["*"])) // Cuba
-restricted.set("IR", new Set(["*"])) // Iran
-restricted.set("KP", new Set(["*"])) // North Korea
-restricted.set("RU", new Set(["*"])) // Russia
-restricted.set("SY", new Set(["*"])) // Syria
-restricted.set("UA", new Set(["43", "14", "09"])) // Ukraine: Crimea, Donetsk, Luhansk
-
-// Restricted countries
-restricted.set("US", new Set(["*"])) // United States
-
-function isRestricted(geo: CityResponse) {
-  if (geo.country == null) {
-    throw new Error("Missing Country information")
-  }
-
-  const countryCode = geo.country.iso_code
-  const restrictedRegions = restricted.get(countryCode)
-
-  // Not on restricted list
-  if (restrictedRegions == null) {
-    return false
-  }
-
-  // All regions are restricted
-  if (restrictedRegions.has("*")) {
-    return true
-  }
-
-  // Country has restricted regions but we could not detect their region
-  if (geo.subdivisions == null) {
-    return false
-  }
-
-  // Check all detected subdivisions against restricted region list
-  for (const region of geo.subdivisions) {
-    if (restrictedRegions.has(region.iso_code)) {
+    // All regions are restricted
+    if (
+      restrictedRegions.includes("*") ||
+      restrictedRegions.includes(region)
+    ) {
       return true
     }
+
+    // Country has restricted regions but we could not detect their region
+    if (restrictedKeys.filter((val) => val === country)) {
+      return false
+    }
+
+    return false
   }
 
-  return false
+  res.status(200).json({
+    country,
+    region,
+    isRestricted: isRestricted(country, region),
+  })
 }
+
+export default testGeo
