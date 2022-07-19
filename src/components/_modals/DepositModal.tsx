@@ -137,6 +137,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     formatUnits: "wei",
   })
 
+  // TODO: complete writing form validation based on this query
   const [{ data: depositData }] = useGetCurrentDepositsQuery({
     variables: { walletAddress: account?.address! },
   })
