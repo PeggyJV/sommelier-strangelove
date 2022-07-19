@@ -7,6 +7,9 @@ import {
   useState,
 } from "react"
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+
 type CheckIPContext =
   | {
       country: string
@@ -22,7 +25,7 @@ export const GeoProvider: FC<ReactNode> = ({ children }) => {
 
   useEffect(() => {
     const getRegionData = async () => {
-      const res = await fetch("http://localhost:3000/api/geo", {
+      const res = await fetch(`${BASE_URL}/api/geo`, {
         method: "GET",
       })
       const data = await res.json()
