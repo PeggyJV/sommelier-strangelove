@@ -4,8 +4,9 @@ const testGeo = (req: NextApiRequest, res: NextApiResponse) => {
   const { headers } = req
 
   if (process.env.NODE_ENV === "development") {
-    headers["x-vercel-ip-country"] = "UA"
-    headers["x-vercel-ip-country-region"] = "14"
+    headers["x-vercel-ip-country"] = process.env.IP_COUNTRY || "UA"
+    headers["x-vercel-ip-country-region"] =
+      process.env.IP_COUNTRY_REGION || "14"
   }
 
   let country = headers["x-vercel-ip-country"] ?? "NO_RESULT"
