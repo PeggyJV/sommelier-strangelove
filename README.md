@@ -63,9 +63,9 @@ The subgraph is written in AssemblyScript and supports representing 256 bit inte
 - [urql Basics](https://formidable.com/open-source/urql/docs/basics/react-preact/)
 - [urql SSR with NextJS](https://formidable.com/open-source/urql/docs/advanced/server-side-rendering/#using-getstaticprops-or-getserversideprops)
 
-### IP Detection and Maxmind
+### IP Detection using Vercel's headers
 
-In order to block access to the app from sanctioned and restricted countries we are using the Maxmind database to detect IP addresses. This is setup via a Next.js API route which reads the file from disk and performs a lookup against the IP. See `src/pages/api/geo.ts`. To download the Maxmind database, sign up for an account at [maxmind.com](https://maxmind.com) and create a license key. Export the key as an env var `MAXMIND_KEY` and run `./maxmind.sh` to pull the database. Maxmind updates their database once a week on Tuesdays so we should be deploying to Vercel at least once a week.
+In order to block access to the app from sanctioned and restricted countries we are using Vercel's `x-vercel-ip-country` and `x-vercel-ip-country-region` to detect IP addresses. This is setup via a Next.js API route which reads the file from disk and performs a lookup against the IP. See `src/pages/api/geo.ts`. The endpoint is hardcoded to use a restricted region unless you set the env vars `IP_COUNTRY`, and `IP_COUTNRY_REGION`. This API endpoint is then used by our GeoProvider (see `src/context/geoContext.tsx`). You can import the `useGeo()` hook to get access to the user's country, region, and a boolean that determines if they are in a restricted region or not. It's currently beging used in the `<Layout />` component to display a "Service Unavailable" banner and to block a user from connecting their wallet to the app.
 
 ## Learn More
 
