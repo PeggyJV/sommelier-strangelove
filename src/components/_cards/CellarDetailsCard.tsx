@@ -27,6 +27,7 @@ import { TokenAssets } from "components/TokenAssets"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { CellarDataMap } from "data/cellarDataMap"
 import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { StrategyProvider } from "components/StrategyProvider"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -56,6 +57,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     managementFee,
     supportedChains,
     performanceSplit,
+    strategyProvider,
   } = cellarDataMap[cellarId]
   const strategyAssets = tokenConfig.filter((token) =>
     supportedChains?.includes(token.symbol)
@@ -178,6 +180,9 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           cellarDataMap={cellarDataMap}
           cellarId={cellarId}
         />
+        {strategyProvider && (
+          <StrategyProvider strategyProvider={strategyProvider} />
+        )}
       </VStack>
     </TransparentCard>
   )
