@@ -56,7 +56,10 @@ import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
-import { useGetCellarQuery } from "generated/subgraph"
+import {
+  useGetCellarQuery,
+  useGetCurrentDepositsQuery,
+} from "generated/subgraph"
 import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
@@ -133,6 +136,12 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     token: selectedToken?.address,
     formatUnits: "wei",
   })
+
+  const [{ data: depositData }] = useGetCurrentDepositsQuery({
+    variables: { walletAddress: account?.address! },
+  })
+
+  console.log({ depositData, account })
 
   const erc20Contract =
     selectedToken?.address &&
