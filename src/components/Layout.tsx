@@ -3,7 +3,7 @@ import { Nav } from "./Nav"
 import { Container, Flex, FlexProps } from "@chakra-ui/react"
 import Footer from "./Footer"
 import { BackgroundAssets } from "./BackgroundAssets"
-import { useGeo } from "context/checkIPContext"
+import { useGeo } from "context/geoContext"
 
 export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   const { isRestricted } = useGeo() || {}

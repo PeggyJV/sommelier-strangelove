@@ -12,7 +12,7 @@ import "utils/analytics"
 import { AaveV2CellarProvider } from "context/aaveV2StablecoinCellar"
 import { AaveStakerProvider } from "context/aaveStakerContext"
 import { GlobalFonts } from "theme/GlobalFonts"
-import { GeoProvider } from "context/checkIPContext"
+import { GeoProvider } from "context/geoContext"
 
 const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient()
