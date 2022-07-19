@@ -6,6 +6,7 @@ import { ConnectedPopover } from "./ConnectedPopover"
 import { BaseButton, BaseButtonProps } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
+import { useGeo } from "context/geoContext"
 
 export interface ConnectButtonProps
   extends Omit<ButtonProps, "children"> {
@@ -18,6 +19,8 @@ const ConnectButton = ({
   unstyled,
   ...rest
 }: ConnectButtonProps) => {
+  const { isRestricted } = useGeo() || {}
+
   const [account] = useAccount({
     fetchEns: true,
   })
@@ -107,11 +110,16 @@ const ConnectButton = ({
         <BaseButton
           isLoading={loading}
           key={c.id}
+          disabled={isRestricted}
           {...styles}
           {...conditionalProps}
           {...rest}
         >
-          {c.ready ? `Connect Wallet` : `Please install MetaMask`}
+          {isRestricted
+            ? `Unable to connect`
+            : c.ready
+            ? `Connect Wallet`
+            : `Please install MetaMask`}
         </BaseButton>
       )}
     </ClientOnly>

@@ -12,6 +12,7 @@ import "utils/analytics"
 import { AaveV2CellarProvider } from "context/aaveV2StablecoinCellar"
 import { AaveStakerProvider } from "context/aaveStakerContext"
 import { GlobalFonts } from "theme/GlobalFonts"
+import { GeoProvider } from "context/geoContext"
 
 const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient()
@@ -22,19 +23,21 @@ const App = ({ Component, pageProps }: AppProps) => {
         <PlausibleProvider
           domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
         >
-          <ChakraProvider theme={theme}>
-            <GlobalFonts />
-            <DialogProvider>
-              <WagmiProvider>
-                <AaveV2CellarProvider>
-                  <AaveStakerProvider>
-                    <Component {...pageProps} />
-                  </AaveStakerProvider>
-                </AaveV2CellarProvider>
-                <AlertDialog />
-              </WagmiProvider>
-            </DialogProvider>
-          </ChakraProvider>
+          <GeoProvider>
+            <ChakraProvider theme={theme}>
+              <GlobalFonts />
+              <DialogProvider>
+                <WagmiProvider>
+                  <AaveV2CellarProvider>
+                    <AaveStakerProvider>
+                      <Component {...pageProps} />
+                    </AaveStakerProvider>
+                  </AaveV2CellarProvider>
+                  <AlertDialog />
+                </WagmiProvider>
+              </DialogProvider>
+            </ChakraProvider>
+          </GeoProvider>
         </PlausibleProvider>
       </GraphQLProvider>
     </QueryClientProvider>
