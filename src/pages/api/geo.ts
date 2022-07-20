@@ -23,6 +23,7 @@ const testGeo = (req: NextApiRequest, res: NextApiResponse) => {
     // https://orpa.princeton.edu/export-controls/sanctioned-countries
     // Updated as of March 10, 2022
     const restricted: { [key: string]: string[] } = {
+      US: ["*"], // USA
       CU: ["*"], // Cuba
       IR: ["*"], // Iran
       KP: ["*"], // North Korea
@@ -54,6 +55,17 @@ const testGeo = (req: NextApiRequest, res: NextApiResponse) => {
 
     return false
   }
+
+  res.setHeader("Access-Control-Allow-Credentials", "true")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  )
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  )
 
   res.status(200).json({
     country,
