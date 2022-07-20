@@ -15,11 +15,11 @@ export const MobileWarningCTA: FC<StackProps> = (props) => {
       >
         <LogoTextIcon h={6} w="auto" />
         <Text textAlign="center">
-          This app is not supported on mobile at this time - try it on
-          desktop instead.
+          This app is only supported on desktop at this time. Got
+          feedback? We'd love to hear it.
         </Text>
         <Link
-          href="https://www.sommelier.finance/"
+          href="https://t.me/getsomm"
           fontWeight="bold"
           textDecoration="underline"
         >
