@@ -21,6 +21,7 @@ import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import ConnectButton from "components/_buttons/ConnectButton"
+import { analytics } from "utils/analytics"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -49,8 +50,13 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
     parseInt(toEther(userData?.balances?.aaveClr, 18)) <= 0
 
   const handleClaimAll = async () => {
+    analytics.track("rewards.claim-started")
     const tx = await aaveStakerSigner.claimAll()
-    await doHandleTransaction(tx)
+    await doHandleTransaction({
+      ...tx,
+      onSuccess: () => analytics.track("rewards.claim-succeeded"),
+      onError: () => analytics.track("rewards.claim-failed"),
+    })
     fetchUserStakes()
   }
 
