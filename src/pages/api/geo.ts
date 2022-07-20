@@ -57,7 +57,7 @@ const testGeo = (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   // @ts-ignore boolean missing from setHeader types
-  res.setHeader("Access-Control-Allow-Credentials", true)
+  res.setHeader("Access-Control-Allow-Credentials", "true")
   res.setHeader("Access-Control-Allow-Origin", "*")
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -67,6 +67,8 @@ const testGeo = (req: NextApiRequest, res: NextApiResponse) => {
     "Access-Control-Allow-Headers",
     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
   )
+
+  console.log({ headers: res.getHeaders() })
 
   res.status(200).json({
     country,
