@@ -49,10 +49,10 @@ const testGeo = (req: NextApiRequest, res: NextApiResponse) => {
       return true
     }
 
-    // Country has restricted regions but we could not detect their region
-    if (restrictedKeys.filter((val) => val === country)) {
-      return false
-    }
+    // // Country has restricted regions but we could not detect their region
+    // if (restrictedKeys.filter((val) => val === country)) {
+    //   return false
+    // }
 
     return false
   }
