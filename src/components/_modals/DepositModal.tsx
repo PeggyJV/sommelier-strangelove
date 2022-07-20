@@ -139,7 +139,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
   // TODO: complete writing form validation based on this query
   const [{ data: depositData }] = useGetCurrentDepositsQuery({
-    variables: { walletAddress: account?.address! },
+    variables: { walletAddress: account?.address.toLowerCase()! },
   })
 
   console.log({ depositData, account })
