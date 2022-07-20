@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 
 const testGeo = (req: NextApiRequest, res: NextApiResponse) => {
   const { headers } = req
+  console.log({ headers })
 
   if (process.env.NODE_ENV === "development") {
     headers["x-vercel-ip-country"] = process.env.IP_COUNTRY || "UA"
