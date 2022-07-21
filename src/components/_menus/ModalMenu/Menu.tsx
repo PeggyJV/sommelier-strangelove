@@ -187,21 +187,23 @@ export const Menu: VFC<MenuProps> = ({
                     ) || "Insufficient balance"
                 )
               },
-              depositLimit: (v) => {
-                const currentDeposits = parseFloat(
-                  toEther(
-                    depositData?.wallet?.currentDeposits!,
-                    18,
-                    false
-                  )
-                )
-                const sum = v + currentDeposits
+              // depositLimit: (v) => {
+              //   const currentDeposits = depositData?.wallet?.currentDeposits ? parseFloat(
+              //     toEther(
+              //       depositData?.wallet?.currentDeposits,
+              //       18,
+              //       false
+              //     )
+              //   ) : 0
+              //   console.log({ currentDeposits })
 
-                return (
-                  sum <= 50000 ||
-                  `You cannot exceed the cellar limit of $50,000. You currently have $${currentDeposits} deposited in this cellar.`
-                )
-              },
+              //   const sum = v + currentDeposits
+
+              //   return (
+              //     sum <= 50000 ||
+              //     `You cannot exceed the cellar limit of $50,000. You currently have $${currentDeposits} deposited in this cellar.`
+              //   )
+              // },
             },
           })}
         />
