@@ -16,6 +16,12 @@ export interface CellarDataMap {
       [key: string]: string
     }
     strategyImgSrc?: string
+    strategyProvider?: {
+      logo?: string
+      title?: string
+      href?: string
+      tooltip?: string
+    }
   }
 }
 
@@ -51,5 +57,12 @@ export const cellarDataMap: CellarDataMap = {
       The Aave Strategy uses high-powered predictive analytics to respond instantly when opportunity arises. Every second, we are monitoring and predicting APYs, gas fees, price volatility, liquidity, slippage and more. Rather than a simple formula such as "if gas fees <= current_apy/12, {claim_rewards}", the Aave Strategy is continually primed with real-time data points to make intelligent decisions. We bring statistics to DeFi without compromising decentralization. This has never been possible until now.`,
     },
     strategyImgSrc: "/assets/images/net-yield-over-time.png",
+    strategyProvider: {
+      logo: "/assets/images/seven-seas.png",
+      title: "Seven Seas",
+      href: "https://7seas.capital/",
+      tooltip:
+        "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
+    },
   },
 }

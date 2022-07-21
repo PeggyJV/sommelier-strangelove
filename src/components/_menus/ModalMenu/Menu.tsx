@@ -22,6 +22,8 @@ import { useFormContext } from "react-hook-form"
 import { toEther } from "utils/formatCurrency"
 import { ModalMenuProps } from "."
 import { analytics } from "utils/analytics"
+import { useGetCurrentDepositsQuery } from "generated/subgraph"
+import { useAccount } from "wagmi"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -35,6 +37,10 @@ export const Menu: VFC<MenuProps> = ({
   value,
   onChange,
 }) => {
+  const [{ data: account }] = useAccount()
+  const [{ data: depositData }] = useGetCurrentDepositsQuery({
+    variables: { walletAddress: account?.address.toLowerCase()! },
+  })
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const menuDims = useDimensions(menuRef, true)
@@ -179,6 +185,21 @@ export const Menu: VFC<MenuProps> = ({
                         false
                       )
                     ) || "Insufficient balance"
+                )
+              },
+              depositLimit: (v) => {
+                const currentDeposits = parseFloat(
+                  toEther(
+                    depositData?.wallet?.currentDeposits!,
+                    18,
+                    false
+                  )
+                )
+                const sum = v + currentDeposits
+
+                return (
+                  sum <= 50000 ||
+                  `You cannot exceed the cellar limit of $50,000. You currently have $${currentDeposits} deposited in this cellar.`
                 )
               },
             },

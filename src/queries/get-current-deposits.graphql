@@ -1,0 +1,6 @@
+query GetCurrentDeposits($walletAddress: ID!) {
+  wallet(id: $walletAddress) {
+    id
+    currentDeposits
+  }
+}
