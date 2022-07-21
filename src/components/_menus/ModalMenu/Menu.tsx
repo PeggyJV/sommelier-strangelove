@@ -190,7 +190,7 @@ export const Menu: VFC<MenuProps> = ({
               depositLimit: (v) => {
                 const currentDeposits = parseFloat(
                   toEther(
-                    depositData?.wallet?.currentDeposits!,
+                    depositData?.wallet?.currentDeposits || 0,
                     18,
                     false
                   )
