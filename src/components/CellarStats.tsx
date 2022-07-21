@@ -1,7 +1,8 @@
-import { VFC } from "react"
+import { ReactNode, VFC } from "react"
 import {
   Box,
   HStack,
+  Spinner,
   StackProps,
   Text,
   Tooltip,
@@ -17,7 +18,7 @@ import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
 
 interface CellarStatsProps extends StackProps {
-  tvm?: string
+  tvm?: ReactNode
   apy?: string
   apyTooltip?: string
   currentDeposits?: string
@@ -58,7 +59,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
     >
       <VStack spacing={1} align="flex-start">
         <Text as="span" fontSize="21px" fontWeight="bold">
-          {tvm}
+          {tvm !== "$undefined" ? tvm : <Spinner />}
         </Text>
         <Tooltip
           hasArrow
