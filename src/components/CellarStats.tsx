@@ -2,7 +2,6 @@ import { ReactNode, VFC } from "react"
 import {
   Box,
   HStack,
-  Spinner,
   StackProps,
   Text,
   Tooltip,
@@ -59,7 +58,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
     >
       <VStack spacing={1} align="flex-start">
         <Text as="span" fontSize="21px" fontWeight="bold">
-          {tvm !== "$undefined" ? tvm : <Spinner />}
+          {tvm}
         </Text>
         <Tooltip
           hasArrow
