@@ -5,10 +5,10 @@ import { LogoTextIcon } from "./_icons"
 
 export const MobileWarningCTA: FC<StackProps> = (props) => {
   return (
-    <Container display="flex" minH="100vh" flexDir="column" p={8}>
+    <Container as="body" display="flex" minH="100vh" p={6}>
       <VStack
-        flex={1}
         spacing={6}
+        align="center"
         justify="center"
         fontSize={12}
         {...props}
