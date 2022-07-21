@@ -205,7 +205,9 @@ export const AaveStakerProvider = ({
     try {
       // Somm rewards emitted per epoch
       let rewardRate = await aaveStakerContract.rewardRate()
-      rewardRate = new BigNumber(rewardRate.toString())
+      rewardRate = new BigNumber(rewardRate.toString()).dividedBy(
+        new BigNumber(10).pow(6)
+      )
 
       // Current deposits in the staker
       let totalDepositsWithBoost =
@@ -213,40 +215,17 @@ export const AaveStakerProvider = ({
       totalDepositsWithBoost = new BigNumber(
         totalDepositsWithBoost.toString()
       )
+        .dividedBy(new BigNumber(10).pow(18))
+        .plus(10000)
 
-      let currentEpochDuration =
-        await aaveStakerContract.currentEpochDuration()
-      currentEpochDuration = new BigNumber(
-        currentEpochDuration.toString()
-      )
+      const withUserDeposit = totalDepositsWithBoost.plus(10000)
 
-      // Reward emissions per day
-      const rewardPerEpoch = rewardRate
-        .multipliedBy(currentEpochDuration)
-        .dividedBy(new BigNumber(10 ** 6))
-      const epochDays = currentEpochDuration.dividedBy(
-        new BigNumber(60 * 60 * 24)
-      )
-      const dailyEmissions = rewardPerEpoch
-        .dividedBy(epochDays)
+      const potentialStakingApy = rewardRate
+        .multipliedBy(sommPrice)
+        .dividedBy(withUserDeposit)
+        .multipliedBy(365 * 24 * 60 * 60)
+        .multipliedBy(100)
         .toNumber()
-
-      // Add potential deposit of $10,000 to totalDepositsWithBoost
-      const potential = 10000
-      const convertedTotalDeposits = totalDepositsWithBoost.div(
-        new BigNumber(10).exponentiatedBy(18)
-      )
-      const potentialTotalDeposits =
-        convertedTotalDeposits.toNumber() + potential
-
-      // Daily rewards in USD
-      const dailyEmissionsUSD = sommPrice * dailyEmissions
-      const potentialRewardsUSD =
-        (dailyEmissionsUSD * potential) / potentialTotalDeposits
-
-      // APR & potential APY
-      const apr = (potentialRewardsUSD / potential) * 100
-      const potentialStakingApy = (1 + apr / 365) ** 365
 
       setStakerData((state) => ({
         ...state,
