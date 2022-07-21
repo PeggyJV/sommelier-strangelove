@@ -188,7 +188,7 @@ export const Menu: VFC<MenuProps> = ({
                 )
               },
               depositLessThanFifty: (v) =>
-                v < 50000 ||
+                v <= 50000 ||
                 "You cannot exceed the cellar limit of $50,000.",
               depositLimit: (v) => {
                 if (!depositData?.wallet) return true
