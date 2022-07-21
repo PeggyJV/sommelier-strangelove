@@ -73,7 +73,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
             <Tag>{data.strategyType}</Tag>
             <Tag ml={2}>
               {data.managementFee}{" "}
-              {data.managementFee !== "-" && "Fee"}
+              {data.managementFee !== "..." && "Fee"}
             </Tag>
             <Tag ml={2} display="flex" alignItems="center">
               {protocolIcon && (

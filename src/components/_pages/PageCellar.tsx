@@ -168,12 +168,13 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
       </Section>
       <Section>
         <VStack spacing={6} align="stretch">
-          <Heading {...h2Styles}>Cellar Details</Heading>
+          <Heading pt={12} {...h2Styles}>Cellar Details</Heading>
           <CellarDetailsCard
             cellarDataMap={cellarDataMap}
             cellarId={id}
           />
           <PerformanceChartProvider>
+            <Heading pt={12} {...h2Styles}>Cellar Performance</Heading>
             <PerformanceCard />
           </PerformanceChartProvider>
         </VStack>
