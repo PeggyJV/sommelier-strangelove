@@ -147,6 +147,7 @@ export const PerformanceChartProvider: FC = ({ children }) => {
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   })
+  // console.log({ data })
 
   // Set tvl value
   const [tvl, setTvl] = useState<TvlData>({
