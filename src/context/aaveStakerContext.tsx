@@ -214,9 +214,7 @@ export const AaveStakerProvider = ({
         await aaveStakerContract.totalDepositsWithBoost()
       totalDepositsWithBoost = new BigNumber(
         totalDepositsWithBoost.toString()
-      )
-        .dividedBy(new BigNumber(10).pow(18))
-        .plus(10000)
+      ).dividedBy(new BigNumber(10).pow(18))
 
       const withUserDeposit = totalDepositsWithBoost.plus(10000)
 
