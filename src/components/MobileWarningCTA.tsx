@@ -5,7 +5,7 @@ import { LogoTextIcon } from "./_icons"
 
 export const MobileWarningCTA: FC<StackProps> = (props) => {
   return (
-    <Container as="body" display="flex" minH="100vh" p={6}>
+    <Container display="flex" minH="100vh" p={6}>
       <VStack
         spacing={6}
         align="center"
@@ -22,6 +22,7 @@ export const MobileWarningCTA: FC<StackProps> = (props) => {
           href="https://t.me/getsomm"
           fontWeight="bold"
           textDecoration="underline"
+          isExternal
         >
           Join the conversation
         </Link>
