@@ -1,17 +1,23 @@
-import { Container, StackProps, Text, VStack } from "@chakra-ui/react"
+import { Flex, FlexProps, Text, VStack } from "@chakra-ui/react"
 import React, { FC } from "react"
 import { Link } from "./Link"
 import { LogoTextIcon } from "./_icons"
 
-export const MobileWarningCTA: FC<StackProps> = (props) => {
+export const MobileWarningCTA: FC<FlexProps> = (props) => {
   return (
-    <Container as="body" display="flex" minH="100vh" p={6}>
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      minH="100vh"
+      p={6}
+      {...props}
+    >
       <VStack
+        flex={1}
         spacing={6}
         align="center"
         justify="center"
         fontSize={12}
-        {...props}
       >
         <LogoTextIcon h={6} w="auto" />
         <Text textAlign="center">
@@ -22,6 +28,7 @@ export const MobileWarningCTA: FC<StackProps> = (props) => {
           href="https://t.me/getsomm"
           fontWeight="bold"
           textDecoration="underline"
+          isExternal
         >
           Join the conversation
         </Link>
@@ -33,6 +40,6 @@ export const MobileWarningCTA: FC<StackProps> = (props) => {
           Learn more
         </Link>
       </VStack>
-    </Container>
+    </Flex>
   )
 }

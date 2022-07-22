@@ -58,6 +58,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     liquidityLimit,
     addedLiquidityAllTime,
     removedLiquidityAllTime,
+    asset,
   } = cellar || {}
   const { activeAsset } = cellarData || {}
   const [cellarShareBalance, setCellarSharesBalance] =
@@ -97,7 +98,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const cellarCap =
     liquidityLimit &&
     new BigNumber(liquidityLimit)
-      .dividedBy(10 ** userData?.balances?.aAsset?.decimals)
+      .dividedBy(10 ** (asset?.decimals || 0))
       .toString()
   const { name: nameAbbreviated, cellarApy } = cellarDataMap[id]
   const activeSymbol =
@@ -156,7 +157,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             </HStack>
           </VStack>
           <CellarStats
-            tvm={`$${tvmVal} ${activeSymbol}`}
+            tvm={tvmVal ? `$${tvmVal} ${activeSymbol}` : <Spinner />}
             apy={expectedApy.toFixed(1)}
             apyTooltip={apyLabel}
             currentDeposits={currentDepositsVal}

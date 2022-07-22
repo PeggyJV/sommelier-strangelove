@@ -31,10 +31,10 @@ const ToolTip: FunctionComponent<PointTooltipProps> = ({ point }) => {
 export const TVLChart: VFC = () => {
   const { data, setTvl } = usePerformanceChart()
   const { lineChartTheme, chartTheme } = useNivoThemes()
-  const updateTvl = ({ data }: Point) => {
+  const updateTvl = ({ data: point, index }: Point) => {
     setTvl({
-      xFormatted: data.xFormatted,
-      yFormatted: data.yFormatted,
+      xFormatted: point.xFormatted,
+      yFormatted: data?.series![0].data[index].y as string,
     })
   }
   const debouncedTvl = debounce(updateTvl, 100)
@@ -44,6 +44,7 @@ export const TVLChart: VFC = () => {
       data={data.series!}
       colors={lineChartTheme}
       enableArea={true}
+      animate={false}
       onMouseMove={debouncedTvl}
       crosshairType="x"
       defs={[

@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { ReactNode, VFC } from "react"
 import {
   Box,
   HStack,
@@ -17,7 +17,7 @@ import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
 
 interface CellarStatsProps extends StackProps {
-  tvm?: string
+  tvm?: ReactNode
   apy?: string
   apyTooltip?: string
   currentDeposits?: string

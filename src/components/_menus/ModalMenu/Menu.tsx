@@ -190,15 +190,24 @@ export const Menu: VFC<MenuProps> = ({
                     ) || "Insufficient balance"
                 )
               },
+              depositLessThanFifty: (v) =>
+                v <= 50000 ||
+                "You cannot exceed the cellar limit of $50,000.",
               depositLimit: (v) => {
-                const currentDeposits = toEther(
-                  depositData?.wallet?.currentDeposits!,
-                  18,
-                  false
+                if (!depositData?.wallet) return true
+
+                const currentDeposits = parseFloat(
+                  toEther(
+                    depositData?.wallet?.currentDeposits!,
+                    18,
+                    false
+                  )
                 )
+                const sum = v + currentDeposits
+
                 return (
-                  parseFloat(v + currentDeposits) > 50000 ||
-                  `You cannot exceed the cellar limit of $50,0000. You currently have ${currentDeposits} deposited in this cellar.`
+                  sum <= 50000 ||
+                  `You cannot exceed the cellar limit of $50,000. You currently have $${currentDeposits} deposited in this cellar.`
                 )
               },
             },
