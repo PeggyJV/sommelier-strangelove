@@ -1,11 +1,11 @@
 import { useEffect, useState, VFC } from "react"
 import {
   Box,
-  Flex,
   Heading,
   HeadingProps,
   HStack,
   Img,
+  Text,
   VStack,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
@@ -16,12 +16,9 @@ import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/cellars/[id]"
 import { useGetCellarQuery } from "generated/subgraph"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"
-import { Link } from "components/Link"
 import { CellarStats } from "components/CellarStats"
-import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { formatCurrency } from "utils/formatCurrency"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
-import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
 import { getCalulatedTvl } from "utils/bigNumber"
@@ -133,11 +130,6 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           <VStack spacing={6} align="flex-start">
             <BreadCrumb cellarName={name} />
             <HStack spacing={4}>
-              {/* <Link href="/">
-                <SecondaryButton>
-                  <ArrowLeftIcon />
-                </SecondaryButton>
-              </Link> */}
               <Box
                 display="flex"
                 width="15rem"
@@ -151,14 +143,14 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
                 />
                 <Heading fontSize="2.5rem">
                   {nameAbbreviated}{" "}
-                  <Box
+                  <Text
                     as="span"
                     textTransform="uppercase"
-                    fontSize="21px"
+                    fontSize="1.3rem"
                     color="neutral.300"
                   >
                     clr-s
-                  </Box>
+                  </Text>
                 </Heading>
               </Box>
             </HStack>
