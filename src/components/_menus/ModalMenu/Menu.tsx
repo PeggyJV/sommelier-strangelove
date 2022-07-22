@@ -119,6 +119,9 @@ export const Menu: VFC<MenuProps> = ({
             defaultValue={activeAsset && tokenConfig[0].symbol}
             type="radio"
           >
+            <Box pt={4} pb={2} pl={10}>
+              <Text color="neutral.400">Select deposit asset</Text>
+            </Box>
             {tokenConfig.map((token) => {
               const { address, src, alt, symbol } = token
               const isActiveAsset =

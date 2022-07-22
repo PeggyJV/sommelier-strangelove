@@ -1,9 +1,11 @@
 import { useEffect, useState, VFC } from "react"
 import {
   Box,
+  Flex,
   Heading,
   HeadingProps,
   HStack,
+  Img,
   VStack,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
@@ -131,22 +133,34 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           <VStack spacing={6} align="flex-start">
             <BreadCrumb cellarName={name} />
             <HStack spacing={4}>
-              <Link href="/">
+              {/* <Link href="/">
                 <SecondaryButton>
                   <ArrowLeftIcon />
                 </SecondaryButton>
-              </Link>
-              <Heading fontSize="2.5rem">
-                {nameAbbreviated}{" "}
-                <Box
-                  as="span"
-                  textTransform="uppercase"
-                  fontSize="21px"
-                  color="neutral.300"
-                >
-                  clr-s
-                </Box>
-              </Heading>
+              </Link> */}
+              <Box
+                display="flex"
+                width="15rem"
+                justifyContent="space-between"
+                alignContent="center"
+              >
+                <Img
+                  src="/assets/images/coin.png"
+                  width="40px"
+                  mb={3}
+                />
+                <Heading fontSize="2.5rem">
+                  {nameAbbreviated}{" "}
+                  <Box
+                    as="span"
+                    textTransform="uppercase"
+                    fontSize="21px"
+                    color="neutral.300"
+                  >
+                    clr-s
+                  </Box>
+                </Heading>
+              </Box>
             </HStack>
           </VStack>
           <CellarStats
@@ -168,13 +182,17 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
       </Section>
       <Section>
         <VStack spacing={6} align="stretch">
-          <Heading pt={12} {...h2Styles}>Cellar Details</Heading>
+          <Heading pt={12} {...h2Styles}>
+            Cellar Details
+          </Heading>
           <CellarDetailsCard
             cellarDataMap={cellarDataMap}
             cellarId={id}
           />
           <PerformanceChartProvider>
-            <Heading pt={12} {...h2Styles}>Cellar Performance</Heading>
+            <Heading pt={12} {...h2Styles}>
+              Cellar Performance
+            </Heading>
             <PerformanceCard />
           </PerformanceChartProvider>
         </VStack>
