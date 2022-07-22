@@ -66,6 +66,15 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const { cellarData } = useAaveV2Cellar()
   const { activeAsset } = cellarData
 
+  // Unsure why this was necessary? Nivo acts strangely when there are fewer than three args in an index. Could be refined later.
+  const moveColors = (colorTheme: string[]): string[] => {
+    const lastColor = colorTheme.slice(-1)
+    const otherColors = colorTheme.slice(0, -1)
+    return [...lastColor, ...otherColors]
+  }
+
+  const colors = moveColors(barChartTheme)
+
   return (
     <TransparentCard p={8} overflow="visible">
       <VStack spacing={8} align={{ sm: "unset", md: "stretch" }}>
@@ -149,7 +158,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               {/* @ts-ignore */}
               <BarChart
                 layout="horizontal"
-                colors={barChartTheme}
+                colors={colors}
                 borderColor={theme.colors.neutral[800]}
                 borderWidth={1}
                 borderRadius={2}

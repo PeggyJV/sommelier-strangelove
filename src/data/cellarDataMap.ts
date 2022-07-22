@@ -45,8 +45,8 @@ export const cellarDataMap: CellarDataMap = {
       "GUSD",
     ],
     performanceSplit: {
-      "strategy provider": 5,
-      protocol: 5,
+      // "strategy provider": 5,
+      protocol: 10,
       depositors: 90,
     },
     strategyBreakdown: {
