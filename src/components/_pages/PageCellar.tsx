@@ -6,6 +6,7 @@ import {
   HStack,
   Img,
   Text,
+  Spinner,
   VStack,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
