@@ -1,5 +1,5 @@
 import { StackProps } from "@chakra-ui/react"
-import { Token, tokenConfig } from "data/tokenConfig"
+import { Token } from "data/tokenConfig"
 import { VFC } from "react"
 import { CroppedMap } from "./TokenMaps/CroppedMap"
 import { UncroppedMap } from "./TokenMaps/UncroppedMap"
@@ -16,15 +16,15 @@ export const TokenAssets: VFC<TokenAssetsProps> = ({
   displaySymbol,
   ...rest
 }) => {
-  return tokenConfig.length > 6 ? (
+  return tokens.length > 6 ? (
     <CroppedMap
-      tokens={tokenConfig}
+      tokens={tokens}
       displaySymbol={displaySymbol}
       {...rest}
     />
   ) : (
     <UncroppedMap
-      tokens={tokenConfig}
+      tokens={tokens}
       displaySymbol={displaySymbol}
       {...rest}
     />

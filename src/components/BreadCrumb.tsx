@@ -6,7 +6,7 @@ import {
   BreadcrumbProps,
 } from "@chakra-ui/react"
 import { useRouter } from "next/router"
-import { ChevronRightIcon } from "./_icons"
+import { ArrowLeftIcon, ChevronRightIcon } from "./_icons"
 
 interface CustomBCProps extends BreadcrumbProps {
   cellarName?: string
@@ -30,17 +30,17 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
       {...rest}
     >
       <BreadcrumbItem color="neutral.300">
-        <BreadcrumbLink href="/">Overview</BreadcrumbLink>
-      </BreadcrumbItem>
-      <BreadcrumbItem>
         <BreadcrumbLink
-          isCurrentPage
-          href={`/cellars/${router.query.id}`}
-          color="purple.light"
+          href="/"
+          width="13rem"
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          {cellarName}
+          <ArrowLeftIcon /> Back to Cellars Overview
         </BreadcrumbLink>
       </BreadcrumbItem>
+
       {/* {asPathNestedRoutes.map((path, i) => {
         const hrefSlices = asPathNestedRoutes.slice(0, i + 1)
         const hrefMap = hrefSlices.map((path) => `/${path}`)

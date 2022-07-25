@@ -45,11 +45,11 @@ const PageHome: NextPage = () => {
         {placeholderCardsArray.map((index) => {
           const cellarCardData: CellarCardData = {
             cellarId: "",
-            name: "-",
+            name: "...",
             description: "",
-            strategyType: "-",
-            managementFee: "-",
-            protocols: "-",
+            strategyType: "...",
+            managementFee: "...",
+            protocols: "...",
             individualApy: "-",
             cellarApy: "-",
           }
