@@ -62,7 +62,6 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const strategyAssets = tokenConfig.filter((token) =>
     supportedChains?.includes(token.symbol)
   )
-
   const { cellarData } = useAaveV2Cellar()
   const { activeAsset } = cellarData
 
