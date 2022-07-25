@@ -57,7 +57,7 @@ export const tokenConfig: Token[] = [
   {
     src: "/assets/icons/susd.png",
     alt: "sUSD logo",
-    symbol: "SUSD",
+    symbol: "sUSD",
     address: "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
   },
   {
