@@ -4,6 +4,8 @@ import {
   Heading,
   HeadingProps,
   HStack,
+  Img,
+  Text,
   Spinner,
   VStack,
 } from "@chakra-ui/react"
@@ -15,12 +17,9 @@ import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/cellars/[id]"
 import { useGetCellarQuery } from "generated/subgraph"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"
-import { Link } from "components/Link"
 import { CellarStats } from "components/CellarStats"
-import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { formatCurrency } from "utils/formatCurrency"
 import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
-import { ArrowLeftIcon } from "components/_icons"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
 import { getCalulatedTvl } from "utils/bigNumber"
@@ -133,22 +132,29 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           <VStack spacing={6} align="flex-start">
             <BreadCrumb cellarName={name} />
             <HStack spacing={4}>
-              <Link href="/">
-                <SecondaryButton>
-                  <ArrowLeftIcon />
-                </SecondaryButton>
-              </Link>
-              <Heading fontSize="2.5rem">
-                {nameAbbreviated}{" "}
-                <Box
-                  as="span"
-                  textTransform="uppercase"
-                  fontSize="21px"
-                  color="neutral.300"
-                >
-                  clr-s
-                </Box>
-              </Heading>
+              <Box
+                display="flex"
+                width="15rem"
+                justifyContent="space-between"
+                alignContent="center"
+              >
+                <Img
+                  src="/assets/images/coin.png"
+                  width="40px"
+                  mb={3}
+                />
+                <Heading fontSize="2.5rem">
+                  {nameAbbreviated}{" "}
+                  <Text
+                    as="span"
+                    textTransform="uppercase"
+                    fontSize="1.3rem"
+                    color="neutral.300"
+                  >
+                    clr-s
+                  </Text>
+                </Heading>
+              </Box>
             </HStack>
           </VStack>
           <CellarStats
@@ -170,12 +176,17 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
       </Section>
       <Section>
         <VStack spacing={6} align="stretch">
-          <Heading {...h2Styles}>Cellar Details</Heading>
+          <Heading pt={12} {...h2Styles}>
+            Cellar Details
+          </Heading>
           <CellarDetailsCard
             cellarDataMap={cellarDataMap}
             cellarId={id}
           />
           <PerformanceChartProvider>
+            <Heading pt={12} {...h2Styles}>
+              Cellar Performance
+            </Heading>
             <PerformanceCard />
           </PerformanceChartProvider>
         </VStack>
