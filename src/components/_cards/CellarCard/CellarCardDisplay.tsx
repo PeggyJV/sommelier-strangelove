@@ -14,8 +14,8 @@ export interface CellarCardData {
   strategyType: string
   managementFee: string
   protocols: string
-  individualApy: string
-  cellarApy: string
+  individualApy: number | string
+  cellarApy: number | string
 }
 
 interface CellarCardProps extends BoxProps {
