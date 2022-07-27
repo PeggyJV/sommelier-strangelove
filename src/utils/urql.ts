@@ -4,16 +4,16 @@ import {
   GetAllTimeTvlQuery,
 } from "generated/subgraph"
 import { Serie } from "@nivo/line"
-import { formatCurrency } from "./formatCurrency"
 import { getCalulatedTvl } from "./bigNumber"
 
-const formatTvl = (tvlTotal: string, asset: any) => {
-  // const total = getCalulatedTvl(tvlTotal, asset?.decimals)
-  const total = getCalulatedTvl(tvlTotal, 18)
+// Unsed code. Keeping it in here in case we require it one day.
+// const formatTvl = (tvlTotal: string, asset: any) => {
+//   // const total = getCalulatedTvl(tvlTotal, asset?.decimals)
+//   const total = getCalulatedTvl(tvlTotal, 18)
 
-  const totalString = `${formatCurrency(total)} ${asset?.symbol}`
-  return totalString
-}
+//   const totalString = `${formatCurrency(total)} ${asset?.symbol}`
+//   return totalString
+// }
 
 export const mutateHourlyData = (
   data?: GetHourlyTvlQuery
@@ -26,7 +26,8 @@ export const mutateHourlyData = (
           ({ date, tvlTotal, asset }) => {
             return {
               x: new Date(date * 1000),
-              y: formatTvl(tvlTotal, asset),
+              y: getCalulatedTvl(tvlTotal, 18),
+              asset,
             }
           }
         ),
@@ -45,7 +46,8 @@ export const mutateDayData = (
         data: data.cellarDayDatas.map(({ date, tvlTotal, asset }) => {
           return {
             x: new Date(date * 1000),
-            y: formatTvl(tvlTotal, asset),
+            y: getCalulatedTvl(tvlTotal, 18),
+            asset,
           }
         }),
       },
