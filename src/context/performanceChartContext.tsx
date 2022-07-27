@@ -23,6 +23,11 @@ import { mutateDayData, mutateHourlyData } from "utils/urql"
 export interface DataProps {
   series?: Serie[]
   chartProps: Partial<LineProps>
+  asset?: {
+    decimals: number
+    symbol: string
+    __typename: string
+  }
 }
 
 export interface TvlData {
