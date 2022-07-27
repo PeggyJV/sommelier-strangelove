@@ -5,6 +5,7 @@ import {
   BoxProps,
   Tooltip,
   HStack,
+  Spinner,
 } from "@chakra-ui/react"
 import { CurrentDeposits } from "components/CurrentDeposits"
 import { Label } from "./Label"
@@ -55,16 +56,19 @@ export const ValueManaged: React.FC<Props> = ({
 
   // Staker Info
   const { stakerData } = useAaveStaker()
-  const { potentialStakingApy } = stakerData
+  const { potentialStakingApy, loading: stakerDataLoading } =
+    stakerData
 
-  let expectedApy = parseFloat(cellarApy)
-  let apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (%)`
-  if (potentialStakingApy != null) {
-    expectedApy = expectedApy + potentialStakingApy
-    apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${potentialStakingApy.toFixed(
-      1
-    )}%)`
-  }
+  const expectedApy = stakerDataLoading
+    ? cellarApy
+    : cellarApy + potentialStakingApy!
+  const isDefaultApy = expectedApy === cellarApy
+
+  const stakingApy = stakerDataLoading
+    ? ""
+    : potentialStakingApy?.toFixed(1)
+
+  const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${stakingApy}%)`
 
   return (
     <Box {...rest}>
@@ -98,7 +102,11 @@ export const ValueManaged: React.FC<Props> = ({
           alignItems="center"
           columnGap="3px"
         >
-          {expectedApy.toFixed(1)}%
+          {stakerDataLoading || isDefaultApy ? (
+            <Spinner />
+          ) : (
+            expectedApy.toFixed(1).toString() + "%"
+          )}
         </Heading>
         <Tooltip
           hasArrow

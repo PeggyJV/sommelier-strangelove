@@ -11,14 +11,14 @@ import {
 import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { CurrentDeposits } from "./CurrentDeposits"
-import { Apy } from "./Apy"
 import { InformationIcon } from "./_icons"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
+import { Apy } from "./Apy"
 
 interface CellarStatsProps extends StackProps {
   tvm?: ReactNode
-  apy?: string
+  apy?: ReactNode
   apyTooltip?: string
   currentDeposits?: string
   cellarCap?: string
