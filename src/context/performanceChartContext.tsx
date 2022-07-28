@@ -14,10 +14,12 @@ import {
   useState,
 } from "react"
 import { OperationContext } from "urql"
+import { getCalulatedTvl } from "utils/bigNumber"
 import {
   getPrevious24Hours,
   getPreviousWeek,
 } from "utils/calculateTime"
+import { formatCurrency } from "utils/formatCurrency"
 import { mutateDayData, mutateHourlyData } from "utils/urql"
 
 export interface DataProps {
@@ -84,6 +86,7 @@ const dayChartProps: Partial<LineProps> = {
     precision: "day",
   },
 }
+
 const allTimeChartProps: Partial<LineProps> = {
   axisBottom: {
     format: "%d",
@@ -168,6 +171,28 @@ export const PerformanceChartProvider: FC = ({ children }) => {
       setData({
         series: mutateHourlyData(hourlyData),
         chartProps: hourlyChartProps,
+      })
+
+      const latestData =
+        hourlyData?.cellarHourDatas[
+          hourlyData?.cellarHourDatas.length - 1
+        ]
+
+      const latestDate = new Date(
+        latestData.date * 1000
+      ).toLocaleTimeString(undefined, {
+        minute: "2-digit",
+        hour: "2-digit",
+        hour12: false,
+      })
+
+      const latestTvl = `${formatCurrency(
+        getCalulatedTvl(latestData.tvlTotal, 18)
+      )} ${latestData.asset?.symbol}`
+
+      setTvl({
+        xFormatted: latestDate,
+        yFormatted: latestTvl,
       })
     }
   }, [hourlyData, data])
