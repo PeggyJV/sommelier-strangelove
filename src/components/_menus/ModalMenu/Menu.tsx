@@ -44,7 +44,7 @@ export const Menu: VFC<MenuProps> = ({
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const menuDims = useDimensions(menuRef, true)
-  const { register, setValue } = useFormContext()
+  const { register, setValue, clearErrors } = useFormContext()
   const availableBalance = `${toEther(
     selectedTokenBalance?.data?.value,
     selectedTokenBalance?.data?.decimals
@@ -137,7 +137,10 @@ export const Menu: VFC<MenuProps> = ({
                   value={symbol}
                   borderRadius={8}
                   _hover={{ bg: "rgba(96, 80, 155, 0.4)" }}
-                  onClick={() => onChange(token)}
+                  onClick={() => {
+                    clearErrors()
+                    onChange(token)
+                  }}
                 >
                   <HStack justify="space-between">
                     <HStack>
