@@ -5,6 +5,7 @@ import { AboutCellar } from "./AboutCellar"
 import { Burst } from "./Burst"
 import { ComingSoon } from "./ComingSoon"
 import { InlineImage } from "components/InlineImage"
+import { CoinImage } from "./CoinImage"
 
 export interface CellarCardData {
   cellarId: string
@@ -60,7 +61,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
           borderTopRightRadius={24}
           borderTopLeftRadius={24}
         >
-          <Img src="/assets/images/coin.png" width="40px" mb={3} />
+          <CoinImage mb={3} />
           <Flex mb={2}>
             <Heading size="lg" mr={1} lineHeight="100%">
               {data.name}

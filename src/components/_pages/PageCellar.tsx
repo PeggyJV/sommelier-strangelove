@@ -29,6 +29,7 @@ import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { tokenConfig } from "data/tokenConfig"
 import { getCurrentAsset } from "utils/getCurrentAsset"
+import { CoinImage } from "components/_cards/CellarCard/CoinImage"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -144,11 +145,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
                 justifyContent="space-between"
                 alignContent="center"
               >
-                <Img
-                  src="/assets/images/coin.png"
-                  width="40px"
-                  mb={3}
-                />
+                <CoinImage mb={3} />
                 <Heading fontSize="2.5rem">
                   {nameAbbreviated}{" "}
                   <Text
