@@ -16,10 +16,10 @@ type CellarState = {
   loading: boolean
   name: string
   activeAsset: string
-  totalAssets: BigNumber
-  maxLocked: BigNumber
-  accrualPeriod: BigNumber
-  apy: BigNumber
+  totalAssets?: BigNumber
+  maxLocked?: BigNumber
+  accrualPeriod?: BigNumber
+  apy?: BigNumber
 }
 
 type Balances = {

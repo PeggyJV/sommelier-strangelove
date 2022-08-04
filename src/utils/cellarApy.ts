@@ -4,7 +4,6 @@ import { CellarDayData } from "generated/subgraph"
 const SECS_DAY = 60 * 60 * 24
 
 type ExpectedApyResult = {
-  isLoading: boolean
   expectedApy: BigNumber
   formattedApy: string
   formattedCellarApy: string
