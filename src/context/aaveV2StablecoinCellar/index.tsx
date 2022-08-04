@@ -10,11 +10,16 @@ import {
 import { config } from "utils/config"
 import { useEffect, useState, useCallback } from "react"
 import { BigNumber as BigNumberE } from "ethers"
+import BigNumber from "bignumber.js"
 
 type CellarState = {
   loading: boolean
   name: string
   activeAsset: string
+  totalAssets: BigNumber
+  maxLocked: BigNumber
+  accrualPeriod: BigNumber
+  apy: BigNumber
 }
 
 type Balances = {
@@ -53,6 +58,9 @@ const AaveV2CellarContext = createContext<SharedState>({
   cellarData: initialCellarData,
   userData: initialUserData,
 })
+
+const yearInSecs = 60 * 60 * 24 * 365
+const yearInSecsBN = new BigNumber(yearInSecs)
 
 export const AaveV2CellarProvider = ({
   children,
@@ -123,11 +131,32 @@ export const AaveV2CellarProvider = ({
         const name = await aaveV2CellarContract.name()
         const activeAsset = await aaveV2CellarContract.asset()
 
+        // APY
+        const maxLocked = new BigNumber(
+          (await aaveV2CellarContract.maxLocked()).toString()
+        )
+        const totalAssets = new BigNumber(
+          (await aaveV2CellarContract.totalAssets()).toString()
+        )
+        const accrualPeriod = new BigNumber(
+          (await aaveV2CellarContract.accrualPeriod()).toString()
+        )
+        const accrualPeriodsInYear =
+          yearInSecsBN.dividedBy(accrualPeriod)
+        const apy = maxLocked
+          .dividedBy(totalAssets)
+          .multipliedBy(accrualPeriodsInYear)
+          .multipliedBy(100)
+
         setCellarData((state) => ({
           ...state,
           name: name,
           activeAsset,
           aAssetToken,
+          totalAssets: new BigNumber(totalAssets.toString()),
+          maxLocked: new BigNumber(maxLocked.toString()),
+          accrualPeriod,
+          apy,
           loading: false,
         }))
       } catch (e) {

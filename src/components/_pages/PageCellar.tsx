@@ -29,6 +29,7 @@ import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { useAaveStaker } from "context/aaveStakerContext"
 import { tokenConfig } from "data/tokenConfig"
 import { getCurrentAsset } from "utils/getCurrentAsset"
+import { getExpectedApy } from "utils/cellarApy"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -101,7 +102,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     new BigNumber(liquidityLimit)
       .dividedBy(10 ** (asset?.decimals || 0))
       .toString()
-  const { name: nameAbbreviated, cellarApy } = cellarDataMap[id]
+  const { name: nameAbbreviated } = cellarDataMap[id]
   const activeSymbol =
     activeAsset && getCurrentAsset(tokenConfig, activeAsset)?.symbol
 
@@ -113,16 +114,10 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
     error,
   } = stakerData
 
-  const expectedApy = stakerDataLoading
-    ? cellarApy
-    : cellarApy + potentialStakingApy!
-  const isDefaultApy = expectedApy === cellarApy
+  const { expectedApy, formattedCellarApy, formattedStakingApy } =
+    getExpectedApy(cellarData.apy, potentialStakingApy)
 
-  const stakingApy = stakerDataLoading
-    ? ""
-    : potentialStakingApy?.toFixed(1)
-
-  const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${stakingApy}%)`
+  const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${formattedCellarApy}%) and Liquidity Mining Rewards (${formattedStakingApy}%)`
 
   return (
     <Layout>
@@ -166,7 +161,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           <CellarStats
             tvm={tvmVal ? `$${tvmVal} ${activeSymbol}` : <Spinner />}
             apy={
-              stakerDataLoading || isDefaultApy ? (
+              stakerDataLoading || cellarData.loading ? (
                 <Spinner />
               ) : (
                 expectedApy.toFixed(1).toString() + "%"
