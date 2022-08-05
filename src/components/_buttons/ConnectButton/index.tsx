@@ -119,7 +119,7 @@ const ConnectButton = ({
             ? `Unable to connect`
             : c.ready
             ? `Connect Wallet`
-            : `Please install MetaMask`}
+            : `Connect Wallet`}
         </BaseButton>
       )}
     </ClientOnly>
