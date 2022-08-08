@@ -16,6 +16,8 @@ import BigNumber from "bignumber.js"
 import { cellarDataMap } from "data/cellarDataMap"
 import { formatCurrency } from "utils/formatCurrency"
 import { useAaveStaker } from "context/aaveStakerContext"
+import { getExpectedApy } from "utils/cellarApy"
+import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 
 interface Props extends BoxProps {
   cellarId: string
@@ -59,16 +61,13 @@ export const ValueManaged: React.FC<Props> = ({
   const { potentialStakingApy, loading: stakerDataLoading } =
     stakerData
 
-  const expectedApy = stakerDataLoading
-    ? cellarApy
-    : cellarApy + potentialStakingApy!
-  const isDefaultApy = expectedApy === cellarApy
+  // Cellar Info
+  const { cellarData } = useAaveV2Cellar()
 
-  const stakingApy = stakerDataLoading
-    ? ""
-    : potentialStakingApy?.toFixed(1)
+  const { expectedApy, formattedCellarApy, formattedStakingApy } =
+    getExpectedApy(cellarData.apy, potentialStakingApy)
 
-  const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${cellarApy}%) and Liquidity Mining Rewards (${stakingApy}%)`
+  const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${formattedCellarApy}%) and Liquidity Mining Rewards (${formattedStakingApy}%)`
 
   return (
     <Box {...rest}>
@@ -102,7 +101,7 @@ export const ValueManaged: React.FC<Props> = ({
           alignItems="center"
           columnGap="3px"
         >
-          {stakerDataLoading || isDefaultApy ? (
+          {stakerDataLoading || cellarData.loading ? (
             <Spinner />
           ) : (
             expectedApy.toFixed(1).toString() + "%"

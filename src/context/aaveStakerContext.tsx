@@ -42,7 +42,7 @@ type StakerData = {
   loading: boolean
   error: boolean
   rewardRate?: BigNumber
-  potentialStakingApy?: number
+  potentialStakingApy?: BigNumber
   sommPrice?: number
 }
 
@@ -223,7 +223,6 @@ export const AaveStakerProvider = ({
         .dividedBy(withUserDeposit)
         .multipliedBy(365 * 24 * 60 * 60)
         .multipliedBy(100)
-        .toNumber()
 
       setStakerData((state) => ({
         ...state,
