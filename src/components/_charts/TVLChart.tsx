@@ -6,6 +6,7 @@ import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
 import { FunctionComponent, VFC } from "react"
 import { debounce } from "lodash"
+import { formatCurrency } from "utils/formatCurrency"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -34,7 +35,9 @@ export const TVLChart: VFC = () => {
   const updateTvl = ({ data: point, index }: Point) => {
     setTvl({
       xFormatted: point.xFormatted,
-      yFormatted: data?.series![0].data[index].y as string,
+      yFormatted: `
+        ${formatCurrency(data?.series![0].data[index].y as string)!} 
+        ${data?.series![0].data[index].asset.symbol}`,
     })
   }
   const debouncedTvl = debounce(updateTvl, 100)
