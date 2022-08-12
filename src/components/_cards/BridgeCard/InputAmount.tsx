@@ -36,7 +36,7 @@ export const InputAmount: React.FC<InputProps> = ({
             src="/assets/images/coin.png"
             alt="coin logo big"
           />
-          <Text>SOMM</Text>
+          <Text fontWeight="semibold">SOMM</Text>
         </HStack>
 
         <VStack spacing={0} align="flex-end">
