@@ -69,7 +69,7 @@ export const Nav: VFC<FlexProps> = (props) => {
             px={4}
             py={3}
             bgColor="surface.primary"
-            borderRadius={4}
+            borderRadius={"16px"}
           >
             {NAV_LINKS.map((item) => {
               const isActive =
