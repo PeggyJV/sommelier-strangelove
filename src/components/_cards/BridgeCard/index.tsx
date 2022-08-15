@@ -12,7 +12,7 @@ export const BridgeCard: React.FC = () => (
   <TransparentCard
     maxW="432px"
     w="full"
-    boxShadow="0 0 0 2px #6C4ED9"
+    boxShadow="purpleOutline1"
     px={12}
     pt="52px"
     pb="48px"
@@ -42,7 +42,7 @@ export const BridgeCard: React.FC = () => (
         Bridge $SOMM
       </BaseButton>
       <Center>
-        <TimerIcon color="orange.base" boxSize="12px" mr={"6px"} />
+        <TimerIcon color="orange.base" boxSize="12px" mr="6px" />
         <Text
           fontSize="xs"
           fontWeight="semibold"
