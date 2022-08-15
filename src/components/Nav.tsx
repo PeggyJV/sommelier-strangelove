@@ -5,17 +5,7 @@ import ConnectButton from "components/_buttons/ConnectButton"
 import { Link } from "components/Link"
 import { LogoTextIcon } from "components/_icons"
 import { useRouter } from "next/router"
-
-export const NAV_LINKS = [
-  {
-    link: "/cellars",
-    title: "Cellars",
-  },
-  {
-    link: "/bridge",
-    title: "Bridge",
-  },
-]
+import { NAV_LINKS } from "utils/navLinks"
 
 export const Nav: VFC<FlexProps> = (props) => {
   const [auth] = useConnect()
@@ -69,7 +59,7 @@ export const Nav: VFC<FlexProps> = (props) => {
             px={4}
             py={3}
             bgColor="surface.primary"
-            borderRadius={"16px"}
+            borderRadius="16px"
           >
             {NAV_LINKS.map((item) => {
               const isActive =
