@@ -6,14 +6,32 @@ import {
   Button,
   Text,
   InputProps,
+  Spinner,
 } from "@chakra-ui/react"
 import React from "react"
 
 import Image from "next/image"
-export const InputAmount: React.FC<InputProps> = ({
+import { useAccount, useBalance } from "wagmi"
+import { toEther } from "utils/formatCurrency"
+import { ErrorIcon } from "components/_icons"
+
+interface InputAmountProps extends InputProps {
+  address?: string
+}
+
+export const InputAmount: React.FC<InputAmountProps> = ({
   children,
+  address,
   ...rest
 }) => {
+  const [account] = useAccount()
+  const [{ data, error, loading }] = useBalance({
+    addressOrName: account.data?.address,
+    token: "0xa670d7237398238DE01267472C6f13e5B8010FD1",
+    watch: true,
+  })
+  const isBalanceLoading = account.loading || loading
+
   return (
     <Stack spacing={2}>
       <Text fontWeight="bold" color="neutral.400" fontSize="xs">
@@ -37,7 +55,6 @@ export const InputAmount: React.FC<InputProps> = ({
           />
           <Text fontWeight="semibold">SOMM</Text>
         </HStack>
-
         <VStack spacing={0} align="flex-end">
           <Input
             variant="unstyled"
@@ -52,7 +69,14 @@ export const InputAmount: React.FC<InputProps> = ({
             {...rest}
           />
           <HStack spacing={0} fontSize="10px">
-            <Text as="span">Available: 0.00</Text>
+            <Text as="span">
+              Available:{" "}
+              {isBalanceLoading ? (
+                <Spinner size="xs" />
+              ) : (
+                (data && toEther(data.value, data.decimals)) || "--"
+              )}
+            </Text>
             <Button
               variant="unstyled"
               p={0}
@@ -67,6 +91,12 @@ export const InputAmount: React.FC<InputProps> = ({
           </HStack>
         </VStack>
       </HStack>
+      {error && (
+        <HStack color="red.base">
+          <ErrorIcon boxSize={4} />
+          <Text>{error.message}</Text>
+        </HStack>
+      )}
     </Stack>
   )
 }
