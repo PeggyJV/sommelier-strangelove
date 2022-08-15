@@ -10,7 +10,6 @@ import {
 import React from "react"
 
 import Image from "next/image"
-
 export const InputAmount: React.FC<InputProps> = ({
   children,
   ...rest
