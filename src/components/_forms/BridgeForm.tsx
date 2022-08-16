@@ -1,20 +1,52 @@
-import { Stack, Center, Text } from "@chakra-ui/react"
+import { Stack, Center, Text, FormControl } from "@chakra-ui/react"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { EthereumAddress } from "components/_cards/BridgeCard/EthereumAddress"
 import { InputAmount } from "components/_cards/BridgeCard/InputAmount"
-import { InputCosmosAddress } from "components/_cards/BridgeCard/InputCosmosAddress"
+import { InputSommelierAddress } from "components/_cards/BridgeCard/InputSommelierAddress"
 import { TimerIcon } from "components/_icons"
 import { VFC } from "react"
+import { useFormContext } from "react-hook-form"
 
 export const BridgeForm: VFC = () => {
+  const { watch, handleSubmit, formState, getFieldState } =
+    useFormContext()
+
+  const onSubmit = () => {}
+  const watchAmount = watch("amount")
+  const watchSommelierAddress = watch("sommelierAddress")
+
+  const isDisabled =
+    isNaN(watchAmount) ||
+    watchAmount <= 0 ||
+    !!getFieldState("amount").error ||
+    !!getFieldState("sommelierAddress").error ||
+    !watchSommelierAddress
+
   return (
-    <Stack spacing="40px">
+    <Stack spacing="40px" as="form" onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={6}>
-        <InputAmount />
+        <FormControl
+          isInvalid={
+            formState.errors.sommelierAddress as boolean | undefined
+          }
+        >
+          <InputAmount />
+        </FormControl>
         <EthereumAddress />
-        <InputCosmosAddress />
+        <FormControl
+          isInvalid={
+            formState.errors.sommelierAddress as boolean | undefined
+          }
+        >
+          <InputSommelierAddress />
+        </FormControl>
       </Stack>
-      <BaseButton height="69px" fontSize="21px" disabled>
+      <BaseButton
+        disabled={isDisabled}
+        type="submit"
+        height="69px"
+        fontSize="21px"
+      >
         Bridge $SOMM
       </BaseButton>
       <Center>
