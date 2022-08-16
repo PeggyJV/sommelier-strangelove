@@ -6,10 +6,18 @@ import { Link } from "components/Link"
 import { BridgeForm } from "components/_forms/BridgeForm"
 import { useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
+import { FormProvider, useForm } from "react-hook-form"
+
+interface FormValues {
+  amount: number
+  sommelierAddress: string
+}
 
 export const BridgeCard: React.FC = () => {
   const [auth] = useConnect()
   const isConnected = auth.data.connected
+  const methods = useForm<FormValues>()
+
   return (
     <TransparentCard
       maxW="432px"
@@ -37,7 +45,9 @@ export const BridgeCard: React.FC = () => {
         </Link>
       </Text>
       {isConnected ? (
-        <BridgeForm />
+        <FormProvider {...methods}>
+          <BridgeForm />
+        </FormProvider>
       ) : (
         <Stack>
           {auth.data.connectors.map((c) => (
