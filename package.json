@@ -36,6 +36,7 @@
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/smart-order-router": "^2.5.30",
     "analytics": "^0.8.1",
+    "bech32": "^2.0.0",
     "bignumber.js": "^9.0.2",
     "ethers": "^5.5.4",
     "framer-motion": "6.2.8",
