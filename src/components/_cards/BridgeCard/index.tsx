@@ -39,6 +39,8 @@ export const BridgeCard: React.FC = () => {
           fontSize="xs"
           fontWeight="semibold"
           textDecoration="underline"
+          href="https://www.notion.so/Bridge-UI-88307640a6ab4f649b6a0b3cb6cb4d34"
+          target="_blank"
         >
           Read More{" "}
           <ExternalLinkIcon boxSize={3} color="purple.base" />
