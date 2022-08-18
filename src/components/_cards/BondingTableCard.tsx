@@ -21,7 +21,6 @@ import { useHandleTransaction } from "hooks/web3"
 import { InformationIcon } from "components/_icons"
 import { InnerCard } from "./InnerCard"
 import { analytics } from "utils/analytics"
-import { UnstakeButton } from "components/_buttons/UnstakeButton"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -45,8 +44,8 @@ const BondingTableCard: VFC<TableProps> = (props) => {
 
     await doHandleTransaction({
       ...tx,
-      onSuccess: () => analytics.track("unbond.succeeded"),
-      onError: () => analytics.track("unbond.failed"),
+      onSuccess: () => analytics.track("unstake.succeeded"),
+      onError: () => analytics.track("unstake.failed"),
     })
     fetchUserStakes()
   }
