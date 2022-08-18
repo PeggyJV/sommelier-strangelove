@@ -38,9 +38,23 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const { doHandleTransaction } = useHandleTransaction()
   const { userStakes, claimAllRewards } = userStakeData
 
+  const handleUnstake = async (id: number) => {
+    analytics.track("unstake.started")
+    const tx = await aaveStakerSigner.unstake(id)
+
+    await doHandleTransaction({
+      ...tx,
+      onSuccess: () => analytics.track("unstake.succeeded"),
+      onError: () => analytics.track("unstake.failed"),
+    })
+    fetchUserStakes()
+  }
+
   const handleUnBond = async (id: number) => {
     analytics.track("unbond.started")
-    const tx = await aaveStakerSigner.unbond(id)
+    const tx = await aaveStakerSigner.unbond(id, {
+      gasLimit: 1000000,
+    })
 
     await doHandleTransaction({
       ...tx,
@@ -48,6 +62,33 @@ const BondingTableCard: VFC<TableProps> = (props) => {
       onError: () => analytics.track("unbond.failed"),
     })
     fetchUserStakes()
+  }
+
+  const renderBondAction = (unbondTimestamp: number, i: number) => {
+    const unbondTime = new Date(
+      unbondTimestamp * 1000
+    ).toLocaleDateString()
+
+    const canUnstake =
+      unbondTimestamp * 1000 < Date.now() &&
+      unbondTimestamp.toString() !== "0"
+
+    if (canUnstake)
+      return (
+        <SecondaryButton size="sm" onClick={() => handleUnstake(i)}>
+          Unstake
+        </SecondaryButton>
+      )
+
+    if (unbondTimestamp.toString() === "0") {
+      return (
+        <SecondaryButton size="sm" onClick={() => handleUnBond(i)}>
+          Unbond
+        </SecondaryButton>
+      )
+    } else {
+      return <Text>{unbondTime}</Text>
+    }
   }
 
   return (
@@ -140,10 +181,13 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   "1": "14 days",
                   "2": "21 days",
                 }
-                const unbondTime = new Date(
-                  unbondTimestamp * 1000
-                ).toLocaleDateString()
+                // const unbondTime = new Date(
+                //   unbondTimestamp * 1000
+                // ).toLocaleDateString()
 
+                // const unbondTimeHasElapsed =
+                //   unbondTimestamp * 1000 < Date.now()
+                if (amount?.toString() === "0") return null
                 return (
                   <Tr
                     key={i}
@@ -177,16 +221,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     </Td>
                     <Td fontWeight="normal">
                       <Flex justify="flex-end">
-                        {unbondTimestamp.toString() === "0" ? (
-                          <SecondaryButton
-                            size="sm"
-                            onClick={() => handleUnBond(i)}
-                          >
-                            Unbond
-                          </SecondaryButton>
-                        ) : (
-                          <Text>{unbondTime}</Text>
-                        )}
+                        {renderBondAction(unbondTimestamp, i)}
                       </Flex>
                     </Td>
                   </Tr>
