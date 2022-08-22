@@ -1,6 +1,7 @@
 import aaveV2CellarAbi from "../abi/aaveV2Cellar-v2.json"
 import cellarRouter from "../abi/cellarRouter.json"
 import sommStaking from "../abi/sommStaking.json"
+import gravityBridge from "../abi/gravityBridge.json"
 import { erc20ABI } from "wagmi"
 
 /** Ensure Checksum Address  */
@@ -52,6 +53,15 @@ export const config = {
     FEI: {
       ADDRESS: "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
       ABI: erc20ABI,
+    },
+    SOMMELLIER: {
+      ADDRESS: "0xa670d7237398238de01267472c6f13e5b8010fd1",
+      DECIMALS: 6,
+      ABI: erc20ABI,
+    },
+    BRIDGE: {
+      ADDRESS: "0x69592e6f9d21989a043646fE8225da2600e5A0f7",
+      ABI: gravityBridge,
     },
   },
 }

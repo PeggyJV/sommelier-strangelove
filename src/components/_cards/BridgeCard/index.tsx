@@ -8,7 +8,7 @@ import { useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { FormProvider, useForm } from "react-hook-form"
 
-interface FormValues {
+export interface BridgeFormValues {
   amount: number
   sommelierAddress: string
 }
@@ -16,7 +16,7 @@ interface FormValues {
 export const BridgeCard: React.FC = () => {
   const [auth] = useConnect()
   const isConnected = auth.data.connected
-  const methods = useForm<FormValues>()
+  const methods = useForm<BridgeFormValues>()
 
   return (
     <TransparentCard
