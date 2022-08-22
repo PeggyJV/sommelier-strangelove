@@ -1,6 +1,6 @@
 export const NAV_LINKS = [
   {
-    link: "/cellars",
+    link: "/",
     title: "Cellars",
   },
   {
