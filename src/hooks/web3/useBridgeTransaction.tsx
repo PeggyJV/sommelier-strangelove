@@ -8,13 +8,14 @@ import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
 import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
-import { getBytes32 } from "utils/getBytes32"
 import { ethers } from "ethers"
+import { getBytes32 } from "utils/getBytes32"
 
 export const useBridgeTransaction = () => {
   const { CONTRACT } = config
-  const { addToast, update } = useBrandedToast()
-
+  // Currently `close` have a bug it only closes the last toast appeared
+  // TODO: Fix `close` and implement it here https://github.com/strangelove-ventures/sommelier/issues/431
+  const { addToast, update, closeAll } = useBrandedToast()
   const [isLoading, setIsLoading] = useState(false)
 
   const [{ data: signer }] = useSigner()
@@ -120,6 +121,7 @@ export const useBridgeTransaction = () => {
           body: null,
           status: "success",
           duration: null,
+          closeHandler: closeAll,
         })
       }}
       aria-label="Copy to clipboard"
@@ -136,19 +138,17 @@ export const useBridgeTransaction = () => {
         body: <Text>Approval in progress</Text>,
         isLoading: true,
         duration: null,
+        closeHandler: closeAll,
       })
       const convertedAmount = ethers.utils.parseUnits(
         String(props.amount),
         CONTRACT.SOMMELLIER.DECIMALS
       )
-
       // ERC20 Approval
-      const { hash: erc20Hash, confirmations: erc20Confirmations } =
-        await erc20Contract.approve(
-          CONTRACT.BRIDGE.ADDRESS,
-          convertedAmount
-        )
-
+      const { hash: erc20Hash } = await erc20Contract.approve(
+        CONTRACT.BRIDGE.ADDRESS,
+        convertedAmount
+      )
       const waitForApproval = wait({
         hash: erc20Hash,
       })
@@ -165,6 +165,7 @@ export const useBridgeTransaction = () => {
           ),
           status: "error",
           duration: null,
+          closeHandler: closeAll,
         })
       }
       if (
@@ -176,26 +177,24 @@ export const useBridgeTransaction = () => {
           body: <TxHashToastBody title="Approved" hash={erc20Hash} />,
           status: "primary",
           duration: null,
+          closeHandler: closeAll,
         })
       }
-
       // Bridge transaction
       addToast({
         heading: "Loading",
         status: "default",
         body: <Text>Transaction in progress</Text>,
         isLoading: true,
-        closeHandler: close,
         duration: null,
+        closeHandler: closeAll,
       })
       const bytes32 = getBytes32(props.sommelierAddress)
-
-      const { hash: bridgeHash, confirmations: bridgeConfirmations } =
-        await bridgeContract.sendToCosmos(
-          CONTRACT.SOMMELLIER.ADDRESS,
-          bytes32,
-          convertedAmount
-        )
+      const { hash: bridgeHash } = await bridgeContract.sendToCosmos(
+        CONTRACT.SOMMELLIER.ADDRESS,
+        bytes32,
+        convertedAmount
+      )
       const waitForBridge = wait({
         hash: bridgeHash,
       })
@@ -212,6 +211,7 @@ export const useBridgeTransaction = () => {
           ),
           status: "error",
           duration: null,
+          closeHandler: closeAll,
         })
       }
       if (
@@ -228,9 +228,9 @@ export const useBridgeTransaction = () => {
           ),
           status: "primary",
           duration: null,
+          closeHandler: closeAll,
         })
       }
-
       setIsLoading(false)
     } catch (e) {
       const error = e as Error
@@ -239,6 +239,7 @@ export const useBridgeTransaction = () => {
         heading: "Error",
         body: <Text>{error.message}</Text>,
         status: "error",
+        closeHandler: closeAll,
       })
     }
   }
