@@ -32,8 +32,8 @@ export const BridgeCard: React.FC = () => {
         Bridge
       </Heading>
       <Text fontSize="md" mb="41px">
-        With Sommelier Bridge UI, we can transfer Sommelier Token from
-        the Ethereum chain to the Sommelier Chain.{" "}
+        Bridge your Ethereum SOMM back home to its native Cosmos
+        representation on Sommelier.{" "}
         <Link
           ml={1}
           fontSize="xs"
