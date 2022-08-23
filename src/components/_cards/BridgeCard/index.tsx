@@ -8,7 +8,7 @@ import { useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { FormProvider, useForm } from "react-hook-form"
 
-interface FormValues {
+export interface BridgeFormValues {
   amount: number
   sommelierAddress: string
 }
@@ -16,7 +16,7 @@ interface FormValues {
 export const BridgeCard: React.FC = () => {
   const [auth] = useConnect()
   const isConnected = auth.data.connected
-  const methods = useForm<FormValues>()
+  const methods = useForm<BridgeFormValues>()
 
   return (
     <TransparentCard
@@ -32,8 +32,8 @@ export const BridgeCard: React.FC = () => {
         Bridge
       </Heading>
       <Text fontSize="md" mb="41px">
-        $SOMM emits on Ethereum. We bridge SOMM back to Cosmos for
-        you.{" "}
+        Bridge your Ethereum SOMM back home to its native Cosmos
+        representation on Sommelier.{" "}
         <Link
           ml={1}
           fontSize="xs"
