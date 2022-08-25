@@ -53,7 +53,8 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const handleUnBond = async (id: number) => {
     analytics.track("unbond.started")
     const tx = await aaveStakerSigner.unbond(id, {
-      gasLimit: 1000000,
+      // gas used around 63000
+      gasLimit: 80000,
     })
 
     await doHandleTransaction({
