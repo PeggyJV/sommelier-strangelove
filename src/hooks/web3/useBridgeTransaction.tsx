@@ -10,6 +10,7 @@ import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
 import { ethers } from "ethers"
 import { getBytes32 } from "utils/getBytes32"
+import { GravityBridge } from "src/abi/types"
 
 export const useBridgeTransaction = () => {
   const { CONTRACT } = config
@@ -29,7 +30,7 @@ export const useBridgeTransaction = () => {
     signerOrProvider: signer,
   })
 
-  const bridgeContract = useContract({
+  const bridgeContract: GravityBridge = useContract({
     addressOrName: CONTRACT.BRIDGE.ADDRESS,
     contractInterface: CONTRACT.BRIDGE.ABI,
     signerOrProvider: signer,
