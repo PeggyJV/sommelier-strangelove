@@ -75,18 +75,17 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       )
     )
 
-  const onSubmit = async (data: any, e: any) => {
+  const onSubmit = async (data: FormValues) => {
     const analyticsData = {
       duration: bondingPeriodOptions[bondPeriod],
     }
     analytics.track("bond.started", analyticsData)
-
-    await doApprove(data?.depositAmount, {
+    await doApprove(data.depositAmount, {
       onSuccess: () => analytics.track("bond.approval-succeeded"),
       onError: () => analytics.track("bond.approval-failed"),
     })
 
-    const amtInBigNumber = new BigNumber(data?.depositAmount)
+    const amtInBigNumber = new BigNumber(data.depositAmount)
     const depositAmtInWei = ethers.utils.parseUnits(
       amtInBigNumber.toFixed(),
       18
@@ -95,7 +94,8 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       const { hash: bondConf } = await sommStakingContract.stake(
         depositAmtInWei,
         bondPeriod,
-        { gasLimit: 1000000 }
+        // gas used around 125000-130000
+        { gasLimit: 200000 }
       )
 
       await doHandleTransaction({
