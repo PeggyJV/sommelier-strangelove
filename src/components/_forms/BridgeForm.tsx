@@ -16,14 +16,15 @@ export const BridgeForm: VFC = () => {
   const watchAmount = watch("amount")
   const watchSommelierAddress = watch("sommelierAddress")
 
+  const { isLoading, doTransaction } = useBridgeTransaction()
+
   const isDisabled =
     isNaN(watchAmount) ||
     watchAmount <= 0 ||
     !!getFieldState("amount").error ||
     !!getFieldState("sommelierAddress").error ||
-    !watchSommelierAddress
-
-  const { isLoading, doTransaction } = useBridgeTransaction()
+    !watchSommelierAddress ||
+    isLoading
 
   return (
     <Stack
