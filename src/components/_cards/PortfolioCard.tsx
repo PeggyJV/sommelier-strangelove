@@ -22,6 +22,8 @@ import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { analytics } from "utils/analytics"
+import { ImportMetamaskButton } from "components/_buttons/ImportMetamaskButton"
+import { config } from "utils/config"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
@@ -224,18 +226,25 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               >
                 <InlineImage
                   src="/assets/icons/somm.png"
-                  alt="aave logo"
+                  alt="sommelier logo"
                   boxSize={5}
                 />
-                {isConnected
-                  ? toEther(
+                {isConnected ? (
+                  <>
+                    {toEther(
                       userStakeData?.totalClaimAllRewards?.toFixed() ||
                         "0",
                       6,
                       false,
                       2
-                    )
-                  : "--"}
+                    )}
+                    <ImportMetamaskButton
+                      address={config.CONTRACT.SOMMELLIER.ADDRESS}
+                    />
+                  </>
+                ) : (
+                  "--"
+                )}
               </CardStat>
             </VStack>
             <BaseButton
