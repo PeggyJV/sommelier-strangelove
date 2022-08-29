@@ -8,24 +8,18 @@ import {
   Spinner,
   Icon,
 } from "@chakra-ui/react"
-import React, { useEffect } from "react"
+import React from "react"
 
 import Image from "next/image"
 import { useAccount, useBalance } from "wagmi"
 import { toEther } from "utils/formatCurrency"
 import { useFormContext } from "react-hook-form"
 import { AiOutlineInfo } from "react-icons/ai"
+import { BridgeFormValues } from "."
 
 export const InputAmount: React.FC = () => {
-  const {
-    register,
-    setValue,
-    watch,
-    setError,
-    clearErrors,
-    getFieldState,
-    formState,
-  } = useFormContext()
+  const { register, setValue, formState } =
+    useFormContext<BridgeFormValues>()
 
   const [account] = useAccount()
   const [{ data, error, loading }] = useBalance({
@@ -34,41 +28,15 @@ export const InputAmount: React.FC = () => {
     watch: true,
   })
 
-  const watchAmount = watch("amount")
-
   const isBalanceLoading = account.loading || loading
-  const isBalanceNotEnough =
-    data &&
-    watchAmount >
-      parseFloat(toEther(data.value, data.decimals, false))
-  const isBalanceError = error || isBalanceNotEnough
 
   const onMaxButtonClick = () => {
     if (!data) return
     const amount = parseFloat(
       toEther(data.value, data.decimals, false)
     )
-    setValue("amount", amount)
+    setValue("amount", amount, { shouldValidate: true })
   }
-
-  useEffect(() => {
-    if (error) {
-      setError("amount", {
-        message: error.message,
-      })
-    } else if (isBalanceNotEnough) {
-      setError("amount", {
-        message: "Your balance is not enough",
-      })
-    } else if (isNaN(watchAmount) || watchAmount < 0) {
-      setError("amount", {
-        message: "Invalid amount",
-      })
-    } else {
-      clearErrors("amount")
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchAmount, isBalanceError])
 
   return (
     <Stack spacing={2}>
@@ -95,6 +63,7 @@ export const InputAmount: React.FC = () => {
         </HStack>
         <VStack spacing={0} align="flex-end">
           <Input
+            id="amount"
             variant="unstyled"
             pr="2"
             type="number"
@@ -110,6 +79,13 @@ export const InputAmount: React.FC = () => {
               validate: {
                 positive: (v) =>
                   v > 0 || "You must submit a positive amount.",
+                balance: (v) =>
+                  (data &&
+                    v <=
+                      parseFloat(
+                        toEther(data.value, data.decimals, false)
+                      )) ||
+                  "Insufficient balance",
               },
             })}
           />
@@ -152,6 +128,21 @@ export const InputAmount: React.FC = () => {
           />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
             {formState.errors.amount.message}
+          </Text>
+        </HStack>
+      )}
+      {error && (
+        <HStack>
+          <Icon
+            p={0.5}
+            mr={1}
+            color="surface.bg"
+            bg="red.base"
+            borderRadius="50%"
+            as={AiOutlineInfo}
+          />
+          <Text fontSize="xs" fontWeight="semibold" color="red.light">
+            {error.message}
           </Text>
         </HStack>
       )}

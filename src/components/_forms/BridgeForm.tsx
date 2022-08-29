@@ -34,9 +34,7 @@ export const BridgeForm: VFC = () => {
     >
       <Stack spacing={6}>
         <FormControl
-          isInvalid={
-            formState.errors.sommelierAddress as boolean | undefined
-          }
+          isInvalid={formState.errors.amount as boolean | undefined}
         >
           <InputAmount />
         </FormControl>

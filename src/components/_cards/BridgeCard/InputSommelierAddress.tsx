@@ -11,39 +11,19 @@ import {
 import { InformationIcon } from "components/_icons"
 import { getKeplr, mainnetChains } from "graz"
 import { useBrandedToast } from "hooks/chakra"
-import React, { useEffect } from "react"
+import React from "react"
 import { useFormContext } from "react-hook-form"
 import { AiOutlineInfo } from "react-icons/ai"
 import { validateSommelierAddress } from "utils/validateSommelierAddress"
+import { BridgeFormValues } from "."
 
 export const InputSommelierAddress: React.FC<InputProps> = ({
   children,
   ...rest
 }) => {
   const { addToast, closeAll } = useBrandedToast()
-  const {
-    register,
-    formState,
-    setError,
-    watch,
-    clearErrors,
-    setValue,
-  } = useFormContext()
-
-  const watchSommelierAddress = watch("sommelierAddress")
-
-  useEffect(() => {
-    const isValid = validateSommelierAddress(watchSommelierAddress)
-    if (watchSommelierAddress && !isValid) {
-      setError("sommelierAddress", {
-        message: "Address is not valid",
-        type: "validate",
-      })
-    } else {
-      clearErrors("sommelierAddress")
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchSommelierAddress])
+  const { register, formState, setValue } =
+    useFormContext<BridgeFormValues>()
 
   const onAutofillClick = async () => {
     try {
@@ -51,7 +31,9 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
       if (!keplr) throw new Error("Keplr not found")
       const key = await keplr.getKey(mainnetChains.sommelier.chainId)
       if (!key.bech32Address) throw new Error("Address not defined")
-      setValue("sommelierAddress", key.bech32Address)
+      setValue("sommelierAddress", key.bech32Address, {
+        shouldValidate: true,
+      })
     } catch (e) {
       const error = e as Error
       addToast({
@@ -81,6 +63,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         </HStack>
       </HStack>
       <Input
+        id="sommelierAddress"
         placeholder="Enter Sommelier address"
         fontSize="xs"
         fontWeight={700}
@@ -96,6 +79,10 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         type="text"
         {...register("sommelierAddress", {
           required: "Enter Sommelier address",
+          validate: {
+            validAddress: (v) =>
+              validateSommelierAddress(v) || "Address is not valid",
+          },
         })}
         {...rest}
       />
