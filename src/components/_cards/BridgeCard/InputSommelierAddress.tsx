@@ -8,7 +8,8 @@ import {
   Icon,
   Image,
 } from "@chakra-ui/react"
-import { InformationIcon } from "components/_icons"
+import { Link } from "components/Link"
+import { ExternalLinkIcon, InformationIcon } from "components/_icons"
 import { getKeplr, mainnetChains } from "graz"
 import { useBrandedToast } from "hooks/chakra"
 import React from "react"
@@ -28,7 +29,6 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
   const onAutofillClick = async () => {
     try {
       const keplr = getKeplr()
-      if (!keplr) throw new Error("Keplr not found")
       const key = await keplr.getKey(mainnetChains.sommelier.chainId)
       if (!key.bech32Address) throw new Error("Address not defined")
       setValue("sommelierAddress", key.bech32Address, {
@@ -36,6 +36,27 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
       })
     } catch (e) {
       const error = e as Error
+      if (error.message === "Keplr is not defined") {
+        return addToast({
+          heading: "Autofill from Keplr",
+          body: (
+            <>
+              <Text>Keplr not found</Text>
+              <Link
+                display="flex"
+                alignItems="center"
+                href="https://www.keplr.app/download"
+                isExternal
+              >
+                <Text as="span">Install Keplr</Text>
+                <ExternalLinkIcon ml={2} />
+              </Link>
+            </>
+          ),
+          status: "error",
+          closeHandler: closeAll,
+        })
+      }
       addToast({
         heading: "Autofill from Keplr",
         body: <Text>{error.message}</Text>,
