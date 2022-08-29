@@ -1,6 +1,8 @@
 import { useWaitForTransaction } from "wagmi"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
+import { Link } from "components/Link"
+import { ExternalLinkIcon } from "components/_icons"
 
 type TxParams = {
   hash: string
@@ -28,7 +30,6 @@ export const useHandleTransaction = (): {
     onError,
   }: TxParams) => {
     const infoBody = toastBody?.info || <Text>In progress...</Text>
-    const successBody = toastBody?.success || <Text>Successful</Text>
     const errorBody = toastBody?.error || <Text>Failed</Text>
 
     addToast({
@@ -43,6 +44,20 @@ export const useHandleTransaction = (): {
     const result = await waitForApproval
 
     if (result?.data?.transactionHash) {
+      const successBody = toastBody?.success || (
+        <>
+          <Text>Successful</Text>
+          <Link
+            display="flex"
+            alignItems="center"
+            href={`https://etherscan.io/tx/${result?.data?.transactionHash}`}
+            isExternal
+          >
+            <Text as="span">View on Etherscan</Text>
+            <ExternalLinkIcon ml={2} />
+          </Link>
+        </>
+      )
       update({
         heading: "Transaction",
         body: successBody,
