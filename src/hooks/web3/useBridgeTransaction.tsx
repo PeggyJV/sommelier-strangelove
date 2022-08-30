@@ -180,7 +180,7 @@ export const useBridgeTransaction = () => {
         resultApproval?.data?.transactionHash &&
         resultApproval.data?.status === 1
       ) {
-        analytics.track("bridge.approval-granted", {
+        analytics.track("bridge.approval-succeeded", {
           value: props.amount,
         })
         update({
@@ -235,7 +235,7 @@ export const useBridgeTransaction = () => {
         resultBridge?.data?.transactionHash &&
         resultBridge.data?.status === 1
       ) {
-        analytics.track("bridge.contract-succeed", {
+        analytics.track("bridge.contract-succeeded", {
           value: props.amount,
         })
         update({
@@ -253,7 +253,7 @@ export const useBridgeTransaction = () => {
       }
       setIsLoading(false)
     } catch (e) {
-      analytics.track("bridge.error", {
+      analytics.track("bridge.failed", {
         value: props.amount,
       })
       const error = e as Error
