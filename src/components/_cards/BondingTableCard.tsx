@@ -126,6 +126,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 label="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
                 placement="top"
                 bg="surface.bg"
+                color="neutral.300"
               >
                 <Th
                   fontSize={10}
@@ -154,6 +155,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 label="Amount of SOMM earned and available to be claimed"
                 placement="top"
                 bg="surface.bg"
+                color="neutral.300"
               >
                 <Th
                   fontSize={10}

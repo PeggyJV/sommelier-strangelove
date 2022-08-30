@@ -146,6 +146,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 placement="top"
                 label="Cellar earned performance split"
                 bg="surface.bg"
+                color="neutral.300"
               >
                 <HStack align="center" spacing={1}>
                   <CardHeading>performance split</CardHeading>

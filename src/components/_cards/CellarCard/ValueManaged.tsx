@@ -73,26 +73,28 @@ export const ValueManaged: React.FC<Props> = ({
     <Box {...rest}>
       <Flex alignItems="baseline" mb={1}>
         <Heading size="md">{tvm}</Heading>
-        <Label
-          ml={1}
+        <Tooltip
+          hasArrow
+          arrowShadowColor="purple.base"
+          label="Total value managed by Cellar"
+          placement="top"
+          bg="surface.bg"
           color="neutral.300"
-          display="flex"
-          alignItems="center"
-          columnGap="4px"
         >
-          TVM
-          <Tooltip
-            hasArrow
-            arrowShadowColor="purple.base"
-            label="Total value managed by Cellar"
-            placement="top"
-            bg="surface.bg"
-          >
-            <HStack spacing={1} align="center">
-              <InformationIcon color="neutral.300" boxSize={3} />
-            </HStack>
-          </Tooltip>
-        </Label>
+          <HStack spacing={1} align="center">
+            <Label
+              ml={1}
+              color="neutral.300"
+              display="flex"
+              alignItems="center"
+              columnGap="4px"
+            >
+              TVM
+            </Label>
+
+            <InformationIcon color="neutral.300" boxSize={3} />
+          </HStack>
+        </Tooltip>
       </Flex>
       <Flex alignItems="center" mb={4}>
         <Heading
@@ -112,6 +114,7 @@ export const ValueManaged: React.FC<Props> = ({
           placement="top"
           label={apyLabel}
           bg="surface.bg"
+          color="neutral.300"
         >
           <HStack spacing={1} align="center">
             <Label ml={1} color="neutral.300">

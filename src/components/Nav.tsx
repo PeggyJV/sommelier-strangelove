@@ -62,8 +62,10 @@ export const Nav: VFC<FlexProps> = (props) => {
             borderRadius="16px"
           >
             {NAV_LINKS.map((item) => {
+              const path = routes.pathname.split("/")[1]
+
               const isActive =
-                routes.pathname.split("/")[1] ===
+                (path === "cellars" ? "" : path) ===
                 item.link.split("/")[1]
               return (
                 <Link
