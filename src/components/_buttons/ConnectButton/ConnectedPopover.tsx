@@ -65,6 +65,7 @@ export const ConnectedPopover = () => {
           arrowShadowColor="purple.base"
           label="Copy to clipboard"
           placement="bottom"
+          color="neutral.300"
           bg="surface.bg"
         >
           <BaseButton

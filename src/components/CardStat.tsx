@@ -38,6 +38,7 @@ export const CardStat: VFC<CardStatProps> = ({
         arrowShadowColor="purple.base"
         label={tooltip}
         placement="top"
+        color="neutral.300"
         bg="surface.bg"
       >
         <HStack spacing={1} align="center">
