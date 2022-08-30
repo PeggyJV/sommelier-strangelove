@@ -64,6 +64,7 @@ export const CroppedMap: VFC<CroppedMapProps> = ({
         <Tooltip
           hasArrow
           arrowShadowColor="purple.base"
+          color="neutral.300"
           label={
             <VStack align="flex-start" minW={120}>
               {tokens.map((token, i) => {

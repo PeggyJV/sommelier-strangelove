@@ -30,6 +30,7 @@ export const StrategyProvider: VFC<StrategyProviderProps> = ({
           label={tooltip}
           placement="top"
           bg="surface.bg"
+          color="neutral.300"
         >
           <HStack spacing={1} align="center">
             <CardHeading>Strategy Provider</CardHeading>

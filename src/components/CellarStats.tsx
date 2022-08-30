@@ -65,6 +65,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           placement="top"
           label="Total value managed by Cellar"
           bg="surface.bg"
+          color="neutral.300"
         >
           <HStack spacing={1} align="center">
             <CardHeading>TVM</CardHeading>
@@ -84,6 +85,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
             placement="top"
             label={apyTooltip}
             bg="surface.bg"
+            color="neutral.300"
           >
             <HStack spacing={1} align="center">
               <CardHeading>Expected APY</CardHeading>
