@@ -134,7 +134,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text as="span">Bonded Tokens</Text>
+                    <Text>Bonded Tokens</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -163,7 +163,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text as="span">SOMM Rewards</Text>
+                    <Text>SOMM Rewards</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
