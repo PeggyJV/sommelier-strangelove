@@ -188,9 +188,23 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 label="tokens"
                 tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
               >
-                {isConnected
-                  ? toEther(userData?.balances?.aaveClr, 18, false, 2)
-                  : "--"}
+                {isConnected ? (
+                  <>
+                    {toEther(
+                      userData?.balances?.aaveClr,
+                      18,
+                      false,
+                      2
+                    )}
+                    <ImportMetamaskButton
+                      address={
+                        config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS
+                      }
+                    />
+                  </>
+                ) : (
+                  "--"
+                )}
               </CardStat>
             </VStack>
             <VStack align="flex-start">
