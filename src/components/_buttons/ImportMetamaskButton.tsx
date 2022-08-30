@@ -30,6 +30,7 @@ export const ImportMetamaskButton = ({
             boxSize={5}
           />
         }
+        variant="ghost"
       />
     </Tooltip>
   )
