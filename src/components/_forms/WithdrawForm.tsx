@@ -138,6 +138,11 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
               validate: {
                 positive: (v) =>
                   v > 0 || "You must submit a positive amount.",
+                balance: (v) =>
+                  v <=
+                    parseFloat(
+                      toEther(userData?.balances?.aaveClr, 18, false)
+                    ) || "Insufficient balance",
               },
             })}
           />
