@@ -23,7 +23,8 @@ export const WithdrawModal: VFC<WithdrawModalProps> = ({
         <VStack align="flex-start">
           <CardHeading>available</CardHeading>
           <Text as="span">
-            {toEther(userData?.balances?.aaveClr, 18)} LP TOKENS
+            {toEther(userData?.balances?.aaveClr, 18, false)} LP
+            TOKENS
           </Text>
         </VStack>
       </VStack>
