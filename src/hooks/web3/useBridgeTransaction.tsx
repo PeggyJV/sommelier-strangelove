@@ -11,6 +11,7 @@ import { ExternalLinkIcon } from "components/_icons"
 import { ethers } from "ethers"
 import { getBytes32 } from "utils/getBytes32"
 import { GravityBridge } from "src/abi/types"
+import { analytics } from "utils/analytics"
 
 export const useBridgeTransaction = () => {
   const { CONTRACT } = config
@@ -145,6 +146,9 @@ export const useBridgeTransaction = () => {
         String(props.amount),
         CONTRACT.SOMMELLIER.DECIMALS
       )
+      analytics.track("bridge.approval-required", {
+        value: props.amount,
+      })
       // ERC20 Approval
       const { hash: erc20Hash } = await erc20Contract.approve(
         CONTRACT.BRIDGE.ADDRESS,
@@ -155,6 +159,9 @@ export const useBridgeTransaction = () => {
       })
       const resultApproval = await waitForApproval
       if (resultApproval.data?.status !== 1) {
+        analytics.track("bridge.approval-failed", {
+          value: props.amount,
+        })
         setIsLoading(false)
         return update({
           heading: "ERC20 Approval",
@@ -173,6 +180,9 @@ export const useBridgeTransaction = () => {
         resultApproval?.data?.transactionHash &&
         resultApproval.data?.status === 1
       ) {
+        analytics.track("bridge.approval-succeeded", {
+          value: props.amount,
+        })
         update({
           heading: "ERC20 Approval",
           body: <TxHashToastBody title="Approved" hash={erc20Hash} />,
@@ -181,6 +191,9 @@ export const useBridgeTransaction = () => {
           closeHandler: closeAll,
         })
       }
+      analytics.track("bridge.contract-started", {
+        value: props.amount,
+      })
       // Bridge transaction
       addToast({
         heading: "Loading",
@@ -201,6 +214,9 @@ export const useBridgeTransaction = () => {
       })
       const resultBridge = await waitForBridge
       if (resultBridge.data?.status !== 1) {
+        analytics.track("bridge.contract-failed", {
+          value: props.amount,
+        })
         setIsLoading(false)
         return update({
           heading: "Bridge Initiated",
@@ -219,6 +235,9 @@ export const useBridgeTransaction = () => {
         resultBridge?.data?.transactionHash &&
         resultBridge.data?.status === 1
       ) {
+        analytics.track("bridge.contract-succeeded", {
+          value: props.amount,
+        })
         update({
           heading: "Bridge Initiated",
           body: (
@@ -234,6 +253,9 @@ export const useBridgeTransaction = () => {
       }
       setIsLoading(false)
     } catch (e) {
+      analytics.track("bridge.failed", {
+        value: props.amount,
+      })
       const error = e as Error
       setIsLoading(false)
       update({
