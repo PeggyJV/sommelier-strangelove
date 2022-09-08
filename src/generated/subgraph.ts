@@ -1698,6 +1698,8 @@ export type _Block_ = {
   hash?: Maybe<Scalars['Bytes']>;
   /** The block number */
   number: Scalars['Int'];
+  /** Timestamp of the block if available, format depends on the chain */
+  timestamp?: Maybe<Scalars['String']>;
 };
 
 /** The type for the top-level _meta field */
@@ -1731,6 +1733,13 @@ export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __type
 
 export type CellarDayDatasFragment = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
 
+export type GetAllTimeTvlByAddressQueryVariables = Exact<{
+  cellarAddress: Scalars['ID'];
+}>;
+
+
+export type GetAllTimeTvlByAddressQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', dayDatas: Array<{ __typename?: 'CellarDayData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> } | null };
+
 export type GetAllTimeTvlQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1763,6 +1772,14 @@ export type GetCurrentDepositsQueryVariables = Exact<{
 
 export type GetCurrentDepositsQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, currentDeposits: string } | null };
 
+export type GetHourlyTvlByAddressQueryVariables = Exact<{
+  epoch: Scalars['Int'];
+  cellarAddress?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetHourlyTvlByAddressQuery = { __typename?: 'Query', cellarHourDatas: Array<{ __typename?: 'CellarHourData', date: number, tvlTotal: string, asset?: { __typename?: 'TokenERC20', symbol: string, decimals: number } | null }> };
+
 export type GetHourlyTvlQueryVariables = Exact<{
   epoch?: InputMaybe<Scalars['Int']>;
 }>;
@@ -1776,6 +1793,14 @@ export type GetPositionQueryVariables = Exact<{
 
 
 export type GetPositionQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, currentDeposits: string, cellarShares: Array<{ __typename?: 'CellarShare', balance: string }> } | null };
+
+export type GetWeeklyTvlByAdressQueryVariables = Exact<{
+  epoch: Scalars['Int'];
+  cellarAddress: Scalars['ID'];
+}>;
+
+
+export type GetWeeklyTvlByAdressQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', dayDatas: Array<{ __typename?: 'CellarDayData', date: number, tvlTotal: string, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number } }> } | null };
 
 export type GetWeeklyTvlQueryVariables = Exact<{
   epoch: Scalars['Int'];
@@ -1824,6 +1849,24 @@ export const GetAllCellarsDocument = gql`
 
 export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCellarsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllCellarsQuery>({ query: GetAllCellarsDocument, ...options });
+};
+export const GetAllTimeTvlByAddressDocument = gql`
+    query GetAllTimeTVLByAddress($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    dayDatas(orderDirection: asc, orderBy: date) {
+      date
+      asset {
+        symbol
+        decimals
+      }
+      tvlTotal
+    }
+  }
+}
+    `;
+
+export function useGetAllTimeTvlByAddressQuery(options: Omit<Urql.UseQueryArgs<GetAllTimeTvlByAddressQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllTimeTvlByAddressQuery>({ query: GetAllTimeTvlByAddressDocument, ...options });
 };
 export const GetAllTimeTvlDocument = gql`
     query GetAllTimeTVL {
@@ -1920,6 +1963,26 @@ export const GetCurrentDepositsDocument = gql`
 export function useGetCurrentDepositsQuery(options: Omit<Urql.UseQueryArgs<GetCurrentDepositsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetCurrentDepositsQuery>({ query: GetCurrentDepositsDocument, ...options });
 };
+export const GetHourlyTvlByAddressDocument = gql`
+    query GetHourlyTVLByAddress($epoch: Int!, $cellarAddress: String) {
+  cellarHourDatas(
+    orderDirection: asc
+    orderBy: date
+    where: {cellar: $cellarAddress, date_gte: $epoch}
+  ) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}
+    `;
+
+export function useGetHourlyTvlByAddressQuery(options: Omit<Urql.UseQueryArgs<GetHourlyTvlByAddressQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetHourlyTvlByAddressQuery>({ query: GetHourlyTvlByAddressDocument, ...options });
+};
 export const GetHourlyTvlDocument = gql`
     query GetHourlyTVL($epoch: Int) {
   cellarHourDatas(orderDirection: asc, orderBy: date, where: {date_gte: $epoch}) {
@@ -1950,6 +2013,29 @@ export const GetPositionDocument = gql`
 
 export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQueryVariables>, 'query'>) {
   return Urql.useQuery<GetPositionQuery>({ query: GetPositionDocument, ...options });
+};
+export const GetWeeklyTvlByAdressDocument = gql`
+    query GetWeeklyTVLByAdress($epoch: Int!, $cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    dayDatas(
+      first: 7
+      orderDirection: asc
+      orderBy: date
+      where: {date_gte: $epoch}
+    ) {
+      date
+      asset {
+        symbol
+        decimals
+      }
+      tvlTotal
+    }
+  }
+}
+    `;
+
+export function useGetWeeklyTvlByAdressQuery(options: Omit<Urql.UseQueryArgs<GetWeeklyTvlByAdressQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetWeeklyTvlByAdressQuery>({ query: GetWeeklyTvlByAdressDocument, ...options });
 };
 export const GetWeeklyTvlDocument = gql`
     query GetWeeklyTVL($epoch: Int!) {
