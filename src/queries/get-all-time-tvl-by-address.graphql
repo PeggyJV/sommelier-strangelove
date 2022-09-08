@@ -1,0 +1,12 @@
+query GetAllTimeTVLByAddress($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    dayDatas(orderDirection: asc, orderBy: date) {
+      date
+      asset {
+        symbol
+        decimals
+      }
+      tvlTotal
+    }
+  }
+}
