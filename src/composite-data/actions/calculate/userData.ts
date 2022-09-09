@@ -4,6 +4,15 @@ import { ethers } from "ethers"
 import { GetPositionQuery } from "generated/subgraph"
 import { getPNL } from "utils/pnl"
 
+interface CalculateUserDataProps {
+  aAssetDecimals?: number
+  cellarShareBalance?: BigNumber
+  claimAllRewardsUSD?: BigNumber
+  totalBondedAmount?: BigNumber
+  totalClaimAllRewards?: BigNumber
+  positionData?: GetPositionQuery
+}
+
 export const calculateUserData = async ({
   aAssetDecimals,
   cellarShareBalance,
@@ -11,14 +20,7 @@ export const calculateUserData = async ({
   totalBondedAmount,
   totalClaimAllRewards,
   positionData,
-}: {
-  aAssetDecimals?: number
-  cellarShareBalance?: BigNumber
-  claimAllRewardsUSD?: BigNumber
-  totalBondedAmount?: BigNumber
-  totalClaimAllRewards?: BigNumber
-  positionData?: GetPositionQuery
-}) => {
+}: CalculateUserDataProps) => {
   try {
     if (
       !aAssetDecimals ||

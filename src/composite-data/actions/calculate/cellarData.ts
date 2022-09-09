@@ -7,16 +7,7 @@ import { getCurrentAsset } from "utils/getCurrentAsset"
 import { tokenConfig } from "data/tokenConfig"
 import { useBalance } from "wagmi"
 
-export const calculateData = async ({
-  activeAsset,
-  addedLiquidityAllTime,
-  apy,
-  assetDecimals,
-  liquidityLimit,
-  potentialStakingApy,
-  removedLiquidityAllTime,
-  tvlTotal,
-}: {
+interface CalculateDataProps {
   aAsset?: ReturnType<typeof useBalance>[0]
   activeAsset?: string
   addedLiquidityAllTime?: string
@@ -26,7 +17,18 @@ export const calculateData = async ({
   potentialStakingApy?: BigNumber
   removedLiquidityAllTime?: string
   tvlTotal?: string
-}) => {
+}
+
+export const calculateData = async ({
+  activeAsset,
+  addedLiquidityAllTime,
+  apy,
+  assetDecimals,
+  liquidityLimit,
+  potentialStakingApy,
+  removedLiquidityAllTime,
+  tvlTotal,
+}: CalculateDataProps) => {
   try {
     if (
       !activeAsset ||
