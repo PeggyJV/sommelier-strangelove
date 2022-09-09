@@ -94,7 +94,7 @@ export const cellarDataMap: CellarDataMap = {
         "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
     },
     config: {
-      id: "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+      id: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
       lpToken: {
         address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
       },
