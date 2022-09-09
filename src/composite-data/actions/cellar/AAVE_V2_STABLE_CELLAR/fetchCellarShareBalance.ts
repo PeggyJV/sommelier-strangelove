@@ -17,10 +17,10 @@ export const fetchCellarShareBalance = async ({
     if (!totalBondedAmount) {
       throw new Error("totalBondedAmount is undefined")
     }
-
-    const cellarSharebalance = await contract.convertToAssets(
-      new BigNumber(aaveClrBalance).plus(totalBondedAmount).toFixed()
-    )
+    const shares = new BigNumber(aaveClrBalance)
+      .plus(totalBondedAmount)
+      .toFixed()
+    const cellarSharebalance = await contract.convertToAssets(shares)
     const res = new BigNumber(cellarSharebalance.toString())
 
     return res
