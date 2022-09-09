@@ -5,17 +5,19 @@ import { fetchCellarShareBalance } from "src/composite-data/actions/cellar/AAVE_
 import { useAccount, useBalance } from "wagmi"
 import { ContractProps } from "../types"
 
+interface UseCellarShareBalanceProps {
+  staker: ContractProps
+  cellar: Omit<ContractProps, "signer">
+  totalBondedAmount?: BigNumber
+  lpToken?: ReturnType<typeof useBalance>[0]
+}
+
 export const useCellarShareBalance = ({
   cellar,
   staker,
   totalBondedAmount,
   lpToken,
-}: {
-  staker: ContractProps
-  cellar: Omit<ContractProps, "signer">
-  totalBondedAmount?: BigNumber
-  lpToken?: ReturnType<typeof useBalance>[0]
-}) => {
+}: UseCellarShareBalanceProps) => {
   const [{ data: account }] = useAccount()
 
   const queryCellarShareBalanceKey = [

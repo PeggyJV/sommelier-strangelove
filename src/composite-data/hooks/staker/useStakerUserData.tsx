@@ -4,11 +4,13 @@ import { fetchStakerUserData } from "src/composite-data/actions/staker/AAVE_STAK
 import { useAccount } from "wagmi"
 import { ContractProps } from "../types"
 
+interface UseStakerUserDataProps {
+  staker: ContractProps
+}
+
 export const useStakerUserData = ({
   staker,
-}: {
-  staker: ContractProps
-}) => {
+}: UseStakerUserDataProps) => {
   const [{ data }] = useAccount()
   const address = data?.address
 
