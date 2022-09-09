@@ -3,11 +3,11 @@ import { SommStaking } from "src/abi/types"
 import { fetchStakerData } from "src/composite-data/actions/staker/AAVE_STAKER/fetchStakerData"
 import { ContractProps } from "../types"
 
-export const useStakerData = ({
-  staker,
-}: {
+interface UseStakerDataProps {
   staker: Omit<ContractProps, "signer">
-}) => {
+}
+
+export const useStakerData = ({ staker }: UseStakerDataProps) => {
   const queryStaker = useQuery(["USE_STAKER_DATA"], async () => {
     if (staker.key === "AAVE_STAKER") {
       return await fetchStakerData(staker.contract as SommStaking)
