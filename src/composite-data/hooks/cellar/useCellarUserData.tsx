@@ -1,14 +1,16 @@
 import { useQuery } from "@tanstack/react-query"
 import { AaveV2CellarV2 } from "src/abi/types"
+import { fetchCellarUserData } from "src/composite-data/actions/cellar/AAVE_V2_STABLE_CELLAR/fetchCellarUserData"
 import { useAccount } from "wagmi"
-import { fetchCellarUserData } from "../../actions/cellar/AAVE_V2_STABLE_CELLAR/fetchCellarUserData"
 import { ContractProps } from "../types"
+
+interface UseCellarUserDataProps {
+  cellar: Omit<ContractProps, "signer">
+}
 
 export const useCellarUserData = ({
   cellar,
-}: {
-  cellar: Omit<ContractProps, "signer">
-}) => {
+}: UseCellarUserDataProps) => {
   const [{ data }] = useAccount()
   const address = data?.address
 

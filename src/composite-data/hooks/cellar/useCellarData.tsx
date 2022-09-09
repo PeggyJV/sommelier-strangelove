@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query"
 import { AaveV2CellarV2 } from "src/abi/types"
-import { fetchCellarData } from "../../actions/cellar/AAVE_V2_STABLE_CELLAR/fetchCellarData"
+import { fetchCellarData } from "src/composite-data/actions/cellar/AAVE_V2_STABLE_CELLAR/fetchCellarData"
 import { ContractProps } from "../types"
 
-export const useCellarData = ({
-  cellar,
-}: {
+interface UseCellarDataProps {
   cellar: Omit<ContractProps, "signer">
-}) => {
+}
+
+export const useCellarData = ({ cellar }: UseCellarDataProps) => {
   const queryCellar = useQuery(["USE_CELLAR_DATA"], async () => {
     if (cellar.key === "AAVE_V2_STABLE_CELLAR") {
       return await fetchCellarData(cellar.contract as AaveV2CellarV2)
