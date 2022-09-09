@@ -1,5 +1,4 @@
 import BigNumber from "bignumber.js"
-import { BigNumber as BigNumberE } from "ethers"
 
 export interface CellarData {
   activeAsset: string
@@ -11,7 +10,7 @@ export interface CellarData {
 }
 
 export interface CellarUserData {
-  maxDeposit: BigNumberE
-  maxWithdraw: BigNumberE
-  netValue: BigNumberE
+  maxDeposit: BigNumber
+  maxWithdraw: BigNumber
+  netValue: BigNumber
 }

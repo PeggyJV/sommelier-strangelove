@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js"
 import { AaveV2CellarV2 } from "src/abi/types"
 import { CellarUserData } from "../types"
 
@@ -13,9 +14,9 @@ export const fetchCellarUserData = async (
     const maxWithdraw = await contract.maxWithdraw(address)
 
     const userData: CellarUserData = {
-      maxDeposit,
-      maxWithdraw,
-      netValue: userBalance,
+      maxDeposit: new BigNumber(maxDeposit.toString()),
+      maxWithdraw: new BigNumber(maxWithdraw.toString()),
+      netValue: new BigNumber(userBalance.toString()),
     }
 
     return userData
