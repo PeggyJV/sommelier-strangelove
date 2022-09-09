@@ -49,10 +49,12 @@ export const fetchStakerUserData = async (
         new BigNumber(amount.toString())
       )
       userStakesArray.push({
-        amount,
-        amountWithBoost,
-        rewardPerTokenPaid,
-        rewards,
+        amount: new BigNumber(amount.toString()),
+        amountWithBoost: new BigNumber(amountWithBoost.toString()),
+        rewardPerTokenPaid: new BigNumber(
+          rewardPerTokenPaid.toString()
+        ),
+        rewards: new BigNumber(rewards.toString()),
         unbondTimestamp,
         lock,
       })
@@ -62,13 +64,17 @@ export const fetchStakerUserData = async (
       .div(new BigNumber(10).pow(6)) // convert from 6 decimals
       .multipliedBy(new BigNumber(sommPrice))
 
+    const convertedClaimAllRewards = claimAllRewards.map(
+      (item) => new BigNumber(item.toString())
+    )
+
     const userStakeData: StakerUserData = {
-      claimAllRewards,
+      claimAllRewards: convertedClaimAllRewards,
       claimAllRewardsUSD,
       totalBondedAmount,
       totalClaimAllRewards,
       totalRewards,
-      userStakes,
+      userStakes: userStakesArray,
     }
     return userStakeData
   } catch (error) {

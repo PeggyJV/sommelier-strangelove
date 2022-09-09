@@ -1,17 +1,15 @@
 import BigNumber from "bignumber.js"
-import { BigNumber as BigNumberE } from "ethers"
 
 export interface UserStake {
-  amount: BigNumberE
-  amountWithBoost: BigNumberE
-  rewardPerTokenPaid: BigNumberE
-  rewards: BigNumberE
+  amount: BigNumber
+  amountWithBoost: BigNumber
+  rewardPerTokenPaid: BigNumber
+  rewards: BigNumber
   unbondTimestamp: number
   lock: number
-  // maxDeposit?: BigNumberE
 }
 export interface StakerUserData {
-  claimAllRewards: BigNumberE[]
+  claimAllRewards: BigNumber[]
   claimAllRewardsUSD: BigNumber
   totalBondedAmount: BigNumber
   totalClaimAllRewards: BigNumber
