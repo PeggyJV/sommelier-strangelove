@@ -1,41 +1,19 @@
 import { useQuery } from "@tanstack/react-query"
-import {
-  useAccount,
-  useContract,
-  useProvider,
-  useSigner,
-  useToken,
-} from "wagmi"
+import { useAccount, useToken } from "wagmi"
 import { useCellarShareBalance } from "../cellar/useCellarShareBalance"
 import { calculateUserData } from "src/composite-data/actions/calculate/userData"
 import { useCellarData } from "../cellar/useCellarData"
-import { ContractInterface } from "ethers"
 import { useStakerUserData } from "../staker/useStakerUserData"
 import { useUserBalances } from "./useUserBalances"
 import { useGetPositionQuery } from "generated/subgraph"
 import { ConfigProps } from "data/cellarDataMap"
+import { useCreateContracts } from "./useCreateContracts"
 
 export const useOutputUserData = (config: ConfigProps) => {
   const [{ data: account }] = useAccount()
 
-  const [{ data: signer }] = useSigner()
-  const provider = useProvider()
-
-  const stakerSigner = useContract({
-    addressOrName: config.staker.address,
-    contractInterface: config.staker.abi as ContractInterface,
-    signerOrProvider: signer,
-  })
-  const stakerContract = useContract({
-    addressOrName: config.staker.address,
-    contractInterface: config.staker.abi as ContractInterface,
-    signerOrProvider: provider,
-  })
-  const cellarContract = useContract({
-    addressOrName: config.cellar.address,
-    contractInterface: config.cellar.abi as ContractInterface,
-    signerOrProvider: provider,
-  })
+  const { stakerSigner, stakerContract, cellarContract } =
+    useCreateContracts(config)
 
   const [
     {
