@@ -13,6 +13,7 @@ import { AaveV2CellarProvider } from "context/aaveV2StablecoinCellar"
 import { AaveStakerProvider } from "context/aaveStakerContext"
 import { GlobalFonts } from "theme/GlobalFonts"
 import { GeoProvider } from "context/geoContext"
+import CompositeDataProvider from "src/composite-data/provider/compositeDataProvider"
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -27,7 +28,9 @@ const App = ({ Component, pageProps }: AppProps) => {
               <WagmiProvider>
                 <AaveV2CellarProvider>
                   <AaveStakerProvider>
-                    <Component {...pageProps} />
+                    <CompositeDataProvider>
+                      <Component {...pageProps} />
+                    </CompositeDataProvider>
                   </AaveStakerProvider>
                 </AaveV2CellarProvider>
                 <AlertDialog />
