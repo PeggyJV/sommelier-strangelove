@@ -3,24 +3,14 @@ import { useQuery } from "@tanstack/react-query"
 import { useCellarData } from "../cellar/useCellarData"
 import { useStakerData } from "../staker/useStakerData"
 import { calculateData } from "src/composite-data/actions/calculate/cellarData"
-import { ContractInterface } from "ethers"
-import { useProvider, useContract } from "wagmi"
 import { cellarDataMap, ConfigProps } from "data/cellarDataMap"
+import { useCreateContracts } from "./useCreateContracts"
 
 export const useOutputData = (config: ConfigProps) => {
   const id = config.id.toLowerCase()
-  const provider = useProvider()
 
-  const stakerContract = useContract({
-    addressOrName: config.staker.address,
-    contractInterface: config.staker.abi as ContractInterface,
-    signerOrProvider: provider,
-  })
-  const cellarContract = useContract({
-    addressOrName: config.cellar.address,
-    contractInterface: config.cellar.abi as ContractInterface,
-    signerOrProvider: provider,
-  })
+  const { stakerContract, cellarContract } =
+    useCreateContracts(config)
 
   const stakerData = useStakerData({
     staker: {
