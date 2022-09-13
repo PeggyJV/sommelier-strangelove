@@ -71,14 +71,14 @@ export const calculateData = async ({
         value: cellarCap,
         formatted: `${formatCurrency(cellarCap)} ${activeSymbol}`,
       },
-      currentDepositsVal: {
+      currentDeposits: {
         value: currentDepositsVal,
         formatted: `${formatCurrency(
           currentDepositsVal
         )} ${activeSymbol}`,
       },
       expectedApy: expectedApy.toFixed(1).toString() + "%",
-      tvmVal: {
+      tvm: {
         value: tvmVal,
         formatted: `$${tvmVal} ${activeSymbol}`,
       },
