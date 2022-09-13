@@ -9,8 +9,6 @@ import { AlertDialog } from "components/AlertDialog"
 import { Provider as GraphQLProvider } from "urql"
 import { client as urqlClient } from "queries/client"
 import "utils/analytics"
-import { AaveV2CellarProvider } from "context/aaveV2StablecoinCellar"
-import { AaveStakerProvider } from "context/aaveStakerContext"
 import { GlobalFonts } from "theme/GlobalFonts"
 import { GeoProvider } from "context/geoContext"
 import CompositeDataProvider from "src/composite-data/provider/compositeDataProvider"
@@ -26,13 +24,9 @@ const App = ({ Component, pageProps }: AppProps) => {
             <GlobalFonts />
             <DialogProvider>
               <WagmiProvider>
-                <AaveV2CellarProvider>
-                  <AaveStakerProvider>
-                    <CompositeDataProvider>
-                      <Component {...pageProps} />
-                    </CompositeDataProvider>
-                  </AaveStakerProvider>
-                </AaveV2CellarProvider>
+                <CompositeDataProvider>
+                  <Component {...pageProps} />
+                </CompositeDataProvider>
                 <AlertDialog />
               </WagmiProvider>
             </DialogProvider>

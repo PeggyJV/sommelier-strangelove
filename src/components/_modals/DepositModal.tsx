@@ -30,7 +30,6 @@ import {
 } from "wagmi"
 import { ethers } from "ethers"
 import { useBrandedToast } from "hooks/chakra"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import {
   AlphaRouter,
   AlphaRouterParams,
@@ -56,51 +55,47 @@ import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
-import { useGetCellarQuery } from "generated/subgraph"
 import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
+import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useOutputData } from "src/composite-data/hooks/output/useOutputData"
+import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
 export const DepositModal: VFC<DepositModalProps> = (props) => {
+  const id = useRouter().query.id as string
+  const cellarConfig = cellarDataMap[id].config
+  const cellarName = cellarDataMap[id].name
+
+  const [{ data: signer }] = useSigner()
+  const [{ data: account }] = useAccount()
+  const provider = useProvider()
+
+  const { addToast, update, close, closeAll } = useBrandedToast()
+
+  const [selectedToken, setSelectedToken] =
+    useState<TokenType | null>(null)
   const [showSwapSettings, setShowSwapSettings] = useState(false)
-  const { query } = useRouter()
-  const { id } = query
-  const [{ data }, refetch] = useGetCellarQuery({
-    variables: {
-      cellarAddress: id as string,
-      cellarString: id as string,
-    },
-    pause: typeof id === "undefined",
-  })
   const methods = useForm<FormValues>({
     defaultValues: { slippage: config.SWAP.SLIPPAGE },
   })
   const {
-    register,
     watch,
     handleSubmit,
-    setValue,
-    getValues,
-    control,
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { errors, isSubmitting },
   } = methods
-  const provider = useProvider()
-  const p =
-    (window as any)?.ethereum &&
-    new ethers.providers.Web3Provider((window as any)?.ethereum)
-  const router = new AlphaRouter({
-    chainId: 1,
-    provider: provider as unknown as AlphaRouterParams["provider"],
-  })
-
   const watchDepositAmount = watch("depositAmount")
   const isError =
     errors.depositAmount !== undefined ||
     errors.slippage !== undefined
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
-  const [selectedToken, setSelectedToken] =
-    useState<TokenType | null>(null)
+
+  const router = new AlphaRouter({
+    chainId: 1,
+    provider: provider as unknown as AlphaRouterParams["provider"],
+  })
 
   function trackedSetSelectedToken(value: TokenType | null) {
     if (value && value !== selectedToken) {
@@ -112,16 +107,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     setSelectedToken(value)
   }
 
-  const { addToast, update, close, closeAll } = useBrandedToast()
-  const [{ data: signer }] = useSigner()
-  const [{ data: account }] = useAccount()
-  const {
-    cellarRouterSigner,
-    aaveCellarSigner,
-    cellarData,
-    userData,
-    fetchUserData,
-  } = useAaveV2Cellar()
+  const { cellarRouterSigner, cellarSigner } =
+    useCreateContracts(cellarConfig)
+
+  const outputData = useOutputData(cellarConfig)
+  const outputUserData = useOutputUserData(cellarConfig)
 
   // eslint-disable-next-line no-unused-vars
   const [_, wait] = useWaitForTransaction({
@@ -164,12 +154,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
       const outputToken = new Token(
         1, // chainId
-        cellarData?.activeAsset,
-        userData?.balances?.aAsset?.decimals,
-        userData?.balances?.aAsset?.symbol,
-        userData?.balances?.aAsset?.symbol
+        outputData.data.cellarData?.activeAsset!,
+        outputUserData.data.activeAsset?.decimals!,
+        outputUserData.data.activeAsset?.symbol,
+        outputUserData.data.activeAsset?.symbol
       )
-      console.log({ inputToken, outputToken })
 
       swapRoute = await router.route(
         inputAmt,
@@ -204,7 +193,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
   const isActiveAsset =
     selectedToken?.address?.toLowerCase() ===
-    cellarData?.activeAsset?.toLowerCase()
+    outputData.data.cellarData?.activeAsset?.toLowerCase()
 
   const onSubmit = async (data: any, e: any) => {
     const tokenSymbol = data?.selectedToken?.symbol
@@ -214,7 +203,6 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     const slippage = data?.slippage
 
     if (!erc20Contract) return
-
     analytics.track("deposit.started", {
       stable: tokenSymbol,
       value: depositAmount,
@@ -224,8 +212,8 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     const allowance = await erc20Contract.allowance(
       account?.address,
       isActiveAsset
-        ? config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS
-        : config.CONTRACT.CELLAR_ROUTER.ADDRESS
+        ? cellarConfig.cellar.address
+        : cellarConfig.cellarRouter.address
     )
 
     const amtInWei = ethers.utils.parseUnits(
@@ -250,8 +238,8 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       try {
         const { hash } = await erc20Contract.approve(
           isActiveAsset
-            ? config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS
-            : config.CONTRACT.CELLAR_ROUTER.ADDRESS,
+            ? cellarConfig.cellar.address
+            : cellarConfig.cellarRouter.address,
           ethers.constants.MaxUint256
         )
         addToast({
@@ -312,10 +300,9 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       depositParams = [amtInWei, account?.address]
     } else {
       const swapRoute = await getSwapRoute()
-
       if (!swapRoute?.route || swapRoute?.error) {
         addToast({
-          heading: "Aave V2 Cellar Deposit",
+          heading: cellarName + " Cellar Deposit",
           body: <Text>Failed to fetch Swap Data</Text>,
           status: "error",
           closeHandler: closeAll,
@@ -331,11 +318,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         .divide(100_00)
       const minAmountOutInWei = ethers.utils.parseUnits(
         minAmountOut.toExact(),
-        userData?.balances?.aAsset?.decimals
+        outputUserData.data.activeAsset?.decimals
       )
 
       depositParams = [
-        config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+        cellarConfig.cellar.address,
         swapRoute.tokenPath,
         swapRoute.poolFees,
         amtInWei,
@@ -346,19 +333,18 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
     try {
       const inputToken = selectedToken?.address
-      const outputToken = cellarData?.activeAsset
-
+      const outputToken = outputData.data.cellarData?.activeAsset
       // If selected token is cellar's current asset, it is cheapter to deposit into the cellar
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
       const { hash: depositConf } = isActiveAsset
-        ? await aaveCellarSigner.deposit(...depositParams)
+        ? await cellarSigner.deposit(...depositParams)
         : await cellarRouterSigner.depositAndSwapIntoCellar(
             ...depositParams
           )
 
       addToast({
-        heading: "Aave V2 Cellar Deposit",
+        heading: cellarName + " Cellar Deposit",
         status: "default",
         body: <Text>Depositing {selectedToken?.symbol}</Text>,
         isLoading: true,
@@ -377,11 +363,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           value: depositAmount,
         })
 
-        refetch()
+        outputData.refetch()
         props.onClose()
 
         update({
-          heading: "Aave V2 Cellar Deposit",
+          heading: cellarName + " Cellar Deposit",
           body: (
             <>
               <Text>Deposit Success</Text>
@@ -402,7 +388,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         })
       }
 
-      fetchUserData()
+      outputUserData.refetch()
 
       if (depositResult?.error) {
         analytics.track("deposit.failed", {
@@ -411,7 +397,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         })
 
         update({
-          heading: "Aave V2 Cellar Deposit",
+          heading: cellarName + " Cellar Deposit",
           body: <Text>Deposit Failed</Text>,
           status: "error",
           closeHandler: closeAll,
@@ -419,7 +405,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       }
     } catch (e) {
       addToast({
-        heading: "Aave V2 Cellar Deposit",
+        heading: cellarName + " Cellar Deposit",
         body: <Text>Deposit Cancelled</Text>,
         status: "error",
         closeHandler: closeAll,
@@ -433,16 +419,19 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     // gasFailure
     // onChain assert
     addToast({
-      heading: "Aave V2 Cellar Deposit",
+      heading: cellarName + " Cellar Deposit",
       body: <Text>Deposit Failed</Text>,
       status: "error",
       closeHandler: closeAll,
     })
   }
 
-  const { loading, maxDeposit } = userData || {}
-  const { activeAsset } = cellarData || {}
-  const currentAsset = getCurrentAsset(tokenConfig, activeAsset)
+  const loading = outputData.isLoading || outputUserData.isLoading
+
+  const currentAsset = getCurrentAsset(
+    tokenConfig,
+    outputData.data.cellarData?.activeAsset
+  )
 
   // Move active asset to top of token list.
   useEffect(() => {
@@ -457,7 +446,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       0,
       tokenConfig.splice(indexOfActiveAsset, 1)[0]
     )
-  }, [activeAsset, currentAsset])
+  }, [outputData.data.cellarData?.activeAsset, currentAsset])
 
   // Close swap settings card if user changed current asset to active asset.
   useEffect(() => {
@@ -472,7 +461,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           <CardHeading>cellar details</CardHeading>
           <HStack justify="space-between">
             <Text as="span">Cellar</Text>
-            <Text as="span">aave2-CLR-S</Text>
+            <Text as="span">{cellarName}-CLR-S</Text>
           </HStack>
           <HStack justify="space-between">
             <Text as="span">Active token strategy</Text>
@@ -523,7 +512,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
             <ModalMenu
               setSelectedToken={trackedSetSelectedToken}
-              activeAsset={activeAsset}
+              activeAsset={outputData.data.cellarData?.activeAsset}
               selectedTokenBalance={selectedTokenBalance}
             />
             <FormErrorMessage color="energyYellow">
