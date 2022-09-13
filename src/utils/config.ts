@@ -2,6 +2,7 @@ import aaveV2CellarAbi from "../abi/aaveV2Cellar-v2.json"
 import cellarRouter from "../abi/cellarRouter.json"
 import sommStaking from "../abi/sommStaking.json"
 import gravityBridge from "../abi/gravityBridge.json"
+import v1_5TestCellar from "../abi/v1_5TestCellar.json"
 import { erc20ABI } from "wagmi"
 
 /** Ensure Checksum Address  */
@@ -29,6 +30,10 @@ export const config = {
       // ADDRESS: "0xCEe04d9b75C282A630bA10583a3aC2C3c3599939",
       ADDRESS: "0x24691a00779d375A5447727E1610d327D04B3C5F",
       ABI: sommStaking,
+    },
+    V1_5_TEST_CELLAR: {
+      ADDRESS: "0xbc5d133107deebc4525b6f8c1b8209e6f34104a1",
+      ABI: v1_5TestCellar,
     },
     USDC: {
       ADDRESS: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
