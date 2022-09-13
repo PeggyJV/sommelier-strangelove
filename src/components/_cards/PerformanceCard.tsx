@@ -11,11 +11,11 @@ import { CardDivider } from "components/_layout/CardDivider"
 import { TransparentCard } from "./TransparentCard"
 import { TVLChart } from "components/_charts/TVLChart"
 import { CardHeading } from "components/_typography/CardHeading"
-import { usePerformanceChart } from "context/performanceChartContext"
 import { analytics } from "utils/analytics"
+import { usePerformanceChartByAddress } from "src/composite-data/context/performanceChartByAddressContext"
 
 export const PerformanceCard: VFC<BoxProps> = (props) => {
-  const { timeArray, tvl } = usePerformanceChart()
+  const { timeArray, tvl } = usePerformanceChartByAddress()
   const [timeline, setTimeline] = useState<string>("Day")
 
   return (

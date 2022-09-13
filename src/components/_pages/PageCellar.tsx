@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react"
+import { VFC } from "react"
 import {
   Box,
   Heading,
@@ -14,22 +14,13 @@ import { Section } from "components/_layout/Section"
 import { useConnect } from "wagmi"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/cellars/[id]"
-import { useGetCellarQuery } from "generated/subgraph"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"
 import { CellarStats } from "components/CellarStats"
-import { formatCurrency } from "utils/formatCurrency"
-import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
-import { getCalulatedTvl } from "utils/bigNumber"
-import { PerformanceChartProvider } from "context/performanceChartContext"
-import BigNumber from "bignumber.js"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
-import { useAaveStaker } from "context/aaveStakerContext"
-import { tokenConfig } from "data/tokenConfig"
-import { getCurrentAsset } from "utils/getCurrentAsset"
 import { CoinImage } from "components/_cards/CellarCard/CoinImage"
-import { getExpectedApy } from "utils/cellarApy"
+import { useOutputData } from "src/composite-data/hooks/output/useOutputData"
+import { PerformanceChartByAddressProvider } from "src/composite-data/context/performanceChartByAddressContext"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -42,82 +33,10 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const [auth] = useConnect()
   const isConnected = auth.data.connected
   const { cellar: staticCellar } = staticData
-  const { cellarData, userData, aaveV2CellarContract } =
-    useAaveV2Cellar()
-  const { userStakeData } = useAaveStaker()
-  const { id, name } = staticCellar!
-  const [cellarResult] = useGetCellarQuery({
-    variables: {
-      cellarAddress: id,
-      cellarString: id,
-    },
-  })
-  const { data } = cellarResult
-  const { cellar } = data || {}
-  const {
-    dayDatas,
-    tvlTotal,
-    liquidityLimit,
-    addedLiquidityAllTime,
-    removedLiquidityAllTime,
-    asset,
-  } = cellar || {}
-  const { activeAsset } = cellarData || {}
-  const [cellarShareBalance, setCellarSharesBalance] =
-    useState<BigNumber>(new BigNumber("0"))
+  const { id } = staticCellar!
 
-  useEffect(() => {
-    const fn = async () => {
-      try {
-        const cellarShareBalance =
-          await aaveV2CellarContract.convertToAssets(
-            new BigNumber(userData?.balances?.aaveClr || 0)
-              .plus(userStakeData?.totalBondedAmount?.toString() || 0)
-              .toFixed()
-          )
-
-        setCellarSharesBalance(cellarShareBalance)
-      } catch (e) {
-        console.warn("Error converting shares to assets", e)
-      }
-    }
-
-    void fn()
-  }, [
-    aaveV2CellarContract,
-    userData?.balances?.aAsset?.decimals,
-    userData?.balances?.aaveClr,
-    userStakeData?.totalBondedAmount,
-  ])
-
-  const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
-  const tvmVal = formatCurrency(calculatedTvl)
-  // const apy = data && averageApy(dayDatas!).toFixed(2)
-  const currentDepositsVal = formatCurrentDeposits(
-    addedLiquidityAllTime,
-    removedLiquidityAllTime
-  )
-  const cellarCap =
-    liquidityLimit &&
-    new BigNumber(liquidityLimit)
-      .dividedBy(10 ** (asset?.decimals || 0))
-      .toString()
-  const { name: nameAbbreviated } = cellarDataMap[id]
-  const activeSymbol =
-    activeAsset && getCurrentAsset(tokenConfig, activeAsset)?.symbol
-
-  // Staker Info
-  const { stakerData } = useAaveStaker()
-  const {
-    potentialStakingApy,
-    loading: stakerDataLoading,
-    error,
-  } = stakerData
-
-  const { expectedApy, formattedCellarApy, formattedStakingApy } =
-    getExpectedApy(cellarData.apy, potentialStakingApy)
-
-  const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${formattedCellarApy}%) and Liquidity Mining Rewards (${formattedStakingApy}%)`
+  const cellarConfig = cellarDataMap[id].config
+  const outputData = useOutputData(cellarConfig)
 
   return (
     <Layout>
@@ -131,7 +50,9 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           rowGap={4}
         >
           <VStack spacing={6} align="flex-start">
-            <BreadCrumb cellarName={name} />
+            <BreadCrumb
+              cellarName={outputData.data.staticCellarData.name}
+            />
             <HStack spacing={4}>
               <Box
                 display="flex"
@@ -141,7 +62,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
               >
                 <CoinImage mb={3} />
                 <Heading fontSize="2.5rem">
-                  {nameAbbreviated}{" "}
+                  {outputData.data.staticCellarData.name}{" "}
                   <Text
                     as="span"
                     textTransform="uppercase"
@@ -155,26 +76,29 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             </HStack>
           </VStack>
           <CellarStats
-            tvm={tvmVal ? `$${tvmVal} ${activeSymbol}` : <Spinner />}
-            apy={
-              stakerDataLoading || cellarData.loading ? (
-                <Spinner />
+            tvm={
+              outputData.data.tvm ? (
+                `${outputData.data.tvm.formatted}`
               ) : (
-                expectedApy.toFixed(1).toString() + "%"
+                <Spinner />
               )
             }
-            apyTooltip={apyLabel}
-            currentDeposits={currentDepositsVal}
-            cellarCap={cellarCap}
-            asset={activeSymbol}
+            apy={
+              outputData.isLoading ? (
+                <Spinner />
+              ) : (
+                outputData.data.expectedApy
+              )
+            }
+            apyTooltip={outputData.data.apyLabel}
+            currentDeposits={outputData.data.currentDeposits?.value}
+            cellarCap={outputData.data.cellarCap?.value}
+            asset={outputData.data.activeSymbol}
           />
         </HStack>
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles}>Your Portfolio</Heading>
-          <PortfolioCard
-            isConnected={isConnected}
-            cellarShareBalance={cellarShareBalance}
-          />
+          <PortfolioCard isConnected={isConnected} />
         </VStack>
       </Section>
       <Section>
@@ -186,12 +110,12 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             cellarDataMap={cellarDataMap}
             cellarId={id}
           />
-          <PerformanceChartProvider>
+          <PerformanceChartByAddressProvider address={id}>
             <Heading pt={12} {...h2Styles}>
               Cellar Performance
             </Heading>
             <PerformanceCard />
-          </PerformanceChartProvider>
+          </PerformanceChartByAddressProvider>
         </VStack>
       </Section>
     </Layout>
