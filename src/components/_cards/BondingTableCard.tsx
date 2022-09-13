@@ -15,12 +15,15 @@ import {
   Heading,
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "utils/formatCurrency"
 import { useHandleTransaction } from "hooks/web3"
 import { InformationIcon } from "components/_icons"
 import { InnerCard } from "./InnerCard"
 import { analytics } from "utils/analytics"
+import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
+import { useRouter } from "next/router"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -33,10 +36,12 @@ const formatTrancheNumber = (number: number): string => {
 }
 
 const BondingTableCard: VFC<TableProps> = (props) => {
-  const { userStakeData, aaveStakerSigner, fetchUserStakes } =
-    useAaveStaker()
+  const id = useRouter().query.id as string
+  const cellarConfig = cellarDataMap[id].config
+  const { stakerSigner } = useCreateContracts(cellarConfig)
+  const outputUserData = useOutputUserData(cellarConfig)
+
   const { doHandleTransaction } = useHandleTransaction()
-  const { userStakes, claimAllRewards } = userStakeData
   const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
     new Set()
   )
@@ -52,7 +57,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         return newState
       })
       analytics.track("unstake.started")
-      const tx = await aaveStakerSigner.unstake(id)
+      const tx = await stakerSigner.unstake(id)
 
       await doHandleTransaction({
         ...tx,
@@ -64,7 +69,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.delete(id)
         return newState
       })
-      fetchUserStakes()
+      outputUserData.refetch()
     } catch (error) {
       setUnstakeLoading((oldState) => {
         const newState = new Set(oldState)
@@ -82,7 +87,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         return newState
       })
       analytics.track("unbond.started")
-      const tx = await aaveStakerSigner.unbond(id, {
+      const tx = await stakerSigner.unbond(id, {
         // gas used around 63000
         gasLimit: 80000,
       })
@@ -97,7 +102,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.delete(id)
         return newState
       })
-      fetchUserStakes()
+      outputUserData.refetch()
     } catch (error) {
       setUnbondLoading((oldState) => {
         const newState = new Set(oldState)
@@ -227,61 +232,66 @@ const BondingTableCard: VFC<TableProps> = (props) => {
             </Tr>
           </Thead>
           <Tbody fontWeight="bold">
-            {userStakes?.length &&
-              userStakes.map((data, i) => {
-                const { amount, lock, rewards, unbondTimestamp } =
-                  data
-                const lockMap: { [key: string]: string } = {
-                  "0": "7 days",
-                  "1": "14 days",
-                  "2": "21 days",
-                }
-                // const unbondTime = new Date(
-                //   unbondTimestamp * 1000
-                // ).toLocaleDateString()
+            {outputUserData.data.userStake?.userStakes?.length &&
+              outputUserData.data.userStake?.userStakes.map(
+                (data, i) => {
+                  const { amount, lock, rewards, unbondTimestamp } =
+                    data
+                  const lockMap: { [key: string]: string } = {
+                    "0": "7 days",
+                    "1": "14 days",
+                    "2": "21 days",
+                  }
+                  // const unbondTime = new Date(
+                  //   unbondTimestamp * 1000
+                  // ).toLocaleDateString()
 
-                // const unbondTimeHasElapsed =
-                //   unbondTimestamp * 1000 < Date.now()
-                if (amount?.toString() === "0") return null
-                return (
-                  <Tr
-                    key={i}
-                    _hover={{
-                      bg: "surface.secondary",
-                      "td:first-of-type": {
-                        borderRadius: "32px 0 0 32px",
-                        overflow: "hidden",
-                      },
-                      "td:last-of-type": {
-                        borderRadius: "0 32px 32px 0",
-                        overflow: "hidden",
-                      },
-                    }}
-                    _last={{
-                      border: "none",
-                    }}
-                  >
-                    <Td>#{formatTrancheNumber(i + 1)}</Td>
-                    <Td>{toEther(amount)}</Td>
-                    <Td>{lockMap[lock?.toString()]}</Td>
-                    <Td>
-                      {claimAllRewards
-                        ? toEther(
-                            claimAllRewards[i]?.toString() || "0",
-                            6,
-                            false,
-                            2
-                          )
-                        : "0.00"}
-                    </Td>
-                    <Td fontWeight="normal">
-                      <Flex justify="flex-end">
-                        {renderBondAction(unbondTimestamp, i)}
-                      </Flex>
-                    </Td>
-                  </Tr>
-                )
-              })}
+                  // const unbondTimeHasElapsed =
+                  //   unbondTimestamp * 1000 < Date.now()
+                  if (amount?.toString() === "0") return null
+                  return (
+                    <Tr
+                      key={i}
+                      _hover={{
+                        bg: "surface.secondary",
+                        "td:first-of-type": {
+                          borderRadius: "32px 0 0 32px",
+                          overflow: "hidden",
+                        },
+                        "td:last-of-type": {
+                          borderRadius: "0 32px 32px 0",
+                          overflow: "hidden",
+                        },
+                      }}
+                      _last={{
+                        border: "none",
+                      }}
+                    >
+                      <Td>#{formatTrancheNumber(i + 1)}</Td>
+                      <Td>{toEther(amount.toString())}</Td>
+                      <Td>{lockMap[lock?.toString()]}</Td>
+                      <Td>
+                        {outputUserData.data.userStake
+                          ?.claimAllRewards
+                          ? toEther(
+                              outputUserData.data.userStake?.claimAllRewards[
+                                i
+                              ]?.toString() || "0",
+                              6,
+                              false,
+                              2
+                            )
+                          : "0.00"}
+                      </Td>
+                      <Td fontWeight="normal">
+                        <Flex justify="flex-end">
+                          {renderBondAction(unbondTimestamp, i)}
+                        </Flex>
+                      </Td>
+                    </Tr>
+                  )
+                }
+              )}
           </Tbody>
         </Table>
       </TableContainer>
