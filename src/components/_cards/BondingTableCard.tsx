@@ -41,6 +41,9 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const outputUserData = useOutputUserData(cellarConfig)
 
+  const { userStake } = outputUserData.data || {}
+  const { userStakes } = outputUserData.data.userStake || {}
+
   const { doHandleTransaction } = useHandleTransaction()
   const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
     new Set()
@@ -232,66 +235,57 @@ const BondingTableCard: VFC<TableProps> = (props) => {
             </Tr>
           </Thead>
           <Tbody fontWeight="bold">
-            {outputUserData.data.userStake?.userStakes?.length &&
-              outputUserData.data.userStake?.userStakes.map(
-                (data, i) => {
-                  const { amount, lock, rewards, unbondTimestamp } =
-                    data
-                  const lockMap: { [key: string]: string } = {
-                    "0": "7 days",
-                    "1": "14 days",
-                    "2": "21 days",
-                  }
-                  // const unbondTime = new Date(
-                  //   unbondTimestamp * 1000
-                  // ).toLocaleDateString()
-
-                  // const unbondTimeHasElapsed =
-                  //   unbondTimestamp * 1000 < Date.now()
-                  if (amount?.toString() === "0") return null
-                  return (
-                    <Tr
-                      key={i}
-                      _hover={{
-                        bg: "surface.secondary",
-                        "td:first-of-type": {
-                          borderRadius: "32px 0 0 32px",
-                          overflow: "hidden",
-                        },
-                        "td:last-of-type": {
-                          borderRadius: "0 32px 32px 0",
-                          overflow: "hidden",
-                        },
-                      }}
-                      _last={{
-                        border: "none",
-                      }}
-                    >
-                      <Td>#{formatTrancheNumber(i + 1)}</Td>
-                      <Td>{toEther(amount.toString())}</Td>
-                      <Td>{lockMap[lock?.toString()]}</Td>
-                      <Td>
-                        {outputUserData.data.userStake
-                          ?.claimAllRewards
-                          ? toEther(
-                              outputUserData.data.userStake?.claimAllRewards[
-                                i
-                              ]?.toString() || "0",
-                              6,
-                              false,
-                              2
-                            )
-                          : "0.00"}
-                      </Td>
-                      <Td fontWeight="normal">
-                        <Flex justify="flex-end">
-                          {renderBondAction(unbondTimestamp, i)}
-                        </Flex>
-                      </Td>
-                    </Tr>
-                  )
+            {userStakes?.length &&
+              userStakes.map((data, i) => {
+                const { amount, lock, rewards, unbondTimestamp } =
+                  data
+                const lockMap: { [key: string]: string } = {
+                  "0": "7 days",
+                  "1": "14 days",
+                  "2": "21 days",
                 }
-              )}
+                if (amount?.toString() === "0") return null
+                return (
+                  <Tr
+                    key={i}
+                    _hover={{
+                      bg: "surface.secondary",
+                      "td:first-of-type": {
+                        borderRadius: "32px 0 0 32px",
+                        overflow: "hidden",
+                      },
+                      "td:last-of-type": {
+                        borderRadius: "0 32px 32px 0",
+                        overflow: "hidden",
+                      },
+                    }}
+                    _last={{
+                      border: "none",
+                    }}
+                  >
+                    <Td>#{formatTrancheNumber(i + 1)}</Td>
+                    <Td>{toEther(amount.toString())}</Td>
+                    <Td>{lockMap[lock?.toString()]}</Td>
+                    <Td>
+                      {userStake?.claimAllRewards
+                        ? toEther(
+                            userStake.claimAllRewards[
+                              i
+                            ]?.toString() || "0",
+                            6,
+                            false,
+                            2
+                          )
+                        : "0.00"}
+                    </Td>
+                    <Td fontWeight="normal">
+                      <Flex justify="flex-end">
+                        {renderBondAction(unbondTimestamp, i)}
+                      </Flex>
+                    </Td>
+                  </Tr>
+                )
+              })}
           </Tbody>
         </Table>
       </TableContainer>
