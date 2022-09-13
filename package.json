@@ -53,8 +53,7 @@
     "react-jazzicon": "^1.0.4",
     "slugify": "^1.6.5",
     "urql": "^2.2.0",
-    "wagmi": "0.2.18",
-    "zustand": "3.7.1"
+    "wagmi": "0.2.18"
   },
   "devDependencies": {
     "@chakra-ui/cli": "1.9.0",
