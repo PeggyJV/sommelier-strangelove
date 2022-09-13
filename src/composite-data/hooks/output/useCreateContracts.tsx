@@ -27,7 +27,7 @@ export const useCreateContracts = (config: ConfigProps) => {
     signerOrProvider: provider,
   })
   const cellarRouterSigner = useContract({
-    addressOrName: config.cellar.address,
+    addressOrName: config.cellarRouter.address,
     contractInterface: config.cellarRouter.abi as ContractInterface,
     signerOrProvider: signer,
   })
