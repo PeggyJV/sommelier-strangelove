@@ -25,6 +25,7 @@ export interface ConfigProps {
     abi: unknown
     key: StakerKey
   }
+  rewardTokenAddress: string
 }
 export interface CellarDataMap {
   [key: string]: {
@@ -113,6 +114,7 @@ export const cellarDataMap: CellarDataMap = {
         abi: config.CONTRACT.AAVE_STAKER.ABI,
         key: "AAVE_STAKER",
       },
+      rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     },
   },
 }
