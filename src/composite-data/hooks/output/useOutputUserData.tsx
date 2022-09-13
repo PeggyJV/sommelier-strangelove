@@ -116,8 +116,10 @@ export const useOutputUserData = (config: ConfigProps) => {
 
   const result = {
     ...query.data,
+    userStake: userStakeData.data,
     activeAsset: aAssetToken,
     lpToken,
+    positionData,
   }
 
   const refetchAll = () => {
