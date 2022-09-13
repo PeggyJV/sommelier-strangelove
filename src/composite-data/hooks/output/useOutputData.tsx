@@ -106,6 +106,7 @@ export const useOutputData = (config: ConfigProps) => {
 
   const result = {
     staticCellarData,
+    cellarData: cellarData.data,
     ...queryCalculate.data,
   }
 
