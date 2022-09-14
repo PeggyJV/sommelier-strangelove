@@ -1,10 +1,12 @@
 import { ModalProps, Text, VStack } from "@chakra-ui/react"
 import { WithdrawForm } from "components/_forms/WithdrawForm"
 import { CardHeading } from "components/_typography/CardHeading"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { VFC } from "react"
 import { BaseModal } from "./BaseModal"
 import { toEther } from "utils/formatCurrency"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useRouter } from "next/router"
+import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
 
 type WithdrawModalProps = Pick<ModalProps, "isOpen" | "onClose"> & {
   onCloseProp: () => void
@@ -15,7 +17,10 @@ export const WithdrawModal: VFC<WithdrawModalProps> = ({
   onClose,
   onCloseProp,
 }) => {
-  const { userData } = useAaveV2Cellar()
+  const id = useRouter().query.id as string
+  const cellarConfig = cellarDataMap[id].config
+  const { lpToken } = useUserBalances(cellarConfig)
+  const [{ data: lpTokenData, loading }] = lpToken
 
   return (
     <BaseModal heading="Withdraw" isOpen={isOpen} onClose={onClose}>
@@ -23,8 +28,10 @@ export const WithdrawModal: VFC<WithdrawModalProps> = ({
         <VStack align="flex-start">
           <CardHeading>available</CardHeading>
           <Text as="span">
-            {toEther(userData?.balances?.aaveClr, 18, false)} LP
-            TOKENS
+            {loading
+              ? "..."
+              : toEther(lpTokenData?.formatted, 18, false)}{" "}
+            LP TOKENS
           </Text>
         </VStack>
       </VStack>

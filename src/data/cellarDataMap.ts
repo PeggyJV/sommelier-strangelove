@@ -1,4 +1,32 @@
 import { config } from "utils/config"
+
+// if there is a new abi, add the key here (ex: "AAVE_V2_STABLE_CELLAR" | "AAVE_V1_STABLE_CELLAR")
+type CellarRouterKey = "CELLAR_ROUTER"
+type CellarKey = "AAVE_V2_STABLE_CELLAR"
+type StakerKey = "AAVE_STAKER"
+
+export interface ConfigProps {
+  id: string
+  lpToken: {
+    address: string
+  }
+  cellarRouter: {
+    address: string
+    abi: unknown
+    key: CellarRouterKey
+  }
+  cellar: {
+    address: string
+    abi: unknown
+    key: CellarKey
+  }
+  staker: {
+    address: string
+    abi: unknown
+    key: StakerKey
+  }
+  rewardTokenAddress: string
+}
 export interface CellarDataMap {
   [key: string]: {
     name: string
@@ -22,6 +50,7 @@ export interface CellarDataMap {
       href?: string
       tooltip?: string
     }
+    config: ConfigProps
   }
 }
 
@@ -64,6 +93,28 @@ export const cellarDataMap: CellarDataMap = {
       href: "https://7seas.capital/",
       tooltip:
         "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
+    },
+    config: {
+      id: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+      lpToken: {
+        address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+      },
+      cellarRouter: {
+        address: config.CONTRACT.CELLAR_ROUTER.ADDRESS,
+        abi: config.CONTRACT.CELLAR_ROUTER.ABI,
+        key: "CELLAR_ROUTER",
+      },
+      cellar: {
+        address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+        abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
+        key: "AAVE_V2_STABLE_CELLAR",
+      },
+      staker: {
+        address: config.CONTRACT.AAVE_STAKER.ADDRESS,
+        abi: config.CONTRACT.AAVE_STAKER.ABI,
+        key: "AAVE_STAKER",
+      },
+      rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     },
   },
 }

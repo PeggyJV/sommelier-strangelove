@@ -26,8 +26,8 @@ import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { CellarDataMap } from "data/cellarDataMap"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { StrategyProvider } from "components/StrategyProvider"
+import { useOutputData } from "src/composite-data/hooks/output/useOutputData"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -62,8 +62,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const strategyAssets = tokenConfig.filter((token) =>
     supportedChains?.includes(token.symbol)
   )
-  const { cellarData } = useAaveV2Cellar()
-  const { activeAsset } = cellarData
+
+  const outputData = useOutputData(cellarDataMap[cellarId].config)
 
   // Unsure why this was necessary? Nivo acts strangely when there are fewer than three args in an index. Could be refined later.
   const moveColors = (colorTheme: string[]): string[] => {
@@ -131,7 +131,9 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           >
             <TokenAssets
               tokens={strategyAssets}
-              activeAsset={activeAsset}
+              activeAsset={
+                outputData.data.cellarData?.activeAsset || ""
+              }
               displaySymbol
             />
           </CardStat>

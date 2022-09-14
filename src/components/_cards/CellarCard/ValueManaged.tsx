@@ -9,15 +9,9 @@ import {
 } from "@chakra-ui/react"
 import { CurrentDeposits } from "components/CurrentDeposits"
 import { Label } from "./Label"
-import { formatCurrentDeposits } from "utils/formatCurrentDeposits"
-import { useGetCellarQuery } from "generated/subgraph"
 import { InformationIcon } from "components/_icons"
-import BigNumber from "bignumber.js"
 import { cellarDataMap } from "data/cellarDataMap"
-import { formatCurrency } from "utils/formatCurrency"
-import { useAaveStaker } from "context/aaveStakerContext"
-import { getExpectedApy } from "utils/cellarApy"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
+import { useOutputData } from "src/composite-data/hooks/output/useOutputData"
 
 interface Props extends BoxProps {
   cellarId: string
@@ -27,52 +21,14 @@ export const ValueManaged: React.FC<Props> = ({
   cellarId,
   ...rest
 }) => {
-  const [cellarResult] = useGetCellarQuery({
-    variables: {
-      cellarAddress: cellarId,
-      cellarString: cellarId,
-    },
-  })
-  const { data } = cellarResult
-  const { cellar } = data || {}
-  const {
-    liquidityLimit,
-    addedLiquidityAllTime,
-    removedLiquidityAllTime,
-    tvlTotal,
-  } = cellar || {}
-  const currentDepositsVal = formatCurrentDeposits(
-    addedLiquidityAllTime,
-    removedLiquidityAllTime
-  )
-
-  const cellarCap =
-    liquidityLimit &&
-    new BigNumber(liquidityLimit).dividedBy(10 ** 6).toString()
-
-  const tvlString =
-    tvlTotal && new BigNumber(tvlTotal).dividedBy(10 ** 18).toString()
-  const tvm = formatCurrency(tvlString)
-
-  const { cellarApy } = cellarDataMap[cellarId]
-
-  // Staker Info
-  const { stakerData } = useAaveStaker()
-  const { potentialStakingApy, loading: stakerDataLoading } =
-    stakerData
-
-  // Cellar Info
-  const { cellarData } = useAaveV2Cellar()
-
-  const { expectedApy, formattedCellarApy, formattedStakingApy } =
-    getExpectedApy(cellarData.apy, potentialStakingApy)
-
-  const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${formattedCellarApy}%) and Liquidity Mining Rewards (${formattedStakingApy}%)`
-
+  const cellarConfig = cellarDataMap[cellarId].config
+  const outputData = useOutputData(cellarConfig)
   return (
     <Box {...rest}>
       <Flex alignItems="baseline" mb={1}>
-        <Heading size="md">{tvm}</Heading>
+        <Heading size="md">
+          {outputData.data.tvm?.formatted || "..."}
+        </Heading>
         <Tooltip
           hasArrow
           arrowShadowColor="purple.base"
@@ -103,16 +59,16 @@ export const ValueManaged: React.FC<Props> = ({
           alignItems="center"
           columnGap="3px"
         >
-          {stakerDataLoading || cellarData.loading ? (
+          {outputData.isLoading ? (
             <Spinner />
           ) : (
-            expectedApy.toFixed(1).toString() + "%"
+            outputData.data.expectedApy
           )}
         </Heading>
         <Tooltip
           hasArrow
           placement="top"
-          label={apyLabel}
+          label={outputData.data.apyLabel}
           bg="surface.bg"
           color="neutral.300"
         >
@@ -125,8 +81,9 @@ export const ValueManaged: React.FC<Props> = ({
         </Tooltip>
       </Flex>
       <CurrentDeposits
-        currentDeposits={currentDepositsVal}
-        cellarCap={cellarCap}
+        currentDeposits={outputData.data.currentDeposits?.value}
+        cellarCap={outputData.data.cellarCap?.value}
+        asset={outputData.data.activeSymbol}
       />
     </Box>
   )
