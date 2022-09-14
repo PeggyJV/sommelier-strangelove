@@ -5,7 +5,6 @@ import { Label } from "./Label"
 import { useConnect } from "wagmi"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
-import { Apy } from "components/Apy"
 interface Props extends FlexProps {
   data: CellarCardData
 }
@@ -39,8 +38,8 @@ export const Stats: React.FC<Props> = ({
         </Heading>
         <Label color="neutral.300">Your Portfolio</Label>
       </Box>
-
-      <Box>
+      {/* TODO: Verify PNL result */}
+      {/* <Box>
         <Heading
           as="p"
           size="sm"
@@ -65,7 +64,7 @@ export const Stats: React.FC<Props> = ({
         <Label color="neutral.300" whiteSpace="nowrap">
           PNL
         </Label>
-      </Box>
+      </Box> */}
       <Grid backgroundColor="">
         <Heading
           as="p"
