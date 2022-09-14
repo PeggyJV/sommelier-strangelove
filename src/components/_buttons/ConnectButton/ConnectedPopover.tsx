@@ -1,10 +1,12 @@
 import {
+  Avatar,
   Box,
   HStack,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
   Tooltip,
   useToast,
   VStack,
@@ -33,8 +35,14 @@ export const ConnectedPopover = () => {
 
     disconnect()
   }
+
   const walletAddress = account?.data?.address
+  const walletENS = account?.data?.ens
+
   const walletAddressIcon = () => {
+    if (walletENS?.avatar) {
+      return <Avatar boxSize={"16px"} src={walletENS.avatar} />
+    }
     if (walletAddress) {
       return (
         <Jazzicon
@@ -57,6 +65,9 @@ export const ConnectedPopover = () => {
     }
   }
 
+  // to make sure the loading is about not about fetching ENS
+  const isLoading = account.loading && !account.data?.address
+
   return (
     <Popover placement="bottom-end">
       <HStack spacing={2}>
@@ -75,7 +86,11 @@ export const ConnectedPopover = () => {
             borderRadius={12}
             icon={walletAddressIcon}
             minW="max-content"
-            isLoading={account.loading}
+            isLoading={isLoading}
+            // loading state fetching ENS
+            leftIcon={
+              (account.loading && <Spinner size="xs" />) || undefined
+            }
             onClick={handleCopyAddressToClipboard}
             fontFamily="SF Mono"
             fontSize={12}
@@ -84,7 +99,9 @@ export const ConnectedPopover = () => {
               borderColor: "surface.tertiary",
             }}
           >
-            {truncateWalletAddress(walletAddress)}
+            {walletENS?.name
+              ? walletENS.name
+              : truncateWalletAddress(walletAddress)}
           </BaseButton>
         </Tooltip>
         <PopoverTrigger>
@@ -95,7 +112,7 @@ export const ConnectedPopover = () => {
             borderColor="surface.secondary"
             borderRadius={12}
             minW="max-content"
-            isLoading={account.loading}
+            isLoading={isLoading}
             _hover={{
               bg: "purple.dark",
               borderColor: "surface.tertiary",
