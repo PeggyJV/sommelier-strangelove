@@ -20,7 +20,6 @@ import { ImportMetamaskButton } from "components/_buttons/ImportMetamaskButton"
 import { useRouter } from "next/router"
 import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
 import { cellarDataMap } from "data/cellarDataMap"
-import { Apy } from "components/Apy"
 import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
 import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
 
@@ -107,7 +106,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 displaySymbol
               />
             </CardStat>
-            <CardStat
+            {/* TODO: Verify PNL result */}
+            {/* <CardStat
               label="pnl"
               tooltip={`${
                 ((outputUserData.data.pnl &&
@@ -129,7 +129,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               ) : (
                 "--"
               )}
-            </CardStat>
+            </CardStat> */}
             <Stack
               spacing={3}
               direction={{ sm: "row", md: "column", lg: "row" }}
