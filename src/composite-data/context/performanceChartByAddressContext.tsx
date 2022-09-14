@@ -1,8 +1,8 @@
 import { LineProps, Serie } from "@nivo/line"
 import {
-  useGetAllTimeTvlQuery,
-  useGetHourlyTvlQuery,
-  useGetWeeklyTvlQuery,
+  useGetAllTimeTvlByAddressQuery,
+  useGetHourlyTvlByAddressQuery,
+  useGetWeeklyTvlByAdressQuery,
 } from "generated/subgraph"
 import {
   createContext,
@@ -20,7 +20,11 @@ import {
   getPreviousWeek,
 } from "utils/calculateTime"
 import { formatCurrency } from "utils/formatCurrency"
-import { mutateDayData, mutateHourlyData } from "utils/urql"
+import {
+  mutateDayDataByAddress,
+  mutateHourlyData,
+  mutateHourlyDataByAddress,
+} from "utils/urql"
 
 export interface DataProps {
   series?: Serie[]
@@ -128,27 +132,36 @@ const initialData: PerformanceChartContext = {
   ],
 }
 
-const performanceChartContext =
+const performanceChartByAddressContext =
   createContext<PerformanceChartContext>(initialData)
 
-export const PerformanceChartProvider: FC = ({ children }) => {
+export const PerformanceChartByAddressProvider: FC<{
+  address: string
+}> = ({ children, address }) => {
   // GQL Queries
   const [
     { fetching: hourlyIsFetching, data: hourlyData },
     reexecuteHourly,
-  ] = useGetHourlyTvlQuery({
-    variables: { epoch: getPrevious24Hours() },
+  ] = useGetHourlyTvlByAddressQuery({
+    variables: {
+      epoch: getPrevious24Hours(),
+      cellarAddress: address,
+    },
   })
   const [
     { fetching: weeklyIsFetching, data: weeklyData },
     reexecuteWeekly,
-  ] = useGetWeeklyTvlQuery({
-    variables: { epoch: getPreviousWeek() },
+  ] = useGetWeeklyTvlByAdressQuery({
+    variables: { epoch: getPreviousWeek(), cellarAddress: address },
   })
   const [
     { fetching: allTimeIsFetching, data: allTimeData },
     reexecuteAllTime,
-  ] = useGetAllTimeTvlQuery()
+  ] = useGetAllTimeTvlByAddressQuery({
+    variables: {
+      cellarAddress: address,
+    },
+  })
 
   // Set data to be returned by hook
   const [data, setData] = useState<DataProps>({
@@ -204,17 +217,17 @@ export const PerformanceChartProvider: FC = ({ children }) => {
   // Functions to update data returned by hook
   const setDataHourly = () =>
     setData({
-      series: mutateHourlyData(hourlyData),
+      series: mutateHourlyDataByAddress(hourlyData),
       chartProps: hourlyChartProps,
     })
   const setDataWeekly = () =>
     setData({
-      series: mutateDayData(weeklyData),
+      series: mutateDayDataByAddress(weeklyData),
       chartProps: dayChartProps,
     })
   const setDataAllTime = () =>
     setData({
-      series: mutateDayData(allTimeData),
+      series: mutateDayDataByAddress(allTimeData),
       chartProps: allTimeChartProps,
     })
 
@@ -231,7 +244,7 @@ export const PerformanceChartProvider: FC = ({ children }) => {
   ]
 
   return (
-    <performanceChartContext.Provider
+    <performanceChartByAddressContext.Provider
       value={{
         fetching,
         data,
@@ -247,12 +260,12 @@ export const PerformanceChartProvider: FC = ({ children }) => {
       }}
     >
       {children}
-    </performanceChartContext.Provider>
+    </performanceChartByAddressContext.Provider>
   )
 }
 
-export const usePerformanceChart = () => {
-  const context = useContext(performanceChartContext)
+export const usePerformanceChartByAddress = () => {
+  const context = useContext(performanceChartByAddressContext)
 
   if (context === undefined) {
     throw new Error(

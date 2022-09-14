@@ -5,17 +5,11 @@ import { VFC } from "react"
 import { BondButton } from "components/_buttons/BondButton"
 import { InlineImage } from "components/InlineImage"
 import { TransparentCard } from "./TransparentCard"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
-import { useAaveStaker } from "context/aaveStakerContext"
-import { formatUSD, toEther } from "utils/formatCurrency"
-import { ethers } from "ethers"
+import { toEther } from "utils/formatCurrency"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useHandleTransaction } from "hooks/web3"
 import BondingTableCard from "./BondingTableCard"
-import BigNumber from "bignumber.js"
-import { useGetPositionQuery } from "generated/subgraph"
-import { useAccount, useConnect } from "wagmi"
-import { getPNL } from "utils/pnl"
+import { useConnect } from "wagmi"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
@@ -23,83 +17,51 @@ import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { analytics } from "utils/analytics"
 import { ImportMetamaskButton } from "components/_buttons/ImportMetamaskButton"
-import { config } from "utils/config"
+import { useRouter } from "next/router"
+import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
+import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
 
 interface PortfolioCardProps extends BoxProps {
   isConnected?: boolean
-  cellarShareBalance?: BigNumber
 }
 
 export const PortfolioCard: VFC<PortfolioCardProps> = ({
   isConnected,
-  cellarShareBalance,
   ...rest
 }) => {
-  const { userData, cellarData } = useAaveV2Cellar()
-  const { aaveStakerSigner, fetchUserStakes, userStakeData } =
-    useAaveStaker()
-  const { doHandleTransaction } = useHandleTransaction()
-  const { userStakes, totalBondedAmount, claimAllRewardsUSD } =
-    userStakeData
+  const id = useRouter().query.id as string
+  const cellarConfig = cellarDataMap[id].config
+
+  const [auth] = useConnect()
+  const { stakerSigner } = useCreateContracts(cellarConfig)
+
+  const outputUserData = useOutputUserData(cellarConfig)
+  const { lpToken } = useUserBalances(cellarConfig)
+  const [{ data: lpTokenData }] = lpToken
+
+  const lpTokenDisabled =
+    !isConnected || parseInt(toEther(lpTokenData?.formatted, 18)) <= 0
+
   const userRewards =
-    userStakeData?.totalClaimAllRewards &&
-    new BigNumber(userStakeData?.totalClaimAllRewards).toString()
+    outputUserData.data.totalClaimAllRewards?.value.toString()
+
   const claimAllDisabled =
     !isConnected || !userRewards || parseInt(userRewards) <= 0
 
-  const lpTokenDisabled =
-    !isConnected ||
-    parseInt(toEther(userData?.balances?.aaveClr, 18)) <= 0
+  const { doHandleTransaction } = useHandleTransaction()
 
   const handleClaimAll = async () => {
     analytics.track("rewards.claim-started")
-    const tx = await aaveStakerSigner.claimAll()
+    const tx = await stakerSigner.claimAll()
     await doHandleTransaction({
       ...tx,
       onSuccess: () => analytics.track("rewards.claim-succeeded"),
       onError: () => analytics.track("rewards.claim-failed"),
     })
-    fetchUserStakes()
+    outputUserData.refetch()
   }
-
-  const { activeAsset } = cellarData
-
-  // PNL
-  const [{ data: account }] = useAccount()
-  const [auth] = useConnect()
-  const [{ data: positionData }] = useGetPositionQuery({
-    variables: {
-      walletAddress: (account?.address ?? "").toLowerCase(),
-    },
-    pause: false,
-  })
-
-  const userTvl = new BigNumber(cellarShareBalance?.toString() ?? 0)
-
-  const currentUserDeposits = new BigNumber(
-    positionData?.wallet?.currentDeposits ?? 0
-  )
-  // always 18 decimals from subgraph, must be normalized to 6
-  const deposits = currentUserDeposits.div(
-    new BigNumber(10).pow(18 - 6)
-  )
-
-  const pnl = getPNL(userTvl, deposits)
-
-  // netValue = cellarValue + rewardValue
-  let netValue = new BigNumber(
-    toEther(
-      cellarShareBalance?.toString(),
-      userData?.balances?.aAsset?.decimals,
-      false,
-      2
-    )
-  )
-  if (claimAllRewardsUSD) {
-    netValue = netValue.plus(claimAllRewardsUSD)
-  }
-
-  const formattedNetValue = netValue.toFixed(2, 0)
 
   return (
     <TransparentCard p={8} {...rest}>
@@ -125,8 +87,11 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               label="net value"
               tooltip="Current value of your assets in Cellar"
             >
-              {isConnected ? formatUSD(formattedNetValue) : "--"}
+              {isConnected
+                ? outputUserData.data.netValue?.formatted || "..."
+                : "--"}
             </CardStat>
+
             <CardStat
               label="deposit assets"
               tooltip="Accepted deposit assets"
@@ -135,29 +100,36 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
             >
               <TokenAssets
                 tokens={tokenConfig}
-                activeAsset={activeAsset}
+                activeAsset={
+                  outputUserData.data.activeAsset?.address || ""
+                }
                 displaySymbol
               />
             </CardStat>
-            {/* TODO: fix PNL bug: https://github.com/strangelove-ventures/sommelier/issues/131 */}
-            {/* <Box
-              onMouseEnter={debounce(() => {
-                analytics.track("cellar.tooltip-opened-apy")
-              }, 1000)}
+            {/* TODO: Verify PNL result */}
+            {/* <CardStat
+              label="pnl"
+              tooltip={`${
+                ((outputUserData.data.pnl &&
+                  outputUserData.data.pnl.value.toFixed(5, 0)) ||
+                  "...") + "%"
+              }: This represents percentage gains compared to current deposits`}
+              labelProps={{
+                textTransform: "uppercase",
+              }}
             >
-              <CardStat
-                label="pnl"
-                tooltip={`${pnl.toFixed(
-                  5,
-                  0
-                )}%: This represents percentage gains compared to current deposits`}
-                labelProps={{
-                  textTransform: "uppercase",
-                }}
-              >
-                {isConnected ? <Apy apy={pnl.toFixed(2, 1)} /> : "--"}
-              </CardStat>
-            </Box> */}
+              {isConnected ? (
+                <Apy
+                  apy={
+                    (outputUserData.data.pnl &&
+                      `${outputUserData.data.pnl.formatted}`) ||
+                    "..."
+                  }
+                />
+              ) : (
+                "--"
+              )}
+            </CardStat> */}
             <Stack
               spacing={3}
               direction={{ sm: "row", md: "column", lg: "row" }}
@@ -190,16 +162,11 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
               >
                 {isConnected ? (
                   <>
-                    {toEther(
-                      userData?.balances?.aaveClr,
-                      18,
-                      false,
-                      2
-                    )}
+                    {(lpTokenData &&
+                      toEther(lpTokenData.formatted, 18, false, 2)) ||
+                      "..."}
                     <ImportMetamaskButton
-                      address={
-                        config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS
-                      }
+                      address={cellarConfig.lpToken.address}
                     />
                   </>
                 ) : (
@@ -213,15 +180,8 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
               >
                 {isConnected
-                  ? toEther(
-                      ethers.utils.parseUnits(
-                        totalBondedAmount?.toFixed() || "0",
-                        0
-                      ),
-                      18,
-                      false,
-                      2
-                    )
+                  ? outputUserData.data.totalBondedAmount
+                      ?.formatted || "..."
                   : "--"}
               </CardStat>
             </VStack>
@@ -245,15 +205,10 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 />
                 {isConnected ? (
                   <>
-                    {toEther(
-                      userStakeData?.totalClaimAllRewards?.toFixed() ||
-                        "0",
-                      6,
-                      false,
-                      2
-                    )}
+                    {outputUserData.data.totalClaimAllRewards
+                      ?.formatted || "..."}
                     <ImportMetamaskButton
-                      address={config.CONTRACT.SOMMELLIER.ADDRESS}
+                      address={cellarConfig.rewardTokenAddress}
                     />
                   </>
                 ) : (
@@ -269,7 +224,10 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
             </BaseButton>
           </SimpleGrid>
         </CardStatRow>
-        {isConnected && userStakes.length && <BondingTableCard />}
+        {isConnected &&
+          outputUserData.data.userStake?.userStakes.length && (
+            <BondingTableCard />
+          )}
       </VStack>
     </TransparentCard>
   )
