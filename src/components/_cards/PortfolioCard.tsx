@@ -110,7 +110,9 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
             <CardStat
               label="pnl"
               tooltip={`${
-                outputUserData.data.pnl?.formatted || "..."
+                ((outputUserData.data.pnl &&
+                  outputUserData.data.pnl.value.toFixed(5, 0)) ||
+                  "...") + "%"
               }: This represents percentage gains compared to current deposits`}
               labelProps={{
                 textTransform: "uppercase",
@@ -120,10 +122,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                 <Apy
                   apy={
                     (outputUserData.data.pnl &&
-                      `${outputUserData.data.pnl?.value.toFixed(
-                        2,
-                        1
-                      )}%`) ||
+                      `${outputUserData.data.pnl.formatted}`) ||
                     "..."
                   }
                 />

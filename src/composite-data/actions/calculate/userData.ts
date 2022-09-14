@@ -79,7 +79,7 @@ export const calculateUserData = async ({
       const result = getPNL(userTvl, deposits)
       return {
         value: result,
-        formatted: `${result.toFixed(5, 0)}%`,
+        formatted: `${result.toFixed(2, 1)}%`,
       }
     })()
 
@@ -93,7 +93,7 @@ export const calculateUserData = async ({
         value: totalClaimAllRewards,
         formatted: ttlClaimAllrewards,
       },
-      pnl: pnl,
+      pnl,
     }
   } catch (error) {
     console.warn(error)

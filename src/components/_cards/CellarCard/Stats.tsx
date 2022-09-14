@@ -53,7 +53,7 @@ export const Stats: React.FC<Props> = ({
             <Apy
               apy={
                 (outputUserData.data.pnl &&
-                  outputUserData.data.pnl?.value.toFixed(2, 1)) ||
+                  outputUserData.data.pnl?.formatted) ||
                 "..."
               }
               fontSize="inherit"
