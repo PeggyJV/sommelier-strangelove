@@ -22,8 +22,10 @@ import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUser
 import { cellarDataMap } from "data/cellarDataMap"
 import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
 import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
+import { useIsMounted } from "hooks/utils/useIsMounted"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
+  const isMounted = useIsMounted()
   const { isConnected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
@@ -81,9 +83,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               label="net value"
               tooltip="Current value of your assets in Cellar"
             >
-              {isConnected
-                ? outputUserData.data.netValue?.formatted || "..."
-                : "--"}
+              {isMounted &&
+                (isConnected
+                  ? outputUserData.data.netValue?.formatted || "..."
+                  : "--")}
             </CardStat>
 
             <CardStat
@@ -128,16 +131,21 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               spacing={3}
               direction={{ sm: "row", md: "column", lg: "row" }}
             >
-              {isConnected ? (
-                <>
-                  <DepositButton disabled={!isConnected} />
-                  <WithdrawButton disabled={lpTokenDisabled} />
-                </>
-              ) : (
-                connectors.map((c) => (
-                  <ConnectButton connector={c} key={c.id} unstyled />
-                ))
-              )}
+              {isMounted &&
+                (isConnected ? (
+                  <>
+                    <DepositButton disabled={!isConnected} />
+                    <WithdrawButton disabled={lpTokenDisabled} />
+                  </>
+                ) : (
+                  connectors.map((c) => (
+                    <ConnectButton
+                      connector={c}
+                      key={c.id}
+                      unstyled
+                    />
+                  ))
+                ))}
             </Stack>
           </SimpleGrid>
           <SimpleGrid
@@ -154,18 +162,24 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 label="tokens"
                 tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
               >
-                {isConnected ? (
-                  <>
-                    {(lpTokenData &&
-                      toEther(lpTokenData.formatted, 18, false, 2)) ||
-                      "..."}
-                    <ImportMetamaskButton
-                      address={cellarConfig.lpToken.address}
-                    />
-                  </>
-                ) : (
-                  "--"
-                )}
+                {isMounted &&
+                  (isConnected ? (
+                    <>
+                      {(lpTokenData &&
+                        toEther(
+                          lpTokenData.formatted,
+                          18,
+                          false,
+                          2
+                        )) ||
+                        "..."}
+                      <ImportMetamaskButton
+                        address={cellarConfig.lpToken.address}
+                      />
+                    </>
+                  ) : (
+                    "--"
+                  ))}
               </CardStat>
             </VStack>
             <VStack align="flex-start">
@@ -173,13 +187,14 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 label="bonded tokens"
                 tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
               >
-                {isConnected
-                  ? outputUserData.data.totalBondedAmount
-                      ?.formatted || "..."
-                  : "--"}
+                {isMounted &&
+                  (isConnected
+                    ? outputUserData.data.totalBondedAmount
+                        ?.formatted || "..."
+                    : "--")}
               </CardStat>
             </VStack>
-            <BondButton disabled={lpTokenDisabled} />
+            {isMounted && <BondButton disabled={lpTokenDisabled} />}
           </SimpleGrid>
           <SimpleGrid
             templateColumns="max-content"
@@ -197,17 +212,18 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   alt="sommelier logo"
                   boxSize={5}
                 />
-                {isConnected ? (
-                  <>
-                    {outputUserData.data.totalClaimAllRewards
-                      ?.formatted || "..."}
-                    <ImportMetamaskButton
-                      address={cellarConfig.rewardTokenAddress}
-                    />
-                  </>
-                ) : (
-                  "--"
-                )}
+                {isMounted &&
+                  (isConnected ? (
+                    <>
+                      {outputUserData.data.totalClaimAllRewards
+                        ?.formatted || "..."}
+                      <ImportMetamaskButton
+                        address={cellarConfig.rewardTokenAddress}
+                      />
+                    </>
+                  ) : (
+                    "--"
+                  ))}
               </CardStat>
             </VStack>
             <BaseButton
