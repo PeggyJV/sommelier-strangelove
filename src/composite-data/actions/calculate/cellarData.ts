@@ -8,7 +8,7 @@ import { tokenConfig } from "data/tokenConfig"
 import { useBalance } from "wagmi"
 
 interface CalculateDataProps {
-  aAsset?: ReturnType<typeof useBalance>[0]
+  aAsset?: ReturnType<typeof useBalance>["data"]
   activeAsset?: string
   addedLiquidityAllTime?: string
   apy?: BigNumber

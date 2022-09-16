@@ -15,7 +15,7 @@ export const BondModal: VFC<BondModalProps> = (props) => {
   const cellarConfig = cellarDataMap[id].config
 
   const { lpToken } = useUserBalances(cellarConfig)
-  const [{ data: lpTokenData }] = lpToken
+  const { data: lpTokenData } = lpToken
 
   return (
     <BaseModal heading="Bond" {...props}>

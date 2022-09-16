@@ -1,8 +1,8 @@
-import { useWaitForTransaction } from "wagmi"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
 import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
+import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 
 type TxParams = {
   hash: string
@@ -18,7 +18,7 @@ export const useHandleTransaction = (): {
   doHandleTransaction: (T: TxParams) => Promise<void>
 } => {
   const { addToast, update, close, closeAll } = useBrandedToast()
-  // eslint-disable-next-line no-unused-vars
+
   const [_, wait] = useWaitForTransaction({
     skip: true,
   })

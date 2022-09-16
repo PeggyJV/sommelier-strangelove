@@ -42,7 +42,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   } = useForm<FormValues>()
 
   const { addToast, close } = useBrandedToast()
-  const [{ data: account }] = useAccount()
+  const { address } = useAccount()
 
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
@@ -52,7 +52,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken } = useUserBalances(cellarConfig)
-  const [{ data: lpTokenData }] = lpToken
+  const { data: lpTokenData } = lpToken
 
   const { doHandleTransaction } = useHandleTransaction()
 
@@ -68,7 +68,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     setValue("withdrawAmount", amount)
 
     analytics.track("withdraw.max-selected", {
-      account: account?.address,
+      account: address,
       amount,
     })
   }
@@ -76,16 +76,16 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   useEffect(() => {
     if (watchWithdrawAmount != null) {
       analytics.track("withdraw.amount-selected", {
-        account: account?.address,
+        account: address,
         amount: watchWithdrawAmount,
       })
     }
-  }, [watchWithdrawAmount, account])
+  }, [watchWithdrawAmount, address])
 
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (withdrawAmount <= 0) return
 
-    if (!account?.address) {
+    if (!address) {
       addToast({
         heading: "Withdraw Position",
         status: "default",
@@ -98,18 +98,14 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     }
 
     const analyticsData = {
-      account: account.address,
+      account: address,
       amount: withdrawAmount,
     }
 
     analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
-    const tx = await cellarSigner.redeem(
-      amtInWei,
-      account.address,
-      account.address
-    )
+    const tx = await cellarSigner.redeem(amtInWei, address, address)
 
     function onSuccess() {
       analytics.track("withdraw.succeeded", analyticsData)

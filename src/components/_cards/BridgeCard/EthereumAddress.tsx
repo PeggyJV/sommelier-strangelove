@@ -3,7 +3,7 @@ import React from "react"
 import { useAccount } from "wagmi"
 
 export const EthereumAddress: React.FC = () => {
-  const [account] = useAccount()
+  const { address, isConnecting } = useAccount()
   return (
     <Stack spacing={2}>
       <Text fontWeight="bold" color="neutral.400" fontSize="xs">
@@ -17,7 +17,7 @@ export const EthereumAddress: React.FC = () => {
         height="64px"
         alignItems="center"
       >
-        {account.loading ? (
+        {isConnecting ? (
           <Spinner size="xs" />
         ) : (
           <Text
@@ -26,7 +26,7 @@ export const EthereumAddress: React.FC = () => {
             color="neutral.300"
             overflow="auto"
           >
-            {account.data?.address || "--"}
+            {address || "--"}
           </Text>
         )}
       </Flex>

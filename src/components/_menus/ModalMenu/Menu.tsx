@@ -37,29 +37,29 @@ export const Menu: VFC<MenuProps> = ({
   value,
   onChange,
 }) => {
-  const [{ data: account }] = useAccount()
+  const { address } = useAccount()
   const [{ data: depositData }] = useGetCurrentDepositsQuery({
-    variables: { walletAddress: account?.address.toLowerCase()! },
+    variables: { walletAddress: address?.toLowerCase()! },
   })
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const menuDims = useDimensions(menuRef, true)
   const { register, setValue, clearErrors } = useFormContext()
   const availableBalance = `${toEther(
-    selectedTokenBalance?.data?.value,
-    selectedTokenBalance?.data?.decimals
+    selectedTokenBalance?.value,
+    selectedTokenBalance?.decimals
   )}`
   const setMax = () => {
     analytics.track("deposit.max-selected", {
-      value: selectedTokenBalance?.data?.value?.toString(),
+      value: selectedTokenBalance?.value?.toString(),
     })
 
     return setValue(
       "depositAmount",
       parseFloat(
         toEther(
-          selectedTokenBalance?.data?.value,
-          selectedTokenBalance?.data?.decimals,
+          selectedTokenBalance?.value,
+          selectedTokenBalance?.decimals,
           false
         )
       )
@@ -186,8 +186,8 @@ export const Menu: VFC<MenuProps> = ({
                   v <=
                     parseFloat(
                       toEther(
-                        selectedTokenBalance.data?.value || "",
-                        selectedTokenBalance.data?.decimals,
+                        selectedTokenBalance?.value || "",
+                        selectedTokenBalance?.decimals,
                         false
                       )
                     ) || "Insufficient balance"

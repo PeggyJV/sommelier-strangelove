@@ -8,7 +8,7 @@ import { useRouter } from "next/router"
 import { NAV_LINKS } from "utils/navLinks"
 
 export const Nav: VFC<FlexProps> = (props) => {
-  const [auth] = useConnect()
+  const { connectors } = useConnect()
   const [scrolled, setScrolled] = useState<boolean>(false)
 
   const routes = useRouter()
@@ -81,7 +81,7 @@ export const Nav: VFC<FlexProps> = (props) => {
           </HStack>
         </HStack>
 
-        {auth.data.connectors.map((c) => (
+        {connectors.map((c) => (
           <ConnectButton connector={c} key={c.id} />
         ))}
       </Container>

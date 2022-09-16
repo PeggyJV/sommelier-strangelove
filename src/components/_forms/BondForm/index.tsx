@@ -45,7 +45,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken } = useUserBalances(cellarConfig)
-  const [{ data: lpTokenData }] = lpToken
+  const { data: lpTokenData } = lpToken
 
   const methods = useForm<FormValues>({
     defaultValues: { bondingPeriod: 0 },

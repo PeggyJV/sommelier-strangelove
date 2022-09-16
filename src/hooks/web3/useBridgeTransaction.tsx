@@ -2,7 +2,7 @@ import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
 import { config } from "utils/config"
-import { useWaitForTransaction, useContract, useSigner } from "wagmi"
+import { useContract, useSigner } from "wagmi"
 import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
 import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
@@ -12,6 +12,7 @@ import { ethers } from "ethers"
 import { getBytes32 } from "utils/getBytes32"
 import { GravityBridge } from "src/abi/types"
 import { analytics } from "utils/analytics"
+import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 
 export const useBridgeTransaction = () => {
   const { CONTRACT } = config
@@ -20,7 +21,7 @@ export const useBridgeTransaction = () => {
   const { addToast, update, closeAll } = useBrandedToast()
   const [isLoading, setIsLoading] = useState(false)
 
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const [_, wait] = useWaitForTransaction({
     skip: true,
   })

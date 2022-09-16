@@ -2,7 +2,7 @@ import { Heading, Box, Grid, FlexProps } from "@chakra-ui/react"
 import { InlineImage } from "components/InlineImage"
 import { CellarCardData } from "./CellarCardDisplay"
 import { Label } from "./Label"
-import { useConnect } from "wagmi"
+import { useAccount } from "wagmi"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
 interface Props extends FlexProps {
@@ -14,8 +14,7 @@ export const Stats: React.FC<Props> = ({
   children,
   ...rest
 }) => {
-  const [{ data: connectData }] = useConnect()
-  const isConnected = connectData.connected
+  const { isConnected } = useAccount()
 
   const cellarConfig = cellarDataMap[data.cellarId].config
   const outputUserData = useOutputUserData(cellarConfig)

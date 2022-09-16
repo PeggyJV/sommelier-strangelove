@@ -21,12 +21,9 @@ const ConnectButton = ({
 }: ConnectButtonProps) => {
   const { isRestricted } = useGeo() || {}
 
-  const [account] = useAccount({
-    fetchEns: true,
-  })
-  const [{ error, loading, data }, connect] = useConnect()
+  const { isConnected, address, isConnecting } = useAccount()
+  const { error, connect } = useConnect()
   const toast = useToast()
-  const isConnected = data.connected
 
   // on wallet connect error
   React.useEffect(() => {
@@ -49,10 +46,10 @@ const ConnectButton = ({
   React.useEffect(() => {
     if (isConnected) {
       analytics.track("wallet.connect-succeeded", {
-        account: account?.data?.address,
+        account: address,
       })
     }
-  }, [isConnected, account?.data?.address])
+  }, [isConnected, address])
 
   /**
    * - If connector is ready (window.ethereum exists), it'll detect the connector
@@ -67,7 +64,9 @@ const ConnectButton = ({
         {
           onClick: () => {
             analytics.track("wallet.connect-started")
-            connect(c)
+            connect({
+              connector: c,
+            })
           },
         }
       : // connector not ready props
@@ -105,10 +104,10 @@ const ConnectButton = ({
   return (
     <ClientOnly>
       {isConnected ? (
-        account.data && <ConnectedPopover />
+        isConnected && <ConnectedPopover />
       ) : (
         <BaseButton
-          isLoading={loading}
+          isLoading={isConnecting}
           key={c.id}
           disabled={isRestricted}
           {...styles}

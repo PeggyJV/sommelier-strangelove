@@ -7,10 +7,13 @@ export const useImportToken = (address: string) => {
   const toast = useBrandedToast()
 
   const [isLoading, setLoading] = useState(false)
-  const [{ data: tokenData, error, loading: tokenLoading }] =
-    useToken({
-      address,
-    })
+  const {
+    data: tokenData,
+    error,
+    isLoading: tokenLoading,
+  } = useToken({
+    address,
+  })
 
   const loading = tokenLoading || isLoading
 
