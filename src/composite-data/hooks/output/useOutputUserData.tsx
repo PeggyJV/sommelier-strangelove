@@ -10,7 +10,7 @@ import { ConfigProps } from "data/cellarDataMap"
 import { useCreateContracts } from "./useCreateContracts"
 
 export const useOutputUserData = (config: ConfigProps) => {
-  const [{ data: account }] = useAccount()
+  const { address } = useAccount()
 
   const { stakerSigner, stakerContract, cellarContract } =
     useCreateContracts(config)
@@ -23,7 +23,7 @@ export const useOutputUserData = (config: ConfigProps) => {
     },
   ] = useGetPositionQuery({
     variables: {
-      walletAddress: (account?.address ?? "").toLowerCase(),
+      walletAddress: (address ?? "").toLowerCase(),
     },
     pause: false,
   })
@@ -57,10 +57,10 @@ export const useOutputUserData = (config: ConfigProps) => {
       signer: stakerSigner,
     },
     totalBondedAmount: userStakeData.data?.totalBondedAmount,
-    lpToken: lpToken[0],
+    lpToken: lpToken,
   })
 
-  const [{ data: aAssetToken }] = useToken({
+  const { data: aAssetToken } = useToken({
     address: cellarData?.activeAsset,
   })
 
@@ -74,7 +74,7 @@ export const useOutputUserData = (config: ConfigProps) => {
       totalClaimAllRewards: userStakeData.data?.totalClaimAllRewards,
       positionData,
     },
-    account?.address,
+    address,
   ] as const
 
   const query = useQuery(
@@ -107,7 +107,7 @@ export const useOutputUserData = (config: ConfigProps) => {
           userStakeData.data?.claimAllRewardsUSD &&
           userStakeData.data?.totalBondedAmount &&
           userStakeData.data?.totalClaimAllRewards &&
-          account?.address &&
+          address &&
           cellarData &&
           positionData
       ),
@@ -123,7 +123,7 @@ export const useOutputUserData = (config: ConfigProps) => {
   }
 
   const refetchAll = () => {
-    const refetchBalances = lpToken[1]
+    const refetchBalances = lpToken.refetch
     void refetchBalances()
     void cellarShareBalance.refetch()
     void refetchCellarData

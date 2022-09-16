@@ -11,8 +11,7 @@ interface UseCellarUserDataProps {
 export const useCellarUserData = ({
   cellar,
 }: UseCellarUserDataProps) => {
-  const [{ data }] = useAccount()
-  const address = data?.address
+  const { address } = useAccount()
 
   const queryUser = useQuery(
     ["USE_CELLAR_USER_DATA", address],

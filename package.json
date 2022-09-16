@@ -38,7 +38,7 @@
     "analytics": "^0.8.1",
     "bech32": "^2.0.0",
     "bignumber.js": "^9.0.2",
-    "ethers": "^5.5.4",
+    "ethers": "^5.7.1",
     "framer-motion": "6.2.8",
     "graphql": "^16.3.0",
     "graz": "^0.0.14",
@@ -53,7 +53,7 @@
     "react-jazzicon": "^1.0.4",
     "slugify": "^1.6.5",
     "urql": "^2.2.0",
-    "wagmi": "0.2.18"
+    "wagmi": "^0.6.6"
   },
   "devDependencies": {
     "@chakra-ui/cli": "1.9.0",

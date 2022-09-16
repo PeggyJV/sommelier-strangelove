@@ -21,14 +21,14 @@ export const InputAmount: React.FC = () => {
   const { register, setValue, formState } =
     useFormContext<BridgeFormValues>()
 
-  const [account] = useAccount()
-  const [{ data, error, loading }] = useBalance({
-    addressOrName: account.data?.address,
+  const { address, isConnecting } = useAccount()
+  const { data, error, isLoading } = useBalance({
+    addressOrName: address,
     token: "0xa670d7237398238DE01267472C6f13e5B8010FD1",
     watch: true,
   })
 
-  const isBalanceLoading = account.loading || loading
+  const isBalanceLoading = isConnecting || isLoading
 
   const onMaxButtonClick = () => {
     if (!data) return

@@ -3,7 +3,7 @@ import { ContractInterface } from "ethers"
 import { useSigner, useProvider, useContract } from "wagmi"
 
 export const useCreateContracts = (config: ConfigProps) => {
-  const [{ data: signer, loading, error }] = useSigner()
+  const { data: signer } = useSigner()
   const provider = useProvider()
 
   const stakerSigner = useContract({

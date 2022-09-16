@@ -9,7 +9,7 @@ interface UseCellarShareBalanceProps {
   staker: ContractProps
   cellar: Omit<ContractProps, "signer">
   totalBondedAmount?: BigNumber
-  lpToken?: ReturnType<typeof useBalance>[0]
+  lpToken?: ReturnType<typeof useBalance>
 }
 
 export const useCellarShareBalance = ({
@@ -18,13 +18,13 @@ export const useCellarShareBalance = ({
   totalBondedAmount,
   lpToken,
 }: UseCellarShareBalanceProps) => {
-  const [{ data: account }] = useAccount()
+  const { address } = useAccount()
 
   const queryCellarShareBalanceKey = [
     "CELLAR_SHARE_BALANCE",
     lpToken?.data?.formatted,
     totalBondedAmount,
-    account?.address,
+    address,
   ] as const
 
   const queryCellarShareBalance = useQuery(
@@ -45,7 +45,7 @@ export const useCellarShareBalance = ({
       enabled: Boolean(
         lpToken?.data?.formatted &&
           totalBondedAmount &&
-          account?.address &&
+          address &&
           // @ts-ignore we need to make sure the provider is not null
           staker.contract.provider
       ),
@@ -56,7 +56,7 @@ export const useCellarShareBalance = ({
     data: queryCellarShareBalance.data,
     error: queryCellarShareBalance.error,
     isFetching:
-      queryCellarShareBalance.isFetching || lpToken?.loading,
+      queryCellarShareBalance.isFetching || lpToken?.isLoading,
     isLoading: queryCellarShareBalance.isLoading,
     isRefetching: queryCellarShareBalance.isRefetching,
     isSuccess: queryCellarShareBalance.isSuccess,

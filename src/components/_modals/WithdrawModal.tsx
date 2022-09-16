@@ -20,7 +20,7 @@ export const WithdrawModal: VFC<WithdrawModalProps> = ({
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { lpToken } = useUserBalances(cellarConfig)
-  const [{ data: lpTokenData, loading }] = lpToken
+  const { data: lpTokenData, isLoading } = lpToken
 
   return (
     <BaseModal heading="Withdraw" isOpen={isOpen} onClose={onClose}>
@@ -28,7 +28,7 @@ export const WithdrawModal: VFC<WithdrawModalProps> = ({
         <VStack align="flex-start">
           <CardHeading>available</CardHeading>
           <Text as="span">
-            {loading
+            {isLoading
               ? "..."
               : toEther(lpTokenData?.formatted, 18, false)}{" "}
             LP TOKENS

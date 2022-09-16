@@ -11,8 +11,7 @@ interface UseStakerUserDataProps {
 export const useStakerUserData = ({
   staker,
 }: UseStakerUserDataProps) => {
-  const [{ data }] = useAccount()
-  const address = data?.address
+  const { address } = useAccount()
 
   const queryUser = useQuery(
     ["USE_STAKER_USER_DATA", address],

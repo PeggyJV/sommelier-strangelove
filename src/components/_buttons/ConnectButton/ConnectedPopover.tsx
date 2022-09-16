@@ -13,7 +13,12 @@ import {
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import truncateWalletAddress from "src/utils/truncateWalletAddress"
-import { useAccount } from "wagmi"
+import {
+  useAccount,
+  useDisconnect,
+  useEnsAvatar,
+  useEnsName,
+} from "wagmi"
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
 import {
@@ -24,38 +29,38 @@ import { analytics } from "utils/analytics"
 
 export const ConnectedPopover = () => {
   const toast = useToast()
-  const [account, disconnect] = useAccount({
-    fetchEns: true,
+  const { disconnect } = useDisconnect()
+  const { address, isConnecting } = useAccount()
+  const { data: ensName, isLoading: ensNameLoading } = useEnsName({
+    address,
   })
+  const { data: ensAvatar, isLoading: ensAvatarLoading } =
+    useEnsAvatar({
+      addressOrName: address,
+    })
 
   function onDisconnect() {
     analytics.track("wallet.disconnected", {
-      account: account?.data?.address,
+      account: address,
     })
 
     disconnect()
   }
 
-  const walletAddress = account?.data?.address
-  const walletENS = account?.data?.ens
-
   const walletAddressIcon = () => {
-    if (walletENS?.avatar) {
-      return <Avatar boxSize={"16px"} src={walletENS.avatar} />
+    if (ensAvatar) {
+      return <Avatar boxSize={"16px"} src={ensAvatar} />
     }
-    if (walletAddress) {
+    if (address) {
       return (
-        <Jazzicon
-          diameter={16}
-          seed={jsNumberForAddress(walletAddress)}
-        />
+        <Jazzicon diameter={16} seed={jsNumberForAddress(address)} />
       )
     }
   }
 
   const handleCopyAddressToClipboard = () => {
-    if (walletAddress) {
-      navigator.clipboard.writeText(walletAddress)
+    if (address) {
+      navigator.clipboard.writeText(address)
 
       toast({
         title: "Copied to clipboard",
@@ -66,7 +71,8 @@ export const ConnectedPopover = () => {
   }
 
   // to make sure the loading is about not about fetching ENS
-  const isLoading = account.loading && !account.data?.address
+  const isLoading = isConnecting && !address
+  const isEnsLoading = ensAvatarLoading || ensNameLoading
 
   return (
     <Popover placement="bottom-end">
@@ -89,7 +95,10 @@ export const ConnectedPopover = () => {
             isLoading={isLoading}
             // loading state fetching ENS
             leftIcon={
-              (account.loading && <Spinner size="xs" />) || undefined
+              ((isLoading || isEnsLoading) && (
+                <Spinner size="xs" />
+              )) ||
+              undefined
             }
             onClick={handleCopyAddressToClipboard}
             fontFamily="SF Mono"
@@ -99,9 +108,7 @@ export const ConnectedPopover = () => {
               borderColor: "surface.tertiary",
             }}
           >
-            {walletENS?.name
-              ? walletENS.name
-              : truncateWalletAddress(walletAddress)}
+            {ensName ? ensName : truncateWalletAddress(address)}
           </BaseButton>
         </Tooltip>
         <PopoverTrigger>
@@ -139,7 +146,7 @@ export const ConnectedPopover = () => {
         <PopoverBody p={0}>
           <VStack align="flex-start">
             <Link
-              href={`https://etherscan.io/address/${walletAddress}`}
+              href={`https://etherscan.io/address/${address}`}
               isExternal
               py={2}
               px={4}

@@ -9,7 +9,7 @@ import { toEther } from "utils/formatCurrency"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useHandleTransaction } from "hooks/web3"
 import BondingTableCard from "./BondingTableCard"
-import { useConnect } from "wagmi"
+import { useAccount, useConnect } from "wagmi"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
@@ -23,26 +23,20 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
 import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
 
-interface PortfolioCardProps extends BoxProps {
-  isConnected?: boolean
-}
-
-export const PortfolioCard: VFC<PortfolioCardProps> = ({
-  isConnected,
-  ...rest
-}) => {
+export const PortfolioCard: VFC<BoxProps> = (props) => {
+  const { isConnected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const [auth] = useConnect()
+  const { connectors } = useConnect()
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
   const outputUserData = useOutputUserData(cellarConfig)
   const { lpToken } = useUserBalances(cellarConfig)
-  const [{ data: lpTokenData }] = lpToken
+  const { data: lpTokenData } = lpToken
 
   const lpTokenDisabled =
-    !isConnected || parseInt(toEther(lpTokenData?.formatted, 18)) <= 0
+    !lpTokenData || parseInt(toEther(lpTokenData?.formatted, 18)) <= 0
 
   const userRewards =
     outputUserData.data.totalClaimAllRewards?.value.toString()
@@ -64,7 +58,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
   }
 
   return (
-    <TransparentCard p={8} {...rest}>
+    <TransparentCard p={8} {...props}>
       <VStack align="stretch" spacing={8}>
         <CardStatRow
           // px={{ md: 10 }}
@@ -140,7 +134,7 @@ export const PortfolioCard: VFC<PortfolioCardProps> = ({
                   <WithdrawButton disabled={lpTokenDisabled} />
                 </>
               ) : (
-                auth.data.connectors.map((c) => (
+                connectors.map((c) => (
                   <ConnectButton connector={c} key={c.id} unstyled />
                 ))
               )}

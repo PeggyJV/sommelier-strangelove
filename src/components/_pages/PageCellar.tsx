@@ -11,7 +11,6 @@ import {
 import { Layout } from "components/Layout"
 import { PerformanceCard } from "components/_cards/PerformanceCard"
 import { Section } from "components/_layout/Section"
-import { useConnect } from "wagmi"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/cellars/[id]"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"
@@ -30,8 +29,6 @@ const h2Styles: HeadingProps = {
 }
 
 const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
-  const [auth] = useConnect()
-  const isConnected = auth.data.connected
   const { cellar: staticCellar } = staticData
   const { id } = staticCellar!
 
@@ -98,7 +95,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
         </HStack>
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles}>Your Portfolio</Heading>
-          <PortfolioCard isConnected={isConnected} />
+          <PortfolioCard />
         </VStack>
       </Section>
       <Section>

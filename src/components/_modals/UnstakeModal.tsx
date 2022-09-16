@@ -20,7 +20,7 @@ export const UnstakeModal: VFC<UnstakeModalProps> = ({
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { lpToken } = useUserBalances(cellarConfig)
-  const [{ data: lpTokenData }] = lpToken
+  const { data: lpTokenData } = lpToken
 
   return (
     <BaseModal heading="Unstake" isOpen={isOpen} onClose={onClose}>

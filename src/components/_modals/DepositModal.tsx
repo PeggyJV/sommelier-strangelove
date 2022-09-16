@@ -26,7 +26,6 @@ import {
   useAccount,
   useBalance,
   useProvider,
-  useWaitForTransaction,
 } from "wagmi"
 import { ethers } from "ethers"
 import { useBrandedToast } from "hooks/chakra"
@@ -60,6 +59,7 @@ import { useCreateContracts } from "src/composite-data/hooks/output/useCreateCon
 import { cellarDataMap } from "data/cellarDataMap"
 import { useOutputData } from "src/composite-data/hooks/output/useOutputData"
 import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
+import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -68,8 +68,8 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const cellarConfig = cellarDataMap[id].config
   const cellarName = cellarDataMap[id].name
 
-  const [{ data: signer }] = useSigner()
-  const [{ data: account }] = useAccount()
+  const { data: signer } = useSigner()
+  const { address } = useAccount()
   const provider = useProvider()
 
   const { addToast, update, close, closeAll } = useBrandedToast()
@@ -113,20 +113,19 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const outputData = useOutputData(cellarConfig)
   const outputUserData = useOutputUserData(cellarConfig)
 
-  // eslint-disable-next-line no-unused-vars
   const [_, wait] = useWaitForTransaction({
     skip: true,
   })
 
-  const [selectedTokenBalance, getSelectedTokenBalance] = useBalance({
-    addressOrName: account?.address,
+  const { data: selectedTokenBalance } = useBalance({
+    addressOrName: address,
     token: selectedToken?.address,
     formatUnits: "wei",
   })
 
   const erc20Contract =
     selectedToken?.address &&
-    new ethers.Contract(selectedToken?.address, erc20ABI, signer)
+    new ethers.Contract(selectedToken?.address, erc20ABI, signer!)
 
   const getSwapRoute = async () => {
     let error = false
@@ -137,14 +136,14 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         new Token(
           1, // chainId
           selectedToken?.address,
-          selectedTokenBalance?.data?.decimals || 18,
+          selectedTokenBalance?.decimals || 18,
           selectedToken?.symbol,
           selectedToken?.symbol
         )
 
       const amtInWei = ethers.utils.parseUnits(
         watchDepositAmount.toString(),
-        selectedTokenBalance?.data?.decimals
+        selectedTokenBalance?.decimals
       )
 
       const inputAmt = CurrencyAmount.fromRawAmount(
@@ -165,7 +164,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         outputToken,
         TradeType.EXACT_INPUT,
         {
-          recipient: account?.address as string,
+          recipient: address as string,
           slippageTolerance: new Percent(
             // this is done because value must be an integer (eg. 0.5 -> 50)
             config.SWAP.SLIPPAGE * 100,
@@ -210,7 +209,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
     // check if approval exists
     const allowance = await erc20Contract.allowance(
-      account?.address,
+      address,
       isActiveAsset
         ? cellarConfig.cellar.address
         : cellarConfig.cellarRouter.address
@@ -218,7 +217,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
     const amtInWei = ethers.utils.parseUnits(
       depositAmount.toString(),
-      selectedTokenBalance?.data?.decimals
+      selectedTokenBalance?.decimals
     )
 
     let needsApproval
@@ -297,7 +296,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     let depositParams
 
     if (isActiveAsset) {
-      depositParams = [amtInWei, account?.address]
+      depositParams = [amtInWei, address]
     } else {
       const swapRoute = await getSwapRoute()
       if (!swapRoute?.route || swapRoute?.error) {
@@ -327,7 +326,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         swapRoute.poolFees,
         amtInWei,
         minAmountOutInWei,
-        account?.address,
+        address,
       ]
     }
 

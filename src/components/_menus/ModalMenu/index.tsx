@@ -6,17 +6,11 @@ import { BigNumber } from "ethers"
 export interface ModalMenuProps {
   setSelectedToken: (value: any) => void
   activeAsset?: string
-  selectedTokenBalance: {
-    readonly data:
-      | {
-          decimals: number
-          formatted: string
-          symbol: string
-          value: BigNumber
-        }
-      | undefined
-    readonly error: Error | undefined
-    readonly loading: boolean | undefined
+  selectedTokenBalance?: {
+    decimals: number
+    formatted: string
+    symbol: string
+    value: BigNumber
   }
 }
 

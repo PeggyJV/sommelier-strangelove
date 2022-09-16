@@ -4,7 +4,7 @@ import React from "react"
 import { TransparentCard } from "../TransparentCard"
 import { Link } from "components/Link"
 import { BridgeForm } from "components/_forms/BridgeForm"
-import { useConnect } from "wagmi"
+import { useAccount, useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { FormProvider, useForm } from "react-hook-form"
 
@@ -14,8 +14,8 @@ export interface BridgeFormValues {
 }
 
 export const BridgeCard: React.FC = () => {
-  const [auth] = useConnect()
-  const isConnected = auth.data.connected
+  const { connectors } = useConnect()
+  const { isConnected } = useAccount()
   const methods = useForm<BridgeFormValues>()
 
   return (
@@ -52,7 +52,7 @@ export const BridgeCard: React.FC = () => {
         </FormProvider>
       ) : (
         <Stack>
-          {auth.data.connectors.map((c) => (
+          {connectors.map((c) => (
             <ConnectButton connector={c} key={c.id} unstyled />
           ))}
         </Stack>
