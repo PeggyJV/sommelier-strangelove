@@ -20,7 +20,8 @@ export interface ConfigProps {
     abi: unknown
     key: CellarKey
   }
-  staker: {
+  // staker optional because there will be a cellar without staker contract
+  staker?: {
     address: string
     abi: unknown
     key: StakerKey

@@ -4,9 +4,9 @@ import { CardHeading } from "components/_typography/CardHeading"
 import { VFC } from "react"
 import { BaseModal } from "./BaseModal"
 import { toEther } from "utils/formatCurrency"
-import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
+import { useUserBalances } from "data/hooks/useUserBalances"
 
 type BondModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
