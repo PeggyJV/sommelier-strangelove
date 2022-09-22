@@ -11,7 +11,7 @@ import { client as urqlClient } from "queries/client"
 import "utils/analytics"
 import { GlobalFonts } from "theme/GlobalFonts"
 import { GeoProvider } from "context/geoContext"
-import CompositeDataProvider from "src/composite-data/provider/compositeDataProvider"
+import DataProvider from "data/provider/dataProvider"
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -24,9 +24,9 @@ const App = ({ Component, pageProps }: AppProps) => {
             <GlobalFonts />
             <DialogProvider>
               <WagmiProvider>
-                <CompositeDataProvider>
+                <DataProvider>
                   <Component {...pageProps} />
-                </CompositeDataProvider>
+                </DataProvider>
                 <AlertDialog />
               </WagmiProvider>
             </DialogProvider>

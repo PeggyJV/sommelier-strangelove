@@ -18,11 +18,13 @@ import ConnectButton from "components/_buttons/ConnectButton"
 import { analytics } from "utils/analytics"
 import { ImportMetamaskButton } from "components/_buttons/ImportMetamaskButton"
 import { useRouter } from "next/router"
-import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
-import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
 import { useIsMounted } from "hooks/utils/useIsMounted"
+import { useUserStakes } from "data/hooks/useUserStakes"
+import { useNetValue } from "data/hooks/useNetValue"
+import { useActiveAsset } from "data/hooks/useActiveAsset"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useUserBalances } from "data/hooks/useUserBalances"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isMounted = useIsMounted()
@@ -33,30 +35,33 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const { connectors } = useConnect()
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
-  const outputUserData = useOutputUserData(cellarConfig)
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData } = lpToken
 
   const lpTokenDisabled =
     !lpTokenData || parseInt(toEther(lpTokenData?.formatted, 18)) <= 0
 
+  const { data: userStakes } = useUserStakes(cellarConfig)
   const userRewards =
-    outputUserData.data.totalClaimAllRewards?.value.toString()
+    userStakes?.totalClaimAllRewards?.value.toString()
 
   const claimAllDisabled =
     !isConnected || !userRewards || parseInt(userRewards) <= 0
+
+  const { data: netValue } = useNetValue(cellarConfig)
+  const { data: activeAsset } = useActiveAsset(cellarConfig)
 
   const { doHandleTransaction } = useHandleTransaction()
 
   const handleClaimAll = async () => {
     analytics.track("rewards.claim-started")
-    const tx = await stakerSigner.claimAll()
+    const tx = await stakerSigner?.claimAll()
     await doHandleTransaction({
       ...tx,
       onSuccess: () => analytics.track("rewards.claim-succeeded"),
       onError: () => analytics.track("rewards.claim-failed"),
     })
-    outputUserData.refetch()
+    // outputUserData.refetch()
   }
 
   return (
@@ -84,9 +89,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               tooltip="Current value of your assets in Cellar"
             >
               {isMounted &&
-                (isConnected
-                  ? outputUserData.data.netValue?.formatted || "..."
-                  : "--")}
+                (isConnected ? netValue?.formatted || "..." : "--")}
             </CardStat>
 
             <CardStat
@@ -97,9 +100,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             >
               <TokenAssets
                 tokens={tokenConfig}
-                activeAsset={
-                  outputUserData.data.activeAsset?.address || ""
-                }
+                activeAsset={activeAsset?.address || ""}
                 displaySymbol
               />
             </CardStat>
@@ -189,8 +190,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               >
                 {isMounted &&
                   (isConnected
-                    ? outputUserData.data.totalBondedAmount
-                        ?.formatted || "..."
+                    ? userStakes?.totalBondedAmount.formatted || "..."
                     : "--")}
               </CardStat>
             </VStack>
@@ -215,8 +215,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 {isMounted &&
                   (isConnected ? (
                     <>
-                      {outputUserData.data.totalClaimAllRewards
-                        ?.formatted || "..."}
+                      {userStakes?.totalClaimAllRewards.formatted ||
+                        "..."}
                       <ImportMetamaskButton
                         address={cellarConfig.rewardTokenAddress}
                       />
@@ -234,10 +234,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             </BaseButton>
           </SimpleGrid>
         </CardStatRow>
-        {isConnected &&
-          outputUserData.data.userStake?.userStakes.length && (
-            <BondingTableCard />
-          )}
+        {isConnected && userStakes?.userStakes.length && (
+          <BondingTableCard />
+        )}
       </VStack>
     </TransparentCard>
   )

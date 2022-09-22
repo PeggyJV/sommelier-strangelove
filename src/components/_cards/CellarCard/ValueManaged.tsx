@@ -11,7 +11,11 @@ import { CurrentDeposits } from "components/CurrentDeposits"
 import { Label } from "./Label"
 import { InformationIcon } from "components/_icons"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useOutputData } from "src/composite-data/hooks/output/useOutputData"
+import { useTvm } from "data/hooks/useTvm"
+import { useApy } from "data/hooks/useApy"
+import { useCellarCap } from "data/hooks/useCellarCap"
+import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
+import { useActiveAsset } from "data/hooks/useActiveAsset"
 
 interface Props extends BoxProps {
   cellarId: string
@@ -22,13 +26,15 @@ export const ValueManaged: React.FC<Props> = ({
   ...rest
 }) => {
   const cellarConfig = cellarDataMap[cellarId].config
-  const outputData = useOutputData(cellarConfig)
+  const { data: tvm } = useTvm(cellarConfig)
+  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const { data: cellarCap } = useCellarCap(cellarConfig)
+  const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
+  const { data: activeAsset } = useActiveAsset(cellarConfig)
   return (
     <Box {...rest}>
       <Flex alignItems="baseline" mb={1}>
-        <Heading size="md">
-          {outputData.data.tvm?.formatted || "..."}
-        </Heading>
+        <Heading size="md">{tvm?.formatted || "..."}</Heading>
         <Tooltip
           hasArrow
           arrowShadowColor="purple.base"
@@ -59,16 +65,12 @@ export const ValueManaged: React.FC<Props> = ({
           alignItems="center"
           columnGap="3px"
         >
-          {outputData.isLoading ? (
-            <Spinner />
-          ) : (
-            outputData.data.expectedApy
-          )}
+          {apyLoading ? <Spinner /> : apy?.expectedApy}
         </Heading>
         <Tooltip
           hasArrow
           placement="top"
-          label={outputData.data.apyLabel}
+          label={apy?.apyLabel}
           bg="surface.bg"
           color="neutral.300"
         >
@@ -81,9 +83,9 @@ export const ValueManaged: React.FC<Props> = ({
         </Tooltip>
       </Flex>
       <CurrentDeposits
-        currentDeposits={outputData.data.currentDeposits?.value}
-        cellarCap={outputData.data.cellarCap?.value}
-        asset={outputData.data.activeSymbol}
+        currentDeposits={currentDeposits?.value}
+        cellarCap={cellarCap?.value}
+        asset={activeAsset?.symbol}
       />
     </Box>
   )

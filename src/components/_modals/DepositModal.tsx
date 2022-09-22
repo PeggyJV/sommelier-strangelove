@@ -26,6 +26,7 @@ import {
   useAccount,
   useBalance,
   useProvider,
+  useToken,
 } from "wagmi"
 import { ethers } from "ethers"
 import { useBrandedToast } from "hooks/chakra"
@@ -55,11 +56,10 @@ import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
-import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useOutputData } from "src/composite-data/hooks/output/useOutputData"
-import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useActiveAsset } from "data/hooks/useActiveAsset"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -110,8 +110,15 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const { cellarRouterSigner, cellarSigner } =
     useCreateContracts(cellarConfig)
 
-  const outputData = useOutputData(cellarConfig)
-  const outputUserData = useOutputUserData(cellarConfig)
+  const {
+    data: activeAsset,
+    refetch: activeAssetRefetch,
+    isLoading: activeAssetLoading,
+  } = useActiveAsset(cellarConfig)
+  const activeAssetToken = useToken({
+    address: activeAsset?.address,
+    chainId: 1,
+  })
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -153,10 +160,10 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
       const outputToken = new Token(
         1, // chainId
-        outputData.data.cellarData?.activeAsset!,
-        outputUserData.data.activeAsset?.decimals!,
-        outputUserData.data.activeAsset?.symbol,
-        outputUserData.data.activeAsset?.symbol
+        activeAsset?.address!,
+        activeAssetToken.data?.decimals!,
+        activeAsset?.symbol,
+        activeAsset?.symbol
       )
 
       swapRoute = await router.route(
@@ -192,7 +199,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
   const isActiveAsset =
     selectedToken?.address?.toLowerCase() ===
-    outputData.data.cellarData?.activeAsset?.toLowerCase()
+    activeAsset?.address?.toLowerCase()
 
   const onSubmit = async (data: any, e: any) => {
     const tokenSymbol = data?.selectedToken?.symbol
@@ -317,7 +324,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         .divide(100_00)
       const minAmountOutInWei = ethers.utils.parseUnits(
         minAmountOut.toExact(),
-        outputUserData.data.activeAsset?.decimals
+        activeAssetToken.data?.decimals
       )
 
       depositParams = [
@@ -332,7 +339,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
     try {
       const inputToken = selectedToken?.address
-      const outputToken = outputData.data.cellarData?.activeAsset
+      const outputToken = activeAsset?.address
       // If selected token is cellar's current asset, it is cheapter to deposit into the cellar
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
@@ -362,7 +369,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           value: depositAmount,
         })
 
-        outputData.refetch()
+        activeAssetRefetch()
         props.onClose()
 
         update({
@@ -387,7 +394,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
         })
       }
 
-      outputUserData.refetch()
+      activeAssetRefetch()
 
       if (depositResult?.error) {
         analytics.track("deposit.failed", {
@@ -425,11 +432,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     })
   }
 
-  const loading = outputData.isLoading || outputUserData.isLoading
+  const loading = activeAssetLoading
 
   const currentAsset = getCurrentAsset(
     tokenConfig,
-    outputData.data.cellarData?.activeAsset
+    activeAsset?.address
   )
 
   // Move active asset to top of token list.
@@ -445,7 +452,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       0,
       tokenConfig.splice(indexOfActiveAsset, 1)[0]
     )
-  }, [outputData.data.cellarData?.activeAsset, currentAsset])
+  }, [activeAsset?.address, currentAsset])
 
   // Close swap settings card if user changed current asset to active asset.
   useEffect(() => {
@@ -511,7 +518,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
             <ModalMenu
               setSelectedToken={trackedSetSelectedToken}
-              activeAsset={outputData.data.cellarData?.activeAsset}
+              activeAsset={activeAsset?.address}
               selectedTokenBalance={selectedTokenBalance}
             />
             <FormErrorMessage color="energyYellow">

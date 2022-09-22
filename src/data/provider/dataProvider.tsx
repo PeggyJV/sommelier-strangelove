@@ -10,11 +10,12 @@ interface ProviderProps {
 
 const queryClient = new QueryClient({})
 
-export default function CompositeDataProvider({
-  children,
-}: ProviderProps) {
+export default function DataProvider({ children }: ProviderProps) {
   return (
-    <QueryClientProvider key="somm-query-key" client={queryClient}>
+    <QueryClientProvider
+      key="somm-data-provider-query-key"
+      client={queryClient}
+    >
       {children}
     </QueryClientProvider>
   )

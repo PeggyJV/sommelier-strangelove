@@ -11,8 +11,14 @@ export interface UserStake {
 export interface StakerUserData {
   claimAllRewards: BigNumber[]
   claimAllRewardsUSD: BigNumber
-  totalBondedAmount: BigNumber
-  totalClaimAllRewards: BigNumber
+  totalBondedAmount: {
+    value: BigNumber
+    formatted: string
+  }
+  totalClaimAllRewards: {
+    value: BigNumber
+    formatted: string
+  }
   totalRewards: BigNumber
   userStakes: UserStake[]
 }
@@ -20,4 +26,19 @@ export interface StakerUserData {
 export interface StakerData {
   rewardRate: BigNumber
   potentialStakingApy: BigNumber
+}
+
+export interface CellarData {
+  activeAsset: string
+  name: string
+  maxLocked: BigNumber
+  accrualPeriod: BigNumber
+  totalAssets: BigNumber
+  apy: BigNumber
+}
+
+export interface CellarUserData {
+  maxDeposit: BigNumber
+  maxWithdraw: BigNumber
+  netValue: BigNumber
 }

@@ -1,15 +1,17 @@
 import BigNumber from "bignumber.js"
+import { ethers } from "ethers"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { SommStaking } from "src/abi/types"
+import { toEther } from "utils/formatCurrency"
 import { StakerUserData, UserStake } from "../types"
 
-export const fetchStakerUserData = async (
-  contract: SommStaking,
-  signer: SommStaking,
-  address: string
+export const getUserStakes = async (
+  address: string,
+  stakerContract: SommStaking,
+  stakerSigner: SommStaking
 ) => {
   try {
-    if (!signer.provider || !signer.signer) {
+    if (!stakerSigner.provider || !stakerSigner.signer) {
       throw new Error("provider or signer is undefined")
     }
     const sommPrice = await fetchCoingeckoPrice("sommelier", "usd")
@@ -17,9 +19,9 @@ export const fetchStakerUserData = async (
       throw new Error("sommelierPrice is undefined")
     }
 
-    const userStakes = await contract.getUserStakes(address)
+    const userStakes = await stakerContract.getUserStakes(address)
 
-    const claimAllRewards = await signer.callStatic.claimAll()
+    const claimAllRewards = await stakerSigner.callStatic.claimAll()
     let totalClaimAllRewards = new BigNumber(0)
     claimAllRewards.length &&
       claimAllRewards.forEach((reward) => {
@@ -71,8 +73,24 @@ export const fetchStakerUserData = async (
     const userStakeData: StakerUserData = {
       claimAllRewards: convertedClaimAllRewards,
       claimAllRewardsUSD,
-      totalBondedAmount,
-      totalClaimAllRewards,
+      totalBondedAmount: {
+        value: totalBondedAmount,
+        formatted: toEther(
+          ethers.utils.parseUnits(totalBondedAmount?.toFixed(), 0),
+          18,
+          false,
+          2
+        ),
+      },
+      totalClaimAllRewards: {
+        value: totalClaimAllRewards,
+        formatted: toEther(
+          totalClaimAllRewards?.toFixed(),
+          6,
+          false,
+          2
+        ),
+      },
       totalRewards,
       userStakes: userStakesArray,
     }
