@@ -12,7 +12,7 @@ import { TransparentCard } from "./TransparentCard"
 import { TVLChart } from "components/_charts/TVLChart"
 import { CardHeading } from "components/_typography/CardHeading"
 import { analytics } from "utils/analytics"
-import { usePerformanceChartByAddress } from "src/composite-data/context/performanceChartByAddressContext"
+import { usePerformanceChartByAddress } from "data/context/performanceChartByAddressContext"
 
 export const PerformanceCard: VFC<BoxProps> = (props) => {
   const { timeArray, tvl } = usePerformanceChartByAddress()

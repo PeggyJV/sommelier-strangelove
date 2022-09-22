@@ -4,9 +4,9 @@ import { VFC } from "react"
 import { BaseModal } from "./BaseModal"
 import { toEther } from "utils/formatCurrency"
 import { UnstakeForm } from "components/_forms/UnstakeForm"
-import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
+import { useUserBalances } from "data/hooks/useUserBalances"
 
 type UnstakeModalProps = Pick<ModalProps, "isOpen" | "onClose"> & {
   onCloseProp: () => void

@@ -20,10 +20,10 @@ import { useHandleTransaction } from "hooks/web3"
 import { InformationIcon } from "components/_icons"
 import { InnerCard } from "./InnerCard"
 import { analytics } from "utils/analytics"
-import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useUserStakes } from "data/hooks/useUserStakes"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -39,10 +39,9 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { stakerSigner } = useCreateContracts(cellarConfig)
-  const outputUserData = useOutputUserData(cellarConfig)
-
-  const { userStake } = outputUserData.data || {}
-  const { userStakes } = outputUserData.data.userStake || {}
+  const { data: userStakesRes, refetch: userStakesRefetch } =
+    useUserStakes(cellarConfig)
+  const { userStakes, claimAllRewards } = userStakesRes || {}
 
   const { doHandleTransaction } = useHandleTransaction()
   const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
@@ -60,7 +59,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         return newState
       })
       analytics.track("unstake.started")
-      const tx = await stakerSigner.unstake(id)
+      const tx = await stakerSigner?.unstake(id)
 
       await doHandleTransaction({
         ...tx,
@@ -72,7 +71,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.delete(id)
         return newState
       })
-      outputUserData.refetch()
+      userStakesRefetch()
     } catch (error) {
       setUnstakeLoading((oldState) => {
         const newState = new Set(oldState)
@@ -90,7 +89,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         return newState
       })
       analytics.track("unbond.started")
-      const tx = await stakerSigner.unbond(id, {
+      const tx = await stakerSigner?.unbond(id, {
         // gas used around 63000
         gasLimit: 80000,
       })
@@ -105,7 +104,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.delete(id)
         return newState
       })
-      outputUserData.refetch()
+      userStakesRefetch()
     } catch (error) {
       setUnbondLoading((oldState) => {
         const newState = new Set(oldState)
@@ -267,11 +266,9 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     <Td>{toEther(amount.toString())}</Td>
                     <Td>{lockMap[lock?.toString()]}</Td>
                     <Td>
-                      {userStake?.claimAllRewards
+                      {claimAllRewards
                         ? toEther(
-                            userStake.claimAllRewards[
-                              i
-                            ]?.toString() || "0",
+                            claimAllRewards[i]?.toString() || "0",
                             6,
                             false,
                             2

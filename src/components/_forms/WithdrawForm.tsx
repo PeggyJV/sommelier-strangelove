@@ -21,9 +21,9 @@ import { useHandleTransaction } from "hooks/web3"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
-import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
-import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
+import { useUserStakes } from "data/hooks/useUserStakes"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useUserBalances } from "data/hooks/useUserBalances"
 interface FormValues {
   withdrawAmount: number
 }
@@ -47,8 +47,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch: refetchOutputUserData } =
-    useOutputUserData(cellarConfig)
+  const { refetch: userStakesRefetch } = useUserStakes(cellarConfig)
+
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken } = useUserBalances(cellarConfig)
@@ -126,7 +126,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       onError,
     })
 
-    refetchOutputUserData()
+    userStakesRefetch()
 
     setValue("withdrawAmount", 0)
   }

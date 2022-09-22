@@ -23,11 +23,11 @@ import { useApproveERC20, useHandleTransaction } from "hooks/web3"
 import { ethers } from "ethers"
 import { analytics } from "utils/analytics"
 import { bondingPeriodOptions } from "./BondingPeriodOptions"
-import { useUserBalances } from "src/composite-data/hooks/output/useUserBalances"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
-import { useCreateContracts } from "src/composite-data/hooks/output/useCreateContracts"
-import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserStakes } from "data/hooks/useUserStakes"
 
 interface FormValues {
   depositAmount: number
@@ -40,8 +40,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch: refetchOutputUserData } =
-    useOutputUserData(cellarConfig)
+  const { refetch: userStakesRefetch } = useUserStakes(cellarConfig)
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken } = useUserBalances(cellarConfig)
@@ -61,7 +60,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
 
   const { doApprove } = useApproveERC20({
     tokenAddress: cellarConfig.cellar.address,
-    spender: cellarConfig.staker.address,
+    spender: cellarConfig.staker?.address!,
   })
 
   const { doHandleTransaction } = useHandleTransaction()
@@ -95,7 +94,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       18
     )
     try {
-      const { hash: bondConf } = await stakerSigner.stake(
+      const { hash: bondConf } = await stakerSigner?.stake(
         depositAmtInWei,
         bondPeriod,
         // gas used around 125000-130000
@@ -106,12 +105,12 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         hash: bondConf,
         onSuccess: () => {
           analytics.track("bond.succeeded", analyticsData)
-          refetchOutputUserData()
+          userStakesRefetch()
           onClose()
         },
         onError: () => analytics.track("bond.failed", analyticsData),
       })
-      refetchOutputUserData()
+      userStakesRefetch()
     } catch (e) {
       addToast({
         heading: "Staking LP Tokens",

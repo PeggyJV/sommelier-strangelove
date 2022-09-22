@@ -18,8 +18,12 @@ import { CellarStats } from "components/CellarStats"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
 import { CoinImage } from "components/_cards/CellarCard/CoinImage"
-import { useOutputData } from "src/composite-data/hooks/output/useOutputData"
-import { PerformanceChartByAddressProvider } from "src/composite-data/context/performanceChartByAddressContext"
+import { PerformanceChartByAddressProvider } from "data/context/performanceChartByAddressContext"
+import { useTvm } from "data/hooks/useTvm"
+import { useApy } from "data/hooks/useApy"
+import { useCellarCap } from "data/hooks/useCellarCap"
+import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
+import { useActiveAsset } from "data/hooks/useActiveAsset"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -33,7 +37,12 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
   const { id } = staticCellar!
 
   const cellarConfig = cellarDataMap[id].config
-  const outputData = useOutputData(cellarConfig)
+  const staticCellarData = cellarDataMap[id]
+  const { data: tvm } = useTvm(cellarConfig)
+  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const { data: cellarCap } = useCellarCap(cellarConfig)
+  const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
+  const { data: activeAsset } = useActiveAsset(cellarConfig)
 
   return (
     <Layout>
@@ -47,9 +56,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           rowGap={4}
         >
           <VStack spacing={6} align="flex-start">
-            <BreadCrumb
-              cellarName={outputData.data.staticCellarData.name}
-            />
+            <BreadCrumb cellarName={staticCellarData.name} />
             <HStack spacing={4}>
               <Box
                 display="flex"
@@ -59,7 +66,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
               >
                 <CoinImage mb={3} />
                 <Heading fontSize="2.5rem">
-                  {outputData.data.staticCellarData.name}{" "}
+                  {staticCellarData.name}{" "}
                   <Text
                     as="span"
                     textTransform="uppercase"
@@ -73,24 +80,12 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             </HStack>
           </VStack>
           <CellarStats
-            tvm={
-              outputData.data.tvm ? (
-                `${outputData.data.tvm.formatted}`
-              ) : (
-                <Spinner />
-              )
-            }
-            apy={
-              outputData.isLoading ? (
-                <Spinner />
-              ) : (
-                outputData.data.expectedApy
-              )
-            }
-            apyTooltip={outputData.data.apyLabel}
-            currentDeposits={outputData.data.currentDeposits?.value}
-            cellarCap={outputData.data.cellarCap?.value}
-            asset={outputData.data.activeSymbol}
+            tvm={tvm ? `${tvm.formatted}` : <Spinner />}
+            apy={apyLoading ? <Spinner /> : apy?.expectedApy}
+            apyTooltip={apy?.apyLabel}
+            currentDeposits={currentDeposits?.value}
+            cellarCap={cellarCap?.value}
+            asset={activeAsset?.symbol}
           />
         </HStack>
         <VStack spacing={4} align="stretch">

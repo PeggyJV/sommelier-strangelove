@@ -4,7 +4,8 @@ import { CellarCardData } from "./CellarCardDisplay"
 import { Label } from "./Label"
 import { useAccount } from "wagmi"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useOutputUserData } from "src/composite-data/hooks/output/useOutputUserData"
+import { useNetValue } from "data/hooks/useNetValue"
+import { useUserStakes } from "data/hooks/useUserStakes"
 interface Props extends FlexProps {
   data: CellarCardData
 }
@@ -17,7 +18,8 @@ export const Stats: React.FC<Props> = ({
   const { isConnected } = useAccount()
 
   const cellarConfig = cellarDataMap[data.cellarId].config
-  const outputUserData = useOutputUserData(cellarConfig)
+  const { data: netValue } = useNetValue(cellarConfig)
+  const { data: userStakes } = useUserStakes(cellarConfig)
 
   return (
     <Grid
@@ -31,9 +33,7 @@ export const Stats: React.FC<Props> = ({
     >
       <Box>
         <Heading as="p" size="sm" fontWeight="bold">
-          {isConnected
-            ? outputUserData.data.netValue?.formatted || "..."
-            : "--"}
+          {isConnected ? netValue?.formatted || "..." : "--"}
         </Heading>
         <Label color="neutral.300">Your Portfolio</Label>
       </Box>
@@ -78,8 +78,7 @@ export const Stats: React.FC<Props> = ({
             boxSize={3}
           />
           {isConnected
-            ? outputUserData.data.totalClaimAllRewards?.formatted ||
-              "..."
+            ? userStakes?.totalClaimAllRewards.formatted || "..."
             : "--"}
         </Heading>
         <Label color="neutral.300">Rewards</Label>

@@ -6,7 +6,7 @@ import dynamic from "next/dynamic"
 import { FunctionComponent, VFC } from "react"
 import { debounce } from "lodash"
 import { formatCurrency } from "utils/formatCurrency"
-import { usePerformanceChartByAddress } from "src/composite-data/context/performanceChartByAddressContext"
+import { usePerformanceChartByAddress } from "data/context/performanceChartByAddressContext"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
