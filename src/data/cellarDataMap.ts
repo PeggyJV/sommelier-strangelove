@@ -1,59 +1,10 @@
 import { config } from "utils/config"
-
-// if there is a new abi, add the key here (ex: "AAVE_V2_STABLE_CELLAR" | "AAVE_V1_STABLE_CELLAR")
-type CellarRouterKey = "CELLAR_ROUTER"
-type CellarKey = "AAVE_V2_STABLE_CELLAR"
-type StakerKey = "AAVE_STAKER"
-
-export interface ConfigProps {
-  id: string
-  lpToken: {
-    address: string
-  }
-  cellarRouter: {
-    address: string
-    abi: unknown
-    key: CellarRouterKey
-  }
-  cellar: {
-    address: string
-    abi: unknown
-    key: CellarKey
-  }
-  // staker optional because there will be a cellar without staker contract
-  staker?: {
-    address: string
-    abi: unknown
-    key: StakerKey
-  }
-  rewardTokenAddress: string
-}
-export interface CellarDataMap {
-  [key: string]: {
-    name: string
-    description: string
-    strategyType: string
-    managementFee: string
-    individualApy: number
-    cellarApy: number
-    protocols: string
-    supportedChains: string[]
-    performanceSplit: {
-      [key: string]: number
-    }
-    strategyBreakdown: {
-      [key: string]: string
-    }
-    strategyImgSrc?: string
-    strategyProvider?: {
-      logo?: string
-      title?: string
-      href?: string
-      tooltip?: string
-    }
-    config: ConfigProps
-  }
-}
+import {
+  CellarDataMap,
+  CellarKey,
+  CellarRouterKey,
+  StakerKey,
+} from "./types"
 
 export const cellarDataMap: CellarDataMap = {
   [config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS]: {
@@ -103,17 +54,17 @@ export const cellarDataMap: CellarDataMap = {
       cellarRouter: {
         address: config.CONTRACT.CELLAR_ROUTER.ADDRESS,
         abi: config.CONTRACT.CELLAR_ROUTER.ABI,
-        key: "CELLAR_ROUTER",
+        key: CellarRouterKey.CELLAR_ROUTER,
       },
       cellar: {
         address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
         abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
-        key: "AAVE_V2_STABLE_CELLAR",
+        key: CellarKey.AAVE_V2_STABLE_CELLAR,
       },
       staker: {
         address: config.CONTRACT.AAVE_STAKER.ADDRESS,
         abi: config.CONTRACT.AAVE_STAKER.ABI,
-        key: "AAVE_STAKER",
+        key: StakerKey.AAVE_STAKER,
       },
       rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     },

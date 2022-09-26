@@ -1,4 +1,4 @@
-import { ConfigProps } from "data/cellarDataMap"
+import { ConfigProps } from "data/types"
 import { useAccount, useBalance } from "wagmi"
 
 export const useUserBalances = (config: ConfigProps) => {

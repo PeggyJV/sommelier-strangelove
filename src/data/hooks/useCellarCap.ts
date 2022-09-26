@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getCellarCap as getCellarCap_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getCellarCap"
-import { ConfigProps } from "data/cellarDataMap"
+import { CellarKey, ConfigProps } from "data/types"
 import { useGetCellarQuery } from "generated/subgraph"
 
 export const useCellarCap = (config: ConfigProps) => {
@@ -15,7 +15,7 @@ export const useCellarCap = (config: ConfigProps) => {
   const { liquidityLimit, asset } = cellar || {}
 
   const AAVE_V2_STABLE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === "AAVE_V2_STABLE_CELLAR" &&
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR &&
       asset?.decimals &&
       asset?.symbol &&
       liquidityLimit
@@ -24,7 +24,7 @@ export const useCellarCap = (config: ConfigProps) => {
   const query = useQuery(
     ["USE_CELLAR_CAP"],
     async () => {
-      if (config.cellar.key === "AAVE_V2_STABLE_CELLAR") {
+      if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getCellarCap_AAVE_V2_STABLE_CELLAR({
           assetDecimals: asset?.decimals,
           assetSymbol: asset?.symbol,
