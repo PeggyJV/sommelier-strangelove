@@ -1,5 +1,3 @@
-// if there is a new abi, add the key here (ex: "AAVE_V2_STABLE_CELLAR" | "AAVE_V1_STABLE_CELLAR")
-
 export enum StakerKey {
   AAVE_STAKER = "AAVE_STAKER",
 }
