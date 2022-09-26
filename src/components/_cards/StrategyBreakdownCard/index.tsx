@@ -8,11 +8,11 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react"
-import { CellarDataMap } from "data/cellarDataMap"
 import { VFC } from "react"
 import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
+import { CellarDataMap } from "data/types"
 
 interface StrategyBreakdownProps extends BoxProps {
   cellarDataMap: CellarDataMap

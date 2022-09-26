@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 import { getNetValue as getNetValue_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getNetValue"
-import { ConfigProps } from "data/cellarDataMap"
 import { useCreateContracts } from "./useCreateContracts"
 import { useToken } from "wagmi"
 import { useActiveAsset } from "./useActiveAsset"
 import { useUserBalances } from "./useUserBalances"
 import { useUserStakes } from "./useUserStakes"
+import { CellarKey, ConfigProps } from "data/types"
 
 export const useNetValue = (config: ConfigProps) => {
   const { cellarContract } = useCreateContracts(config)
@@ -19,7 +19,7 @@ export const useNetValue = (config: ConfigProps) => {
   })
 
   const AAVE_V2_STABLE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === "AAVE_V2_STABLE_CELLAR" &&
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR &&
       cellarContract.provider &&
       userStakes &&
       activeAsset &&
@@ -29,7 +29,7 @@ export const useNetValue = (config: ConfigProps) => {
   const query = useQuery(
     ["USE_NET_VALUE"],
     async () => {
-      if (config.cellar.key === "AAVE_V2_STABLE_CELLAR") {
+      if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getNetValue_AAVE_V2_STABLE_CELLAR({
           activeAsset: activeAsset,
           cellarContract,

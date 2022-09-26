@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getTvm as getTvm_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getTvm"
-import { ConfigProps } from "data/cellarDataMap"
+import { CellarKey, ConfigProps } from "data/types"
 import { useGetCellarQuery } from "generated/subgraph"
 import { AaveV2CellarV2 } from "src/abi/types"
 import { useCreateContracts } from "./useCreateContracts"
@@ -19,7 +19,7 @@ export const useTvm = (config: ConfigProps) => {
   const { tvlTotal } = cellar || {}
 
   const AAVE_V2_STABLE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === "AAVE_V2_STABLE_CELLAR" &&
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR &&
       cellarContract.provider &&
       tvlTotal
   )
@@ -27,7 +27,7 @@ export const useTvm = (config: ConfigProps) => {
   const query = useQuery(
     ["USE_TVM"],
     async () => {
-      if (config.cellar.key === "AAVE_V2_STABLE_CELLAR") {
+      if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getTvm_AAVE_V2_STABLE_CELLAR(
           cellarContract as AaveV2CellarV2,
           tvlTotal

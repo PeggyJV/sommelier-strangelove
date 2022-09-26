@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getPnl as getPnl_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getPnl"
-import { ConfigProps } from "data/cellarDataMap"
+import { CellarKey, ConfigProps } from "data/types"
 import { useGetPositionQuery } from "generated/subgraph"
 import { useCreateContracts } from "./useCreateContracts"
 import { useAccount } from "wagmi"
@@ -28,14 +28,14 @@ export const usePnl = (config: ConfigProps) => {
   })
 
   const AAVE_V2_STABLE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === "AAVE_V2_STABLE_CELLAR" &&
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR &&
       cellarContract.provider
   )
 
   const query = useQuery(
     ["USE_PNL"],
     async () => {
-      if (config.cellar.key === "AAVE_V2_STABLE_CELLAR") {
+      if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getPnl_AAVE_V2_STABLE_CELLAR({
           cellarContract,
           lpToken: lpToken.data?.formatted,

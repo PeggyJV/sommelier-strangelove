@@ -25,9 +25,9 @@ import { TransparentCard } from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
-import { CellarDataMap } from "data/cellarDataMap"
 import { StrategyProvider } from "components/StrategyProvider"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
+import { CellarDataMap } from "data/types"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {

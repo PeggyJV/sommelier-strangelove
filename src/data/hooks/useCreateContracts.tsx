@@ -1,4 +1,4 @@
-import { ConfigProps } from "data/cellarDataMap"
+import { ConfigProps } from "data/types"
 import { ContractInterface, ethers } from "ethers"
 import { useSigner, useProvider, useContract } from "wagmi"
 
