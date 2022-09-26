@@ -28,12 +28,6 @@ export const WrongNetworkBanner: VFC = () => {
         <SecondaryButton onClick={() => switchNetwork?.(1)}>
           Switch to Ethereum
         </SecondaryButton>
-        {/* <Text>
-          More details can be found in our{" "}
-          <Link href="/terms">
-            Terms of Service <ExternalLinkIcon color="purple.base" />
-          </Link>
-        </Text> */}
       </VStack>
     </HStack>
   )
