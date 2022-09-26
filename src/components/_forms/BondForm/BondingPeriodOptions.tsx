@@ -41,7 +41,7 @@ export const BondingPeriodOptions: VFC = () => {
   const bondingPeriod = getValues("bondingPeriod")
 
   useEffect(() => {
-    if (bondingPeriod != null) {
+    if (bondingPeriod !== null) {
       analytics.track("bond.duration-selected", {
         duration: bondingPeriod.title,
       })
