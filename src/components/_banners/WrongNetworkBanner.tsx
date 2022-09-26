@@ -21,9 +21,9 @@ export const WrongNetworkBanner: VFC = () => {
       <VStack align="flex-start">
         <Heading size="sm">Wrong Network</Heading>
         <Text>
-          You are on the wrong network-- this may couse executing
-          contracts to fail. Please switch your network to Ethereum
-          chain.
+          You are on the wrong network, this may cause executing
+          contracts to fail. Please switch your network to the
+          Ethereum chain.
         </Text>
         <SecondaryButton onClick={() => switchNetwork?.(1)}>
           Switch to Ethereum
