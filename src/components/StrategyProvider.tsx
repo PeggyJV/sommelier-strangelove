@@ -5,7 +5,7 @@ import {
   Tooltip,
   VStack,
 } from "@chakra-ui/react"
-import { CellarDataMap } from "data/cellarDataMap"
+import { CellarDataMap } from "data/types"
 import React, { VFC } from "react"
 import { Link } from "./Link"
 import { ExternalLinkIcon, InformationIcon } from "./_icons"
