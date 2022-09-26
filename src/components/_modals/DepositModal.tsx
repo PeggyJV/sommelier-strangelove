@@ -441,7 +441,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
   // Move active asset to top of token list.
   useEffect(() => {
-    if (currentAsset == undefined) return
+    if (currentAsset === undefined) return
 
     const indexOfActiveAsset = tokenConfig.findIndex(
       (token) => token === currentAsset

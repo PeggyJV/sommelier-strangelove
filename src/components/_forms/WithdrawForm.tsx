@@ -74,7 +74,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   }
 
   useEffect(() => {
-    if (watchWithdrawAmount != null) {
+    if (watchWithdrawAmount !== null) {
       analytics.track("withdraw.amount-selected", {
         account: address,
         amount: watchWithdrawAmount,
