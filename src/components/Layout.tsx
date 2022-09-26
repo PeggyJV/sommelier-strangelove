@@ -6,11 +6,12 @@ import { Nav } from "./Nav"
 import { GeoBanner } from "./_banners/GeoBanner"
 import Footer from "./Footer"
 import { MobileWarningCTA } from "./MobileWarningCTA"
-import { useNetwork } from "wagmi"
+import { useAccount, useNetwork } from "wagmi"
 import { WrongNetworkBanner } from "./_banners/WrongNetworkBanner"
 
 export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   const { isRestricted } = useGeo() || {}
+  const { isConnected } = useAccount()
   const { chain } = useNetwork()
 
   return (
@@ -22,7 +23,7 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
           <Nav />
           <Container as="main" flex={1} pt={40} maxW="container.lg">
             {isRestricted && <GeoBanner />}
-            {chain?.id !== 1 && <WrongNetworkBanner />}
+            {isConnected && chain?.id !== 1 && <WrongNetworkBanner />}
             {children}
           </Container>
           <Footer />
