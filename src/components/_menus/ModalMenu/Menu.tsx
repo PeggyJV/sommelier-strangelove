@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react"
 import { useRef, VFC } from "react"
 import { FaChevronDown } from "react-icons/fa"
-import { Token, tokenConfig } from "data/tokenConfig"
+import { depositAssetTokenConfig, Token } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
 import { toEther } from "utils/formatCurrency"
 import { ModalMenuProps } from "."
@@ -116,13 +116,15 @@ export const Menu: VFC<MenuProps> = ({
           w={menuDims?.borderBox.width}
         >
           <MenuOptionGroup
-            defaultValue={activeAsset && tokenConfig[0].symbol}
+            defaultValue={
+              activeAsset && depositAssetTokenConfig[0].symbol
+            }
             type="radio"
           >
             <Box pt={4} pb={2} pl={10}>
               <Text color="neutral.400">Select deposit asset</Text>
             </Box>
-            {tokenConfig.map((token) => {
+            {depositAssetTokenConfig.map((token) => {
               const { address, src, alt, symbol } = token
               const isActiveAsset =
                 token.address.toUpperCase() ===

@@ -17,7 +17,11 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { FiSettings } from "react-icons/fi"
 import { ModalMenu } from "components/_menus/ModalMenu"
-import { Token as TokenType, tokenConfig } from "data/tokenConfig"
+import {
+  depositAssetTokenConfig,
+  Token as TokenType,
+  tokenConfig,
+} from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
 import {
@@ -443,14 +447,14 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   useEffect(() => {
     if (currentAsset === undefined) return
 
-    const indexOfActiveAsset = tokenConfig.findIndex(
+    const indexOfActiveAsset = depositAssetTokenConfig.findIndex(
       (token) => token === currentAsset
     )
 
-    tokenConfig.splice(
+    depositAssetTokenConfig.splice(
       0,
       0,
-      tokenConfig.splice(indexOfActiveAsset, 1)[0]
+      depositAssetTokenConfig.splice(indexOfActiveAsset, 1)[0]
     )
   }, [activeAsset?.address, currentAsset])
 
