@@ -9,6 +9,7 @@ import {
   useBreakpointValue,
   useTheme,
   VStack,
+  Image,
 } from "@chakra-ui/react"
 import { CardDivider } from "components/_layout/CardDivider"
 import { CardHeading } from "components/_typography/CardHeading"
@@ -16,11 +17,7 @@ import { VFC } from "react"
 import { useNivoThemes } from "hooks/nivo"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
-import {
-  AaveIcon,
-  InformationIcon,
-  UsdcIcon,
-} from "components/_icons"
+import { InformationIcon, UsdcIcon } from "components/_icons"
 import { TransparentCard } from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
@@ -28,6 +25,7 @@ import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { StrategyProvider } from "components/StrategyProvider"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { CellarDataMap } from "data/types"
+import { protocolsImage } from "utils/protocolsImagePath"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -55,12 +53,12 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     protocols,
     strategyType,
     managementFee,
-    supportedChains,
+    strategyAssets,
     performanceSplit,
     strategyProvider,
   } = cellarDataMap[cellarId]
-  const strategyAssets = tokenConfig.filter((token) =>
-    supportedChains?.includes(token.symbol)
+  const cellarStrategyAssets = tokenConfig.filter((token) =>
+    strategyAssets?.includes(token.symbol)
   )
   const cellarConfig = cellarDataMap[cellarId].config
   const { data: activeAsset } = useActiveAsset(cellarConfig)
@@ -73,6 +71,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   }
 
   const colors = moveColors(barChartTheme)
+
+  const protocolIcon = protocolsImage[protocols]
 
   return (
     <TransparentCard p={8} overflow="visible">
@@ -103,11 +103,10 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             label="protocols"
             tooltip="Protocols in which Cellar operates"
           >
-            <AaveIcon
-              color="purple.base"
-              bg="white"
-              borderRadius="full"
-              p={1}
+            <Image
+              src={protocolIcon}
+              alt="aave logo"
+              boxSize={6}
               mr={2}
             />
             {protocols}
@@ -130,7 +129,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
           >
             <TokenAssets
-              tokens={strategyAssets}
+              tokens={cellarStrategyAssets}
               activeAsset={activeAsset?.address || ""}
               displaySymbol
             />
@@ -158,11 +157,11 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               {/* @ts-ignore */}
               <BarChart
                 layout="horizontal"
-                colors={colors}
+                colors={barChartTheme}
                 borderColor={theme.colors.neutral[800]}
                 borderWidth={1}
                 borderRadius={2}
-                keys={["strategy provider", "protocol", "depositors"]}
+                keys={["depositors", "protocol", "strategy provider"]}
                 data={[performanceSplit]}
               />
             </Box>

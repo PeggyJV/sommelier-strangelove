@@ -1,4 +1,4 @@
-import { Box, BoxProps, Heading, Img, Flex } from "@chakra-ui/react"
+import { Box, BoxProps, Heading, Flex } from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
@@ -6,6 +6,7 @@ import { Burst } from "./Burst"
 import { ComingSoon } from "./ComingSoon"
 import { InlineImage } from "components/InlineImage"
 import { CoinImage } from "./CoinImage"
+import { protocolsImage } from "utils/protocolsImagePath"
 
 export interface CellarCardData {
   cellarId: string
@@ -15,8 +16,6 @@ export interface CellarCardData {
   strategyType: string
   managementFee: string
   protocols: string
-  individualApy: number | string
-  cellarApy: number | string
 }
 
 interface CellarCardProps extends BoxProps {
@@ -25,18 +24,13 @@ interface CellarCardProps extends BoxProps {
   index?: number
 }
 
-const baseIconPath = "/assets/icons"
-const protocols: { [key: string]: string } = {
-  AAVE: `${baseIconPath}/aave.png`,
-}
-
 export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   data,
   isPlaceholder,
   index,
   ...rest
 }) => {
-  const protocolIcon = protocols[data.protocols]
+  const protocolIcon = protocolsImage[data.protocols]
 
   return (
     <Card

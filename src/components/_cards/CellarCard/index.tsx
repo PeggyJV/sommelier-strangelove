@@ -46,8 +46,6 @@ export const CellarCard: React.FC<CellarCardProps> = ({
   const {
     name,
     description,
-    individualApy,
-    cellarApy,
     strategyType,
     managementFee,
     protocols,
@@ -58,8 +56,6 @@ export const CellarCard: React.FC<CellarCardProps> = ({
     name,
     description,
     tvm,
-    individualApy,
-    cellarApy,
     strategyType,
     managementFee,
     protocols,
