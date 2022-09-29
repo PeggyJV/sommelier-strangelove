@@ -5,6 +5,10 @@ export interface Token {
   address: string
 }
 
+/**
+ *
+ *  tokenConfig is for storing the all token data that used in the app
+ */
 export const tokenConfig: Token[] = [
   {
     src: "/assets/icons/ampl.png",
@@ -91,3 +95,22 @@ export const tokenConfig: Token[] = [
     address: "",
   },
 ]
+
+const depositAssetTokenList = [
+  "AMPL",
+  "BUSD",
+  "DAI",
+  "FEI",
+  "FRAX",
+  "GUSD",
+  "USDP",
+  "RAI",
+  "sUSD",
+  "TUSD",
+  "USDC",
+  "USDT",
+]
+
+export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
+  (token) => depositAssetTokenList.includes(token.symbol)
+)
