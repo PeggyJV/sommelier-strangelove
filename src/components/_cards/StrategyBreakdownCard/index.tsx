@@ -1,6 +1,5 @@
 import {
   BoxProps,
-  Image,
   Tab,
   TabList,
   TabPanel,
@@ -13,6 +12,7 @@ import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
 import { CellarDataMap } from "data/types"
+import htmr from "htmr"
 
 interface StrategyBreakdownProps extends BoxProps {
   cellarDataMap: CellarDataMap
@@ -23,8 +23,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
   cellarId,
   cellarDataMap,
 }) => {
-  const { strategyBreakdown, strategyImgSrc } =
-    cellarDataMap[cellarId]
+  const { strategyBreakdown } = cellarDataMap[cellarId]
 
   return (
     <InnerCard pt={4} px={6} pb={8}>
@@ -49,10 +48,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
           {Object.values(strategyBreakdown).map((value, i) => {
             return (
               <TabPanel key={i} {...tabPanelProps}>
-                <Text whiteSpace="pre-line">{value}</Text>
-                {strategyImgSrc && i === 1 && (
-                  <Image src={strategyImgSrc} alt="" mt={4} />
-                )}
+                <Text whiteSpace="pre-line">{htmr(value)}</Text>
               </TabPanel>
             )
           })}

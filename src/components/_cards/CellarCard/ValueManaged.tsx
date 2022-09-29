@@ -25,7 +25,8 @@ export const ValueManaged: React.FC<Props> = ({
   cellarId,
   ...rest
 }) => {
-  const cellarConfig = cellarDataMap[cellarId].config
+  const cellarData = cellarDataMap[cellarId]
+  const cellarConfig = cellarData.config
   const { data: tvm } = useTvm(cellarConfig)
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
   const { data: cellarCap } = useCellarCap(cellarConfig)
@@ -65,18 +66,19 @@ export const ValueManaged: React.FC<Props> = ({
           alignItems="center"
           columnGap="3px"
         >
-          {apyLoading ? <Spinner /> : apy?.expectedApy}
+          {cellarData.overrideApy?.value ||
+            (apyLoading ? <Spinner /> : apy?.expectedApy)}
         </Heading>
         <Tooltip
           hasArrow
           placement="top"
-          label={apy?.apyLabel}
+          label={cellarData.overrideApy?.tooltip || apy?.apyLabel}
           bg="surface.bg"
           color="neutral.300"
         >
           <HStack spacing={1} align="center">
             <Label ml={1} color="neutral.300">
-              Expected APY
+              {cellarData.overrideApy?.title || "Expected APY"}
             </Label>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>

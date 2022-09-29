@@ -8,8 +8,8 @@ export const useNivoThemes = () => {
   const { colors } = useTheme()
 
   const barChartTheme: string[] = [
-    colors.violet.base,
     colors.turquoise.base,
+    colors.violet.base,
     colors.red.base,
   ]
 

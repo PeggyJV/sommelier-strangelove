@@ -1,6 +1,5 @@
 import { VFC } from "react"
 import {
-  Box,
   Heading,
   HeadingProps,
   HStack,
@@ -58,25 +57,18 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
           <VStack spacing={6} align="flex-start">
             <BreadCrumb cellarName={staticCellarData.name} />
             <HStack spacing={4}>
-              <Box
-                display="flex"
-                width="15rem"
-                justifyContent="space-between"
-                alignContent="center"
-              >
-                <CoinImage mb={3} />
-                <Heading fontSize="2.5rem">
-                  {staticCellarData.name}{" "}
-                  <Text
-                    as="span"
-                    textTransform="uppercase"
-                    fontSize="1.3rem"
-                    color="neutral.300"
-                  >
-                    clr-s
-                  </Text>
-                </Heading>
-              </Box>
+              <CoinImage />
+              <Heading fontSize="2.5rem">
+                {staticCellarData.name}{" "}
+                <Text
+                  as="span"
+                  textTransform="uppercase"
+                  fontSize="1.3rem"
+                  color="neutral.300"
+                >
+                  clr-s
+                </Text>
+              </Heading>
             </HStack>
           </VStack>
           <CellarStats
@@ -86,6 +78,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             currentDeposits={currentDeposits?.value}
             cellarCap={cellarCap?.value}
             asset={activeAsset?.symbol}
+            overrideApy={staticCellarData.overrideApy}
           />
         </HStack>
         <VStack spacing={4} align="stretch">

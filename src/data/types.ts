@@ -37,22 +37,24 @@ export interface CellarDataMap {
     description: string
     strategyType: string
     managementFee: string
-    individualApy: number
-    cellarApy: number
     protocols: string
-    supportedChains: string[]
+    strategyAssets: string[]
     performanceSplit: {
       [key: string]: number
     }
     strategyBreakdown: {
       [key: string]: string
     }
-    strategyImgSrc?: string
     strategyProvider?: {
       logo?: string
       title?: string
       href?: string
       tooltip?: string
+    }
+    overrideApy?: {
+      title: string
+      value: string
+      tooltip: string
     }
     config: ConfigProps
   }

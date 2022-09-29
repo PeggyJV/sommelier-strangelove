@@ -10,7 +10,7 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { useHandleTransaction } from "hooks/web3"
 import BondingTableCard from "./BondingTableCard"
 import { useAccount, useConnect } from "wagmi"
-import { tokenConfig } from "data/tokenConfig"
+import { depositAssetTokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
@@ -99,7 +99,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               spacing={0}
             >
               <TokenAssets
-                tokens={tokenConfig}
+                tokens={depositAssetTokenConfig}
                 activeAsset={activeAsset?.address || ""}
                 displaySymbol
               />
