@@ -82,6 +82,18 @@ export const tokenConfig: Token[] = [
     symbol: "USDT",
     address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
   },
+  {
+    src: "/assets/icons/eth.png",
+    alt: "Ethereum logo",
+    symbol: "ETH",
+    address: "",
+  },
+  {
+    src: "/assets/icons/btc.png",
+    alt: "Bitcoin logo",
+    symbol: "BTC",
+    address: "",
+  },
 ]
 
 const depositAssetTokenList = [

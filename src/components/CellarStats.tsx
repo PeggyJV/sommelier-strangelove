@@ -23,6 +23,11 @@ interface CellarStatsProps extends StackProps {
   currentDeposits?: string
   cellarCap?: string
   asset?: string
+  overrideApy?: {
+    title: string
+    value: string
+    tooltip: string
+  }
 }
 
 export const CellarStats: VFC<CellarStatsProps> = ({
@@ -32,6 +37,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
   currentDeposits,
   cellarCap,
   asset,
+  overrideApy,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
@@ -74,7 +80,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
         </Tooltip>
       </VStack>
       <VStack spacing={1} align="flex-start">
-        <Apy apy={apy} />
+        <Apy apy={overrideApy?.value || apy} />
         <Box
           onMouseEnter={debounce(() => {
             analytics.track("user.tooltip-opened-apy")
@@ -83,12 +89,14 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label={apyTooltip}
+            label={overrideApy?.tooltip || apyTooltip}
             bg="surface.bg"
             color="neutral.300"
           >
             <HStack spacing={1} align="center">
-              <CardHeading>Expected APY</CardHeading>
+              <CardHeading>
+                {overrideApy?.title || "Expected APY"}
+              </CardHeading>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>
