@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
 import { getApy as getApy_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getApy"
-import { getApy as getApy_CLEAR_GATE } from "data/actions/CLEAR_GATE_CELLAR/getApy"
 import { CellarKey, ConfigProps } from "data/types"
 import { AaveV2CellarV2, SommStaking } from "src/abi/types"
 import { useCreateContracts } from "./useCreateContracts"
@@ -28,7 +27,7 @@ export const useApy = (config: ConfigProps) => {
         )
       }
       if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
-        return getApy_CLEAR_GATE()
+        return null
       }
       throw new Error("UNKNOWN CONTRACT")
     },
