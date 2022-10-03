@@ -27,6 +27,7 @@ export const useApy = (config: ConfigProps) => {
         )
       }
       if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
+        // the value is overridden from cellarDataMap.overrideApy
         return null
       }
       throw new Error("UNKNOWN CONTRACT")
