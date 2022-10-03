@@ -42,3 +42,19 @@ export interface CellarUserData {
   maxWithdraw: BigNumber
   netValue: BigNumber
 }
+
+export interface DepositAndSwapPayload {
+  selectedToken?: {
+    address: string
+    decimals: number
+    symbol: string
+  }
+  activeAsset?: {
+    address: string
+    decimals: number
+    symbol: string
+  }
+  cellarAddress: string
+  depositAmount: number
+  slippage: number
+}
