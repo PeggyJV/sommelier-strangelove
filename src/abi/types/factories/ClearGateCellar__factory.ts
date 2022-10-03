@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
 import type {
-  V1_5TestCellar,
-  V1_5TestCellarInterface,
-} from "../V1_5TestCellar";
+  ClearGateCellar,
+  ClearGateCellarInterface,
+} from "../ClearGateCellar";
 
 const _abi = [
   {
@@ -79,6 +79,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "Cellar__ContractNotShutdown",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "Cellar__ContractShutdown",
     type: "error",
   },
@@ -96,6 +101,28 @@ const _abi = [
       },
     ],
     name: "Cellar__DepositRestricted",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "illiquidPosition",
+        type: "address",
+      },
+    ],
+    name: "Cellar__IlliquidWithdraw",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "assetsOwed",
+        type: "uint256",
+      },
+    ],
+    name: "Cellar__IncompleteWithdraw",
     type: "error",
   },
   {
@@ -122,6 +149,38 @@ const _abi = [
       },
     ],
     name: "Cellar__InvalidPosition",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "requested",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "max",
+        type: "uint256",
+      },
+    ],
+    name: "Cellar__InvalidRebalanceDeviation",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "Cellar__InvalidShareLockPeriod",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "depositor",
+        type: "address",
+      },
+    ],
+    name: "Cellar__NotApprovedToDepositOnBehalf",
     type: "error",
   },
   {
@@ -168,8 +227,72 @@ const _abi = [
     type: "error",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "position",
+        type: "address",
+      },
+    ],
+    name: "Cellar__PositionPricingNotSetUp",
+    type: "error",
+  },
+  {
     inputs: [],
     name: "Cellar__RemoveHoldingPosition",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "blockSharesAreUnlocked",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "currentBlock",
+        type: "uint256",
+      },
+    ],
+    name: "Cellar__SharesAreLocked",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "assets",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "min",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "max",
+        type: "uint256",
+      },
+    ],
+    name: "Cellar__TotalAssetDeviatedOutsideRange",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "current",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "expected",
+        type: "uint256",
+      },
+    ],
+    name: "Cellar__TotalSharesMustRemainConstant",
     type: "error",
   },
   {
@@ -216,7 +339,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "amount",
+        name: "value",
         type: "uint256",
       },
     ],
@@ -550,6 +673,25 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
+        name: "oldDeviation",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newDeviation",
+        type: "uint256",
+      },
+    ],
+    name: "RebalanceDeviationChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
         name: "feesInSharesRedeemed",
         type: "uint256",
       },
@@ -561,6 +703,25 @@ const _abi = [
       },
     ],
     name: "SendFees",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "oldPeriod",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newPeriod",
+        type: "uint256",
+      },
+    ],
+    name: "ShareLockingPeriodChanged",
     type: "event",
   },
   {
@@ -651,7 +812,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "amount",
+        name: "value",
         type: "uint256",
       },
     ],
@@ -748,6 +909,19 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "MAXIMUM_SHARE_LOCK_PERIOD",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "MAX_FEE_CUT",
     outputs: [
       {
@@ -799,6 +973,45 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "MAX_REBALANCE_DEVIATION",
+    outputs: [
+      {
+        internalType: "uint64",
+        name: "",
+        type: "uint64",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "MINIMUM_SHARE_LOCK_PERIOD",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "PRICE_ROUTER_REGISTRY_SLOT",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -820,16 +1033,29 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "",
+        name: "owner",
         type: "address",
       },
       {
         internalType: "address",
-        name: "",
+        name: "spender",
         type: "address",
       },
     ],
     name: "allowance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "allowedRebalanceDeviation",
     outputs: [
       {
         internalType: "uint256",
@@ -881,7 +1107,7 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "",
+        name: "account",
         type: "address",
       },
     ],
@@ -945,6 +1171,30 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "subtractedValue",
+        type: "uint256",
+      },
+    ],
+    name: "decreaseAllowance",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1083,6 +1333,30 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "addedValue",
+        type: "uint256",
+      },
+    ],
+    name: "increaseAllowance",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1277,25 +1551,6 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes[]",
-        name: "data",
-        type: "bytes[]",
-      },
-    ],
-    name: "multicall",
-    outputs: [
-      {
-        internalType: "bytes[]",
-        name: "results",
-        type: "bytes[]",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "name",
     outputs: [
@@ -1312,7 +1567,7 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "",
+        name: "owner",
         type: "address",
       },
     ],
@@ -1712,6 +1967,32 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "newDeviation",
+        type: "uint256",
+      },
+    ],
+    name: "setRebalanceDeviation",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newLock",
+        type: "uint256",
+      },
+    ],
+    name: "setShareLockPeriod",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "payout",
         type: "address",
@@ -1762,6 +2043,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "shareLockPeriod",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -1795,6 +2089,19 @@ const _abi = [
   {
     inputs: [],
     name: "totalAssets",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "assets",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalAssetsWithdrawable",
     outputs: [
       {
         internalType: "uint256",
@@ -1905,6 +2212,25 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "userShareLockStartBlock",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "assets",
         type: "uint256",
@@ -1946,15 +2272,15 @@ const _abi = [
   },
 ];
 
-export class V1_5TestCellar__factory {
+export class ClearGateCellar__factory {
   static readonly abi = _abi;
-  static createInterface(): V1_5TestCellarInterface {
-    return new utils.Interface(_abi) as V1_5TestCellarInterface;
+  static createInterface(): ClearGateCellarInterface {
+    return new utils.Interface(_abi) as ClearGateCellarInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): V1_5TestCellar {
-    return new Contract(address, _abi, signerOrProvider) as V1_5TestCellar;
+  ): ClearGateCellar {
+    return new Contract(address, _abi, signerOrProvider) as ClearGateCellar;
   }
 }

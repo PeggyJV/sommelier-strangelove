@@ -9,7 +9,6 @@ import type {
   CallOverrides,
   ContractTransaction,
   Overrides,
-  PayableOverrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -28,21 +27,27 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface V1_5TestCellarInterface extends utils.Interface {
+export interface ClearGateCellarInterface extends utils.Interface {
   functions: {
     "DOMAIN_SEPARATOR()": FunctionFragment;
+    "MAXIMUM_SHARE_LOCK_PERIOD()": FunctionFragment;
     "MAX_FEE_CUT()": FunctionFragment;
     "MAX_PERFORMANCE_FEE()": FunctionFragment;
     "MAX_PLATFORM_FEE()": FunctionFragment;
     "MAX_POSITIONS()": FunctionFragment;
+    "MAX_REBALANCE_DEVIATION()": FunctionFragment;
+    "MINIMUM_SHARE_LOCK_PERIOD()": FunctionFragment;
+    "PRICE_ROUTER_REGISTRY_SLOT()": FunctionFragment;
     "addPosition(uint256,address)": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
+    "allowedRebalanceDeviation()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "asset()": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "convertToAssets(uint256)": FunctionFragment;
     "convertToShares(uint256)": FunctionFragment;
     "decimals()": FunctionFragment;
+    "decreaseAllowance(address,uint256)": FunctionFragment;
     "deposit(uint256,address)": FunctionFragment;
     "depositLimit()": FunctionFragment;
     "distrustPosition(address)": FunctionFragment;
@@ -50,6 +55,7 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     "getPositionType(address)": FunctionFragment;
     "getPositions()": FunctionFragment;
     "holdingPosition()": FunctionFragment;
+    "increaseAllowance(address,uint256)": FunctionFragment;
     "initiateShutdown()": FunctionFragment;
     "isPositionUsed(address)": FunctionFragment;
     "isShutdown()": FunctionFragment;
@@ -62,7 +68,6 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     "maxRedeem(address)": FunctionFragment;
     "maxWithdraw(address)": FunctionFragment;
     "mint(uint256,address)": FunctionFragment;
-    "multicall(bytes[])": FunctionFragment;
     "name()": FunctionFragment;
     "nonces(address)": FunctionFragment;
     "owner()": FunctionFragment;
@@ -88,18 +93,23 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     "setLiquidityLimit(uint256)": FunctionFragment;
     "setPerformanceFee(uint64)": FunctionFragment;
     "setPlatformFee(uint64)": FunctionFragment;
+    "setRebalanceDeviation(uint256)": FunctionFragment;
+    "setShareLockPeriod(uint256)": FunctionFragment;
     "setStrategistPayoutAddress(address)": FunctionFragment;
     "setStrategistPerformanceCut(uint64)": FunctionFragment;
     "setStrategistPlatformCut(uint64)": FunctionFragment;
     "setWithdrawType(uint8)": FunctionFragment;
+    "shareLockPeriod()": FunctionFragment;
     "swapPositions(uint256,uint256)": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalAssets()": FunctionFragment;
+    "totalAssetsWithdrawable()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "trustPosition(address,uint8)": FunctionFragment;
+    "userShareLockStartBlock(address)": FunctionFragment;
     "withdraw(uint256,address,address)": FunctionFragment;
     "withdrawType()": FunctionFragment;
   };
@@ -107,18 +117,24 @@ export interface V1_5TestCellarInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "DOMAIN_SEPARATOR"
+      | "MAXIMUM_SHARE_LOCK_PERIOD"
       | "MAX_FEE_CUT"
       | "MAX_PERFORMANCE_FEE"
       | "MAX_PLATFORM_FEE"
       | "MAX_POSITIONS"
+      | "MAX_REBALANCE_DEVIATION"
+      | "MINIMUM_SHARE_LOCK_PERIOD"
+      | "PRICE_ROUTER_REGISTRY_SLOT"
       | "addPosition"
       | "allowance"
+      | "allowedRebalanceDeviation"
       | "approve"
       | "asset"
       | "balanceOf"
       | "convertToAssets"
       | "convertToShares"
       | "decimals"
+      | "decreaseAllowance"
       | "deposit"
       | "depositLimit"
       | "distrustPosition"
@@ -126,6 +142,7 @@ export interface V1_5TestCellarInterface extends utils.Interface {
       | "getPositionType"
       | "getPositions"
       | "holdingPosition"
+      | "increaseAllowance"
       | "initiateShutdown"
       | "isPositionUsed"
       | "isShutdown"
@@ -138,7 +155,6 @@ export interface V1_5TestCellarInterface extends utils.Interface {
       | "maxRedeem"
       | "maxWithdraw"
       | "mint"
-      | "multicall"
       | "name"
       | "nonces"
       | "owner"
@@ -164,24 +180,33 @@ export interface V1_5TestCellarInterface extends utils.Interface {
       | "setLiquidityLimit"
       | "setPerformanceFee"
       | "setPlatformFee"
+      | "setRebalanceDeviation"
+      | "setShareLockPeriod"
       | "setStrategistPayoutAddress"
       | "setStrategistPerformanceCut"
       | "setStrategistPlatformCut"
       | "setWithdrawType"
+      | "shareLockPeriod"
       | "swapPositions"
       | "symbol"
       | "totalAssets"
+      | "totalAssetsWithdrawable"
       | "totalSupply"
       | "transfer"
       | "transferFrom"
       | "transferOwnership"
       | "trustPosition"
+      | "userShareLockStartBlock"
       | "withdraw"
       | "withdrawType"
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "DOMAIN_SEPARATOR",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAXIMUM_SHARE_LOCK_PERIOD",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -201,12 +226,28 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "MAX_REBALANCE_DEVIATION",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MINIMUM_SHARE_LOCK_PERIOD",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "PRICE_ROUTER_REGISTRY_SLOT",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "addPosition",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allowedRebalanceDeviation",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "approve",
@@ -226,6 +267,10 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "decreaseAllowance",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
     functionFragment: "deposit",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
@@ -250,6 +295,10 @@ export interface V1_5TestCellarInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "holdingPosition",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "increaseAllowance",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "initiateShutdown",
@@ -298,10 +347,6 @@ export interface V1_5TestCellarInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "mint",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "multicall",
-    values: [PromiseOrValue<BytesLike>[]]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
@@ -410,6 +455,14 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setRebalanceDeviation",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setShareLockPeriod",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setStrategistPayoutAddress",
     values: [PromiseOrValue<string>]
   ): string;
@@ -426,12 +479,20 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "shareLockPeriod",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "swapPositions",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalAssets",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalAssetsWithdrawable",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -459,6 +520,10 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "userShareLockStartBlock",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "withdraw",
     values: [
       PromiseOrValue<BigNumberish>,
@@ -473,6 +538,10 @@ export interface V1_5TestCellarInterface extends utils.Interface {
 
   decodeFunctionResult(
     functionFragment: "DOMAIN_SEPARATOR",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAXIMUM_SHARE_LOCK_PERIOD",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -492,10 +561,26 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "MAX_REBALANCE_DEVIATION",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MINIMUM_SHARE_LOCK_PERIOD",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "PRICE_ROUTER_REGISTRY_SLOT",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "addPosition",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "allowedRebalanceDeviation",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "asset", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -508,6 +593,10 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "decreaseAllowance",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "depositLimit",
@@ -528,6 +617,10 @@ export interface V1_5TestCellarInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "holdingPosition",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "increaseAllowance",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -560,7 +653,6 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "nonces", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -635,6 +727,14 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setRebalanceDeviation",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setShareLockPeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setStrategistPayoutAddress",
     data: BytesLike
   ): Result;
@@ -651,12 +751,20 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "shareLockPeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "swapPositions",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalAssets",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "totalAssetsWithdrawable",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -674,6 +782,10 @@ export interface V1_5TestCellarInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "trustPosition",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "userShareLockStartBlock",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
@@ -699,7 +811,9 @@ export interface V1_5TestCellarInterface extends utils.Interface {
     "PositionSwapped(address,address,uint256,uint256)": EventFragment;
     "PulledFromPosition(address,uint256)": EventFragment;
     "Rebalance(address,address,uint256,uint256)": EventFragment;
+    "RebalanceDeviationChanged(uint256,uint256)": EventFragment;
     "SendFees(uint256,uint256)": EventFragment;
+    "ShareLockingPeriodChanged(uint256,uint256)": EventFragment;
     "ShutdownChanged(bool)": EventFragment;
     "StrategistPayoutAddressChanged(address,address)": EventFragment;
     "StrategistPerformanceCutChanged(uint64,uint64)": EventFragment;
@@ -726,7 +840,9 @@ export interface V1_5TestCellarInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "PositionSwapped"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PulledFromPosition"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Rebalance"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RebalanceDeviationChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SendFees"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ShareLockingPeriodChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ShutdownChanged"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "StrategistPayoutAddressChanged"
@@ -746,7 +862,7 @@ export interface V1_5TestCellarInterface extends utils.Interface {
 export interface ApprovalEventObject {
   owner: string;
   spender: string;
-  amount: BigNumber;
+  value: BigNumber;
 }
 export type ApprovalEvent = TypedEvent<
   [string, string, BigNumber],
@@ -936,6 +1052,18 @@ export type RebalanceEvent = TypedEvent<
 
 export type RebalanceEventFilter = TypedEventFilter<RebalanceEvent>;
 
+export interface RebalanceDeviationChangedEventObject {
+  oldDeviation: BigNumber;
+  newDeviation: BigNumber;
+}
+export type RebalanceDeviationChangedEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  RebalanceDeviationChangedEventObject
+>;
+
+export type RebalanceDeviationChangedEventFilter =
+  TypedEventFilter<RebalanceDeviationChangedEvent>;
+
 export interface SendFeesEventObject {
   feesInSharesRedeemed: BigNumber;
   feesInAssetsSent: BigNumber;
@@ -946,6 +1074,18 @@ export type SendFeesEvent = TypedEvent<
 >;
 
 export type SendFeesEventFilter = TypedEventFilter<SendFeesEvent>;
+
+export interface ShareLockingPeriodChangedEventObject {
+  oldPeriod: BigNumber;
+  newPeriod: BigNumber;
+}
+export type ShareLockingPeriodChangedEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  ShareLockingPeriodChangedEventObject
+>;
+
+export type ShareLockingPeriodChangedEventFilter =
+  TypedEventFilter<ShareLockingPeriodChangedEvent>;
 
 export interface ShutdownChangedEventObject {
   isShutdown: boolean;
@@ -996,7 +1136,7 @@ export type StrategistPlatformCutChangedEventFilter =
 export interface TransferEventObject {
   from: string;
   to: string;
-  amount: BigNumber;
+  value: BigNumber;
 }
 export type TransferEvent = TypedEvent<
   [string, string, BigNumber],
@@ -1042,12 +1182,12 @@ export type WithdrawTypeChangedEvent = TypedEvent<
 export type WithdrawTypeChangedEventFilter =
   TypedEventFilter<WithdrawTypeChangedEvent>;
 
-export interface V1_5TestCellar extends BaseContract {
+export interface ClearGateCellar extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: V1_5TestCellarInterface;
+  interface: ClearGateCellarInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -1071,6 +1211,8 @@ export interface V1_5TestCellar extends BaseContract {
   functions: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<[string]>;
 
+    MAXIMUM_SHARE_LOCK_PERIOD(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     MAX_FEE_CUT(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     MAX_PERFORMANCE_FEE(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -1079,6 +1221,12 @@ export interface V1_5TestCellar extends BaseContract {
 
     MAX_POSITIONS(overrides?: CallOverrides): Promise<[number]>;
 
+    MAX_REBALANCE_DEVIATION(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    MINIMUM_SHARE_LOCK_PERIOD(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    PRICE_ROUTER_REGISTRY_SLOT(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     addPosition(
       index: PromiseOrValue<BigNumberish>,
       position: PromiseOrValue<string>,
@@ -1086,10 +1234,12 @@ export interface V1_5TestCellar extends BaseContract {
     ): Promise<ContractTransaction>;
 
     allowance(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    allowedRebalanceDeviation(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     approve(
       spender: PromiseOrValue<string>,
@@ -1100,7 +1250,7 @@ export interface V1_5TestCellar extends BaseContract {
     asset(overrides?: CallOverrides): Promise<[string]>;
 
     balanceOf(
-      arg0: PromiseOrValue<string>,
+      account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -1115,6 +1265,12 @@ export interface V1_5TestCellar extends BaseContract {
     ): Promise<[BigNumber] & { shares: BigNumber }>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
+
+    decreaseAllowance(
+      spender: PromiseOrValue<string>,
+      subtractedValue: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     deposit(
       assets: PromiseOrValue<BigNumberish>,
@@ -1159,6 +1315,12 @@ export interface V1_5TestCellar extends BaseContract {
     getPositions(overrides?: CallOverrides): Promise<[string[]]>;
 
     holdingPosition(overrides?: CallOverrides): Promise<[string]>;
+
+    increaseAllowance(
+      spender: PromiseOrValue<string>,
+      addedValue: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     initiateShutdown(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1210,15 +1372,10 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    multicall(
-      data: PromiseOrValue<BytesLike>[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     name(overrides?: CallOverrides): Promise<[string]>;
 
     nonces(
-      arg0: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -1340,6 +1497,16 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setRebalanceDeviation(
+      newDeviation: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setShareLockPeriod(
+      newLock: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     setStrategistPayoutAddress(
       payout: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1360,6 +1527,8 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    shareLockPeriod(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     swapPositions(
       index1: PromiseOrValue<BigNumberish>,
       index2: PromiseOrValue<BigNumberish>,
@@ -1369,6 +1538,10 @@ export interface V1_5TestCellar extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
     totalAssets(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { assets: BigNumber }>;
+
+    totalAssetsWithdrawable(
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { assets: BigNumber }>;
 
@@ -1398,6 +1571,11 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    userShareLockStartBlock(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     withdraw(
       assets: PromiseOrValue<BigNumberish>,
       receiver: PromiseOrValue<string>,
@@ -1410,6 +1588,8 @@ export interface V1_5TestCellar extends BaseContract {
 
   DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
+  MAXIMUM_SHARE_LOCK_PERIOD(overrides?: CallOverrides): Promise<BigNumber>;
+
   MAX_FEE_CUT(overrides?: CallOverrides): Promise<BigNumber>;
 
   MAX_PERFORMANCE_FEE(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1418,6 +1598,12 @@ export interface V1_5TestCellar extends BaseContract {
 
   MAX_POSITIONS(overrides?: CallOverrides): Promise<number>;
 
+  MAX_REBALANCE_DEVIATION(overrides?: CallOverrides): Promise<BigNumber>;
+
+  MINIMUM_SHARE_LOCK_PERIOD(overrides?: CallOverrides): Promise<BigNumber>;
+
+  PRICE_ROUTER_REGISTRY_SLOT(overrides?: CallOverrides): Promise<BigNumber>;
+
   addPosition(
     index: PromiseOrValue<BigNumberish>,
     position: PromiseOrValue<string>,
@@ -1425,10 +1611,12 @@ export interface V1_5TestCellar extends BaseContract {
   ): Promise<ContractTransaction>;
 
   allowance(
-    arg0: PromiseOrValue<string>,
-    arg1: PromiseOrValue<string>,
+    owner: PromiseOrValue<string>,
+    spender: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  allowedRebalanceDeviation(overrides?: CallOverrides): Promise<BigNumber>;
 
   approve(
     spender: PromiseOrValue<string>,
@@ -1439,7 +1627,7 @@ export interface V1_5TestCellar extends BaseContract {
   asset(overrides?: CallOverrides): Promise<string>;
 
   balanceOf(
-    arg0: PromiseOrValue<string>,
+    account: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -1454,6 +1642,12 @@ export interface V1_5TestCellar extends BaseContract {
   ): Promise<BigNumber>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
+
+  decreaseAllowance(
+    spender: PromiseOrValue<string>,
+    subtractedValue: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   deposit(
     assets: PromiseOrValue<BigNumberish>,
@@ -1490,6 +1684,12 @@ export interface V1_5TestCellar extends BaseContract {
   getPositions(overrides?: CallOverrides): Promise<string[]>;
 
   holdingPosition(overrides?: CallOverrides): Promise<string>;
+
+  increaseAllowance(
+    spender: PromiseOrValue<string>,
+    addedValue: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   initiateShutdown(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1541,15 +1741,10 @@ export interface V1_5TestCellar extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  multicall(
-    data: PromiseOrValue<BytesLike>[],
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   name(overrides?: CallOverrides): Promise<string>;
 
   nonces(
-    arg0: PromiseOrValue<string>,
+    owner: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -1671,6 +1866,16 @@ export interface V1_5TestCellar extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setRebalanceDeviation(
+    newDeviation: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setShareLockPeriod(
+    newLock: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   setStrategistPayoutAddress(
     payout: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1691,6 +1896,8 @@ export interface V1_5TestCellar extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  shareLockPeriod(overrides?: CallOverrides): Promise<BigNumber>;
+
   swapPositions(
     index1: PromiseOrValue<BigNumberish>,
     index2: PromiseOrValue<BigNumberish>,
@@ -1700,6 +1907,8 @@ export interface V1_5TestCellar extends BaseContract {
   symbol(overrides?: CallOverrides): Promise<string>;
 
   totalAssets(overrides?: CallOverrides): Promise<BigNumber>;
+
+  totalAssetsWithdrawable(overrides?: CallOverrides): Promise<BigNumber>;
 
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1727,6 +1936,11 @@ export interface V1_5TestCellar extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  userShareLockStartBlock(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   withdraw(
     assets: PromiseOrValue<BigNumberish>,
     receiver: PromiseOrValue<string>,
@@ -1739,6 +1953,8 @@ export interface V1_5TestCellar extends BaseContract {
   callStatic: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
+    MAXIMUM_SHARE_LOCK_PERIOD(overrides?: CallOverrides): Promise<BigNumber>;
+
     MAX_FEE_CUT(overrides?: CallOverrides): Promise<BigNumber>;
 
     MAX_PERFORMANCE_FEE(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1747,6 +1963,12 @@ export interface V1_5TestCellar extends BaseContract {
 
     MAX_POSITIONS(overrides?: CallOverrides): Promise<number>;
 
+    MAX_REBALANCE_DEVIATION(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MINIMUM_SHARE_LOCK_PERIOD(overrides?: CallOverrides): Promise<BigNumber>;
+
+    PRICE_ROUTER_REGISTRY_SLOT(overrides?: CallOverrides): Promise<BigNumber>;
+
     addPosition(
       index: PromiseOrValue<BigNumberish>,
       position: PromiseOrValue<string>,
@@ -1754,10 +1976,12 @@ export interface V1_5TestCellar extends BaseContract {
     ): Promise<void>;
 
     allowance(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    allowedRebalanceDeviation(overrides?: CallOverrides): Promise<BigNumber>;
 
     approve(
       spender: PromiseOrValue<string>,
@@ -1768,7 +1992,7 @@ export interface V1_5TestCellar extends BaseContract {
     asset(overrides?: CallOverrides): Promise<string>;
 
     balanceOf(
-      arg0: PromiseOrValue<string>,
+      account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1783,6 +2007,12 @@ export interface V1_5TestCellar extends BaseContract {
     ): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
+
+    decreaseAllowance(
+      spender: PromiseOrValue<string>,
+      subtractedValue: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     deposit(
       assets: PromiseOrValue<BigNumberish>,
@@ -1827,6 +2057,12 @@ export interface V1_5TestCellar extends BaseContract {
     getPositions(overrides?: CallOverrides): Promise<string[]>;
 
     holdingPosition(overrides?: CallOverrides): Promise<string>;
+
+    increaseAllowance(
+      spender: PromiseOrValue<string>,
+      addedValue: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     initiateShutdown(overrides?: CallOverrides): Promise<void>;
 
@@ -1874,15 +2110,10 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    multicall(
-      data: PromiseOrValue<BytesLike>[],
-      overrides?: CallOverrides
-    ): Promise<string[]>;
-
     name(overrides?: CallOverrides): Promise<string>;
 
     nonces(
-      arg0: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1996,6 +2227,16 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setRebalanceDeviation(
+      newDeviation: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setShareLockPeriod(
+      newLock: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setStrategistPayoutAddress(
       payout: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -2016,6 +2257,8 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    shareLockPeriod(overrides?: CallOverrides): Promise<BigNumber>;
+
     swapPositions(
       index1: PromiseOrValue<BigNumberish>,
       index2: PromiseOrValue<BigNumberish>,
@@ -2025,6 +2268,8 @@ export interface V1_5TestCellar extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<string>;
 
     totalAssets(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalAssetsWithdrawable(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -2052,6 +2297,11 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    userShareLockStartBlock(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     withdraw(
       assets: PromiseOrValue<BigNumberish>,
       receiver: PromiseOrValue<string>,
@@ -2066,12 +2316,12 @@ export interface V1_5TestCellar extends BaseContract {
     "Approval(address,address,uint256)"(
       owner?: PromiseOrValue<string> | null,
       spender?: PromiseOrValue<string> | null,
-      amount?: null
+      value?: null
     ): ApprovalEventFilter;
     Approval(
       owner?: PromiseOrValue<string> | null,
       spender?: PromiseOrValue<string> | null,
-      amount?: null
+      value?: null
     ): ApprovalEventFilter;
 
     "Deposit(address,address,uint256,uint256)"(
@@ -2219,6 +2469,15 @@ export interface V1_5TestCellar extends BaseContract {
       assetsTo?: null
     ): RebalanceEventFilter;
 
+    "RebalanceDeviationChanged(uint256,uint256)"(
+      oldDeviation?: null,
+      newDeviation?: null
+    ): RebalanceDeviationChangedEventFilter;
+    RebalanceDeviationChanged(
+      oldDeviation?: null,
+      newDeviation?: null
+    ): RebalanceDeviationChangedEventFilter;
+
     "SendFees(uint256,uint256)"(
       feesInSharesRedeemed?: null,
       feesInAssetsSent?: null
@@ -2227,6 +2486,15 @@ export interface V1_5TestCellar extends BaseContract {
       feesInSharesRedeemed?: null,
       feesInAssetsSent?: null
     ): SendFeesEventFilter;
+
+    "ShareLockingPeriodChanged(uint256,uint256)"(
+      oldPeriod?: null,
+      newPeriod?: null
+    ): ShareLockingPeriodChangedEventFilter;
+    ShareLockingPeriodChanged(
+      oldPeriod?: null,
+      newPeriod?: null
+    ): ShareLockingPeriodChangedEventFilter;
 
     "ShutdownChanged(bool)"(isShutdown?: null): ShutdownChangedEventFilter;
     ShutdownChanged(isShutdown?: null): ShutdownChangedEventFilter;
@@ -2261,12 +2529,12 @@ export interface V1_5TestCellar extends BaseContract {
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
-      amount?: null
+      value?: null
     ): TransferEventFilter;
     Transfer(
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
-      amount?: null
+      value?: null
     ): TransferEventFilter;
 
     "TrustChanged(address,bool)"(
@@ -2306,6 +2574,8 @@ export interface V1_5TestCellar extends BaseContract {
   estimateGas: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
+    MAXIMUM_SHARE_LOCK_PERIOD(overrides?: CallOverrides): Promise<BigNumber>;
+
     MAX_FEE_CUT(overrides?: CallOverrides): Promise<BigNumber>;
 
     MAX_PERFORMANCE_FEE(overrides?: CallOverrides): Promise<BigNumber>;
@@ -2314,6 +2584,12 @@ export interface V1_5TestCellar extends BaseContract {
 
     MAX_POSITIONS(overrides?: CallOverrides): Promise<BigNumber>;
 
+    MAX_REBALANCE_DEVIATION(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MINIMUM_SHARE_LOCK_PERIOD(overrides?: CallOverrides): Promise<BigNumber>;
+
+    PRICE_ROUTER_REGISTRY_SLOT(overrides?: CallOverrides): Promise<BigNumber>;
+
     addPosition(
       index: PromiseOrValue<BigNumberish>,
       position: PromiseOrValue<string>,
@@ -2321,10 +2597,12 @@ export interface V1_5TestCellar extends BaseContract {
     ): Promise<BigNumber>;
 
     allowance(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    allowedRebalanceDeviation(overrides?: CallOverrides): Promise<BigNumber>;
 
     approve(
       spender: PromiseOrValue<string>,
@@ -2335,7 +2613,7 @@ export interface V1_5TestCellar extends BaseContract {
     asset(overrides?: CallOverrides): Promise<BigNumber>;
 
     balanceOf(
-      arg0: PromiseOrValue<string>,
+      account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -2350,6 +2628,12 @@ export interface V1_5TestCellar extends BaseContract {
     ): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    decreaseAllowance(
+      spender: PromiseOrValue<string>,
+      subtractedValue: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     deposit(
       assets: PromiseOrValue<BigNumberish>,
@@ -2374,6 +2658,12 @@ export interface V1_5TestCellar extends BaseContract {
     getPositions(overrides?: CallOverrides): Promise<BigNumber>;
 
     holdingPosition(overrides?: CallOverrides): Promise<BigNumber>;
+
+    increaseAllowance(
+      spender: PromiseOrValue<string>,
+      addedValue: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     initiateShutdown(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2425,15 +2715,10 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    multicall(
-      data: PromiseOrValue<BytesLike>[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     nonces(
-      arg0: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -2555,6 +2840,16 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setRebalanceDeviation(
+      newDeviation: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setShareLockPeriod(
+      newLock: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     setStrategistPayoutAddress(
       payout: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2575,6 +2870,8 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    shareLockPeriod(overrides?: CallOverrides): Promise<BigNumber>;
+
     swapPositions(
       index1: PromiseOrValue<BigNumberish>,
       index2: PromiseOrValue<BigNumberish>,
@@ -2584,6 +2881,8 @@ export interface V1_5TestCellar extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalAssets(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalAssetsWithdrawable(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -2611,6 +2910,11 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    userShareLockStartBlock(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     withdraw(
       assets: PromiseOrValue<BigNumberish>,
       receiver: PromiseOrValue<string>,
@@ -2624,6 +2928,10 @@ export interface V1_5TestCellar extends BaseContract {
   populateTransaction: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    MAXIMUM_SHARE_LOCK_PERIOD(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     MAX_FEE_CUT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     MAX_PERFORMANCE_FEE(
@@ -2634,6 +2942,18 @@ export interface V1_5TestCellar extends BaseContract {
 
     MAX_POSITIONS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    MAX_REBALANCE_DEVIATION(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    MINIMUM_SHARE_LOCK_PERIOD(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    PRICE_ROUTER_REGISTRY_SLOT(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     addPosition(
       index: PromiseOrValue<BigNumberish>,
       position: PromiseOrValue<string>,
@@ -2641,8 +2961,12 @@ export interface V1_5TestCellar extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     allowance(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    allowedRebalanceDeviation(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -2655,7 +2979,7 @@ export interface V1_5TestCellar extends BaseContract {
     asset(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     balanceOf(
-      arg0: PromiseOrValue<string>,
+      account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -2670,6 +2994,12 @@ export interface V1_5TestCellar extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    decreaseAllowance(
+      spender: PromiseOrValue<string>,
+      subtractedValue: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     deposit(
       assets: PromiseOrValue<BigNumberish>,
@@ -2694,6 +3024,12 @@ export interface V1_5TestCellar extends BaseContract {
     getPositions(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     holdingPosition(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    increaseAllowance(
+      spender: PromiseOrValue<string>,
+      addedValue: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     initiateShutdown(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2745,15 +3081,10 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    multicall(
-      data: PromiseOrValue<BytesLike>[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     nonces(
-      arg0: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -2875,6 +3206,16 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    setRebalanceDeviation(
+      newDeviation: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setShareLockPeriod(
+      newLock: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     setStrategistPayoutAddress(
       payout: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2895,6 +3236,8 @@ export interface V1_5TestCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    shareLockPeriod(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     swapPositions(
       index1: PromiseOrValue<BigNumberish>,
       index2: PromiseOrValue<BigNumberish>,
@@ -2904,6 +3247,10 @@ export interface V1_5TestCellar extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     totalAssets(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    totalAssetsWithdrawable(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -2929,6 +3276,11 @@ export interface V1_5TestCellar extends BaseContract {
       position: PromiseOrValue<string>,
       positionType: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    userShareLockStartBlock(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     withdraw(
