@@ -218,7 +218,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       {userStakes?.totalClaimAllRewards.formatted ||
                         "..."}
                       <ImportMetamaskButton
-                        address={cellarConfig.rewardTokenAddress}
+                        address={
+                          cellarConfig.rewardTokenAddress || ""
+                        }
                       />
                     </>
                   ) : (
