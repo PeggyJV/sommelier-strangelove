@@ -16,6 +16,7 @@ import { useApy } from "data/hooks/useApy"
 import { useCellarCap } from "data/hooks/useCellarCap"
 import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
+import { isCurrentDepositsEnabled } from "data/uiConfig"
 
 interface Props extends BoxProps {
   cellarId: string
@@ -84,11 +85,13 @@ export const ValueManaged: React.FC<Props> = ({
           </HStack>
         </Tooltip>
       </Flex>
-      <CurrentDeposits
-        currentDeposits={currentDeposits?.value}
-        cellarCap={cellarCap?.value}
-        asset={activeAsset?.symbol}
-      />
+      {isCurrentDepositsEnabled(cellarConfig) && (
+        <CurrentDeposits
+          currentDeposits={currentDeposits?.value}
+          cellarCap={cellarCap?.value}
+          asset={activeAsset?.symbol}
+        />
+      )}
     </Box>
   )
 }
