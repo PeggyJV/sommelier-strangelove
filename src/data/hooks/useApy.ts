@@ -13,6 +13,9 @@ export const useApy = (config: ConfigProps) => {
       cellarContract.provider &&
       stakerContract?.provider
   )
+  const CLEAR_GATE_QUERY_ENABLED = Boolean(
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+  )
 
   const query = useQuery(
     ["USE_APY"],
@@ -23,10 +26,16 @@ export const useApy = (config: ConfigProps) => {
           stakerContract as SommStaking
         )
       }
+      if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
+        // the value is overridden from cellarDataMap.overrideApy
+        return null
+      }
       throw new Error("UNKNOWN CONTRACT")
     },
     {
-      enabled: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED, // branching example: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED || V1_5_CELLAR_QUERY_ENABLED
+      enabled:
+        AAVE_V2_STABLE_CELLAR_QUERY_ENABLED ||
+        CLEAR_GATE_QUERY_ENABLED, // branching example: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED || V1_5_CELLAR_QUERY_ENABLED
     }
   )
 
