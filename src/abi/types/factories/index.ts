@@ -4,6 +4,7 @@
 export { AaveV2CellarV2__factory } from "./AaveV2CellarV2__factory";
 export { AaveV2StablecoinCellar__factory } from "./AaveV2StablecoinCellar__factory";
 export { CellarRouter__factory } from "./CellarRouter__factory";
+export { ClearGateCellar__factory } from "./ClearGateCellar__factory";
+export { ClearGateRouter__factory } from "./ClearGateRouter__factory";
 export { GravityBridge__factory } from "./GravityBridge__factory";
 export { SommStaking__factory } from "./SommStaking__factory";
-export { V1_5TestCellar__factory } from "./V1_5TestCellar__factory";
