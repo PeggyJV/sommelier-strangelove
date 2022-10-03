@@ -63,18 +63,14 @@ const getSwapRoute = async ({
         selectedToken?.symbol,
         selectedToken?.symbol
       )
-    console.log(1, inputToken)
     const amtInWei = ethers.utils.parseUnits(
       depositAmount.toString(),
       selectedToken?.decimals
     )
-    console.log(2, amtInWei)
     const inputAmt = CurrencyAmount.fromRawAmount(
       inputToken as Currency,
       JSBI.BigInt(amtInWei)
     )
-    console.log(3, inputAmt)
-    console.log(3, activeAsset)
     const outputToken = new Token(
       1, // chainId
       activeAsset?.address!,
@@ -82,7 +78,6 @@ const getSwapRoute = async ({
       activeAsset?.symbol,
       activeAsset?.symbol
     )
-    console.log(4, outputToken)
     swapRoute = await router.route(
       inputAmt,
       outputToken,
@@ -97,7 +92,6 @@ const getSwapRoute = async ({
         deadline: Math.floor(Date.now() / 1000 + 1800),
       }
     )
-    console.log(5, swapRoute)
   } catch (e) {
     console.warn("Error Occured ", e)
     error = true
@@ -128,7 +122,6 @@ export const depositAndSwap = async ({
       senderAddress: senderAddress,
       activeAsset: payload.activeAsset,
     })
-    console.log(swapRoute)
     if (!swapRoute?.route || !swapRoute.tokenPath || swapRoute?.error)
       throw new Error("swapRoute.route is undefined")
 
