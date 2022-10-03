@@ -68,7 +68,7 @@ export const cellarDataMap: CellarDataMap = {
     },
   },
   // TODO: Change key and config
-  // "btc-eth-trend": {
+  // [config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS]: {
   //   name: "btc-eth-trend",
   //   description:
   //     "A long-only strategy for dynamic BTC-ETH portfolio management. A better way to hold while better managing the negative volatility.",
@@ -119,26 +119,20 @@ export const cellarDataMap: CellarDataMap = {
   //     value: "123.72%",
   //   },
   //   config: {
-  //     id: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+  //     id: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
   //     lpToken: {
-  //       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+  //       address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
   //     },
   //     cellarRouter: {
-  //       address: config.CONTRACT.CELLAR_ROUTER.ADDRESS,
-  //       abi: config.CONTRACT.CELLAR_ROUTER.ABI,
-  //       key: CellarRouterKey.CELLAR_ROUTER,
+  //       address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
+  //       abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
+  //       key: CellarRouterKey.CLEAR_GATE_ROUTER,
   //     },
   //     cellar: {
-  //       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-  //       abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
-  //       key: CellarKey.AAVE_V2_STABLE_CELLAR,
+  //       address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //       abi: config.CONTRACT.CLEAR_GATE_CELLAR.ABI,
+  //       key: CellarKey.CLEAR_GATE_CELLAR,
   //     },
-  //     staker: {
-  //       address: config.CONTRACT.AAVE_STAKER.ADDRESS,
-  //       abi: config.CONTRACT.AAVE_STAKER.ABI,
-  //       key: StakerKey.AAVE_STAKER,
-  //     },
-  //     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   //   },
   // },
   // "btc-eth-moment": {
@@ -195,26 +189,20 @@ export const cellarDataMap: CellarDataMap = {
   //     value: "84.15%",
   //   },
   //   config: {
-  //     id: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-  //     lpToken: {
-  //       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-  //     },
-  //     cellarRouter: {
-  //       address: config.CONTRACT.CELLAR_ROUTER.ADDRESS,
-  //       abi: config.CONTRACT.CELLAR_ROUTER.ABI,
-  //       key: CellarRouterKey.CELLAR_ROUTER,
-  //     },
-  //     cellar: {
-  //       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-  //       abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
-  //       key: CellarKey.AAVE_V2_STABLE_CELLAR,
-  //     },
-  //     staker: {
-  //       address: config.CONTRACT.AAVE_STAKER.ADDRESS,
-  //       abi: config.CONTRACT.AAVE_STAKER.ABI,
-  //       key: StakerKey.AAVE_STAKER,
-  //     },
-  //     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+  //   id: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //   lpToken: {
+  //     address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //   },
+  //   cellarRouter: {
+  //     address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
+  //     abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
+  //     key: CellarRouterKey.CLEAR_GATE_ROUTER,
+  //   },
+  //   cellar: {
+  //     address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //     abi: config.CONTRACT.CLEAR_GATE_CELLAR.ABI,
+  //     key: CellarKey.CLEAR_GATE_CELLAR,
   //   },
   // },
+  //
 }

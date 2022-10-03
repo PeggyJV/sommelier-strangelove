@@ -86,13 +86,13 @@ export const tokenConfig: Token[] = [
     src: "/assets/icons/eth.png",
     alt: "Ethereum logo",
     symbol: "ETH",
-    address: "",
+    address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
   },
   {
     src: "/assets/icons/btc.png",
     alt: "Bitcoin logo",
     symbol: "BTC",
-    address: "",
+    address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
   },
 ]
 
