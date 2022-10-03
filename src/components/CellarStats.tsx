@@ -15,6 +15,8 @@ import { InformationIcon } from "./_icons"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
 import { Apy } from "./Apy"
+import { isCurrentDepositsEnabled } from "data/uiConfig"
+import { ConfigProps } from "data/types"
 
 interface CellarStatsProps extends StackProps {
   tvm?: ReactNode
@@ -28,6 +30,7 @@ interface CellarStatsProps extends StackProps {
     value: string
     tooltip: string
   }
+  cellarConfig: ConfigProps
 }
 
 export const CellarStats: VFC<CellarStatsProps> = ({
@@ -38,6 +41,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
   cellarCap,
   asset,
   overrideApy,
+  cellarConfig,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
@@ -102,11 +106,13 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           </Tooltip>
         </Box>
       </VStack>
-      <CurrentDeposits
-        currentDeposits={currentDeposits}
-        cellarCap={cellarCap}
-        asset={asset}
-      />
+      {isCurrentDepositsEnabled(cellarConfig) && (
+        <CurrentDeposits
+          currentDeposits={currentDeposits}
+          cellarCap={cellarCap}
+          asset={asset}
+        />
+      )}
     </HStack>
   )
 }

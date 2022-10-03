@@ -10,7 +10,6 @@ import {
 import { Layout } from "components/Layout"
 import { PerformanceCard } from "components/_cards/PerformanceCard"
 import { Section } from "components/_layout/Section"
-import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/cellars/[id]"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"
 import { CellarStats } from "components/CellarStats"
@@ -23,6 +22,7 @@ import { useApy } from "data/hooks/useApy"
 import { useCellarCap } from "data/hooks/useCellarCap"
 import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
+import { PortfolioCard } from "components/_cards/PortfolioCard"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -79,6 +79,7 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
             cellarCap={cellarCap?.value}
             asset={activeAsset?.symbol}
             overrideApy={staticCellarData.overrideApy}
+            cellarConfig={cellarConfig}
           />
         </HStack>
         <VStack spacing={4} align="stretch">

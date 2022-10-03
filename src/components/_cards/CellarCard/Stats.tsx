@@ -6,6 +6,7 @@ import { useAccount } from "wagmi"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useNetValue } from "data/hooks/useNetValue"
 import { useUserStakes } from "data/hooks/useUserStakes"
+import { isRewardsEnabled } from "data/uiConfig"
 interface Props extends FlexProps {
   data: CellarCardData
 }
@@ -64,25 +65,27 @@ export const Stats: React.FC<Props> = ({
           PNL
         </Label>
       </Box> */}
-      <Grid backgroundColor="">
-        <Heading
-          as="p"
-          size="sm"
-          fontWeight="bold"
-          display="flex"
-          alignItems="baseline"
-        >
-          <InlineImage
-            src="/assets/images/coin.png"
-            alt="coin logo"
-            boxSize={3}
-          />
-          {isConnected
-            ? userStakes?.totalClaimAllRewards.formatted || "..."
-            : "--"}
-        </Heading>
-        <Label color="neutral.300">Rewards</Label>
-      </Grid>
+      {isRewardsEnabled(cellarConfig) && (
+        <Grid backgroundColor="">
+          <Heading
+            as="p"
+            size="sm"
+            fontWeight="bold"
+            display="flex"
+            alignItems="baseline"
+          >
+            <InlineImage
+              src="/assets/images/coin.png"
+              alt="coin logo"
+              boxSize={3}
+            />
+            {isConnected
+              ? userStakes?.totalClaimAllRewards.formatted || "..."
+              : "--"}
+          </Heading>
+          <Label color="neutral.300">Rewards</Label>
+        </Grid>
+      )}
     </Grid>
   )
 }
