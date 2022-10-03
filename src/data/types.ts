@@ -3,11 +3,9 @@ export enum StakerKey {
 }
 export enum CellarKey {
   AAVE_V2_STABLE_CELLAR = "AAVE_V2_STABLE_CELLAR",
-  CLEAR_GATE_CELLAR = "CLEARGATE_ROUTER",
 }
 export enum CellarRouterKey {
   CELLAR_ROUTER = "CELLAR_ROUTER",
-  CLEAR_GATE_ROUTER = "CLEAR_GATE_ROUTER",
 }
 
 export interface ConfigProps {
@@ -31,7 +29,7 @@ export interface ConfigProps {
     abi: unknown
     key: StakerKey
   }
-  rewardTokenAddress?: string
+  rewardTokenAddress: string
 }
 export interface CellarDataMap {
   [key: string]: {

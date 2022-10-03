@@ -29,10 +29,24 @@ import {
   useSigner,
   useAccount,
   useBalance,
+  useProvider,
   useToken,
 } from "wagmi"
 import { ethers } from "ethers"
 import { useBrandedToast } from "hooks/chakra"
+import {
+  AlphaRouter,
+  AlphaRouterParams,
+  V3Route,
+} from "@uniswap/smart-order-router"
+import {
+  Token,
+  CurrencyAmount,
+  Currency,
+  TradeType,
+  Percent,
+} from "@uniswap/sdk-core"
+import JSBI from "jsbi"
 
 interface FormValues {
   depositAmount: number
@@ -50,7 +64,6 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
-import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -61,6 +74,8 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
 
   const { data: signer } = useSigner()
   const { address } = useAccount()
+  const provider = useProvider()
+
   const { addToast, update, close, closeAll } = useBrandedToast()
 
   const [selectedToken, setSelectedToken] =
@@ -81,6 +96,11 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
 
+  const router = new AlphaRouter({
+    chainId: 1,
+    provider: provider as unknown as AlphaRouterParams["provider"],
+  })
+
   function trackedSetSelectedToken(value: TokenType | null) {
     if (value && value !== selectedToken) {
       analytics.track("deposit.stable-selected", {
@@ -91,7 +111,8 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     setSelectedToken(value)
   }
 
-  const { cellarSigner } = useCreateContracts(cellarConfig)
+  const { cellarRouterSigner, cellarSigner } =
+    useCreateContracts(cellarConfig)
 
   const {
     data: activeAsset,
@@ -117,7 +138,68 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     selectedToken?.address &&
     new ethers.Contract(selectedToken?.address, erc20ABI, signer!)
 
-  const depositAndSwap = useDepositAndSwap(cellarConfig)
+  const getSwapRoute = async () => {
+    let error = false
+    let swapRoute
+    try {
+      const inputToken =
+        selectedToken?.address &&
+        new Token(
+          1, // chainId
+          selectedToken?.address,
+          selectedTokenBalance?.decimals || 18,
+          selectedToken?.symbol,
+          selectedToken?.symbol
+        )
+
+      const amtInWei = ethers.utils.parseUnits(
+        watchDepositAmount.toString(),
+        selectedTokenBalance?.decimals
+      )
+
+      const inputAmt = CurrencyAmount.fromRawAmount(
+        inputToken as Currency,
+        JSBI.BigInt(amtInWei)
+      )
+
+      const outputToken = new Token(
+        1, // chainId
+        activeAsset?.address!,
+        activeAssetToken.data?.decimals!,
+        activeAsset?.symbol,
+        activeAsset?.symbol
+      )
+
+      swapRoute = await router.route(
+        inputAmt,
+        outputToken,
+        TradeType.EXACT_INPUT,
+        {
+          recipient: address as string,
+          slippageTolerance: new Percent(
+            // this is done because value must be an integer (eg. 0.5 -> 50)
+            config.SWAP.SLIPPAGE * 100,
+            100_00
+          ),
+          deadline: Math.floor(Date.now() / 1000 + 1800),
+        }
+      )
+    } catch (e) {
+      console.warn("Error Occured ", e)
+      error = true
+    }
+
+    const tokenPath = swapRoute?.route[0].tokenPath.map(
+      (token) => token?.address
+    )
+
+    const v3Route = swapRoute?.route[0]?.route as V3Route
+    const fee = v3Route?.pools[0]?.fee
+    const poolFees =
+      swapRoute?.route[0]?.protocol === "V3" ? [fee] : []
+
+    return { route: swapRoute, tokenPath, poolFees, error }
+  }
 
   const isActiveAsset =
     selectedToken?.address?.toLowerCase() ===
@@ -220,29 +302,56 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       }
     }
 
+    // deposit
+    let depositConf
+    let depositParams
+
+    if (isActiveAsset) {
+      depositParams = [amtInWei, address]
+    } else {
+      const swapRoute = await getSwapRoute()
+      if (!swapRoute?.route || swapRoute?.error) {
+        addToast({
+          heading: cellarName + " Cellar Deposit",
+          body: <Text>Failed to fetch Swap Data</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+        return
+      }
+
+      const minAmountOut = swapRoute.route.quote
+        .multiply(
+          // must multiply slippage by 100 because value must be an integer (eg. 0.5 -> 50)
+          100_00 - slippage * 100
+        )
+        .divide(100_00)
+      const minAmountOutInWei = ethers.utils.parseUnits(
+        minAmountOut.toExact(),
+        activeAssetToken.data?.decimals
+      )
+
+      depositParams = [
+        cellarConfig.cellar.address,
+        swapRoute.tokenPath,
+        swapRoute.poolFees,
+        amtInWei,
+        minAmountOutInWei,
+        address,
+      ]
+    }
+
     try {
+      const inputToken = selectedToken?.address
+      const outputToken = activeAsset?.address
       // If selected token is cellar's current asset, it is cheapter to deposit into the cellar
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
-      const response = isActiveAsset
-        ? await cellarSigner.deposit([amtInWei, address])
-        : await depositAndSwap?.mutateAsync({
-            cellarAddress: cellarConfig.cellar.address,
-            depositAmount: depositAmount,
-            slippage,
-            activeAsset: {
-              address: activeAsset?.address!,
-              decimals: activeAssetToken.data?.decimals!,
-              symbol: activeAsset?.symbol!,
-            },
-            selectedToken: {
-              address: selectedToken.address,
-              decimals: selectedTokenBalance?.decimals!,
-              symbol: selectedToken.symbol,
-            },
-          })
-
-      if (!response) throw new Error("response is undefined")
+      const { hash: depositConf } = isActiveAsset
+        ? await cellarSigner.deposit(...depositParams)
+        : await cellarRouterSigner.depositAndSwapIntoCellar(
+            ...depositParams
+          )
 
       addToast({
         heading: cellarName + " Cellar Deposit",
@@ -254,7 +363,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       })
       const waitForDeposit = wait({
         confirmations: 1,
-        hash: response.hash,
+        hash: depositConf,
       })
 
       const depositResult = await waitForDeposit
