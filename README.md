@@ -109,7 +109,7 @@ Though the core workflow of the subgraph is covered above, writing queries and u
 Files of note:
 
 - [`config.ts`](./src/utils/config.ts)
-- [`data/cellarDataMap.ts`](./src/data/actions/)
+- [`data/cellarDataMap.ts`](./src/data/cellarDataMap.ts)
 - [`data/hooks/*`](./src/data/hooks/)
 - [`data/actions/*`](./src/data/actions/)
 
