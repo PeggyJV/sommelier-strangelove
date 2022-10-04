@@ -14,9 +14,6 @@ import { Link } from "components/Link"
 
 const PageHome: NextPage = () => {
   const [cellarsResult] = useGetAllCellarsQuery()
-  // const { cellarData, userData, aaveCellarSigner } = useAaveV2Cellar()
-  // console.log({ cellarData, userData, aaveCellarSigner })
-
   const { data, fetching } = cellarsResult
   const totalCellars = data?.cellars?.length ?? 0
   const numPlaceholderCards = 3 - totalCellars
