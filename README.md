@@ -13,6 +13,7 @@
   - [Hardcoded values](#hardcoded-values)
   - [The Subgraph](#the-subgraph)
   - [Directly querying the contracts](#directly-querying-the-contracts)
+  - [Displaying/Branching UI output](#displayingbranching-ui-output)
 - [Learn More](#learn-more)
 
 ## Getting Started
@@ -108,12 +109,30 @@ Though the core workflow of the subgraph is covered above, writing queries and u
 Files of note:
 
 - [`config.ts`](./src/utils/config.ts)
+- [`data/cellarDataMap.ts`](./src/data/actions/)
 - [`data/hooks/*`](./src/data/hooks/)
 - [`data/actions/*`](./src/data/actions/)
 
 Hooks per output
 ![query data](./querying-data.png)
-If there's a new cellar with a different cellar or staker contract with different ABI and output value we should create output actions for it inside `data/actions/{cellarContractname}/{outputName}` and branch those actions inside `data/hooks/{outputName}`
+If there's a new cellar with a different cellar or staker contract with different ABI and output value we should create output actions for it inside `data/actions/{cellarContractname}/{outputName}` and branch those actions inside `data/hooks/{outputName}`. If we found same method and same calculation on the smart contract/output we should put it inside `data/actions/common/{outputName}`
+
+## Displaying/Branching UI output
+
+In case of if we don't show specific UI output per cellar, We can specify what will be display or not inside `/src/data/uiConfig.ts` each functions needs a `ConfigProps` to be passed.
+
+example:
+We show "Rewards" only on `aave v2` cellar
+
+```tsx
+// src/data/uiConfig.ts
+export const isRewardsEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+}
+
+// somewhere in ui component
+isRewardsEnabled(cellarConfig) && <RewardsCard />
+```
 
 # Learn More
 
