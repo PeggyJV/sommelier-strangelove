@@ -227,7 +227,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       // cellar's current asset.
       const response = isActiveAsset
         ? await cellarSigner.deposit([amtInWei, address])
-        : await depositAndSwap?.mutateAsync({
+        : await depositAndSwap.mutateAsync({
             cellarAddress: cellarConfig.cellar.address,
             depositAmount: depositAmount,
             slippage,

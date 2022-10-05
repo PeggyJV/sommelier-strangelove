@@ -14,11 +14,11 @@ import {
 } from "@uniswap/sdk-core"
 import JSBI from "jsbi"
 import { Provider } from "@wagmi/core"
-import { config } from "utils/config"
-import { DepositAndSwapPayload } from "../types"
+import { DepositAndSwapParams } from "../types"
 
 interface GetSwapRouteParams {
   provider: Provider
+  slippage: number
   depositAmount: number
   senderAddress?: string
   selectedToken?: {
@@ -33,11 +33,9 @@ interface GetSwapRouteParams {
   }
 }
 
-export interface DepositAndSwapParams_AAVE_V2_STABLE_CELLAR {
-  provider: Provider
+interface DepositAndSwapParams_AAVE_V2_STABLE_CELLAR
+  extends DepositAndSwapParams {
   cellarRouterSigner: CellarRouter
-  senderAddress: string
-  payload: DepositAndSwapPayload
 }
 
 const getSwapRoute = async ({
@@ -46,6 +44,7 @@ const getSwapRoute = async ({
   activeAsset,
   provider,
   senderAddress,
+  slippage,
 }: GetSwapRouteParams) => {
   const router = new AlphaRouter({
     chainId: 1,
@@ -86,7 +85,7 @@ const getSwapRoute = async ({
         recipient: senderAddress as string,
         slippageTolerance: new Percent(
           // this is done because value must be an integer (eg. 0.5 -> 50)
-          config.SWAP.SLIPPAGE * 100,
+          slippage * 100,
           100_00
         ),
         deadline: Math.floor(Date.now() / 1000 + 1800),
@@ -121,6 +120,7 @@ export const depositAndSwap = async ({
       selectedToken: payload.selectedToken,
       senderAddress: senderAddress,
       activeAsset: payload.activeAsset,
+      slippage: payload.slippage,
     })
     if (!swapRoute?.route || !swapRoute.tokenPath || swapRoute?.error)
       throw new Error("swapRoute.route is undefined")
