@@ -6,6 +6,7 @@ import { useActiveAsset } from "./useActiveAsset"
 import { useUserBalances } from "./useUserBalances"
 import { useUserStakes } from "./useUserStakes"
 import { CellarKey, ConfigProps } from "data/types"
+import { getNetValue as getNetValue_CLEAR_GATE_CELLAR } from "data/actions/CLEAR_GATE_CELLAR/getNetValue"
 
 export const useNetValue = (config: ConfigProps) => {
   const { cellarContract } = useCreateContracts(config)
@@ -26,6 +27,11 @@ export const useNetValue = (config: ConfigProps) => {
       lpToken.data?.formatted
   )
 
+  const CLEAR_GATE_CELLAR_QUERY_ENABLED = Boolean(
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR &&
+      lpToken.data?.value
+  )
+
   const query = useQuery(
     ["USE_NET_VALUE"],
     async () => {
@@ -37,10 +43,18 @@ export const useNetValue = (config: ConfigProps) => {
           userStakes: userStakes,
         })
       }
+      if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
+        if (!lpToken.data?.value) {
+          throw new Error("lpToken is undefined")
+        }
+        return getNetValue_CLEAR_GATE_CELLAR(lpToken.data?.value)
+      }
       throw new Error("UNKNOWN CONTRACT")
     },
     {
-      enabled: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED, // branching example: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED || V1_5_CELLAR_QUERY_ENABLED
+      enabled:
+        AAVE_V2_STABLE_CELLAR_QUERY_ENABLED ||
+        CLEAR_GATE_CELLAR_QUERY_ENABLED,
     }
   )
 
