@@ -13,7 +13,7 @@ export const useActiveAsset = (config: ConfigProps) => {
   )
 
   const query = useQuery(
-    ["USE_ACTIVE_ASSET"],
+    ["USE_ACTIVE_ASSET", config.cellar.address],
     async () => {
       if (
         config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||

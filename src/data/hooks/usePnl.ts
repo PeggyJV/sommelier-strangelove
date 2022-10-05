@@ -33,7 +33,7 @@ export const usePnl = (config: ConfigProps) => {
   )
 
   const query = useQuery(
-    ["USE_PNL"],
+    ["USE_PNL", config.cellar.address, lpToken.data?.formatted],
     async () => {
       if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getPnl_AAVE_V2_STABLE_CELLAR({
