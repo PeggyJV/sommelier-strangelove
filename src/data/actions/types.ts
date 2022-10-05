@@ -1,3 +1,4 @@
+import { Provider } from "@wagmi/core"
 import BigNumber from "bignumber.js"
 
 export interface UserStake {
@@ -57,4 +58,10 @@ export interface DepositAndSwapPayload {
   cellarAddress: string
   depositAmount: number
   slippage: number
+}
+
+export interface DepositAndSwapParams {
+  provider: Provider
+  senderAddress: string
+  payload: DepositAndSwapPayload
 }
