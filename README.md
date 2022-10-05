@@ -115,11 +115,11 @@ Files of note:
 
 Hooks per output
 ![query data](./querying-data.png)
-If there's a new cellar with a different cellar or staker contract with different ABI and output value we should create output actions for it inside `data/actions/{cellarContractname}/{outputName}` and branch those actions inside `data/hooks/{outputName}`. If we found same method and same calculation on the smart contract/output we should put it inside `data/actions/common/{outputName}`
+If there's a new cellar with a different cellar or staker contract that has a different ABI and output value, we should create output actions for it inside `data/actions/{cellarContractname}/{outputName}` and branch those actions inside `data/hooks/{outputName}`. If we find the same method and calculation on the smart contract/output, we should put it inside `data/actions/common/{outputName}`
 
 ## Displaying/Branching UI output
 
-In case of if we don't show specific UI output per cellar, We can specify what will be display or not inside `/src/data/uiConfig.ts` each functions needs a `ConfigProps` to be passed.
+In the case we don't show specific UI output per cellar, We can specify what will be displayed or not inside /src/data/uiConfig.ts. Each function needs to be passed ConfigProps.
 
 example:
 We show "Rewards" only on `aave v2` cellar
