@@ -20,7 +20,12 @@ export const useUserStakes = (config: ConfigProps) => {
   )
 
   const query = useQuery(
-    ["USE_USER_STAKES", address, sommPrice.data],
+    [
+      "USE_USER_STAKES",
+      config.cellar.address,
+      address,
+      sommPrice.data,
+    ],
     async ({ queryKey: [, _address] }) => {
       if (!sommPrice.data) {
         throw new Error("Sommelier price is undefined")

@@ -111,6 +111,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     addressOrName: address,
     token: selectedToken?.address,
     formatUnits: "wei",
+    watch: true,
   })
 
   const erc20Contract =
