@@ -12,7 +12,6 @@ import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import ConnectButton from "components/_buttons/ConnectButton"
-import { ImportMetamaskButton } from "components/_buttons/ImportMetamaskButton"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useIsMounted } from "hooks/utils/useIsMounted"
@@ -142,23 +141,16 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
               >
                 {isMounted &&
-                  (isConnected ? (
-                    <>
-                      {(lpTokenData &&
+                  (isConnected
+                    ? (lpTokenData &&
                         toEther(
                           lpTokenData.formatted,
                           18,
                           false,
                           2
                         )) ||
-                        "..."}
-                      <ImportMetamaskButton
-                        address={cellarConfig.lpToken.address}
-                      />
-                    </>
-                  ) : (
-                    "--"
-                  ))}
+                      "..."
+                    : "--")}
               </CardStat>
             </VStack>
             {isBondingEnabled(cellarConfig) && (

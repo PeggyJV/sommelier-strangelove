@@ -2,7 +2,6 @@ import { SimpleGrid, VStack } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { InlineImage } from "components/InlineImage"
 import { BaseButton } from "components/_buttons/BaseButton"
-import { ImportMetamaskButton } from "components/_buttons/ImportMetamaskButton"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { ConfigProps } from "data/types"
@@ -57,16 +56,9 @@ export const Rewards = ({
             boxSize={5}
           />
           {isMounted &&
-            (isConnected ? (
-              <>
-                {userStakes?.totalClaimAllRewards.formatted || "..."}
-                <ImportMetamaskButton
-                  address={cellarConfig.rewardTokenAddress || ""}
-                />
-              </>
-            ) : (
-              "--"
-            ))}
+            (isConnected
+              ? userStakes?.totalClaimAllRewards.formatted || "..."
+              : "--")}
         </CardStat>
       </VStack>
       <BaseButton
