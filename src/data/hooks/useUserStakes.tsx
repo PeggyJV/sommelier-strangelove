@@ -12,8 +12,8 @@ export const useUserStakes = (config: ConfigProps) => {
   const sommPrice = useSommelierPrice()
 
   const AAVE_STAKER_QUERY_ENABLED = Boolean(
-    address &&
-      config.staker?.key === StakerKey.AAVE_STAKER &&
+    config.staker?.key === StakerKey.AAVE_STAKER &&
+      address &&
       stakerContract?.provider &&
       stakerSigner?.provider &&
       stakerSigner.signer
@@ -22,9 +22,9 @@ export const useUserStakes = (config: ConfigProps) => {
   const query = useQuery(
     [
       "USE_USER_STAKES",
-      config.cellar.address,
       address,
       sommPrice.data,
+      config.staker?.address,
     ],
     async ({ queryKey: [, _address] }) => {
       if (!sommPrice.data) {

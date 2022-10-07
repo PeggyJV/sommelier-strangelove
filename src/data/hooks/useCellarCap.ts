@@ -22,7 +22,7 @@ export const useCellarCap = (config: ConfigProps) => {
   )
 
   const query = useQuery(
-    ["USE_CELLAR_CAP", config.cellar.address, liquidityLimit],
+    ["USE_CELLAR_CAP", liquidityLimit, config.cellar.address],
     async () => {
       if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getCellarCap_AAVE_V2_STABLE_CELLAR({

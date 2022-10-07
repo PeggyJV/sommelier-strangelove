@@ -21,7 +21,7 @@ export const useApy = (config: ConfigProps) => {
   )
 
   const query = useQuery(
-    ["USE_APY", config.cellar.address, sommPrice.data],
+    ["USE_APY", sommPrice.data, config.cellar.address],
     async () => {
       if (!sommPrice.data) {
         throw new Error("Sommelier price is undefined")

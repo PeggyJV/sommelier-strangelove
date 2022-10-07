@@ -25,7 +25,7 @@ export const useTvm = (config: ConfigProps) => {
   )
 
   const query = useQuery(
-    ["USE_TVM", config.cellar.address, tvlTotal],
+    ["USE_TVM", tvlTotal, config.cellar.address],
     async () => {
       if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getTvm_AAVE_V2_STABLE_CELLAR(

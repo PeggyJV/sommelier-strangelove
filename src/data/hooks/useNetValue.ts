@@ -33,7 +33,7 @@ export const useNetValue = (config: ConfigProps) => {
   )
 
   const query = useQuery(
-    ["USE_NET_VALUE", config.cellar.address, lpToken.data?.formatted],
+    ["USE_NET_VALUE", lpToken.data?.formatted, config.cellar.address],
     async () => {
       if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getNetValue_AAVE_V2_STABLE_CELLAR({
