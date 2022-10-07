@@ -74,6 +74,7 @@ export const cellarDataMap: CellarDataMap = {
   //     "A long-only strategy for dynamic BTC-ETH portfolio management. A better way to hold while better managing the negative volatility.",
   //   strategyType: "Crypto portfolio",
   //   managementFee: "2%",
+  //   managementFeeTooltip: "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   //   protocols: "Uniswap V3",
   //   strategyAssets: ["BTC", "ETH", "USDC"],
   //   performanceSplit: {
@@ -141,6 +142,7 @@ export const cellarDataMap: CellarDataMap = {
   //     "A dynamic long-only strategy for BTC-ETH portfolio management. More responsive to recent market changes and slightly more risky than BTC-ETH Trend strategy.",
   //   strategyType: "Crypto portfolio",
   //   managementFee: "2%",
+  //   managementFeeTooltip: "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   //   protocols: "Uniswap V3",
   //   strategyAssets: ["BTC", "ETH", "USDC"],
   //   performanceSplit: {
