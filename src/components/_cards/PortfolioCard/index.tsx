@@ -3,28 +3,24 @@ import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { VFC } from "react"
 import { BondButton } from "components/_buttons/BondButton"
-import { InlineImage } from "components/InlineImage"
-import { TransparentCard } from "./TransparentCard"
+import { TransparentCard } from "../TransparentCard"
 import { toEther } from "utils/formatCurrency"
-import { BaseButton } from "components/_buttons/BaseButton"
-import { useHandleTransaction } from "hooks/web3"
-import BondingTableCard from "./BondingTableCard"
+import BondingTableCard from "../BondingTableCard"
 import { useAccount, useConnect } from "wagmi"
 import { depositAssetTokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import ConnectButton from "components/_buttons/ConnectButton"
-import { analytics } from "utils/analytics"
-import { ImportMetamaskButton } from "components/_buttons/ImportMetamaskButton"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { useNetValue } from "data/hooks/useNetValue"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
-import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
+import { Rewards } from "./Rewards"
+import { isBondingEnabled, isRewardsEnabled } from "data/uiConfig"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isMounted = useIsMounted()
@@ -33,7 +29,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const cellarConfig = cellarDataMap[id].config
 
   const { connectors } = useConnect()
-  const { stakerSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData } = lpToken
@@ -42,27 +37,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     !lpTokenData || parseInt(toEther(lpTokenData?.formatted, 18)) <= 0
 
   const { data: userStakes } = useUserStakes(cellarConfig)
-  const userRewards =
-    userStakes?.totalClaimAllRewards?.value.toString()
-
-  const claimAllDisabled =
-    !isConnected || !userRewards || parseInt(userRewards) <= 0
 
   const { data: netValue } = useNetValue(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
-
-  const { doHandleTransaction } = useHandleTransaction()
-
-  const handleClaimAll = async () => {
-    analytics.track("rewards.claim-started")
-    const tx = await stakerSigner?.claimAll()
-    await doHandleTransaction({
-      ...tx,
-      onSuccess: () => analytics.track("rewards.claim-succeeded"),
-      onError: () => analytics.track("rewards.claim-failed"),
-    })
-    // outputUserData.refetch()
-  }
 
   return (
     <TransparentCard p={8} {...props}>
@@ -164,81 +141,45 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
               >
                 {isMounted &&
-                  (isConnected ? (
-                    <>
-                      {(lpTokenData &&
+                  (isConnected
+                    ? (lpTokenData &&
                         toEther(
                           lpTokenData.formatted,
                           18,
                           false,
                           2
                         )) ||
-                        "..."}
-                      <ImportMetamaskButton
-                        address={cellarConfig.lpToken.address}
-                      />
-                    </>
-                  ) : (
-                    "--"
-                  ))}
-              </CardStat>
-            </VStack>
-            <VStack align="flex-start">
-              <CardStat
-                label="bonded tokens"
-                tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
-              >
-                {isMounted &&
-                  (isConnected
-                    ? userStakes?.totalBondedAmount.formatted || "..."
+                      "..."
                     : "--")}
               </CardStat>
             </VStack>
-            {isMounted && <BondButton disabled={lpTokenDisabled} />}
+            {isBondingEnabled(cellarConfig) && (
+              <>
+                <VStack align="flex-start">
+                  <CardStat
+                    label="bonded tokens"
+                    tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
+                  >
+                    {isMounted &&
+                      (isConnected
+                        ? userStakes?.totalBondedAmount.formatted ||
+                          "..."
+                        : "--")}
+                  </CardStat>
+                </VStack>
+                {isMounted && (
+                  <BondButton disabled={lpTokenDisabled} />
+                )}
+              </>
+            )}
           </SimpleGrid>
-          <SimpleGrid
-            templateColumns="max-content"
-            templateRows="repeat(2, 1fr)"
-            spacing={4}
-            alignItems="flex-end"
-          >
-            <VStack align="flex-start">
-              <CardStat
-                label="rewards"
-                tooltip="Amount of SOMM earned and available to be claimed"
-              >
-                <InlineImage
-                  src="/assets/icons/somm.png"
-                  alt="sommelier logo"
-                  boxSize={5}
-                />
-                {isMounted &&
-                  (isConnected ? (
-                    <>
-                      {userStakes?.totalClaimAllRewards.formatted ||
-                        "..."}
-                      <ImportMetamaskButton
-                        address={
-                          cellarConfig.rewardTokenAddress || ""
-                        }
-                      />
-                    </>
-                  ) : (
-                    "--"
-                  ))}
-              </CardStat>
-            </VStack>
-            <BaseButton
-              disabled={claimAllDisabled}
-              onClick={handleClaimAll}
-            >
-              Claim All
-            </BaseButton>
-          </SimpleGrid>
+          {isRewardsEnabled(cellarConfig) && (
+            <Rewards cellarConfig={cellarConfig} />
+          )}
         </CardStatRow>
-        {isConnected && userStakes?.userStakes.length && (
-          <BondingTableCard />
-        )}
+        {isBondingEnabled(cellarConfig) &&
+          isConnected &&
+          userStakes?.userStakes.length && <BondingTableCard />}
       </VStack>
     </TransparentCard>
   )

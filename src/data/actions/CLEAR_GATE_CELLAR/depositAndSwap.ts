@@ -1,8 +1,9 @@
 import { ContractTransaction, ethers } from "ethers"
-import { CellarRouter } from "src/abi/types"
+import { ClearGateRouter } from "src/abi/types"
 import {
   AlphaRouter,
   AlphaRouterParams,
+  SwapRoute,
   V3Route,
 } from "@uniswap/smart-order-router"
 import {
@@ -17,10 +18,25 @@ import { Provider } from "@wagmi/core"
 import { DepositAndSwapParams } from "../types"
 
 interface GetSwapRouteParams {
-  provider: Provider
+  swapRoute: SwapRoute
   slippage: number
-  depositAmount: number
+  activeAsset?: {
+    address: string
+    decimals: number
+    symbol: string
+  }
+  amountInWei: ethers.BigNumber
+}
+
+interface DepositAndSwapParams_CLEAR_GATE_CELLAR
+  extends DepositAndSwapParams {
+  cellarRouterSigner: ClearGateRouter
+}
+
+interface CreateSwapRouteParams {
   senderAddress?: string
+  depositAmount: number
+  provider: Provider
   selectedToken?: {
     address: string
     decimals: number
@@ -31,27 +47,21 @@ interface GetSwapRouteParams {
     decimals: number
     symbol: string
   }
+  slippage: number
 }
 
-interface DepositAndSwapParams_AAVE_V2_STABLE_CELLAR
-  extends DepositAndSwapParams {
-  cellarRouterSigner: CellarRouter
-}
-
-const getSwapRoute = async ({
+const createSwapRoute = async ({
+  provider,
   selectedToken,
   depositAmount,
   activeAsset,
-  provider,
   senderAddress,
   slippage,
-}: GetSwapRouteParams) => {
+}: CreateSwapRouteParams) => {
   const router = new AlphaRouter({
     chainId: 1,
     provider: provider as unknown as AlphaRouterParams["provider"],
   })
-  let error = false
-  let swapRoute
   try {
     const inputToken =
       selectedToken?.address &&
@@ -66,6 +76,7 @@ const getSwapRoute = async ({
       depositAmount.toString(),
       selectedToken?.decimals
     )
+
     const inputAmt = CurrencyAmount.fromRawAmount(
       inputToken as Currency,
       JSBI.BigInt(amtInWei)
@@ -77,7 +88,7 @@ const getSwapRoute = async ({
       activeAsset?.symbol,
       activeAsset?.symbol
     )
-    swapRoute = await router.route(
+    const swapRoute = await router.route(
       inputAmt,
       outputToken,
       TradeType.EXACT_INPUT,
@@ -91,10 +102,29 @@ const getSwapRoute = async ({
         deadline: Math.floor(Date.now() / 1000 + 1800),
       }
     )
-  } catch (e) {
-    console.warn("Error Occured ", e)
-    error = true
+    return swapRoute
+  } catch (error) {
+    console.warn(error)
+    throw error
   }
+}
+
+const createSwapData = ({
+  slippage,
+  swapRoute,
+  activeAsset,
+  amountInWei,
+}: GetSwapRouteParams) => {
+  const minAmountOut = swapRoute.quote
+    .multiply(
+      // must multiply slippage by 100 because value must be an integer (eg. 0.5 -> 50)
+      100_00 - slippage * 100
+    )
+    .divide(100_00)
+  const minAmountOutInWei = ethers.utils.parseUnits(
+    minAmountOut.toExact(),
+    activeAsset?.decimals
+  )
 
   const tokenPath = swapRoute?.route[0].tokenPath.map(
     (token) => token?.address
@@ -104,7 +134,11 @@ const getSwapRoute = async ({
   const fee = v3Route?.pools[0]?.fee
   const poolFees = swapRoute?.route[0]?.protocol === "V3" ? [fee] : []
 
-  return { route: swapRoute, tokenPath, poolFees, error }
+  const swapData = ethers.utils.defaultAbiCoder.encode(
+    ["address[]", "uint24[]", "uint256", "uint256"],
+    [tokenPath, poolFees, amountInWei, minAmountOutInWei]
+  )
+  return swapData
 }
 
 export const depositAndSwap = async ({
@@ -112,9 +146,17 @@ export const depositAndSwap = async ({
   cellarRouterSigner,
   provider,
   senderAddress,
-}: DepositAndSwapParams_AAVE_V2_STABLE_CELLAR): Promise<ContractTransaction> => {
+}: DepositAndSwapParams_CLEAR_GATE_CELLAR): Promise<ContractTransaction> => {
   try {
-    const swapRoute = await getSwapRoute({
+    if (!payload.selectedToken?.address) {
+      throw new Error("Token address is undefined")
+    }
+
+    const amountInWei = ethers.utils.parseUnits(
+      payload.depositAmount.toString(),
+      payload.selectedToken?.decimals
+    )
+    const swapRoute = await createSwapRoute({
       depositAmount: payload.depositAmount,
       provider: provider,
       selectedToken: payload.selectedToken,
@@ -122,31 +164,42 @@ export const depositAndSwap = async ({
       activeAsset: payload.activeAsset,
       slippage: payload.slippage,
     })
-    if (!swapRoute?.route || !swapRoute.tokenPath || swapRoute?.error)
-      throw new Error("swapRoute.route is undefined")
 
-    const amtInWei = ethers.utils.parseUnits(
-      payload.depositAmount.toString(),
-      payload.selectedToken?.decimals
-    )
-    const minAmountOut = swapRoute.route.quote
-      .multiply(
-        // must multiply slippage by 100 because value must be an integer (eg. 0.5 -> 50)
-        100_00 - payload.slippage * 100
-      )
-      .divide(100_00)
-    const minAmountOutInWei = ethers.utils.parseUnits(
-      minAmountOut.toExact(),
-      payload.activeAsset?.decimals
-    )
+    if (!swapRoute) {
+      throw new Error("swapRoute is undefined")
+    }
+    const swapData = createSwapData({
+      swapRoute,
+      slippage: payload.slippage,
+      activeAsset: payload.activeAsset,
+      amountInWei,
+    })
 
-    return await cellarRouterSigner.depositAndSwapIntoCellar(
+    const gasLimitEstimated = await (async () => {
+      try {
+        const gas =
+          await cellarRouterSigner.estimateGas.depositAndSwap(
+            payload.cellarAddress,
+            1,
+            swapData,
+            amountInWei,
+            payload.selectedToken?.address!
+          )
+        return gas.mul(120).div(100).toString() // increase 20%
+      } catch (error) {
+        return 600000
+      }
+    })()
+
+    return await cellarRouterSigner.depositAndSwap(
       payload.cellarAddress,
-      swapRoute.tokenPath,
-      swapRoute.poolFees,
-      amtInWei,
-      minAmountOutInWei,
-      senderAddress
+      1,
+      swapData,
+      amountInWei,
+      payload.selectedToken?.address,
+      {
+        gasLimit: gasLimitEstimated,
+      }
     )
   } catch (error) {
     throw error

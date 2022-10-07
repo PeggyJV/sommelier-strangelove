@@ -1,7 +1,7 @@
 import { AaveV2CellarV2 } from "src/abi/types"
 import { getCalulatedTvl } from "utils/bigNumber"
 import { formatCurrency } from "utils/formatCurrency"
-import { getActiveAsset } from "./getActiveAsset"
+import { getActiveAsset } from "../common/getActiveAsset"
 
 export const getTvm = async (
   cellarContract: AaveV2CellarV2,

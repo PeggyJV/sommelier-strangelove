@@ -23,7 +23,12 @@ export const useCurrentDeposits = (config: ConfigProps) => {
   )
 
   const query = useQuery(
-    ["USE_CURRENT_DEPOSITS"],
+    [
+      "USE_CURRENT_DEPOSITS",
+      addedLiquidityAllTime,
+      removedLiquidityAllTime,
+      config.cellar.address,
+    ],
     async () => {
       if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getCurrentDeposits_AAVE_V2_STABLE_CELLAR({

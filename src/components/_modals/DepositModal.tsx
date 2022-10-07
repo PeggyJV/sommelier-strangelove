@@ -111,6 +111,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     addressOrName: address,
     token: selectedToken?.address,
     formatUnits: "wei",
+    watch: true,
   })
 
   const erc20Contract =
@@ -225,8 +226,8 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
       const response = isActiveAsset
-        ? await cellarSigner.deposit([amtInWei, address])
-        : await depositAndSwap?.mutateAsync({
+        ? await cellarSigner.deposit(amtInWei, address)
+        : await depositAndSwap.mutateAsync({
             cellarAddress: cellarConfig.cellar.address,
             depositAmount: depositAmount,
             slippage,
@@ -362,7 +363,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           <CardHeading>cellar details</CardHeading>
           <HStack justify="space-between">
             <Text as="span">Cellar</Text>
-            <Text as="span">{cellarName}-CLR-S</Text>
+            <Text as="span">{cellarName}</Text>
           </HStack>
           <HStack justify="space-between">
             <Text as="span">Active token strategy</Text>

@@ -1,5 +1,4 @@
 import BigNumber from "bignumber.js"
-import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { AaveV2CellarV2, SommStaking } from "src/abi/types"
 import { getExpectedApy } from "utils/cellarApy"
 
@@ -8,7 +7,8 @@ const yearInSecsBN = new BigNumber(yearInSecs)
 
 export const getApy = async (
   cellarContract: AaveV2CellarV2,
-  stakerContract: SommStaking
+  stakerContract: SommStaking,
+  sommPrice: string
 ) => {
   try {
     const maxLocked = new BigNumber(
@@ -37,11 +37,6 @@ export const getApy = async (
       totalDepositWithBoostRes.toString()
     ).dividedBy(new BigNumber(10).pow(18))
     const withUserDeposit = totalDepositWithBoost.plus(10000)
-
-    const sommPrice = await fetchCoingeckoPrice("sommelier", "usd")
-    if (!sommPrice) {
-      throw new Error("sommelierPrice is undefined")
-    }
 
     const potentialStakingApy = rewardRate
       .multipliedBy(sommPrice)

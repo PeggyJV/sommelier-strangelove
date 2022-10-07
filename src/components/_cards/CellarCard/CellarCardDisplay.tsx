@@ -60,9 +60,6 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
             <Heading size="lg" mr={1} lineHeight="100%">
               {data.name}
             </Heading>
-            <Heading size="sm" as="p" color="neutral.300" mt="auto">
-              CLR-S
-            </Heading>
           </Flex>
           <Flex>
             <Tag>{data.strategyType}</Tag>

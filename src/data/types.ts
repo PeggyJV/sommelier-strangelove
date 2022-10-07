@@ -39,6 +39,7 @@ export interface CellarDataMap {
     description: string
     strategyType: string
     managementFee: string
+    managementFeeTooltip?: string
     protocols: string
     strategyAssets: string[]
     performanceSplit: {

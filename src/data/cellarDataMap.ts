@@ -68,12 +68,13 @@ export const cellarDataMap: CellarDataMap = {
     },
   },
   // TODO: Change key and config
-  // "btc-eth-trend": {
+  // [config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS]: {
   //   name: "btc-eth-trend",
   //   description:
   //     "A long-only strategy for dynamic BTC-ETH portfolio management. A better way to hold while better managing the negative volatility.",
   //   strategyType: "Crypto portfolio",
   //   managementFee: "2%",
+  //   managementFeeTooltip: "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   //   protocols: "Uniswap V3",
   //   strategyAssets: ["BTC", "ETH", "USDC"],
   //   performanceSplit: {
@@ -90,23 +91,13 @@ export const cellarDataMap: CellarDataMap = {
   //   },
   //   strategyBreakdown: {
   //     goals: `ETH-BTC Trend strategy aims to provide a better risk-return tradeoff than holding ETH and/or BTC. The strategy follows upward price trends and exits the market when no positive trend is detected. The goal is to overperform simple buy and hold strategy, cut losses during market downturn, and re-establish the long position after prices start to go up, so that Sommelier users will not miss out any subsequent price appreciation.`,
-  //     highlights: `- Holds a combination of BTC and ETH with smart rebalancing to suit market conditions
+  //     highlights: `The cellar:
 
-  //     - Has high exposure to BTC and ETH when the trend in price goes up, no exposure when the trend is down
+  //     - Holds a combination of BTC and ETH with smart rebalancing depending on market conditions
 
-  //     - Applies smart rebalancing rules to overweight the asset with higher upside potential, as found from historical probabilities
+  //     - High exposure to BTC and ETH when price trend goes up, no exposure when the trend is down
 
-  //     - Uses risk management rules to reduce risks in an unfavorable market and exit completely in a bear market
-
-  //     - Is designed to re-establish long positions after prices start to go up
-
-  //     - Aims to outperform BTC, ETH and equally-weighted BTC and ETH in the medium to long run
-
-  //     - Is designed to offer lower volatility and a better risk-return trade-off than holding a single crypto asset
-
-  //     - Follows quantitative rules with no human discretion for rebalancing
-
-  //     - Is optimized for a medium to long-term holding period to capture the majority of all positive trends and avoid extended periods with negative trends`,
+  //     - Risk management rules to reduce risks in unfavorable market`,
   //     description: `The cellar accumulates BTC and ETH relative to USDC with a medium to long-term perspective. The rebalancing decision applies the concept of trend following while also considering the correlation between the portfolio assets and emerging trends. The strategy aims to outperform the benchmarks and have lower volatility and risk than holding BTC or ETH individually or an equally weighted portfolio of BTC and ETH.
 
   //     The strategy is long only but cuts risk exposure when the price trends are negative. The cellar is based on backtests and is expected to outperform at times when price increases are moderate and to outperform significantly and reduce risks in a bear market. The strategy is likely to underperform in sideways markets or when prices are rising extremely quickly (because of being long only and not using leverage). The cellar is expected to capture the majority of any positive price trends, but it will always enter the market only after the trend has started to be positive. The strategy will limit losses if price movements are negative with the expectation of improving the risk-reward ratio. The benefits of the strategy can emerge within 3-6 month (i.e., medium term) holding period in case of diverse market conditions and are highly likely to emerge for holding periods over 1 year (i.e., long term).`,
@@ -119,26 +110,20 @@ export const cellarDataMap: CellarDataMap = {
   //     value: "123.72%",
   //   },
   //   config: {
-  //     id: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+  //     id: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
   //     lpToken: {
-  //       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+  //       address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
   //     },
   //     cellarRouter: {
-  //       address: config.CONTRACT.CELLAR_ROUTER.ADDRESS,
-  //       abi: config.CONTRACT.CELLAR_ROUTER.ABI,
-  //       key: CellarRouterKey.CELLAR_ROUTER,
+  //       address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
+  //       abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
+  //       key: CellarRouterKey.CLEAR_GATE_ROUTER,
   //     },
   //     cellar: {
-  //       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-  //       abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
-  //       key: CellarKey.AAVE_V2_STABLE_CELLAR,
+  //       address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //       abi: config.CONTRACT.CLEAR_GATE_CELLAR.ABI,
+  //       key: CellarKey.CLEAR_GATE_CELLAR,
   //     },
-  //     staker: {
-  //       address: config.CONTRACT.AAVE_STAKER.ADDRESS,
-  //       abi: config.CONTRACT.AAVE_STAKER.ABI,
-  //       key: StakerKey.AAVE_STAKER,
-  //     },
-  //     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   //   },
   // },
   // "btc-eth-moment": {
@@ -147,6 +132,7 @@ export const cellarDataMap: CellarDataMap = {
   //     "A dynamic long-only strategy for BTC-ETH portfolio management. More responsive to recent market changes and slightly more risky than BTC-ETH Trend strategy.",
   //   strategyType: "Crypto portfolio",
   //   managementFee: "2%",
+  //   managementFeeTooltip: "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   //   protocols: "Uniswap V3",
   //   strategyAssets: ["BTC", "ETH", "USDC"],
   //   performanceSplit: {
@@ -164,23 +150,13 @@ export const cellarDataMap: CellarDataMap = {
   //   strategyBreakdown: {
   //     goals: `ETH-BTC Momentum strategy aims to provide a better risk-return tradeoff than holding ETH and/or BTC. The strategy reacts to positive price movement to buy ETH and/or BTC and decreases positions otherwise. The goal is to overperform simple buy-and-hold strategy, decrease losses during market downturn, and re-establish the long position after prices start to go up, so that Sommelier users will not miss out any subsequent price appreciation.`,
 
-  //     highlights: `- Holds a combination of BTC and ETH with smart rebalancing to suit market conditions
+  //     highlights: `The cellar:
+
+  //     - Holds a combination of BTC and ETH with smart rebalancing to suit market conditions
 
   //     - Has high exposure to BTC and ETH when price momentum is positive, low exposure when prices are dropping
 
-  //     - Applies smart rebalancing rules to overweight the asset that has a higher probability of appreciating faster
-
-  //     - Uses risk management rules to reduce risks when price show signs of falling
-
-  //     - Aims to outperform BTC, ETH and equally-weighted BTC and ETH in the medium to long run
-
-  //     - Is designed to offer lower volatility and better risk-return trade-off than holding a single crypto asset would
-
-  //     - Follows quantitative rules with no human discretion for rebalancing
-
-  //     - Is optimized for a medium to long-term holding period to have high market exposure when prices are appreciating and low market exposure when markets are depreciating
-
-  //     - Applies a strategy that never completely exits the positions of the risky assets BTC and ETH but just reduces the risk level`,
+  //     - Uses risk management rules to reduce risks in an unfavorable market`,
   //     description: `The cellar accumulates BTC and ETH relative to USDC with a medium to long-term perspective. The rebalancing decision is based on price momentum and the asset with higher momentum is assigned to be overweight. The strategy aims to outperform the benchmarks and have lower volatility and risk than holding BTC or ETH individually or in an equally weighted portfolio of BTC and ETH.
 
   //     The strategy is long only, but it reduces risk exposure if price momentum is negative. Backtests indicate the cellar will outperform at times when prices are rising moderately or one of the portfolio assets is appreciating faster than the other. The strategy is likely to underperform when there are extreme price appreciations but is expected to capture the majority of any positive price movements. The strategy is expected to outperform in a bear market since it can cut risk exposure, but it is exposed to negative price movements because it is long only and always holds at least a small proportion of risky assets. The benefits of the strategy should emerge within 3-6 month (i.e., medium term) holding period in case of diverse market conditions and are highly likely to emerge for holding periods over 1 year (i.e., long term).
@@ -195,26 +171,20 @@ export const cellarDataMap: CellarDataMap = {
   //     value: "84.15%",
   //   },
   //   config: {
-  //     id: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-  //     lpToken: {
-  //       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-  //     },
-  //     cellarRouter: {
-  //       address: config.CONTRACT.CELLAR_ROUTER.ADDRESS,
-  //       abi: config.CONTRACT.CELLAR_ROUTER.ABI,
-  //       key: CellarRouterKey.CELLAR_ROUTER,
-  //     },
-  //     cellar: {
-  //       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-  //       abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
-  //       key: CellarKey.AAVE_V2_STABLE_CELLAR,
-  //     },
-  //     staker: {
-  //       address: config.CONTRACT.AAVE_STAKER.ADDRESS,
-  //       abi: config.CONTRACT.AAVE_STAKER.ABI,
-  //       key: StakerKey.AAVE_STAKER,
-  //     },
-  //     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+  //   id: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //   lpToken: {
+  //     address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //   },
+  //   cellarRouter: {
+  //     address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
+  //     abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
+  //     key: CellarRouterKey.CLEAR_GATE_ROUTER,
+  //   },
+  //   cellar: {
+  //     address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //     abi: config.CONTRACT.CLEAR_GATE_CELLAR.ABI,
+  //     key: CellarKey.CLEAR_GATE_CELLAR,
   //   },
   // },
+  //
 }

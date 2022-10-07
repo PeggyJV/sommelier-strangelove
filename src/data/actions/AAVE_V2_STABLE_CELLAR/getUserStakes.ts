@@ -1,6 +1,5 @@
 import BigNumber from "bignumber.js"
 import { ethers } from "ethers"
-import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { SommStaking } from "src/abi/types"
 import { toEther } from "utils/formatCurrency"
 import { StakerUserData, UserStake } from "../types"
@@ -8,15 +7,12 @@ import { StakerUserData, UserStake } from "../types"
 export const getUserStakes = async (
   address: string,
   stakerContract: SommStaking,
-  stakerSigner: SommStaking
+  stakerSigner: SommStaking,
+  sommelierPrice: string
 ) => {
   try {
     if (!stakerSigner.provider || !stakerSigner.signer) {
       throw new Error("provider or signer is undefined")
-    }
-    const sommPrice = await fetchCoingeckoPrice("sommelier", "usd")
-    if (!sommPrice) {
-      throw new Error("sommelierPrice is undefined")
     }
 
     const userStakes = await stakerContract.getUserStakes(address)
@@ -64,7 +60,7 @@ export const getUserStakes = async (
 
     const claimAllRewardsUSD = totalClaimAllRewards
       .div(new BigNumber(10).pow(6)) // convert from 6 decimals
-      .multipliedBy(new BigNumber(sommPrice))
+      .multipliedBy(new BigNumber(sommelierPrice))
 
     const convertedClaimAllRewards = claimAllRewards.map(
       (item) => new BigNumber(item.toString())

@@ -53,6 +53,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     protocols,
     strategyType,
     managementFee,
+    managementFeeTooltip,
     strategyAssets,
     performanceSplit,
     strategyProvider,
@@ -113,7 +114,9 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           </CardStat>
           <CardStat
             label="mgmt fee"
-            tooltip="Platform management fee"
+            tooltip={
+              managementFeeTooltip || "Platform management fee"
+            }
           >
             <UsdcIcon
               color="purple.base"
