@@ -363,7 +363,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           <CardHeading>cellar details</CardHeading>
           <HStack justify="space-between">
             <Text as="span">Cellar</Text>
-            <Text as="span">{cellarName}-CLR-S</Text>
+            <Text as="span">{cellarName}</Text>
           </HStack>
           <HStack justify="space-between">
             <Text as="span">Active token strategy</Text>

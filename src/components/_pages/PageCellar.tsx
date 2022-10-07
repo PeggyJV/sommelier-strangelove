@@ -3,7 +3,6 @@ import {
   Heading,
   HeadingProps,
   HStack,
-  Text,
   Spinner,
   VStack,
 } from "@chakra-ui/react"
@@ -60,14 +59,6 @@ const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
               <CoinImage />
               <Heading fontSize="2.5rem">
                 {staticCellarData.name}{" "}
-                <Text
-                  as="span"
-                  textTransform="uppercase"
-                  fontSize="1.3rem"
-                  color="neutral.300"
-                >
-                  clr-s
-                </Text>
               </Heading>
             </HStack>
           </VStack>
