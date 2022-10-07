@@ -44,7 +44,7 @@ export const StrategyProvider: VFC<StrategyProviderProps> = ({
         </HStack>
       )}
       <HStack>
-        {logo && <Avatar src={logo} boxSize="16px" />}
+        {logo && <Avatar src={logo} size="xs" />}
         <Text as="span" fontWeight="bold" fontSize={21}>
           {title}
         </Text>
