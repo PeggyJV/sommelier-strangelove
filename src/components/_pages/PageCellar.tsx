@@ -30,10 +30,7 @@ const h2Styles: HeadingProps = {
   pl: 8,
 }
 
-const PageCellar: VFC<CellarPageProps> = ({ data: staticData }) => {
-  const { cellar: staticCellar } = staticData
-  const { id } = staticCellar!
-
+const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const cellarConfig = cellarDataMap[id].config
   const staticCellarData = cellarDataMap[id]
   const { data: tvm } = useTvm(cellarConfig)

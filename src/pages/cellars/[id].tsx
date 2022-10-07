@@ -1,36 +1,25 @@
 import PageCellar from "components/_pages/PageCellar"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
-import {
-  GetCellarQuery,
-  GetCellarRoutesDocument,
-  GetCellarRoutesQuery,
-  GetCellarRouteStaticDocument,
-  GetCellarRouteStaticQuery,
-} from "generated/subgraph"
-import { ssrClient } from "queries/client"
+
 import { ParsedUrlQuery } from "querystring"
+import { cellarDataMap } from "data/cellarDataMap"
 export interface CellarPageProps {
-  data: GetCellarQuery
+  id: string
 }
 
 type Params = ParsedUrlQuery & { id: string }
 
-const CellarPage: NextPage<CellarPageProps> = ({ data }) => {
-  return <PageCellar data={data} />
+const CellarPage: NextPage<CellarPageProps> = ({ id }) => {
+  return <PageCellar id={id} />
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   // query subgraph for all cellars
-  const { data }: { data?: GetCellarRoutesQuery } = await ssrClient
-    .query(GetCellarRoutesDocument)
-    .toPromise()
-  const { cellars } = data!
+  const cellars = Object.keys(cellarDataMap)
 
   // create array of static paths from cellars data
   const paths = cellars.map((cellar) => {
-    const { id } = cellar
-
-    return { params: { id } }
+    return { params: { id: cellar } }
   })
 
   return {
@@ -42,12 +31,8 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params || {}
   // query subgraph for cellar data of given ID
-  const { data }: { data?: GetCellarRouteStaticQuery } =
-    await ssrClient
-      .query(GetCellarRouteStaticDocument, { cellarAddress: id })
-      .toPromise()
 
-  return { props: { data } }
+  return { props: { id } }
 }
 
 export default CellarPage
