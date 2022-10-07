@@ -226,7 +226,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
       const response = isActiveAsset
-        ? await cellarSigner.deposit([amtInWei, address])
+        ? await cellarSigner.deposit(amtInWei, address)
         : await depositAndSwap.mutateAsync({
             cellarAddress: cellarConfig.cellar.address,
             depositAmount: depositAmount,
