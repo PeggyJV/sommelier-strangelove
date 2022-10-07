@@ -1,9 +1,8 @@
 import { NextPage } from "next"
-import { Box, Flex, Heading, Spinner, VStack } from "@chakra-ui/react"
+import { Box, Flex, Heading, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { CellarCard } from "components/_cards/CellarCard"
 import { Section } from "components/_layout/Section"
-import { useGetAllCellarsQuery } from "generated/subgraph"
 import { Education } from "components/Education"
 import { GridHome } from "components/GridHome"
 import {
@@ -11,31 +10,28 @@ import {
   CellarCardData,
 } from "components/_cards/CellarCard/CellarCardDisplay"
 import { Link } from "components/Link"
+import { cellarDataMap } from "data/cellarDataMap"
 
 const PageHome: NextPage = () => {
-  const [cellarsResult] = useGetAllCellarsQuery()
-  const { data, fetching } = cellarsResult
-  const totalCellars = data?.cellars?.length ?? 0
+  const cellars = Object.keys(cellarDataMap)
+  const totalCellars = cellars.length ?? 0
   const numPlaceholderCards = 3 - totalCellars
   const placeholderCardsArray = Array.from(
     Array(numPlaceholderCards).keys()
   )
 
   const CellarGridItems = () => {
-    if (fetching) {
-      return <Spinner />
-    }
     return (
       <>
-        {data?.cellars.map((cellar) => {
+        {cellars.map((cellar) => {
           return (
             <Link
-              href={`/cellars/${cellar.id}`}
-              key={cellar.id}
+              href={`/cellars/${cellar}`}
+              key={cellar}
               display="flex"
               borderRadius={28}
             >
-              <CellarCard cellarAddress={cellar.id} as="li" />
+              <CellarCard cellarAddress={cellar} as="li" />
             </Link>
           )
         })}
