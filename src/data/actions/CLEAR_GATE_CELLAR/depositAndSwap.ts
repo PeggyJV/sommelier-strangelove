@@ -33,14 +33,7 @@ interface DepositAndSwapParams_CLEAR_GATE_CELLAR
   cellarRouterSigner: ClearGateRouter
 }
 
-const createSwapRoute = async ({
-  provider,
-  selectedToken,
-  depositAmount,
-  activeAsset,
-  senderAddress,
-  slippage,
-}: {
+interface CreateSwapRouteParams {
   senderAddress?: string
   depositAmount: number
   provider: Provider
@@ -55,7 +48,16 @@ const createSwapRoute = async ({
     symbol: string
   }
   slippage: number
-}) => {
+}
+
+const createSwapRoute = async ({
+  provider,
+  selectedToken,
+  depositAmount,
+  activeAsset,
+  senderAddress,
+  slippage,
+}: CreateSwapRouteParams) => {
   const router = new AlphaRouter({
     chainId: 1,
     provider: provider as unknown as AlphaRouterParams["provider"],
