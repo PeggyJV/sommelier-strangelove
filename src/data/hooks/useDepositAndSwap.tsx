@@ -1,4 +1,3 @@
-import { Text } from "@chakra-ui/react"
 import { useMutation } from "@tanstack/react-query"
 import { depositAndSwap as depositAndSwap_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/depositAndSwap"
 import { depositAndSwap as depositAndSwap_CLEAR_GATE_CELLAR } from "data/actions/CLEAR_GATE_CELLAR/depositAndSwap"
@@ -35,12 +34,7 @@ export const useDepositAndSwap = (config: ConfigProps) => {
       }
       throw new Error("UNKNOWN CONTRACT")
     } catch (error) {
-      addToast({
-        heading: "Cellar Deposit",
-        body: <Text>{(error as Error).message}</Text>,
-        status: "error",
-        closeHandler: closeAll,
-      })
+      throw error
     }
   })
 
