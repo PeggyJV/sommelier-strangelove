@@ -12,6 +12,7 @@ export const cellarDataMap: CellarDataMap = {
     description:
       "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
     strategyType: "Stablecoin",
+    strategyTypeTooltip: "Cellar uses Stablecoin lending",
     managementFee: "0.25%",
     protocols: "AAVE",
     strategyAssets: [
@@ -67,14 +68,15 @@ export const cellarDataMap: CellarDataMap = {
       rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     },
   },
-  // TODO: Change key and config
-  // [config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS]: {
-  //   name: "btc-eth-trend",
+  // [config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS]: {
+  //   name: "ETH-BTC Trend",
   //   description:
   //     "A long-only strategy for dynamic BTC-ETH portfolio management. A better way to hold while better managing the negative volatility.",
   //   strategyType: "Crypto portfolio",
+  //   strategyTypeTooltip: "Cellar takes long positions in crypto",
   //   managementFee: "2%",
-  //   managementFeeTooltip: "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+  //   managementFeeTooltip:
+  //     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   //   protocols: "Uniswap V3",
   //   strategyAssets: ["BTC", "ETH", "USDC"],
   //   performanceSplit: {
@@ -110,9 +112,9 @@ export const cellarDataMap: CellarDataMap = {
   //     value: "123.72%",
   //   },
   //   config: {
-  //     id: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //     id: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
   //     lpToken: {
-  //       address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //       address: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
   //     },
   //     cellarRouter: {
   //       address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
@@ -120,19 +122,21 @@ export const cellarDataMap: CellarDataMap = {
   //       key: CellarRouterKey.CLEAR_GATE_ROUTER,
   //     },
   //     cellar: {
-  //       address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
-  //       abi: config.CONTRACT.CLEAR_GATE_CELLAR.ABI,
+  //       address: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
+  //       abi: config.CONTRACT.ETH_BTC_TREND_CELLAR.ABI,
   //       key: CellarKey.CLEAR_GATE_CELLAR,
   //     },
   //   },
   // },
-  // "btc-eth-moment": {
-  //   name: "btc-eth-moment",
+  // [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS]: {
+  //   name: "ETH-BTC Momentum",
   //   description:
   //     "A dynamic long-only strategy for BTC-ETH portfolio management. More responsive to recent market changes and slightly more risky than BTC-ETH Trend strategy.",
   //   strategyType: "Crypto portfolio",
+  //   strategyTypeTooltip: "Cellar takes long positions in crypto",
   //   managementFee: "2%",
-  //   managementFeeTooltip: "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+  //   managementFeeTooltip:
+  //     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   //   protocols: "Uniswap V3",
   //   strategyAssets: ["BTC", "ETH", "USDC"],
   //   performanceSplit: {
@@ -171,20 +175,20 @@ export const cellarDataMap: CellarDataMap = {
   //     value: "84.15%",
   //   },
   //   config: {
-  //   id: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
-  //   lpToken: {
-  //     address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
-  //   },
-  //   cellarRouter: {
-  //     address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
-  //     abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
-  //     key: CellarRouterKey.CLEAR_GATE_ROUTER,
-  //   },
-  //   cellar: {
-  //     address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
-  //     abi: config.CONTRACT.CLEAR_GATE_CELLAR.ABI,
-  //     key: CellarKey.CLEAR_GATE_CELLAR,
+  //     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
+  //     lpToken: {
+  //       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
+  //     },
+  //     cellarRouter: {
+  //       address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
+  //       abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
+  //       key: CellarRouterKey.CLEAR_GATE_ROUTER,
+  //     },
+  //     cellar: {
+  //       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
+  //       abi: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ABI,
+  //       key: CellarKey.CLEAR_GATE_CELLAR,
+  //     },
   //   },
   // },
-  //
 }

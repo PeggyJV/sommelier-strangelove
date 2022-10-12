@@ -3,7 +3,7 @@ export enum StakerKey {
 }
 export enum CellarKey {
   AAVE_V2_STABLE_CELLAR = "AAVE_V2_STABLE_CELLAR",
-  CLEAR_GATE_CELLAR = "CLEARGATE_ROUTER",
+  CLEAR_GATE_CELLAR = "CLEARGATE_CELLAR",
 }
 export enum CellarRouterKey {
   CELLAR_ROUTER = "CELLAR_ROUTER",
@@ -38,6 +38,7 @@ export interface CellarDataMap {
     name: string
     description: string
     strategyType: string
+    strategyTypeTooltip?: string
     managementFee: string
     managementFeeTooltip?: string
     protocols: string
