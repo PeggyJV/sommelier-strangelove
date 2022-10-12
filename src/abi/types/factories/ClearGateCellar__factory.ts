@@ -472,7 +472,7 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
-        name: "previousOwner",
+        name: "user",
         type: "address",
       },
       {
@@ -482,7 +482,7 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "OwnershipTransferred",
+    name: "OwnerUpdated",
     type: "event",
   },
   {
@@ -559,31 +559,6 @@ const _abi = [
       },
     ],
     name: "PositionRemoved",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "oldPosition",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "newPosition",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
-      },
-    ],
-    name: "PositionReplaced",
     type: "event",
   },
   {
@@ -1235,19 +1210,6 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "position",
-        type: "address",
-      },
-    ],
-    name: "distrustPosition",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "feeData",
     outputs: [
@@ -1481,7 +1443,7 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "shares",
+        name: "",
         type: "uint256",
       },
     ],
@@ -1634,13 +1596,6 @@ const _abi = [
       },
     ],
     name: "permit",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "popPosition",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1849,31 +1804,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "newPosition",
-        type: "address",
-      },
-    ],
-    name: "replacePosition",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "resetHighWatermark",
     outputs: [],
     stateMutability: "nonpayable",
@@ -1934,6 +1864,19 @@ const _abi = [
       },
     ],
     name: "setLiquidityLimit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "setOwner",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -2175,19 +2118,6 @@ const _abi = [
         type: "bool",
       },
     ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
