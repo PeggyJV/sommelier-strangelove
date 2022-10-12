@@ -69,6 +69,14 @@ export const config = {
       ADDRESS: "0xa953f0c594365b821a847e7b9f4722e338526699",
       ABI: clearGateCellar,
     },
+    ETH_BTC_TREND_CELLAR: {
+      ADDRESS: "0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
+      ABI: clearGateCellar,
+    },
+    ETH_BTC_MOMENTUM_CELLAR: {
+      ADDRESS: "0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
+      ABI: clearGateCellar,
+    },
     CLEAR_GATE_ROUTER: {
       ADDRESS: "0x15533bA95b85DA500e1fAA444871d4760ECc4a58",
       ABI: clearGateRouter,
