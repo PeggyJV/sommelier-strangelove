@@ -1,12 +1,15 @@
 import BigNumber from "bignumber.js"
-import { BigNumber as BigNumberE } from "ethers"
-import { formatUSD } from "utils/formatCurrency"
+import { formatUSD, toEther } from "utils/formatCurrency"
 
-export const getNetValue = (lpTokenValue: BigNumberE) => {
-  const val = new BigNumber(lpTokenValue.toString())
-  const formattedNetValue = val.toFixed(2, 0)
+export const getNetValue = (
+  lpTokenValue: string,
+  decimals: number
+) => {
+  const nv = new BigNumber(toEther(lpTokenValue, decimals, false, 2))
+  const formattedNetValue = nv.toFixed(2, 0)
+
   return {
-    value: val,
+    value: nv,
     formatted: formatUSD(formattedNetValue),
   }
 }
