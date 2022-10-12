@@ -52,6 +52,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const {
     protocols,
     strategyType,
+    strategyTypeTooltip,
     managementFee,
     managementFeeTooltip,
     strategyAssets,
@@ -96,7 +97,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
         >
           <CardStat
             label="strategy type"
-            tooltip="Cellar uses Stablecoin lending"
+            tooltip={strategyTypeTooltip}
           >
             {strategyType}
           </CardStat>
