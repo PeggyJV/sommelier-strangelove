@@ -50,7 +50,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "deposit(uint256,address)": FunctionFragment;
     "depositLimit()": FunctionFragment;
-    "distrustPosition(address)": FunctionFragment;
     "feeData()": FunctionFragment;
     "getPositionType(address)": FunctionFragment;
     "getPositions()": FunctionFragment;
@@ -72,7 +71,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
     "nonces(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "permit(address,address,uint256,uint256,uint8,bytes32,bytes32)": FunctionFragment;
-    "popPosition()": FunctionFragment;
     "positions(uint256)": FunctionFragment;
     "previewDeposit(uint256)": FunctionFragment;
     "previewMint(uint256)": FunctionFragment;
@@ -83,14 +81,13 @@ export interface ClearGateCellarInterface extends utils.Interface {
     "redeem(uint256,address,address)": FunctionFragment;
     "registry()": FunctionFragment;
     "removePosition(uint256)": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
-    "replacePosition(uint256,address)": FunctionFragment;
     "resetHighWatermark()": FunctionFragment;
     "sendFees()": FunctionFragment;
     "setDepositLimit(uint256)": FunctionFragment;
     "setFeesDistributor(bytes32)": FunctionFragment;
     "setHoldingPosition(address)": FunctionFragment;
     "setLiquidityLimit(uint256)": FunctionFragment;
+    "setOwner(address)": FunctionFragment;
     "setPerformanceFee(uint64)": FunctionFragment;
     "setPlatformFee(uint64)": FunctionFragment;
     "setRebalanceDeviation(uint256)": FunctionFragment;
@@ -107,7 +104,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
     "trustPosition(address,uint8)": FunctionFragment;
     "userShareLockStartBlock(address)": FunctionFragment;
     "withdraw(uint256,address,address)": FunctionFragment;
@@ -137,7 +133,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
       | "decreaseAllowance"
       | "deposit"
       | "depositLimit"
-      | "distrustPosition"
       | "feeData"
       | "getPositionType"
       | "getPositions"
@@ -159,7 +154,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
       | "nonces"
       | "owner"
       | "permit"
-      | "popPosition"
       | "positions"
       | "previewDeposit"
       | "previewMint"
@@ -170,14 +164,13 @@ export interface ClearGateCellarInterface extends utils.Interface {
       | "redeem"
       | "registry"
       | "removePosition"
-      | "renounceOwnership"
-      | "replacePosition"
       | "resetHighWatermark"
       | "sendFees"
       | "setDepositLimit"
       | "setFeesDistributor"
       | "setHoldingPosition"
       | "setLiquidityLimit"
+      | "setOwner"
       | "setPerformanceFee"
       | "setPlatformFee"
       | "setRebalanceDeviation"
@@ -194,7 +187,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
       | "totalSupply"
       | "transfer"
       | "transferFrom"
-      | "transferOwnership"
       | "trustPosition"
       | "userShareLockStartBlock"
       | "withdraw"
@@ -278,10 +270,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "depositLimit",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "distrustPosition",
-    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "feeData", values?: undefined): string;
   encodeFunctionData(
@@ -367,10 +355,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "popPosition",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "positions",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -418,14 +402,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "replacePosition",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "resetHighWatermark",
     values?: undefined
   ): string;
@@ -445,6 +421,10 @@ export interface ClearGateCellarInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "setLiquidityLimit",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setOwner",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "setPerformanceFee",
@@ -510,10 +490,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
     ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "trustPosition",
@@ -602,10 +578,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
     functionFragment: "depositLimit",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "distrustPosition",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "feeData", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getPositionType",
@@ -657,10 +629,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "nonces", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "permit", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "popPosition",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "positions", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "previewDeposit",
@@ -690,14 +658,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "replacePosition",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "resetHighWatermark",
     data: BytesLike
   ): Result;
@@ -718,6 +678,7 @@ export interface ClearGateCellarInterface extends utils.Interface {
     functionFragment: "setLiquidityLimit",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setOwner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setPerformanceFee",
     data: BytesLike
@@ -777,10 +738,6 @@ export interface ClearGateCellarInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "trustPosition",
     data: BytesLike
   ): Result;
@@ -802,12 +759,11 @@ export interface ClearGateCellarInterface extends utils.Interface {
     "HighWatermarkReset(uint256)": EventFragment;
     "HoldingPositionChanged(address,address)": EventFragment;
     "LiquidityLimitChanged(uint256,uint256)": EventFragment;
-    "OwnershipTransferred(address,address)": EventFragment;
+    "OwnerUpdated(address,address)": EventFragment;
     "PerformanceFeeChanged(uint64,uint64)": EventFragment;
     "PlatformFeeChanged(uint64,uint64)": EventFragment;
     "PositionAdded(address,uint256)": EventFragment;
     "PositionRemoved(address,uint256)": EventFragment;
-    "PositionReplaced(address,address,uint256)": EventFragment;
     "PositionSwapped(address,address,uint256,uint256)": EventFragment;
     "PulledFromPosition(address,uint256)": EventFragment;
     "Rebalance(address,address,uint256,uint256)": EventFragment;
@@ -831,12 +787,11 @@ export interface ClearGateCellarInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "HighWatermarkReset"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "HoldingPositionChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LiquidityLimitChanged"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnerUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PerformanceFeeChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PlatformFeeChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PositionAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PositionRemoved"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PositionReplaced"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PositionSwapped"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PulledFromPosition"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Rebalance"): EventFragment;
@@ -943,17 +898,16 @@ export type LiquidityLimitChangedEvent = TypedEvent<
 export type LiquidityLimitChangedEventFilter =
   TypedEventFilter<LiquidityLimitChangedEvent>;
 
-export interface OwnershipTransferredEventObject {
-  previousOwner: string;
+export interface OwnerUpdatedEventObject {
+  user: string;
   newOwner: string;
 }
-export type OwnershipTransferredEvent = TypedEvent<
+export type OwnerUpdatedEvent = TypedEvent<
   [string, string],
-  OwnershipTransferredEventObject
+  OwnerUpdatedEventObject
 >;
 
-export type OwnershipTransferredEventFilter =
-  TypedEventFilter<OwnershipTransferredEvent>;
+export type OwnerUpdatedEventFilter = TypedEventFilter<OwnerUpdatedEvent>;
 
 export interface PerformanceFeeChangedEventObject {
   oldPerformanceFee: BigNumber;
@@ -1000,19 +954,6 @@ export type PositionRemovedEvent = TypedEvent<
 >;
 
 export type PositionRemovedEventFilter = TypedEventFilter<PositionRemovedEvent>;
-
-export interface PositionReplacedEventObject {
-  oldPosition: string;
-  newPosition: string;
-  index: BigNumber;
-}
-export type PositionReplacedEvent = TypedEvent<
-  [string, string, BigNumber],
-  PositionReplacedEventObject
->;
-
-export type PositionReplacedEventFilter =
-  TypedEventFilter<PositionReplacedEvent>;
 
 export interface PositionSwappedEventObject {
   newPosition1: string;
@@ -1280,11 +1221,6 @@ export interface ClearGateCellar extends BaseContract {
 
     depositLimit(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    distrustPosition(
-      position: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     feeData(
       overrides?: CallOverrides
     ): Promise<
@@ -1354,7 +1290,7 @@ export interface ClearGateCellar extends BaseContract {
     maxMint(
       receiver: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[BigNumber] & { shares: BigNumber }>;
+    ): Promise<[BigNumber]>;
 
     maxRedeem(
       owner: PromiseOrValue<string>,
@@ -1389,10 +1325,6 @@ export interface ClearGateCellar extends BaseContract {
       v: PromiseOrValue<BigNumberish>,
       r: PromiseOrValue<BytesLike>,
       s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    popPosition(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -1449,16 +1381,6 @@ export interface ClearGateCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    replacePosition(
-      index: PromiseOrValue<BigNumberish>,
-      newPosition: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     resetHighWatermark(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -1484,6 +1406,11 @@ export interface ClearGateCellar extends BaseContract {
 
     setLiquidityLimit(
       newLimit: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setOwner(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -1557,11 +1484,6 @@ export interface ClearGateCellar extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -1656,11 +1578,6 @@ export interface ClearGateCellar extends BaseContract {
   ): Promise<ContractTransaction>;
 
   depositLimit(overrides?: CallOverrides): Promise<BigNumber>;
-
-  distrustPosition(
-    position: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
 
   feeData(
     overrides?: CallOverrides
@@ -1761,10 +1678,6 @@ export interface ClearGateCellar extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  popPosition(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   positions(
     arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -1818,16 +1731,6 @@ export interface ClearGateCellar extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  renounceOwnership(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  replacePosition(
-    index: PromiseOrValue<BigNumberish>,
-    newPosition: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   resetHighWatermark(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -1853,6 +1756,11 @@ export interface ClearGateCellar extends BaseContract {
 
   setLiquidityLimit(
     newLimit: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setOwner(
+    newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1922,11 +1830,6 @@ export interface ClearGateCellar extends BaseContract {
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  transferOwnership(
-    newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -2021,11 +1924,6 @@ export interface ClearGateCellar extends BaseContract {
     ): Promise<BigNumber>;
 
     depositLimit(overrides?: CallOverrides): Promise<BigNumber>;
-
-    distrustPosition(
-      position: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     feeData(
       overrides?: CallOverrides
@@ -2130,8 +2028,6 @@ export interface ClearGateCellar extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    popPosition(overrides?: CallOverrides): Promise<void>;
-
     positions(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -2185,14 +2081,6 @@ export interface ClearGateCellar extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    replacePosition(
-      index: PromiseOrValue<BigNumberish>,
-      newPosition: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     resetHighWatermark(overrides?: CallOverrides): Promise<void>;
 
     sendFees(overrides?: CallOverrides): Promise<void>;
@@ -2214,6 +2102,11 @@ export interface ClearGateCellar extends BaseContract {
 
     setLiquidityLimit(
       newLimit: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setOwner(
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -2285,11 +2178,6 @@ export interface ClearGateCellar extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     trustPosition(
       position: PromiseOrValue<string>,
@@ -2378,14 +2266,14 @@ export interface ClearGateCellar extends BaseContract {
       newLimit?: null
     ): LiquidityLimitChangedEventFilter;
 
-    "OwnershipTransferred(address,address)"(
-      previousOwner?: PromiseOrValue<string> | null,
+    "OwnerUpdated(address,address)"(
+      user?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter;
-    OwnershipTransferred(
-      previousOwner?: PromiseOrValue<string> | null,
+    ): OwnerUpdatedEventFilter;
+    OwnerUpdated(
+      user?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter;
+    ): OwnerUpdatedEventFilter;
 
     "PerformanceFeeChanged(uint64,uint64)"(
       oldPerformanceFee?: null,
@@ -2422,17 +2310,6 @@ export interface ClearGateCellar extends BaseContract {
       position?: PromiseOrValue<string> | null,
       index?: null
     ): PositionRemovedEventFilter;
-
-    "PositionReplaced(address,address,uint256)"(
-      oldPosition?: PromiseOrValue<string> | null,
-      newPosition?: PromiseOrValue<string> | null,
-      index?: null
-    ): PositionReplacedEventFilter;
-    PositionReplaced(
-      oldPosition?: PromiseOrValue<string> | null,
-      newPosition?: PromiseOrValue<string> | null,
-      index?: null
-    ): PositionReplacedEventFilter;
 
     "PositionSwapped(address,address,uint256,uint256)"(
       newPosition1?: PromiseOrValue<string> | null,
@@ -2643,11 +2520,6 @@ export interface ClearGateCellar extends BaseContract {
 
     depositLimit(overrides?: CallOverrides): Promise<BigNumber>;
 
-    distrustPosition(
-      position: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     feeData(overrides?: CallOverrides): Promise<BigNumber>;
 
     getPositionType(
@@ -2735,10 +2607,6 @@ export interface ClearGateCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    popPosition(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     positions(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -2792,16 +2660,6 @@ export interface ClearGateCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    replacePosition(
-      index: PromiseOrValue<BigNumberish>,
-      newPosition: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     resetHighWatermark(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -2827,6 +2685,11 @@ export interface ClearGateCellar extends BaseContract {
 
     setLiquidityLimit(
       newLimit: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setOwner(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -2896,11 +2759,6 @@ export interface ClearGateCellar extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -3009,11 +2867,6 @@ export interface ClearGateCellar extends BaseContract {
 
     depositLimit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    distrustPosition(
-      position: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     feeData(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getPositionType(
@@ -3101,10 +2954,6 @@ export interface ClearGateCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    popPosition(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     positions(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -3158,16 +3007,6 @@ export interface ClearGateCellar extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    replacePosition(
-      index: PromiseOrValue<BigNumberish>,
-      newPosition: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     resetHighWatermark(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -3193,6 +3032,11 @@ export interface ClearGateCellar extends BaseContract {
 
     setLiquidityLimit(
       newLimit: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setOwner(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -3264,11 +3108,6 @@ export interface ClearGateCellar extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

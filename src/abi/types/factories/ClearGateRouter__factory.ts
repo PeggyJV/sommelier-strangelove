@@ -243,7 +243,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "assets",
+        name: "sharesToRedeem",
         type: "uint256",
       },
       {

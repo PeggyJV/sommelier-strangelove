@@ -10,7 +10,7 @@ import { getNetValue as getNetValue_CLEAR_GATE_CELLAR } from "data/actions/CLEAR
 
 export const useNetValue = (config: ConfigProps) => {
   const { cellarContract } = useCreateContracts(config)
-  const { lpToken } = useUserBalances(config)
+  const { lpToken, lpTokenInfo } = useUserBalances(config)
 
   const { data: userStakes } = useUserStakes(config)
   const { data: activeAssetRes } = useActiveAsset(config)
@@ -29,7 +29,8 @@ export const useNetValue = (config: ConfigProps) => {
 
   const CLEAR_GATE_CELLAR_QUERY_ENABLED = Boolean(
     config.cellar.key === CellarKey.CLEAR_GATE_CELLAR &&
-      lpToken.data?.value
+      lpToken.data?.formatted &&
+      lpTokenInfo.data?.decimals
   )
 
   const query = useQuery(
@@ -44,10 +45,13 @@ export const useNetValue = (config: ConfigProps) => {
         })
       }
       if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
-        if (!lpToken.data?.value) {
+        if (!lpToken.data?.value || !lpTokenInfo.data?.decimals) {
           throw new Error("lpToken is undefined")
         }
-        return getNetValue_CLEAR_GATE_CELLAR(lpToken.data?.value)
+        return getNetValue_CLEAR_GATE_CELLAR(
+          lpToken.data?.formatted,
+          lpTokenInfo.data?.decimals
+        )
       }
       throw new Error("UNKNOWN CONTRACT")
     },

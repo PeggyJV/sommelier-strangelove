@@ -12,6 +12,7 @@ export const cellarDataMap: CellarDataMap = {
     description:
       "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
     strategyType: "Stablecoin",
+    strategyTypeTooltip: "Cellar uses Stablecoin lending",
     managementFee: "0.25%",
     protocols: "AAVE",
     strategyAssets: [
@@ -67,14 +68,15 @@ export const cellarDataMap: CellarDataMap = {
       rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     },
   },
-  // TODO: Change key and config
-  // [config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS]: {
-  //   name: "btc-eth-trend",
+  // [config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS]: {
+  //   name: "ETH-BTC Trend",
   //   description:
   //     "A long-only strategy for dynamic BTC-ETH portfolio management. A better way to hold while better managing the negative volatility.",
   //   strategyType: "Crypto portfolio",
+  //   strategyTypeTooltip: "Cellar takes long positions in crypto",
   //   managementFee: "2%",
-  //   managementFeeTooltip: "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+  //   managementFeeTooltip:
+  //     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   //   protocols: "Uniswap V3",
   //   strategyAssets: ["BTC", "ETH", "USDC"],
   //   performanceSplit: {
@@ -101,7 +103,7 @@ export const cellarDataMap: CellarDataMap = {
   //     description: `The cellar accumulates BTC and ETH relative to USDC with a medium to long-term perspective. The rebalancing decision applies the concept of trend following while also considering the correlation between the portfolio assets and emerging trends. The strategy aims to outperform the benchmarks and have lower volatility and risk than holding BTC or ETH individually or an equally weighted portfolio of BTC and ETH.
 
   //     The strategy is long only but cuts risk exposure when the price trends are negative. The cellar is based on backtests and is expected to outperform at times when price increases are moderate and to outperform significantly and reduce risks in a bear market. The strategy is likely to underperform in sideways markets or when prices are rising extremely quickly (because of being long only and not using leverage). The cellar is expected to capture the majority of any positive price trends, but it will always enter the market only after the trend has started to be positive. The strategy will limit losses if price movements are negative with the expectation of improving the risk-reward ratio. The benefits of the strategy can emerge within 3-6 month (i.e., medium term) holding period in case of diverse market conditions and are highly likely to emerge for holding periods over 1 year (i.e., long term).`,
-  //     backtesting: `<img src="/assets/images/btc-eth-trend-strategy.png" alt="btc eth trend backtesting" />`,
+  //     backtesting: `<img src="/assets/images/btc-eth-trend-backtesting.png" alt="btc eth trend backtesting" />`,
   //   },
   //   overrideApy: {
   //     title: "Backtested APY",
@@ -110,9 +112,9 @@ export const cellarDataMap: CellarDataMap = {
   //     value: "123.72%",
   //   },
   //   config: {
-  //     id: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //     id: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
   //     lpToken: {
-  //       address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
+  //       address: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
   //     },
   //     cellarRouter: {
   //       address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
@@ -120,19 +122,21 @@ export const cellarDataMap: CellarDataMap = {
   //       key: CellarRouterKey.CLEAR_GATE_ROUTER,
   //     },
   //     cellar: {
-  //       address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
-  //       abi: config.CONTRACT.CLEAR_GATE_CELLAR.ABI,
+  //       address: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
+  //       abi: config.CONTRACT.ETH_BTC_TREND_CELLAR.ABI,
   //       key: CellarKey.CLEAR_GATE_CELLAR,
   //     },
   //   },
   // },
-  // "btc-eth-moment": {
-  //   name: "btc-eth-moment",
+  // [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS]: {
+  //   name: "ETH-BTC Momentum",
   //   description:
   //     "A dynamic long-only strategy for BTC-ETH portfolio management. More responsive to recent market changes and slightly more risky than BTC-ETH Trend strategy.",
   //   strategyType: "Crypto portfolio",
+  //   strategyTypeTooltip: "Cellar takes long positions in crypto",
   //   managementFee: "2%",
-  //   managementFeeTooltip: "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+  //   managementFeeTooltip:
+  //     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   //   protocols: "Uniswap V3",
   //   strategyAssets: ["BTC", "ETH", "USDC"],
   //   performanceSplit: {
@@ -171,20 +175,20 @@ export const cellarDataMap: CellarDataMap = {
   //     value: "84.15%",
   //   },
   //   config: {
-  //   id: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
-  //   lpToken: {
-  //     address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
-  //   },
-  //   cellarRouter: {
-  //     address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
-  //     abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
-  //     key: CellarRouterKey.CLEAR_GATE_ROUTER,
-  //   },
-  //   cellar: {
-  //     address: config.CONTRACT.CLEAR_GATE_CELLAR.ADDRESS,
-  //     abi: config.CONTRACT.CLEAR_GATE_CELLAR.ABI,
-  //     key: CellarKey.CLEAR_GATE_CELLAR,
+  //     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
+  //     lpToken: {
+  //       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
+  //     },
+  //     cellarRouter: {
+  //       address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
+  //       abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
+  //       key: CellarRouterKey.CLEAR_GATE_ROUTER,
+  //     },
+  //     cellar: {
+  //       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
+  //       abi: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ABI,
+  //       key: CellarKey.CLEAR_GATE_CELLAR,
+  //     },
   //   },
   // },
-  //
 }

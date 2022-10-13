@@ -52,6 +52,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const {
     protocols,
     strategyType,
+    strategyTypeTooltip,
     managementFee,
     managementFeeTooltip,
     strategyAssets,
@@ -96,17 +97,18 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
         >
           <CardStat
             label="strategy type"
-            tooltip="Cellar uses Stablecoin lending"
+            tooltip={strategyTypeTooltip}
           >
             {strategyType}
           </CardStat>
           <CardStat
             label="protocols"
             tooltip="Protocols in which Cellar operates"
+            pr={{ sm: 2, lg: 8 }}
           >
             <Image
               src={protocolIcon}
-              alt="aave logo"
+              alt="Protocol Icon"
               boxSize={6}
               mr={2}
             />

@@ -51,6 +51,7 @@ import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
+import { isActiveTokenStrategyEnabled } from "data/uiConfig"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -365,24 +366,26 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
             <Text as="span">Cellar</Text>
             <Text as="span">{cellarName}</Text>
           </HStack>
-          <HStack justify="space-between">
-            <Text as="span">Active token strategy</Text>
-            {loading ? (
-              <Spinner size="xs" />
-            ) : (
-              <HStack spacing={1}>
-                <Avatar
-                  boxSize={6}
-                  src={currentAsset?.src}
-                  name={currentAsset?.alt}
-                  borderWidth={2}
-                  borderColor="surface.bg"
-                  bg="surface.bg"
-                />
-                <Text as="span">{currentAsset?.symbol}</Text>
-              </HStack>
-            )}
-          </HStack>
+          {isActiveTokenStrategyEnabled(cellarConfig) && (
+            <HStack justify="space-between">
+              <Text as="span">Active token strategy</Text>
+              {loading ? (
+                <Spinner size="xs" />
+              ) : (
+                <HStack spacing={1}>
+                  <Avatar
+                    boxSize={6}
+                    src={currentAsset?.src}
+                    name={currentAsset?.alt}
+                    borderWidth={2}
+                    borderColor="surface.bg"
+                    bg="surface.bg"
+                  />
+                  <Text as="span">{currentAsset?.symbol}</Text>
+                </HStack>
+              )}
+            </HStack>
+          )}
         </VStack>
       </VStack>
       <FormProvider {...methods}>

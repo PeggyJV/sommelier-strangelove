@@ -65,12 +65,24 @@ export const config = {
       ADDRESS: "0x69592e6f9d21989a043646fE8225da2600e5A0f7",
       ABI: gravityBridge,
     },
-    CLEAR_GATE_CELLAR: {
-      ADDRESS: "0xa953f0c594365b821a847e7b9f4722e338526699",
+    ETH_BTC_TREND_CELLAR: {
+      ADDRESS: "0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
+      ABI: clearGateCellar,
+    },
+    ETH_BTC_MOMENTUM_CELLAR: {
+      ADDRESS: "0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
+      ABI: clearGateCellar,
+    },
+    CLEAR_GATE_TEST_CELLAR_A: {
+      ADDRESS: "0xbfC413eA6Cb68c05dedA0D9aa7DaF8E51A7dDdfF",
+      ABI: clearGateCellar,
+    },
+    CLEAR_GATE_TEST_CELLAR_B: {
+      ADDRESS: "0x8bdd3d5b889f3d0d735eb4db5d87782df2b4647d",
       ABI: clearGateCellar,
     },
     CLEAR_GATE_ROUTER: {
-      ADDRESS: "0x15533bA95b85DA500e1fAA444871d4760ECc4a58",
+      ADDRESS: "0x1d90366b0154fbcb5101c06a39c25d26cb48e889",
       ABI: clearGateRouter,
     },
   },

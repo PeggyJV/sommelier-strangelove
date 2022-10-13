@@ -20,7 +20,11 @@ import { useNetValue } from "data/hooks/useNetValue"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { Rewards } from "./Rewards"
-import { isBondingEnabled, isRewardsEnabled } from "data/uiConfig"
+import {
+  isBondingEnabled,
+  isRewardsEnabled,
+  lpTokenTooltipContent,
+} from "data/uiConfig"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isMounted = useIsMounted()
@@ -138,7 +142,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             <VStack align="flex-start">
               <CardStat
                 label="tokens"
-                tooltip="Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
+                tooltip={lpTokenTooltipContent(cellarConfig)}
               >
                 {isMounted &&
                   (isConnected
