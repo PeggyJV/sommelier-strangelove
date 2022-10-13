@@ -104,10 +104,11 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           <CardStat
             label="protocols"
             tooltip="Protocols in which Cellar operates"
+            pr={{ sm: 2, lg: 8 }}
           >
             <Image
               src={protocolIcon}
-              alt="aave logo"
+              alt="Protocol Icon"
               boxSize={6}
               mr={2}
             />
