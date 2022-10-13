@@ -12,7 +12,6 @@ export interface CellarCardData {
   cellarId: string
   name: string
   description: string
-  tvm?: string
   strategyType: string
   managementFee: string
   protocols: string
