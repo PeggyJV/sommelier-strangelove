@@ -7,6 +7,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useNetValue } from "data/hooks/useNetValue"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { isRewardsEnabled } from "data/uiConfig"
+import { useIsMounted } from "hooks/utils/useIsMounted"
 interface Props extends FlexProps {
   data: CellarCardData
 }
@@ -21,6 +22,7 @@ export const Stats: React.FC<Props> = ({
   const cellarConfig = cellarDataMap[data.cellarId].config
   const { data: netValue } = useNetValue(cellarConfig)
   const { data: userStakes } = useUserStakes(cellarConfig)
+  const isMounted = useIsMounted()
 
   return (
     <Grid
@@ -34,7 +36,9 @@ export const Stats: React.FC<Props> = ({
     >
       <Box>
         <Heading as="p" size="sm" fontWeight="bold">
-          {isConnected ? netValue?.formatted || "..." : "--"}
+          {isMounted && isConnected
+            ? netValue?.formatted || "..."
+            : "--"}
         </Heading>
         <Label color="neutral.300">Your Portfolio</Label>
       </Box>
@@ -79,7 +83,7 @@ export const Stats: React.FC<Props> = ({
               alt="coin logo"
               boxSize={3}
             />
-            {isConnected
+            {isMounted && isConnected
               ? userStakes?.totalClaimAllRewards.formatted || "..."
               : "--"}
           </Heading>
