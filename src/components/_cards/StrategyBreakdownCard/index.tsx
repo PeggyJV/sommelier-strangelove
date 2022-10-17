@@ -28,7 +28,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
   return (
     <InnerCard pt={4} px={6} pb={8}>
       <Tabs>
-        <TabList borderBottomWidth={1} borderColor="purple.base">
+        <TabList borderBottomWidth={1} borderColor="purple.dark">
           {Object.keys(strategyBreakdown).map((key) => {
             return (
               <Tab

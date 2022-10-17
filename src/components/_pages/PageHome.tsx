@@ -3,7 +3,6 @@ import { Box, Flex, Heading, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { CellarCard } from "components/_cards/CellarCard"
 import { Section } from "components/_layout/Section"
-import { Education } from "components/Education"
 import { GridHome } from "components/GridHome"
 import {
   CellarCardDisplay,
@@ -11,8 +10,10 @@ import {
 } from "components/_cards/CellarCard/CellarCardDisplay"
 import { Link } from "components/Link"
 import { cellarDataMap } from "data/cellarDataMap"
+import { HomeProps } from "pages/index"
+import FAQ from "components/FAQ"
 
-const PageHome: NextPage = () => {
+const PageHome: NextPage<HomeProps> = ({ faqData }) => {
   const cellars = Object.keys(cellarDataMap)
   const totalCellars = cellars.length ?? 0
   const numPlaceholderCards = 3 - totalCellars
@@ -76,7 +77,7 @@ const PageHome: NextPage = () => {
           </Flex>
         </Section>
       </VStack>
-      <Education />
+      <FAQ data={faqData.faqTabs} />
     </Layout>
   )
 }
