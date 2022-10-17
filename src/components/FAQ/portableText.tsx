@@ -4,7 +4,7 @@ import {
   PortableTextListItemComponent,
 } from "@portabletext/react"
 
-import { Heading, List, ListItem, Text } from "@chakra-ui/react"
+import { Heading, List, ListItem } from "@chakra-ui/react"
 
 const h1: PortableTextBlockComponent = ({ children }) => (
   <Heading
@@ -31,16 +31,6 @@ const h2: PortableTextBlockComponent = ({ children }) => (
   </Heading>
 )
 
-const normal: PortableTextBlockComponent = ({ children }) => (
-  <Text
-    fontSize={{ base: "button", md: "2xl" }}
-    as="p"
-    _notLast={{ marginBottom: "2rem" }}
-  >
-    {children}
-  </Text>
-)
-
 const list: PortableTextListComponent = ({ children }) => (
   <List fontSize="1rem" mb="2rem" listStyleType="disc" ml={4}>
     {children}
@@ -57,7 +47,6 @@ export const FAQComponents = {
   block: {
     h1,
     h2,
-    normal,
   },
   list,
   listItem,
