@@ -20,11 +20,7 @@ interface Props extends AccordionProps {
 export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
   if (!data) return null
   return (
-    <Accordion
-      allowMultiple
-      borderColor="surface.secondary"
-      {...rest}
-    >
+    <Accordion allowMultiple borderColor="purple.dark" {...rest}>
       {data.map((faq: FaqItem) => {
         return (
           <AccordionItem

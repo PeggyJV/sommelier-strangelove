@@ -21,7 +21,7 @@ const FAQTabs: React.FC<FAQTabsProps> = ({ data }) => {
   return (
     <InnerCard pt={4} px={6} pb={8}>
       <Tabs>
-        <TabList borderBottomWidth={1} borderColor="purple.base">
+        <TabList borderBottomWidth={1} borderColor="purple.dark">
           {data?.map((faqTab) => {
             return (
               <Tab
