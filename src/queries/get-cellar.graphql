@@ -22,16 +22,4 @@ query GetCellar($cellarAddress: ID!, $cellarString: String!) {
       earnings
     }
   }
-  wallets {
-    id
-    cellarShares(where: { cellar: $cellarString }) {
-      id
-      balance
-    }
-    depositWithdrawEvents(where: { cellar: $cellarString }) {
-      id
-      txId
-      amount
-    }
-  }
 }
