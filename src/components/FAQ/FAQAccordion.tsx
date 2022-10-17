@@ -48,7 +48,7 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
                     as={isExpanded ? AiOutlineMinus : AiOutlinePlus}
                   />
                 </AccordionButton>
-                <AccordionPanel pb={4}>
+                <AccordionPanel pb={4} px={0}>
                   {faq.answer && (
                     <PortableText
                       value={faq.answer}
