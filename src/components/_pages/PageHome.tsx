@@ -4,15 +4,16 @@ import { Layout } from "components/Layout"
 import { CellarCard } from "components/_cards/CellarCard"
 import { Section } from "components/_layout/Section"
 import { useGetAllCellarsQuery } from "generated/subgraph"
-import { Education } from "components/Education"
 import { GridHome } from "components/GridHome"
 import {
   CellarCardDisplay,
   CellarCardData,
 } from "components/_cards/CellarCard/CellarCardDisplay"
 import { Link } from "components/Link"
+import { HomeProps } from "pages/index"
+import FAQ from "components/FAQ"
 
-const PageHome: NextPage = () => {
+const PageHome: NextPage<HomeProps> = ({ faqData }) => {
   const [cellarsResult] = useGetAllCellarsQuery()
   // const { cellarData, userData, aaveCellarSigner } = useAaveV2Cellar()
   // console.log({ cellarData, userData, aaveCellarSigner })
@@ -85,7 +86,7 @@ const PageHome: NextPage = () => {
           </Flex>
         </Section>
       </VStack>
-      <Education />
+      <FAQ data={faqData.faqTabs} />
     </Layout>
   )
 }
