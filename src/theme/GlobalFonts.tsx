@@ -46,14 +46,6 @@ export const GlobalFonts = () => (
         src: url('/assets/fonts/HafferXH-Bold.woff') format('woff'),
              url('/assets/fonts/HafferXH-Bold.woff2') format('woff2');
       }
-
-      @font-face {
-        font-family: 'SF Mono';
-        font-style: semibold;
-        font-weight: 500;
-        font-display: swap;
-        src: url('/assets/fonts/SFMonoSemibold.woff') format('woff');
-      }
     `}
   />
 )
