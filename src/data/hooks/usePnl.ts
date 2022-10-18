@@ -14,6 +14,11 @@ export const usePnl = (config: ConfigProps) => {
   const { lpToken } = useUserBalances(config)
 
   const { data: userStakes } = useUserStakes(config)
+
+  const cellarAddress = config.cellar.address.toLowerCase()
+  const walletCellarId = `${(
+    address ?? ""
+  ).toLowerCase()}-${cellarAddress}`
   const [
     {
       data: positionData,
@@ -21,9 +26,7 @@ export const usePnl = (config: ConfigProps) => {
       error: positionError,
     },
   ] = useGetPositionQuery({
-    variables: {
-      walletAddress: (address ?? "").toLowerCase(),
-    },
+    variables: { walletCellarId },
     pause: false,
   })
 
