@@ -101,7 +101,7 @@ export const ConnectedPopover = () => {
               undefined
             }
             onClick={handleCopyAddressToClipboard}
-            fontFamily="SF Mono"
+            fontFamily="Haffer"
             fontSize={12}
             _hover={{
               bg: "purple.dark",
