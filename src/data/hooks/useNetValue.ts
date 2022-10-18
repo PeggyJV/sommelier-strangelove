@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { getNetValue as getNetValue_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getNetValue"
 import { useCreateContracts } from "./useCreateContracts"
-import { useToken } from "wagmi"
+import { useAccount, useToken } from "wagmi"
 import { useActiveAsset } from "./useActiveAsset"
 import { useUserBalances } from "./useUserBalances"
 import { useUserStakes } from "./useUserStakes"
@@ -10,7 +10,8 @@ import { getNetValue as getNetValue_CLEAR_GATE_CELLAR } from "data/actions/CLEAR
 
 export const useNetValue = (config: ConfigProps) => {
   const { cellarContract } = useCreateContracts(config)
-  const { lpToken, lpTokenInfo } = useUserBalances(config)
+  const { lpToken } = useUserBalances(config)
+  const { address } = useAccount()
 
   const { data: userStakes } = useUserStakes(config)
   const { data: activeAssetRes } = useActiveAsset(config)
@@ -29,29 +30,30 @@ export const useNetValue = (config: ConfigProps) => {
 
   const CLEAR_GATE_CELLAR_QUERY_ENABLED = Boolean(
     config.cellar.key === CellarKey.CLEAR_GATE_CELLAR &&
-      lpToken.data?.formatted &&
-      lpTokenInfo.data?.decimals
+      activeAsset &&
+      address
   )
 
   const query = useQuery(
-    ["USE_NET_VALUE", lpToken.data?.formatted, config.cellar.address],
+    ["USE_NET_VALUE", config.cellar.address],
     async () => {
       if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
         return await getNetValue_AAVE_V2_STABLE_CELLAR({
-          activeAsset: activeAsset,
+          activeAsset,
           cellarContract,
           lpToken: lpToken.data?.formatted,
           userStakes: userStakes,
         })
       }
       if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
-        if (!lpToken.data?.value || !lpTokenInfo.data?.decimals) {
-          throw new Error("lpToken is undefined")
+        if (!address) {
+          throw new Error("address is undefined")
         }
-        return getNetValue_CLEAR_GATE_CELLAR(
-          lpToken.data?.formatted,
-          lpTokenInfo.data?.decimals
-        )
+        return await getNetValue_CLEAR_GATE_CELLAR({
+          cellarContract,
+          address,
+          activeAsset,
+        })
       }
       throw new Error("UNKNOWN CONTRACT")
     },
