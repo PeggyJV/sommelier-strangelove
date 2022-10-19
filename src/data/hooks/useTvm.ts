@@ -9,8 +9,8 @@ export const useTvm = (config: ConfigProps) => {
 
   const [cellarResult] = useGetCellarQuery({
     variables: {
-      cellarAddress: config.id.toLowerCase(),
-      cellarString: config.id.toLowerCase(),
+      cellarAddress: config.id,
+      cellarString: config.id,
     },
   })
 
