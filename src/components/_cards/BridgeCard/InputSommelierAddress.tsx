@@ -5,16 +5,15 @@ import {
   HStack,
   InputProps,
   FormErrorMessage,
-  Icon,
   Image,
+  Box,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import { ExternalLinkIcon, InformationIcon } from "components/_icons"
 import { getKeplr, mainnetChains } from "graz"
 import { useBrandedToast } from "hooks/chakra"
-import React from "react"
+import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { AiOutlineInfo } from "react-icons/ai"
 import { validateSommelierAddress } from "utils/validateSommelierAddress"
 import { BridgeFormValues } from "."
 
@@ -23,17 +22,25 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
   ...rest
 }) => {
   const { addToast, closeAll } = useBrandedToast()
-  const { register, formState, setValue } =
+  const { register, setValue, getValues, getFieldState } =
     useFormContext<BridgeFormValues>()
+  const isError = !!getFieldState("sommelierAddress").error
+  const [isActive, setActive] = useState(false)
 
-  const onAutofillClick = async () => {
+  const onAutofillClick = async (isValidateAddress?: boolean) => {
     try {
       const keplr = getKeplr()
       const key = await keplr.getKey(mainnetChains.sommelier.chainId)
       if (!key.bech32Address) throw new Error("Address not defined")
-      setValue("sommelierAddress", key.bech32Address, {
-        shouldValidate: true,
-      })
+      setValue(
+        "sommelierAddress",
+        isValidateAddress
+          ? getValues().sommelierAddress
+          : key.bech32Address,
+        {
+          shouldValidate: true,
+        }
+      )
     } catch (e) {
       const error = e as Error
       if (error.message === "Keplr is not defined") {
@@ -72,7 +79,11 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
           Sommelier Address
         </Text>
-        <HStack as="button" spacing={1} onClick={onAutofillClick}>
+        <HStack
+          as="button"
+          spacing={1}
+          onClick={() => onAutofillClick()}
+        >
           <Text fontWeight="bold" color="white" fontSize="xs">
             Autofill from
           </Text>
@@ -83,54 +94,53 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           />
         </HStack>
       </HStack>
-      <Input
-        id="sommelierAddress"
-        placeholder="Enter Sommelier address"
-        fontSize="xs"
-        fontWeight={700}
-        boxShadow="orangeOutline1"
-        variant="unstyled"
+      <Box
+        onFocus={() => setActive(true)}
+        onBlur={() => setActive(false)}
+        boxShadow={
+          isError
+            ? "redOutline1"
+            : isActive
+            ? "purpleOutline1"
+            : "none"
+        }
         borderRadius="16px"
-        px={4}
-        py={6}
-        maxH="64px"
-        _placeholder={{
-          fontSize: "lg",
-        }}
-        type="text"
-        {...register("sommelierAddress", {
-          required: "Enter Sommelier address",
-          validate: {
-            validAddress: (v) =>
-              validateSommelierAddress(v) || "Address is not valid",
-          },
-        })}
-        {...rest}
-      />
-      <FormErrorMessage>
-        <Icon
-          p={0.5}
-          mr={1}
-          color="surface.bg"
-          bg="red.base"
-          borderRadius="50%"
-          as={AiOutlineInfo}
-        />
-        <Text fontSize="xs" fontWeight="semibold" color="red.light">
-          {formState.errors.sommelierAddress?.message}
-        </Text>
-      </FormErrorMessage>
-      <HStack spacing="6px">
-        <InformationIcon color="orange.base" boxSize="12px" />
-        <Text
+      >
+        <Input
+          id="sommelierAddress"
+          placeholder="Enter Sommelier address"
           fontSize="xs"
-          fontWeight="semibold"
-          color="orange.light"
-        >
-          You need to have a Cosmos wallet to bridge SOMM from
-          Ethereum Mainnet to Sommelier.
-        </Text>
-      </HStack>
+          fontWeight={700}
+          backgroundColor="surface.tertiary"
+          variant="unstyled"
+          borderRadius="16px"
+          px={4}
+          py={6}
+          maxH="64px"
+          _placeholder={{
+            fontSize: "lg",
+          }}
+          type="text"
+          {...register("sommelierAddress", {
+            required: "Enter Sommelier address",
+            validate: {
+              validAddress: (v) =>
+                validateSommelierAddress(v) || "Address is not valid",
+            },
+            onBlur: () => onAutofillClick(true),
+          })}
+          {...rest}
+        />
+      </Box>
+      <FormErrorMessage>
+        <HStack spacing="6px">
+          <InformationIcon color="red.base" boxSize="12px" />
+          <Text fontSize="xs" fontWeight="semibold" color="red.light">
+            Address is not valid—make sure Sommelier address is from a
+            Cosmos wallet
+          </Text>
+        </HStack>
+      </FormErrorMessage>
     </Stack>
   )
 }
