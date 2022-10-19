@@ -1,10 +1,10 @@
-import { AaveV2CellarV2 } from "src/abi/types"
+import { AaveV2CellarV2, ClearGateCellar } from "src/abi/types"
 import { getCalulatedTvl } from "utils/bigNumber"
 import { formatCurrency } from "utils/formatCurrency"
-import { getActiveAsset } from "../common/getActiveAsset"
+import { getActiveAsset } from "./getActiveAsset"
 
 export const getTvm = async (
-  cellarContract: AaveV2CellarV2,
+  cellarContract: AaveV2CellarV2 | ClearGateCellar,
   tvlTotal?: string
 ) => {
   try {
