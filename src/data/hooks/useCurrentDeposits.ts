@@ -6,8 +6,8 @@ import { useGetCellarQuery } from "generated/subgraph"
 export const useCurrentDeposits = (config: ConfigProps) => {
   const [cellarResult] = useGetCellarQuery({
     variables: {
-      cellarAddress: config.id.toLowerCase(),
-      cellarString: config.id.toLowerCase(),
+      cellarAddress: config.id,
+      cellarString: config.id,
     },
   })
   const { data } = cellarResult
