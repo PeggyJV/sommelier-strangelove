@@ -45,7 +45,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
       const error = e as Error
       if (error.message === "Keplr is not defined") {
         return addToast({
-          heading: "Autofill from Keplr",
+          heading: "Import from Keplr",
           body: (
             <>
               <Text>Keplr not found</Text>
@@ -65,7 +65,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         })
       }
       addToast({
-        heading: "Autofill from Keplr",
+        heading: "Import from Keplr",
         body: <Text>{error.message}</Text>,
         status: "error",
         closeHandler: closeAll,
@@ -85,7 +85,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           onClick={() => onAutofillClick()}
         >
           <Text fontWeight="bold" color="white" fontSize="xs">
-            Autofill from
+            Import from Keplr
           </Text>
           <Image
             src="/assets/images/keplr.png"
