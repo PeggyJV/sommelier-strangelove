@@ -192,7 +192,7 @@ export const PerformanceChartByAddressProvider: FC<{
         ]
 
       const latestDate = new Date(
-        latestData.date * 1000
+        latestData?.date * 1000
       ).toLocaleTimeString(undefined, {
         minute: "2-digit",
         hour: "2-digit",
@@ -200,8 +200,8 @@ export const PerformanceChartByAddressProvider: FC<{
       })
 
       const latestTvl = `${formatCurrency(
-        getCalulatedTvl(latestData.tvlTotal, 18)
-      )} ${latestData.asset?.symbol}`
+        getCalulatedTvl(latestData?.tvlTotal, 18)
+      )} ${latestData?.asset?.symbol}`
 
       setTvl({
         xFormatted: latestDate,
