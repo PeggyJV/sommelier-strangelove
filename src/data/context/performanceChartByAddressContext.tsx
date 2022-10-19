@@ -145,21 +145,24 @@ export const PerformanceChartByAddressProvider: FC<{
   ] = useGetHourlyTvlByAddressQuery({
     variables: {
       epoch: getPrevious24Hours(),
-      cellarAddress: address,
+      cellarAddress: address.toLowerCase(),
     },
   })
   const [
     { fetching: weeklyIsFetching, data: weeklyData },
     reexecuteWeekly,
   ] = useGetWeeklyTvlByAdressQuery({
-    variables: { epoch: getPreviousWeek(), cellarAddress: address },
+    variables: {
+      epoch: getPreviousWeek(),
+      cellarAddress: address.toLowerCase(),
+    },
   })
   const [
     { fetching: allTimeIsFetching, data: allTimeData },
     reexecuteAllTime,
   ] = useGetAllTimeTvlByAddressQuery({
     variables: {
-      cellarAddress: address,
+      cellarAddress: address.toLowerCase(),
     },
   })
 
