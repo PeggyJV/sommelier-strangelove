@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { getTvm as getTvm_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getTvm"
+import { getTvm } from "data/actions/common/getTvm"
 import { CellarKey, ConfigProps } from "data/types"
 import { useGetCellarQuery } from "generated/subgraph"
-import { AaveV2CellarV2 } from "src/abi/types"
 import { useCreateContracts } from "./useCreateContracts"
 
 export const useTvm = (config: ConfigProps) => {
@@ -10,16 +9,18 @@ export const useTvm = (config: ConfigProps) => {
 
   const [cellarResult] = useGetCellarQuery({
     variables: {
-      cellarAddress: config.id,
-      cellarString: config.id,
+      cellarAddress: config.id.toLowerCase(),
+      cellarString: config.id.toLowerCase(),
     },
   })
+
   const { data } = cellarResult
   const { cellar } = data || {}
   const { tvlTotal } = cellar || {}
 
-  const AAVE_V2_STABLE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR &&
+  const queryEnabled = Boolean(
+    (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
+      config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) &&
       cellarContract.provider &&
       tvlTotal
   )
@@ -27,16 +28,16 @@ export const useTvm = (config: ConfigProps) => {
   const query = useQuery(
     ["USE_TVM", tvlTotal, config.cellar.address],
     async () => {
-      if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
-        return await getTvm_AAVE_V2_STABLE_CELLAR(
-          cellarContract as AaveV2CellarV2,
-          tvlTotal
-        )
+      if (
+        config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
+        config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+      ) {
+        return await getTvm(cellarContract, tvlTotal)
       }
       throw new Error("UNKNOWN CONTRACT")
     },
     {
-      enabled: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED, // branching example: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED || V1_5_CELLAR_QUERY_ENABLED
+      enabled: queryEnabled,
     }
   )
 
