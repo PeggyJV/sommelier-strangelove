@@ -1,3 +1,4 @@
+import { PageStrategy } from "components/_pages/PageStrategy"
 import { cellarDataMap } from "data/cellarDataMap"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { ParsedUrlQuery } from "querystring"
@@ -9,7 +10,7 @@ export interface CellarPageProps {
 export type Params = ParsedUrlQuery & { id: string }
 
 const CellarPage: NextPage<CellarPageProps> = ({ id }) => {
-  return <div>Landing page {id}</div>
+  return <PageStrategy id={id} />
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
