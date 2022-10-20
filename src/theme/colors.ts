@@ -5,6 +5,7 @@ const purple = {
   extraDark: "#1E163D",
 }
 const red = {
+  normal: "#F26057",
   base: "#F2574D",
   light: "#FCE5E3",
   dark: "#662521",

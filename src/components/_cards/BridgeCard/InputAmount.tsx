@@ -6,21 +6,22 @@ import {
   Button,
   Text,
   Spinner,
-  Icon,
 } from "@chakra-ui/react"
-import React from "react"
+import React, { useState } from "react"
 
 import Image from "next/image"
 import { useAccount, useBalance } from "wagmi"
 import { toEther } from "utils/formatCurrency"
 import { useFormContext } from "react-hook-form"
-import { AiOutlineInfo } from "react-icons/ai"
 import { BridgeFormValues } from "."
+import { InformationIcon } from "components/_icons"
 
 export const InputAmount: React.FC = () => {
-  const { register, setValue, formState } =
+  const { register, setValue, formState, getFieldState } =
     useFormContext<BridgeFormValues>()
 
+  const isError = !!getFieldState("amount").error
+  const [isActive, setActive] = useState(false)
   const { address, isConnecting } = useAccount()
   const { data, error, isLoading } = useBalance({
     addressOrName: address,
@@ -47,7 +48,15 @@ export const InputAmount: React.FC = () => {
         backgroundColor="surface.tertiary"
         justifyContent="space-between"
         borderRadius={16}
-        boxShadow="purpleOutline1"
+        onFocus={() => setActive(true)}
+        onBlur={() => setActive(false)}
+        boxShadow={
+          isError
+            ? "redOutline1"
+            : isActive
+            ? "purpleOutline1"
+            : "none"
+        }
         px={4}
         py={3}
         height="64px"
@@ -117,30 +126,16 @@ export const InputAmount: React.FC = () => {
         </VStack>
       </HStack>
       {formState.errors.amount && (
-        <HStack>
-          <Icon
-            p={0.5}
-            mr={1}
-            color="surface.bg"
-            bg="red.base"
-            borderRadius="50%"
-            as={AiOutlineInfo}
-          />
+        <HStack spacing="6px">
+          <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
             {formState.errors.amount.message}
           </Text>
         </HStack>
       )}
       {error && (
-        <HStack>
-          <Icon
-            p={0.5}
-            mr={1}
-            color="surface.bg"
-            bg="red.base"
-            borderRadius="50%"
-            as={AiOutlineInfo}
-          />
+        <HStack spacing="6px">
+          <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
             {error.message}
           </Text>
