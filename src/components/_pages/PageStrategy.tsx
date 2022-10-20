@@ -2,20 +2,22 @@ import {
   Heading,
   Stack,
   Text,
-  Button,
   Box,
   SimpleGrid,
   HStack,
-  Circle,
   Link,
   Tooltip,
+  Image,
+  VStack,
+  StackDivider,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { Label } from "components/_cards/CellarCard/Label"
-import { InformationIcon } from "components/_icons"
+import { ArrowDownIcon, InformationIcon } from "components/_icons"
 import { NextPage } from "next"
+import { BsChevronDown } from "react-icons/bs"
 
 type PageStrategyProps = {
   id: string
@@ -45,7 +47,11 @@ export const PageStrategy: NextPage<PageStrategyProps> = ({ id }) => {
             Fully or partially sells both assets when prices go down.
           </Heading>
           <HStack spacing={8} pt={10}>
-            <Circle size={16} bgColor="red" />
+            <Image
+              ml={-6}
+              src="/assets/images/asset-management.png"
+              alt="asset management image"
+            />
             <Stack>
               <Text fontWeight="semibold" fontSize="xl">
                 Automated Asset Management Included
@@ -57,40 +63,109 @@ export const PageStrategy: NextPage<PageStrategyProps> = ({ id }) => {
               </Text>
             </Stack>
           </HStack>
+          <HStack color="neutral.300">
+            <ArrowDownIcon />
+            <Text>Learn More</Text>
+          </HStack>
         </Stack>
         <Stack width="container.md" spacing={4}>
           <BaseButton h="50px">Buy</BaseButton>
           <SecondaryButton h="50px">
             Manage Portofolio
           </SecondaryButton>
-          <HStack>
-            <Heading size="md">$1.09M</Heading>
-            <Tooltip
-              hasArrow
-              arrowShadowColor="purple.base"
-              label="Total value managed by Cellar"
-              placement="top"
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={1} align="center">
-                <Label
-                  ml={1}
-                  color="neutral.300"
-                  display="flex"
-                  alignItems="center"
-                  columnGap="4px"
-                >
-                  TVM
-                </Label>
+          <HStack
+            pt={4}
+            justifyContent="space-around"
+            divider={<StackDivider borderColor="purple.dark" />}
+          >
+            <VStack>
+              <Heading size="lg">$1.09M</Heading>
+              <Tooltip
+                hasArrow
+                arrowShadowColor="purple.base"
+                label="Total value managed by Cellar"
+                placement="top"
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={1} align="center">
+                  <Label
+                    ml={1}
+                    color="neutral.300"
+                    display="flex"
+                    alignItems="center"
+                    columnGap="4px"
+                  >
+                    TVM
+                  </Label>
 
-                <InformationIcon color="neutral.300" boxSize={3} />
-              </HStack>
-            </Tooltip>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+            </VStack>
+            <VStack>
+              <Heading size="lg">16.2%</Heading>
+              <Tooltip
+                hasArrow
+                arrowShadowColor="purple.base"
+                label="APY"
+                placement="top"
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={1} align="center">
+                  <Label
+                    ml={1}
+                    color="neutral.300"
+                    display="flex"
+                    alignItems="center"
+                    columnGap="4px"
+                  >
+                    Backtested APY
+                  </Label>
+
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+            </VStack>
           </HStack>
+          <Stack pt={4} spacing={4} color="neutral.300">
+            <HStack>
+              <Text w="150px" fontWeight="semibold">
+                Ticker
+              </Text>
+              <Image
+                alt="eth btc trend"
+                src="/assets/icons/eth-btc-trend.svg"
+                boxSize={8}
+              />
+              <Text>ETHBTCTrend</Text>
+            </HStack>
+            <HStack>
+              <Text w="150px" fontWeight="semibold">
+                Traded Assets
+              </Text>
+              <Image
+                alt="eth btc trend"
+                src="/assets/icons/eth.png"
+                boxSize={8}
+              />
+              <Image
+                alt="eth btc trend"
+                src="/assets/icons/btc.png"
+                boxSize={8}
+              />
+            </HStack>
+            <HStack>
+              <Text w="150px" fontWeight="semibold">
+                Alternative to
+              </Text>
+              <Text>Holding ETH or BTC</Text>
+            </HStack>
+          </Stack>
         </Stack>
       </Stack>
-      <Stack direction="column" mt={28} spacing="80px">
+      <Stack direction="column" mt={24} spacing="80px">
         <Stack spacing="40px">
           <Heading>Strategy Highlights</Heading>
           <SimpleGrid columns={3} spacing={4}>
@@ -152,17 +227,9 @@ export const PageStrategy: NextPage<PageStrategyProps> = ({ id }) => {
             not miss out any subsequent price appreciation.
           </Text>
           <Box>
-            <Button
-              color="neutral.100"
-              border="2px solid"
-              borderColor="#6C4ED9"
-              backgroundColor="rgba(78, 56, 156, 0.32)"
-              _hover={{
-                backgroundColor: "rgba(78, 56, 156, 0.32)",
-              }}
-            >
+            <SecondaryButton rightIcon={<BsChevronDown />}>
               View More
-            </Button>
+            </SecondaryButton>
           </Box>
         </Stack>
         <Stack maxW="34vw" spacing="40px">
@@ -170,6 +237,9 @@ export const PageStrategy: NextPage<PageStrategyProps> = ({ id }) => {
             All strategies available on Sommelier marketplace are
             comprehensively backtested.
           </Heading>
+          <Box>
+            <SecondaryButton>View Backtesting Data</SecondaryButton>
+          </Box>
         </Stack>
       </Stack>
     </Layout>
