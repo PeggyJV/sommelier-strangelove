@@ -6,6 +6,7 @@ import clearGateCellar from "../abi/clearGateCellar.json"
 import clearGateRouter from "../abi/clearGateRouter.json"
 import { erc20ABI } from "wagmi"
 
+// Adress should be saved as lowercase
 /** Ensure Checksum Address  */
 export const config = {
   SWAP: {
