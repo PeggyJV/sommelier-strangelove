@@ -27,7 +27,7 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
         {cellars.map((cellar) => {
           return (
             <Link
-              href={`/cellars/${cellar}`}
+              href={`/strategies/${cellar}`}
               key={cellar}
               display="flex"
               borderRadius={28}
