@@ -22,8 +22,6 @@ import { useFormContext } from "react-hook-form"
 import { toEther } from "utils/formatCurrency"
 import { ModalMenuProps } from "."
 import { analytics } from "utils/analytics"
-import { useGetCurrentDepositsQuery } from "generated/subgraph"
-import { useAccount } from "wagmi"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -37,10 +35,6 @@ export const Menu: VFC<MenuProps> = ({
   value,
   onChange,
 }) => {
-  const { address } = useAccount()
-  const [{ data: depositData }] = useGetCurrentDepositsQuery({
-    variables: { walletAddress: address?.toLowerCase()! },
-  })
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const menuDims = useDimensions(menuRef, true)

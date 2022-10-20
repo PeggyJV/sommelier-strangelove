@@ -152,7 +152,10 @@ export const PerformanceChartByAddressProvider: FC<{
     { fetching: weeklyIsFetching, data: weeklyData },
     reexecuteWeekly,
   ] = useGetWeeklyTvlByAdressQuery({
-    variables: { epoch: getPreviousWeek(), cellarAddress: address },
+    variables: {
+      epoch: getPreviousWeek(),
+      cellarAddress: address,
+    },
   })
   const [
     { fetching: allTimeIsFetching, data: allTimeData },

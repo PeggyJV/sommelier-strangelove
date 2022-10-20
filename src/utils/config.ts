@@ -6,6 +6,7 @@ import clearGateCellar from "../abi/clearGateCellar.json"
 import clearGateRouter from "../abi/clearGateRouter.json"
 import { erc20ABI } from "wagmi"
 
+// Adress should be saved as lowercase
 /** Ensure Checksum Address  */
 export const config = {
   SWAP: {
@@ -66,15 +67,15 @@ export const config = {
       ABI: gravityBridge,
     },
     ETH_BTC_TREND_CELLAR: {
-      ADDRESS: "0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
+      ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f2",
       ABI: clearGateCellar,
     },
     ETH_BTC_MOMENTUM_CELLAR: {
-      ADDRESS: "0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
+      ADDRESS: "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
       ABI: clearGateCellar,
     },
     CLEAR_GATE_TEST_CELLAR_A: {
-      ADDRESS: "0xbfC413eA6Cb68c05dedA0D9aa7DaF8E51A7dDdfF",
+      ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
       ABI: clearGateCellar,
     },
     CLEAR_GATE_TEST_CELLAR_B: {
