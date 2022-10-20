@@ -4,7 +4,7 @@ export const NAV_LINKS = (() => {
   const links = [
     {
       link: "/",
-      title: "Cellars",
+      title: "Strategies",
     },
     {
       link: "/bridge",
