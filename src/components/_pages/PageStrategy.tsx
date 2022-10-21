@@ -13,6 +13,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react"
 import { Cellars } from "components/Cellars"
+import { FAQStrategy } from "components/FAQStrategy"
 import { Layout } from "components/Layout"
 import { Strategy } from "components/Strategy"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -245,6 +246,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
       </Stack>
       <Cellars data={sectionCellars} mt={52} />
       <Strategy data={sectionStrategies} mt={52} />
+      <FAQStrategy data={faqData} mt={52} />
     </Layout>
   )
 }
