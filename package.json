@@ -56,6 +56,7 @@
     "react-jazzicon": "^1.0.4",
     "react-slick": "^0.29.0",
     "sanity-codegen": "^0.9.8",
+    "slick-carousel": "^1.8.1",
     "slugify": "^1.6.5",
     "urql": "^2.2.0",
     "wagmi": "^0.6.6"
