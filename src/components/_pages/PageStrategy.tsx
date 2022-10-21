@@ -88,7 +88,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
               Buy
             </BaseButton>
           </Link>
-          <Link href={`strategies/${id}/manage`}>
+          <Link href={`/strategies/${id}/manage`}>
             <SecondaryButton w="full" h="50px">
               Manage Portofolio
             </SecondaryButton>
