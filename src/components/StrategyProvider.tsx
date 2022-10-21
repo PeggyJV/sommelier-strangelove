@@ -6,7 +6,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { CellarDataMap } from "data/types"
-import React, { VFC } from "react"
+import { VFC } from "react"
 import { Link } from "./Link"
 import { ExternalLinkIcon, InformationIcon } from "./_icons"
 import { CardHeading } from "./_typography/CardHeading"
