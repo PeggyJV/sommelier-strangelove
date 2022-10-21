@@ -32,12 +32,12 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
       <BreadcrumbItem color="neutral.300">
         <BreadcrumbLink
           href="/"
-          width="13rem"
+          width="14rem"
           display="flex"
           justifyContent="space-between"
           alignItems="center"
         >
-          <ArrowLeftIcon /> Back to Cellars Overview
+          <ArrowLeftIcon /> Back to Strategies Overview
         </BreadcrumbLink>
       </BreadcrumbItem>
 
