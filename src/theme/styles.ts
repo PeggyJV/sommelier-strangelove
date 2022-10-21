@@ -29,6 +29,12 @@ export const styles: Styles = {
       color: "#ED4A7D",
       fontWeight: 100,
     },
+    ".slick-prev:before, .slick-next:before": {
+      content: '""',
+    },
+    ".slick-slide": {
+      padding: "0 1rem",
+    },
     ".blink_me": {
       animation: "blinker 1s linear infinite",
     },
