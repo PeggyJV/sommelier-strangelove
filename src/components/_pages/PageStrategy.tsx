@@ -12,7 +12,9 @@ import {
   StackDivider,
   useDisclosure,
 } from "@chakra-ui/react"
+import { Cellars } from "components/Cellars"
 import { Layout } from "components/Layout"
+import { Strategy } from "components/Strategy"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { Label } from "components/_cards/CellarCard/Label"
@@ -178,7 +180,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
           </Stack>
         </Stack>
       </Stack>
-      <Stack direction="column" mt={24} spacing="80px">
+      <Stack direction="column" mt={52} spacing="80px">
         <Stack spacing="40px">
           <Heading>Strategy Highlights</Heading>
           <SimpleGrid columns={3} spacing={4}>
@@ -241,6 +243,8 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
           </Stack>
         )}
       </Stack>
+      <Cellars data={sectionCellars} mt={52} />
+      <Strategy data={sectionStrategies} mt={52} />
     </Layout>
   )
 }
