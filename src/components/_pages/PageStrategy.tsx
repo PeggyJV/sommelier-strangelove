@@ -16,8 +16,11 @@ import { Layout } from "components/Layout"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { Label } from "components/_cards/CellarCard/Label"
-import { ArrowDownIcon, InformationIcon } from "components/_icons"
+import { InformationIcon } from "components/_icons"
 import { BaseModal } from "components/_modals/BaseModal"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useApy } from "data/hooks/useApy"
+import { useTvm } from "data/hooks/useTvm"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import htmr from "htmr"
 import { NextPage } from "next"
@@ -35,6 +38,10 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   const [expandHowItWorks, setExpandHowItWorks] = useState(false)
   const howItWorks = content.howItWorks.split("<br/><br/>")
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const cellarData = cellarDataMap[id]
+  const cellarConfig = cellarData.config
+  const tvm = useTvm(cellarConfig)
+  const apy = useApy(cellarConfig)
   return (
     <Layout>
       <Stack direction="row" spacing={12}>
@@ -71,23 +78,27 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
               </Text>
             </Stack>
           </HStack>
-          <HStack color="neutral.300">
-            <ArrowDownIcon />
-            <Text>Learn More</Text>
-          </HStack>
         </Stack>
         <Stack width="container.md" spacing={4}>
-          <BaseButton h="50px">Buy</BaseButton>
-          <SecondaryButton h="50px">
-            Manage Portofolio
-          </SecondaryButton>
+          <Link href={content.buyUrl} target="_blank">
+            <BaseButton w="full" h="50px">
+              Buy
+            </BaseButton>
+          </Link>
+          <Link href={`strategies/${id}/manage`}>
+            <SecondaryButton w="full" h="50px">
+              Manage Portofolio
+            </SecondaryButton>
+          </Link>
           <HStack
             pt={4}
             justifyContent="space-around"
             divider={<StackDivider borderColor="purple.dark" />}
           >
             <VStack>
-              <Heading size="lg">$1.09M</Heading>
+              <Heading size="lg">
+                {tvm.data?.formatted || "--"}
+              </Heading>
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
@@ -112,11 +123,19 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
               </Tooltip>
             </VStack>
             <VStack>
-              <Heading size="lg">16.2%</Heading>
+              <Heading size="lg">
+                {apy.data?.expectedApy ||
+                  cellarData.overrideApy?.value ||
+                  "--"}
+              </Heading>
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
-                label="APY"
+                label={
+                  cellarData.overrideApy
+                    ? cellarData.overrideApy.tooltip
+                    : apy.data?.apyLabel
+                }
                 placement="top"
                 bg="surface.bg"
                 color="neutral.300"
@@ -129,7 +148,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
                     alignItems="center"
                     columnGap="4px"
                   >
-                    Backtested APY
+                    {cellarData.overrideApy?.title || "Expected APY"}
                   </Label>
 
                   <InformationIcon color="neutral.300" boxSize={3} />
