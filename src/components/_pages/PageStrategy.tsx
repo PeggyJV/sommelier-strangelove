@@ -10,12 +10,14 @@ import {
   Image,
   VStack,
   StackDivider,
+  useDisclosure,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { Label } from "components/_cards/CellarCard/Label"
 import { ArrowDownIcon, InformationIcon } from "components/_icons"
+import { BaseModal } from "components/_modals/BaseModal"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import htmr from "htmr"
 import { NextPage } from "next"
@@ -32,6 +34,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   const content = strategyPageContentData[id]
   const [expandHowItWorks, setExpandHowItWorks] = useState(false)
   const howItWorks = content.howItWorks.split("<br/><br/>")
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Layout>
       <Stack direction="row" spacing={12}>
@@ -194,15 +197,30 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
             </Box>
           )}
         </Stack>
-        <Stack maxW="34vw" spacing="40px">
-          <Heading size="lg">
-            All strategies available on Sommelier marketplace are
-            comprehensively backtested.
-          </Heading>
-          <Box>
-            <SecondaryButton>View Backtesting Data</SecondaryButton>
-          </Box>
-        </Stack>
+        {content.backtestingImage && (
+          <Stack maxW="34vw" spacing="40px">
+            <Heading size="lg">
+              All strategies available on Sommelier marketplace are
+              comprehensively backtested.
+            </Heading>
+            <Box>
+              <SecondaryButton onClick={onOpen}>
+                View Backtesting Data
+              </SecondaryButton>
+            </Box>
+            <BaseModal
+              heading="Backtesting data"
+              isOpen={isOpen}
+              onClose={onClose}
+              size="2xl"
+            >
+              <Image
+                src={content.backtestingImage}
+                alt="backtesting"
+              />
+            </BaseModal>
+          </Stack>
+        )}
       </Stack>
     </Layout>
   )
