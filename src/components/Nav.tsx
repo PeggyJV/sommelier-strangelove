@@ -65,7 +65,7 @@ export const Nav: VFC<FlexProps> = (props) => {
               const path = routes.pathname.split("/")[1]
 
               const isActive =
-                (path === "cellars" ? "" : path) ===
+                (path === "strategies" ? "" : path) ===
                 item.link.split("/")[1]
               return (
                 <Link
