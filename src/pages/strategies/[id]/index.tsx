@@ -1,7 +1,10 @@
 import { PageStrategy } from "components/_pages/PageStrategy"
 import { cellarDataMap } from "data/cellarDataMap"
+import { strategyPageContentData } from "data/strategyPageContentData"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import { useRouter } from "next/router"
 import { ParsedUrlQuery } from "querystring"
+import { useEffect } from "react"
 import { sanityClient } from "src/lib/sanity/client"
 import {
   sanityFaqQuery,
@@ -21,6 +24,14 @@ export type Params = ParsedUrlQuery & { id: string }
 const StrategyLandingPage: NextPage<StrategyLandingPageProps> = (
   props
 ) => {
+  const router = useRouter()
+  const landingPageContent = strategyPageContentData[props.id]
+  useEffect(() => {
+    if (!landingPageContent) {
+      router.replace(`/strategies/${props.id}/manage`)
+    }
+  }, [router, landingPageContent, props.id])
+  if (!landingPageContent) return null
   return <PageStrategy {...props} />
 }
 
@@ -42,6 +53,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const home: HomeWithImages = await sanityClient.fetch(
     sanityHomeQuery
   )
+
   return {
     props: {
       id,

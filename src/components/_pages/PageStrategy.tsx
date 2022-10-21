@@ -16,6 +16,8 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { Label } from "components/_cards/CellarCard/Label"
 import { ArrowDownIcon, InformationIcon } from "components/_icons"
+import { strategyPageContentData } from "data/strategyPageContentData"
+import htmr from "htmr"
 import { NextPage } from "next"
 import { StrategyLandingPageProps } from "pages/strategies/[id]"
 import { BsChevronDown } from "react-icons/bs"
@@ -26,28 +28,27 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   sectionCellars,
   sectionStrategies,
 }) => {
+  const content = strategyPageContentData[id]
+
   return (
     <Layout>
       <Stack direction="row" spacing={12}>
         <Stack spacing={8}>
           <Stack>
             <Heading size="4xl" fontWeight="900" as="h1">
-              ETH-BTC Trend Strategy
+              {content.name}
             </Heading>
             <Text fontWeight="semibold">
               by{" "}
               <Link
                 textDecoration="underline"
-                href="https://cleargate.capital/"
+                href={content.providerUrl}
               >
-                Cleargate Capital
+                {content.provider}
               </Link>
             </Text>
           </Stack>
-          <Heading size="lg">
-            Strategy portfolio buys BTC and ETH when prices go up.
-            Fully or partially sells both assets when prices go down.
-          </Heading>
+          <Heading size="lg">{content.description}</Heading>
           <HStack spacing={8} pt={10}>
             <Image
               ml={-6}
@@ -136,33 +137,19 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
               <Text w="150px" fontWeight="semibold">
                 Ticker
               </Text>
-              <Image
-                alt="eth btc trend"
-                src="/assets/icons/eth-btc-trend.svg"
-                boxSize={8}
-              />
-              <Text>ETHBTCTrend</Text>
+              {content.ticker}
             </HStack>
             <HStack>
               <Text w="150px" fontWeight="semibold">
                 Traded Assets
               </Text>
-              <Image
-                alt="eth btc trend"
-                src="/assets/icons/eth.png"
-                boxSize={8}
-              />
-              <Image
-                alt="eth btc trend"
-                src="/assets/icons/btc.png"
-                boxSize={8}
-              />
+              {content.tradedAssets}
             </HStack>
             <HStack>
               <Text w="150px" fontWeight="semibold">
                 Alternative to
               </Text>
-              <Text>Holding ETH or BTC</Text>
+              <Text>{content.alternativeTo}</Text>
             </HStack>
           </Stack>
         </Stack>
@@ -171,62 +158,26 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
         <Stack spacing="40px">
           <Heading>Strategy Highlights</Heading>
           <SimpleGrid columns={3} spacing={4}>
-            <Box
-              bg="rgba(78, 56, 156, 0.16)"
-              px={4}
-              py={10}
-              rounded="xl"
-            >
-              <Heading size="md">
-                Holds a combination of BTC and ETH with smart
-                rebalancing depending on market conditions.
-              </Heading>
-            </Box>
-            <Box
-              bg="rgba(78, 56, 156, 0.16)"
-              px={4}
-              py={10}
-              rounded="xl"
-            >
-              <Heading size="md">
-                High exposure to BTC and ETH when price trend goes up,
-                no exposure when the trend is down.
-              </Heading>
-            </Box>
-            <Box
-              bg="rgba(78, 56, 156, 0.16)"
-              px={4}
-              py={10}
-              rounded="xl"
-            >
-              <Heading size="md">
-                Risk management rules to reduce risks in unfavorable
-                market.
-              </Heading>
-            </Box>
+            {content.strategyHighlights.card.map((item, index) => (
+              <Box
+                key={index}
+                bg="rgba(78, 56, 156, 0.16)"
+                px={4}
+                py={10}
+                rounded="xl"
+              >
+                <Heading size="md">{item}</Heading>
+              </Box>
+            ))}
           </SimpleGrid>
           <Text maxW="34vw" color="#D9D7E0">
-            ETH-BTC Trend strategy aims to provide a better
-            risk-return tradeoff than holding ETH and/or BTC. The
-            strategy follows upward price trends and exits the market
-            when no positive trend is detected. The goal is to
-            overperform simple buy and hold strategy, cut losses
-            during market downturn, and re-establish the long position
-            after prices start to go up, so that Sommelier users will
-            not miss out any subsequent price appreciation.
+            {content.strategyHighlights.description}
           </Text>
         </Stack>
         <Stack spacing="40px">
           <Heading>How it Works</Heading>
           <Text maxW="34vw" color="#D9D7E0">
-            ETH-BTC Trend strategy aims to provide a better
-            risk-return tradeoff than holding ETH and/or BTC. The
-            strategy follows upward price trends and exits the market
-            when no positive trend is detected. The goal is to
-            overperform simple buy and hold strategy, cut losses
-            during market downturn, and re-establish the long position
-            after prices start to go up, so that Sommelier users will
-            not miss out any subsequent price appreciation.
+            {htmr(content.howItWorks)}
           </Text>
           <Box>
             <SecondaryButton rightIcon={<BsChevronDown />}>
