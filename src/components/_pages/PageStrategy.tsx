@@ -20,6 +20,7 @@ import { strategyPageContentData } from "data/strategyPageContentData"
 import htmr from "htmr"
 import { NextPage } from "next"
 import { StrategyLandingPageProps } from "pages/strategies/[id]"
+import { useState } from "react"
 import { BsChevronDown } from "react-icons/bs"
 
 export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
@@ -29,7 +30,8 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   sectionStrategies,
 }) => {
   const content = strategyPageContentData[id]
-
+  const [expandHowItWorks, setExpandHowItWorks] = useState(false)
+  const howItWorks = content.howItWorks.split("<br/><br/>")
   return (
     <Layout>
       <Stack direction="row" spacing={12}>
@@ -177,13 +179,20 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
         <Stack spacing="40px">
           <Heading>How it Works</Heading>
           <Text maxW="34vw" color="#D9D7E0">
-            {htmr(content.howItWorks)}
+            {expandHowItWorks
+              ? htmr(content.howItWorks)
+              : howItWorks[0]}
           </Text>
-          <Box>
-            <SecondaryButton rightIcon={<BsChevronDown />}>
-              View More
-            </SecondaryButton>
-          </Box>
+          {howItWorks.length > 1 && !expandHowItWorks && (
+            <Box>
+              <SecondaryButton
+                rightIcon={<BsChevronDown />}
+                onClick={() => setExpandHowItWorks(true)}
+              >
+                View More
+              </SecondaryButton>
+            </Box>
+          )}
         </Stack>
         <Stack maxW="34vw" spacing="40px">
           <Heading size="lg">
