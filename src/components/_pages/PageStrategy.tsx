@@ -18,12 +18,19 @@ import { Label } from "components/_cards/CellarCard/Label"
 import { ArrowDownIcon, InformationIcon } from "components/_icons"
 import { NextPage } from "next"
 import { BsChevronDown } from "react-icons/bs"
+import { CustomFaqSection, HomeWithImages } from "types/sanity"
 
 type PageStrategyProps = {
   id: string
+  faqData: CustomFaqSection
+  data: HomeWithImages
 }
 
-export const PageStrategy: NextPage<PageStrategyProps> = ({ id }) => {
+export const PageStrategy: NextPage<PageStrategyProps> = ({
+  id,
+  faqData,
+  data,
+}) => {
   return (
     <Layout>
       <Stack direction="row" spacing={12}>
