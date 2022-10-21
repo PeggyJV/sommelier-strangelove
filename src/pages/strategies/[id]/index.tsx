@@ -26,8 +26,6 @@ const StrategyLandingPage: NextPage<StrategyLandingPageProps> = (
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const cellars = Object.keys(cellarDataMap)
-
-  // create array of static paths from cellars data
   const paths = cellars.map((cellar) => {
     return { params: { id: cellar } }
   })
@@ -40,7 +38,6 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params || {}
-  // query subgraph for cellar data of given ID
   const faqData = await sanityClient.fetch(sanityFaqQuery)
   const home: HomeWithImages = await sanityClient.fetch(
     sanityHomeQuery
