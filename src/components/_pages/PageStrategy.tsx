@@ -17,19 +17,14 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { Label } from "components/_cards/CellarCard/Label"
 import { ArrowDownIcon, InformationIcon } from "components/_icons"
 import { NextPage } from "next"
+import { StrategyLandingPageProps } from "pages/strategies/[id]"
 import { BsChevronDown } from "react-icons/bs"
-import { CustomFaqSection, HomeWithImages } from "types/sanity"
 
-type PageStrategyProps = {
-  id: string
-  faqData: CustomFaqSection
-  data: HomeWithImages
-}
-
-export const PageStrategy: NextPage<PageStrategyProps> = ({
+export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   id,
   faqData,
-  data,
+  sectionCellars,
+  sectionStrategies,
 }) => {
   return (
     <Layout>

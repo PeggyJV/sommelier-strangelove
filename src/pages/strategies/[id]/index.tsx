@@ -9,20 +9,19 @@ import {
 } from "src/lib/sanity/queries"
 import { CustomFaqSection, HomeWithImages } from "types/sanity"
 
-export interface CellarPageProps {
+export interface StrategyLandingPageProps {
   id: string
   faqData: CustomFaqSection
-  data: HomeWithImages
+  sectionCellars: HomeWithImages["sectionCellars"]
+  sectionStrategies: HomeWithImages["sectionStrategies"]
 }
 
 export type Params = ParsedUrlQuery & { id: string }
 
-const CellarPage: NextPage<CellarPageProps> = ({
-  id,
-  faqData,
-  data,
-}) => {
-  return <PageStrategy id={id} faqData={faqData} data={data} />
+const StrategyLandingPage: NextPage<StrategyLandingPageProps> = (
+  props
+) => {
+  return <PageStrategy {...props} />
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
@@ -43,8 +42,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params || {}
   // query subgraph for cellar data of given ID
   const faqData = await sanityClient.fetch(sanityFaqQuery)
-  const home = await sanityClient.fetch(sanityHomeQuery)
-  return { props: { id, faqData, data: home } }
+  const home: HomeWithImages = await sanityClient.fetch(
+    sanityHomeQuery
+  )
+  return {
+    props: {
+      id,
+      faqData,
+      sectionCellars: home.sectionCellars,
+      sectionStrategies: home.sectionStrategies,
+    },
+  }
 }
 
-export default CellarPage
+export default StrategyLandingPage
