@@ -33,7 +33,7 @@ export const Strategy: VFC<StrategyProps> = ({ data, ...rest }) => {
           base: "calc(40rem - 50vw)",
           sm: "calc(40rem - 50vw)",
           md: "calc(57rem - 50vw)",
-          lg: "calc(50rem - 50vw)",
+          lg: "calc(58rem - 50vw)",
           xl: "full",
         }}
       >
