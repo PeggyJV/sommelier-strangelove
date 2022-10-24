@@ -12,7 +12,7 @@ export const PrevArrow: FC<CustomArrowProps> = (props) => {
       aria-label="prev"
       display={{
         base: "none",
-        lg: displayLg,
+        xl: displayLg,
       }}
       icon={<FaChevronLeft />}
       onClick={onClick}

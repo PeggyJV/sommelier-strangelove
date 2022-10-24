@@ -197,13 +197,13 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
               </Box>
             ))}
           </SimpleGrid>
-          <Text maxW="34vw" color="#D9D7E0">
+          <Text maxW="40rem" color="#D9D7E0">
             {content.strategyHighlights.description}
           </Text>
         </Stack>
         <Stack spacing="40px">
           <Heading>How it Works</Heading>
-          <Text maxW="34vw" color="#D9D7E0">
+          <Text maxW="40rem" color="#D9D7E0">
             {expandHowItWorks
               ? htmr(content.howItWorks)
               : howItWorks[0]}
@@ -220,7 +220,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
           )}
         </Stack>
         {content.backtestingImage && (
-          <Stack maxW="34vw" spacing="40px">
+          <Stack maxW="40rem" spacing="40px">
             <Heading size="lg">
               All strategies available on Sommelier marketplace are
               comprehensively backtested.
