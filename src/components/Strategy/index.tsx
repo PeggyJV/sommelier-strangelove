@@ -32,8 +32,8 @@ export const Strategy: VFC<StrategyProps> = ({ data, ...rest }) => {
         height={{
           base: "calc(40rem - 50vw)",
           sm: "calc(40rem - 50vw)",
-          md: "calc(65rem - 50vw)",
-          lg: "calc(70rem - 50vw)",
+          md: "calc(57rem - 50vw)",
+          lg: "calc(50rem - 50vw)",
           xl: "full",
         }}
       >
@@ -72,7 +72,7 @@ export const Strategy: VFC<StrategyProps> = ({ data, ...rest }) => {
             }}
             display={{
               base: "flex",
-              lg: "none",
+              xl: "none",
             }}
           />
           <IconButton
@@ -88,7 +88,7 @@ export const Strategy: VFC<StrategyProps> = ({ data, ...rest }) => {
             }}
             display={{
               base: "flex",
-              lg: "none",
+              xl: "none",
             }}
           />
         </HStack>

@@ -12,7 +12,7 @@ export const NextArrow: FC<CustomArrowProps> = (props) => {
       aria-label="next"
       display={{
         base: "none",
-        lg: displayLg,
+        xl: displayLg,
       }}
       icon={<FaChevronRight />}
       onClick={onClick}
