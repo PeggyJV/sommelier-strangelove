@@ -103,7 +103,27 @@ export const cellarDataMap: CellarDataMap = {
       description: `The cellar accumulates BTC and ETH relative to USDC with a medium to long-term perspective. The rebalancing decision applies the concept of trend following while also considering the correlation between the portfolio assets and emerging trends. The strategy aims to outperform the benchmarks and have lower volatility and risk than holding BTC or ETH individually or an equally weighted portfolio of BTC and ETH.
 
       The strategy is long only but cuts risk exposure when the price trends are negative. The cellar is based on backtests and is expected to outperform at times when price increases are moderate and to outperform significantly and reduce risks in a bear market. The strategy is likely to underperform in sideways markets or when prices are rising extremely quickly (because of being long only and not using leverage). The cellar is expected to capture the majority of any positive price trends, but it will always enter the market only after the trend has started to be positive. The strategy will limit losses if price movements are negative with the expectation of improving the risk-reward ratio. The benefits of the strategy can emerge within 3-6 month (i.e., medium term) holding period in case of diverse market conditions and are highly likely to emerge for holding periods over 1 year (i.e., long term).`,
-      backtesting: `<img src="/assets/images/btc-eth-trend-backtesting.png" alt="btc eth trend backtesting" />`,
+      backtesting: `<img src="/assets/images/btc-eth-trend-backtesting.png" alt="btc eth trend backtesting" />
+      Notes: Performance of the strategy from Jan 2019-Jun 2022. Black line for benchmark
+
+      Backtest results:
+      Period: Jan 2019 – June 2022
+      APY: 123.72%
+      Sharpe ratio: 2.117
+      Profit-Loss Ratio: 0.94
+      Worst drawdown: 28.50%
+      Annual Std: 0.431
+
+      Backtest results:
+      Alpha: 0.868
+      Cumulative profit: 1576.59%
+      Win rate: 87%
+      Loss rate: 13%
+      Best month: 52.51%
+      Worst month: -14.21%
+
+      Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.
+      `,
     },
     overrideApy: {
       title: "Backtested APY",
@@ -166,7 +186,26 @@ export const cellarDataMap: CellarDataMap = {
       The strategy is long only, but it reduces risk exposure if price momentum is negative. Backtests indicate the cellar will outperform at times when prices are rising moderately or one of the portfolio assets is appreciating faster than the other. The strategy is likely to underperform when there are extreme price appreciations but is expected to capture the majority of any positive price movements. The strategy is expected to outperform in a bear market since it can cut risk exposure, but it is exposed to negative price movements because it is long only and always holds at least a small proportion of risky assets. The benefits of the strategy should emerge within 3-6 month (i.e., medium term) holding period in case of diverse market conditions and are highly likely to emerge for holding periods over 1 year (i.e., long term).
 
       The strategy is more sensitive to positive market movements than a trend-following strategy and is expected to provide slightly higher returns in a bull market than a similar trend-following strategy but lower returns in a bear market.`,
-      backtesting: `<img src="/assets/images/btc-eth-moment-backtesting.png" alt="btc eth moment backtesting" />`,
+      backtesting: `<img src="/assets/images/btc-eth-moment-backtesting.png" alt="btc eth moment backtesting" />
+      Notes: Performance of the strategy from Jan 2019-Jun 2022. Black line for benchmark
+
+      Backtest results:
+      Period: Jan 2019 – June 2022
+      APY: 84.15%
+      Sharpe ratio: 1.402
+      Profit-Loss Ratio: 1.76
+      Worst drawdown: 60.30%
+      Annual Std: 0.524
+
+      Backtest results:
+      Alpha: 0.671
+      Cumulative profit: 748.12%
+      Win rate: 62%
+      Loss rate: 38%
+      Best month: 51.97%
+      Worst month: -27.50%
+
+      Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
     },
     overrideApy: {
       title: "Backtested APY",
