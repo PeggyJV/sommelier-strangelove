@@ -30,7 +30,7 @@ import htmr from "htmr"
 import { NextPage } from "next"
 import { StrategyLandingPageProps } from "pages/strategies/[id]"
 import { useState } from "react"
-import { BsChevronDown } from "react-icons/bs"
+import { BsChevronDown, BsChevronUp } from "react-icons/bs"
 
 export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   id,
@@ -218,13 +218,19 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
               ? htmr(content.howItWorks)
               : howItWorks[0]}
           </Text>
-          {howItWorks.length > 1 && !expandHowItWorks && (
+          {howItWorks.length > 1 && (
             <Box>
               <SecondaryButton
-                rightIcon={<BsChevronDown />}
-                onClick={() => setExpandHowItWorks(true)}
+                rightIcon={
+                  expandHowItWorks ? (
+                    <BsChevronUp />
+                  ) : (
+                    <BsChevronDown />
+                  )
+                }
+                onClick={() => setExpandHowItWorks(!expandHowItWorks)}
               >
-                View More
+                {expandHowItWorks ? "View Less" : "View More"}
               </SecondaryButton>
             </Box>
           )}
@@ -250,6 +256,9 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
                 src={content.backtestingImage}
                 alt="backtesting"
               />
+              <Text whiteSpace="pre-line" mt="4">
+                {content.backtestingText}
+              </Text>
             </BaseModal>
           </Stack>
         )}
