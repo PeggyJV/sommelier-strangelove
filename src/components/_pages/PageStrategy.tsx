@@ -21,6 +21,7 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { Label } from "components/_cards/CellarCard/Label"
 import { InformationIcon } from "components/_icons"
 import { BaseModal } from "components/_modals/BaseModal"
+import { BuyOrSellModal } from "components/_modals/BuyOrSellModal"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useApy } from "data/hooks/useApy"
 import { useTvm } from "data/hooks/useTvm"
@@ -41,6 +42,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   const [expandHowItWorks, setExpandHowItWorks] = useState(false)
   const howItWorks = content.howItWorks.split("<br/><br/>")
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const buyOrSellModal = useDisclosure()
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
   const tvm = useTvm(cellarConfig)
@@ -83,11 +85,19 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
           </HStack>
         </Stack>
         <Stack width="container.md" spacing={4}>
-          <Link href={content.buyUrl} target="_blank">
-            <BaseButton w="full" h="50px">
-              Buy
-            </BaseButton>
-          </Link>
+          <BaseButton
+            w="full"
+            h="50px"
+            onClick={buyOrSellModal.onOpen}
+          >
+            Buy / Sell
+          </BaseButton>
+          <BuyOrSellModal
+            uniswapLink={content.buyUrl}
+            id={id}
+            isOpen={buyOrSellModal.isOpen}
+            onClose={buyOrSellModal.onClose}
+          />
           <Link href={`/strategies/${id}/manage`}>
             <SecondaryButton w="full" h="50px">
               Manage Portofolio
