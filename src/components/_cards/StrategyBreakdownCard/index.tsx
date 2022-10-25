@@ -13,6 +13,7 @@ import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
 import { CellarDataMap } from "data/types"
 import htmr from "htmr"
+import { FAQAccordion } from "./FAQAccordion"
 
 interface StrategyBreakdownProps extends BoxProps {
   cellarDataMap: CellarDataMap
@@ -23,7 +24,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
   cellarId,
   cellarDataMap,
 }) => {
-  const { strategyBreakdown } = cellarDataMap[cellarId]
+  const { strategyBreakdown, faq } = cellarDataMap[cellarId]
 
   return (
     <InnerCard pt={4} px={6} pb={8}>
@@ -43,6 +44,18 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
               </Tab>
             )
           })}
+          {faq && (
+            <Tab
+              key="faq"
+              {...tabProps}
+              onClick={() => {
+                const eventName = `cellar.details-selected-faq}`
+                analytics.safeTrack(eventName.toLowerCase())
+              }}
+            >
+              FAQs
+            </Tab>
+          )}
         </TabList>
         <TabPanels>
           {Object.values(strategyBreakdown).map((value, i) => {
@@ -52,6 +65,11 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
               </TabPanel>
             )
           })}
+          {faq && (
+            <TabPanel key={"faq"} {...tabPanelProps} maxW="none">
+              <FAQAccordion data={faq} />
+            </TabPanel>
+          )}
         </TabPanels>
       </Tabs>
     </InnerCard>
