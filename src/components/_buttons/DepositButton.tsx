@@ -19,7 +19,7 @@ export const DepositButton: VFC<ButtonProps> = (props) => {
   return (
     <ClientOnly>
       <BaseButton variant="solid" onClick={onClick} {...props}>
-        Deposit
+        Buy
       </BaseButton>
       <DepositModal isOpen={isOpen} onClose={onClose} />
     </ClientOnly>
