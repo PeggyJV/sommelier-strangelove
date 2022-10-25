@@ -358,7 +358,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   }, [currentAsset?.address, selectedToken?.address])
 
   return (
-    <BaseModal heading="Deposit" {...props}>
+    <BaseModal heading="Buy" {...props}>
       <VStack pb={10} spacing={6} align="stretch">
         <VStack align="stretch">
           <CardHeading>cellar details</CardHeading>
@@ -441,7 +441,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
             py={8}
             px={12}
           >
-            Deposit
+            Submit
           </BaseButton>
         </VStack>
       </FormProvider>
