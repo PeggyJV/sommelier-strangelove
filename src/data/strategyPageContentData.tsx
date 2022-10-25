@@ -1,3 +1,4 @@
+// TODO: Move content to a cms
 import { Image, Text } from "@chakra-ui/react"
 import { config } from "utils/config"
 
