@@ -54,8 +54,8 @@ export const strategyPageContentData = {
     backtestingText: `Notes: Performance of the strategy from Jan 2019-Jun 2022. Black line for benchmark
 
       Backtest results:
-      <div style="display:flex;">
-        <div style="padding-right:5rem;">
+      <div style="display:flex;flex-direction:row;gap:5rem;">
+        <div>
           Period: Jan 2019 – June 2022
           APY: 123.72%
           Sharpe ratio: 2.117
@@ -128,8 +128,8 @@ export const strategyPageContentData = {
     backtestingText: `Notes: Performance of the strategy from Jan 2019-Jun 2022. Black line for benchmark
 
       Backtest results:
-      <div style="display:flex;">
-        <div style="padding-right:5rem;">
+      <div style="display:flex;flex-direction:row;gap:5rem;">
+        <div>
           Period: Jan 2019 – June 2022
           APY: 84.15%
           Sharpe ratio: 1.402
