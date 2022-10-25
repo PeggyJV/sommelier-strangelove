@@ -51,7 +51,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
           rowGap={4}
         >
           <VStack spacing={6} align="flex-start">
-            <BreadCrumb cellarName={staticCellarData.name} />
+            <BreadCrumb cellarName={staticCellarData.name} id={id} />
             <HStack spacing={4}>
               <CoinImage />
               <Heading fontSize="2.5rem">
