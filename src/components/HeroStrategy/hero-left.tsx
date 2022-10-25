@@ -39,7 +39,7 @@ export const HeroStrategyLeft: VFC<HeroStrategyLeftProps> = ({
         />
         <Stack>
           <Text fontWeight="semibold" fontSize="xl">
-            Automated Asset Management Included
+            Automated Portfolio Management Included
           </Text>
           <Text>
             Buy the token to get exposure to the strategy portfolio,

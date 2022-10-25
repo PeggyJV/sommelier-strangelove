@@ -80,7 +80,7 @@ export const strategyPageContentData = {
     provider: "Cleargate Capital",
     providerUrl: "https://cleargate.capital/",
     description:
-      "Strategy portfolio buys BTC and ETH when prices go up. Fully or partially sells both assets when prices go down.",
+      "Strategy portfolio has exposure to BTC and ETH with positive price momentum, lower exposure when prices drop.",
     ticker: (
       <>
         <Image
@@ -115,11 +115,12 @@ export const strategyPageContentData = {
     strategyHighlights: {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing to suit market conditions.",
-        "Has high exposure to BTC and ETH when price momentum is positive, low exposure when prices are dropping.",
-        "Uses risk management rules to reduce risks in an unfavorable market.",
+        "Has high exposure to BTC and ETH when the price trend goes up, no exposure when the trend is down.",
+        "Uses risk management rules to reduce risks in unfavorable market conditions and exit completely in a bear market.",
       ],
     },
-    howItWorks: `The cellar accumulates BTC and ETH relative to USDC with a medium to long-term perspective. The rebalancing decision is based on price momentum and the asset with higher momentum is assigned to be overweight. The strategy aims to outperform the benchmarks and have lower volatility and risk than holding BTC or ETH individually or in an equally weighted portfolio of BTC and ETH.
+    howItWorks: `ETH-BTC Trend strategy aims to provide a better risk-return tradeoff than holding ETH and/or BTC. The cellar accumulates BTC and ETH relative to USDC with a medium to long-term perspective. The
+    rebalancing decision is based on price momentum and the asset with higher momentum is assigned to be overweight. The strategy aims to outperform the benchmarks and have lower volatility and risk than holding BTC or ETH individually or in an equally weighted portfolio of BTC and ETH.
     <br/><br/>
     The strategy is long only, but it reduces risk exposure if price momentum is negative. Backtests indicate the cellar will outperform at times when prices are rising moderately or one of the portfolio assets is appreciating faster than the other. The strategy is likely to underperform when there are extreme price appreciations but is expected to capture the majority of any positive price movements. The strategy is expected to outperform in a bear market since it can cut risk exposure, but it is exposed to negative price movements because it is long only and always holds at least a small proportion of risky assets. The benefits of the strategy should emerge within 3-6 month (i.e., medium term) holding period in case of diverse market conditions and are highly likely to emerge for holding periods over 1 year (i.e., long term).
     <br/><br/>
