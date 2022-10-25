@@ -54,20 +54,24 @@ export const strategyPageContentData = {
     backtestingText: `Notes: Performance of the strategy from Jan 2019-Jun 2022. Black line for benchmark
 
       Backtest results:
-      Period: Jan 2019 – June 2022
-      APY: 123.72%
-      Sharpe ratio: 2.117
-      Profit-Loss Ratio: 0.94
-      Worst drawdown: 28.50%
-      Annual Std: 0.431
-
-      Backtest results:
-      Alpha: 0.868
-      Cumulative profit: 1576.59%
-      Win rate: 87%
-      Loss rate: 13%
-      Best month: 52.51%
-      Worst month: -14.21%
+      <div style="display:flex;">
+        <div style="padding-right:5rem;">
+          Period: Jan 2019 – June 2022
+          APY: 123.72%
+          Sharpe ratio: 2.117
+          Profit-Loss Ratio: 0.94
+          Worst drawdown: 28.50%
+          Annual Std: 0.431
+        </div>
+        <div>
+          Alpha: 0.868
+          Cumulative profit: 1576.59%
+          Win rate: 87%
+          Loss rate: 13%
+          Best month: 52.51%
+          Worst month: -14.21%
+        </div>
+      </div>
 
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
@@ -124,20 +128,24 @@ export const strategyPageContentData = {
     backtestingText: `Notes: Performance of the strategy from Jan 2019-Jun 2022. Black line for benchmark
 
       Backtest results:
-      Period: Jan 2019 – June 2022
-      APY: 84.15%
-      Sharpe ratio: 1.402
-      Profit-Loss Ratio: 1.76
-      Worst drawdown: 60.30%
-      Annual Std: 0.524
-
-      Backtest results:
-      Alpha: 0.671
-      Cumulative profit: 748.12%
-      Win rate: 62%
-      Loss rate: 38%
-      Best month: 51.97%
-      Worst month: -27.50%
+      <div style="display:flex;">
+        <div style="padding-right:5rem;">
+          Period: Jan 2019 – June 2022
+          APY: 84.15%
+          Sharpe ratio: 1.402
+          Profit-Loss Ratio: 1.76
+          Worst drawdown: 60.30%
+          Annual Std: 0.524
+        </div>
+        <div>
+          Alpha: 0.671
+          Cumulative profit: 748.12%
+          Win rate: 62%
+          Loss rate: 38%
+          Best month: 51.97%
+          Worst month: -27.50%
+        </div>
+      </div>
 
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
