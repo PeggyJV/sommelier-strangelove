@@ -187,7 +187,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
         py={6}
         px={12}
       >
-        Withdraw Liquidity
+        Submit
       </BaseButton>
     </VStack>
   )
