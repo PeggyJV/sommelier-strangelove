@@ -23,7 +23,7 @@ export const WithdrawModal: VFC<WithdrawModalProps> = ({
   const { data: lpTokenData, isLoading } = lpToken
 
   return (
-    <BaseModal heading="Withdraw" isOpen={isOpen} onClose={onClose}>
+    <BaseModal heading="Sell" isOpen={isOpen} onClose={onClose}>
       <VStack pb={10} spacing={6} align="stretch">
         <VStack align="flex-start">
           <CardHeading>available</CardHeading>
