@@ -83,7 +83,7 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
           >
             <Image src={content.backtestingImage} alt="backtesting" />
             <Text whiteSpace="pre-line" mt="4">
-              {content.backtestingText}
+              {htmr(content.backtestingText)}
             </Text>
           </BaseModal>
         </Stack>
