@@ -39,10 +39,10 @@ export const getApy = async (
     const withUserDeposit = totalDepositWithBoost.plus(10000)
 
     const stakingEnd = await stakerContract.endTimestamp()
-    const isStakingOver = Date.now() > stakingEnd.toNumber() * 1000
+    const isStakingOngoing = Date.now() < stakingEnd.toNumber() * 1000
 
     let potentialStakingApy = new BigNumber(0)
-    if (isStakingOver === false) {
+    if (isStakingOngoing) {
       potentialStakingApy = rewardRate
         .multipliedBy(sommPrice)
         .dividedBy(withUserDeposit)
