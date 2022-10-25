@@ -38,11 +38,17 @@ export const getApy = async (
     ).dividedBy(new BigNumber(10).pow(18))
     const withUserDeposit = totalDepositWithBoost.plus(10000)
 
-    const potentialStakingApy = rewardRate
-      .multipliedBy(sommPrice)
-      .dividedBy(withUserDeposit)
-      .multipliedBy(365 * 24 * 60 * 60)
-      .multipliedBy(100)
+    const stakingEnd = await stakerContract.endTimestamp()
+    const isStakingOver = Date.now() > stakingEnd.toNumber() * 1000
+
+    let potentialStakingApy = new BigNumber(0)
+    if (isStakingOver === false) {
+      potentialStakingApy = rewardRate
+        .multipliedBy(sommPrice)
+        .dividedBy(withUserDeposit)
+        .multipliedBy(365 * 24 * 60 * 60)
+        .multipliedBy(100)
+    }
 
     const { expectedApy, formattedCellarApy, formattedStakingApy } =
       getExpectedApy(apy, potentialStakingApy)

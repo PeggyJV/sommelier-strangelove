@@ -90,4 +90,7 @@ export const config = {
       ABI: clearGateRouter,
     },
   },
+  cleargate: {
+    enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
+  },
 }
