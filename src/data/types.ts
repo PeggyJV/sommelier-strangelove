@@ -61,5 +61,9 @@ export interface CellarDataMap {
       tooltip: string
     }
     config: ConfigProps
+    faq?: {
+      question: string
+      answer: string
+    }[]
   }
 }
