@@ -38,7 +38,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const { data: lpTokenData } = lpToken
 
   const lpTokenDisabled =
-    !lpTokenData || parseInt(toEther(lpTokenData?.formatted, 18)) <= 0
+    !lpTokenData ||
+    Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <=
+      0
 
   const { data: userStakes } = useUserStakes(cellarConfig)
 
