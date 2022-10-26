@@ -43,7 +43,7 @@ export const strategyPageContentData = {
     strategyHighlights: {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing depending on market conditions.",
-        "High exposure to BTC and ETH when price trend goes up, no exposure when the trend is down.",
+        "Has high exposure to BTC and ETH when the price trend goes up, no exposure when the trend is down.",
         "Risk management rules to reduce risks in unfavorable market.",
       ],
       description:
@@ -117,7 +117,7 @@ export const strategyPageContentData = {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing to suit market conditions.",
         "Has high exposure to BTC and ETH when the price trend goes up, no exposure when the trend is down.",
-        "Uses risk management rules to reduce risks in unfavorable market conditions and exit completely in a bear market.",
+        "Uses risk management rules to reduce risks in unfavorable market conditions.",
       ],
     },
     howItWorks: `ETH-BTC Trend strategy aims to provide a better risk-return tradeoff than holding ETH and/or BTC. The cellar accumulates BTC and ETH relative to USDC with a medium to long-term perspective. The
