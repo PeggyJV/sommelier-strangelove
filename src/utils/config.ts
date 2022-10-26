@@ -22,6 +22,7 @@ export const config = {
       // ADDRESS: "0xd15135141f1217b8863cb1431ad71309ef22ceda",
       ADDRESS: "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
       ABI: aaveV2CellarAbi,
+      SLUG: "AAVE",
     },
     CELLAR_ROUTER: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -69,10 +70,12 @@ export const config = {
     ETH_BTC_TREND_CELLAR: {
       ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f2",
       ABI: clearGateCellar,
+      SLUG: "ETH-BTC-Trend",
     },
     ETH_BTC_MOMENTUM_CELLAR: {
       ADDRESS: "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
       ABI: clearGateCellar,
+      SLUG: "ETH-BTC-Momentum",
     },
     CLEAR_GATE_TEST_CELLAR_A: {
       ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
