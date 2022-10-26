@@ -3,7 +3,7 @@ import { Image, Text } from "@chakra-ui/react"
 import { config } from "utils/config"
 
 export const strategyPageContentData = {
-  [config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS]: {
+  [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: {
     name: "ETH-BTC Trend Strategy",
     provider: "Cleargate Capital",
     providerUrl: "https://cleargate.capital/",
@@ -76,7 +76,7 @@ export const strategyPageContentData = {
 
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
-  [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS]: {
+  [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG]: {
     name: "ETH-BTC Momentum Strategy",
     provider: "Cleargate Capital",
     providerUrl: "https://cleargate.capital/",
