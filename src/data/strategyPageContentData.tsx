@@ -3,7 +3,7 @@ import { Image, Text } from "@chakra-ui/react"
 import { config } from "utils/config"
 
 export const strategyPageContentData = {
-  [config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS]: {
+  [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: {
     name: "ETH-BTC Trend Strategy",
     provider: "Cleargate Capital",
     providerUrl: "https://cleargate.capital/",
@@ -43,7 +43,7 @@ export const strategyPageContentData = {
     strategyHighlights: {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing depending on market conditions.",
-        "High exposure to BTC and ETH when price trend goes up, no exposure when the trend is down.",
+        "Has high exposure to BTC and ETH when the price trend goes up, no exposure when the trend is down.",
         "Risk management rules to reduce risks in unfavorable market.",
       ],
       description:
@@ -76,7 +76,7 @@ export const strategyPageContentData = {
 
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
-  [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS]: {
+  [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG]: {
     name: "ETH-BTC Momentum Strategy",
     provider: "Cleargate Capital",
     providerUrl: "https://cleargate.capital/",
@@ -117,7 +117,7 @@ export const strategyPageContentData = {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing to suit market conditions.",
         "Has high exposure to BTC and ETH when the price trend goes up, no exposure when the trend is down.",
-        "Uses risk management rules to reduce risks in unfavorable market conditions and exit completely in a bear market.",
+        "Uses risk management rules to reduce risks in unfavorable market conditions.",
       ],
     },
     howItWorks: `ETH-BTC Trend strategy aims to provide a better risk-return tradeoff than holding ETH and/or BTC. The cellar accumulates BTC and ETH relative to USDC with a medium to long-term perspective. The

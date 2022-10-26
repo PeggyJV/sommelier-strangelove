@@ -8,7 +8,7 @@ import {
 } from "./types"
 
 export const cellarDataMap: CellarDataMap = {
-  [config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS]: {
+  [config.CONTRACT.AAVE_V2_STABLE_CELLAR.SLUG]: {
     name: "aave2",
     description:
       "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
@@ -69,7 +69,7 @@ export const cellarDataMap: CellarDataMap = {
       rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     },
   },
-  [config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS]: {
+  [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: {
     name: "ETH-BTC Trend",
     description:
       "A long-only strategy for dynamic BTC-ETH portfolio management. A better way to hold while better managing the negative volatility.",
@@ -202,13 +202,13 @@ export const cellarDataMap: CellarDataMap = {
         <li>Best month: shows the return of the portfolio during the best month in the observation period.</li>
         <li>Worst month: shows the return of the portfolio during the worst month in the observation period and can be considered one indicator of downside risk.</li>
       </ul>
-      <br/> 
-      
+      <br/>
+
       Please remember that past performance is not indicative of future results. The backtesting procedure for the Cleargate strategies has followed all the best practices of backtesting to reduce the risks of over-optimising the strategies and takes account of actual trade execution costs and slippage.`,
       },
     ],
   },
-  [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS]: {
+  [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG]: {
     name: "ETH-BTC Momentum",
     description:
       "A dynamic long-only strategy for BTC-ETH portfolio management. More responsive to recent market changes and slightly more risky than BTC-ETH Trend strategy.",
@@ -343,7 +343,7 @@ export const cellarDataMap: CellarDataMap = {
         <li>Worst month: shows the return of the portfolio during the worst month in the observation period and can be considered one indicator of downside risk.</li>
       </ul>
      <br/>
-      
+
       Please remember that past performance is not indicative of future results. The backtesting procedure for the Cleargate strategies has followed all the best practices of backtesting to reduce the risks of over-optimising the strategies and takes account of actual trade execution costs and slippage.
       `,
       },

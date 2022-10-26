@@ -69,7 +69,7 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
             align={{ base: "center", md: "initial" }}
           >
             <Box mb={12}>
-              <Heading>Cellars</Heading>
+              <Heading>Strategies</Heading>
             </Box>
             <GridHome>
               <CellarGridItems />
