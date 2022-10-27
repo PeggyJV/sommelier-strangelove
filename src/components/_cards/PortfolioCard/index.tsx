@@ -7,7 +7,7 @@ import { TransparentCard } from "../TransparentCard"
 import { toEther } from "utils/formatCurrency"
 import BondingTableCard from "../BondingTableCard"
 import { useAccount, useConnect } from "wagmi"
-import { depositAssetTokenConfig } from "data/tokenConfig"
+import { getTokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
@@ -31,6 +31,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const { isConnected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
+  const depositTokens = cellarDataMap[id].depositTokens.list
+  const depositTokenConfig = getTokenConfig(depositTokens)
 
   const { connectors } = useConnect()
 
@@ -82,7 +84,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               spacing={0}
             >
               <TokenAssets
-                tokens={depositAssetTokenConfig}
+                tokens={depositTokenConfig}
                 activeAsset={activeAsset?.address || ""}
                 displaySymbol
               />
