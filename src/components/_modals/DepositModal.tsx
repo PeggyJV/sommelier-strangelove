@@ -59,6 +59,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const cellarName = cellarDataMap[id].name
+  const depositTokens = cellarDataMap[id].depositTokens.list
 
   const { data: signer } = useSigner()
   const { address } = useAccount()
@@ -416,6 +417,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
             </Flex>
 
             <ModalMenu
+              depositTokens={depositTokens}
               setSelectedToken={trackedSetSelectedToken}
               activeAsset={activeAsset?.address}
               selectedTokenBalance={selectedTokenBalance}

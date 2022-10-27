@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react"
 import { useRef, VFC } from "react"
 import { FaChevronDown } from "react-icons/fa"
-import { depositAssetTokenConfig, Token } from "data/tokenConfig"
+import { getTokenConfig, Token } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
 import { toEther } from "utils/formatCurrency"
 import { ModalMenuProps } from "."
@@ -30,6 +30,7 @@ export interface MenuProps
 }
 
 export const Menu: VFC<MenuProps> = ({
+  depositTokens,
   activeAsset,
   selectedTokenBalance,
   value,
@@ -43,6 +44,8 @@ export const Menu: VFC<MenuProps> = ({
     selectedTokenBalance?.value,
     selectedTokenBalance?.decimals
   )}`
+
+  const depositTokenConfig = getTokenConfig(depositTokens)
   const setMax = () => {
     analytics.track("deposit.max-selected", {
       value: selectedTokenBalance?.value?.toString(),
@@ -110,15 +113,13 @@ export const Menu: VFC<MenuProps> = ({
           w={menuDims?.borderBox.width}
         >
           <MenuOptionGroup
-            defaultValue={
-              activeAsset && depositAssetTokenConfig[0].symbol
-            }
+            defaultValue={activeAsset && depositTokenConfig[0].symbol}
             type="radio"
           >
             <Box pt={4} pb={2} pl={10}>
               <Text color="neutral.400">Select deposit asset</Text>
             </Box>
-            {depositAssetTokenConfig.map((token) => {
+            {depositTokenConfig.map((token) => {
               const { address, src, alt, symbol } = token
               const isActiveAsset =
                 token.address.toUpperCase() ===

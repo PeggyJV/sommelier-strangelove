@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import { CellarKey, CellarRouterKey } from "../types"
+import { depositTokenListWithEthBtc } from "../tokenConfig"
 
 export const ethBtcMomentum = {
   name: "ETH-BTC Momentum",
@@ -68,6 +69,9 @@ export const ethBtcMomentum = {
     tooltip:
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
     value: "84.15%",
+  },
+  depositTokens: {
+    list: depositTokenListWithEthBtc,
   },
   config: {
     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,

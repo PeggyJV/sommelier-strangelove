@@ -96,7 +96,7 @@ export const tokenConfig: Token[] = [
   },
 ]
 
-const depositAssetTokenList = [
+export const depositAssetTokenList = [
   "AMPL",
   "BUSD",
   "DAI",
@@ -111,6 +111,18 @@ const depositAssetTokenList = [
   "USDT",
 ]
 
+export const depositTokenListWithEthBtc = [
+  ...depositAssetTokenList,
+  "ETH",
+  "BTC",
+]
+
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
   (token) => depositAssetTokenList.includes(token.symbol)
 )
+
+export function getTokenConfig(tokenList: string[]) {
+  return tokenConfig.filter((token) =>
+    tokenList.includes(token.symbol)
+  )
+}
