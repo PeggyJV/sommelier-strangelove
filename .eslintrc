@@ -1,21 +1,12 @@
 {
-  "env": {
-    "cypress/globals": true
-  },
-  "plugins": ["cypress", "jsx-a11y", "unused-imports"],
+  "plugins": ["jsx-a11y", "unused-imports"],
   "extends": [
     "next",
     "next/core-web-vitals",
-    "plugin:cypress/recommended",
     "plugin:jsx-a11y/recommended"
   ],
   "rules": {
     "react/no-unescaped-entities": 0,
-    "cypress/no-assigning-return-values": "error",
-    "cypress/no-unnecessary-waiting": "error",
-    "cypress/assertion-before-screenshot": "warn",
-    "cypress/no-force": "warn",
-    "cypress/no-async-tests": "error",
     "unused-imports/no-unused-imports-ts": 1
   }
 }

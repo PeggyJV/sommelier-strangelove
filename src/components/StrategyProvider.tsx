@@ -5,8 +5,8 @@ import {
   Tooltip,
   VStack,
 } from "@chakra-ui/react"
-import { CellarDataMap } from "data/cellarDataMap"
-import React, { VFC } from "react"
+import { CellarDataMap } from "data/types"
+import { VFC } from "react"
 import { Link } from "./Link"
 import { ExternalLinkIcon, InformationIcon } from "./_icons"
 import { CardHeading } from "./_typography/CardHeading"
@@ -30,6 +30,7 @@ export const StrategyProvider: VFC<StrategyProviderProps> = ({
           label={tooltip}
           placement="top"
           bg="surface.bg"
+          color="neutral.300"
         >
           <HStack spacing={1} align="center">
             <CardHeading>Strategy Provider</CardHeading>
@@ -43,7 +44,7 @@ export const StrategyProvider: VFC<StrategyProviderProps> = ({
         </HStack>
       )}
       <HStack>
-        {logo && <Avatar src={logo} boxSize="16px" />}
+        {logo && <Avatar src={logo} size="xs" />}
         <Text as="span" fontWeight="bold" fontSize={21}>
           {title}
         </Text>

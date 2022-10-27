@@ -1,12 +1,12 @@
 import { Circle } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
 import { PointTooltipProps, Point } from "@nivo/line"
-import { usePerformanceChart } from "context/performanceChartContext"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
 import { FunctionComponent, VFC } from "react"
 import { debounce } from "lodash"
 import { formatCurrency } from "utils/formatCurrency"
+import { usePerformanceChartByAddress } from "data/context/performanceChartByAddressContext"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -30,7 +30,7 @@ const ToolTip: FunctionComponent<PointTooltipProps> = ({ point }) => {
 }
 
 export const TVLChart: VFC = () => {
-  const { data, setTvl } = usePerformanceChart()
+  const { data, setTvl } = usePerformanceChartByAddress()
   const { lineChartTheme, chartTheme } = useNivoThemes()
   const updateTvl = ({ data: point, index }: Point) => {
     setTvl({

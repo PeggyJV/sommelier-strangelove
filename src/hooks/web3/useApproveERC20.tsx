@@ -1,14 +1,9 @@
-import {
-  useSigner,
-  useContract,
-  erc20ABI,
-  useAccount,
-  useWaitForTransaction,
-} from "wagmi"
+import { useSigner, useContract, erc20ABI, useAccount } from "wagmi"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
 import { ethers } from "ethers"
 import { BigNumber } from "bignumber.js"
+import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 
 export const useApproveERC20 = ({
   tokenAddress,
@@ -18,15 +13,15 @@ export const useApproveERC20 = ({
   spender: string
 }) => {
   const { addToast, update, close, closeAll } = useBrandedToast()
-  const [{ data: signer }] = useSigner()
-  const [{ data: account }] = useAccount()
+  const { data: signer } = useSigner()
+  const { address } = useAccount()
 
   const erc20Contract = useContract({
     addressOrName: tokenAddress,
     contractInterface: erc20ABI,
     signerOrProvider: signer,
   })
-  // eslint-disable-next-line no-unused-vars
+
   const [_, wait] = useWaitForTransaction({
     skip: true,
   })
@@ -38,10 +33,7 @@ export const useApproveERC20 = ({
       onError?: (error: Error) => void
     }
   ) => {
-    const allowance = await erc20Contract.allowance(
-      account?.address,
-      spender
-    )
+    const allowance = await erc20Contract.allowance(address, spender)
     const amtInBigNumber = new BigNumber(amount)
     const amtInWei = ethers.utils.parseUnits(
       amtInBigNumber.toFixed(),

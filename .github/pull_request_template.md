@@ -14,9 +14,6 @@ List any technical changes.
 
 ## Testing Steps
 
-Please outline path to new tests here:
-eg. `./cypress/integration/path/to/test.spec.js`
-
 As a reviewer, what steps should I take to verify this is working correctly?
 
 - [ ] Step 1

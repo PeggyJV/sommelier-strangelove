@@ -1,5 +1,6 @@
 import {
   Heading,
+  HeadingProps,
   HStack,
   Modal,
   ModalCloseButton,
@@ -11,11 +12,13 @@ import { VFC } from "react"
 
 interface BaseModalProps extends ModalProps {
   heading?: string
+  headingProps?: HeadingProps
 }
 
 export const BaseModal: VFC<BaseModalProps> = ({
   children,
   heading,
+  headingProps,
   ...rest
 }) => {
   return (
@@ -31,7 +34,11 @@ export const BaseModal: VFC<BaseModalProps> = ({
         borderRadius={24}
       >
         <HStack pb={10} justify="space-between">
-          {heading && <Heading fontSize="4xl">{heading}</Heading>}
+          {heading && (
+            <Heading fontSize="4xl" {...headingProps}>
+              {heading}
+            </Heading>
+          )}
           <ModalCloseButton position="static" size="lg" />
         </HStack>
         {children}

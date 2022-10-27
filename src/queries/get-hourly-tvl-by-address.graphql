@@ -1,0 +1,14 @@
+query GetHourlyTVLByAddress($epoch: Int!, $cellarAddress: String) {
+  cellarHourDatas(
+    orderDirection: asc
+    orderBy: date
+    where: { cellar: $cellarAddress, date_gte: $epoch }
+  ) {
+    date
+    asset {
+      symbol
+      decimals
+    }
+    tvlTotal
+  }
+}

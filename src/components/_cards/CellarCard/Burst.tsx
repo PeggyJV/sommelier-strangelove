@@ -1,14 +1,29 @@
-import { Img } from "@chakra-ui/react"
+import { Box, Image } from "@chakra-ui/react"
 
 export const Burst = () => {
   return (
-    <Img
-      src="/assets/images/burst.png"
+    <Box
       width="160px"
+      height="auto"
+      maxW="125%"
       position="absolute"
-      right="-33px"
       top="-58px"
+      right="-33px"
       zIndex="1"
-    />
+    >
+      <picture>
+        <source
+          srcSet="/assets/images/burst.webp"
+          type="image/webp"
+        />
+        <source srcSet="/assets/images/burst.png" type="image/png" />
+        <Image
+          width="160px"
+          height="auto"
+          src="/assets/images/burst.png"
+          alt=""
+        />
+      </picture>
+    </Box>
   )
 }

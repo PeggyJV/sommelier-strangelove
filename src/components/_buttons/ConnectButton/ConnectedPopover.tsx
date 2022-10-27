@@ -1,17 +1,24 @@
 import {
+  Avatar,
   Box,
   HStack,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
   Tooltip,
   useToast,
   VStack,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import truncateWalletAddress from "src/utils/truncateWalletAddress"
-import { useAccount } from "wagmi"
+import {
+  useAccount,
+  useDisconnect,
+  useEnsAvatar,
+  useEnsName,
+} from "wagmi"
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
 import {
@@ -22,32 +29,38 @@ import { analytics } from "utils/analytics"
 
 export const ConnectedPopover = () => {
   const toast = useToast()
-  const [account, disconnect] = useAccount({
-    fetchEns: true,
+  const { disconnect } = useDisconnect()
+  const { address, isConnecting } = useAccount()
+  const { data: ensName, isLoading: ensNameLoading } = useEnsName({
+    address,
   })
+  const { data: ensAvatar, isLoading: ensAvatarLoading } =
+    useEnsAvatar({
+      addressOrName: address,
+    })
 
   function onDisconnect() {
     analytics.track("wallet.disconnected", {
-      account: account?.data?.address,
+      account: address,
     })
 
     disconnect()
   }
-  const walletAddress = account?.data?.address
+
   const walletAddressIcon = () => {
-    if (walletAddress) {
+    if (ensAvatar) {
+      return <Avatar boxSize={"16px"} src={ensAvatar} />
+    }
+    if (address) {
       return (
-        <Jazzicon
-          diameter={16}
-          seed={jsNumberForAddress(walletAddress)}
-        />
+        <Jazzicon diameter={16} seed={jsNumberForAddress(address)} />
       )
     }
   }
 
   const handleCopyAddressToClipboard = () => {
-    if (walletAddress) {
-      navigator.clipboard.writeText(walletAddress)
+    if (address) {
+      navigator.clipboard.writeText(address)
 
       toast({
         title: "Copied to clipboard",
@@ -57,6 +70,10 @@ export const ConnectedPopover = () => {
     }
   }
 
+  // to make sure the loading is about not about fetching ENS
+  const isLoading = isConnecting && !address
+  const isEnsLoading = ensAvatarLoading || ensNameLoading
+
   return (
     <Popover placement="bottom-end">
       <HStack spacing={2}>
@@ -65,6 +82,7 @@ export const ConnectedPopover = () => {
           arrowShadowColor="purple.base"
           label="Copy to clipboard"
           placement="bottom"
+          color="neutral.300"
           bg="surface.bg"
         >
           <BaseButton
@@ -74,16 +92,23 @@ export const ConnectedPopover = () => {
             borderRadius={12}
             icon={walletAddressIcon}
             minW="max-content"
-            isLoading={account.loading}
+            isLoading={isLoading}
+            // loading state fetching ENS
+            leftIcon={
+              ((isLoading || isEnsLoading) && (
+                <Spinner size="xs" />
+              )) ||
+              undefined
+            }
             onClick={handleCopyAddressToClipboard}
-            fontFamily="SF Mono"
+            fontFamily="Haffer"
             fontSize={12}
             _hover={{
               bg: "purple.dark",
               borderColor: "surface.tertiary",
             }}
           >
-            {truncateWalletAddress(walletAddress)}
+            {ensName ? ensName : truncateWalletAddress(address)}
           </BaseButton>
         </Tooltip>
         <PopoverTrigger>
@@ -94,7 +119,7 @@ export const ConnectedPopover = () => {
             borderColor="surface.secondary"
             borderRadius={12}
             minW="max-content"
-            isLoading={account.loading}
+            isLoading={isLoading}
             _hover={{
               bg: "purple.dark",
               borderColor: "surface.tertiary",
@@ -121,7 +146,7 @@ export const ConnectedPopover = () => {
         <PopoverBody p={0}>
           <VStack align="flex-start">
             <Link
-              href={`https://etherscan.io/address/${walletAddress}`}
+              href={`https://etherscan.io/address/${address}`}
               isExternal
               py={2}
               px={4}

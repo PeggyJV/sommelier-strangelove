@@ -1,21 +1,20 @@
-import { Box, BoxProps, Heading, Img, Flex } from "@chakra-ui/react"
+import { Box, BoxProps, Heading, Flex } from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
 import { Burst } from "./Burst"
 import { ComingSoon } from "./ComingSoon"
 import { InlineImage } from "components/InlineImage"
+import { CoinImage } from "./CoinImage"
+import { protocolsImage } from "utils/protocolsImagePath"
 
 export interface CellarCardData {
   cellarId: string
   name: string
   description: string
-  tvm?: string
   strategyType: string
   managementFee: string
   protocols: string
-  individualApy: number | string
-  cellarApy: number | string
 }
 
 interface CellarCardProps extends BoxProps {
@@ -24,18 +23,13 @@ interface CellarCardProps extends BoxProps {
   index?: number
 }
 
-const baseIconPath = "/assets/icons"
-const protocols: { [key: string]: string } = {
-  AAVE: `${baseIconPath}/aave.png`,
-}
-
 export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   data,
   isPlaceholder,
   index,
   ...rest
 }) => {
-  const protocolIcon = protocols[data.protocols]
+  const protocolIcon = protocolsImage[data.protocols]
 
   return (
     <Card
@@ -60,13 +54,10 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
           borderTopRightRadius={24}
           borderTopLeftRadius={24}
         >
-          <Img src="/assets/images/coin.png" width="40px" mb={3} />
+          <CoinImage mb={3} />
           <Flex mb={2}>
             <Heading size="lg" mr={1} lineHeight="100%">
               {data.name}
-            </Heading>
-            <Heading size="sm" as="p" color="neutral.300" mt="auto">
-              CLR-S
             </Heading>
           </Flex>
           <Flex>

@@ -4,23 +4,19 @@ import { Menu } from "./Menu"
 import { BigNumber } from "ethers"
 
 export interface ModalMenuProps {
+  depositTokens: string[]
   setSelectedToken: (value: any) => void
   activeAsset?: string
-  selectedTokenBalance: {
-    readonly data:
-      | {
-          decimals: number
-          formatted: string
-          symbol: string
-          value: BigNumber
-        }
-      | undefined
-    readonly error: Error | undefined
-    readonly loading: boolean | undefined
+  selectedTokenBalance?: {
+    decimals: number
+    formatted: string
+    symbol: string
+    value: BigNumber
   }
 }
 
 export const ModalMenu: VFC<ModalMenuProps> = ({
+  depositTokens,
   activeAsset,
   selectedTokenBalance,
   setSelectedToken,
@@ -34,6 +30,7 @@ export const ModalMenu: VFC<ModalMenuProps> = ({
       render={({ field: { value, onChange } }) => {
         return (
           <Menu
+            depositTokens={depositTokens}
             value={value}
             activeAsset={activeAsset}
             selectedTokenBalance={selectedTokenBalance}

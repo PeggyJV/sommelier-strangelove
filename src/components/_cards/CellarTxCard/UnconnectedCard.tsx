@@ -5,7 +5,7 @@ import { useConnect } from "wagmi"
 import { Card } from "../Card"
 
 export const UnconnectedCard: VFC = () => {
-  const [auth] = useConnect()
+  const { connectors } = useConnect()
 
   return (
     <Card
@@ -21,7 +21,7 @@ export const UnconnectedCard: VFC = () => {
           <Text color="neutral.400" maxW="30ch" textAlign="center">
             Please connect your wallet to start investing.
           </Text>
-          {auth.data.connectors.map((c) => (
+          {connectors.map((c) => (
             <ConnectButton connector={c} key={c.id} />
           ))}
         </VStack>
