@@ -4,6 +4,7 @@ import { Menu } from "./Menu"
 import { BigNumber } from "ethers"
 
 export interface ModalMenuProps {
+  depositTokens: string[]
   setSelectedToken: (value: any) => void
   activeAsset?: string
   selectedTokenBalance?: {
@@ -15,6 +16,7 @@ export interface ModalMenuProps {
 }
 
 export const ModalMenu: VFC<ModalMenuProps> = ({
+  depositTokens,
   activeAsset,
   selectedTokenBalance,
   setSelectedToken,
@@ -28,6 +30,7 @@ export const ModalMenu: VFC<ModalMenuProps> = ({
       render={({ field: { value, onChange } }) => {
         return (
           <Menu
+            depositTokens={depositTokens}
             value={value}
             activeAsset={activeAsset}
             selectedTokenBalance={selectedTokenBalance}

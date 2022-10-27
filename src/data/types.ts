@@ -60,6 +60,9 @@ export interface CellarDataMap {
       value: string
       tooltip: string
     }
+    depositTokens: {
+      list: string[]
+    }
     config: ConfigProps
     faq?: {
       question: string

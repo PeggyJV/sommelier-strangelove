@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import { CellarKey, CellarRouterKey, StakerKey } from "../types"
+import { depositAssetTokenList } from "../tokenConfig"
 
 export const aaveStable = {
   name: "aave2",
@@ -38,6 +39,9 @@ export const aaveStable = {
     href: "https://7seas.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
+  },
+  depositTokens: {
+    list: depositAssetTokenList,
   },
   config: {
     id: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,

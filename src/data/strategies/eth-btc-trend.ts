@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import { CellarKey, CellarRouterKey } from "../types"
+import { depositTokenListWithEthBtc } from "../tokenConfig"
 
 export const ethBtcTrend = {
   name: "ETH-BTC Trend",
@@ -67,6 +68,9 @@ export const ethBtcTrend = {
     tooltip:
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
     value: "123.72%",
+  },
+  depositTokens: {
+    list: depositTokenListWithEthBtc,
   },
   config: {
     id: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
