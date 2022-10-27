@@ -16,17 +16,18 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { ModalInput } from "components/_inputs/ModalInput"
 import { CardHeading } from "components/_typography/CardHeading"
 import { BondingPeriodOptions } from "./BondingPeriodOptions"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
-import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "utils/formatCurrency"
 import { useBrandedToast } from "hooks/chakra"
 import { BigNumber } from "bignumber.js"
 import { useApproveERC20, useHandleTransaction } from "hooks/web3"
-import { config } from "utils/config"
-import { useContract, useSigner } from "wagmi"
 import { ethers } from "ethers"
 import { analytics } from "utils/analytics"
 import { bondingPeriodOptions } from "./BondingPeriodOptions"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useRouter } from "next/router"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserStakes } from "data/hooks/useUserStakes"
 
 interface FormValues {
   depositAmount: number
@@ -36,8 +37,15 @@ interface FormValues {
 type BondFormProps = Pick<ModalProps, "onClose">
 
 export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
-  const { userData, fetchUserData } = useAaveV2Cellar()
-  const { fetchUserStakes } = useAaveStaker()
+  const id = useRouter().query.id as string
+  const cellarConfig = cellarDataMap[id].config
+
+  const { refetch: userStakesRefetch } = useUserStakes(cellarConfig)
+  const { stakerSigner } = useCreateContracts(cellarConfig)
+
+  const { lpToken } = useUserBalances(cellarConfig)
+  const { data: lpTokenData } = lpToken
+
   const methods = useForm<FormValues>({
     defaultValues: { bondingPeriod: 0 },
   })
@@ -48,31 +56,26 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
     setValue,
     formState: { errors, isSubmitting },
   } = methods
-  const { addToast, update, close, closeAll } = useBrandedToast()
-  const { AAVE_V2_STABLE_CELLAR, AAVE_STAKER } = config.CONTRACT
-  const [{ data: signer }] = useSigner()
+  const { addToast, closeAll } = useBrandedToast()
+
   const { doApprove } = useApproveERC20({
-    tokenAddress: AAVE_V2_STABLE_CELLAR?.ADDRESS,
-    spender: AAVE_STAKER?.ADDRESS,
+    tokenAddress: cellarConfig.cellar.address,
+    spender: cellarConfig.staker?.address!,
   })
+
   const { doHandleTransaction } = useHandleTransaction()
-  const sommStakingContract = useContract({
-    addressOrName: config.CONTRACT.AAVE_STAKER.ADDRESS,
-    contractInterface: config.CONTRACT.AAVE_STAKER.ABI,
-    signerOrProvider: signer,
-  })
+
   const watchDepositAmount = watch("depositAmount")
   const bondPeriod = watch("bondingPeriod")
 
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0
   const isError = errors.depositAmount
+
   const setMax = () =>
     setValue(
       "depositAmount",
-      parseFloat(
-        toEther(userData?.balances?.aaveClr, 18, false) || ""
-      )
+      parseFloat(toEther(lpTokenData?.formatted, 18, false) || "")
     )
 
   const onSubmit = async (data: FormValues) => {
@@ -91,7 +94,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       18
     )
     try {
-      const { hash: bondConf } = await sommStakingContract.stake(
+      const { hash: bondConf } = await stakerSigner?.stake(
         depositAmtInWei,
         bondPeriod,
         // gas used around 125000-130000
@@ -102,12 +105,12 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         hash: bondConf,
         onSuccess: () => {
           analytics.track("bond.succeeded", analyticsData)
-          fetchUserData()
+          userStakesRefetch()
           onClose()
         },
         onError: () => analytics.track("bond.failed", analyticsData),
       })
-      fetchUserStakes()
+      userStakesRefetch()
     } catch (e) {
       addToast({
         heading: "Staking LP Tokens",
@@ -150,6 +153,11 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
                 validate: {
                   positive: (v) =>
                     v > 0 || "You must submit a positive amount.",
+                  balance: (v) =>
+                    v <=
+                      parseFloat(
+                        toEther(lpTokenData?.formatted, 18, false)
+                      ) || "Insufficient balance",
                 },
               })}
             />

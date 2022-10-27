@@ -25,5 +25,30 @@ export const styles: Styles = {
         outline: "unset",
         boxShadow: "unset",
       },
+    ".blinker": {
+      color: "#ED4A7D",
+      fontWeight: 100,
+    },
+    ".slick-prev:before, .slick-next:before": {
+      content: '""',
+    },
+    ".slick-slide": {
+      padding: "0 1rem",
+    },
+    ".blink_me": {
+      animation: "blinker 1s linear infinite",
+    },
+    "@keyframes blinker": {
+      "0%": { opacity: 1 },
+      "49%": {
+        opacity: 1,
+      },
+      "50%": {
+        opacity: 0,
+      },
+      "100%": {
+        opacity: 0,
+      },
+    },
   },
 }

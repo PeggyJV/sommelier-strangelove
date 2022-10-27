@@ -15,6 +15,17 @@ const SentryOptions = {
 let nextConfig = {
   reactStrictMode: true,
   outputFileTracing: false, // Temporary fix for Sentry + Next 12 bug
+  redirects: async () => {
+    // because aave was using "cellars" not "strategies" we should redirect to handle previous user
+    return [
+      {
+        source: "/cellars/0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+        destination: "/strategies/AAVE",
+        permanent: true,
+        basePath: false,
+      },
+    ]
+  },
 }
 
 // https://github.com/vercel/next.js/tree/canary/packages/next-bundle-analyzer

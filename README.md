@@ -1,11 +1,20 @@
 # somm-boilerplate
 
-- [Getting Started](#getting-started)
-- [The Graph](#the-graph--cellars-subgraph)
-- [IP Detection](#ip-detection-using-vercels-headers)
-- [Multiple Sources of Truh](#multiple-sources-of-truth)
+- [somm-boilerplate](#somm-boilerplate)
+  - [Getting Started](#getting-started)
+- [The Graph / Cellars Subgraph](#the-graph--cellars-subgraph)
+  - [GraphQL Codegen](#graphql-codegen)
+  - [Updating the schema.json](#updating-the-schemajson)
+  - [Using hooks](#using-hooks)
+  - [Parsing BigInt](#parsing-bigint)
+  - [Learn more about graphql-codegen & urql](#learn-more-about-graphql-codegen--urql)
+- [IP Detection using Vercel's headers](#ip-detection-using-vercels-headers)
+- [Multiple Sources of Truth](#multiple-sources-of-truth)
+  - [Hardcoded values](#hardcoded-values)
+  - [The Subgraph](#the-subgraph)
+  - [Directly querying the contracts](#directly-querying-the-contracts)
+  - [Displaying/Branching UI output](#displayingbranching-ui-output)
 - [Learn More](#learn-more)
-- [Notes](#notes)
 
 ## Getting Started
 
@@ -100,10 +109,30 @@ Though the core workflow of the subgraph is covered above, writing queries and u
 Files of note:
 
 - [`config.ts`](./src/utils/config.ts)
-- [`aaveV2StablecoinCellar`](./src/context/aaveV2StablecoinCellar/index.tsx)
-- [`aaveStakerContext`](./src/context/aaveStakerContext.tsx)
+- [`data/cellarDataMap.ts`](./src/data/cellarDataMap.ts)
+- [`data/hooks/*`](./src/data/hooks/)
+- [`data/actions/*`](./src/data/actions/)
 
-These two context providers expose hooks that allow you to query for data or write to the contracts, depending on the functionality you're after. For instance, we use the v2 stablecoin cellar for grabbing live APY data, as the subgraph lags behind by a minute or two. Think of the subgraph as a cache, almost. Also, the staker context is primarily used for bonding/staking rewards. If you need to incorporate new functionality that requires on-chain queries, these are the files to do that work in.
+Hooks per output
+![query data](./querying-data.png)
+If there's a new cellar with a different cellar or staker contract that has a different ABI and output value, we should create output actions for it inside `data/actions/{cellarContractname}/{outputName}` and branch those actions inside `data/hooks/{outputName}`. If we find the same method and calculation on the smart contract/output, we should put it inside `data/actions/common/{outputName}`
+
+## Displaying/Branching UI output
+
+In the case we don't show specific UI output per cellar, We can specify what will be displayed or not inside /src/data/uiConfig.ts. Each function needs to be passed ConfigProps.
+
+example:
+We show "Rewards" only on `aave v2` cellar
+
+```tsx
+// src/data/uiConfig.ts
+export const isRewardsEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+}
+
+// somewhere in ui component
+isRewardsEnabled(cellarConfig) && <RewardsCard />
+```
 
 # Learn More
 

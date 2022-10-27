@@ -2,6 +2,9 @@ import {
   GetHourlyTvlQuery,
   GetWeeklyTvlQuery,
   GetAllTimeTvlQuery,
+  GetAllTimeTvlByAddressQuery,
+  GetWeeklyTvlByAdressQuery,
+  GetHourlyTvlByAddressQuery,
 } from "generated/subgraph"
 import { Serie } from "@nivo/line"
 import { getCalulatedTvl } from "./bigNumber"
@@ -50,6 +53,48 @@ export const mutateDayData = (
             asset,
           }
         }),
+      },
+    ]
+  }
+}
+
+export const mutateHourlyDataByAddress = (
+  data?: GetHourlyTvlByAddressQuery
+): Serie[] | undefined => {
+  if (data) {
+    return [
+      {
+        id: "tvl",
+        data: data.cellarHourDatas.map(
+          ({ date, tvlTotal, asset }) => {
+            return {
+              x: new Date(date * 1000),
+              y: getCalulatedTvl(tvlTotal, 18),
+              asset,
+            }
+          }
+        ),
+      },
+    ]
+  }
+}
+
+export const mutateDayDataByAddress = (
+  data?: GetWeeklyTvlByAdressQuery | GetAllTimeTvlByAddressQuery
+): Serie[] | undefined => {
+  if (data && data.cellar) {
+    return [
+      {
+        id: "tvl",
+        data: data.cellar.dayDatas.map(
+          ({ date, tvlTotal, asset }) => {
+            return {
+              x: new Date(date * 1000),
+              y: getCalulatedTvl(tvlTotal, 18),
+              asset,
+            }
+          }
+        ),
       },
     ]
   }

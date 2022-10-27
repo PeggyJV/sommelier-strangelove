@@ -17,13 +17,11 @@ import {
 } from "@chakra-ui/react"
 import { useRef, VFC } from "react"
 import { FaChevronDown } from "react-icons/fa"
-import { Token, tokenConfig } from "data/tokenConfig"
+import { getTokenConfig, Token } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
 import { toEther } from "utils/formatCurrency"
 import { ModalMenuProps } from "."
 import { analytics } from "utils/analytics"
-import { useGetCurrentDepositsQuery } from "generated/subgraph"
-import { useAccount } from "wagmi"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -32,34 +30,35 @@ export interface MenuProps
 }
 
 export const Menu: VFC<MenuProps> = ({
+  depositTokens,
   activeAsset,
   selectedTokenBalance,
   value,
   onChange,
 }) => {
-  const [{ data: account }] = useAccount()
-  const [{ data: depositData }] = useGetCurrentDepositsQuery({
-    variables: { walletAddress: account?.address.toLowerCase()! },
-  })
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const menuDims = useDimensions(menuRef, true)
   const { register, setValue, clearErrors } = useFormContext()
   const availableBalance = `${toEther(
-    selectedTokenBalance?.data?.value,
-    selectedTokenBalance?.data?.decimals
+    selectedTokenBalance?.value,
+    selectedTokenBalance?.decimals,
+    false,
+    6
   )}`
+
+  const depositTokenConfig = getTokenConfig(depositTokens)
   const setMax = () => {
     analytics.track("deposit.max-selected", {
-      value: selectedTokenBalance?.data?.value?.toString(),
+      value: selectedTokenBalance?.value?.toString(),
     })
 
     return setValue(
       "depositAmount",
       parseFloat(
         toEther(
-          selectedTokenBalance?.data?.value,
-          selectedTokenBalance?.data?.decimals,
+          selectedTokenBalance?.value,
+          selectedTokenBalance?.decimals,
           false
         )
       )
@@ -116,13 +115,13 @@ export const Menu: VFC<MenuProps> = ({
           w={menuDims?.borderBox.width}
         >
           <MenuOptionGroup
-            defaultValue={activeAsset && tokenConfig[0].symbol}
+            defaultValue={activeAsset && depositTokenConfig[0].symbol}
             type="radio"
           >
             <Box pt={4} pb={2} pl={10}>
               <Text color="neutral.400">Select deposit asset</Text>
             </Box>
-            {tokenConfig.map((token) => {
+            {depositTokenConfig.map((token) => {
               const { address, src, alt, symbol } = token
               const isActiveAsset =
                 token.address.toUpperCase() ===
@@ -147,9 +146,6 @@ export const Menu: VFC<MenuProps> = ({
                       <Image boxSize={5} src={src} alt={alt} />
                       <span>{symbol}</span>
                     </HStack>
-                    {isActiveAsset && (
-                      <Text as="span">Active Asset</Text>
-                    )}
                   </HStack>
                 </MenuItemOption>
               )
@@ -183,14 +179,8 @@ export const Menu: VFC<MenuProps> = ({
                 v > 0 || "You must submit a positive amount.",
               lessThanBalance: (v) => {
                 return (
-                  v <=
-                    parseFloat(
-                      toEther(
-                        selectedTokenBalance.data?.value || "",
-                        selectedTokenBalance.data?.decimals,
-                        false
-                      )
-                    ) || "Insufficient balance"
+                  v <= parseFloat(availableBalance) ||
+                  "Insufficient balance"
                 )
               },
               // depositLessThanFifty: (v) =>

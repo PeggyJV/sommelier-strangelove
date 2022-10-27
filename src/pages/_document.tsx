@@ -11,12 +11,7 @@ class Document extends NextDocument {
   render() {
     return (
       <Html lang="en">
-        <Head>
-          <link
-            href="https://fonts.cdnfonts.com/css/sf-mono"
-            rel="stylesheet"
-          />
-        </Head>
+        <Head />
         <body>
           <ColorModeScript
             initialColorMode={config.initialColorMode}

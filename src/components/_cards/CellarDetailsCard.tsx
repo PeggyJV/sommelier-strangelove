@@ -9,6 +9,7 @@ import {
   useBreakpointValue,
   useTheme,
   VStack,
+  Image,
 } from "@chakra-ui/react"
 import { CardDivider } from "components/_layout/CardDivider"
 import { CardHeading } from "components/_typography/CardHeading"
@@ -16,18 +17,15 @@ import { VFC } from "react"
 import { useNivoThemes } from "hooks/nivo"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
-import {
-  AaveIcon,
-  InformationIcon,
-  UsdcIcon,
-} from "components/_icons"
+import { InformationIcon, UsdcIcon } from "components/_icons"
 import { TransparentCard } from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
-import { CellarDataMap } from "data/cellarDataMap"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { StrategyProvider } from "components/StrategyProvider"
+import { useActiveAsset } from "data/hooks/useActiveAsset"
+import { CellarDataMap } from "data/types"
+import { protocolsImage } from "utils/protocolsImagePath"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -54,16 +52,18 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const {
     protocols,
     strategyType,
+    strategyTypeTooltip,
     managementFee,
-    supportedChains,
+    managementFeeTooltip,
+    strategyAssets,
     performanceSplit,
     strategyProvider,
   } = cellarDataMap[cellarId]
-  const strategyAssets = tokenConfig.filter((token) =>
-    supportedChains?.includes(token.symbol)
+  const cellarStrategyAssets = tokenConfig.filter((token) =>
+    strategyAssets?.includes(token.symbol)
   )
-  const { cellarData } = useAaveV2Cellar()
-  const { activeAsset } = cellarData
+  const cellarConfig = cellarDataMap[cellarId].config
+  const { data: activeAsset } = useActiveAsset(cellarConfig)
 
   // Unsure why this was necessary? Nivo acts strangely when there are fewer than three args in an index. Could be refined later.
   const moveColors = (colorTheme: string[]): string[] => {
@@ -73,6 +73,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   }
 
   const colors = moveColors(barChartTheme)
+
+  const protocolIcon = protocolsImage[protocols]
 
   return (
     <TransparentCard p={8} overflow="visible">
@@ -95,26 +97,28 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
         >
           <CardStat
             label="strategy type"
-            tooltip="Cellar uses Stablecoin lending"
+            tooltip={strategyTypeTooltip}
           >
             {strategyType}
           </CardStat>
           <CardStat
             label="protocols"
             tooltip="Protocols in which Cellar operates"
+            pr={{ sm: 2, lg: 8 }}
           >
-            <AaveIcon
-              color="purple.base"
-              bg="white"
-              borderRadius="full"
-              p={1}
+            <Image
+              src={protocolIcon}
+              alt="Protocol Icon"
+              boxSize={6}
               mr={2}
             />
             {protocols}
           </CardStat>
           <CardStat
             label="mgmt fee"
-            tooltip="Platform management fee"
+            tooltip={
+              managementFeeTooltip || "Platform management fee"
+            }
           >
             <UsdcIcon
               color="purple.base"
@@ -130,8 +134,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
           >
             <TokenAssets
-              tokens={strategyAssets}
-              activeAsset={activeAsset}
+              tokens={cellarStrategyAssets}
+              activeAsset={activeAsset?.address || ""}
               displaySymbol
             />
           </CardStat>
@@ -146,6 +150,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 placement="top"
                 label="Cellar earned performance split"
                 bg="surface.bg"
+                color="neutral.300"
               >
                 <HStack align="center" spacing={1}>
                   <CardHeading>performance split</CardHeading>
@@ -157,11 +162,11 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               {/* @ts-ignore */}
               <BarChart
                 layout="horizontal"
-                colors={colors}
+                colors={barChartTheme}
                 borderColor={theme.colors.neutral[800]}
                 borderWidth={1}
                 borderRadius={2}
-                keys={["strategy provider", "protocol", "depositors"]}
+                keys={["depositors", "protocol", "strategy provider"]}
                 data={[performanceSplit]}
               />
             </Box>

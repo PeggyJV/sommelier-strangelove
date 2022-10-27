@@ -3,13 +3,19 @@ import { BondForm } from "components/_forms/BondForm"
 import { CardHeading } from "components/_typography/CardHeading"
 import { VFC } from "react"
 import { BaseModal } from "./BaseModal"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { toEther } from "utils/formatCurrency"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useRouter } from "next/router"
+import { useUserBalances } from "data/hooks/useUserBalances"
 
 type BondModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
 export const BondModal: VFC<BondModalProps> = (props) => {
-  const { userData } = useAaveV2Cellar()
+  const id = useRouter().query.id as string
+  const cellarConfig = cellarDataMap[id].config
+
+  const { lpToken } = useUserBalances(cellarConfig)
+  const { data: lpTokenData } = lpToken
 
   return (
     <BaseModal heading="Bond" {...props}>
@@ -17,7 +23,7 @@ export const BondModal: VFC<BondModalProps> = (props) => {
         <VStack align="flex-start">
           <CardHeading>available</CardHeading>
           <Text as="span">
-            {toEther(userData?.balances?.aaveClr)} LP TOKENS
+            {toEther(lpTokenData?.formatted, 18, false)} LP TOKENS
           </Text>
         </VStack>
       </VStack>

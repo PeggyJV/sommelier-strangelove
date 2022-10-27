@@ -1,45 +1,38 @@
 import { NextPage } from "next"
-import { Box, Flex, Heading, Spinner, VStack } from "@chakra-ui/react"
+import { Box, Flex, Heading, VStack } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
 import { CellarCard } from "components/_cards/CellarCard"
 import { Section } from "components/_layout/Section"
-import { useGetAllCellarsQuery } from "generated/subgraph"
 import { GridHome } from "components/GridHome"
 import {
   CellarCardDisplay,
   CellarCardData,
 } from "components/_cards/CellarCard/CellarCardDisplay"
 import { Link } from "components/Link"
+import { cellarDataMap } from "data/cellarDataMap"
 import { HomeProps } from "pages/index"
 import FAQ from "components/FAQ"
 
 const PageHome: NextPage<HomeProps> = ({ faqData }) => {
-  const [cellarsResult] = useGetAllCellarsQuery()
-  // const { cellarData, userData, aaveCellarSigner } = useAaveV2Cellar()
-  // console.log({ cellarData, userData, aaveCellarSigner })
-
-  const { data, fetching } = cellarsResult
-  const totalCellars = data?.cellars?.length ?? 0
+  const cellars = Object.keys(cellarDataMap)
+  const totalCellars = cellars.length ?? 0
   const numPlaceholderCards = 3 - totalCellars
   const placeholderCardsArray = Array.from(
     Array(numPlaceholderCards).keys()
   )
 
   const CellarGridItems = () => {
-    if (fetching) {
-      return <Spinner />
-    }
     return (
       <>
-        {data?.cellars.map((cellar) => {
+        {cellars.map((cellar) => {
           return (
             <Link
-              href={`/cellars/${cellar.id}`}
-              key={cellar.id}
+              href={`/strategies/${cellar}`}
+              key={cellar}
               display="flex"
               borderRadius={28}
             >
-              <CellarCard cellarAddress={cellar.id} as="li" />
+              <CellarCard cellarAddress={cellar} as="li" />
             </Link>
           )
         })}
@@ -51,8 +44,6 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
             strategyType: "...",
             managementFee: "...",
             protocols: "...",
-            individualApy: "-",
-            cellarApy: "-",
           }
           return (
             <CellarCardDisplay
@@ -78,7 +69,7 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
             align={{ base: "center", md: "initial" }}
           >
             <Box mb={12}>
-              <Heading>Cellars</Heading>
+              <Heading>Strategies</Heading>
             </Box>
             <GridHome>
               <CellarGridItems />

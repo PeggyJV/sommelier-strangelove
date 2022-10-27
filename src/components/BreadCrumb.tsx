@@ -5,22 +5,26 @@ import {
   BreadcrumbLink,
   BreadcrumbProps,
 } from "@chakra-ui/react"
-import { useRouter } from "next/router"
 import { ArrowLeftIcon, ChevronRightIcon } from "./_icons"
+import { strategyPageContentData } from "data/strategyPageContentData"
 
 interface CustomBCProps extends BreadcrumbProps {
+  id: string
   cellarName?: string
 }
 
 export const BreadCrumb: VFC<CustomBCProps> = ({
+  id,
   cellarName,
   ...rest
 }) => {
-  const router = useRouter()
+  // const router = useRouter()
   // const asPathWithoutQuery = router.asPath.split("?")[0]
   // const asPathNestedRoutes = asPathWithoutQuery
   //   .split("/")
   //   .filter((v) => v.length > 0)
+
+  const landingPageContent = strategyPageContentData[id]
 
   return (
     <ChBreadcrumb
@@ -31,13 +35,16 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
     >
       <BreadcrumbItem color="neutral.300">
         <BreadcrumbLink
-          href="/"
-          width="13rem"
+          href={landingPageContent ? `/strategies/${id}` : "/"}
           display="flex"
           justifyContent="space-between"
           alignItems="center"
+          gap={3}
         >
-          <ArrowLeftIcon /> Back to Cellars Overview
+          <ArrowLeftIcon />
+          {landingPageContent
+            ? "Back"
+            : "Back to Strategies Overview"}
         </BreadcrumbLink>
       </BreadcrumbItem>
 

@@ -15,6 +15,8 @@ import { InformationIcon } from "./_icons"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
 import { Apy } from "./Apy"
+import { isCurrentDepositsEnabled } from "data/uiConfig"
+import { ConfigProps } from "data/types"
 
 interface CellarStatsProps extends StackProps {
   tvm?: ReactNode
@@ -23,6 +25,12 @@ interface CellarStatsProps extends StackProps {
   currentDeposits?: string
   cellarCap?: string
   asset?: string
+  overrideApy?: {
+    title: string
+    value: string
+    tooltip: string
+  }
+  cellarConfig: ConfigProps
 }
 
 export const CellarStats: VFC<CellarStatsProps> = ({
@@ -32,6 +40,8 @@ export const CellarStats: VFC<CellarStatsProps> = ({
   currentDeposits,
   cellarCap,
   asset,
+  overrideApy,
+  cellarConfig,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
@@ -65,6 +75,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           placement="top"
           label="Total value managed by Cellar"
           bg="surface.bg"
+          color="neutral.300"
         >
           <HStack spacing={1} align="center">
             <CardHeading>TVM</CardHeading>
@@ -73,7 +84,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
         </Tooltip>
       </VStack>
       <VStack spacing={1} align="flex-start">
-        <Apy apy={apy} />
+        <Apy apy={overrideApy?.value || apy} />
         <Box
           onMouseEnter={debounce(() => {
             analytics.track("user.tooltip-opened-apy")
@@ -82,21 +93,26 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label={apyTooltip}
+            label={overrideApy?.tooltip || apyTooltip}
             bg="surface.bg"
+            color="neutral.300"
           >
             <HStack spacing={1} align="center">
-              <CardHeading>Expected APY</CardHeading>
+              <CardHeading>
+                {overrideApy?.title || "Expected APY"}
+              </CardHeading>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>
         </Box>
       </VStack>
-      <CurrentDeposits
-        currentDeposits={currentDeposits}
-        cellarCap={cellarCap}
-        asset={asset}
-      />
+      {isCurrentDepositsEnabled(cellarConfig) && (
+        <CurrentDeposits
+          currentDeposits={currentDeposits}
+          cellarCap={cellarCap}
+          asset={asset}
+        />
+      )}
     </HStack>
   )
 }

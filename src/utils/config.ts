@@ -1,8 +1,12 @@
 import aaveV2CellarAbi from "../abi/aaveV2Cellar-v2.json"
 import cellarRouter from "../abi/cellarRouter.json"
 import sommStaking from "../abi/sommStaking.json"
+import gravityBridge from "../abi/gravityBridge.json"
+import clearGateCellar from "../abi/clearGateCellar.json"
+import clearGateRouter from "../abi/clearGateRouter.json"
 import { erc20ABI } from "wagmi"
 
+// Adress should be saved as lowercase
 /** Ensure Checksum Address  */
 export const config = {
   SWAP: {
@@ -18,6 +22,7 @@ export const config = {
       // ADDRESS: "0xd15135141f1217b8863cb1431ad71309ef22ceda",
       ADDRESS: "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
       ABI: aaveV2CellarAbi,
+      SLUG: "AAVE",
     },
     CELLAR_ROUTER: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -53,5 +58,39 @@ export const config = {
       ADDRESS: "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
       ABI: erc20ABI,
     },
+    SOMMELLIER: {
+      ADDRESS: "0xa670d7237398238de01267472c6f13e5b8010fd1",
+      DECIMALS: 6,
+      ABI: erc20ABI,
+    },
+    BRIDGE: {
+      ADDRESS: "0x69592e6f9d21989a043646fE8225da2600e5A0f7",
+      ABI: gravityBridge,
+    },
+    ETH_BTC_TREND_CELLAR: {
+      ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f2",
+      ABI: clearGateCellar,
+      SLUG: "ETH-BTC-Trend",
+    },
+    ETH_BTC_MOMENTUM_CELLAR: {
+      ADDRESS: "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+      ABI: clearGateCellar,
+      SLUG: "ETH-BTC-Momentum",
+    },
+    CLEAR_GATE_TEST_CELLAR_A: {
+      ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
+      ABI: clearGateCellar,
+    },
+    CLEAR_GATE_TEST_CELLAR_B: {
+      ADDRESS: "0x8bdd3d5b889f3d0d735eb4db5d87782df2b4647d",
+      ABI: clearGateCellar,
+    },
+    CLEAR_GATE_ROUTER: {
+      ADDRESS: "0x1d90366b0154fbcb5101c06a39c25d26cb48e889",
+      ABI: clearGateRouter,
+    },
+  },
+  cleargate: {
+    enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
   },
 }

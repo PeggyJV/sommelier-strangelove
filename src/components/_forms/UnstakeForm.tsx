@@ -15,12 +15,15 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { ModalInput } from "components/_inputs/ModalInput"
 import { useBrandedToast } from "hooks/chakra"
 import { useAccount } from "wagmi"
-import { useAaveV2Cellar } from "context/aaveV2StablecoinCellar"
 import { toEther } from "utils/formatCurrency"
 import { ethers } from "ethers"
 import { useHandleTransaction } from "hooks/web3"
 import { analytics } from "utils/analytics"
-
+import { useRouter } from "next/router"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserStakes } from "data/hooks/useUserStakes"
 interface FormValues {
   withdrawAmount: number
 }
@@ -34,44 +37,54 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
     register,
     watch,
     handleSubmit,
-    getValues,
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
-  const { aaveCellarSigner, userData, fetchUserData } =
-    useAaveV2Cellar()
-  const { addToast, update, close, closeAll } = useBrandedToast()
-  const [{ data: account }] = useAccount()
+
+  const { addToast } = useBrandedToast()
+  const { address } = useAccount()
+
+  const id = useRouter().query.id as string
+  const cellarConfig = cellarDataMap[id].config
+
+  const { cellarSigner } = useCreateContracts(cellarConfig)
+
+  const { refetch: userStakesRefetch } = useUserStakes(cellarConfig)
+  const { lpToken } = useUserBalances(cellarConfig)
+  const { data: lpTokenData } = lpToken
+
   const { doHandleTransaction } = useHandleTransaction()
+
   const watchWithdrawAmount = watch("withdrawAmount")
   const isDisabled =
     isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
   const isError = errors.withdrawAmount
+
   const setMax = () => {
     const amount = parseFloat(
-      toEther(userData?.balances?.aaveClr, 18, false)
+      toEther(lpTokenData?.formatted, 18, false)
     )
     setValue("withdrawAmount", amount)
 
     analytics.track("withdraw.max-selected", {
-      account: account?.address,
+      account: address,
       amount,
     })
   }
 
   useEffect(() => {
-    if (watchWithdrawAmount != null) {
+    if (watchWithdrawAmount !== null) {
       analytics.track("withdraw.amount-selected", {
-        account: account?.address,
+        account: address,
         amount: watchWithdrawAmount,
       })
     }
-  }, [watchWithdrawAmount, account])
+  }, [watchWithdrawAmount, address])
 
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (withdrawAmount <= 0) return
 
-    if (!account?.address) {
+    if (!address) {
       addToast({
         heading: "Withdraw Position",
         status: "default",
@@ -79,23 +92,18 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
         closeHandler: close,
         duration: null,
       })
-
       return
     }
 
     const analyticsData = {
-      account: account.address,
+      account: address,
       amount: withdrawAmount,
     }
 
     analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
-    const tx = await aaveCellarSigner.redeem(
-      amtInWei,
-      account.address,
-      account.address
-    )
+    const tx = await cellarSigner.redeem(amtInWei, address, address)
 
     function onSuccess() {
       analytics.track("withdraw.succeeded", analyticsData)
@@ -116,7 +124,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
       onError,
     })
 
-    await fetchUserData()
+    userStakesRefetch()
 
     setValue("withdrawAmount", 0)
   }

@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { useState, VFC } from "react"
 import {
   Table,
   Thead,
@@ -15,12 +15,15 @@ import {
   Heading,
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { useAaveStaker } from "context/aaveStakerContext"
 import { toEther } from "utils/formatCurrency"
 import { useHandleTransaction } from "hooks/web3"
 import { InformationIcon } from "components/_icons"
 import { InnerCard } from "./InnerCard"
 import { analytics } from "utils/analytics"
+import { useRouter } from "next/router"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useUserStakes } from "data/hooks/useUserStakes"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -33,36 +36,82 @@ const formatTrancheNumber = (number: number): string => {
 }
 
 const BondingTableCard: VFC<TableProps> = (props) => {
-  const { userStakeData, aaveStakerSigner, fetchUserStakes } =
-    useAaveStaker()
+  const id = useRouter().query.id as string
+  const cellarConfig = cellarDataMap[id].config
+  const { stakerSigner } = useCreateContracts(cellarConfig)
+  const { data: userStakesRes, refetch: userStakesRefetch } =
+    useUserStakes(cellarConfig)
+  const { userStakes, claimAllRewards } = userStakesRes || {}
+
   const { doHandleTransaction } = useHandleTransaction()
-  const { userStakes, claimAllRewards } = userStakeData
+  const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
+    new Set()
+  )
+  const [unstakeLoading, setUnstakeLoading] = useState<Set<number>>(
+    new Set()
+  )
 
   const handleUnstake = async (id: number) => {
-    analytics.track("unstake.started")
-    const tx = await aaveStakerSigner.unstake(id)
+    try {
+      setUnstakeLoading((oldState) => {
+        const newState = new Set(oldState)
+        newState.add(id)
+        return newState
+      })
+      analytics.track("unstake.started")
+      const tx = await stakerSigner?.unstake(id)
 
-    await doHandleTransaction({
-      ...tx,
-      onSuccess: () => analytics.track("unstake.succeeded"),
-      onError: () => analytics.track("unstake.failed"),
-    })
-    fetchUserStakes()
+      await doHandleTransaction({
+        ...tx,
+        onSuccess: () => analytics.track("unstake.succeeded"),
+        onError: () => analytics.track("unstake.failed"),
+      })
+      setUnstakeLoading((oldState) => {
+        const newState = new Set(oldState)
+        newState.delete(id)
+        return newState
+      })
+      userStakesRefetch()
+    } catch (error) {
+      setUnstakeLoading((oldState) => {
+        const newState = new Set(oldState)
+        newState.delete(id)
+        return newState
+      })
+    }
   }
 
   const handleUnBond = async (id: number) => {
-    analytics.track("unbond.started")
-    const tx = await aaveStakerSigner.unbond(id, {
-      // gas used around 63000
-      gasLimit: 80000,
-    })
+    try {
+      setUnbondLoading((oldState) => {
+        const newState = new Set(oldState)
+        newState.add(id)
+        return newState
+      })
+      analytics.track("unbond.started")
+      const tx = await stakerSigner?.unbond(id, {
+        // gas used around 63000
+        gasLimit: 80000,
+      })
 
-    await doHandleTransaction({
-      ...tx,
-      onSuccess: () => analytics.track("unbond.succeeded"),
-      onError: () => analytics.track("unbond.failed"),
-    })
-    fetchUserStakes()
+      await doHandleTransaction({
+        ...tx,
+        onSuccess: () => analytics.track("unbond.succeeded"),
+        onError: () => analytics.track("unbond.failed"),
+      })
+      setUnbondLoading((oldState) => {
+        const newState = new Set(oldState)
+        newState.delete(id)
+        return newState
+      })
+      userStakesRefetch()
+    } catch (error) {
+      setUnbondLoading((oldState) => {
+        const newState = new Set(oldState)
+        newState.delete(id)
+        return newState
+      })
+    }
   }
 
   const renderBondAction = (unbondTimestamp: number, i: number) => {
@@ -76,14 +125,24 @@ const BondingTableCard: VFC<TableProps> = (props) => {
 
     if (canUnstake)
       return (
-        <SecondaryButton size="sm" onClick={() => handleUnstake(i)}>
+        <SecondaryButton
+          isLoading={unstakeLoading.has(i)}
+          disabled={unstakeLoading.has(i)}
+          size="sm"
+          onClick={() => handleUnstake(i)}
+        >
           Unstake
         </SecondaryButton>
       )
 
     if (unbondTimestamp.toString() === "0") {
       return (
-        <SecondaryButton size="sm" onClick={() => handleUnBond(i)}>
+        <SecondaryButton
+          isLoading={unbondLoading.has(i)}
+          disabled={unbondLoading.has(i)}
+          size="sm"
+          onClick={() => handleUnBond(i)}
+        >
           Unbond
         </SecondaryButton>
       )
@@ -126,6 +185,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 label="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
                 placement="top"
                 bg="surface.bg"
+                color="neutral.300"
               >
                 <Th
                   fontSize={10}
@@ -133,7 +193,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text as="span">Bonded Tokens</Text>
+                    <Text>Bonded Tokens</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -154,6 +214,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 label="Amount of SOMM earned and available to be claimed"
                 placement="top"
                 bg="surface.bg"
+                color="neutral.300"
               >
                 <Th
                   fontSize={10}
@@ -161,7 +222,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text as="span">SOMM Rewards</Text>
+                    <Text>SOMM Rewards</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -182,12 +243,6 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   "1": "14 days",
                   "2": "21 days",
                 }
-                // const unbondTime = new Date(
-                //   unbondTimestamp * 1000
-                // ).toLocaleDateString()
-
-                // const unbondTimeHasElapsed =
-                //   unbondTimestamp * 1000 < Date.now()
                 if (amount?.toString() === "0") return null
                 return (
                   <Tr
@@ -208,7 +263,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     }}
                   >
                     <Td>#{formatTrancheNumber(i + 1)}</Td>
-                    <Td>{toEther(amount)}</Td>
+                    <Td>{toEther(amount.toString())}</Td>
                     <Td>{lockMap[lock?.toString()]}</Td>
                     <Td>
                       {claimAllRewards

@@ -16,7 +16,7 @@ import { VFC } from "react"
 
 interface BaseToastProps extends StackProps {
   closeHandler: () => void
-  status?: Status
+  status?: Status | "primary"
   isLoading?: boolean
   heading?: string
 }

@@ -13,11 +13,12 @@ import { ReactNode, useRef } from "react"
 import { InformationIcon, WarningIcon } from "components/_icons"
 import { SuccessIcon } from "components/_icons/SuccessIcon"
 
-interface BaseToast extends Partial<ToastOptions> {
+interface BaseToast extends Partial<Omit<ToastOptions, "status">> {
   body: ReactNode
   closeHandler?: () => void
   isLoading?: boolean
   heading?: string
+  status?: Status | "primary"
 }
 
 export const useBrandedToast = () => {
@@ -86,7 +87,7 @@ export const useBrandedToast = () => {
   return { close, closeAll, update, addToast }
 }
 
-export const useToastStyles = (status?: Status) => {
+export const useToastStyles = (status?: Status | "primary") => {
   const dynamicBoxStyles: BoxProps =
     status === "info"
       ? {
@@ -105,6 +106,12 @@ export const useToastStyles = (status?: Status) => {
           bg: "red.dark",
           borderWidth: 1,
           borderColor: "red.base",
+        }
+      : status === "primary"
+      ? {
+          bg: "purple.extraDark",
+          borderWidth: 1,
+          borderColor: "purple.dark",
         }
       : {
           bg: "lime.dark",
@@ -125,6 +132,10 @@ export const useToastStyles = (status?: Status) => {
       ? {
           bg: "red.dark",
         }
+      : status === "primary"
+      ? {
+          bg: "purple.extraDark",
+        }
       : {
           bg: "lime.dark",
         }
@@ -141,6 +152,10 @@ export const useToastStyles = (status?: Status) => {
       : status === "error"
       ? {
           color: "red.light",
+        }
+      : status === "primary"
+      ? {
+          color: "purple.light",
         }
       : {
           color: "lime.light",
@@ -161,6 +176,11 @@ export const useToastStyles = (status?: Status) => {
       ? {
           color: "red.base",
           borderColor: "red.base",
+        }
+      : status === "primary"
+      ? {
+          color: "purple.base",
+          borderColor: "purple.base",
         }
       : {
           color: "lime.base",
