@@ -1,6 +1,6 @@
 import { config } from "utils/config"
 import { CellarKey, CellarRouterKey } from "../types"
-import { depositTokenListWithEthBtc } from "../tokenConfig"
+import { depositTokenListWithWethWbtc } from "../tokenConfig"
 
 export const ethBtcMomentum = {
   name: "ETH-BTC Momentum",
@@ -71,7 +71,7 @@ export const ethBtcMomentum = {
     value: "84.15%",
   },
   depositTokens: {
-    list: depositTokenListWithEthBtc,
+    list: depositTokenListWithWethWbtc,
   },
   config: {
     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,

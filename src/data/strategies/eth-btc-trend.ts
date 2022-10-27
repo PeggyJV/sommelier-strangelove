@@ -1,6 +1,6 @@
 import { config } from "utils/config"
 import { CellarKey, CellarRouterKey } from "../types"
-import { depositTokenListWithEthBtc } from "../tokenConfig"
+import { depositTokenListWithWethWbtc } from "../tokenConfig"
 
 export const ethBtcTrend = {
   name: "ETH-BTC Trend",
@@ -70,7 +70,7 @@ export const ethBtcTrend = {
     value: "123.72%",
   },
   depositTokens: {
-    list: depositTokenListWithEthBtc,
+    list: depositTokenListWithWethWbtc,
   },
   config: {
     id: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
