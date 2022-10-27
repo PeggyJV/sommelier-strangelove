@@ -42,7 +42,9 @@ export const Menu: VFC<MenuProps> = ({
   const { register, setValue, clearErrors } = useFormContext()
   const availableBalance = `${toEther(
     selectedTokenBalance?.value,
-    selectedTokenBalance?.decimals
+    selectedTokenBalance?.decimals,
+    false,
+    6
   )}`
 
   const depositTokenConfig = getTokenConfig(depositTokens)
@@ -180,14 +182,8 @@ export const Menu: VFC<MenuProps> = ({
                 v > 0 || "You must submit a positive amount.",
               lessThanBalance: (v) => {
                 return (
-                  v <=
-                    parseFloat(
-                      toEther(
-                        selectedTokenBalance?.value || "",
-                        selectedTokenBalance?.decimals,
-                        false
-                      )
-                    ) || "Insufficient balance"
+                  v <= parseFloat(availableBalance) ||
+                  "Insufficient balance"
                 )
               },
               // depositLessThanFifty: (v) =>
