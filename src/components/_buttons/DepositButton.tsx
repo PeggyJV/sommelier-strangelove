@@ -1,9 +1,9 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react"
 import ClientOnly from "components/ClientOnly"
-import { DepositModal } from "components/_modals/DepositModal"
 import { VFC } from "react"
 import { BaseButton } from "./BaseButton"
 import { analytics } from "utils/analytics"
+import { DepositModal } from "components/_modals/DepositModal"
 
 export const DepositButton: VFC<ButtonProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()

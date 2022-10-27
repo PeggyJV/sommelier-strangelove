@@ -39,7 +39,8 @@ export const strategyPageContentData = {
       </>
     ),
     alternativeTo: "Holding ETH or BTC",
-    buyUrl: "https://uniswap.org/",
+    buyUrl:
+      "https://info.uniswap.org/#/pools/0x953c953755ddbb61a6c116f2219508f838b3219b",
     strategyHighlights: {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing depending on market conditions.",
@@ -112,7 +113,8 @@ export const strategyPageContentData = {
       </>
     ),
     alternativeTo: "Holding ETH or BTC",
-    buyUrl: "https://uniswap.org/",
+    buyUrl:
+      "https://info.uniswap.org/#/pools/0xffd96cda41d3b28f0b58ce5dcb02bc51224c1331",
     strategyHighlights: {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing to suit market conditions.",

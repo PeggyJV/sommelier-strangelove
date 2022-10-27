@@ -40,7 +40,6 @@ interface FormValues {
   selectedToken: TokenType
 }
 import { CardHeading } from "components/_typography/CardHeading"
-import { BaseModal } from "./BaseModal"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
@@ -55,7 +54,7 @@ import { isActiveTokenStrategyEnabled } from "data/uiConfig"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
-export const DepositModal: VFC<DepositModalProps> = (props) => {
+export const SommelierTab: VFC<DepositModalProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const cellarName = cellarDataMap[id].name
@@ -359,7 +358,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
   }, [currentAsset?.address, selectedToken?.address])
 
   return (
-    <BaseModal heading="Buy" {...props}>
+    <>
       <VStack pb={10} spacing={6} align="stretch">
         <VStack align="stretch">
           <CardHeading>cellar details</CardHeading>
@@ -447,6 +446,6 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
           </BaseButton>
         </VStack>
       </FormProvider>
-    </BaseModal>
+    </>
   )
 }
