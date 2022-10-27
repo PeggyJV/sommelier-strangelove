@@ -30,7 +30,11 @@ export const WithdrawModal: VFC<WithdrawModalProps> = ({
           <Text as="span">
             {isLoading
               ? "..."
-              : toEther(lpTokenData?.formatted, 18, false)}{" "}
+              : toEther(
+                  lpTokenData?.formatted,
+                  lpTokenData?.decimals,
+                  true
+                )}{" "}
             LP TOKENS
           </Text>
         </VStack>

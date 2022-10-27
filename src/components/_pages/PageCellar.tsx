@@ -33,6 +33,7 @@ const h2Styles: HeadingProps = {
 const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const cellarConfig = cellarDataMap[id].config
   const staticCellarData = cellarDataMap[id]
+  const cellarAddress = cellarDataMap[id].config.id
   const { data: tvm } = useTvm(cellarConfig)
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
   const { data: cellarCap } = useCellarCap(cellarConfig)
@@ -84,7 +85,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
             cellarDataMap={cellarDataMap}
             cellarId={id}
           />
-          <PerformanceChartByAddressProvider address={id}>
+          <PerformanceChartByAddressProvider address={cellarAddress}>
             <Heading pt={12} {...h2Styles}>
               Cellar Performance
             </Heading>

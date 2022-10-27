@@ -24,6 +24,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
+import { estimateGasLimit } from "utils/estimateGasLimit"
 interface FormValues {
   withdrawAmount: number
 }
@@ -105,7 +106,13 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
-    const tx = await cellarSigner.redeem(amtInWei, address, address)
+    const gasLimit = await estimateGasLimit(
+      cellarSigner.redeem(amtInWei, address, address),
+      330000
+    )
+    const tx = await cellarSigner.redeem(amtInWei, address, address, {
+      gasLimit: gasLimit,
+    })
 
     function onSuccess() {
       analytics.track("withdraw.succeeded", analyticsData)
@@ -152,7 +159,11 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
                 balance: (v) =>
                   v <=
                     parseFloat(
-                      toEther(lpTokenData?.formatted, 18, false)
+                      toEther(
+                        lpTokenData?.formatted,
+                        lpTokenData?.decimals,
+                        false
+                      )
                     ) || "Insufficient balance",
               },
             })}

@@ -25,7 +25,11 @@ export const HeroStrategyLeft: VFC<HeroStrategyLeftProps> = ({
         </Heading>
         <Text fontWeight="semibold">
           by{" "}
-          <Link textDecoration="underline" href={content.providerUrl}>
+          <Link
+            textDecoration="underline"
+            href={content.providerUrl}
+            target="_blank"
+          >
             {content.provider}
           </Link>
         </Text>
