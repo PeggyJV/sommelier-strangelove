@@ -144,9 +144,6 @@ export const Menu: VFC<MenuProps> = ({
                       <Image boxSize={5} src={src} alt={alt} />
                       <span>{symbol}</span>
                     </HStack>
-                    {isActiveAsset && (
-                      <Text as="span">Active Asset</Text>
-                    )}
                   </HStack>
                 </MenuItemOption>
               )
