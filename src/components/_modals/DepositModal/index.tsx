@@ -54,7 +54,7 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     <BaseModal heading="Buy" {...props}>
       <Tabs variant="unstyled" isFitted>
         {buyUrl && (
-          <TabList>
+          <TabList gap={2}>
             {/* @ts-ignore */}
             <CustomTab>Sommelier</CustomTab>
             {/* @ts-ignore */}
