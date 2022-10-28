@@ -73,7 +73,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
         <Tooltip
           hasArrow
           placement="top"
-          label="Total value managed by Cellar"
+          label="Total value managed by Strategy"
           bg="surface.bg"
           color="neutral.300"
         >
