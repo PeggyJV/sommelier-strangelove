@@ -79,7 +79,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
       <Section>
         <VStack spacing={6} align="stretch">
           <Heading pt={12} {...h2Styles}>
-            Cellar Details
+            Strategy Details
           </Heading>
           <CellarDetailsCard
             cellarDataMap={cellarDataMap}
