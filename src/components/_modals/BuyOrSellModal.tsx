@@ -29,14 +29,27 @@ export const BuyOrSellModal = ({
       {...rest}
     >
       <Stack>
-        <Text>Available on</Text>
+        <Text
+          textTransform="capitalize"
+          color="neutral.300"
+          fontSize="0.625rem"
+        >
+          Available on
+        </Text>
         {uniswapLink && (
-          <Link href={uniswapLink} target="_blank">
+          <Link
+            href={uniswapLink}
+            target="_blank"
+            style={{ textDecoration: "none" }}
+          >
             <HStack
               justifyContent="space-between"
               backgroundColor="surface.secondary"
               padding={4}
               borderRadius="xl"
+              _hover={{
+                backgroundColor: "purple.dark",
+              }}
             >
               <HStack spacing={4}>
                 <Image
@@ -52,12 +65,18 @@ export const BuyOrSellModal = ({
             </HStack>
           </Link>
         )}
-        <Link href={`/strategies/${id}/manage`}>
+        <Link
+          href={`/strategies/${id}/manage`}
+          style={{ textDecoration: "none" }}
+        >
           <HStack
             justifyContent="space-between"
             backgroundColor="surface.secondary"
             padding={4}
             borderRadius="xl"
+            _hover={{
+              backgroundColor: "purple.dark",
+            }}
           >
             <HStack spacing={4}>
               <Image
