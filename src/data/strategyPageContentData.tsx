@@ -22,17 +22,17 @@ export const strategyPageContentData = {
     tradedAssets: (
       <>
         <Image
-          alt="eth btc trend"
+          alt="eth icon"
           src="/assets/icons/eth.png"
           boxSize={8}
         />
         <Image
-          alt="eth btc trend"
+          alt="btc icon"
           src="/assets/icons/btc.png"
           boxSize={8}
         />
         <Image
-          alt="eth btc trend"
+          alt="usdc icon"
           src="/assets/icons/usdc.png"
           boxSize={8}
         />
