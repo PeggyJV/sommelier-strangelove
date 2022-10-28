@@ -45,9 +45,12 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         isOpen={buyOrSellModal.isOpen}
         onClose={buyOrSellModal.onClose}
       />
-      <Link href={`/strategies/${id}/manage`}>
+      <Link
+        href={`/strategies/${id}/manage`}
+        style={{ textDecoration: "none" }}
+      >
         <SecondaryButton w="full" h="50px">
-          Manage Portofolio
+          Manage Portfolio
         </SecondaryButton>
       </Link>
       <HStack
