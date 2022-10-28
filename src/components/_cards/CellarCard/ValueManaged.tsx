@@ -40,7 +40,7 @@ export const ValueManaged: React.FC<Props> = ({
         <Tooltip
           hasArrow
           arrowShadowColor="purple.base"
-          label="Total value managed by Cellar"
+          label="Total value managed by Strategy"
           placement="top"
           bg="surface.bg"
           color="neutral.300"
