@@ -12,7 +12,7 @@ export const ethBtcTrend = {
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: "Uniswap V3",
-  strategyAssets: ["BTC", "ETH", "USDC"],
+  strategyAssets: ["WBTC", "WETH", "USDC"],
   performanceSplit: {
     depositors: 90,
     protocol: 2.5,
@@ -137,8 +137,8 @@ export const ethBtcTrend = {
         <li>Best month: shows the return of the portfolio during the best month in the observation period.</li>
         <li>Worst month: shows the return of the portfolio during the worst month in the observation period and can be considered one indicator of downside risk.</li>
       </ul>
-      <br/> 
-      
+      <br/>
+
       Please remember that past performance is not indicative of future results. The backtesting procedure for the Cleargate strategies has followed all the best practices of backtesting to reduce the risks of over-optimising the strategies and takes account of actual trade execution costs and slippage.`,
     },
   ],
