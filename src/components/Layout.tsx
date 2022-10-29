@@ -16,10 +16,10 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   const { chain } = useNetwork()
 
   const router = useRouter()
-  console.log(router)
   const isStrategiesLandingPage =
     router.pathname.split("/")[1]?.toLowerCase() === "strategies" &&
     router.pathname.split("/")[3]?.toLowerCase() !== "manage"
+
   return (
     <Box>
       <MobileWarningCTA
