@@ -8,16 +8,32 @@ import Footer from "./Footer"
 import { MobileWarningCTA } from "./MobileWarningCTA"
 import { useAccount, useNetwork } from "wagmi"
 import { WrongNetworkBanner } from "./_banners/WrongNetworkBanner"
+import { useRouter } from "next/router"
 
 export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   const { isRestricted } = useGeo() || {}
   const { isConnected } = useAccount()
   const { chain } = useNetwork()
 
+  const router = useRouter()
+  console.log(router)
+  const isStrategiesLandingPage =
+    router.pathname.split("/")[1]?.toLowerCase() === "strategies" &&
+    router.pathname.split("/")[3]?.toLowerCase() !== "manage"
   return (
     <Box>
-      <MobileWarningCTA display={{ base: "flex", md: "none" }} />
-      <Box display={{ base: "none", md: "block" }}>
+      <MobileWarningCTA
+        display={{
+          base: isStrategiesLandingPage ? "none" : "flex",
+          md: "none",
+        }}
+      />
+      <Box
+        display={{
+          base: isStrategiesLandingPage ? "block" : "none",
+          md: "block",
+        }}
+      >
         <BackgroundAssets />
         <Flex minH="100vh" flexDir="column" {...rest}>
           <Nav />

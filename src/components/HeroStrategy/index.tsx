@@ -9,7 +9,13 @@ interface HeroProps {
 
 export const HeroStrategy: VFC<HeroProps> = ({ id }) => {
   return (
-    <Stack direction="row" spacing={12}>
+    <Stack
+      direction={{
+        base: "column",
+        md: "row",
+      }}
+      spacing={12}
+    >
       <HeroStrategyLeft id={id} />
       <HeroStrategyRight id={id} />
     </Stack>
