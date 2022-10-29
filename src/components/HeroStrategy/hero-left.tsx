@@ -35,7 +35,7 @@ export const HeroStrategyLeft: VFC<HeroStrategyLeftProps> = ({
         </Text>
       </Stack>
       <Heading size="lg">{content.description}</Heading>
-      <HStack spacing={8} pt={10}>
+      <HStack spacing={{ base: 2, md: 8 }} pt={10}>
         <Image
           ml={-6}
           src="/assets/images/asset-management.png"

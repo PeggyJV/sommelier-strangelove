@@ -1,5 +1,12 @@
 import { useEffect, useState, VFC } from "react"
-import { Container, Flex, FlexProps, HStack } from "@chakra-ui/react"
+import {
+  Container,
+  Flex,
+  FlexProps,
+  HStack,
+  Image,
+  useMediaQuery,
+} from "@chakra-ui/react"
 import { useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { Link } from "components/Link"
@@ -12,6 +19,7 @@ export const Nav: VFC<FlexProps> = (props) => {
   const [scrolled, setScrolled] = useState<boolean>(false)
 
   const routes = useRouter()
+  const [isLarger768] = useMediaQuery("(min-width: 768px)")
 
   // listen for scroll event to set state
   useEffect(() => {
@@ -52,7 +60,15 @@ export const Nav: VFC<FlexProps> = (props) => {
       >
         <HStack spacing={10}>
           <Link href="/">
-            <LogoTextIcon w="9rem" h="2rem" />
+            {isLarger768 ? (
+              <LogoTextIcon w="9rem" h="2rem" />
+            ) : (
+              <Image
+                src="/assets/images/sommelier-icon.svg"
+                alt="sommelier logo"
+                height="2rem"
+              />
+            )}
           </Link>
           <HStack
             spacing={8}
@@ -81,9 +97,10 @@ export const Nav: VFC<FlexProps> = (props) => {
           </HStack>
         </HStack>
 
-        {connectors.map((c) => (
-          <ConnectButton connector={c} key={c.id} />
-        ))}
+        {isLarger768 &&
+          connectors.map((c) => (
+            <ConnectButton connector={c} key={c.id} />
+          ))}
       </Container>
     </Flex>
   )
