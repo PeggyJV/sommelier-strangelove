@@ -22,17 +22,17 @@ export const strategyPageContentData = {
     tradedAssets: (
       <>
         <Image
-          alt="eth btc trend"
+          alt="eth icon"
           src="/assets/icons/eth.png"
           boxSize={8}
         />
         <Image
-          alt="eth btc trend"
+          alt="btc icon"
           src="/assets/icons/btc.png"
           boxSize={8}
         />
         <Image
-          alt="eth btc trend"
+          alt="usdc icon"
           src="/assets/icons/usdc.png"
           boxSize={8}
         />
@@ -40,7 +40,7 @@ export const strategyPageContentData = {
     ),
     alternativeTo: "Holding ETH or BTC",
     buyUrl:
-      "https://info.uniswap.org/#/pools/0x953c953755ddbb61a6c116f2219508f838b3219b",
+      "https://app.uniswap.org/#/swap?outputCurrency=0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
     strategyHighlights: {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing depending on market conditions.",
@@ -86,7 +86,7 @@ export const strategyPageContentData = {
     ticker: (
       <>
         <Image
-          alt="eth btc trend"
+          alt="eth btc mom icon"
           src="/assets/icons/eth-btc-mom.svg"
           boxSize={8}
         />
@@ -96,17 +96,17 @@ export const strategyPageContentData = {
     tradedAssets: (
       <>
         <Image
-          alt="eth btc trend"
+          alt="eth icon"
           src="/assets/icons/eth.png"
           boxSize={8}
         />
         <Image
-          alt="eth btc trend"
+          alt="btc icon"
           src="/assets/icons/btc.png"
           boxSize={8}
         />
         <Image
-          alt="eth btc trend"
+          alt="usdc icon"
           src="/assets/icons/usdc.png"
           boxSize={8}
         />
@@ -114,7 +114,7 @@ export const strategyPageContentData = {
     ),
     alternativeTo: "Holding ETH or BTC",
     buyUrl:
-      "https://info.uniswap.org/#/pools/0xffd96cda41d3b28f0b58ce5dcb02bc51224c1331",
+      "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
     strategyHighlights: {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing to suit market conditions.",
