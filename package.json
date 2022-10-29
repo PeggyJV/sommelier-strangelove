@@ -54,6 +54,7 @@
     "react-hook-form": "7.27.1",
     "react-icons": "^4",
     "react-jazzicon": "^1.0.4",
+    "react-query": "3.34.16",
     "react-slick": "^0.29.0",
     "sanity-codegen": "^0.9.8",
     "slick-carousel": "^1.8.1",
