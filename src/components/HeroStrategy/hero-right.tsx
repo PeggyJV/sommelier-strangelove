@@ -35,7 +35,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const apy = useApy(cellarConfig)
 
   return (
-    <Stack width="container.md" spacing={4}>
+    <Stack maxWidth="container.md" spacing={4}>
       <BaseButton w="full" h="50px" onClick={buyOrSellModal.onOpen}>
         Buy / Sell
       </BaseButton>

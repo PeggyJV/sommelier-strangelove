@@ -27,7 +27,7 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
     <Stack direction="column" mt={52} spacing="80px">
       <Stack spacing="40px">
         <Heading>Strategy Highlights</Heading>
-        <SimpleGrid columns={3} spacing={4}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
           {content.strategyHighlights.card.map((item, index) => (
             <Box
               key={index}
