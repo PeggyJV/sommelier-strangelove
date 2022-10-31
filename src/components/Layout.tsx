@@ -16,21 +16,23 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   const { chain } = useNetwork()
 
   const router = useRouter()
-  const isStrategiesLandingPage =
-    router.pathname.split("/")[1]?.toLowerCase() === "strategies" &&
-    router.pathname.split("/")[3]?.toLowerCase() !== "manage"
+
+  const isHomeOrStrategiesLandingPage =
+    router.pathname === "/" ||
+    (router.pathname.includes("strategies") &&
+      !router.pathname.includes("manage"))
 
   return (
     <Box>
       <MobileWarningCTA
         display={{
-          base: isStrategiesLandingPage ? "none" : "flex",
+          base: isHomeOrStrategiesLandingPage ? "none" : "flex",
           md: "none",
         }}
       />
       <Box
         display={{
-          base: isStrategiesLandingPage ? "block" : "none",
+          base: isHomeOrStrategiesLandingPage ? "block" : "none",
           md: "block",
         }}
       >
