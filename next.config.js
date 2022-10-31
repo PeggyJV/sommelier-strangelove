@@ -24,6 +24,12 @@ let nextConfig = {
         permanent: true,
         basePath: false,
       },
+      {
+        source: "/strategies",
+        destination: "/",
+        permanent: true,
+        basePath: false,
+      },
     ]
   },
 }

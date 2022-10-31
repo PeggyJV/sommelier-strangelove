@@ -21,8 +21,10 @@ export const MobileWarningCTA: FC<FlexProps> = (props) => {
       >
         <LogoTextIcon h={6} w="auto" />
         <Text textAlign="center">
-          This app is only supported on desktop at this time. Got
-          feedback? We'd love to hear it.
+          This app only works on desktop but please use uniswap link
+          to buy the token directly on mobile. Buying a token is
+          easiest way to onboard yourself to sommelier's automated
+          trading strategies which have been expertly curated.
         </Text>
         <Link
           href="https://t.me/getsomm"
