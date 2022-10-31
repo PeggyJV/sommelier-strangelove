@@ -19,8 +19,8 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
 
   const isHomeOrStrategiesLandingPage =
     router.pathname === "/" ||
-    (router.pathname.split("/")[1]?.toLowerCase() === "strategies" &&
-      router.pathname.split("/")[3]?.toLowerCase() !== "manage")
+    (router.pathname.includes("strategies") &&
+      !router.pathname.includes("manage"))
 
   return (
     <Box>
