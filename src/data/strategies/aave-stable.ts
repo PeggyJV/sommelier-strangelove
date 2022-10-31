@@ -7,7 +7,7 @@ export const aaveStable = {
   description:
     "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
   strategyType: "Stablecoin",
-  strategyTypeTooltip: "Cellar uses Stablecoin lending",
+  strategyTypeTooltip: "Strategy uses Stablecoin lending",
   managementFee: "0.25%",
   protocols: "AAVE",
   strategyAssets: [

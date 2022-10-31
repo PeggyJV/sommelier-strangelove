@@ -7,7 +7,7 @@ export const ethBtcMomentum = {
   description:
     "A dynamic long-only strategy for BTC-ETH portfolio management. More responsive to recent market changes and slightly more risky than BTC-ETH Trend strategy.",
   strategyType: "Crypto portfolio",
-  strategyTypeTooltip: "Cellar takes long positions in crypto",
+  strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
