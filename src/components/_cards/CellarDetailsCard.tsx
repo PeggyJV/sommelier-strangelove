@@ -103,7 +103,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           </CardStat>
           <CardStat
             label="protocols"
-            tooltip="Protocols in which Cellar operates"
+            tooltip="Protocols in which Strategy operates"
             pr={{ sm: 2, lg: 8 }}
           >
             <Image
@@ -131,7 +131,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           </CardStat>
           <CardStat
             label="strategy assets"
-            tooltip="Cellar will have exposure to 1 or more of these assets at any given time"
+            tooltip="Strategy will have exposure to 1 or more of these assets at any given time"
           >
             <TokenAssets
               tokens={cellarStrategyAssets}
@@ -148,7 +148,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               <Tooltip
                 hasArrow
                 placement="top"
-                label="Cellar earned performance split"
+                label="Strategy earned performance split"
                 bg="surface.bg"
                 color="neutral.300"
               >

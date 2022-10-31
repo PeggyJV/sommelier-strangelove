@@ -7,7 +7,7 @@ export const ethBtcTrend = {
   description:
     "A long-only strategy for dynamic BTC-ETH portfolio management. A better way to hold while better managing the negative volatility.",
   strategyType: "Crypto portfolio",
-  strategyTypeTooltip: "Cellar takes long positions in crypto",
+  strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
