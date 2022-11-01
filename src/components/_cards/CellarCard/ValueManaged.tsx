@@ -60,7 +60,7 @@ export const ValueManaged: React.FC<Props> = ({
           </HStack>
         </Tooltip>
       </Flex>
-      <Flex alignItems="center" mb={4}>
+      <Flex alignItems="center">
         <Heading
           size="sm"
           display="flex"

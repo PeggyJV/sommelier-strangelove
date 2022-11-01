@@ -1,4 +1,4 @@
-import { Box, BoxProps, Heading, Flex } from "@chakra-ui/react"
+import { BoxProps, Heading, Flex } from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
@@ -47,12 +47,15 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
     >
       <Burst />
       <Flex flexDirection="column" borderRadius={24} zIndex="2">
-        <Box
+        <Flex
           p={4}
           ml={2}
           bg="radial-gradient(104.22% 1378.1% at 0% 0%, rgba(194, 34, 194, 0) 0%, rgba(210, 37, 204, 0.16) 100%)"
           borderTopRightRadius={24}
           borderTopLeftRadius={24}
+          minH="180.5px"
+          direction="column"
+          justifyContent="space-between"
         >
           <CoinImage mb={3} />
           <Flex mb={2}>
@@ -77,7 +80,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
               {data.protocols}
             </Tag>
           </Flex>
-        </Box>
+        </Flex>
         <Flex
           p="16px 16px 24px"
           backgroundColor="surface.primary"
@@ -86,7 +89,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
           position="relative"
           flexGrow="1"
           flexDirection="column"
-          justifyContent="space-evenly"
+          justifyContent="space-between"
         >
           {isPlaceholder ? (
             <ComingSoon index={index} />
