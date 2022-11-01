@@ -14,12 +14,14 @@ query GetCellar($cellarAddress: ID!, $cellarString: String!) {
     tvlTotal
     addedLiquidityAllTime
     removedLiquidityAllTime
-    dayDatas(first: 7, orderBy: date, orderDirection: asc) {
+    shareValue
+    dayDatas(first: 7, orderBy: date, orderDirection: desc) {
       id
       date
       tvlActive
       tvlInvested
       earnings
+      shareValue
     }
   }
 }

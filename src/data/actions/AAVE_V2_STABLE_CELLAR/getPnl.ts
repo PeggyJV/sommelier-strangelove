@@ -26,7 +26,7 @@ export const getPnl = async ({
     const userTvl = new BigNumber(cellarShareBalance?.toString() ?? 0)
 
     const currentUserDeposits = new BigNumber(
-      positionData?.wallet?.currentDeposits ?? 0
+      positionData?.walletCellarData?.currentDeposits ?? 0
     )
     // always 18 decimals from subgraph, must be normalized to 6
     const deposits = currentUserDeposits.div(
