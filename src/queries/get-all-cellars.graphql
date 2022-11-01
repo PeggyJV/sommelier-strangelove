@@ -12,19 +12,21 @@ query GetAllCellars {
     numWalletsActive
     numWalletsAllTime
     sharesTotal
-    dayDatas(first: 7, orderBy: date, orderDirection: asc) {
+    shareValue
+    dayDatas(first: 7, orderBy: date, orderDirection: desc) {
       id
       date
       tvlActive
       tvlInvested
       earnings
+      shareValue
     }
   }
   ...CellarDayDatas
 }
 
 fragment CellarDayDatas on Query {
-  cellarDayDatas(orderBy: date, orderDirection: asc) {
+  cellarDayDatas(orderBy: date, orderDirection: desc) {
     id
     date
     tvlActive
