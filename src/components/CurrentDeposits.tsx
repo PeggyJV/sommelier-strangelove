@@ -34,7 +34,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
   }
 
   return (
-    <VStack minW={240} align="stretch">
+    <VStack maxW={288} align="stretch" mt={4}>
       <HStack justify="space-between" align="flex-end">
         <Text fontSize="0.625rem" color="neutral3400">
           Current Deposits
