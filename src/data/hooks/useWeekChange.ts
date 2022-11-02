@@ -29,9 +29,9 @@ export const useWeekChange = (config: ConfigProps) => {
     async () => {
       const percentage =
         dayDatas &&
-        ((toInteger(dayDatas[6].shareValue) -
-          toInteger(dayDatas[0].shareValue)) /
-          toInteger(dayDatas[0].shareValue)) *
+        ((toInteger(dayDatas[0].shareValue) -
+          toInteger(dayDatas[6].shareValue)) /
+          toInteger(dayDatas[6].shareValue)) *
           100
       if (
         config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
