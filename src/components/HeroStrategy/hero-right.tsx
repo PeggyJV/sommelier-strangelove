@@ -9,6 +9,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react"
+import { PercentageText } from "components/PercentageText"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { Label } from "components/_cards/CellarCard/Label"
@@ -16,9 +17,12 @@ import { InformationIcon } from "components/_icons"
 import { BuyOrSellModal } from "components/_modals/BuyOrSellModal"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useApy } from "data/hooks/useApy"
+import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useTvm } from "data/hooks/useTvm"
+import { useWeekChange } from "data/hooks/useWeekChange"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import { VFC } from "react"
+import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 
 interface HeroStrategyRightProps {
   id: string
@@ -33,6 +37,8 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const cellarConfig = cellarData.config
   const tvm = useTvm(cellarConfig)
   const apy = useApy(cellarConfig)
+  const { data: tokenPrice } = useTokenPrice(cellarConfig)
+  const { data: weekChange } = useWeekChange(cellarConfig)
 
   return (
     <Stack maxWidth="container.md" spacing={4}>
@@ -59,11 +65,11 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         divider={<StackDivider borderColor="purple.dark" />}
       >
         <VStack>
-          <Heading size="lg">{tvm.data?.formatted || "--"}</Heading>
+          <Heading size="md">{tokenPrice || "--"}</Heading>
           <Tooltip
             hasArrow
             arrowShadowColor="purple.base"
-            label="Total value managed by Strategy"
+            label="1 token price which is calculated based on current BTC, ETH, and USDC prices vs their proportions in strategy vs minted tokens in strategy"
             placement="top"
             bg="surface.bg"
             color="neutral.300"
@@ -76,27 +82,25 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 alignItems="center"
                 columnGap="4px"
               >
-                TVM
+                Token Price
               </Label>
-
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>
         </VStack>
         <VStack>
-          <Heading size="lg">
-            {apy.data?.expectedApy ||
-              cellarData.overrideApy?.value ||
-              "--"}
-          </Heading>
+          {weekChange && (
+            <PercentageText
+              data={weekChange}
+              positiveIcon={FaArrowUp}
+              negativeIcon={FaArrowDown}
+              headingSize="md"
+            />
+          )}
           <Tooltip
             hasArrow
             arrowShadowColor="purple.base"
-            label={
-              cellarData.overrideApy
-                ? cellarData.overrideApy.tooltip
-                : apy.data?.apyLabel
-            }
+            label="% of current token price vs token price 1 W(7 days) ago"
             placement="top"
             bg="surface.bg"
             color="neutral.300"
@@ -109,7 +113,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 alignItems="center"
                 columnGap="4px"
               >
-                {cellarData.overrideApy?.title || "Expected APY"}
+                1W Change
               </Label>
 
               <InformationIcon color="neutral.300" boxSize={3} />
