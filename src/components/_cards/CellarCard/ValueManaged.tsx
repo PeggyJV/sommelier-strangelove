@@ -6,7 +6,6 @@ import {
   Tooltip,
   HStack,
   Spinner,
-  Icon,
 } from "@chakra-ui/react"
 import { CurrentDeposits } from "components/CurrentDeposits"
 import { Label } from "./Label"
@@ -21,6 +20,7 @@ import { isCurrentDepositsEnabled } from "data/uiConfig"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useWeekChange } from "data/hooks/useWeekChange"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+import { PercentageText } from "components/PercentageText"
 
 interface Props extends BoxProps {
   cellarId: string
@@ -40,7 +40,6 @@ export const ValueManaged: React.FC<Props> = ({
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: weekChange } = useWeekChange(cellarConfig)
-  const isWeekChangeNegative = weekChange && weekChange < 0
 
   const valueManagedData = {
     firstTooltip: isAave
@@ -64,22 +63,11 @@ export const ValueManaged: React.FC<Props> = ({
     ) : (
       <>
         {weekChange ? (
-          <HStack
-            color={isWeekChangeNegative ? "red.base" : "lime.base"}
-            spacing={0}
-          >
-            <Icon
-              as={isWeekChangeNegative ? FaArrowDown : FaArrowUp}
-            />
-            <Heading
-              size="sm"
-              display="flex"
-              alignItems="center"
-              columnGap="3px"
-            >
-              {Math.abs(weekChange).toFixed(2)}%
-            </Heading>
-          </HStack>
+          <PercentageText
+            data={weekChange}
+            positiveIcon={FaArrowUp}
+            negativeIcon={FaArrowDown}
+          />
         ) : (
           <Box>...</Box>
         )}
