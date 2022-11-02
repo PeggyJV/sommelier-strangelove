@@ -1,4 +1,5 @@
 import {
+  Box,
   Heading,
   HStack,
   Link,
@@ -123,21 +124,27 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
       </HStack>
       <Stack pt={4} spacing={4} color="neutral.300">
         <HStack>
-          <Text w="150px" fontWeight="semibold">
-            Ticker
-          </Text>
+          <Box>
+            <Text w="120px" fontWeight="semibold">
+              Ticker
+            </Text>
+          </Box>
           {content.ticker}
         </HStack>
         <HStack>
-          <Text w="150px" fontWeight="semibold">
-            Traded Assets
-          </Text>
+          <Box>
+            <Text w="120px" fontWeight="semibold">
+              Traded Assets
+            </Text>
+          </Box>
           {content.tradedAssets}
         </HStack>
         <HStack>
-          <Text w="150px" fontWeight="semibold">
-            Alternative to
-          </Text>
+          <Box>
+            <Text w="120px" fontWeight="semibold">
+              Alternative to
+            </Text>
+          </Box>
           <Text>{content.alternativeTo}</Text>
         </HStack>
       </Stack>
