@@ -104,8 +104,15 @@ export const ValueManaged: React.FC<Props> = ({
           </HStack>
         </Tooltip>
       </Flex>
-      <Flex alignItems="center" mb={4}>
-        {valueManagedData.secondValue}
+      <Flex alignItems="center">
+        <Heading
+          size="sm"
+          display="flex"
+          alignItems="center"
+          columnGap="3px"
+        >
+          {valueManagedData.secondValue}
+        </Heading>
         <Tooltip
           hasArrow
           placement="top"
