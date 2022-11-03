@@ -1,4 +1,10 @@
-import { BoxProps, SimpleGrid, Stack, VStack } from "@chakra-ui/react"
+import {
+  BoxProps,
+  Image,
+  SimpleGrid,
+  Stack,
+  VStack,
+} from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { VFC } from "react"
@@ -148,12 +154,21 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 label="tokens"
                 tooltip={lpTokenTooltipContent(cellarConfig)}
               >
+                {cellarConfig.lpToken.imagePath && (
+                  <Image
+                    src={cellarConfig.lpToken.imagePath}
+                    alt="lp token image"
+                    height="24px"
+                    mr={2}
+                  />
+                )}
+
                 {isMounted &&
                   (isConnected
                     ? (lpTokenData &&
                         toEther(
                           lpTokenData.formatted,
-                          18,
+                          lpTokenData.decimals,
                           false,
                           2
                         )) ||
