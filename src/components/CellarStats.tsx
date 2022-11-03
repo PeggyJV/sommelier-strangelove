@@ -1,9 +1,9 @@
 import { ReactNode, VFC } from "react"
 import {
   Box,
+  Heading,
   HStack,
   StackProps,
-  Text,
   Tooltip,
   useBreakpointValue,
   VStack,
@@ -14,34 +14,33 @@ import { CurrentDeposits } from "./CurrentDeposits"
 import { InformationIcon } from "./_icons"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
-import { Apy } from "./Apy"
 import { isCurrentDepositsEnabled } from "data/uiConfig"
 import { ConfigProps } from "data/types"
 
 interface CellarStatsProps extends StackProps {
-  tvm?: ReactNode
-  apy?: ReactNode
-  apyTooltip?: string
+  firstTooltip?: string
+  firstLabel?: string
+  firstValue?: ReactNode
+  secondTooltip?: string
+  secondLabel?: string
+  secondValue?: ReactNode
+  cellarConfig: ConfigProps
   currentDeposits?: string
   cellarCap?: string
   asset?: string
-  overrideApy?: {
-    title: string
-    value: string
-    tooltip: string
-  }
-  cellarConfig: ConfigProps
 }
 
 export const CellarStats: VFC<CellarStatsProps> = ({
-  tvm,
-  apy,
-  apyTooltip,
+  firstTooltip,
+  firstLabel,
+  firstValue,
+  secondTooltip,
+  secondLabel,
+  secondValue,
+  cellarConfig,
   currentDeposits,
   cellarCap,
   asset,
-  overrideApy,
-  cellarConfig,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
@@ -52,7 +51,6 @@ export const CellarStats: VFC<CellarStatsProps> = ({
   return (
     <HStack
       spacing={8}
-      align="flex-start"
       wrap="wrap"
       rowGap={4}
       divider={
@@ -67,24 +65,22 @@ export const CellarStats: VFC<CellarStatsProps> = ({
       {...rest}
     >
       <VStack spacing={1} align="flex-start">
-        <Text as="span" fontSize="21px" fontWeight="bold">
-          {tvm}
-        </Text>
+        <Heading size="md">{firstValue}</Heading>
         <Tooltip
           hasArrow
           placement="top"
-          label="Total value managed by Strategy"
+          label={firstTooltip}
           bg="surface.bg"
           color="neutral.300"
         >
           <HStack spacing={1} align="center">
-            <CardHeading>TVM</CardHeading>
+            <CardHeading>{firstLabel}</CardHeading>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>
         </Tooltip>
       </VStack>
       <VStack spacing={1} align="flex-start">
-        <Apy apy={overrideApy?.value || apy} />
+        {secondValue}
         <Box
           onMouseEnter={debounce(() => {
             analytics.track("user.tooltip-opened-apy")
@@ -93,14 +89,12 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label={overrideApy?.tooltip || apyTooltip}
+            label={secondTooltip}
             bg="surface.bg"
             color="neutral.300"
           >
             <HStack spacing={1} align="center">
-              <CardHeading>
-                {overrideApy?.title || "Expected APY"}
-              </CardHeading>
+              <CardHeading>{secondLabel}</CardHeading>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>
