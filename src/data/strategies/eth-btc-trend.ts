@@ -76,6 +76,7 @@ export const ethBtcTrend = {
     id: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
     lpToken: {
       address: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
+      imagePath: "/assets/icons/eth-btc-trend.svg",
     },
     cellarRouter: {
       address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,

@@ -77,6 +77,7 @@ export const ethBtcMomentum = {
     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
     lpToken: {
       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
+      imagePath: "/assets/icons/eth-btc-mom.svg",
     },
     cellarRouter: {
       address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
