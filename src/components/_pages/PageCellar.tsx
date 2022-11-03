@@ -1,5 +1,6 @@
 import { VFC } from "react"
 import {
+  Box,
   Heading,
   HeadingProps,
   HStack,
@@ -22,6 +23,10 @@ import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/strategies/[id]/manage"
+import { useTokenPrice } from "data/hooks/useTokenPrice"
+import { useWeekChange } from "data/hooks/useWeekChange"
+import { PercentageText } from "components/PercentageText"
+import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -39,6 +44,44 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: cellarCap } = useCellarCap(cellarConfig)
   const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
+  const { data: tokenPrice } = useTokenPrice(cellarConfig)
+  const { data: weekChange } = useWeekChange(cellarConfig)
+  const isAave = id === "AAVE"
+
+  const cellarStatsData = {
+    firstTooltip: isAave
+      ? "Total value managed by Strategy"
+      : "1 token price which is calculated based on current BTC, ETH, and USDC prices vs their proportions in strategy vs minted tokens in strategy",
+    firstLabel: isAave ? "TVM" : "Token price",
+    firstValue: isAave ? tvm?.formatted : tokenPrice,
+    secondTooltip: isAave
+      ? apy?.apyLabel
+      : "% of current token price vs token price 1 W(7 days) ago",
+    secondLabel: isAave ? "Expected APY" : "1W Change",
+    secondValue: isAave ? (
+      <Heading
+        size="md"
+        display="flex"
+        alignItems="center"
+        columnGap="3px"
+      >
+        {apyLoading ? <Spinner /> : apy?.expectedApy}
+      </Heading>
+    ) : (
+      <>
+        {weekChange ? (
+          <PercentageText
+            data={weekChange}
+            positiveIcon={FaArrowUp}
+            negativeIcon={FaArrowDown}
+            headingSize="md"
+          />
+        ) : (
+          <Box>...</Box>
+        )}
+      </>
+    ),
+  }
 
   return (
     <Layout>
@@ -61,14 +104,16 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
             </HStack>
           </VStack>
           <CellarStats
-            tvm={tvm ? `${tvm.formatted}` : <Spinner />}
-            apy={apyLoading ? <Spinner /> : apy?.expectedApy}
-            apyTooltip={apy?.apyLabel}
+            firstTooltip={cellarStatsData.firstTooltip}
+            firstLabel={cellarStatsData.firstLabel}
+            firstValue={cellarStatsData.firstValue}
+            secondTooltip={cellarStatsData.secondTooltip}
+            secondLabel={cellarStatsData.secondLabel}
+            secondValue={cellarStatsData.secondValue}
             currentDeposits={currentDeposits?.value}
-            cellarCap={cellarCap?.value}
             asset={activeAsset?.symbol}
-            overrideApy={staticCellarData.overrideApy}
             cellarConfig={cellarConfig}
+            cellarCap={cellarCap?.value}
           />
         </HStack>
         <VStack spacing={4} align="stretch">
