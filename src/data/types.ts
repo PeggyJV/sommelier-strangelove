@@ -14,6 +14,7 @@ export interface ConfigProps {
   id: string
   lpToken: {
     address: string
+    imagePath: string
   }
   cellarRouter: {
     address: string
