@@ -107,7 +107,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
     const gasLimit = await estimateGasLimit(
-      cellarSigner.redeem(amtInWei, address, address),
+      cellarSigner.estimateGas.redeem(amtInWei, address, address),
       330000
     )
     const tx = await cellarSigner.redeem(amtInWei, address, address, {
