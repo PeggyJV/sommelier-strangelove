@@ -10,20 +10,18 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react"
-import { PercentageText } from "components/PercentageText"
+// import { PercentageText } from "components/PercentageText"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { Label } from "components/_cards/CellarCard/Label"
 import { InformationIcon } from "components/_icons"
 import { BuyOrSellModal } from "components/_modals/BuyOrSellModal"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useApy } from "data/hooks/useApy"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
-import { useTvm } from "data/hooks/useTvm"
 import { useWeekChange } from "data/hooks/useWeekChange"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import { VFC } from "react"
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+// import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 
 interface HeroStrategyRightProps {
   id: string
@@ -36,8 +34,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const buyOrSellModal = useDisclosure()
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
-  const tvm = useTvm(cellarConfig)
-  const apy = useApy(cellarConfig)
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: weekChange } = useWeekChange(cellarConfig)
 
@@ -89,7 +85,9 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </HStack>
           </Tooltip>
         </VStack>
-        <VStack>
+
+        {/* REMOVE COMMENT TO DISPLAY 1W CHANGE PERCENTAGE */}
+        {/* <VStack>
           {weekChange && (
             <PercentageText
               data={weekChange}
@@ -120,7 +118,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>
-        </VStack>
+        </VStack> */}
       </HStack>
       <Stack pt={4} spacing={4} color="neutral.300">
         <HStack>

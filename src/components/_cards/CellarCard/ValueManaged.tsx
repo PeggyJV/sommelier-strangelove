@@ -104,30 +104,34 @@ export const ValueManaged: React.FC<Props> = ({
           </HStack>
         </Tooltip>
       </Flex>
-      <Flex alignItems="center">
-        <Heading
-          size="sm"
-          display="flex"
-          alignItems="center"
-          columnGap="3px"
-        >
-          {valueManagedData.secondValue}
-        </Heading>
-        <Tooltip
-          hasArrow
-          placement="top"
-          label={valueManagedData.secondTooltip}
-          bg="surface.bg"
-          color="neutral.300"
-        >
-          <HStack spacing={1} align="center">
-            <Label ml={1} color="neutral.300">
-              {valueManagedData.secondLabel}
-            </Label>
-            <InformationIcon color="neutral.300" boxSize={3} />
-          </HStack>
-        </Tooltip>
-      </Flex>
+
+      {/* REMOVE THIS CONDITION IF WE WANT TO DISPLAY 1W CHANGE PERCENTAGE */}
+      {isAave && (
+        <Flex alignItems="center">
+          <Heading
+            size="sm"
+            display="flex"
+            alignItems="center"
+            columnGap="3px"
+          >
+            {valueManagedData.secondValue}
+          </Heading>
+          <Tooltip
+            hasArrow
+            placement="top"
+            label={valueManagedData.secondTooltip}
+            bg="surface.bg"
+            color="neutral.300"
+          >
+            <HStack spacing={1} align="center">
+              <Label ml={1} color="neutral.300">
+                {valueManagedData.secondLabel}
+              </Label>
+              <InformationIcon color="neutral.300" boxSize={3} />
+            </HStack>
+          </Tooltip>
+        </Flex>
+      )}
       {isCurrentDepositsEnabled(cellarConfig) && (
         <CurrentDeposits
           currentDeposits={currentDeposits?.value}

@@ -28,6 +28,7 @@ interface CellarStatsProps extends StackProps {
   currentDeposits?: string
   cellarCap?: string
   asset?: string
+  isAave?: boolean
 }
 
 export const CellarStats: VFC<CellarStatsProps> = ({
@@ -41,6 +42,7 @@ export const CellarStats: VFC<CellarStatsProps> = ({
   currentDeposits,
   cellarCap,
   asset,
+  isAave,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
@@ -79,27 +81,30 @@ export const CellarStats: VFC<CellarStatsProps> = ({
           </HStack>
         </Tooltip>
       </VStack>
-      <VStack spacing={1} align="flex-start">
-        {secondValue}
-        <Box
-          onMouseEnter={debounce(() => {
-            analytics.track("user.tooltip-opened-apy")
-          }, 1000)}
-        >
-          <Tooltip
-            hasArrow
-            placement="top"
-            label={secondTooltip}
-            bg="surface.bg"
-            color="neutral.300"
+      {/* REMOVE THIS CONDITION IF WE WANT TO DISPLAY 1W CHANGE PERCENTAGE */}
+      {isAave && (
+        <VStack spacing={1} align="flex-start">
+          {secondValue}
+          <Box
+            onMouseEnter={debounce(() => {
+              analytics.track("user.tooltip-opened-apy")
+            }, 1000)}
           >
-            <HStack spacing={1} align="center">
-              <CardHeading>{secondLabel}</CardHeading>
-              <InformationIcon color="neutral.300" boxSize={3} />
-            </HStack>
-          </Tooltip>
-        </Box>
-      </VStack>
+            <Tooltip
+              hasArrow
+              placement="top"
+              label={secondTooltip}
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack spacing={1} align="center">
+                <CardHeading>{secondLabel}</CardHeading>
+                <InformationIcon color="neutral.300" boxSize={3} />
+              </HStack>
+            </Tooltip>
+          </Box>
+        </VStack>
+      )}
       {isCurrentDepositsEnabled(cellarConfig) && (
         <CurrentDeposits
           currentDeposits={currentDeposits}

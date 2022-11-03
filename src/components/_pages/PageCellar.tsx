@@ -114,6 +114,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
             asset={activeAsset?.symbol}
             cellarConfig={cellarConfig}
             cellarCap={cellarCap?.value}
+            isAave={isAave}
           />
         </HStack>
         <VStack spacing={4} align="stretch">
