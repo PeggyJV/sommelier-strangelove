@@ -5,7 +5,7 @@ import { depositTokenListWithWethWbtc } from "../tokenConfig"
 export const ethBtcTrend = {
   name: "ETH-BTC Trend",
   description:
-    "A long-only strategy for dynamic BTC-ETH portfolio management. A better way to hold while better managing the negative volatility.",
+    "A long-only strategy for smart ETH-BTC portfolio management that has the ability to reduce or even temporarily exit ETH-BTC exposure. Best suited for medium to long horizons.",
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",

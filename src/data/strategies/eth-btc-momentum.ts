@@ -5,7 +5,7 @@ import { depositTokenListWithWethWbtc } from "../tokenConfig"
 export const ethBtcMomentum = {
   name: "ETH-BTC Momentum",
   description:
-    "A dynamic long-only strategy for BTC-ETH portfolio management. More responsive to recent market changes and slightly more risky than BTC-ETH Trend strategy.",
+    "A long-only strategy for smart ETH-BTC portfolio management. More responsive to recent market changes than ETH-BTC Trend and has the ability to reduce but not eliminate exposure. Best suited for medium horizons.",
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
