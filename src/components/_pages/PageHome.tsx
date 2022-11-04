@@ -11,15 +11,27 @@ import {
 import { Link } from "components/Link"
 import { HomeProps } from "pages/index"
 import FAQ from "components/FAQ"
-import { CellarHomeDataMap } from "data/CellarHomeDataMap"
+import { cellarDataMap } from "data/cellarDataMap"
+import { CellarType } from "data/types"
+import { config } from "utils/config"
 
 interface CellarGridItemsType {
-  section: "automatedPortofolio" | "yieldStrategies"
+  section: CellarType
 }
 
 const PageHome: NextPage<HomeProps> = ({ faqData }) => {
   const CellarGridItems = ({ section }: CellarGridItemsType) => {
-    const cellars = Object.keys(CellarHomeDataMap[section])
+    const filteredCellars = Object.values(cellarDataMap).filter(
+      (v) => v.cellarType === section
+    )
+
+    const cellars = filteredCellars.map((v) => {
+      return Object.values(config.CONTRACT).find(
+        (item) => item.ADDRESS === v.config.id
+        // @ts-ignore use ts-ignore because we don't have type for config
+      )?.SLUG
+    })
+
     const totalCellars = cellars.length ?? 0
     const numPlaceholderCards = 3 - totalCellars
     const placeholderCardsArray = Array.from(
@@ -75,7 +87,9 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
               <Heading>Automated Portfolio Management</Heading>
             </Box>
             <GridHome>
-              <CellarGridItems section="automatedPortofolio" />
+              <CellarGridItems
+                section={CellarType.automatedPortfolio}
+              />
             </GridHome>
           </Flex>
         </Section>
@@ -89,7 +103,7 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
               <Heading>Yield Strategies</Heading>
             </Box>
             <GridHome>
-              <CellarGridItems section="yieldStrategies" />
+              <CellarGridItems section={CellarType.yieldStrategies} />
             </GridHome>
           </Flex>
         </Section>
