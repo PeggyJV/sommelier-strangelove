@@ -5,6 +5,7 @@ import {
   BoxProps,
   Tooltip,
   HStack,
+  Spinner,
 } from "@chakra-ui/react"
 import { CurrentDeposits } from "components/CurrentDeposits"
 import { Label } from "./Label"
@@ -35,8 +36,8 @@ export const TokenPrice: React.FC<Props> = ({
 
   return (
     <Box {...rest}>
-      <Flex alignItems="baseline" mb={1}>
-        <Heading size="md">{tokenPrice || "..."}</Heading>
+      <Flex alignItems="center" mb={1}>
+        <Heading size="md">{tokenPrice || <Spinner />}</Heading>
         <Tooltip
           hasArrow
           arrowShadowColor="purple.base"

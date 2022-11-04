@@ -3,6 +3,7 @@ import {
   Heading,
   HStack,
   Link,
+  Spinner,
   Stack,
   StackDivider,
   Text,
@@ -62,7 +63,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         divider={<StackDivider borderColor="purple.dark" />}
       >
         <VStack>
-          <Heading size="md">{tokenPrice || "--"}</Heading>
+          <Heading size="md">{tokenPrice || <Spinner />}</Heading>
           <Tooltip
             hasArrow
             arrowShadowColor="purple.base"
