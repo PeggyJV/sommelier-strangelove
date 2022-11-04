@@ -1,9 +1,9 @@
 import { ReactNode, VFC } from "react"
 import {
   Box,
-  Heading,
   HStack,
   StackProps,
+  Text,
   Tooltip,
   useBreakpointValue,
   VStack,
@@ -14,35 +14,34 @@ import { CurrentDeposits } from "./CurrentDeposits"
 import { InformationIcon } from "./_icons"
 import { analytics } from "utils/analytics"
 import { debounce } from "lodash"
+import { Apy } from "./Apy"
 import { isCurrentDepositsEnabled } from "data/uiConfig"
 import { ConfigProps } from "data/types"
 
-interface CellarStatsProps extends StackProps {
-  firstTooltip?: string
-  firstLabel?: string
-  firstValue?: ReactNode
-  secondTooltip?: string
-  secondLabel?: string
-  secondValue?: ReactNode
-  cellarConfig: ConfigProps
+interface CellarStatsYieldProps extends StackProps {
+  tvm?: ReactNode
+  apy?: ReactNode
+  apyTooltip?: string
   currentDeposits?: string
   cellarCap?: string
   asset?: string
-  isAave?: boolean
+  overrideApy?: {
+    title: string
+    value: string
+    tooltip: string
+  }
+  cellarConfig: ConfigProps
 }
 
-export const CellarStats: VFC<CellarStatsProps> = ({
-  firstTooltip,
-  firstLabel,
-  firstValue,
-  secondTooltip,
-  secondLabel,
-  secondValue,
-  cellarConfig,
+export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
+  tvm,
+  apy,
+  apyTooltip,
   currentDeposits,
   cellarCap,
   asset,
-  isAave,
+  overrideApy,
+  cellarConfig,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
@@ -67,44 +66,45 @@ export const CellarStats: VFC<CellarStatsProps> = ({
       {...rest}
     >
       <VStack spacing={1} align="flex-start">
-        <Heading size="md">{firstValue}</Heading>
+        <Text as="span" fontSize="21px" fontWeight="bold">
+          {tvm}
+        </Text>
         <Tooltip
           hasArrow
           placement="top"
-          label={firstTooltip}
+          label="Total value managed by Strategy"
           bg="surface.bg"
           color="neutral.300"
         >
           <HStack spacing={1} align="center">
-            <CardHeading>{firstLabel}</CardHeading>
+            <CardHeading>TVM</CardHeading>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>
         </Tooltip>
       </VStack>
-      {/* REMOVE THIS CONDITION IF WE WANT TO DISPLAY 1W CHANGE PERCENTAGE */}
-      {isAave && (
-        <VStack spacing={1} align="flex-start">
-          {secondValue}
-          <Box
-            onMouseEnter={debounce(() => {
-              analytics.track("user.tooltip-opened-apy")
-            }, 1000)}
+      <VStack spacing={1} align="flex-start">
+        <Apy apy={overrideApy?.value || apy} />
+        <Box
+          onMouseEnter={debounce(() => {
+            analytics.track("user.tooltip-opened-apy")
+          }, 1000)}
+        >
+          <Tooltip
+            hasArrow
+            placement="top"
+            label={overrideApy?.tooltip || apyTooltip}
+            bg="surface.bg"
+            color="neutral.300"
           >
-            <Tooltip
-              hasArrow
-              placement="top"
-              label={secondTooltip}
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={1} align="center">
-                <CardHeading>{secondLabel}</CardHeading>
-                <InformationIcon color="neutral.300" boxSize={3} />
-              </HStack>
-            </Tooltip>
-          </Box>
-        </VStack>
-      )}
+            <HStack spacing={1} align="center">
+              <CardHeading>
+                {overrideApy?.title || "Expected APY"}
+              </CardHeading>
+              <InformationIcon color="neutral.300" boxSize={3} />
+            </HStack>
+          </Tooltip>
+        </Box>
+      </VStack>
       {isCurrentDepositsEnabled(cellarConfig) && (
         <CurrentDeposits
           currentDeposits={currentDeposits}
