@@ -1,9 +1,10 @@
 import { config } from "utils/config"
-import { CellarKey, CellarRouterKey } from "../types"
+import { CellarKey, CellarRouterKey, CellarType } from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
 
 export const ethBtcMomentum = {
   name: "ETH-BTC Momentum",
+  cellarType: CellarType.automatedPortfolio,
   description:
     "A long-only strategy for smart ETH-BTC portfolio management. More responsive to recent market changes than ETH-BTC Trend and has the ability to reduce but not eliminate exposure. Best suited for medium horizons.",
   strategyType: "Crypto portfolio",
