@@ -1,9 +1,15 @@
 import { config } from "utils/config"
-import { CellarKey, CellarRouterKey, StakerKey } from "../types"
+import {
+  CellarKey,
+  CellarRouterKey,
+  StakerKey,
+  CellarType,
+} from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
 export const aaveStable = {
   name: "aave2",
+  cellarType: CellarType.yieldStrategies,
   description:
     "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
   strategyType: "Stablecoin",
