@@ -9,19 +9,22 @@ import {
   CellarCardData,
 } from "components/_cards/CellarCard/CellarCardDisplay"
 import { Link } from "components/Link"
-import { cellarDataMap } from "data/cellarDataMap"
 import { HomeProps } from "pages/index"
 import FAQ from "components/FAQ"
+import { CellarHomeDataMap } from "data/CellarHomeDataMap"
+
+interface CellarGridItemsType {
+  section: "automatedPortofolio" | "yieldStrategies"
+}
 
 const PageHome: NextPage<HomeProps> = ({ faqData }) => {
-  const cellars = Object.keys(cellarDataMap)
-  const totalCellars = cellars.length ?? 0
-  const numPlaceholderCards = 3 - totalCellars
-  const placeholderCardsArray = Array.from(
-    Array(numPlaceholderCards).keys()
-  )
-
-  const CellarGridItems = () => {
+  const CellarGridItems = ({ section }: CellarGridItemsType) => {
+    const cellars = Object.keys(CellarHomeDataMap[section])
+    const totalCellars = cellars.length ?? 0
+    const numPlaceholderCards = 3 - totalCellars
+    const placeholderCardsArray = Array.from(
+      Array(numPlaceholderCards).keys()
+    )
     return (
       <>
         {cellars.map((cellar) => {
@@ -69,10 +72,24 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
             align={{ base: "center", md: "initial" }}
           >
             <Box mb={12}>
-              <Heading>Strategies</Heading>
+              <Heading>Automated Portfolio Management</Heading>
             </Box>
             <GridHome>
-              <CellarGridItems />
+              <CellarGridItems section="automatedPortofolio" />
+            </GridHome>
+          </Flex>
+        </Section>
+        <Section w="100%">
+          <Flex
+            w="100%"
+            direction="column"
+            align={{ base: "center", md: "initial" }}
+          >
+            <Box mb={12}>
+              <Heading>Yield Strategies</Heading>
+            </Box>
+            <GridHome>
+              <CellarGridItems section="yieldStrategies" />
             </GridHome>
           </Flex>
         </Section>
