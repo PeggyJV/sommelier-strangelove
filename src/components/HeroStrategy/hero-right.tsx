@@ -66,7 +66,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           <Tooltip
             hasArrow
             arrowShadowColor="purple.base"
-            label="1 token price which is calculated based on current BTC, ETH, and USDC prices vs their proportions in strategy vs minted tokens in strategy"
+            label="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
             placement="top"
             bg="surface.bg"
             color="neutral.300"
@@ -99,7 +99,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           <Tooltip
             hasArrow
             arrowShadowColor="purple.base"
-            label="% of current token price vs token price 1 W(7 days) ago"
+            label="% change of current token price vs. token price 1 week ago"
             placement="top"
             bg="surface.bg"
             color="neutral.300"
