@@ -24,6 +24,9 @@ interface CellarStatsAutomatedProps extends StackProps {
   weekChangeTooltip?: string
   weekChangeLabel?: string
   weekChangeValue?: ReactNode
+  changeVsEthBtcTooltip?: string
+  changeVsEthBtcLabel?: string
+  changeVsEthBtcValue?: ReactNode
   cellarConfig: ConfigProps
   currentDeposits?: string
   cellarCap?: string
@@ -37,6 +40,9 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
   weekChangeTooltip,
   weekChangeLabel,
   weekChangeValue,
+  changeVsEthBtcTooltip,
+  changeVsEthBtcLabel,
+  changeVsEthBtcValue,
   cellarConfig,
   currentDeposits,
   cellarCap,
@@ -51,6 +57,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
   return (
     <HStack
       spacing={8}
+      align="start"
       wrap="wrap"
       rowGap={4}
       divider={
@@ -79,7 +86,30 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           </HStack>
         </Tooltip>
       </VStack>
-      <VStack spacing={1} align="flex-start">
+      <VStack spacing={1} w={28} textAlign="center">
+        {changeVsEthBtcValue}
+        <Box
+          onMouseEnter={debounce(() => {
+            analytics.track(
+              "user.tooltip-opened-1m-change-vs-eth-btc-50-50"
+            )
+          }, 1000)}
+        >
+          <Tooltip
+            hasArrow
+            placement="top"
+            label={changeVsEthBtcTooltip}
+            bg="surface.bg"
+            color="neutral.300"
+          >
+            <HStack spacing={1} align="center">
+              <CardHeading>{changeVsEthBtcLabel}</CardHeading>
+              <InformationIcon color="neutral.300" boxSize={3} />
+            </HStack>
+          </Tooltip>
+        </Box>
+      </VStack>
+      {/* <VStack spacing={1} align="flex-start">
         {weekChangeValue}
         <Box
           onMouseEnter={debounce(() => {
@@ -100,6 +130,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           </Tooltip>
         </Box>
       </VStack>
+        */}
       {isCurrentDepositsEnabled(cellarConfig) && (
         <CurrentDeposits
           currentDeposits={currentDeposits}

@@ -1,6 +1,5 @@
 import { VFC } from "react"
 import {
-  Box,
   Heading,
   HeadingProps,
   HStack,
@@ -98,7 +97,18 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
                       headingSize="md"
                     />
                   ) : (
-                    <Box>...</Box>
+                    <Spinner />
+                  )}
+                </>
+              }
+              changeVsEthBtcTooltip="1M Change vs ETH/BTC 50/50 - % change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
+              changeVsEthBtcLabel="1M Change vs ETH/BTC 50/50"
+              changeVsEthBtcValue={
+                <>
+                  {dailyChange ? (
+                    <PercentageText data={0.43} headingSize="md" />
+                  ) : (
+                    <Spinner />
                   )}
                 </>
               }

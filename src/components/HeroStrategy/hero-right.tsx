@@ -61,7 +61,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         justifyContent="space-around"
         divider={<StackDivider borderColor="purple.dark" />}
       >
-        <VStack>
+        <VStack w="50%">
           <Heading size="md">{tokenPrice || <Spinner />}</Heading>
           <CellarStatsLabel
             tooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
