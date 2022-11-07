@@ -36,7 +36,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const cellarConfig = cellarData.config
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
-  const { data: tvm } = useTvm(cellarConfig)
+  const tvm = useTvm(cellarConfig)
 
   return (
     <Stack minW={"280px"} spacing={4}>
@@ -62,14 +62,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         justifyContent="space-around"
         divider={<StackDivider borderColor="purple.dark" />}
       >
-        <VStack>
-          <Heading size="md">{tvm?.formatted || <Spinner />}</Heading>
-          <CellarStatsLabel
-            tooltip="Total value managed by Strategy"
-            title="TVM"
-          />
-        </VStack>
-
         <VStack>
           <Heading size="md">{tokenPrice || <Spinner />}</Heading>
           <CellarStatsLabel
@@ -112,6 +104,20 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </Text>
           </Box>
           <Text>{content.alternativeTo}</Text>
+        </HStack>
+        <HStack>
+          <Box>
+            <Text w="120px" fontWeight="semibold">
+              Total Value
+            </Text>
+          </Box>
+          <Text>
+            {tvm.isLoading ? (
+              <Spinner />
+            ) : (
+              tvm.data?.formatted || "--"
+            )}
+          </Text>
         </HStack>
       </Stack>
     </Stack>
