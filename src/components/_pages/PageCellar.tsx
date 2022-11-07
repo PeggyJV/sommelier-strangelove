@@ -24,11 +24,10 @@ import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/strategies/[id]/manage"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
-import { useWeekChange } from "data/hooks/useWeekChange"
+import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"
-import { isTokenPriceEnabled, isTVMEnabled } from "data/uiConfig"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
+import { CellarType } from "data/types"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -47,7 +46,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
-  const { data: weekChange } = useWeekChange(cellarConfig)
+  const { data: dailyChange } = useDailyChange(cellarConfig)
 
   return (
     <Layout>
@@ -69,7 +68,8 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
               </Heading>
             </HStack>
           </VStack>
-          {isTVMEnabled(cellarConfig) && (
+          {staticCellarData.cellarType ===
+            CellarType.yieldStrategies && (
             <CellarStatsYield
               tvm={tvm ? `${tvm.formatted}` : <Spinner />}
               apy={apyLoading ? <Spinner /> : apy?.expectedApy}
@@ -82,20 +82,19 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
             />
           )}
 
-          {isTokenPriceEnabled(cellarConfig) && (
+          {staticCellarData.cellarType ===
+            CellarType.automatedPortfolio && (
             <CellarStatsAutomated
               tokenPriceTooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
               tokenPriceLabel="Token price"
               tokenPriceValue={tokenPrice ?? <Spinner />}
-              weekChangeTooltip="% change of current token price vs. token price 1 week ago"
-              weekChangeLabel="1W Change"
+              weekChangeTooltip="% change of current token price vs. token price yesterday"
+              weekChangeLabel="1D Change"
               weekChangeValue={
                 <>
-                  {weekChange ? (
+                  {dailyChange ? (
                     <PercentageText
-                      data={weekChange}
-                      positiveIcon={FaArrowUp}
-                      negativeIcon={FaArrowDown}
+                      data={dailyChange}
                       headingSize="md"
                     />
                   ) : (
