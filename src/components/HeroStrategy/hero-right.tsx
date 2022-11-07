@@ -10,7 +10,6 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react"
-// import { PercentageText } from "components/PercentageText"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { BuyOrSellModal } from "components/_modals/BuyOrSellModal"
