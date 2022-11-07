@@ -15,6 +15,7 @@ import { toEther } from "utils/formatCurrency"
 import { useFormContext } from "react-hook-form"
 import { BridgeFormValues } from "."
 import { InformationIcon } from "components/_icons"
+import { config } from "utils/config"
 
 export const InputAmount: React.FC = () => {
   const { register, setValue, formState, getFieldState } =
@@ -25,7 +26,7 @@ export const InputAmount: React.FC = () => {
   const { address, isConnecting } = useAccount()
   const { data, error, isLoading } = useBalance({
     addressOrName: address,
-    token: "0xa670d7237398238DE01267472C6f13e5B8010FD1",
+    token: config.CONTRACT.SOMMELLIER.ADDRESS,
     watch: true,
   })
 
