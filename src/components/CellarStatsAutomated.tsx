@@ -1,5 +1,6 @@
 import { ReactNode, VFC } from "react"
 import {
+  Box,
   // Box,
   Heading,
   HStack,
@@ -16,6 +17,8 @@ import { InformationIcon } from "./_icons"
 // import { debounce } from "lodash"
 import { isCurrentDepositsEnabled } from "data/uiConfig"
 import { ConfigProps } from "data/types"
+import { debounce } from "lodash"
+import { analytics } from "utils/analytics"
 
 interface CellarStatsAutomatedProps extends StackProps {
   tokenPriceTooltip?: string
@@ -79,11 +82,11 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           </HStack>
         </Tooltip>
       </VStack>
-      {/* <VStack spacing={1} align="flex-start">
+      <VStack spacing={1} align="flex-start">
         {weekChangeValue}
         <Box
           onMouseEnter={debounce(() => {
-            analytics.track("user.tooltip-opened-apy")
+            analytics.track("user.tooltip-opened-daily-change")
           }, 1000)}
         >
           <Tooltip
@@ -99,7 +102,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
             </HStack>
           </Tooltip>
         </Box>
-      </VStack> */}
+      </VStack>
       {isCurrentDepositsEnabled(cellarConfig) && (
         <CurrentDeposits
           currentDeposits={currentDeposits}
