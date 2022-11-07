@@ -204,7 +204,7 @@ export const PerformanceChartByAddressProvider: FC<{
 
       const latestTvl = `${formatCurrency(
         getCalulatedTvl(latestData?.tvlTotal, 18)
-      )} ${latestData?.asset?.symbol}`
+      )}`
 
       setTvl({
         xFormatted: latestDate,

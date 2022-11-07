@@ -36,8 +36,7 @@ export const TVLChart: VFC = () => {
     setTvl({
       xFormatted: point.xFormatted,
       yFormatted: `
-        ${formatCurrency(data?.series![0].data[index].y as string)!} 
-        ${data?.series![0].data[index].asset.symbol}`,
+        ${formatCurrency(data?.series![0].data[index].y as string)!}`,
     })
   }
   const debouncedTvl = debounce(updateTvl, 100)
