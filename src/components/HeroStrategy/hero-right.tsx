@@ -107,7 +107,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         <HStack>
           <Box>
             <Text w="120px" fontWeight="semibold">
-              Total Value
+              Total assets
             </Text>
           </Box>
           <Text>
