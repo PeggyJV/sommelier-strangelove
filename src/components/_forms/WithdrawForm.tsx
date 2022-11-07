@@ -1,18 +1,20 @@
-import { useEffect, VFC } from "react"
+import React, { useEffect, VFC } from "react"
 import {
   FormControl,
   FormErrorMessage,
   Icon,
-  InputGroup,
   Text,
-  InputRightElement,
   VStack,
+  Button,
+  HStack,
+  Input,
+  Spinner,
+  Image,
+  Stack,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
-import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { ModalInput } from "components/_inputs/ModalInput"
 import { useBrandedToast } from "hooks/chakra"
 import { useAccount } from "wagmi"
 import { toEther } from "utils/formatCurrency"
@@ -26,6 +28,7 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { estimateGasLimit } from "utils/estimateGasLimit"
 import { useNetValue } from "data/hooks/useNetValue"
+import { WarningIcon } from "components/_icons"
 interface FormValues {
   withdrawAmount: number
 }
@@ -55,7 +58,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken } = useUserBalances(cellarConfig)
-  const { data: lpTokenData } = lpToken
+  const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
 
   const { doHandleTransaction } = useHandleTransaction()
 
@@ -148,50 +151,126 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <FormControl isInvalid={isError as boolean | undefined}>
-        <InputGroup display="flex" alignItems="center">
-          <ModalInput
-            type="number"
-            step="any"
-            {...register("withdrawAmount", {
-              required: "Enter amount",
-              valueAsNumber: true,
-              validate: {
-                positive: (v) =>
-                  v > 0 || "You must submit a positive amount.",
-                balance: (v) =>
-                  v <=
-                    parseFloat(
-                      toEther(
-                        lpTokenData?.formatted,
-                        lpTokenData?.decimals,
-                        false
-                      )
-                    ) || "Insufficient balance",
-              },
-            })}
-          />
-          <InputRightElement h="100%" mr={3}>
-            <SecondaryButton
-              size="sm"
-              borderRadius={8}
-              onClick={setMax}
+        <Stack spacing={2}>
+          <Text fontWeight="bold" color="neutral.400" fontSize="xs">
+            Enter Amount
+          </Text>
+          <HStack
+            backgroundColor="surface.tertiary"
+            justifyContent="space-between"
+            borderRadius={16}
+            px={4}
+            py={3}
+            height="64px"
+          >
+            <HStack>
+              <Image
+                width="16px"
+                height="16px"
+                src={cellarConfig.lpToken.imagePath}
+                alt="coinlogo"
+              />
+              <Text fontWeight="semibold">{lpTokenData?.symbol}</Text>
+            </HStack>
+            <VStack spacing={0} align="flex-end">
+              <Input
+                id="amount"
+                variant="unstyled"
+                pr="2"
+                type="number"
+                step="any"
+                defaultValue="0.00"
+                placeholder="0.00"
+                fontSize="lg"
+                fontWeight={700}
+                textAlign="right"
+                {...register("withdrawAmount", {
+                  required: "Enter amount",
+                  valueAsNumber: true,
+                  validate: {
+                    positive: (v) =>
+                      v > 0 || "You must submit a positive amount.",
+                    balance: (v) =>
+                      v <=
+                        parseFloat(
+                          toEther(
+                            lpTokenData?.formatted,
+                            lpTokenData?.decimals,
+                            false
+                          )
+                        ) || "Insufficient balance",
+                  },
+                })}
+              />
+              <HStack spacing={0} fontSize="10px">
+                {isBalanceLoading ? (
+                  <Spinner size="xs" mr="2" />
+                ) : (
+                  <>
+                    <Text as="span">
+                      Available:{" "}
+                      {(lpTokenData &&
+                        toEther(
+                          lpTokenData.value,
+                          lpTokenData.decimals
+                        )) ||
+                        "--"}
+                    </Text>
+                    <Button
+                      variant="unstyled"
+                      p={0}
+                      w="max-content"
+                      h="max-content"
+                      textTransform="uppercase"
+                      fontSize="inherit"
+                      fontWeight={600}
+                      onClick={setMax}
+                    >
+                      max
+                    </Button>
+                  </>
+                )}
+              </HStack>
+            </VStack>
+          </HStack>
+
+          <FormErrorMessage color="energyYellow">
+            <Icon
+              p={0.5}
+              mr={1}
+              color="surface.bg"
+              bg="red.base"
+              borderRadius="50%"
+              as={AiOutlineInfo}
+            />
+            {errors.withdrawAmount?.message}
+          </FormErrorMessage>
+          <HStack pt={2}>
+            <WarningIcon color="orange.base" boxSize="12px" />
+            <Text
+              fontSize="xs"
+              fontWeight="semibold"
+              color="orange.light"
             >
-              Max
-            </SecondaryButton>
-          </InputRightElement>
-        </InputGroup>
-        <FormErrorMessage color="energyYellow">
-          <Icon
-            p={0.5}
-            mr={1}
-            color="surface.bg"
-            bg="red.base"
-            borderRadius="50%"
-            as={AiOutlineInfo}
-          />{" "}
-          {errors.withdrawAmount?.message}
-        </FormErrorMessage>
+              Tokens are swapped to the actively traded strategy
+              assets which may include multiple assets in varying
+              distribution
+            </Text>
+          </HStack>
+        </Stack>
       </FormControl>
+      <Stack>
+        <Text fontSize="sm" fontWeight="semibold" color="neutral.400">
+          Transaction Details
+        </Text>
+        <Stack>
+          <TransactionDetailItem
+            title="title"
+            value={<Text fontWeight="semibold">Value</Text>}
+          />
+        </Stack>
+      </Stack>
+
       <BaseButton
         type="submit"
         isDisabled={isDisabled}
@@ -206,5 +285,20 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
         Please wait 15 min after the deposit to Sell
       </Text>
     </VStack>
+  )
+}
+
+const TransactionDetailItem = ({
+  title,
+  value,
+}: {
+  title: string
+  value: React.ReactNode
+}) => {
+  return (
+    <HStack alignItems="flex-start" justifyContent="space-between">
+      <Text color="neutral.300">{title}</Text>
+      <Stack>{value}</Stack>
+    </HStack>
   )
 }
