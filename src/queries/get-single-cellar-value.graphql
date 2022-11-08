@@ -1,0 +1,8 @@
+query GetSingleCellarValue($epoch: Int!, $cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    dayDatas(where: { date: $epoch }) {
+      date
+      shareValue
+    }
+  }
+}
