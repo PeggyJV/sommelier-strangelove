@@ -1,8 +1,7 @@
 export const getToday = () => {
-  const dayInSecs = 24 * 60 * 60
+  const dayInMs = 24 * 60 * 60 * 1000
   const now = new Date()
-  const today =
-    Math.floor(now.getTime() / 1000 / dayInSecs) * dayInSecs
+  const today = (Math.floor(now.getTime() / dayInMs) * dayInMs) / 1000
 
   return today
 }
@@ -26,14 +25,11 @@ export const getPreviousWeek = (): number => {
 }
 
 export const getPreviousMonth = (): number => {
-  const dayInSecs = 24 * 60 * 60
+  const dayInMs = 24 * 60 * 60 * 1000
   const now = new Date()
   const previousMonth =
-    Math.floor(
-      (now.getTime() - dayInSecs * 30 * 1000) / 1000 / dayInSecs
-    ) *
-      dayInSecs +
-    dayInSecs * 3
+    (Math.floor((now.getTime() - dayInMs * 30) / dayInMs) * dayInMs) /
+    1000
 
   return previousMonth
 }
