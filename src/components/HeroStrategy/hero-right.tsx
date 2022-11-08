@@ -3,25 +3,24 @@ import {
   Heading,
   HStack,
   Link,
+  Spinner,
   Stack,
   StackDivider,
   Text,
-  Tooltip,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react"
-// import { PercentageText } from "components/PercentageText"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { Label } from "components/_cards/CellarCard/Label"
-import { InformationIcon } from "components/_icons"
 import { BuyOrSellModal } from "components/_modals/BuyOrSellModal"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
-import { useWeekChange } from "data/hooks/useWeekChange"
+import { useDailyChange } from "data/hooks/useDailyChange"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import { VFC } from "react"
-// import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+import { PercentageText } from "components/PercentageText"
+import { CellarStatsLabel } from "components/_cards/CellarCard/CellarStats"
+import { useTvm } from "data/hooks/useTvm"
 
 interface HeroStrategyRightProps {
   id: string
@@ -35,10 +34,11 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
-  const { data: weekChange } = useWeekChange(cellarConfig)
+  const { data: dailyChange } = useDailyChange(cellarConfig)
+  const tvm = useTvm(cellarConfig)
 
   return (
-    <Stack maxWidth="container.md" spacing={4}>
+    <Stack minW={"280px"} spacing={4}>
       <BaseButton w="full" h="50px" onClick={buyOrSellModal.onOpen}>
         Buy / Sell
       </BaseButton>
@@ -62,63 +62,22 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         divider={<StackDivider borderColor="purple.dark" />}
       >
         <VStack>
-          <Heading size="md">{tokenPrice || "--"}</Heading>
-          <Tooltip
-            hasArrow
-            arrowShadowColor="purple.base"
-            label="1 token price which is calculated based on current BTC, ETH, and USDC prices vs their proportions in strategy vs minted tokens in strategy"
-            placement="top"
-            bg="surface.bg"
-            color="neutral.300"
-          >
-            <HStack spacing={1} align="center">
-              <Label
-                ml={1}
-                color="neutral.300"
-                display="flex"
-                alignItems="center"
-                columnGap="4px"
-              >
-                Token Price
-              </Label>
-              <InformationIcon color="neutral.300" boxSize={3} />
-            </HStack>
-          </Tooltip>
+          <Heading size="md">{tokenPrice || <Spinner />}</Heading>
+          <CellarStatsLabel
+            tooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
+            title="Token Price"
+          />
         </VStack>
 
-        {/* REMOVE COMMENT TO DISPLAY 1W CHANGE PERCENTAGE */}
-        {/* <VStack>
-          {weekChange && (
-            <PercentageText
-              data={weekChange}
-              positiveIcon={FaArrowUp}
-              negativeIcon={FaArrowDown}
-              headingSize="md"
-            />
+        <VStack>
+          {dailyChange && (
+            <PercentageText data={dailyChange} headingSize="md" />
           )}
-          <Tooltip
-            hasArrow
-            arrowShadowColor="purple.base"
-            label="% of current token price vs token price 1 W(7 days) ago"
-            placement="top"
-            bg="surface.bg"
-            color="neutral.300"
-          >
-            <HStack spacing={1} align="center">
-              <Label
-                ml={1}
-                color="neutral.300"
-                display="flex"
-                alignItems="center"
-                columnGap="4px"
-              >
-                1W Change
-              </Label>
-
-              <InformationIcon color="neutral.300" boxSize={3} />
-            </HStack>
-          </Tooltip>
-        </VStack> */}
+          <CellarStatsLabel
+            tooltip="% change of current token price vs. token price yesterday"
+            title="1D Change"
+          />
+        </VStack>
       </HStack>
       <Stack pt={4} spacing={4} color="neutral.300">
         <HStack>
@@ -144,6 +103,20 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </Text>
           </Box>
           <Text>{content.alternativeTo}</Text>
+        </HStack>
+        <HStack>
+          <Box>
+            <Text w="120px" fontWeight="semibold">
+              Total assets
+            </Text>
+          </Box>
+          <Text>
+            {tvm.isLoading ? (
+              <Spinner />
+            ) : (
+              tvm.data?.formatted || "--"
+            )}
+          </Text>
         </HStack>
       </Stack>
     </Stack>

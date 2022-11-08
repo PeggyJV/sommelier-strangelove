@@ -34,9 +34,15 @@ export interface ConfigProps {
   }
   rewardTokenAddress?: string
 }
+
+export enum CellarType {
+  automatedPortfolio,
+  yieldStrategies,
+}
 export interface CellarDataMap {
   [key: string]: {
     name: string
+    cellarType: CellarType
     description: string
     strategyType: string
     strategyTypeTooltip?: string

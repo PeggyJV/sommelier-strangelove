@@ -11,7 +11,7 @@ import { Layout } from "components/Layout"
 import { PerformanceCard } from "components/_cards/PerformanceCard"
 import { Section } from "components/_layout/Section"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"
-import { CellarStats } from "components/CellarStats"
+import { CellarStatsYield } from "components/CellarStatsYield"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
 import { CoinImage } from "components/_cards/CellarCard/CoinImage"
@@ -24,9 +24,10 @@ import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarPageProps } from "pages/strategies/[id]/manage"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
-import { useWeekChange } from "data/hooks/useWeekChange"
+import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+import { CellarStatsAutomated } from "components/CellarStatsAutomated"
+import { CellarType } from "data/types"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -45,43 +46,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
-  const { data: weekChange } = useWeekChange(cellarConfig)
-  const isAave = id === "AAVE"
-
-  const cellarStatsData = {
-    firstTooltip: isAave
-      ? "Total value managed by Strategy"
-      : "1 token price which is calculated based on current BTC, ETH, and USDC prices vs their proportions in strategy vs minted tokens in strategy",
-    firstLabel: isAave ? "TVM" : "Token price",
-    firstValue: isAave ? tvm?.formatted : tokenPrice,
-    secondTooltip: isAave
-      ? apy?.apyLabel
-      : "% of current token price vs token price 1 W(7 days) ago",
-    secondLabel: isAave ? "Expected APY" : "1W Change",
-    secondValue: isAave ? (
-      <Heading
-        size="md"
-        display="flex"
-        alignItems="center"
-        columnGap="3px"
-      >
-        {apyLoading ? <Spinner /> : apy?.expectedApy}
-      </Heading>
-    ) : (
-      <>
-        {weekChange ? (
-          <PercentageText
-            data={weekChange}
-            positiveIcon={FaArrowUp}
-            negativeIcon={FaArrowDown}
-            headingSize="md"
-          />
-        ) : (
-          <Box>...</Box>
-        )}
-      </>
-    ),
-  }
+  const { data: dailyChange } = useDailyChange(cellarConfig)
 
   return (
     <Layout>
@@ -103,19 +68,46 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
               </Heading>
             </HStack>
           </VStack>
-          <CellarStats
-            firstTooltip={cellarStatsData.firstTooltip}
-            firstLabel={cellarStatsData.firstLabel}
-            firstValue={cellarStatsData.firstValue}
-            secondTooltip={cellarStatsData.secondTooltip}
-            secondLabel={cellarStatsData.secondLabel}
-            secondValue={cellarStatsData.secondValue}
-            currentDeposits={currentDeposits?.value}
-            asset={activeAsset?.symbol}
-            cellarConfig={cellarConfig}
-            cellarCap={cellarCap?.value}
-            isAave={isAave}
-          />
+          {staticCellarData.cellarType ===
+            CellarType.yieldStrategies && (
+            <CellarStatsYield
+              tvm={tvm ? `${tvm.formatted}` : <Spinner />}
+              apy={apyLoading ? <Spinner /> : apy?.expectedApy}
+              apyTooltip={apy?.apyLabel}
+              currentDeposits={currentDeposits?.value}
+              cellarCap={cellarCap?.value}
+              asset={activeAsset?.symbol}
+              overrideApy={staticCellarData.overrideApy}
+              cellarConfig={cellarConfig}
+            />
+          )}
+
+          {staticCellarData.cellarType ===
+            CellarType.automatedPortfolio && (
+            <CellarStatsAutomated
+              tokenPriceTooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
+              tokenPriceLabel="Token price"
+              tokenPriceValue={tokenPrice ?? <Spinner />}
+              weekChangeTooltip="% change of current token price vs. token price yesterday"
+              weekChangeLabel="1D Change"
+              weekChangeValue={
+                <>
+                  {dailyChange ? (
+                    <PercentageText
+                      data={dailyChange}
+                      headingSize="md"
+                    />
+                  ) : (
+                    <Box>...</Box>
+                  )}
+                </>
+              }
+              cellarConfig={cellarConfig}
+              currentDeposits={currentDeposits?.value}
+              cellarCap={cellarCap?.value}
+              asset={activeAsset?.symbol}
+            />
+          )}
         </HStack>
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles}>Your Portfolio</Heading>

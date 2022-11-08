@@ -16,6 +16,22 @@ export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
   return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
 }
 
+export const isTVMEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+}
+
+export const isAPYEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+}
+
+export const isTokenPriceEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+}
+
+export const isDailyChangeEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+}
+
 export const lpTokenTooltipContent = (config: ConfigProps) => {
   if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR)
     return "Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"

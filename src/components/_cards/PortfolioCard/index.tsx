@@ -77,7 +77,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           >
             <CardStat
               label="net value"
-              tooltip="Current value of your assets in Cellar"
+              tooltip="Current value of your assets in Strategy"
             >
               {isMounted &&
                 (isConnected ? netValue?.formatted || "..." : "--")}

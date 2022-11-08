@@ -12,37 +12,35 @@ import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { CurrentDeposits } from "./CurrentDeposits"
 import { InformationIcon } from "./_icons"
-import { analytics } from "utils/analytics"
-import { debounce } from "lodash"
 import { isCurrentDepositsEnabled } from "data/uiConfig"
 import { ConfigProps } from "data/types"
+import { debounce } from "lodash"
+import { analytics } from "utils/analytics"
 
-interface CellarStatsProps extends StackProps {
-  firstTooltip?: string
-  firstLabel?: string
-  firstValue?: ReactNode
-  secondTooltip?: string
-  secondLabel?: string
-  secondValue?: ReactNode
+interface CellarStatsAutomatedProps extends StackProps {
+  tokenPriceTooltip?: string
+  tokenPriceLabel?: string
+  tokenPriceValue?: ReactNode
+  weekChangeTooltip?: string
+  weekChangeLabel?: string
+  weekChangeValue?: ReactNode
   cellarConfig: ConfigProps
   currentDeposits?: string
   cellarCap?: string
   asset?: string
-  isAave?: boolean
 }
 
-export const CellarStats: VFC<CellarStatsProps> = ({
-  firstTooltip,
-  firstLabel,
-  firstValue,
-  secondTooltip,
-  secondLabel,
-  secondValue,
+export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
+  tokenPriceTooltip,
+  tokenPriceLabel,
+  tokenPriceValue,
+  weekChangeTooltip,
+  weekChangeLabel,
+  weekChangeValue,
   cellarConfig,
   currentDeposits,
   cellarCap,
   asset,
-  isAave,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
@@ -67,44 +65,41 @@ export const CellarStats: VFC<CellarStatsProps> = ({
       {...rest}
     >
       <VStack spacing={1} align="flex-start">
-        <Heading size="md">{firstValue}</Heading>
+        <Heading size="md">{tokenPriceValue}</Heading>
         <Tooltip
           hasArrow
           placement="top"
-          label={firstTooltip}
+          label={tokenPriceTooltip}
           bg="surface.bg"
           color="neutral.300"
         >
           <HStack spacing={1} align="center">
-            <CardHeading>{firstLabel}</CardHeading>
+            <CardHeading>{tokenPriceLabel}</CardHeading>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>
         </Tooltip>
       </VStack>
-      {/* REMOVE THIS CONDITION IF WE WANT TO DISPLAY 1W CHANGE PERCENTAGE */}
-      {isAave && (
-        <VStack spacing={1} align="flex-start">
-          {secondValue}
-          <Box
-            onMouseEnter={debounce(() => {
-              analytics.track("user.tooltip-opened-apy")
-            }, 1000)}
+      <VStack spacing={1} align="flex-start">
+        {weekChangeValue}
+        <Box
+          onMouseEnter={debounce(() => {
+            analytics.track("user.tooltip-opened-daily-change")
+          }, 1000)}
+        >
+          <Tooltip
+            hasArrow
+            placement="top"
+            label={weekChangeTooltip}
+            bg="surface.bg"
+            color="neutral.300"
           >
-            <Tooltip
-              hasArrow
-              placement="top"
-              label={secondTooltip}
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={1} align="center">
-                <CardHeading>{secondLabel}</CardHeading>
-                <InformationIcon color="neutral.300" boxSize={3} />
-              </HStack>
-            </Tooltip>
-          </Box>
-        </VStack>
-      )}
+            <HStack spacing={1} align="center">
+              <CardHeading>{weekChangeLabel}</CardHeading>
+              <InformationIcon color="neutral.300" boxSize={3} />
+            </HStack>
+          </Tooltip>
+        </Box>
+      </VStack>
       {isCurrentDepositsEnabled(cellarConfig) && (
         <CurrentDeposits
           currentDeposits={currentDeposits}
