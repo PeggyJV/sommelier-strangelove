@@ -1,5 +1,6 @@
 import { VFC } from "react"
 import {
+  Box,
   Heading,
   HeadingProps,
   HStack,
@@ -27,6 +28,7 @@ import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarType } from "data/types"
+import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -46,6 +48,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
+  const intervalGainPct = useIntervalGainPct(cellarConfig)
 
   return (
     <Layout>
@@ -95,20 +98,24 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
                     <PercentageText
                       data={dailyChange}
                       headingSize="md"
+                      arrow
                     />
                   ) : (
-                    <Spinner />
+                    <Box>...</Box>
                   )}
                 </>
               }
-              changeVsEthBtcTooltip="1M Change vs ETH/BTC 50/50 - % change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
-              changeVsEthBtcLabel="1M Change vs ETH/BTC 50/50"
-              changeVsEthBtcValue={
+              monthChangeTooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
+              monthChangeLabel="1M Change vs ETH/BTC 50/50"
+              monthChangeValue={
                 <>
-                  {dailyChange ? (
-                    <PercentageText data={0.43} headingSize="md" />
+                  {intervalGainPct.data ? (
+                    <PercentageText
+                      data={intervalGainPct.data}
+                      headingSize="md"
+                    />
                   ) : (
-                    <Spinner />
+                    <Box>...</Box>
                   )}
                 </>
               }
