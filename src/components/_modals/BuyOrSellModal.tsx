@@ -7,6 +7,9 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { ChevronRightIcon, ExternalLinkIcon } from "components/_icons"
+import { cellarDataMap } from "data/cellarDataMap"
+import { analytics } from "utils/analytics"
+import { landingType } from "utils/landingType"
 import { BaseModal } from "./BaseModal"
 
 interface BuyOrSellModalProps
@@ -39,6 +42,13 @@ export const BuyOrSellModal = ({
         {uniswapLink && (
           <Link
             href={uniswapLink}
+            onClick={() => {
+              analytics.track("strategy.buy-sell", {
+                strategyCard: cellarDataMap[id].name,
+                platformSelection: "Uniswap",
+                landingType: landingType(),
+              })
+            }}
             target="_blank"
             style={{ textDecoration: "none" }}
           >
@@ -67,6 +77,13 @@ export const BuyOrSellModal = ({
         )}
         <Link
           href={`/strategies/${id}/manage`}
+          onClick={() => {
+            analytics.track("strategy.buy-sell", {
+              strategyCard: cellarDataMap[id].name,
+              platformSelection: "Sommelier",
+              landingType: landingType(),
+            })
+          }}
           style={{ textDecoration: "none" }}
         >
           <HStack
