@@ -109,13 +109,13 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
               monthChangeLabel="1M Change vs ETH/BTC 50/50"
               monthChangeValue={
                 <>
-                  {intervalGainPct.data ? (
+                  {intervalGainPct.isLoading ? (
+                    <Spinner />
+                  ) : (
                     <PercentageText
                       data={intervalGainPct.data}
                       headingSize="md"
                     />
-                  ) : (
-                    <Box>...</Box>
                   )}
                 </>
               }
