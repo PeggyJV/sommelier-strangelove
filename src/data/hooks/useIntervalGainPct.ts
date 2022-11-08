@@ -33,8 +33,9 @@ export const useIntervalGainPct = (config: ConfigProps) => {
   const { dayDatas: previousMonthDatas } = cellarPreviousMonth || {}
 
   const queryEnabled = Boolean(
-    todayDatas &&
-      previousMonthDatas &&
+    config.id &&
+      todayDatas?.[0].shareValue &&
+      previousMonthDatas?.[0].shareValue &&
       Boolean(ethIntervalGain.data) &&
       Boolean(btcIntervalGain.data)
   )
@@ -42,11 +43,11 @@ export const useIntervalGainPct = (config: ConfigProps) => {
   const query = useQuery(
     [
       "USE_INTERVAL_GAIN_PCT",
+      config.id,
       todayDatas,
       previousMonthDatas,
       ethIntervalGain.data,
       btcIntervalGain.data,
-      config.id,
     ],
     async () => {
       if (
