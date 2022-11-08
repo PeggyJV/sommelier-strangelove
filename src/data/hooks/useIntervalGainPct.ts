@@ -44,8 +44,8 @@ export const useIntervalGainPct = (config: ConfigProps) => {
     [
       "USE_INTERVAL_GAIN_PCT",
       config.id,
-      todayDatas,
-      previousMonthDatas,
+      todayDatas?.[0].shareValue,
+      previousMonthDatas?.[0].shareValue,
       ethIntervalGain.data,
       btcIntervalGain.data,
     ],
