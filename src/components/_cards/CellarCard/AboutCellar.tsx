@@ -10,6 +10,7 @@ import {
   isAPYEnabled,
   isCurrentDepositsEnabled,
   isDailyChangeEnabled,
+  isIntervalGainPctEnabled,
   isTokenPriceEnabled,
   isTVMEnabled,
 } from "data/uiConfig"
@@ -83,7 +84,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
           </Flex>
         )}
 
-        {isTokenPriceEnabled(cellarConfig) && (
+        {isIntervalGainPctEnabled(cellarConfig) && (
           <Flex alignItems="center">
             {intervalGainPct.data ? (
               <PercentageText data={intervalGainPct.data} />
