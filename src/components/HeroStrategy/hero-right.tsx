@@ -82,7 +82,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         alignItems="start"
         divider={<StackDivider borderColor="purple.dark" />}
       >
-        <VStack w="30%">
+        <VStack flex={1}>
           <Heading size="md">{tokenPrice || <Spinner />}</Heading>
           <CellarStatsLabel
             tooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
@@ -90,7 +90,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           />
         </VStack>
 
-        <VStack w="30%">
+        <VStack flex={1}>
           {dailyChange && (
             <PercentageText data={dailyChange} headingSize="md" />
           )}
@@ -100,7 +100,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           />
         </VStack>
 
-        <VStack w="30%" textAlign="center">
+        <VStack flex={1} textAlign="center">
           {intervalGainPct.data && (
             <PercentageText
               data={intervalGainPct.data}
