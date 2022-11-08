@@ -1686,7 +1686,7 @@ export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQ
 export const GetSingleCellarValueDocument = gql`
     query GetSingleCellarValue($epoch: Int!, $cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
-    dayDatas(where: {date: $epoch}) {
+    dayDatas(first: 1, where: {date_gte: $epoch}) {
       date
       shareValue
     }
