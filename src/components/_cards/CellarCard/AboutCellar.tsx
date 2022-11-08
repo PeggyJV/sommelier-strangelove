@@ -20,6 +20,7 @@ import { CellarStats, CellarStatsLabel } from "./CellarStats"
 import { useDailyChange } from "data/hooks/useDailyChange"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { PercentageText } from "components/PercentageText"
+import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
 
 interface Props {
   data: CellarCardData
@@ -32,6 +33,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: cellarCap } = useCellarCap(cellarConfig)
   const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
+  const intervalGainPct = useIntervalGainPct(cellarConfig)
 
   const tokenPrice = useTokenPrice(cellarConfig)
   const dailyChange = useDailyChange(cellarConfig)
@@ -70,13 +72,27 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
         {isDailyChangeEnabled(cellarConfig) && (
           <Flex alignItems="center">
             {dailyChange.data ? (
-              <PercentageText data={dailyChange.data} />
+              <PercentageText data={dailyChange.data} arrow />
             ) : (
               <Box>--</Box>
             )}
             <CellarStatsLabel
               title="1D Change"
               tooltip="% change of current token price vs. token price yesterday"
+            />
+          </Flex>
+        )}
+
+        {isTokenPriceEnabled(cellarConfig) && (
+          <Flex alignItems="center">
+            {intervalGainPct.data ? (
+              <PercentageText data={intervalGainPct.data} />
+            ) : (
+              <Box>--</Box>
+            )}
+            <CellarStatsLabel
+              title="1M Change vs ETH/BTC 50/50"
+              tooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
             />
           </Flex>
         )}
