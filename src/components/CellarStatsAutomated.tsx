@@ -111,7 +111,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
         {monthChangeValue}
         <Box
           onMouseEnter={debounce(() => {
-            analytics.track("user.tooltip-opened-daily-change")
+            analytics.track("user.tooltip-opened-monthly-change")
           }, 1000)}
         >
           <Tooltip
