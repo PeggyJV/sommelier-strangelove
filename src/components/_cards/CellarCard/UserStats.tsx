@@ -12,7 +12,7 @@ interface Props extends FlexProps {
   data: CellarCardData
 }
 
-export const Stats: React.FC<Props> = ({
+export const UserStats: React.FC<Props> = ({
   data,
   children,
   ...rest

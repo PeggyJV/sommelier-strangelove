@@ -1,21 +1,18 @@
-import { Box, Heading, HStack, Icon } from "@chakra-ui/react"
+import { Heading, HStack } from "@chakra-ui/react"
 import { VFC } from "react"
+import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 
 interface PercentageTextProps {
-  positiveIcon: any
-  negativeIcon: any
-  data: number
+  data?: number
   headingSize?: "sm" | "md" | "lg" | "xl"
 }
 
 export const PercentageText: VFC<PercentageTextProps> = ({
-  positiveIcon,
-  negativeIcon,
   data,
   headingSize = "sm",
 }) => {
   const isDataZero = data === 0
-  const isDataNegative = data < 0
+  const isDataNegative = data && data < 0
 
   return (
     <HStack
@@ -28,18 +25,15 @@ export const PercentageText: VFC<PercentageTextProps> = ({
       }
       spacing={0}
     >
-      {isDataZero ? (
-        <Box />
-      ) : (
-        <Icon as={isDataNegative ? negativeIcon : positiveIcon} />
-      )}
+      {!isDataZero &&
+        (isDataNegative ? <FaArrowDown /> : <FaArrowUp />)}
       <Heading
         size={headingSize}
         display="flex"
         alignItems="center"
         columnGap="3px"
       >
-        {Math.abs(data).toFixed(2)}%
+        {(data && Math.abs(data).toFixed(2)) || "--"}%
       </Heading>
     </HStack>
   )

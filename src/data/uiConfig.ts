@@ -20,7 +20,15 @@ export const isTVMEnabled = (config: ConfigProps) => {
   return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
 }
 
+export const isAPYEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+}
+
 export const isTokenPriceEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+}
+
+export const isDailyChangeEnabled = (config: ConfigProps) => {
   return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
 }
 
