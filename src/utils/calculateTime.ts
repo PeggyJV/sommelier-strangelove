@@ -29,8 +29,11 @@ export const getPreviousMonth = (): number => {
   const dayInSecs = 24 * 60 * 60
   const now = new Date()
   const previousMonth =
-    Math.floor((now.getTime() - dayInSecs * 30) / 1000 / dayInSecs) *
-    dayInSecs
+    Math.floor(
+      (now.getTime() - dayInSecs * 30 * 1000) / 1000 / dayInSecs
+    ) *
+      dayInSecs +
+    dayInSecs * 3
 
   return previousMonth
 }
