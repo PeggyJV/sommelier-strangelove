@@ -13,8 +13,8 @@ export const getAssetIntervalGain = async (
       },
     })
     const data = await response.json()
-    const getToday = data.prices[0][1]
-    const previousMonth = data.prices[data.prices.length - 1][1]
+    const previousMonth = data.prices[0][1]
+    const getToday = data.prices[data.prices.length - 1][1]
 
     const result = getGainPct(getToday, previousMonth)
 
