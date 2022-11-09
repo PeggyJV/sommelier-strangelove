@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query"
 import { ConfigProps } from "data/types"
 import { useGetSingleCellarValueQuery } from "generated/subgraph"
-import { getPreviousMonth, getToday } from "utils/calculateTime"
+import { getPreviousWeek, getToday } from "utils/calculateTime"
 import { getGainPct } from "utils/getGainPct"
 import { useBtcIntervalGain } from "./useBtcIntervalGain"
 import { useEthIntervalGain } from "./useEthIntervalGain"
 
 export const useIntervalGainPct = (config: ConfigProps) => {
-  const ethIntervalGain = useEthIntervalGain(30)
-  const btcIntervalGain = useBtcIntervalGain(30)
+  const ethIntervalGain = useEthIntervalGain(7)
+  const btcIntervalGain = useBtcIntervalGain(7)
 
   const [todayData] = useGetSingleCellarValueQuery({
     variables: {
@@ -17,10 +17,10 @@ export const useIntervalGainPct = (config: ConfigProps) => {
     },
   })
 
-  const [previousMonthData] = useGetSingleCellarValueQuery({
+  const [previousWeekData] = useGetSingleCellarValueQuery({
     variables: {
       cellarAddress: config.id,
-      epoch: getPreviousMonth(),
+      epoch: getPreviousWeek(),
     },
   })
 
@@ -28,14 +28,14 @@ export const useIntervalGainPct = (config: ConfigProps) => {
   const { cellar: cellarToday } = dataToday || {}
   const { dayDatas: todayDatas } = cellarToday || {}
 
-  const { data: dataPreviousMonth } = previousMonthData
+  const { data: dataPreviousMonth } = previousWeekData
   const { cellar: cellarPreviousMonth } = dataPreviousMonth || {}
-  const { dayDatas: previousMonthDatas } = cellarPreviousMonth || {}
+  const { dayDatas: previousWeekDatas } = cellarPreviousMonth || {}
 
   const queryEnabled = Boolean(
     config.id &&
       todayDatas?.[0].shareValue &&
-      previousMonthDatas?.[0].shareValue &&
+      previousWeekDatas?.[0].shareValue &&
       Boolean(ethIntervalGain.data) &&
       Boolean(btcIntervalGain.data)
   )
@@ -45,14 +45,14 @@ export const useIntervalGainPct = (config: ConfigProps) => {
       "USE_INTERVAL_GAIN_PCT",
       config.id,
       todayDatas?.[0].shareValue,
-      previousMonthDatas?.[0].shareValue,
+      previousWeekDatas?.[0].shareValue,
       ethIntervalGain.data,
       btcIntervalGain.data,
     ],
     async () => {
       if (
         !todayDatas ||
-        !previousMonthDatas ||
+        !previousWeekDatas ||
         !ethIntervalGain.data ||
         !btcIntervalGain.data
       ) {
@@ -60,7 +60,7 @@ export const useIntervalGainPct = (config: ConfigProps) => {
       }
       const cellarIntervalGainPct = getGainPct(
         Number(todayDatas[0].shareValue),
-        Number(previousMonthDatas[0].shareValue)
+        Number(previousWeekDatas[0].shareValue)
       )
 
       const result =
