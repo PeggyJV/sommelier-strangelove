@@ -28,9 +28,9 @@ export const useIntervalGainPct = (config: ConfigProps) => {
   const { cellar: cellarToday } = dataToday || {}
   const { dayDatas: todayDatas } = cellarToday || {}
 
-  const { data: dataPreviousMonth } = previousWeekData
-  const { cellar: cellarPreviousMonth } = dataPreviousMonth || {}
-  const { dayDatas: previousWeekDatas } = cellarPreviousMonth || {}
+  const { data: dataPreviousWeek } = previousWeekData
+  const { cellar: cellarPreviousWeek } = dataPreviousWeek || {}
+  const { dayDatas: previousWeekDatas } = cellarPreviousWeek || {}
 
   const queryEnabled = Boolean(
     config.id &&
