@@ -106,7 +106,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
                 </>
               }
               monthChangeTooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
-              monthChangeLabel="1M Change vs ETH/BTC 50/50"
+              monthChangeLabel="1W Change vs ETH/BTC 50/50"
               monthChangeValue={
                 <>
                   {intervalGainPct.isLoading ? (

@@ -108,7 +108,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             />
           )}
           <CellarStatsLabel
-            title="1M Change vs ETH/BTC 50/50"
+            title="1W Change vs ETH/BTC 50/50"
             tooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
           />
         </VStack>
