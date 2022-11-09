@@ -24,6 +24,9 @@ interface CellarStatsAutomatedProps extends StackProps {
   weekChangeTooltip?: string
   weekChangeLabel?: string
   weekChangeValue?: ReactNode
+  monthChangeTooltip?: string
+  monthChangeLabel?: string
+  monthChangeValue?: ReactNode
   cellarConfig: ConfigProps
   currentDeposits?: string
   cellarCap?: string
@@ -37,6 +40,9 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
   weekChangeTooltip,
   weekChangeLabel,
   weekChangeValue,
+  monthChangeTooltip,
+  monthChangeLabel,
+  monthChangeValue,
   cellarConfig,
   currentDeposits,
   cellarCap,
@@ -53,6 +59,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
       spacing={8}
       wrap="wrap"
       rowGap={4}
+      align="start"
       divider={
         <CardDivider
           css={{
@@ -64,7 +71,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
       }
       {...rest}
     >
-      <VStack spacing={1} align="flex-start">
+      <VStack spacing={1} align="center">
         <Heading size="md">{tokenPriceValue}</Heading>
         <Tooltip
           hasArrow
@@ -79,7 +86,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           </HStack>
         </Tooltip>
       </VStack>
-      <VStack spacing={1} align="flex-start">
+      <VStack spacing={1} align="center">
         {weekChangeValue}
         <Box
           onMouseEnter={debounce(() => {
@@ -95,6 +102,29 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           >
             <HStack spacing={1} align="center">
               <CardHeading>{weekChangeLabel}</CardHeading>
+              <InformationIcon color="neutral.300" boxSize={3} />
+            </HStack>
+          </Tooltip>
+        </Box>
+      </VStack>
+      <VStack spacing={1} align="center" w="7rem">
+        {monthChangeValue}
+        <Box
+          onMouseEnter={debounce(() => {
+            analytics.track("user.tooltip-opened-monthly-change")
+          }, 1000)}
+        >
+          <Tooltip
+            hasArrow
+            placement="top"
+            label={monthChangeTooltip}
+            bg="surface.bg"
+            color="neutral.300"
+          >
+            <HStack spacing={1} align="center">
+              <CardHeading textAlign="center">
+                {monthChangeLabel}
+              </CardHeading>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>

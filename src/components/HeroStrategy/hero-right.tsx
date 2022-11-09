@@ -21,6 +21,9 @@ import { VFC } from "react"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsLabel } from "components/_cards/CellarCard/CellarStats"
 import { useTvm } from "data/hooks/useTvm"
+import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
+import { analytics } from "utils/analytics"
+import { landingType } from "utils/landingType"
 
 interface HeroStrategyRightProps {
   id: string
@@ -35,11 +38,22 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const cellarConfig = cellarData.config
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
+  const intervalGainPct = useIntervalGainPct(cellarConfig)
   const tvm = useTvm(cellarConfig)
 
   return (
     <Stack minW={"280px"} spacing={4}>
-      <BaseButton w="full" h="50px" onClick={buyOrSellModal.onOpen}>
+      <BaseButton
+        w="full"
+        h="50px"
+        onClick={() => {
+          analytics.track("strategy.buy-sell", {
+            strategyCard: cellarData.name,
+            landingType: landingType(),
+          })
+          buyOrSellModal.onOpen()
+        }}
+      >
         Buy / Sell
       </BaseButton>
       <BuyOrSellModal
@@ -50,6 +64,12 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
       />
       <Link
         href={`/strategies/${id}/manage`}
+        onClick={() => {
+          analytics.track("strategy.manage-portfolio", {
+            strategyCard: cellarData.name,
+            landingType: landingType(),
+          })
+        }}
         style={{ textDecoration: "none" }}
       >
         <SecondaryButton w="full" h="50px">
@@ -59,9 +79,10 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
       <HStack
         pt={4}
         justifyContent="space-around"
+        alignItems="start"
         divider={<StackDivider borderColor="purple.dark" />}
       >
-        <VStack>
+        <VStack flex={1}>
           <Heading size="md">{tokenPrice || <Spinner />}</Heading>
           <CellarStatsLabel
             tooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
@@ -69,13 +90,26 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           />
         </VStack>
 
-        <VStack>
+        <VStack flex={1}>
           {dailyChange && (
             <PercentageText data={dailyChange} headingSize="md" />
           )}
           <CellarStatsLabel
             tooltip="% change of current token price vs. token price yesterday"
             title="1D Change"
+          />
+        </VStack>
+
+        <VStack flex={1} textAlign="center">
+          {intervalGainPct.data && (
+            <PercentageText
+              data={intervalGainPct.data}
+              headingSize="md"
+            />
+          )}
+          <CellarStatsLabel
+            title="1W Change vs ETH/BTC 50/50"
+            tooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
           />
         </VStack>
       </HStack>

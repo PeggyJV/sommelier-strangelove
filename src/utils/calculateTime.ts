@@ -1,3 +1,11 @@
+export const getToday = () => {
+  const dayInMs = 24 * 60 * 60 * 1000
+  const now = new Date()
+  const today = (Math.floor(now.getTime() / dayInMs) * dayInMs) / 1000
+
+  return today
+}
+
 export const getPrevious24Hours = () => {
   const now = new Date()
   const last24HoursInSeconds = 24 * 60 * 60
@@ -14,4 +22,14 @@ export const getPreviousWeek = (): number => {
   const secondsSinceEpoch = Math.round(now.getTime() / 1000)
 
   return secondsSinceEpoch
+}
+
+export const getPreviousMonth = (): number => {
+  const dayInMs = 24 * 60 * 60 * 1000
+  const now = new Date()
+  const previousMonth =
+    (Math.floor((now.getTime() - dayInMs * 30) / dayInMs) * dayInMs) /
+    1000
+
+  return previousMonth
 }

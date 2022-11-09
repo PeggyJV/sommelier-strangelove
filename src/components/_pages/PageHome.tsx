@@ -14,6 +14,8 @@ import FAQ from "components/FAQ"
 import { cellarDataMap } from "data/cellarDataMap"
 import { CellarType } from "data/types"
 import { config } from "utils/config"
+import { analytics } from "utils/analytics"
+import { landingType } from "utils/landingType"
 
 interface CellarGridItemsType {
   section: CellarType
@@ -46,6 +48,12 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
               key={cellar}
               display="flex"
               borderRadius={28}
+              onClick={() => {
+                analytics.track("strategy.selection", {
+                  strategyCard: cellarDataMap[cellar].name,
+                  landingType: landingType(),
+                })
+              }}
             >
               <CellarCard cellarAddress={cellar} as="li" />
             </Link>
