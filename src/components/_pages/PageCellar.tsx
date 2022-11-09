@@ -28,6 +28,7 @@ import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarType } from "data/types"
+import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -47,6 +48,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
+  const intervalGainPct = useIntervalGainPct(cellarConfig)
 
   return (
     <Layout>
@@ -96,9 +98,24 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
                     <PercentageText
                       data={dailyChange}
                       headingSize="md"
+                      arrow
                     />
                   ) : (
                     <Box>...</Box>
+                  )}
+                </>
+              }
+              monthChangeTooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
+              monthChangeLabel="1W Change vs ETH/BTC 50/50"
+              monthChangeValue={
+                <>
+                  {intervalGainPct.isLoading ? (
+                    <Spinner />
+                  ) : (
+                    <PercentageText
+                      data={intervalGainPct.data}
+                      headingSize="md"
+                    />
                   )}
                 </>
               }

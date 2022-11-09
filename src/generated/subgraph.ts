@@ -1466,6 +1466,14 @@ export type GetPositionQueryVariables = Exact<{
 
 export type GetPositionQuery = { __typename?: 'Query', walletCellarData?: { __typename?: 'WalletCellarData', id: string, currentDeposits: string } | null };
 
+export type GetSingleCellarValueQueryVariables = Exact<{
+  epoch: Scalars['Int'];
+  cellarAddress: Scalars['ID'];
+}>;
+
+
+export type GetSingleCellarValueQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }> } | null };
+
 export type GetWeeklyTvlByAdressQueryVariables = Exact<{
   epoch: Scalars['Int'];
   cellarAddress: Scalars['ID'];
@@ -1674,6 +1682,20 @@ export const GetPositionDocument = gql`
 
 export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQueryVariables>, 'query'>) {
   return Urql.useQuery<GetPositionQuery>({ query: GetPositionDocument, ...options });
+};
+export const GetSingleCellarValueDocument = gql`
+    query GetSingleCellarValue($epoch: Int!, $cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    dayDatas(first: 1, where: {date_gte: $epoch}) {
+      date
+      shareValue
+    }
+  }
+}
+    `;
+
+export function useGetSingleCellarValueQuery(options: Omit<Urql.UseQueryArgs<GetSingleCellarValueQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetSingleCellarValueQuery>({ query: GetSingleCellarValueDocument, ...options });
 };
 export const GetWeeklyTvlByAdressDocument = gql`
     query GetWeeklyTVLByAdress($epoch: Int!, $cellarAddress: ID!) {
