@@ -189,6 +189,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                         : "--")}
                   </CardStat>
                 </VStack>
+                {/* Remove the "Bond" button from the Aave Cellar view as the Reward program ended. */}
+                {/* {isMounted && (
+                  <BondButton disabled={lpTokenDisabled} />
+                )} */}
               </>
             )}
           </SimpleGrid>
