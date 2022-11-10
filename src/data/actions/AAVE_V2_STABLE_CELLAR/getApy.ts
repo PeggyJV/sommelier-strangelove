@@ -53,11 +53,15 @@ export const getApy = async (
     const { expectedApy, formattedCellarApy, formattedStakingApy } =
       getExpectedApy(apy, potentialStakingApy)
 
-    const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${formattedCellarApy}%) and Liquidity Mining Rewards (${formattedStakingApy}%)`
+    // Comment out because of rebalancing, Aave APY is 0.00% for the week.
+    // const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${formattedCellarApy}%) and Liquidity Mining Rewards (${formattedStakingApy}%)`
+    const apyLabel = `Expected APY`
 
     return {
       apyLabel,
-      expectedApy: expectedApy.toFixed(1).toString() + "%",
+      // Comment out because of rebalancing, Aave APY is 0.00% for the week.
+      // expectedApy: expectedApy.toFixed(1).toString() + "%",
+      expectedApy: "1.9%",
     }
   } catch (error) {
     console.warn("Cannot read cellar data", error)
