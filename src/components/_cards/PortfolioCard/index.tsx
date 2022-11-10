@@ -8,7 +8,6 @@ import {
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { VFC } from "react"
-import { BondButton } from "components/_buttons/BondButton"
 import { TransparentCard } from "../TransparentCard"
 import { toEther } from "utils/formatCurrency"
 import BondingTableCard from "../BondingTableCard"
@@ -190,9 +189,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                         : "--")}
                   </CardStat>
                 </VStack>
-                {isMounted && (
+                {/* Remove the "Bond" button from the Aave Cellar view as the Reward program ended. */}
+                {/* {isMounted && (
                   <BondButton disabled={lpTokenDisabled} />
-                )}
+                )} */}
               </>
             )}
           </SimpleGrid>
