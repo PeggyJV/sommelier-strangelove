@@ -1,5 +1,5 @@
 // TODO: Move content to a cms
-import { Image, Text } from "@chakra-ui/react"
+import { HStack, Image, Stack, Text } from "@chakra-ui/react"
 import { config } from "utils/config"
 
 export const strategyPageContentData = {
@@ -20,23 +20,32 @@ export const strategyPageContentData = {
       </>
     ),
     tradedAssets: (
-      <>
-        <Image
-          alt="eth icon"
-          src="/assets/icons/eth.png"
-          boxSize={8}
-        />
-        <Image
-          alt="btc icon"
-          src="/assets/icons/btc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-      </>
+      <Stack direction="column">
+        <HStack>
+          <Image
+            alt="eth icon"
+            src="/assets/icons/eth.png"
+            boxSize={8}
+          />
+          <Text>WETH (78.34%)</Text>
+        </HStack>
+        <HStack>
+          <Image
+            alt="btc icon"
+            src="/assets/icons/btc.png"
+            boxSize={8}
+          />
+          <Text>WBTC (21.66%)</Text>
+        </HStack>
+        <HStack>
+          <Image
+            alt="usdc icon"
+            src="/assets/icons/usdc.png"
+            boxSize={8}
+          />
+          <Text>USDC (0%)</Text>
+        </HStack>
+      </Stack>
     ),
     alternativeTo: "Holding ETH or BTC",
     buyUrl:
@@ -94,23 +103,32 @@ export const strategyPageContentData = {
       </>
     ),
     tradedAssets: (
-      <>
-        <Image
-          alt="eth icon"
-          src="/assets/icons/eth.png"
-          boxSize={8}
-        />
-        <Image
-          alt="btc icon"
-          src="/assets/icons/btc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-      </>
+      <Stack direction="column">
+        <HStack>
+          <Image
+            alt="eth icon"
+            src="/assets/icons/eth.png"
+            boxSize={8}
+          />
+          <Text>WETH (78.34%)</Text>
+        </HStack>
+        <HStack>
+          <Image
+            alt="btc icon"
+            src="/assets/icons/btc.png"
+            boxSize={8}
+          />
+          <Text>WBTC (21.66%)</Text>
+        </HStack>
+        <HStack>
+          <Image
+            alt="usdc icon"
+            src="/assets/icons/usdc.png"
+            boxSize={8}
+          />
+          <Text>USDC (0%)</Text>
+        </HStack>
+      </Stack>
     ),
     alternativeTo: "Holding ETH or BTC",
     buyUrl:
