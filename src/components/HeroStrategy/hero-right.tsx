@@ -122,7 +122,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           </Box>
           {content.ticker}
         </HStack>
-        <HStack>
+        <HStack alignItems="start">
           <Box>
             <Text w="120px" fontWeight="semibold">
               Traded Assets
