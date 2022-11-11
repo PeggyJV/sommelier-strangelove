@@ -8,6 +8,10 @@ export const isRewardsEnabled = (config: ConfigProps) => {
   return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
 }
 
+export const isTokenAssets = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+}
+
 export const isCurrentDepositsEnabled = (config: ConfigProps) => {
   return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
 }
