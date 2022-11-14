@@ -26,7 +26,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
           ? "red.base"
           : "lime.base"
       }
-      spacing={0}
+      spacing={1}
     >
       {!isDataZero && (
         <PercentageHeading
@@ -34,7 +34,6 @@ export const PercentageText: VFC<PercentageTextProps> = ({
           isDataNegative={isDataNegative}
         />
       )}
-
       <Heading
         size={headingSize}
         display="flex"
