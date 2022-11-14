@@ -29,6 +29,9 @@ import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarType } from "data/types"
 import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
+import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
+import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
+import { isEthBtcChartEnabled } from "data/uiConfig"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -133,6 +136,15 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
       </Section>
       <Section>
         <VStack spacing={6} align="stretch">
+          {isEthBtcChartEnabled(cellarConfig) && (
+            <EthBtcChartProvider address={cellarAddress}>
+              <Heading pt={12} {...h2Styles}>
+                Strategy Perfomance
+              </Heading>
+              <EthBtcPerfomanceCard />
+            </EthBtcChartProvider>
+          )}
+
           <Heading pt={12} {...h2Styles}>
             Strategy Details
           </Heading>

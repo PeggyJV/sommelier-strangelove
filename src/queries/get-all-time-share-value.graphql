@@ -1,8 +1,8 @@
-query GetAllTimeTVLByAddress($cellarAddress: ID!) {
+query GetAllTimeShareValue($cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
     dayDatas(orderDirection: asc, orderBy: date) {
       date
-      tvlTotal
+      shareValue
     }
   }
 }

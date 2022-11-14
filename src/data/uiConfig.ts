@@ -43,3 +43,7 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
     return "The LP tokens represent a user's share of the pool and can always be redeemed for the original tokens"
   return ""
 }
+
+export const isEthBtcChartEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+}

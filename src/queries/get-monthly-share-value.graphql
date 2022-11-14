@@ -1,13 +1,13 @@
-query GetWeeklyTVLByAdress($epoch: Int!, $cellarAddress: ID!) {
+query GetMonthlyShareValue($epoch: Int!, $cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
     dayDatas(
-      first: 7
+      first: 31
       orderDirection: asc
       orderBy: date
       where: { date_gte: $epoch }
     ) {
       date
-      tvlTotal
+      shareValue
     }
   }
 }
