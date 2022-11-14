@@ -40,7 +40,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
                 <CardHeading>Token Price</CardHeading>
                 <HStack>
                   <Text fontSize="2.5rem" fontWeight="bold">
-                    {tokenPrice.data || "--"} %
+                    {tokenPrice.data || "--"}
                   </Text>
                   <PercentageText
                     data={Number(tokenPriceChange?.yFormatted)}
