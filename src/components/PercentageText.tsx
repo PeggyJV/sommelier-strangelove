@@ -13,7 +13,8 @@ export const PercentageText: VFC<PercentageTextProps> = ({
   headingSize = "sm",
   arrow,
 }) => {
-  const isDataZero = data === 0
+  const percentageData = data && Math.abs(data).toFixed(2)
+  const isDataZero = Number(percentageData) === 0
   const isDataNegative = data && data < 0
 
   return (
@@ -29,7 +30,6 @@ export const PercentageText: VFC<PercentageTextProps> = ({
     >
       {!isDataZero && (
         <PercentageHeading
-          headingSize={headingSize}
           arrow={arrow}
           isDataNegative={isDataNegative}
         />
@@ -41,7 +41,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
         alignItems="center"
         columnGap="3px"
       >
-        {(data && Math.abs(data).toFixed(2)) || "--"}%
+        {percentageData || "--"}%
       </Heading>
     </HStack>
   )
