@@ -14,26 +14,17 @@ import {
   useState,
 } from "react"
 import { OperationContext } from "urql"
-import { getCalulatedTvl } from "utils/bigNumber"
+import { formatDecimals } from "utils/bigNumber"
 import {
   getPrevious24Hours,
   getPreviousWeek,
 } from "utils/calculateTime"
+import { createTVLSeries } from "utils/chartHelper"
 import { formatCurrency } from "utils/formatCurrency"
-import {
-  mutateDayDataByAddress,
-  mutateHourlyData,
-  mutateHourlyDataByAddress,
-} from "utils/urql"
 
 export interface DataProps {
   series?: Serie[]
   chartProps: Partial<LineProps>
-  asset?: {
-    decimals: number
-    symbol: string
-    __typename: string
-  }
 }
 
 export interface TvlData {
@@ -182,10 +173,16 @@ export const PerformanceChartByAddressProvider: FC<{
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
-
     if (hourlyData && idIsDefault) {
       setData({
-        series: mutateHourlyData(hourlyData),
+        series: createTVLSeries(
+          hourlyData.cellarHourDatas.map((item) => {
+            return {
+              date: item.date,
+              tvlTotal: item.tvlTotal,
+            }
+          })
+        ),
         chartProps: hourlyChartProps,
       })
 
@@ -203,7 +200,7 @@ export const PerformanceChartByAddressProvider: FC<{
       })
 
       const latestTvl = `${formatCurrency(
-        getCalulatedTvl(latestData?.tvlTotal, 18)
+        formatDecimals(latestData?.tvlTotal, 18)
       )}`
 
       setTvl({
@@ -220,17 +217,38 @@ export const PerformanceChartByAddressProvider: FC<{
   // Functions to update data returned by hook
   const setDataHourly = () =>
     setData({
-      series: mutateHourlyDataByAddress(hourlyData),
+      series: createTVLSeries(
+        hourlyData?.cellarHourDatas.map((item) => {
+          return {
+            date: item.date,
+            tvlTotal: item.tvlTotal,
+          }
+        })
+      ),
       chartProps: hourlyChartProps,
     })
   const setDataWeekly = () =>
     setData({
-      series: mutateDayDataByAddress(weeklyData),
+      series: createTVLSeries(
+        weeklyData?.cellar?.dayDatas.map((item) => {
+          return {
+            date: item.date,
+            tvlTotal: item.tvlTotal,
+          }
+        })
+      ),
       chartProps: dayChartProps,
     })
   const setDataAllTime = () =>
     setData({
-      series: mutateDayDataByAddress(allTimeData),
+      series: createTVLSeries(
+        allTimeData?.cellar?.dayDatas.map((item) => {
+          return {
+            date: item.date,
+            tvlTotal: item.tvlTotal,
+          }
+        })
+      ),
       chartProps: allTimeChartProps,
     })
 
