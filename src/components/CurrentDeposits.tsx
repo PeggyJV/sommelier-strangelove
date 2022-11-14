@@ -40,7 +40,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           Current Deposits
         </Text>
         <Text fontSize="xs" fontWeight="semibold">
-          ${formatCurrency(currentDeposits)} {asset}
+          ${formatCurrency(currentDeposits)}
         </Text>
       </HStack>
       <Box
@@ -69,7 +69,7 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           Cellar Cap
         </Text>
         <Text fontSize="xs" fontWeight="semibold">
-          ${formatCurrency(cellarCap)} {asset}
+          ${formatCurrency(cellarCap)}
         </Text>
       </HStack>
     </VStack>
