@@ -1,15 +1,14 @@
-import { Heading } from "@chakra-ui/react"
 import { VFC } from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+import { MinusIcon } from "./_icons/MinusIcon"
+import { PlusIcon } from "./_icons/PlusIcon"
 
 interface PercentageHeadingProps {
-  headingSize?: "sm" | "md" | "lg" | "xl"
   arrow?: boolean
   isDataNegative?: boolean | 0
 }
 
 export const PercentageHeading: VFC<PercentageHeadingProps> = ({
-  headingSize,
   arrow,
   isDataNegative,
 }) => {
@@ -19,7 +18,9 @@ export const PercentageHeading: VFC<PercentageHeadingProps> = ({
     ) : (
       <FaArrowUp />
     )
+  ) : isDataNegative ? (
+    <MinusIcon />
   ) : (
-    <Heading size={headingSize}>{isDataNegative ? "-" : "+"}</Heading>
+    <PlusIcon />
   )
 }
