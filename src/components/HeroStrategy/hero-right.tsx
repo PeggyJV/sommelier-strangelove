@@ -92,7 +92,11 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
 
         <VStack flex={1}>
           {dailyChange && (
-            <PercentageText data={dailyChange} headingSize="md" />
+            <PercentageText
+              data={dailyChange}
+              headingSize="md"
+              arrow
+            />
           )}
           <CellarStatsLabel
             tooltip="% change of current token price vs. token price yesterday"
