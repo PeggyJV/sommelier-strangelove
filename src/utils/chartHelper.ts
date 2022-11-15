@@ -26,13 +26,13 @@ export const createTokenPriceChangeDatum = (
   if (!data) return
 
   let datum: Datum[] = []
-  data.map((item, index) => {
-    const before = data[index - 1]
-    if (before) {
+  data.map((item, index, arr) => {
+    const firstData = data[0]
+    if (firstData) {
       const current = item.shareValue
-      const change = before
-        ? ((toInteger(current) - toInteger(before.shareValue)) /
-            toInteger(before.shareValue)) *
+      const change = firstData
+        ? ((toInteger(current) - toInteger(firstData.shareValue)) /
+            toInteger(firstData.shareValue)) *
           100
         : 0
       datum.push({

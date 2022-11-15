@@ -20,11 +20,11 @@ export const getEthBtcGainChartData = async (
         change: number
       }[] = []
       wethData.prices.map(([date, value], index) => {
-        const prevData = wethData.prices[index - 1]
-        if (prevData) {
+        const firstData = wethData.prices[0]
+        if (firstData) {
           res.push({
             date,
-            change: getGainPct(value, prevData[1]),
+            change: getGainPct(value, firstData[1]),
           })
         }
       })
@@ -37,11 +37,11 @@ export const getEthBtcGainChartData = async (
         change: number
       }[] = []
       wbtcData.prices.map(([date, value], index) => {
-        const prevData = wbtcData.prices[index - 1]
-        if (prevData) {
+        const firstData = wbtcData.prices[0]
+        if (firstData) {
           res.push({
             date,
-            change: getGainPct(value, prevData[1]),
+            change: getGainPct(value, firstData[1]),
           })
         }
       })
@@ -56,8 +56,8 @@ export const getEthBtcGainChartData = async (
         interval === "daily"
           ? wbtcGainPct.find((item) =>
               isSameDay(new Date(item.date), new Date(weth.date))
-            )
-          : wbtcGainPct[index]
+            ) // daily
+          : wbtcGainPct[index] //hourly
       if (wbtc) {
         wethDatum.push({
           x: new Date(weth.date),

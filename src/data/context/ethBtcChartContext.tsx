@@ -155,7 +155,7 @@ export const EthBtcChartProvider: FC<{
 }> = ({ children, address }) => {
   // GQL Queries
   const [
-    { fetching: hourlyIsFetching, data: hourlyData },
+    { fetching: hourlyIsFetching, data: hourlyDataRaw },
     reexecuteHourly,
   ] = useGetHourlyShareValueQuery({
     variables: {
@@ -164,7 +164,7 @@ export const EthBtcChartProvider: FC<{
     },
   })
   const [
-    { fetching: weeklyIsFetching, data: weeklyData },
+    { fetching: weeklyIsFetching, data: weeklyDataRaw },
     reexecuteWeekly,
   ] = useGetWeeklyShareValueQuery({
     variables: {
@@ -173,7 +173,7 @@ export const EthBtcChartProvider: FC<{
     },
   })
   const [
-    { fetching: monthlyIsFetching, data: monthlyData },
+    { fetching: monthlyIsFetching, data: monthlyDataRaw },
     reexecuteMonthly,
   ] = useGetMonthlyShareValueQuery({
     variables: {
@@ -182,24 +182,22 @@ export const EthBtcChartProvider: FC<{
     },
   })
   const [
-    { fetching: allTimeIsFetching, data: allTimeData },
+    { fetching: allTimeIsFetching, data: allTimeDataRaw },
     reexecuteAllTime,
   ] = useGetAllTimeShareValueQuery({
     variables: {
       cellarAddress: address,
     },
   })
+  const hourlyData = hourlyDataRaw?.cellarHourDatas
+  const weeklyData = weeklyDataRaw?.cellar?.dayDatas
+  const monthlyData = monthlyDataRaw?.cellar?.dayDatas
+  const allTimeData = allTimeDataRaw?.cellar?.dayDatas
 
   const ethBtcHourly = useEthBtcGainChartData(1, "hourly")
-  const ethBtcHWeekly = useEthBtcGainChartData(
-    weeklyData?.cellar?.dayDatas.length
-  )
-  const ethBtcMonthly = useEthBtcGainChartData(
-    monthlyData?.cellar?.dayDatas.length
-  )
-  const ethBtcAlltime = useEthBtcGainChartData(
-    allTimeData?.cellar?.dayDatas.length
-  )
+  const ethBtcHWeekly = useEthBtcGainChartData(weeklyData?.length)
+  const ethBtcMonthly = useEthBtcGainChartData(monthlyData?.length)
+  const ethBtcAlltime = useEthBtcGainChartData(allTimeData?.length)
 
   // Set data to be returned by hook
   const [data, setData] = useState<DataProps>({
@@ -224,7 +222,7 @@ export const EthBtcChartProvider: FC<{
   // Functions to update data returned by hook
   const setDataHourly = () => {
     const tokenPriceDatum = createTokenPriceChangeDatum(
-      hourlyData?.cellarHourDatas.map((item) => {
+      hourlyData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
@@ -253,7 +251,7 @@ export const EthBtcChartProvider: FC<{
   }
   const setDataWeekly = () => {
     const tokenPriceDatum = createTokenPriceChangeDatum(
-      weeklyData?.cellar?.dayDatas.map((item) => {
+      weeklyData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
@@ -282,7 +280,7 @@ export const EthBtcChartProvider: FC<{
   }
   const setDataMonthly = () => {
     const tokenPriceDatum = createTokenPriceChangeDatum(
-      monthlyData?.cellar?.dayDatas.map((item) => {
+      monthlyData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
@@ -310,7 +308,7 @@ export const EthBtcChartProvider: FC<{
   }
   const setDataAllTime = () => {
     const tokenPriceDatum = createTokenPriceChangeDatum(
-      allTimeData?.cellar?.dayDatas.map((item) => {
+      allTimeData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
@@ -358,18 +356,16 @@ export const EthBtcChartProvider: FC<{
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
     if (weeklyData && idIsDefault && ethBtcHWeekly.data) {
-      const latestData =
-        weeklyData.cellar?.dayDatas[
-          weeklyData.cellar?.dayDatas.length - 1
-        ]
-      const tokenPriceDatum = createTokenPriceChangeDatum(
-        weeklyData?.cellar?.dayDatas.map((item) => {
-          return {
-            date: item.date,
-            shareValue: item.shareValue,
-          }
-        })
-      )
+      const latestData = weeklyData[weeklyData.length - 1]
+      const weeklyDataMap = weeklyData?.map((item) => {
+        return {
+          date: item.date,
+          shareValue: item.shareValue,
+        }
+      })
+      const tokenPriceDatum =
+        createTokenPriceChangeDatum(weeklyDataMap)
+
       setData({
         series: createEthBtcChartSeries({
           tokenPrice: tokenPriceDatum,
@@ -398,14 +394,11 @@ export const EthBtcChartProvider: FC<{
         hour12: false,
       })
 
-      const before =
-        weeklyData.cellar?.dayDatas[
-          weeklyData.cellar?.dayDatas.length - 2
-        ].shareValue
+      const firstData = weeklyData[0].shareValue
 
       const change =
-        ((toInteger(latestData?.shareValue) - toInteger(before)) /
-          toInteger(before)) *
+        ((toInteger(latestData?.shareValue) - toInteger(firstData)) /
+          toInteger(firstData)) *
         100
 
       const latestTokenPriceChange = `${formatPercentage(
