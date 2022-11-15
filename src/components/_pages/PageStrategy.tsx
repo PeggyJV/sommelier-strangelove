@@ -14,7 +14,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   sectionStrategies,
 }) => {
   return (
-    <Layout>
+    <Layout px={4}>
       <HeroStrategy id={id} />
       <Highlight id={id} />
       <Cellars data={sectionCellars} mt={52} />
