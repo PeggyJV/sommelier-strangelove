@@ -1,4 +1,4 @@
-import { Circle } from "@chakra-ui/react"
+import { Circle, useMediaQuery } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
 import { PointTooltipProps, Point } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
@@ -40,6 +40,7 @@ export const TVLChart: VFC = () => {
     })
   }
   const debouncedTvl = debounce(updateTvl, 100)
+  const [isLarger768] = useMediaQuery("(min-width: 768px)")
 
   return (
     <LineChart
@@ -56,7 +57,12 @@ export const TVLChart: VFC = () => {
         ]),
       ]}
       fill={[{ match: "*", id: "gradientA" }]}
-      margin={{ bottom: 110, left: 6, right: 6, top: 20 }}
+      margin={{
+        bottom: 110,
+        left: isLarger768 ? 6 : 24,
+        right: 24,
+        top: 20,
+      }}
       axisLeft={null}
       theme={chartTheme}
       tooltip={ToolTip}

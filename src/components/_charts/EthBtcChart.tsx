@@ -72,7 +72,7 @@ export const EthBtcChart: VFC = () => {
         ]),
       ]}
       fill={[{ match: "*", id: "gradientA" }]}
-      margin={{ bottom: 110, left: 20, right: 6, top: 20 }}
+      margin={{ bottom: 110, left: 25, right: 6, top: 20 }}
       theme={chartTheme}
       tooltip={ToolTip}
       yScale={{
