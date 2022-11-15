@@ -398,14 +398,11 @@ export const EthBtcChartProvider: FC<{
         hour12: false,
       })
 
-      const before =
-        weeklyData.cellar?.dayDatas[
-          weeklyData.cellar?.dayDatas.length - 2
-        ].shareValue
+      const firstData = weeklyData[0].shareValue
 
       const change =
-        ((toInteger(latestData?.shareValue) - toInteger(before)) /
-          toInteger(before)) *
+        ((toInteger(latestData?.shareValue) - toInteger(firstData)) /
+          toInteger(firstData)) *
         100
 
       const latestTokenPriceChange = `${formatPercentage(
