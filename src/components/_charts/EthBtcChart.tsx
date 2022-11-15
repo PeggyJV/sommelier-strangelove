@@ -46,7 +46,7 @@ export const EthBtcChart: VFC = () => {
       xFormatted: point.xFormatted,
       yFormatted: `
         ${
-          tokenPriceChange
+          tokenPriceChange || String(tokenPriceChange) === "0"
             ? formatPercentage(String(tokenPriceChange))
             : "--"
         }`,

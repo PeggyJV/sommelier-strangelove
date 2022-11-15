@@ -16,7 +16,6 @@ export const PercentageText: VFC<PercentageTextProps> = ({
   const percentageData = data && Math.abs(data).toFixed(2)
   const isDataZero = Number(percentageData) === 0
   const isDataNegative = data && data < 0
-
   return (
     <HStack
       color={
@@ -40,7 +39,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
         alignItems="center"
         columnGap="3px"
       >
-        {percentageData || "--"}%
+        {isDataZero || percentageData ? percentageData : "--"}%
       </Heading>
     </HStack>
   )
