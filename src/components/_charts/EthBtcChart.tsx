@@ -42,11 +42,13 @@ export const EthBtcChart: VFC = () => {
   const updateTokenPriceChange = ({ data: point, id }: Point) => {
     const [_, i] = id.split(".")
     const tokenPriceChange = data.series?.[0].data[Number(i)]?.y
+    const valueExists: boolean =
+      Boolean(tokenPriceChange) || String(tokenPriceChange) === "0"
     setTokenPriceChange({
       xFormatted: point.xFormatted,
       yFormatted: `
         ${
-          tokenPriceChange || String(tokenPriceChange) === "0"
+          valueExists
             ? formatPercentage(String(tokenPriceChange))
             : "--"
         }`,
