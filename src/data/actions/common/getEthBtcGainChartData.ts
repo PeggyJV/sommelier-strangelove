@@ -1,5 +1,4 @@
-import { Datum } from "@nivo/line"
-import { isSameDay } from "date-fns"
+import { closestIndexTo, format } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { fetchMarketChart } from "./fetchMarketChart"
 
@@ -47,37 +46,51 @@ export const getEthBtcGainChartData = async (
       })
       return res
     })()
-    let wethDatum: Datum[] = []
-    let wbtcDatum: Datum[] = []
-    let wethWbtcdatum: Datum[] = []
-
+    let wethMap = new Map()
+    let wbtcMap = new Map()
+    let wethWbtcMap = new Map()
     wethGainPct.map((weth, index) => {
       const wbtc =
-        interval === "daily"
-          ? wbtcGainPct.find((item) =>
-              isSameDay(new Date(item.date), new Date(weth.date))
-            ) // daily
-          : wbtcGainPct[index] //hourly
+        wbtcGainPct[
+          closestIndexTo(
+            new Date(weth.date),
+            wethGainPct.map((item) => new Date(item.date))
+          )!
+        ]
       if (wbtc) {
-        wethDatum.push({
-          x: new Date(weth.date),
-          y: weth.change,
-        })
-        wbtcDatum.push({
-          x: new Date(wbtc.date),
-          y: wbtc.change,
-        })
-        wethWbtcdatum.push({
-          x: new Date(weth.date),
-          y: (weth.change + wbtc.change) / 2,
-        })
+        wethMap.set(
+          interval === "daily"
+            ? format(new Date(weth.date), "dLL")
+            : format(new Date(weth.date), "dHH"),
+          {
+            x: new Date(weth.date),
+            y: weth.change,
+          }
+        )
+        wbtcMap.set(
+          interval === "daily"
+            ? format(new Date(wbtc.date), "dLL")
+            : format(new Date(wbtc.date), "dHH"),
+          {
+            x: new Date(wbtc.date),
+            y: wbtc.change,
+          }
+        )
+        wethWbtcMap.set(
+          interval === "daily"
+            ? format(new Date(weth.date), "dLL")
+            : format(new Date(weth.date), "dHH"),
+          {
+            x: new Date(weth.date),
+            y: (weth.change + wbtc.change) / 2,
+          }
+        )
       }
     })
-
     return {
-      wethDatum,
-      wbtcDatum,
-      wethWbtcdatum,
+      wethDatum: Array.from(wethMap, ([_, v]) => v),
+      wbtcDatum: Array.from(wbtcMap, ([_, v]) => v),
+      wethWbtcdatum: Array.from(wethWbtcMap, ([_, v]) => v),
     }
   } catch (error) {
     console.warn(error)

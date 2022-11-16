@@ -1,5 +1,6 @@
 import { LineProps, Serie } from "@nivo/line"
 import { useEthBtcGainChartData } from "data/hooks/useEthBtcGainChartData"
+import { format } from "date-fns"
 import {
   useGetAllTimeShareValueQuery,
   useGetHourlyShareValueQuery,
@@ -38,6 +39,13 @@ export interface TokenPriceData {
   xFormatted: string | number
 }
 
+export interface ShowLine {
+  tokenPrice: boolean
+  ethBtc50: boolean
+  eth: boolean
+  btc: boolean
+}
+
 export interface EthBtcChartContext {
   fetching: boolean
   data: DataProps
@@ -63,6 +71,8 @@ export interface EthBtcChartContext {
   }[]
   tokenPriceChange: TokenPriceData
   setTokenPriceChange: Dispatch<SetStateAction<TokenPriceData>>
+  showLine: ShowLine
+  setShowLine: Dispatch<SetStateAction<ShowLine>>
 }
 
 const hourlyChartProps: Partial<LineProps> = {
@@ -145,6 +155,13 @@ const initialData: EthBtcChartContext = {
       onClick: () => null,
     },
   ],
+  showLine: {
+    tokenPrice: true,
+    ethBtc50: true,
+    eth: false,
+    btc: false,
+  },
+  setShowLine: () => null,
 }
 
 const ethBtcChartContext =
@@ -153,6 +170,13 @@ const ethBtcChartContext =
 export const EthBtcChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
+  const [showLine, setShowLine] = useState<ShowLine>({
+    tokenPrice: true,
+    ethBtc50: true,
+    eth: false,
+    btc: false,
+  })
+
   // GQL Queries
   const [
     { fetching: hourlyIsFetching, data: hourlyDataRaw },
@@ -248,6 +272,25 @@ export const EthBtcChartProvider: FC<{
 
       chartProps: hourlyChartProps,
     })
+
+    const valueExists: boolean =
+      Boolean(tokenPriceDatum?.at(-1)?.y) ||
+      String(tokenPriceDatum?.at(-1)?.y) === "0"
+    const dateText = `${format(
+      new Date(String(tokenPriceDatum?.at(0)?.x)),
+      "HH:mm d"
+    )} - ${format(
+      new Date(String(tokenPriceDatum?.at(-1)?.x)),
+      "HH:mm d MMM yyyy"
+    )}`
+    setTokenPriceChange({
+      xFormatted: dateText,
+      yFormatted: `${
+        valueExists
+          ? formatPercentage(String(tokenPriceDatum?.at(-1)?.y))
+          : "--"
+      }`,
+    })
   }
   const setDataWeekly = () => {
     const tokenPriceDatum = createTokenPriceChangeDatum(
@@ -277,6 +320,24 @@ export const EthBtcChartProvider: FC<{
 
       chartProps: dayChartProps,
     })
+    const valueExists: boolean =
+      Boolean(tokenPriceDatum?.at(-1)?.y) ||
+      String(tokenPriceDatum?.at(-1)?.y) === "0"
+    const dateText = `${format(
+      new Date(String(tokenPriceDatum?.at(0)?.x)),
+      "d MMM"
+    )} - ${format(
+      new Date(tokenPriceDatum?.at(-1)?.x!),
+      "d MMM yyyy"
+    )}`
+    setTokenPriceChange({
+      xFormatted: dateText,
+      yFormatted: `${
+        valueExists
+          ? formatPercentage(String(tokenPriceDatum?.at(-1)?.y))
+          : "--"
+      }`,
+    })
   }
   const setDataMonthly = () => {
     const tokenPriceDatum = createTokenPriceChangeDatum(
@@ -305,6 +366,24 @@ export const EthBtcChartProvider: FC<{
       }),
       chartProps: monthChartProps,
     })
+    const valueExists: boolean =
+      Boolean(tokenPriceDatum?.at(-1)?.y) ||
+      String(tokenPriceDatum?.at(-1)?.y) === "0"
+    const dateText = `${format(
+      new Date(String(tokenPriceDatum?.at(0)?.x)),
+      "d MMM"
+    )} - ${format(
+      new Date(String(tokenPriceDatum?.at(-1)?.x)),
+      "d MMM yyyy"
+    )}`
+    setTokenPriceChange({
+      xFormatted: dateText,
+      yFormatted: `${
+        valueExists
+          ? formatPercentage(String(tokenPriceDatum?.at(-1)?.y))
+          : "--"
+      }`,
+    })
   }
   const setDataAllTime = () => {
     const tokenPriceDatum = createTokenPriceChangeDatum(
@@ -332,6 +411,24 @@ export const EthBtcChartProvider: FC<{
         ),
       }),
       chartProps: allTimeChartProps,
+    })
+    const valueExists: boolean =
+      Boolean(tokenPriceDatum?.at(-1)?.y) ||
+      String(tokenPriceDatum?.at(-1)?.y) === "0"
+    const dateText = `${format(
+      new Date(String(tokenPriceDatum?.at(0)?.x)),
+      "d MMM yyyy"
+    )} - ${format(
+      new Date(String(tokenPriceDatum?.at(-1)?.x)),
+      "d MMM yyyy"
+    )}`
+    setTokenPriceChange({
+      xFormatted: dateText,
+      yFormatted: `${
+        valueExists
+          ? formatPercentage(String(tokenPriceDatum?.at(-1)?.y))
+          : "--"
+      }`,
     })
   }
 
@@ -386,14 +483,6 @@ export const EthBtcChartProvider: FC<{
         chartProps: dayChartProps,
       })
 
-      const latestDate = new Date(
-        latestData?.date! * 1000
-      ).toLocaleTimeString(undefined, {
-        minute: "2-digit",
-        hour: "2-digit",
-        hour12: false,
-      })
-
       const firstData = weeklyData[0].shareValue
 
       const change =
@@ -405,18 +494,45 @@ export const EthBtcChartProvider: FC<{
         String(change)
       )}`
 
+      const latestDate = format(
+        new Date(latestData?.date * 1000),
+        "d MMM yyyy"
+      )
+      const dateText = `${format(
+        new Date(weeklyData[0].date * 1000),
+        "d MMM"
+      )} - ${latestDate}`
       setTokenPriceChange({
-        xFormatted: latestDate,
+        xFormatted: dateText,
         yFormatted: latestTokenPriceChange,
       })
     }
   }, [weeklyData, data, ethBtcHWeekly.data])
 
+  const dataC = {
+    ...data,
+    series: data.series?.filter((item) => {
+      if (item.id === "token-price") {
+        return showLine.tokenPrice
+      }
+      if (item.id === "eth-btc-50") {
+        return showLine.ethBtc50
+      }
+      if (item.id === "weth") {
+        return showLine.eth
+      }
+      if (item.id === "wbtc") {
+        return showLine.btc
+      }
+      return false
+    }),
+  }
+
   return (
     <ethBtcChartContext.Provider
       value={{
         fetching,
-        data,
+        data: dataC,
         setDataHourly,
         setDataWeekly,
         setDataMonthly,
@@ -428,6 +544,8 @@ export const EthBtcChartProvider: FC<{
         timeArray,
         tokenPriceChange,
         setTokenPriceChange,
+        showLine,
+        setShowLine,
       }}
     >
       {children}
