@@ -229,21 +229,13 @@ export const EthBtcChartProvider: FC<{
         }
       })
     )
+
     setData({
       series: createEthBtcChartSeries({
         tokenPrice: tokenPriceDatum,
-        ethBtc50: ethBtcHourly.data?.wethWbtcdatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        weth: ethBtcHourly.data?.wethDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        wbtc: ethBtcHourly.data?.wbtcDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
+        ethBtc50: ethBtcHourly.data?.wethWbtcdatum,
+        weth: ethBtcHourly.data?.wethDatum,
+        wbtc: ethBtcHourly.data?.wbtcDatum,
       }),
 
       chartProps: hourlyChartProps,
@@ -261,18 +253,9 @@ export const EthBtcChartProvider: FC<{
     setData({
       series: createEthBtcChartSeries({
         tokenPrice: tokenPriceDatum,
-        ethBtc50: ethBtcHWeekly.data?.wethWbtcdatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        weth: ethBtcHWeekly.data?.wethDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        wbtc: ethBtcHWeekly.data?.wbtcDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
+        ethBtc50: ethBtcHWeekly.data?.wethWbtcdatum,
+        weth: ethBtcHWeekly.data?.wethDatum,
+        wbtc: ethBtcHWeekly.data?.wbtcDatum,
       }),
 
       chartProps: dayChartProps,
@@ -290,18 +273,9 @@ export const EthBtcChartProvider: FC<{
     setData({
       series: createEthBtcChartSeries({
         tokenPrice: tokenPriceDatum,
-        ethBtc50: ethBtcMonthly.data?.wethWbtcdatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        weth: ethBtcMonthly.data?.wethDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        wbtc: ethBtcMonthly.data?.wbtcDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
+        ethBtc50: ethBtcMonthly.data?.wethWbtcdatum,
+        weth: ethBtcMonthly.data?.wethDatum,
+        wbtc: ethBtcMonthly.data?.wbtcDatum,
       }),
       chartProps: monthChartProps,
     })
@@ -318,18 +292,9 @@ export const EthBtcChartProvider: FC<{
     setData({
       series: createEthBtcChartSeries({
         tokenPrice: tokenPriceDatum,
-        ethBtc50: ethBtcAlltime.data?.wethWbtcdatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        weth: ethBtcAlltime.data?.wethDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        wbtc: ethBtcAlltime.data?.wbtcDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
+        ethBtc50: ethBtcAlltime.data?.wethWbtcdatum,
+        weth: ethBtcAlltime.data?.wethDatum,
+        wbtc: ethBtcAlltime.data?.wbtcDatum,
       }),
       chartProps: allTimeChartProps,
     })
@@ -369,18 +334,9 @@ export const EthBtcChartProvider: FC<{
       setData({
         series: createEthBtcChartSeries({
           tokenPrice: tokenPriceDatum,
-          ethBtc50: ethBtcHWeekly.data.wethWbtcdatum.slice(
-            0,
-            tokenPriceDatum?.length
-          ),
-          weth: ethBtcHWeekly.data?.wethDatum.slice(
-            0,
-            tokenPriceDatum?.length
-          ),
-          wbtc: ethBtcHWeekly.data?.wbtcDatum.slice(
-            0,
-            tokenPriceDatum?.length
-          ),
+          ethBtc50: ethBtcHWeekly.data.wethWbtcdatum,
+          weth: ethBtcHWeekly.data?.wethDatum,
+          wbtc: ethBtcHWeekly.data?.wbtcDatum,
         }),
 
         chartProps: dayChartProps,
