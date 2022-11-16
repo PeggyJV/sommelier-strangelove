@@ -1,4 +1,4 @@
-import { closestIndexTo, format, set } from "date-fns"
+import { closestIndexTo, format } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { fetchMarketChart } from "./fetchMarketChart"
 
@@ -63,11 +63,7 @@ export const getEthBtcGainChartData = async (
             ? format(new Date(weth.date), "dLL")
             : format(new Date(weth.date), "dHH"),
           {
-            x: set(new Date(weth.date), {
-              minutes: 0,
-              seconds: 0,
-              milliseconds: 0,
-            }),
+            x: new Date(weth.date),
             y: weth.change,
           }
         )
@@ -76,11 +72,7 @@ export const getEthBtcGainChartData = async (
             ? format(new Date(wbtc.date), "dLL")
             : format(new Date(wbtc.date), "dHH"),
           {
-            x: set(new Date(wbtc.date), {
-              minutes: 0,
-              seconds: 0,
-              milliseconds: 0,
-            }),
+            x: new Date(wbtc.date),
             y: wbtc.change,
           }
         )
@@ -89,11 +81,7 @@ export const getEthBtcGainChartData = async (
             ? format(new Date(weth.date), "dLL")
             : format(new Date(weth.date), "dHH"),
           {
-            x: set(new Date(weth.date), {
-              minutes: 0,
-              seconds: 0,
-              milliseconds: 0,
-            }),
+            x: new Date(weth.date),
             y: (weth.change + wbtc.change) / 2,
           }
         )
