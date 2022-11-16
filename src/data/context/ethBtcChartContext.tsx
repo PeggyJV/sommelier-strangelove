@@ -276,14 +276,15 @@ export const EthBtcChartProvider: FC<{
     const valueExists: boolean =
       Boolean(tokenPriceDatum?.at(-1)?.y) ||
       String(tokenPriceDatum?.at(-1)?.y) === "0"
+    const dateText = `${format(
+      new Date(String(tokenPriceDatum?.at(0)?.x)),
+      "HH:mm d"
+    )} - ${format(
+      new Date(String(tokenPriceDatum?.at(-1)?.x)),
+      "HH:mm d MMM yyyy"
+    )}`
     setTokenPriceChange({
-      xFormatted: `${format(
-        new Date(tokenPriceDatum?.at(0)?.x!),
-        "HH:mm d"
-      )} - ${format(
-        new Date(tokenPriceDatum?.at(-1)?.x!),
-        "HH:mm d MMM yyyy"
-      )}`,
+      xFormatted: dateText,
       yFormatted: `${
         valueExists
           ? formatPercentage(String(tokenPriceDatum?.at(-1)?.y))
@@ -322,14 +323,15 @@ export const EthBtcChartProvider: FC<{
     const valueExists: boolean =
       Boolean(tokenPriceDatum?.at(-1)?.y) ||
       String(tokenPriceDatum?.at(-1)?.y) === "0"
+    const dateText = `${format(
+      new Date(String(tokenPriceDatum?.at(0)?.x)),
+      "d MMM"
+    )} - ${format(
+      new Date(tokenPriceDatum?.at(-1)?.x!),
+      "d MMM yyyy"
+    )}`
     setTokenPriceChange({
-      xFormatted: `${format(
-        new Date(tokenPriceDatum?.at(0)?.x!),
-        "d MMM"
-      )} - ${format(
-        new Date(tokenPriceDatum?.at(-1)?.x!),
-        "d MMM yyyy"
-      )}`,
+      xFormatted: dateText,
       yFormatted: `${
         valueExists
           ? formatPercentage(String(tokenPriceDatum?.at(-1)?.y))
@@ -367,14 +369,15 @@ export const EthBtcChartProvider: FC<{
     const valueExists: boolean =
       Boolean(tokenPriceDatum?.at(-1)?.y) ||
       String(tokenPriceDatum?.at(-1)?.y) === "0"
+    const dateText = `${format(
+      new Date(String(tokenPriceDatum?.at(0)?.x)),
+      "d MMM"
+    )} - ${format(
+      new Date(String(tokenPriceDatum?.at(-1)?.x)),
+      "d MMM yyyy"
+    )}`
     setTokenPriceChange({
-      xFormatted: `${format(
-        new Date(tokenPriceDatum?.at(0)?.x!),
-        "d MMM"
-      )} - ${format(
-        new Date(tokenPriceDatum?.at(-1)?.x!),
-        "d MMM yyyy"
-      )}`,
+      xFormatted: dateText,
       yFormatted: `${
         valueExists
           ? formatPercentage(String(tokenPriceDatum?.at(-1)?.y))
@@ -412,14 +415,15 @@ export const EthBtcChartProvider: FC<{
     const valueExists: boolean =
       Boolean(tokenPriceDatum?.at(-1)?.y) ||
       String(tokenPriceDatum?.at(-1)?.y) === "0"
+    const dateText = `${format(
+      new Date(String(tokenPriceDatum?.at(0)?.x)),
+      "d MMM yyyy"
+    )} - ${format(
+      new Date(String(tokenPriceDatum?.at(-1)?.x)),
+      "d MMM yyyy"
+    )}`
     setTokenPriceChange({
-      xFormatted: `${format(
-        new Date(tokenPriceDatum?.at(0)?.x!),
-        "d MMM yyyy"
-      )} - ${format(
-        new Date(tokenPriceDatum?.at(-1)?.x!),
-        "d MMM yyyy"
-      )}`,
+      xFormatted: dateText,
       yFormatted: `${
         valueExists
           ? formatPercentage(String(tokenPriceDatum?.at(-1)?.y))
@@ -491,14 +495,15 @@ export const EthBtcChartProvider: FC<{
       )}`
 
       const latestDate = format(
-        new Date(latestData?.date! * 1000),
+        new Date(latestData?.date * 1000),
         "d MMM yyyy"
       )
+      const dateText = `${format(
+        new Date(weeklyData[0].date * 1000),
+        "d MMM"
+      )} - ${latestDate}`
       setTokenPriceChange({
-        xFormatted: `${format(
-          new Date(weeklyData[0].date * 1000),
-          "d MMM"
-        )} - ${latestDate}`,
+        xFormatted: dateText,
         yFormatted: latestTokenPriceChange,
       })
     }
