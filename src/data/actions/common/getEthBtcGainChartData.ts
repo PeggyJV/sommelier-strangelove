@@ -60,8 +60,8 @@ export const getEthBtcGainChartData = async (
       if (wbtc) {
         wethMap.set(
           interval === "daily"
-            ? format(new Date(weth.date), "d")
-            : format(new Date(weth.date), "HH"),
+            ? format(new Date(weth.date), "dLL")
+            : format(new Date(weth.date), "dHH"),
           {
             x: set(new Date(weth.date), {
               minutes: 0,
@@ -73,8 +73,8 @@ export const getEthBtcGainChartData = async (
         )
         wbtcMap.set(
           interval === "daily"
-            ? format(new Date(wbtc.date), "d")
-            : format(new Date(wbtc.date), "HH"),
+            ? format(new Date(wbtc.date), "dLL")
+            : format(new Date(wbtc.date), "dHH"),
           {
             x: set(new Date(wbtc.date), {
               minutes: 0,
@@ -86,8 +86,8 @@ export const getEthBtcGainChartData = async (
         )
         wethWbtcMap.set(
           interval === "daily"
-            ? format(new Date(weth.date), "d")
-            : format(new Date(weth.date), "HH"),
+            ? format(new Date(weth.date), "dLL")
+            : format(new Date(weth.date), "dHH"),
           {
             x: set(new Date(weth.date), {
               minutes: 0,
