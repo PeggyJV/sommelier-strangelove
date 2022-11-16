@@ -7,6 +7,7 @@ import { FunctionComponent, VFC } from "react"
 import { debounce } from "lodash"
 import { useEthBtcChart } from "data/context/ethBtcChartContext"
 import { formatPercentage } from "utils/chartHelper"
+import { format } from "date-fns"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -29,7 +30,9 @@ const ToolTip: FunctionComponent<PointTooltipProps> = ({ point }) => {
   )
 }
 
-export const EthBtcChart: VFC = () => {
+export const EthBtcChart: VFC<{ timeline: string }> = ({
+  timeline,
+}) => {
   const { data, setTokenPriceChange } = useEthBtcChart()
   const { chartTheme } = useNivoThemes()
   const lineColors = data.series?.map((item) => item.color)
@@ -38,8 +41,23 @@ export const EthBtcChart: VFC = () => {
     const tokenPriceChange = data.series?.[0].data[Number(i)]?.y
     const valueExists: boolean =
       Boolean(tokenPriceChange) || String(tokenPriceChange) === "0"
+
+    const hourlyDataText = `${format(
+      new Date(String(data.series?.[0].data[0].x)),
+      "HH:mm d"
+    )} - ${format(
+      new Date(String(data.series?.[0].data[Number(i)].x)),
+      "HH:mm d MMM yyyy"
+    )}`
+    const dailyDataText = `${format(
+      new Date(String(data.series?.[0].data[0].x)),
+      "d MMM"
+    )} - ${format(
+      new Date(String(data.series?.[0].data[Number(i)].x)),
+      "d MMM yyyy"
+    )}`
     setTokenPriceChange({
-      xFormatted: point.xFormatted,
+      xFormatted: timeline === "1D" ? hourlyDataText : dailyDataText,
       yFormatted: `
         ${
           valueExists
