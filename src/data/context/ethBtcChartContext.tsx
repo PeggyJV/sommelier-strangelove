@@ -38,6 +38,13 @@ export interface TokenPriceData {
   xFormatted: string | number
 }
 
+export interface ShowLine {
+  tokenPrice: boolean
+  ethBtc50: boolean
+  eth: boolean
+  btc: boolean
+}
+
 export interface EthBtcChartContext {
   fetching: boolean
   data: DataProps
@@ -63,6 +70,8 @@ export interface EthBtcChartContext {
   }[]
   tokenPriceChange: TokenPriceData
   setTokenPriceChange: Dispatch<SetStateAction<TokenPriceData>>
+  showLine: ShowLine
+  setShowLine: Dispatch<SetStateAction<ShowLine>>
 }
 
 const hourlyChartProps: Partial<LineProps> = {
@@ -145,6 +154,13 @@ const initialData: EthBtcChartContext = {
       onClick: () => null,
     },
   ],
+  showLine: {
+    tokenPrice: true,
+    ethBtc50: true,
+    eth: true,
+    btc: true,
+  },
+  setShowLine: () => null,
 }
 
 const ethBtcChartContext =
@@ -153,6 +169,13 @@ const ethBtcChartContext =
 export const EthBtcChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
+  const [showLine, setShowLine] = useState<ShowLine>({
+    tokenPrice: true,
+    ethBtc50: true,
+    eth: true,
+    btc: true,
+  })
+
   // GQL Queries
   const [
     { fetching: hourlyIsFetching, data: hourlyDataRaw },
@@ -368,11 +391,30 @@ export const EthBtcChartProvider: FC<{
     }
   }, [weeklyData, data, ethBtcHWeekly.data])
 
+  const dataC = {
+    ...data,
+    series: data.series?.filter((item) => {
+      if (item.id === "token-price") {
+        return showLine.tokenPrice
+      }
+      if (item.id === "eth-btc-50") {
+        return showLine.ethBtc50
+      }
+      if (item.id === "weth") {
+        return showLine.eth
+      }
+      if (item.id === "wbtc") {
+        return showLine.btc
+      }
+      return false
+    }),
+  }
+
   return (
     <ethBtcChartContext.Provider
       value={{
         fetching,
-        data,
+        data: dataC,
         setDataHourly,
         setDataWeekly,
         setDataMonthly,
@@ -384,6 +426,8 @@ export const EthBtcChartProvider: FC<{
         timeArray,
         tokenPriceChange,
         setTokenPriceChange,
+        showLine,
+        setShowLine,
       }}
     >
       {children}

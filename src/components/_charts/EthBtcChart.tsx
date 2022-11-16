@@ -6,7 +6,6 @@ import dynamic from "next/dynamic"
 import { FunctionComponent, VFC } from "react"
 import { debounce } from "lodash"
 import { useEthBtcChart } from "data/context/ethBtcChartContext"
-import { colors } from "theme/colors"
 import { formatPercentage } from "utils/chartHelper"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
@@ -33,12 +32,7 @@ const ToolTip: FunctionComponent<PointTooltipProps> = ({ point }) => {
 export const EthBtcChart: VFC = () => {
   const { data, setTokenPriceChange } = useEthBtcChart()
   const { chartTheme } = useNivoThemes()
-  const lineColors = [
-    colors.purple.base,
-    colors.violet.base,
-    colors.turquoise.base,
-    colors.orange.base,
-  ]
+  const lineColors = data.series?.map((item) => item.color)
   const updateTokenPriceChange = ({ data: point, id }: Point) => {
     const [_, i] = id.split(".")
     const tokenPriceChange = data.series?.[0].data[Number(i)]?.y
@@ -72,7 +66,7 @@ export const EthBtcChart: VFC = () => {
         ]),
       ]}
       fill={[{ match: "*", id: "gradientA" }]}
-      margin={{ bottom: 110, left: 25, right: 6, top: 20 }}
+      margin={{ bottom: 110, left: 26, right: 6, top: 20 }}
       theme={chartTheme}
       tooltip={ToolTip}
       yScale={{

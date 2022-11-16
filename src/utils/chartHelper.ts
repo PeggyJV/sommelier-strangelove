@@ -1,5 +1,6 @@
 import { Datum, Serie } from "@nivo/line"
 import { toInteger } from "lodash"
+import { colors } from "theme/colors"
 import { formatDecimals } from "./bigNumber"
 
 export const createTVLSeries = (
@@ -59,18 +60,22 @@ export const createEthBtcChartSeries = ({
     {
       id: "token-price",
       data: tokenPrice || [],
+      color: colors.purple.base,
     },
     {
       id: "eth-btc-50",
       data: ethBtc50 || [],
+      color: colors.violet.base,
     },
     {
       id: "weth",
       data: weth || [],
+      color: colors.turquoise.base,
     },
     {
       id: "wbtc",
       data: wbtc || [],
+      color: colors.orange.base,
     },
   ]
 }
