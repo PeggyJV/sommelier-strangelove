@@ -3,6 +3,7 @@ import {
   BoxProps,
   Button,
   HStack,
+  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react"
@@ -26,9 +27,14 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
   const [timeline, setTimeline] = useState<string>("1W")
 
   return (
-    <TransparentCard p={8} overflow="visible" {...props}>
+    <TransparentCard
+      px={{ base: 6, sm: 6, md: 8 }}
+      py={{ base: 6, md: 8 }}
+      overflow="visible"
+      {...props}
+    >
       <VStack spacing={6} align="stretch">
-        <Box h="20rem" mb={{ sm: "2.2rem", md: 0 }}>
+        <Box h="20rem" mb={{ base: 12, sm: "2.2rem", md: 0 }}>
           <HStack
             justify="space-between"
             align="flex-start"
@@ -92,7 +98,10 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
           </HStack>
           <EthBtcChart />
         </Box>
-        <HStack spacing={6}>
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          spacing={{ base: 2, md: 4 }}
+        >
           <Legend
             color="purple.base"
             title={cellarDataMap[id].name}
@@ -100,7 +109,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
           <Legend color="violet.base" title="ETH 50/BTC 50" />
           <Legend color="turquoise.base" title="ETH" />
           <Legend color="orange.base" title="BTC" />
-        </HStack>
+        </Stack>
       </VStack>
     </TransparentCard>
   )

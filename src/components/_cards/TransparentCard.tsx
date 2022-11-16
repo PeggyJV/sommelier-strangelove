@@ -7,7 +7,7 @@ export const TransparentCard: VFC<BoxProps> = (props) => {
     <Card
       bg="surface.primary"
       borderWidth={1}
-      borderRadius={24}
+      borderRadius={{ base: 0, sm: 24 }}
       borderColor="surface.secondary"
       backdropFilter="blur(8px)"
       {...props}

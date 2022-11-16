@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react"
 import { Cellars } from "components/Cellars"
 import { FAQStrategy } from "components/FAQStrategy"
 import { HeroStrategy } from "components/HeroStrategy"
@@ -15,11 +16,13 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
 }) => {
   return (
     <Layout>
-      <HeroStrategy id={id} />
-      <Highlight id={id} />
-      <Cellars data={sectionCellars} mt={52} />
-      <Strategy data={sectionStrategies} mt={52} />
-      <FAQStrategy data={faqData} mt={52} />
+      <Box px={{ base: 4, sm: 0 }}>
+        <HeroStrategy id={id} />
+        <Highlight id={id} />
+        <Cellars data={sectionCellars} mt={52} />
+        <Strategy data={sectionStrategies} mt={52} />
+        <FAQStrategy data={faqData} mt={52} />
+      </Box>
     </Layout>
   )
 }

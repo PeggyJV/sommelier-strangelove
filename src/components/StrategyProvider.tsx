@@ -1,14 +1,16 @@
 import {
   Avatar,
   HStack,
+  Icon,
   Text,
   Tooltip,
   VStack,
 } from "@chakra-ui/react"
 import { CellarDataMap } from "data/types"
 import { VFC } from "react"
+import { FaExternalLinkAlt } from "react-icons/fa"
 import { Link } from "./Link"
-import { ExternalLinkIcon, InformationIcon } from "./_icons"
+import { InformationIcon } from "./_icons"
 import { CardHeading } from "./_typography/CardHeading"
 
 export type StrategyProviderProps = Pick<
@@ -43,29 +45,13 @@ export const StrategyProvider: VFC<StrategyProviderProps> = ({
           <InformationIcon boxSize="12px" />
         </HStack>
       )}
-      <HStack>
+      <HStack as={Link} href={href} isExternal>
         {logo && <Avatar src={logo} size="xs" />}
         <Text as="span" fontWeight="bold" fontSize={21}>
           {title}
         </Text>
+        <Icon as={FaExternalLinkAlt} color="purple.base" />
       </HStack>
-      <Link
-        href={href}
-        isExternal
-        _hover={{
-          textDecoration: "underline",
-        }}
-      >
-        <HStack role="group" align="center">
-          <Text>Visit Website</Text>{" "}
-          <ExternalLinkIcon
-            color="purple.base"
-            _groupHover={{
-              color: "neutral.100",
-            }}
-          />
-        </HStack>
-      </Link>
     </VStack>
   )
 }

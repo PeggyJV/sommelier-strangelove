@@ -5,6 +5,7 @@ import {
   HeadingProps,
   HStack,
   Spinner,
+  useMediaQuery,
   VStack,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
@@ -14,7 +15,6 @@ import CellarDetailsCard from "components/_cards/CellarDetailsCard"
 import { CellarStatsYield } from "components/CellarStatsYield"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
-import { CoinImage } from "components/_cards/CellarCard/CoinImage"
 import { PerformanceChartByAddressProvider } from "data/context/performanceChartByAddressContext"
 import { useTvm } from "data/hooks/useTvm"
 import { useApy } from "data/hooks/useApy"
@@ -29,15 +29,14 @@ import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarType } from "data/types"
 import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
+import { isEthBtcChartEnabled } from "data/uiConfig"
 import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
 import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
-import { isEthBtcChartEnabled } from "data/uiConfig"
-
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
   color: "neutral.300",
-  pl: 8,
+  pl: { base: 6, sm: 8 },
 }
 
 const PageCellar: VFC<CellarPageProps> = ({ id }) => {
@@ -52,13 +51,17 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
   const intervalGainPct = useIntervalGainPct(cellarConfig)
+  const [isLarger768] = useMediaQuery("(min-width: 768px)")
+  const isYieldStrategies =
+    staticCellarData.cellarType === CellarType.yieldStrategies
+  const isAutomatedPortfolio =
+    staticCellarData.cellarType === CellarType.automatedPortfolio
 
   return (
     <Layout>
       <Section>
         <HStack
-          spacing={4}
-          pb={12}
+          pb={isLarger768 ? 12 : 0}
           justify="space-between"
           align="flex-end"
           wrap="wrap"
@@ -67,14 +70,12 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
           <VStack spacing={6} align="flex-start">
             <BreadCrumb cellarName={staticCellarData.name} id={id} />
             <HStack spacing={4}>
-              <CoinImage />
               <Heading fontSize="2.5rem">
                 {staticCellarData.name}{" "}
               </Heading>
             </HStack>
           </VStack>
-          {staticCellarData.cellarType ===
-            CellarType.yieldStrategies && (
+          {isYieldStrategies && (
             <CellarStatsYield
               tvm={tvm ? `${tvm.formatted}` : <Spinner />}
               apy={apyLoading ? <Spinner /> : apy?.expectedApy}
@@ -87,8 +88,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
             />
           )}
 
-          {staticCellarData.cellarType ===
-            CellarType.automatedPortfolio && (
+          {isAutomatedPortfolio && (
             <CellarStatsAutomated
               tokenPriceTooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
               tokenPriceLabel="Token price"
@@ -129,23 +129,27 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
             />
           )}
         </HStack>
-        <VStack spacing={4} align="stretch">
-          <Heading {...h2Styles}>Your Portfolio</Heading>
-          <PortfolioCard />
-        </VStack>
+        {isLarger768 && (
+          <VStack spacing={4} align="stretch">
+            <Heading {...h2Styles} pt={12}>
+              Your Portfolio
+            </Heading>
+            <PortfolioCard />
+          </VStack>
+        )}
       </Section>
-      <Section>
+      <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">
+          VStack{" "}
           {isEthBtcChartEnabled(cellarConfig) && (
             <EthBtcChartProvider address={cellarAddress}>
-              <Heading pt={12} {...h2Styles}>
+              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                 Strategy Perfomance
               </Heading>
               <EthBtcPerfomanceCard />
             </EthBtcChartProvider>
           )}
-
-          <Heading pt={12} {...h2Styles}>
+          <Heading pt={isYieldStrategies ? 0 : 12} {...h2Styles}>
             Strategy Details
           </Heading>
           <CellarDetailsCard
