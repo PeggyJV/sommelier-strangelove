@@ -1,6 +1,5 @@
 import { VFC } from "react"
 import {
-  Box,
   Heading,
   HeadingProps,
   HStack,
@@ -96,17 +95,11 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
               weekChangeTooltip="% change of current token price vs. token price yesterday"
               weekChangeLabel="1D Change"
               weekChangeValue={
-                <>
-                  {dailyChange ? (
-                    <PercentageText
-                      data={dailyChange}
-                      headingSize="md"
-                      arrow
-                    />
-                  ) : (
-                    <Box>...</Box>
-                  )}
-                </>
+                <PercentageText
+                  data={dailyChange}
+                  headingSize="md"
+                  arrow
+                />
               }
               monthChangeTooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
               monthChangeLabel="1W Change vs ETH/BTC 50/50"
