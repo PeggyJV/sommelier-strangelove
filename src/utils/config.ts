@@ -77,6 +77,9 @@ export const config = {
       ABI: clearGateCellar,
       SLUG: "ETH-BTC-Momentum",
     },
+    BREAKOUT_ETH: {
+      SLUG: "BreakoutETH",
+    },
     CLEAR_GATE_TEST_CELLAR_A: {
       ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
       ABI: clearGateCellar,
