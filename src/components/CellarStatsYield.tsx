@@ -57,10 +57,8 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
       justifyContent={{ base: "space-between", md: "unset" }}
       divider={
         <CardDivider
-          css={{
-            _last: {
-              borderColor,
-            },
+          _last={{
+            borderColor,
           }}
         />
       }
