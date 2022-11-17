@@ -2,6 +2,12 @@ import { closestIndexTo, format } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { fetchMarketChart } from "./fetchMarketChart"
 
+interface PriceData {
+  date: number
+  change: number
+  value: number
+}
+
 export const getEthBtcGainChartData = async (
   day: number,
   interval: "daily" | "hourly" = "daily"
@@ -14,16 +20,14 @@ export const getEthBtcGainChartData = async (
       interval
     )
     const wethGainPct = (() => {
-      let res: {
-        date: number
-        change: number
-      }[] = []
+      let res: PriceData[] = []
       wethData.prices.map(([date, value], index) => {
         const firstData = wethData.prices[0]
         if (firstData) {
           res.push({
             date,
             change: getGainPct(value, firstData[1]),
+            value: value,
           })
         }
       })
@@ -31,16 +35,14 @@ export const getEthBtcGainChartData = async (
     })()
 
     const wbtcGainPct = (() => {
-      let res: {
-        date: number
-        change: number
-      }[] = []
+      let res: PriceData[] = []
       wbtcData.prices.map(([date, value], index) => {
         const firstData = wbtcData.prices[0]
         if (firstData) {
           res.push({
             date,
             change: getGainPct(value, firstData[1]),
+            value: value,
           })
         }
       })
@@ -49,7 +51,7 @@ export const getEthBtcGainChartData = async (
     let wethMap = new Map()
     let wbtcMap = new Map()
     let wethWbtcMap = new Map()
-    wethGainPct.map((weth, index) => {
+    wethGainPct.map((weth) => {
       const wbtc =
         wbtcGainPct[
           closestIndexTo(
@@ -65,6 +67,7 @@ export const getEthBtcGainChartData = async (
           {
             x: new Date(weth.date),
             y: weth.change,
+            value: weth.value,
           }
         )
         wbtcMap.set(
@@ -74,6 +77,7 @@ export const getEthBtcGainChartData = async (
           {
             x: new Date(wbtc.date),
             y: wbtc.change,
+            value: wbtc.value,
           }
         )
         wethWbtcMap.set(
@@ -83,6 +87,7 @@ export const getEthBtcGainChartData = async (
           {
             x: new Date(weth.date),
             y: (weth.change + wbtc.change) / 2,
+            value: (weth.value + wbtc.value) / 2,
           }
         )
       }
