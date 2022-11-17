@@ -7,7 +7,7 @@ import { useBtcIntervalGain } from "./useBtcIntervalGain"
 import { useEthIntervalGain } from "./useEthIntervalGain"
 
 export const useIntervalGainPct = (config: ConfigProps) => {
-  // Shift back coingecko by 1 day
+  // Shift back coingecko by 1 day is intentional
   const ethIntervalGain = useEthIntervalGain(8)
   const btcIntervalGain = useBtcIntervalGain(8)
 
