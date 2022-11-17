@@ -1,5 +1,5 @@
 import { AaveV2CellarV2, ClearGateCellar } from "src/abi/types"
-import { getCalulatedTvl } from "utils/bigNumber"
+import { formatDecimals } from "utils/bigNumber"
 import { formatCurrency } from "utils/formatCurrency"
 
 export const getTvm = async (
@@ -7,7 +7,7 @@ export const getTvm = async (
   tvlTotal?: string
 ) => {
   try {
-    const calculatedTvl = tvlTotal && getCalulatedTvl(tvlTotal, 18)
+    const calculatedTvl = tvlTotal && formatDecimals(tvlTotal, 18)
     const tvmVal = formatCurrency(calculatedTvl)
 
     return {

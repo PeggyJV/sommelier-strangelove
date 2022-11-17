@@ -8,9 +8,10 @@ import {
   useTheme,
   VStack,
   Image,
-  Avatar,
   SimpleGrid,
   Stack,
+  useMediaQuery,
+  Avatar,
 } from "@chakra-ui/react"
 import { CardHeading } from "components/_typography/CardHeading"
 import { VFC } from "react"
@@ -24,8 +25,8 @@ import { StrategyProvider } from "components/StrategyProvider"
 import { CellarDataMap } from "data/types"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { useTvm } from "data/hooks/useTvm"
-import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { isTokenAssets } from "data/uiConfig"
+import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { TokenAssets } from "components/TokenAssets"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
@@ -45,6 +46,11 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
 }) => {
   const { barChartTheme } = useNivoThemes()
   const theme = useTheme()
+  // const borderColor = useBreakpointValue({
+  //   sm: "purple.dark",
+  //   md: "transparent",
+  //   lg: "purple.dark",
+  // })
   const {
     protocols,
     strategyType,
@@ -61,6 +67,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const cellarConfig = cellarDataMap[cellarId].config
   const { data: tvm } = useTvm(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
+  const [isLarger400] = useMediaQuery("(min-width: 400px)")
 
   // Unsure why this was necessary? Nivo acts strangely when there are fewer than three args in an index. Could be refined later.
   // const moveColors = (colorTheme: string[]): string[] => {
@@ -74,9 +81,20 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const protocolIcon = protocolsImage[protocols]
 
   return (
-    <TransparentCard p={8} overflow="visible">
-      <VStack spacing={8} align={{ sm: "unset", md: "stretch" }}>
-        <SimpleGrid columns={{ base: 3, lg: 4 }} spacing={6}>
+    <TransparentCard
+      px={{ base: 0, sm: 6, md: 8 }}
+      py={{ base: 6, md: 8 }}
+      overflow="visible"
+    >
+      <VStack
+        spacing={{ base: 6, sm: 6, md: 8 }}
+        align={{ sm: "unset", md: "stretch" }}
+      >
+        <SimpleGrid
+          columns={{ base: isLarger400 ? 2 : 1, sm: 2, md: 3, lg: 4 }}
+          spacing={4}
+          px={{ base: 6, sm: 0 }}
+        >
           <CardStat
             label="strategy type"
             flex={0}
@@ -125,7 +143,6 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             {tvm?.formatted || "..."}
           </CardStat>
           <CardStat
-            flex={0}
             label="strategy assets"
             tooltip="Strategy will have exposure to 1 or more of these assets at any given time"
           >
@@ -172,7 +189,12 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               )}
             </HStack>
           </CardStat>
-          <VStack width="lg" spacing={2} align="stretch" maxW="150%">
+          <VStack
+            width="lg"
+            spacing={2}
+            align="stretch"
+            maxW={{ base: "100%", md: "150%" }}
+          >
             <HStack spacing={1} align="center">
               <Tooltip
                 hasArrow
@@ -218,7 +240,6 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             </HStack>
           </VStack>
         </SimpleGrid>
-
         <StrategyBreakdownCard
           cellarDataMap={cellarDataMap}
           cellarId={cellarId}

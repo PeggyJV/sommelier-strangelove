@@ -1,4 +1,4 @@
-import { Box, Flex, Stack, Text } from "@chakra-ui/react"
+import { Flex, Stack, Text } from "@chakra-ui/react"
 import { CurrentDeposits } from "components/CurrentDeposits"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
@@ -72,11 +72,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
         )}
         {isDailyChangeEnabled(cellarConfig) && (
           <Flex alignItems="center">
-            {dailyChange.data ? (
-              <PercentageText data={dailyChange.data} arrow />
-            ) : (
-              <Box>--</Box>
-            )}
+            <PercentageText data={dailyChange.data} arrow />
             <CellarStatsLabel
               title="1D Change"
               tooltip="% change of current token price vs. token price yesterday"
@@ -86,11 +82,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
 
         {isIntervalGainPctEnabled(cellarConfig) && (
           <Flex alignItems="center">
-            {intervalGainPct.data ? (
-              <PercentageText data={intervalGainPct.data} />
-            ) : (
-              <Box>--</Box>
-            )}
+            <PercentageText data={intervalGainPct.data} />
             <CellarStatsLabel
               title="1W Change vs ETH/BTC 50/50"
               tooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"

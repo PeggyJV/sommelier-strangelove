@@ -13,8 +13,22 @@ export const PercentageText: VFC<PercentageTextProps> = ({
   headingSize = "sm",
   arrow,
 }) => {
-  const isDataZero = data === 0
+  const percentageData = data && Math.abs(data).toFixed(2)
+  const isDataZero = Number(percentageData) === 0
   const isDataNegative = data && data < 0
+  const valueExists: boolean = isDataZero || Boolean(percentageData)
+  if (!data && !isDataZero) {
+    return (
+      <Heading
+        size={headingSize}
+        display="flex"
+        alignItems="center"
+        columnGap="3px"
+      >
+        --
+      </Heading>
+    )
+  }
 
   return (
     <HStack
@@ -25,23 +39,21 @@ export const PercentageText: VFC<PercentageTextProps> = ({
           ? "red.base"
           : "lime.base"
       }
-      spacing={0}
+      spacing={1}
     >
       {!isDataZero && (
         <PercentageHeading
-          headingSize={headingSize}
           arrow={arrow}
           isDataNegative={isDataNegative}
         />
       )}
-
       <Heading
         size={headingSize}
         display="flex"
         alignItems="center"
         columnGap="3px"
       >
-        {(data && Math.abs(data).toFixed(2)) || "--"}%
+        {valueExists ? percentageData : "--"}%
       </Heading>
     </HStack>
   )
