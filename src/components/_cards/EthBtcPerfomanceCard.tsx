@@ -97,7 +97,10 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
               })}
             </HStack>
           </HStack>
-          <EthBtcChart />
+          <EthBtcChart
+            timeline={timeline}
+            name={cellarDataMap[id].name}
+          />
         </Box>
         <Stack
           direction={{ base: "column", md: "row" }}
