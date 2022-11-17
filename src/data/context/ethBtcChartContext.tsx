@@ -77,8 +77,8 @@ export interface EthBtcChartContext {
 
 const hourlyChartProps: Partial<LineProps> = {
   axisBottom: {
-    format: "%m/%d: %H:%M",
-    tickValues: "every 6 hours",
+    format: "%d %H:%M",
+    tickValues: "every 3 hours",
   },
   xFormat: "time:%H:%M",
   xScale: {
@@ -278,7 +278,7 @@ export const EthBtcChartProvider: FC<{
       String(tokenPriceDatum?.at(-1)?.y) === "0"
     const dateText = `${format(
       new Date(String(tokenPriceDatum?.at(0)?.x)),
-      "HH:mm d"
+      "HH:mm d MMM"
     )} - ${format(
       new Date(String(tokenPriceDatum?.at(-1)?.x)),
       "HH:mm d MMM yyyy"
