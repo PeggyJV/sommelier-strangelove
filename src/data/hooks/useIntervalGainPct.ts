@@ -7,8 +7,9 @@ import { useBtcIntervalGain } from "./useBtcIntervalGain"
 import { useEthIntervalGain } from "./useEthIntervalGain"
 
 export const useIntervalGainPct = (config: ConfigProps) => {
-  const ethIntervalGain = useEthIntervalGain(7)
-  const btcIntervalGain = useBtcIntervalGain(7)
+  // Shift back coingecko by 1 day
+  const ethIntervalGain = useEthIntervalGain(8)
+  const btcIntervalGain = useBtcIntervalGain(8)
 
   const [todayData] = useGetSingleCellarValueQuery({
     variables: {

@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
-import { getAssetIntervalGain } from "data/actions/common/getAssetIntervalGain"
+import { getWeeklyAssetIntervalGain } from "data/actions/common/getWeeklyAssetIntervalGain"
 
 export const useEthIntervalGain = (day: number) => {
   const query = useQuery(
     ["USE_ETH_INTERVAL_GAIN", day],
     async () => {
-      return await getAssetIntervalGain("weth", day)
+      return await getWeeklyAssetIntervalGain("weth", day)
     },
     {
       enabled: true,
