@@ -17,7 +17,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
   const isDataZero = Number(percentageData) === 0
   const isDataNegative = data && data < 0
   const valueExists: boolean = isDataZero || Boolean(percentageData)
-  if (!data) {
+  if (!data && !isDataZero) {
     return (
       <Heading
         size={headingSize}
