@@ -19,7 +19,12 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
   const [timeline, setTimeline] = useState<string>("Day")
 
   return (
-    <TransparentCard p={8} overflow="visible" {...props}>
+    <TransparentCard
+      px={{ base: 0, sm: 6, md: 8 }}
+      py={{ base: 6, md: 8 }}
+      overflow="visible"
+      {...props}
+    >
       <VStack spacing={6} align="stretch" divider={<CardDivider />}>
         <Box h="20rem" mb={{ sm: "2.2rem", md: 0 }}>
           <HStack
@@ -27,6 +32,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
             align="flex-start"
             wrap="wrap"
             rowGap={2}
+            px={{ base: 6, sm: 0 }}
           >
             <HStack spacing={8}>
               <VStack spacing={0} align="flex-start">
@@ -77,7 +83,9 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
               })}
             </HStack>
           </HStack>
-          <TVLChart />
+          <Box h="90%">
+            <TVLChart />
+          </Box>
         </Box>
       </VStack>
     </TransparentCard>

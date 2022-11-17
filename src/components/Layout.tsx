@@ -17,29 +17,33 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
 
   const router = useRouter()
 
-  const isHomeOrStrategiesLandingPage =
-    router.pathname === "/" ||
-    (router.pathname.includes("strategies") &&
-      !router.pathname.includes("manage"))
+  const isNotBridge =
+    router.pathname === "/" || router.pathname.includes("strategies")
 
   return (
     <Box>
       <MobileWarningCTA
         display={{
-          base: isHomeOrStrategiesLandingPage ? "none" : "flex",
+          base: isNotBridge ? "none" : "flex",
           md: "none",
         }}
       />
       <Box
         display={{
-          base: isHomeOrStrategiesLandingPage ? "block" : "none",
+          base: isNotBridge ? "block" : "none",
           md: "block",
         }}
       >
         <BackgroundAssets />
         <Flex minH="100vh" flexDir="column" {...rest}>
           <Nav />
-          <Container as="main" flex={1} pt={40} maxW="container.lg">
+          <Container
+            as="main"
+            flex={1}
+            pt={40}
+            maxW="container.lg"
+            px={{ base: 0, sm: 4 }}
+          >
             {isRestricted && <GeoBanner />}
             {isConnected && chain?.id !== 1 && <WrongNetworkBanner />}
             {children}
