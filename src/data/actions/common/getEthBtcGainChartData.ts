@@ -1,4 +1,4 @@
-import { closestIndexTo, format } from "date-fns"
+import { closestIndexTo, format, subDays } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { fetchMarketChart } from "./fetchMarketChart"
 
@@ -7,12 +7,13 @@ interface PriceData {
   change: number
   value: number
 }
-
+// Shift back 1 day coin gecko price is intentional
 export const getEthBtcGainChartData = async (
   day: number,
   interval: "daily" | "hourly" = "daily"
 ) => {
   try {
+    const isDaily = interval === "daily"
     const wethData = await fetchMarketChart("weth", day, interval)
     const wbtcData = await fetchMarketChart(
       "wrapped-bitcoin",
@@ -22,7 +23,7 @@ export const getEthBtcGainChartData = async (
     const wethGainPct = (() => {
       let res: PriceData[] = []
       wethData.prices.map(([date, value], index) => {
-        const firstData = wethData.prices[0]
+        const firstData = wethData.prices[isDaily ? 1 : 0]
         if (firstData) {
           res.push({
             date,
@@ -37,7 +38,7 @@ export const getEthBtcGainChartData = async (
     const wbtcGainPct = (() => {
       let res: PriceData[] = []
       wbtcData.prices.map(([date, value], index) => {
-        const firstData = wbtcData.prices[0]
+        const firstData = wbtcData.prices[isDaily ? 1 : 0]
         if (firstData) {
           res.push({
             date,
@@ -65,7 +66,9 @@ export const getEthBtcGainChartData = async (
             ? format(new Date(weth.date), "dLL")
             : format(new Date(weth.date), "dHH"),
           {
-            x: new Date(weth.date),
+            x: isDaily
+              ? subDays(new Date(weth.date), 1)
+              : new Date(weth.date),
             y: weth.change,
             value: weth.value,
           }
@@ -75,7 +78,9 @@ export const getEthBtcGainChartData = async (
             ? format(new Date(wbtc.date), "dLL")
             : format(new Date(wbtc.date), "dHH"),
           {
-            x: new Date(wbtc.date),
+            x: isDaily
+              ? subDays(new Date(wbtc.date), 1)
+              : new Date(wbtc.date),
             y: wbtc.change,
             value: wbtc.value,
           }
@@ -85,17 +90,26 @@ export const getEthBtcGainChartData = async (
             ? format(new Date(weth.date), "dLL")
             : format(new Date(weth.date), "dHH"),
           {
-            x: new Date(weth.date),
+            x: isDaily
+              ? subDays(new Date(weth.date), 1)
+              : new Date(weth.date),
             y: (weth.change + wbtc.change) / 2,
             value: (weth.value + wbtc.value) / 2,
           }
         )
       }
     })
+
     return {
-      wethDatum: Array.from(wethMap, ([_, v]) => v),
-      wbtcDatum: Array.from(wbtcMap, ([_, v]) => v),
-      wethWbtcdatum: Array.from(wethWbtcMap, ([_, v]) => v),
+      wethDatum: Array.from(wethMap, ([_, v]) => v).slice(
+        isDaily ? 1 : 0
+      ),
+      wbtcDatum: Array.from(wbtcMap, ([_, v]) => v).slice(
+        isDaily ? 1 : 0
+      ),
+      wethWbtcdatum: Array.from(wethWbtcMap, ([_, v]) => v).slice(
+        isDaily ? 1 : 0
+      ),
     }
   } catch (error) {
     console.warn(error)
