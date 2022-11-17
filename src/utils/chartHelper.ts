@@ -39,6 +39,7 @@ export const createTokenPriceChangeDatum = (
       datum.push({
         x: new Date(item.date * 1000),
         y: String(change),
+        value: formatDecimals(current, 6, 2),
       })
     }
   })
@@ -81,5 +82,5 @@ export const createEthBtcChartSeries = ({
 }
 
 export const formatPercentage = (value: string) => {
-  return parseFloat(value).toFixed(6)
+  return parseFloat(value).toFixed(2)
 }
