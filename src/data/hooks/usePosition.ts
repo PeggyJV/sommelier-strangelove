@@ -18,8 +18,7 @@ export const usePosition = (config: ConfigProps) => {
   const { positions, positionDistribution } = cellar || {}
 
   const queryEnabled = Boolean(
-    (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
-      config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) &&
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR &&
       cellarContract.provider &&
       positions &&
       positionDistribution
