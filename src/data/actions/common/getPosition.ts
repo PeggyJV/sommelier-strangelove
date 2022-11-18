@@ -5,21 +5,19 @@ export const getPositon = async (
   positionDistribution?: string[]
 ) => {
   try {
-    const Total = positionDistribution!
+   const total = positionDistribution!
       .map((value) => Number(value))
       .reduce((partialSum, a) => partialSum + a, 0)
 
-    const tradedAssets = tokenConfig
-      .filter((token) => positions!.includes(token.address))
-      .map((value, index) => ({
-        ...value,
-        positionDistribution: `${(
-          (Number(positionDistribution![index]) / Total) *
-          100
-        ).toFixed(2)}%`,
-      }))
-
-    return tradedAssets
+    const distributions = positions?.map((address, index) => {
+      const value = positionDistribution?.[index]
+      return {
+        address,
+        percentage: (Number(value)/total) * 100
+      }
+    })
+    
+  return distributions
   } catch (error) {
     console.warn("Cannot read cellar data", error)
     throw error
