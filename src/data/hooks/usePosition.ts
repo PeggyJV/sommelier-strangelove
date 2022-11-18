@@ -32,10 +32,7 @@ export const usePosition = (config: ConfigProps) => {
       config.cellar.address,
     ],
     async () => {
-      if (
-        config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
-        config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
-      ) {
+      if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
         return await getPositon(positions, positionDistribution)
       }
       throw new Error("UNKNOWN CONTRACT")
