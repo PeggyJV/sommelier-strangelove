@@ -13,6 +13,8 @@ query GetAllCellars {
     numWalletsAllTime
     sharesTotal
     shareValue
+    positions
+    positionDistribution
     dayDatas(first: 7, orderBy: date, orderDirection: desc) {
       id
       date
