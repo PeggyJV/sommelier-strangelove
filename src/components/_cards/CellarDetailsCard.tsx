@@ -11,6 +11,7 @@ import {
   SimpleGrid,
   Stack,
   useMediaQuery,
+  Spinner,
 } from "@chakra-ui/react"
 import { CardHeading } from "components/_typography/CardHeading"
 import { VFC } from "react"
@@ -19,13 +20,16 @@ import { CardStat } from "components/CardStat"
 import { InformationIcon, UsdcIcon } from "components/_icons"
 import { TransparentCard } from "./TransparentCard"
 import { tokenConfig } from "data/tokenConfig"
-import { TokenAssets } from "components/TokenAssets"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { StrategyProvider } from "components/StrategyProvider"
-import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { CellarDataMap } from "data/types"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { useTvm } from "data/hooks/useTvm"
+import { isPositionTokenAssets, isTokenAssets } from "data/uiConfig"
+import { useActiveAsset } from "data/hooks/useActiveAsset"
+import { TokenAssets } from "components/TokenAssets"
+import { usePosition } from "data/hooks/usePosition"
+import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -63,9 +67,10 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     strategyAssets?.includes(token.symbol)
   )
   const cellarConfig = cellarDataMap[cellarId].config
-  const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: tvm } = useTvm(cellarConfig)
+  const { data: activeAsset } = useActiveAsset(cellarConfig)
   const [isLarger400] = useMediaQuery("(min-width: 400px)")
+  const position = usePosition(cellarConfig)
 
   // Unsure why this was necessary? Nivo acts strangely when there are fewer than three args in an index. Could be refined later.
   // const moveColors = (colorTheme: string[]): string[] => {
@@ -105,6 +110,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           )}
           <CardStat
             label="protocols"
+            flex={0}
             tooltip="Protocols in which Strategy operates"
             pr={{ sm: 2, lg: 8 }}
           >
@@ -118,6 +124,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           </CardStat>
           <CardStat
             label="mgmt fee"
+            flex={0}
             tooltip={
               managementFeeTooltip || "Platform management fee"
             }
@@ -142,11 +149,34 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             label="strategy assets"
             tooltip="Strategy will have exposure to 1 or more of these assets at any given time"
           >
-            <TokenAssets
-              tokens={cellarStrategyAssets}
-              activeAsset={activeAsset?.address || ""}
-              displaySymbol
-            />
+            <HStack>
+              {isTokenAssets(cellarConfig) && (
+                <TokenAssets
+                  tokens={cellarStrategyAssets}
+                  activeAsset={activeAsset?.address || ""}
+                  displaySymbol
+                />
+              )}
+
+              {isPositionTokenAssets(cellarConfig) &&
+              position.isLoading ? (
+                <Spinner />
+              ) : (
+                position.data?.map((item) => {
+                  const asset = tokenConfig.find(
+                    (v) => v.address === item.address
+                  )
+                  return (
+                    <PositionDistribution
+                      key={item.address}
+                      address={item.address}
+                      percentage={`${item.percentage.toFixed(2)}%`}
+                      src={asset?.src}
+                    />
+                  )
+                })
+              )}
+            </HStack>
           </CardStat>
           <VStack
             width="lg"

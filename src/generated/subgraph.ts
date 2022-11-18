@@ -1514,6 +1514,13 @@ export type GetMonthlyShareValueQueryVariables = Exact<{
 
 export type GetMonthlyShareValueQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }> } | null };
 
+export type GetPositionValueQueryVariables = Exact<{
+  cellarAddress: Scalars['ID'];
+}>;
+
+
+export type GetPositionValueQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', positions: Array<string>, positionDistribution: Array<string> } | null };
+
 export type GetPositionQueryVariables = Exact<{
   walletCellarId: Scalars['ID'];
 }>;
@@ -1778,6 +1785,18 @@ export const GetMonthlyShareValueDocument = gql`
 
 export function useGetMonthlyShareValueQuery(options: Omit<Urql.UseQueryArgs<GetMonthlyShareValueQueryVariables>, 'query'>) {
   return Urql.useQuery<GetMonthlyShareValueQuery>({ query: GetMonthlyShareValueDocument, ...options });
+};
+export const GetPositionValueDocument = gql`
+    query GetPositionValue($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    positions
+    positionDistribution
+  }
+}
+    `;
+
+export function useGetPositionValueQuery(options: Omit<Urql.UseQueryArgs<GetPositionValueQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetPositionValueQuery>({ query: GetPositionValueDocument, ...options });
 };
 export const GetPositionDocument = gql`
     query GetPosition($walletCellarId: ID!) {
