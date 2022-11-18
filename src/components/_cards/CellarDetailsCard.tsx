@@ -11,7 +11,6 @@ import {
   SimpleGrid,
   Stack,
   useMediaQuery,
-  Avatar,
   Spinner,
 } from "@chakra-ui/react"
 import { CardHeading } from "components/_typography/CardHeading"
@@ -26,12 +25,11 @@ import { StrategyProvider } from "components/StrategyProvider"
 import { CellarDataMap } from "data/types"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { useTvm } from "data/hooks/useTvm"
-import { isTokenAssets } from "data/uiConfig"
+import { isPositionTokenAssets, isTokenAssets } from "data/uiConfig"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { TokenAssets } from "components/TokenAssets"
 import { usePosition } from "data/hooks/usePosition"
 import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
-import { assert } from "console"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -160,7 +158,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 />
               )}
 
-              {!isTokenAssets(cellarConfig) && position.isLoading ? (
+              {isPositionTokenAssets(cellarConfig) &&
+              position.isLoading ? (
                 <Spinner />
               ) : (
                 position.data?.map((item) => {
