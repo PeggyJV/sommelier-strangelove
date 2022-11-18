@@ -123,7 +123,7 @@ export const EthBtcChart: VFC<{ timeline: string; name: string }> = ({
             new Date(String(datum.x)),
             new Date(String(pointActive))
           )
-    if (active) {
+    if (active && isLarger768) {
       return (
         <svg height="16" width="16" x="-7.5" y="-7.5">
           <circle
@@ -177,6 +177,7 @@ export const EthBtcChart: VFC<{ timeline: string; name: string }> = ({
         tickRotation: 0,
         legendPosition: "middle",
       }}
+      useMesh={isLarger768}
     />
   )
 }
