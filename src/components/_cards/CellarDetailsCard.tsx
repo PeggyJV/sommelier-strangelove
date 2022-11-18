@@ -12,6 +12,7 @@ import {
   Stack,
   useMediaQuery,
   Avatar,
+  Spinner,
 } from "@chakra-ui/react"
 import { CardHeading } from "components/_typography/CardHeading"
 import { VFC } from "react"
@@ -29,6 +30,8 @@ import { isTokenAssets } from "data/uiConfig"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { TokenAssets } from "components/TokenAssets"
 import { usePosition } from "data/hooks/usePosition"
+import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
+import { assert } from "console"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -68,8 +71,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const cellarConfig = cellarDataMap[cellarId].config
   const { data: tvm } = useTvm(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
-  const { data: position } = usePosition(cellarConfig)
   const [isLarger400] = useMediaQuery("(min-width: 400px)")
+  const position = usePosition(cellarConfig)
 
   // Unsure why this was necessary? Nivo acts strangely when there are fewer than three args in an index. Could be refined later.
   // const moveColors = (colorTheme: string[]): string[] => {
@@ -149,48 +152,30 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             tooltip="Strategy will have exposure to 1 or more of these assets at any given time"
           >
             <HStack>
-              {isTokenAssets(cellarConfig) ? (
+              {isTokenAssets(cellarConfig) && (
                 <TokenAssets
                   tokens={cellarStrategyAssets}
                   activeAsset={activeAsset?.address || ""}
                   displaySymbol
                 />
+              )}
+
+              {!isTokenAssets(cellarConfig) && position.isLoading ? (
+                <Spinner />
               ) : (
-                position &&
-                position.map((asset) => (
-                  <HStack
-                    spacing={1}
-                    alignItems="center"
-                    key={asset.address}
-                  >
-                    <Avatar
-                      boxSize="24px"
-                      borderWidth={2}
-                      borderColor="surface.bg"
-                      src={asset.src}
-                      bg="surface.bg"
-                      _notFirst={{
-                        opacity: 0.65,
-                      }}
-                      _hover={{
-                        opacity: 1,
-                      }}
-                      _groupHover={{
-                        _first: {
-                          opacity: 0.65,
-                        },
-                      }}
-                      _first={{
-                        _hover: {
-                          opacity: "1 !important",
-                        },
-                      }}
+                position.data?.map((item) => {
+                  const asset = tokenConfig.find(
+                    (v) => v.address === item.address
+                  )
+                  return (
+                    <PositionDistribution
+                      key={item.address}
+                      address={item.address}
+                      percentage={`${item.percentage.toFixed(2)}%`}
+                      src={asset?.src}
                     />
-                    <Text fontSize="0.625rem">
-                      {asset.positionDistribution}
-                    </Text>
-                  </HStack>
-                ))
+                  )
+                })
               )}
             </HStack>
           </CardStat>

@@ -26,6 +26,7 @@ import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
 import { analytics } from "utils/analytics"
 import { landingType } from "utils/landingType"
 import { usePosition } from "data/hooks/usePosition"
+import { tokenConfig } from "data/tokenConfig"
 
 interface HeroStrategyRightProps {
   id: string
@@ -40,7 +41,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const cellarConfig = cellarData.config
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
-  const { data: position } = usePosition(cellarConfig)
+  const position = usePosition(cellarConfig)
   const intervalGainPct = useIntervalGainPct(cellarConfig)
   const tvm = useTvm(cellarConfig)
 
@@ -132,19 +133,27 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </Text>
           </Box>
           <Stack direction="column">
-            {position &&
-              position.map((asset) => (
-                <HStack key={asset.address}>
-                  <Image
-                    alt={asset.alt}
-                    src={asset.src}
-                    boxSize={8}
-                  />
-                  <Text>
-                    {asset.symbol} ({asset.positionDistribution})
-                  </Text>
-                </HStack>
-              ))}
+            {position.isLoading ? (
+              <Spinner />
+            ) : (
+              position.data?.map((item) => {
+                const asset = tokenConfig.find(
+                  (v) => v.address === item.address
+                )
+                return (
+                  <HStack key={item.address}>
+                    <Image
+                      alt={asset?.alt}
+                      src={asset?.src}
+                      boxSize={8}
+                    />
+                    <Text>
+                      {asset?.symbol} ({item.percentage.toFixed(2)}%)
+                    </Text>
+                  </HStack>
+                )
+              })
+            )}
           </Stack>
         </HStack>
         <HStack>
