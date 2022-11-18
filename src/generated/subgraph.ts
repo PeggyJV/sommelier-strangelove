@@ -41,6 +41,8 @@ export type Cellar = {
   name: Scalars['String'];
   numWalletsActive: Scalars['Int'];
   numWalletsAllTime: Scalars['Int'];
+  positionDistribution: Array<Scalars['BigDecimal']>;
+  positions: Array<Scalars['String']>;
   removedLiquidityAllTime: Scalars['BigInt'];
   shareProfitRatio: Scalars['BigDecimal'];
   shareValue: Scalars['BigInt'];
@@ -69,6 +71,7 @@ export type CellarDayData = {
   earnings: Scalars['BigInt'];
   id: Scalars['ID'];
   numWallets: Scalars['Int'];
+  positionDistribution: Array<Scalars['BigDecimal']>;
   removedLiquidity: Scalars['BigInt'];
   shareProfitRatio: Scalars['BigDecimal'];
   shareValue: Scalars['BigInt'];
@@ -164,6 +167,12 @@ export type CellarDayData_Filter = {
   numWallets_lte?: InputMaybe<Scalars['Int']>;
   numWallets_not?: InputMaybe<Scalars['Int']>;
   numWallets_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  positionDistribution?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_contains?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_contains_nocase?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_not?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_not_contains?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_not_contains_nocase?: InputMaybe<Array<Scalars['BigDecimal']>>;
   removedLiquidity?: InputMaybe<Scalars['BigInt']>;
   removedLiquidity_gt?: InputMaybe<Scalars['BigInt']>;
   removedLiquidity_gte?: InputMaybe<Scalars['BigInt']>;
@@ -238,6 +247,7 @@ export enum CellarDayData_OrderBy {
   Earnings = 'earnings',
   Id = 'id',
   NumWallets = 'numWallets',
+  PositionDistribution = 'positionDistribution',
   RemovedLiquidity = 'removedLiquidity',
   ShareProfitRatio = 'shareProfitRatio',
   ShareValue = 'shareValue',
@@ -257,6 +267,7 @@ export type CellarHourData = {
   earnings: Scalars['BigInt'];
   id: Scalars['ID'];
   numWallets: Scalars['Int'];
+  positionDistribution: Array<Scalars['BigDecimal']>;
   removedLiquidity: Scalars['BigInt'];
   shareProfitRatio: Scalars['BigDecimal'];
   shareValue: Scalars['BigInt'];
@@ -352,6 +363,12 @@ export type CellarHourData_Filter = {
   numWallets_lte?: InputMaybe<Scalars['Int']>;
   numWallets_not?: InputMaybe<Scalars['Int']>;
   numWallets_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  positionDistribution?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_contains?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_contains_nocase?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_not?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_not_contains?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_not_contains_nocase?: InputMaybe<Array<Scalars['BigDecimal']>>;
   removedLiquidity?: InputMaybe<Scalars['BigInt']>;
   removedLiquidity_gt?: InputMaybe<Scalars['BigInt']>;
   removedLiquidity_gte?: InputMaybe<Scalars['BigInt']>;
@@ -426,6 +443,7 @@ export enum CellarHourData_OrderBy {
   Earnings = 'earnings',
   Id = 'id',
   NumWallets = 'numWallets',
+  PositionDistribution = 'positionDistribution',
   RemovedLiquidity = 'removedLiquidity',
   ShareProfitRatio = 'shareProfitRatio',
   ShareValue = 'shareValue',
@@ -537,6 +555,18 @@ export type Cellar_Filter = {
   numWalletsAllTime_lte?: InputMaybe<Scalars['Int']>;
   numWalletsAllTime_not?: InputMaybe<Scalars['Int']>;
   numWalletsAllTime_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  positionDistribution?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_contains?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_contains_nocase?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_not?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_not_contains?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positionDistribution_not_contains_nocase?: InputMaybe<Array<Scalars['BigDecimal']>>;
+  positions?: InputMaybe<Array<Scalars['String']>>;
+  positions_contains?: InputMaybe<Array<Scalars['String']>>;
+  positions_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
+  positions_not?: InputMaybe<Array<Scalars['String']>>;
+  positions_not_contains?: InputMaybe<Array<Scalars['String']>>;
+  positions_not_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
   removedLiquidityAllTime?: InputMaybe<Scalars['BigInt']>;
   removedLiquidityAllTime_gt?: InputMaybe<Scalars['BigInt']>;
   removedLiquidityAllTime_gte?: InputMaybe<Scalars['BigInt']>;
@@ -614,6 +644,8 @@ export enum Cellar_OrderBy {
   Name = 'name',
   NumWalletsActive = 'numWalletsActive',
   NumWalletsAllTime = 'numWalletsAllTime',
+  PositionDistribution = 'positionDistribution',
+  Positions = 'positions',
   RemovedLiquidityAllTime = 'removedLiquidityAllTime',
   ShareProfitRatio = 'shareProfitRatio',
   ShareValue = 'shareValue',
@@ -1482,6 +1514,13 @@ export type GetMonthlyShareValueQueryVariables = Exact<{
 
 export type GetMonthlyShareValueQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }> } | null };
 
+export type GetPositionValueQueryVariables = Exact<{
+  cellarAddress: Scalars['ID'];
+}>;
+
+
+export type GetPositionValueQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', positions: Array<string>, positionDistribution: Array<string> } | null };
+
 export type GetPositionQueryVariables = Exact<{
   walletCellarId: Scalars['ID'];
 }>;
@@ -1742,6 +1781,18 @@ export const GetMonthlyShareValueDocument = gql`
 
 export function useGetMonthlyShareValueQuery(options: Omit<Urql.UseQueryArgs<GetMonthlyShareValueQueryVariables>, 'query'>) {
   return Urql.useQuery<GetMonthlyShareValueQuery>({ query: GetMonthlyShareValueDocument, ...options });
+};
+export const GetPositionValueDocument = gql`
+    query GetPositionValue($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    positions
+    positionDistribution
+  }
+}
+    `;
+
+export function useGetPositionValueQuery(options: Omit<Urql.UseQueryArgs<GetPositionValueQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetPositionValueQuery>({ query: GetPositionValueDocument, ...options });
 };
 export const GetPositionDocument = gql`
     query GetPosition($walletCellarId: ID!) {
