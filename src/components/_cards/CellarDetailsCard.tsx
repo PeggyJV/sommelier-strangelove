@@ -28,6 +28,7 @@ import { useTvm } from "data/hooks/useTvm"
 import { isTokenAssets } from "data/uiConfig"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { TokenAssets } from "components/TokenAssets"
+import { usePosition } from "data/hooks/usePosition"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -67,6 +68,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const cellarConfig = cellarDataMap[cellarId].config
   const { data: tvm } = useTvm(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
+  const { data: position } = usePosition(cellarConfig)
   const [isLarger400] = useMediaQuery("(min-width: 400px)")
 
   // Unsure why this was necessary? Nivo acts strangely when there are fewer than three args in an index. Could be refined later.
@@ -154,7 +156,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                   displaySymbol
                 />
               ) : (
-                cellarStrategyAssets.map((asset) => (
+                position &&
+                position.map((asset) => (
                   <HStack
                     spacing={1}
                     alignItems="center"
@@ -183,7 +186,9 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                         },
                       }}
                     />
-                    <Text fontSize="0.625rem">78.34%</Text>
+                    <Text fontSize="0.625rem">
+                      {asset.positionDistribution}
+                    </Text>
                   </HStack>
                 ))
               )}
