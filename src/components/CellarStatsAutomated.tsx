@@ -56,16 +56,15 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
 
   return (
     <HStack
-      spacing={8}
-      wrap="wrap"
+      spacing={{ base: 2, md: 8 }}
       rowGap={4}
       align="start"
+      w={{ base: "full", md: "auto" }}
+      justifyContent={{ base: "space-between", md: "unset" }}
       divider={
         <CardDivider
-          css={{
-            "&:nth-last-of-type(2)": {
-              borderColor,
-            },
+          _last={{
+            borderColor,
           }}
         />
       }
@@ -107,7 +106,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           </Tooltip>
         </Box>
       </VStack>
-      <VStack spacing={1} align="center" w="7rem">
+      <VStack spacing={1} align="center" maxW="7rem">
         {monthChangeValue}
         <Box
           onMouseEnter={debounce(() => {

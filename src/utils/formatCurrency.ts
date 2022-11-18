@@ -1,28 +1,28 @@
 import { ethers } from "ethers"
 import BigNumber from "bignumber.js"
 
-export const formatCurrency = (tvlTotal?: string) => {
-  const tvmVal =
-    tvlTotal &&
+export const formatCurrency = (value?: string) => {
+  const v =
+    value &&
     Intl.NumberFormat("en-US", {
       notation: "compact",
       maximumFractionDigits: 2,
-    }).format(parseFloat(tvlTotal))
+    }).format(parseFloat(value))
 
-  return tvmVal
+  return v
 }
 
-export const formatUSD = (tvlTotal?: string) => {
-  const tvmVal =
-    tvlTotal &&
+export const formatUSD = (value?: string) => {
+  const v =
+    value &&
     Intl.NumberFormat("en-US", {
       notation: "compact",
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 2,
-    }).format(parseFloat(tvlTotal))
+    }).format(parseFloat(value))
 
-  return tvmVal
+  return v
 }
 
 export const toEther = (

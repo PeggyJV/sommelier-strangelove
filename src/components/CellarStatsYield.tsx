@@ -51,21 +51,20 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
 
   return (
     <HStack
-      spacing={8}
-      wrap="wrap"
+      spacing={{ base: 2, md: 8 }}
       rowGap={4}
+      w={{ base: "full", md: "auto" }}
+      justifyContent={{ base: "space-between", md: "unset" }}
       divider={
         <CardDivider
-          css={{
-            "&:nth-last-of-type(2)": {
-              borderColor,
-            },
+          _last={{
+            borderColor,
           }}
         />
       }
       {...rest}
     >
-      <VStack spacing={1} align="flex-start">
+      <VStack spacing={1} align="center">
         <Text as="span" fontSize="21px" fontWeight="bold">
           {tvm}
         </Text>
@@ -82,7 +81,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
           </HStack>
         </Tooltip>
       </VStack>
-      <VStack spacing={1} align="flex-start">
+      <VStack spacing={1} align="center">
         <Apy apy={overrideApy?.value || apy} />
         <Box
           onMouseEnter={debounce(() => {

@@ -116,7 +116,9 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
           </Flex>
         </Section>
       </VStack>
-      <FAQ data={faqData.faqTabs} />
+      <Section pb="0">
+        <FAQ data={faqData.faqTabs} />
+      </Section>
     </Layout>
   )
 }

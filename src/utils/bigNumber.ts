@@ -1,11 +1,15 @@
 import BigNumber from "bignumber.js"
 
-export const getCalulatedTvl = (
-  tvlTotal: string,
-  decimals?: number
+export const formatDecimals = (
+  value: string,
+  decimals?: number,
+  fixed?: number
 ) => {
   const conversion = decimals
-    ? new BigNumber(tvlTotal).dividedBy(10 ** decimals).toString()
+    ? new BigNumber(value)
+        .dividedBy(10 ** decimals)
+        .toFixed(fixed || 6)
+        .toString()
     : "0"
 
   return conversion
