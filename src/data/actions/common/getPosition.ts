@@ -1,5 +1,5 @@
 import { tokenConfig } from "data/tokenConfig"
-
+interface GetPositionReturnValue {address: string, percentage: number}[]
 export const getPositon = async (
   positions?: string[],
   positionDistribution?: string[]
