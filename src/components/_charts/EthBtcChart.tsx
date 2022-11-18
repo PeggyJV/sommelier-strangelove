@@ -1,4 +1,10 @@
-import { Box, HStack, Stack, Text } from "@chakra-ui/react"
+import {
+  Box,
+  HStack,
+  Stack,
+  Text,
+  useMediaQuery,
+} from "@chakra-ui/react"
 import { DatumValue, linearGradientDef } from "@nivo/core"
 import {
   Point,
@@ -30,75 +36,77 @@ export const EthBtcChart: VFC<{ timeline: string; name: string }> = ({
   const onMouseMove = (point: Point, event: React.MouseEvent) => {
     setPointActive(point.data.x)
   }
+  const [isLarger768] = useMediaQuery("(min-width: 768px)")
 
   const ToolTip: FunctionComponent<PointTooltipProps> = ({
     point,
   }) => {
     const { id, serieId } = point
     const [_, i] = id.split(".")
+    if (isLarger768) {
+      return (
+        <Stack
+          p={4}
+          bg="rgba(18, 18, 20, 0.8)"
+          borderWidth={1}
+          borderColor="purple.base"
+          borderRadius={8}
+          textTransform="capitalize"
+        >
+          {data.series?.map((item) => {
+            const name = (() => {
+              if (item.id === "token-price") return strategyTokenName
+              if (item.id === "eth-btc-50") return "ETH 50/BTC 50"
+              if (item.id === "weth") return "ETH"
+              if (item.id === "wbtc") return "BTC"
+              return ""
+            })()
+            return (
+              <HStack
+                key={item.id}
+                justifyContent="space-between"
+                spacing={4}
+              >
+                <HStack spacing={4}>
+                  <Box
+                    boxSize="8px"
+                    backgroundColor={item.color}
+                    borderRadius={2}
+                  />
+                  <Text>
+                    {name}:{" "}
+                    {formatPercentage(
+                      String(
+                        data.series?.find((s) => s.id === item.id)
+                          ?.data[Number(i)]?.value
+                      )
+                    )}
+                    $
+                  </Text>
+                </HStack>
 
-    return (
-      <Stack
-        p={4}
-        bg="rgba(18, 18, 20, 0.8)"
-        borderWidth={1}
-        borderColor="purple.base"
-        borderRadius={8}
-        textTransform="capitalize"
-      >
-        {data.series?.map((item) => {
-          const name = (() => {
-            if (item.id === "token-price") return strategyTokenName
-            if (item.id === "eth-btc-50") return "ETH 50/BTC 50"
-            if (item.id === "weth") return "ETH"
-            if (item.id === "wbtc") return "BTC"
-            return ""
-          })()
-          return (
-            <HStack
-              key={item.id}
-              justifyContent="space-between"
-              spacing={4}
-            >
-              <HStack spacing={4}>
-                <Box
-                  boxSize="8px"
-                  backgroundColor={item.color}
-                  borderRadius={2}
-                />
                 <Text>
-                  {name}:{" "}
                   {formatPercentage(
                     String(
                       data.series?.find((s) => s.id === item.id)
-                        ?.data[Number(i)]?.value
+                        ?.data[Number(i)]?.y
                     )
                   )}
-                  $
+                  %
                 </Text>
               </HStack>
-
-              <Text>
-                {formatPercentage(
-                  String(
-                    data.series?.find((s) => s.id === item.id)?.data[
-                      Number(i)
-                    ]?.y
-                  )
-                )}
-                %
-              </Text>
-            </HStack>
-          )
-        })}
-        <Text color="neutral.400">
-          {format(
-            new Date(String(data.series?.[0].data[Number(i)].x)),
-            "MMM, d, yyyy, HH:mm"
-          )}
-        </Text>
-      </Stack>
-    )
+            )
+          })}
+          <Text color="neutral.400">
+            {format(
+              new Date(String(data.series?.[0].data[Number(i)].x)),
+              "MMM, d, yyyy, HH:mm"
+            )}
+          </Text>
+        </Stack>
+      )
+    }
+    return null
   }
 
   const Point: FunctionComponent<PointSymbolProps> = ({
