@@ -3,7 +3,7 @@ interface GetPositionReturnValue {address: string, percentage: number}[]
 export const getPositon = async (
   positions?: string[],
   positionDistribution?: string[]
-) => {
+): Promise<GetPositionReturnValue> => {
   try {
    const total = positionDistribution!
       .map((value) => Number(value))
