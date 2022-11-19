@@ -9,6 +9,7 @@ export const getWeeklyAssetIntervalGain = async (
   try {
     const data = await fetchMarketChart(asset, day, "daily")
     const firstData = data.prices[0]
+    // today
     const nextWeekDate = addWeeks(new Date(firstData[0]), 1)
     const nextWeekData = data.prices.find(([date]) => {
       return isSameDay(new Date(date), nextWeekDate)
