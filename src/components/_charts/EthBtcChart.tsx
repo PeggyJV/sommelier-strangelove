@@ -13,7 +13,7 @@ import {
 } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
-import { FunctionComponent, useState, VFC } from "react"
+import { FunctionComponent, useMemo, useState, VFC } from "react"
 import { useEthBtcChart } from "data/context/ethBtcChartContext"
 import { colors } from "theme/colors"
 import { format, isSameDay, isSameHour } from "date-fns"
@@ -140,10 +140,22 @@ export const EthBtcChart: VFC<{ timeline: string; name: string }> = ({
     return null
   }
 
+  const hourlyAxisBottom = useMemo<any>(() => {
+    if (timeline === "1D") {
+      return {
+        axisBottom: {
+          format: "%d %H:%M",
+          tickValues: isLarger768 ? "every 3 hours" : "every 6 hours",
+        },
+      }
+    }
+  }, [isLarger768, timeline])
+
   return (
     <LineChart
       {...data.chartProps}
-      data={data.series!}
+      {...hourlyAxisBottom}
+      data={data.series || []}
       colors={lineColors}
       enableArea={true}
       animate={false}
