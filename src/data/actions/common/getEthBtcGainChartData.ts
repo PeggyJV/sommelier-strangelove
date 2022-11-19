@@ -54,13 +54,15 @@ export const getEthBtcGainChartData = async (
     const wbtcGainPct = (() => {
       let res: PriceData[] = []
       wbtcData.prices.map(([date, value]) => {
-        const dailyDateData =
+        const firstDailyDateData =
           isDaily &&
           firstDate &&
           wbtcData.prices.find((item) =>
             isSameDay(subDays(new Date(item[0]), 1), firstDate)
           )
-        const firstData = isDaily ? dailyDateData : wbtcData.prices[0]
+        const firstData = isDaily
+          ? firstDailyDateData
+          : wbtcData.prices[0]
         if (firstData) {
           res.push({
             date,
