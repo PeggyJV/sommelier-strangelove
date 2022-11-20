@@ -78,14 +78,16 @@ export const config = {
       SLUG: "ETH-BTC-Momentum",
     },
     // NEED TO UPDATE ADDRESS
-    BREAKOUT_ETH: {
-      ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f2",
-      SLUG: "BreakoutETH",
+    STEADY_ETH: {
+      ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f1",
+      SLUG: "SteadyETH",
+      ABI: sommStaking,
     },
     // NEED TO UPDATE ADDRESS
-    BREAKOUT_BTC: {
-      ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f2",
-      SLUG: "BreakoutBTC",
+    STEADY_BTC: {
+      ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f3",
+      SLUG: "SteadyBTC",
+      ABI: sommStaking,
     },
     CLEAR_GATE_TEST_CELLAR_A: {
       ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
