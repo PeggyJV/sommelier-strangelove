@@ -1,23 +1,18 @@
-import { Grid, GridProps } from "@chakra-ui/react"
+import { SimpleGrid, SimpleGridProps } from "@chakra-ui/react"
 
-export const GridHome: React.FC<GridProps> = ({
+export const GridHome: React.FC<SimpleGridProps> = ({
   children,
   ...rest
 }) => {
   return (
-    <Grid
+    <SimpleGrid
       as="ul"
       listStyleType="none"
       gap={6}
-      templateColumns={{
-        base: "1fr",
-        md: "1fr 1fr",
-        lg: "1fr 1fr 1fr",
-      }}
-      gridAutoColumns={{ base: "minmax(0, 1fr)" }}
+      columns={{ base: 1, md: 2, lg: 3 }}
       {...rest}
     >
       {children}
-    </Grid>
+    </SimpleGrid>
   )
 }
