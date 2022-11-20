@@ -153,8 +153,8 @@ export const strategyPageContentData = {
 
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
-  [config.CONTRACT.BREAKOUT_ETH.SLUG]: {
-    name: "Breakout ETH",
+  [config.CONTRACT.STEADY_ETH.SLUG]: {
+    name: "Steady ETH",
     provider: "Patache Link",
     providerUrl: "https://www.algoreturns.com/patache/",
     description: `Capture the majority of ETH price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is more important than capital growth.`,
@@ -165,7 +165,7 @@ export const strategyPageContentData = {
           src="/assets/icons/eth-btc-mom.svg"
           boxSize={8}
         />
-        <Text>ETHBreakout</Text>
+        <Text>SteadyETH</Text>
       </>
     ),
     tradedAssets: (
@@ -182,12 +182,12 @@ export const strategyPageContentData = {
         />
       </>
     ),
-    alternativeTo: "Holding ETH",
+    alternativeTo: "Holding USDC",
     // buyUrl:
     //   "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
     strategyHighlights: {
       card: [
-        `"Risk first" approach - capital preservation is prioritized over capital growth.`,
+        `"Risk first" approach - capital preservation is more important than capital growth.`,
         `Always defined risk for every position prevailing from trade inception until trade exit.`,
         `Each trade strategy comprises two independent trade orders: 1 "Workhorse" with a fixed target and stop + 1 "Racehorse" with a trailing stop.`,
       ],
@@ -226,11 +226,11 @@ export const strategyPageContentData = {
       </div>
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
-  [config.CONTRACT.BREAKOUT_BTC.SLUG]: {
-    name: "Breakout BTC",
+  [config.CONTRACT.STEADY_BTC.SLUG]: {
+    name: "Steady BTC",
     provider: "Patache Link",
     providerUrl: "https://www.algoreturns.com/patache/",
-    description: `Capture the majority of BTC price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is more important than capital growth.`,
+    description: `Capture the majority of BTC price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
     ticker: (
       <>
         <Image
@@ -238,7 +238,7 @@ export const strategyPageContentData = {
           src="/assets/icons/eth-btc-mom.svg"
           boxSize={8}
         />
-        <Text>BTCBreakout</Text>
+        <Text>SteadyBTC</Text>
       </>
     ),
     tradedAssets: (
@@ -260,7 +260,7 @@ export const strategyPageContentData = {
     //   "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
     strategyHighlights: {
       card: [
-        `"Risk first" approach - capital preservation is prioritized over capital growth.`,
+        `"Risk first" approach - capital preservation is more important than capital growth.`,
         `Always defined risk for every position prevailing from trade inception until trade exit.`,
         `Each trade strategy comprises two independent trade orders: 1 "Workhorse" with a fixed target and stop + 1 "Racehorse" with a trailing stop.`,
       ],
@@ -275,24 +275,28 @@ export const strategyPageContentData = {
     `,
     // backtestingImage: "/assets/images/btc-eth-moment-backtesting.png",
     backtestingText: `
+      Notes: Performance of the strategy from May 2021-September 2022. Black line for benchmark
+
       Backtest results:
       <div style="display:flex;flex-direction:row;gap:5rem;">
         <div style="width:50%">
           Beginning Cellar Value: 500,000
-          Period: Period Tested: May 2021 -September 2022. First Trade: 6/11/2021 Last Trade: 9/29/2022
+          Period: May 2021 - September 2022
           No. of Trades: 58
-          Winning Trades/Losing Trades: 34 wins/24 losses (58%/42%)
-          Best Month: 6.3%
-          Worst Month: -2.6%
+          Worst Loss (Single Trade): -7,523
+          Worst drawdown:  5.21%
+          Annualized Sharpe Ratio: 226%
+          Annualized Std.Dev of Return: 10.4%
         </div>
         <div style="width:50%">
-          Worst Loss (Single Trade): -7,523on 6/21/2022
-          Worst Drawdown (Peak to trough): 5.21%
-          Cumulative Profit: 38.1%
           Annualized Mean Return: 23.4%
-          Annualized Std.Dev of Return: 10.4%
-          Annualized Sharpe Ratio: 226%
+          Cumulative profit: 38.1%
+          Win rate: 58%
+          Loss rate: 42%
+          Best month: 6.3%
+          Worst month: -2.6%
         </div>
-      </div>`,
+      </div>
+      Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
 }
