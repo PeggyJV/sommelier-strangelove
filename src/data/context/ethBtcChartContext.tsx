@@ -218,10 +218,22 @@ export const EthBtcChartProvider: FC<{
   const monthlyData = monthlyDataRaw?.cellar?.dayDatas
   const allTimeData = allTimeDataRaw?.cellar?.dayDatas
 
-  const ethBtcHourly = useEthBtcGainChartData(1, "hourly")
-  const ethBtcHWeekly = useEthBtcGainChartData(weeklyData?.length)
-  const ethBtcMonthly = useEthBtcGainChartData(monthlyData?.length)
-  const ethBtcAlltime = useEthBtcGainChartData(allTimeData?.length)
+  const ethBtcHourly = useEthBtcGainChartData({
+    day: 1,
+    interval: "hourly",
+  })
+  const ethBtcHWeekly = useEthBtcGainChartData({
+    day: Number(weeklyData?.length),
+    firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
+  })
+  const ethBtcMonthly = useEthBtcGainChartData({
+    day: Number(monthlyData?.length),
+    firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
+  })
+  const ethBtcAlltime = useEthBtcGainChartData({
+    day: Number(allTimeData?.length),
+    firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
+  })
 
   // Set data to be returned by hook
   const [data, setData] = useState<DataProps>({

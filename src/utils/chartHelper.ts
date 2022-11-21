@@ -57,25 +57,31 @@ export const createEthBtcChartSeries = ({
   weth?: Datum[]
   wbtc?: Datum[]
 }): Serie[] => {
+  const minimal = Math.min(
+    Number(tokenPrice?.length),
+    Number(ethBtc50?.length),
+    Number(weth?.length),
+    Number(wbtc?.length)
+  )
   return [
     {
       id: "token-price",
-      data: tokenPrice || [],
+      data: tokenPrice?.slice(0, minimal) || [],
       color: colors.purple.base,
     },
     {
       id: "eth-btc-50",
-      data: ethBtc50 || [],
+      data: ethBtc50?.slice(0, minimal) || [],
       color: colors.violet.base,
     },
     {
       id: "weth",
-      data: weth || [],
+      data: weth?.slice(0, minimal) || [],
       color: colors.turquoise.base,
     },
     {
       id: "wbtc",
-      data: wbtc || [],
+      data: wbtc?.slice(0, minimal) || [],
       color: colors.orange.base,
     },
   ]

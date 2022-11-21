@@ -1,4 +1,4 @@
-import { closestIndexTo, format, subDays } from "date-fns"
+import { closestIndexTo, format, isSameDay, subDays } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { fetchMarketChart } from "./fetchMarketChart"
 
@@ -7,12 +7,19 @@ interface PriceData {
   change: number
   value: number
 }
+
+export type GetEthBtcGainChartDataProps = {
+  day: number
+  interval: "hourly" | "daily"
+  firstDate?: Date
+}
+
 // Shift back 1 day coin gecko price is intentional
 export const getEthBtcGainChartData = async (
-  day: number,
-  interval: "daily" | "hourly" = "daily"
+  props: GetEthBtcGainChartDataProps
 ) => {
   try {
+    const { day, interval, firstDate } = props
     const isDaily = interval === "daily"
     const wethData = await fetchMarketChart("weth", day, interval)
     const wbtcData = await fetchMarketChart(
@@ -22,8 +29,17 @@ export const getEthBtcGainChartData = async (
     )
     const wethGainPct = (() => {
       let res: PriceData[] = []
-      wethData.prices.map(([date, value], index) => {
-        const firstData = wethData.prices[isDaily ? 1 : 0]
+      wethData.prices.map(([date, value]) => {
+        const firstDailyDateData =
+          isDaily &&
+          firstDate &&
+          wethData.prices.find((item) =>
+            isSameDay(subDays(new Date(item[0]), 1), firstDate)
+          )
+
+        const firstData = isDaily
+          ? firstDailyDateData
+          : wethData.prices[0]
         if (firstData) {
           res.push({
             date,
@@ -37,8 +53,16 @@ export const getEthBtcGainChartData = async (
 
     const wbtcGainPct = (() => {
       let res: PriceData[] = []
-      wbtcData.prices.map(([date, value], index) => {
-        const firstData = wbtcData.prices[isDaily ? 1 : 0]
+      wbtcData.prices.map(([date, value]) => {
+        const firstDailyDateData =
+          isDaily &&
+          firstDate &&
+          wbtcData.prices.find((item) =>
+            isSameDay(subDays(new Date(item[0]), 1), firstDate)
+          )
+        const firstData = isDaily
+          ? firstDailyDateData
+          : wbtcData.prices[0]
         if (firstData) {
           res.push({
             date,
