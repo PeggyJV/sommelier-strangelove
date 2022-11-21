@@ -95,7 +95,7 @@ export const steadyBtc = {
   },
 
   config: {
-    id: config.CONTRACT.STEADY_ETH.ADDRESS,
+    id: config.CONTRACT.STEADY_BTC.ADDRESS,
     lpToken: {
       address: config.CONTRACT.STEADY_BTC.ADDRESS,
       // STILL NEED TO UPDATE THIS ICON
