@@ -17,7 +17,8 @@
     "generate": "graphql-codegen",
     "generate:watch": "yarn generate --watch",
     "generate:schema": "get-graphql-schema https://api.thegraph.com/subgraphs/name/peggyjv/cellars > src/generated/schema.json --json",
-    "generate:schema:pending": "get-graphql-schema https://api.thegraph.com/subgraphs/name/elkdao/cellarsnext > src/generated/schema.json --json"
+    "generate:schema:dev": "get-graphql-schema https://api.thegraph.com/subgraphs/name/elkdao/cellarsnext > src/generated/schema.json --json",
+    "generate:schema:pending": "get-graphql-schema https://api.thegraph.com/subgraphs/id/QmSw3249rE3Uz3CMGw3FX5ugSyHbQWs3yE7pbLcsVzN4sm > src/generated/schema.json --json"
   },
   "dependencies": {
     "@analytics/google-tag-manager": "^0.5.2",

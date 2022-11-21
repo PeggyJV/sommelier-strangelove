@@ -1,25 +1,28 @@
-import { addWeeks, isSameDay } from "date-fns"
+import { addWeeks, isSameDay, subDays } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { fetchMarketChart } from "./fetchMarketChart"
 
+// shift back coin gecko data is intentional
 export const getWeeklyAssetIntervalGain = async (
   asset: "wrapped-bitcoin" | "weth",
   day: number
 ) => {
   try {
     const data = await fetchMarketChart(asset, day, "daily")
-    const firstData = data.prices[0]
-    const nextWeekDate = addWeeks(new Date(firstData[0]), 1)
-    const nextWeekData = data.prices.find(([date]) => {
-      return isSameDay(new Date(date), nextWeekDate)
+
+    const previousWeek = data.prices[0]
+    // today
+    const today = subDays(addWeeks(new Date(previousWeek[0]), 1), 1)
+    const todayData = data.prices.find(([date]) => {
+      return isSameDay(new Date(date), today)
     })
 
-    if (!nextWeekData) throw new Error("nextWeekData undefined")
-    const result = getGainPct(nextWeekData![1], firstData[1])
+    if (!todayData) throw new Error("nextWeekData undefined")
+    const result = getGainPct(todayData![1], previousWeek[1])
 
     return result
   } catch (error) {
-    console.warn("Cannot read cellar data", error)
+    console.warn(error)
     throw error
   }
 }
