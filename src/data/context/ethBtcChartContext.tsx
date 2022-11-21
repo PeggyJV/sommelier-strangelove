@@ -7,7 +7,6 @@ import {
   useGetMonthlyShareValueQuery,
   useGetWeeklyShareValueQuery,
 } from "generated/subgraph"
-import { toInteger } from "lodash"
 import {
   createContext,
   Dispatch,
@@ -465,7 +464,6 @@ export const EthBtcChartProvider: FC<{
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
     if (weeklyData && idIsDefault && ethBtcHWeekly.data) {
-      const latestData = weeklyData[weeklyData.length - 1]
       const weeklyDataMap = weeklyData?.map((item) => {
         return {
           date: item.date,
@@ -475,48 +473,45 @@ export const EthBtcChartProvider: FC<{
       const tokenPriceDatum =
         createTokenPriceChangeDatum(weeklyDataMap)
 
-      setData({
-        series: createEthBtcChartSeries({
-          tokenPrice: tokenPriceDatum,
-          ethBtc50: ethBtcHWeekly.data.wethWbtcdatum.slice(
-            0,
-            tokenPriceDatum?.length
-          ),
-          weth: ethBtcHWeekly.data?.wethDatum.slice(
-            0,
-            tokenPriceDatum?.length
-          ),
-          wbtc: ethBtcHWeekly.data?.wbtcDatum.slice(
-            0,
-            tokenPriceDatum?.length
-          ),
-        }),
+      const series = createEthBtcChartSeries({
+        tokenPrice: tokenPriceDatum,
+        ethBtc50: ethBtcHWeekly.data.wethWbtcdatum.slice(
+          0,
+          tokenPriceDatum?.length
+        ),
+        weth: ethBtcHWeekly.data?.wethDatum.slice(
+          0,
+          tokenPriceDatum?.length
+        ),
+        wbtc: ethBtcHWeekly.data?.wbtcDatum.slice(
+          0,
+          tokenPriceDatum?.length
+        ),
+      })
 
+      setData({
+        series,
         chartProps: dayChartProps,
       })
 
-      const firstData = weeklyData[0].shareValue
-
-      const change =
-        ((toInteger(latestData?.shareValue) - toInteger(firstData)) /
-          toInteger(firstData)) *
-        100
-
-      const latestTokenPriceChange = `${formatPercentage(
-        String(change)
-      )}`
+      const latestData = series![0].data.at(-1)
+      const firstData = series![0].data.at(0)
 
       const latestDate = format(
-        new Date(latestData?.date * 1000),
+        new Date(String(latestData?.x)),
         "d MMM yyyy"
       )
       const dateText = `${format(
-        new Date(weeklyData[0].date * 1000),
+        new Date(String(firstData?.x)),
         "d MMM"
       )} - ${latestDate}`
+      const valueExists: boolean =
+        Boolean(latestData?.y) || String(latestData?.y) === "0"
       setTokenPriceChange({
         xFormatted: dateText,
-        yFormatted: latestTokenPriceChange,
+        yFormatted: `${
+          valueExists ? formatPercentage(String(latestData?.y)) : "--"
+        }`,
       })
     }
   }, [weeklyData, data, ethBtcHWeekly.data])
