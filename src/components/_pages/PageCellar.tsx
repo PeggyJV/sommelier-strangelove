@@ -1,6 +1,5 @@
 import { VFC } from "react"
 import {
-  Box,
   Heading,
   HeadingProps,
   HStack,
@@ -29,7 +28,7 @@ import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarType } from "data/types"
 import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
-import { isEthBtcChartEnabled } from "data/uiConfig"
+import { isEthBtcChartEnabled, isTVMEnabled } from "data/uiConfig"
 import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
 import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
 const h2Styles: HeadingProps = {
@@ -96,17 +95,11 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
               weekChangeTooltip="% change of current token price vs. token price yesterday"
               weekChangeLabel="1D Change"
               weekChangeValue={
-                <>
-                  {dailyChange ? (
-                    <PercentageText
-                      data={dailyChange}
-                      headingSize="md"
-                      arrow
-                    />
-                  ) : (
-                    <Box>...</Box>
-                  )}
-                </>
+                <PercentageText
+                  data={dailyChange}
+                  headingSize="md"
+                  arrow
+                />
               }
               monthChangeTooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
               monthChangeLabel="1W Change vs ETH/BTC 50/50"
@@ -140,7 +133,6 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
       </Section>
       <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">
-          VStack{" "}
           {isEthBtcChartEnabled(cellarConfig) && (
             <EthBtcChartProvider address={cellarAddress}>
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
@@ -156,12 +148,16 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
             cellarDataMap={cellarDataMap}
             cellarId={id}
           />
-          <PerformanceChartByAddressProvider address={cellarAddress}>
-            <Heading pt={12} {...h2Styles}>
-              Cellar Performance
-            </Heading>
-            <PerformanceCard />
-          </PerformanceChartByAddressProvider>
+          {isTVMEnabled(cellarConfig) && (
+            <PerformanceChartByAddressProvider
+              address={cellarAddress}
+            >
+              <Heading pt={12} {...h2Styles}>
+                Cellar Performance
+              </Heading>
+              <PerformanceCard />
+            </PerformanceChartByAddressProvider>
+          )}
         </VStack>
       </Section>
     </Layout>

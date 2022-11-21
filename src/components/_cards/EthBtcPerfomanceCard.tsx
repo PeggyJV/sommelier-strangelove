@@ -20,7 +20,8 @@ import { PercentageText } from "components/PercentageText"
 import { Legend } from "components/_charts/Legend"
 
 export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
-  const { timeArray, tokenPriceChange } = useEthBtcChart()
+  const { timeArray, tokenPriceChange, showLine, setShowLine } =
+    useEthBtcChart()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const tokenPrice = useTokenPrice(cellarConfig)
@@ -96,7 +97,10 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
               })}
             </HStack>
           </HStack>
-          <EthBtcChart />
+          <EthBtcChart
+            timeline={timeline}
+            name={cellarDataMap[id].name}
+          />
         </Box>
         <Stack
           direction={{ base: "column", md: "row" }}
@@ -105,10 +109,47 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
           <Legend
             color="purple.base"
             title={cellarDataMap[id].name}
+            active={showLine.tokenPrice}
+            onClick={() => {
+              setShowLine((prev) => ({
+                ...prev,
+                tokenPrice: !showLine.tokenPrice,
+              }))
+            }}
           />
-          <Legend color="violet.base" title="ETH 50/BTC 50" />
-          <Legend color="turquoise.base" title="ETH" />
-          <Legend color="orange.base" title="BTC" />
+          <Legend
+            color="violet.base"
+            title="ETH 50/BTC 50"
+            active={showLine.ethBtc50}
+            onClick={() => {
+              setShowLine((prev) => ({
+                ...prev,
+                ethBtc50: !showLine.ethBtc50,
+              }))
+            }}
+          />
+          <Legend
+            color="turquoise.base"
+            title="ETH"
+            active={showLine.eth}
+            onClick={() => {
+              setShowLine((prev) => ({
+                ...prev,
+                eth: !showLine.eth,
+              }))
+            }}
+          />
+          <Legend
+            color="orange.base"
+            title="BTC"
+            active={showLine.btc}
+            onClick={() => {
+              setShowLine((prev) => ({
+                ...prev,
+                btc: !showLine.btc,
+              }))
+            }}
+          />
         </Stack>
       </VStack>
     </TransparentCard>

@@ -17,6 +17,19 @@ export const PercentageText: VFC<PercentageTextProps> = ({
   const isDataZero = Number(percentageData) === 0
   const isDataNegative = data && data < 0
   const valueExists: boolean = isDataZero || Boolean(percentageData)
+  if (!data && !isDataZero) {
+    return (
+      <Heading
+        size={headingSize}
+        display="flex"
+        alignItems="center"
+        columnGap="3px"
+      >
+        --
+      </Heading>
+    )
+  }
+
   return (
     <HStack
       color={

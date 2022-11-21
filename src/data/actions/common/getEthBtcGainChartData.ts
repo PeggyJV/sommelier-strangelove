@@ -1,13 +1,26 @@
-import { Datum } from "@nivo/line"
-import { isSameDay } from "date-fns"
+import { closestIndexTo, format, isSameDay, subDays } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { fetchMarketChart } from "./fetchMarketChart"
 
+interface PriceData {
+  date: number
+  change: number
+  value: number
+}
+
+export type GetEthBtcGainChartDataProps = {
+  day: number
+  interval: "hourly" | "daily"
+  firstDate?: Date
+}
+
+// Shift back 1 day coin gecko price is intentional
 export const getEthBtcGainChartData = async (
-  day: number,
-  interval: "daily" | "hourly" = "daily"
+  props: GetEthBtcGainChartDataProps
 ) => {
   try {
+    const { day, interval, firstDate } = props
+    const isDaily = interval === "daily"
     const wethData = await fetchMarketChart("weth", day, interval)
     const wbtcData = await fetchMarketChart(
       "wrapped-bitcoin",
@@ -15,16 +28,23 @@ export const getEthBtcGainChartData = async (
       interval
     )
     const wethGainPct = (() => {
-      let res: {
-        date: number
-        change: number
-      }[] = []
-      wethData.prices.map(([date, value], index) => {
-        const firstData = wethData.prices[0]
+      let res: PriceData[] = []
+      wethData.prices.map(([date, value]) => {
+        const firstDailyDateData =
+          isDaily &&
+          firstDate &&
+          wethData.prices.find((item) =>
+            isSameDay(subDays(new Date(item[0]), 1), firstDate)
+          )
+
+        const firstData = isDaily
+          ? firstDailyDateData
+          : wethData.prices[0]
         if (firstData) {
           res.push({
             date,
             change: getGainPct(value, firstData[1]),
+            value: value,
           })
         }
       })
@@ -32,52 +52,88 @@ export const getEthBtcGainChartData = async (
     })()
 
     const wbtcGainPct = (() => {
-      let res: {
-        date: number
-        change: number
-      }[] = []
-      wbtcData.prices.map(([date, value], index) => {
-        const firstData = wbtcData.prices[0]
+      let res: PriceData[] = []
+      wbtcData.prices.map(([date, value]) => {
+        const firstDailyDateData =
+          isDaily &&
+          firstDate &&
+          wbtcData.prices.find((item) =>
+            isSameDay(subDays(new Date(item[0]), 1), firstDate)
+          )
+        const firstData = isDaily
+          ? firstDailyDateData
+          : wbtcData.prices[0]
         if (firstData) {
           res.push({
             date,
             change: getGainPct(value, firstData[1]),
+            value: value,
           })
         }
       })
       return res
     })()
-    let wethDatum: Datum[] = []
-    let wbtcDatum: Datum[] = []
-    let wethWbtcdatum: Datum[] = []
-
-    wethGainPct.map((weth, index) => {
+    let wethMap = new Map()
+    let wbtcMap = new Map()
+    let wethWbtcMap = new Map()
+    wethGainPct.map((weth) => {
       const wbtc =
-        interval === "daily"
-          ? wbtcGainPct.find((item) =>
-              isSameDay(new Date(item.date), new Date(weth.date))
-            ) // daily
-          : wbtcGainPct[index] //hourly
+        wbtcGainPct[
+          closestIndexTo(
+            new Date(weth.date),
+            wethGainPct.map((item) => new Date(item.date))
+          )!
+        ]
       if (wbtc) {
-        wethDatum.push({
-          x: new Date(weth.date),
-          y: weth.change,
-        })
-        wbtcDatum.push({
-          x: new Date(wbtc.date),
-          y: wbtc.change,
-        })
-        wethWbtcdatum.push({
-          x: new Date(weth.date),
-          y: (weth.change + wbtc.change) / 2,
-        })
+        wethMap.set(
+          interval === "daily"
+            ? format(new Date(weth.date), "dLL")
+            : format(new Date(weth.date), "dHH"),
+          {
+            x: isDaily
+              ? subDays(new Date(weth.date), 1)
+              : new Date(weth.date),
+            y: weth.change,
+            value: weth.value,
+          }
+        )
+        wbtcMap.set(
+          interval === "daily"
+            ? format(new Date(wbtc.date), "dLL")
+            : format(new Date(wbtc.date), "dHH"),
+          {
+            x: isDaily
+              ? subDays(new Date(wbtc.date), 1)
+              : new Date(wbtc.date),
+            y: wbtc.change,
+            value: wbtc.value,
+          }
+        )
+        wethWbtcMap.set(
+          interval === "daily"
+            ? format(new Date(weth.date), "dLL")
+            : format(new Date(weth.date), "dHH"),
+          {
+            x: isDaily
+              ? subDays(new Date(weth.date), 1)
+              : new Date(weth.date),
+            y: (weth.change + wbtc.change) / 2,
+            value: (weth.value + wbtc.value) / 2,
+          }
+        )
       }
     })
 
     return {
-      wethDatum,
-      wbtcDatum,
-      wethWbtcdatum,
+      wethDatum: Array.from(wethMap, ([_, v]) => v).slice(
+        isDaily ? 1 : 0
+      ),
+      wbtcDatum: Array.from(wbtcMap, ([_, v]) => v).slice(
+        isDaily ? 1 : 0
+      ),
+      wethWbtcdatum: Array.from(wethWbtcMap, ([_, v]) => v).slice(
+        isDaily ? 1 : 0
+      ),
     }
   } catch (error) {
     console.warn(error)

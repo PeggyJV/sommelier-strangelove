@@ -1,0 +1,6 @@
+query GetPositionValue($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    positions
+    positionDistribution
+  }
+}

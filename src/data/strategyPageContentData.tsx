@@ -19,25 +19,6 @@ export const strategyPageContentData = {
         <Text>ETHBTCTrend</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="eth icon"
-          src="/assets/icons/eth.png"
-          boxSize={8}
-        />
-        <Image
-          alt="btc icon"
-          src="/assets/icons/btc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-      </>
-    ),
     alternativeTo: "Holding ETH or BTC",
     buyUrl:
       "https://app.uniswap.org/#/swap?outputCurrency=0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
@@ -91,25 +72,6 @@ export const strategyPageContentData = {
           boxSize={8}
         />
         <Text>ETHBTCMom</Text>
-      </>
-    ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="eth icon"
-          src="/assets/icons/eth.png"
-          boxSize={8}
-        />
-        <Image
-          alt="btc icon"
-          src="/assets/icons/btc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
       </>
     ),
     alternativeTo: "Holding ETH or BTC",
