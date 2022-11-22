@@ -123,8 +123,8 @@ export const strategyPageContentData = {
     ticker: (
       <>
         <Image
-          alt="eth btc mom icon"
-          src="/assets/icons/eth-btc-mom.svg"
+          alt="steady eth icon"
+          src="/assets/icons/steady-eth.png"
           boxSize={8}
         />
         <Text>SteadyETH</Text>
@@ -193,8 +193,8 @@ export const strategyPageContentData = {
     ticker: (
       <>
         <Image
-          alt="eth btc mom icon"
-          src="/assets/icons/eth-btc-mom.svg"
+          alt="steady btc icon"
+          src="/assets/icons/steady-btc.png"
           boxSize={8}
         />
         <Text> </Text>
