@@ -30,19 +30,6 @@ let nextConfig = {
         permanent: true,
         basePath: false,
       },
-      // REMOVE THIS NEAR LAUCH DATE
-      {
-        source: "/strategies/SteadyETH/manage",
-        destination: "/strategies/SteadyETH",
-        permanent: true,
-        basePath: false,
-      },
-      {
-        source: "/strategies/SteadyBTC/manage",
-        destination: "/strategies/SteadyBTC",
-        permanent: true,
-        basePath: false,
-      },
     ]
   },
 }
