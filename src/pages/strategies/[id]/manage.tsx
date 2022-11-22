@@ -15,9 +15,23 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const cellars = Object.keys(cellarDataMap)
 
   // create array of static paths from cellars data
-  const paths = cellars.map((cellar) => {
-    return { params: { id: cellar } }
-  })
+  const paths = cellars
+    .filter((item) => {
+      const launchDate = cellarDataMap[item].launchDate
+      const formatedLaunchDate = launchDate
+        ? new Date(launchDate)
+        : null
+      const formatedDateNow = new Date(Date.now())
+      const isCountdown =
+        formatedLaunchDate !== null
+          ? formatedLaunchDate > formatedDateNow
+          : false
+
+      return !isCountdown
+    })
+    .map((cellar) => {
+      return { params: { id: cellar } }
+    })
 
   return {
     paths,

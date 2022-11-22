@@ -15,7 +15,7 @@ export const useDailyChange = (config: ConfigProps) => {
   })
 
   const queryEnabled = Boolean(
-    (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
+    (config.cellar.key === CellarKey.PATACHE_LINK ||
       config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) &&
       cellarContract.provider &&
       hourlyData?.cellarHourDatas
@@ -39,7 +39,7 @@ export const useDailyChange = (config: ConfigProps) => {
           toInteger(hourlyData.cellarHourDatas[0].shareValue)) *
           100
       if (
-        config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
+        config.cellar.key === CellarKey.PATACHE_LINK ||
         config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
       ) {
         return percentage

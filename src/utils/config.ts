@@ -77,6 +77,16 @@ export const config = {
       ABI: clearGateCellar,
       SLUG: "ETH-BTC-Momentum",
     },
+    STEADY_ETH: {
+      ADDRESS: "0x3f07a84ecdf494310d397d24c1c78b041d2fa622",
+      SLUG: "SteadyETH",
+      ABI: sommStaking,
+    },
+    STEADY_BTC: {
+      ADDRESS: "0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
+      SLUG: "SteadyBTC",
+      ABI: sommStaking,
+    },
     CLEAR_GATE_TEST_CELLAR_A: {
       ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
       ABI: clearGateCellar,

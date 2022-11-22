@@ -26,9 +26,15 @@ import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
-import { CellarType } from "data/types"
+import { CellarKey, CellarType } from "data/types"
 import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
-import { isEthBtcChartEnabled, isTVMEnabled } from "data/uiConfig"
+import {
+  intervalGainPctTitleContent,
+  intervalGainPctTooltipContent,
+  isEthBtcChartEnabled,
+  isTVMEnabled,
+  tokenPriceTooltipContent,
+} from "data/uiConfig"
 import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
 import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
 const h2Styles: HeadingProps = {
@@ -55,6 +61,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
     staticCellarData.cellarType === CellarType.yieldStrategies
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
+  const isSteady = cellarConfig.cellar.key === CellarKey.PATACHE_LINK
 
   return (
     <Layout>
@@ -89,7 +96,9 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
 
           {isAutomatedPortfolio && (
             <CellarStatsAutomated
-              tokenPriceTooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
+              tokenPriceTooltip={tokenPriceTooltipContent(
+                cellarConfig
+              )}
               tokenPriceLabel="Token price"
               tokenPriceValue={tokenPrice ?? <Spinner />}
               weekChangeTooltip="% change of current token price vs. token price yesterday"
@@ -101,8 +110,12 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
                   arrow
                 />
               }
-              monthChangeTooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
-              monthChangeLabel="1W Change vs ETH/BTC 50/50"
+              monthChangeTooltip={intervalGainPctTooltipContent(
+                cellarConfig
+              )}
+              monthChangeLabel={intervalGainPctTitleContent(
+                cellarConfig
+              )}
               monthChangeValue={
                 <>
                   {intervalGainPct.isLoading ? (

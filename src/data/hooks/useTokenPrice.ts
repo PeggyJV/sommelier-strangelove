@@ -18,7 +18,7 @@ export const useTokenPrice = (config: ConfigProps) => {
   const { shareValue } = cellar || {}
 
   const queryEnabled = Boolean(
-    (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
+    (config.cellar.key === CellarKey.PATACHE_LINK ||
       config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) &&
       cellarContract.provider &&
       shareValue
@@ -30,7 +30,7 @@ export const useTokenPrice = (config: ConfigProps) => {
       if (!shareValue) throw new Error("shareValue undefined")
       const tokenPrice = formatDecimals(shareValue, 6, 2)
       if (
-        config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
+        config.cellar.key === CellarKey.PATACHE_LINK ||
         config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
       ) {
         return `$${tokenPrice}`

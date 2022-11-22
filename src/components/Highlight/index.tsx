@@ -64,7 +64,7 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
           </Box>
         )}
       </Stack>
-      {content.backtestingImage && (
+      {content.backtestingText && (
         <Stack maxW="40rem" spacing="40px">
           <Heading size="lg">
             All strategies available on Sommelier marketplace are
@@ -81,7 +81,12 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
             onClose={onClose}
             size="2xl"
           >
-            <Image src={content.backtestingImage} alt="backtesting" />
+            {content.backtestingImage && (
+              <Image
+                src={content.backtestingImage}
+                alt="backtesting"
+              />
+            )}
             <Text whiteSpace="pre-line" mt="4">
               {htmr(content.backtestingText)}
             </Text>

@@ -66,6 +66,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const cellarStrategyAssets = tokenConfig.filter((token) =>
     strategyAssets?.includes(token.symbol)
   )
+  const performanceSplitKeys = Object.keys(performanceSplit)
   const cellarConfig = cellarDataMap[cellarId].config
   const { data: tvm } = useTvm(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
@@ -206,7 +207,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 borderColor={theme.colors.neutral[800]}
                 borderWidth={1}
                 borderRadius={2}
-                keys={["depositors", "protocol", "strategy provider"]}
+                keys={performanceSplitKeys}
                 data={[performanceSplit]}
               />
             </Stack>
