@@ -15,6 +15,7 @@ import {
   isIntervalGainPctEnabled,
   isTokenPriceEnabled,
   isTVMEnabled,
+  tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CellarCardData } from "./CellarCardDisplay"
 
@@ -73,7 +74,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
 
           {isTokenPriceEnabled(cellarConfig) && (
             <CellarStats
-              tooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
+              tooltip={tokenPriceTooltipContent(cellarConfig)}
               title="Token price"
               value={tokenPrice.data || "--"}
               isLoading={tokenPrice.isLoading}

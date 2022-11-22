@@ -31,6 +31,7 @@ import { useCountdown } from "data/hooks/useCountdown"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
+  tokenPriceTooltipContent,
 } from "data/uiConfig"
 
 interface HeroStrategyRightProps {
@@ -113,7 +114,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             <VStack flex={1}>
               <Heading size="md">{tokenPrice || "--"}</Heading>
               <CellarStatsLabel
-                tooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
+                tooltip={tokenPriceTooltipContent(cellarConfig)}
                 title="Token Price"
               />
             </VStack>

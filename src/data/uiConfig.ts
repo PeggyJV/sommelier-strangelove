@@ -81,6 +81,7 @@ export const intervalGainPctTitleContent = (config: ConfigProps) => {
     return "1W Change vs ETH/BTC 50/50"
   return ""
 }
+
 export const intervalGainPctTooltipContent = (
   config: ConfigProps
 ) => {
@@ -91,6 +92,13 @@ export const intervalGainPctTooltipContent = (
     config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
   )
     return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
+  return ""
+}
+
+export const tokenPriceTooltipContent = (config: ConfigProps) => {
+  if (config.cellar.key === CellarKey.PATACHE_LINK) return ""
+  if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR)
+    return `The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for`
   return ""
 }
 

@@ -28,7 +28,13 @@ import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarKey, CellarType } from "data/types"
 import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
-import { isEthBtcChartEnabled, isTVMEnabled } from "data/uiConfig"
+import {
+  intervalGainPctTitleContent,
+  intervalGainPctTooltipContent,
+  isEthBtcChartEnabled,
+  isTVMEnabled,
+  tokenPriceTooltipContent,
+} from "data/uiConfig"
 import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
 import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
 const h2Styles: HeadingProps = {
@@ -90,7 +96,9 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
 
           {isAutomatedPortfolio && (
             <CellarStatsAutomated
-              tokenPriceTooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
+              tokenPriceTooltip={tokenPriceTooltipContent(
+                cellarConfig
+              )}
               tokenPriceLabel="Token price"
               tokenPriceValue={tokenPrice ?? <Spinner />}
               weekChangeTooltip="% change of current token price vs. token price yesterday"
@@ -102,14 +110,12 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
                   arrow
                 />
               }
-              monthChangeTooltip={`% change of token price compared to a benchmark portfolio of ${
-                isSteady ? "USDC" : "50% ETH and 50% BTC"
-              }`}
-              monthChangeLabel={
-                isSteady
-                  ? "1W Change vs USDC"
-                  : "1W Change vs ETH/BTC 50/50"
-              }
+              monthChangeTooltip={intervalGainPctTooltipContent(
+                cellarConfig
+              )}
+              monthChangeLabel={intervalGainPctTitleContent(
+                cellarConfig
+              )}
               monthChangeValue={
                 <>
                   {intervalGainPct.isLoading ? (
