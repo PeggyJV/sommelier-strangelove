@@ -164,9 +164,6 @@ export const strategyPageContentData = {
     `,
     // backtestingImage: "/assets/images/btc-eth-moment-backtesting.png",
     backtestingText: `
-      Notes: Performance of the strategy from May 2021-September 2022. Black line for benchmark
-
-      Backtest results:
       <div style="display:flex;flex-direction:row;gap:5rem;">
         <div style="width:50%">
           Beginning Cellar Value: 500,000
@@ -200,7 +197,7 @@ export const strategyPageContentData = {
           src="/assets/icons/eth-btc-mom.svg"
           boxSize={8}
         />
-        <Text>SteadyBTC</Text>
+        <Text> </Text>
       </>
     ),
     tradedAssets: (
@@ -237,9 +234,6 @@ export const strategyPageContentData = {
     `,
     // backtestingImage: "/assets/images/btc-eth-moment-backtesting.png",
     backtestingText: `
-      Notes: Performance of the strategy from May 2021-September 2022. Black line for benchmark
-
-      Backtest results:
       <div style="display:flex;flex-direction:row;gap:5rem;">
         <div style="width:50%">
           Beginning Cellar Value: 500,000

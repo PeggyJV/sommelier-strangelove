@@ -9,30 +9,16 @@ import { depositTokenListWithWethWbtc } from "../tokenConfig"
 
 export const steadyEth = {
   name: "Steady ETH",
+  launchDate: "25 Nov 2022 07:45:00",
   cellarType: CellarType.automatedPortfolio,
-  description: `Capture the majority of BTC price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
+  description: `Capture the majority of ETH price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is more important than capital growth.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: "Uniswap V3",
-  strategyAssets: [
-    "WBTC",
-    "WETH",
-    "USDC",
-    "AMPL",
-    "BUSD",
-    "DAI",
-    "FEI",
-    "FRAX",
-    "GUSD",
-    "USDP",
-    "RAI",
-    "sUSD",
-    "TUSD",
-    "USDT",
-  ],
+  strategyAssets: ["WETH", "USDC"],
   performanceSplit: {
     protocol: 2.5,
     "strategy provider": 7.5,
@@ -60,9 +46,6 @@ export const steadyEth = {
 
       The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed to be held over a medium to the long term (6 months to a year). In this time, the benefits of being in the strategy are expected to emerge.`,
     backtesting: `
-      Notes: Performance of the strategy from May 2021-September 2022. Black line for benchmark
-
-      Backtest results:
       <div style="display:flex;flex-direction:row;gap:5rem;">
         <div style="width:50%">
           Beginning Cellar Value: 500,000
@@ -109,7 +92,7 @@ export const steadyEth = {
     cellar: {
       address: config.CONTRACT.STEADY_ETH.ADDRESS,
       abi: config.CONTRACT.STEADY_ETH.ABI,
-      key: CellarKey.AAVE_V2_STABLE_CELLAR,
+      key: CellarKey.PATACHE_LINK,
     },
     staker: {
       address: config.CONTRACT.AAVE_STAKER.ADDRESS,
