@@ -26,7 +26,7 @@ import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
-import { CellarType } from "data/types"
+import { CellarKey, CellarType } from "data/types"
 import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
 import { isEthBtcChartEnabled, isTVMEnabled } from "data/uiConfig"
 import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
@@ -55,6 +55,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
     staticCellarData.cellarType === CellarType.yieldStrategies
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
+  const isSteady = cellarConfig.cellar.key === CellarKey.PATACHE_LINK
 
   return (
     <Layout>
@@ -101,8 +102,14 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
                   arrow
                 />
               }
-              monthChangeTooltip="% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC"
-              monthChangeLabel="1W Change vs ETH/BTC 50/50"
+              monthChangeTooltip={`% change of token price compared to a benchmark portfolio of ${
+                isSteady ? "USDC" : "50% ETH and 50% BTC"
+              }`}
+              monthChangeLabel={
+                isSteady
+                  ? "1W Change vs USDC"
+                  : "1W Change vs ETH/BTC 50/50"
+              }
               monthChangeValue={
                 <>
                   {intervalGainPct.isLoading ? (
