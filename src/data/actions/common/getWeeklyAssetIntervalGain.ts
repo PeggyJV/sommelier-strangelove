@@ -4,7 +4,7 @@ import { fetchMarketChart } from "./fetchMarketChart"
 
 // shift back coin gecko data is intentional
 export const getWeeklyAssetIntervalGain = async (
-  asset: "wrapped-bitcoin" | "weth",
+  asset: "wrapped-bitcoin" | "weth" | "wrapped-usdc",
   day: number
 ) => {
   try {
@@ -12,7 +12,7 @@ export const getWeeklyAssetIntervalGain = async (
 
     const previousWeek = data.prices[0]
     // today
-    const today = subDays(addWeeks(new Date(previousWeek[0]), 1), 1)
+    const today = new Date(Date.now())
     const todayData = data.prices.find(([date]) => {
       return isSameDay(new Date(date), today)
     })
