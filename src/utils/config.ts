@@ -77,15 +77,13 @@ export const config = {
       ABI: clearGateCellar,
       SLUG: "ETH-BTC-Momentum",
     },
-    // NEED TO UPDATE ADDRESS
     STEADY_ETH: {
-      ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f1",
+      ADDRESS: "0x3f07a84ecdf494310d397d24c1c78b041d2fa622",
       SLUG: "SteadyETH",
       ABI: sommStaking,
     },
-    // NEED TO UPDATE ADDRESS
     STEADY_BTC: {
-      ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f3",
+      ADDRESS: "0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
       SLUG: "SteadyBTC",
       ABI: sommStaking,
     },
