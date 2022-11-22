@@ -3,7 +3,7 @@ import { fetchMarketChart } from "./fetchMarketChart"
 
 // shift back coin gecko data is intentional
 export const getWeeklyAssetIntervalGain = async (
-  asset: "wrapped-bitcoin" | "weth",
+  asset: "wrapped-bitcoin" | "weth" | "wrapped-usdc",
   day: number
 ) => {
   try {
