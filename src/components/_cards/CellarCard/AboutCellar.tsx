@@ -7,6 +7,8 @@ import { useCellarCap } from "data/hooks/useCellarCap"
 import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
 import { useTvm } from "data/hooks/useTvm"
 import {
+  intervalGainPctTitleContent,
+  intervalGainPctTooltipContent,
   isAPYEnabled,
   isCurrentDepositsEnabled,
   isDailyChangeEnabled,
@@ -92,14 +94,8 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
             <Flex alignItems="center">
               <PercentageText data={intervalGainPct.data} />
               <CellarStatsLabel
-                title={
-                  isSteady
-                    ? "1W Change vs USDC"
-                    : "1W Change vs ETH/BTC 50/50"
-                }
-                tooltip={`% change of token price compared to a benchmark portfolio of ${
-                  isSteady ? "USDC" : "50% ETH and 50% BTC"
-                }`}
+                title={intervalGainPctTitleContent(cellarConfig)}
+                tooltip={intervalGainPctTooltipContent(cellarConfig)}
               />
             </Flex>
           )}

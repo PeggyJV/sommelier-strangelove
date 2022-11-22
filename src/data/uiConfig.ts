@@ -71,6 +71,29 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
   return ""
 }
 
+export const intervalGainPctTitleContent = (config: ConfigProps) => {
+  if (config.cellar.key === CellarKey.PATACHE_LINK)
+    return "1W Change vs USDC"
+  if (
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+  )
+    return "1W Change vs ETH/BTC 50/50"
+  return ""
+}
+export const intervalGainPctTooltipContent = (
+  config: ConfigProps
+) => {
+  if (config.cellar.key === CellarKey.PATACHE_LINK)
+    return `% change of token price compared to a benchmark portfolio of USDC`
+  if (
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+  )
+    return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
+  return ""
+}
+
 export const isEthBtcChartEnabled = (config: ConfigProps) => {
   return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
 }

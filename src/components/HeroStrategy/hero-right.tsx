@@ -27,8 +27,11 @@ import { analytics } from "utils/analytics"
 import { landingType } from "utils/landingType"
 import { usePosition } from "data/hooks/usePosition"
 import { tokenConfig } from "data/tokenConfig"
-import { CellarKey } from "data/types"
 import { useCountdown } from "data/hooks/useCountdown"
+import {
+  intervalGainPctTitleContent,
+  intervalGainPctTooltipContent,
+} from "data/uiConfig"
 
 interface HeroStrategyRightProps {
   id: string
@@ -47,14 +50,13 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const position = usePosition(cellarConfig)
   const intervalGainPct = useIntervalGainPct(cellarConfig)
   const tvm = useTvm(cellarConfig)
-  const isSteady = cellarConfig.cellar.key === CellarKey.PATACHE_LINK
   const countdown = useCountdown({
     launchDate,
   })
 
   return (
     <Stack minW={"280px"} spacing={4}>
-      {countdown && (
+      {countdown ? (
         <Box
           background="surface.tertiary"
           padding="30px 16px"
@@ -67,90 +69,76 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         >
           Coming soon
         </Box>
-      )}
-      {!countdown && (
-        <BaseButton
-          w="full"
-          h="50px"
-          onClick={() => {
-            analytics.track("strategy.buy-sell", {
-              strategyCard: cellarData.name,
-              landingType: landingType(),
-            })
-            buyOrSellModal.onOpen()
-          }}
-        >
-          Buy / Sell
-        </BaseButton>
-      )}
-      {!countdown && (
-        <BuyOrSellModal
-          uniswapLink={content.buyUrl}
-          id={id}
-          isOpen={buyOrSellModal.isOpen}
-          onClose={buyOrSellModal.onClose}
-        />
-      )}
-      {!countdown && (
-        <Link
-          href={`/strategies/${id}/manage`}
-          onClick={() => {
-            analytics.track("strategy.manage-portfolio", {
-              strategyCard: cellarData.name,
-              landingType: landingType(),
-            })
-          }}
-          style={{ textDecoration: "none" }}
-        >
-          <SecondaryButton w="full" h="50px">
-            Manage Portfolio
-          </SecondaryButton>
-        </Link>
-      )}
-      {!countdown && (
-        <HStack
-          pt={4}
-          justifyContent="space-around"
-          alignItems="start"
-          divider={<StackDivider borderColor="purple.dark" />}
-        >
-          <VStack flex={1}>
-            <Heading size="md">{tokenPrice || "--"}</Heading>
-            <CellarStatsLabel
-              tooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
-              title="Token Price"
-            />
-          </VStack>
+      ) : (
+        <>
+          <BaseButton
+            w="full"
+            h="50px"
+            onClick={() => {
+              analytics.track("strategy.buy-sell", {
+                strategyCard: cellarData.name,
+                landingType: landingType(),
+              })
+              buyOrSellModal.onOpen()
+            }}
+          >
+            Buy / Sell
+          </BaseButton>
+          <BuyOrSellModal
+            uniswapLink={content.buyUrl}
+            id={id}
+            isOpen={buyOrSellModal.isOpen}
+            onClose={buyOrSellModal.onClose}
+          />
+          <Link
+            href={`/strategies/${id}/manage`}
+            onClick={() => {
+              analytics.track("strategy.manage-portfolio", {
+                strategyCard: cellarData.name,
+                landingType: landingType(),
+              })
+            }}
+            style={{ textDecoration: "none" }}
+          >
+            <SecondaryButton w="full" h="50px">
+              Manage Portfolio
+            </SecondaryButton>
+          </Link>
+          <HStack
+            pt={4}
+            justifyContent="space-around"
+            alignItems="start"
+            divider={<StackDivider borderColor="purple.dark" />}
+          >
+            <VStack flex={1}>
+              <Heading size="md">{tokenPrice || "--"}</Heading>
+              <CellarStatsLabel
+                tooltip="The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for"
+                title="Token Price"
+              />
+            </VStack>
 
-          <VStack flex={1}>
-            <PercentageText data={dailyChange} headingSize="md" />
-            <CellarStatsLabel
-              tooltip="% change of current token price vs. token price yesterday"
-              title="1D Change"
-            />
-          </VStack>
+            <VStack flex={1}>
+              <PercentageText data={dailyChange} headingSize="md" />
+              <CellarStatsLabel
+                tooltip="% change of current token price vs. token price yesterday"
+                title="1D Change"
+              />
+            </VStack>
 
-          <VStack flex={1} textAlign="center">
-            {intervalGainPct.data ? (
+            <VStack flex={1} textAlign="center">
               <PercentageText
                 data={intervalGainPct.data}
                 headingSize="md"
               />
-            ) : (
-              <Box>--</Box>
-            )}
-            <CellarStatsLabel
-              title={
-                isSteady
-                  ? "1W Change vs USDC"
-                  : "1W Change vs ETH/BTC 50/50"
-              }
-              tooltip={`% change of token price compared to a benchmark portfolio of ${
-                isSteady ? "USDC" : "50% ETH and 50% BTC"
-              }`}
-            />
-          </VStack>
-        </HStack>
+
+              <CellarStatsLabel
+                title={intervalGainPctTitleContent(cellarConfig)}
+                tooltip={intervalGainPctTooltipContent(cellarConfig)}
+              />
+            </VStack>
+          </HStack>
+        </>
       )}
 
       <Stack pt={4} spacing={4} color="neutral.300">
