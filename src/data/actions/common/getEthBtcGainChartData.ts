@@ -84,43 +84,36 @@ export const getEthBtcGainChartData = async (
             wethGainPct.map((item) => new Date(item.date))
           )!
         ]
+      const getKey = (date: number) =>
+        format(new Date(date), interval === "daily" ? "dLL" : "dHH")
       if (wbtc) {
-        wethMap.set(
-          interval === "daily"
-            ? format(new Date(weth.date), "dLL")
-            : format(new Date(weth.date), "dHH"),
-          {
+        if (!wethMap.has(getKey(weth.date))) {
+          wethMap.set(getKey(weth.date), {
             x: isDaily
               ? subDays(new Date(weth.date), 1)
               : new Date(weth.date),
             y: weth.change,
             value: weth.value,
-          }
-        )
-        wbtcMap.set(
-          interval === "daily"
-            ? format(new Date(wbtc.date), "dLL")
-            : format(new Date(wbtc.date), "dHH"),
-          {
+          })
+        }
+        if (!wbtcMap.has(getKey(wbtc.date))) {
+          wbtcMap.set(getKey(wbtc.date), {
             x: isDaily
               ? subDays(new Date(wbtc.date), 1)
               : new Date(wbtc.date),
             y: wbtc.change,
             value: wbtc.value,
-          }
-        )
-        wethWbtcMap.set(
-          interval === "daily"
-            ? format(new Date(weth.date), "dLL")
-            : format(new Date(weth.date), "dHH"),
-          {
+          })
+        }
+        if (!wethWbtcMap.has(getKey(weth.date))) {
+          wethWbtcMap.set(getKey(weth.date), {
             x: isDaily
               ? subDays(new Date(weth.date), 1)
               : new Date(weth.date),
             y: (weth.change + wbtc.change) / 2,
             value: (weth.value + wbtc.value) / 2,
-          }
-        )
+          })
+        }
       }
     })
 
