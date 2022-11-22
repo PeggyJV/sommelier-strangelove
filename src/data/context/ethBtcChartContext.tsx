@@ -214,8 +214,12 @@ export const EthBtcChartProvider: FC<{
   })
   const hourlyData = hourlyDataRaw?.cellarHourDatas
   const weeklyData = weeklyDataRaw?.cellar?.dayDatas
-  const monthlyData = monthlyDataRaw?.cellar?.dayDatas
-  const allTimeData = allTimeDataRaw?.cellar?.dayDatas
+  const monthlyData = monthlyDataRaw?.cellar?.dayDatas.filter(
+    (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
+  )
+  const allTimeData = allTimeDataRaw?.cellar?.dayDatas.filter(
+    (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
+  )
 
   const ethBtcHourly = useEthBtcGainChartData({
     day: 1,
