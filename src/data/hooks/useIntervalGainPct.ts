@@ -1,15 +1,17 @@
 import { useQuery } from "@tanstack/react-query"
-import { ConfigProps } from "data/types"
+import { CellarKey, ConfigProps } from "data/types"
 import { useGetSingleCellarValueQuery } from "generated/subgraph"
 import { getPreviousWeek, getToday } from "utils/calculateTime"
 import { getGainPct } from "utils/getGainPct"
 import { useBtcIntervalGain } from "./useBtcIntervalGain"
 import { useEthIntervalGain } from "./useEthIntervalGain"
+import { useUsdcIntervalGain } from "./useUSDCIntervalGain"
 
 export const useIntervalGainPct = (config: ConfigProps) => {
   // Shift back coingecko by 1 day is intentional
   const ethIntervalGain = useEthIntervalGain(6)
   const btcIntervalGain = useBtcIntervalGain(6)
+  const usdcIntervalGain = useUsdcIntervalGain(6)
 
   const [todayData] = useGetSingleCellarValueQuery({
     variables: {
@@ -33,7 +35,15 @@ export const useIntervalGainPct = (config: ConfigProps) => {
   const { cellar: cellarPreviousWeek } = dataPreviousWeek || {}
   const { dayDatas: previousWeekDatas } = cellarPreviousWeek || {}
 
-  const queryEnabled = Boolean(
+  const PATACHE_LINK_QUERY_ENABLED = Boolean(
+    config.id &&
+      todayDatas?.[0].shareValue &&
+      previousWeekDatas?.[0].shareValue &&
+      Boolean(ethIntervalGain.data) &&
+      Boolean(usdcIntervalGain.data)
+  )
+
+  const CLEAR_GATE_CELLAR_QUERY_ENABLED = Boolean(
     config.id &&
       todayDatas?.[0].shareValue &&
       previousWeekDatas?.[0].shareValue &&
@@ -51,27 +61,48 @@ export const useIntervalGainPct = (config: ConfigProps) => {
       btcIntervalGain.data,
     ],
     async () => {
-      if (
-        !todayDatas ||
-        !previousWeekDatas ||
-        !ethIntervalGain.data ||
-        !btcIntervalGain.data
-      ) {
-        throw new Error("DATA UNDEFINED")
+      if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
+        if (
+          !todayDatas ||
+          !previousWeekDatas ||
+          !ethIntervalGain.data ||
+          !btcIntervalGain.data
+        ) {
+          throw new Error("DATA UNDEFINED")
+        }
+        const cellarIntervalGainPct = getGainPct(
+          Number(todayDatas[0].shareValue),
+          Number(previousWeekDatas[0].shareValue)
+        )
+
+        const result =
+          cellarIntervalGainPct -
+          (ethIntervalGain.data + btcIntervalGain.data) / 2
+
+        return result
       }
-      const cellarIntervalGainPct = getGainPct(
-        Number(todayDatas[0].shareValue),
-        Number(previousWeekDatas[0].shareValue)
-      )
+      if (config.cellar.key === CellarKey.PATACHE_LINK) {
+        if (
+          !todayDatas ||
+          !previousWeekDatas ||
+          !usdcIntervalGain.data
+        ) {
+          throw new Error("DATA UNDEFINED")
+        }
+        const cellarIntervalGainPct = getGainPct(
+          Number(todayDatas[0].shareValue),
+          Number(previousWeekDatas[0].shareValue)
+        )
 
-      const result =
-        cellarIntervalGainPct -
-        (ethIntervalGain.data + btcIntervalGain.data) / 2
+        const result =
+          cellarIntervalGainPct - usdcIntervalGain.data / 2
 
-      return result
+        return result
+      }
     },
     {
-      enabled: queryEnabled,
+      enabled:
+        CLEAR_GATE_CELLAR_QUERY_ENABLED || PATACHE_LINK_QUERY_ENABLED,
     }
   )
 

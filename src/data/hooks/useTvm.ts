@@ -20,7 +20,8 @@ export const useTvm = (config: ConfigProps) => {
 
   const queryEnabled = Boolean(
     (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
-      config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) &&
+      config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+      config.cellar.key === CellarKey.PATACHE_LINK) &&
       cellarContract.provider &&
       tvlTotal
   )
@@ -30,7 +31,8 @@ export const useTvm = (config: ConfigProps) => {
     async () => {
       if (
         config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
-        config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+        config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+        config.cellar.key === CellarKey.PATACHE_LINK
       ) {
         return await getTvm(cellarContract, tvlTotal)
       }
