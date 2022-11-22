@@ -15,7 +15,8 @@ export const getPositon = async (
       const value = positionDistribution?.[index]
       return {
         address,
-        percentage: (Number(value) / total) * 100,
+        percentage:
+          Number(value) === 0 ? 0 : (Number(value) / total) * 100,
       }
     })
 

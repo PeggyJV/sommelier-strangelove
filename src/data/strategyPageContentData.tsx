@@ -115,4 +115,144 @@ export const strategyPageContentData = {
 
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
+  [config.CONTRACT.STEADY_ETH.SLUG]: {
+    name: "Steady ETH",
+    provider: "Patache",
+    providerUrl: "https://www.algoreturns.com/patache/",
+    description: `Capture the majority of ETH price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is more important than capital growth.`,
+    ticker: (
+      <>
+        <Image
+          alt="steady eth icon"
+          src="/assets/icons/steady-eth.png"
+          boxSize={8}
+        />
+        <Text>SteadyETH</Text>
+      </>
+    ),
+    tradedAssets: (
+      <>
+        <Image
+          alt="eth icon"
+          src="/assets/icons/eth.png"
+          boxSize={8}
+        />
+        <Image
+          alt="usdc icon"
+          src="/assets/icons/usdc.png"
+          boxSize={8}
+        />
+      </>
+    ),
+    alternativeTo: "Holding USDC",
+    // buyUrl:
+    //   "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
+    strategyHighlights: {
+      card: [
+        `"Risk first" approach - capital preservation is more important than capital growth.`,
+        `Always defined risk for every position prevailing from trade inception until trade exit.`,
+        `Each trade strategy comprises two independent trade orders: 1 "Workhorse" with a fixed target and stop + 1 "Racehorse" with a trailing stop.`,
+      ],
+    },
+    howItWorks: `Every recommended trade always sets the trade risk immediately after the position is activated. The level of risk is determined by our proprietary algorithms and is optimized for modest risk tolerance. It is important to emphasize that having a risk limit does not imply a guaranteed risk price, as slippage can be exacerbated in uncertain market conditions. With the downside risk under pragmatic control, the strategy can shift focus to the realization of upside potential. The upside potential comprises two parts – a fixed target and a variable target. A fixed target is a reasonable expectation of modest favorable market movement, and a variable target is deliberately open-ended to facilitate the pursuit of an opportunistic movement in favor of the trade. The pursuit of a variable target is activated when the initial capital outlay for the trade has already been earned back and realized, thereby adding no incremental risk to the position.
+    <br/><br/>
+    With the visibility of the trade risk, the investor can focus on the capital-at-risk/risk appetite. Our approach towards capital management is prudence accompanied by a strategy to “stay in the game.” We recommend a capital allocation of 2.5%-5.0% per trade, which allows the investor to stay with the strategy for 40-20 consecutive losing trades. Of course, the actual risk tolerance of investors is on a broad spectrum, and some investors may even be comfortable with a 10-15% allocation per trade.
+    <br/><br/>
+    The trade management technique comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Capital allocation of 2.50% per trade strategy assigned equally to “Workhorse” and “Racehorse” (1.25% each).
+    <br/><br/>
+    ETH Long Trade example: A long trade is triggered when the market reaches the directional entry level. 2 positions on the long side are initiated by accumulating the ETH relative to USDC. Each position is immediately assigned a Target and a Stop (loss). If the market reaches the Target before the Stop, the workhorse BTC is sold for USDC, profit taken. Simultaneously, the racehorse Stop changes to a Trailing stop. At this point, the economic risk is nullified, a small profit is locked in, and the racehorse is pursuing a larger payoff potential.
+    `,
+    // backtestingImage: "/assets/images/btc-eth-moment-backtesting.png",
+    backtestingText: `
+      <div style="display:flex;flex-direction:row;gap:5rem;">
+        <div style="width:50%">
+          Beginning Cellar Value: 500,000
+          Period: May 2021 - September 2022
+          No. of Trades: 72
+          Worst Loss (Single Trade): -6,838
+          Worst drawdown:  7.55%
+          Annualized Sharpe Ratio: 267%
+          Annualized Std.Dev of Return: 10.4%
+        </div>
+        <div style="width:50%">
+          Annualized Mean Return: 27.8%
+          Cumulative profit: 46.6%
+          Win rate: 55%
+          Loss rate: 45%
+          Best month: 8%
+          Worst month: -2.5%
+        </div>
+      </div>
+      Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
+  },
+  [config.CONTRACT.STEADY_BTC.SLUG]: {
+    name: "Steady BTC",
+    provider: "Patache",
+    providerUrl: "https://www.algoreturns.com/patache/",
+    description: `Capture the majority of BTC price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
+    ticker: (
+      <>
+        <Image
+          alt="steady btc icon"
+          src="/assets/icons/steady-btc.png"
+          boxSize={8}
+        />
+        <Text> </Text>
+      </>
+    ),
+    tradedAssets: (
+      <>
+        <Image
+          alt="btc icon"
+          src="/assets/icons/btc.png"
+          boxSize={8}
+        />
+        <Image
+          alt="usdc icon"
+          src="/assets/icons/usdc.png"
+          boxSize={8}
+        />
+      </>
+    ),
+    alternativeTo: "Holding USDC",
+    // buyUrl:
+    //   "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
+    strategyHighlights: {
+      card: [
+        `"Risk first" approach - capital preservation is more important than capital growth.`,
+        `Always defined risk for every position prevailing from trade inception until trade exit.`,
+        `Each trade strategy comprises two independent trade orders: 1 "Workhorse" with a fixed target and stop + 1 "Racehorse" with a trailing stop.`,
+      ],
+    },
+    howItWorks: `Every recommended trade always sets the trade risk immediately after the position is activated. The level of risk is determined by our proprietary algorithms and is optimized for modest risk tolerance. It is important to emphasize that having a risk limit does not imply a guaranteed risk price, as slippage can be exacerbated in uncertain market conditions. With the downside risk under pragmatic control, the strategy can shift focus to the realization of upside potential. The upside potential comprises two parts – a fixed target and a variable target. A fixed target is a reasonable expectation of modest favorable market movement, and a variable target is deliberately open-ended to facilitate the pursuit of an opportunistic movement in favor of the trade. The pursuit of a variable target is activated when the initial capital outlay for the trade has already been earned back and realized, thereby adding no incremental risk to the position.
+    <br/><br/>
+    With the visibility of the trade risk, the investor can focus on the capital-at-risk/risk appetite. Our approach towards capital management is prudence accompanied by a strategy to “stay in the game.” We recommend a capital allocation of 2.5%-5.0% per trade, which allows the investor to stay with the strategy for 40-20 consecutive losing trades. Of course, the actual risk tolerance of investors is on a broad spectrum, and some investors may even be comfortable with a 10-15% allocation per trade.
+    <br/><br/>
+    The trade management technique comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Capital allocation of 2.50% per trade strategy assigned equally to “Workhorse” and “Racehorse” (1.25% each).
+    <br/><br/>
+    BTC Long Trade example: A long trade is triggered when the market reaches the directional entry level. 2 positions on the long side are initiated by accumulating the BTC relative to USDC. Each position is immediately assigned a Target and a Stop (loss). If the market reaches the Target before the Stop, the workhorse BTC is sold for USDC, profit taken. Simultaneously, the racehorse Stop changes to a Trailing stop. At this point, the economic risk is nullified, a small profit is locked in, and the racehorse is pursuing a larger payoff potential.
+    `,
+    // backtestingImage: "/assets/images/btc-eth-moment-backtesting.png",
+    backtestingText: `
+      <div style="display:flex;flex-direction:row;gap:5rem;">
+        <div style="width:50%">
+          Beginning Cellar Value: 500,000
+          Period: May 2021 - September 2022
+          No. of Trades: 58
+          Worst Loss (Single Trade): -7,523
+          Worst drawdown:  5.21%
+          Annualized Sharpe Ratio: 226%
+          Annualized Std.Dev of Return: 10.4%
+        </div>
+        <div style="width:50%">
+          Annualized Mean Return: 23.4%
+          Cumulative profit: 38.1%
+          Win rate: 58%
+          Loss rate: 42%
+          Best month: 6.3%
+          Worst month: -2.6%
+        </div>
+      </div>
+      Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
+  },
 }

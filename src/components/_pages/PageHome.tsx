@@ -34,8 +34,11 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
       )?.SLUG
     })
 
+    const contentRow =
+      cellars.length / 3 < 1 ? 3 : Math.ceil(cellars.length / 3) * 3
+
     const totalCellars = cellars.length ?? 0
-    const numPlaceholderCards = 3 - totalCellars
+    const numPlaceholderCards = contentRow - totalCellars
     const placeholderCardsArray = Array.from(
       Array(numPlaceholderCards).keys()
     )

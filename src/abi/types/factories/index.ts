@@ -8,3 +8,4 @@ export { ClearGateCellar__factory } from "./ClearGateCellar__factory";
 export { ClearGateRouter__factory } from "./ClearGateRouter__factory";
 export { GravityBridge__factory } from "./GravityBridge__factory";
 export { SommStaking__factory } from "./SommStaking__factory";
+export { Steady__factory } from "./Steady__factory";
