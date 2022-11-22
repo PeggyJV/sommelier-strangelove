@@ -1,7 +1,10 @@
 import { CellarKey, ConfigProps } from "./types"
 
 export const isBondingEnabled = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+  return (
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
+    config.cellar.key === CellarKey.PATACHE_LINK
+  )
 }
 
 export const isRewardsEnabled = (config: ConfigProps) => {
@@ -13,11 +16,18 @@ export const isTokenAssets = (config: ConfigProps) => {
 }
 
 export const isPositionTokenAssets = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+  return (
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+    config.cellar.key === CellarKey.PATACHE_LINK
+  )
 }
 
 export const isCurrentDepositsEnabled = (config: ConfigProps) => {
   return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+}
+
+export const isCountdownEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.PATACHE_LINK
 }
 
 export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
@@ -33,15 +43,24 @@ export const isAPYEnabled = (config: ConfigProps) => {
 }
 
 export const isTokenPriceEnabled = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+  return (
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+    config.cellar.key === CellarKey.PATACHE_LINK
+  )
 }
 
 export const isDailyChangeEnabled = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+  return (
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+    config.cellar.key === CellarKey.PATACHE_LINK
+  )
 }
 
 export const isIntervalGainPctEnabled = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+  return (
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+    config.cellar.key === CellarKey.PATACHE_LINK
+  )
 }
 
 export const lpTokenTooltipContent = (config: ConfigProps) => {
