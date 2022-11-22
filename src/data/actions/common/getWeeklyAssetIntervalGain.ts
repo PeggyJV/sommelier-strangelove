@@ -1,4 +1,3 @@
-import { addWeeks, isSameDay, subDays } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { fetchMarketChart } from "./fetchMarketChart"
 
@@ -9,16 +8,12 @@ export const getWeeklyAssetIntervalGain = async (
 ) => {
   try {
     const data = await fetchMarketChart(asset, day, "daily")
-
     const previousWeek = data.prices[0]
-    // today
-    const today = subDays(addWeeks(new Date(previousWeek[0]), 1), 1)
-    const todayData = data.prices.find(([date]) => {
-      return isSameDay(new Date(date), today)
-    })
-
-    if (!todayData) throw new Error("nextWeekData undefined")
-    const result = getGainPct(todayData![1], previousWeek[1])
+    // coingecko returns the latest date with 2 hour value, 00:00 data and latest hour data. We get the 00:00 value with length - 2 index
+    const todayIndex = data.prices.length === day + 1 ? -2 : -1
+    const todayData = data.prices.at(todayIndex)
+    if (!todayData) throw new Error("todayData undefined")
+    const result = getGainPct(todayData[1], previousWeek[1])
 
     return result
   } catch (error) {
