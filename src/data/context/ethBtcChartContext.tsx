@@ -304,6 +304,7 @@ export const EthBtcChartProvider: FC<{
       }`,
     })
   }
+
   const setDataWeekly = () => {
     const tokenPriceDatum = createTokenPriceChangeDatum(
       weeklyData?.map((item) => {
@@ -333,19 +334,23 @@ export const EthBtcChartProvider: FC<{
       series,
       chartProps: dayChartProps,
     })
-    const latestData = series[0].data.at(-1)
-    const firstData = series[0].data.at(0)
+    const latestData = series![0].data.at(-1)
+    const firstData = series![0].data.at(0)
 
-    const valueExists: boolean =
-      Boolean(latestData?.y) || String(latestData?.y) === "0"
+    const latestDate = format(
+      new Date(String(latestData?.x)),
+      "d MMM yyyy"
+    )
     const dateText = `${format(
       new Date(String(firstData?.x)),
       "d MMM"
-    )} - ${format(new Date(latestData?.x!), "d MMM yyyy")}`
+    )} - ${latestDate}`
+    const valueExists: boolean =
+      Boolean(latestData?.y) || String(latestData?.y) === "0"
     setTokenPriceChange({
       xFormatted: dateText,
       yFormatted: `${
-        valueExists ? formatPercentage(String(firstData?.y)) : "--"
+        valueExists ? formatPercentage(String(latestData?.y)) : "--"
       }`,
     })
   }
