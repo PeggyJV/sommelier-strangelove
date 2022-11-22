@@ -84,69 +84,35 @@ export const getEthBtcGainChartData = async (
             wethGainPct.map((item) => new Date(item.date))
           )!
         ]
+      const getKey = (date: number) =>
+        format(new Date(date), interval === "daily" ? "dLL" : "dHH")
       if (wbtc) {
-        if (
-          !wethMap.has(
-            format(
-              new Date(weth.date),
-              interval === "daily" ? "dLL" : "dHH"
-            )
-          )
-        ) {
-          wethMap.set(
-            interval === "daily"
-              ? format(new Date(weth.date), "dLL")
-              : format(new Date(weth.date), "dHH"),
-            {
-              x: isDaily
-                ? subDays(new Date(weth.date), 1)
-                : new Date(weth.date),
-              y: weth.change,
-              value: weth.value,
-            }
-          )
+        if (!wethMap.has(getKey(weth.date))) {
+          wethMap.set(getKey(weth.date), {
+            x: isDaily
+              ? subDays(new Date(weth.date), 1)
+              : new Date(weth.date),
+            y: weth.change,
+            value: weth.value,
+          })
         }
-        if (
-          !wbtcMap.has(
-            format(
-              new Date(wbtc.date),
-              interval === "daily" ? "dLL" : "dHH"
-            )
-          )
-        ) {
-          wbtcMap.set(
-            interval === "daily"
-              ? format(new Date(wbtc.date), "dLL")
-              : format(new Date(wbtc.date), "dHH"),
-            {
-              x: isDaily
-                ? subDays(new Date(wbtc.date), 1)
-                : new Date(wbtc.date),
-              y: wbtc.change,
-              value: wbtc.value,
-            }
-          )
+        if (!wbtcMap.has(getKey(wbtc.date))) {
+          wbtcMap.set(getKey(wbtc.date), {
+            x: isDaily
+              ? subDays(new Date(wbtc.date), 1)
+              : new Date(wbtc.date),
+            y: wbtc.change,
+            value: wbtc.value,
+          })
         }
-        if (
-          !wethWbtcMap.has(
-            format(
-              new Date(weth.date),
-              interval === "daily" ? "dLL" : "dHH"
-            )
-          )
-        ) {
-          wethWbtcMap.set(
-            interval === "daily"
-              ? format(new Date(weth.date), "dLL")
-              : format(new Date(weth.date), "dHH"),
-            {
-              x: isDaily
-                ? subDays(new Date(weth.date), 1)
-                : new Date(weth.date),
-              y: (weth.change + wbtc.change) / 2,
-              value: (weth.value + wbtc.value) / 2,
-            }
-          )
+        if (!wethWbtcMap.has(getKey(weth.date))) {
+          wethWbtcMap.set(getKey(weth.date), {
+            x: isDaily
+              ? subDays(new Date(weth.date), 1)
+              : new Date(weth.date),
+            y: (weth.change + wbtc.change) / 2,
+            value: (weth.value + wbtc.value) / 2,
+          })
         }
       }
     })
