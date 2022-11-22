@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { CellarKey, ConfigProps } from "data/types"
 import { useGetSingleCellarValueQuery } from "generated/subgraph"
-import { getPreviousWeek, getToday } from "utils/calculateTime"
+import { getPreviousDay, getPreviousWeek } from "utils/calculateTime"
 import { getGainPct } from "utils/getGainPct"
 import { useBtcIntervalGain } from "./useBtcIntervalGain"
 import { useEthIntervalGain } from "./useEthIntervalGain"
@@ -16,7 +16,7 @@ export const useIntervalGainPct = (config: ConfigProps) => {
   const [todayData] = useGetSingleCellarValueQuery({
     variables: {
       cellarAddress: config.id,
-      epoch: getToday(),
+      epoch: getPreviousDay(),
     },
   })
 
