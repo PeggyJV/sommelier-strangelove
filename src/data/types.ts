@@ -4,6 +4,7 @@ export enum StakerKey {
 export enum CellarKey {
   AAVE_V2_STABLE_CELLAR = "AAVE_V2_STABLE_CELLAR",
   CLEAR_GATE_CELLAR = "CLEARGATE_CELLAR",
+  PATACHE_LINK = "PATACHE_LINK",
 }
 export enum CellarRouterKey {
   CELLAR_ROUTER = "CELLAR_ROUTER",
@@ -42,6 +43,7 @@ export enum CellarType {
 export interface CellarDataMap {
   [key: string]: {
     name: string
+    launchDate?: string
     cellarType: CellarType
     description: string
     strategyType: string
