@@ -58,7 +58,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         <Box
           background="surface.tertiary"
           padding="30px 16px"
-          borderRadius={16}
+          borderRadius={34}
           borderWidth={1}
           borderColor="surface.tertiary"
           fontWeight="bold"
