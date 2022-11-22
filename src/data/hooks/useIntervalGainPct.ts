@@ -8,8 +8,8 @@ import { useEthIntervalGain } from "./useEthIntervalGain"
 
 export const useIntervalGainPct = (config: ConfigProps) => {
   // Shift back coingecko by 1 day is intentional
-  const ethIntervalGain = useEthIntervalGain(7)
-  const btcIntervalGain = useBtcIntervalGain(7)
+  const ethIntervalGain = useEthIntervalGain(6)
+  const btcIntervalGain = useBtcIntervalGain(6)
 
   const [todayData] = useGetSingleCellarValueQuery({
     variables: {
@@ -64,13 +64,10 @@ export const useIntervalGainPct = (config: ConfigProps) => {
         Number(previousWeekDatas[0].shareValue)
       )
 
-      console.log(new Date(previousWeekDatas[0].date * 1000))
-      console.log(new Date(todayDatas[0].date * 1000))
       const result =
         cellarIntervalGainPct -
         (ethIntervalGain.data + btcIntervalGain.data) / 2
-      console.log(cellarIntervalGainPct)
-      console.log((ethIntervalGain.data + btcIntervalGain.data) / 2)
+
       return result
     },
     {
