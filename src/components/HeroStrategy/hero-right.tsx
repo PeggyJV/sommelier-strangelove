@@ -183,9 +183,14 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                       src={asset?.src}
                       boxSize={8}
                     />
-                    <Text>
-                      {asset?.symbol} ({item.percentage.toFixed(2)}%)
-                    </Text>
+                    {!countdown ? (
+                      <Text>
+                        {asset?.symbol} ({item.percentage.toFixed(2)}
+                        %)
+                      </Text>
+                    ) : (
+                      <Text>{asset?.symbol}</Text>
+                    )}
                   </HStack>
                 )
               })
