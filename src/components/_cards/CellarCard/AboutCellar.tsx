@@ -125,14 +125,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
           borderColor="surface.tertiary"
         />
       ) : (
-        <Box
-          background="surface.tertiary"
-          padding="12px 16px"
-          borderRadius={16}
-          borderWidth={1}
-          borderColor="surface.tertiary"
-          fontWeight="bold"
-        >
+        <Box padding="12px 16px" fontWeight="bold">
           Coming soon
         </Box>
       )}
