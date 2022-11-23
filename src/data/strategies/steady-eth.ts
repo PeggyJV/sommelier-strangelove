@@ -11,7 +11,7 @@ export const steadyEth = {
   name: "Steady ETH",
   launchDate: "2022-11-29 00:00:00",
   cellarType: CellarType.automatedPortfolio,
-  description: `Capture the majority of ETH price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is more important than capital growth.`,
+  description: `Capture the upside of ETH price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is more important than capital growth.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
@@ -39,7 +39,9 @@ export const steadyEth = {
 
       - Always defined risk for every position prevailing from trade inception until trade exit.
 
-      - Each trade strategy comprises two independent trade orders: 1 "Workhorse" with a fixed target and stop + 1 "Racehorse" with a trailing stop.`,
+      - Each trade strategy comprises two independent trade orders: 1
+      “”Workhorse”" with a fixed target to lock in some return and stop + 1
+      “”Racehorse”" with a trailing stop to capture market upside.`,
     description: `Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a "risk first" paradigm – capital preservation is more important than capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional "home runs."
 
       The trade management technique of ETH Breakout strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the "How it works" section for detailed strategy performance explanations.
