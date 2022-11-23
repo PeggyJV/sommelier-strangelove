@@ -119,7 +119,7 @@ export const strategyPageContentData = {
     name: "Steady ETH",
     provider: "Patache",
     providerUrl: "https://www.algoreturns.com/patache/",
-    description: `Capture the majority of ETH price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is more important than capital growth.`,
+    description: `Capture the upside of ETH price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is prioritized over capital growth.`,
     ticker: (
       <>
         <Image
@@ -189,7 +189,7 @@ export const strategyPageContentData = {
     name: "Steady BTC",
     provider: "Patache",
     providerUrl: "https://www.algoreturns.com/patache/",
-    description: `Capture the majority of BTC price breakouts, limit losses through trailing tops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
+    description: `Capture the upside of BTC price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is prioritized over capital growth.`,
     ticker: (
       <>
         <Image
