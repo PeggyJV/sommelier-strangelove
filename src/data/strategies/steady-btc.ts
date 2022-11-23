@@ -9,7 +9,7 @@ import { depositTokenListWithWethWbtc } from "../tokenConfig"
 
 export const steadyBtc = {
   name: "Steady BTC",
-  launchDate: "27 Nov 2022 07:45:00",
+  launchDate: "2022-11-29 00:00:00",
   cellarType: CellarType.automatedPortfolio,
   description: `Capture the upside of BTC price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is more important than capital growth.`,
   strategyType: "Crypto portfolio",

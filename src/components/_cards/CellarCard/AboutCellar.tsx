@@ -1,4 +1,4 @@
-import { Box, Flex, Stack, Text } from "@chakra-ui/react"
+import { Flex, Stack, Text } from "@chakra-ui/react"
 import { CurrentDeposits } from "components/CurrentDeposits"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
@@ -26,7 +26,7 @@ import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { PercentageText } from "components/PercentageText"
 import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
 import { useCountdown } from "data/hooks/useCountdown"
-import { CellarKey } from "data/types"
+import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 
 interface Props {
   data: CellarCardData
@@ -41,10 +41,16 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const { data: cellarCap } = useCellarCap(cellarConfig)
   const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
   const intervalGainPct = useIntervalGainPct(cellarConfig)
-  const isSteady = cellarConfig.cellar.key === CellarKey.PATACHE_LINK
   const countdown = useCountdown({
     launchDate,
   })
+
+  const launchingDate = (() => {
+    if (!launchDate) return "Coming soon"
+    const dateTz = zonedTimeToUtc(new Date(launchDate), "EST")
+    const et = utcToZonedTime(dateTz, "EST")
+    return `${format(et, "iii MMM d, h:mmaaa")} ET`
+  })()
 
   const tokenPrice = useTokenPrice(cellarConfig)
   const dailyChange = useDailyChange(cellarConfig)
@@ -122,9 +128,23 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
           borderColor="surface.tertiary"
         />
       ) : (
-        <Box padding="12px 16px" fontWeight="bold">
-          Coming soon
-        </Box>
+        <Stack
+          padding="12px 16px"
+          background="surface.secondary"
+          borderRadius={16}
+          spacing={0}
+          borderWidth={1}
+          borderColor="surface.tertiary"
+        >
+          <Text
+            fontWeight="semibold"
+            fontSize="10px"
+            color="neutral.300"
+          >
+            Launching
+          </Text>
+          <Text fontWeight="bold">{launchingDate}</Text>
+        </Stack>
       )}
     </>
   )
