@@ -79,12 +79,12 @@ export const config = {
     },
     STEADY_ETH: {
       ADDRESS: "0x3f07a84ecdf494310d397d24c1c78b041d2fa622",
-      SLUG: "SteadyETH",
+      SLUG: "Steady-ETH",
       ABI: sommStaking,
     },
     STEADY_BTC: {
       ADDRESS: "0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
-      SLUG: "SteadyBTC",
+      SLUG: "Steady-BTC",
       ABI: sommStaking,
     },
     CLEAR_GATE_TEST_CELLAR_A: {
