@@ -197,7 +197,7 @@ export const strategyPageContentData = {
           src="/assets/icons/steady-btc.png"
           boxSize={8}
         />
-        <Text> </Text>
+        <Text>SteadyBTC</Text>
       </>
     ),
     tradedAssets: (
