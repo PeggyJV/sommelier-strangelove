@@ -33,6 +33,7 @@ import {
   intervalGainPctTooltipContent,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
+import { CountDown } from "./count-down"
 
 interface HeroStrategyRightProps {
   id: string
@@ -56,20 +57,9 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   })
 
   return (
-    <Stack minW={"280px"} spacing={4}>
-      {countdown ? (
-        <Box
-          background="surface.tertiary"
-          padding="30px 16px"
-          borderRadius={34}
-          borderWidth={1}
-          borderColor="surface.tertiary"
-          fontWeight="bold"
-          textAlign="center"
-          fontSize="3xl"
-        >
-          Coming soon
-        </Box>
+    <Stack minW={"380px"} spacing={4}>
+      {countdown && launchDate ? (
+        <CountDown launchDate={launchDate} />
       ) : (
         <>
           <BaseButton
@@ -142,10 +132,10 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         </>
       )}
 
-      <Stack pt={4} spacing={4} color="neutral.300">
+      <Stack pt={4} spacing={6} color="neutral.300">
         <HStack>
           <Box>
-            <Text w="120px" fontWeight="semibold">
+            <Text w="150px" fontWeight="semibold">
               Ticker
             </Text>
           </Box>
@@ -153,7 +143,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         </HStack>
         <HStack alignItems="start">
           <Box>
-            <Text w="120px" fontWeight="semibold">
+            <Text w="150px" fontWeight="semibold">
               Traded Assets
             </Text>
           </Box>
@@ -188,7 +178,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         </HStack>
         <HStack>
           <Box>
-            <Text w="120px" fontWeight="semibold">
+            <Text w="150px" fontWeight="semibold">
               Alternative to
             </Text>
           </Box>
@@ -197,7 +187,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         {!countdown && (
           <HStack>
             <Box>
-              <Text w="120px" fontWeight="semibold">
+              <Text w="150px" fontWeight="semibold">
                 Total assets
               </Text>
             </Box>
