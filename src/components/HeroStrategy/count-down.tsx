@@ -12,11 +12,11 @@ const pad = (d: number) => {
 }
 
 export const CountDown: FC<CountDownProps> = ({ launchDate }) => {
-  const timezone = "PST"
+  const timezone = "EST"
   const dateTz = zonedTimeToUtc(new Date(launchDate), timezone)
-  const pst = utcToZonedTime(dateTz, timezone)
-  const day = format(pst, "iii MMM d")
-  const hour = format(pst, "h:mmaaa")
+  const et = utcToZonedTime(dateTz, timezone)
+  const day = format(et, "iii MMM d")
+  const hour = format(et, "h:mmaaa")
 
   return (
     <VStack
@@ -29,9 +29,7 @@ export const CountDown: FC<CountDownProps> = ({ launchDate }) => {
         Launching on
       </Text>
       <Heading>{day}</Heading>
-      <Text fontWeight="bold">
-        {hour} {timezone}
-      </Text>
+      <Text fontWeight="bold">{hour} ET</Text>
       <HStack
         w="full"
         padding={6}

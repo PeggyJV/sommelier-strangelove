@@ -47,9 +47,9 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
 
   const launchingDate = (() => {
     if (!launchDate) return "Coming soon"
-    const dateTz = zonedTimeToUtc(new Date(launchDate), "PST")
-    const pst = utcToZonedTime(dateTz, "PST")
-    return `${format(pst, "iii MMM d, h:mmaaa")} PST`
+    const dateTz = zonedTimeToUtc(new Date(launchDate), "EST")
+    const et = utcToZonedTime(dateTz, "EST")
+    return `${format(et, "iii MMM d, h:mmaaa")} ET`
   })()
 
   const tokenPrice = useTokenPrice(cellarConfig)
