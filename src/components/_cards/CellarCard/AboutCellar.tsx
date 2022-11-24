@@ -27,6 +27,7 @@ import { PercentageText } from "components/PercentageText"
 import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
 import { useCountdown } from "data/hooks/useCountdown"
 import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
+import { COUNT_DOWN_TIMEZONE } from "utils/config"
 
 interface Props {
   data: CellarCardData
@@ -48,8 +49,11 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const launchingDate = (() => {
     if (!launchDate) return "Coming soon"
     const dateTz = zonedTimeToUtc(new Date(launchDate), "EST")
-    const et = utcToZonedTime(dateTz, "EST")
-    return `${format(et, "iii MMM d, h:mmaaa")} ET`
+    const et = utcToZonedTime(dateTz, COUNT_DOWN_TIMEZONE)
+    return `${format(
+      et,
+      "iii MMM d, h:mmaaa"
+    )} ${COUNT_DOWN_TIMEZONE}`
   })()
 
   const tokenPrice = useTokenPrice(cellarConfig)

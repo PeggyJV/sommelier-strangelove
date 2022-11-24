@@ -38,10 +38,16 @@ const ConnectButton = ({
         message: error.message,
       })
     },
-    onSuccess: () => {
-      analytics.track("wallet.connect-succeeded", {
-        account: address,
-      })
+    onSuccess: (data) => {
+      const { account } = data
+
+      if (account && account.length) {
+        analytics.track("wallet.connect-succeeded", {
+          account,
+        })
+
+        analytics.identify(account)
+      }
     },
   })
 

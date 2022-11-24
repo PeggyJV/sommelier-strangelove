@@ -56,9 +56,17 @@ type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
 export const SommelierTab: VFC<DepositModalProps> = (props) => {
   const id = useRouter().query.id as string
-  const cellarConfig = cellarDataMap[id].config
-  const cellarName = cellarDataMap[id].name
-  const depositTokens = cellarDataMap[id].depositTokens.list
+  const cellarData = cellarDataMap[id]
+  const cellarConfig = cellarData.config
+  const cellarName = cellarData.name
+  const cellarAddress = cellarConfig.id
+  const depositTokens = cellarData.depositTokens.list
+
+  // Base Analytics data to differentiate between cellars
+  const baseAnalytics = {
+    cellarName,
+    cellarAddress,
+  }
 
   const { data: signer } = useSigner()
   const { address } = useAccount()
@@ -85,6 +93,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
   function trackedSetSelectedToken(value: TokenType | null) {
     if (value && value !== selectedToken) {
       analytics.track("deposit.stable-selected", {
+        ...baseAnalytics,
         stable: value.symbol,
       })
     }
@@ -134,6 +143,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
 
     if (!erc20Contract) return
     analytics.track("deposit.started", {
+      ...baseAnalytics,
       stable: tokenSymbol,
       value: depositAmount,
     })
@@ -161,6 +171,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
 
     if (needsApproval) {
       analytics.track("deposit.approval-required", {
+        ...baseAnalytics,
         stable: tokenSymbol,
         value: depositAmount,
       })
@@ -184,6 +195,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
         const result = await waitForApproval
         if (result?.data?.transactionHash) {
           analytics.track("deposit.approval-granted", {
+            ...baseAnalytics,
             stable: tokenSymbol,
             value: depositAmount,
           })
@@ -196,6 +208,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           })
         } else if (result?.error) {
           analytics.track("deposit.approval-failed", {
+            ...baseAnalytics,
             stable: tokenSymbol,
             value: depositAmount,
           })
@@ -209,6 +222,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
         }
       } catch (e) {
         analytics.track("deposit.approval-cancelled", {
+          ...baseAnalytics,
           stable: tokenSymbol,
           value: depositAmount,
         })
@@ -262,6 +276,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
       const depositResult = await waitForDeposit
       if (depositResult?.data?.transactionHash) {
         analytics.track("deposit.succeeded", {
+          ...baseAnalytics,
           stable: tokenSymbol,
           value: depositAmount,
         })
@@ -295,6 +310,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
 
       if (depositResult?.error) {
         analytics.track("deposit.failed", {
+          ...baseAnalytics,
           stable: tokenSymbol,
           value: depositAmount,
         })

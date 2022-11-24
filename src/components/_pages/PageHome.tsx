@@ -15,7 +15,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { CellarType } from "data/types"
 import { config } from "utils/config"
 import { analytics } from "utils/analytics"
-import { landingType } from "utils/landingType"
+import { DIRECT, landingType } from "utils/landingType"
 
 interface CellarGridItemsType {
   section: CellarType
@@ -52,10 +52,24 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
               display="flex"
               borderRadius={28}
               onClick={() => {
+                const landingTyp = landingType()
+
                 analytics.track("strategy.selection", {
                   strategyCard: cellarDataMap[cellar].name,
                   landingType: landingType(),
                 })
+
+                if (landingTyp === DIRECT) {
+                  analytics.track("strategy.selection.direct", {
+                    strategyCard: cellarDataMap[cellar].name,
+                    landingType: landingTyp,
+                  })
+                } else {
+                  analytics.track("strategy.selection.indirect", {
+                    strategyCard: cellarDataMap[cellar].name,
+                    landingType: landingTyp,
+                  })
+                }
               }}
             >
               <CellarCard cellarAddress={cellar} as="li" />
