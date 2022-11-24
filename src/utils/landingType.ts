@@ -1,4 +1,4 @@
-const DIRECT = "Direct"
+export const DIRECT = "Direct"
 
 export const landingType = () => {
   const referrer = document.referrer
