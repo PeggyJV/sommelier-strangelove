@@ -2,6 +2,7 @@ import { VStack, Heading, HStack, Text } from "@chakra-ui/react"
 import { format, zonedTimeToUtc, utcToZonedTime } from "date-fns-tz"
 import { FC } from "react"
 import Countdown from "react-countdown"
+import { COUNT_DOWN_TIMEZONE } from "utils/config"
 
 interface CountDownProps {
   launchDate: string
@@ -12,9 +13,8 @@ const pad = (d: number) => {
 }
 
 export const CountDown: FC<CountDownProps> = ({ launchDate }) => {
-  const timezone = "EST"
-  const dateTz = zonedTimeToUtc(new Date(launchDate), timezone)
-  const et = utcToZonedTime(dateTz, timezone)
+  const dateTz = zonedTimeToUtc(new Date(launchDate), "EST")
+  const et = utcToZonedTime(dateTz, COUNT_DOWN_TIMEZONE)
   const day = format(et, "iii MMM d")
   const hour = format(et, "h:mmaaa")
 
@@ -29,7 +29,9 @@ export const CountDown: FC<CountDownProps> = ({ launchDate }) => {
         Launching on
       </Text>
       <Heading>{day}</Heading>
-      <Text fontWeight="bold">{hour} ET</Text>
+      <Text fontWeight="bold">
+        {hour} {COUNT_DOWN_TIMEZONE}
+      </Text>
       <HStack
         w="full"
         padding={6}

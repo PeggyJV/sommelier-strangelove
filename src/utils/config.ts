@@ -104,3 +104,5 @@ export const config = {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
   },
 }
+
+export const COUNT_DOWN_TIMEZONE = "UTC"
