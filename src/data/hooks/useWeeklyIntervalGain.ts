@@ -3,15 +3,21 @@ import { CellarKey, ConfigProps } from "data/types"
 import { useGetSingleCellarValueQuery } from "generated/subgraph"
 import { getPreviousDay, getPreviousWeek } from "utils/calculateTime"
 import { getGainPct } from "utils/getGainPct"
-import { useBtcIntervalGain } from "./useBtcIntervalGain"
-import { useEthIntervalGain } from "./useEthIntervalGain"
-import { useUsdcIntervalGain } from "./useUSDCIntervalGain"
+import { useWeeklyAssetIntervalGain } from "./useWeeklyAssetIntervalGain"
 
-export const useIntervalGainPct = (config: ConfigProps) => {
-  // Shift back coingecko by 1 day is intentional
-  const ethIntervalGain = useEthIntervalGain(6)
-  const btcIntervalGain = useBtcIntervalGain(6)
-  const usdcIntervalGain = useUsdcIntervalGain(6)
+export const useWeeklyIntervalGain = (config: ConfigProps) => {
+  const ethIntervalGain = useWeeklyAssetIntervalGain(
+    "weth",
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+  )
+  const btcIntervalGain = useWeeklyAssetIntervalGain(
+    "wrapped-bitcoin",
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+  )
+  const usdcIntervalGain = useWeeklyAssetIntervalGain(
+    "usd-coin",
+    config.cellar.key === CellarKey.PATACHE_LINK
+  )
 
   const [todayData] = useGetSingleCellarValueQuery({
     variables: {
@@ -36,15 +42,16 @@ export const useIntervalGainPct = (config: ConfigProps) => {
   const { dayDatas: previousWeekDatas } = cellarPreviousWeek || {}
 
   const PATACHE_LINK_QUERY_ENABLED = Boolean(
-    config.id &&
+    config.cellar.key === CellarKey.PATACHE_LINK &&
+      config.id &&
       todayDatas?.[0].shareValue &&
       previousWeekDatas?.[0].shareValue &&
-      Boolean(ethIntervalGain.data) &&
       Boolean(usdcIntervalGain.data)
   )
 
   const CLEAR_GATE_CELLAR_QUERY_ENABLED = Boolean(
-    config.id &&
+    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR &&
+      config.id &&
       todayDatas?.[0].shareValue &&
       previousWeekDatas?.[0].shareValue &&
       Boolean(ethIntervalGain.data) &&
@@ -57,8 +64,6 @@ export const useIntervalGainPct = (config: ConfigProps) => {
       config.id,
       todayDatas?.[0].shareValue,
       previousWeekDatas?.[0].shareValue,
-      ethIntervalGain.data,
-      btcIntervalGain.data,
     ],
     async () => {
       if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
@@ -94,8 +99,7 @@ export const useIntervalGainPct = (config: ConfigProps) => {
           Number(previousWeekDatas[0].shareValue)
         )
 
-        const result =
-          cellarIntervalGainPct - usdcIntervalGain.data / 2
+        const result = cellarIntervalGainPct - usdcIntervalGain.data
 
         return result
       }
