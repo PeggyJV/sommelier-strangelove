@@ -63,13 +63,13 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
               {data.name}
             </Heading>
           </Flex>
-          <Flex>
+          <Flex wrap="wrap" gap={2}>
             <Tag>{data.strategyType}</Tag>
-            <Tag ml={2}>
+            <Tag>
               {data.managementFee}{" "}
               {data.managementFee !== "..." && "Fee"}
             </Tag>
-            <Tag ml={2} display="flex" alignItems="center">
+            <Tag display="flex" alignItems="center">
               {protocolIcon && (
                 <InlineImage
                   src={protocolIcon}
