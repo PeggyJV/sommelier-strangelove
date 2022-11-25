@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query"
-import { getPnl as getPnl_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getPnl"
 import { CellarKey, ConfigProps } from "data/types"
 import { useGetPositionQuery } from "generated/subgraph"
 import { useCreateContracts } from "./useCreateContracts"
 import { useAccount } from "wagmi"
 import { useUserBalances } from "./useUserBalances"
 import { useUserStakes } from "./useUserStakes"
+import { getPnl as getPnl_PATACHE_LINK } from "data/actions/PATACHE_LINK/getPnl"
+import { getPnl as getPnl_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getPnl"
 
 export const usePnl = (config: ConfigProps) => {
   const { cellarContract } = useCreateContracts(config)
@@ -35,6 +36,11 @@ export const usePnl = (config: ConfigProps) => {
       cellarContract.provider
   )
 
+  const STEADY_CELLAR_QUERY_ENABLED = Boolean(
+    config.cellar.key === CellarKey.PATACHE_LINK &&
+      cellarContract.provider
+  )
+
   const query = useQuery(
     ["USE_PNL", lpToken.data?.formatted, config.cellar.address],
     async () => {
@@ -46,10 +52,20 @@ export const usePnl = (config: ConfigProps) => {
           userStakes,
         })
       }
+      if (config.cellar.key === CellarKey.PATACHE_LINK) {
+        return await getPnl_PATACHE_LINK({
+          cellarContract,
+          lpToken: lpToken.data?.formatted,
+          positionData,
+          userStakes,
+        })
+      }
       throw new Error("UNKNOWN CONTRACT")
     },
     {
-      enabled: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED, // branching example: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED || V1_5_CELLAR_QUERY_ENABLED
+      enabled:
+        AAVE_V2_STABLE_CELLAR_QUERY_ENABLED ||
+        STEADY_CELLAR_QUERY_ENABLED, // branching example: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED || V1_5_CELLAR_QUERY_ENABLED
     }
   )
 
