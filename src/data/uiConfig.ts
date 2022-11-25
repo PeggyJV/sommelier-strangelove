@@ -7,8 +7,16 @@ export const isBondingEnabled = (config: ConfigProps) => {
   )
 }
 
+export const isBondButtonEnabled = (config: ConfigProps) => {
+  // aave bond button disabled because program already ended
+  return config.cellar.key === CellarKey.PATACHE_LINK
+}
+
 export const isRewardsEnabled = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+  return (
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
+    config.cellar.key === CellarKey.PATACHE_LINK
+  )
 }
 
 export const isTokenAssets = (config: ConfigProps) => {
@@ -31,7 +39,10 @@ export const isCountdownEnabled = (config: ConfigProps) => {
 }
 
 export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+  return (
+    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
+    config.cellar.key === CellarKey.PATACHE_LINK
+  )
 }
 
 export const isTVMEnabled = (config: ConfigProps) => {
@@ -104,4 +115,8 @@ export const tokenPriceTooltipContent = (config: ConfigProps) => {
 
 export const isEthBtcChartEnabled = (config: ConfigProps) => {
   return config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+}
+
+export const isUsdcChartEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.PATACHE_LINK
 }
