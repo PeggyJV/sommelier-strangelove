@@ -1,5 +1,5 @@
 export enum StakerKey {
-  AAVE_STAKER = "AAVE_STAKER",
+  CELLAR_STAKING = "CELLAR_STAKING",
 }
 export enum CellarKey {
   AAVE_V2_STABLE_CELLAR = "AAVE_V2_STABLE_CELLAR",
