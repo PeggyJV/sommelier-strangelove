@@ -1,22 +1,11 @@
 import { closestIndexTo, format, isSameDay, subDays } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
+import { GetAssetGainChartDataProps, PriceData } from "../types"
 import { fetchMarketChart } from "./fetchMarketChart"
-
-interface PriceData {
-  date: number
-  change: number
-  value: number
-}
-
-export type GetEthBtcGainChartDataProps = {
-  day: number
-  interval: "hourly" | "daily"
-  firstDate?: Date
-}
 
 // Shift back 1 day coin gecko price is intentional
 export const getEthBtcGainChartData = async (
-  props: GetEthBtcGainChartDataProps
+  props: GetAssetGainChartDataProps
 ) => {
   try {
     const { day, interval, firstDate } = props
