@@ -8,7 +8,8 @@ export const useActiveAsset = (config: ConfigProps) => {
 
   const activeAssetQueryEnabled = Boolean(
     (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
-      config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) &&
+      config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+      config.cellar.key === CellarKey.PATACHE_LINK) &&
       cellarContract.provider
   )
 
@@ -17,7 +18,8 @@ export const useActiveAsset = (config: ConfigProps) => {
     async () => {
       if (
         config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
-        config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+        config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
+        config.cellar.key === CellarKey.PATACHE_LINK
       ) {
         return await getActiveAsset(cellarContract)
       }
