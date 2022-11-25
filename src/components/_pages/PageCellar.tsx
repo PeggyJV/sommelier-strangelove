@@ -26,8 +26,8 @@ import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
-import { CellarKey, CellarType } from "data/types"
-import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
+import { CellarType } from "data/types"
+import { useWeeklyIntervalGain } from "data/hooks/useWeeklyIntervalGain"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
@@ -55,13 +55,12 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
-  const intervalGainPct = useIntervalGainPct(cellarConfig)
+  const intervalGainPct = useWeeklyIntervalGain(cellarConfig)
   const [isLarger768] = useMediaQuery("(min-width: 768px)")
   const isYieldStrategies =
     staticCellarData.cellarType === CellarType.yieldStrategies
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
-  const isSteady = cellarConfig.cellar.key === CellarKey.PATACHE_LINK
 
   return (
     <Layout>
