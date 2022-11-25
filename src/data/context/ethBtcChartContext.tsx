@@ -256,7 +256,11 @@ export const EthBtcChartProvider: FC<{
     hourlyIsFetching ||
     weeklyIsFetching ||
     monthlyIsFetching ||
-    allTimeIsFetching
+    allTimeIsFetching ||
+    ethBtcHourly.isLoading ||
+    ethBtcHWeekly.isLoading ||
+    ethBtcMonthly.isLoading ||
+    ethBtcAlltime.isLoading
 
   // Functions to update data returned by hook
   const setDataHourly = () => {
