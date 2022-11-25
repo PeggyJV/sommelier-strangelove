@@ -33,10 +33,13 @@ import {
   intervalGainPctTooltipContent,
   isEthBtcChartEnabled,
   isTVMEnabled,
+  isUsdcChartEnabled,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
 import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
+import { UsdcPerfomanceCard } from "components/_cards/UsdcPerfomanceCard"
+import { UsdcChartProvider } from "data/context/usdcChartContext"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -152,6 +155,14 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
               </Heading>
               <EthBtcPerfomanceCard />
             </EthBtcChartProvider>
+          )}
+          {isUsdcChartEnabled(cellarConfig) && (
+            <UsdcChartProvider address={cellarAddress}>
+              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
+                Strategy Perfomance
+              </Heading>
+              <UsdcPerfomanceCard />
+            </UsdcChartProvider>
           )}
           <Heading pt={isYieldStrategies ? 0 : 12} {...h2Styles}>
             Strategy Details
