@@ -54,7 +54,7 @@ export declare namespace ICellarStaking {
   };
 }
 
-export interface SommStakingInterface extends utils.Interface {
+export interface CellarStakingV0815Interface extends utils.Interface {
   functions: {
     "LONG_BOOST()": FunctionFragment;
     "LONG_BOOST_TIME()": FunctionFragment;
@@ -603,12 +603,12 @@ export type UnstakeEvent = TypedEvent<
 
 export type UnstakeEventFilter = TypedEventFilter<UnstakeEvent>;
 
-export interface SommStaking extends BaseContract {
+export interface CellarStakingV0815 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: SommStakingInterface;
+  interface: CellarStakingV0815Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

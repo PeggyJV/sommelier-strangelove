@@ -28,7 +28,7 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface AaveV2CellarV2Interface extends utils.Interface {
+export interface CellarV0815Interface extends utils.Interface {
   functions: {
     "AAVE()": FunctionFragment;
     "DOMAIN_SEPARATOR()": FunctionFragment;
@@ -975,12 +975,12 @@ export type WithdrawFromPositionEvent = TypedEvent<
 export type WithdrawFromPositionEventFilter =
   TypedEventFilter<WithdrawFromPositionEvent>;
 
-export interface AaveV2CellarV2 extends BaseContract {
+export interface CellarV0815 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: AaveV2CellarV2Interface;
+  interface: CellarV0815Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

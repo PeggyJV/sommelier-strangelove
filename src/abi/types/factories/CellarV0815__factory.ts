@@ -4,10 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type {
-  AaveV2CellarV2,
-  AaveV2CellarV2Interface,
-} from "../AaveV2CellarV2";
+import type { CellarV0815, CellarV0815Interface } from "../CellarV0815";
 
 const _abi = [
   {
@@ -1765,15 +1762,15 @@ const _abi = [
   },
 ];
 
-export class AaveV2CellarV2__factory {
+export class CellarV0815__factory {
   static readonly abi = _abi;
-  static createInterface(): AaveV2CellarV2Interface {
-    return new utils.Interface(_abi) as AaveV2CellarV2Interface;
+  static createInterface(): CellarV0815Interface {
+    return new utils.Interface(_abi) as CellarV0815Interface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): AaveV2CellarV2 {
-    return new Contract(address, _abi, signerOrProvider) as AaveV2CellarV2;
+  ): CellarV0815 {
+    return new Contract(address, _abi, signerOrProvider) as CellarV0815;
   }
 }

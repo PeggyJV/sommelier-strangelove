@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
 import type {
-  ClearGateRouter,
-  ClearGateRouterInterface,
-} from "../ClearGateRouter";
+  CellarRouterV0816,
+  CellarRouterV0816Interface,
+} from "../CellarRouterV0816";
 
 const _abi = [
   {
@@ -275,15 +275,15 @@ const _abi = [
   },
 ];
 
-export class ClearGateRouter__factory {
+export class CellarRouterV0816__factory {
   static readonly abi = _abi;
-  static createInterface(): ClearGateRouterInterface {
-    return new utils.Interface(_abi) as ClearGateRouterInterface;
+  static createInterface(): CellarRouterV0816Interface {
+    return new utils.Interface(_abi) as CellarRouterV0816Interface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ClearGateRouter {
-    return new Contract(address, _abi, signerOrProvider) as ClearGateRouter;
+  ): CellarRouterV0816 {
+    return new Contract(address, _abi, signerOrProvider) as CellarRouterV0816;
   }
 }

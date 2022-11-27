@@ -4,10 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type {
-  ClearGateCellar,
-  ClearGateCellarInterface,
-} from "../ClearGateCellar";
+import type { CellarV0816, CellarV0816Interface } from "../CellarV0816";
 
 const _abi = [
   {
@@ -2202,15 +2199,15 @@ const _abi = [
   },
 ];
 
-export class ClearGateCellar__factory {
+export class CellarV0816__factory {
   static readonly abi = _abi;
-  static createInterface(): ClearGateCellarInterface {
-    return new utils.Interface(_abi) as ClearGateCellarInterface;
+  static createInterface(): CellarV0816Interface {
+    return new utils.Interface(_abi) as CellarV0816Interface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ClearGateCellar {
-    return new Contract(address, _abi, signerOrProvider) as ClearGateCellar;
+  ): CellarV0816 {
+    return new Contract(address, _abi, signerOrProvider) as CellarV0816;
   }
 }
