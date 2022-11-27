@@ -1,5 +1,10 @@
 import { config } from "utils/config"
-import { CellarKey, CellarRouterKey, CellarType } from "../types"
+import {
+  CellarKey,
+  CellarNameKey,
+  CellarRouterKey,
+  CellarType,
+} from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
 
 export const ethBtcMomentum = {
@@ -76,19 +81,20 @@ export const ethBtcMomentum = {
   },
   config: {
     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
+    cellarNameKey: CellarNameKey.ETH_BTC_MOM,
     lpToken: {
       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
       imagePath: "/assets/icons/eth-btc-mom.svg",
     },
     cellarRouter: {
-      address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
-      abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
-      key: CellarRouterKey.CLEAR_GATE_ROUTER,
+      address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
+      abi: config.CONTRACT.CELLAR_ROUTER_V0816.ABI,
+      key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
       abi: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ABI,
-      key: CellarKey.CLEAR_GATE_CELLAR,
+      key: CellarKey.CELLAR_V0816,
     },
   },
   faq: [
