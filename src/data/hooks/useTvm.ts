@@ -19,9 +19,8 @@ export const useTvm = (config: ConfigProps) => {
   const { tvlTotal } = cellar || {}
 
   const queryEnabled = Boolean(
-    (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
-      config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
-      config.cellar.key === CellarKey.PATACHE_LINK) &&
+    (config.cellar.key === CellarKey.CELLAR_V0815 ||
+      config.cellar.key === CellarKey.CELLAR_V0816) &&
       cellarContract.provider &&
       tvlTotal
   )
@@ -30,11 +29,10 @@ export const useTvm = (config: ConfigProps) => {
     ["USE_TVM", tvlTotal, config.cellar.address],
     async () => {
       if (
-        config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR ||
-        config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
-        config.cellar.key === CellarKey.PATACHE_LINK
+        config.cellar.key === CellarKey.CELLAR_V0815 ||
+        config.cellar.key === CellarKey.CELLAR_V0816
       ) {
-        return await getTvm(cellarContract, tvlTotal)
+        return await getTvm(tvlTotal)
       }
       throw new Error("UNKNOWN CONTRACT")
     },

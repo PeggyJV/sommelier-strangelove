@@ -1,14 +1,12 @@
 import { useMutation } from "@tanstack/react-query"
-import { depositAndSwap as depositAndSwap_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/depositAndSwap"
-import { depositAndSwap as depositAndSwap_CLEAR_GATE_CELLAR } from "data/actions/CLEAR_GATE_CELLAR/depositAndSwap"
+import { depositAndSwap as depositAndSwap_V0815 } from "data/actions/CELLAR_ROUTER_V0815/depositAndSwap"
+import { depositAndSwap as depositAndSwap_V0816 } from "data/actions/CELLAR_ROUTER_V0816/depositAndSwap"
 import { DepositAndSwapPayload } from "data/actions/types"
 import { CellarRouterKey, ConfigProps } from "data/types"
-import { useBrandedToast } from "hooks/chakra"
 import { useAccount, useProvider } from "wagmi"
 import { useCreateContracts } from "./useCreateContracts"
 
 export const useDepositAndSwap = (config: ConfigProps) => {
-  const { addToast, closeAll } = useBrandedToast()
   const { cellarRouterSigner } = useCreateContracts(config)
   const { address } = useAccount()
   const provider = useProvider()
@@ -16,8 +14,11 @@ export const useDepositAndSwap = (config: ConfigProps) => {
   const query = useMutation(async (props: DepositAndSwapPayload) => {
     try {
       if (!address) throw new Error("address is undefined")
-      if (config.cellarRouter.key === CellarRouterKey.CELLAR_ROUTER) {
-        return await depositAndSwap_AAVE_V2_STABLE_CELLAR({
+      if (
+        config.cellarRouter.key ===
+        CellarRouterKey.CELLAR_ROUTER_V0815
+      ) {
+        return await depositAndSwap_V0815({
           senderAddress: address,
           cellarRouterSigner,
           provider,
@@ -25,9 +26,10 @@ export const useDepositAndSwap = (config: ConfigProps) => {
         })
       }
       if (
-        config.cellarRouter.key === CellarRouterKey.CLEAR_GATE_ROUTER
+        config.cellarRouter.key ===
+        CellarRouterKey.CELLAR_ROUTER_V0816
       ) {
-        return await depositAndSwap_CLEAR_GATE_CELLAR({
+        return await depositAndSwap_V0816({
           senderAddress: address,
           cellarRouterSigner,
           provider,

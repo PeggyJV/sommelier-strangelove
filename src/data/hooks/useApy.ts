@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { getApy as getApy_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getApy"
-import { CellarKey, ConfigProps } from "data/types"
-import { AaveV2CellarV2, SommStaking } from "src/abi/types"
+import { getApy as getApy_AAVE_V2_STABLE_CELLAR } from "data/actions/CELLAR_V0815/getApy"
+import { CellarNameKey, ConfigProps } from "data/types"
+import { CellarStakingV0815, CellarV0815 } from "src/abi/types"
 import { useCreateContracts } from "./useCreateContracts"
 import { useSommelierPrice } from "./useSommelierPrice"
 
@@ -12,12 +12,9 @@ export const useApy = (config: ConfigProps) => {
   const sommPrice = useSommelierPrice()
 
   const AAVE_V2_STABLE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR &&
+    config.cellarNameKey === CellarNameKey.AAVE &&
       cellarContract.provider &&
       stakerContract?.provider
-  )
-  const CLEAR_GATE_QUERY_ENABLED = Boolean(
-    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
   )
 
   const query = useQuery(
@@ -26,23 +23,18 @@ export const useApy = (config: ConfigProps) => {
       if (!sommPrice.data) {
         throw new Error("Sommelier price is undefined")
       }
-      if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
+      if (config.cellarNameKey === CellarNameKey.AAVE) {
         return await getApy_AAVE_V2_STABLE_CELLAR(
-          cellarContract as AaveV2CellarV2,
-          stakerContract as SommStaking,
+          cellarContract as CellarV0815,
+          stakerContract as CellarStakingV0815,
           sommPrice.data
         )
-      }
-      if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
-        // the value is overridden from cellarDataMap.overrideApy
-        return null
       }
       throw new Error("UNKNOWN CONTRACT")
     },
     {
       enabled:
-        (AAVE_V2_STABLE_CELLAR_QUERY_ENABLED ||
-          CLEAR_GATE_QUERY_ENABLED) &&
+        AAVE_V2_STABLE_CELLAR_QUERY_ENABLED &&
         Boolean(sommPrice.data),
     }
   )
