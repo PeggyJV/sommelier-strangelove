@@ -1,18 +1,26 @@
 export enum StakerKey {
-  CELLAR_STAKING = "CELLAR_STAKING",
+  CELLAR_STAKING_V0815 = "CELLAR_STAKING_V0815",
 }
 export enum CellarKey {
-  AAVE_V2_STABLE_CELLAR = "AAVE_V2_STABLE_CELLAR",
-  CLEAR_GATE_CELLAR = "CLEARGATE_CELLAR",
-  PATACHE_LINK = "PATACHE_LINK",
+  CELLAR_V0815 = "CELLAR_V0815",
+  CELLAR_V0816 = "CELLAR_V0816",
 }
 export enum CellarRouterKey {
-  CELLAR_ROUTER = "CELLAR_ROUTER",
-  CLEAR_GATE_ROUTER = "CLEAR_GATE_ROUTER",
+  CELLAR_ROUTER_V0815 = "CELLAR_ROUTER_V0815",
+  CELLAR_ROUTER_V0816 = "CELLAR_ROUTER_V0816",
+}
+
+export enum CellarNameKey {
+  AAVE = "AAVE",
+  ETH_BTC_MOM = "ETH_BTC_MOM",
+  ETH_BTC_TREND = "ETH_BTC_TREND",
+  STEADY_ETH = "STEADY_ETH",
+  STEADY_BTC = "STEADY_BTC",
 }
 
 export interface ConfigProps {
   id: string
+  cellarNameKey: CellarNameKey
   lpToken: {
     address: string
     imagePath: string
