@@ -1,13 +1,13 @@
 import BigNumber from "bignumber.js"
 import { ethers } from "ethers"
-import { SommStaking } from "src/abi/types"
+import { CellarStakingV0815 } from "src/abi/types"
 import { toEther } from "utils/formatCurrency"
 import { StakerUserData, UserStake } from "../types"
 
 export const getUserStakes = async (
   address: string,
-  stakerContract: SommStaking,
-  stakerSigner: SommStaking,
+  stakerContract: CellarStakingV0815,
+  stakerSigner: CellarStakingV0815,
   sommelierPrice: string
 ) => {
   try {

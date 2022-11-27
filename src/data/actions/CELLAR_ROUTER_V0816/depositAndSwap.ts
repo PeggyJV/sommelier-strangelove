@@ -1,5 +1,4 @@
 import { ContractTransaction, ethers } from "ethers"
-import { ClearGateRouter } from "src/abi/types"
 import {
   AlphaRouter,
   AlphaRouterParams,
@@ -17,6 +16,7 @@ import JSBI from "jsbi"
 import { Provider } from "@wagmi/core"
 import { DepositAndSwapParams } from "../types"
 import { estimateGasLimit } from "utils/estimateGasLimit"
+import { CellarRouterV0816 } from "src/abi/types"
 
 interface GetSwapRouteParams {
   swapRoute: SwapRoute
@@ -29,9 +29,8 @@ interface GetSwapRouteParams {
   amountInWei: ethers.BigNumber
 }
 
-interface DepositAndSwapParams_CLEAR_GATE_CELLAR
-  extends DepositAndSwapParams {
-  cellarRouterSigner: ClearGateRouter
+interface DepositAndSwapParams_V0816 extends DepositAndSwapParams {
+  cellarRouterSigner: CellarRouterV0816
 }
 
 interface CreateSwapRouteParams {
@@ -147,7 +146,7 @@ export const depositAndSwap = async ({
   cellarRouterSigner,
   provider,
   senderAddress,
-}: DepositAndSwapParams_CLEAR_GATE_CELLAR): Promise<ContractTransaction> => {
+}: DepositAndSwapParams_V0816): Promise<ContractTransaction> => {
   try {
     if (!payload.selectedToken?.address) {
       throw new Error("Token address is undefined")

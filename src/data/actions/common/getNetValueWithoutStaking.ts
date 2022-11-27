@@ -1,14 +1,14 @@
 import BigNumber from "bignumber.js"
-import { ClearGateCellar } from "src/abi/types"
+import { CellarV0815, CellarV0816 } from "src/abi/types"
 import { formatUSD, toEther } from "utils/formatCurrency"
 import { useToken } from "wagmi"
 
-export const getNetValue = async ({
+export const getNetValueWithoutStaking = async ({
   cellarContract,
   address,
   activeAsset,
 }: {
-  cellarContract: ClearGateCellar
+  cellarContract: CellarV0815 | CellarV0816
   address: string
   activeAsset: ReturnType<typeof useToken>["data"]
 }) => {
