@@ -7,7 +7,7 @@
   - [Updating the schema.json](#updating-the-schemajson)
   - [Using hooks](#using-hooks)
   - [Parsing BigInt](#parsing-bigint)
-  - [Learn more about graphql-codegen & urql](#learn-more-about-graphql-codegen--urql)
+  - [Learn more about graphql-codegen \& urql](#learn-more-about-graphql-codegen--urql)
 - [IP Detection using Vercel's headers](#ip-detection-using-vercels-headers)
 - [Multiple Sources of Truth](#multiple-sources-of-truth)
   - [Hardcoded values](#hardcoded-values)
@@ -115,7 +115,7 @@ Files of note:
 
 Hooks per output
 ![query data](./querying-data.png)
-If there's a new cellar with a different cellar or staker contract that has a different ABI and output value, we should create output actions for it inside `data/actions/{cellarContractname}/{outputName}` and branch those actions inside `data/hooks/{outputName}`. If we find the same method and calculation on the smart contract/output, we should put it inside `data/actions/common/{outputName}`
+If there's a new cellar with a different cellar or cellar router or staker contract that has a different ABI and output value, we should create output actions for it inside `data/actions/{CONTRACT_NAME_VERSION}/{outputName}` and branch those actions inside `data/hooks/{outputName}`. If we find the same method and calculation on the smart contract/output, we should put it inside `data/actions/common/{outputName}`
 
 ## Displaying/Branching UI output
 
@@ -127,7 +127,7 @@ We show "Rewards" only on `aave v2` cellar
 ```tsx
 // src/data/uiConfig.ts
 export const isRewardsEnabled = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR
+  return config.cellarNameKey === CellarNameKey.AAVE
 }
 
 // somewhere in ui component
