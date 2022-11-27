@@ -26,10 +26,12 @@ import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { Rewards } from "./Rewards"
 import {
+  isBondButtonEnabled,
   isBondingEnabled,
   isRewardsEnabled,
   lpTokenTooltipContent,
 } from "data/uiConfig"
+import { BondButton } from "components/_buttons/BondButton"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isMounted = useIsMounted()
@@ -189,10 +191,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                         : "--")}
                   </CardStat>
                 </VStack>
-                {/* Remove the "Bond" button from the Aave Cellar view as the Reward program ended. */}
-                {/* {isMounted && (
+                {isBondButtonEnabled(cellarConfig) && isMounted && (
                   <BondButton disabled={lpTokenDisabled} />
-                )} */}
+                )}
               </>
             )}
           </SimpleGrid>

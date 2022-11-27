@@ -25,6 +25,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
       overflow="visible"
       {...props}
     >
+      {/* TODO: Add Error, loading state */}
       <VStack spacing={6} align="stretch" divider={<CardDivider />}>
         <Box h="20rem" mb={{ sm: "2.2rem", md: 0 }}>
           <HStack

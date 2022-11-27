@@ -59,7 +59,8 @@ export const Menu: VFC<MenuProps> = ({
         toEther(
           selectedTokenBalance?.value,
           selectedTokenBalance?.decimals,
-          false
+          false,
+          6
         )
       )
     )

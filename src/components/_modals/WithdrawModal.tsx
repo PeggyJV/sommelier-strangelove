@@ -33,7 +33,8 @@ export const WithdrawModal: VFC<WithdrawModalProps> = ({
               : toEther(
                   lpTokenData?.formatted,
                   lpTokenData?.decimals,
-                  true
+                  false,
+                  6
                 )}{" "}
             LP TOKENS
           </Text>

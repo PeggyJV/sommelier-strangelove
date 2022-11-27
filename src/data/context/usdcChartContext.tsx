@@ -1,5 +1,5 @@
 import { LineProps, Serie } from "@nivo/line"
-import { useEthBtcGainChartData } from "data/hooks/useEthBtcGainChartData"
+import { useUsdcGainChartData } from "data/hooks/useUsdcGainChartData"
 import { format } from "date-fns"
 import {
   useGetAllTimeShareValueQuery,
@@ -23,7 +23,7 @@ import {
   getPreviousWeek,
 } from "utils/calculateTime"
 import {
-  createEthBtcChartSeries,
+  createUsdcChartSeries,
   createTokenPriceChangeDatum,
   formatPercentage,
 } from "utils/chartHelper"
@@ -40,12 +40,10 @@ export interface TokenPriceData {
 
 export interface ShowLine {
   tokenPrice: boolean
-  ethBtc50: boolean
-  eth: boolean
-  btc: boolean
+  usdc: boolean
 }
 
-export interface EthBtcChartContext {
+export interface UsdcChartContext {
   fetching: boolean
   data: DataProps
   setDataHourly: () => void
@@ -129,7 +127,7 @@ const allTimeChartProps: Partial<LineProps> = {
 
 const defaultSerieId = "default"
 
-const initialData: EthBtcChartContext = {
+const initialData: UsdcChartContext = {
   data: {
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
@@ -156,24 +154,19 @@ const initialData: EthBtcChartContext = {
   ],
   showLine: {
     tokenPrice: true,
-    ethBtc50: true,
-    eth: false,
-    btc: false,
+    usdc: true,
   },
   setShowLine: () => null,
 }
 
-const ethBtcChartContext =
-  createContext<EthBtcChartContext>(initialData)
+const usdcChartContext = createContext<UsdcChartContext>(initialData)
 
-export const EthBtcChartProvider: FC<{
+export const UsdcChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
   const [showLine, setShowLine] = useState<ShowLine>({
     tokenPrice: true,
-    ethBtc50: true,
-    eth: false,
-    btc: false,
+    usdc: true,
   })
 
   // GQL Queries
@@ -221,19 +214,19 @@ export const EthBtcChartProvider: FC<{
     (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
   )
 
-  const ethBtcHourly = useEthBtcGainChartData({
+  const usdcHourly = useUsdcGainChartData({
     day: 1,
     interval: "hourly",
   })
-  const ethBtcHWeekly = useEthBtcGainChartData({
+  const usdcWeekly = useUsdcGainChartData({
     day: Number(weeklyData?.length),
     firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
   })
-  const ethBtcMonthly = useEthBtcGainChartData({
+  const usdcMonthly = useUsdcGainChartData({
     day: Number(monthlyData?.length),
     firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
   })
-  const ethBtcAlltime = useEthBtcGainChartData({
+  const usdcAlltime = useUsdcGainChartData({
     day: Number(allTimeData?.length),
     firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
   })
@@ -257,10 +250,10 @@ export const EthBtcChartProvider: FC<{
     weeklyIsFetching ||
     monthlyIsFetching ||
     allTimeIsFetching ||
-    ethBtcHourly.isLoading ||
-    ethBtcHWeekly.isLoading ||
-    ethBtcMonthly.isLoading ||
-    ethBtcAlltime.isLoading
+    usdcHourly.isLoading ||
+    usdcWeekly.isLoading ||
+    usdcMonthly.isLoading ||
+    usdcAlltime.isLoading
 
   // Functions to update data returned by hook
   const setDataHourly = () => {
@@ -273,17 +266,9 @@ export const EthBtcChartProvider: FC<{
       })
     )
 
-    const series = createEthBtcChartSeries({
+    const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: ethBtcHourly.data?.wethWbtcdatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      weth: ethBtcHourly.data?.wethDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      wbtc: ethBtcHourly.data?.wbtcDatum.slice(
+      usdc: usdcHourly.data?.usdcDatum.slice(
         0,
         tokenPriceDatum?.length
       ),
@@ -323,17 +308,9 @@ export const EthBtcChartProvider: FC<{
       })
     )
 
-    const series = createEthBtcChartSeries({
+    const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: ethBtcHWeekly.data?.wethWbtcdatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      weth: ethBtcHWeekly.data?.wethDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      wbtc: ethBtcHWeekly.data?.wbtcDatum.slice(
+      usdc: usdcWeekly.data?.usdcDatum.slice(
         0,
         tokenPriceDatum?.length
       ),
@@ -372,17 +349,9 @@ export const EthBtcChartProvider: FC<{
         }
       })
     )
-    const series = createEthBtcChartSeries({
+    const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: ethBtcMonthly.data?.wethWbtcdatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      weth: ethBtcMonthly.data?.wethDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      wbtc: ethBtcMonthly.data?.wbtcDatum.slice(
+      usdc: usdcMonthly.data?.usdcDatum.slice(
         0,
         tokenPriceDatum?.length
       ),
@@ -418,17 +387,9 @@ export const EthBtcChartProvider: FC<{
         }
       })
     )
-    const series = createEthBtcChartSeries({
+    const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: ethBtcAlltime.data?.wethWbtcdatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      weth: ethBtcAlltime.data?.wethDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      wbtc: ethBtcAlltime.data?.wbtcDatum.slice(
+      usdc: usdcAlltime.data?.usdcDatum.slice(
         0,
         tokenPriceDatum?.length
       ),
@@ -475,7 +436,7 @@ export const EthBtcChartProvider: FC<{
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
-    if (weeklyData && idIsDefault && ethBtcHWeekly.data) {
+    if (weeklyData && idIsDefault && usdcWeekly.data) {
       const weeklyDataMap = weeklyData?.map((item) => {
         return {
           date: item.date,
@@ -485,17 +446,9 @@ export const EthBtcChartProvider: FC<{
       const tokenPriceDatum =
         createTokenPriceChangeDatum(weeklyDataMap)
 
-      const series = createEthBtcChartSeries({
+      const series = createUsdcChartSeries({
         tokenPrice: tokenPriceDatum,
-        ethBtc50: ethBtcHWeekly.data.wethWbtcdatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        weth: ethBtcHWeekly.data?.wethDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
-        wbtc: ethBtcHWeekly.data?.wbtcDatum.slice(
+        usdc: usdcWeekly.data?.usdcDatum.slice(
           0,
           tokenPriceDatum?.length
         ),
@@ -526,7 +479,7 @@ export const EthBtcChartProvider: FC<{
         }`,
       })
     }
-  }, [weeklyData, data, ethBtcHWeekly.data])
+  }, [weeklyData, data, usdcWeekly.data])
 
   const dataC = {
     ...data,
@@ -534,21 +487,16 @@ export const EthBtcChartProvider: FC<{
       if (item.id === "token-price") {
         return showLine.tokenPrice
       }
-      if (item.id === "eth-btc-50") {
-        return showLine.ethBtc50
+      if (item.id === "usdc") {
+        return showLine.usdc
       }
-      if (item.id === "weth") {
-        return showLine.eth
-      }
-      if (item.id === "wbtc") {
-        return showLine.btc
-      }
+
       return false
     }),
   }
 
   return (
-    <ethBtcChartContext.Provider
+    <usdcChartContext.Provider
       value={{
         fetching,
         data: dataC,
@@ -568,16 +516,16 @@ export const EthBtcChartProvider: FC<{
       }}
     >
       {children}
-    </ethBtcChartContext.Provider>
+    </usdcChartContext.Provider>
   )
 }
 
-export const useEthBtcChart = () => {
-  const context = useContext(ethBtcChartContext)
+export const useUsdcChart = () => {
+  const context = useContext(usdcChartContext)
 
   if (context === undefined) {
     throw new Error(
-      "This hook must be used within a EthBtcChartProvider."
+      "This hook must be used within a UsdcChartProvider."
     )
   }
 

@@ -1,6 +1,8 @@
+import { Page404 } from "components/_pages/Page404"
 import PageCellar from "components/_pages/PageCellar"
 import { cellarDataMap } from "data/cellarDataMap"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import { LAUNCH_DATE_DISABLED } from "utils/constants"
 import { Params } from "."
 
 export interface CellarPageProps {
@@ -8,30 +10,27 @@ export interface CellarPageProps {
 }
 
 const CellarPage: NextPage<CellarPageProps> = ({ id }) => {
-  return <PageCellar id={id} />
+  const launchDate = cellarDataMap[id].launchDate
+  const formatedLaunchDate = launchDate ? new Date(launchDate) : null
+  const formatedDateNow = new Date(Date.now())
+  const isCountdown =
+    formatedLaunchDate !== null
+      ? formatedLaunchDate > formatedDateNow
+      : false
+
+  if (!isCountdown || LAUNCH_DATE_DISABLED) {
+    return <PageCellar id={id} />
+  }
+  return <Page404 />
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const cellars = Object.keys(cellarDataMap)
 
   // create array of static paths from cellars data
-  const paths = cellars
-    .filter((item) => {
-      const launchDate = cellarDataMap[item].launchDate
-      const formatedLaunchDate = launchDate
-        ? new Date(launchDate)
-        : null
-      const formatedDateNow = new Date(Date.now())
-      const isCountdown =
-        formatedLaunchDate !== null
-          ? formatedLaunchDate > formatedDateNow
-          : false
-
-      return !isCountdown
-    })
-    .map((cellar) => {
-      return { params: { id: cellar } }
-    })
+  const paths = cellars.map((cellar) => {
+    return { params: { id: cellar } }
+  })
 
   return {
     paths,
