@@ -23,6 +23,7 @@ export const steadyEth = {
   protocols: "Uniswap V3",
   strategyAssets: ["WETH", "USDC"],
   performanceSplit: {
+    depositors: 90,
     protocol: 2.5,
     "strategy provider": 7.5,
   },

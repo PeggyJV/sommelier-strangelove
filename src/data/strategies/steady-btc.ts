@@ -23,6 +23,7 @@ export const steadyBtc = {
   protocols: "Uniswap V3",
   strategyAssets: ["WBTC", "USDC"],
   performanceSplit: {
+    depositors: 90,
     protocol: 2.5,
     "strategy provider": 7.5,
   },
