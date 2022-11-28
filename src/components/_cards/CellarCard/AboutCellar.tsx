@@ -13,6 +13,7 @@ import {
   isCurrentDepositsEnabled,
   isDailyChangeEnabled,
   isIntervalGainPctEnabled,
+  IsOneMonthEthBtc,
   isTokenPriceEnabled,
   isTVMEnabled,
   tokenPriceTooltipContent,
@@ -24,7 +25,7 @@ import { CellarStats, CellarStatsLabel } from "./CellarStats"
 import { useDailyChange } from "data/hooks/useDailyChange"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { PercentageText } from "components/PercentageText"
-import { useWeeklyIntervalGain } from "data/hooks/useWeeklyIntervalGain"
+import { useIntervalGain } from "data/hooks/useIntervalGain"
 import { useCountdown } from "data/hooks/useCountdown"
 import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
@@ -41,7 +42,10 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: cellarCap } = useCellarCap(cellarConfig)
   const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
-  const intervalGainPct = useWeeklyIntervalGain(cellarConfig)
+  const intervalGainPct = useIntervalGain({
+    config: cellarConfig,
+    timeline: IsOneMonthEthBtc(cellarConfig) ? "monthly" : "weekly",
+  })
   const countdown = useCountdown({
     launchDate,
   })

@@ -22,7 +22,7 @@ import { VFC } from "react"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsLabel } from "components/_cards/CellarCard/CellarStats"
 import { useTvm } from "data/hooks/useTvm"
-import { useWeeklyIntervalGain } from "data/hooks/useWeeklyIntervalGain"
+import { useIntervalGain } from "data/hooks/useIntervalGain"
 import { analytics } from "utils/analytics"
 import { landingType } from "utils/landingType"
 import { usePosition } from "data/hooks/usePosition"
@@ -31,6 +31,7 @@ import { useCountdown } from "data/hooks/useCountdown"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
+  IsOneMonthEthBtc,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
@@ -50,7 +51,10 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
   const position = usePosition(cellarConfig)
-  const intervalGainPct = useWeeklyIntervalGain(cellarConfig)
+  const intervalGainPct = useIntervalGain({
+    config: cellarConfig,
+    timeline: IsOneMonthEthBtc(cellarConfig) ? "monthly" : "weekly",
+  })
   const tvm = useTvm(cellarConfig)
   const countdown = useCountdown({
     launchDate,
