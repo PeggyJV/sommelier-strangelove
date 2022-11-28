@@ -25,7 +25,7 @@ export const isTokenAssets = (config: ConfigProps) => {
   return config.cellarNameKey === CellarNameKey.AAVE
 }
 
-export const IsOneWeekEthBtc = (config: ConfigProps) => {
+export const IsOneMonthEthBtc = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
