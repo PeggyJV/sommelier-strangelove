@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import { getCellarCap as getCellarCap_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getCellarCap"
-import { CellarKey, ConfigProps } from "data/types"
+import { getCellarCap as getCellarCap__AAVE_V2_STABLE_CELLAR } from "data/actions/common/getCellarCap"
+import { CellarNameKey, ConfigProps } from "data/types"
 import { useGetCellarQuery } from "generated/subgraph"
 
 export const useCellarCap = (config: ConfigProps) => {
@@ -15,7 +15,7 @@ export const useCellarCap = (config: ConfigProps) => {
   const { liquidityLimit, asset } = cellar || {}
 
   const AAVE_V2_STABLE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR &&
+    config.cellarNameKey === CellarNameKey.AAVE &&
       asset?.decimals &&
       asset?.symbol &&
       liquidityLimit
@@ -24,8 +24,8 @@ export const useCellarCap = (config: ConfigProps) => {
   const query = useQuery(
     ["USE_CELLAR_CAP", liquidityLimit, config.cellar.address],
     async () => {
-      if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
-        return await getCellarCap_AAVE_V2_STABLE_CELLAR({
+      if (config.cellarNameKey === CellarNameKey.AAVE) {
+        return await getCellarCap__AAVE_V2_STABLE_CELLAR({
           assetDecimals: asset?.decimals,
           assetSymbol: asset?.symbol,
           liquidityLimit,
@@ -34,7 +34,7 @@ export const useCellarCap = (config: ConfigProps) => {
       throw new Error("UNKNOWN CONTRACT")
     },
     {
-      enabled: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED, // branching example: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED || V1_5_CELLAR_QUERY_ENABLED
+      enabled: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED,
     }
   )
 

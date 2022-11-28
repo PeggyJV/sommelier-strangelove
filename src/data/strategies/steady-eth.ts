@@ -1,6 +1,7 @@
 import { config } from "utils/config"
 import {
   CellarKey,
+  CellarNameKey,
   CellarRouterKey,
   CellarType,
   StakerKey,
@@ -85,24 +86,25 @@ export const steadyEth = {
 
   config: {
     id: config.CONTRACT.STEADY_ETH.ADDRESS,
+    cellarNameKey: CellarNameKey.STEADY_ETH,
     lpToken: {
       address: config.CONTRACT.STEADY_ETH.ADDRESS,
       imagePath: "/assets/icons/steady-eth.svg",
     },
     cellarRouter: {
-      address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
-      abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
-      key: CellarRouterKey.CLEAR_GATE_ROUTER,
+      address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
+      abi: config.CONTRACT.CELLAR_ROUTER_V0816.ABI,
+      key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
       address: config.CONTRACT.STEADY_ETH.ADDRESS,
       abi: config.CONTRACT.STEADY_ETH.ABI,
-      key: CellarKey.PATACHE_LINK,
+      key: CellarKey.CELLAR_V0816,
     },
     staker: {
       address: config.CONTRACT.STEADY_ETH_STAKER.ADDRESS,
       abi: config.CONTRACT.STEADY_ETH_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING,
+      key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   },

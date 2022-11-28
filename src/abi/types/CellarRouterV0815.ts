@@ -27,7 +27,7 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface CellarRouterInterface extends utils.Interface {
+export interface CellarRouterV0815Interface extends utils.Interface {
   functions: {
     "depositAndSwapIntoCellar(address,address[],uint24[],uint256,uint256,address)": FunctionFragment;
     "depositAndSwapIntoCellarWithPermit(address,address[],uint24[],uint256,uint256,address,uint256,bytes)": FunctionFragment;
@@ -188,12 +188,12 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
-export interface CellarRouter extends BaseContract {
+export interface CellarRouterV0815 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: CellarRouterInterface;
+  interface: CellarRouterV0815Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

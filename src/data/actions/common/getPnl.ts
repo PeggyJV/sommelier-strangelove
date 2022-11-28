@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { GetPositionQuery } from "generated/subgraph"
-import { AaveV2CellarV2 } from "src/abi/types"
+import { CellarV0815, CellarV0816 } from "src/abi/types"
 import { getPNL } from "utils/pnl"
 import { getCellarShareBalance } from "./getCellarShareBalance"
 
@@ -11,7 +11,7 @@ export const getPnl = async ({
   userStakes,
   positionData,
 }: {
-  cellarContract: AaveV2CellarV2
+  cellarContract: CellarV0815 | CellarV0816
   lpToken?: string
   userStakes?: ReturnType<typeof useUserStakes>["data"]
   positionData?: GetPositionQuery

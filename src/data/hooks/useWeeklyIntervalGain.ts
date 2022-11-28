@@ -1,22 +1,30 @@
 import { useQuery } from "@tanstack/react-query"
-import { CellarKey, ConfigProps } from "data/types"
+import { CellarNameKey, ConfigProps } from "data/types"
 import { useGetSingleCellarValueQuery } from "generated/subgraph"
 import { getPreviousDay, getPreviousWeek } from "utils/calculateTime"
 import { getGainPct } from "utils/getGainPct"
 import { useWeeklyAssetIntervalGain } from "./useWeeklyAssetIntervalGain"
 
 export const useWeeklyIntervalGain = (config: ConfigProps) => {
+  const clearGate =
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+
+  const patache =
+    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+    config.cellarNameKey === CellarNameKey.STEADY_ETH
+
   const ethIntervalGain = useWeeklyAssetIntervalGain(
     "weth",
-    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+    clearGate
   )
   const btcIntervalGain = useWeeklyAssetIntervalGain(
     "wrapped-bitcoin",
-    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
+    clearGate
   )
   const usdcIntervalGain = useWeeklyAssetIntervalGain(
     "usd-coin",
-    config.cellar.key === CellarKey.PATACHE_LINK
+    patache
   )
 
   const [todayData] = useGetSingleCellarValueQuery({
@@ -42,7 +50,7 @@ export const useWeeklyIntervalGain = (config: ConfigProps) => {
   const { dayDatas: previousWeekDatas } = cellarPreviousWeek || {}
 
   const PATACHE_LINK_QUERY_ENABLED = Boolean(
-    config.cellar.key === CellarKey.PATACHE_LINK &&
+    patache &&
       config.id &&
       todayDatas?.[0].shareValue &&
       previousWeekDatas?.[0].shareValue &&
@@ -50,7 +58,7 @@ export const useWeeklyIntervalGain = (config: ConfigProps) => {
   )
 
   const CLEAR_GATE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === CellarKey.CLEAR_GATE_CELLAR &&
+    clearGate &&
       config.id &&
       todayDatas?.[0].shareValue &&
       previousWeekDatas?.[0].shareValue &&
@@ -66,7 +74,7 @@ export const useWeeklyIntervalGain = (config: ConfigProps) => {
       previousWeekDatas?.[0].shareValue,
     ],
     async () => {
-      if (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) {
+      if (clearGate) {
         if (
           !todayDatas ||
           !previousWeekDatas ||
@@ -86,7 +94,7 @@ export const useWeeklyIntervalGain = (config: ConfigProps) => {
 
         return result
       }
-      if (config.cellar.key === CellarKey.PATACHE_LINK) {
+      if (patache) {
         if (
           !todayDatas ||
           !previousWeekDatas ||

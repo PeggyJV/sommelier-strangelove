@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
-import { getUserStakes } from "data/actions/CELLAR_STAKING/getUserStakes"
+import { getUserStakes } from "data/actions/CELLAR_STAKING_V0815/getUserStakes"
 import { ConfigProps, StakerKey } from "data/types"
-import { SommStaking } from "src/abi/types"
 import { useCreateContracts } from "./useCreateContracts"
 import { useAccount } from "wagmi"
 import { useSommelierPrice } from "./useSommelierPrice"
+import { CellarStakingV0815 } from "src/abi/types"
 
 export const useUserStakes = (config: ConfigProps) => {
   const { address } = useAccount()
@@ -12,7 +12,8 @@ export const useUserStakes = (config: ConfigProps) => {
   const sommPrice = useSommelierPrice()
 
   const queryEnabled = Boolean(
-    config.staker?.key === StakerKey.CELLAR_STAKING &&
+    config.staker?.key === StakerKey.CELLAR_STAKING_V0815 &&
+      sommPrice.data &&
       address &&
       stakerContract?.provider &&
       stakerSigner?.provider &&
@@ -30,11 +31,11 @@ export const useUserStakes = (config: ConfigProps) => {
       if (!sommPrice.data) {
         throw new Error("Sommelier price is undefined")
       }
-      if (config.staker?.key === StakerKey.CELLAR_STAKING) {
+      if (config.staker?.key === StakerKey.CELLAR_STAKING_V0815) {
         return await getUserStakes(
           _address!,
-          stakerContract as SommStaking,
-          stakerSigner as SommStaking,
+          stakerContract as CellarStakingV0815,
+          stakerSigner as CellarStakingV0815,
           sommPrice.data
         )
       }

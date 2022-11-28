@@ -27,7 +27,7 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface ClearGateCellarInterface extends utils.Interface {
+export interface CellarV0816Interface extends utils.Interface {
   functions: {
     "DOMAIN_SEPARATOR()": FunctionFragment;
     "MAXIMUM_SHARE_LOCK_PERIOD()": FunctionFragment;
@@ -1123,12 +1123,12 @@ export type WithdrawTypeChangedEvent = TypedEvent<
 export type WithdrawTypeChangedEventFilter =
   TypedEventFilter<WithdrawTypeChangedEvent>;
 
-export interface ClearGateCellar extends BaseContract {
+export interface CellarV0816 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: ClearGateCellarInterface;
+  interface: CellarV0816Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

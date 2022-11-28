@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getPositon } from "data/actions/common/getPosition"
-import { CellarKey, ConfigProps } from "data/types"
+import { CellarNameKey, ConfigProps } from "data/types"
 import { useGetPositionValueQuery } from "generated/subgraph"
 import { useCreateContracts } from "./useCreateContracts"
 
@@ -17,9 +17,14 @@ export const usePosition = (config: ConfigProps) => {
   const { cellar } = data || {}
   const { positions, positionDistribution } = cellar || {}
 
+  const isEnabled =
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+    config.cellarNameKey === CellarNameKey.STEADY_ETH
+
   const queryEnabled = Boolean(
-    (config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
-      config.cellar.key === CellarKey.PATACHE_LINK) &&
+    isEnabled &&
       cellarContract.provider &&
       positions &&
       positionDistribution
@@ -33,10 +38,7 @@ export const usePosition = (config: ConfigProps) => {
       config.cellar.address,
     ],
     async () => {
-      if (
-        config.cellar.key === CellarKey.CLEAR_GATE_CELLAR ||
-        config.cellar.key === CellarKey.PATACHE_LINK
-      ) {
+      if (isEnabled) {
         return await getPositon(positions, positionDistribution)
       }
       throw new Error("UNKNOWN CONTRACT")

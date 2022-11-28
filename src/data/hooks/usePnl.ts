@@ -5,8 +5,7 @@ import { useCreateContracts } from "./useCreateContracts"
 import { useAccount } from "wagmi"
 import { useUserBalances } from "./useUserBalances"
 import { useUserStakes } from "./useUserStakes"
-import { getPnl as getPnl_PATACHE_LINK } from "data/actions/PATACHE_LINK/getPnl"
-import { getPnl as getPnl_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getPnl"
+import { getPnl } from "data/actions/common/getPnl"
 
 export const usePnl = (config: ConfigProps) => {
   const { cellarContract } = useCreateContracts(config)
@@ -31,41 +30,31 @@ export const usePnl = (config: ConfigProps) => {
     pause: false,
   })
 
-  const AAVE_V2_STABLE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR &&
-      cellarContract.provider
-  )
-
-  const STEADY_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === CellarKey.PATACHE_LINK &&
+  const queryEnabled = Boolean(
+    (config.cellar.key === CellarKey.CELLAR_V0815 ||
+      config.cellar.key === CellarKey.CELLAR_V0816) &&
       cellarContract.provider
   )
 
   const query = useQuery(
     ["USE_PNL", lpToken.data?.formatted, config.cellar.address],
     async () => {
-      if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
-        return await getPnl_AAVE_V2_STABLE_CELLAR({
+      if (
+        config.cellar.key === CellarKey.CELLAR_V0815 ||
+        config.cellar.key === CellarKey.CELLAR_V0816
+      ) {
+        return await getPnl({
           cellarContract,
           lpToken: lpToken.data?.formatted,
           positionData,
           userStakes,
         })
       }
-      if (config.cellar.key === CellarKey.PATACHE_LINK) {
-        return await getPnl_PATACHE_LINK({
-          cellarContract,
-          lpToken: lpToken.data?.formatted,
-          positionData,
-          userStakes,
-        })
-      }
+
       throw new Error("UNKNOWN CONTRACT")
     },
     {
-      enabled:
-        AAVE_V2_STABLE_CELLAR_QUERY_ENABLED ||
-        STEADY_CELLAR_QUERY_ENABLED, // branching example: AAVE_V2_STABLE_CELLAR_QUERY_ENABLED || V1_5_CELLAR_QUERY_ENABLED
+      enabled: queryEnabled,
     }
   )
 

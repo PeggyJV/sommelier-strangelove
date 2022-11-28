@@ -4,7 +4,10 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { CellarRouter, CellarRouterInterface } from "../CellarRouter";
+import type {
+  CellarRouterV0815,
+  CellarRouterV0815Interface,
+} from "../CellarRouterV0815";
 
 const _abi = [
   {
@@ -354,15 +357,15 @@ const _abi = [
   },
 ];
 
-export class CellarRouter__factory {
+export class CellarRouterV0815__factory {
   static readonly abi = _abi;
-  static createInterface(): CellarRouterInterface {
-    return new utils.Interface(_abi) as CellarRouterInterface;
+  static createInterface(): CellarRouterV0815Interface {
+    return new utils.Interface(_abi) as CellarRouterV0815Interface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): CellarRouter {
-    return new Contract(address, _abi, signerOrProvider) as CellarRouter;
+  ): CellarRouterV0815 {
+    return new Contract(address, _abi, signerOrProvider) as CellarRouterV0815;
   }
 }

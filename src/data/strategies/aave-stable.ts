@@ -4,6 +4,7 @@ import {
   CellarRouterKey,
   StakerKey,
   CellarType,
+  CellarNameKey,
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
@@ -51,24 +52,25 @@ export const aaveStable = {
   },
   config: {
     id: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+    cellarNameKey: CellarNameKey.AAVE,
     lpToken: {
       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
       imagePath: "/assets/icons/aave.png",
     },
     cellarRouter: {
-      address: config.CONTRACT.CELLAR_ROUTER.ADDRESS,
-      abi: config.CONTRACT.CELLAR_ROUTER.ABI,
-      key: CellarRouterKey.CELLAR_ROUTER,
+      address: config.CONTRACT.CELLAR_ROUER_V0815.ADDRESS,
+      abi: config.CONTRACT.CELLAR_ROUER_V0815.ABI,
+      key: CellarRouterKey.CELLAR_ROUTER_V0815,
     },
     cellar: {
       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
       abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
-      key: CellarKey.AAVE_V2_STABLE_CELLAR,
+      key: CellarKey.CELLAR_V0815,
     },
     staker: {
       address: config.CONTRACT.AAVE_STAKER.ADDRESS,
       abi: config.CONTRACT.AAVE_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING,
+      key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   },

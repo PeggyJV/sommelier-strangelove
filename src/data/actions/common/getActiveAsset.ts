@@ -1,13 +1,9 @@
 import { tokenConfig } from "data/tokenConfig"
-import {
-  AaveV2CellarV2,
-  ClearGateCellar,
-  Steady,
-} from "src/abi/types"
+import { CellarV0815, CellarV0816 } from "src/abi/types"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 
 export const getActiveAsset = async (
-  cellarContract: ClearGateCellar | AaveV2CellarV2 | Steady
+  cellarContract: CellarV0815 | CellarV0816
 ) => {
   try {
     const activeAssetAddress = await cellarContract.asset()
