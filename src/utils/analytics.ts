@@ -50,6 +50,7 @@ export const invalidEventCharRex = /[^(\w|.|\-)]*/g
 export class AnalyticsWrapper {
   client: ReturnType<typeof Analytics>
   enabled: boolean
+  account: string | null
 
   constructor(
     appName: string,
@@ -61,6 +62,7 @@ export class AnalyticsWrapper {
     })
 
     this.enabled = false
+    this.account = null
   }
 
   enable() {
@@ -68,7 +70,12 @@ export class AnalyticsWrapper {
   }
 
   track(eventName: string, payload?: Record<string, unknown>) {
-    this.enabled && this.client.track(eventName, payload)
+    const eventPayload = {
+      ...payload,
+      account: this.account ?? "not-connected",
+    }
+
+    this.enabled && this.client.track(eventName, eventPayload)
   }
 
   // strips invalid characters
@@ -78,7 +85,10 @@ export class AnalyticsWrapper {
   }
 
   identify(id: string) {
-    this.enabled && this.client.identify(id)
+    if (this.enabled) {
+      // setting account and passing to each event instead of using cookies
+      this.account = id
+    }
   }
 }
 
