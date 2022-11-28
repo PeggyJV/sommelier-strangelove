@@ -87,7 +87,7 @@ export const config = {
       ABI: cellarV0816,
     },
     // Router
-    CELLAR_ROUER_V0815: {
+    CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
       ADDRESS: "0x7286eC6A1425a5A3EC62DEF2a2Cdd2498e07086c",
       ABI: cellarRouterV0815,
@@ -108,6 +108,14 @@ export const config = {
     },
     STEADY_BTC_STAKER: {
       ADDRESS: "0xd1d02c16874e0714fd825213e0c13eab6dd9c25f",
+      ABI: cellarStakingV0815,
+    },
+    ETH_BTC_TREND_STAKER: {
+      ADDRESS: "0x9eEaBfFf5D15e8CedFD2F6C914c8826ba0a5FbBD",
+      ABI: cellarStakingV0815,
+    },
+    ETH_BTC_MOMENTUM_STAKER: {
+      ADDRESS: "0x6Ce314c39F30488B4a86B8892C81a5B7af83e337",
       ABI: cellarStakingV0815,
     },
   },

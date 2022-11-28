@@ -4,6 +4,7 @@ import {
   CellarNameKey,
   CellarRouterKey,
   CellarType,
+  StakerKey,
 } from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
 
@@ -94,6 +95,11 @@ export const ethBtcTrend = {
       address: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
       abi: config.CONTRACT.ETH_BTC_TREND_CELLAR.ABI,
       key: CellarKey.CELLAR_V0816,
+    },
+    staker: {
+      address: config.CONTRACT.ETH_BTC_TREND_STAKER.ADDRESS,
+      abi: config.CONTRACT.ETH_BTC_TREND_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0815,
     },
   },
   faq: [

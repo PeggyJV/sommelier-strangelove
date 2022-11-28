@@ -4,6 +4,7 @@ import {
   CellarNameKey,
   CellarRouterKey,
   CellarType,
+  StakerKey,
 } from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
 
@@ -95,6 +96,11 @@ export const ethBtcMomentum = {
       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
       abi: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ABI,
       key: CellarKey.CELLAR_V0816,
+    },
+    staker: {
+      address: config.CONTRACT.ETH_BTC_MOMENTUM_STAKER.ADDRESS,
+      abi: config.CONTRACT.ETH_BTC_MOMENTUM_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0815,
     },
   },
   faq: [
