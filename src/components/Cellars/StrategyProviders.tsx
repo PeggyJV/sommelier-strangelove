@@ -4,6 +4,7 @@ import { SevenSeasIcon } from "components/_icons/SevenSeasIcon"
 import { ClearGateIcon } from "components/_icons/ClearGateIcon"
 import { BecomeProvider } from "./BecomeProvider"
 import { CardBase } from "./CardBase"
+import { PatacheIcon } from "components/_icons/PatacheIcon"
 
 export const StrategyProviders: React.FC<BoxProps> = (props) => {
   return (
@@ -27,6 +28,11 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
         <Link isExternal href="https://cleargate.capital/">
           <CardBase justifyContent="center" h="full">
             <ClearGateIcon w={{ base: 200, lg: 243 }} h={100} />
+          </CardBase>
+        </Link>
+        <Link isExternal href="https://cleargate.capital/">
+          <CardBase justifyContent="center" h="full">
+            <PatacheIcon w={{ base: 200, lg: 243 }} h={100} />
           </CardBase>
         </Link>
         <BecomeProvider />
