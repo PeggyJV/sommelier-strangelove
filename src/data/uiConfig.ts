@@ -25,6 +25,13 @@ export const isTokenAssets = (config: ConfigProps) => {
   return config.cellarNameKey === CellarNameKey.AAVE
 }
 
+export const IsOneWeekEthBtc = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  )
+}
+
 export const isPositionTokenAssets = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
@@ -98,7 +105,7 @@ export const intervalGainPctTitleContent = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
   )
-    return "1W Change vs ETH/BTC 50/50"
+    return "1M Change vs ETH/BTC 50/50"
   return ""
 }
 
