@@ -40,7 +40,7 @@ export const steadyEth = {
 
     highlights: `The cellar:
 
-      - "Risk first" approach - capital preservation is more important than capital growth.
+      - “Risk first” approach - capital preservation is prioritized over capital growth.
 
       - Always defined risk for every position prevailing from trade inception until trade exit.
 
