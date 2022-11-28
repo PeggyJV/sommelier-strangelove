@@ -133,11 +133,10 @@ export const intervalGainPctTooltipContent = (
 }
 
 export const tokenPriceTooltipContent = (config: ConfigProps) => {
-  if (
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
-  )
-    return ""
+  if (config.cellarNameKey === CellarNameKey.STEADY_ETH)
+    return "The dollar value of the ETH and USDC that 1 token can be redeemed"
+  if (config.cellarNameKey === CellarNameKey.STEADY_BTC)
+    return "The dollar value of the BTC and USDC that 1 token can be redeemed"
   if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
