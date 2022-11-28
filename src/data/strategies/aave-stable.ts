@@ -58,8 +58,8 @@ export const aaveStable = {
       imagePath: "/assets/icons/aave.png",
     },
     cellarRouter: {
-      address: config.CONTRACT.CELLAR_ROUER_V0815.ADDRESS,
-      abi: config.CONTRACT.CELLAR_ROUER_V0815.ABI,
+      address: config.CONTRACT.CELLAR_ROUTER_V0815.ADDRESS,
+      abi: config.CONTRACT.CELLAR_ROUTER_V0815.ABI,
       key: CellarRouterKey.CELLAR_ROUTER_V0815,
     },
     cellar: {

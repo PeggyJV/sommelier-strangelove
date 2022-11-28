@@ -22,12 +22,12 @@ import { BigNumber } from "bignumber.js"
 import { useApproveERC20, useHandleTransaction } from "hooks/web3"
 import { ethers } from "ethers"
 import { analytics } from "utils/analytics"
-import { bondingPeriodOptions } from "./BondingPeriodOptions"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStakes } from "data/hooks/useUserStakes"
+import { bondingPeriodOptions } from "data/uiConfig"
 
 interface FormValues {
   depositAmount: number
@@ -80,7 +80,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
 
   const onSubmit = async (data: FormValues) => {
     const analyticsData = {
-      duration: bondingPeriodOptions[bondPeriod],
+      duration: bondingPeriodOptions(cellarConfig)[bondPeriod],
     }
     analytics.track("bond.started", analyticsData)
     await doApprove(data.depositAmount, {
@@ -140,7 +140,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       >
         <VStack align="stretch">
           <CardHeading>Bonding Period</CardHeading>
-          <BondingPeriodOptions />
+          <BondingPeriodOptions cellarConfig={cellarConfig} />
         </VStack>
         <FormControl isInvalid={isError as boolean | undefined}>
           <InputGroup display="flex" alignItems="center">
