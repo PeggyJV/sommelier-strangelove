@@ -51,6 +51,7 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
 import { isActiveTokenStrategyEnabled } from "data/uiConfig"
+import { useNetValue } from "data/hooks/useNetValue"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -71,6 +72,8 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
   const { data: signer } = useSigner()
   const { address } = useAccount()
   const { addToast, update, close, closeAll } = useBrandedToast()
+
+  const { refetch: refetchNetValue } = useNetValue(cellarConfig)
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
@@ -259,7 +262,6 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           })
 
       if (!response) throw new Error("response is undefined")
-
       addToast({
         heading: cellarName + " Cellar Deposit",
         status: "default",
@@ -274,6 +276,9 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
       })
 
       const depositResult = await waitForDeposit
+
+      refetchNetValue()
+
       if (depositResult?.data?.transactionHash) {
         analytics.track("deposit.succeeded", {
           ...baseAnalytics,
@@ -422,6 +427,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
                 aria-label="swap settings"
                 colorScheme="transparent"
                 disabled={isActiveAsset}
+                color="neutral.300"
                 icon={<FiSettings />}
                 onClick={() => {
                   setShowSwapSettings(!showSwapSettings)

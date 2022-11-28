@@ -25,6 +25,7 @@ import { useUserStakes } from "data/hooks/useUserStakes"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { estimateGasLimit } from "utils/estimateGasLimit"
+import { useNetValue } from "data/hooks/useNetValue"
 interface FormValues {
   withdrawAmount: number
 }
@@ -48,7 +49,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch: userStakesRefetch } = useUserStakes(cellarConfig)
+  const { refetch: refetchUserStakes } = useUserStakes(cellarConfig)
+  const { refetch: refetchNetValue } = useNetValue(cellarConfig)
 
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
@@ -64,7 +66,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
   const setMax = () => {
     const amount = parseFloat(
-      toEther(lpTokenData?.formatted, 18, false)
+      toEther(lpTokenData?.formatted, 18, false, 6)
     )
     setValue("withdrawAmount", amount)
 
@@ -133,8 +135,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       onError,
     })
 
-    userStakesRefetch()
-
+    refetchUserStakes()
+    refetchNetValue()
     setValue("withdrawAmount", 0)
   }
 

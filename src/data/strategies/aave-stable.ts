@@ -68,7 +68,7 @@ export const aaveStable = {
     staker: {
       address: config.CONTRACT.AAVE_STAKER.ADDRESS,
       abi: config.CONTRACT.AAVE_STAKER.ABI,
-      key: StakerKey.AAVE_STAKER,
+      key: StakerKey.CELLAR_STAKING,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   },

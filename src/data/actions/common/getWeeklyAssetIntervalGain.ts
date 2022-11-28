@@ -1,9 +1,10 @@
 import { getGainPct } from "utils/getGainPct"
+import { KnownCoingeckoAssetId } from "../types"
 import { fetchMarketChart } from "./fetchMarketChart"
 
 // shift back coin gecko data is intentional
 export const getWeeklyAssetIntervalGain = async (
-  asset: "wrapped-bitcoin" | "weth" | "wrapped-usdc",
+  asset: KnownCoingeckoAssetId,
   day: number
 ) => {
   try {

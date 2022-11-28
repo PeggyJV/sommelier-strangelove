@@ -4,6 +4,7 @@ import sommStaking from "../abi/sommStaking.json"
 import gravityBridge from "../abi/gravityBridge.json"
 import clearGateCellar from "../abi/clearGateCellar.json"
 import clearGateRouter from "../abi/clearGateRouter.json"
+import steadyCellar from "../abi/steady.json"
 import { erc20ABI } from "wagmi"
 
 // Adress should be saved as lowercase
@@ -80,12 +81,12 @@ export const config = {
     STEADY_ETH: {
       ADDRESS: "0x3f07a84ecdf494310d397d24c1c78b041d2fa622",
       SLUG: "Steady-ETH",
-      ABI: sommStaking,
+      ABI: steadyCellar,
     },
     STEADY_BTC: {
       ADDRESS: "0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
       SLUG: "Steady-BTC",
-      ABI: sommStaking,
+      ABI: steadyCellar,
     },
     CLEAR_GATE_TEST_CELLAR_A: {
       ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
@@ -98,6 +99,14 @@ export const config = {
     CLEAR_GATE_ROUTER: {
       ADDRESS: "0x1d90366b0154fbcb5101c06a39c25d26cb48e889",
       ABI: clearGateRouter,
+    },
+    STEADY_ETH_STAKER: {
+      ADDRESS: "0xae0e6024972b70601bc35405479af5cd372cc956",
+      ABI: sommStaking,
+    },
+    STEADY_BTC_STAKER: {
+      ADDRESS: "0xd1d02c16874e0714fd825213e0c13eab6dd9c25f",
+      ABI: sommStaking,
     },
   },
   cleargate: {

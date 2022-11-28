@@ -26,17 +26,20 @@ import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
-import { CellarKey, CellarType } from "data/types"
-import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
+import { CellarType } from "data/types"
+import { useWeeklyIntervalGain } from "data/hooks/useWeeklyIntervalGain"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
   isEthBtcChartEnabled,
   isTVMEnabled,
+  isUsdcChartEnabled,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
 import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
+import { UsdcPerfomanceCard } from "components/_cards/UsdcPerfomanceCard"
+import { UsdcChartProvider } from "data/context/usdcChartContext"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -55,13 +58,12 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
-  const intervalGainPct = useIntervalGainPct(cellarConfig)
+  const intervalGainPct = useWeeklyIntervalGain(cellarConfig)
   const [isLarger768] = useMediaQuery("(min-width: 768px)")
   const isYieldStrategies =
     staticCellarData.cellarType === CellarType.yieldStrategies
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
-  const isSteady = cellarConfig.cellar.key === CellarKey.PATACHE_LINK
 
   return (
     <Layout>
@@ -153,6 +155,14 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
               </Heading>
               <EthBtcPerfomanceCard />
             </EthBtcChartProvider>
+          )}
+          {isUsdcChartEnabled(cellarConfig) && (
+            <UsdcChartProvider address={cellarAddress}>
+              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
+                Strategy Perfomance
+              </Heading>
+              <UsdcPerfomanceCard />
+            </UsdcChartProvider>
           )}
           <Heading pt={isYieldStrategies ? 0 : 12} {...h2Styles}>
             Strategy Details

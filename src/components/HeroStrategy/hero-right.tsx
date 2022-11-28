@@ -22,7 +22,7 @@ import { VFC } from "react"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsLabel } from "components/_cards/CellarCard/CellarStats"
 import { useTvm } from "data/hooks/useTvm"
-import { useIntervalGainPct } from "data/hooks/useIntervalGainPct"
+import { useWeeklyIntervalGain } from "data/hooks/useWeeklyIntervalGain"
 import { analytics } from "utils/analytics"
 import { landingType } from "utils/landingType"
 import { usePosition } from "data/hooks/usePosition"
@@ -50,7 +50,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
   const position = usePosition(cellarConfig)
-  const intervalGainPct = useIntervalGainPct(cellarConfig)
+  const intervalGainPct = useWeeklyIntervalGain(cellarConfig)
   const tvm = useTvm(cellarConfig)
   const countdown = useCountdown({
     launchDate,
@@ -92,7 +92,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             style={{ textDecoration: "none" }}
           >
             <SecondaryButton w="full" h="50px">
-              Manage Portfolio
+              View Details
             </SecondaryButton>
           </Link>
           <HStack

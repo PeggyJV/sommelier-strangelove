@@ -6,12 +6,15 @@ import {
   StakerKey,
 } from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
+import { LAUNCH_DATE_DISABLED } from "utils/constants"
 
 export const steadyBtc = {
   name: "Steady BTC",
-  launchDate: "2022-11-29 12:00:00",
+  launchDate: LAUNCH_DATE_DISABLED
+    ? undefined
+    : "2022-11-29 12:00:00",
   cellarType: CellarType.automatedPortfolio,
-  description: `Capture the upside of BTC price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is more important than capital growth.`,
+  description: `Capture the upside of BTC price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
@@ -20,6 +23,7 @@ export const steadyBtc = {
   protocols: "Uniswap V3",
   strategyAssets: ["WBTC", "USDC"],
   performanceSplit: {
+    depositors: 90,
     protocol: 2.5,
     "strategy provider": 7.5,
   },
@@ -83,13 +87,12 @@ export const steadyBtc = {
     id: config.CONTRACT.STEADY_BTC.ADDRESS,
     lpToken: {
       address: config.CONTRACT.STEADY_BTC.ADDRESS,
-      // STILL NEED TO UPDATE THIS ICON
-      imagePath: "/assets/icons/eth-btc-mom.svg",
+      imagePath: "/assets/icons/steady-btc.svg",
     },
     cellarRouter: {
-      address: config.CONTRACT.CELLAR_ROUTER.ADDRESS,
-      abi: config.CONTRACT.CELLAR_ROUTER.ABI,
-      key: CellarRouterKey.CELLAR_ROUTER,
+      address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
+      abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
+      key: CellarRouterKey.CLEAR_GATE_ROUTER,
     },
     cellar: {
       address: config.CONTRACT.STEADY_BTC.ADDRESS,
@@ -97,9 +100,9 @@ export const steadyBtc = {
       key: CellarKey.PATACHE_LINK,
     },
     staker: {
-      address: config.CONTRACT.STEADY_BTC.ADDRESS,
-      abi: config.CONTRACT.STEADY_BTC.ABI,
-      key: StakerKey.AAVE_STAKER,
+      address: config.CONTRACT.STEADY_BTC_STAKER.ADDRESS,
+      abi: config.CONTRACT.STEADY_BTC_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   },

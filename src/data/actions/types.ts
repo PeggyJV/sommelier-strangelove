@@ -65,3 +65,20 @@ export interface DepositAndSwapParams {
   senderAddress: string
   payload: DepositAndSwapPayload
 }
+
+export type KnownCoingeckoAssetId =
+  | "wrapped-bitcoin"
+  | "weth"
+  | "usd-coin"
+
+export interface PriceData {
+  date: number
+  change: number
+  value: number
+}
+
+export type GetAssetGainChartDataProps = {
+  day: number
+  interval: "hourly" | "daily"
+  firstDate?: Date
+}

@@ -11,17 +11,22 @@ import { useState, VFC } from "react"
 import { TransparentCard } from "./TransparentCard"
 import { CardHeading } from "components/_typography/CardHeading"
 import { analytics } from "utils/analytics"
-import { useEthBtcChart } from "data/context/ethBtcChartContext"
-import { EthBtcChart } from "components/_charts/EthBtcChart"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { PercentageText } from "components/PercentageText"
 import { Legend } from "components/_charts/Legend"
+import { useUsdcChart } from "data/context/usdcChartContext"
+import { UsdcChart } from "components/_charts/UsdcChart"
 
-export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
-  const { timeArray, tokenPriceChange, showLine, setShowLine } =
-    useEthBtcChart()
+export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
+  const {
+    timeArray,
+    tokenPriceChange,
+    showLine,
+    setShowLine,
+    fetching,
+  } = useUsdcChart()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const tokenPrice = useTokenPrice(cellarConfig)
@@ -98,7 +103,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
               })}
             </HStack>
           </HStack>
-          <EthBtcChart
+          <UsdcChart
             timeline={timeline}
             name={cellarDataMap[id].name}
           />
@@ -120,34 +125,12 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
           />
           <Legend
             color="violet.base"
-            title="ETH 50/BTC 50"
-            active={showLine.ethBtc50}
+            title="USDC"
+            active={showLine.usdc}
             onClick={() => {
               setShowLine((prev) => ({
                 ...prev,
-                ethBtc50: !showLine.ethBtc50,
-              }))
-            }}
-          />
-          <Legend
-            color="turquoise.base"
-            title="ETH"
-            active={showLine.eth}
-            onClick={() => {
-              setShowLine((prev) => ({
-                ...prev,
-                eth: !showLine.eth,
-              }))
-            }}
-          />
-          <Legend
-            color="orange.base"
-            title="BTC"
-            active={showLine.btc}
-            onClick={() => {
-              setShowLine((prev) => ({
-                ...prev,
-                btc: !showLine.btc,
+                ethBtc50: !showLine.usdc,
               }))
             }}
           />
