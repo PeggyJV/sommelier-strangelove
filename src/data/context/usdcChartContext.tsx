@@ -44,7 +44,8 @@ export interface ShowLine {
 }
 
 export interface UsdcChartContext {
-  fetching: boolean
+  isFetching: boolean
+  isError: boolean
   data: DataProps
   setDataHourly: () => void
   setDataWeekly: () => void
@@ -132,7 +133,8 @@ const initialData: UsdcChartContext = {
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   },
-  fetching: true,
+  isFetching: true,
+  isError: false,
   reexecuteHourly: () => null,
   reexecuteWeekly: () => null,
   reexecuteMonthly: () => null,
@@ -171,7 +173,11 @@ export const UsdcChartProvider: FC<{
 
   // GQL Queries
   const [
-    { fetching: hourlyIsFetching, data: hourlyDataRaw },
+    {
+      fetching: hourlyIsFetching,
+      data: hourlyDataRaw,
+      error: hourlyError,
+    },
     reexecuteHourly,
   ] = useGetHourlyShareValueQuery({
     variables: {
@@ -180,7 +186,11 @@ export const UsdcChartProvider: FC<{
     },
   })
   const [
-    { fetching: weeklyIsFetching, data: weeklyDataRaw },
+    {
+      fetching: weeklyIsFetching,
+      data: weeklyDataRaw,
+      error: weeklyError,
+    },
     reexecuteWeekly,
   ] = useGetWeeklyShareValueQuery({
     variables: {
@@ -189,7 +199,11 @@ export const UsdcChartProvider: FC<{
     },
   })
   const [
-    { fetching: monthlyIsFetching, data: monthlyDataRaw },
+    {
+      fetching: monthlyIsFetching,
+      data: monthlyDataRaw,
+      error: monthlyError,
+    },
     reexecuteMonthly,
   ] = useGetMonthlyShareValueQuery({
     variables: {
@@ -198,7 +212,11 @@ export const UsdcChartProvider: FC<{
     },
   })
   const [
-    { fetching: allTimeIsFetching, data: allTimeDataRaw },
+    {
+      fetching: allTimeIsFetching,
+      data: allTimeDataRaw,
+      error: allTimeError,
+    },
     reexecuteAllTime,
   ] = useGetAllTimeShareValueQuery({
     variables: {
@@ -245,7 +263,7 @@ export const UsdcChartProvider: FC<{
     })
 
   // Grouped loading state
-  const fetching =
+  const isFetching =
     hourlyIsFetching ||
     weeklyIsFetching ||
     monthlyIsFetching ||
@@ -254,6 +272,16 @@ export const UsdcChartProvider: FC<{
     usdcWeekly.isLoading ||
     usdcMonthly.isLoading ||
     usdcAlltime.isLoading
+
+  const isError =
+    !!hourlyError ||
+    !!weeklyError ||
+    !!monthlyError ||
+    !!allTimeError ||
+    usdcHourly.isError ||
+    usdcWeekly.isError ||
+    usdcMonthly.isError ||
+    usdcAlltime.isError
 
   // Functions to update data returned by hook
   const setDataHourly = () => {
@@ -498,7 +526,8 @@ export const UsdcChartProvider: FC<{
   return (
     <usdcChartContext.Provider
       value={{
-        fetching,
+        isFetching,
+        isError,
         data: dataC,
         setDataHourly,
         setDataWeekly,

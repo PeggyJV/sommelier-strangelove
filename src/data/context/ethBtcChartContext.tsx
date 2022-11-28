@@ -46,7 +46,8 @@ export interface ShowLine {
 }
 
 export interface EthBtcChartContext {
-  fetching: boolean
+  isFetching: boolean
+  isError: boolean
   data: DataProps
   setDataHourly: () => void
   setDataWeekly: () => void
@@ -134,7 +135,8 @@ const initialData: EthBtcChartContext = {
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   },
-  fetching: true,
+  isFetching: true,
+  isError: false,
   reexecuteHourly: () => null,
   reexecuteWeekly: () => null,
   reexecuteMonthly: () => null,
@@ -178,7 +180,11 @@ export const EthBtcChartProvider: FC<{
 
   // GQL Queries
   const [
-    { fetching: hourlyIsFetching, data: hourlyDataRaw },
+    {
+      fetching: hourlyIsFetching,
+      data: hourlyDataRaw,
+      error: hourlyError,
+    },
     reexecuteHourly,
   ] = useGetHourlyShareValueQuery({
     variables: {
@@ -187,7 +193,11 @@ export const EthBtcChartProvider: FC<{
     },
   })
   const [
-    { fetching: weeklyIsFetching, data: weeklyDataRaw },
+    {
+      fetching: weeklyIsFetching,
+      data: weeklyDataRaw,
+      error: weeklyError,
+    },
     reexecuteWeekly,
   ] = useGetWeeklyShareValueQuery({
     variables: {
@@ -196,7 +206,11 @@ export const EthBtcChartProvider: FC<{
     },
   })
   const [
-    { fetching: monthlyIsFetching, data: monthlyDataRaw },
+    {
+      fetching: monthlyIsFetching,
+      data: monthlyDataRaw,
+      error: monthlyError,
+    },
     reexecuteMonthly,
   ] = useGetMonthlyShareValueQuery({
     variables: {
@@ -205,7 +219,11 @@ export const EthBtcChartProvider: FC<{
     },
   })
   const [
-    { fetching: allTimeIsFetching, data: allTimeDataRaw },
+    {
+      fetching: allTimeIsFetching,
+      data: allTimeDataRaw,
+      error: allTimeError,
+    },
     reexecuteAllTime,
   ] = useGetAllTimeShareValueQuery({
     variables: {
@@ -252,7 +270,7 @@ export const EthBtcChartProvider: FC<{
     })
 
   // Grouped loading state
-  const fetching =
+  const isFetching =
     hourlyIsFetching ||
     weeklyIsFetching ||
     monthlyIsFetching ||
@@ -261,6 +279,16 @@ export const EthBtcChartProvider: FC<{
     ethBtcHWeekly.isLoading ||
     ethBtcMonthly.isLoading ||
     ethBtcAlltime.isLoading
+
+  const isError =
+    !!hourlyError ||
+    !!weeklyError ||
+    !!monthlyError ||
+    !!allTimeError ||
+    ethBtcHourly.isError ||
+    ethBtcHWeekly.isError ||
+    ethBtcMonthly.isError ||
+    ethBtcAlltime.isError
 
   // Functions to update data returned by hook
   const setDataHourly = () => {
@@ -550,7 +578,8 @@ export const EthBtcChartProvider: FC<{
   return (
     <ethBtcChartContext.Provider
       value={{
-        fetching,
+        isFetching,
+        isError,
         data: dataC,
         setDataHourly,
         setDataWeekly,
