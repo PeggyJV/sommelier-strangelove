@@ -3,9 +3,18 @@ import { CellarNameKey, ConfigProps } from "data/types"
 import { useGetSingleCellarValueQuery } from "generated/subgraph"
 import { getPreviousDay, getPreviousWeek } from "utils/calculateTime"
 import { getGainPct } from "utils/getGainPct"
-import { useWeeklyAssetIntervalGain } from "./useWeeklyAssetIntervalGain"
+import { useAssetIntervalGain } from "./useAssetIntervalGain"
 
-export const useWeeklyIntervalGain = (config: ConfigProps) => {
+interface useIntervalGainProps {
+  config: ConfigProps
+  timeline?: "weekly" | "monthly"
+}
+
+export const useIntervalGain = ({
+  config,
+  timeline = "weekly",
+}: useIntervalGainProps) => {
+  const days = timeline === "weekly" ? 6 : 29
   const clearGate =
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
@@ -14,17 +23,20 @@ export const useWeeklyIntervalGain = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
     config.cellarNameKey === CellarNameKey.STEADY_ETH
 
-  const ethIntervalGain = useWeeklyAssetIntervalGain(
+  const ethIntervalGain = useAssetIntervalGain(
     "weth",
-    clearGate
+    clearGate,
+    days
   )
-  const btcIntervalGain = useWeeklyAssetIntervalGain(
+  const btcIntervalGain = useAssetIntervalGain(
     "wrapped-bitcoin",
-    clearGate
+    clearGate,
+    days
   )
-  const usdcIntervalGain = useWeeklyAssetIntervalGain(
+  const usdcIntervalGain = useAssetIntervalGain(
     "usd-coin",
-    patache
+    patache,
+    days
   )
 
   const [todayData] = useGetSingleCellarValueQuery({
