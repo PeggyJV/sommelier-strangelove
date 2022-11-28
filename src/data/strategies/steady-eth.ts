@@ -14,7 +14,7 @@ export const steadyEth = {
     ? undefined
     : "2022-11-29 12:00:00",
   cellarType: CellarType.automatedPortfolio,
-  description: `Capture the upside of ETH price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is more important than capital growth.`,
+  description: `Capture the upside of ETH price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
