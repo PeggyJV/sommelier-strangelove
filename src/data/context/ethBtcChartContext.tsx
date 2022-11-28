@@ -284,17 +284,6 @@ export const EthBtcChartProvider: FC<{
     ethBtcMonthly.isLoading ||
     ethBtcAlltime.isLoading
 
-  console.log(
-    hourlyIsFetching,
-    weeklyIsFetching,
-    monthlyIsFetching,
-    allTimeIsFetching,
-    ethBtcHourly.isLoading,
-    ethBtcHWeekly.isLoading,
-    ethBtcMonthly.isLoading,
-    ethBtcAlltime.isLoading
-  )
-
   const isError =
     !!hourlyError ||
     !!weeklyError ||
