@@ -1,27 +1,15 @@
 import { CellarNameKey, ConfigProps } from "./types"
 
 export const isBondingEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
-  )
+  return true
 }
 
 export const isBondButtonEnabled = (config: ConfigProps) => {
-  // aave bond button disabled because program already ended
-  return (
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
-  )
+  return true
 }
 
 export const isRewardsEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
-  )
+  return true
 }
 
 export const isTokenAssets = (config: ConfigProps) => {
@@ -41,19 +29,8 @@ export const isCurrentDepositsEnabled = (config: ConfigProps) => {
   return config.cellarNameKey === CellarNameKey.AAVE
 }
 
-export const isCountdownEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
-  )
-}
-
 export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
-  )
+  return true
 }
 
 export const isTVMEnabled = (config: ConfigProps) => {
