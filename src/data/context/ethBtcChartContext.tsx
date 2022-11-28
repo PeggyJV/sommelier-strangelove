@@ -168,6 +168,10 @@ const initialData: EthBtcChartContext = {
 const ethBtcChartContext =
   createContext<EthBtcChartContext>(initialData)
 
+const prev24Hours = getPrevious24Hours()
+const prevWeek = getPreviousWeek()
+const prevMonth = getPreviousMonth()
+
 export const EthBtcChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
@@ -188,7 +192,7 @@ export const EthBtcChartProvider: FC<{
     reexecuteHourly,
   ] = useGetHourlyShareValueQuery({
     variables: {
-      epoch: getPrevious24Hours(),
+      epoch: prev24Hours,
       cellarAddress: address,
     },
   })
@@ -201,7 +205,7 @@ export const EthBtcChartProvider: FC<{
     reexecuteWeekly,
   ] = useGetWeeklyShareValueQuery({
     variables: {
-      epoch: getPreviousWeek(),
+      epoch: prevWeek,
       cellarAddress: address,
     },
   })
@@ -214,7 +218,7 @@ export const EthBtcChartProvider: FC<{
     reexecuteMonthly,
   ] = useGetMonthlyShareValueQuery({
     variables: {
-      epoch: getPreviousMonth(),
+      epoch: prevMonth,
       cellarAddress: address,
     },
   })
@@ -279,6 +283,17 @@ export const EthBtcChartProvider: FC<{
     ethBtcHWeekly.isLoading ||
     ethBtcMonthly.isLoading ||
     ethBtcAlltime.isLoading
+
+  console.log(
+    hourlyIsFetching,
+    weeklyIsFetching,
+    monthlyIsFetching,
+    allTimeIsFetching,
+    ethBtcHourly.isLoading,
+    ethBtcHWeekly.isLoading,
+    ethBtcMonthly.isLoading,
+    ethBtcAlltime.isLoading
+  )
 
   const isError =
     !!hourlyError ||

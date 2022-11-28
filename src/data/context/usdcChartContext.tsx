@@ -163,6 +163,10 @@ const initialData: UsdcChartContext = {
 
 const usdcChartContext = createContext<UsdcChartContext>(initialData)
 
+const prev24Hours = getPrevious24Hours()
+const prevWeek = getPreviousWeek()
+const prevMonth = getPreviousMonth()
+
 export const UsdcChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
@@ -181,7 +185,7 @@ export const UsdcChartProvider: FC<{
     reexecuteHourly,
   ] = useGetHourlyShareValueQuery({
     variables: {
-      epoch: getPrevious24Hours(),
+      epoch: prev24Hours,
       cellarAddress: address,
     },
   })
@@ -194,7 +198,7 @@ export const UsdcChartProvider: FC<{
     reexecuteWeekly,
   ] = useGetWeeklyShareValueQuery({
     variables: {
-      epoch: getPreviousWeek(),
+      epoch: prevWeek,
       cellarAddress: address,
     },
   })
@@ -207,7 +211,7 @@ export const UsdcChartProvider: FC<{
     reexecuteMonthly,
   ] = useGetMonthlyShareValueQuery({
     variables: {
-      epoch: getPreviousMonth(),
+      epoch: prevMonth,
       cellarAddress: address,
     },
   })

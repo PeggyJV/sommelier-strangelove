@@ -128,6 +128,9 @@ const initialData: PerformanceChartContext = {
 const performanceChartByAddressContext =
   createContext<PerformanceChartContext>(initialData)
 
+const prev24Hours = getPrevious24Hours()
+const prevWeek = getPreviousWeek()
+
 export const PerformanceChartByAddressProvider: FC<{
   address: string
 }> = ({ children, address }) => {
@@ -141,7 +144,7 @@ export const PerformanceChartByAddressProvider: FC<{
     reexecuteHourly,
   ] = useGetHourlyTvlByAddressQuery({
     variables: {
-      epoch: getPrevious24Hours(),
+      epoch: prev24Hours,
       cellarAddress: address,
     },
   })
@@ -154,7 +157,7 @@ export const PerformanceChartByAddressProvider: FC<{
     reexecuteWeekly,
   ] = useGetWeeklyTvlByAdressQuery({
     variables: {
-      epoch: getPreviousWeek(),
+      epoch: prevWeek,
       cellarAddress: address,
     },
   })
