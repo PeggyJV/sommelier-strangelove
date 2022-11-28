@@ -44,7 +44,8 @@ export interface ShowLine {
 }
 
 export interface UsdcChartContext {
-  fetching: boolean
+  isFetching: boolean
+  isError: boolean
   data: DataProps
   setDataHourly: () => void
   setDataWeekly: () => void
@@ -132,7 +133,8 @@ const initialData: UsdcChartContext = {
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   },
-  fetching: true,
+  isFetching: true,
+  isError: false,
   reexecuteHourly: () => null,
   reexecuteWeekly: () => null,
   reexecuteMonthly: () => null,
@@ -161,6 +163,10 @@ const initialData: UsdcChartContext = {
 
 const usdcChartContext = createContext<UsdcChartContext>(initialData)
 
+const prev24Hours = getPrevious24Hours()
+const prevWeek = getPreviousWeek()
+const prevMonth = getPreviousMonth()
+
 export const UsdcChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
@@ -171,34 +177,50 @@ export const UsdcChartProvider: FC<{
 
   // GQL Queries
   const [
-    { fetching: hourlyIsFetching, data: hourlyDataRaw },
+    {
+      fetching: hourlyIsFetching,
+      data: hourlyDataRaw,
+      error: hourlyError,
+    },
     reexecuteHourly,
   ] = useGetHourlyShareValueQuery({
     variables: {
-      epoch: getPrevious24Hours(),
+      epoch: prev24Hours,
       cellarAddress: address,
     },
   })
   const [
-    { fetching: weeklyIsFetching, data: weeklyDataRaw },
+    {
+      fetching: weeklyIsFetching,
+      data: weeklyDataRaw,
+      error: weeklyError,
+    },
     reexecuteWeekly,
   ] = useGetWeeklyShareValueQuery({
     variables: {
-      epoch: getPreviousWeek(),
+      epoch: prevWeek,
       cellarAddress: address,
     },
   })
   const [
-    { fetching: monthlyIsFetching, data: monthlyDataRaw },
+    {
+      fetching: monthlyIsFetching,
+      data: monthlyDataRaw,
+      error: monthlyError,
+    },
     reexecuteMonthly,
   ] = useGetMonthlyShareValueQuery({
     variables: {
-      epoch: getPreviousMonth(),
+      epoch: prevMonth,
       cellarAddress: address,
     },
   })
   const [
-    { fetching: allTimeIsFetching, data: allTimeDataRaw },
+    {
+      fetching: allTimeIsFetching,
+      data: allTimeDataRaw,
+      error: allTimeError,
+    },
     reexecuteAllTime,
   ] = useGetAllTimeShareValueQuery({
     variables: {
@@ -245,7 +267,7 @@ export const UsdcChartProvider: FC<{
     })
 
   // Grouped loading state
-  const fetching =
+  const isFetching =
     hourlyIsFetching ||
     weeklyIsFetching ||
     monthlyIsFetching ||
@@ -254,6 +276,16 @@ export const UsdcChartProvider: FC<{
     usdcWeekly.isLoading ||
     usdcMonthly.isLoading ||
     usdcAlltime.isLoading
+
+  const isError =
+    !!hourlyError ||
+    !!weeklyError ||
+    !!monthlyError ||
+    !!allTimeError ||
+    usdcHourly.isError ||
+    usdcWeekly.isError ||
+    usdcMonthly.isError ||
+    usdcAlltime.isError
 
   // Functions to update data returned by hook
   const setDataHourly = () => {
@@ -498,7 +530,8 @@ export const UsdcChartProvider: FC<{
   return (
     <usdcChartContext.Provider
       value={{
-        fetching,
+        isFetching,
+        isError,
         data: dataC,
         setDataHourly,
         setDataWeekly,
