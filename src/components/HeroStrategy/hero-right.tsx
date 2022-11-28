@@ -92,7 +92,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             style={{ textDecoration: "none" }}
           >
             <SecondaryButton w="full" h="50px">
-              Manage Portfolio
+              View Details
             </SecondaryButton>
           </Link>
           <HStack
