@@ -136,7 +136,7 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
                 }))
               }}
             />
-            <Legend
+            {/* <Legend
               color="violet.base"
               title="USDC"
               active={showLine.usdc}
@@ -146,7 +146,7 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
                   ethBtc50: !showLine.usdc,
                 }))
               }}
-            />
+            /> */}
           </Stack>
         </VStack>
       </TransparentCard>
