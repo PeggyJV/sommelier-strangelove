@@ -117,5 +117,5 @@ export const createUsdcChartSeries = ({
 }
 
 export const formatPercentage = (value: string) => {
-  return parseFloat(value).toFixed(4)
+  return parseFloat(value).toFixed(3)
 }
