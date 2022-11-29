@@ -19,6 +19,7 @@ export const useIntervalGain = ({
   config,
   timeline = "weekly",
 }: useIntervalGainProps) => {
+  // DAYS AND DATE ARE SAME WITH THE CHART DATA
   const days = timeline === "weekly" ? 7 : 31
   const clearGate =
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
