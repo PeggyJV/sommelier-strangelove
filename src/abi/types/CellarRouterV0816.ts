@@ -23,7 +23,7 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface ClearGateRouterInterface extends utils.Interface {
+export interface CellarRouterV0816Interface extends utils.Interface {
   functions: {
     "SWAP_ROUTER_REGISTRY_SLOT()": FunctionFragment;
     "depositAndSwap(address,uint8,bytes,uint256,address)": FunctionFragment;
@@ -133,12 +133,12 @@ export interface ClearGateRouterInterface extends utils.Interface {
   events: {};
 }
 
-export interface ClearGateRouter extends BaseContract {
+export interface CellarRouterV0816 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: ClearGateRouterInterface;
+  interface: CellarRouterV0816Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

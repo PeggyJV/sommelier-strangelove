@@ -1,6 +1,13 @@
 import { config } from "utils/config"
-import { CellarKey, CellarRouterKey, CellarType } from "../types"
+import {
+  CellarKey,
+  CellarNameKey,
+  CellarRouterKey,
+  CellarType,
+  StakerKey,
+} from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
+import { zonedTimeToUtc } from "date-fns-tz"
 
 export const ethBtcMomentum = {
   name: "ETH-BTC Momentum",
@@ -18,6 +25,10 @@ export const ethBtcMomentum = {
     depositors: 90,
     protocol: 2.5,
     "strategy provider": 7.5,
+  },
+  staking: {
+    endDate: zonedTimeToUtc(new Date("2022-12-12"), "UTC"),
+    multiplier: "1.25x",
   },
   strategyProvider: {
     logo: "/assets/images/clear-gate.png",
@@ -76,19 +87,25 @@ export const ethBtcMomentum = {
   },
   config: {
     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
+    cellarNameKey: CellarNameKey.ETH_BTC_MOM,
     lpToken: {
       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
       imagePath: "/assets/icons/eth-btc-mom.svg",
     },
     cellarRouter: {
-      address: config.CONTRACT.CLEAR_GATE_ROUTER.ADDRESS,
-      abi: config.CONTRACT.CLEAR_GATE_ROUTER.ABI,
-      key: CellarRouterKey.CLEAR_GATE_ROUTER,
+      address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
+      abi: config.CONTRACT.CELLAR_ROUTER_V0816.ABI,
+      key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
       abi: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ABI,
-      key: CellarKey.CLEAR_GATE_CELLAR,
+      key: CellarKey.CELLAR_V0816,
+    },
+    staker: {
+      address: config.CONTRACT.ETH_BTC_MOMENTUM_STAKER.ADDRESS,
+      abi: config.CONTRACT.ETH_BTC_MOMENTUM_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0815,
     },
   },
   faq: [

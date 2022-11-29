@@ -1,10 +1,9 @@
-import aaveV2CellarAbi from "../abi/aaveV2Cellar-v2.json"
-import cellarRouter from "../abi/cellarRouter.json"
-import sommStaking from "../abi/sommStaking.json"
+import cellarRouterV0815 from "../abi/cellar-router-v0.8.15.json"
+import cellarRouterV0816 from "../abi/cellar-router-v0.8.16.json"
+import cellarStakingV0815 from "../abi/cellar-staking-v.0.8.15.json"
+import cellarV0815 from "../abi/cellar-v0.8.15.json"
+import cellarV0816 from "../abi/cellar-v0.8.16.json"
 import gravityBridge from "../abi/gravityBridge.json"
-import clearGateCellar from "../abi/clearGateCellar.json"
-import clearGateRouter from "../abi/clearGateRouter.json"
-import steadyCellar from "../abi/steady.json"
 import { erc20ABI } from "wagmi"
 
 // Adress should be saved as lowercase
@@ -15,26 +14,6 @@ export const config = {
     SLIPPAGE: 0.5,
   },
   CONTRACT: {
-    AAVE_V2_STABLE_CELLAR: {
-      // ADDRESS: "0xb03f18c2d28c29fa3811184f028c5bf6f11c2659",
-      // ADDRESS: "0x7A9E1403fBb6C2AA0C180B976f688997E63FDA2c",
-      // ADDRESS: "0x4E9FbDa4Dc1a207Db97e2BD66Fd1e8837c4DdD36",
-      // ADDRESS: "0xF9f875BD4B1BC19693fe3Fe3C719f9deb11a2637",
-      // ADDRESS: "0xd15135141f1217b8863cb1431ad71309ef22ceda",
-      ADDRESS: "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
-      ABI: aaveV2CellarAbi,
-      SLUG: "AAVE",
-    },
-    CELLAR_ROUTER: {
-      // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
-      ADDRESS: "0x7286eC6A1425a5A3EC62DEF2a2Cdd2498e07086c",
-      ABI: cellarRouter,
-    },
-    AAVE_STAKER: {
-      // ADDRESS: "0xCEe04d9b75C282A630bA10583a3aC2C3c3599939",
-      ADDRESS: "0x24691a00779d375A5447727E1610d327D04B3C5F",
-      ABI: sommStaking,
-    },
     USDC: {
       ADDRESS: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       ABI: erc20ABI,
@@ -68,45 +47,76 @@ export const config = {
       ADDRESS: "0x69592e6f9d21989a043646fE8225da2600e5A0f7",
       ABI: gravityBridge,
     },
+    CLEAR_GATE_TEST_CELLAR_A: {
+      ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
+      ABI: cellarV0816,
+    },
+    CLEAR_GATE_TEST_CELLAR_B: {
+      ADDRESS: "0x8bdd3d5b889f3d0d735eb4db5d87782df2b4647d",
+      ABI: cellarV0816,
+    },
+    // Cellars
+    AAVE_V2_STABLE_CELLAR: {
+      // ADDRESS: "0xb03f18c2d28c29fa3811184f028c5bf6f11c2659",
+      // ADDRESS: "0x7A9E1403fBb6C2AA0C180B976f688997E63FDA2c",
+      // ADDRESS: "0x4E9FbDa4Dc1a207Db97e2BD66Fd1e8837c4DdD36",
+      // ADDRESS: "0xF9f875BD4B1BC19693fe3Fe3C719f9deb11a2637",
+      // ADDRESS: "0xd15135141f1217b8863cb1431ad71309ef22ceda",
+      ADDRESS: "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+      ABI: cellarV0815,
+      SLUG: "AAVE",
+    },
     ETH_BTC_TREND_CELLAR: {
       ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f2",
-      ABI: clearGateCellar,
+      ABI: cellarV0816,
       SLUG: "ETH-BTC-Trend",
     },
     ETH_BTC_MOMENTUM_CELLAR: {
       ADDRESS: "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
-      ABI: clearGateCellar,
+      ABI: cellarV0816,
       SLUG: "ETH-BTC-Momentum",
     },
     STEADY_ETH: {
       ADDRESS: "0x3f07a84ecdf494310d397d24c1c78b041d2fa622",
       SLUG: "Steady-ETH",
-      ABI: steadyCellar,
+      ABI: cellarV0816,
     },
     STEADY_BTC: {
       ADDRESS: "0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
       SLUG: "Steady-BTC",
-      ABI: steadyCellar,
+      ABI: cellarV0816,
     },
-    CLEAR_GATE_TEST_CELLAR_A: {
-      ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
-      ABI: clearGateCellar,
+    // Router
+    CELLAR_ROUTER_V0815: {
+      // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
+      ADDRESS: "0x7286eC6A1425a5A3EC62DEF2a2Cdd2498e07086c",
+      ABI: cellarRouterV0815,
     },
-    CLEAR_GATE_TEST_CELLAR_B: {
-      ADDRESS: "0x8bdd3d5b889f3d0d735eb4db5d87782df2b4647d",
-      ABI: clearGateCellar,
-    },
-    CLEAR_GATE_ROUTER: {
+    CELLAR_ROUTER_V0816: {
       ADDRESS: "0x1d90366b0154fbcb5101c06a39c25d26cb48e889",
-      ABI: clearGateRouter,
+      ABI: cellarRouterV0816,
+    },
+    // Staker
+    AAVE_STAKER: {
+      // ADDRESS: "0xCEe04d9b75C282A630bA10583a3aC2C3c3599939",
+      ADDRESS: "0x24691a00779d375A5447727E1610d327D04B3C5F",
+      ABI: cellarStakingV0815,
     },
     STEADY_ETH_STAKER: {
       ADDRESS: "0xae0e6024972b70601bc35405479af5cd372cc956",
-      ABI: sommStaking,
+      ABI: cellarStakingV0815,
     },
     STEADY_BTC_STAKER: {
       ADDRESS: "0xd1d02c16874e0714fd825213e0c13eab6dd9c25f",
-      ABI: sommStaking,
+      ABI: cellarStakingV0815,
+    },
+    ETH_BTC_TREND_STAKER: {
+      ADDRESS: "0x9eEaBfFf5D15e8CedFD2F6C914c8826ba0a5FbBD",
+      ABI: cellarStakingV0815,
+    },
+    ETH_BTC_MOMENTUM_STAKER: {
+      ADDRESS: "0x6Ce314c39F30488B4a86B8892C81a5B7af83e337",
+      ABI: cellarStakingV0815,
     },
   },
   cleargate: {

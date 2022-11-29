@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import { getCurrentDeposits as getCurrentDeposits_AAVE_V2_STABLE_CELLAR } from "data/actions/AAVE_V2_STABLE_CELLAR/getCurrentDeposits"
-import { CellarKey, ConfigProps } from "data/types"
+import { getCurrentDeposits } from "data/actions/common/getCurrentDeposits"
+import { CellarNameKey, ConfigProps } from "data/types"
 import { useGetCellarQuery } from "generated/subgraph"
 
 export const useCurrentDeposits = (config: ConfigProps) => {
@@ -16,7 +16,7 @@ export const useCurrentDeposits = (config: ConfigProps) => {
     cellar || {}
 
   const AAVE_V2_STABLE_CELLAR_QUERY_ENABLED = Boolean(
-    config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR &&
+    config.cellarNameKey === CellarNameKey.AAVE &&
       asset?.symbol &&
       addedLiquidityAllTime &&
       removedLiquidityAllTime
@@ -30,8 +30,8 @@ export const useCurrentDeposits = (config: ConfigProps) => {
       config.cellar.address,
     ],
     async () => {
-      if (config.cellar.key === CellarKey.AAVE_V2_STABLE_CELLAR) {
-        return await getCurrentDeposits_AAVE_V2_STABLE_CELLAR({
+      if (config.cellarNameKey === CellarNameKey.AAVE) {
+        return await getCurrentDeposits({
           assetSymbol: asset?.symbol,
           addedLiquidityAllTime,
           removedLiquidityAllTime,

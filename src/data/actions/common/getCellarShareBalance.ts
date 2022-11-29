@@ -1,13 +1,13 @@
 import BigNumber from "bignumber.js"
 import { useUserStakes } from "data/hooks/useUserStakes"
-import { Steady } from "src/abi/types"
+import { CellarV0815, CellarV0816 } from "src/abi/types"
 
 export const getCellarShareBalance = async ({
   cellarContract,
   lpToken,
   userStakes,
 }: {
-  cellarContract: Steady
+  cellarContract: CellarV0815 | CellarV0816
   lpToken?: string
   userStakes?: ReturnType<typeof useUserStakes>["data"]
 }) => {

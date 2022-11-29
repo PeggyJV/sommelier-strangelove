@@ -65,33 +65,30 @@ export const UsdcChart: VFC<{ timeline: string; name: string }> = ({
                 justifyContent="space-between"
                 spacing={4}
               >
-                <HStack spacing={4}>
-                  <Box
-                    boxSize="8px"
-                    backgroundColor={item.color}
-                    borderRadius={2}
-                  />
-                  <Text>
-                    {name}:{" "}
+                <Box
+                  boxSize="8px"
+                  backgroundColor={item.color}
+                  borderRadius={2}
+                />
+                <Text>{name}: </Text>
+                <HStack>
+                  <Text textAlign="right" width="9ch">
+                    $
+                    {
+                      data.series?.find((s) => s.id === item.id)
+                        ?.data[Number(i)]?.value
+                    }
+                  </Text>
+                  <Text textAlign="right" width="8ch">
                     {formatPercentage(
                       String(
                         data.series?.find((s) => s.id === item.id)
-                          ?.data[Number(i)]?.value
+                          ?.data[Number(i)]?.y
                       )
                     )}
-                    $
+                    %
                   </Text>
                 </HStack>
-
-                <Text>
-                  {formatPercentage(
-                    String(
-                      data.series?.find((s) => s.id === item.id)
-                        ?.data[Number(i)]?.y
-                    )
-                  )}
-                  %
-                </Text>
               </HStack>
             )
           })}
@@ -165,7 +162,7 @@ export const UsdcChart: VFC<{ timeline: string; name: string }> = ({
         ]),
       ]}
       fill={[{ match: "*", id: "gradientA" }]}
-      margin={{ bottom: 110, left: 26, right: 6, top: 20 }}
+      margin={{ bottom: 110, left: 50, right: 6, top: 20 }}
       theme={chartTheme}
       onMouseMove={onMouseMove}
       onMouseLeave={() => {

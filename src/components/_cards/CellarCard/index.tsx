@@ -19,6 +19,7 @@ export const CellarCard: React.FC<CellarCardProps> = ({
     strategyType,
     managementFee,
     protocols,
+    staking,
   } = cellarDataMap[cellarAddress]
 
   const cellarCardData: CellarCardData = {
@@ -28,6 +29,7 @@ export const CellarCard: React.FC<CellarCardProps> = ({
     strategyType,
     managementFee,
     protocols,
+    staking,
   }
 
   return <CellarCardDisplay data={cellarCardData} {...rest} />

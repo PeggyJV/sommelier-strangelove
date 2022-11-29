@@ -1,5 +1,4 @@
 import { ContractTransaction, ethers } from "ethers"
-import { CellarRouter } from "src/abi/types"
 import {
   AlphaRouter,
   AlphaRouterParams,
@@ -16,6 +15,7 @@ import JSBI from "jsbi"
 import { Provider } from "@wagmi/core"
 import { DepositAndSwapParams } from "../types"
 import { estimateGasLimit } from "utils/estimateGasLimit"
+import { CellarRouterV0815 } from "src/abi/types"
 
 interface GetSwapRouteParams {
   provider: Provider
@@ -34,9 +34,8 @@ interface GetSwapRouteParams {
   }
 }
 
-interface DepositAndSwapParams_AAVE_V2_STABLE_CELLAR
-  extends DepositAndSwapParams {
-  cellarRouterSigner: CellarRouter
+interface DepositAndSwapParams_V0815 extends DepositAndSwapParams {
+  cellarRouterSigner: CellarRouterV0815
 }
 
 const getSwapRoute = async ({
@@ -113,7 +112,7 @@ export const depositAndSwap = async ({
   cellarRouterSigner,
   provider,
   senderAddress,
-}: DepositAndSwapParams_AAVE_V2_STABLE_CELLAR): Promise<ContractTransaction> => {
+}: DepositAndSwapParams_V0815): Promise<ContractTransaction> => {
   try {
     const swapRoute = await getSwapRoute({
       depositAmount: payload.depositAmount,

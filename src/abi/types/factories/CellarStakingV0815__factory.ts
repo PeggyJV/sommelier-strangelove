@@ -4,7 +4,10 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { SommStaking, SommStakingInterface } from "../SommStaking";
+import type {
+  CellarStakingV0815,
+  CellarStakingV0815Interface,
+} from "../CellarStakingV0815";
 
 const _abi = [
   {
@@ -1118,15 +1121,15 @@ const _abi = [
   },
 ];
 
-export class SommStaking__factory {
+export class CellarStakingV0815__factory {
   static readonly abi = _abi;
-  static createInterface(): SommStakingInterface {
-    return new utils.Interface(_abi) as SommStakingInterface;
+  static createInterface(): CellarStakingV0815Interface {
+    return new utils.Interface(_abi) as CellarStakingV0815Interface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): SommStaking {
-    return new Contract(address, _abi, signerOrProvider) as SommStaking;
+  ): CellarStakingV0815 {
+    return new Contract(address, _abi, signerOrProvider) as CellarStakingV0815;
   }
 }

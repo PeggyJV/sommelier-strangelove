@@ -4,8 +4,10 @@ import {
   CellarRouterKey,
   StakerKey,
   CellarType,
+  CellarNameKey,
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
+import { zonedTimeToUtc } from "date-fns-tz"
 
 export const aaveStable = {
   name: "aave2",
@@ -31,6 +33,10 @@ export const aaveStable = {
     depositors: 90,
     protocol: 10,
   },
+  staking: {
+    endDate: zonedTimeToUtc(new Date("2022-12-28"), "UTC"),
+    multiplier: "1.5x",
+  },
   strategyBreakdown: {
     goals: `The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis. The goal is to outperform a static strategy of lending any single stablecoin. Returns are amplified for Sommelier users as they will not suffer opportunity costs from passively sitting in less profitable lending positions at any given moment.`,
     strategy: `This strategy involves observation of several variables including Aave interest rates, rate volatility, gas fees, slippage estimations, and TVL. This data is the input for a custom predictive model which recommends position adjustments periodically. The entire process is automated as the model delivers a feed to Sommelier validators who relay necessary function calls to the Cellar.
@@ -51,24 +57,25 @@ export const aaveStable = {
   },
   config: {
     id: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
+    cellarNameKey: CellarNameKey.AAVE,
     lpToken: {
       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
       imagePath: "/assets/icons/aave.png",
     },
     cellarRouter: {
-      address: config.CONTRACT.CELLAR_ROUTER.ADDRESS,
-      abi: config.CONTRACT.CELLAR_ROUTER.ABI,
-      key: CellarRouterKey.CELLAR_ROUTER,
+      address: config.CONTRACT.CELLAR_ROUTER_V0815.ADDRESS,
+      abi: config.CONTRACT.CELLAR_ROUTER_V0815.ABI,
+      key: CellarRouterKey.CELLAR_ROUTER_V0815,
     },
     cellar: {
       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
       abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
-      key: CellarKey.AAVE_V2_STABLE_CELLAR,
+      key: CellarKey.CELLAR_V0815,
     },
     staker: {
       address: config.CONTRACT.AAVE_STAKER.ADDRESS,
       abi: config.CONTRACT.AAVE_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING,
+      key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   },

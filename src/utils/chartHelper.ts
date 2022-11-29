@@ -94,24 +94,28 @@ export const createUsdcChartSeries = ({
   tokenPrice?: Datum[]
   usdc?: Datum[]
 }): Serie[] => {
-  const minimal = Math.min(
-    Number(tokenPrice?.length),
-    Number(usdc?.length)
-  )
+  // const minimal = Math.min(
+  //   Number(tokenPrice?.length),
+  //   Number(usdc?.length)
+  // )
   return [
     {
       id: "token-price",
-      data: tokenPrice?.slice(0, minimal) || [],
+      data:
+        tokenPrice?.slice(
+          0
+          //  minimal
+        ) || [],
       color: colors.purple.base,
     },
-    {
-      id: "usdc",
-      data: usdc?.slice(0, minimal) || [],
-      color: colors.violet.base,
-    },
+    // {
+    //   id: "usdc",
+    //   data: usdc?.slice(0, minimal) || [],
+    //   color: colors.violet.base,
+    // },
   ]
 }
 
 export const formatPercentage = (value: string) => {
-  return parseFloat(value).toFixed(4)
+  return parseFloat(value).toFixed(3)
 }

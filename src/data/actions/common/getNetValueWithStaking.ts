@@ -1,18 +1,18 @@
 import BigNumber from "bignumber.js"
 import { useUserStakes } from "data/hooks/useUserStakes"
-import { Steady } from "src/abi/types"
+import { CellarV0815, CellarV0816 } from "src/abi/types"
 import { formatUSD, toEther } from "utils/formatCurrency"
 import { useToken } from "wagmi"
 import { getCellarShareBalance } from "./getCellarShareBalance"
 
-export const getNetValue = async ({
+export const getNetValueWithStaking = async ({
   activeAsset,
   cellarContract,
   lpToken,
   userStakes,
 }: {
   activeAsset?: ReturnType<typeof useToken>["data"]
-  cellarContract: Steady
+  cellarContract: CellarV0815 | CellarV0816
   lpToken?: string
   userStakes?: ReturnType<typeof useUserStakes>["data"]
 }) => {

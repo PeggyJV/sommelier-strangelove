@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { CellarKey, ConfigProps } from "data/types"
+import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { useGetHourlyShareValueQuery } from "generated/subgraph"
 import { toInteger } from "lodash"
 import { getPrevious24Hours } from "utils/calculateTime"
@@ -15,8 +15,10 @@ export const useDailyChange = (config: ConfigProps) => {
   })
 
   const queryEnabled = Boolean(
-    (config.cellar.key === CellarKey.PATACHE_LINK ||
-      config.cellar.key === CellarKey.CLEAR_GATE_CELLAR) &&
+    (config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+      config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+      config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+      config.cellarNameKey === CellarNameKey.STEADY_ETH) &&
       cellarContract.provider &&
       hourlyData?.cellarHourDatas
   )
@@ -28,20 +30,17 @@ export const useDailyChange = (config: ConfigProps) => {
       hourlyData?.cellarHourDatas,
     ],
     async () => {
-      const percentage =
-        hourlyData?.cellarHourDatas &&
-        ((toInteger(
-          hourlyData.cellarHourDatas[
-            hourlyData.cellarHourDatas.length - 1
-          ].shareValue
-        ) -
-          toInteger(hourlyData.cellarHourDatas[0].shareValue)) /
-          toInteger(hourlyData.cellarHourDatas[0].shareValue)) *
-          100
-      if (
-        config.cellar.key === CellarKey.PATACHE_LINK ||
-        config.cellar.key === CellarKey.CLEAR_GATE_CELLAR
-      ) {
+      if (config.cellar.key === CellarKey.CELLAR_V0816) {
+        const percentage =
+          hourlyData?.cellarHourDatas &&
+          ((toInteger(
+            hourlyData.cellarHourDatas[
+              hourlyData.cellarHourDatas.length - 1
+            ].shareValue
+          ) -
+            toInteger(hourlyData.cellarHourDatas[0].shareValue)) /
+            toInteger(hourlyData.cellarHourDatas[0].shareValue)) *
+            100
         return percentage
       }
       throw new Error("UNKNOWN CONTRACT")
