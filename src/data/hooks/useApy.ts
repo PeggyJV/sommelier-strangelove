@@ -63,7 +63,7 @@ export const useApy = (config: ConfigProps) => {
           dayDatas!
         )
       }
-      if (getRewardsApyQueryEnabled) {
+      if (getRewardsApyEnabled) {
         return await getRewardsApy(
           stakerContract as CellarStakingV0815,
           sommPrice.data
@@ -79,12 +79,12 @@ export const useApy = (config: ConfigProps) => {
 
   return {
     ...query,
-    isLoading: fetching || query.isLoading,
-    error: error || query.error,
-    isError: !!error || query.isError,
-    isFetching: fetching || query.isFetching,
+    isLoading: fetching || query.isLoading || sommPrice.isLoading,
+    error: error || query.error || sommPrice.error,
+    isError: !!error || query.isError || sommPrice.isError,
+    isFetching: fetching || query.isFetching || sommPrice.isFetching,
     refetch: () => {
-      reexecute10Days
+      reexecute10Days()
       query.refetch()
     },
   }
