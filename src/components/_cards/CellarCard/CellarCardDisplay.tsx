@@ -7,7 +7,7 @@ import { ComingSoon } from "./ComingSoon"
 import { InlineImage } from "components/InlineImage"
 import { CoinImage } from "./CoinImage"
 import { protocolsImage } from "utils/protocolsImagePath"
-import { formatDistanceToNow } from "date-fns"
+import { formatDistanceToNow, isFuture } from "date-fns"
 export interface CellarCardData {
   cellarId: string
   name: string
@@ -51,15 +51,12 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
     >
       <Burst />
       <Flex flexDirection="column" borderRadius={24} zIndex="2">
-        {data?.staking && (
+        {data?.staking && isFuture(data?.staking?.endDate) && (
           <Tag
             px={6}
             py={3}
             justifyContent="center"
             bgColor="surface.tertiary"
-            // _hover={{
-            //   bgColor: "#6C4ED9",
-            // }}
           >
             <Text>{`${formatDistanceToNow(
               data?.staking?.endDate

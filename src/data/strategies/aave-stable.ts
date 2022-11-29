@@ -7,6 +7,7 @@ import {
   CellarNameKey,
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
+import { zonedTimeToUtc } from "date-fns-tz"
 
 export const aaveStable = {
   name: "aave2",
@@ -33,7 +34,7 @@ export const aaveStable = {
     protocol: 10,
   },
   staking: {
-    endDate: new Date("2022-12-28"),
+    endDate: zonedTimeToUtc(new Date("2022-12-28"), "UTC"),
     multiplier: "1.5x",
   },
   strategyBreakdown: {

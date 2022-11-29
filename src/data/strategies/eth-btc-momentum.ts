@@ -7,6 +7,7 @@ import {
   StakerKey,
 } from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
+import { zonedTimeToUtc } from "date-fns-tz"
 
 export const ethBtcMomentum = {
   name: "ETH-BTC Momentum",
@@ -26,7 +27,7 @@ export const ethBtcMomentum = {
     "strategy provider": 7.5,
   },
   staking: {
-    endDate: new Date("2022-12-12"),
+    endDate: zonedTimeToUtc(new Date("2022-12-12"), "UTC"),
     multiplier: "1.25x",
   },
   strategyProvider: {

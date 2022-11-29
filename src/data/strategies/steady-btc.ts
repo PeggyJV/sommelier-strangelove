@@ -8,6 +8,7 @@ import {
 } from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
 import { LAUNCH_DATE_DISABLED } from "utils/constants"
+import { zonedTimeToUtc } from "date-fns-tz"
 
 export const steadyBtc = {
   name: "Steady BTC",
@@ -29,7 +30,7 @@ export const steadyBtc = {
     "strategy provider": 7.5,
   },
   staking: {
-    endDate: new Date("2022-12-12"),
+    endDate: zonedTimeToUtc(new Date("2022-12-12"), "UTC"),
     multiplier: "1.25x",
   },
   strategyProvider: {
