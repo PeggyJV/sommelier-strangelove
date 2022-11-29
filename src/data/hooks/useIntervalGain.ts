@@ -104,8 +104,8 @@ export const useIntervalGain = ({
           throw new Error("DATA UNDEFINED")
         }
         const cellarIntervalGainPct = getGainPct(
-          Number(formatDecimals(todayDatas[0].shareValue, 6, 2)),
-          Number(formatDecimals(previousDatas[0].shareValue, 6, 2))
+          Number(todayDatas[0].shareValue),
+          Number(previousDatas[0].shareValue)
         )
 
         const result =
