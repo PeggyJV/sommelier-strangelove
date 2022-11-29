@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getApy as getApy_AAVE_V2_STABLE_CELLAR } from "data/actions/CELLAR_V0815/getApy"
-import { getRewardsApy as v0815_getRewardsApy } from "data/actions/CELLAR_V0815/getRewardsApy"
+import { getRewardsApy } from "data/actions/CELLAR_V0815/getRewardsApy"
 import { CellarNameKey, ConfigProps } from "data/types"
 import { useGet10DaysShareValueQuery } from "generated/subgraph"
 import { CellarV0815, CellarStakingV0815 } from "src/abi/types"
@@ -24,35 +24,29 @@ export const useApy = (config: ConfigProps) => {
       },
     })
 
-  const latestData = data?.cellar?.dayDatas.at(-1)
-  const prevDayLatestData = data?.cellar?.dayDatas.at(-2)
+  const dayDatas = data?.cellar?.dayDatas
 
-  const v0815GetApy = [CellarNameKey.AAVE]
-  const v0815ApyEnabled = v0815GetApy.includes(config.cellarNameKey)
-  const v0815ApyQueryEnabled = Boolean(
-    v0815ApyEnabled &&
+  const aaveQueryEnabled = Boolean(
+    config.cellarNameKey === CellarNameKey.AAVE &&
+      dayDatas &&
       cellarContract.provider &&
       stakerContract?.provider
   )
 
-  const v0815GetRewardApy = [
+  const getRewardsApyCellars = [
     CellarNameKey.ETH_BTC_MOM,
     CellarNameKey.ETH_BTC_TREND,
     CellarNameKey.STEADY_BTC,
     CellarNameKey.STEADY_ETH,
   ]
-  const v0815RewardApyEnabled = v0815GetRewardApy.includes(
+  const getRewardsApyEnabled = getRewardsApyCellars.includes(
     config.cellarNameKey
   )
-  const v0815RewardApyQueryEnabled = Boolean(
-    v0815RewardApyEnabled &&
-      latestData?.shareValue &&
-      prevDayLatestData?.shareValue &&
-      stakerContract?.provider
+  const getRewardsApyQueryEnabled = Boolean(
+    getRewardsApyEnabled && stakerContract?.provider
   )
 
-  const queryEnabled =
-    v0815ApyQueryEnabled || v0815RewardApyQueryEnabled
+  const queryEnabled = aaveQueryEnabled || getRewardsApyQueryEnabled
 
   const query = useQuery(
     ["USE_APY", config.cellar.address],
@@ -61,16 +55,16 @@ export const useApy = (config: ConfigProps) => {
         throw new Error("Sommelier price is undefined")
       }
 
-      if (v0815ApyEnabled) {
+      if (config.cellarNameKey === CellarNameKey.AAVE) {
         return await getApy_AAVE_V2_STABLE_CELLAR(
           cellarContract as CellarV0815,
           stakerContract as CellarStakingV0815,
           sommPrice.data,
-          latestData?.shareValue!,
-          prevDayLatestData?.shareValue!
+          dayDatas!
         )
-      } else if (v0815RewardApyQueryEnabled) {
-        return await v0815_getRewardsApy(
+      }
+      if (getRewardsApyQueryEnabled) {
+        return await getRewardsApy(
           stakerContract as CellarStakingV0815,
           sommPrice.data
         )

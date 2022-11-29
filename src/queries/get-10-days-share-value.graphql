@@ -1,8 +1,7 @@
 query Get10DaysShareValue($epoch: Int!, $cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
     dayDatas(
-      first: 10
-      orderDirection: asc
+      orderDirection: desc
       orderBy: date
       where: { date_gte: $epoch }
     ) {

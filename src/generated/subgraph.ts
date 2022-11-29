@@ -1581,12 +1581,7 @@ export const CellarDayDatasFragmentDoc = gql`
 export const Get10DaysShareValueDocument = gql`
     query Get10DaysShareValue($epoch: Int!, $cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
-    dayDatas(
-      first: 10
-      orderDirection: asc
-      orderBy: date
-      where: {date_gte: $epoch}
-    ) {
+    dayDatas(orderDirection: desc, orderBy: date, where: {date_gte: $epoch}) {
       date
       shareValue
     }
