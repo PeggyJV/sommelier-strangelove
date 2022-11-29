@@ -5,7 +5,7 @@ import { BackgroundAssets } from "./BackgroundAssets"
 import { Nav } from "./Nav"
 import { GeoBanner } from "./_banners/GeoBanner"
 import Footer from "./Footer"
-import { MobileWarningCTA } from "./MobileWarningCTA"
+// import { MobileWarningCTA } from "./MobileWarningCTA"
 import { useAccount, useNetwork } from "wagmi"
 import { WrongNetworkBanner } from "./_banners/WrongNetworkBanner"
 import { useRouter } from "next/router"
@@ -22,12 +22,12 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
 
   return (
     <Box>
-      <MobileWarningCTA
+      {/* <MobileWarningCTA
         display={{
           base: isNotBridge ? "none" : "flex",
           md: "none",
         }}
-      />
+      /> */}
       <Box
         display={{
           base: isNotBridge ? "block" : "none",
