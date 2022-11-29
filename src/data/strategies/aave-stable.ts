@@ -32,6 +32,10 @@ export const aaveStable = {
     depositors: 90,
     protocol: 10,
   },
+  staking: {
+    endDate: new Date("2022-12-28"),
+    multiplier: "1.5x",
+  },
   strategyBreakdown: {
     goals: `The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis. The goal is to outperform a static strategy of lending any single stablecoin. Returns are amplified for Sommelier users as they will not suffer opportunity costs from passively sitting in less profitable lending positions at any given moment.`,
     strategy: `This strategy involves observation of several variables including Aave interest rates, rate volatility, gas fees, slippage estimations, and TVL. This data is the input for a custom predictive model which recommends position adjustments periodically. The entire process is automated as the model delivers a feed to Sommelier validators who relay necessary function calls to the Cellar.

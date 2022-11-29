@@ -25,6 +25,10 @@ export const ethBtcTrend = {
     protocol: 2.5,
     "strategy provider": 7.5,
   },
+  staking: {
+    endDate: new Date("2022-12-12"),
+    multiplier: "1.25x",
+  },
   strategyProvider: {
     logo: "/assets/images/clear-gate.png",
     title: "Clear Gate",

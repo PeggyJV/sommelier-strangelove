@@ -1,4 +1,4 @@
-import { BoxProps, Heading, Flex } from "@chakra-ui/react"
+import { BoxProps, Heading, Flex, Text } from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
@@ -7,7 +7,7 @@ import { ComingSoon } from "./ComingSoon"
 import { InlineImage } from "components/InlineImage"
 import { CoinImage } from "./CoinImage"
 import { protocolsImage } from "utils/protocolsImagePath"
-
+import { formatDistanceToNow } from "date-fns"
 export interface CellarCardData {
   cellarId: string
   name: string
@@ -15,6 +15,10 @@ export interface CellarCardData {
   strategyType: string
   managementFee: string
   protocols: string
+  staking?: {
+    endDate: Date
+    multiplier: string
+  }
 }
 
 interface CellarCardProps extends BoxProps {
@@ -47,6 +51,21 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
     >
       <Burst />
       <Flex flexDirection="column" borderRadius={24} zIndex="2">
+        {data?.staking && (
+          <Tag
+            px={6}
+            py={3}
+            justifyContent="center"
+            bgColor="surface.tertiary"
+            // _hover={{
+            //   bgColor: "#6C4ED9",
+            // }}
+          >
+            <Text>{`${formatDistanceToNow(
+              data?.staking?.endDate
+            )} left to earn rewards`}</Text>
+          </Tag>
+        )}
         <Flex
           p={4}
           ml={2}
