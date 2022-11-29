@@ -34,7 +34,7 @@ export const aaveStable = {
     protocol: 10,
   },
   staking: {
-    endDate: zonedTimeToUtc(new Date("2022-12-28"), "UTC"),
+    endDate: zonedTimeToUtc(new Date("2022-12-30"), "UTC"),
     multiplier: "1.5x",
   },
   strategyBreakdown: {
