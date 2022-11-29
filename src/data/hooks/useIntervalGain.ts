@@ -1,7 +1,12 @@
 import { useQuery } from "@tanstack/react-query"
 import { CellarNameKey, ConfigProps } from "data/types"
 import { useGetSingleCellarValueQuery } from "generated/subgraph"
-import { getPreviousDay, getPreviousWeek } from "utils/calculateTime"
+import { formatDecimals } from "utils/bigNumber"
+import {
+  getPreviousDay,
+  getPreviousMonth,
+  getPreviousWeek,
+} from "utils/calculateTime"
 import { getGainPct } from "utils/getGainPct"
 import { useAssetIntervalGain } from "./useAssetIntervalGain"
 
@@ -14,7 +19,7 @@ export const useIntervalGain = ({
   config,
   timeline = "weekly",
 }: useIntervalGainProps) => {
-  const days = timeline === "weekly" ? 6 : 29
+  const days = timeline === "weekly" ? 7 : 31
   const clearGate =
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
@@ -46,10 +51,13 @@ export const useIntervalGain = ({
     },
   })
 
-  const [previousWeekData] = useGetSingleCellarValueQuery({
+  const [previousData] = useGetSingleCellarValueQuery({
     variables: {
       cellarAddress: config.id,
-      epoch: getPreviousWeek(),
+      epoch:
+        timeline === "weekly"
+          ? getPreviousWeek()
+          : getPreviousMonth(),
     },
   })
 
@@ -57,15 +65,15 @@ export const useIntervalGain = ({
   const { cellar: cellarToday } = dataToday || {}
   const { dayDatas: todayDatas } = cellarToday || {}
 
-  const { data: dataPreviousWeek } = previousWeekData
-  const { cellar: cellarPreviousWeek } = dataPreviousWeek || {}
-  const { dayDatas: previousWeekDatas } = cellarPreviousWeek || {}
+  const { data: dataPrevious } = previousData
+  const { cellar: cellarPrevious } = dataPrevious || {}
+  const { dayDatas: previousDatas } = cellarPrevious || {}
 
   const PATACHE_LINK_QUERY_ENABLED = Boolean(
     patache &&
       config.id &&
       todayDatas?.[0].shareValue &&
-      previousWeekDatas?.[0].shareValue &&
+      previousDatas?.[0].shareValue &&
       Boolean(usdcIntervalGain.data)
   )
 
@@ -73,7 +81,7 @@ export const useIntervalGain = ({
     clearGate &&
       config.id &&
       todayDatas?.[0].shareValue &&
-      previousWeekDatas?.[0].shareValue &&
+      previousDatas?.[0].shareValue &&
       Boolean(ethIntervalGain.data) &&
       Boolean(btcIntervalGain.data)
   )
@@ -83,21 +91,21 @@ export const useIntervalGain = ({
       "USE_INTERVAL_GAIN_PCT",
       config.id,
       todayDatas?.[0].shareValue,
-      previousWeekDatas?.[0].shareValue,
+      previousDatas?.[0].shareValue,
     ],
     async () => {
       if (clearGate) {
         if (
           !todayDatas ||
-          !previousWeekDatas ||
+          !previousDatas ||
           !ethIntervalGain.data ||
           !btcIntervalGain.data
         ) {
           throw new Error("DATA UNDEFINED")
         }
         const cellarIntervalGainPct = getGainPct(
-          Number(todayDatas[0].shareValue),
-          Number(previousWeekDatas[0].shareValue)
+          Number(formatDecimals(todayDatas[0].shareValue, 6, 2)),
+          Number(formatDecimals(previousDatas[0].shareValue, 6, 2))
         )
 
         const result =
@@ -107,16 +115,12 @@ export const useIntervalGain = ({
         return result
       }
       if (patache) {
-        if (
-          !todayDatas ||
-          !previousWeekDatas ||
-          !usdcIntervalGain.data
-        ) {
+        if (!todayDatas || !previousDatas || !usdcIntervalGain.data) {
           throw new Error("DATA UNDEFINED")
         }
         const cellarIntervalGainPct = getGainPct(
-          Number(todayDatas[0].shareValue),
-          Number(previousWeekDatas[0].shareValue)
+          Number(formatDecimals(todayDatas[0].shareValue, 6, 2)),
+          Number(formatDecimals(previousDatas[0].shareValue, 6, 2))
         )
 
         const result = cellarIntervalGainPct - usdcIntervalGain.data
