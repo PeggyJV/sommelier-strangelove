@@ -98,7 +98,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         depositAmtInWei,
         bondPeriod,
         // gas used around 125000-130000
-        { gasLimit: 200000 }
+        { gasLimit: 600000 }
       )
 
       await doHandleTransaction({
