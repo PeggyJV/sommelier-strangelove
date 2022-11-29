@@ -14,8 +14,7 @@ export const isBondingEnabled = (config: ConfigProps) => {
 }
 
 export const isBondButtonEnabled = (config: ConfigProps) => {
-  //TODO: change this to true if the staking contracts allready funded
-  return false
+  return true
 }
 
 export const isRewardsEnabled = (config: ConfigProps) => {
