@@ -240,7 +240,6 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 const { amount, lock, rewards, unbondTimestamp } =
                   data
                 const lockMap = bondingPeriodOptions(cellarConfig)
-
                 if (amount?.toString() === "0") return null
                 return (
                   <Tr
@@ -261,7 +260,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     }}
                   >
                     <Td>#{formatTrancheNumber(i + 1)}</Td>
-                    <Td>{toEther(amount.toString())}</Td>
+                    <Td>{toEther(amount.toFixed())}</Td>
                     <Td>{lockMap[lock].title}</Td>
                     <Td>
                       {claimAllRewards
