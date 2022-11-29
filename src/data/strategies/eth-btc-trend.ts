@@ -27,7 +27,7 @@ export const ethBtcTrend = {
     "strategy provider": 7.5,
   },
   staking: {
-    endDate: zonedTimeToUtc(new Date("2022-12-12"), "UTC"),
+    endDate: zonedTimeToUtc(new Date("2022-12-15"), "UTC"),
     multiplier: "1.25x",
   },
   strategyProvider: {
