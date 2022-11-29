@@ -35,7 +35,7 @@ import {
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
-
+import { formatDistanceToNow } from "date-fns"
 interface HeroStrategyRightProps {
   id: string
 }
@@ -202,6 +202,30 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 tvm.data?.formatted || "--"
               )}
             </Text>
+          </HStack>
+        )}
+        {cellarData?.staking && (
+          <HStack>
+            <Box>
+              <Text w="150px" fontWeight="semibold">
+                Rewards
+              </Text>
+            </Box>
+            <HStack>
+              <Text>{cellarData?.staking?.multiplier}</Text>
+              <Box
+                py={1}
+                px={2}
+                borderRadius={28}
+                bgColor="purple.base"
+              >
+                <Text size="sm" fontFamily={"monospace"}>
+                  {`ends in ${formatDistanceToNow(
+                    cellarData?.staking?.endDate
+                  )}`}
+                </Text>
+              </Box>
+            </HStack>
           </HStack>
         )}
       </Stack>
