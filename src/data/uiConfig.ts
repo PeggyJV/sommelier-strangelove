@@ -60,6 +60,13 @@ export const isAPYEnabled = (config: ConfigProps) => {
   return config.cellarNameKey === CellarNameKey.AAVE
 }
 
+export const isRewardAPYEnabled = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+    config.cellarNameKey === CellarNameKey.STEADY_ETH
+  )
+}
+
 export const isTokenPriceEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||

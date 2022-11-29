@@ -8,6 +8,8 @@ import { InlineImage } from "components/InlineImage"
 import { CoinImage } from "./CoinImage"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { formatDistanceToNow, isFuture } from "date-fns"
+import { useApy } from "data/hooks/useApy"
+import { cellarDataMap } from "data/cellarDataMap"
 export interface CellarCardData {
   cellarId: string
   name: string
@@ -33,7 +35,14 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   index,
   ...rest
 }) => {
+  const cellarConfig = cellarDataMap[data.cellarId].config
+
   const protocolIcon = protocolsImage[data.protocols]
+  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+
+  const potentialStakingApy = apyLoading
+    ? "-"
+    : apy?.potentialStakingApy
 
   return (
     <Card
@@ -63,8 +72,9 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
             justifyContent="center"
             borderRadius={0}
             bgColor="purple.base"
+            textAlign="center"
           >
-            <Text>{`Expected 21% APY . ${formatDistanceToNow(
+            <Text>{`Expected Rewards APY ${potentialStakingApy}. ${formatDistanceToNow(
               data?.staking?.endDate
             )} left`}</Text>
           </Tag>
