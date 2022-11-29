@@ -27,7 +27,7 @@ import { analytics } from "utils/analytics"
 import { landingType } from "utils/landingType"
 import { usePosition } from "data/hooks/usePosition"
 import { tokenConfig } from "data/tokenConfig"
-import { useCountdown } from "data/hooks/useCountdown"
+import { isComingSoon } from "utils/isComingSoon"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
@@ -46,7 +46,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const content = strategyPageContentData[id]
   const buyOrSellModal = useDisclosure()
   const cellarData = cellarDataMap[id]
-  const launchDate = cellarDataMap[id].launchDate ?? null
+  const launchDate = cellarDataMap[id].launchDate
   const cellarConfig = cellarData.config
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
@@ -56,9 +56,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
     timeline: intervalGainTimeline(cellarConfig),
   })
   const tvm = useTvm(cellarConfig)
-  const countdown = useCountdown({
-    launchDate,
-  })
+  const countdown = isComingSoon(launchDate)
 
   return (
     <Stack minW={"380px"} spacing={4}>

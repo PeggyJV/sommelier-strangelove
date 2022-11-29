@@ -26,7 +26,7 @@ import { useDailyChange } from "data/hooks/useDailyChange"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { PercentageText } from "components/PercentageText"
 import { useIntervalGain } from "data/hooks/useIntervalGain"
-import { useCountdown } from "data/hooks/useCountdown"
+import { isComingSoon } from "utils/isComingSoon"
 import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
 
@@ -36,7 +36,7 @@ interface Props {
 
 export const AboutCellar: React.FC<Props> = ({ data }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
-  const launchDate = cellarDataMap[data.cellarId].launchDate ?? null
+  const launchDate = cellarDataMap[data.cellarId].launchDate
   const { data: tvm } = useTvm(cellarConfig)
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
@@ -46,9 +46,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
     config: cellarConfig,
     timeline: intervalGainTimeline(cellarConfig),
   })
-  const countdown = useCountdown({
-    launchDate,
-  })
+  const countdown = isComingSoon(launchDate)
 
   const launchingDate = (() => {
     if (!launchDate) return "Coming soon"
