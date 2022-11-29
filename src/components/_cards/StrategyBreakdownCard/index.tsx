@@ -1,19 +1,19 @@
 import {
+  Box,
   BoxProps,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
 } from "@chakra-ui/react"
 import { VFC } from "react"
 import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
 import { CellarDataMap } from "data/types"
-import htmr from "htmr"
 import { FAQAccordion } from "./FAQAccordion"
+import htmr from "htmr"
 
 interface StrategyBreakdownProps extends BoxProps {
   cellarDataMap: CellarDataMap
@@ -71,7 +71,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
           {Object.values(strategyBreakdown).map((value, i) => {
             return (
               <TabPanel key={i} {...tabPanelProps}>
-                <Text whiteSpace="pre-line">{htmr(value)}</Text>
+                <Box whiteSpace="pre-line">{htmr(value)}</Box>
               </TabPanel>
             )
           })}
