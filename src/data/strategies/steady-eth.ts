@@ -6,13 +6,10 @@ import {
   StakerKey,
 } from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
-import { LAUNCH_DATE_DISABLED } from "utils/constants"
 
 export const steadyEth = {
   name: "Steady ETH",
-  launchDate: LAUNCH_DATE_DISABLED
-    ? undefined
-    : "2022-11-29 12:00:00",
+  launchDate: "2022-11-29T12:00:00",
   cellarType: CellarType.automatedPortfolio,
   description: `Capture the upside of ETH price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
