@@ -58,10 +58,13 @@ export const getApy = async (
     const apyLabel = `Expected APY`
 
     return {
+      apy,
       apyLabel,
       // Comment out because of rebalancing, Aave APY is 0.00% for the week.
       // expectedApy: expectedApy.toFixed(1).toString() + "%",
       expectedApy: "1.9%",
+      potentialStakingApy:
+        potentialStakingApy.toFixed(1).toString() + "%",
     }
   } catch (error) {
     console.warn("Cannot read cellar data", error)

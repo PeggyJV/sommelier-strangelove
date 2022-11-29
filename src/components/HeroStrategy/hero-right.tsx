@@ -36,6 +36,7 @@ import {
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
 import { formatDistanceToNow } from "date-fns"
+import { useApy } from "data/hooks/useApy"
 interface HeroStrategyRightProps {
   id: string
 }
@@ -57,6 +58,11 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   })
   const tvm = useTvm(cellarConfig)
   const countdown = isComingSoon(launchDate)
+
+  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const potentialStakingApy = apyLoading
+    ? "-"
+    : apy?.potentialStakingApy
 
   return (
     <Stack minW={"380px"} spacing={4}>
@@ -210,7 +216,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               </Text>
             </Box>
             <Stack direction="column">
-              <Text>Expected 21% APY</Text>
+              <Text>{`Expected Rewards APY ${potentialStakingApy}`}</Text>
               <Box
                 py={1}
                 px={2}
