@@ -33,7 +33,8 @@ export interface TvlData {
 }
 
 export interface PerformanceChartContext {
-  fetching: boolean
+  isFetching: boolean
+  isError: boolean
   data: DataProps
   setDataHourly: () => void
   setDataWeekly: () => void
@@ -103,7 +104,8 @@ const initialData: PerformanceChartContext = {
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   },
-  fetching: true,
+  isFetching: true,
+  isError: false,
   reexecuteHourly: () => null,
   reexecuteWeekly: () => null,
   reexecuteAllTime: () => null,
@@ -126,30 +128,45 @@ const initialData: PerformanceChartContext = {
 const performanceChartByAddressContext =
   createContext<PerformanceChartContext>(initialData)
 
+const prev24Hours = getPrevious24Hours()
+const prevWeek = getPreviousWeek()
+
 export const PerformanceChartByAddressProvider: FC<{
   address: string
 }> = ({ children, address }) => {
   // GQL Queries
   const [
-    { fetching: hourlyIsFetching, data: hourlyData },
+    {
+      fetching: hourlyIsFetching,
+      data: hourlyData,
+      error: hourlyError,
+    },
     reexecuteHourly,
   ] = useGetHourlyTvlByAddressQuery({
     variables: {
-      epoch: getPrevious24Hours(),
+      epoch: prev24Hours,
       cellarAddress: address,
     },
   })
   const [
-    { fetching: weeklyIsFetching, data: weeklyData },
+    {
+      fetching: weeklyIsFetching,
+      data: weeklyData,
+      error: weeklyError,
+    },
     reexecuteWeekly,
   ] = useGetWeeklyTvlByAdressQuery({
     variables: {
-      epoch: getPreviousWeek(),
+      epoch: prevWeek,
       cellarAddress: address,
     },
   })
   const [
-    { fetching: allTimeIsFetching, data: allTimeData },
+    {
+      fetching: allTimeIsFetching,
+      data: allTimeData,
+      error: allTimeError,
+    },
     reexecuteAllTime,
   ] = useGetAllTimeTvlByAddressQuery({
     variables: {
@@ -211,8 +228,10 @@ export const PerformanceChartByAddressProvider: FC<{
   }, [hourlyData, data])
 
   // Grouped loading state
-  const fetching =
+  const isFetching =
     hourlyIsFetching || weeklyIsFetching || allTimeIsFetching
+
+  const isError = !!hourlyError || !!weeklyError || !!allTimeError
 
   // Functions to update data returned by hook
   const setDataHourly = () =>
@@ -267,7 +286,8 @@ export const PerformanceChartByAddressProvider: FC<{
   return (
     <performanceChartByAddressContext.Provider
       value={{
-        fetching,
+        isFetching: isFetching,
+        isError,
         data,
         setDataHourly,
         setDataWeekly,

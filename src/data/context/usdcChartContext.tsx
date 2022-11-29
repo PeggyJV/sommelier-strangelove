@@ -1,5 +1,4 @@
 import { LineProps, Serie } from "@nivo/line"
-import { useUsdcGainChartData } from "data/hooks/useUsdcGainChartData"
 import { format } from "date-fns"
 import {
   useGetAllTimeShareValueQuery,
@@ -44,7 +43,8 @@ export interface ShowLine {
 }
 
 export interface UsdcChartContext {
-  fetching: boolean
+  isFetching: boolean
+  isError: boolean
   data: DataProps
   setDataHourly: () => void
   setDataWeekly: () => void
@@ -132,7 +132,8 @@ const initialData: UsdcChartContext = {
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   },
-  fetching: true,
+  isFetching: true,
+  isError: false,
   reexecuteHourly: () => null,
   reexecuteWeekly: () => null,
   reexecuteMonthly: () => null,
@@ -161,6 +162,10 @@ const initialData: UsdcChartContext = {
 
 const usdcChartContext = createContext<UsdcChartContext>(initialData)
 
+const prev24Hours = getPrevious24Hours()
+const prevWeek = getPreviousWeek()
+const prevMonth = getPreviousMonth()
+
 export const UsdcChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
@@ -171,34 +176,50 @@ export const UsdcChartProvider: FC<{
 
   // GQL Queries
   const [
-    { fetching: hourlyIsFetching, data: hourlyDataRaw },
+    {
+      fetching: hourlyIsFetching,
+      data: hourlyDataRaw,
+      error: hourlyError,
+    },
     reexecuteHourly,
   ] = useGetHourlyShareValueQuery({
     variables: {
-      epoch: getPrevious24Hours(),
+      epoch: prev24Hours,
       cellarAddress: address,
     },
   })
   const [
-    { fetching: weeklyIsFetching, data: weeklyDataRaw },
+    {
+      fetching: weeklyIsFetching,
+      data: weeklyDataRaw,
+      error: weeklyError,
+    },
     reexecuteWeekly,
   ] = useGetWeeklyShareValueQuery({
     variables: {
-      epoch: getPreviousWeek(),
+      epoch: prevWeek,
       cellarAddress: address,
     },
   })
   const [
-    { fetching: monthlyIsFetching, data: monthlyDataRaw },
+    {
+      fetching: monthlyIsFetching,
+      data: monthlyDataRaw,
+      error: monthlyError,
+    },
     reexecuteMonthly,
   ] = useGetMonthlyShareValueQuery({
     variables: {
-      epoch: getPreviousMonth(),
+      epoch: prevMonth,
       cellarAddress: address,
     },
   })
   const [
-    { fetching: allTimeIsFetching, data: allTimeDataRaw },
+    {
+      fetching: allTimeIsFetching,
+      data: allTimeDataRaw,
+      error: allTimeError,
+    },
     reexecuteAllTime,
   ] = useGetAllTimeShareValueQuery({
     variables: {
@@ -214,22 +235,22 @@ export const UsdcChartProvider: FC<{
     (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
   )
 
-  const usdcHourly = useUsdcGainChartData({
-    day: 1,
-    interval: "hourly",
-  })
-  const usdcWeekly = useUsdcGainChartData({
-    day: Number(weeklyData?.length),
-    firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
-  })
-  const usdcMonthly = useUsdcGainChartData({
-    day: Number(monthlyData?.length),
-    firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
-  })
-  const usdcAlltime = useUsdcGainChartData({
-    day: Number(allTimeData?.length),
-    firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
-  })
+  // const usdcHourly = useUsdcGainChartData({
+  //   day: 1,
+  //   interval: "hourly",
+  // })
+  // const usdcWeekly = useUsdcGainChartData({
+  //   day: Number(weeklyData?.length),
+  //   firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
+  // })
+  // const usdcMonthly = useUsdcGainChartData({
+  //   day: Number(monthlyData?.length),
+  //   firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
+  // })
+  // const usdcAlltime = useUsdcGainChartData({
+  //   day: Number(allTimeData?.length),
+  //   firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
+  // })
 
   // Set data to be returned by hook
   const [data, setData] = useState<DataProps>({
@@ -245,15 +266,22 @@ export const UsdcChartProvider: FC<{
     })
 
   // Grouped loading state
-  const fetching =
+  const isFetching =
     hourlyIsFetching ||
     weeklyIsFetching ||
     monthlyIsFetching ||
-    allTimeIsFetching ||
-    usdcHourly.isLoading ||
-    usdcWeekly.isLoading ||
-    usdcMonthly.isLoading ||
-    usdcAlltime.isLoading
+    allTimeIsFetching
+  // || usdcHourly.isLoading ||
+  // usdcWeekly.isLoading ||
+  // usdcMonthly.isLoading ||
+  // usdcAlltime.isLoading
+
+  const isError =
+    !!hourlyError || !!weeklyError || !!monthlyError || !!allTimeError
+  // || usdcHourly.isError ||
+  // usdcWeekly.isError ||
+  // usdcMonthly.isError ||
+  // usdcAlltime.isError
 
   // Functions to update data returned by hook
   const setDataHourly = () => {
@@ -268,10 +296,10 @@ export const UsdcChartProvider: FC<{
 
     const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      usdc: usdcHourly.data?.usdcDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
+      // usdc: usdcHourly.data?.usdcDatum.slice(
+      //   0,
+      //   tokenPriceDatum?.length
+      // ),
     })
     setData({
       series,
@@ -310,10 +338,10 @@ export const UsdcChartProvider: FC<{
 
     const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      usdc: usdcWeekly.data?.usdcDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
+      // usdc: usdcWeekly.data?.usdcDatum.slice(
+      //   0,
+      //   tokenPriceDatum?.length
+      // ),
     })
     setData({
       series,
@@ -351,10 +379,10 @@ export const UsdcChartProvider: FC<{
     )
     const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      usdc: usdcMonthly.data?.usdcDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
+      // usdc: usdcMonthly.data?.usdcDatum.slice(
+      //   0,
+      //   tokenPriceDatum?.length
+      // ),
     })
     setData({
       series,
@@ -389,10 +417,10 @@ export const UsdcChartProvider: FC<{
     )
     const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      usdc: usdcAlltime.data?.usdcDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
+      // usdc: usdcAlltime.data?.usdcDatum.slice(
+      //   0,
+      //   tokenPriceDatum?.length
+      // ),
     })
     setData({
       series,
@@ -436,7 +464,11 @@ export const UsdcChartProvider: FC<{
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
-    if (weeklyData && idIsDefault && usdcWeekly.data) {
+    if (
+      weeklyData &&
+      idIsDefault
+      // && usdcWeekly.data
+    ) {
       const weeklyDataMap = weeklyData?.map((item) => {
         return {
           date: item.date,
@@ -448,10 +480,10 @@ export const UsdcChartProvider: FC<{
 
       const series = createUsdcChartSeries({
         tokenPrice: tokenPriceDatum,
-        usdc: usdcWeekly.data?.usdcDatum.slice(
-          0,
-          tokenPriceDatum?.length
-        ),
+        // usdc: usdcWeekly.data?.usdcDatum.slice(
+        //   0,
+        //   tokenPriceDatum?.length
+        // ),
       })
 
       setData({
@@ -479,7 +511,11 @@ export const UsdcChartProvider: FC<{
         }`,
       })
     }
-  }, [weeklyData, data, usdcWeekly.data])
+  }, [
+    weeklyData,
+    data,
+    // usdcWeekly.data
+  ])
 
   const dataC = {
     ...data,
@@ -498,7 +534,8 @@ export const UsdcChartProvider: FC<{
   return (
     <usdcChartContext.Provider
       value={{
-        fetching,
+        isFetching,
+        isError,
         data: dataC,
         setDataHourly,
         setDataWeekly,
