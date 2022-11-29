@@ -25,11 +25,14 @@ export const isTokenAssets = (config: ConfigProps) => {
   return config.cellarNameKey === CellarNameKey.AAVE
 }
 
-export const IsOneMonthEthBtc = (config: ConfigProps) => {
-  return (
+export const intervalGainTimeline = (config: ConfigProps) => {
+  if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  )
+  ) {
+    return "monthly"
+  }
+  return "weekly"
 }
 
 export const isPositionTokenAssets = (config: ConfigProps) => {
