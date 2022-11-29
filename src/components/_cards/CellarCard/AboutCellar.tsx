@@ -9,11 +9,11 @@ import { useTvm } from "data/hooks/useTvm"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
+  intervalGainTimeline,
   isAPYEnabled,
   isCurrentDepositsEnabled,
   isDailyChangeEnabled,
   isIntervalGainPctEnabled,
-  IsOneMonthEthBtc,
   isTokenPriceEnabled,
   isTVMEnabled,
   tokenPriceTooltipContent,
@@ -44,7 +44,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
   const intervalGainPct = useIntervalGain({
     config: cellarConfig,
-    timeline: IsOneMonthEthBtc(cellarConfig) ? "monthly" : "weekly",
+    timeline: intervalGainTimeline(cellarConfig),
   })
   const countdown = useCountdown({
     launchDate,

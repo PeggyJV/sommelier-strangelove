@@ -31,8 +31,8 @@ import { useIntervalGain } from "data/hooks/useIntervalGain"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
+  intervalGainTimeline,
   isEthBtcChartEnabled,
-  IsOneMonthEthBtc,
   isTVMEnabled,
   isUsdcChartEnabled,
   tokenPriceTooltipContent,
@@ -61,7 +61,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: dailyChange } = useDailyChange(cellarConfig)
   const intervalGainPct = useIntervalGain({
     config: cellarConfig,
-    timeline: IsOneMonthEthBtc(cellarConfig) ? "monthly" : "weekly",
+    timeline: intervalGainTimeline(cellarConfig),
   })
   const [isLarger768] = useMediaQuery("(min-width: 768px)")
   const isYieldStrategies =

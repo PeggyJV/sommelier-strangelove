@@ -31,7 +31,7 @@ import { useCountdown } from "data/hooks/useCountdown"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
-  IsOneMonthEthBtc,
+  intervalGainTimeline,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
@@ -53,7 +53,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const position = usePosition(cellarConfig)
   const intervalGainPct = useIntervalGain({
     config: cellarConfig,
-    timeline: IsOneMonthEthBtc(cellarConfig) ? "monthly" : "weekly",
+    timeline: intervalGainTimeline(cellarConfig),
   })
   const tvm = useTvm(cellarConfig)
   const countdown = useCountdown({
