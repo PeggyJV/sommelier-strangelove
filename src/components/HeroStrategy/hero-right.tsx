@@ -209,21 +209,21 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 Rewards
               </Text>
             </Box>
-            <HStack>
-              <Text>{cellarData?.staking?.multiplier}</Text>
+            <Stack direction="column">
+              <Text>Expected 21% APY</Text>
               <Box
                 py={1}
                 px={2}
                 borderRadius={28}
                 bgColor="purple.base"
               >
-                <Text size="sm" fontFamily={"monospace"}>
-                  {`ends in ${formatDistanceToNow(
+                <Text fontSize="xs" fontFamily={"monospace"}>
+                  {`${formatDistanceToNow(
                     cellarData?.staking?.endDate
-                  )}`}
+                  )} left`}
                 </Text>
               </Box>
-            </HStack>
+            </Stack>
           </HStack>
         )}
       </Stack>

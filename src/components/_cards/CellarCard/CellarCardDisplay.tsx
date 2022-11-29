@@ -64,9 +64,9 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
             borderRadius={0}
             bgColor="purple.base"
           >
-            <Text>{`${formatDistanceToNow(
+            <Text>{`Expected 21% APY . ${formatDistanceToNow(
               data?.staking?.endDate
-            )} left to earn rewards`}</Text>
+            )} left`}</Text>
           </Tag>
         )}
         <Flex
