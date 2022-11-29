@@ -7,6 +7,7 @@ import { BridgeForm } from "components/_forms/BridgeForm"
 import { useAccount, useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { FormProvider, useForm } from "react-hook-form"
+import { useIsMounted } from "hooks/utils/useIsMounted"
 
 export interface BridgeFormValues {
   amount: number
@@ -14,6 +15,7 @@ export interface BridgeFormValues {
 }
 
 export const BridgeCard: React.FC = () => {
+  const isMounted = useIsMounted()
   const { connectors } = useConnect()
   const { isConnected } = useAccount()
   const methods = useForm<BridgeFormValues>()
@@ -46,17 +48,18 @@ export const BridgeCard: React.FC = () => {
           <ExternalLinkIcon boxSize={3} color="purple.base" />
         </Link>
       </Text>
-      {isConnected ? (
-        <FormProvider {...methods}>
-          <BridgeForm />
-        </FormProvider>
-      ) : (
-        <Stack>
-          {connectors.map((c) => (
-            <ConnectButton connector={c} key={c.id} unstyled />
-          ))}
-        </Stack>
-      )}
+      {isMounted &&
+        (isConnected ? (
+          <FormProvider {...methods}>
+            <BridgeForm />
+          </FormProvider>
+        ) : (
+          <Stack>
+            {connectors.map((c) => (
+              <ConnectButton connector={c} key={c.id} unstyled />
+            ))}
+          </Stack>
+        ))}
     </TransparentCard>
   )
 }
