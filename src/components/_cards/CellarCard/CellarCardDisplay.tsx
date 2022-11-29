@@ -50,13 +50,19 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
       {...rest}
     >
       <Burst />
-      <Flex flexDirection="column" borderRadius={24} zIndex="2">
+      <Flex
+        flexDirection="column"
+        borderRadius={24}
+        zIndex="2"
+        overflow="hidden"
+      >
         {data?.staking && isFuture(data?.staking?.endDate) && (
           <Tag
             px={6}
             py={3}
             justifyContent="center"
-            bgColor="surface.tertiary"
+            borderRadius={0}
+            bgColor="purple.base"
           >
             <Text>{`${formatDistanceToNow(
               data?.staking?.endDate
@@ -67,7 +73,6 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
           p={4}
           ml={2}
           bg="radial-gradient(104.22% 1378.1% at 0% 0%, rgba(194, 34, 194, 0) 0%, rgba(210, 37, 204, 0.16) 100%)"
-          borderTopRightRadius={24}
           borderTopLeftRadius={24}
           minH="180.5px"
           direction="column"
