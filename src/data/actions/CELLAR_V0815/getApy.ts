@@ -8,7 +8,9 @@ const yearInSecsBN = new BigNumber(yearInSecs)
 export const getApy = async (
   cellarContract: CellarV0815,
   stakerContract: CellarStakingV0815,
-  sommPrice: string
+  sommPrice: string,
+  latestData: string,
+  prevDayLatestData: string
 ) => {
   try {
     const maxLocked = new BigNumber(
@@ -52,6 +54,11 @@ export const getApy = async (
 
     const { expectedApy, formattedCellarApy, formattedStakingApy } =
       getExpectedApy(apy, potentialStakingApy)
+
+    const yieldGain =
+      (Number(latestData) - Number(prevDayLatestData)) /
+      Number(prevDayLatestData)
+    const cellarApy = yieldGain * 52 * 100
 
     // Comment out because of rebalancing, Aave APY is 0.00% for the week.
     // const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${formattedCellarApy}%) and Liquidity Mining Rewards (${formattedStakingApy}%)`
