@@ -34,7 +34,7 @@ export const toEther = (
   if (!val || val === "--") return "--"
   try {
     const fmt = ethers.utils.formatUnits(val, decimals)
-    const result = new BigNumber(fmt)
+    const result = new BigNumber(fmt.toString())
     if (format) return result.toFormat(2)
     return result.toFixed(precision, 1)
   } catch (e) {

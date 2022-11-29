@@ -24,6 +24,7 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserStakes } from "data/hooks/useUserStakes"
+import { bondingPeriodOptions } from "data/uiConfig"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -238,11 +239,8 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               userStakes.map((data, i) => {
                 const { amount, lock, rewards, unbondTimestamp } =
                   data
-                const lockMap: { [key: string]: string } = {
-                  "0": "7 days",
-                  "1": "14 days",
-                  "2": "21 days",
-                }
+                const lockMap = bondingPeriodOptions(cellarConfig)
+
                 if (amount?.toString() === "0") return null
                 return (
                   <Tr
@@ -264,7 +262,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   >
                     <Td>#{formatTrancheNumber(i + 1)}</Td>
                     <Td>{toEther(amount.toString())}</Td>
-                    <Td>{lockMap[lock?.toString()]}</Td>
+                    <Td>{lockMap[lock].title}</Td>
                     <Td>
                       {claimAllRewards
                         ? toEther(
