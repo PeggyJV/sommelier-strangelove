@@ -29,12 +29,6 @@ export const tokenConfig: Token[] = [
     address: "0x6b175474e89094c44da98b954eedeac495271d0f",
   },
   {
-    src: "/assets/icons/fei.png",
-    alt: "Fei logo",
-    symbol: "FEI",
-    address: "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
-  },
-  {
     src: "/assets/icons/frax.png",
     alt: "Frax logo",
     symbol: "FRAX",
@@ -100,7 +94,6 @@ export const depositAssetTokenList = [
   "AMPL",
   "BUSD",
   "DAI",
-  "FEI",
   "FRAX",
   "GUSD",
   "USDP",
