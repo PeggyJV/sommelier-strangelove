@@ -69,7 +69,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
   const setMax = () => {
     const amount = parseFloat(
-      toEther(lpTokenData?.formatted, 18, false, 6)
+      toEther(lpTokenData?.formatted, lpTokenData?.decimals, false, 6)
     )
     setValue("withdrawAmount", amount)
 
@@ -196,7 +196,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
                           toEther(
                             lpTokenData?.formatted,
                             lpTokenData?.decimals,
-                            false
+                            false,
+                            6
                           )
                         ) || "Insufficient balance",
                   },
@@ -212,7 +213,9 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
                       {(lpTokenData &&
                         toEther(
                           lpTokenData.value,
-                          lpTokenData.decimals
+                          lpTokenData.decimals,
+                          false,
+                          6
                         )) ||
                         "--"}
                     </Text>
