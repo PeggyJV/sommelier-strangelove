@@ -38,9 +38,8 @@ import {
 import { BondButton } from "components/_buttons/BondButton"
 import { useApy } from "data/hooks/useApy"
 import { InnerCard } from "../InnerCard"
-import { formatDistanceToNow } from "date-fns"
+import { formatDistanceToNow, isFuture } from "date-fns"
 import { CoinImage } from "../CellarCard/CoinImage"
-import { isComingSoon } from "utils/isComingSoon"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isMounted = useIsMounted()
@@ -70,7 +69,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
   const { data: netValue } = useNetValue(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
-  const isEarn = isComingSoon(cellarStaking.endDate)
 
   return (
     <TransparentCard p={8} {...props}>
@@ -220,7 +218,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           isConnected &&
           userStakes?.userStakes.length && <BondingTableCard />}
       </VStack>
-      {isEarn && (
+      {cellarStaking && isFuture(cellarStaking?.endDate) && (
         <InnerCard mt="8" px="7" py="7">
           <HStack>
             <CoinImage boxSize="1.6rem" mr="6px" />
