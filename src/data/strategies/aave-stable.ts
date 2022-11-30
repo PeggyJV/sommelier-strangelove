@@ -24,7 +24,6 @@ export const aaveStable = {
     "BUSD",
     "USDT",
     "DAI",
-    "FEI",
     "FRAX",
     "sUSD",
     "USDP",
