@@ -28,6 +28,7 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { bondingPeriodOptions } from "data/uiConfig"
+import { estimateGasLimit } from "utils/estimateGasLimit"
 
 interface FormValues {
   depositAmount: number
@@ -79,6 +80,14 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
     )
 
   const onSubmit = async (data: FormValues) => {
+    if (!stakerSigner) {
+      return addToast({
+        heading: "No wallet connected",
+        body: <Text>Please connect your wallet</Text>,
+        status: "error",
+        closeHandler: closeAll,
+      })
+    }
     const analyticsData = {
       duration: bondingPeriodOptions(cellarConfig)[bondPeriod],
     }
@@ -93,12 +102,17 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       amtInBigNumber.toFixed(),
       18
     )
+
     try {
-      const { hash: bondConf } = await stakerSigner?.stake(
+      const gasLimit = await estimateGasLimit(
+        stakerSigner.estimateGas.stake(depositAmtInWei, bondPeriod),
+        250000 // known gasLimit
+      )
+
+      const { hash: bondConf } = await stakerSigner.stake(
         depositAmtInWei,
         bondPeriod,
-        // gas used around 125000-130000
-        { gasLimit: 600000 }
+        { gasLimit }
       )
 
       await doHandleTransaction({
