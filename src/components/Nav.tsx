@@ -5,7 +5,6 @@ import {
   FlexProps,
   HStack,
   Image,
-  useMediaQuery,
 } from "@chakra-ui/react"
 import { useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
@@ -14,6 +13,7 @@ import { useRouter } from "next/router"
 import { NAV_LINKS } from "utils/navLinks"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { LogoTextIcon } from "./_icons"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 export const Nav: VFC<FlexProps> = (props) => {
   const isMounted = useIsMounted()
@@ -21,7 +21,7 @@ export const Nav: VFC<FlexProps> = (props) => {
   const [scrolled, setScrolled] = useState<boolean>(false)
 
   const routes = useRouter()
-  const [isLarger768] = useMediaQuery("(min-width: 768px)")
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
 
   // listen for scroll event to set state
   useEffect(() => {

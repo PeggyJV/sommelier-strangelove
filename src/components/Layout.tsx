@@ -5,35 +5,17 @@ import { BackgroundAssets } from "./BackgroundAssets"
 import { Nav } from "./Nav"
 import { GeoBanner } from "./_banners/GeoBanner"
 import Footer from "./Footer"
-// import { MobileWarningCTA } from "./MobileWarningCTA"
 import { useAccount, useNetwork } from "wagmi"
 import { WrongNetworkBanner } from "./_banners/WrongNetworkBanner"
-import { useRouter } from "next/router"
 
 export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   const { isRestricted } = useGeo() || {}
   const { isConnected } = useAccount()
   const { chain } = useNetwork()
 
-  const router = useRouter()
-
-  const isNotBridge =
-    router.pathname === "/" || router.pathname.includes("strategies")
-
   return (
     <Box>
-      {/* <MobileWarningCTA
-        display={{
-          base: isNotBridge ? "none" : "flex",
-          md: "none",
-        }}
-      /> */}
-      <Box
-        display={{
-          base: isNotBridge ? "block" : "none",
-          md: "block",
-        }}
-      >
+      <Box display="block">
         <BackgroundAssets />
         <Flex minH="100vh" flexDir="column" {...rest}>
           <Nav />
