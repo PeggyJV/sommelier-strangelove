@@ -30,6 +30,7 @@ import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { Rewards } from "./Rewards"
 import {
+  bondingPeriodOptions,
   isBondButtonEnabled,
   isBondingEnabled,
   isRewardsEnabled,
@@ -39,17 +40,18 @@ import { BondButton } from "components/_buttons/BondButton"
 import { useApy } from "data/hooks/useApy"
 import { InnerCard } from "../InnerCard"
 import { formatDistanceToNow, isFuture } from "date-fns"
-import { CoinImage } from "../CellarCard/CoinImage"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
+import { LighterSkeleton } from "components/_skeleton"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isMounted = useIsMounted()
   const { isConnected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
-  const cellarStaking = cellarDataMap[id].staking
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(depositTokens)
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const stakingEnd = useStakingEnd(cellarConfig)
 
   const potentialStakingApy = apyLoading
     ? "-"
@@ -65,13 +67,25 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <=
       0
 
-  const { data: userStakes } = useUserStakes(cellarConfig)
+  const userStakes = useUserStakes(cellarConfig)
 
   const { data: netValue } = useNetValue(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
 
+  const bondingPeriods = bondingPeriodOptions(cellarConfig)
+  const maxMultiplier = bondingPeriods
+    .at(-1)
+    ?.amount.replace("SOMM", "")
+
+  const isStakingAllowed =
+    stakingEnd.data?.endDate && isFuture(stakingEnd.data.endDate)
+
   return (
-    <TransparentCard p={8} {...props}>
+    <TransparentCard
+      {...props}
+      backgroundColor="surface.secondary"
+      p={8}
+    >
       <VStack align="stretch" spacing={8}>
         <CardStatRow
           spacing={{ sm: 4, md: 8, lg: 14 }}
@@ -199,14 +213,16 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   >
                     {isMounted &&
                       (isConnected
-                        ? userStakes?.totalBondedAmount.formatted ||
-                          "..."
+                        ? userStakes.data?.totalBondedAmount
+                            .formatted || "..."
                         : "--")}
                   </CardStat>
                 </VStack>
-                {isBondButtonEnabled(cellarConfig) && isMounted && (
-                  <BondButton disabled={lpTokenDisabled} />
-                )}
+                {isBondButtonEnabled(cellarConfig) &&
+                  isStakingAllowed &&
+                  isMounted && (
+                    <BondButton disabled={lpTokenDisabled} />
+                  )}
               </>
             )}
           </SimpleGrid>
@@ -214,25 +230,56 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             <Rewards cellarConfig={cellarConfig} />
           )}
         </CardStatRow>
-        {isBondingEnabled(cellarConfig) &&
-          isConnected &&
-          userStakes?.userStakes.length && <BondingTableCard />}
+        {isBondingEnabled(cellarConfig) && (
+          <>
+            {!userStakes.data?.userStakes.length && (
+              <InnerCard
+                backgroundColor="surface.tertiary"
+                mt="8"
+                px="7"
+                py="7"
+              >
+                <HStack>
+                  <Image
+                    src="/assets/icons/somm.png"
+                    alt="sommelier logo"
+                    boxSize={6}
+                  />
+                  <Heading size="16px">
+                    Earn rewards when you bond {potentialStakingApy} .
+                    up to {maxMultiplier}
+                  </Heading>
+                  <Spacer />
+                  <LighterSkeleton
+                    isLoaded={!stakingEnd.isLoading}
+                    height={4}
+                  >
+                    <Text fontSize="xs">
+                      {stakingEnd.data?.endDate &&
+                      isFuture(stakingEnd.data.endDate)
+                        ? `Ends in ${formatDistanceToNow(
+                            stakingEnd.data.endDate
+                          )}`
+                        : "Program Ended"}
+                    </Text>
+                  </LighterSkeleton>
+                </HStack>
+              </InnerCard>
+            )}
+            <LighterSkeleton
+              h={userStakes.isLoading ? "100px" : "none"}
+              borderRadius={24}
+              isLoaded={!userStakes.isLoading}
+            >
+              {isConnected &&
+                Boolean(userStakes.data?.userStakes.length) && (
+                  <BondingTableCard />
+                )}
+            </LighterSkeleton>
+          </>
+        )}
       </VStack>
-      {cellarStaking && isFuture(cellarStaking?.endDate) && (
-        <InnerCard mt="8" px="7" py="7">
-          <HStack>
-            <CoinImage boxSize="1.6rem" mr="6px" />
-            <Heading size="16px">
-              Earn rewards when you bond {potentialStakingApy} . up to{" "}
-              {cellarStaking.multiplier}
-            </Heading>
-            <Spacer />
-            <Text fontSize="xs">
-              Ends in {formatDistanceToNow(cellarStaking.endDate)}
-            </Text>
-          </HStack>
-        </InnerCard>
-      )}
+      {/* Show if only nothing staked */}
     </TransparentCard>
   )
 }
