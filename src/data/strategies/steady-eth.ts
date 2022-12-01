@@ -7,7 +7,6 @@ import {
   StakerKey,
 } from "../types"
 import { depositTokenListWithWethWbtc } from "../tokenConfig"
-import { zonedTimeToUtc } from "date-fns-tz"
 
 export const steadyEth = {
   name: "Steady ETH",
@@ -25,10 +24,6 @@ export const steadyEth = {
     depositors: 90,
     protocol: 2.5,
     "strategy provider": 7.5,
-  },
-  staking: {
-    endDate: zonedTimeToUtc(new Date("2022-12-14"), "UTC"),
-    multiplier: "1.25x",
   },
   strategyProvider: {
     logo: "/assets/images/patache.png",
