@@ -1,4 +1,4 @@
-import { Circle, useMediaQuery } from "@chakra-ui/react"
+import { Circle } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
 import { PointTooltipProps, Point } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
@@ -7,6 +7,7 @@ import { FunctionComponent, VFC } from "react"
 import { debounce } from "lodash"
 import { formatCurrency } from "utils/formatCurrency"
 import { usePerformanceChartByAddress } from "data/context/performanceChartByAddressContext"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -40,7 +41,7 @@ export const TVLChart: VFC = () => {
     })
   }
   const debouncedTvl = debounce(updateTvl, 100)
-  const [isLarger768] = useMediaQuery("(min-width: 768px)")
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
 
   return (
     <LineChart
