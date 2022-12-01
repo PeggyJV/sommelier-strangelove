@@ -1,11 +1,13 @@
 import { Heading, HStack, Text, VStack } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { BlockIcon } from "components/_icons"
+import { useBrandedToast } from "hooks/chakra"
 import React, { VFC } from "react"
 import { useSwitchNetwork } from "wagmi"
 
 export const WrongNetworkBanner: VFC = () => {
-  const { switchNetwork } = useSwitchNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
+  const { addToast, close } = useBrandedToast()
   return (
     <HStack
       p={4}
@@ -25,7 +27,22 @@ export const WrongNetworkBanner: VFC = () => {
           contracts to fail. Please switch your network to the
           Ethereum chain.
         </Text>
-        <SecondaryButton onClick={() => switchNetwork?.(1)}>
+        <SecondaryButton
+          onClick={async () => {
+            try {
+              await switchNetworkAsync?.(1)
+            } catch (e) {
+              const error = e as Error
+              addToast({
+                heading: "Change network error",
+                status: "error",
+                body: <Text>{error?.message}</Text>,
+                closeHandler: close,
+                duration: null,
+              })
+            }
+          }}
+        >
           Switch to Ethereum
         </SecondaryButton>
       </VStack>
