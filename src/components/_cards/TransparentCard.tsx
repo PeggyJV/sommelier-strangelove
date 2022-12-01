@@ -5,7 +5,7 @@ import { Card } from "./Card"
 export const TransparentCard: VFC<BoxProps> = (props) => {
   return (
     <Card
-      bg="surface.primary"
+      backgroundColor="surface.primary"
       borderWidth={1}
       borderRadius={{ base: 0, sm: 24 }}
       borderColor="surface.secondary"
