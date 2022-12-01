@@ -207,7 +207,9 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         >
           Bond LP Tokens
         </BaseButton>
-        <Text>Please wait 15 min after the deposit to Bond</Text>
+        <Text textAlign="center">
+          Please wait 15 min after the deposit to Bond
+        </Text>
       </VStack>
     </FormProvider>
   )
