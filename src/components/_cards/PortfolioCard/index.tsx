@@ -1,8 +1,12 @@
 import {
   BoxProps,
+  Heading,
+  HStack,
   Image,
   SimpleGrid,
+  Spacer,
   Stack,
+  Text,
   VStack,
 } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
@@ -32,14 +36,24 @@ import {
   lpTokenTooltipContent,
 } from "data/uiConfig"
 import { BondButton } from "components/_buttons/BondButton"
+import { useApy } from "data/hooks/useApy"
+import { InnerCard } from "../InnerCard"
+import { formatDistanceToNow, isFuture } from "date-fns"
+import { CoinImage } from "../CellarCard/CoinImage"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isMounted = useIsMounted()
   const { isConnected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
+  const cellarStaking = cellarDataMap[id].staking
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(depositTokens)
+  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+
+  const potentialStakingApy = apyLoading
+    ? "-"
+    : apy?.potentialStakingApy
 
   const { connectors } = useConnect()
 
@@ -60,7 +74,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     <TransparentCard p={8} {...props}>
       <VStack align="stretch" spacing={8}>
         <CardStatRow
-          // px={{ md: 10 }}
           spacing={{ sm: 4, md: 8, lg: 14 }}
           align="flex-start"
           justify="flex-start"
@@ -205,6 +218,21 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           isConnected &&
           userStakes?.userStakes.length && <BondingTableCard />}
       </VStack>
+      {cellarStaking && isFuture(cellarStaking?.endDate) && (
+        <InnerCard mt="8" px="7" py="7">
+          <HStack>
+            <CoinImage boxSize="1.6rem" mr="6px" />
+            <Heading size="16px">
+              Earn rewards when you bond {potentialStakingApy} . up to{" "}
+              {cellarStaking.multiplier}
+            </Heading>
+            <Spacer />
+            <Text fontSize="xs">
+              Ends in {formatDistanceToNow(cellarStaking.endDate)}
+            </Text>
+          </HStack>
+        </InnerCard>
+      )}
     </TransparentCard>
   )
 }
