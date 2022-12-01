@@ -53,10 +53,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
   const stakingEnd = useStakingEnd(cellarConfig)
 
-  const potentialStakingApy = apyLoading
-    ? "-"
-    : apy?.potentialStakingApy
-
   const { connectors } = useConnect()
 
   const { lpToken } = useUserBalances(cellarConfig)
@@ -246,8 +242,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                     boxSize={6}
                   />
                   <Heading size="16px">
-                    Earn rewards when you bond {potentialStakingApy} .
-                    up to {maxMultiplier}
+                    Earn rewards when you bond{" "}
+                    {apy?.potentialStakingApy}. up to {maxMultiplier}
                   </Heading>
                   <Spacer />
                   <LighterSkeleton
