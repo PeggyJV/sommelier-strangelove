@@ -1,5 +1,6 @@
 import {
   Box,
+  Flex,
   Heading,
   HStack,
   Image,
@@ -37,6 +38,8 @@ import {
 import { CountDown } from "./count-down"
 import { formatDistanceToNow } from "date-fns"
 import { useApy } from "data/hooks/useApy"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
+
 interface HeroStrategyRightProps {
   id: string
 }
@@ -51,6 +54,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const cellarConfig = cellarData.config
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
+  const { data: stakingEnd } = useStakingEnd(cellarConfig)
   const position = usePosition(cellarConfig)
   const intervalGainPct = useIntervalGain({
     config: cellarConfig,
@@ -208,30 +212,30 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </Text>
           </HStack>
         )}
-        {cellarData?.staking && (
-          <HStack>
-            <Box>
-              <Text w="150px" fontWeight="semibold">
-                Rewards
-              </Text>
-            </Box>
-            <Stack direction="column">
-              <Text>{`Expected Rewards APY ${potentialStakingApy}`}</Text>
-              <Box
-                py={1}
-                px={2}
-                borderRadius={28}
-                bgColor="purple.base"
-              >
-                <Text fontSize="xs" fontFamily={"monospace"}>
-                  {`${formatDistanceToNow(
-                    cellarData?.staking?.endDate
-                  )} left`}
-                </Text>
-              </Box>
-            </Stack>
-          </HStack>
-        )}
+
+        <HStack>
+          <Box>
+            <Text w="150px" fontWeight="semibold">
+              Rewards
+            </Text>
+          </Box>
+          <Flex wrap="wrap" gap={2}>
+            <Text>{`Expected Rewards APY ${potentialStakingApy}`}</Text>
+            <Text
+              py={1}
+              px={2}
+              borderRadius={28}
+              bgColor="purple.base"
+              fontSize="xs"
+              fontFamily={"monospace"}
+            >
+              {!stakingEnd?.ended
+                ? stakingEnd?.endDate &&
+                  `${formatDistanceToNow(stakingEnd?.endDate)} left`
+                : "Program Ended"}
+            </Text>
+          </Flex>
+        </HStack>
       </Stack>
     </Stack>
   )

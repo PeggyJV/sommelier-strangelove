@@ -7,7 +7,6 @@ import {
   CellarNameKey,
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
-import { zonedTimeToUtc } from "date-fns-tz"
 
 export const aaveStable = {
   name: "aave2",
@@ -31,10 +30,6 @@ export const aaveStable = {
   performanceSplit: {
     depositors: 90,
     protocol: 10,
-  },
-  staking: {
-    endDate: zonedTimeToUtc(new Date("2022-12-30"), "UTC"),
-    multiplier: "1.5x",
   },
   strategyBreakdown: {
     goals: `The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis. The goal is to outperform a static strategy of lending any single stablecoin. Returns are amplified for Sommelier users as they will not suffer opportunity costs from passively sitting in less profitable lending positions at any given moment.`,

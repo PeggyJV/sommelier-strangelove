@@ -10,6 +10,8 @@ import { protocolsImage } from "utils/protocolsImagePath"
 import { formatDistanceToNow, isFuture } from "date-fns"
 import { useApy } from "data/hooks/useApy"
 import { cellarDataMap } from "data/cellarDataMap"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
+import { TransparentSkeleton } from "components/_skeleton"
 export interface CellarCardData {
   cellarId: string
   name: string
@@ -17,10 +19,6 @@ export interface CellarCardData {
   strategyType: string
   managementFee: string
   protocols: string
-  staking?: {
-    endDate: Date
-    multiplier: string
-  }
 }
 
 interface CellarCardProps extends BoxProps {
@@ -39,11 +37,9 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
 
   const protocolIcon = protocolsImage[data.protocols]
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const stakingEnd = useStakingEnd(cellarConfig)
 
-  const potentialStakingApy = apyLoading
-    ? "-"
-    : apy?.potentialStakingApy
-
+  const tagLoading = apyLoading || stakingEnd.isLoading
   return (
     <Card
       padding="0"
@@ -65,20 +61,31 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
         zIndex="2"
         overflow="hidden"
       >
-        {data?.staking && isFuture(data?.staking?.endDate) && (
-          <Tag
-            px={6}
-            py={3}
-            justifyContent="center"
-            borderRadius={0}
-            bgColor="purple.base"
-            textAlign="center"
+        <Tag
+          px={3}
+          py={4}
+          justifyContent="center"
+          borderRadius={0}
+          bgColor="purple.base"
+          textAlign="center"
+        >
+          <TransparentSkeleton
+            isLoaded={!tagLoading}
+            h={tagLoading ? "14px" : "none"}
+            startColor="purple.dark"
+            endColor="surface.secondary"
           >
-            <Text>{`Expected Rewards APY ${potentialStakingApy}. ${formatDistanceToNow(
-              data?.staking?.endDate
-            )} left`}</Text>
-          </Tag>
-        )}
+            <Text>
+              {`Expected Rewards APY ${apy?.potentialStakingApy}. `}{" "}
+              {stakingEnd.data?.endDate &&
+              isFuture(stakingEnd.data?.endDate)
+                ? `${formatDistanceToNow(
+                    stakingEnd.data.endDate
+                  )} left`
+                : "Program ends"}
+            </Text>
+          </TransparentSkeleton>
+        </Tag>
         <Flex
           p={4}
           ml={2}
