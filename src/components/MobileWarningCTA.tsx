@@ -3,12 +3,19 @@ import React, { FC } from "react"
 import { Link } from "./Link"
 import { LogoTextIcon } from "./_icons"
 
-export const MobileWarningCTA: FC<FlexProps> = (props) => {
+interface MobileWarningCTAProps extends FlexProps {
+  text: string
+}
+
+export const MobileWarningCTA: FC<MobileWarningCTAProps> = ({
+  text,
+  ...props
+}) => {
   return (
     <Flex
       alignItems="center"
       justifyContent="center"
-      minH="100vh"
+      minH="40vh"
       p={6}
       {...props}
     >
@@ -20,12 +27,7 @@ export const MobileWarningCTA: FC<FlexProps> = (props) => {
         fontSize={12}
       >
         <LogoTextIcon h={6} w="auto" />
-        <Text textAlign="center">
-          This app only works on desktop but please use uniswap link
-          to buy the token directly on mobile. Buying a token is
-          easiest way to onboard yourself to sommelier's automated
-          trading strategies which have been expertly curated.
-        </Text>
+        <Text textAlign="center">{text}</Text>
         <Link
           href="https://t.me/getsomm"
           fontWeight="bold"
