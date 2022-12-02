@@ -264,9 +264,13 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               </InnerCard>
             )}
             <LighterSkeleton
-              h={userStakes.isLoading ? "100px" : "none"}
+              h={
+                !isConnected || !userStakes.isLoading
+                  ? "none"
+                  : "100px"
+              }
               borderRadius={24}
-              isLoaded={!userStakes.isLoading}
+              isLoaded={!isConnected || !userStakes.isLoading}
             >
               {isConnected &&
                 Boolean(userStakes.data?.userStakes.length) && (
