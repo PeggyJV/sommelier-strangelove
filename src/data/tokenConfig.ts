@@ -109,5 +109,7 @@ export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
 )
 
 export function getTokenConfig(tokenList: string[]) {
-  return tokenList.map((i) => tokenConfig.find((j) => j.symbol === i))
+  return tokenList.map((list) =>
+    tokenConfig.find((token) => token.symbol === list)
+  )
 }
