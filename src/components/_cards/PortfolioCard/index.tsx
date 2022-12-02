@@ -228,6 +228,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
           <>
+            {/* Show if only nothing staked */}
             {!userStakes.data?.userStakes.length && (
               <InnerCard
                 backgroundColor="surface.tertiary"
@@ -275,7 +276,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           </>
         )}
       </VStack>
-      {/* Show if only nothing staked */}
     </TransparentCard>
   )
 }
