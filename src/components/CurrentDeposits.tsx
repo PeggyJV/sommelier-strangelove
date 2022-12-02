@@ -64,14 +64,6 @@ export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
           enableGridY={false}
         />
       </Box>
-      <HStack justify="space-between" align="flex-end">
-        <Text fontSize="0.625rem" color="neutral3400">
-          Cellar Cap
-        </Text>
-        <Text fontSize="xs" fontWeight="semibold">
-          ${formatCurrency(cellarCap)}
-        </Text>
-      </HStack>
     </VStack>
   )
 }
