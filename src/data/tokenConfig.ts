@@ -11,6 +11,24 @@ export interface Token {
  */
 export const tokenConfig: Token[] = [
   {
+    src: "/assets/icons/eth.png",
+    alt: "Ethereum logo",
+    symbol: "WETH",
+    address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  },
+  {
+    src: "/assets/icons/btc.png",
+    alt: "Bitcoin logo",
+    symbol: "WBTC",
+    address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+  },
+  {
+    src: "/assets/icons/usdc.png",
+    alt: "USD Coin logo",
+    symbol: "USDC",
+    address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+  },
+  {
     src: "/assets/icons/ampl.png",
     alt: "Ampleforth logo",
     symbol: "AMPL",
@@ -65,32 +83,15 @@ export const tokenConfig: Token[] = [
     address: "0x0000000000085d4780B73119b644AE5ecd22b376",
   },
   {
-    src: "/assets/icons/usdc.png",
-    alt: "USD Coin logo",
-    symbol: "USDC",
-    address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-  },
-  {
     src: "/assets/icons/usdt.png",
     alt: "Tether logo",
     symbol: "USDT",
     address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
   },
-  {
-    src: "/assets/icons/eth.png",
-    alt: "Ethereum logo",
-    symbol: "WETH",
-    address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-  },
-  {
-    src: "/assets/icons/btc.png",
-    alt: "Bitcoin logo",
-    symbol: "WBTC",
-    address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
-  },
 ]
 
 export const depositAssetTokenList = [
+  "USDC",
   "AMPL",
   "BUSD",
   "DAI",
@@ -100,14 +101,7 @@ export const depositAssetTokenList = [
   "RAI",
   "sUSD",
   "TUSD",
-  "USDC",
   "USDT",
-]
-
-export const depositTokenListWithWethWbtc = [
-  ...depositAssetTokenList,
-  "WETH",
-  "WBTC",
 ]
 
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
@@ -115,7 +109,7 @@ export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
 )
 
 export function getTokenConfig(tokenList: string[]) {
-  return tokenConfig.filter((token) =>
-    tokenList.includes(token.symbol)
+  return tokenList.map((list) =>
+    tokenConfig.find((token) => token.symbol === list)
   )
 }

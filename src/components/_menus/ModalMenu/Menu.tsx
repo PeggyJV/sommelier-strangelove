@@ -47,7 +47,7 @@ export const Menu: VFC<MenuProps> = ({
     6
   )}`
 
-  const depositTokenConfig = getTokenConfig(depositTokens)
+  const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
   const setMax = () => {
     analytics.track("deposit.max-selected", {
       value: selectedTokenBalance?.value?.toString(),

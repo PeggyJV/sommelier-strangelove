@@ -6,7 +6,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
-import { depositTokenListWithWethWbtc } from "../tokenConfig"
+import { depositAssetTokenList } from "../tokenConfig"
 
 export const steadyEth = {
   name: "Steady ETH",
@@ -78,7 +78,7 @@ export const steadyEth = {
   //   value: "84.15%",
   // },
   depositTokens: {
-    list: depositTokenListWithWethWbtc,
+    list: ["WETH", "WBTC", ...depositAssetTokenList],
   },
 
   config: {
