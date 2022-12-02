@@ -130,13 +130,6 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               managementFeeTooltip || "Platform management fee"
             }
           >
-            <UsdcIcon
-              color="purple.base"
-              bg="white"
-              borderRadius="full"
-              p={1}
-              mr={2}
-            />
             {managementFee}
           </CardStat>
           <CardStat
