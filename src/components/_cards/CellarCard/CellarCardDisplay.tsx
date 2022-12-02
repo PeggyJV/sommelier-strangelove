@@ -76,7 +76,8 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
             endColor="surface.secondary"
           >
             <Text>
-              {`Expected Rewards APY ${apy?.potentialStakingApy}. `}{" "}
+              {`Expected Rewards APY ${apy?.potentialStakingApy}`}
+              <span> &#183; </span>
               {stakingEnd.data?.endDate &&
               isFuture(stakingEnd.data?.endDate)
                 ? `${formatDistanceToNow(
