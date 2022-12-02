@@ -42,6 +42,7 @@ import { InnerCard } from "../InnerCard"
 import { formatDistanceToNow, isFuture } from "date-fns"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { LighterSkeleton } from "components/_skeleton"
+import { formatDistance } from "utils/formatDistance"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isMounted = useIsMounted()
@@ -255,7 +256,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       {stakingEnd.data?.endDate &&
                       isFuture(stakingEnd.data.endDate)
                         ? `Ends in ${formatDistanceToNow(
-                            stakingEnd.data.endDate
+                            stakingEnd.data.endDate,
+                            {
+                              locale: { formatDistance },
+                            }
                           )}`
                         : "Program Ended"}
                     </Text>

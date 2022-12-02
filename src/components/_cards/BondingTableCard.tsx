@@ -29,6 +29,7 @@ import { bondingPeriodOptions } from "data/uiConfig"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { formatDistanceToNow, isFuture } from "date-fns"
 import { LighterSkeleton } from "components/_skeleton"
+import { formatDistance } from "utils/formatDistance"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -176,9 +177,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
             <Text fontSize="xs">
               {stakingEnd.data?.endDate &&
               isFuture(stakingEnd.data.endDate)
-                ? `Ends in ${formatDistanceToNow(
-                    stakingEnd.data.endDate
-                  )}`
+                ? `Ends in ${
+                    (formatDistanceToNow(stakingEnd.data.endDate),
+                    {
+                      locale: { formatDistance },
+                    })
+                  }`
                 : "Program Ended"}
             </Text>
           </LighterSkeleton>
