@@ -6,7 +6,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
-import { depositTokenListWithWethWbtc } from "../tokenConfig"
+import { depositAssetTokenList } from "../tokenConfig"
 import { zonedTimeToUtc } from "date-fns-tz"
 
 export const ethBtcMomentum = {
@@ -83,7 +83,7 @@ export const ethBtcMomentum = {
     value: "84.15%",
   },
   depositTokens: {
-    list: depositTokenListWithWethWbtc,
+    list: ["WBTC", "WETH", ...depositAssetTokenList],
   },
   config: {
     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,

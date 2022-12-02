@@ -6,7 +6,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
-import { depositTokenListWithWethWbtc } from "../tokenConfig"
+import { depositAssetTokenList } from "../tokenConfig"
 import { zonedTimeToUtc } from "date-fns-tz"
 
 export const steadyEth = {
@@ -83,7 +83,7 @@ export const steadyEth = {
   //   value: "84.15%",
   // },
   depositTokens: {
-    list: depositTokenListWithWethWbtc,
+    list: ["WETH", "WBTC", ...depositAssetTokenList],
   },
 
   config: {
