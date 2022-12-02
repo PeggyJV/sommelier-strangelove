@@ -7,7 +7,6 @@ import {
   StakerKey,
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
-import { zonedTimeToUtc } from "date-fns-tz"
 
 export const ethBtcTrend = {
   name: "ETH-BTC Trend",
@@ -25,10 +24,6 @@ export const ethBtcTrend = {
     depositors: 90,
     protocol: 2.5,
     "strategy provider": 7.5,
-  },
-  staking: {
-    endDate: zonedTimeToUtc(new Date("2022-12-14"), "UTC"),
-    multiplier: "1.25x",
   },
   strategyProvider: {
     logo: "/assets/images/clear-gate.png",

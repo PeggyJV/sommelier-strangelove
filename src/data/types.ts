@@ -63,10 +63,6 @@ export interface CellarDataMap {
     performanceSplit: {
       [key: string]: number
     }
-    staking: {
-      endDate: Date
-      multiplier: string
-    }
     strategyBreakdown: {
       [key: string]: string
     }
