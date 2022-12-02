@@ -12,6 +12,7 @@ import { useApy } from "data/hooks/useApy"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { TransparentSkeleton } from "components/_skeleton"
+import { formatDistance } from "utils/formatDistance"
 export interface CellarCardData {
   cellarId: string
   name: string
@@ -80,9 +81,9 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
               <span> &#183; </span>
               {stakingEnd.data?.endDate &&
               isFuture(stakingEnd.data?.endDate)
-                ? `${formatDistanceToNow(
-                    stakingEnd.data.endDate
-                  )} left`
+                ? `${formatDistanceToNow(stakingEnd.data.endDate, {
+                    locale: { formatDistance },
+                  })} left`
                 : "Program ends"}
             </Text>
           </TransparentSkeleton>
