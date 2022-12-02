@@ -16,7 +16,7 @@ import { TransparentCard } from "../TransparentCard"
 import { toEther } from "utils/formatCurrency"
 import BondingTableCard from "../BondingTableCard"
 import { useAccount, useConnect } from "wagmi"
-import { getTokenConfig } from "data/tokenConfig"
+import { getTokenConfig, Token } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
@@ -48,7 +48,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const cellarConfig = cellarDataMap[id].config
   const cellarStaking = cellarDataMap[id].staking
   const depositTokens = cellarDataMap[id].depositTokens.list
-  const depositTokenConfig = getTokenConfig(depositTokens)
+  const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
 
   const potentialStakingApy = apyLoading
