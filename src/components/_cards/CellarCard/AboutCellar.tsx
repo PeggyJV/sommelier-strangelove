@@ -112,14 +112,6 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
               />
             </Flex>
           )}
-
-          {isCurrentDepositsEnabled(cellarConfig) && (
-            <CurrentDeposits
-              currentDeposits={currentDeposits?.value}
-              cellarCap={cellarCap?.value}
-              asset={activeAsset?.symbol}
-            />
-          )}
         </Stack>
       )}
       <Text my={4} mx={2}>
