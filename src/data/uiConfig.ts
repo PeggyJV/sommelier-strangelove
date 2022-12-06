@@ -35,6 +35,13 @@ export const intervalGainTimeline = (config: ConfigProps) => {
   return "weekly"
 }
 
+export const depositAssetDefaultValue = (config: ConfigProps) => {
+  if (config.cellarNameKey === CellarNameKey.AAVE) {
+    return "USDT"
+  }
+  return "USDC"
+}
+
 export const isPositionTokenAssets = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
