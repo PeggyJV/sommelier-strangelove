@@ -11,6 +11,7 @@ import {
   Spinner,
   Image,
   Stack,
+  Avatar,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -30,6 +31,9 @@ import { estimateGasLimit } from "utils/estimateGasLimit"
 import { useNetValue } from "data/hooks/useNetValue"
 import { useGeo } from "context/geoContext"
 import { WarningIcon } from "components/_icons"
+import { useCurrentPosition } from "data/hooks/useCurrentPosition"
+import { tokenConfig } from "data/tokenConfig"
+import { useTokenPrice } from "data/hooks/useTokenPrice"
 interface FormValues {
   withdrawAmount: number
 }
@@ -55,6 +59,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
   const { refetch: refetchUserStakes } = useUserStakes(cellarConfig)
   const { refetch: refetchNetValue } = useNetValue(cellarConfig)
+  const tokenPrice = useTokenPrice(cellarConfig)
 
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
@@ -67,6 +72,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const isDisabled =
     isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
   const isError = errors.withdrawAmount
+
+  const currentPosition = useCurrentPosition(cellarConfig)
 
   const setMax = () => {
     const amount = parseFloat(
@@ -146,6 +153,21 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     refetchUserStakes()
     refetchNetValue()
     setValue("withdrawAmount", 0)
+  }
+
+  function fixed(num: number, fixed: number) {
+    fixed = fixed || 0
+    fixed = Math.pow(10, fixed)
+    return Math.floor(num * fixed) / fixed
+  }
+
+  const formatAsset = (num: number, fixed: number) => {
+    fixed = fixed || 0
+    fixed = Math.pow(10, fixed)
+    if (num < 0.01) {
+      return ">0.01%"
+    }
+    return `${Math.floor(num * fixed) / fixed}%`
   }
 
   return (
@@ -273,8 +295,45 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
         </Text>
         <Stack>
           <TransactionDetailItem
-            title="title"
-            value={<Text fontWeight="semibold">Value</Text>}
+            title="Strategy"
+            value={<Text>{cellarDataMap[id].name}</Text>}
+          />
+          <TransactionDetailItem
+            title="Token price"
+            value={<Text>{tokenPrice.data}</Text>}
+          />
+          <TransactionDetailItem
+            title="Assets"
+            value={currentPosition.data?.map((item) => {
+              const token = tokenConfig.find(
+                (token) =>
+                  token.address === item.address.toLowerCase()
+              )
+              return (
+                <HStack
+                  key={item.address}
+                  justifyContent="space-between"
+                >
+                  <Avatar
+                    boxSize={6}
+                    src={token?.src}
+                    name={token?.alt}
+                    borderWidth={2}
+                    borderColor="surface.bg"
+                    bg="surface.bg"
+                  />
+                  <Text>
+                    {fixed(
+                      Number(item.withdrawable) /
+                        Math.pow(10, item.decimals),
+                      6
+                    )}{" "}
+                    {token?.symbol} (
+                    {formatAsset(Number(item.percentage), 2)})
+                  </Text>
+                </HStack>
+              )
+            })}
           />
         </Stack>
       </Stack>
