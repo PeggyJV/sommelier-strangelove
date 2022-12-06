@@ -35,6 +35,13 @@ export const styles: Styles = {
     ".slick-slide": {
       padding: "0 1rem",
     },
+    ".slick-dots li button:before": {
+      color: "#EDE8FC",
+      "margin-top": "10px !important",
+    },
+    ".slick-dots li.slick-active button:before": {
+      color: "#6C4ED9 !important",
+    },
     ".blink_me": {
       animation: "blinker 1s linear infinite",
     },
