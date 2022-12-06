@@ -1,10 +1,4 @@
-import {
-  Box,
-  HStack,
-  Stack,
-  Text,
-  useMediaQuery,
-} from "@chakra-ui/react"
+import { Box, HStack, Stack, Text } from "@chakra-ui/react"
 import { DatumValue, linearGradientDef } from "@nivo/core"
 import {
   Point,
@@ -18,6 +12,7 @@ import { useEthBtcChart } from "data/context/ethBtcChartContext"
 import { colors } from "theme/colors"
 import { format, isSameDay, isSameHour } from "date-fns"
 import { formatPercentage } from "utils/chartHelper"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -36,7 +31,7 @@ export const EthBtcChart: VFC<{ timeline: string; name: string }> = ({
   const onMouseMove = (point: Point, event: React.MouseEvent) => {
     setPointActive(point.data.x)
   }
-  const [isLarger768] = useMediaQuery("(min-width: 768px)")
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
 
   const ToolTip: FunctionComponent<PointTooltipProps> = ({
     point,

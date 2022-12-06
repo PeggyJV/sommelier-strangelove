@@ -1,8 +1,12 @@
 import {
   BoxProps,
+  Heading,
+  HStack,
   Image,
   SimpleGrid,
+  Spacer,
   Stack,
+  Text,
   VStack,
 } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
@@ -12,7 +16,7 @@ import { TransparentCard } from "../TransparentCard"
 import { toEther } from "utils/formatCurrency"
 import BondingTableCard from "../BondingTableCard"
 import { useAccount, useConnect } from "wagmi"
-import { getTokenConfig } from "data/tokenConfig"
+import { getTokenConfig, Token } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
@@ -26,12 +30,19 @@ import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { Rewards } from "./Rewards"
 import {
+  bondingPeriodOptions,
   isBondButtonEnabled,
   isBondingEnabled,
   isRewardsEnabled,
   lpTokenTooltipContent,
 } from "data/uiConfig"
 import { BondButton } from "components/_buttons/BondButton"
+import { useApy } from "data/hooks/useApy"
+import { InnerCard } from "../InnerCard"
+import { formatDistanceToNow, isFuture } from "date-fns"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
+import { LighterSkeleton } from "components/_skeleton"
+import { formatDistance } from "utils/formatDistance"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isMounted = useIsMounted()
@@ -39,7 +50,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const depositTokens = cellarDataMap[id].depositTokens.list
-  const depositTokenConfig = getTokenConfig(depositTokens)
+  const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
+  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const stakingEnd = useStakingEnd(cellarConfig)
 
   const { connectors } = useConnect()
 
@@ -51,16 +64,27 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <=
       0
 
-  const { data: userStakes } = useUserStakes(cellarConfig)
+  const userStakes = useUserStakes(cellarConfig)
 
   const { data: netValue } = useNetValue(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
 
+  const bondingPeriods = bondingPeriodOptions(cellarConfig)
+  const maxMultiplier = bondingPeriods
+    .at(-1)
+    ?.amount.replace("SOMM", "")
+
+  const isStakingAllowed =
+    stakingEnd.data?.endDate && isFuture(stakingEnd.data.endDate)
+
   return (
-    <TransparentCard p={8} {...props}>
+    <TransparentCard
+      {...props}
+      backgroundColor="surface.secondary"
+      p={8}
+    >
       <VStack align="stretch" spacing={8}>
         <CardStatRow
-          // px={{ md: 10 }}
           spacing={{ sm: 4, md: 8, lg: 14 }}
           align="flex-start"
           justify="flex-start"
@@ -186,14 +210,16 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   >
                     {isMounted &&
                       (isConnected
-                        ? userStakes?.totalBondedAmount.formatted ||
-                          "..."
+                        ? userStakes.data?.totalBondedAmount
+                            .formatted || "..."
                         : "--")}
                   </CardStat>
                 </VStack>
-                {isBondButtonEnabled(cellarConfig) && isMounted && (
-                  <BondButton disabled={lpTokenDisabled} />
-                )}
+                {isBondButtonEnabled(cellarConfig) &&
+                  isStakingAllowed &&
+                  isMounted && (
+                    <BondButton disabled={lpTokenDisabled} />
+                  )}
               </>
             )}
           </SimpleGrid>
@@ -201,9 +227,60 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             <Rewards cellarConfig={cellarConfig} />
           )}
         </CardStatRow>
-        {isBondingEnabled(cellarConfig) &&
-          isConnected &&
-          userStakes?.userStakes.length && <BondingTableCard />}
+        {isBondingEnabled(cellarConfig) && (
+          <>
+            {/* Show if only nothing staked */}
+            {!userStakes.data?.userStakes.length && (
+              <InnerCard
+                backgroundColor="surface.tertiary"
+                mt="8"
+                px="7"
+                py="7"
+              >
+                <HStack>
+                  <Image
+                    src="/assets/icons/somm.png"
+                    alt="sommelier logo"
+                    boxSize={6}
+                  />
+                  <Heading size="16px">
+                    Earn rewards when you bond{" "}
+                    {apy?.potentialStakingApy}. up to {maxMultiplier}
+                  </Heading>
+                  <Spacer />
+                  <LighterSkeleton
+                    isLoaded={!stakingEnd.isLoading}
+                    height={4}
+                  >
+                    <Text fontSize="xs">
+                      {stakingEnd.data?.endDate &&
+                      isFuture(stakingEnd.data.endDate)
+                        ? `Ends in ${formatDistanceToNow(
+                            stakingEnd.data.endDate,
+                            {
+                              locale: { formatDistance },
+                            }
+                          )}`
+                        : "Program Ended"}
+                    </Text>
+                  </LighterSkeleton>
+                </HStack>
+              </InnerCard>
+            )}
+            {isConnected && (
+              <LighterSkeleton
+                h={!userStakes.isLoading ? "none" : "100px"}
+                borderRadius={24}
+                isLoaded={!userStakes.isLoading}
+              >
+                {isConnected &&
+                  Boolean(userStakes.data?.userStakes.length) && (
+                    <BondingTableCard />
+                  )}
+              </LighterSkeleton>
+            )}
+          </>
+        )}
       </VStack>
     </TransparentCard>
   )

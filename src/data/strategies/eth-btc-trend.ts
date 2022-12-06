@@ -6,8 +6,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
-import { depositTokenListWithWethWbtc } from "../tokenConfig"
-import { zonedTimeToUtc } from "date-fns-tz"
+import { depositAssetTokenList } from "../tokenConfig"
 
 export const ethBtcTrend = {
   name: "ETH-BTC Trend",
@@ -25,10 +24,6 @@ export const ethBtcTrend = {
     depositors: 90,
     protocol: 2.5,
     "strategy provider": 7.5,
-  },
-  staking: {
-    endDate: zonedTimeToUtc(new Date("2022-12-14"), "UTC"),
-    multiplier: "1.25x",
   },
   strategyProvider: {
     logo: "/assets/images/clear-gate.png",
@@ -82,7 +77,7 @@ export const ethBtcTrend = {
     value: "123.72%",
   },
   depositTokens: {
-    list: depositTokenListWithWethWbtc,
+    list: ["WBTC", "WETH", ...depositAssetTokenList],
   },
   config: {
     id: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,

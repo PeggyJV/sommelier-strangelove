@@ -10,7 +10,6 @@ import {
   Image,
   SimpleGrid,
   Stack,
-  useMediaQuery,
   Spinner,
 } from "@chakra-ui/react"
 import { CardHeading } from "components/_typography/CardHeading"
@@ -30,6 +29,7 @@ import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { TokenAssets } from "components/TokenAssets"
 import { usePosition } from "data/hooks/usePosition"
 import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -70,7 +70,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const cellarConfig = cellarDataMap[cellarId].config
   const { data: tvm } = useTvm(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
-  const [isLarger400] = useMediaQuery("(min-width: 400px)")
+  const isLarger400 = useBetterMediaQuery("(min-width: 400px)")
   const position = usePosition(cellarConfig)
 
   // Unsure why this was necessary? Nivo acts strangely when there are fewer than three args in an index. Could be refined later.
@@ -130,13 +130,6 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               managementFeeTooltip || "Platform management fee"
             }
           >
-            <UsdcIcon
-              color="purple.base"
-              bg="white"
-              borderRadius="full"
-              p={1}
-              mr={2}
-            />
             {managementFee}
           </CardStat>
           <CardStat

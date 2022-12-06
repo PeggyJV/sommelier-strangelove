@@ -4,7 +4,6 @@ import {
   HeadingProps,
   HStack,
   Spinner,
-  useMediaQuery,
   VStack,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
@@ -41,6 +40,7 @@ import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
 import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
 import { UsdcPerfomanceCard } from "components/_cards/UsdcPerfomanceCard"
 import { UsdcChartProvider } from "data/context/usdcChartContext"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -63,7 +63,7 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
     config: cellarConfig,
     timeline: intervalGainTimeline(cellarConfig),
   })
-  const [isLarger768] = useMediaQuery("(min-width: 768px)")
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const isYieldStrategies =
     staticCellarData.cellarType === CellarType.yieldStrategies
   const isAutomatedPortfolio =

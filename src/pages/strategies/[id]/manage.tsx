@@ -8,18 +8,7 @@ export interface CellarPageProps {
 }
 
 const CellarPage: NextPage<CellarPageProps> = ({ id }) => {
-  // const launchDate = cellarDataMap[id].launchDate
-  // const formatedLaunchDate = launchDate ? new Date(launchDate) : null
-  // const formatedDateNow = new Date(Date.now())
-  // const isCountdown =
-  //   formatedLaunchDate !== null
-  //     ? formatedLaunchDate > formatedDateNow
-  //     : false
-
-  // if (!isCountdown || LAUNCH_DATE_DISABLED) {
   return <PageCellar id={id} />
-  // }
-  // return <Page404 />
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {

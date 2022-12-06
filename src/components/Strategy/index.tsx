@@ -58,7 +58,7 @@ export const Strategy: VFC<StrategyProps> = ({ data, ...rest }) => {
           setSliderRef={setSliderRef}
           data={data?.strategies}
         />
-        <HStack mt={6} pl={15}>
+        <HStack mt={12} pl={15}>
           <IconButton
             aria-label="next"
             icon={<FaChevronLeft />}

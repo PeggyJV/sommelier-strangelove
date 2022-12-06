@@ -13,6 +13,7 @@ import {
   HStack,
   Text,
   Heading,
+  Image,
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { toEther } from "utils/formatCurrency"
@@ -25,6 +26,10 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { bondingPeriodOptions } from "data/uiConfig"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
+import { formatDistanceToNow, isFuture } from "date-fns"
+import { LighterSkeleton } from "components/_skeleton"
+import { formatDistance } from "utils/formatDistance"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -51,6 +56,8 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const [unstakeLoading, setUnstakeLoading] = useState<Set<number>>(
     new Set()
   )
+
+  const stakingEnd = useStakingEnd(cellarConfig)
 
   const handleUnstake = async (id: number) => {
     try {
@@ -153,11 +160,34 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   }
 
   return (
-    <InnerCard pt={6} px={4} pb={4}>
+    <InnerCard
+      bg="surface.tertiary"
+      backdropFilter="none"
+      pt={6}
+      px={4}
+      pb={4}
+    >
       <TableContainer>
-        <Heading fontSize="lg" pl={4} pt={2} pb={4}>
-          Active Bonds
-        </Heading>
+        <HStack justifyContent="space-between" px={4} pt={2} pb={4}>
+          <Heading fontSize="lg">Active Bonds</Heading>
+          <LighterSkeleton
+            isLoaded={!stakingEnd.isLoading}
+            height={4}
+          >
+            <Text fontSize="xs">
+              {stakingEnd.data?.endDate &&
+              isFuture(stakingEnd.data.endDate)
+                ? `Ends in ${formatDistanceToNow(
+                    stakingEnd.data.endDate,
+                    {
+                      locale: { formatDistance },
+                    }
+                  )}`
+                : "Program Ended"}
+            </Text>
+          </LighterSkeleton>
+        </HStack>
+
         <Table
           variant="unstyled"
           css={{
@@ -260,7 +290,18 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     }}
                   >
                     <Td>#{formatTrancheNumber(i + 1)}</Td>
-                    <Td>{toEther(amount.toFixed())}</Td>
+                    <Td>
+                      <HStack spacing={2}>
+                        <Image
+                          src={cellarConfig.lpToken.imagePath}
+                          alt="lp token image"
+                          height="20px"
+                        />
+                        <Text textAlign="right">
+                          {toEther(amount.toFixed())}
+                        </Text>
+                      </HStack>
+                    </Td>
                     <Td>{lockMap[lock].title}</Td>
                     <Td>
                       {claimAllRewards

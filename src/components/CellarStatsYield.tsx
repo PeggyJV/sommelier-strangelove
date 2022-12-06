@@ -104,13 +104,6 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
           </Tooltip>
         </Box>
       </VStack>
-      {isCurrentDepositsEnabled(cellarConfig) && (
-        <CurrentDeposits
-          currentDeposits={currentDeposits}
-          cellarCap={cellarCap}
-          asset={asset}
-        />
-      )}
     </HStack>
   )
 }
