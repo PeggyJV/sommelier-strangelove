@@ -165,6 +165,11 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     return `${Math.floor(num * fixed) / fixed}%`
   }
 
+  useEffect(() => {
+    currentPosition.refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <VStack
       as="form"
