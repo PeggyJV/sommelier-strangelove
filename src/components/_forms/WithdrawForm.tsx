@@ -299,36 +299,38 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
           />
           <TransactionDetailItem
             title="Assets"
-            value={currentPosition.data?.map((item) => {
-              const token = tokenConfig.find(
-                (token) =>
-                  token.address === item.address.toLowerCase()
-              )
-              return (
-                <HStack
-                  key={item.address}
-                  justifyContent="space-between"
-                >
-                  <Avatar
-                    boxSize={6}
-                    src={token?.src}
-                    name={token?.alt}
-                    borderWidth={2}
-                    borderColor="surface.bg"
-                    bg="surface.bg"
-                  />
-                  <Text>
-                    {fixed(
-                      Number(item.withdrawable) /
-                        Math.pow(10, item.decimals),
-                      6
-                    )}{" "}
-                    {token?.symbol} (
-                    {formatAsset(Number(item.percentage), 2)})
-                  </Text>
-                </HStack>
-              )
-            })}
+            value={currentPosition.data
+              ?.filter((item) => Number(item.withdrawable) > 0)
+              .map((item) => {
+                const token = tokenConfig.find(
+                  (token) =>
+                    token.address === item.address.toLowerCase()
+                )
+                return (
+                  <HStack
+                    key={item.address}
+                    justifyContent="space-between"
+                  >
+                    <Avatar
+                      boxSize={6}
+                      src={token?.src}
+                      name={token?.alt}
+                      borderWidth={2}
+                      borderColor="surface.bg"
+                      bg="surface.bg"
+                    />
+                    <Text>
+                      {fixed(
+                        Number(item.withdrawable) /
+                          Math.pow(10, item.decimals),
+                        6
+                      )}{" "}
+                      {token?.symbol} (
+                      {formatAsset(Number(item.percentage), 2)})
+                    </Text>
+                  </HStack>
+                )
+              })}
           />
         </Stack>
       </Stack>
