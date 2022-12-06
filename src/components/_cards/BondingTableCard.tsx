@@ -177,12 +177,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
             <Text fontSize="xs">
               {stakingEnd.data?.endDate &&
               isFuture(stakingEnd.data.endDate)
-                ? `Ends in ${
-                    (formatDistanceToNow(stakingEnd.data.endDate),
+                ? `Ends in ${formatDistanceToNow(
+                    stakingEnd.data.endDate,
                     {
                       locale: { formatDistance },
-                    })
-                  }`
+                    }
+                  )}`
                 : "Program Ended"}
             </Text>
           </LighterSkeleton>
