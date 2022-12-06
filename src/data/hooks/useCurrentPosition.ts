@@ -56,35 +56,32 @@ export const useCurrentPosition = (config: ConfigProps) => {
               }
             })
           )
-          let totalBalances = new BigNumber(0)
-          await Promise.all(
-            positionBalances.map(async (item) => {
-              const toShares = await contract.convertToShares(
-                ethers.BigNumber.from(item.balance.toString())
-              )
-              totalBalances = totalBalances.plus(
-                new BigNumber(toShares.toString())
-              )
-            })
-          )
+
+          let totalWithdrawable = new BigNumber(0)
+          positionBalances.map((item) => {
+            totalWithdrawable = totalWithdrawable.plus(
+              new BigNumber(item.balance)
+                .multipliedBy(maxSharesOut)
+                .div(totalShares)
+            )
+          })
 
           const result = await Promise.all(
             positionBalances.map(async (item) => {
-              const toShares = await contract.convertToShares(
-                ethers.BigNumber.from(item.balance.toString())
-              )
-              const withdrawable = new BigNumber(toShares.toString())
+              const withdrawable = new BigNumber(item.balance)
                 .multipliedBy(maxSharesOut)
                 .div(totalShares)
+
+              const ratio = new BigNumber(withdrawable).div(
+                totalWithdrawable
+              )
 
               return {
                 address: item.address,
                 balance: item.balance,
                 decimals: item.decimals,
-                withdrawable,
-                percentage: new BigNumber(toShares.toString())
-                  .div(totalBalances)
-                  .multipliedBy(100),
+                withdrawable: withdrawable.multipliedBy(item.balance),
+                percentage: ratio.multipliedBy(100),
               }
             })
           )
