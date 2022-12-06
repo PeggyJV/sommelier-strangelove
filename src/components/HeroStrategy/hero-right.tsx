@@ -69,7 +69,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
     : apy?.potentialStakingApy
 
   return (
-    <Stack minW={"380px"} spacing={4}>
+    <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
       {countdown && launchDate ? (
         <CountDown launchDate={launchDate} />
       ) : (
