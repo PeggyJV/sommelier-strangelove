@@ -267,20 +267,18 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 </HStack>
               </InnerCard>
             )}
-            <LighterSkeleton
-              h={
-                !isConnected || !userStakes.isLoading
-                  ? "none"
-                  : "100px"
-              }
-              borderRadius={24}
-              isLoaded={!isConnected || !userStakes.isLoading}
-            >
-              {isConnected &&
-                Boolean(userStakes.data?.userStakes.length) && (
-                  <BondingTableCard />
-                )}
-            </LighterSkeleton>
+            {isConnected && (
+              <LighterSkeleton
+                h={!userStakes.isLoading ? "none" : "100px"}
+                borderRadius={24}
+                isLoaded={!userStakes.isLoading}
+              >
+                {isConnected &&
+                  Boolean(userStakes.data?.userStakes.length) && (
+                    <BondingTableCard />
+                  )}
+              </LighterSkeleton>
+            )}
           </>
         )}
       </VStack>
