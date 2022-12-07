@@ -1,6 +1,5 @@
 import BigNumber from "bignumber.js"
 import { CellarStakingV0815, CellarV0815 } from "src/abi/types"
-import { getExpectedApy } from "utils/cellarApy"
 
 const yearInSecs = 60 * 60 * 24 * 365
 const yearInSecsBN = new BigNumber(yearInSecs)
@@ -8,7 +7,8 @@ const yearInSecsBN = new BigNumber(yearInSecs)
 export const getApy = async (
   cellarContract: CellarV0815,
   stakerContract: CellarStakingV0815,
-  sommPrice: string
+  sommPrice: string,
+  dayDatas: { date: number; shareValue: string }[]
 ) => {
   try {
     const maxLocked = new BigNumber(
@@ -50,18 +50,41 @@ export const getApy = async (
         .multipliedBy(100)
     }
 
-    const { expectedApy, formattedCellarApy, formattedStakingApy } =
-      getExpectedApy(apy, potentialStakingApy)
+    // cellar apy
+    const cellarApy = (() => {
+      const indexThatHaveChanges = dayDatas.findIndex(
+        (data, idx, arr) => {
+          if (idx === 0) return false // return false because first data doesn't have comparation
 
-    // Comment out because of rebalancing, Aave APY is 0.00% for the week.
-    // const apyLabel = `Expected APY is calculated by combining the Base Cellar APY (${formattedCellarApy}%) and Liquidity Mining Rewards (${formattedStakingApy}%)`
-    const apyLabel = `Expected APY`
+          const prev = arr[idx + 1].shareValue
+          return prev !== data.shareValue
+        }
+      )
+      if (indexThatHaveChanges === -1) return 0
+      const latestDataChanged =
+        dayDatas[indexThatHaveChanges].shareValue
+      const prevDayLatestData =
+        dayDatas[indexThatHaveChanges + 1].shareValue
+
+      const yieldGain =
+        (Number(latestDataChanged) - Number(prevDayLatestData)) /
+        Number(prevDayLatestData)
+      return yieldGain * 52 * 100
+    })()
+
+    const apyLabel = `Expected APY is the sum of the Cellar APY ${cellarApy.toFixed(
+      1
+    )}% and the Rewards APY ${potentialStakingApy
+      .toFixed(1)
+      .toString()}%.`
 
     return {
+      apy: cellarApy.toFixed(1),
       apyLabel,
-      // Comment out because of rebalancing, Aave APY is 0.00% for the week.
-      // expectedApy: expectedApy.toFixed(1).toString() + "%",
-      expectedApy: "1.9%",
+      expectedApy:
+        (cellarApy + Number(potentialStakingApy)).toFixed(1) + "%",
+      potentialStakingApy:
+        potentialStakingApy.toFixed(1).toString() + "%",
     }
   } catch (error) {
     console.warn("Cannot read cellar data", error)

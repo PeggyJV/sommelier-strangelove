@@ -135,7 +135,7 @@ export const ConnectedPopover = () => {
         borderWidth={1}
         borderColor="purple.dark"
         borderRadius={12}
-        bg="surface.primary"
+        bg="surface.bg"
         fontWeight="semibold"
         _focus={{
           outline: "unset",

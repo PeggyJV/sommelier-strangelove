@@ -6,14 +6,11 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
-import { depositTokenListWithWethWbtc } from "../tokenConfig"
-import { LAUNCH_DATE_DISABLED } from "utils/constants"
+import { depositAssetTokenList } from "../tokenConfig"
 
 export const steadyEth = {
   name: "Steady ETH",
-  launchDate: LAUNCH_DATE_DISABLED
-    ? undefined
-    : "2022-11-29 12:00:00",
+  launchDate: new Date(2022, 10, 29, 12, 0, 0, 0), // 29 Nov 2022 12 am utc
   cellarType: CellarType.automatedPortfolio,
   description: `Capture the upside of ETH price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
@@ -40,7 +37,7 @@ export const steadyEth = {
 
     highlights: `The cellar:
 
-      - "Risk first" approach - capital preservation is more important than capital growth.
+      - “Risk first” approach - capital preservation is prioritized over capital growth.
 
       - Always defined risk for every position prevailing from trade inception until trade exit.
 
@@ -81,7 +78,7 @@ export const steadyEth = {
   //   value: "84.15%",
   // },
   depositTokens: {
-    list: depositTokenListWithWethWbtc,
+    list: ["WETH", "WBTC", ...depositAssetTokenList],
   },
 
   config: {

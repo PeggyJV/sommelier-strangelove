@@ -6,6 +6,7 @@ export const sliderSettings: Settings = {
   slidesToShow: 3,
   slidesToScroll: 1,
   infinite: false,
+  dots: true,
   nextArrow: <NextArrow />,
   prevArrow: <PrevArrow />,
   responsive: [

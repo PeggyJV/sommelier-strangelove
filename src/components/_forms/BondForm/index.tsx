@@ -22,12 +22,13 @@ import { BigNumber } from "bignumber.js"
 import { useApproveERC20, useHandleTransaction } from "hooks/web3"
 import { ethers } from "ethers"
 import { analytics } from "utils/analytics"
-import { bondingPeriodOptions } from "./BondingPeriodOptions"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStakes } from "data/hooks/useUserStakes"
+import { bondingPeriodOptions } from "data/uiConfig"
+import { estimateGasLimit } from "utils/estimateGasLimit"
 
 interface FormValues {
   depositAmount: number
@@ -79,8 +80,16 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
     )
 
   const onSubmit = async (data: FormValues) => {
+    if (!stakerSigner) {
+      return addToast({
+        heading: "No wallet connected",
+        body: <Text>Please connect your wallet</Text>,
+        status: "error",
+        closeHandler: closeAll,
+      })
+    }
     const analyticsData = {
-      duration: bondingPeriodOptions[bondPeriod],
+      duration: bondingPeriodOptions(cellarConfig)[bondPeriod],
     }
     analytics.track("bond.started", analyticsData)
     await doApprove(data.depositAmount, {
@@ -93,12 +102,17 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       amtInBigNumber.toFixed(),
       18
     )
+
     try {
-      const { hash: bondConf } = await stakerSigner?.stake(
+      const gasLimit = await estimateGasLimit(
+        stakerSigner.estimateGas.stake(depositAmtInWei, bondPeriod),
+        250000 // known gasLimit
+      )
+
+      const { hash: bondConf } = await stakerSigner.stake(
         depositAmtInWei,
         bondPeriod,
-        // gas used around 125000-130000
-        { gasLimit: 200000 }
+        { gasLimit }
       )
 
       await doHandleTransaction({
@@ -140,7 +154,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       >
         <VStack align="stretch">
           <CardHeading>Bonding Period</CardHeading>
-          <BondingPeriodOptions />
+          <BondingPeriodOptions cellarConfig={cellarConfig} />
         </VStack>
         <FormControl isInvalid={isError as boolean | undefined}>
           <InputGroup display="flex" alignItems="center">
@@ -193,6 +207,9 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         >
           Bond LP Tokens
         </BaseButton>
+        <Text textAlign="center">
+          Please wait 15 min after the deposit to Bond
+        </Text>
       </VStack>
     </FormProvider>
   )

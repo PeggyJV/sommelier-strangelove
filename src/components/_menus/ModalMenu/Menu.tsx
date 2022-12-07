@@ -22,6 +22,9 @@ import { useFormContext } from "react-hook-form"
 import { toEther } from "utils/formatCurrency"
 import { ModalMenuProps } from "."
 import { analytics } from "utils/analytics"
+import { useRouter } from "next/router"
+import { cellarDataMap } from "data/cellarDataMap"
+import { depositAssetDefaultValue } from "data/uiConfig"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -46,8 +49,11 @@ export const Menu: VFC<MenuProps> = ({
     false,
     6
   )}`
+  const id = useRouter().query.id as string
+  const cellarData = cellarDataMap[id]
+  const cellarConfig = cellarData.config
 
-  const depositTokenConfig = getTokenConfig(depositTokens)
+  const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
   const setMax = () => {
     analytics.track("deposit.max-selected", {
       value: selectedTokenBalance?.value?.toString(),
@@ -116,7 +122,9 @@ export const Menu: VFC<MenuProps> = ({
           w={menuDims?.borderBox.width}
         >
           <MenuOptionGroup
-            defaultValue={activeAsset && depositTokenConfig[0].symbol}
+            defaultValue={
+              activeAsset && depositAssetDefaultValue(cellarConfig)
+            }
             type="radio"
           >
             <Box pt={4} pb={2} pl={10}>

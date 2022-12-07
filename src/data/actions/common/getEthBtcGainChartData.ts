@@ -82,7 +82,7 @@ export const getEthBtcGainChartData = async (
               ? subDays(new Date(weth.date), 1)
               : new Date(weth.date),
             y: weth.change,
-            value: weth.value,
+            value: weth.value.toFixed(2),
           })
         }
         if (!wbtcMap.has(getKey(wbtc.date))) {
@@ -91,7 +91,7 @@ export const getEthBtcGainChartData = async (
               ? subDays(new Date(wbtc.date), 1)
               : new Date(wbtc.date),
             y: wbtc.change,
-            value: wbtc.value,
+            value: wbtc.value.toFixed(2),
           })
         }
         if (!wethWbtcMap.has(getKey(weth.date))) {
@@ -100,7 +100,7 @@ export const getEthBtcGainChartData = async (
               ? subDays(new Date(weth.date), 1)
               : new Date(weth.date),
             y: (weth.change + wbtc.change) / 2,
-            value: (weth.value + wbtc.value) / 2,
+            value: ((weth.value + wbtc.value) / 2).toFixed(2),
           })
         }
       }

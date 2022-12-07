@@ -9,6 +9,7 @@ import { useTvm } from "data/hooks/useTvm"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
+  intervalGainTimeline,
   isAPYEnabled,
   isCurrentDepositsEnabled,
   isDailyChangeEnabled,
@@ -24,8 +25,8 @@ import { CellarStats, CellarStatsLabel } from "./CellarStats"
 import { useDailyChange } from "data/hooks/useDailyChange"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { PercentageText } from "components/PercentageText"
-import { useWeeklyIntervalGain } from "data/hooks/useWeeklyIntervalGain"
-import { useCountdown } from "data/hooks/useCountdown"
+import { useIntervalGain } from "data/hooks/useIntervalGain"
+import { isComingSoon } from "utils/isComingSoon"
 import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
 
@@ -35,16 +36,17 @@ interface Props {
 
 export const AboutCellar: React.FC<Props> = ({ data }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
-  const launchDate = cellarDataMap[data.cellarId].launchDate ?? null
+  const launchDate = cellarDataMap[data.cellarId].launchDate
   const { data: tvm } = useTvm(cellarConfig)
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: cellarCap } = useCellarCap(cellarConfig)
   const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
-  const intervalGainPct = useWeeklyIntervalGain(cellarConfig)
-  const countdown = useCountdown({
-    launchDate,
+  const intervalGainPct = useIntervalGain({
+    config: cellarConfig,
+    timeline: intervalGainTimeline(cellarConfig),
   })
+  const countdown = isComingSoon(launchDate)
 
   const launchingDate = (() => {
     if (!launchDate) return "Coming soon"
@@ -109,14 +111,6 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                 tooltip={intervalGainPctTooltipContent(cellarConfig)}
               />
             </Flex>
-          )}
-
-          {isCurrentDepositsEnabled(cellarConfig) && (
-            <CurrentDeposits
-              currentDeposits={currentDeposits?.value}
-              cellarCap={cellarCap?.value}
-              asset={activeAsset?.symbol}
-            />
           )}
         </Stack>
       )}

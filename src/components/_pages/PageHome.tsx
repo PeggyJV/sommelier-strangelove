@@ -4,10 +4,7 @@ import { Layout } from "components/Layout"
 import { CellarCard } from "components/_cards/CellarCard"
 import { Section } from "components/_layout/Section"
 import { GridHome } from "components/GridHome"
-import {
-  CellarCardDisplay,
-  CellarCardData,
-} from "components/_cards/CellarCard/CellarCardDisplay"
+
 import { Link } from "components/Link"
 import { HomeProps } from "pages/index"
 import FAQ from "components/FAQ"
@@ -34,14 +31,14 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
       )?.SLUG
     })
 
-    const contentRow =
-      cellars.length / 3 < 1 ? 3 : Math.ceil(cellars.length / 3) * 3
+    // const contentRow =
+    //   cellars.length / 3 < 1 ? 3 : Math.ceil(cellars.length / 3) * 3
 
-    const totalCellars = cellars.length ?? 0
-    const numPlaceholderCards = contentRow - totalCellars
-    const placeholderCardsArray = Array.from(
-      Array(numPlaceholderCards).keys()
-    )
+    // const totalCellars = cellars.length ?? 0
+    // const numPlaceholderCards = contentRow - totalCellars
+    // const placeholderCardsArray = Array.from(
+    //   Array(numPlaceholderCards).keys()
+    // )
     return (
       <>
         {cellars.map((cellar) => {
@@ -76,7 +73,7 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
             </Link>
           )
         })}
-        {placeholderCardsArray.map((index) => {
+        {/* {placeholderCardsArray.map((index) => {
           const cellarCardData: CellarCardData = {
             cellarId: "",
             name: "...",
@@ -94,7 +91,7 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
               index={index}
             />
           )
-        })}
+        })} */}
       </>
     )
   }

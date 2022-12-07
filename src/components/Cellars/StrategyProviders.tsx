@@ -30,7 +30,7 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
             <ClearGateIcon w={{ base: 200, lg: 243 }} h={100} />
           </CardBase>
         </Link>
-        <Link isExternal href="https://cleargate.capital/">
+        <Link isExternal href="https://www.algoreturns.com/patache/">
           <CardBase justifyContent="center" h="full">
             <PatacheIcon w={{ base: 200, lg: 243 }} h={100} />
           </CardBase>

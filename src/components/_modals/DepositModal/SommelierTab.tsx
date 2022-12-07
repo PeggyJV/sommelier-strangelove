@@ -303,6 +303,9 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
                 <Text as="span">View on Etherscan</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
+              <Text>
+                Please wait 15 min after the deposit to Sell or Bond
+              </Text>
             </>
           ),
           status: "success",

@@ -12,6 +12,7 @@ const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
       tooltip={ToolTip}
       motionConfig="default"
       enablePoints={false}
+      pointLabelYOffset={0}
       {...rest}
     />
   )

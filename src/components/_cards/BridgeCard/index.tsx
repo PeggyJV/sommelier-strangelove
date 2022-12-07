@@ -1,5 +1,11 @@
-import { Heading, Stack, Text } from "@chakra-ui/react"
-import { ExternalLinkIcon } from "components/_icons"
+import {
+  Center,
+  Heading,
+  HStack,
+  Stack,
+  Text,
+} from "@chakra-ui/react"
+import { ExternalLinkIcon, InformationIcon } from "components/_icons"
 import React from "react"
 import { TransparentCard } from "../TransparentCard"
 import { Link } from "components/Link"
@@ -7,6 +13,8 @@ import { BridgeForm } from "components/_forms/BridgeForm"
 import { useAccount, useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { FormProvider, useForm } from "react-hook-form"
+import { useIsMounted } from "hooks/utils/useIsMounted"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 export interface BridgeFormValues {
   amount: number
@@ -14,6 +22,8 @@ export interface BridgeFormValues {
 }
 
 export const BridgeCard: React.FC = () => {
+  const isMounted = useIsMounted()
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const { connectors } = useConnect()
   const { isConnected } = useAccount()
   const methods = useForm<BridgeFormValues>()
@@ -46,16 +56,32 @@ export const BridgeCard: React.FC = () => {
           <ExternalLinkIcon boxSize={3} color="purple.base" />
         </Link>
       </Text>
-      {isConnected ? (
-        <FormProvider {...methods}>
-          <BridgeForm />
-        </FormProvider>
+      {isLarger768 ? (
+        isMounted &&
+        (isConnected ? (
+          <FormProvider {...methods}>
+            <BridgeForm />
+          </FormProvider>
+        ) : (
+          <Stack>
+            {connectors.map((c) => (
+              <ConnectButton connector={c} key={c.id} unstyled />
+            ))}
+          </Stack>
+        ))
       ) : (
-        <Stack>
-          {connectors.map((c) => (
-            <ConnectButton connector={c} key={c.id} unstyled />
-          ))}
-        </Stack>
+        <Center>
+          <HStack spacing="6px">
+            <InformationIcon color="red.base" boxSize="12px" />
+            <Text
+              fontSize="xs"
+              fontWeight="semibold"
+              color="red.light"
+            >
+              Bridge not yet supported on mobile
+            </Text>
+          </HStack>
+        </Center>
       )}
     </TransparentCard>
   )

@@ -45,8 +45,6 @@ const ConnectButton = ({
         analytics.track("wallet.connect-succeeded", {
           account,
         })
-
-        analytics.identify(account)
       }
     },
   })

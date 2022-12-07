@@ -1430,6 +1430,14 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
+export type Get10DaysShareValueQueryVariables = Exact<{
+  epoch: Scalars['Int'];
+  cellarAddress: Scalars['ID'];
+}>;
+
+
+export type Get10DaysShareValueQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }> } | null };
+
 export type GetAllCellarsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1570,6 +1578,20 @@ export const CellarDayDatasFragmentDoc = gql`
   }
 }
     `;
+export const Get10DaysShareValueDocument = gql`
+    query Get10DaysShareValue($epoch: Int!, $cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    dayDatas(orderDirection: desc, orderBy: date, where: {date_gte: $epoch}) {
+      date
+      shareValue
+    }
+  }
+}
+    `;
+
+export function useGet10DaysShareValueQuery(options: Omit<Urql.UseQueryArgs<Get10DaysShareValueQueryVariables>, 'query'>) {
+  return Urql.useQuery<Get10DaysShareValueQuery>({ query: Get10DaysShareValueDocument, ...options });
+};
 export const GetAllCellarsDocument = gql`
     query GetAllCellars {
   cellars {

@@ -1,4 +1,4 @@
-import { BoxProps, Heading, Flex } from "@chakra-ui/react"
+import { BoxProps, Heading, Flex, Text } from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
@@ -7,7 +7,12 @@ import { ComingSoon } from "./ComingSoon"
 import { InlineImage } from "components/InlineImage"
 import { CoinImage } from "./CoinImage"
 import { protocolsImage } from "utils/protocolsImagePath"
-
+import { formatDistanceToNow, isFuture } from "date-fns"
+import { useApy } from "data/hooks/useApy"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
+import { TransparentSkeleton } from "components/_skeleton"
+import { formatDistance } from "utils/formatDistance"
 export interface CellarCardData {
   cellarId: string
   name: string
@@ -29,8 +34,13 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   index,
   ...rest
 }) => {
-  const protocolIcon = protocolsImage[data.protocols]
+  const cellarConfig = cellarDataMap[data.cellarId].config
 
+  const protocolIcon = protocolsImage[data.protocols]
+  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const stakingEnd = useStakingEnd(cellarConfig)
+
+  const tagLoading = apyLoading || stakingEnd.isLoading
   return (
     <Card
       padding="0"
@@ -46,12 +56,42 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
       {...rest}
     >
       <Burst />
-      <Flex flexDirection="column" borderRadius={24} zIndex="2">
+      <Flex
+        flexDirection="column"
+        borderRadius={24}
+        zIndex="2"
+        overflow="hidden"
+      >
+        <Tag
+          px={3}
+          py={4}
+          justifyContent="center"
+          borderRadius={0}
+          bgColor="purple.base"
+          textAlign="center"
+        >
+          <TransparentSkeleton
+            isLoaded={!tagLoading}
+            h={tagLoading ? "14px" : "none"}
+            startColor="purple.dark"
+            endColor="surface.secondary"
+          >
+            <Text>
+              {`Expected Rewards APY ${apy?.potentialStakingApy}`}
+              <span> &#183; </span>
+              {stakingEnd.data?.endDate &&
+              isFuture(stakingEnd.data?.endDate)
+                ? `${formatDistanceToNow(stakingEnd.data.endDate, {
+                    locale: { formatDistance },
+                  })} left`
+                : "Program ends"}
+            </Text>
+          </TransparentSkeleton>
+        </Tag>
         <Flex
           p={4}
           ml={2}
           bg="radial-gradient(104.22% 1378.1% at 0% 0%, rgba(194, 34, 194, 0) 0%, rgba(210, 37, 204, 0.16) 100%)"
-          borderTopRightRadius={24}
           borderTopLeftRadius={24}
           minH="180.5px"
           direction="column"

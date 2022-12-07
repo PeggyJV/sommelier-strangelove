@@ -5,7 +5,7 @@ import Countdown from "react-countdown"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
 
 interface CountDownProps {
-  launchDate: string
+  launchDate: Date
 }
 
 const pad = (d: number) => {
@@ -13,7 +13,7 @@ const pad = (d: number) => {
 }
 
 export const CountDown: FC<CountDownProps> = ({ launchDate }) => {
-  const dateTz = zonedTimeToUtc(new Date(launchDate), "EST")
+  const dateTz = zonedTimeToUtc(launchDate, "EST")
   const et = utcToZonedTime(dateTz, COUNT_DOWN_TIMEZONE)
   const day = format(et, "iii MMM d")
   const hour = format(et, "h:mmaaa")

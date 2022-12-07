@@ -1,5 +1,6 @@
 import {
   Box,
+  Flex,
   Heading,
   HStack,
   Image,
@@ -22,18 +23,22 @@ import { VFC } from "react"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsLabel } from "components/_cards/CellarCard/CellarStats"
 import { useTvm } from "data/hooks/useTvm"
-import { useWeeklyIntervalGain } from "data/hooks/useWeeklyIntervalGain"
+import { useIntervalGain } from "data/hooks/useIntervalGain"
 import { analytics } from "utils/analytics"
 import { landingType } from "utils/landingType"
 import { usePosition } from "data/hooks/usePosition"
 import { tokenConfig } from "data/tokenConfig"
-import { useCountdown } from "data/hooks/useCountdown"
+import { isComingSoon } from "utils/isComingSoon"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
+  intervalGainTimeline,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
+import { formatDistanceToNow } from "date-fns"
+import { useApy } from "data/hooks/useApy"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
 
 interface HeroStrategyRightProps {
   id: string
@@ -45,19 +50,26 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const content = strategyPageContentData[id]
   const buyOrSellModal = useDisclosure()
   const cellarData = cellarDataMap[id]
-  const launchDate = cellarDataMap[id].launchDate ?? null
+  const launchDate = cellarDataMap[id].launchDate
   const cellarConfig = cellarData.config
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
+  const { data: stakingEnd } = useStakingEnd(cellarConfig)
   const position = usePosition(cellarConfig)
-  const intervalGainPct = useWeeklyIntervalGain(cellarConfig)
-  const tvm = useTvm(cellarConfig)
-  const countdown = useCountdown({
-    launchDate,
+  const intervalGainPct = useIntervalGain({
+    config: cellarConfig,
+    timeline: intervalGainTimeline(cellarConfig),
   })
+  const tvm = useTvm(cellarConfig)
+  const countdown = isComingSoon(launchDate)
+
+  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const potentialStakingApy = apyLoading
+    ? "-"
+    : apy?.potentialStakingApy
 
   return (
-    <Stack minW={"380px"} spacing={4}>
+    <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
       {countdown && launchDate ? (
         <CountDown launchDate={launchDate} />
       ) : (
@@ -200,6 +212,30 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </Text>
           </HStack>
         )}
+
+        <HStack>
+          <Box>
+            <Text w="150px" fontWeight="semibold">
+              Rewards
+            </Text>
+          </Box>
+          <Flex wrap="wrap" gap={2}>
+            <Text>{`Expected Rewards APY ${potentialStakingApy}`}</Text>
+            <Text
+              py={1}
+              px={2}
+              borderRadius={28}
+              bgColor="purple.base"
+              fontSize="xs"
+              fontFamily={"monospace"}
+            >
+              {!stakingEnd?.ended
+                ? stakingEnd?.endDate &&
+                  `${formatDistanceToNow(stakingEnd?.endDate)} left`
+                : "Program Ended"}
+            </Text>
+          </Flex>
+        </HStack>
       </Stack>
     </Stack>
   )

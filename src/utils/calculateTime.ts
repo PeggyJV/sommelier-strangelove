@@ -42,3 +42,12 @@ export const getPreviousMonth = (): number => {
 
   return previousMonth
 }
+
+export const getPrevious10Days = (): number => {
+  const now = new Date()
+  const lastWeekInSeconds = 24 * 60 * 60 * 10
+  now.setSeconds(now.getSeconds() - lastWeekInSeconds)
+  const secondsSinceEpoch = Math.round(now.getTime() / 1000)
+
+  return secondsSinceEpoch
+}

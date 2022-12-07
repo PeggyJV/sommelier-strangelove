@@ -1,8 +1,6 @@
-import { Page404 } from "components/_pages/Page404"
 import PageCellar from "components/_pages/PageCellar"
 import { cellarDataMap } from "data/cellarDataMap"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
-import { LAUNCH_DATE_DISABLED } from "utils/constants"
 import { Params } from "."
 
 export interface CellarPageProps {
@@ -10,18 +8,7 @@ export interface CellarPageProps {
 }
 
 const CellarPage: NextPage<CellarPageProps> = ({ id }) => {
-  const launchDate = cellarDataMap[id].launchDate
-  const formatedLaunchDate = launchDate ? new Date(launchDate) : null
-  const formatedDateNow = new Date(Date.now())
-  const isCountdown =
-    formatedLaunchDate !== null
-      ? formatedLaunchDate > formatedDateNow
-      : false
-
-  if (!isCountdown || LAUNCH_DATE_DISABLED) {
-    return <PageCellar id={id} />
-  }
-  return <Page404 />
+  return <PageCellar id={id} />
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {

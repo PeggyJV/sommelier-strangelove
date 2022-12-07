@@ -145,11 +145,11 @@ export const strategyPageContentData = {
       </>
     ),
     alternativeTo: "Holding USDC",
-    // buyUrl:
-    //   "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
+    buyUrl:
+      "https://info.uniswap.org/#/pools/0x86b8d3571f104939e6d046d9a7858a83b22cf20b",
     strategyHighlights: {
       card: [
-        `"Risk first" approach - capital preservation is more important than capital growth.`,
+        `“Risk first” approach - capital preservation is prioritized over capital growth.`,
         `Always defined risk for every position prevailing from trade inception until trade exit.`,
         `Each trade strategy comprises two independent trade orders: 1 "Workhorse" with a fixed target and stop + 1 "Racehorse" with a trailing stop.`,
       ],
@@ -217,11 +217,11 @@ export const strategyPageContentData = {
       </>
     ),
     alternativeTo: "Holding USDC",
-    // buyUrl:
-    //   "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
+    buyUrl:
+      "https://info.uniswap.org/#/pools/0x10854cf5e3d5cc7ef415930e7f32320e9c0ab12b",
     strategyHighlights: {
       card: [
-        `"Risk first" approach - capital preservation is more important than capital growth.`,
+        `“Risk first” approach - capital preservation is prioritized over capital growth.`,
         `Always defined risk for every position prevailing from trade inception until trade exit.`,
         `Each trade strategy comprises two independent trade orders: 1 "Workhorse" with a fixed target and stop + 1 "Racehorse" with a trailing stop.`,
       ],

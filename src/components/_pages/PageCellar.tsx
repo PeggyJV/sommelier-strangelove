@@ -4,7 +4,6 @@ import {
   HeadingProps,
   HStack,
   Spinner,
-  useMediaQuery,
   VStack,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
@@ -27,10 +26,11 @@ import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarType } from "data/types"
-import { useWeeklyIntervalGain } from "data/hooks/useWeeklyIntervalGain"
+import { useIntervalGain } from "data/hooks/useIntervalGain"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
+  intervalGainTimeline,
   isEthBtcChartEnabled,
   isTVMEnabled,
   isUsdcChartEnabled,
@@ -40,6 +40,7 @@ import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
 import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
 import { UsdcPerfomanceCard } from "components/_cards/UsdcPerfomanceCard"
 import { UsdcChartProvider } from "data/context/usdcChartContext"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -58,8 +59,11 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const { data: activeAsset } = useActiveAsset(cellarConfig)
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
-  const intervalGainPct = useWeeklyIntervalGain(cellarConfig)
-  const [isLarger768] = useMediaQuery("(min-width: 768px)")
+  const intervalGainPct = useIntervalGain({
+    config: cellarConfig,
+    timeline: intervalGainTimeline(cellarConfig),
+  })
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const isYieldStrategies =
     staticCellarData.cellarType === CellarType.yieldStrategies
   const isAutomatedPortfolio =
