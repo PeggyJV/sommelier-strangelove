@@ -163,12 +163,10 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
             borderRadius={16}
             appearance="none"
             textAlign="start"
-            css={{
-              "span:first-of-type": {
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              },
+            _first={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
             <HStack>
