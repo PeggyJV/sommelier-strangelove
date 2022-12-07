@@ -33,9 +33,9 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
     <HStack
       spacing={0}
       justify="space-evenly"
-      border="1px solid"
       borderRadius={12}
-      borderColor="neutral.400"
+      border="1px solid"
+      borderColor="purple.dark"
       overflow="hidden"
       divider={<StackDivider borderColor="inherit" />}
     >
