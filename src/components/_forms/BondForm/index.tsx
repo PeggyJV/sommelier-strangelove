@@ -1,10 +1,12 @@
 import { VFC } from "react"
 import {
+  Button,
   FormControl,
   FormErrorMessage,
+  Heading,
+  HStack,
   Icon,
-  InputGroup,
-  InputRightElement,
+  Input,
   ModalProps,
   Text,
   VStack,
@@ -12,8 +14,6 @@ import {
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
-import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { ModalInput } from "components/_inputs/ModalInput"
 import { CardHeading } from "components/_typography/CardHeading"
 import { BondingPeriodOptions } from "./BondingPeriodOptions"
 import { toEther } from "utils/formatCurrency"
@@ -29,6 +29,7 @@ import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { bondingPeriodOptions } from "data/uiConfig"
 import { estimateGasLimit } from "utils/estimateGasLimit"
+import { LpTokenIcon } from "components/_icons/LpTokenIcon"
 
 interface FormValues {
   depositAmount: number
@@ -152,39 +153,75 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         align="stretch"
         onSubmit={handleSubmit(onSubmit, onError)}
       >
-        <VStack align="stretch">
-          <CardHeading>Bonding Period</CardHeading>
-          <BondingPeriodOptions cellarConfig={cellarConfig} />
-        </VStack>
         <FormControl isInvalid={isError as boolean | undefined}>
-          <InputGroup display="flex" alignItems="center">
-            <ModalInput
-              type="number"
-              step="any"
-              {...register("depositAmount", {
-                required: "Enter amount",
-                valueAsNumber: true,
-                validate: {
-                  positive: (v) =>
-                    v > 0 || "You must submit a positive amount.",
-                  balance: (v) =>
-                    v <=
-                      parseFloat(
-                        toEther(lpTokenData?.formatted, 18, false)
-                      ) || "Insufficient balance",
-                },
-              })}
-            />
-            <InputRightElement h="100%" mr={3}>
-              <SecondaryButton
-                size="sm"
-                borderRadius={8}
-                onClick={setMax}
-              >
-                Max
-              </SecondaryButton>
-            </InputRightElement>
-          </InputGroup>
+          <HStack
+            p={4}
+            justifyContent="space-between"
+            w="100%"
+            bg="surface.secondary"
+            border="none"
+            borderRadius={16}
+            appearance="none"
+            textAlign="start"
+            css={{
+              "span:first-of-type": {
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              },
+            }}
+          >
+            <HStack>
+              <LpTokenIcon />
+              <Heading size="md">LPTokens</Heading>
+            </HStack>
+            <VStack spacing={0} align="flex-end">
+              <FormControl isInvalid={isError as boolean | undefined}>
+                <Input
+                  variant="unstyled"
+                  pr="2"
+                  type="number"
+                  step="any"
+                  defaultValue="0.00"
+                  placeholder="0.00"
+                  fontSize="lg"
+                  fontWeight={700}
+                  textAlign="right"
+                  {...register("depositAmount", {
+                    required: "Enter amount",
+                    valueAsNumber: true,
+                    validate: {
+                      positive: (v) =>
+                        v > 0 || "You must submit a positive amount.",
+                      balance: (v) =>
+                        v <=
+                          parseFloat(
+                            toEther(lpTokenData?.formatted, 18, false)
+                          ) || "Insufficient balance",
+                    },
+                  })}
+                />
+              </FormControl>
+              <HStack spacing={0} fontSize="10px">
+                <Text as="span">
+                  Available:{" "}
+                  {toEther(lpTokenData?.formatted, 18, false)}
+                </Text>
+                <Button
+                  variant="unstyled"
+                  p={0}
+                  w="max-content"
+                  h="max-content"
+                  textTransform="uppercase"
+                  onClick={setMax}
+                  fontSize="inherit"
+                  fontWeight={600}
+                >
+                  max
+                </Button>
+              </HStack>
+            </VStack>
+          </HStack>
           <FormErrorMessage color="energyYellow">
             <Icon
               p={0.5}
@@ -197,6 +234,10 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
             {errors.depositAmount?.message}
           </FormErrorMessage>
         </FormControl>
+        <VStack align="stretch">
+          <CardHeading>Bonding Period</CardHeading>
+          <BondingPeriodOptions cellarConfig={cellarConfig} />
+        </VStack>
         <BaseButton
           type="submit"
           isDisabled={isDisabled}
