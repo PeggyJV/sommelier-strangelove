@@ -246,7 +246,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
           py={6}
           px={12}
         >
-          Bond LP Tokens
+          Bond
         </BaseButton>
         <Text textAlign="center">
           Please wait 15 min after the deposit to Bond
