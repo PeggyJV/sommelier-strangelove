@@ -330,8 +330,10 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
                       bg="surface.bg"
                     />
                     <Text>
-                      {Number(item.withdrawable)} {token?.symbol} (
-                      {formatAsset(Number(item.percentage), 2)})
+                      {item.withdrawable
+                        .div(Math.pow(10, item.decimals))
+                        .toFixed()}{" "}
+                      ({token?.symbol})
                     </Text>
                   </HStack>
                 )

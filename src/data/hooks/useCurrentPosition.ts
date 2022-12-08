@@ -61,9 +61,7 @@ export const useCurrentPosition = (config: ConfigProps) => {
               const cellarBalance: BigNumber = await c
                 .balanceOf(config.cellar.address)
                 .then(toBN)
-              const decimals: number = await c
-                .decimals()
-                .then((v: ethers.BigNumber) => v.toNumber())
+              const decimals: number = await c.decimals()
 
               return {
                 address: position,
