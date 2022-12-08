@@ -40,11 +40,14 @@ export const useCurrentPosition = (config: ConfigProps) => {
         if (!address) throw new Error("address is undefined")
         if (config.cellar.key === CellarKey.CELLAR_V0816) {
           const contract: CellarV0816 = cellarContract
-          // Returns max number of shares withdrawable by user
-          // Will always be <= total user shares
-          const maxSharesOut = await contract
+          // Returns max number of assets withdrawable by user
+          const maxAssetsOut = await contract
             .maxWithdraw(address)
             .then(toBN) // Total shares across all users
+
+          const maxSharesOut = await contract
+            .convertToShares(maxAssetsOut.toString())
+            .then(toBN)
 
           // Total shares minted by the Cellar
           const totalShares = await contract.totalSupply().then(toBN)
