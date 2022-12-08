@@ -8,6 +8,7 @@ import {
   useEffect,
   useState,
 } from "react"
+import { analytics } from "utils/analytics"
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -47,6 +48,7 @@ export const GeoProvider: FC<ReactNode> = ({ children }) => {
   const isRestrictedAndOpenModal = () => {
     if (ctx.isRestricted) {
       restrictedModal.onOpen()
+      analytics.track("user.modal-access-restricted-opened")
       return true
     }
     return false
