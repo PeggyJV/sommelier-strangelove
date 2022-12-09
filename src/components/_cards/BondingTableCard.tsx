@@ -30,6 +30,7 @@ import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { formatDistanceToNow, isFuture } from "date-fns"
 import { LighterSkeleton } from "components/_skeleton"
 import { formatDistance } from "utils/formatDistance"
+import { useGeo } from "context/geoContext"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -59,7 +60,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
 
   const stakingEnd = useStakingEnd(cellarConfig)
 
+  const geo = useGeo()
+
   const handleUnstake = async (id: number) => {
+    if (geo?.isRestrictedAndOpenModal()) {
+      return
+    }
     try {
       setUnstakeLoading((oldState) => {
         const newState = new Set(oldState)
@@ -90,6 +96,9 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   }
 
   const handleUnBond = async (id: number) => {
+    if (geo?.isRestrictedAndOpenModal()) {
+      return
+    }
     try {
       setUnbondLoading((oldState) => {
         const newState = new Set(oldState)

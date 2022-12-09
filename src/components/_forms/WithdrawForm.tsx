@@ -26,6 +26,7 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { estimateGasLimit } from "utils/estimateGasLimit"
 import { useNetValue } from "data/hooks/useNetValue"
+import { useGeo } from "context/geoContext"
 interface FormValues {
   withdrawAmount: number
 }
@@ -85,7 +86,11 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     }
   }, [watchWithdrawAmount, address])
 
+  const geo = useGeo()
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
+    if (geo?.isRestrictedAndOpenModal()) {
+      return
+    }
     if (withdrawAmount <= 0) return
 
     if (!address) {

@@ -30,6 +30,7 @@ import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { bondingPeriodOptions } from "data/uiConfig"
 import { estimateGasLimit } from "utils/estimateGasLimit"
+import { useGeo } from "context/geoContext"
 
 interface FormValues {
   depositAmount: number
@@ -80,7 +81,12 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       parseFloat(toEther(lpTokenData?.formatted, 18, false) || "")
     )
 
+  const geo = useGeo()
+
   const onSubmit = async (data: FormValues) => {
+    if (geo?.isRestrictedAndOpenModal()) {
+      return
+    }
     if (!stakerSigner) {
       return addToast({
         heading: "No wallet connected",

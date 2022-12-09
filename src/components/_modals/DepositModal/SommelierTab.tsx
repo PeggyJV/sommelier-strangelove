@@ -52,6 +52,7 @@ import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
 import { isActiveTokenStrategyEnabled } from "data/uiConfig"
 import { useNetValue } from "data/hooks/useNetValue"
+import { useGeo } from "context/geoContext"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -137,7 +138,11 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
     selectedToken?.address?.toLowerCase() ===
     activeAsset?.address?.toLowerCase()
 
+  const geo = useGeo()
   const onSubmit = async (data: any, e: any) => {
+    if (geo?.isRestrictedAndOpenModal()) {
+      return
+    }
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
 

@@ -2,6 +2,7 @@ import { SimpleGrid, VStack } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { InlineImage } from "components/InlineImage"
 import { BaseButton } from "components/_buttons/BaseButton"
+import { useGeo } from "context/geoContext"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { ConfigProps } from "data/types"
@@ -28,7 +29,11 @@ export const Rewards = ({
 
   const { doHandleTransaction } = useHandleTransaction()
 
+  const geo = useGeo()
   const handleClaimAll = async () => {
+    if (geo?.isRestrictedAndOpenModal()) {
+      return
+    }
     analytics.track("rewards.claim-started")
     const tx = await stakerSigner?.claimAll()
     await doHandleTransaction({

@@ -19,8 +19,8 @@ const App = ({ Component, pageProps }: AppProps) => {
       <PlausibleProvider
         domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
       >
-        <GeoProvider>
-          <ChakraProvider theme={theme}>
+        <ChakraProvider theme={theme}>
+          <GeoProvider>
             <GlobalFonts />
             <DialogProvider>
               <WagmiProvider>
@@ -30,8 +30,8 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <AlertDialog />
               </WagmiProvider>
             </DialogProvider>
-          </ChakraProvider>
-        </GeoProvider>
+          </GeoProvider>
+        </ChakraProvider>
       </PlausibleProvider>
     </GraphQLProvider>
   )
