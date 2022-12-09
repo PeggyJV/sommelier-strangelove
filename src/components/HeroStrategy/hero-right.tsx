@@ -88,8 +88,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             Buy / Sell
           </BaseButton>
           <BuyOrSellModal
-            uniswapLink={content.buyUrl}
-            injectiveLink={content.injectiveUrl}
+            exchange={content.exchange}
             id={id}
             isOpen={buyOrSellModal.isOpen}
             onClose={buyOrSellModal.onClose}
