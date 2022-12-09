@@ -48,24 +48,26 @@ export const DepositModal: VFC<DepositModalProps> = (props) => {
     )
   })
   const id = useRouter().query.id as string
-  const buyUrl = strategyPageContentData[id]?.buyUrl
+  const uniswap = strategyPageContentData[id].exchange.find(
+    (v) => v.name === "Uniswap"
+  )
 
   return (
     <BaseModal heading="Buy" {...props}>
       <Tabs variant="unstyled" isFitted>
-        {buyUrl && (
+        {uniswap && (
           <TabList gap={2}>
             {/* @ts-ignore */}
             <CustomTab>Sommelier</CustomTab>
             {/* @ts-ignore */}
-            <CustomTab>Exchange</CustomTab>
+            <CustomTab>uniswap</CustomTab>
           </TabList>
         )}
         <TabPanels>
           <TabPanel px={0}>
             <SommelierTab {...props} />
           </TabPanel>
-          {buyUrl && (
+          {uniswap && (
             <TabPanel px={0} pt={8}>
               <ExchangeTab />
             </TabPanel>

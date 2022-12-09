@@ -13,10 +13,12 @@ import { useRouter } from "next/router"
 
 export const ExchangeTab = () => {
   const id = useRouter().query.id as string
-  const buyUrl = strategyPageContentData[id].buyUrl
+  const uniswap = strategyPageContentData[id].exchange.find(
+    (v) => v.name === "Uniswap"
+  )
 
   return (
-    <Link href={buyUrl} target="_blank">
+    <Link href={uniswap?.url} target="_blank">
       <HStack
         justifyContent="space-between"
         backgroundColor="surface.secondary"
