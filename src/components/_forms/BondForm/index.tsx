@@ -6,6 +6,7 @@ import {
   Heading,
   HStack,
   Icon,
+  Image,
   Input,
   ModalProps,
   Text,
@@ -29,7 +30,6 @@ import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { bondingPeriodOptions } from "data/uiConfig"
 import { estimateGasLimit } from "utils/estimateGasLimit"
-import { LpTokenIcon } from "components/_icons/LpTokenIcon"
 
 interface FormValues {
   depositAmount: number
@@ -170,7 +170,14 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
             }}
           >
             <HStack>
-              <LpTokenIcon />
+              {cellarConfig.lpToken.imagePath && (
+                <Image
+                  src={cellarConfig.lpToken.imagePath}
+                  alt="lp token image"
+                  height="22px"
+                />
+              )}
+
               <Heading size="md">LPTokens</Heading>
             </HStack>
             <VStack spacing={0} align="flex-end">
