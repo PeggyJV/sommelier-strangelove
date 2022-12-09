@@ -331,9 +331,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
                     />
                     <Text>
                       {fixed(
-                        item.withdrawable
-                          .div(Math.pow(10, item.decimals))
-                          .toNumber(),
+                        Number(item.withdrawable) /
+                          Math.pow(10, item.decimals),
                         6
                       )}{" "}
                       {token?.symbol}

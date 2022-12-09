@@ -27,16 +27,9 @@ export const useCurrentPosition = (config: ConfigProps) => {
   const { lpToken } = useUserBalances(config)
 
   const query = useQuery(
-    [
-      "USE_CURRENT_POSITION",
-      config.cellar.address,
-      address,
-      lpToken.data?.value,
-    ],
+    ["USE_CURRENT_POSITION", config.cellar.address, address],
     async () => {
       try {
-        if (!lpToken.data?.value)
-          throw new Error("lpToken is undefined")
         if (!address) throw new Error("address is undefined")
         if (config.cellar.key === CellarKey.CELLAR_V0816) {
           const contract: CellarV0816 = cellarContract
@@ -64,7 +57,7 @@ export const useCurrentPosition = (config: ConfigProps) => {
                 .balanceOf(config.cellar.address)
                 .then(toBN)
               const decimals: number = await c.decimals()
-
+              console.log(cellarBalance)
               return {
                 address: position,
                 balance: cellarBalance,
@@ -75,21 +68,24 @@ export const useCurrentPosition = (config: ConfigProps) => {
 
           // This percentage is the same across all positions held by the cellar
           const percentage = maxSharesOut.div(totalShares).times(100)
-          return positionBalances.map((position) => {
-            // Cellar balance of position
-            const { balance } = position
+          const result = await Promise.all(
+            positionBalances.map(async (position) => {
+              // Cellar balance of position
+              const { balance } = position
 
-            // User balance = user withdrawable percentage * cellar balance
-            const withdrawable = balance
-              .times(maxSharesOut)
-              .div(totalShares)
+              // User balance = user withdrawable percentage * cellar balance
+              const withdrawable = balance
+                .times(maxSharesOut)
+                .div(totalShares)
 
-            return {
-              ...position,
-              withdrawable,
-              percentage,
-            }
-          })
+              return {
+                ...position,
+                withdrawable,
+                percentage,
+              }
+            })
+          )
+          return result
         }
 
         throw new Error("UNKNOWN CONTRACT")
@@ -99,7 +95,7 @@ export const useCurrentPosition = (config: ConfigProps) => {
       }
     },
     {
-      enabled: Boolean(signer && address && lpToken.data?.value),
+      enabled: Boolean(signer && address),
       refetchOnMount: true,
     }
   )
