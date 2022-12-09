@@ -54,7 +54,6 @@ export const useCurrentPosition = (config: ConfigProps) => {
 
           // Positions held by the cellar
           const positionAddresses = await contract.getPositions()
-
           // Get balance of each position held by the Cellar
           const positionBalances = await Promise.all(
             positionAddresses.map(async (position) => {
