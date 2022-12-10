@@ -6,7 +6,7 @@ import { useGet10DaysShareValueQuery } from "generated/subgraph"
 import { CellarV0815, CellarStakingV0815 } from "src/abi/types"
 import { getPrevious10Days } from "utils/calculateTime"
 import { useCreateContracts } from "./useCreateContracts"
-import { useSommelierPrice } from "./useSommelierPrice"
+import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 
 const previous10Days = getPrevious10Days()
 
@@ -14,7 +14,7 @@ export const useApy = (config: ConfigProps) => {
   const { cellarContract, stakerContract } =
     useCreateContracts(config)
 
-  const sommPrice = useSommelierPrice()
+  const sommPrice = useCoinGeckoPrice("sommelier")
 
   const [{ fetching, data, error }, reexecute10Days] =
     useGet10DaysShareValueQuery({
