@@ -4,9 +4,10 @@ import { CellarV0816 } from "src/abi/types"
 import { useAccount, useQuery, useSigner } from "wagmi"
 import { useCreateContracts } from "./useCreateContracts"
 import erc20 from "src/abi/erc20.json"
-import { useUserBalances } from "./useUserBalances"
 import BigNumber from "bignumber.js"
 import { config } from "src/utils/config"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
+import { tokenConfig } from "data/tokenConfig"
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_KEY
 const provider = new ethers.providers.AlchemyProvider(
@@ -24,7 +25,6 @@ export const useCurrentPosition = (config: ConfigProps) => {
   const { cellarContract } = useCreateContracts(config)
   const { address } = useAccount()
   const { data: signer } = useSigner()
-  const { lpToken } = useUserBalances(config)
 
   const query = useQuery(
     ["USE_CURRENT_POSITION", config.cellar.address, address],
@@ -47,6 +47,8 @@ export const useCurrentPosition = (config: ConfigProps) => {
 
           // Positions held by the cellar
           const positionAddresses = await contract.getPositions()
+
+          let totalWithdrawableBalanceInUSD = new BigNumber(0)
           // Get balance of each position held by the Cellar
           const positionBalances = await Promise.all(
             positionAddresses.map(async (position) => {
@@ -57,35 +59,57 @@ export const useCurrentPosition = (config: ConfigProps) => {
                 .balanceOf(config.cellar.address)
                 .then(toBN)
               const decimals: number = await c.decimals()
-              console.log(cellarBalance)
+              const tokenInfo = tokenConfig.find(
+                (item) =>
+                  item.address.toLowerCase() ===
+                  position.toLowerCase()
+              )
+              const usdPrice = await fetchCoingeckoPrice(
+                tokenInfo?.coinGeckoId || "",
+                "usd"
+              ).then(toBN)
+
+              // User balance = user withdrawable percentage * cellar balance
+              const withdrawable = cellarBalance
+                .times(maxSharesOut)
+                .div(totalShares)
+
+              const withdrawableUSD = withdrawable
+                .div(Math.pow(10, decimals))
+                .times(usdPrice)
+
+              totalWithdrawableBalanceInUSD =
+                totalWithdrawableBalanceInUSD.plus(withdrawableUSD)
+
               return {
                 address: position,
                 balance: cellarBalance,
                 decimals,
+                usdPrice: usdPrice,
+                withdrawable,
+                withdrawableUSD,
               }
             })
           )
 
           // This percentage is the same across all positions held by the cellar
-          const percentage = maxSharesOut.div(totalShares).times(100)
+          // const percentage = maxSharesOut.div(totalShares).times(100)
+
           const result = await Promise.all(
             positionBalances.map(async (position) => {
-              // Cellar balance of position
-              const { balance } = position
-
-              // User balance = user withdrawable percentage * cellar balance
-              const withdrawable = balance
-                .times(maxSharesOut)
-                .div(totalShares)
-
+              const ratio = position.withdrawableUSD.div(
+                totalWithdrawableBalanceInUSD
+              )
               return {
                 ...position,
-                withdrawable,
-                percentage,
+                ratio,
               }
             })
           )
-          return result
+          return {
+            positions: result,
+            totalUSD: totalWithdrawableBalanceInUSD,
+          }
         }
 
         throw new Error("UNKNOWN CONTRACT")

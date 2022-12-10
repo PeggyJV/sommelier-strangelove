@@ -34,6 +34,7 @@ import { WarningIcon } from "components/_icons"
 import { useCurrentPosition } from "data/hooks/useCurrentPosition"
 import { tokenConfig } from "data/tokenConfig"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
+import BigNumber from "bignumber.js"
 interface FormValues {
   withdrawAmount: number
 }
@@ -309,13 +310,35 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
           />
           <TransactionDetailItem
             title="Assets"
-            value={currentPosition.data
+            value={currentPosition.data?.positions
               ?.filter((item) => Number(item.withdrawable) > 0)
               .map((item) => {
                 const token = tokenConfig.find(
                   (token) =>
                     token.address === item.address.toLowerCase()
                 )
+                const withdrawable =
+                  Number(item.withdrawable) /
+                  Math.pow(10, item.decimals)
+
+                const percentage = item.ratio.times(100).toNumber()
+
+                const resultWithdraw = new BigNumber(
+                  watchWithdrawAmount || 0
+                )
+                  .div(
+                    new BigNumber(
+                      toEther(
+                        lpTokenData?.formatted,
+                        lpTokenData?.decimals,
+                        false,
+                        6
+                      )
+                    )
+                  )
+                  .times(withdrawable)
+                  .toNumber()
+
                 return (
                   <HStack
                     key={item.address}
@@ -330,16 +353,25 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
                       bg="surface.bg"
                     />
                     <Text>
-                      {fixed(
-                        Number(item.withdrawable) /
-                          Math.pow(10, item.decimals),
-                        6
-                      )}{" "}
-                      {token?.symbol}
+                      {fixed(withdrawable, 6)}{" "}
+                      {fixed(resultWithdraw, 6)} {token?.symbol} (
+                      {fixed(percentage, 2)}%)
                     </Text>
                   </HStack>
                 )
               })}
+          />
+          <TransactionDetailItem
+            title="Estimated USD"
+            value={
+              <Text>
+                ≈ $
+                {fixed(
+                  currentPosition.data?.totalUSD.toNumber() || 0,
+                  2
+                )}
+              </Text>
+            }
           />
         </Stack>
       </Stack>
