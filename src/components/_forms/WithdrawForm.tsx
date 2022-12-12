@@ -1,4 +1,4 @@
-import React, { useEffect, VFC } from "react"
+import React, { useEffect, useMemo, VFC } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -35,6 +35,7 @@ import { useCurrentPosition } from "data/hooks/useCurrentPosition"
 import { tokenConfig } from "data/tokenConfig"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
 import BigNumber from "bignumber.js"
+import { isAssetDistributionEnabled } from "data/uiConfig"
 interface FormValues {
   withdrawAmount: number
 }
@@ -176,6 +177,40 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const estimatedUSD = useMemo(() => {
+    let total = 0
+    currentPosition.data?.positions
+      ?.filter((item) => Number(item.withdrawable) > 0)
+      .forEach((item) => {
+        const withdrawable =
+          Number(item.withdrawable) / Math.pow(10, item.decimals)
+
+        const resultWithdraw = new BigNumber(watchWithdrawAmount || 0)
+          .div(
+            new BigNumber(
+              toEther(
+                lpTokenData?.formatted,
+                lpTokenData?.decimals,
+                false,
+                6
+              )
+            )
+          )
+          .times(withdrawable)
+
+        const resultWithdrawUSD = resultWithdraw
+          .times(item.usdPrice)
+          .toNumber()
+        total += resultWithdrawUSD
+      })
+    return total
+  }, [
+    currentPosition.data?.positions,
+    lpTokenData?.decimals,
+    lpTokenData?.formatted,
+    watchWithdrawAmount,
+  ])
+
   return (
     <VStack
       as="form"
@@ -281,18 +316,20 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
             />
             {errors.withdrawAmount?.message}
           </FormErrorMessage>
-          <HStack pt={2}>
-            <WarningIcon color="orange.base" boxSize="12px" />
-            <Text
-              fontSize="xs"
-              fontWeight="semibold"
-              color="orange.light"
-            >
-              Tokens are swapped to the actively traded strategy
-              assets which may include multiple assets in varying
-              distribution
-            </Text>
-          </HStack>
+          {isAssetDistributionEnabled(cellarConfig) && (
+            <HStack pt={2}>
+              <WarningIcon color="orange.base" boxSize="12px" />
+              <Text
+                fontSize="xs"
+                fontWeight="semibold"
+                color="orange.light"
+              >
+                Tokens are swapped to the actively traded strategy
+                assets which may include multiple assets in varying
+                distribution
+              </Text>
+            </HStack>
+          )}
         </Stack>
       </FormControl>
       <Stack>
@@ -304,75 +341,85 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
             title="Strategy"
             value={<Text>{cellarDataMap[id].name}</Text>}
           />
-          <TransactionDetailItem
-            title="Token price"
-            value={<Text>{tokenPrice.data}</Text>}
-          />
-          <TransactionDetailItem
-            title="Assets"
-            value={currentPosition.data?.positions
-              ?.filter((item) => Number(item.withdrawable) > 0)
-              .map((item) => {
-                const token = tokenConfig.find(
-                  (token) =>
-                    token.address === item.address.toLowerCase()
-                )
-                const withdrawable =
-                  Number(item.withdrawable) /
-                  Math.pow(10, item.decimals)
-
-                const percentage = item.ratio.times(100).toNumber()
-
-                const resultWithdraw = new BigNumber(
-                  watchWithdrawAmount || 0
-                )
-                  .div(
-                    new BigNumber(
-                      toEther(
-                        lpTokenData?.formatted,
-                        lpTokenData?.decimals,
-                        false,
-                        6
+          {isAssetDistributionEnabled(cellarConfig) && (
+            <>
+              <TransactionDetailItem
+                title="Token price"
+                value={<Text>{tokenPrice.data}</Text>}
+              />
+              <TransactionDetailItem
+                title="Assets"
+                value={
+                  currentPosition.isLoading ||
+                  currentPosition.isRefetching ||
+                  currentPosition.isFetching ? (
+                    <Spinner />
+                  ) : (
+                    currentPosition.data?.positions
+                      ?.filter(
+                        (item) => Number(item.withdrawable) > 0
                       )
-                    )
-                  )
-                  .times(withdrawable)
-                  .toNumber()
+                      .map((item) => {
+                        if (!item) return <Text>--</Text>
+                        const token = tokenConfig.find(
+                          (token) =>
+                            token.address ===
+                            item.address.toLowerCase()
+                        )
+                        const withdrawable =
+                          Number(item.withdrawable) /
+                          Math.pow(10, item.decimals)
 
-                return (
-                  <HStack
-                    key={item.address}
-                    justifyContent="space-between"
-                  >
-                    <Avatar
-                      boxSize={6}
-                      src={token?.src}
-                      name={token?.alt}
-                      borderWidth={2}
-                      borderColor="surface.bg"
-                      bg="surface.bg"
-                    />
-                    <Text>
-                      {fixed(withdrawable, 6)}{" "}
-                      {fixed(resultWithdraw, 6)} {token?.symbol} (
-                      {fixed(percentage, 2)}%)
-                    </Text>
-                  </HStack>
-                )
-              })}
-          />
-          <TransactionDetailItem
-            title="Estimated USD"
-            value={
-              <Text>
-                ≈ $
-                {fixed(
-                  currentPosition.data?.totalUSD.toNumber() || 0,
-                  2
-                )}
-              </Text>
-            }
-          />
+                        const percentage = item.ratio
+                          .times(100)
+                          .toNumber()
+
+                        const resultWithdraw = new BigNumber(
+                          watchWithdrawAmount || 0
+                        )
+                          .div(
+                            new BigNumber(
+                              toEther(
+                                lpTokenData?.formatted,
+                                lpTokenData?.decimals,
+                                false,
+                                6
+                              )
+                            )
+                          )
+                          .times(withdrawable)
+                          .toNumber()
+
+                        return (
+                          <HStack
+                            key={item.address}
+                            justifyContent="space-between"
+                          >
+                            <Avatar
+                              boxSize={6}
+                              src={token?.src}
+                              name={token?.alt}
+                              borderWidth={2}
+                              borderColor="surface.bg"
+                              bg="surface.bg"
+                            />
+                            <Text>
+                              {fixed(resultWithdraw, 8)}{" "}
+                              {token?.symbol} ({fixed(percentage, 2)}
+                              %)
+                            </Text>
+                          </HStack>
+                        )
+                      })
+                  )
+                }
+              />
+              <TransactionDetailItem
+                title="Estimated USD"
+                value={<Text>≈ ${fixed(estimatedUSD || 0, 6)}</Text>}
+              />
+            </>
+          )}
         </Stack>
       </Stack>
 

@@ -237,3 +237,10 @@ export const bondingPeriodOptions = (
   }
   return []
 }
+
+export const isAssetDistributionEnabled = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  )
+}
