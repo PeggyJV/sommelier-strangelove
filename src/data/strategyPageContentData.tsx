@@ -20,8 +20,22 @@ export const strategyPageContentData = {
       </>
     ),
     alternativeTo: "Holding ETH or BTC",
-    buyUrl:
-      "https://app.uniswap.org/#/swap?outputCurrency=0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+      {
+        url: "https://app.uniswap.org/#/swap?outputCurrency=0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
+        name: "Uniswap",
+        logo: "/assets/icons/uniswap.png",
+      },
+      {
+        url: "https://injective.com/",
+        name: "Injective",
+        logo: "/assets/icons/injective.png",
+      },
+    ],
     strategyHighlights: {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing depending on market conditions.",
@@ -75,8 +89,22 @@ export const strategyPageContentData = {
       </>
     ),
     alternativeTo: "Holding ETH or BTC",
-    buyUrl:
-      "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+      {
+        url: "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
+        name: "Uniswap",
+        logo: "/assets/icons/uniswap.png",
+      },
+      {
+        url: "https://injective.com/",
+        name: "Injective",
+        logo: "/assets/icons/injective.png",
+      },
+    ],
     strategyHighlights: {
       card: [
         "Holds a combination of BTC and ETH with smart rebalancing to suit market conditions.",
@@ -145,8 +173,22 @@ export const strategyPageContentData = {
       </>
     ),
     alternativeTo: "Holding USDC",
-    buyUrl:
-      "https://info.uniswap.org/#/pools/0x86b8d3571f104939e6d046d9a7858a83b22cf20b",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+      {
+        url: "https://info.uniswap.org/#/pools/0x86b8d3571f104939e6d046d9a7858a83b22cf20b",
+        name: "Uniswap",
+        logo: "/assets/icons/uniswap.png",
+      },
+      {
+        url: "https://injective.com/",
+        name: "Injective",
+        logo: "/assets/icons/injective.png",
+      },
+    ],
     strategyHighlights: {
       card: [
         `“Risk first” approach - capital preservation is prioritized over capital growth.`,
@@ -217,8 +259,22 @@ export const strategyPageContentData = {
       </>
     ),
     alternativeTo: "Holding USDC",
-    buyUrl:
-      "https://info.uniswap.org/#/pools/0x10854cf5e3d5cc7ef415930e7f32320e9c0ab12b",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+      {
+        url: "https://info.uniswap.org/#/pools/0x10854cf5e3d5cc7ef415930e7f32320e9c0ab12b",
+        name: "Uniswap",
+        logo: "/assets/icons/uniswap.png",
+      },
+      {
+        url: "https://injective.com/",
+        name: "Injective",
+        logo: "/assets/icons/injective.png",
+      },
+    ],
     strategyHighlights: {
       card: [
         `“Risk first” approach - capital preservation is prioritized over capital growth.`,

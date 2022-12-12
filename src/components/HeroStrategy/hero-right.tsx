@@ -88,7 +88,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             Buy / Sell
           </BaseButton>
           <BuyOrSellModal
-            uniswapLink={content.buyUrl}
+            exchange={content.exchange}
             id={id}
             isOpen={buyOrSellModal.isOpen}
             onClose={buyOrSellModal.onClose}
@@ -101,7 +101,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 landingType: landingType(),
               })
             }}
-            style={{ textDecoration: "none" }}
+            textDecoration="none"
           >
             <SecondaryButton w="full" h="50px">
               View Details
