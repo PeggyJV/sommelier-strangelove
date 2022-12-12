@@ -24,7 +24,7 @@ export const BecomeProvider: React.FC<BoxProps> = (props) => {
         isExternal
         href={getInTouchUrl}
         textDecoration="none"
-        style={{ textDecoration: "none" }}
+        textDecoration="none"
       >
         <SecondaryButton
           fontSize="md"

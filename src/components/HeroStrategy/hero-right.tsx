@@ -101,7 +101,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 landingType: landingType(),
               })
             }}
-            style={{ textDecoration: "none" }}
+            textDecoration="none"
           >
             <SecondaryButton w="full" h="50px">
               View Details

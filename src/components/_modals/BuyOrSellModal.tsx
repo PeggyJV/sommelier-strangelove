@@ -55,7 +55,7 @@ export const BuyOrSellModal = ({
                     landingType: landingType(),
                   })
                 }}
-                style={{ textDecoration: "none" }}
+                textDecoration="none"
               >
                 <HStack
                   justifyContent="space-between"
@@ -93,7 +93,7 @@ export const BuyOrSellModal = ({
                 })
               }}
               target="_blank"
-              style={{ textDecoration: "none" }}
+              textDecoration="none"
             >
               <HStack
                 justifyContent="space-between"
