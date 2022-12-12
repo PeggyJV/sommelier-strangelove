@@ -1,4 +1,4 @@
-import { CellarKey, ConfigProps } from "data/types"
+import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { ethers } from "ethers"
 import { CellarV0816 } from "src/abi/types"
 import { useAccount, useQuery, useSigner } from "wagmi"
@@ -25,6 +25,11 @@ export const useCurrentPosition = (config: ConfigProps) => {
   const { cellarContract } = useCreateContracts(config)
   const { address } = useAccount()
   const { data: signer } = useSigner()
+
+  const queryEnabled =
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+    Boolean(signer && address)
 
   const query = useQuery(
     ["USE_CURRENT_POSITION", config.cellar.address, address],
@@ -119,7 +124,7 @@ export const useCurrentPosition = (config: ConfigProps) => {
       }
     },
     {
-      enabled: Boolean(signer && address),
+      enabled: queryEnabled,
       refetchOnMount: true,
     }
   )
