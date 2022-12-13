@@ -174,7 +174,7 @@ export const strategyPageContentData = {
         logo: "/assets/icons/somm.png",
       },
       {
-        url: "https://info.uniswap.org/#/pools/0x86b8d3571f104939e6d046d9a7858a83b22cf20b",
+        url: "https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x3f07a84ecdf494310d397d24c1c78b041d2fa622",
         name: "Uniswap",
         logo: "/assets/icons/uniswap.png",
       },
@@ -260,7 +260,7 @@ export const strategyPageContentData = {
         logo: "/assets/icons/somm.png",
       },
       {
-        url: "https://info.uniswap.org/#/pools/0x10854cf5e3d5cc7ef415930e7f32320e9c0ab12b",
+        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
         name: "Uniswap",
         logo: "/assets/icons/uniswap.png",
       },
