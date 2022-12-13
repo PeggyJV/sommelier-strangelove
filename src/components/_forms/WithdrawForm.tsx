@@ -35,7 +35,10 @@ import { useCurrentPosition } from "data/hooks/useCurrentPosition"
 import { tokenConfig } from "data/tokenConfig"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
 import BigNumber from "bignumber.js"
-import { isAssetDistributionEnabled } from "data/uiConfig"
+import {
+  isAssetDistributionEnabled,
+  isWithdrawTokenPriceEnabled,
+} from "data/uiConfig"
 interface FormValues {
   withdrawAmount: number
 }
@@ -341,12 +344,14 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
             title="Strategy"
             value={<Text>{cellarDataMap[id].name}</Text>}
           />
+          {isWithdrawTokenPriceEnabled(cellarConfig) && (
+            <TransactionDetailItem
+              title="Token price"
+              value={<Text>{tokenPrice.data}</Text>}
+            />
+          )}
           {isAssetDistributionEnabled(cellarConfig) && (
             <>
-              <TransactionDetailItem
-                title="Token price"
-                value={<Text>{tokenPrice.data}</Text>}
-              />
               <TransactionDetailItem
                 title="Assets"
                 value={
