@@ -17,7 +17,7 @@ export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
   props
 ) => {
   const id = useRouter().query.id as string
-  const exchanges = strategyPageContentData[id].exchange.length
+  const exchanges = strategyPageContentData[id]?.exchange.length
 
   return (
     <BaseModal {...props}>
