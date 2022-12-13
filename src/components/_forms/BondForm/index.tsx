@@ -46,7 +46,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   const { refetch: userStakesRefetch } = useUserStakes(cellarConfig)
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
-  const { lpToken } = useUserBalances(cellarConfig)
+  const { lpToken, lpTokenInfo } = useUserBalances(cellarConfig)
   const { data: lpTokenData } = lpToken
 
   const methods = useForm<FormValues>({
@@ -184,7 +184,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
                 />
               )}
 
-              <Heading size="md">LPTokens</Heading>
+              <Heading size="sm">{lpTokenInfo.data?.symbol}</Heading>
             </HStack>
             <VStack spacing={0} align="flex-end">
               <FormControl isInvalid={isError as boolean | undefined}>
