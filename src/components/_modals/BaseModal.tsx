@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react"
 import { VFC } from "react"
 
-interface BaseModalProps extends ModalProps {
+export interface BaseModalProps extends ModalProps {
   heading?: string
   headingProps?: HeadingProps
 }
