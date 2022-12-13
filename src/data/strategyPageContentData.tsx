@@ -31,9 +31,9 @@ export const strategyPageContentData = {
         logo: "/assets/icons/uniswap.png",
       },
       {
-        url: "https://injective.com/",
-        name: "Injective",
-        logo: "/assets/icons/injective.png",
+        url: "https://helixapp.com/spot/ethbtctrend-usdt/",
+        name: "Helix",
+        logo: "/assets/icons/helix.png",
       },
     ],
     strategyHighlights: {
@@ -98,11 +98,6 @@ export const strategyPageContentData = {
         url: "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
         name: "Uniswap",
         logo: "/assets/icons/uniswap.png",
-      },
-      {
-        url: "https://injective.com/",
-        name: "Injective",
-        logo: "/assets/icons/injective.png",
       },
     ],
     strategyHighlights: {
@@ -184,9 +179,9 @@ export const strategyPageContentData = {
         logo: "/assets/icons/uniswap.png",
       },
       {
-        url: "https://injective.com/",
-        name: "Injective",
-        logo: "/assets/icons/injective.png",
+        url: "https://helixapp.com/spot/steadyeth-usdt/",
+        name: "Helix",
+        logo: "/assets/icons/helix.png",
       },
     ],
     strategyHighlights: {
@@ -270,9 +265,9 @@ export const strategyPageContentData = {
         logo: "/assets/icons/uniswap.png",
       },
       {
-        url: "https://injective.com/",
-        name: "Injective",
-        logo: "/assets/icons/injective.png",
+        url: "https://helixapp.com/spot/steadybtc-usdt/",
+        name: "Helix",
+        logo: "/assets/icons/helix.png",
       },
     ],
     strategyHighlights: {
