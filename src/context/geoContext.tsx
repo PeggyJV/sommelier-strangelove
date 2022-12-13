@@ -1,3 +1,5 @@
+import { useDisclosure } from "@chakra-ui/react"
+import { RestrictedModal } from "components/_modals/RestrictedModal"
 import {
   createContext,
   FC,
@@ -6,22 +8,30 @@ import {
   useEffect,
   useState,
 } from "react"
+import { analytics } from "utils/analytics"
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
-type CheckIPContext =
-  | {
-      country: string
-      region: string
-      isRestricted: boolean
-    }
-  | undefined
+type CheckIPState = {
+  country: string | null
+  region: string | null
+  isRestricted: boolean
+}
+
+interface CheckIPContext extends CheckIPState {
+  isRestrictedAndOpenModal: () => boolean
+}
 
 const geoContext = createContext<CheckIPContext | null>(null)
 
 export const GeoProvider: FC<ReactNode> = ({ children }) => {
-  const [ctx, setCtx] = useState<CheckIPContext>()
+  const [ctx, setCtx] = useState<CheckIPState>({
+    country: null,
+    region: null,
+    isRestricted: false,
+  })
+  const restrictedModal = useDisclosure()
 
   useEffect(() => {
     const getRegionData = async () => {
@@ -35,8 +45,25 @@ export const GeoProvider: FC<ReactNode> = ({ children }) => {
     getRegionData()
   }, [])
 
+  const isRestrictedAndOpenModal = () => {
+    if (ctx.isRestricted) {
+      restrictedModal.onOpen()
+      analytics.track("user.modal-access-restricted-opened")
+      return true
+    }
+    return false
+  }
+
   return (
-    <geoContext.Provider value={ctx}>{children}</geoContext.Provider>
+    <geoContext.Provider
+      value={{
+        ...ctx,
+        isRestrictedAndOpenModal,
+      }}
+    >
+      {children}
+      <RestrictedModal {...restrictedModal} />
+    </geoContext.Provider>
   )
 }
 

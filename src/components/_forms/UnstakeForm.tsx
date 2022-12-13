@@ -24,6 +24,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStakes } from "data/hooks/useUserStakes"
+import { useGeo } from "context/geoContext"
 interface FormValues {
   withdrawAmount: number
 }
@@ -81,7 +82,12 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
     }
   }, [watchWithdrawAmount, address])
 
+  const geo = useGeo()
+
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
+    if (geo?.isRestrictedAndOpenModal()) {
+      return
+    }
     if (withdrawAmount <= 0) return
 
     if (!address) {

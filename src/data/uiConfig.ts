@@ -56,7 +56,7 @@ export const isCurrentDepositsEnabled = (config: ConfigProps) => {
 }
 
 export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
-  return true
+  return config.cellarNameKey === CellarNameKey.AAVE
 }
 
 export const isTVMEnabled = (config: ConfigProps) => {
@@ -175,17 +175,17 @@ export const bondingPeriodOptions = (
   if (config.cellarNameKey === CellarNameKey.AAVE) {
     return [
       {
-        title: "7 Days",
+        title: "7D",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "14 Days",
+        title: "14D",
         amount: "1.3x SOMM",
         value: 1,
       },
       {
-        title: "21 Days",
+        title: "21D",
         amount: "1.5x SOMM",
         value: 2,
       },
@@ -236,4 +236,20 @@ export const bondingPeriodOptions = (
     ]
   }
   return []
+}
+
+export const isAssetDistributionEnabled = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  )
+}
+
+export const isWithdrawTokenPriceEnabled = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+    config.cellarNameKey === CellarNameKey.STEADY_ETH
+  )
 }

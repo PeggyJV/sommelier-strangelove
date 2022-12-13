@@ -98,7 +98,6 @@ export const Strategy: VFC<StrategyProps> = ({ data, ...rest }) => {
         isExternal
         href="https://app.sommelier.finance"
         textDecoration="none"
-        style={{ textDecoration: "none" }}
       >
         <SecondaryButton
           fontSize="md"
