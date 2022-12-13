@@ -8,9 +8,5 @@ export const SommelierTab: VFC<WithdrawModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  return (
-    <>
-      <WithdrawForm onClose={onClose} />
-    </>
-  )
+  return <WithdrawForm onClose={onClose} />
 }

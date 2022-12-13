@@ -4,7 +4,6 @@ import {
   TabList,
   TabPanels,
   TabPanel,
-  useTab,
 } from "@chakra-ui/react"
 import { VFC } from "react"
 import { Token as TokenType } from "data/tokenConfig"
@@ -16,37 +15,15 @@ interface FormValues {
 }
 import { BaseModal } from "../BaseModal"
 import React from "react"
-import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import { useRouter } from "next/router"
 import { ExchangeTab } from "./ExchangeTab"
 import { SommelierTab } from "./SommelierTab"
+import { CustomTab } from "../CustomTab"
 
 type WithdrawModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
 export const WithdrawModal: VFC<WithdrawModalProps> = (props) => {
-  // eslint-disable-next-line react/display-name
-  const CustomTab = React.forwardRef((props, ref) => {
-    const tabProps = useTab({
-      ...props,
-      ref: ref as React.Ref<HTMLElement>,
-    })
-
-    const isSelected = !!tabProps["aria-selected"]
-
-    return (
-      <SecondaryButton
-        {...tabProps}
-        borderWidth={!isSelected ? 0 : 2}
-        borderRadius={16}
-        size="lg"
-        backgroundColor="surface.tertiary"
-        flex={1}
-      >
-        {tabProps.children}
-      </SecondaryButton>
-    )
-  })
   const id = useRouter().query.id as string
   const buyUrl = strategyPageContentData[id]?.buyUrl
 
@@ -55,9 +32,7 @@ export const WithdrawModal: VFC<WithdrawModalProps> = (props) => {
       <Tabs variant="unstyled" isFitted>
         {buyUrl && (
           <TabList gap={2}>
-            {/* @ts-ignore */}
             <CustomTab>Sommelier</CustomTab>
-            {/* @ts-ignore */}
             <CustomTab>Exchange</CustomTab>
           </TabList>
         )}
