@@ -56,7 +56,7 @@ export const isCurrentDepositsEnabled = (config: ConfigProps) => {
 }
 
 export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
-  return true
+  return config.cellarNameKey === CellarNameKey.AAVE
 }
 
 export const isTVMEnabled = (config: ConfigProps) => {

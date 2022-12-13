@@ -390,9 +390,9 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
     <>
       <VStack pb={10} spacing={6} align="stretch">
         <VStack align="stretch">
-          <CardHeading>cellar details</CardHeading>
+          <CardHeading>Stragety details</CardHeading>
           <HStack justify="space-between">
-            <Text as="span">Cellar</Text>
+            <Text as="span">Strategy</Text>
             <Text as="span">{cellarName}</Text>
           </HStack>
           {isActiveTokenStrategyEnabled(cellarConfig) && (
