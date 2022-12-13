@@ -12,7 +12,7 @@ export const ExchangeTab = () => {
   return (
     <Stack>
       {exchanges
-        .filter((item) => item.name !== "Sommelier")
+        .filter((item) => !!item.url)
         .map((item) => (
           <Link key={item.name} href={item.url} target="_blank">
             <HStack
