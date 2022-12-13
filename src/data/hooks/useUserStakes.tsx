@@ -3,13 +3,13 @@ import { getUserStakes } from "data/actions/CELLAR_STAKING_V0815/getUserStakes"
 import { ConfigProps, StakerKey } from "data/types"
 import { useCreateContracts } from "./useCreateContracts"
 import { useAccount } from "wagmi"
-import { useSommelierPrice } from "./useSommelierPrice"
+import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { CellarStakingV0815 } from "src/abi/types"
 
 export const useUserStakes = (config: ConfigProps) => {
   const { address } = useAccount()
   const { stakerContract, stakerSigner } = useCreateContracts(config)
-  const sommPrice = useSommelierPrice()
+  const sommPrice = useCoinGeckoPrice("sommelier")
 
   const queryEnabled = Boolean(
     config.staker?.key === StakerKey.CELLAR_STAKING_V0815 &&

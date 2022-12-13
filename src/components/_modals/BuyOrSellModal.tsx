@@ -47,6 +47,7 @@ export const BuyOrSellModal = ({
           if (!value.url) {
             return (
               <Link
+                key={value.url}
                 href={`/strategies/${id}/manage`}
                 onClick={() => {
                   analytics.track("strategy.buy-sell", {
@@ -106,7 +107,7 @@ export const BuyOrSellModal = ({
               >
                 <HStack spacing={4}>
                   <Image
-                    alt="uniswap icon"
+                    alt={value.name}
                     src={value.logo}
                     boxSize={6}
                   />

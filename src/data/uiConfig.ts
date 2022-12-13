@@ -56,7 +56,7 @@ export const isCurrentDepositsEnabled = (config: ConfigProps) => {
 }
 
 export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
-  return true
+  return config.cellarNameKey === CellarNameKey.AAVE
 }
 
 export const isTVMEnabled = (config: ConfigProps) => {
@@ -236,4 +236,11 @@ export const bondingPeriodOptions = (
     ]
   }
   return []
+}
+
+export const isAssetDistributionEnabled = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  )
 }

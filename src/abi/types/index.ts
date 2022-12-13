@@ -6,6 +6,7 @@ export type { CellarRouterV0816 } from "./CellarRouterV0816";
 export type { CellarStakingV0815 } from "./CellarStakingV0815";
 export type { CellarV0815 } from "./CellarV0815";
 export type { CellarV0816 } from "./CellarV0816";
+export type { Erc20 } from "./Erc20";
 export type { GravityBridge } from "./GravityBridge";
 export * as factories from "./factories";
 export { CellarRouterV0815__factory } from "./factories/CellarRouterV0815__factory";
@@ -13,4 +14,5 @@ export { CellarRouterV0816__factory } from "./factories/CellarRouterV0816__facto
 export { CellarStakingV0815__factory } from "./factories/CellarStakingV0815__factory";
 export { CellarV0815__factory } from "./factories/CellarV0815__factory";
 export { CellarV0816__factory } from "./factories/CellarV0816__factory";
+export { Erc20__factory } from "./factories/Erc20__factory";
 export { GravityBridge__factory } from "./factories/GravityBridge__factory";
