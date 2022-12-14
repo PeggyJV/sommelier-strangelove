@@ -84,7 +84,7 @@ export const BuyOrSellModal = ({
           }
           return (
             <Link
-              href={value.name}
+              href={value.url}
               key={value.name}
               onClick={() => {
                 analytics.track("strategy.buy-sell", {
