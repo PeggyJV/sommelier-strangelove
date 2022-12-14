@@ -32,7 +32,9 @@ export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
           <TabPanel px={0}>{props.sommelierTab}</TabPanel>
           {exchanges && (
             <TabPanel px={0} pt={8}>
-              <ExchangeTab />
+              <ExchangeTab
+                title={props.heading?.toLowerCase() || ""}
+              />
             </TabPanel>
           )}
         </TabPanels>
