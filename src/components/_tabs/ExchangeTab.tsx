@@ -4,8 +4,9 @@ import { ExternalLinkIcon } from "components/_icons"
 import React from "react"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import { useRouter } from "next/router"
+import { analytics } from "utils/analytics"
 
-export const ExchangeTab = () => {
+export const ExchangeTab = ({ title }: { title: string }) => {
   const id = useRouter().query.id as string
   const exchanges = strategyPageContentData[id].exchange
 
@@ -14,7 +15,21 @@ export const ExchangeTab = () => {
       {exchanges
         .filter((item) => !!item.url)
         .map((item) => (
-          <Link key={item.name} href={item.url} target="_blank">
+          <Link
+            key={item.name}
+            href={item.url}
+            onClick={() => {
+              analytics.track(
+                `${
+                  title === "buy" ? "deposit" : "withdraw"
+                }.exchange`,
+                {
+                  platformSelection: `${item.name}`,
+                }
+              )
+            }}
+            target="_blank"
+          >
             <HStack
               justifyContent="space-between"
               backgroundColor="surface.secondary"

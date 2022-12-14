@@ -47,7 +47,7 @@ export const BuyOrSellModal = ({
           if (!value.url) {
             return (
               <Link
-                key={value.url}
+                key={value.name}
                 href={`/strategies/${id}/manage`}
                 onClick={() => {
                   analytics.track("strategy.buy-sell", {
@@ -89,7 +89,7 @@ export const BuyOrSellModal = ({
               onClick={() => {
                 analytics.track("strategy.buy-sell", {
                   strategyCard: cellarDataMap[id].name,
-                  platformSelection: "Uniswap",
+                  platformSelection: value.name,
                   landingType: landingType(),
                 })
               }}
