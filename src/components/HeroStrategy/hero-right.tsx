@@ -36,7 +36,7 @@ import {
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
-import { formatDistanceToNow } from "date-fns"
+import { formatDistanceToNow, isFuture } from "date-fns"
 import { useApy } from "data/hooks/useApy"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
 
@@ -212,30 +212,31 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </Text>
           </HStack>
         )}
-
-        <HStack>
-          <Box>
-            <Text w="150px" fontWeight="semibold">
-              Rewards
-            </Text>
-          </Box>
-          <Flex wrap="wrap" gap={2}>
-            <Text>{`Expected Rewards APY ${potentialStakingApy}`}</Text>
-            <Text
-              py={1}
-              px={2}
-              borderRadius={28}
-              bgColor="purple.base"
-              fontSize="xs"
-              fontFamily={"monospace"}
-            >
-              {!stakingEnd?.ended
-                ? stakingEnd?.endDate &&
-                  `${formatDistanceToNow(stakingEnd?.endDate)} left`
-                : "Program Ended"}
-            </Text>
-          </Flex>
-        </HStack>
+        {stakingEnd?.endDate && isFuture(stakingEnd?.endDate) && (
+          <HStack>
+            <Box>
+              <Text w="150px" fontWeight="semibold">
+                Rewards
+              </Text>
+            </Box>
+            <Flex wrap="wrap" gap={2}>
+              <Text>{`Expected Rewards APY ${potentialStakingApy}`}</Text>
+              <Text
+                py={1}
+                px={2}
+                borderRadius={28}
+                bgColor="purple.base"
+                fontSize="xs"
+                fontFamily={"monospace"}
+              >
+                {!stakingEnd?.endDate
+                  ? isFuture(stakingEnd?.endDate) &&
+                    `${formatDistanceToNow(stakingEnd?.endDate)} left`
+                  : "Program Ended"}
+              </Text>
+            </Flex>
+          </HStack>
+        )}
       </Stack>
     </Stack>
   )

@@ -230,43 +230,46 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
         {isBondingEnabled(cellarConfig) && (
           <>
             {/* Show if only nothing staked */}
-            {!userStakes.data?.userStakes.length && (
-              <InnerCard
-                backgroundColor="surface.tertiary"
-                mt="8"
-                px="7"
-                py="7"
-              >
-                <HStack>
-                  <Image
-                    src="/assets/icons/somm.png"
-                    alt="sommelier logo"
-                    boxSize={6}
-                  />
-                  <Heading size="16px">
-                    Earn rewards when you bond{" "}
-                    {apy?.potentialStakingApy}. up to {maxMultiplier}
-                  </Heading>
-                  <Spacer />
-                  <LighterSkeleton
-                    isLoaded={!stakingEnd.isLoading}
-                    height={4}
-                  >
-                    <Text fontSize="xs">
-                      {stakingEnd.data?.endDate &&
-                      isFuture(stakingEnd.data.endDate)
-                        ? `Ends in ${formatDistanceToNow(
-                            stakingEnd.data.endDate,
-                            {
-                              locale: { formatDistance },
-                            }
-                          )}`
-                        : "Program Ended"}
-                    </Text>
-                  </LighterSkeleton>
-                </HStack>
-              </InnerCard>
-            )}
+            {!userStakes.data?.userStakes.length &&
+              stakingEnd.data?.endDate &&
+              isFuture(stakingEnd.data?.endDate) && (
+                <InnerCard
+                  backgroundColor="surface.tertiary"
+                  mt="8"
+                  px="7"
+                  py="7"
+                >
+                  <HStack>
+                    <Image
+                      src="/assets/icons/somm.png"
+                      alt="sommelier logo"
+                      boxSize={6}
+                    />
+                    <Heading size="16px">
+                      Earn rewards when you bond{" "}
+                      {apy?.potentialStakingApy}. up to{" "}
+                      {maxMultiplier}
+                    </Heading>
+                    <Spacer />
+                    <LighterSkeleton
+                      isLoaded={!stakingEnd.isLoading}
+                      height={4}
+                    >
+                      <Text fontSize="xs">
+                        {stakingEnd.data?.endDate &&
+                        isFuture(stakingEnd.data.endDate)
+                          ? `Ends in ${formatDistanceToNow(
+                              stakingEnd.data.endDate,
+                              {
+                                locale: { formatDistance },
+                              }
+                            )}`
+                          : "Program Ended"}
+                      </Text>
+                    </LighterSkeleton>
+                  </HStack>
+                </InnerCard>
+              )}
             {isConnected && (
               <LighterSkeleton
                 h={!userStakes.isLoading ? "none" : "100px"}
