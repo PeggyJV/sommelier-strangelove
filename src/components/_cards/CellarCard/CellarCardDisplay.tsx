@@ -62,32 +62,38 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
         zIndex="2"
         overflow="hidden"
       >
-        <Tag
-          px={3}
-          py={4}
-          justifyContent="center"
-          borderRadius={0}
-          bgColor="purple.base"
-          textAlign="center"
-        >
-          <TransparentSkeleton
-            isLoaded={!tagLoading}
-            h={tagLoading ? "14px" : "none"}
-            startColor="purple.dark"
-            endColor="surface.secondary"
-          >
-            <Text>
-              {`Expected Rewards APY ${apy?.potentialStakingApy}`}
-              <span> &#183; </span>
-              {stakingEnd.data?.endDate &&
-              isFuture(stakingEnd.data?.endDate)
-                ? `${formatDistanceToNow(stakingEnd.data.endDate, {
-                    locale: { formatDistance },
-                  })} left`
-                : "Program ends"}
-            </Text>
-          </TransparentSkeleton>
-        </Tag>
+        {stakingEnd.data?.endDate &&
+          isFuture(stakingEnd.data?.endDate) && (
+            <Tag
+              px={3}
+              py={4}
+              justifyContent="center"
+              borderRadius={0}
+              bgColor="purple.base"
+              textAlign="center"
+            >
+              <TransparentSkeleton
+                isLoaded={!tagLoading}
+                h={tagLoading ? "14px" : "none"}
+                startColor="purple.dark"
+                endColor="surface.secondary"
+              >
+                <Text>
+                  {`Expected Rewards APY ${apy?.potentialStakingApy}`}
+                  <span> &#183; </span>
+                  {stakingEnd.data?.endDate &&
+                  isFuture(stakingEnd.data?.endDate)
+                    ? `${formatDistanceToNow(
+                        stakingEnd.data.endDate,
+                        {
+                          locale: { formatDistance },
+                        }
+                      )} left`
+                    : "Program ends"}
+                </Text>
+              </TransparentSkeleton>
+            </Tag>
+          )}
         <Flex
           p={4}
           ml={2}
