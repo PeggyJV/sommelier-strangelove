@@ -183,17 +183,20 @@ const BondingTableCard: VFC<TableProps> = (props) => {
             isLoaded={!stakingEnd.isLoading}
             height={4}
           >
-            <Text fontSize="xs">
-              {stakingEnd.data?.endDate &&
-              isFuture(stakingEnd.data.endDate)
-                ? `Ends in ${formatDistanceToNow(
-                    stakingEnd.data.endDate,
-                    {
-                      locale: { formatDistance },
-                    }
-                  )}`
-                : "Program Ended"}
-            </Text>
+            {stakingEnd.data?.endDate &&
+              isFuture(stakingEnd.data?.endDate) && (
+                <Text fontSize="xs">
+                  {stakingEnd.data?.endDate &&
+                  isFuture(stakingEnd.data.endDate)
+                    ? `Ends in ${formatDistanceToNow(
+                        stakingEnd.data.endDate,
+                        {
+                          locale: { formatDistance },
+                        }
+                      )}`
+                    : "Program Ended"}
+                </Text>
+              )}
           </LighterSkeleton>
         </HStack>
 
