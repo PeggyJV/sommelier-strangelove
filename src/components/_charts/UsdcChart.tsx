@@ -1,5 +1,5 @@
-import { Box, HStack, Stack, Text } from "@chakra-ui/react"
-import { DatumValue, linearGradientDef } from "@nivo/core"
+import { Stack, Text } from "@chakra-ui/react"
+import { linearGradientDef } from "@nivo/core"
 import {
   Point,
   PointSymbolProps,
@@ -7,12 +7,20 @@ import {
 } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
-import { FunctionComponent, useMemo, useState, VFC } from "react"
+import {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useMemo,
+  VFC,
+} from "react"
 import { colors } from "theme/colors"
 import { format, isSameDay, isSameHour } from "date-fns"
-import { formatPercentage } from "utils/chartHelper"
 import { useUsdcChart } from "data/context/usdcChartContext"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { ChartPoint } from "./ChartPoint"
+import { ChartTooltipItem } from "./ChartTooltipItem"
+import { formatPercentage } from "utils/chartHelper"
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
@@ -20,16 +28,24 @@ const LineChart = dynamic(
   }
 )
 
-export const UsdcChart: VFC<{ timeline: string; name: string }> = ({
+interface UsdcChartProps {
+  timeline: string
+  name: string
+  pointActive?: Point
+  setPointActive: Dispatch<SetStateAction<Point | undefined>>
+}
+
+export const UsdcChart: VFC<UsdcChartProps> = ({
   timeline,
   name: strategyTokenName,
+  setPointActive,
+  pointActive,
 }) => {
   const { data } = useUsdcChart()
   const { chartTheme } = useNivoThemes()
   const lineColors = data.series?.map((item) => item.color)
-  const [pointActive, setPointActive] = useState<DatumValue>()
   const onMouseMove = (point: Point, event: React.MouseEvent) => {
-    setPointActive(point.data.x)
+    setPointActive(point)
   }
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
 
@@ -42,7 +58,7 @@ export const UsdcChart: VFC<{ timeline: string; name: string }> = ({
       return (
         <Stack
           p={4}
-          bg="rgba(18, 18, 20, 0.8)"
+          bg="surface.blackTransparent"
           borderWidth={1}
           borderColor="purple.base"
           borderRadius={8}
@@ -55,36 +71,23 @@ export const UsdcChart: VFC<{ timeline: string; name: string }> = ({
               return ""
             })()
             return (
-              <HStack
+              <ChartTooltipItem
                 key={item.id}
-                justifyContent="space-between"
-                spacing={4}
-              >
-                <Box
-                  boxSize="8px"
-                  backgroundColor={item.color}
-                  borderRadius={2}
-                />
-                <Text>{name}: </Text>
-                <HStack>
-                  <Text textAlign="right" width="9ch">
-                    $
-                    {
-                      data.series?.find((s) => s.id === item.id)
-                        ?.data[Number(i)]?.value
-                    }
-                  </Text>
-                  <Text textAlign="right" width="8ch">
-                    {formatPercentage(
-                      String(
-                        data.series?.find((s) => s.id === item.id)
-                          ?.data[Number(i)]?.y
-                      )
-                    )}
-                    %
-                  </Text>
-                </HStack>
-              </HStack>
+                backgroundColor={item.color}
+                name={name}
+                value={`$${
+                  data.series?.find((s) => s.id === item.id)?.data[
+                    Number(i)
+                  ]?.value
+                }`}
+                percentage={`${formatPercentage(
+                  String(
+                    data.series?.find((s) => s.id === item.id)?.data[
+                      Number(i)
+                    ]?.y
+                  )
+                )}%`}
+              />
             )
           })}
           <Text color="neutral.400">
@@ -107,25 +110,14 @@ export const UsdcChart: VFC<{ timeline: string; name: string }> = ({
       timeline === "1D"
         ? isSameHour(
             new Date(String(datum.x)),
-            new Date(String(pointActive))
+            new Date(String(pointActive?.data.x))
           )
         : isSameDay(
             new Date(String(datum.x)),
-            new Date(String(pointActive))
+            new Date(String(pointActive?.data.x))
           )
-    if (active && isLarger768) {
-      return (
-        <svg height="16" width="16" x="-7.5" y="-7.5">
-          <circle
-            cx="7"
-            cy="7"
-            r="6"
-            fill={color}
-            strokeWidth="2"
-            stroke={colors.neutral[100]}
-          />
-        </svg>
-      )
+    if (active) {
+      return <ChartPoint fill={color} stroke={colors.neutral[100]} />
     }
     return null
   }
@@ -179,7 +171,6 @@ export const UsdcChart: VFC<{ timeline: string; name: string }> = ({
         tickRotation: 0,
         legendPosition: "middle",
       }}
-      useMesh={isLarger768}
     />
   )
 }

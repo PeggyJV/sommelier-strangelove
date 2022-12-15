@@ -20,9 +20,15 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { PercentageText } from "components/PercentageText"
 import { Legend } from "components/_charts/Legend"
 import { ErrorCard } from "./ErrorCard"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { Point } from "@nivo/line"
+import { ChartTooltipItem } from "components/_charts/ChartTooltipItem"
+import { formatPercentage } from "utils/chartHelper"
+import { format } from "date-fns"
 
 export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
   const {
+    data,
     timeArray,
     tokenPriceChange,
     showLine,
@@ -33,14 +39,70 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const tokenPrice = useTokenPrice(cellarConfig)
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const [timeline, setTimeline] = useState<string>("1W")
+  const [pointActive, setPointActive] = useState<Point>()
+
+  const MobileTooltip = () => {
+    if (!!pointActive && !isLarger768) {
+      const { id: pointId, serieId } = pointActive
+      const [_, i] = pointId.split(".")
+      return (
+        <Stack
+          p={4}
+          bg="surface.blackTransparent"
+          borderWidth={1}
+          borderColor="purple.base"
+          borderRadius={8}
+          textTransform="capitalize"
+        >
+          {data.series?.map((item) => {
+            const name = (() => {
+              if (item.id === "token-price")
+                return cellarDataMap[id]?.name
+              if (item.id === "eth-btc-50") return "ETH 50/BTC 50"
+              if (item.id === "weth") return "ETH"
+              if (item.id === "wbtc") return "BTC"
+              return ""
+            })()
+            return (
+              <ChartTooltipItem
+                key={item.id}
+                backgroundColor={item.color}
+                name={name}
+                value={`$${
+                  data.series?.find((s) => s.id === item.id)?.data[
+                    Number(i)
+                  ]?.value
+                }`}
+                percentage={`${formatPercentage(
+                  String(
+                    data.series?.find((s) => s.id === item.id)?.data[
+                      Number(i)
+                    ]?.y
+                  )
+                )}%`}
+              />
+            )
+          })}
+          <Text color="neutral.400">
+            {format(
+              new Date(String(data.series?.[0].data[Number(i)].x)),
+              "MMM, d, yyyy, HH:mm"
+            )}
+          </Text>
+        </Stack>
+      )
+    }
+    return null
+  }
 
   if (isError) {
     return <ErrorCard />
   }
   return (
     <Skeleton
-      h="450px"
+      h={isFetching ? "450px" : "none"}
       startColor="surface.primary"
       endColor="surface.secondary"
       borderRadius={{ base: 0, sm: 24 }}
@@ -120,56 +182,61 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
             <EthBtcChart
               timeline={timeline}
               name={cellarDataMap[id].name}
+              pointActive={pointActive}
+              setPointActive={setPointActive}
             />
           </Box>
-          <Stack
-            direction={{ base: "column", md: "row" }}
-            spacing={{ base: 2, md: 4 }}
-          >
-            <Legend
-              color="purple.base"
-              title={cellarDataMap[id].name}
-              active={showLine.tokenPrice}
-              onClick={() => {
-                setShowLine((prev) => ({
-                  ...prev,
-                  tokenPrice: !showLine.tokenPrice,
-                }))
-              }}
-            />
-            <Legend
-              color="violet.base"
-              title="ETH 50/BTC 50"
-              active={showLine.ethBtc50}
-              onClick={() => {
-                setShowLine((prev) => ({
-                  ...prev,
-                  ethBtc50: !showLine.ethBtc50,
-                }))
-              }}
-            />
-            <Legend
-              color="turquoise.base"
-              title="ETH"
-              active={showLine.eth}
-              onClick={() => {
-                setShowLine((prev) => ({
-                  ...prev,
-                  eth: !showLine.eth,
-                }))
-              }}
-            />
-            <Legend
-              color="orange.base"
-              title="BTC"
-              active={showLine.btc}
-              onClick={() => {
-                setShowLine((prev) => ({
-                  ...prev,
-                  btc: !showLine.btc,
-                }))
-              }}
-            />
+          <Stack>
+            <MobileTooltip />
+            <Stack
+              direction={{ base: "column", md: "row" }}
+              spacing={{ base: 2, md: 4 }}
+            >
+              <Legend
+                color="purple.base"
+                title={cellarDataMap[id].name}
+                active={showLine.tokenPrice}
+                onClick={() => {
+                  setShowLine((prev) => ({
+                    ...prev,
+                    tokenPrice: !showLine.tokenPrice,
+                  }))
+                }}
+              />
+              <Legend
+                color="violet.base"
+                title="ETH 50/BTC 50"
+                active={showLine.ethBtc50}
+                onClick={() => {
+                  setShowLine((prev) => ({
+                    ...prev,
+                    ethBtc50: !showLine.ethBtc50,
+                  }))
+                }}
+              />
+              <Legend
+                color="turquoise.base"
+                title="ETH"
+                active={showLine.eth}
+                onClick={() => {
+                  setShowLine((prev) => ({
+                    ...prev,
+                    eth: !showLine.eth,
+                  }))
+                }}
+              />
+              <Legend
+                color="orange.base"
+                title="BTC"
+                active={showLine.btc}
+                onClick={() => {
+                  setShowLine((prev) => ({
+                    ...prev,
+                    btc: !showLine.btc,
+                  }))
+                }}
+              />
+            </Stack>
           </Stack>
         </VStack>
       </TransparentCard>
