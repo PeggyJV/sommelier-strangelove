@@ -1,5 +1,5 @@
 import { Stack, Text } from "@chakra-ui/react"
-import { DatumValue, linearGradientDef } from "@nivo/core"
+import { linearGradientDef } from "@nivo/core"
 import {
   Point,
   PointSymbolProps,
@@ -7,7 +7,13 @@ import {
 } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
-import { FunctionComponent, useMemo, useState, VFC } from "react"
+import {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useMemo,
+  VFC,
+} from "react"
 import { useEthBtcChart } from "data/context/ethBtcChartContext"
 import { colors } from "theme/colors"
 import { format, isSameDay, isSameHour } from "date-fns"
@@ -21,17 +27,23 @@ const LineChart = dynamic(
     ssr: false,
   }
 )
-
-export const EthBtcChart: VFC<{ timeline: string; name: string }> = ({
+interface EthBtcChartProps {
+  timeline: string
+  name: string
+  pointActive?: Point
+  setPointActive: Dispatch<SetStateAction<Point | undefined>>
+}
+export const EthBtcChart: VFC<EthBtcChartProps> = ({
   timeline,
   name: strategyTokenName,
+  pointActive,
+  setPointActive,
 }) => {
   const { data } = useEthBtcChart()
   const { chartTheme } = useNivoThemes()
   const lineColors = data.series?.map((item) => item.color)
-  const [pointActive, setPointActive] = useState<DatumValue>()
   const onMouseMove = (point: Point, event: React.MouseEvent) => {
-    setPointActive(point.data.x)
+    setPointActive(point)
   }
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
 
@@ -98,11 +110,11 @@ export const EthBtcChart: VFC<{ timeline: string; name: string }> = ({
       timeline === "1D"
         ? isSameHour(
             new Date(String(datum.x)),
-            new Date(String(pointActive))
+            new Date(String(pointActive?.data.x))
           )
         : isSameDay(
             new Date(String(datum.x)),
-            new Date(String(pointActive))
+            new Date(String(pointActive?.data.x))
           )
     if (active && isLarger768) {
       return <ChartPoint fill={color} stroke={colors.neutral[100]} />
@@ -159,7 +171,6 @@ export const EthBtcChart: VFC<{ timeline: string; name: string }> = ({
         tickRotation: 0,
         legendPosition: "middle",
       }}
-      useMesh={isLarger768}
     />
   )
 }
