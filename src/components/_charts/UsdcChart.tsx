@@ -58,7 +58,7 @@ export const UsdcChart: VFC<UsdcChartProps> = ({
       return (
         <Stack
           p={4}
-          bg="rgba(18, 18, 20, 0.8)"
+          bg="surface.blackTransparent"
           borderWidth={1}
           borderColor="purple.base"
           borderRadius={8}
