@@ -116,7 +116,7 @@ export const EthBtcChart: VFC<EthBtcChartProps> = ({
             new Date(String(datum.x)),
             new Date(String(pointActive?.data.x))
           )
-    if (active && isLarger768) {
+    if (active) {
       return <ChartPoint fill={color} stroke={colors.neutral[100]} />
     }
     return null
