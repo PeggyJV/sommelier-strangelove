@@ -20,9 +20,15 @@ import { Legend } from "components/_charts/Legend"
 import { useUsdcChart } from "data/context/usdcChartContext"
 import { UsdcChart } from "components/_charts/UsdcChart"
 import { ErrorCard } from "./ErrorCard"
+import { Point } from "@nivo/line"
+import { ChartTooltipItem } from "components/_charts/ChartTooltipItem"
+import { formatPercentage } from "utils/chartHelper"
+import { format } from "date-fns"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
   const {
+    data,
     timeArray,
     tokenPriceChange,
     showLine,
@@ -33,13 +39,68 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const tokenPrice = useTokenPrice(cellarConfig)
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const [timeline, setTimeline] = useState<string>("1W")
+  const [pointActive, setPointActive] = useState<Point>()
+
+  const MobileTooltip = () => {
+    if (!!pointActive && !isLarger768) {
+      const { id: pointId, serieId } = pointActive
+      const [_, i] = pointId.split(".")
+      return (
+        <Stack
+          p={4}
+          bg="surface.blackTransparent"
+          borderWidth={1}
+          borderColor="purple.base"
+          borderRadius={8}
+          textTransform="capitalize"
+        >
+          {data.series?.map((item) => {
+            const name = (() => {
+              if (item.id === "token-price")
+                return cellarDataMap[id]?.name
+              if (item.id === "usdc") return "USDC"
+              return ""
+            })()
+            return (
+              <ChartTooltipItem
+                key={item.id}
+                backgroundColor={item.color}
+                name={name}
+                value={`$${
+                  data.series?.find((s) => s.id === item.id)?.data[
+                    Number(i)
+                  ]?.value
+                }`}
+                percentage={`${formatPercentage(
+                  String(
+                    data.series?.find((s) => s.id === item.id)?.data[
+                      Number(i)
+                    ]?.y
+                  )
+                )}%`}
+              />
+            )
+          })}
+          <Text color="neutral.400">
+            {format(
+              new Date(String(data.series?.[0].data[Number(i)].x)),
+              "MMM, d, yyyy, HH:mm"
+            )}
+          </Text>
+        </Stack>
+      )
+    }
+    return null
+  }
+
   if (isError) {
     return <ErrorCard />
   }
   return (
     <Skeleton
-      h="450px"
+      h={isFetching ? "450px" : "none"}
       startColor="surface.primary"
       endColor="surface.secondary"
       borderRadius={{ base: 0, sm: 24 }}
@@ -119,24 +180,28 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
             <UsdcChart
               timeline={timeline}
               name={cellarDataMap[id].name}
+              pointActive={pointActive}
+              setPointActive={setPointActive}
             />
           </Box>
-          <Stack
-            direction={{ base: "column", md: "row" }}
-            spacing={{ base: 2, md: 4 }}
-          >
-            <Legend
-              color="purple.base"
-              title={cellarDataMap[id].name}
-              active={showLine.tokenPrice}
-              onClick={() => {
-                setShowLine((prev) => ({
-                  ...prev,
-                  tokenPrice: !showLine.tokenPrice,
-                }))
-              }}
-            />
-            {/* <Legend
+          <Stack>
+            <MobileTooltip />
+            <Stack
+              direction={{ base: "column", md: "row" }}
+              spacing={{ base: 2, md: 4 }}
+            >
+              <Legend
+                color="purple.base"
+                title={cellarDataMap[id].name}
+                active={showLine.tokenPrice}
+                onClick={() => {
+                  setShowLine((prev) => ({
+                    ...prev,
+                    tokenPrice: !showLine.tokenPrice,
+                  }))
+                }}
+              />
+              {/* <Legend
               color="violet.base"
               title="USDC"
               active={showLine.usdc}
@@ -147,6 +212,7 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
                 }))
               }}
             /> */}
+            </Stack>
           </Stack>
         </VStack>
       </TransparentCard>
