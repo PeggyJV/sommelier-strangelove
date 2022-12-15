@@ -10,12 +10,15 @@ interface ChartTooltipItem {
 export const ChartTooltipItem = (props: ChartTooltipItem) => {
   return (
     <HStack justifyContent="space-between" spacing={4}>
-      <Box
-        boxSize="8px"
-        backgroundColor={props.backgroundColor}
-        borderRadius={2}
-      />
-      <Text>{props.name}: </Text>
+      <HStack>
+        <Box
+          boxSize="8px"
+          backgroundColor={props.backgroundColor}
+          borderRadius={2}
+        />
+        <Text>{props.name}: </Text>
+      </HStack>
+
       <HStack>
         <Text textAlign="right" width="9ch">
           {props.value}
