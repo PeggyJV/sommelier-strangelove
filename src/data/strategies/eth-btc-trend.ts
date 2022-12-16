@@ -12,7 +12,7 @@ export const ethBtcTrend = {
   name: "ETH-BTC Trend",
   cellarType: CellarType.automatedPortfolio,
   description:
-    "A long-only strategy for smart ETH-BTC portfolio management that has the ability to reduce or even temporarily exit ETH-BTC exposure. Best suited for medium to long horizons.",
+    "Strategy portfolio buys BTC and ETH when prices go up. Fully or partially sells both assets when prices go down.",
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
