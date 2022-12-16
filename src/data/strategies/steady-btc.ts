@@ -12,7 +12,7 @@ export const steadyBtc = {
   name: "Steady BTC",
   launchDate: new Date(2022, 10, 29, 12, 0, 0, 0), // 29 Nov 2022 12 am utc
   cellarType: CellarType.automatedPortfolio,
-  description: `Capture the upside of BTC price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
+  description: `Capture the upside of BTC price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",

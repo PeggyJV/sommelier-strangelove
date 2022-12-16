@@ -12,7 +12,7 @@ export const ethBtcMomentum = {
   name: "ETH-BTC Momentum",
   cellarType: CellarType.automatedPortfolio,
   description:
-    "A long-only strategy for smart ETH-BTC portfolio management. More responsive to recent market changes than ETH-BTC Trend and has the ability to reduce but not eliminate exposure. Best suited for medium horizons.",
+    "Strategy portfolio has exposure to BTC and ETH with positive price momentum, lower exposure when prices drop.",
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
