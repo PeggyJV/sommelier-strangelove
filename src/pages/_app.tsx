@@ -12,6 +12,7 @@ import "utils/analytics"
 import { GlobalFonts } from "theme/GlobalFonts"
 import { GeoProvider } from "context/geoContext"
 import DataProvider from "data/provider/dataProvider"
+import { DefaultSeo } from "next-seo"
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -25,6 +26,28 @@ const App = ({ Component, pageProps }: AppProps) => {
             <DialogProvider>
               <WagmiProvider>
                 <DataProvider>
+                  <DefaultSeo
+                    title="Sommelier Finance"
+                    description="Access to risk-managed, multi chain strategies powered by off-chain computation"
+                    openGraph={{
+                      type: "website",
+                      url: "https://app.sommelier.finance/",
+                      site_name: "Sommelier Finance",
+                      images: [
+                        {
+                          url: "https://app.sommelier.finance/ogimage.png",
+                          width: 1200,
+                          height: 630,
+                          alt: "Your dynamic DeFi strategy connoisseur",
+                        },
+                      ],
+                    }}
+                    twitter={{
+                      handle: "@sommfinance",
+                      site: "@site",
+                      cardType: "summary_large_image",
+                    }}
+                  />
                   <Component {...pageProps} />
                 </DataProvider>
                 <AlertDialog />
