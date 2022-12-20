@@ -16,6 +16,8 @@ export enum CellarNameKey {
   ETH_BTC_TREND = "ETH_BTC_TREND",
   STEADY_ETH = "STEADY_ETH",
   STEADY_BTC = "STEADY_BTC",
+  STEADY_UNI = "STEADY_UNI",
+  STEADY_MATIC = "STEADY_MATIC",
 }
 
 export interface ConfigProps {
