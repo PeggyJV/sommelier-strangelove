@@ -102,6 +102,20 @@ export const tokenConfig: Token[] = [
     address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
     coinGeckoId: "tether",
   },
+  {
+    src: "/assets/icons/uniswap.png",
+    alt: "Uniswap logo",
+    symbol: "UNI",
+    address: "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    coinGeckoId: "uniswap",
+  },
+  {
+    src: "/assets/icons/matic.png",
+    alt: "Matic logo",
+    symbol: "Matic",
+    address: "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
+    coinGeckoId: "matic-network",
+  },
 ]
 
 export const depositAssetTokenList = [
