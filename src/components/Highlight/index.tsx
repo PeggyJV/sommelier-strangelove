@@ -41,7 +41,8 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
           ))}
         </SimpleGrid>
         <Text maxW="40rem" color="#D9D7E0">
-          {content.strategyHighlights.description}
+          {content.strategyHighlights.description &&
+            htmr(content.strategyHighlights.description)}
         </Text>
       </Stack>
       <Stack spacing="40px">
