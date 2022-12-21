@@ -331,7 +331,7 @@ export const strategyPageContentData = {
       <>
         <Image
           alt="steady uni icon"
-          src="/assets/icons/steady-btc.png"
+          src="/assets/icons/steady-uni.png"
           boxSize={8}
         />
         <Text>SteadyUNI</Text>
@@ -401,7 +401,7 @@ export const strategyPageContentData = {
       <>
         <Image
           alt="steady matic icon"
-          src="/assets/icons/steady-btc.png"
+          src="/assets/icons/steady-matic.png"
           boxSize={8}
         />
         <Text>SteadyMATIC</Text>
