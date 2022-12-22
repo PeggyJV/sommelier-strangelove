@@ -25,6 +25,15 @@ export const isTokenAssets = (config: ConfigProps) => {
   return config.cellarNameKey === CellarNameKey.AAVE
 }
 
+export const isTradedAssetsHardCoded = (config: ConfigProps) => {
+  if (config.cellarNameKey === CellarNameKey.STEADY_UNI) {
+    return ["USDC", "UNI"]
+  } else if (config.cellarNameKey === CellarNameKey.STEADY_MATIC) {
+    return ["USDC", "MATIC"]
+  }
+  return null
+}
+
 export const intervalGainTimeline = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||

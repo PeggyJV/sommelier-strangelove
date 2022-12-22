@@ -119,7 +119,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
               {protocolIcon && (
                 <InlineImage
                   src={protocolIcon}
-                  alt="aave logo"
+                  alt="protocol logo"
                   boxSize={4}
                 />
               )}
