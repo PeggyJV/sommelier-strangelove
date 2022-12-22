@@ -33,6 +33,7 @@ import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
   intervalGainTimeline,
+  isTradedAssetsHardCoded,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
@@ -56,6 +57,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const { data: dailyChange } = useDailyChange(cellarConfig)
   const { data: stakingEnd } = useStakingEnd(cellarConfig)
   const position = usePosition(cellarConfig)
+
   const intervalGainPct = useIntervalGain({
     config: cellarConfig,
     timeline: intervalGainTimeline(cellarConfig),
@@ -159,34 +161,55 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               Traded Assets
             </Text>
           </Box>
-          <Stack direction="column">
-            {position.isLoading ? (
-              <Spinner />
-            ) : (
-              position.data?.map((item) => {
+          {isTradedAssetsHardCoded(cellarConfig) ? (
+            <Stack direction="column">
+              {isTradedAssetsHardCoded(cellarConfig)!.map((item) => {
                 const asset = tokenConfig.find(
-                  (v) => v.address === item.address
+                  (v) => v.symbol === item
                 )
                 return (
-                  <HStack key={item.address}>
+                  <HStack key={item}>
                     <Image
                       alt={asset?.alt}
                       src={asset?.src}
                       boxSize={8}
                     />
-                    {!countdown ? (
-                      <Text>
-                        {asset?.symbol} ({item.percentage.toFixed(2)}
-                        %)
-                      </Text>
-                    ) : (
-                      <Text>{asset?.symbol}</Text>
-                    )}
+                    <Text>{asset?.symbol}</Text>
                   </HStack>
                 )
-              })
-            )}
-          </Stack>
+              })}
+            </Stack>
+          ) : (
+            <Stack direction="column">
+              {position.isLoading ? (
+                <Spinner />
+              ) : (
+                position.data?.map((item) => {
+                  const asset = tokenConfig.find(
+                    (v) => v.address === item.address
+                  )
+                  return (
+                    <HStack key={item.address}>
+                      <Image
+                        alt={asset?.alt}
+                        src={asset?.src}
+                        boxSize={8}
+                      />
+                      {!countdown ? (
+                        <Text>
+                          {asset?.symbol} (
+                          {item.percentage.toFixed(2)}
+                          %)
+                        </Text>
+                      ) : (
+                        <Text>{asset?.symbol}</Text>
+                      )}
+                    </HStack>
+                  )
+                })
+              )}
+            </Stack>
+          )}
         </HStack>
         <HStack>
           <Box>
