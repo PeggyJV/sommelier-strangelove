@@ -112,7 +112,7 @@ export const tokenConfig: Token[] = [
   {
     src: "/assets/icons/matic.png",
     alt: "Matic logo",
-    symbol: "Matic",
+    symbol: "MATIC",
     address: "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
     coinGeckoId: "matic-network",
   },
