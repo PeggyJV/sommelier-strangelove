@@ -1,17 +1,12 @@
 import { Flex, Stack, Text } from "@chakra-ui/react"
-import { CurrentDeposits } from "components/CurrentDeposits"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useApy } from "data/hooks/useApy"
-import { useCellarCap } from "data/hooks/useCellarCap"
-import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
 import { useTvm } from "data/hooks/useTvm"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
   intervalGainTimeline,
   isAPYEnabled,
-  isCurrentDepositsEnabled,
   isDailyChangeEnabled,
   isIntervalGainPctEnabled,
   isTokenPriceEnabled,
@@ -39,9 +34,6 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const launchDate = cellarDataMap[data.cellarId].launchDate
   const { data: tvm } = useTvm(cellarConfig)
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
-  const { data: activeAsset } = useActiveAsset(cellarConfig)
-  const { data: cellarCap } = useCellarCap(cellarConfig)
-  const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
   const intervalGainPct = useIntervalGain({
     config: cellarConfig,
     timeline: intervalGainTimeline(cellarConfig),

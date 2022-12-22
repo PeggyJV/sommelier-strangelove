@@ -8,18 +8,18 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
-export const steadyBtc = {
-  name: "Steady BTC",
-  launchDate: new Date(2022, 10, 29, 12, 0, 0, 0), // 29 Nov 2022 12 pm est
+export const steadyMatic = {
+  name: "Steady MATIC",
+  launchDate: new Date(2022, 11, 29, -1, 0, 0, 0), // 29 dec 2022 12 am est
   cellarType: CellarType.automatedPortfolio,
-  description: `Capture the upside of BTC price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is prioritized over capital growth.`,
+  description: `Capture the upside of MATIC price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: "Uniswap V3",
-  strategyAssets: ["WBTC", "USDC"],
+  strategyAssets: ["USDC"],
   performanceSplit: {
     depositors: 90,
     protocol: 2.5,
@@ -33,43 +33,16 @@ export const steadyBtc = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Catch trends early by predicting the significant movement of prices consistently and accurately. Capture the majority of BTC price breakouts, and limit losses through trailing stops.`,
+    goals: `TODO`,
 
     highlights: `The cellar:
 
-      - “Risk first” approach - capital preservation is prioritized over capital growth.
+      - "Risk first" approach - capital preservation is prioritized over capital growth.
 
       - Always defined risk for every position prevailing from trade inception until trade exit.
 
-      - Each trade strategy comprises two independent trade orders: 1
-      “”Workhorse”" with a fixed target to lock in some return and stop + 1
-      “”Racehorse”" with a trailing stop to capture market upside.`,
-    description: `Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a "risk first" paradigm – capital preservation is more important than capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional "home runs."
-
-      The trade management technique of BTC Breakout strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the ""How it works"" section for detailed strategy performance explanations.
-
-      The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed to be held over a medium to the long term (6 months to a year). In this time, the benefits of being in the strategy are expected to emerge."`,
-    backtesting: `
-      <div style="display:flex;flex-direction:row;gap:5rem;">
-        <div style="width:50%">
-          Beginning Cellar Value: 500,000
-          Period: May 2021 - September 2022
-          No. of Trades: 58
-          Worst Loss (Single Trade): -7,523
-          Worst drawdown:  5.21%
-          Annualized Sharpe Ratio: 226%
-          Annualized Std.Dev of Return: 10.4%
-        </div>
-        <div style="width:50%">
-          Annualized Mean Return: 23.4%
-          Cumulative profit: 38.1%
-          Win rate: 58%
-          Loss rate: 42%
-          Best month: 6.3%
-          Worst month: -2.6%
-        </div>
-      </div>
-      Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
+      - Each trade strategy comprises two independent trade orders: 1""Workhorse"" with a fixed target to lock in some return and stop + 1""Racehorse"" with a trailing stop to capture market upside.`,
+    description: `Capture the upside of MATIC price breakouts, manage downside through trailing stops.`,
   },
   // overrideApy: {
   //   title: "Backtested APY",
@@ -82,10 +55,10 @@ export const steadyBtc = {
   },
 
   config: {
-    id: config.CONTRACT.STEADY_BTC.ADDRESS,
-    cellarNameKey: CellarNameKey.STEADY_BTC,
+    id: config.CONTRACT.STEADY_MATIC.ADDRESS,
+    cellarNameKey: CellarNameKey.STEADY_MATIC,
     lpToken: {
-      address: config.CONTRACT.STEADY_BTC.ADDRESS,
+      address: config.CONTRACT.STEADY_MATIC.ADDRESS,
       imagePath: "/assets/icons/steady-btc.svg",
     },
     cellarRouter: {

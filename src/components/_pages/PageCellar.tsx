@@ -41,6 +41,8 @@ import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
 import { UsdcPerfomanceCard } from "components/_cards/UsdcPerfomanceCard"
 import { UsdcChartProvider } from "data/context/usdcChartContext"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { isComingSoon } from "utils/isComingSoon"
+import { PageComingSoon } from "./PageComingSoon"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -69,6 +71,11 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
 
+  const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
+
+  if (notLaunched) {
+    return <PageComingSoon />
+  }
   return (
     <Layout>
       <Section>

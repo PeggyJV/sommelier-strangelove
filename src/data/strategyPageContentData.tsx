@@ -190,6 +190,11 @@ export const strategyPageContentData = {
         `Always defined risk for every position prevailing from trade inception until trade exit.`,
         `Each trade strategy comprises two independent trade orders: 1 "Workhorse" with a fixed target and stop + 1 "Racehorse" with a trailing stop.`,
       ],
+      description: `Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a "risk first" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional "home
+      <br/><br/>
+      The trade management technique of ETH Breakout strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the "How it works" section for detailed strategy performance explanations.
+      <br/><br/>
+      The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge."`,
     },
     howItWorks: `Every recommended trade always sets the trade risk immediately after the position is activated. The level of risk is determined by our proprietary algorithms and is optimized for modest risk tolerance. It is important to emphasize that having a risk limit does not imply a guaranteed risk price, as slippage can be exacerbated in uncertain market conditions. With the downside risk under pragmatic control, the strategy can shift focus to the realization of upside potential. The upside potential comprises two parts – a fixed target and a variable target. A fixed target is a reasonable expectation of modest favorable market movement, and a variable target is deliberately open-ended to facilitate the pursuit of an opportunistic movement in favor of the trade. The pursuit of a variable target is activated when the initial capital outlay for the trade has already been earned back and realized, thereby adding no incremental risk to the position.
     <br/><br/>
@@ -276,6 +281,13 @@ export const strategyPageContentData = {
         `Always defined risk for every position prevailing from trade inception until trade exit.`,
         `Each trade strategy comprises two independent trade orders: 1 "Workhorse" with a fixed target and stop + 1 "Racehorse" with a trailing stop.`,
       ],
+      description: `Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a "risk first" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional "home runs."
+      <br/><br/>
+      The trade management technique of BTC Breakout strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the "How it works" section for detailed strategy performance explanations.
+      <br/><br/>
+      The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge."
+
+      `,
     },
     howItWorks: `Every recommended trade always sets the trade risk immediately after the position is activated. The level of risk is determined by our proprietary algorithms and is optimized for modest risk tolerance. It is important to emphasize that having a risk limit does not imply a guaranteed risk price, as slippage can be exacerbated in uncertain market conditions. With the downside risk under pragmatic control, the strategy can shift focus to the realization of upside potential. The upside potential comprises two parts – a fixed target and a variable target. A fixed target is a reasonable expectation of modest favorable market movement, and a variable target is deliberately open-ended to facilitate the pursuit of an opportunistic movement in favor of the trade. The pursuit of a variable target is activated when the initial capital outlay for the trade has already been earned back and realized, thereby adding no incremental risk to the position.
     <br/><br/>
@@ -309,5 +321,142 @@ export const strategyPageContentData = {
         </div>
       </div>
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
+  },
+  [config.CONTRACT.STEADY_UNI.SLUG]: {
+    name: "Steady UNI",
+    provider: "Patache",
+    providerUrl: "https://www.algoreturns.com/patache/",
+    description: `Capture the upside of UNI price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
+    ticker: (
+      <>
+        <Image
+          alt="steady uni icon"
+          src="/assets/icons/steady-uni.png"
+          boxSize={8}
+        />
+        <Text>SteadyUNI</Text>
+      </>
+    ),
+    tradedAssets: (
+      <>
+        <Image
+          alt="usdc icon"
+          src="/assets/icons/usdc.png"
+          boxSize={8}
+        />
+        <Image
+          alt="uniswap icon"
+          src="/assets/icons/uniswap.png"
+          boxSize={8}
+        />
+      </>
+    ),
+    alternativeTo: "Holding USDC",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+      {
+        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x6f069f711281618467dae7873541ecc082761b33",
+        name: "Uniswap",
+        logo: "/assets/icons/uniswap.png",
+      },
+      // {
+      //   url: "https://helixapp.com/spot/steadybtc-usdt/",
+      //   name: "Helix",
+      //   logo: "/assets/icons/helix.png",
+      // },
+    ],
+    strategyHighlights: {
+      card: [
+        `“Risk first” approach - capital preservation is prioritized over capital growth.`,
+        `Always defined risk for every position prevailing from trade inception until trade exit.`,
+        `Each trade strategy comprises two independent trade orders: 1""Workhorse"" with a fixed target to lock in some return and stop + 1""Racehorse"" with a trailing stop to capture market upside.`,
+      ],
+      description: `"Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a ""risk first"" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional ""home runs.""
+      <br/><br/>
+      The trade management technique of Steady UNI strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the ""How it works"" section for detailed strategy performance explanations.
+      <br/><br/>
+      The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge."""`,
+    },
+    howItWorks: `Every recommended trade always sets the trade risk immediately after the position is activated. The level of risk is determined by our proprietary algorithms and is optimized for modest risk tolerance. It is important to emphasize that having a risk limit does not imply a guaranteed risk price, as slippage can be exacerbated in uncertain market conditions. With the downside risk under pragmatic control, the strategy can shift focus to the realization of upside potential. The upside potential comprises two parts – a fixed target and a variable target. A fixed target is a reasonable expectation of modest favorable market movement, and a variable target is deliberately open-ended to facilitate the pursuit of an opportunistic movement in favor of the trade. The pursuit of a variable target is activated when the initial capital outlay for the trade has already been earned back and realized, thereby adding no incremental risk to the position.
+    <br/><br/>
+    With the visibility of the trade risk, the investor can focus on the capital-at-risk/risk appetite. Our approach towards capital management is prudence accompanied by a strategy to “stay in the game.” We recommend a capital allocation of 2.5%-5.0% per trade, which allows the investor to stay with the strategy for 40-20 consecutive losing trades. Of course, the actual risk tolerance of investors is on a broad spectrum, and some investors may even be comfortable with a 10-15% allocation per trade.
+    <br/><br/>
+    The trade management technique comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Capital allocation of 2.50% per trade strategy assigned equally to “Workhorse” and “Racehorse” (1.25% each).
+    <br/><br/>
+    UNI Long Trade example: A long trade is triggered when the market reaches the directional entry level. 2 positions on the long side are initiated by accumulating the UNI relative to USDC. Each position is immediately assigned a Target and a Stop (loss). If the market reaches the Target before the Stop, the workhorse UNI is sold for USDC, profit taken. Simultaneously, the racehorse Stop changes to a Trailing stop. At this point, the economic risk is nullified, a small profit is locked in, and the racehorse is pursuing a larger payoff potential.
+    <br/><br/>
+    Disclaimer: Simplified for narrative purposes. Actual algorithm(s) may vary.
+    `,
+    // backtestingText: `TODO.`,
+  },
+  [config.CONTRACT.STEADY_MATIC.SLUG]: {
+    name: "Steady MATIC",
+    provider: "Patache",
+    providerUrl: "https://www.algoreturns.com/patache/",
+    description: `Strategy page headline: Capture the upside of MATIC price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
+    ticker: (
+      <>
+        <Image
+          alt="steady matic icon"
+          src="/assets/icons/steady-matic.png"
+          boxSize={8}
+        />
+        <Text>SteadyMATIC</Text>
+      </>
+    ),
+    tradedAssets: (
+      <>
+        <Image
+          alt="usdc icon"
+          src="/assets/icons/usdc.png"
+          boxSize={8}
+        />
+        <Image
+          alt="matic icon"
+          src="/assets/icons/matic.png"
+          boxSize={8}
+        />
+      </>
+    ),
+    alternativeTo: "Holding USDC",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+      {
+        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x05641a27c82799aaf22b436f20a3110410f29652",
+        name: "Uniswap",
+        logo: "/assets/icons/uniswap.png",
+      },
+      // {
+      //   url: "https://helixapp.com/spot/steadybtc-usdt/",
+      //   name: "Helix",
+      //   logo: "/assets/icons/helix.png",
+      // },
+    ],
+    strategyHighlights: {
+      card: [
+        `“Risk first” approach - capital preservation is prioritized over capital growth.`,
+        `Always defined risk for every position prevailing from trade inception until trade exit.`,
+        `Each trade strategy comprises two independent trade orders: 1""Workhorse"" with a fixed target to lock in some return and stop + 1""Racehorse"" with a trailing stop to capture market upside.`,
+      ],
+      description: `"Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a ""risk first"" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional ""home runs.""
+      <br/><br/>
+      The trade management technique of Steady MATIC strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the ""How it works"" section for detailed strategy performance explanations.
+      <br/><br/>
+      The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge."""`,
+    },
+    howItWorks: `Every recommended trade always sets the trade risk immediately after the position is activated. The level of risk is determined by our proprietary algorithms and is optimized for modest risk tolerance. It is important to emphasize that having a risk limit does not imply a guaranteed risk price, as slippage can be exacerbated in uncertain market conditions. With the downside risk under pragmatic control, the strategy can shift focus to the realization of upside potential. The upside potential comprises two parts – a fixed target and a variable target. A fixed target is a reasonable expectation of modest favorable market movement, and a variable target is deliberately open-ended to facilitate the pursuit of an opportunistic movement in favor of the trade. The pursuit of a variable target is activated when the initial capital outlay for the trade has already been earned back and realized, thereby adding no incremental risk to the position.
+    <br/><br/>
+    With the visibility of the trade risk, the investor can focus on the capital-at-risk/risk appetite. Our approach towards capital management is prudence accompanied by a strategy to “stay in the game.” We recommend a capital allocation of 2.5%-5.0% per trade, which allows the investor to stay with the strategy for 40-20 consecutive losing trades. Of course, the actual risk tolerance of investors is on a broad spectrum, and some investors may even be comfortable with a 10-15% allocation per trade.
+    <br/><br/>
+    The trade management technique comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Capital allocation of 2.50% per trade strategy assigned equally to “Workhorse” and “Racehorse” (1.25% each).
+    <br/><br/>
+    MATIC Long Trade example: A long trade is triggered when the market reaches the directional entry level. 2 positions on the long side are initiated by accumulating the MATIC relative to USDC. Each position is immediately assigned a Target and a Stop (loss). If the market reaches the Target before the Stop, the workhorse MATIC is sold for USDC, profit taken. Simultaneously, the racehorse Stop changes to a Trailing stop. At this point, the economic risk is nullified, a small profit is locked in, and the racehorse is pursuing a larger payoff potential.`,
+    // backtestingText: `TODO.`,
   },
 }

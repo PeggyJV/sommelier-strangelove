@@ -7,11 +7,15 @@ import {
   ethBtcMomentum,
   steadyEth,
   steadyBtc,
+  steadyUni,
+  steadyMatic,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
+    [config.CONTRACT.STEADY_UNI.SLUG]: steadyUni,
+    [config.CONTRACT.STEADY_MATIC.SLUG]: steadyMatic,
     [config.CONTRACT.STEADY_ETH.SLUG]: steadyEth,
     [config.CONTRACT.STEADY_BTC.SLUG]: steadyBtc,
     [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: ethBtcTrend,
