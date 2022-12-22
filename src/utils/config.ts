@@ -87,14 +87,12 @@ export const config = {
       ABI: cellarV0816,
     },
     STEADY_UNI: {
-      // TODO: update to real address
-      ADDRESS: "tba-steady-uni",
+      ADDRESS: "0x6f069f711281618467dae7873541ecc082761b33",
       SLUG: "Steady-UNI",
       ABI: cellarV0816,
     },
     STEADY_MATIC: {
-      // TODO: update to real address
-      ADDRESS: "tba-steady-matic",
+      ADDRESS: "0x05641a27c82799aaf22b436f20a3110410f29652",
       SLUG: "Steady-MATIC",
       ABI: cellarV0816,
     },
