@@ -358,15 +358,15 @@ export const strategyPageContentData = {
         logo: "/assets/icons/somm.png",
       },
       {
-        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
+        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x6f069f711281618467dae7873541ecc082761b33",
         name: "Uniswap",
         logo: "/assets/icons/uniswap.png",
       },
-      {
-        url: "https://helixapp.com/spot/steadybtc-usdt/",
-        name: "Helix",
-        logo: "/assets/icons/helix.png",
-      },
+      // {
+      //   url: "https://helixapp.com/spot/steadybtc-usdt/",
+      //   name: "Helix",
+      //   logo: "/assets/icons/helix.png",
+      // },
     ],
     strategyHighlights: {
       card: [
@@ -390,7 +390,7 @@ export const strategyPageContentData = {
     <br/><br/>
     Disclaimer: Simplified for narrative purposes. Actual algorithm(s) may vary.
     `,
-    backtestingText: `TODO.`,
+    // backtestingText: `TODO.`,
   },
   [config.CONTRACT.STEADY_MATIC.SLUG]: {
     name: "Steady MATIC",
@@ -428,15 +428,15 @@ export const strategyPageContentData = {
         logo: "/assets/icons/somm.png",
       },
       {
-        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
+        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x05641a27c82799aaf22b436f20a3110410f29652",
         name: "Uniswap",
         logo: "/assets/icons/uniswap.png",
       },
-      {
-        url: "https://helixapp.com/spot/steadybtc-usdt/",
-        name: "Helix",
-        logo: "/assets/icons/helix.png",
-      },
+      // {
+      //   url: "https://helixapp.com/spot/steadybtc-usdt/",
+      //   name: "Helix",
+      //   logo: "/assets/icons/helix.png",
+      // },
     ],
     strategyHighlights: {
       card: [
@@ -450,7 +450,13 @@ export const strategyPageContentData = {
       <br/><br/>
       The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge."""`,
     },
-    howItWorks: `TODO`,
-    backtestingText: `TODO.`,
+    howItWorks: `Every recommended trade always sets the trade risk immediately after the position is activated. The level of risk is determined by our proprietary algorithms and is optimized for modest risk tolerance. It is important to emphasize that having a risk limit does not imply a guaranteed risk price, as slippage can be exacerbated in uncertain market conditions. With the downside risk under pragmatic control, the strategy can shift focus to the realization of upside potential. The upside potential comprises two parts – a fixed target and a variable target. A fixed target is a reasonable expectation of modest favorable market movement, and a variable target is deliberately open-ended to facilitate the pursuit of an opportunistic movement in favor of the trade. The pursuit of a variable target is activated when the initial capital outlay for the trade has already been earned back and realized, thereby adding no incremental risk to the position.
+    <br/><br/>
+    With the visibility of the trade risk, the investor can focus on the capital-at-risk/risk appetite. Our approach towards capital management is prudence accompanied by a strategy to “stay in the game.” We recommend a capital allocation of 2.5%-5.0% per trade, which allows the investor to stay with the strategy for 40-20 consecutive losing trades. Of course, the actual risk tolerance of investors is on a broad spectrum, and some investors may even be comfortable with a 10-15% allocation per trade.
+    <br/><br/>
+    The trade management technique comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Capital allocation of 2.50% per trade strategy assigned equally to “Workhorse” and “Racehorse” (1.25% each).
+    <br/><br/>
+    MATIC Long Trade example: A long trade is triggered when the market reaches the directional entry level. 2 positions on the long side are initiated by accumulating the MATIC relative to USDC. Each position is immediately assigned a Target and a Stop (loss). If the market reaches the Target before the Stop, the workhorse MATIC is sold for USDC, profit taken. Simultaneously, the racehorse Stop changes to a Trailing stop. At this point, the economic risk is nullified, a small profit is locked in, and the racehorse is pursuing a larger payoff potential.`,
+    // backtestingText: `TODO.`,
   },
 }
