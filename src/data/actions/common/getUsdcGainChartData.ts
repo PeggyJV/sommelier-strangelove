@@ -48,7 +48,7 @@ export const getUsdcGainChartData = async (
             ? subDays(new Date(usdc.date), 1)
             : new Date(usdc.date),
           y: usdc.change,
-          value: usdc.value,
+          value: usdc.value.toFixed(6),
         })
       }
     })

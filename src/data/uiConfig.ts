@@ -124,7 +124,9 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
 export const intervalGainPctTitleContent = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC
   )
     return "1W Change vs USDC"
   if (
@@ -140,7 +142,9 @@ export const intervalGainPctTooltipContent = (
 ) => {
   if (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC
   )
     return `% change of token price compared to a benchmark portfolio of USDC`
   if (
@@ -156,6 +160,10 @@ export const tokenPriceTooltipContent = (config: ConfigProps) => {
     return "The dollar value of the ETH and USDC that 1 token can be redeemed"
   if (config.cellarNameKey === CellarNameKey.STEADY_BTC)
     return "The dollar value of the BTC and USDC that 1 token can be redeemed"
+  if (config.cellarNameKey === CellarNameKey.STEADY_UNI)
+    return "The dollar value of the UNI and USDC that 1 token can be redeemed"
+  if (config.cellarNameKey === CellarNameKey.STEADY_MATIC)
+    return "The dollar value of the MATIC and USDC that 1 token can be redeemed"
   if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
@@ -174,7 +182,9 @@ export const isEthBtcChartEnabled = (config: ConfigProps) => {
 export const isUsdcChartEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC
   )
 }
 
@@ -224,7 +234,9 @@ export const bondingPeriodOptions = (
   }
   if (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC
   ) {
     return [
       {
@@ -259,6 +271,8 @@ export const isWithdrawTokenPriceEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC
   )
 }

@@ -27,7 +27,9 @@ export const useIntervalGain = ({
 
   const patache =
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI
 
   const ethIntervalGain = useAssetIntervalGain(
     "weth",

@@ -67,13 +67,13 @@ export const steadyUni = {
       key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
-      address: config.CONTRACT.STEADY_BTC.ADDRESS,
-      abi: config.CONTRACT.STEADY_BTC.ABI,
+      address: config.CONTRACT.STEADY_UNI.ADDRESS,
+      abi: config.CONTRACT.STEADY_UNI.ABI,
       key: CellarKey.CELLAR_V0816,
     },
     staker: {
-      address: config.CONTRACT.STEADY_BTC_STAKER.ADDRESS,
-      abi: config.CONTRACT.STEADY_BTC_STAKER.ABI,
+      address: config.CONTRACT.STEADY_UNI_STAKER.ADDRESS,
+      abi: config.CONTRACT.STEADY_UNI_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
