@@ -33,7 +33,7 @@ export const steadyMatic = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `TODO`,
+    goals: `Capture the upside of MATIC price breakouts, manage downside through trailing stops.`,
 
     highlights: `The cellar:
 
