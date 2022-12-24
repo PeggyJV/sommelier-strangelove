@@ -33,7 +33,7 @@ export const steadyMatic = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `TODO`,
+    goals: `Capture the upside of MATIC price breakouts, manage downside through trailing stops.`,
 
     highlights: `The cellar:
 
@@ -67,13 +67,13 @@ export const steadyMatic = {
       key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
-      address: config.CONTRACT.STEADY_BTC.ADDRESS,
-      abi: config.CONTRACT.STEADY_BTC.ABI,
+      address: config.CONTRACT.STEADY_MATIC.ADDRESS,
+      abi: config.CONTRACT.STEADY_MATIC.ABI,
       key: CellarKey.CELLAR_V0816,
     },
     staker: {
-      address: config.CONTRACT.STEADY_BTC_STAKER.ADDRESS,
-      abi: config.CONTRACT.STEADY_BTC_STAKER.ABI,
+      address: config.CONTRACT.STEADY_MATIC_STAKER.ADDRESS,
+      abi: config.CONTRACT.STEADY_MATIC_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,

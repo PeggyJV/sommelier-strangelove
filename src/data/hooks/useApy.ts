@@ -38,6 +38,8 @@ export const useApy = (config: ConfigProps) => {
     CellarNameKey.ETH_BTC_TREND,
     CellarNameKey.STEADY_BTC,
     CellarNameKey.STEADY_ETH,
+    CellarNameKey.STEADY_UNI,
+    CellarNameKey.STEADY_MATIC,
   ]
   const getRewardsApyEnabled = getRewardsApyCellars.includes(
     config.cellarNameKey

@@ -201,17 +201,17 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
                   }))
                 }}
               />
-              {/* <Legend
-              color="violet.base"
-              title="USDC"
-              active={showLine.usdc}
-              onClick={() => {
-                setShowLine((prev) => ({
-                  ...prev,
-                  ethBtc50: !showLine.usdc,
-                }))
-              }}
-            /> */}
+              <Legend
+                color="violet.base"
+                title="USDC"
+                active={showLine.usdc}
+                onClick={() => {
+                  setShowLine((prev) => ({
+                    ...prev,
+                    usdc: !showLine.usdc,
+                  }))
+                }}
+              />
             </Stack>
           </Stack>
         </VStack>

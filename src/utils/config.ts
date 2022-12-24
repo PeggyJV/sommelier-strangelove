@@ -128,6 +128,14 @@ export const config = {
       ADDRESS: "0x6Ce314c39F30488B4a86B8892C81a5B7af83e337",
       ABI: cellarStakingV0815,
     },
+    STEADY_UNI_STAKER: {
+      ADDRESS: "0x74a9a6fab61e128246a6a5242a3e96e56198cbdd",
+      ABI: cellarStakingV0815,
+    },
+    STEADY_MATIC_STAKER: {
+      ADDRESS: "0x7da7e27e4bcc6ec8bc06349e1cef6634f6df7c5c",
+      ABI: cellarStakingV0815,
+    },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
