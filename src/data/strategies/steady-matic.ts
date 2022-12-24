@@ -41,7 +41,7 @@ export const steadyMatic = {
 
       - Always defined risk for every position prevailing from trade inception until trade exit.
 
-      - Each trade strategy comprises two independent trade orders: 1""Workhorse"" with a fixed target to lock in some return and stop + 1""Racehorse"" with a trailing stop to capture market upside.`,
+      - Each trade strategy comprises two independent trade orders: 1 "Workhorse"  with a fixed target to lock in some return and stop + 1 "Racehorse" with a trailing stop to capture market upside.`,
     description: `Capture the upside of MATIC price breakouts, manage downside through trailing stops.`,
   },
   // overrideApy: {
