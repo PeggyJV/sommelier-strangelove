@@ -371,14 +371,14 @@ export const strategyPageContentData = {
     strategyHighlights: {
       card: [
         `“Risk first” approach - capital preservation is prioritized over capital growth.`,
-        `Always defined risk for every position prevailing from trade inception until trade exit.`,
-        `Each trade strategy comprises two independent trade orders: 1""Workhorse"" with a fixed target to lock in some return and stop + 1""Racehorse"" with a trailing stop to capture market upside.`,
+        `Always defined risk for every position prevailing from trade inception until trade exit. Increased risk profile for Steady UNI/MATIC strategies vs Steady ETH or Steady BTC.`,
+        `Each trade strategy comprises two independent trade orders: 1 "Workhorse"  with a fixed target to lock in some return and stop + 1 "Racehorse" with a trailing stop to capture market upside.`,
       ],
-      description: `"Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a ""risk first"" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional ""home runs.""
+      description: `Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a "risk first" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional "home runs."
       <br/><br/>
-      The trade management technique of Steady UNI strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the ""How it works"" section for detailed strategy performance explanations.
+      The trade management technique of Steady UNI strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the "How it works" section for detailed strategy performance explanations.
       <br/><br/>
-      The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge."""`,
+      The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge.`,
     },
     howItWorks: `Every recommended trade always sets the trade risk immediately after the position is activated. The level of risk is determined by our proprietary algorithms and is optimized for modest risk tolerance. It is important to emphasize that having a risk limit does not imply a guaranteed risk price, as slippage can be exacerbated in uncertain market conditions. With the downside risk under pragmatic control, the strategy can shift focus to the realization of upside potential. The upside potential comprises two parts – a fixed target and a variable target. A fixed target is a reasonable expectation of modest favorable market movement, and a variable target is deliberately open-ended to facilitate the pursuit of an opportunistic movement in favor of the trade. The pursuit of a variable target is activated when the initial capital outlay for the trade has already been earned back and realized, thereby adding no incremental risk to the position.
     <br/><br/>
@@ -390,7 +390,49 @@ export const strategyPageContentData = {
     <br/><br/>
     Disclaimer: Simplified for narrative purposes. Actual algorithm(s) may vary.
     `,
-    // backtestingText: `TODO.`,
+    backtestingText: `
+    Risk level 3%
+      <div style="display:flex;flex-direction:row;gap:5rem;">
+        <div style="width:50%">
+          Beginning Cellar Value: 100,000
+          Period: Feb 2022 - December 2022
+          No. of Trades: 43
+          Worst Loss (Single Trade): -1,947
+          Worst drawdown: 5.60%
+          Annualized Sharpe Ratio: N/A
+          Annualized Std.Dev of Return: N/A
+        </div>
+        <div style="width:50%">
+          Annualized Mean Return: 6.40%
+          Cumulative profit: 5.00%
+          Win rate: 51%
+          Loss rate: 49%
+          Best month: 6.70%
+          Worst month: -4.47%
+        </div>
+      </div>
+
+    Risk level 6%
+    <div style="display:flex;flex-direction:row;gap:5rem;">
+      <div style="width:50%">
+        Beginning Cellar Value: 100,000
+        Period: Feb 2022 - December 2022
+        No. of Trades: 43
+        Worst Loss (Single Trade): -3,935
+        Worst drawdown:  8.00%
+        Annualized Sharpe Ratio: N/A
+        Annualized Std.Dev of Return: N/A
+      </div>
+      <div style="width:50%">
+        Annualized Mean Return: 17.00%
+        Cumulative profit: 13.40%
+        Win rate: 51%
+        Loss rate: 49%
+        Best month: 14.31%
+        Worst month: -6.38%
+      </div>
+    </div>
+      Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
   [config.CONTRACT.STEADY_MATIC.SLUG]: {
     name: "Steady MATIC",
@@ -441,14 +483,14 @@ export const strategyPageContentData = {
     strategyHighlights: {
       card: [
         `“Risk first” approach - capital preservation is prioritized over capital growth.`,
-        `Always defined risk for every position prevailing from trade inception until trade exit.`,
-        `Each trade strategy comprises two independent trade orders: 1""Workhorse"" with a fixed target to lock in some return and stop + 1""Racehorse"" with a trailing stop to capture market upside.`,
+        `Always defined risk for every position prevailing from trade inception until trade exit. Increased risk profile for Steady UNI/MATIC strategies vs Steady ETH or Steady BTC.`,
+        `Each trade strategy comprises two independent trade orders: 1 "Workhorse"  with a fixed target to lock in some return and stop + 1 "Racehorse" with a trailing stop to capture market upside.`,
       ],
-      description: `"Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a ""risk first"" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional ""home runs.""
+      description: `Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a "risk first" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional "home runs."
       <br/><br/>
-      The trade management technique of Steady MATIC strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the ""How it works"" section for detailed strategy performance explanations.
+      The trade management technique of Steady MATIC strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the "How it works" section for detailed strategy performance explanations.
       <br/><br/>
-      The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge."""`,
+      The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge.`,
     },
     howItWorks: `Every recommended trade always sets the trade risk immediately after the position is activated. The level of risk is determined by our proprietary algorithms and is optimized for modest risk tolerance. It is important to emphasize that having a risk limit does not imply a guaranteed risk price, as slippage can be exacerbated in uncertain market conditions. With the downside risk under pragmatic control, the strategy can shift focus to the realization of upside potential. The upside potential comprises two parts – a fixed target and a variable target. A fixed target is a reasonable expectation of modest favorable market movement, and a variable target is deliberately open-ended to facilitate the pursuit of an opportunistic movement in favor of the trade. The pursuit of a variable target is activated when the initial capital outlay for the trade has already been earned back and realized, thereby adding no incremental risk to the position.
     <br/><br/>
@@ -456,7 +498,51 @@ export const strategyPageContentData = {
     <br/><br/>
     The trade management technique comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Capital allocation of 2.50% per trade strategy assigned equally to “Workhorse” and “Racehorse” (1.25% each).
     <br/><br/>
-    MATIC Long Trade example: A long trade is triggered when the market reaches the directional entry level. 2 positions on the long side are initiated by accumulating the MATIC relative to USDC. Each position is immediately assigned a Target and a Stop (loss). If the market reaches the Target before the Stop, the workhorse MATIC is sold for USDC, profit taken. Simultaneously, the racehorse Stop changes to a Trailing stop. At this point, the economic risk is nullified, a small profit is locked in, and the racehorse is pursuing a larger payoff potential.`,
-    // backtestingText: `TODO.`,
+    MATIC Long Trade example: A long trade is triggered when the market reaches the directional entry level. 2 positions on the long side are initiated by accumulating the MATIC relative to USDC. Each position is immediately assigned a Target and a Stop (loss). If the market reaches the Target before the Stop, the workhorse MATIC is sold for USDC, profit taken. Simultaneously, the racehorse Stop changes to a Trailing stop. At this point, the economic risk is nullified, a small profit is locked in, and the racehorse is pursuing a larger payoff potential.
+    <br/><br/>
+    Disclaimer: Simplified for narrative purposes. Actual algorithm(s) may vary.`,
+    backtestingText: `
+    Risk level 3%
+      <div style="display:flex;flex-direction:row;gap:5rem;">
+        <div style="width:50%">
+          Beginning Cellar Value: 100,000
+          Period: Feb 2022 - December 2022
+          No. of Trades: 25
+          Worst Loss (Single Trade): -1,809
+          Worst drawdown: 2.70%
+          Annualized Sharpe Ratio: N/A
+          Annualized Std.Dev of Return: N/A
+        </div>
+        <div style="width:50%">
+          Annualized Mean Return: 5.86%
+          Cumulative profit: 5.30%
+          Win rate: 68%
+          Loss rate: 32%
+          Best month: 4.25%
+          Worst month: -1.80%
+        </div>
+      </div>
+
+    Risk level 6%
+    <div style="display:flex;flex-direction:row;gap:5rem;">
+      <div style="width:50%">
+        Beginning Cellar Value: 100,000
+        Period: Feb 2022 - December 2022
+        No. of Trades: 25
+        Worst Loss (Single Trade): -2,910
+        Worst drawdown:  3.10%
+        Annualized Sharpe Ratio: N/A
+        Annualized Std.Dev of Return: N/A
+      </div>
+      <div style="width:50%">
+        Annualized Mean Return: 11.00%
+        Cumulative profit: 10.14%
+        Win rate: 68%
+        Loss rate: 32%
+        Best month: 4.25%
+        Worst month: -1.80%
+      </div>
+    </div>
+      Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
 }

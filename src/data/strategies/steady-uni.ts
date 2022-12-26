@@ -33,7 +33,7 @@ export const steadyUni = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `TODO`,
+    goals: `Capture the upside of UNI price breakouts, manage downside through trailing stops.`,
 
     highlights: `The cellar:
 
@@ -41,7 +41,7 @@ export const steadyUni = {
 
       - Always defined risk for every position prevailing from trade inception until trade exit.
 
-      - Each trade strategy comprises two independent trade orders: 1""Workhorse"" with a fixed target to lock in some return and stop + 1""Racehorse"" with a trailing stop to capture market upside.`,
+      - Each trade strategy comprises two independent trade orders: 1 "Workhorse"  with a fixed target to lock in some return and stop + 1 "Racehorse" with a trailing stop to capture market upside.`,
     description: `Capture the upside of UNI price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   },
   // overrideApy: {
@@ -67,13 +67,13 @@ export const steadyUni = {
       key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
-      address: config.CONTRACT.STEADY_BTC.ADDRESS,
-      abi: config.CONTRACT.STEADY_BTC.ABI,
+      address: config.CONTRACT.STEADY_UNI.ADDRESS,
+      abi: config.CONTRACT.STEADY_UNI.ABI,
       key: CellarKey.CELLAR_V0816,
     },
     staker: {
-      address: config.CONTRACT.STEADY_BTC_STAKER.ADDRESS,
-      abi: config.CONTRACT.STEADY_BTC_STAKER.ABI,
+      address: config.CONTRACT.STEADY_UNI_STAKER.ADDRESS,
+      abi: config.CONTRACT.STEADY_UNI_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,

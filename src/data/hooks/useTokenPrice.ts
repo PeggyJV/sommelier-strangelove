@@ -21,7 +21,9 @@ export const useTokenPrice = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI
 
   const queryEnabled = Boolean(
     isEnabled && cellarContract.provider && shareValue

@@ -39,7 +39,7 @@ export const createTokenPriceChangeDatum = (
       datum.push({
         x: new Date(item.date * 1000),
         y: String(change),
-        value: formatDecimals(current, 6, 2),
+        value: formatDecimals(current, 6, 6),
       })
     }
   })
@@ -94,25 +94,21 @@ export const createUsdcChartSeries = ({
   tokenPrice?: Datum[]
   usdc?: Datum[]
 }): Serie[] => {
-  // const minimal = Math.min(
-  //   Number(tokenPrice?.length),
-  //   Number(usdc?.length)
-  // )
+  const minimal = Math.min(
+    Number(tokenPrice?.length),
+    Number(usdc?.length)
+  )
   return [
     {
       id: "token-price",
-      data:
-        tokenPrice?.slice(
-          0
-          //  minimal
-        ) || [],
+      data: tokenPrice?.slice(0, minimal) || [],
       color: colors.purple.base,
     },
-    // {
-    //   id: "usdc",
-    //   data: usdc?.slice(0, minimal) || [],
-    //   color: colors.violet.base,
-    // },
+    {
+      id: "usdc",
+      data: usdc?.slice(0, minimal) || [],
+      color: colors.violet.base,
+    },
   ]
 }
 

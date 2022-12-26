@@ -73,7 +73,10 @@ const PageCellar: VFC<CellarPageProps> = ({ id }) => {
 
   const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
 
-  if (notLaunched) {
+  if (
+    process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE !== "true" &&
+    notLaunched
+  ) {
     return <PageComingSoon />
   }
   return (

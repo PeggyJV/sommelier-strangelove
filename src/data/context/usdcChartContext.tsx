@@ -1,4 +1,5 @@
 import { LineProps, Serie } from "@nivo/line"
+import { useUsdcGainChartData } from "data/hooks/useUsdcGainChartData"
 import { format } from "date-fns"
 import {
   useGetAllTimeShareValueQuery,
@@ -235,22 +236,22 @@ export const UsdcChartProvider: FC<{
     (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
   )
 
-  // const usdcHourly = useUsdcGainChartData({
-  //   day: 1,
-  //   interval: "hourly",
-  // })
-  // const usdcWeekly = useUsdcGainChartData({
-  //   day: Number(weeklyData?.length),
-  //   firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
-  // })
-  // const usdcMonthly = useUsdcGainChartData({
-  //   day: Number(monthlyData?.length),
-  //   firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
-  // })
-  // const usdcAlltime = useUsdcGainChartData({
-  //   day: Number(allTimeData?.length),
-  //   firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
-  // })
+  const usdcHourly = useUsdcGainChartData({
+    day: 1,
+    interval: "hourly",
+  })
+  const usdcWeekly = useUsdcGainChartData({
+    day: Number(weeklyData?.length),
+    firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
+  })
+  const usdcMonthly = useUsdcGainChartData({
+    day: Number(monthlyData?.length),
+    firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
+  })
+  const usdcAlltime = useUsdcGainChartData({
+    day: Number(allTimeData?.length),
+    firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
+  })
 
   // Set data to be returned by hook
   const [data, setData] = useState<DataProps>({
@@ -270,18 +271,21 @@ export const UsdcChartProvider: FC<{
     hourlyIsFetching ||
     weeklyIsFetching ||
     monthlyIsFetching ||
-    allTimeIsFetching
-  // || usdcHourly.isLoading ||
-  // usdcWeekly.isLoading ||
-  // usdcMonthly.isLoading ||
-  // usdcAlltime.isLoading
+    allTimeIsFetching ||
+    usdcHourly.isLoading ||
+    usdcWeekly.isLoading ||
+    usdcMonthly.isLoading ||
+    usdcAlltime.isLoading
 
   const isError =
-    !!hourlyError || !!weeklyError || !!monthlyError || !!allTimeError
-  // || usdcHourly.isError ||
-  // usdcWeekly.isError ||
-  // usdcMonthly.isError ||
-  // usdcAlltime.isError
+    !!hourlyError ||
+    !!weeklyError ||
+    !!monthlyError ||
+    !!allTimeError ||
+    usdcHourly.isError ||
+    usdcWeekly.isError ||
+    usdcMonthly.isError ||
+    usdcAlltime.isError
 
   // Functions to update data returned by hook
   const setDataHourly = () => {
@@ -296,10 +300,10 @@ export const UsdcChartProvider: FC<{
 
     const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      // usdc: usdcHourly.data?.usdcDatum.slice(
-      //   0,
-      //   tokenPriceDatum?.length
-      // ),
+      usdc: usdcHourly.data?.usdcDatum.slice(
+        0,
+        tokenPriceDatum?.length
+      ),
     })
     setData({
       series,
@@ -338,10 +342,10 @@ export const UsdcChartProvider: FC<{
 
     const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      // usdc: usdcWeekly.data?.usdcDatum.slice(
-      //   0,
-      //   tokenPriceDatum?.length
-      // ),
+      usdc: usdcWeekly.data?.usdcDatum.slice(
+        0,
+        tokenPriceDatum?.length
+      ),
     })
     setData({
       series,
@@ -379,10 +383,10 @@ export const UsdcChartProvider: FC<{
     )
     const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      // usdc: usdcMonthly.data?.usdcDatum.slice(
-      //   0,
-      //   tokenPriceDatum?.length
-      // ),
+      usdc: usdcMonthly.data?.usdcDatum.slice(
+        0,
+        tokenPriceDatum?.length
+      ),
     })
     setData({
       series,
@@ -417,10 +421,10 @@ export const UsdcChartProvider: FC<{
     )
     const series = createUsdcChartSeries({
       tokenPrice: tokenPriceDatum,
-      // usdc: usdcAlltime.data?.usdcDatum.slice(
-      //   0,
-      //   tokenPriceDatum?.length
-      // ),
+      usdc: usdcAlltime.data?.usdcDatum.slice(
+        0,
+        tokenPriceDatum?.length
+      ),
     })
     setData({
       series,
@@ -464,11 +468,7 @@ export const UsdcChartProvider: FC<{
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
-    if (
-      weeklyData &&
-      idIsDefault
-      // && usdcWeekly.data
-    ) {
+    if (weeklyData && idIsDefault && usdcWeekly.data) {
       const weeklyDataMap = weeklyData?.map((item) => {
         return {
           date: item.date,
@@ -480,10 +480,10 @@ export const UsdcChartProvider: FC<{
 
       const series = createUsdcChartSeries({
         tokenPrice: tokenPriceDatum,
-        // usdc: usdcWeekly.data?.usdcDatum.slice(
-        //   0,
-        //   tokenPriceDatum?.length
-        // ),
+        usdc: usdcWeekly.data?.usdcDatum.slice(
+          0,
+          tokenPriceDatum?.length
+        ),
       })
 
       setData({
@@ -511,11 +511,7 @@ export const UsdcChartProvider: FC<{
         }`,
       })
     }
-  }, [
-    weeklyData,
-    data,
-    // usdcWeekly.data
-  ])
+  }, [weeklyData, data, usdcWeekly.data])
 
   const dataC = {
     ...data,

@@ -19,9 +19,11 @@ export const ChartTooltipItem = (props: ChartTooltipItem) => {
         <Text>{props.name}: </Text>
       </HStack>
 
-      <HStack>
+      <HStack fontFamily="mono">
         <Text textAlign="right">{props.value}</Text>
-        <Text textAlign="right">{props.percentage}</Text>
+        <Text width="9ch" textAlign="right">
+          {props.percentage}
+        </Text>
       </HStack>
     </HStack>
   )
