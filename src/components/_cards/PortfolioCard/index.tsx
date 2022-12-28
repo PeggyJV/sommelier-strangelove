@@ -74,8 +74,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     .at(-1)
     ?.amount.replace("SOMM", "")
 
-  const isStakingAllowed =
-    stakingEnd.data?.endDate && isFuture(stakingEnd.data.endDate)
+  const isStakingAllowed = stakingEnd.data?.endDate
+    ? isFuture(stakingEnd.data.endDate)
+    : true
 
   return (
     <TransparentCard
