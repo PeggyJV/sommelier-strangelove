@@ -13,6 +13,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { TransparentSkeleton } from "components/_skeleton"
 import { formatDistance } from "utils/formatDistance"
+import { isComingSoon } from "utils/isComingSoon"
 export interface CellarCardData {
   cellarId: string
   name: string
@@ -35,11 +36,11 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   ...rest
 }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
-
+  const launchDate = cellarDataMap[data.cellarId].launchDate
   const protocolIcon = protocolsImage[data.protocols]
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
   const stakingEnd = useStakingEnd(cellarConfig)
-
+  const comingSoon = isComingSoon(launchDate)
   const tagLoading = apyLoading || stakingEnd.isLoading
   return (
     <Card
@@ -62,7 +63,8 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
         zIndex="2"
         overflow="hidden"
       >
-        {stakingEnd.data?.endDate &&
+        {!comingSoon &&
+          stakingEnd.data?.endDate &&
           isFuture(stakingEnd.data?.endDate) && (
             <Tag
               px={3}
