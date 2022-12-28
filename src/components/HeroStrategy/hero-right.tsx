@@ -33,7 +33,6 @@ import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
   intervalGainTimeline,
-  isTradedAssetsHardCoded,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
@@ -161,55 +160,34 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               Traded Assets
             </Text>
           </Box>
-          {isTradedAssetsHardCoded(cellarConfig) ? (
-            <Stack direction="column">
-              {isTradedAssetsHardCoded(cellarConfig)!.map((item) => {
+          <Stack direction="column">
+            {position.isLoading ? (
+              <Spinner />
+            ) : (
+              position.data?.map((item) => {
                 const asset = tokenConfig.find(
-                  (v) => v.symbol === item
+                  (v) => v.address === item.address
                 )
                 return (
-                  <HStack key={item}>
+                  <HStack key={item.address}>
                     <Image
                       alt={asset?.alt}
                       src={asset?.src}
                       boxSize={8}
                     />
-                    <Text>{asset?.symbol}</Text>
+                    {!countdown ? (
+                      <Text>
+                        {asset?.symbol} ({item.percentage.toFixed(2)}
+                        %)
+                      </Text>
+                    ) : (
+                      <Text>{asset?.symbol}</Text>
+                    )}
                   </HStack>
                 )
-              })}
-            </Stack>
-          ) : (
-            <Stack direction="column">
-              {position.isLoading ? (
-                <Spinner />
-              ) : (
-                position.data?.map((item) => {
-                  const asset = tokenConfig.find(
-                    (v) => v.address === item.address
-                  )
-                  return (
-                    <HStack key={item.address}>
-                      <Image
-                        alt={asset?.alt}
-                        src={asset?.src}
-                        boxSize={8}
-                      />
-                      {!countdown ? (
-                        <Text>
-                          {asset?.symbol} (
-                          {item.percentage.toFixed(2)}
-                          %)
-                        </Text>
-                      ) : (
-                        <Text>{asset?.symbol}</Text>
-                      )}
-                    </HStack>
-                  )
-                })
-              )}
-            </Stack>
-          )}
+              })
+            )}
+          </Stack>
         </HStack>
         <HStack>
           <Box>
