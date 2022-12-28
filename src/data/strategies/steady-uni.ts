@@ -49,6 +49,87 @@ The trade management technique of Steady UNI strategy comprises two components: 
 The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge."
 
 `,
+    backtesting: `
+    <table style="text-align:left;">
+  <tr>
+    <td style="padding:10px; font-weight: bold">Risk level :</td>
+    <td style="padding:10px;">3%</td>
+    <td style="padding:10px">6%</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Tx Cost :</td>
+    <td style="padding:10px">300</td>
+    <td style="padding:10px">300<td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Beginning Cellar Value :</td>
+    <td style="padding:10px">100,000</td>
+    <td style="padding:10px">100,000</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Period :</td>
+    <td style="padding:10px">Feb 2022 - December 2022</td>
+    <td style="padding:10px">Feb 2022 - December 2022</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">No. of Trades :</td>
+    <td style="padding:10px">43</td>
+    <td style="padding:10px">43</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Worst Loss (Single Trade) :</td>
+    <td style="padding:10px">-1,947</td>
+    <td style="padding:10px">-3,935</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Worst drawdown :</td>
+    <td style="padding:10px">5.60%</td>
+    <td style="padding:10px">8.00%</td>
+  </tr>
+    <tr>
+    <td style="padding:10px; font-weight: bold">Annualized Sharpe Ratio :</td>
+    <td style="padding:10px">N/A</td>
+    <td style="padding:10px">N/A</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Annualized Std.Dev of Return :</td>
+    <td style="padding:10px">N/A</td>
+    <td style="padding:10px">N/A</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Annualized Mean Return :</td>
+    <td style="padding:10px">6.40%</td>
+    <td style="padding:10px">17.00%</td>
+  </tr>
+   <tr>
+    <td style="padding:10px; font-weight: bold">Cumulative profit :</td>
+    <td style="padding:10px">5.00%</td>
+    <td style="padding:10px">13.40%</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Win rate :</td>
+    <td style="padding:10px">51%</td>
+    <td style="padding:10px">51%</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Loss rate :</td>
+    <td style="padding:10px">49%</td>
+    <td style="padding:10px">49%</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Best month :</td>
+    <td style="padding:10px">6.70%</td>
+    <td style="padding:10px">14.31%</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Worst month :</td>
+    <td style="padding:10px">-4.47%</td>
+    <td style="padding:10px">-6.38%</td>
+  </tr>
+
+</table>
+Presented results are based on historical back tests. Past performance is not indicative of future results. Actual performance will depend on market conditions.
+`,
   },
   // overrideApy: {
   //   title: "Backtested APY",
