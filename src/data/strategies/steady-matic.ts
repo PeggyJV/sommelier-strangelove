@@ -42,7 +42,95 @@ export const steadyMatic = {
       - Always defined risk for every position prevailing from trade inception until trade exit.
 
       - Each trade strategy comprises two independent trade orders: 1 "Workhorse"  with a fixed target to lock in some return and stop + 1 "Racehorse" with a trailing stop to capture market upside.`,
-    description: `Capture the upside of MATIC price breakouts, manage downside through trailing stops.`,
+    description: `Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a "risk first" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional "home runs." [Read more]
+
+The trade management technique of Steady MATIC strategy comprises two components: a workhorse and a racehorse. The point of the workhorse is to nullify risk and capture a small profit/cover transaction cost, and the point of the racehorse is to pursue a larger payoff opportunity. Check the "How it works" section for detailed strategy performance explanations.
+
+The Strategy is expected to capture most of any positive price breakouts and limit losses through its trailing stops. Due to the nature of the strategy, it is designed for the Cellar participant to remain committed over a medium to long term time frame (6 months to a year). In this time the benefits of being in the strategy are expected to emerge."
+
+`,
+    backtesting: `
+    <table style="text-align:left;">
+     <tr>
+    <th></th>
+    <th>Risk level 3%</th>
+    <th>Risk level 3%</th>
+  </tr>
+
+  <tr>
+    <td style="padding:10px; font-weight: bold">Tx Cost :</td>
+    <td style="padding:10px">300</td>
+    <td style="padding:10px">300<td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Beginning Cellar Value :</td>
+    <td style="padding:10px">100,000</td>
+    <td style="padding:10px">100,000</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Period :</td>
+    <td style="padding:10px">Feb 2022 - December 2022</td>
+    <td style="padding:10px">Feb 2022 - December 2022</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">No. of Trades :</td>
+    <td style="padding:10px">25</td>
+    <td style="padding:10px">25</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Worst Loss (Single Trade) :</td>
+    <td style="padding:10px">-1,809</td>
+    <td style="padding:10px">-2,910</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Worst drawdown :</td>
+    <td style="padding:10px">2.70%</td>
+    <td style="padding:10px">3.10%</td>
+  </tr>
+    <tr>
+    <td style="padding:10px; font-weight: bold">Annualized Sharpe Ratio :</td>
+    <td style="padding:10px">N/A</td>
+    <td style="padding:10px">N/A</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Annualized Std.Dev of Return :</td>
+    <td style="padding:10px">N/A</td>
+    <td style="padding:10px">N/A</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Annualized Mean Return :</td>
+    <td style="padding:10px">5.86%</td>
+    <td style="padding:10px">11.00%</td>
+  </tr>
+   <tr>
+    <td style="padding:10px; font-weight: bold">Cumulative profit :</td>
+    <td style="padding:10px">5.30%</td>
+    <td style="padding:10px">10.14%</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Win rate :</td>
+    <td style="padding:10px">68%</td>
+    <td style="padding:10px">68%</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Loss rate :</td>
+    <td style="padding:10px">32%</td>
+    <td style="padding:10px">32%</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Best month :</td>
+    <td style="padding:10px">4.25%</td>
+    <td style="padding:10px">8.98%</td>
+  </tr>
+  <tr>
+    <td style="padding:10px; font-weight: bold">Worst month :</td>
+    <td style="padding:10px">-1.80%</td>
+    <td style="padding:10px">-3.15%</td>
+  </tr>
+
+</table>
+Presented results are based on historical back tests. Past performance is not indicative of future results. Actual performance will depend on market conditions.
+`,
   },
   // overrideApy: {
   //   title: "Backtested APY",
