@@ -51,11 +51,12 @@ The Strategy is expected to capture most of any positive price breakouts and lim
 `,
     backtesting: `
     <table style="text-align:left;">
-  <tr>
-    <td style="padding:10px; font-weight: bold">Risk level :</td>
-    <td style="padding:10px;">3%</td>
-    <td style="padding:10px">6%</td>
+     <tr>
+    <th></th>
+    <th>Risk level 3%</th>
+    <th>Risk level 3%</th>
   </tr>
+
   <tr>
     <td style="padding:10px; font-weight: bold">Tx Cost :</td>
     <td style="padding:10px">300</td>
