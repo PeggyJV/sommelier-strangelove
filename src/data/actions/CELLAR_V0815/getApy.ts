@@ -11,38 +11,23 @@ export const getApy = async (
   dayDatas: { date: number; shareValue: string }[]
 ) => {
   try {
-    const maxLocked = new BigNumber(
-      (await cellarContract.maxLocked()).toString()
-    )
-    const totalAssets = new BigNumber(
-      (await cellarContract.totalAssets()).toString()
-    )
-    const accrualPeriod = new BigNumber(
-      (await cellarContract.accrualPeriod()).toString()
-    )
-    const accrualPeriodsInYear = yearInSecsBN.dividedBy(accrualPeriod)
-    const apy = maxLocked
-      .dividedBy(totalAssets)
-      .multipliedBy(accrualPeriodsInYear)
-      .multipliedBy(100)
-
-    const rewardRateRes = await stakerContract.rewardRate()
-    const rewardRate = new BigNumber(
-      rewardRateRes.toString()
-    ).dividedBy(new BigNumber(10).pow(6))
-
-    const totalDepositWithBoostRes =
-      await stakerContract.totalDepositsWithBoost()
-    const totalDepositWithBoost = new BigNumber(
-      totalDepositWithBoostRes.toString()
-    ).dividedBy(new BigNumber(10).pow(18))
-    const withUserDeposit = totalDepositWithBoost.plus(10000)
-
     const stakingEnd = await stakerContract.endTimestamp()
     const isStakingOngoing = Date.now() < stakingEnd.toNumber() * 1000
 
     let potentialStakingApy = new BigNumber(0)
     if (isStakingOngoing) {
+      const rewardRateRes = await stakerContract.rewardRate()
+      const rewardRate = new BigNumber(
+        rewardRateRes.toString()
+      ).dividedBy(new BigNumber(10).pow(6))
+
+      const totalDepositWithBoostRes =
+        await stakerContract.totalDepositsWithBoost()
+      const totalDepositWithBoost = new BigNumber(
+        totalDepositWithBoostRes.toString()
+      ).dividedBy(new BigNumber(10).pow(18))
+      const withUserDeposit = totalDepositWithBoost.plus(10000)
+
       potentialStakingApy = rewardRate
         .multipliedBy(sommPrice)
         .dividedBy(withUserDeposit)
@@ -54,21 +39,24 @@ export const getApy = async (
     const cellarApy = (() => {
       const indexThatHaveChanges = dayDatas.findIndex(
         (data, idx, arr) => {
-          if (idx === 0) return false // return false because first data doesn't have comparation
+          if (idx === 0) return false // return false because first data doesn't have comparison
 
-          const prev = arr[idx + 1].shareValue
+          const prev = arr[idx - 1].shareValue
           return prev !== data.shareValue
         }
       )
       if (indexThatHaveChanges === -1) return 0
+
+      // dayDatas is in desc order
       const latestDataChanged =
-        dayDatas[indexThatHaveChanges].shareValue
+        dayDatas[indexThatHaveChanges - 1].shareValue
       const prevDayLatestData =
-        dayDatas[indexThatHaveChanges + 1].shareValue
+        dayDatas[indexThatHaveChanges].shareValue
 
       const yieldGain =
         (Number(latestDataChanged) - Number(prevDayLatestData)) /
         Number(prevDayLatestData)
+
       return yieldGain * 52 * 100
     })()
 
