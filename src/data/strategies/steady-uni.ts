@@ -54,7 +54,7 @@ The Strategy is expected to capture most of any positive price breakouts and lim
    <tr>
     <th></th>
     <th>Risk level 3%</th>
-    <th>Risk level 3%</th>
+    <th>Risk level 6%</th>
   </tr>
 
   <tr>
