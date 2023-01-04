@@ -67,7 +67,7 @@ export const createEthBtcChartSeries = ({
     {
       id: "token-price",
       data: tokenPrice?.slice(0, minimal) || [],
-      color: colors.purple.base,
+      color: colors.neutral[100],
     },
     {
       id: "eth-btc-50",
@@ -102,7 +102,7 @@ export const createUsdcChartSeries = ({
     {
       id: "token-price",
       data: tokenPrice?.slice(0, minimal) || [],
-      color: colors.purple.base,
+      color: colors.neutral[100],
     },
     {
       id: "usdc",

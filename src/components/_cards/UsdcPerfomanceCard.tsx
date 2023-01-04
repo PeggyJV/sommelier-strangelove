@@ -189,18 +189,13 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
             <Stack
               direction={{ base: "column", md: "row" }}
               spacing={{ base: 2, md: 4 }}
+              alignItems={{
+                md: "center",
+              }}
             >
-              <Legend
-                color="purple.base"
-                title={cellarDataMap[id].name}
-                active={showLine.tokenPrice}
-                onClick={() => {
-                  setShowLine((prev) => ({
-                    ...prev,
-                    tokenPrice: !showLine.tokenPrice,
-                  }))
-                }}
-              />
+              <Text fontWeight="semibold" color="#9E9DA3">
+                Compare with
+              </Text>
               <Legend
                 color="violet.base"
                 title="USDC"

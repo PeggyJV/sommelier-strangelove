@@ -27,7 +27,9 @@ export const Legend = ({
             backgroundColor={active ? color : "transparent"}
           />
         </Box>
-        <Text color="neutral.400">{title}</Text>
+        <Text fontWeight="semibold" color="#9E9DA3">
+          {title}
+        </Text>
       </HStack>
     </Button>
   )
