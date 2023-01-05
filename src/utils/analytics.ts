@@ -1,5 +1,4 @@
 import Analytics from "analytics"
-import googleTagManager from "@analytics/google-tag-manager"
 import mixpanel from "@analytics/mixpanel"
 
 const isBrowser = typeof window !== "undefined"
@@ -25,20 +24,10 @@ const appName =
 
 // Google Tag Manager
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID
-const gtmAuth = process.env.NEXT_PUBLIC_GTM_AUTH
-const gtmPreview = process.env.NEXT_PUBLIC_GTM_PREVIEW
+const isSendToGTM =
+  isBrowser && gtmId && gtmId !== null && gtmId.length > 0
 
 const plugins = []
-
-if (isBrowser && gtmId != null && gtmId.length > 0) {
-  const config = {
-    containerId: gtmId,
-    auth: gtmAuth,
-    preview: gtmPreview,
-  }
-
-  plugins.push(googleTagManager(config))
-}
 
 const mixpanelToken = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN
 if (isBrowser && mixpanelToken && mixpanelToken.length > 0) {
@@ -69,6 +58,9 @@ export class AnalyticsWrapper {
 
   track(eventName: string, payload?: Record<string, unknown>) {
     this.enabled && this.client.track(eventName, payload)
+    this.enabled &&
+      isSendToGTM &&
+      window.dataLayer?.push({ event: eventName, ...payload })
   }
 
   // strips invalid characters
