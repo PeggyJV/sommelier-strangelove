@@ -57,10 +57,14 @@ export class AnalyticsWrapper {
   }
 
   track(eventName: string, payload?: Record<string, unknown>) {
-    this.enabled && this.client.track(eventName, payload)
-    this.enabled &&
-      isSendToGTM &&
-      window.dataLayer?.push({ event: eventName, ...payload })
+    try {
+      this.enabled && this.client.track(eventName, payload)
+      this.enabled &&
+        isSendToGTM &&
+        window.dataLayer?.push({ event: eventName, ...payload })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   // strips invalid characters
