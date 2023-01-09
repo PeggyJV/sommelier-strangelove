@@ -1,19 +1,23 @@
 import { format, isSameDay, subDays } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { GetAssetGainChartDataProps, PriceData } from "../types"
-import { fetchMarketChart } from "./fetchMarketChart"
+import { MarketChartResponse } from "./fetchMarketChart"
 
 export type UsdcGainChartData = Awaited<
   ReturnType<typeof getUsdcGainChartData>
 >
+
+interface GetUsdcGainChartData extends GetAssetGainChartDataProps {
+  usdcData: MarketChartResponse
+}
 // Shift back 1 day coin gecko price is intentional
 export const getUsdcGainChartData = async (
-  props: GetAssetGainChartDataProps
+  props: GetUsdcGainChartData
 ) => {
   try {
     const { day, interval, firstDate } = props
     const isDaily = interval === "daily"
-    const usdcData = await fetchMarketChart("usd-coin", day, interval)
+    const usdcData = props.usdcData
 
     const usdcGainPct = (() => {
       let res: PriceData[] = []

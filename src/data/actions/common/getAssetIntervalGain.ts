@@ -1,14 +1,13 @@
 import { getGainPct } from "utils/getGainPct"
-import { KnownCoingeckoAssetId } from "../types"
-import { fetchMarketChart } from "./fetchMarketChart"
+import { MarketChartResponse } from "./fetchMarketChart"
 
 // shift back coin gecko data is intentional
 export const getAssetIntervalGain = async (
-  asset: KnownCoingeckoAssetId,
-  day: number
+  day: number,
+  marketChartData: MarketChartResponse
 ) => {
   try {
-    const data = await fetchMarketChart(asset, day, "daily")
+    const data = marketChartData
     const previousData = data.prices[1]
 
     // coingecko returns the latest date with 2 hour value, 00:00 data and latest hour data. We get the 00:00 value with length - 2 index

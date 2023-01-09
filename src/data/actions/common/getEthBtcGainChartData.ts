@@ -1,25 +1,26 @@
 import { closestIndexTo, format, isSameDay, subDays } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
 import { GetAssetGainChartDataProps, PriceData } from "../types"
-import { fetchMarketChart } from "./fetchMarketChart"
+import { MarketChartResponse } from "./fetchMarketChart"
 
 export type EthBtcGainChartData = Awaited<
   ReturnType<typeof getEthBtcGainChartData>
 >
 
+interface GetEthBtcGainChartData extends GetAssetGainChartDataProps {
+  wethData: MarketChartResponse
+  wbtcData: MarketChartResponse
+}
+
 // Shift back 1 day coin gecko price is intentional
 export const getEthBtcGainChartData = async (
-  props: GetAssetGainChartDataProps
+  props: GetEthBtcGainChartData
 ) => {
   try {
     const { day, interval, firstDate } = props
     const isDaily = interval === "daily"
-    const wethData = await fetchMarketChart("weth", day, interval)
-    const wbtcData = await fetchMarketChart(
-      "wrapped-bitcoin",
-      day,
-      interval
-    )
+    const wethData = props.wethData
+    const wbtcData = props.wbtcData
     const wethGainPct = (() => {
       let res: PriceData[] = []
       wethData.prices.map(([date, value]) => {

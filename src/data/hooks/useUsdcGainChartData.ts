@@ -4,6 +4,7 @@ import {
   UsdcGainChartData,
 } from "data/actions/common/getUsdcGainChartData"
 import { useEffect } from "react"
+import { useMarketChart } from "./useMarketChart"
 
 export const useUsdcGainChartData = ({
   day,
@@ -18,18 +19,27 @@ export const useUsdcGainChartData = ({
   enabled?: boolean
   onSuccess?: (data: UsdcGainChartData) => void
 }) => {
+  const usdcMarketChart = useMarketChart({
+    asset: "usd-coin",
+    day,
+    interval,
+  })
   const query = useQuery(
-    ["USE_USDC_GAIN_CHART_DATA", day, interval],
+    ["USE_USDC_GAIN_CHART_DATA", usdcMarketChart.data, day, interval],
     async () => {
       if (!day) throw new Error("day is undefined")
+      if (!usdcMarketChart.data) {
+        throw new Error("market chart data is undefined")
+      }
       return await getUsdcGainChartData({
         day,
         interval: interval ?? "daily",
         firstDate,
+        usdcData: usdcMarketChart.data,
       })
     },
     {
-      enabled: Boolean(day) && enabled,
+      enabled: Boolean(day) && !!usdcMarketChart.data && enabled,
       onSuccess: onSuccess,
     }
   )
@@ -37,6 +47,7 @@ export const useUsdcGainChartData = ({
     if (enabled && query.data) {
       onSuccess && onSuccess(query.data)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Boolean(query.isFetched), enabled])
 
   return query

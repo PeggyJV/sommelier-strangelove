@@ -410,18 +410,21 @@ export const EthBtcChartProvider: FC<{
     day: Number(weeklyData?.length),
     firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
     enabled: timeline === "1W",
+    interval: "daily",
     onSuccess: setDataWeekly,
   })
   const ethBtcMonthly = useEthBtcGainChartData({
     day: Number(monthlyData?.length),
     firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
     enabled: timeline === "1M",
+    interval: "daily",
     onSuccess: setDataMonthly,
   })
   const ethBtcAlltime = useEthBtcGainChartData({
     day: Number(allTimeData?.length),
     firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
     enabled: timeline === "ALL",
+    interval: "daily",
     onSuccess: setDataAllTime,
   })
 

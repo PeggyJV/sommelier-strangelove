@@ -394,18 +394,21 @@ export const UsdcChartProvider: FC<{
     day: Number(weeklyData?.length),
     firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
     enabled: timeline === "1W",
+    interval: "daily",
     onSuccess: setDataWeekly,
   })
   const usdcMonthly = useUsdcGainChartData({
     day: Number(monthlyData?.length),
     firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
     enabled: timeline === "1M",
+    interval: "daily",
     onSuccess: setDataMonthly,
   })
   const usdcAlltime = useUsdcGainChartData({
     day: Number(allTimeData?.length),
     firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
     enabled: timeline === "ALL",
+    interval: "daily",
     onSuccess: setDataAllTime,
   })
 

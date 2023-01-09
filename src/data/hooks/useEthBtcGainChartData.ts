@@ -4,6 +4,7 @@ import {
   getEthBtcGainChartData,
 } from "data/actions/common/getEthBtcGainChartData"
 import { useEffect } from "react"
+import { useMarketChart } from "./useMarketChart"
 
 export const useEthBtcGainChartData = ({
   day,
@@ -18,18 +19,43 @@ export const useEthBtcGainChartData = ({
   enabled?: boolean
   onSuccess?: (data: EthBtcGainChartData) => void
 }) => {
+  const wethMarketChart = useMarketChart({
+    asset: "weth",
+    day,
+    interval,
+  })
+  const wbtcMarketChart = useMarketChart({
+    asset: "wrapped-bitcoin",
+    day,
+    interval,
+  })
   const query = useQuery(
-    ["USE_ETH_BTC_GAIN_CHART_DATA", day, interval],
+    [
+      "USE_ETH_BTC_GAIN_CHART_DATA",
+      wethMarketChart.data,
+      wbtcMarketChart.data,
+      day,
+      interval,
+    ],
     async () => {
       if (!day) throw new Error("day is undefined")
+      if (!wethMarketChart.data || !wbtcMarketChart.data) {
+        throw new Error("market chart data is undefined")
+      }
       return await getEthBtcGainChartData({
         day,
         interval: interval ?? "daily",
         firstDate,
+        wethData: wethMarketChart.data,
+        wbtcData: wbtcMarketChart.data,
       })
     },
     {
-      enabled: Boolean(day) && enabled,
+      enabled:
+        Boolean(day) &&
+        !!wethMarketChart.data &&
+        !!wbtcMarketChart.data &&
+        enabled,
       onSuccess: onSuccess,
     }
   )
@@ -37,6 +63,7 @@ export const useEthBtcGainChartData = ({
     if (enabled && query.data) {
       onSuccess && onSuccess(query.data)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Boolean(query.isFetched), enabled])
   return query
 }
