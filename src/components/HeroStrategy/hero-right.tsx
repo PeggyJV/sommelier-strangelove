@@ -4,7 +4,6 @@ import {
   Heading,
   HStack,
   Image,
-  Link,
   Spinner,
   Stack,
   StackDivider,
@@ -40,6 +39,7 @@ import { formatDistanceToNow, isFuture } from "date-fns"
 import { useApy } from "data/hooks/useApy"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { NotifyModal } from "components/_modals/NotifyModal"
+import { Link } from "components/Link"
 
 interface HeroStrategyRightProps {
   id: string

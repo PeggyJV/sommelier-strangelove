@@ -1,11 +1,11 @@
 import {
   HStack,
   Image,
-  Link,
   ModalProps,
   Stack,
   Text,
 } from "@chakra-ui/react"
+import { Link } from "components/Link"
 import { ChevronRightIcon, ExternalLinkIcon } from "components/_icons"
 import { cellarDataMap } from "data/cellarDataMap"
 import { analytics } from "utils/analytics"
