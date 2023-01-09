@@ -23,11 +23,13 @@ export const useEthBtcGainChartData = ({
     asset: "weth",
     day,
     interval,
+    enabled,
   })
   const wbtcMarketChart = useMarketChart({
     asset: "wrapped-bitcoin",
     day,
     interval,
+    enabled,
   })
   const query = useQuery(
     [

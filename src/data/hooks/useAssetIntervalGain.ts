@@ -12,6 +12,7 @@ export const useAssetIntervalGain = (
     asset,
     day: days,
     interval: "daily",
+    enabled,
   })
   const query = useQuery(
     ["USE_WEEKLY_ASSET_INTERVAL_GAIN", asset, days, "daily"],

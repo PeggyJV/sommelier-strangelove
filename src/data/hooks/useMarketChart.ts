@@ -5,10 +5,12 @@ export const useMarketChart = ({
   asset,
   day,
   interval,
+  enabled,
 }: {
   asset: string
   day: number
   interval?: "hourly" | "daily"
+  enabled?: boolean
 }) => {
   const query = useQuery(
     ["USE_MARKET_CHART", asset, day, interval],
@@ -17,7 +19,7 @@ export const useMarketChart = ({
       return await fetchMarketChart(asset, day, interval)
     },
     {
-      enabled: Boolean(interval),
+      enabled: !!asset && !!day && !!interval && enabled,
     }
   )
 

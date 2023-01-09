@@ -23,6 +23,7 @@ export const useUsdcGainChartData = ({
     asset: "usd-coin",
     day,
     interval,
+    enabled,
   })
   const query = useQuery(
     ["USE_USDC_GAIN_CHART_DATA", usdcMarketChart.data, day, interval],
