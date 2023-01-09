@@ -3,6 +3,10 @@ import { getGainPct } from "utils/getGainPct"
 import { GetAssetGainChartDataProps, PriceData } from "../types"
 import { fetchMarketChart } from "./fetchMarketChart"
 
+export type EthBtcGainChartData = Awaited<
+  ReturnType<typeof getEthBtcGainChartData>
+>
+
 // Shift back 1 day coin gecko price is intentional
 export const getEthBtcGainChartData = async (
   props: GetAssetGainChartDataProps

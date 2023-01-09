@@ -1,4 +1,5 @@
 import { LineProps, Serie } from "@nivo/line"
+import { EthBtcGainChartData } from "data/actions/common/getEthBtcGainChartData"
 import { useEthBtcGainChartData } from "data/hooks/useEthBtcGainChartData"
 import { format } from "date-fns"
 import {
@@ -45,14 +46,12 @@ export interface ShowLine {
   btc: boolean
 }
 
+type Timeline = "1D" | "1W" | "1M" | "ALL"
+
 export interface EthBtcChartContext {
   isFetching: boolean
   isError: boolean
   data: DataProps
-  setDataHourly: () => void
-  setDataWeekly: () => void
-  setDataMonthly: () => void
-  setDataAllTime: () => void
   reexecuteHourly: (
     opts?: Partial<OperationContext> | undefined
   ) => void
@@ -141,10 +140,6 @@ const initialData: EthBtcChartContext = {
   reexecuteWeekly: () => null,
   reexecuteMonthly: () => null,
   reexecuteAllTime: () => null,
-  setDataAllTime: () => null,
-  setDataHourly: () => null,
-  setDataWeekly: () => null,
-  setDataMonthly: () => null,
   setTokenPriceChange: () => null,
   tokenPriceChange: {
     xFormatted: "",
@@ -181,6 +176,7 @@ export const EthBtcChartProvider: FC<{
     eth: false,
     btc: false,
   })
+  const [timeline, setTimeline] = useState<Timeline>("1W")
 
   // GQL Queries
   const [
@@ -243,59 +239,9 @@ export const EthBtcChartProvider: FC<{
     (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
   )
 
-  const ethBtcHourly = useEthBtcGainChartData({
-    day: 1,
-    interval: "hourly",
-  })
-  const ethBtcHWeekly = useEthBtcGainChartData({
-    day: Number(weeklyData?.length),
-    firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
-  })
-  const ethBtcMonthly = useEthBtcGainChartData({
-    day: Number(monthlyData?.length),
-    firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
-  })
-  const ethBtcAlltime = useEthBtcGainChartData({
-    day: Number(allTimeData?.length),
-    firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
-  })
-
-  // Set data to be returned by hook
-  const [data, setData] = useState<DataProps>({
-    series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
-    chartProps: hourlyChartProps,
-  })
-
-  // Set tvl value
-  const [tokenPriceChange, setTokenPriceChange] =
-    useState<TokenPriceData>({
-      xFormatted: "",
-      yFormatted: "",
-    })
-
-  // Grouped loading state
-  const isFetching =
-    hourlyIsFetching ||
-    weeklyIsFetching ||
-    monthlyIsFetching ||
-    allTimeIsFetching ||
-    ethBtcHourly.isLoading ||
-    ethBtcHWeekly.isLoading ||
-    ethBtcMonthly.isLoading ||
-    ethBtcAlltime.isLoading
-
-  const isError =
-    !!hourlyError ||
-    !!weeklyError ||
-    !!monthlyError ||
-    !!allTimeError ||
-    ethBtcHourly.isError ||
-    ethBtcHWeekly.isError ||
-    ethBtcMonthly.isError ||
-    ethBtcAlltime.isError
-
   // Functions to update data returned by hook
-  const setDataHourly = () => {
+  const setDataHourly = (data: EthBtcGainChartData) => {
+    setTimeline("1D")
     const tokenPriceDatum = createTokenPriceChangeDatum(
       hourlyData?.map((item) => {
         return {
@@ -307,18 +253,9 @@ export const EthBtcChartProvider: FC<{
 
     const series = createEthBtcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: ethBtcHourly.data?.wethWbtcdatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      weth: ethBtcHourly.data?.wethDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      wbtc: ethBtcHourly.data?.wbtcDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
+      ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      weth: data?.wethDatum.slice(0, tokenPriceDatum?.length),
+      wbtc: data?.wbtcDatum.slice(0, tokenPriceDatum?.length),
     })
     setData({
       series,
@@ -345,7 +282,8 @@ export const EthBtcChartProvider: FC<{
     })
   }
 
-  const setDataWeekly = () => {
+  const setDataWeekly = (data: EthBtcGainChartData) => {
+    setTimeline("1W")
     const tokenPriceDatum = createTokenPriceChangeDatum(
       weeklyData?.map((item) => {
         return {
@@ -357,18 +295,9 @@ export const EthBtcChartProvider: FC<{
 
     const series = createEthBtcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: ethBtcHWeekly.data?.wethWbtcdatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      weth: ethBtcHWeekly.data?.wethDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      wbtc: ethBtcHWeekly.data?.wbtcDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
+      ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      weth: data?.wethDatum.slice(0, tokenPriceDatum?.length),
+      wbtc: data?.wbtcDatum.slice(0, tokenPriceDatum?.length),
     })
     setData({
       series,
@@ -395,7 +324,8 @@ export const EthBtcChartProvider: FC<{
     })
   }
 
-  const setDataMonthly = () => {
+  const setDataMonthly = (data: EthBtcGainChartData) => {
+    setTimeline("1M")
     const tokenPriceDatum = createTokenPriceChangeDatum(
       monthlyData?.map((item) => {
         return {
@@ -406,18 +336,9 @@ export const EthBtcChartProvider: FC<{
     )
     const series = createEthBtcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: ethBtcMonthly.data?.wethWbtcdatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      weth: ethBtcMonthly.data?.wethDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      wbtc: ethBtcMonthly.data?.wbtcDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
+      ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      weth: data?.wethDatum.slice(0, tokenPriceDatum?.length),
+      wbtc: data?.wbtcDatum.slice(0, tokenPriceDatum?.length),
     })
     setData({
       series,
@@ -441,7 +362,8 @@ export const EthBtcChartProvider: FC<{
     })
   }
 
-  const setDataAllTime = () => {
+  const setDataAllTime = (data: EthBtcGainChartData) => {
+    setTimeline("ALL")
     const tokenPriceDatum = createTokenPriceChangeDatum(
       allTimeData?.map((item) => {
         return {
@@ -452,18 +374,9 @@ export const EthBtcChartProvider: FC<{
     )
     const series = createEthBtcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: ethBtcAlltime.data?.wethWbtcdatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      weth: ethBtcAlltime.data?.wethDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
-      wbtc: ethBtcAlltime.data?.wbtcDatum.slice(
-        0,
-        tokenPriceDatum?.length
-      ),
+      ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      weth: data?.wethDatum.slice(0, tokenPriceDatum?.length),
+      wbtc: data?.wbtcDatum.slice(0, tokenPriceDatum?.length),
     })
     setData({
       series,
@@ -487,20 +400,79 @@ export const EthBtcChartProvider: FC<{
     })
   }
 
+  const ethBtcHourly = useEthBtcGainChartData({
+    day: 1,
+    interval: "hourly",
+    enabled: timeline === "1D",
+    onSuccess: setDataHourly,
+  })
+  const ethBtcHWeekly = useEthBtcGainChartData({
+    day: Number(weeklyData?.length),
+    firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
+    enabled: timeline === "1W",
+    onSuccess: setDataWeekly,
+  })
+  const ethBtcMonthly = useEthBtcGainChartData({
+    day: Number(monthlyData?.length),
+    firstDate: new Date(Number(monthlyData?.[0].date) * 1000),
+    enabled: timeline === "1M",
+    onSuccess: setDataMonthly,
+  })
+  const ethBtcAlltime = useEthBtcGainChartData({
+    day: Number(allTimeData?.length),
+    firstDate: new Date(Number(allTimeData?.[0].date) * 1000),
+    enabled: timeline === "ALL",
+    onSuccess: setDataAllTime,
+  })
+
+  // Set data to be returned by hook
+  const [data, setData] = useState<DataProps>({
+    series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
+    chartProps: hourlyChartProps,
+  })
+
+  // Set tvl value
+  const [tokenPriceChange, setTokenPriceChange] =
+    useState<TokenPriceData>({
+      xFormatted: "",
+      yFormatted: "",
+    })
+
+  // Grouped loading state
+  const isFetching =
+    hourlyIsFetching ||
+    weeklyIsFetching ||
+    monthlyIsFetching ||
+    allTimeIsFetching ||
+    ethBtcHourly.isFetching ||
+    ethBtcHWeekly.isFetching ||
+    ethBtcMonthly.isFetching ||
+    ethBtcAlltime.isFetching
+
+  const isError =
+    !!hourlyError ||
+    !!weeklyError ||
+    !!monthlyError ||
+    !!allTimeError ||
+    ethBtcHourly.isError ||
+    ethBtcHWeekly.isError ||
+    ethBtcMonthly.isError ||
+    ethBtcAlltime.isError
+
   const timeArray = [
     {
       title: "1D",
-      onClick: setDataHourly,
+      onClick: () => setTimeline("1D"),
     },
     {
       title: "1W",
-      onClick: setDataWeekly,
+      onClick: () => setTimeline("1W"),
     },
     {
       title: "1M",
-      onClick: setDataMonthly,
+      onClick: () => setTimeline("1M"),
     },
-    { title: "All", onClick: setDataAllTime },
+    { title: "All", onClick: () => setTimeline("ALL") },
   ]
 
   // Set weekly data by default
@@ -585,10 +557,6 @@ export const EthBtcChartProvider: FC<{
         isFetching,
         isError,
         data: dataC,
-        setDataHourly,
-        setDataWeekly,
-        setDataMonthly,
-        setDataAllTime,
         reexecuteHourly,
         reexecuteWeekly,
         reexecuteMonthly,
