@@ -4,7 +4,6 @@ import {
   Heading,
   HStack,
   Image,
-  Link,
   Spinner,
   Stack,
   StackDivider,
@@ -39,6 +38,8 @@ import { CountDown } from "./count-down"
 import { formatDistanceToNow, isFuture } from "date-fns"
 import { useApy } from "data/hooks/useApy"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
+import { NotifyModal } from "components/_modals/NotifyModal"
+import { Link } from "components/Link"
 
 interface HeroStrategyRightProps {
   id: string
@@ -49,6 +50,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
 }) => {
   const content = strategyPageContentData[id]
   const buyOrSellModal = useDisclosure()
+  const notifyModal = useDisclosure()
   const cellarData = cellarDataMap[id]
   const launchDate = cellarDataMap[id].launchDate
   const cellarConfig = cellarData.config
@@ -72,7 +74,26 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
       {countdown && launchDate ? (
-        <CountDown launchDate={launchDate} />
+        <>
+          <CountDown launchDate={launchDate} />
+          <BaseButton
+            w="full"
+            h="60px"
+            onClick={() => {
+              analytics.track("strategy.notify-me", {
+                strategyCard: cellarData.name,
+                landingType: landingType(),
+              })
+              notifyModal.onOpen()
+            }}
+          >
+            Notify me
+          </BaseButton>
+          <NotifyModal
+            isOpen={notifyModal.isOpen}
+            onClose={notifyModal.onClose}
+          />
+        </>
       ) : (
         <>
           <BaseButton

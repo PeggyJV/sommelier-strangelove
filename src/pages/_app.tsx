@@ -11,21 +11,41 @@ import { client as urqlClient } from "queries/client"
 import "utils/analytics"
 import { GlobalFonts } from "theme/GlobalFonts"
 import { GeoProvider } from "context/geoContext"
-import DataProvider from "data/provider/dataProvider"
 import { DefaultSeo } from "next-seo"
+import { useState } from "react"
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query"
 
 const App = ({ Component, pageProps }: AppProps) => {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // Prevent HTTP error 429
+            refetchOnWindowFocus: false,
+            staleTime: 5 * 60 * 1000,
+            refetchOnMount: false,
+          },
+        },
+      })
+  )
   return (
-    <GraphQLProvider value={urqlClient}>
-      <PlausibleProvider
-        domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
-      >
-        <ChakraProvider theme={theme}>
-          <GeoProvider>
-            <GlobalFonts />
-            <DialogProvider>
-              <WagmiProvider>
-                <DataProvider>
+    <QueryClientProvider
+      key="somm-data-provider-query-key"
+      client={queryClient}
+    >
+      <GraphQLProvider value={urqlClient}>
+        <PlausibleProvider
+          domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
+        >
+          <ChakraProvider theme={theme}>
+            <GeoProvider>
+              <GlobalFonts />
+              <DialogProvider>
+                <WagmiProvider>
                   <DefaultSeo
                     title="Sommelier Finance"
                     description="Access to risk-managed, multi chain strategies powered by off-chain computation"
@@ -49,14 +69,14 @@ const App = ({ Component, pageProps }: AppProps) => {
                     }}
                   />
                   <Component {...pageProps} />
-                </DataProvider>
-                <AlertDialog />
-              </WagmiProvider>
-            </DialogProvider>
-          </GeoProvider>
-        </ChakraProvider>
-      </PlausibleProvider>
-    </GraphQLProvider>
+                  <AlertDialog />
+                </WagmiProvider>
+              </DialogProvider>
+            </GeoProvider>
+          </ChakraProvider>
+        </PlausibleProvider>
+      </GraphQLProvider>
+    </QueryClientProvider>
   )
 }
 
