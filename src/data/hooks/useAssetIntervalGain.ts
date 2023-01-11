@@ -6,7 +6,9 @@ import { useMarketChart } from "./useMarketChart"
 export const useAssetIntervalGain = (
   asset: KnownCoingeckoAssetId,
   enabled: boolean,
-  days: number
+  days: number,
+  startDate?: Date,
+  endDate?: Date
 ) => {
   const assetMarketChart = useMarketChart({
     asset,
@@ -21,10 +23,22 @@ export const useAssetIntervalGain = (
       if (!assetMarketChart.data) {
         throw new Error("Market chart is not defined")
       }
-      return await getAssetIntervalGain(days, assetMarketChart.data)
+      if (!startDate || !endDate) {
+        throw new Error("date not defined")
+      }
+      return await getAssetIntervalGain(
+        days,
+        assetMarketChart.data,
+        startDate,
+        endDate
+      )
     },
     {
-      enabled: enabled && !!assetMarketChart.data,
+      enabled:
+        enabled &&
+        !!assetMarketChart.data &&
+        !!startDate &&
+        !!endDate,
     }
   )
 

@@ -17,7 +17,7 @@ export const getPrevious24Hours = () => {
 
 export const getPreviousWeek = (): number => {
   const now = new Date()
-  const lastWeekInSeconds = 24 * 60 * 60 * 7
+  const lastWeekInSeconds = 24 * 60 * 60 * 8
   now.setSeconds(now.getSeconds() - lastWeekInSeconds)
   const secondsSinceEpoch = Math.round(now.getTime() / 1000)
 
