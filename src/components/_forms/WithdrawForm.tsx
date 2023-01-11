@@ -214,6 +214,11 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     watchWithdrawAmount,
   ])
 
+  const currentPositionLoading =
+    currentPosition.isLoading ||
+    currentPosition.isRefetching ||
+    currentPosition.isFetching
+
   return (
     <VStack
       as="form"
@@ -355,12 +360,10 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
               <TransactionDetailItem
                 title="Assets"
                 value={
-                  currentPosition.isLoading ||
-                  currentPosition.isRefetching ||
-                  currentPosition.isFetching ? (
+                  currentPositionLoading ? (
                     <Spinner />
-                  ) : currentPosition.isError === false ? (
-                    <Text color="red.400">Error</Text>
+                  ) : currentPosition.isError ? (
+                    <Text>(Can't load)</Text>
                   ) : (
                     currentPosition.data?.positions.map((item) => {
                       if (!item) return <Text>--</Text>
@@ -419,8 +422,10 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
               <TransactionDetailItem
                 title="Estimated USD"
                 value={
-                  currentPosition.isError === false ? (
-                    <Text color="red.400">Error</Text>
+                  currentPositionLoading ? (
+                    <Spinner />
+                  ) : currentPosition.isError ? (
+                    <Text>(Can't load)</Text>
                   ) : (
                     <Text>≈ ${fixed(estimatedUSD || 0, 6)}</Text>
                   )
