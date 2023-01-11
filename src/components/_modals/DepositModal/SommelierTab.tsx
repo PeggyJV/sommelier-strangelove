@@ -311,7 +311,11 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
                 <Text as="span">View on Etherscan</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
-              <Text onClick={doImportToken} textDecor="underline">
+              <Text
+                onClick={doImportToken}
+                textDecor="underline"
+                as="button"
+              >
                 Import tokens to wallet
               </Text>
               <Text>
