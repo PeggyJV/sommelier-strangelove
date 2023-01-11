@@ -1,34 +1,44 @@
-import { useBrandedToast } from "hooks/chakra"
-import { useState } from "react"
-import { useToken } from "wagmi"
-import { Text } from "@chakra-ui/react"
+import { useMutation } from "@tanstack/react-query"
+import { fetchToken } from "@wagmi/core"
+import { cellarDataMap } from "data/cellarDataMap"
+import { MutationEventArgs } from "types/hooks"
+type Args = {
+  address: string
+  imageUrl?: string
+}
 
-export const useImportToken = (address: string) => {
-  const toast = useBrandedToast()
+type UseImportTokenArgs = MutationEventArgs<
+  Args,
+  Awaited<ReturnType<typeof fetchToken>>
+>
 
-  const [isLoading, setLoading] = useState(false)
-  const {
-    data: tokenData,
-    error,
-    isLoading: tokenLoading,
-  } = useToken({
+export const useImportToken = ({
+  onSuccess,
+  onError,
+  onMutate,
+}: UseImportTokenArgs = {}) => {
+  const doImportToken = async ({
     address,
-  })
-
-  const loading = tokenLoading || isLoading
-
-  const doImportToken = async () => {
+    imageUrl,
+  }: {
+    address: string
+    imageUrl?: string
+  }) => {
     try {
-      if (error) {
-        throw error
-      }
       if (typeof window.ethereum === "undefined") {
-        throw new Error("Metamask not installed")
+        throw new Error("No wallet installed")
       }
+      const tokenData = await fetchToken({
+        address,
+      })
       if (!tokenData) {
         throw new Error("Token data is undefined")
       }
-      const wasAdded = await window.ethereum.request({
+      const imgUrl = Object.values(cellarDataMap).find(
+        (item) => item.config.lpToken.address === address
+      )?.config.lpToken.imagePath
+      const fullImageUrl = `${window.origin}${imgUrl}`
+      const res = await window.ethereum.request({
         method: "wallet_watchAsset",
         params: {
           type: "ERC20",
@@ -36,31 +46,24 @@ export const useImportToken = (address: string) => {
             address: address,
             symbol: tokenData.symbol,
             decimals: tokenData.decimals,
+            image: imageUrl || fullImageUrl,
           },
         },
       })
-      if (wasAdded) {
-        toast.addToast({
-          heading: "Import Token",
-          status: "success",
-          body: <Text>Token added to metamask</Text>,
-          closeHandler: toast.closeAll,
-        })
+      if (!res) {
+        throw new Error("Failed to import token")
       }
-      setLoading(false)
+      return tokenData
     } catch (e) {
       const error = e as Error
-      toast.addToast({
-        heading: "Import Token",
-        status: "error",
-        body: <Text>{error.message}</Text>,
-        closeHandler: toast.closeAll,
-      })
-      setLoading(false)
+      throw error
     }
   }
-  return {
-    loading,
-    doImportToken,
-  }
+
+  const query = useMutation(["USE_IMPORT_TOKEN"], doImportToken, {
+    onSuccess,
+    onError,
+    onMutate,
+  })
+  return query
 }

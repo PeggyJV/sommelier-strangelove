@@ -64,7 +64,27 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
   const depositTokens = cellarData.depositTokens.list
-  const { doImportToken } = useImportToken(cellarAddress)
+  const { addToast, update, close, closeAll } = useBrandedToast()
+
+  const importToken = useImportToken({
+    onSuccess: (data) => {
+      addToast({
+        heading: "Import Token",
+        status: "success",
+        body: <Text>{data.symbol} added to metamask</Text>,
+        closeHandler: close,
+      })
+    },
+    onError: (error) => {
+      const e = error as Error
+      addToast({
+        heading: "Import Token",
+        status: "error",
+        body: <Text>{e.message}</Text>,
+        closeHandler: close,
+      })
+    },
+  })
 
   // Base Analytics data to differentiate between cellars
   const baseAnalytics = {
@@ -74,7 +94,6 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
 
   const { data: signer } = useSigner()
   const { address } = useAccount()
-  const { addToast, update, close, closeAll } = useBrandedToast()
 
   const { refetch: refetchNetValue } = useNetValue(cellarConfig)
 
@@ -312,7 +331,9 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
                 <ExternalLinkIcon ml={2} />
               </Link>
               <Text
-                onClick={doImportToken}
+                onClick={() => {
+                  importToken.mutate({ address: cellarAddress })
+                }}
                 textDecor="underline"
                 as="button"
               >
