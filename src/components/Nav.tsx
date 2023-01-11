@@ -61,7 +61,7 @@ export const Nav: VFC<FlexProps> = (props) => {
         alignItems="center"
       >
         <HStack spacing={10}>
-          <Link href="/">
+          <Link href="https://www.sommelier.finance/">
             {isMounted &&
               (isLarger768 ? (
                 <LogoTextIcon w="9rem" h="2rem" />
