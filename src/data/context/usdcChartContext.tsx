@@ -391,7 +391,7 @@ export const UsdcChartProvider: FC<{
     onSuccess: setDataHourly,
   })
   const usdcWeekly = useUsdcGainChartData({
-    day: Number(weeklyData?.length),
+    day: Number(weeklyData?.length) + 1,
     firstDate: new Date(Number(weeklyData?.[0].date) * 1000),
     enabled: timeline === "1W",
     interval: "daily",

@@ -359,69 +359,72 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
                   currentPosition.isRefetching ||
                   currentPosition.isFetching ? (
                     <Spinner />
+                  ) : currentPosition.isError === false ? (
+                    <Text color="red.400">Error</Text>
                   ) : (
-                    currentPosition.data?.positions
-                      ?.filter(
-                        (item) => Number(item.withdrawable) > 0
+                    currentPosition.data?.positions.map((item) => {
+                      if (!item) return <Text>--</Text>
+                      const token = tokenConfig.find(
+                        (token) =>
+                          token.address === item.address.toLowerCase()
                       )
-                      .map((item) => {
-                        if (!item) return <Text>--</Text>
-                        const token = tokenConfig.find(
-                          (token) =>
-                            token.address ===
-                            item.address.toLowerCase()
-                        )
-                        const withdrawable =
-                          Number(item.withdrawable) /
-                          Math.pow(10, item.decimals)
+                      const withdrawable =
+                        Number(item.withdrawable) /
+                        Math.pow(10, item.decimals)
 
-                        const percentage = item.ratio
-                          .times(100)
-                          .toNumber()
+                      const percentage = item.ratio
+                        .times(100)
+                        .toNumber()
 
-                        const resultWithdraw = new BigNumber(
-                          watchWithdrawAmount || 0
-                        )
-                          .div(
-                            new BigNumber(
-                              toEther(
-                                lpTokenData?.formatted,
-                                lpTokenData?.decimals,
-                                false,
-                                6
-                              )
+                      const resultWithdraw = new BigNumber(
+                        watchWithdrawAmount || 0
+                      )
+                        .div(
+                          new BigNumber(
+                            toEther(
+                              lpTokenData?.formatted,
+                              lpTokenData?.decimals,
+                              false,
+                              6
                             )
                           )
-                          .times(withdrawable)
-                          .toNumber()
-
-                        return (
-                          <HStack
-                            key={item.address}
-                            justifyContent="space-between"
-                          >
-                            <Avatar
-                              boxSize={6}
-                              src={token?.src}
-                              name={token?.alt}
-                              borderWidth={2}
-                              borderColor="surface.bg"
-                              bg="surface.bg"
-                            />
-                            <Text>
-                              {fixed(resultWithdraw, 8)}{" "}
-                              {token?.symbol} ({fixed(percentage, 2)}
-                              %)
-                            </Text>
-                          </HStack>
                         )
-                      })
+                        .times(withdrawable)
+                        .toNumber()
+
+                      return (
+                        <HStack
+                          key={item.address}
+                          justifyContent="space-between"
+                        >
+                          <Avatar
+                            boxSize={6}
+                            src={token?.src}
+                            name={token?.alt}
+                            borderWidth={2}
+                            borderColor="surface.bg"
+                            bg="surface.bg"
+                          />
+                          <Text>
+                            {fixed(resultWithdraw, 8)} {token?.symbol}{" "}
+                            ({fixed(percentage, 2)}
+                            %)
+                          </Text>
+                        </HStack>
+                      )
+                    })
                   )
                 }
               />
               <TransactionDetailItem
                 title="Estimated USD"
-                value={<Text>≈ ${fixed(estimatedUSD || 0, 6)}</Text>}
+                value={
+                  currentPosition.isError === false ? (
+                    <Text color="red.400">Error</Text>
+                  ) : (
+                    <Text>≈ ${fixed(estimatedUSD || 0, 6)}</Text>
+                  )
+                }
               />
             </>
           )}
