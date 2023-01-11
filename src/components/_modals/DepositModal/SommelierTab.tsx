@@ -53,6 +53,7 @@ import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
 import { isActiveTokenStrategyEnabled } from "data/uiConfig"
 import { useNetValue } from "data/hooks/useNetValue"
 import { useGeo } from "context/geoContext"
+import { useImportToken } from "hooks/web3/useImportToken"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -63,6 +64,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
   const depositTokens = cellarData.depositTokens.list
+  const { doImportToken } = useImportToken(cellarAddress)
 
   // Base Analytics data to differentiate between cellars
   const baseAnalytics = {
@@ -304,10 +306,18 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
                 alignItems="center"
                 href={`https://etherscan.io/tx/${depositResult?.data?.transactionHash}`}
                 isExternal
+                textDecor="underline"
               >
                 <Text as="span">View on Etherscan</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
+              <Text
+                onClick={doImportToken}
+                textDecor="underline"
+                as="button"
+              >
+                Import tokens to wallet
+              </Text>
               <Text>
                 Please wait 15 min after the deposit to Sell or Bond
               </Text>
