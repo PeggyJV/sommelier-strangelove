@@ -42,6 +42,7 @@ export const config = {
       ADDRESS: "0xa670d7237398238de01267472c6f13e5b8010fd1",
       DECIMALS: 6,
       ABI: erc20ABI,
+      IMAGE_PATH: "/assets/icons/somm.svg",
     },
     BRIDGE: {
       ADDRESS: "0x69592e6f9d21989a043646fE8225da2600e5A0f7",

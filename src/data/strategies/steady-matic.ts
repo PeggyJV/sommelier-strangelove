@@ -147,7 +147,7 @@ Presented results are based on historical back tests. Past performance is not in
     cellarNameKey: CellarNameKey.STEADY_MATIC,
     lpToken: {
       address: config.CONTRACT.STEADY_MATIC.ADDRESS,
-      imagePath: "/assets/icons/steady-btc.svg",
+      imagePath: "/assets/icons/steady-matic.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
