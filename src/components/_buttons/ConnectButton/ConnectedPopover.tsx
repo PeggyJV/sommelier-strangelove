@@ -10,7 +10,6 @@ import {
   useToast,
   Text,
   Stack,
-  Flex,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import truncateWalletAddress from "src/utils/truncateWalletAddress"
@@ -31,6 +30,8 @@ import { useImportToken } from "hooks/web3/useImportToken"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
 import { config } from "utils/config"
+import { useRouter } from "next/router"
+import { CellarNameKey } from "data/types"
 
 export const ConnectedPopover = () => {
   const toast = useToast()
@@ -64,6 +65,9 @@ export const ConnectedPopover = () => {
     },
   })
 
+  const id = useRouter().query.id as string | undefined
+  const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
+
   function onDisconnect() {
     analytics.track("wallet.disconnected", {
       account: address,
@@ -93,20 +97,6 @@ export const ConnectedPopover = () => {
         isClosable: true,
       })
     }
-  }
-
-  const importAllToken = async () => {
-    const arr = Object.values(cellarDataMap)
-    for (let i = 0; i < arr.length; i++) {
-      await importToken.mutateAsync({
-        address: arr[i].config.lpToken.address,
-      })
-    }
-    const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
-    await importToken.mutateAsync({
-      address: config.CONTRACT.SOMMELLIER.ADDRESS,
-      imageUrl: fullImageUrl,
-    })
   }
 
   // to make sure the loading is about not about fetching ENS
@@ -170,7 +160,7 @@ export const ConnectedPopover = () => {
       </HStack>
       <PopoverContent
         p={2}
-        maxW="240px"
+        maxW="max-content"
         borderWidth={1}
         borderColor="purple.dark"
         borderRadius={12}
@@ -198,58 +188,72 @@ export const ConnectedPopover = () => {
               <LogoutCircleIcon mr={2} />
               View on Etherscan
             </Link>
-            <Stack
-              as="button"
-              py={2}
-              px={4}
-              fontSize="sm"
-              onClick={importAllToken}
-              _hover={{
-                cursor: "pointer",
-                bg: "purple.dark",
-                borderColor: "surface.tertiary",
-              }}
-            >
-              <HStack>
-                <LogoutCircleIcon />
-                <Text fontWeight="semibold">
-                  Import all tokens to wallet
-                </Text>
-              </HStack>
-
-              <Flex wrap="wrap" gap={1.5}>
-                {Object.values(cellarDataMap).map((item) => (
-                  <Tooltip
-                    key={item.config.id}
-                    hasArrow
-                    arrowShadowColor="purple.base"
-                    label={item.name}
-                    placement="bottom"
-                    color="neutral.300"
-                    bg="surface.bg"
+            {selectedStrategy && (
+              <>
+                {selectedStrategy.config.cellarNameKey !==
+                  CellarNameKey.AAVE && (
+                  <Stack
+                    as="button"
+                    py={2}
+                    px={4}
+                    fontSize="sm"
+                    onClick={() => {
+                      importToken.mutate({
+                        address:
+                          selectedStrategy.config.lpToken.address,
+                      })
+                    }}
+                    _hover={{
+                      cursor: "pointer",
+                      bg: "purple.dark",
+                      borderColor: "surface.tertiary",
+                    }}
                   >
+                    <HStack>
+                      <Avatar
+                        src={
+                          selectedStrategy.config.lpToken.imagePath
+                        }
+                        size="2xs"
+                      />
+                      <Text fontWeight="semibold">
+                        Import {selectedStrategy.name} to wallet
+                      </Text>
+                    </HStack>
+                  </Stack>
+                )}
+
+                <Stack
+                  as="button"
+                  py={2}
+                  px={4}
+                  fontSize="sm"
+                  onClick={() => {
+                    const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
+                    importToken.mutate({
+                      address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                      imageUrl: fullImageUrl,
+                    })
+                  }}
+                  _hover={{
+                    cursor: "pointer",
+                    bg: "purple.dark",
+                    borderColor: "surface.tertiary",
+                  }}
+                >
+                  <HStack>
                     <Avatar
-                      src={item.config.lpToken.imagePath}
+                      src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
                       size="2xs"
                     />
-                  </Tooltip>
-                ))}
-                <Tooltip
-                  key="somm"
-                  hasArrow
-                  arrowShadowColor="purple.base"
-                  label="somm"
-                  placement="bottom"
-                  color="neutral.300"
-                  bg="surface.bg"
-                >
-                  <Avatar
-                    src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
-                    size="2xs"
-                  />
-                </Tooltip>
-              </Flex>
-            </Stack>
+                    <Text fontWeight="semibold">
+                      Import Reward token to wallet
+                    </Text>
+                  </HStack>
+                </Stack>
+              </>
+            )}
+
             <HStack
               as="button"
               py={2}
