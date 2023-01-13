@@ -1,10 +1,8 @@
 import { Box, BoxProps, Grid, Heading } from "@chakra-ui/react"
 import { Link } from "components/Link"
-import { SevenSeasIcon } from "components/_icons/SevenSeasIcon"
-import { ClearGateIcon } from "components/_icons/ClearGateIcon"
 import { BecomeProvider } from "./BecomeProvider"
 import { CardBase } from "./CardBase"
-import { PatacheIcon } from "components/_icons/PatacheIcon"
+import Image from "next/image"
 
 export const StrategyProviders: React.FC<BoxProps> = (props) => {
   return (
@@ -22,17 +20,32 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
       >
         <Link isExternal href="https://7seas.capital/">
           <CardBase justifyContent="center" h="full">
-            <SevenSeasIcon w={{ base: 200, lg: 243 }} h={100} />
+            <Image
+              width={243}
+              height={100}
+              alt="seven seas"
+              src="/assets/logos/seven-seas.webp"
+            />
           </CardBase>
         </Link>
         <Link isExternal href="https://cleargate.capital/">
           <CardBase justifyContent="center" h="full">
-            <ClearGateIcon w={{ base: 200, lg: 243 }} h={100} />
+            <Image
+              width={243}
+              height={100}
+              alt="clear gate"
+              src="/assets/logos/clear-gate.webp"
+            />
           </CardBase>
         </Link>
         <Link isExternal href="https://www.algoreturns.com/patache/">
           <CardBase justifyContent="center" h="full">
-            <PatacheIcon w={{ base: 200, lg: 243 }} h={100} />
+            <Image
+              width={243}
+              height={100}
+              alt="patache"
+              src="/assets/logos/patache.webp"
+            />
           </CardBase>
         </Link>
         <BecomeProvider />

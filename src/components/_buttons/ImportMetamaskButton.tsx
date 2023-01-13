@@ -1,4 +1,5 @@
-import { Tooltip, IconButton, Image } from "@chakra-ui/react"
+import { Tooltip, IconButton, Image, Text } from "@chakra-ui/react"
+import { useBrandedToast } from "hooks/chakra"
 import { useImportToken } from "hooks/web3/useImportToken"
 
 export const ImportMetamaskButton = ({
@@ -6,7 +7,26 @@ export const ImportMetamaskButton = ({
 }: {
   address: string
 }) => {
-  const { doImportToken, loading } = useImportToken(address)
+  const { addToast, closeAll } = useBrandedToast()
+  const importToken = useImportToken({
+    onSuccess: (data) => {
+      addToast({
+        heading: "Import Token",
+        status: "success",
+        body: <Text>{data.symbol} added to metamask</Text>,
+        closeHandler: close,
+      })
+    },
+    onError: (error) => {
+      const e = error as Error
+      addToast({
+        heading: "Import Token",
+        status: "error",
+        body: <Text>{e.message}</Text>,
+        closeHandler: closeAll,
+      })
+    },
+  })
   return (
     <Tooltip
       hasArrow
@@ -17,9 +37,9 @@ export const ImportMetamaskButton = ({
       bg="surface.bg"
     >
       <IconButton
-        isLoading={loading}
-        disabled={loading}
-        onClick={doImportToken}
+        isLoading={importToken.isLoading}
+        disabled={importToken.isLoading}
+        onClick={() => importToken.mutate({ address })}
         ml={1}
         aria-label="Import token to metamask"
         size="sm"

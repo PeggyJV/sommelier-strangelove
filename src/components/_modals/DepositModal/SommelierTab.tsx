@@ -53,6 +53,7 @@ import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
 import { isActiveTokenStrategyEnabled } from "data/uiConfig"
 import { useNetValue } from "data/hooks/useNetValue"
 import { useGeo } from "context/geoContext"
+import { useImportToken } from "hooks/web3/useImportToken"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -63,6 +64,27 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
   const depositTokens = cellarData.depositTokens.list
+  const { addToast, update, close, closeAll } = useBrandedToast()
+
+  const importToken = useImportToken({
+    onSuccess: (data) => {
+      addToast({
+        heading: "Import Token",
+        status: "success",
+        body: <Text>{data.symbol} added to metamask</Text>,
+        closeHandler: close,
+      })
+    },
+    onError: (error) => {
+      const e = error as Error
+      addToast({
+        heading: "Import Token",
+        status: "error",
+        body: <Text>{e.message}</Text>,
+        closeHandler: close,
+      })
+    },
+  })
 
   // Base Analytics data to differentiate between cellars
   const baseAnalytics = {
@@ -72,7 +94,6 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
 
   const { data: signer } = useSigner()
   const { address } = useAccount()
-  const { addToast, update, close, closeAll } = useBrandedToast()
 
   const { refetch: refetchNetValue } = useNetValue(cellarConfig)
 
@@ -304,10 +325,20 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
                 alignItems="center"
                 href={`https://etherscan.io/tx/${depositResult?.data?.transactionHash}`}
                 isExternal
+                textDecor="underline"
               >
                 <Text as="span">View on Etherscan</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
+              <Text
+                onClick={() => {
+                  importToken.mutate({ address: cellarAddress })
+                }}
+                textDecor="underline"
+                as="button"
+              >
+                Import tokens to wallet
+              </Text>
               <Text>
                 Please wait 15 min after the deposit to Sell or Bond
               </Text>

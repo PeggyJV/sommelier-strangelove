@@ -54,7 +54,7 @@ export const aaveStable = {
     cellarNameKey: CellarNameKey.AAVE,
     lpToken: {
       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
-      imagePath: "/assets/icons/aave.png",
+      imagePath: "/assets/icons/aave2.svg",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0815.ADDRESS,
