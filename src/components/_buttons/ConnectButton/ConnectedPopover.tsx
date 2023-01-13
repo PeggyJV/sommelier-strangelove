@@ -217,7 +217,7 @@ export const ConnectedPopover = () => {
                         size="2xs"
                       />
                       <Text fontWeight="semibold">
-                        Import {selectedStrategy.name} to wallet
+                        Import {selectedStrategy.name} to Wallet
                       </Text>
                     </HStack>
                   </Stack>
@@ -247,7 +247,7 @@ export const ConnectedPopover = () => {
                       size="2xs"
                     />
                     <Text fontWeight="semibold">
-                      Import Reward token to wallet
+                      Import Reward token to Wallet
                     </Text>
                   </HStack>
                 </Stack>
