@@ -3,6 +3,17 @@ import { useBrandedToast } from "hooks/chakra"
 import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { TransactionReceipt } from "@ethersproject/providers"
+
+type Result =
+  | {
+      data: TransactionReceipt
+      error: undefined
+    }
+  | {
+      data: undefined
+      error: Error
+    }
 
 type TxParams = {
   hash: string
@@ -10,6 +21,7 @@ type TxParams = {
     info?: React.ReactNode
     success?: React.ReactNode
     error?: React.ReactNode
+    successWithParams?: (data: Result) => React.ReactNode
   }
   onSuccess?: () => void
   onError?: (error: Error) => void
@@ -58,12 +70,22 @@ export const useHandleTransaction = (): {
           </Link>
         </>
       )
-      update({
-        heading: "Transaction",
-        body: successBody,
-        status: "success",
-        closeHandler: closeAll,
-      })
+      if (!!toastBody?.successWithParams) {
+        const tBody = toastBody.successWithParams(result)
+        update({
+          heading: "Transaction",
+          body: tBody,
+          status: "success",
+          closeHandler: closeAll,
+        })
+      } else {
+        update({
+          heading: "Transaction",
+          body: successBody,
+          status: "success",
+          closeHandler: closeAll,
+        })
+      }
 
       if (onSuccess && typeof onSuccess === "function") {
         onSuccess()
