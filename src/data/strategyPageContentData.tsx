@@ -582,17 +582,18 @@ export const strategyPageContentData = {
     ),
     alternativeTo:
       "Holding or manually lending / LPing USDC, USDT, and DAI",
-    // exchange: [
-    //   {
-    //     name: "Sommelier",
-    //     logo: "/assets/icons/somm.png",
-    //   },
-    //   {
-    //     url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x05641a27c82799aaf22b436f20a3110410f29652",
-    //     name: "Uniswap",
-    //     logo: "/assets/icons/uniswap.png",
-    //   },
-    // ],
+    // TODO: UPDATE EXCHANGE DATA
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+      {
+        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x05641a27c82799aaf22b436f20a3110410f29652",
+        name: "Uniswap",
+        logo: "/assets/icons/uniswap.png",
+      },
+    ],
     strategyHighlights: {
       card: [
         `Targets battle-tested protocols that are reliable sources of "real yield."`,
