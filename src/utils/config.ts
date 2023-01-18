@@ -97,6 +97,12 @@ export const config = {
       SLUG: "Steady-MATIC",
       ABI: cellarV0816,
     },
+    REAL_YIELD_USD: {
+      // TODO: UPDATE ADDRESS
+      ADDRESS: "0x05641a27c82799aaf22b436f20a3110410f29655",
+      SLUG: "Real-Yield-USD",
+      ABI: cellarV0816,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",

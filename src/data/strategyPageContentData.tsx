@@ -545,4 +545,68 @@ export const strategyPageContentData = {
     </div>
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
+  [config.CONTRACT.REAL_YIELD_USD.SLUG]: {
+    name: "Real Yield USD",
+    provider: "Seven Seas",
+    providerUrl: "https://www.algoreturns.com/patache/",
+    description: `Stablecoin yield maximization strategy that optimally allocates USDC, USDT and DAI across Aave, Compound and Uniswap v3.`,
+    // TODO: UPDATE TICKER IMAGE
+    ticker: (
+      <>
+        <Image
+          alt="steady matic icon"
+          src="/assets/icons/steady-matic.png"
+          boxSize={8}
+        />
+        <Text>YieldUSD</Text>
+      </>
+    ),
+    tradedAssets: (
+      <>
+        <Image
+          alt="usdc icon"
+          src="/assets/icons/usdc.png"
+          boxSize={8}
+        />
+        <Image
+          alt="usdt icon"
+          src="/assets/icons/usdt.png"
+          boxSize={8}
+        />
+        <Image
+          alt="dai icon"
+          src="/assets/icons/dai.png"
+          boxSize={8}
+        />
+      </>
+    ),
+    alternativeTo:
+      "Holding or manually lending / LPing USDC, USDT, and DAI",
+    // exchange: [
+    //   {
+    //     name: "Sommelier",
+    //     logo: "/assets/icons/somm.png",
+    //   },
+    //   {
+    //     url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x05641a27c82799aaf22b436f20a3110410f29652",
+    //     name: "Uniswap",
+    //     logo: "/assets/icons/uniswap.png",
+    //   },
+    // ],
+    strategyHighlights: {
+      card: [
+        `Targets battle-tested protocols that are reliable sources of "real yield."`,
+        `Earns from lending and LPing to capture yield that others can't.`,
+        `Includes the three most used stablecoins in DeFi.`,
+      ],
+      description: `Real Yield USD is the final evolution of real stablecoin yields in DeFi. By “real yield” we mean yield that results from trading or lending activity (fees) rather than resulting from incentives. The primary sources of real yield exist on lending platforms like Aave and Compound, and decentralized exchanges like Uniswap. Because of this, Real Yield USD focuses on these three protocols and simultaneously allocates capital to Aave and Compound lending pools and Uniswap V3 LP pools in order to maximize yield. One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can manage the complexity of optimizing Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies.`,
+    },
+    howItWorks: `"Determining the optimal allocation of stablecoins across these three protocols for the highest yield is non-trivial and requires some component of off-chain computation. Sommelier’s novel infrastructure enables active management of an ERC-4626 vault (guided by off-chain computation) while remaining non-custodial, transparent, and decentralized.
+    <br/><br/>
+    The optimal allocation is determined by a numerical optimization procedure that accounts for swap fees and market impact due to position size, and makes use of various simple time-series forecasting methods to estimate (future) base yields.
+    <br/><br/>
+    One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it optimizes Uniswap V3 tick ranges. Picking a lending position on Aave or Compound is relatively easy (ignoring factors like market impact which are actually important) because there are no degrees of freedom - it simply boils down to the decision of whether to lend a certain token or not. Providing liquidity on Uniswap V3, on the other hand, is complex because the choice of tick range determines both fee revenue and impermanent loss. Our optimization procedure accounts for all of these factors."`,
+    backtestingText:
+      "https://7seascapital.notion.site/The-Real-Yield-USD-Cellar-af0e2adbd2a14f18a9102871645a472e",
+  },
 }

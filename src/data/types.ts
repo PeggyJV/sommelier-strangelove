@@ -18,6 +18,7 @@ export enum CellarNameKey {
   STEADY_BTC = "STEADY_BTC",
   STEADY_UNI = "STEADY_UNI",
   STEADY_MATIC = "STEADY_MATIC",
+  REAL_YIELD_USD = "REAL_YIELD_USD",
 }
 
 export interface ConfigProps {
