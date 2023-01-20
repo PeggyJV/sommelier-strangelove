@@ -28,7 +28,6 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
   cellarDataMap,
 }) => {
   const { strategyBreakdown, faq } = cellarDataMap[cellarId]
-  console.log(strategyBreakdown)
 
   return (
     <InnerCard
