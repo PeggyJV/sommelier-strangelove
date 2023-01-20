@@ -1,11 +1,13 @@
 import {
   Box,
   BoxProps,
+  Link,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
 } from "@chakra-ui/react"
 import { VFC } from "react"
 import { InnerCard } from "../InnerCard"
@@ -14,6 +16,7 @@ import { analytics } from "utils/analytics"
 import { CellarDataMap } from "data/types"
 import { FAQAccordion } from "./FAQAccordion"
 import htmr from "htmr"
+import { isValidURL } from "components/Highlight"
 
 interface StrategyBreakdownProps extends BoxProps {
   cellarDataMap: CellarDataMap
@@ -25,6 +28,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
   cellarDataMap,
 }) => {
   const { strategyBreakdown, faq } = cellarDataMap[cellarId]
+  console.log(strategyBreakdown)
 
   return (
     <InnerCard
@@ -69,6 +73,18 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
         </TabList>
         <TabPanels>
           {Object.values(strategyBreakdown).map((value, i) => {
+            if (isValidURL(value)) {
+              return (
+                <TabPanel key={i} {...tabPanelProps}>
+                  <Text>
+                    Read more about backtesting{" "}
+                    <Link href={value} textDecor="underline">
+                      here
+                    </Link>
+                  </Text>
+                </TabPanel>
+              )
+            }
             return (
               <TabPanel key={i} {...tabPanelProps}>
                 <Box whiteSpace="pre-line">{htmr(value)}</Box>
