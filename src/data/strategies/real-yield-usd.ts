@@ -10,7 +10,7 @@ import { depositAssetTokenList } from "../tokenConfig"
 
 export const realYieldUsd = {
   name: "Real Yield USD",
-  launchDate: new Date(2023, 1, 25, 11, 30, 0, 0),
+  launchDate: new Date(2023, 0, 25, 11, 30, 0, 0),
   cellarType: CellarType.automatedPortfolio,
   description: `Maximize your stablecoin yield with the only strategy in DeFi that can optimize between Aave, Compound and Uniswap V3.`,
   strategyType: "Crypto portfolio",
@@ -18,7 +18,7 @@ export const realYieldUsd = {
   managementFee: "0.5%",
   managementFeeTooltip:
     "Platform fee split: 0.4% for Strategy provider and 0.1% for protocol",
-  protocols: "Aave, Compound, Uniswap V3",
+  protocols: ["AAVE", "Compound", "Uniswap V3"],
   strategyAssets: ["USDC", "USDT", "DAI"],
   performanceSplit: {
     depositors: 100,
@@ -73,8 +73,8 @@ export const realYieldUsd = {
       key: CellarKey.CELLAR_V0816,
     },
     staker: {
-      address: config.CONTRACT.STEADY_UNI_STAKER.ADDRESS,
-      abi: config.CONTRACT.STEADY_UNI_STAKER.ABI,
+      address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+      abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
