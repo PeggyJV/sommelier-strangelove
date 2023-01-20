@@ -98,8 +98,7 @@ export const config = {
       ABI: cellarV0816,
     },
     REAL_YIELD_USD: {
-      // TODO: UPDATE ADDRESS
-      ADDRESS: "0x05641a27c82799aaf22b436f20a3110410f29655",
+      ADDRESS: "0x97e6E0a40a3D02F12d1cEC30ebfbAE04e37C119E",
       SLUG: "Real-Yield-USD",
       ABI: cellarV0816,
     },
