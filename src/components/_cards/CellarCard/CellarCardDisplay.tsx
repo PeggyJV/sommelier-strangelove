@@ -1,4 +1,4 @@
-import { BoxProps, Heading, Flex, Text } from "@chakra-ui/react"
+import { BoxProps, Heading, Flex, Text, Box } from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
@@ -14,13 +14,14 @@ import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { TransparentSkeleton } from "components/_skeleton"
 import { formatDistance } from "utils/formatDistance"
 import { isComingSoon } from "utils/isComingSoon"
+import { ProtocolDataType } from "../CellarDetailsCard"
 export interface CellarCardData {
   cellarId: string
   name: string
   description: string
   strategyType: string
   managementFee: string
-  protocols: string
+  protocols: string | string[]
 }
 
 interface CellarCardProps extends BoxProps {
@@ -37,7 +38,19 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
 }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
   const launchDate = cellarDataMap[data.cellarId].launchDate
-  const protocolIcon = protocolsImage[data.protocols]
+  const protocols = data.protocols
+  const isManyProtocols = typeof protocols === "object"
+  const protocolData = isManyProtocols
+    ? protocols.map((v) => {
+        return {
+          title: v,
+          icon: protocolsImage[v],
+        }
+      })
+    : {
+        title: protocols,
+        icon: protocolsImage[protocols],
+      }
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
   const stakingEnd = useStakingEnd(cellarConfig)
   const comingSoon = isComingSoon(launchDate)
@@ -117,16 +130,31 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
               {data.managementFee}{" "}
               {data.managementFee !== "..." && "Fee"}
             </Tag>
-            <Tag display="flex" alignItems="center">
-              {protocolIcon && (
-                <InlineImage
-                  src={protocolIcon}
-                  alt="protocol logo"
-                  boxSize={4}
-                />
-              )}
-              {data.protocols}
-            </Tag>
+            {isManyProtocols ? (
+              (protocolData as ProtocolDataType[]).map((v, i) => (
+                <Tag display="flex" alignItems="center" key={i}>
+                  {v && (
+                    <InlineImage
+                      src={(v as ProtocolDataType).icon}
+                      alt="protocol logo"
+                      boxSize={4}
+                    />
+                  )}
+                  {v.title}
+                </Tag>
+              ))
+            ) : (
+              <Tag display="flex" alignItems="center">
+                {protocolData && (
+                  <InlineImage
+                    src={(protocolData as ProtocolDataType).icon}
+                    alt="protocol logo"
+                    boxSize={4}
+                  />
+                )}
+                {(protocolData as ProtocolDataType).title}
+              </Tag>
+            )}
           </Flex>
         </Flex>
         <Flex

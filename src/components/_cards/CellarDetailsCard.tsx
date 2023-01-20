@@ -42,7 +42,7 @@ interface CellarDetailsProps extends BoxProps {
   cellarDataMap: CellarDataMap
 }
 
-interface ProtocolDataType {
+export interface ProtocolDataType {
   title: string
   icon: string
 }
