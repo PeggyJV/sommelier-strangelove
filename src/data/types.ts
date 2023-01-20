@@ -61,7 +61,7 @@ export interface CellarDataMap {
     strategyTypeTooltip?: string
     managementFee: string
     managementFeeTooltip?: string
-    protocols: string
+    protocols: string | string[]
     strategyAssets: string[]
     performanceSplit: {
       [key: string]: number
