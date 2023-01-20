@@ -6,12 +6,11 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
-import { depositAssetTokenList } from "../tokenConfig"
 
 export const realYieldUsd = {
   name: "Real Yield USD",
   launchDate: new Date(2023, 0, 25, 11, 30, 0, 0),
-  cellarType: CellarType.automatedPortfolio,
+  cellarType: CellarType.yieldStrategies,
   description: `Maximize your stablecoin yield with the only strategy in DeFi that can optimize between Aave, Compound and Uniswap V3.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
@@ -51,7 +50,7 @@ export const realYieldUsd = {
   //   value: "84.15%",
   // },
   depositTokens: {
-    list: ["USDC", "USDT", "DAI", ...depositAssetTokenList],
+    list: ["USDC", "USDT", "DAI"],
   },
 
   config: {
@@ -59,8 +58,7 @@ export const realYieldUsd = {
     cellarNameKey: CellarNameKey.REAL_YIELD_USD,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
-      // TODO: UPDATE IMAGE PATH
-      imagePath: "/assets/icons/steady-uni.png",
+      imagePath: "/assets/icons/real-yield-usd.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
