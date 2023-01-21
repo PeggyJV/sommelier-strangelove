@@ -438,7 +438,7 @@ export const strategyPageContentData = {
     name: "Steady MATIC",
     provider: "Patache",
     providerUrl: "https://www.algoreturns.com/patache/",
-    description: `Strategy page headline: Capture the upside of MATIC price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
+    description: `Capture the upside of MATIC price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
     ticker: (
       <>
         <Image
