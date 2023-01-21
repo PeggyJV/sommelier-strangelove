@@ -121,22 +121,20 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             isOpen={buyOrSellModal.isOpen}
             onClose={buyOrSellModal.onClose}
           />
-          {content.exchange && (
-            <Link
-              href={`/strategies/${id}/manage`}
-              onClick={() => {
-                analytics.track("strategy.manage-portfolio", {
-                  strategyCard: cellarData.name,
-                  landingType: landingType(),
-                })
-              }}
-              textDecoration="none"
-            >
-              <SecondaryButton w="full" h="50px">
-                View Details
-              </SecondaryButton>
-            </Link>
-          )}
+          <Link
+            href={`/strategies/${id}/manage`}
+            onClick={() => {
+              analytics.track("strategy.manage-portfolio", {
+                strategyCard: cellarData.name,
+                landingType: landingType(),
+              })
+            }}
+            textDecoration="none"
+          >
+            <SecondaryButton w="full" h="50px">
+              View Details
+            </SecondaryButton>
+          </Link>
           <HStack
             pt={4}
             justifyContent="space-around"
