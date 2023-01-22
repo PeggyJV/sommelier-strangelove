@@ -595,7 +595,12 @@ export const strategyPageContentData = {
     The optimal allocation is determined by a numerical optimization procedure that accounts for swap fees and market impact due to position size, and makes use of various simple time-series forecasting methods to estimate (future) base yields.
     <br/><br/>
     One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it optimizes Uniswap V3 tick ranges. Picking a lending position on Aave or Compound is relatively easy (ignoring factors like market impact which are actually important) because there are no degrees of freedom - it simply boils down to the decision of whether to lend a certain token or not. Providing liquidity on Uniswap V3, on the other hand, is complex because the choice of tick range determines both fee revenue and impermanent loss. Our optimization procedure accounts for all of these factors."`,
-    backtestingText:
-      "https://7seascapital.notion.site/The-Real-Yield-USD-Cellar-af0e2adbd2a14f18a9102871645a472e",
+    backtestingText: `
+    We have run backtests of the strategy for various TVLs using the past 40 days of data:
+      <div style="display:flex;flex-direction:column;gap:1rem;margin-top:20">
+        <img src="/assets/images/real-yield-usd-backtesting-image.png"/>
+        <a href="https://7seascapital.notion.site/The-Real-Yield-USD-Cellar-af0e2adbd2a14f18a9102871645a472e" style="text-decoration:underline">Read more</a>
+      </div>
+      `,
   },
 }
