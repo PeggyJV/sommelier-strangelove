@@ -168,7 +168,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
   ) => {
     const estimatedGas = await estimateGasLimit(
       cellarSigner.estimateGas.deposit(amtInWei, address),
-      120000,
+      1200000,
       1.5
     )
     return cellarSigner.deposit(amtInWei, address, {
