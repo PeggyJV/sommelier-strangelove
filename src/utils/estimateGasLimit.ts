@@ -1,6 +1,9 @@
 import { BigNumber, BigNumberish } from "ethers"
 
-const gasLimitMargin = (gasEstimated: BigNumber, margin?: number) =>
+export const gasLimitMargin = (
+  gasEstimated: BigNumber,
+  margin?: number
+) =>
   gasEstimated
     .mul(Number((margin ? margin : 1.1) * 100).toFixed()) // default increase 10%
     .div(100)
