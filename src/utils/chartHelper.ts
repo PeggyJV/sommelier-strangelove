@@ -62,9 +62,9 @@ export const createEthBtcChartSeries = ({
   const minimal = Math.min(
     Number(tokenPrice?.length),
     // Number(ethBtc50?.length),
+    Number(usdc?.length),
     Number(weth?.length),
-    Number(wbtc?.length),
-    Number(usdc?.length)
+    Number(wbtc?.length)
   )
   return [
     {
@@ -78,6 +78,11 @@ export const createEthBtcChartSeries = ({
     //   color: colors.violet.base,
     // },
     {
+      id: "usdc",
+      data: usdc?.slice(0, minimal) || [],
+      color: colors.violet.base,
+    },
+    {
       id: "weth",
       data: weth?.slice(0, minimal) || [],
       color: colors.turquoise.base,
@@ -86,11 +91,6 @@ export const createEthBtcChartSeries = ({
       id: "wbtc",
       data: wbtc?.slice(0, minimal) || [],
       color: colors.orange.base,
-    },
-    {
-      id: "usdc",
-      data: usdc?.slice(0, minimal) || [],
-      color: colors.violet.base,
     },
   ]
 }
