@@ -1,15 +1,16 @@
 import { BigNumber, BigNumberish } from "ethers"
 
-const gasLimitMargin = (gasEstimated: BigNumber) =>
-  gasEstimated.mul(110).div(100) // increase 10%
+const gasLimitMargin = (gasEstimated: BigNumber, margin?: number) =>
+  gasEstimated.mul(margin ? margin : 1.1) // increase 10%
 
 export const estimateGasLimit = async (
   fn: Promise<BigNumber>,
-  knownGasLimit: BigNumberish
+  knownGasLimit: BigNumberish,
+  margin?: number
 ) => {
   try {
     const gas = await fn
-    return gasLimitMargin(gas).toString()
+    return gasLimitMargin(gas, margin).toString()
   } catch (error) {
     return knownGasLimit
   }
