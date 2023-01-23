@@ -1,7 +1,5 @@
 import { BigNumber, BigNumberish } from "ethers"
 
-const PAD = [1.15, 1.3, 1.45]
-
 export const gasLimitMargin = (
   gasEstimated: BigNumber,
   margin?: number
@@ -22,6 +20,9 @@ export const estimateGasLimit = async (
     return knownGasLimit
   }
 }
+
+const PAD = [1.15, 1.3, 1.45]
+
 /**
  *
  * @example
@@ -53,14 +54,13 @@ export const estimateGasLimitWithRetry = async (
   )
   let gasLimitEstimated = BigNumber.from(gasEstimatedRes)
 
-  const pad = [1.15, 1.3, 1.45]
   let count = 1
   const maxTries = 3
   while (count <= maxTries) {
     try {
       const gasLimit = gasLimitMargin(
         gasLimitEstimated,
-        pad[count - 1]
+        PAD[count - 1]
       )
       const tx = await fnCallStatic(...args, {
         gasLimit,
