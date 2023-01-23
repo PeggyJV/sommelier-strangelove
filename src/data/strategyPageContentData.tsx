@@ -549,7 +549,7 @@ export const strategyPageContentData = {
     name: "Real Yield USD",
     provider: "Seven Seas",
     providerUrl: "https://www.algoreturns.com/patache/",
-    description: `Stablecoin yield maximization strategy that optimally allocates USDC, USDT and DAI across Aave, Compound and Uniswap v3.`,
+    description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
     ticker: (
       <>
         <Image
@@ -584,23 +584,23 @@ export const strategyPageContentData = {
 
     strategyHighlights: {
       card: [
-        `Targets battle-tested protocols that are reliable sources of "real yield."`,
-        `Earns from lending and LPing to capture yield that others can't.`,
-        `Includes the three most used stablecoins in DeFi.`,
+        `The only active strategy which optimally allocates capital across key protocols for max yield.`,
+        `Combines lending and LPing activities in a single strategy to deliver real yield others can't.`,
+        `Optimizes Uniswap V3 LP tick ranges.`,
       ],
-      description: `Real Yield USD is the final evolution of real stablecoin yields in DeFi. By “real yield” we mean yield that results from trading or lending activity (fees) rather than resulting from incentives. The primary sources of real yield exist on lending platforms like Aave and Compound, and decentralized exchanges like Uniswap. Because of this, Real Yield USD focuses on these three protocols and simultaneously allocates capital to Aave and Compound lending pools and Uniswap V3 LP pools in order to maximize yield. One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can manage the complexity of optimizing Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies.`,
+      description: `"Real Yield USD has a real technological edge to deliver yields others can't.
+
+      By “real yield” we mean yield that results from trading or lending activity (fees) rather than resulting from incentives. The primary sources of real yield exist on lending platforms like Aave and Compound, and decentralized exchanges like Uniswap. Because of this, Real Yield USD focuses on these three protocols and simultaneously allocates capital to Aave and Compound lending pools and Uniswap V3 LP pools in order to maximize yield.
+
+      One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can manage the complexity of optimizing Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies."`,
     },
-    howItWorks: `"Determining the optimal allocation of stablecoins across these three protocols for the highest yield is non-trivial and requires some component of off-chain computation. Sommelier’s novel infrastructure enables active management of an ERC-4626 vault (guided by off-chain computation) while remaining non-custodial, transparent, and decentralized.
+    howItWorks: `Determining the optimal allocation of stablecoins across these three protocols for the highest yield is non-trivial and requires off-chain computation.
     <br/><br/>
-    The optimal allocation is determined by a numerical optimization procedure that accounts for swap fees and market impact due to position size, and makes use of various simple time-series forecasting methods to estimate (future) base yields.
+    Sommelier’s novel infrastructure enables active capital management of an ERC-4626 vault (guided by off-chain computation) while remaining non-custodial, transparent, and decentralized. The optimal allocation is determined by a numerical optimization procedure that accounts for swap fees and market impact due to position size, and makes use of various simple time-series forecasting methods to estimate (future) base yields.
     <br/><br/>
-    One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it optimizes Uniswap V3 tick ranges. Picking a lending position on Aave or Compound is relatively easy (ignoring factors like market impact which are actually important) because there are no degrees of freedom - it simply boils down to the decision of whether to lend a certain token or not. Providing liquidity on Uniswap V3, on the other hand, is complex because the choice of tick range determines both fee revenue and impermanent loss. Our optimization procedure accounts for all of these factors."`,
+    One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it optimizes Uniswap V3 tick ranges. Picking a lending position on Aave or Compound is relatively easy (ignoring factors like market impact which are actually important) because there are no degrees of freedom - it simply boils down to the decision of whether to lend a certain token or not. Providing liquidity on Uniswap V3, on the other hand, is complex because the choice of tick range determines both fee revenue and impermanent loss. Our optimization procedure accounts for all of these factors.`,
     backtestingText: `
-    We have run backtests of the strategy for various TVLs using the past 40 days of data:
-      <div style="display:flex;flex-direction:column;gap:1rem;margin-top:20">
         <img src="/assets/images/real-yield-usd-backtesting-image.png"/>
-        <a href="https://7seascapital.notion.site/The-Real-Yield-USD-Cellar-af0e2adbd2a14f18a9102871645a472e" style="text-decoration:underline">Read more</a>
-      </div>
       `,
   },
 }
