@@ -19,6 +19,7 @@ export const strategyPageContentData = {
         <Text>ETHBTCTrend</Text>
       </>
     ),
+    tradedAssets: ["USDC", "WETH", "WBTC"],
     alternativeTo: "Holding ETH or BTC",
     exchange: [
       {
@@ -88,6 +89,7 @@ export const strategyPageContentData = {
         <Text>ETHBTCMom</Text>
       </>
     ),
+    tradedAssets: ["USDC", "WETH", "WBTC"],
     alternativeTo: "Holding ETH or BTC",
     exchange: [
       {
@@ -153,20 +155,7 @@ export const strategyPageContentData = {
         <Text>SteadyETH</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="eth icon"
-          src="/assets/icons/eth.png"
-          boxSize={8}
-        />
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-      </>
-    ),
+    tradedAssets: ["WETH", "USDC"],
     alternativeTo: "Holding USDC",
     exchange: [
       {
@@ -244,20 +233,7 @@ export const strategyPageContentData = {
         <Text>SteadyBTC</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="btc icon"
-          src="/assets/icons/btc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-      </>
-    ),
+    tradedAssets: ["WBTC", "USDC"],
     alternativeTo: "Holding USDC",
     exchange: [
       {
@@ -337,20 +313,7 @@ export const strategyPageContentData = {
         <Text>SteadyUNI</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="uniswap icon"
-          src="/assets/icons/uniswap.png"
-          boxSize={8}
-        />
-      </>
-    ),
+    tradedAssets: ["USDC", "UNI"],
     alternativeTo: "Holding USDC",
     exchange: [
       {
@@ -449,20 +412,7 @@ export const strategyPageContentData = {
         <Text>SteadyMATIC</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="matic icon"
-          src="/assets/icons/matic.png"
-          boxSize={8}
-        />
-      </>
-    ),
+    tradedAssets: ["USDC", "MATIC"],
     alternativeTo: "Holding USDC",
     exchange: [
       {
@@ -548,7 +498,7 @@ export const strategyPageContentData = {
   [config.CONTRACT.REAL_YIELD_USD.SLUG]: {
     name: "Real Yield USD",
     provider: "Seven Seas",
-    providerUrl: "https://www.algoreturns.com/patache/",
+    providerUrl: "https://7seas.capital/",
     description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
     ticker: (
       <>
@@ -560,25 +510,7 @@ export const strategyPageContentData = {
         <Text>YieldUSD</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="usdt icon"
-          src="/assets/icons/usdt.png"
-          boxSize={8}
-        />
-        <Image
-          alt="dai icon"
-          src="/assets/icons/dai.png"
-          boxSize={8}
-        />
-      </>
-    ),
+    tradedAssets: ["USDC", "USDT", "DAI"],
     alternativeTo:
       "Holding or manually lending / LPing USDC, USDT, and DAI",
 
