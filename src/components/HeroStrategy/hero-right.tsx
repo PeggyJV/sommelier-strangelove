@@ -65,6 +65,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
     config: cellarConfig,
     timeline: intervalGainTimeline(cellarConfig),
   })
+
   const tvm = useTvm(cellarConfig)
   const countdown = isComingSoon(launchDate)
 

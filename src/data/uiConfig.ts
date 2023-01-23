@@ -145,16 +145,14 @@ export const intervalGainPctTitleContent = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+  )
+    return "1W Change vs USDC"
+  if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
   )
-    return "1W Change vs USDC"
-  // if (
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  // )
-  //   return "1M Change vs ETH/BTC 50/50"
+    return "1M Change vs USDC"
   return ""
 }
 
@@ -166,14 +164,16 @@ export const intervalGainPctTooltipContent = (
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  )
-    return `% change of token price compared to a benchmark portfolio of USDC`
-  if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
   )
-    return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
+    return `% change of token price compared to a benchmark portfolio of USDC`
+  // if (
+  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  // )
+  //   return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
   return ""
 }
 
