@@ -44,6 +44,7 @@ export interface ShowLine {
   ethBtc50: boolean
   eth: boolean
   btc: boolean
+  usdc: boolean
 }
 
 type Timeline = "1D" | "1W" | "1M" | "ALL"
@@ -153,6 +154,7 @@ const initialData: EthBtcChartContext = {
   ],
   showLine: {
     tokenPrice: true,
+    usdc: true,
     ethBtc50: true,
     eth: false,
     btc: false,
@@ -173,6 +175,7 @@ export const EthBtcChartProvider: FC<{
   const [showLine, setShowLine] = useState<ShowLine>({
     tokenPrice: true,
     ethBtc50: true,
+    usdc: true,
     eth: false,
     btc: false,
   })
@@ -253,7 +256,8 @@ export const EthBtcChartProvider: FC<{
 
     const series = createEthBtcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      // ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      usdc: data?.usdcDatum.slice(0, tokenPriceDatum?.length),
       weth: data?.wethDatum.slice(0, tokenPriceDatum?.length),
       wbtc: data?.wbtcDatum.slice(0, tokenPriceDatum?.length),
     })
@@ -295,7 +299,8 @@ export const EthBtcChartProvider: FC<{
 
     const series = createEthBtcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      // ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      usdc: data?.usdcDatum.slice(0, tokenPriceDatum?.length),
       weth: data?.wethDatum.slice(0, tokenPriceDatum?.length),
       wbtc: data?.wbtcDatum.slice(0, tokenPriceDatum?.length),
     })
@@ -336,7 +341,8 @@ export const EthBtcChartProvider: FC<{
     )
     const series = createEthBtcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      // ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      usdc: data?.usdcDatum.slice(0, tokenPriceDatum?.length),
       weth: data?.wethDatum.slice(0, tokenPriceDatum?.length),
       wbtc: data?.wbtcDatum.slice(0, tokenPriceDatum?.length),
     })
@@ -374,7 +380,8 @@ export const EthBtcChartProvider: FC<{
     )
     const series = createEthBtcChartSeries({
       tokenPrice: tokenPriceDatum,
-      ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      // ethBtc50: data?.wethWbtcdatum.slice(0, tokenPriceDatum?.length),
+      usdc: data?.usdcDatum.slice(0, tokenPriceDatum?.length),
       weth: data?.wethDatum.slice(0, tokenPriceDatum?.length),
       wbtc: data?.wbtcDatum.slice(0, tokenPriceDatum?.length),
     })
@@ -494,7 +501,11 @@ export const EthBtcChartProvider: FC<{
 
       const series = createEthBtcChartSeries({
         tokenPrice: tokenPriceDatum,
-        ethBtc50: ethBtcHWeekly.data.wethWbtcdatum.slice(
+        // ethBtc50: ethBtcHWeekly.data.wethWbtcdatum.slice(
+        //   0,
+        //   tokenPriceDatum?.length
+        // ),
+        usdc: ethBtcHWeekly.data?.usdcDatum.slice(
           0,
           tokenPriceDatum?.length
         ),
@@ -543,6 +554,9 @@ export const EthBtcChartProvider: FC<{
       }
       if (item.id === "eth-btc-50") {
         return showLine.ethBtc50
+      }
+      if (item.id === "usdc") {
+        return showLine.usdc
       }
       if (item.id === "weth") {
         return showLine.eth

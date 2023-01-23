@@ -66,6 +66,7 @@ export const EthBtcChart: VFC<EthBtcChartProps> = ({
             const name = (() => {
               if (item.id === "token-price") return strategyTokenName
               if (item.id === "eth-btc-50") return "ETH 50/BTC 50"
+              if (item.id === "usdc") return "USDC"
               if (item.id === "weth") return "ETH"
               if (item.id === "wbtc") return "BTC"
               return ""

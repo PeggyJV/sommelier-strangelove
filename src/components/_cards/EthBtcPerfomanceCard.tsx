@@ -63,6 +63,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
               if (item.id === "eth-btc-50") return "ETH 50/BTC 50"
               if (item.id === "weth") return "ETH"
               if (item.id === "wbtc") return "BTC"
+              if (item.id === "usdc") return "USDC"
               return ""
             })()
             return (
@@ -200,6 +201,17 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
               </Text>
               <Legend
                 color="violet.base"
+                title="USDC"
+                active={showLine.usdc}
+                onClick={() => {
+                  setShowLine((prev) => ({
+                    ...prev,
+                    usdc: !showLine.usdc,
+                  }))
+                }}
+              />
+              {/* <Legend
+                color="violet.base"
                 title="ETH 50/BTC 50"
                 active={showLine.ethBtc50}
                 onClick={() => {
@@ -208,7 +220,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
                     ethBtc50: !showLine.ethBtc50,
                   }))
                 }}
-              />
+              /> */}
               <Legend
                 color="turquoise.base"
                 title="ETH"
