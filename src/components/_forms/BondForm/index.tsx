@@ -133,7 +133,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       })
       userStakesRefetch()
     } catch (e) {
-      console.log(e)
+      console.warn(e)
       addToast({
         heading: "Staking LP Tokens",
         body: <Text>Tx Cancelled</Text>,
