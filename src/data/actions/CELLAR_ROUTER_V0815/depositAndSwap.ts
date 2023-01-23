@@ -14,7 +14,7 @@ import {
 import JSBI from "jsbi"
 import { Provider } from "@wagmi/core"
 import { DepositAndSwapParams } from "../types"
-import { estimateGasLimit } from "utils/estimateGasLimit"
+import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { CellarRouterV0815 } from "src/abi/types"
 
 interface GetSwapRouteParams {
@@ -140,16 +140,19 @@ export const depositAndSwap = async ({
       payload.activeAsset?.decimals
     )
 
-    const gasLimit = await estimateGasLimit(
-      cellarRouterSigner.estimateGas.depositAndSwapIntoCellar(
+    const gasLimitEstimated = await estimateGasLimitWithRetry(
+      cellarRouterSigner.estimateGas.depositAndSwapIntoCellar,
+      cellarRouterSigner.callStatic.depositAndSwapIntoCellar,
+      [
         payload.cellarAddress,
         swapRoute.tokenPath,
         swapRoute.poolFees,
         amtInWei,
         minAmountOutInWei,
-        senderAddress
-      ),
-      330000
+        senderAddress,
+      ],
+      330000,
+      660000
     )
 
     return await cellarRouterSigner.depositAndSwapIntoCellar(
@@ -160,7 +163,7 @@ export const depositAndSwap = async ({
       minAmountOutInWei,
       senderAddress,
       {
-        gasLimit,
+        gasLimit: gasLimitEstimated,
       }
     )
   } catch (error) {
