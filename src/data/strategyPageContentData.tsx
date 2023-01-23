@@ -588,11 +588,11 @@ export const strategyPageContentData = {
         `Combines lending and LPing activities in a single strategy to deliver real yield others can't.`,
         `Optimizes Uniswap V3 LP tick ranges.`,
       ],
-      description: `"Real Yield USD has a real technological edge to deliver yields others can't.
-
+      description: `Real Yield USD has a real technological edge to deliver yields others can't.
+      <br/><br/>
       By “real yield” we mean yield that results from trading or lending activity (fees) rather than resulting from incentives. The primary sources of real yield exist on lending platforms like Aave and Compound, and decentralized exchanges like Uniswap. Because of this, Real Yield USD focuses on these three protocols and simultaneously allocates capital to Aave and Compound lending pools and Uniswap V3 LP pools in order to maximize yield.
-
-      One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can manage the complexity of optimizing Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies."`,
+      <br/><br/>
+      One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can manage the complexity of optimizing Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies.`,
     },
     howItWorks: `Determining the optimal allocation of stablecoins across these three protocols for the highest yield is non-trivial and requires off-chain computation.
     <br/><br/>
@@ -600,7 +600,7 @@ export const strategyPageContentData = {
     <br/><br/>
     One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it optimizes Uniswap V3 tick ranges. Picking a lending position on Aave or Compound is relatively easy (ignoring factors like market impact which are actually important) because there are no degrees of freedom - it simply boils down to the decision of whether to lend a certain token or not. Providing liquidity on Uniswap V3, on the other hand, is complex because the choice of tick range determines both fee revenue and impermanent loss. Our optimization procedure accounts for all of these factors.`,
     backtestingText: `
-        <img src="/assets/images/real-yield-usd-backtesting-image.png"/>
+        <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
       `,
   },
 }

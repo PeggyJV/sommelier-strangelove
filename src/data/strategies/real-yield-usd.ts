@@ -45,8 +45,8 @@ export const realYieldUsd = {
 
     One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can manage the complexity of optimizing Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies.
 `,
-    backtestingText: `
-        <img src="/assets/images/real-yield-usd-backtesting-image.png"/>
+    backtesting: `
+        <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
       `,
   },
   // overrideApy: {
