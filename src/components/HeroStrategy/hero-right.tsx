@@ -40,6 +40,7 @@ import { useApy } from "data/hooks/useApy"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
+import { useRouter } from "next/router"
 
 interface HeroStrategyRightProps {
   id: string
@@ -58,11 +59,13 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const { data: dailyChange } = useDailyChange(cellarConfig)
   const { data: stakingEnd } = useStakingEnd(cellarConfig)
   const position = usePosition(cellarConfig)
+  const router = useRouter()
 
   const intervalGainPct = useIntervalGain({
     config: cellarConfig,
     timeline: intervalGainTimeline(cellarConfig),
   })
+
   const tvm = useTvm(cellarConfig)
   const countdown = isComingSoon(launchDate)
 
@@ -70,6 +73,20 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const potentialStakingApy = apyLoading
     ? "-"
     : apy?.potentialStakingApy
+
+  const handleBuyOrSell = () => {
+    if (content.exchange) {
+      analytics.track("strategy.buy-sell", {
+        strategyCard: cellarData.name,
+        landingType: landingType(),
+      })
+      buyOrSellModal.onOpen()
+    } else {
+      router.push({
+        pathname: `/strategies/${id}/manage`,
+      })
+    }
+  }
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
@@ -96,17 +113,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         </>
       ) : (
         <>
-          <BaseButton
-            w="full"
-            h="50px"
-            onClick={() => {
-              analytics.track("strategy.buy-sell", {
-                strategyCard: cellarData.name,
-                landingType: landingType(),
-              })
-              buyOrSellModal.onOpen()
-            }}
-          >
+          <BaseButton w="full" h="50px" onClick={handleBuyOrSell}>
             Buy / Sell
           </BaseButton>
           <BuyOrSellModal
