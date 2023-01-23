@@ -31,17 +31,28 @@ export const useEthBtcGainChartData = ({
     interval,
     enabled,
   })
+  const usdcMarketChart = useMarketChart({
+    asset: "usd-coin",
+    day,
+    interval,
+    enabled,
+  })
   const query = useQuery(
     [
       "USE_ETH_BTC_GAIN_CHART_DATA",
       wethMarketChart.data,
       wbtcMarketChart.data,
+      usdcMarketChart.data,
       day,
       interval,
     ],
     async () => {
       if (!day) throw new Error("day is undefined")
-      if (!wethMarketChart.data || !wbtcMarketChart.data) {
+      if (
+        !wethMarketChart.data ||
+        !wbtcMarketChart.data ||
+        !usdcMarketChart.data
+      ) {
         throw new Error("market chart data is undefined")
       }
       return await getEthBtcGainChartData({
@@ -50,6 +61,7 @@ export const useEthBtcGainChartData = ({
         firstDate,
         wethData: wethMarketChart.data,
         wbtcData: wbtcMarketChart.data,
+        usdcData: usdcMarketChart.data,
       })
     },
     {
@@ -57,6 +69,7 @@ export const useEthBtcGainChartData = ({
         Boolean(day) &&
         !!wethMarketChart.data &&
         !!wbtcMarketChart.data &&
+        !!usdcMarketChart.data &&
         enabled,
       onSuccess: onSuccess,
     }
