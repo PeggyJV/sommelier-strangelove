@@ -77,8 +77,8 @@ export const realYieldUsd = {
       key: CellarKey.CELLAR_V0816,
     },
     staker: {
-      address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
-      abi: config.CONTRACT.REAL_YIELD_USD.ABI,
+      address: config.CONTRACT.REAL_YIELD_USD_STAKER.ADDRESS,
+      abi: config.CONTRACT.REAL_YIELD_USD_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,

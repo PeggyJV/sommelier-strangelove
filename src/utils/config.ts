@@ -142,6 +142,10 @@ export const config = {
       ADDRESS: "0x7da7e27e4bcc6ec8bc06349e1cef6634f6df7c5c",
       ABI: cellarStakingV0815,
     },
+    REAL_YIELD_USD_STAKER: {
+      ADDRESS: "0x8510f22bd1932afb4753b6b3edf5db00c7e7a748",
+      ABI: cellarStakingV0815,
+    },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
