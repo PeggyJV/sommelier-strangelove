@@ -54,7 +54,10 @@ import { isActiveTokenStrategyEnabled } from "data/uiConfig"
 import { useNetValue } from "data/hooks/useNetValue"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
-import { estimateGasLimit } from "utils/estimateGasLimit"
+import {
+  estimateGasLimit,
+  gasLimitMargin,
+} from "utils/estimateGasLimit"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -166,13 +169,42 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
     amtInWei: ethers.BigNumber,
     address?: string
   ) => {
-    const estimatedGas = await estimateGasLimit(
+    const gasEstimatedRes = await estimateGasLimit(
       cellarSigner.estimateGas.deposit(amtInWei, address),
-      1200000,
-      1.5
+      800000,
+      1
     )
+    let gasLimitEstimated = ethers.BigNumber.from(gasEstimatedRes)
+
+    const pad = [1.15, 1.3, 1.45]
+    let count = 1
+    const maxTries = 3
+    while (count <= maxTries) {
+      try {
+        const gasLimit = gasLimitMargin(
+          gasLimitEstimated,
+          pad[count - 1]
+        )
+        const tx = await cellarSigner.callStatic.deposit(
+          amtInWei,
+          address,
+          {
+            gasLimit,
+          }
+        )
+        if (tx) {
+          gasLimitEstimated = gasLimit
+          break
+        }
+      } catch (e) {
+        if (count === maxTries) {
+          gasLimitEstimated = ethers.BigNumber.from(1200000)
+        }
+        count++
+      }
+    }
     return cellarSigner.deposit(amtInWei, address, {
-      gasLimit: estimatedGas,
+      gasLimit: gasLimitEstimated,
     })
   }
 
