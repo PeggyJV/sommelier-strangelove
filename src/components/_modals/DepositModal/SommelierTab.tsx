@@ -55,6 +55,7 @@ import { useNetValue } from "data/hooks/useNetValue"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
+import { CellarNameKey } from "data/types"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -166,16 +167,20 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
     amtInWei: ethers.BigNumber,
     address?: string
   ) => {
-    const gasLimitEstimated = await estimateGasLimitWithRetry(
-      cellarSigner.estimateGas.deposit,
-      cellarSigner.callStatic.deposit,
-      [amtInWei, address],
-      800000,
-      1200000
-    )
-    return cellarSigner.deposit(amtInWei, address, {
-      gasLimit: gasLimitEstimated,
-    })
+    if (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD) {
+      const gasLimitEstimated = await estimateGasLimitWithRetry(
+        cellarSigner.estimateGas.deposit,
+        cellarSigner.callStatic.deposit,
+        [amtInWei, address],
+        800000,
+        1200000
+      )
+      return cellarSigner.deposit(amtInWei, address, {
+        gasLimit: gasLimitEstimated,
+      })
+    }
+
+    return cellarSigner.deposit(amtInWei, address)
   }
 
   const onSubmit = async (data: any, e: any) => {
