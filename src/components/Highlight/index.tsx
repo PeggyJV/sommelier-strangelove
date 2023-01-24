@@ -116,7 +116,7 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
                 heading="Backtesting data"
                 isOpen={isOpen}
                 onClose={onClose}
-                size="2xl"
+                size="4xl"
               >
                 {content.backtestingImage && (
                   <Image
