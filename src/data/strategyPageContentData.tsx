@@ -19,6 +19,7 @@ export const strategyPageContentData = {
         <Text>ETHBTCTrend</Text>
       </>
     ),
+    tradedAssets: ["USDC", "WETH", "WBTC"],
     alternativeTo: "Holding ETH or BTC",
     exchange: [
       {
@@ -88,6 +89,7 @@ export const strategyPageContentData = {
         <Text>ETHBTCMom</Text>
       </>
     ),
+    tradedAssets: ["USDC", "WETH", "WBTC"],
     alternativeTo: "Holding ETH or BTC",
     exchange: [
       {
@@ -153,20 +155,7 @@ export const strategyPageContentData = {
         <Text>SteadyETH</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="eth icon"
-          src="/assets/icons/eth.png"
-          boxSize={8}
-        />
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-      </>
-    ),
+    tradedAssets: ["WETH", "USDC"],
     alternativeTo: "Holding USDC",
     exchange: [
       {
@@ -244,20 +233,7 @@ export const strategyPageContentData = {
         <Text>SteadyBTC</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="btc icon"
-          src="/assets/icons/btc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-      </>
-    ),
+    tradedAssets: ["WBTC", "USDC"],
     alternativeTo: "Holding USDC",
     exchange: [
       {
@@ -337,20 +313,7 @@ export const strategyPageContentData = {
         <Text>SteadyUNI</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="uniswap icon"
-          src="/assets/icons/uniswap.png"
-          boxSize={8}
-        />
-      </>
-    ),
+    tradedAssets: ["USDC", "UNI"],
     alternativeTo: "Holding USDC",
     exchange: [
       {
@@ -438,7 +401,7 @@ export const strategyPageContentData = {
     name: "Steady MATIC",
     provider: "Patache",
     providerUrl: "https://www.algoreturns.com/patache/",
-    description: `Strategy page headline: Capture the upside of MATIC price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
+    description: `Capture the upside of MATIC price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
     ticker: (
       <>
         <Image
@@ -449,20 +412,7 @@ export const strategyPageContentData = {
         <Text>SteadyMATIC</Text>
       </>
     ),
-    tradedAssets: (
-      <>
-        <Image
-          alt="usdc icon"
-          src="/assets/icons/usdc.png"
-          boxSize={8}
-        />
-        <Image
-          alt="matic icon"
-          src="/assets/icons/matic.png"
-          boxSize={8}
-        />
-      </>
-    ),
+    tradedAssets: ["USDC", "MATIC"],
     alternativeTo: "Holding USDC",
     exchange: [
       {
@@ -544,5 +494,45 @@ export const strategyPageContentData = {
       </div>
     </div>
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
+  },
+  [config.CONTRACT.REAL_YIELD_USD.SLUG]: {
+    name: "Real Yield USD",
+    provider: "Seven Seas",
+    providerUrl: "https://7seas.capital/",
+    description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
+    ticker: (
+      <>
+        <Image
+          alt="real yield usd icon"
+          src="/assets/icons/real-yield-usd.png"
+          boxSize={8}
+        />
+        <Text>YieldUSD</Text>
+      </>
+    ),
+    tradedAssets: ["USDC", "USDT", "DAI"],
+    alternativeTo:
+      "Holding or manually lending / LPing USDC, USDT, and DAI",
+
+    strategyHighlights: {
+      card: [
+        `The only active strategy which optimally allocates capital across key protocols for max yield.`,
+        `Combines lending and LPing activities in a single strategy to deliver real yield others can't.`,
+        `Optimizes Uniswap V3 LP tick ranges.`,
+      ],
+      description: `Real Yield USD has a real technological edge to deliver yields others can't.
+      <br/><br/>
+      By “real yield” we mean yield that results from trading or lending activity (fees) rather than resulting from incentives. The primary sources of real yield exist on lending platforms like Aave and Compound, and decentralized exchanges like Uniswap. Because of this, Real Yield USD focuses on these three protocols and simultaneously allocates capital to Aave and Compound lending pools and Uniswap V3 LP pools in order to maximize yield.
+      <br/><br/>
+      One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can manage the complexity of optimizing Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies.`,
+    },
+    howItWorks: `Determining the optimal allocation of stablecoins across these three protocols for the highest yield is non-trivial and requires off-chain computation.
+    <br/><br/>
+    Sommelier’s novel infrastructure enables active capital management of an ERC-4626 vault (guided by off-chain computation) while remaining non-custodial, transparent, and decentralized. The optimal allocation is determined by a numerical optimization procedure that accounts for swap fees and market impact due to position size, and makes use of various simple time-series forecasting methods to estimate (future) base yields.
+    <br/><br/>
+    One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it optimizes Uniswap V3 tick ranges. Picking a lending position on Aave or Compound is relatively easy (ignoring factors like market impact which are actually important) because there are no degrees of freedom - it simply boils down to the decision of whether to lend a certain token or not. Providing liquidity on Uniswap V3, on the other hand, is complex because the choice of tick range determines both fee revenue and impermanent loss. Our optimization procedure accounts for all of these factors.`,
+    backtestingText: `
+        <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
+      `,
   },
 }

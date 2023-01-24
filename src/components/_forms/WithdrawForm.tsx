@@ -27,7 +27,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
-import { estimateGasLimit } from "utils/estimateGasLimit"
+import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useNetValue } from "data/hooks/useNetValue"
 import { useGeo } from "context/geoContext"
 import { WarningIcon } from "components/_icons"
@@ -128,12 +128,16 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
-    const gasLimit = await estimateGasLimit(
-      cellarSigner.estimateGas.redeem(amtInWei, address, address),
-      330000
+    const gasLimitEstimated = await estimateGasLimitWithRetry(
+      cellarSigner.estimateGas.redeem,
+      cellarSigner.callStatic.redeem,
+      [amtInWei, address, address],
+      330000,
+      660000
     )
+
     const tx = await cellarSigner.redeem(amtInWei, address, address, {
-      gasLimit: gasLimit,
+      gasLimit: gasLimitEstimated,
     })
 
     function onSuccess() {

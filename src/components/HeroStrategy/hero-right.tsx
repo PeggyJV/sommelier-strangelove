@@ -40,6 +40,7 @@ import { useApy } from "data/hooks/useApy"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
+import { useRouter } from "next/router"
 
 interface HeroStrategyRightProps {
   id: string
@@ -58,11 +59,13 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const { data: dailyChange } = useDailyChange(cellarConfig)
   const { data: stakingEnd } = useStakingEnd(cellarConfig)
   const position = usePosition(cellarConfig)
+  const router = useRouter()
 
   const intervalGainPct = useIntervalGain({
     config: cellarConfig,
     timeline: intervalGainTimeline(cellarConfig),
   })
+
   const tvm = useTvm(cellarConfig)
   const countdown = isComingSoon(launchDate)
 
@@ -70,6 +73,24 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const potentialStakingApy = apyLoading
     ? "-"
     : apy?.potentialStakingApy
+
+  const handleBuyOrSell = () => {
+    if (content.exchange) {
+      analytics.track("strategy.buy-sell", {
+        strategyCard: cellarData.name,
+        landingType: landingType(),
+      })
+      buyOrSellModal.onOpen()
+    } else {
+      analytics.track("strategy.buy-sell", {
+        strategyCard: cellarData.name,
+        landingType: landingType(),
+      })
+      router.push({
+        pathname: `/strategies/${id}/manage`,
+      })
+    }
+  }
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
@@ -96,17 +117,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
         </>
       ) : (
         <>
-          <BaseButton
-            w="full"
-            h="50px"
-            onClick={() => {
-              analytics.track("strategy.buy-sell", {
-                strategyCard: cellarData.name,
-                landingType: landingType(),
-              })
-              buyOrSellModal.onOpen()
-            }}
-          >
+          <BaseButton w="full" h="50px" onClick={handleBuyOrSell}>
             Buy / Sell
           </BaseButton>
           <BuyOrSellModal
@@ -182,32 +193,45 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </Text>
           </Box>
           <Stack direction="column">
-            {position.isLoading ? (
-              <Spinner />
-            ) : (
-              position.data?.map((item) => {
-                const asset = tokenConfig.find(
-                  (v) => v.address === item.address
-                )
-                return (
-                  <HStack key={item.address}>
-                    <Image
-                      alt={asset?.alt}
-                      src={asset?.src}
-                      boxSize={8}
-                    />
-                    {!countdown ? (
-                      <Text>
-                        {asset?.symbol} ({item.percentage.toFixed(2)}
-                        %)
-                      </Text>
-                    ) : (
+            {position.isLoading
+              ? content.tradedAssets.map((item) => {
+                  const asset = tokenConfig.find(
+                    (v) => v.symbol === item
+                  )
+                  return (
+                    <HStack key={item}>
+                      <Image
+                        alt={asset?.alt}
+                        src={asset?.src}
+                        boxSize={8}
+                      />
                       <Text>{asset?.symbol}</Text>
-                    )}
-                  </HStack>
-                )
-              })
-            )}
+                    </HStack>
+                  )
+                })
+              : position.data?.map((item) => {
+                  const asset = tokenConfig.find(
+                    (v) => v.address === item.address
+                  )
+                  return (
+                    <HStack key={item.address}>
+                      <Image
+                        alt={asset?.alt}
+                        src={asset?.src}
+                        boxSize={8}
+                      />
+                      {!countdown ? (
+                        <Text>
+                          {asset?.symbol} (
+                          {item.percentage.toFixed(2)}
+                          %)
+                        </Text>
+                      ) : (
+                        <Text>{asset?.symbol}</Text>
+                      )}
+                    </HStack>
+                  )
+                })}
           </Stack>
         </HStack>
         <HStack>

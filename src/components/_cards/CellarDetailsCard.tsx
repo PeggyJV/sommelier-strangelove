@@ -30,6 +30,7 @@ import { TokenAssets } from "components/TokenAssets"
 import { usePosition } from "data/hooks/usePosition"
 import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { isArray } from "lodash"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -42,6 +43,10 @@ interface CellarDetailsProps extends BoxProps {
   cellarDataMap: CellarDataMap
 }
 
+export interface ProtocolDataType {
+  title: string
+  icon: string
+}
 const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   cellarId,
   cellarDataMap,
@@ -82,7 +87,22 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
 
   // const colors = moveColors(barChartTheme)
 
-  const protocolIcon = protocolsImage[protocols]
+  const isManyProtocols = isArray(protocols)
+  const protocolData = isManyProtocols
+    ? protocols.map((v) => {
+        return {
+          title: v,
+          icon: protocolsImage[v],
+        }
+      })
+    : {
+        title: protocols,
+        icon: protocolsImage[protocols],
+      }
+
+  const gridColumn = isManyProtocols
+    ? { base: isLarger400 ? 2 : 1, sm: 2, md: 2, lg: 2 }
+    : { base: isLarger400 ? 2 : 1, sm: 2, md: 3, lg: 4 }
 
   return (
     <TransparentCard
@@ -95,7 +115,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
         align={{ sm: "unset", md: "stretch" }}
       >
         <SimpleGrid
-          columns={{ base: isLarger400 ? 2 : 1, sm: 2, md: 3, lg: 4 }}
+          columns={gridColumn}
           spacing={4}
           px={{ base: 6, sm: 0 }}
         >
@@ -115,13 +135,35 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             tooltip="Protocols in which Strategy operates"
             pr={{ sm: 2, lg: 8 }}
           >
-            <Image
-              src={protocolIcon}
-              alt="Protocol Icon"
-              boxSize={6}
-              mr={2}
-            />
-            {protocols}
+            {isManyProtocols ? (
+              <Stack
+                spacing={3}
+                direction={{ base: "column", lg: "row" }}
+              >
+                {(protocolData as ProtocolDataType[]).map((v, i) => (
+                  <HStack key={i} spacing={2}>
+                    <Image
+                      src={v.icon}
+                      alt="Protocol Icon"
+                      boxSize={6}
+                    />
+                    <Text>{v.title}</Text>
+                  </HStack>
+                ))}
+              </Stack>
+            ) : (
+              <>
+                <Image
+                  src={
+                    (protocolData as ProtocolDataType).icon as string
+                  }
+                  alt="Protocol Icon"
+                  boxSize={6}
+                  mr={2}
+                />
+                {(protocolData as ProtocolDataType).title}
+              </>
+            )}
           </CardStat>
           <CardStat
             label="mgmt fee"
