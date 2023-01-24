@@ -28,6 +28,7 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
             {isMounted && isConnected && chain?.id !== 1 && (
               <WrongNetworkBanner />
             )}
+
             {children}
           </Container>
           <Footer />
