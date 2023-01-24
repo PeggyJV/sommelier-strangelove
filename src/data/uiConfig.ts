@@ -306,3 +306,10 @@ export const isWithdrawTokenPriceEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
   )
 }
+
+export const isUseBigBacktestingModal = (config: ConfigProps) => {
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD) {
+    return "6xl"
+  }
+  return "2xl"
+}
