@@ -14,7 +14,10 @@ export interface CellarPageProps {
 
 const CellarPage: NextPage<CellarPageProps> = ({ id, blocked }) => {
   const router = useRouter()
-  if (blocked) {
+  if (
+    blocked &&
+    process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
+  ) {
     return <PageComingSoon />
   }
   const content = cellarDataMap[id]
