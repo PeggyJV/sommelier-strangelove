@@ -53,7 +53,9 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const { id } = params || {}
   const launchDate = cellarDataMap[id as string].launchDate
-  const blocked = isComingSoon(launchDate)
+  const blocked =
+    isComingSoon(launchDate) &&
+    process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
 
   return { props: { id, blocked } }
 }

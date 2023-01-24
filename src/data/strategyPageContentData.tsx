@@ -27,11 +27,6 @@ export const strategyPageContentData = {
         logo: "/assets/icons/somm.png",
       },
       {
-        url: "https://app.uniswap.org/#/swap?outputCurrency=0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
-        name: "Uniswap",
-        logo: "/assets/icons/uniswap.png",
-      },
-      {
         url: "https://helixapp.com/spot/ethbtctrend-usdt/",
         name: "Helix",
         logo: "/assets/icons/helix.png",
@@ -96,11 +91,6 @@ export const strategyPageContentData = {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
-      {
-        url: "https://app.uniswap.org/#/swap?outputCurrency=0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
-        name: "Uniswap",
-        logo: "/assets/icons/uniswap.png",
-      },
     ],
     strategyHighlights: {
       card: [
@@ -161,11 +151,6 @@ export const strategyPageContentData = {
       {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
-      },
-      {
-        url: "https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x3f07a84ecdf494310d397d24c1c78b041d2fa622",
-        name: "Uniswap",
-        logo: "/assets/icons/uniswap.png",
       },
       {
         url: "https://helixapp.com/spot/steadyeth-usdt/",
@@ -239,11 +224,6 @@ export const strategyPageContentData = {
       {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
-      },
-      {
-        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
-        name: "Uniswap",
-        logo: "/assets/icons/uniswap.png",
       },
       {
         url: "https://helixapp.com/spot/steadybtc-usdt/",
@@ -320,16 +300,6 @@ export const strategyPageContentData = {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
-      {
-        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x6f069f711281618467dae7873541ecc082761b33",
-        name: "Uniswap",
-        logo: "/assets/icons/uniswap.png",
-      },
-      // {
-      //   url: "https://helixapp.com/spot/steadybtc-usdt/",
-      //   name: "Helix",
-      //   logo: "/assets/icons/helix.png",
-      // },
     ],
     strategyHighlights: {
       card: [
@@ -419,16 +389,6 @@ export const strategyPageContentData = {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
-      {
-        url: " https://app.uniswap.org/#/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x05641a27c82799aaf22b436f20a3110410f29652",
-        name: "Uniswap",
-        logo: "/assets/icons/uniswap.png",
-      },
-      // {
-      //   url: "https://helixapp.com/spot/steadybtc-usdt/",
-      //   name: "Helix",
-      //   logo: "/assets/icons/helix.png",
-      // },
     ],
     strategyHighlights: {
       card: [
@@ -500,6 +460,12 @@ export const strategyPageContentData = {
     provider: "Seven Seas",
     providerUrl: "https://7seas.capital/",
     description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
     ticker: (
       <>
         <Image

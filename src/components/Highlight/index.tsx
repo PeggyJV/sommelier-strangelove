@@ -11,6 +11,7 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { BaseModal } from "components/_modals/BaseModal"
 import { cellarDataMap } from "data/cellarDataMap"
 import { strategyPageContentData } from "data/strategyPageContentData"
+import { isUseBigBacktestingModal } from "data/uiConfig"
 import htmr from "htmr"
 import { useRouter } from "next/router"
 import { useState, VFC } from "react"
@@ -116,7 +117,7 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
                 heading="Backtesting data"
                 isOpen={isOpen}
                 onClose={onClose}
-                size="2xl"
+                size={isUseBigBacktestingModal(cellarData.config)}
               >
                 {content.backtestingImage && (
                   <Image

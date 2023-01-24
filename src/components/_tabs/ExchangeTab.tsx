@@ -12,12 +12,13 @@ export const ExchangeTab = ({ title }: { title: string }) => {
 
   return (
     <Stack>
-      {exchanges &&
+      {exchanges.length > 1 &&
         exchanges
-          .filter((item) => !!item.url)
+          .filter((item) => "url" in item)
           .map((item) => (
             <Link
               key={item.name}
+              // @ts-expect-error - typescript expect url is undefined
               href={item.url}
               onClick={() => {
                 analytics.track(
