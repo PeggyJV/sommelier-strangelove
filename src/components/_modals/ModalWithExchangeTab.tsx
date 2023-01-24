@@ -17,12 +17,13 @@ export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
   props
 ) => {
   const id = useRouter().query.id as string
-  const exchanges = strategyPageContentData[id]?.exchange?.length
-
+  const isHavingExchanges =
+    Number(strategyPageContentData[id]?.exchange?.length) > 1
+  console.log(isHavingExchanges)
   return (
     <BaseModal {...props}>
       <Tabs variant="unstyled" isFitted>
-        {exchanges && (
+        {isHavingExchanges && (
           <TabList gap={2}>
             <CustomTab>Sommelier</CustomTab>
             <CustomTab>Exchange</CustomTab>
@@ -30,7 +31,7 @@ export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
         )}
         <TabPanels>
           <TabPanel px={0}>{props.sommelierTab}</TabPanel>
-          {exchanges && (
+          {isHavingExchanges && (
             <TabPanel px={0} pt={8}>
               <ExchangeTab
                 title={props.heading?.toLowerCase() || ""}

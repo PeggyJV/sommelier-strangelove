@@ -75,7 +75,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
     : apy?.potentialStakingApy
 
   const handleBuyOrSell = () => {
-    if (content.exchange) {
+    if (Number(content.exchange?.length) > 1) {
       analytics.track("strategy.buy-sell", {
         strategyCard: cellarData.name,
         landingType: landingType(),
