@@ -97,6 +97,11 @@ export const config = {
       SLUG: "Steady-MATIC",
       ABI: cellarV0816,
     },
+    REAL_YIELD_USD: {
+      ADDRESS: "0x97e6E0a40a3D02F12d1cEC30ebfbAE04e37C119E",
+      SLUG: "Real-Yield-USD",
+      ABI: cellarV0816,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -135,6 +140,10 @@ export const config = {
     },
     STEADY_MATIC_STAKER: {
       ADDRESS: "0x7da7e27e4bcc6ec8bc06349e1cef6634f6df7c5c",
+      ABI: cellarStakingV0815,
+    },
+    REAL_YIELD_USD_STAKER: {
+      ADDRESS: "0x8510f22bd1932afb4753b6b3edf5db00c7e7a748",
       ABI: cellarStakingV0815,
     },
   },

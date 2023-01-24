@@ -9,11 +9,13 @@ import {
   steadyBtc,
   steadyUni,
   steadyMatic,
+  realYieldUsd,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
+    [config.CONTRACT.REAL_YIELD_USD.SLUG]: realYieldUsd,
     [config.CONTRACT.STEADY_UNI.SLUG]: steadyUni,
     [config.CONTRACT.STEADY_MATIC.SLUG]: steadyMatic,
     [config.CONTRACT.STEADY_ETH.SLUG]: steadyEth,

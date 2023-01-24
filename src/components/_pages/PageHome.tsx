@@ -106,12 +106,10 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
             align={{ base: "center", md: "initial" }}
           >
             <Box mb={12}>
-              <Heading>Automated Portfolio Management</Heading>
+              <Heading>Yield Strategies</Heading>
             </Box>
             <GridHome>
-              <CellarGridItems
-                section={CellarType.automatedPortfolio}
-              />
+              <CellarGridItems section={CellarType.yieldStrategies} />
             </GridHome>
           </Flex>
         </Section>
@@ -122,10 +120,12 @@ const PageHome: NextPage<HomeProps> = ({ faqData }) => {
             align={{ base: "center", md: "initial" }}
           >
             <Box mb={12}>
-              <Heading>Yield Strategies</Heading>
+              <Heading>Automated Portfolio Management</Heading>
             </Box>
             <GridHome>
-              <CellarGridItems section={CellarType.yieldStrategies} />
+              <CellarGridItems
+                section={CellarType.automatedPortfolio}
+              />
             </GridHome>
           </Flex>
         </Section>

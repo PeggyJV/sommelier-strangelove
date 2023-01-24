@@ -54,6 +54,8 @@ import { isActiveTokenStrategyEnabled } from "data/uiConfig"
 import { useNetValue } from "data/hooks/useNetValue"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
+import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
+import { CellarNameKey } from "data/types"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -160,6 +162,27 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
     activeAsset?.address?.toLowerCase()
 
   const geo = useGeo()
+
+  const deposit = async (
+    amtInWei: ethers.BigNumber,
+    address?: string
+  ) => {
+    if (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD) {
+      const gasLimitEstimated = await estimateGasLimitWithRetry(
+        cellarSigner.estimateGas.deposit,
+        cellarSigner.callStatic.deposit,
+        [amtInWei, address],
+        800000,
+        1200000
+      )
+      return cellarSigner.deposit(amtInWei, address, {
+        gasLimit: gasLimitEstimated,
+      })
+    }
+
+    return cellarSigner.deposit(amtInWei, address)
+  }
+
   const onSubmit = async (data: any, e: any) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -270,7 +293,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
       const response = isActiveAsset
-        ? await cellarSigner.deposit(amtInWei, address)
+        ? await deposit(amtInWei, address)
         : await depositAndSwap.mutateAsync({
             cellarAddress: cellarConfig.cellar.address,
             depositAmount: depositAmount,

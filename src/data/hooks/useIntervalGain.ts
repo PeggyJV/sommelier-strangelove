@@ -31,6 +31,7 @@ export const useIntervalGain = ({
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
 
   const [todayData] = useGetSingleCellarValueQuery({
     variables: {

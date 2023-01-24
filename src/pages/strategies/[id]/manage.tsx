@@ -1,17 +1,22 @@
 import PageCellar from "components/_pages/PageCellar"
 import { cellarDataMap } from "data/cellarDataMap"
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import { GetServerSideProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
-import { Params } from "."
 import { origin } from "utils/origin"
 import { useRouter } from "next/router"
+import { isComingSoon } from "utils/isComingSoon"
+import { PageComingSoon } from "components/_pages/PageComingSoon"
 
 export interface CellarPageProps {
   id: string
+  blocked: boolean
 }
 
-const CellarPage: NextPage<CellarPageProps> = ({ id }) => {
+const CellarPage: NextPage<CellarPageProps> = ({ id, blocked }) => {
   const router = useRouter()
+  if (blocked) {
+    return <PageComingSoon />
+  }
   const content = cellarDataMap[id]
   const URL = `${origin}${router.asPath}`
   return (
@@ -43,24 +48,16 @@ const CellarPage: NextPage<CellarPageProps> = ({ id }) => {
   )
 }
 
-export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const cellars = Object.keys(cellarDataMap)
-
-  // create array of static paths from cellars data
-  const paths = cellars.map((cellar) => {
-    return { params: { id: cellar } }
-  })
-
-  return {
-    paths,
-    fallback: false,
-  }
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+}) => {
   const { id } = params || {}
+  const launchDate = cellarDataMap[id as string].launchDate
+  const blocked =
+    isComingSoon(launchDate) &&
+    process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
 
-  return { props: { id } }
+  return { props: { id, blocked } }
 }
 
 export default CellarPage
