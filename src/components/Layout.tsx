@@ -6,7 +6,6 @@ import Footer from "./Footer"
 import { useAccount, useNetwork } from "wagmi"
 import { WrongNetworkBanner } from "./_banners/WrongNetworkBanner"
 import { useIsMounted } from "hooks/utils/useIsMounted"
-import { MaintenanceBanner } from "./_banners/MaintenanceBanner"
 
 export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   const { isConnected } = useAccount()
@@ -29,8 +28,7 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
             {isMounted && isConnected && chain?.id !== 1 && (
               <WrongNetworkBanner />
             )}
-            {/* REMOVE IF SUBGRAPH ISSUE FIXED */}
-            <MaintenanceBanner />
+
             {children}
           </Container>
           <Footer />
