@@ -53,7 +53,8 @@ export const isPositionTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
   )
 }
 
@@ -164,16 +165,14 @@ export const intervalGainPctTooltipContent = (
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+  )
+    return `% change of token price compared to a benchmark portfolio of USDC`
+  if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
   )
-    return `% change of token price compared to a benchmark portfolio of USDC`
-  // if (
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  // )
-  //   return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
+    return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
   return ""
 }
 

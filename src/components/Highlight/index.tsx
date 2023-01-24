@@ -9,11 +9,14 @@ import {
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { BaseModal } from "components/_modals/BaseModal"
+import { cellarDataMap } from "data/cellarDataMap"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import htmr from "htmr"
 import { useRouter } from "next/router"
 import { useState, VFC } from "react"
 import { BsChevronDown, BsChevronUp } from "react-icons/bs"
+import { analytics } from "utils/analytics"
+import { landingType } from "utils/landingType"
 
 interface HighlightProps {
   id: string
@@ -32,6 +35,7 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
   const howItWorks = content.howItWorks.split("<br/><br/>")
   const { isOpen, onOpen, onClose } = useDisclosure()
   const router = useRouter()
+  const cellarData = cellarDataMap[id]
 
   return (
     <Stack direction="column" mt={52} spacing="80px">
@@ -84,14 +88,28 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
           {isValidURL(content.backtestingText) ? (
             <Box>
               <SecondaryButton
-                onClick={() => router.push(content.backtestingText)}
+                onClick={() => {
+                  analytics.track("strategy.view-backtesting", {
+                    strategyCard: cellarData.name,
+                    landingType: landingType(),
+                  })
+                  router.push(content.backtestingText)
+                }}
               >
                 View Backtesting Data
               </SecondaryButton>
             </Box>
           ) : (
             <Box>
-              <SecondaryButton onClick={onOpen}>
+              <SecondaryButton
+                onClick={() => {
+                  analytics.track("strategy.view-backtesting", {
+                    strategyCard: cellarData.name,
+                    landingType: landingType(),
+                  })
+                  onOpen()
+                }}
+              >
                 View Backtesting Data
               </SecondaryButton>
               <BaseModal

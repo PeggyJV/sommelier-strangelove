@@ -30,6 +30,7 @@ import { TokenAssets } from "components/TokenAssets"
 import { usePosition } from "data/hooks/usePosition"
 import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { isArray } from "lodash"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -86,7 +87,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
 
   // const colors = moveColors(barChartTheme)
 
-  const isManyProtocols = typeof protocols === "object"
+  const isManyProtocols = isArray(protocols)
   const protocolData = isManyProtocols
     ? protocols.map((v) => {
         return {

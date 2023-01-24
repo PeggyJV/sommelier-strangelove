@@ -82,6 +82,10 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
       })
       buyOrSellModal.onOpen()
     } else {
+      analytics.track("strategy.buy-sell", {
+        strategyCard: cellarData.name,
+        landingType: landingType(),
+      })
       router.push({
         pathname: `/strategies/${id}/manage`,
       })
