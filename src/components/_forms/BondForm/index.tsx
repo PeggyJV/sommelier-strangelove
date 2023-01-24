@@ -29,7 +29,7 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStakes } from "data/hooks/useUserStakes"
 import { bondingPeriodOptions } from "data/uiConfig"
-import { estimateGasLimit } from "utils/estimateGasLimit"
+import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 
 interface FormValues {
@@ -111,15 +111,18 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
     )
 
     try {
-      const gasLimit = await estimateGasLimit(
-        stakerSigner.estimateGas.stake(depositAmtInWei, bondPeriod),
-        250000 // known gasLimit
+      const gasLimitEstimated = await estimateGasLimitWithRetry(
+        stakerSigner.estimateGas.stake,
+        stakerSigner.callStatic.stake,
+        [depositAmtInWei, bondPeriod],
+        250000,
+        500000
       )
 
       const { hash: bondConf } = await stakerSigner.stake(
         depositAmtInWei,
         bondPeriod,
-        { gasLimit }
+        { gasLimit: gasLimitEstimated }
       )
 
       await doHandleTransaction({
@@ -133,6 +136,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       })
       userStakesRefetch()
     } catch (e) {
+      console.warn(e)
       addToast({
         heading: "Staking LP Tokens",
         body: <Text>Tx Cancelled</Text>,

@@ -9,13 +9,24 @@ import {
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { BaseModal } from "components/_modals/BaseModal"
+import { cellarDataMap } from "data/cellarDataMap"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import htmr from "htmr"
-import React, { useState, VFC } from "react"
+import { useRouter } from "next/router"
+import { useState, VFC } from "react"
 import { BsChevronDown, BsChevronUp } from "react-icons/bs"
+import { analytics } from "utils/analytics"
+import { landingType } from "utils/landingType"
 
 interface HighlightProps {
   id: string
+}
+
+export const isValidURL = (value: string) => {
+  const res = value.match(
+    /^(http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm
+  )
+  return res !== null
 }
 
 export const Highlight: VFC<HighlightProps> = ({ id }) => {
@@ -23,6 +34,9 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
   const [expandHowItWorks, setExpandHowItWorks] = useState(false)
   const howItWorks = content.howItWorks.split("<br/><br/>")
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const router = useRouter()
+  const cellarData = cellarDataMap[id]
+
   return (
     <Stack direction="column" mt={52} spacing="80px">
       <Stack spacing="40px">
@@ -71,27 +85,51 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
             All strategies available on Sommelier marketplace are
             comprehensively backtested.
           </Heading>
-          <Box>
-            <SecondaryButton onClick={onOpen}>
-              View Backtesting Data
-            </SecondaryButton>
-          </Box>
-          <BaseModal
-            heading="Backtesting data"
-            isOpen={isOpen}
-            onClose={onClose}
-            size="2xl"
-          >
-            {content.backtestingImage && (
-              <Image
-                src={content.backtestingImage}
-                alt="backtesting"
-              />
-            )}
-            <Text whiteSpace="pre-line" mt="4">
-              {htmr(content.backtestingText)}
-            </Text>
-          </BaseModal>
+          {isValidURL(content.backtestingText) ? (
+            <Box>
+              <SecondaryButton
+                onClick={() => {
+                  analytics.track("strategy.view-backtesting", {
+                    strategyCard: cellarData.name,
+                    landingType: landingType(),
+                  })
+                  router.push(content.backtestingText)
+                }}
+              >
+                View Backtesting Data
+              </SecondaryButton>
+            </Box>
+          ) : (
+            <Box>
+              <SecondaryButton
+                onClick={() => {
+                  analytics.track("strategy.view-backtesting", {
+                    strategyCard: cellarData.name,
+                    landingType: landingType(),
+                  })
+                  onOpen()
+                }}
+              >
+                View Backtesting Data
+              </SecondaryButton>
+              <BaseModal
+                heading="Backtesting data"
+                isOpen={isOpen}
+                onClose={onClose}
+                size="2xl"
+              >
+                {content.backtestingImage && (
+                  <Image
+                    src={content.backtestingImage}
+                    alt="backtesting"
+                  />
+                )}
+                <Text whiteSpace="pre-line" mt="4">
+                  {htmr(content.backtestingText)}
+                </Text>
+              </BaseModal>
+            </Box>
+          )}
         </Stack>
       )}
     </Stack>
