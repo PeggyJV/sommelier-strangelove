@@ -20,16 +20,18 @@ export const useIntervalGain = ({
 }: useIntervalGainProps) => {
   // DAYS AND DATE ARE SAME WITH THE CHART DATA
   const days = timeline === "weekly" ? 8 : 31
-  const clearGate =
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  // const clearGate =
+  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
 
   const patache =
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
 
   const [todayData] = useGetSingleCellarValueQuery({
     variables: {
@@ -56,20 +58,20 @@ export const useIntervalGain = ({
   const { cellar: cellarPrevious } = dataPrevious || {}
   const { dayDatas: previousDatas } = cellarPrevious || {}
 
-  const ethIntervalGain = useAssetIntervalGain(
-    "weth",
-    clearGate,
-    days,
-    previousDatas && new Date(previousDatas[0].date * 1000),
-    todayDatas && new Date(todayDatas[0].date * 1000)
-  )
-  const btcIntervalGain = useAssetIntervalGain(
-    "wrapped-bitcoin",
-    clearGate,
-    days,
-    previousDatas && new Date(previousDatas[0].date * 1000),
-    todayDatas && new Date(todayDatas[0].date * 1000)
-  )
+  // const ethIntervalGain = useAssetIntervalGain(
+  //   "weth",
+  //   clearGate,
+  //   days,
+  //   previousDatas && new Date(previousDatas[0].date * 1000),
+  //   todayDatas && new Date(todayDatas[0].date * 1000)
+  // )
+  // const btcIntervalGain = useAssetIntervalGain(
+  //   "wrapped-bitcoin",
+  //   clearGate,
+  //   days,
+  //   previousDatas && new Date(previousDatas[0].date * 1000),
+  //   todayDatas && new Date(todayDatas[0].date * 1000)
+  // )
   const usdcIntervalGain = useAssetIntervalGain(
     "usd-coin",
     patache,
@@ -86,14 +88,14 @@ export const useIntervalGain = ({
       Boolean(usdcIntervalGain.data)
   )
 
-  const CLEAR_GATE_CELLAR_QUERY_ENABLED = Boolean(
-    clearGate &&
-      config.id &&
-      todayDatas?.[0].shareValue &&
-      previousDatas?.[0].shareValue &&
-      Boolean(ethIntervalGain.data) &&
-      Boolean(btcIntervalGain.data)
-  )
+  // const CLEAR_GATE_CELLAR_QUERY_ENABLED = Boolean(
+  //   clearGate &&
+  //     config.id &&
+  //     todayDatas?.[0].shareValue &&
+  //     previousDatas?.[0].shareValue &&
+  //     Boolean(ethIntervalGain.data) &&
+  //     Boolean(btcIntervalGain.data)
+  // )
 
   const query = useQuery(
     [
@@ -103,26 +105,26 @@ export const useIntervalGain = ({
       previousDatas?.[0].shareValue,
     ],
     async () => {
-      if (clearGate) {
-        if (
-          !todayDatas ||
-          !previousDatas ||
-          !ethIntervalGain.data ||
-          !btcIntervalGain.data
-        ) {
-          throw new Error("DATA UNDEFINED")
-        }
-        const cellarIntervalGainPct = getGainPct(
-          Number(todayDatas[0].shareValue),
-          Number(previousDatas[0].shareValue)
-        )
+      // if (clearGate) {
+      //   if (
+      //     !todayDatas ||
+      //     !previousDatas ||
+      //     !ethIntervalGain.data ||
+      //     !btcIntervalGain.data
+      //   ) {
+      //     throw new Error("DATA UNDEFINED")
+      //   }
+      //   const cellarIntervalGainPct = getGainPct(
+      //     Number(todayDatas[0].shareValue),
+      //     Number(previousDatas[0].shareValue)
+      //   )
 
-        const result =
-          cellarIntervalGainPct -
-          (ethIntervalGain.data + btcIntervalGain.data) / 2
+      //   const result =
+      //     cellarIntervalGainPct -
+      //     (ethIntervalGain.data + btcIntervalGain.data) / 2
 
-        return result
-      }
+      //   return result
+      // }
       if (patache) {
         if (!todayDatas || !previousDatas || !usdcIntervalGain.data) {
           throw new Error("DATA UNDEFINED")
@@ -138,8 +140,7 @@ export const useIntervalGain = ({
       }
     },
     {
-      enabled:
-        CLEAR_GATE_CELLAR_QUERY_ENABLED || PATACHE_LINK_QUERY_ENABLED,
+      enabled: PATACHE_LINK_QUERY_ENABLED,
     }
   )
 

@@ -19,7 +19,7 @@ export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
   const id = useRouter().query.id as string
   const isHavingExchanges =
     Number(strategyPageContentData[id]?.exchange?.length) > 1
-  console.log(isHavingExchanges)
+
   return (
     <BaseModal {...props}>
       <Tabs variant="unstyled" isFitted>
