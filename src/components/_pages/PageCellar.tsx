@@ -48,7 +48,11 @@ const h2Styles: HeadingProps = {
   pl: { base: 6, sm: 8 },
 }
 
-const PageCellar: VFC<CellarPageProps> = ({ id }) => {
+export interface PageCellarProps {
+  id: string
+}
+
+const PageCellar: VFC<PageCellarProps> = ({ id }) => {
   const cellarConfig = cellarDataMap[id].config
   const staticCellarData = cellarDataMap[id]
   const cellarAddress = cellarDataMap[id].config.id
