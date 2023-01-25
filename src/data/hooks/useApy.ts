@@ -70,7 +70,9 @@ export const useApy = (config: ConfigProps) => {
         return await getRewardsApy(
           stakerContract as CellarStakingV0815,
           sommPrice.data,
-          4.4
+          config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+            ? 4.4
+            : undefined
         )
       }
 
