@@ -49,12 +49,6 @@ export const realYieldUsd = {
         <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
       `,
   },
-  // overrideApy: {
-  //   title: "Backtested APY",
-  //   tooltip:
-  //     "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-  //   value: "84.15%",
-  // },
   depositTokens: {
     list: ["USDC", "USDT", "DAI"],
   },
