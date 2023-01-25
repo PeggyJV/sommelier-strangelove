@@ -11,8 +11,7 @@ import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 const previous10Days = getPrevious10Days()
 
 export const useApy = (config: ConfigProps) => {
-  const { cellarContract, stakerContract } =
-    useCreateContracts(config)
+  const { stakerContract } = useCreateContracts(config)
 
   const sommPrice = useCoinGeckoPrice("sommelier")
 
@@ -29,7 +28,6 @@ export const useApy = (config: ConfigProps) => {
   const aaveQueryEnabled = Boolean(
     config.cellarNameKey === CellarNameKey.AAVE &&
       dayDatas &&
-      cellarContract.provider &&
       stakerContract?.provider
   )
 
