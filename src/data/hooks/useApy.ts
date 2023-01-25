@@ -3,7 +3,7 @@ import { getApy as getApy_AAVE_V2_STABLE_CELLAR } from "data/actions/CELLAR_V081
 import { getRewardsApy } from "data/actions/CELLAR_V0815/getRewardsApy"
 import { CellarNameKey, ConfigProps } from "data/types"
 import { useGet10DaysShareValueQuery } from "generated/subgraph"
-import { CellarV0815, CellarStakingV0815 } from "src/abi/types"
+import { CellarStakingV0815 } from "src/abi/types"
 import { getPrevious10Days } from "utils/calculateTime"
 import { useCreateContracts } from "./useCreateContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
@@ -60,7 +60,6 @@ export const useApy = (config: ConfigProps) => {
 
       if (config.cellarNameKey === CellarNameKey.AAVE) {
         return await getApy_AAVE_V2_STABLE_CELLAR(
-          cellarContract as CellarV0815,
           stakerContract as CellarStakingV0815,
           sommPrice.data,
           dayDatas!
