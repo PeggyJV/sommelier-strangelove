@@ -3,7 +3,8 @@ import { CellarStakingV0815 } from "src/abi/types"
 
 export const getRewardsApy = async (
   stakerContract: CellarStakingV0815,
-  sommPrice: string
+  sommPrice: string,
+  baseApy?: number
 ) => {
   try {
     const rewardRateRes = await stakerContract.rewardRate()
@@ -30,12 +31,19 @@ export const getRewardsApy = async (
         .multipliedBy(100)
     }
 
+    const apyLabelWithBaseApy = `Expected APY is the sum of the base backtested cellar APY ${baseApy}% and the Rewards APY ${potentialStakingApy
+      .toFixed(1)
+      .toString()}%.`
     const apyLabel = `Expected Rewards APY`
-    const rewardsApy = potentialStakingApy.toFixed(1).toString() + "%"
+    const rewardsApy = baseApy
+      ? (baseApy + Number(potentialStakingApy.toFixed(1))).toFixed(
+          1
+        ) + "%"
+      : potentialStakingApy.toFixed(1) + "%"
 
     return {
       apy: rewardsApy,
-      apyLabel,
+      apyLabel: baseApy ? apyLabelWithBaseApy : apyLabel,
       potentialStakingApy: rewardsApy,
       expectedApy: rewardsApy,
     }

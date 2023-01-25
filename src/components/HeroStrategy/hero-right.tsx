@@ -41,6 +41,7 @@ import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
+import { CellarType } from "data/types"
 
 interface HeroStrategyRightProps {
   id: string
@@ -58,6 +59,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const { data: tokenPrice } = useTokenPrice(cellarConfig)
   const { data: dailyChange } = useDailyChange(cellarConfig)
   const { data: stakingEnd } = useStakingEnd(cellarConfig)
+
   const position = usePosition(cellarConfig)
   const router = useRouter()
 
@@ -91,6 +93,11 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
       })
     }
   }
+
+  const isYieldStrategies =
+    cellarData.cellarType === CellarType.yieldStrategies
+  const isAutomatedPortfolio =
+    cellarData.cellarType === CellarType.automatedPortfolio
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
@@ -140,40 +147,79 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               View Details
             </SecondaryButton>
           </Link>
-          <HStack
-            pt={4}
-            justifyContent="space-around"
-            alignItems="start"
-            divider={<StackDivider borderColor="purple.dark" />}
-          >
-            <VStack flex={1}>
-              <Heading size="md">{tokenPrice || "--"}</Heading>
-              <CellarStatsLabel
-                tooltip={tokenPriceTooltipContent(cellarConfig)}
-                title="Token Price"
-              />
-            </VStack>
+          {isYieldStrategies && (
+            <HStack
+              pt={4}
+              justifyContent="space-around"
+              alignItems="start"
+              divider={<StackDivider borderColor="purple.dark" />}
+            >
+              <VStack flex={1}>
+                <Heading size="md">
+                  {tvm.data?.formatted || "--"}
+                </Heading>
+                <CellarStatsLabel
+                  tooltip="Total value managed by Strategy"
+                  title="TVM"
+                />
+              </VStack>
+              <VStack flex={1}>
+                <Heading size="md">
+                  {cellarData.overrideApy?.value ||
+                    apy?.expectedApy ||
+                    "--"}
+                </Heading>
+                <CellarStatsLabel
+                  tooltip={
+                    cellarData.overrideApy?.tooltip ||
+                    apy?.apyLabel ||
+                    ""
+                  }
+                  title={
+                    cellarData.overrideApy?.title || "Expected APY"
+                  }
+                />
+              </VStack>
+            </HStack>
+          )}
+          {isAutomatedPortfolio && (
+            <HStack
+              pt={4}
+              justifyContent="space-around"
+              alignItems="start"
+              divider={<StackDivider borderColor="purple.dark" />}
+            >
+              <VStack flex={1}>
+                <Heading size="md">{tokenPrice || "--"}</Heading>
+                <CellarStatsLabel
+                  tooltip={tokenPriceTooltipContent(cellarConfig)}
+                  title="Token Price"
+                />
+              </VStack>
 
-            <VStack flex={1}>
-              <PercentageText data={dailyChange} headingSize="md" />
-              <CellarStatsLabel
-                tooltip="% change of current token price vs. token price yesterday"
-                title="1D Change"
-              />
-            </VStack>
+              <VStack flex={1}>
+                <PercentageText data={dailyChange} headingSize="md" />
+                <CellarStatsLabel
+                  tooltip="% change of current token price vs. token price yesterday"
+                  title="1D Change"
+                />
+              </VStack>
 
-            <VStack flex={1} textAlign="center">
-              <PercentageText
-                data={intervalGainPct.data}
-                headingSize="md"
-              />
+              <VStack flex={1} textAlign="center">
+                <PercentageText
+                  data={intervalGainPct.data}
+                  headingSize="md"
+                />
 
-              <CellarStatsLabel
-                title={intervalGainPctTitleContent(cellarConfig)}
-                tooltip={intervalGainPctTooltipContent(cellarConfig)}
-              />
-            </VStack>
-          </HStack>
+                <CellarStatsLabel
+                  title={intervalGainPctTitleContent(cellarConfig)}
+                  tooltip={intervalGainPctTooltipContent(
+                    cellarConfig
+                  )}
+                />
+              </VStack>
+            </HStack>
+          )}
         </>
       )}
 

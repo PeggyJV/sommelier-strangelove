@@ -25,7 +25,7 @@ import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
-import { CellarType } from "data/types"
+import { CellarNameKey, CellarType } from "data/types"
 import { useIntervalGain } from "data/hooks/useIntervalGain"
 import {
   intervalGainPctTitleContent,
@@ -74,6 +74,8 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
     staticCellarData.cellarType === CellarType.automatedPortfolio
 
   // const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
+  const isRealYield =
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD
 
   return (
     <Layout>
@@ -181,7 +183,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             cellarDataMap={cellarDataMap}
             cellarId={id}
           />
-          {isTVMEnabled(cellarConfig) && (
+          {isTVMEnabled(cellarConfig) && !isRealYield && (
             <PerformanceChartByAddressProvider
               address={cellarAddress}
             >
