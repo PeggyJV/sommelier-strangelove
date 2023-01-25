@@ -1,11 +1,10 @@
 import BigNumber from "bignumber.js"
-import { CellarStakingV0815, CellarV0815 } from "src/abi/types"
+import { CellarStakingV0815 } from "src/abi/types"
 
 const yearInSecs = 60 * 60 * 24 * 365
 const yearInSecsBN = new BigNumber(yearInSecs)
 
 export const getApy = async (
-  cellarContract: CellarV0815,
   stakerContract: CellarStakingV0815,
   sommPrice: string,
   dayDatas: { date: number; shareValue: string }[]
