@@ -9,7 +9,7 @@ import {
 
 export const realYieldUsd = {
   name: "Real Yield USD",
-  launchDate: new Date(2023, 0, 25, 11, 30, 0, 0),
+  launchDate: new Date(2023, 0, 25, 12, 55, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
   strategyType: "Stablecoin",
