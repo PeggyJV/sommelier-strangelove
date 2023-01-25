@@ -35,17 +35,17 @@ export const getRewardsApy = async (
       .toFixed(1)
       .toString()}%.`
     const apyLabel = `Expected Rewards APY`
-    const rewardsApy = baseApy
+    const rewardsApy = potentialStakingApy.toFixed(1) + "%"
+    const expectedApy = baseApy
       ? (baseApy + Number(potentialStakingApy.toFixed(1))).toFixed(
           1
         ) + "%"
       : potentialStakingApy.toFixed(1) + "%"
-
     return {
-      apy: rewardsApy,
+      apy: expectedApy,
       apyLabel: baseApy ? apyLabelWithBaseApy : apyLabel,
       potentialStakingApy: rewardsApy,
-      expectedApy: rewardsApy,
+      expectedApy: expectedApy,
     }
   } catch (error) {
     console.warn("Cannot read cellar data", error)
