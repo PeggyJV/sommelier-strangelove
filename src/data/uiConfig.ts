@@ -73,10 +73,7 @@ export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
 }
 
 export const isTVMEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  )
+  return config.cellarNameKey === CellarNameKey.AAVE
 }
 
 export const isAPYEnabled = (config: ConfigProps) => {
