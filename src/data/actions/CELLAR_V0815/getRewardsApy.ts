@@ -36,7 +36,9 @@ export const getRewardsApy = async (
       .toString()}%.`
     const apyLabel = `Expected Rewards APY`
     const rewardsApy = baseApy
-      ? (baseApy + Number(potentialStakingApy.toFixed(1))).toFixed(1)
+      ? (baseApy + Number(potentialStakingApy.toFixed(1))).toFixed(
+          1
+        ) + "%"
       : potentialStakingApy.toFixed(1) + "%"
 
     return {
