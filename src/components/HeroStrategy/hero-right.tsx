@@ -155,7 +155,9 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               divider={<StackDivider borderColor="purple.dark" />}
             >
               <VStack flex={1}>
-                <Heading size="md">{tvm.data?.value || "--"}</Heading>
+                <Heading size="md">
+                  {tvm.data?.formatted || "--"}
+                </Heading>
                 <CellarStatsLabel
                   tooltip="Total value managed by Strategy"
                   title="TVM"
