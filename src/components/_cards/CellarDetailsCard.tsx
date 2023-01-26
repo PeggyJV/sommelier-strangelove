@@ -24,7 +24,10 @@ import { StrategyProvider } from "components/StrategyProvider"
 import { CellarDataMap } from "data/types"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { useTvm } from "data/hooks/useTvm"
-import { isPositionTokenAssets, isTokenAssets } from "data/uiConfig"
+import {
+  isAssetDistributionEnabled,
+  isTokenAssets,
+} from "data/uiConfig"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { TokenAssets } from "components/TokenAssets"
 import { usePosition } from "data/hooks/usePosition"
@@ -194,7 +197,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 />
               )}
 
-              {isPositionTokenAssets(cellarConfig) &&
+              {isAssetDistributionEnabled(cellarConfig) &&
               position.isLoading ? (
                 <Spinner />
               ) : (
