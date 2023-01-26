@@ -48,16 +48,6 @@ export const depositAssetDefaultValue = (config: ConfigProps) => {
   return "USDC"
 }
 
-export const isPositionTokenAssets = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  )
-}
-
 export const isCurrentDepositsEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
@@ -296,7 +286,7 @@ export const isAssetDistributionEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC
-    // TODO: After subgraph synced uncomment this
+    // From subgraph Real yield usd returning empty array, so disabling for now.
     // ||
     // config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
   )
