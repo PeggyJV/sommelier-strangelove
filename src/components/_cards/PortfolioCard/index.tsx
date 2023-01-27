@@ -247,9 +247,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       boxSize={6}
                     />
                     <Heading size="16px">
-                      Earn rewards when you bond{" "}
-                      {apy?.potentialStakingApy}. up to{" "}
-                      {maxMultiplier}
+                      Earn {apy?.potentialStakingApy} and{" "}
+                      {maxMultiplier} in SOMM rewards when you bond.
                     </Heading>
                     <Spacer />
                     <LighterSkeleton
