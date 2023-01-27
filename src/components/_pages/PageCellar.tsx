@@ -20,7 +20,6 @@ import { useCellarCap } from "data/hooks/useCellarCap"
 import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
 import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
-import { CellarPageProps } from "pages/strategies/[id]/manage"
 import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useDailyChange } from "data/hooks/useDailyChange"
 import { PercentageText } from "components/PercentageText"
@@ -98,12 +97,14 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
           {isYieldStrategies && (
             <CellarStatsYield
               tvm={tvm ? `${tvm.formatted}` : <Spinner />}
-              apy={apyLoading ? <Spinner /> : apy?.expectedApy}
+              apy={apyLoading ? <Spinner /> : apy?.apy}
               apyTooltip={apy?.apyLabel}
               currentDeposits={currentDeposits?.value}
               cellarCap={cellarCap?.value}
               asset={activeAsset?.symbol}
-              overrideApy={staticCellarData.overrideApy}
+              rewardsApy={
+                apyLoading ? <Spinner /> : apy?.potentialStakingApy
+              }
               cellarConfig={cellarConfig}
             />
           )}

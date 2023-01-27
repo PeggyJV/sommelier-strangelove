@@ -7,6 +7,7 @@ import {
   Spacer,
   Stack,
   Text,
+  useTheme,
   VStack,
 } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
@@ -45,6 +46,7 @@ import { LighterSkeleton } from "components/_skeleton"
 import { formatDistance } from "utils/formatDistance"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
+  const theme = useTheme()
   const isMounted = useIsMounted()
   const { isConnected } = useAccount()
   const id = useRouter().query.id as string
@@ -247,9 +249,12 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       boxSize={6}
                     />
                     <Heading size="16px">
-                      Earn rewards when you bond{" "}
-                      {apy?.potentialStakingApy}. up to{" "}
-                      {maxMultiplier}
+                      Earn{" "}
+                      <span style={{ color: theme.colors.lime.base }}>
+                        {apy?.potentialStakingApy}
+                      </span>{" "}
+                      and {maxMultiplier} in SOMM rewards when you
+                      bond.
                     </Heading>
                     <Spacer />
                     <LighterSkeleton

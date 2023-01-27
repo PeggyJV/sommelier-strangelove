@@ -23,6 +23,7 @@ export enum CellarNameKey {
 
 export interface ConfigProps {
   id: string
+  baseApy?: number
   cellarNameKey: CellarNameKey
   lpToken: {
     address: string
@@ -74,11 +75,6 @@ export interface CellarDataMap {
       title?: string
       href?: string
       tooltip?: string
-    }
-    overrideApy?: {
-      title: string
-      value: string
-      tooltip: string
     }
     depositTokens: {
       list: string[]

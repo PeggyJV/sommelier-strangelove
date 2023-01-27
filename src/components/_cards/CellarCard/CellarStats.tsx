@@ -11,9 +11,10 @@ import { Label } from "./Label"
 interface CellarStatsProps {
   isLoading?: boolean
   title: string
-  tooltip: string
+  tooltip?: string
   value: string
   size?: string
+  colorValue?: string
 }
 
 export const CellarStats = ({
@@ -22,6 +23,7 @@ export const CellarStats = ({
   tooltip,
   value,
   size = "sm",
+  colorValue,
 }: CellarStatsProps) => {
   return (
     <Flex alignItems="center">
@@ -30,6 +32,7 @@ export const CellarStats = ({
         display="flex"
         alignItems="center"
         columnGap="3px"
+        color={colorValue}
       >
         {isLoading ? <Spinner /> : value}
       </Heading>
@@ -42,7 +45,7 @@ export const CellarStatsLabel = ({
   tooltip,
   title,
 }: {
-  tooltip: string
+  tooltip?: string
   title: string
 }) => {
   return (
@@ -57,7 +60,9 @@ export const CellarStatsLabel = ({
         <Label ml={1} color="neutral.300">
           {title}
         </Label>
-        <InformationIcon color="neutral.300" boxSize={3} />
+        {!!tooltip && (
+          <InformationIcon color="neutral.300" boxSize={3} />
+        )}
       </HStack>
     </Tooltip>
   )

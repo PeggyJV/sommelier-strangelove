@@ -164,21 +164,17 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 />
               </VStack>
               <VStack flex={1}>
-                <Heading size="md">
-                  {cellarData.overrideApy?.value ||
-                    apy?.expectedApy ||
-                    "--"}
-                </Heading>
+                <Heading size="md">{apy?.apy || "--"}</Heading>
                 <CellarStatsLabel
-                  tooltip={
-                    cellarData.overrideApy?.tooltip ||
-                    apy?.apyLabel ||
-                    ""
-                  }
-                  title={
-                    cellarData.overrideApy?.title || "Expected APY"
-                  }
+                  tooltip={apy?.apyLabel || ""}
+                  title="Base APY"
                 />
+              </VStack>
+              <VStack flex={1}>
+                <Heading size="md" color="lime.base">
+                  {apy?.potentialStakingApy || "--"}
+                </Heading>
+                <CellarStatsLabel title={"Rewards APY"} />
               </VStack>
             </HStack>
           )}

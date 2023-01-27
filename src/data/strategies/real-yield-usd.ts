@@ -55,6 +55,7 @@ export const realYieldUsd = {
 
   config: {
     id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+    baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_USD,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
