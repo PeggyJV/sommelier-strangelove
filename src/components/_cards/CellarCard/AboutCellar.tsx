@@ -25,6 +25,8 @@ import { isComingSoon } from "utils/isComingSoon"
 import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
 import { TransparentSkeleton } from "components/_skeleton"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
+import { isFuture } from "date-fns"
 
 interface Props {
   data: CellarCardData
@@ -40,6 +42,9 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
     timeline: intervalGainTimeline(cellarConfig),
   })
   const countdown = isComingSoon(launchDate)
+  const stakingEnd = useStakingEnd(cellarConfig)
+  const isStakingStillRunning =
+    stakingEnd.data?.endDate && isFuture(stakingEnd.data?.endDate)
 
   const launchingDate = (() => {
     if (!launchDate) return "Coming soon"
@@ -87,20 +92,21 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                 <>
                   {apy?.apy !== "0.0%" && (
                     <CellarStats
-                      tooltip="Backtested APY will be updated to live APY next week"
+                      tooltip={apy?.apyLabel}
                       title="Base APY"
                       value={apy?.apy || "..."}
                       isLoading={apyLoading}
                     />
                   )}
-                  {apy?.potentialStakingApy !== "0.0%" && (
-                    <CellarStats
-                      title="Rewards APY"
-                      value={apy?.potentialStakingApy || "..."}
-                      isLoading={apyLoading}
-                      colorValue="lime.base"
-                    />
-                  )}
+                  {isStakingStillRunning &&
+                    apy?.potentialStakingApy !== "0.0%" && (
+                      <CellarStats
+                        title="Rewards APY"
+                        value={apy?.potentialStakingApy || "..."}
+                        isLoading={apyLoading}
+                        colorValue="lime.base"
+                      />
+                    )}
                 </>
               ))}
           </Stack>

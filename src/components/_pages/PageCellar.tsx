@@ -97,12 +97,14 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
           {isYieldStrategies && (
             <CellarStatsYield
               tvm={tvm ? `${tvm.formatted}` : <Spinner />}
-              apy={apyLoading ? <Spinner /> : apy?.expectedApy}
+              apy={apyLoading ? <Spinner /> : apy?.apy}
               apyTooltip={apy?.apyLabel}
               currentDeposits={currentDeposits?.value}
               cellarCap={cellarCap?.value}
               asset={activeAsset?.symbol}
-              overrideApy={staticCellarData.overrideApy}
+              rewardsApy={
+                apyLoading ? <Spinner /> : apy?.potentialStakingApy
+              }
               cellarConfig={cellarConfig}
             />
           )}

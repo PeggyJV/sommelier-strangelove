@@ -60,8 +60,11 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
       }
   const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
   const stakingEnd = useStakingEnd(cellarConfig)
+  const isStakingStillRunning =
+    stakingEnd.data?.endDate && isFuture(stakingEnd.data?.endDate)
   const comingSoon = isComingSoon(launchDate)
   const tagLoading = apyLoading || stakingEnd.isLoading
+
   return (
     <Card
       padding="0"
@@ -110,8 +113,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
                     {apy?.potentialStakingApy}
                   </span>
                   <span> &#183; </span>
-                  {stakingEnd.data?.endDate &&
-                  isFuture(stakingEnd.data?.endDate)
+                  {isStakingStillRunning
                     ? `${formatDistanceToNow(
                         stakingEnd.data.endDate,
                         {

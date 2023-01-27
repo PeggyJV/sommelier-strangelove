@@ -4,11 +4,17 @@ import { CellarStakingV0815 } from "src/abi/types"
 const yearInSecs = 60 * 60 * 24 * 365
 const yearInSecsBN = new BigNumber(yearInSecs)
 
-export const getApy = async (
-  stakerContract: CellarStakingV0815,
-  sommPrice: string,
-  dayDatas: { date: number; shareValue: string }[]
-) => {
+export const getApy = async ({
+  stakerContract,
+  sommPrice,
+  baseApy,
+  dayDatas,
+}: {
+  stakerContract: CellarStakingV0815
+  sommPrice: string
+  baseApy?: number
+  dayDatas?: { date: number; shareValue: string }[]
+}) => {
   try {
     const stakingEnd = await stakerContract.endTimestamp()
     const isStakingOngoing = Date.now() < stakingEnd.toNumber() * 1000
@@ -36,6 +42,9 @@ export const getApy = async (
 
     // cellar apy
     const cellarApy = (() => {
+      if (!dayDatas) {
+        return baseApy || 0
+      }
       const indexThatHaveChanges = dayDatas.findIndex(
         (data, idx, arr) => {
           if (idx === 0) return false // return false because first data doesn't have comparison
@@ -59,11 +68,15 @@ export const getApy = async (
       return yieldGain * 52 * 100
     })()
 
-    const apyLabel = `Expected APY is the sum of the Cellar APY ${cellarApy.toFixed(
-      1
-    )}% and the Rewards APY ${potentialStakingApy
-      .toFixed(1)
-      .toString()}%.`
+    // const apyLabel = `Expected APY is the sum of the Cellar APY ${cellarApy.toFixed(
+    //   1
+    // )}% and the Rewards APY ${potentialStakingApy
+    //   .toFixed(1)
+    //   .toString()}%.`
+    const apyLabel =
+      cellarApy === baseApy
+        ? "Backtested APY will be updated to live APY next week"
+        : ""
 
     return {
       apy: cellarApy.toFixed(1) + "%",

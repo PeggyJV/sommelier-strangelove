@@ -10,26 +10,18 @@ import {
 } from "@chakra-ui/react"
 import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
-import { CurrentDeposits } from "./CurrentDeposits"
 import { InformationIcon } from "./_icons"
-import { analytics } from "utils/analytics"
-import { debounce } from "lodash"
 import { Apy } from "./Apy"
-import { isCurrentDepositsEnabled } from "data/uiConfig"
 import { ConfigProps } from "data/types"
 
 interface CellarStatsYieldProps extends StackProps {
   tvm?: ReactNode
   apy?: ReactNode
   apyTooltip?: string
+  rewardsApy?: ReactNode
   currentDeposits?: string
   cellarCap?: string
   asset?: string
-  overrideApy?: {
-    title: string
-    value: string
-    tooltip: string
-  }
   cellarConfig: ConfigProps
 }
 
@@ -40,8 +32,8 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
   currentDeposits,
   cellarCap,
   asset,
-  overrideApy,
   cellarConfig,
+  rewardsApy,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
@@ -82,24 +74,35 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
         </Tooltip>
       </VStack>
       <VStack spacing={1} align="center">
-        <Apy apy={overrideApy?.value || apy} />
-        <Box
-          onMouseEnter={debounce(() => {
-            analytics.track("user.tooltip-opened-apy")
-          }, 1000)}
-        >
+        <Apy apy={apy} />
+        <Box>
           <Tooltip
             hasArrow
             placement="top"
-            label={overrideApy?.tooltip || apyTooltip}
+            label={apyTooltip}
             bg="surface.bg"
             color="neutral.300"
           >
             <HStack spacing={1} align="center">
-              <CardHeading>
-                {overrideApy?.title || "Expected APY"}
-              </CardHeading>
-              <InformationIcon color="neutral.300" boxSize={3} />
+              <CardHeading>Base APY</CardHeading>
+              {apyTooltip && (
+                <InformationIcon color="neutral.300" boxSize={3} />
+              )}
+            </HStack>
+          </Tooltip>
+        </Box>
+      </VStack>
+      <VStack spacing={1} align="center">
+        <Apy apy={rewardsApy} color="lime.base" />
+        <Box>
+          <Tooltip
+            hasArrow
+            placement="top"
+            bg="surface.bg"
+            color="neutral.300"
+          >
+            <HStack spacing={1} align="center">
+              <CardHeading>Rewards APY</CardHeading>
             </HStack>
           </Tooltip>
         </Box>

@@ -60,7 +60,7 @@ export const CellarStatsLabel = ({
         <Label ml={1} color="neutral.300">
           {title}
         </Label>
-        {tooltip && (
+        {!!tooltip && (
           <InformationIcon color="neutral.300" boxSize={3} />
         )}
       </HStack>

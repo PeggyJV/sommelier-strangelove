@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getApy as getApy_AAVE_V2_STABLE_CELLAR } from "data/actions/CELLAR_V0815/getApy"
-import { getRewardsApy } from "data/actions/CELLAR_V0815/getRewardsApy"
+import { getApy } from "data/actions/CELLAR_V0815/getApy"
 import { CellarNameKey, ConfigProps } from "data/types"
 import { useGet10DaysShareValueQuery } from "generated/subgraph"
 import { CellarStakingV0815 } from "src/abi/types"
@@ -56,24 +55,12 @@ export const useApy = (config: ConfigProps) => {
         throw new Error("Sommelier price is undefined")
       }
 
-      if (config.cellarNameKey === CellarNameKey.AAVE) {
-        return await getApy_AAVE_V2_STABLE_CELLAR(
-          stakerContract as CellarStakingV0815,
-          sommPrice.data,
-          dayDatas!
-        )
-      }
-      if (getRewardsApyEnabled) {
-        return await getRewardsApy(
-          stakerContract as CellarStakingV0815,
-          sommPrice.data,
-          config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-            ? 4.4
-            : undefined
-        )
-      }
-
-      throw new Error("UNKNOWN CONTRACT")
+      return await getApy({
+        stakerContract: stakerContract as CellarStakingV0815,
+        sommPrice: sommPrice.data,
+        dayDatas,
+        baseApy: config.baseApy,
+      })
     },
     {
       enabled: queryEnabled && Boolean(sommPrice.data),
