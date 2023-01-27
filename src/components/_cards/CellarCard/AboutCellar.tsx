@@ -87,7 +87,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                 <>
                   {apy?.apy !== "0.0%" && (
                     <CellarStats
-                      tooltip="Backtested APY and will be updated to live APY next week"
+                      tooltip="Backtested APY will be updated to live APY next week"
                       title="Base APY"
                       value={apy?.apy || "..."}
                       isLoading={apyLoading}
