@@ -42,7 +42,7 @@ export const getRewardsApy = async (
         ) + "%"
       : potentialStakingApy.toFixed(1) + "%"
     return {
-      apy: expectedApy,
+      apy: baseApy + "%",
       apyLabel: baseApy ? apyLabelWithBaseApy : apyLabel,
       potentialStakingApy: rewardsApy,
       expectedApy: expectedApy,

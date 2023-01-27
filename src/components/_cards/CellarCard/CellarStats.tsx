@@ -11,7 +11,7 @@ import { Label } from "./Label"
 interface CellarStatsProps {
   isLoading?: boolean
   title: string
-  tooltip: string
+  tooltip?: string
   value: string
   size?: string
 }
@@ -42,7 +42,7 @@ export const CellarStatsLabel = ({
   tooltip,
   title,
 }: {
-  tooltip: string
+  tooltip?: string
   title: string
 }) => {
   return (
@@ -57,7 +57,9 @@ export const CellarStatsLabel = ({
         <Label ml={1} color="neutral.300">
           {title}
         </Label>
-        <InformationIcon color="neutral.300" boxSize={3} />
+        {tooltip && (
+          <InformationIcon color="neutral.300" boxSize={3} />
+        )}
       </HStack>
     </Tooltip>
   )

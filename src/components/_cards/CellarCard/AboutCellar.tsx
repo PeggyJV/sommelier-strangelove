@@ -24,6 +24,7 @@ import { useIntervalGain } from "data/hooks/useIntervalGain"
 import { isComingSoon } from "utils/isComingSoon"
 import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
+import { TransparentSkeleton } from "components/_skeleton"
 
 interface Props {
   data: CellarCardData
@@ -56,7 +57,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
     <>
       {!countdown && (
         <Stack mx={2} spacing={1}>
-          <Stack spacing={0}>
+          <Stack spacing={1}>
             {isTVMEnabled(cellarConfig) && (
               <CellarStats
                 tooltip="Total value managed by Strategy"
@@ -66,14 +67,40 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
               />
             )}
 
-            {isAPYEnabled(cellarConfig) && (
-              <CellarStats
-                tooltip={apy?.apyLabel || "..."}
-                title="APY"
-                value={apy?.expectedApy || "..."}
-                isLoading={apyLoading}
-              />
-            )}
+            {isAPYEnabled(cellarConfig) &&
+              (apyLoading ? (
+                <>
+                  <TransparentSkeleton
+                    h="14px"
+                    w="80px"
+                    startColor="purple.dark"
+                    endColor="surface.secondary"
+                  />
+                  <TransparentSkeleton
+                    h="14px"
+                    w="100px"
+                    startColor="purple.dark"
+                    endColor="surface.secondary"
+                  />
+                </>
+              ) : (
+                <>
+                  {apy?.apy !== "0.0%" && (
+                    <CellarStats
+                      title="Base APY"
+                      value={apy?.apy || "..."}
+                      isLoading={apyLoading}
+                    />
+                  )}
+                  {apy?.potentialStakingApy !== "0.0%" && (
+                    <CellarStats
+                      title="Rewards APY"
+                      value={apy?.potentialStakingApy || "..."}
+                      isLoading={apyLoading}
+                    />
+                  )}
+                </>
+              ))}
           </Stack>
 
           {isTokenPriceEnabled(cellarConfig) && (
