@@ -1,4 +1,10 @@
-import { BoxProps, Heading, Flex, Text, Box } from "@chakra-ui/react"
+import {
+  BoxProps,
+  Heading,
+  Flex,
+  Text,
+  useTheme,
+} from "@chakra-ui/react"
 import { Card } from "components/_cards/Card"
 import { Tag } from "components/Tag"
 import { AboutCellar } from "./AboutCellar"
@@ -36,6 +42,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   index,
   ...rest
 }) => {
+  const theme = useTheme()
   const cellarConfig = cellarDataMap[data.cellarId].config
   const launchDate = cellarDataMap[data.cellarId].launchDate
   const protocols = data.protocols
@@ -94,7 +101,14 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
                 endColor="surface.secondary"
               >
                 <Text>
-                  {`Expected Rewards APY ${apy?.potentialStakingApy}`}
+                  Expected Rewards APY{" "}
+                  <span
+                    style={{
+                      color: theme.colors.lime.base,
+                    }}
+                  >
+                    {apy?.potentialStakingApy}
+                  </span>
                   <span> &#183; </span>
                   {stakingEnd.data?.endDate &&
                   isFuture(stakingEnd.data?.endDate)

@@ -98,6 +98,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                       title="Rewards APY"
                       value={apy?.potentialStakingApy || "..."}
                       isLoading={apyLoading}
+                      colorValue="lime.base"
                     />
                   )}
                 </>
