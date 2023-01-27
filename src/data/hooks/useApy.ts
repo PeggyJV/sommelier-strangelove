@@ -24,29 +24,31 @@ export const useApy = (config: ConfigProps) => {
 
   const dayDatas = data?.cellar?.dayDatas
 
-  const aaveQueryEnabled = Boolean(
+  const yieldStrategiesEnabled = Boolean(
     config.cellarNameKey === CellarNameKey.AAVE &&
       dayDatas &&
       stakerContract?.provider
   )
 
-  const getRewardsApyCellars = [
+  const withoutSubgraphDataStrategies = [
     CellarNameKey.ETH_BTC_MOM,
     CellarNameKey.ETH_BTC_TREND,
     CellarNameKey.STEADY_BTC,
     CellarNameKey.STEADY_ETH,
     CellarNameKey.STEADY_UNI,
     CellarNameKey.STEADY_MATIC,
+    // Move to yield strategies after subgraph is updated
     CellarNameKey.REAL_YIELD_USD,
   ]
-  const getRewardsApyEnabled = getRewardsApyCellars.includes(
+  const getRewardsApyEnabled = withoutSubgraphDataStrategies.includes(
     config.cellarNameKey
   )
-  const getRewardsApyQueryEnabled = Boolean(
+  const withoutSubgraphDataEnabled = Boolean(
     getRewardsApyEnabled && stakerContract?.provider
   )
 
-  const queryEnabled = aaveQueryEnabled || getRewardsApyQueryEnabled
+  const queryEnabled =
+    yieldStrategiesEnabled || withoutSubgraphDataEnabled
 
   const query = useQuery(
     ["USE_APY", config.cellar.address],
