@@ -91,6 +91,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                       title="Base APY"
                       value={apy?.apy || "..."}
                       isLoading={apyLoading}
+                      colorValue="lime.base"
                     />
                   )}
                   {apy?.potentialStakingApy !== "0.0%" && (
@@ -98,6 +99,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                       title="Rewards APY"
                       value={apy?.potentialStakingApy || "..."}
                       isLoading={apyLoading}
+                      colorValue="lime.base"
                     />
                   )}
                 </>

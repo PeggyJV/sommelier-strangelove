@@ -14,6 +14,7 @@ interface CellarStatsProps {
   tooltip?: string
   value: string
   size?: string
+  colorValue?: string
 }
 
 export const CellarStats = ({
@@ -22,6 +23,7 @@ export const CellarStats = ({
   tooltip,
   value,
   size = "sm",
+  colorValue,
 }: CellarStatsProps) => {
   return (
     <Flex alignItems="center">
@@ -30,6 +32,7 @@ export const CellarStats = ({
         display="flex"
         alignItems="center"
         columnGap="3px"
+        color={colorValue}
       >
         {isLoading ? <Spinner /> : value}
       </Heading>

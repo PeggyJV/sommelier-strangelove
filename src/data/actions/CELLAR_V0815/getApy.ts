@@ -66,7 +66,7 @@ export const getApy = async (
       .toString()}%.`
 
     return {
-      apy: cellarApy.toFixed(1),
+      apy: cellarApy.toFixed(1) + "%",
       apyLabel,
       expectedApy:
         (cellarApy + Number(potentialStakingApy)).toFixed(1) + "%",
