@@ -3,7 +3,6 @@ import {
   Heading,
   HeadingProps,
   HStack,
-  Spinner,
   VStack,
 } from "@chakra-ui/react"
 import { Layout } from "components/Layout"
@@ -14,26 +13,13 @@ import { CellarStatsYield } from "components/CellarStatsYield"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
 import { PerformanceChartByAddressProvider } from "data/context/performanceChartByAddressContext"
-import { useTvm } from "data/hooks/useTvm"
-import { useApy } from "data/hooks/useApy"
-import { useCellarCap } from "data/hooks/useCellarCap"
-import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
-import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
-import { useTokenPrice } from "data/hooks/useTokenPrice"
-import { useDailyChange } from "data/hooks/useDailyChange"
-import { PercentageText } from "components/PercentageText"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarNameKey, CellarType } from "data/types"
-import { useIntervalGain } from "data/hooks/useIntervalGain"
 import {
-  intervalGainPctTitleContent,
-  intervalGainPctTooltipContent,
-  intervalGainTimeline,
   isEthBtcChartEnabled,
   isTVMEnabled,
   isUsdcChartEnabled,
-  tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
 import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
@@ -55,17 +41,6 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
   const cellarConfig = cellarDataMap[id].config
   const staticCellarData = cellarDataMap[id]
   const cellarAddress = cellarDataMap[id].config.id
-  const { data: tvm } = useTvm(cellarConfig)
-  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
-  const { data: cellarCap } = useCellarCap(cellarConfig)
-  const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
-  const { data: activeAsset } = useActiveAsset(cellarConfig)
-  const { data: tokenPrice } = useTokenPrice(cellarConfig)
-  const { data: dailyChange } = useDailyChange(cellarConfig)
-  const intervalGainPct = useIntervalGain({
-    config: cellarConfig,
-    timeline: intervalGainTimeline(cellarConfig),
-  })
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const isYieldStrategies =
     staticCellarData.cellarType === CellarType.yieldStrategies
@@ -95,59 +70,11 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             </HStack>
           </VStack>
           {isYieldStrategies && (
-            <CellarStatsYield
-              tvm={tvm ? `${tvm.formatted}` : <Spinner />}
-              apy={apyLoading ? <Spinner /> : apy?.apy}
-              apyTooltip={apy?.apyLabel}
-              currentDeposits={currentDeposits?.value}
-              cellarCap={cellarCap?.value}
-              asset={activeAsset?.symbol}
-              rewardsApy={
-                apyLoading ? <Spinner /> : apy?.potentialStakingApy
-              }
-              cellarConfig={cellarConfig}
-            />
+            <CellarStatsYield cellarConfig={cellarConfig} />
           )}
 
           {isAutomatedPortfolio && (
-            <CellarStatsAutomated
-              tokenPriceTooltip={tokenPriceTooltipContent(
-                cellarConfig
-              )}
-              tokenPriceLabel="Token price"
-              tokenPriceValue={tokenPrice ?? <Spinner />}
-              weekChangeTooltip="% change of current token price vs. token price yesterday"
-              weekChangeLabel="1D Change"
-              weekChangeValue={
-                <PercentageText
-                  data={dailyChange}
-                  headingSize="md"
-                  arrow
-                />
-              }
-              monthChangeTooltip={intervalGainPctTooltipContent(
-                cellarConfig
-              )}
-              monthChangeLabel={intervalGainPctTitleContent(
-                cellarConfig
-              )}
-              monthChangeValue={
-                <>
-                  {intervalGainPct.isLoading ? (
-                    <Spinner />
-                  ) : (
-                    <PercentageText
-                      data={intervalGainPct.data}
-                      headingSize="md"
-                    />
-                  )}
-                </>
-              }
-              cellarConfig={cellarConfig}
-              currentDeposits={currentDeposits?.value}
-              cellarCap={cellarCap?.value}
-              asset={activeAsset?.symbol}
-            />
+            <CellarStatsAutomated cellarConfig={cellarConfig} />
           )}
         </HStack>
         {isLarger768 && (
