@@ -62,6 +62,9 @@ export const useApy = (config: ConfigProps) => {
         sommPrice: sommPrice.data,
         dayDatas,
         baseApy: config.baseApy,
+        // remove that this after we fix calculation for cellars v2
+        hardcodedApy:
+          config.cellarNameKey === CellarNameKey.REAL_YIELD_USD,
       })
     },
     {
