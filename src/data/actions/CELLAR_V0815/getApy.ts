@@ -9,11 +9,13 @@ export const getApy = async ({
   sommPrice,
   baseApy,
   dayDatas,
+  hardcodedApy,
 }: {
   stakerContract: CellarStakingV0815
   sommPrice: string
   baseApy?: number
   dayDatas?: { date: number; shareValue: string }[]
+  hardcodedApy?: boolean
 }) => {
   try {
     const stakingEnd = await stakerContract.endTimestamp()
@@ -42,7 +44,7 @@ export const getApy = async ({
 
     // cellar apy
     const cellarApy = (() => {
-      if (!dayDatas) {
+      if (!dayDatas || hardcodedApy) {
         return baseApy || 0
       }
       const indexThatHaveChanges = dayDatas.findIndex(
