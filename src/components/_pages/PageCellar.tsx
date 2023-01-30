@@ -69,9 +69,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
               </Heading>
             </HStack>
           </VStack>
-          {isYieldStrategies && (
-            <CellarStatsYield cellarConfig={cellarConfig} />
-          )}
+          {isYieldStrategies && <CellarStatsYield cellarId={id} />}
 
           {isAutomatedPortfolio && (
             <CellarStatsAutomated cellarConfig={cellarConfig} />
