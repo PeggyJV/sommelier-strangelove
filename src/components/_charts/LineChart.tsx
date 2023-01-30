@@ -13,7 +13,7 @@ const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
       motionConfig="default"
       enablePoints={false}
       pointLabelYOffset={0}
-      lineWidth={5}
+      lineWidth={2}
       {...rest}
     />
   )
