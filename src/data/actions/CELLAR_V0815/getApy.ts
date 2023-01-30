@@ -10,12 +10,14 @@ export const getApy = async ({
   baseApy,
   dayDatas,
   hardcodedApy,
+  launchEpoch,
 }: {
   stakerContract: CellarStakingV0815
   sommPrice: string
   baseApy?: number
   dayDatas?: { date: number; shareValue: string }[]
   hardcodedApy?: boolean
+  launchEpoch: number
 }) => {
   try {
     const stakingEnd = await stakerContract.endTimestamp()
