@@ -1,8 +1,9 @@
-import { ReactNode, VFC } from "react"
+import { VFC } from "react"
 import {
   Box,
   Heading,
   HStack,
+  Spinner,
   StackProps,
   Tooltip,
   useBreakpointValue,
@@ -12,47 +13,46 @@ import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { CurrentDeposits } from "./CurrentDeposits"
 import { InformationIcon } from "./_icons"
-import { isCurrentDepositsEnabled } from "data/uiConfig"
+import {
+  intervalGainPctTitleContent,
+  intervalGainPctTooltipContent,
+  intervalGainTimeline,
+  isCurrentDepositsEnabled,
+  tokenPriceTooltipContent,
+} from "data/uiConfig"
 import { ConfigProps } from "data/types"
 import { debounce } from "lodash"
 import { analytics } from "utils/analytics"
+import { useTokenPrice } from "data/hooks/useTokenPrice"
+import { PercentageText } from "./PercentageText"
+import { useDailyChange } from "data/hooks/useDailyChange"
+import { useIntervalGain } from "data/hooks/useIntervalGain"
+import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
+import { useCellarCap } from "data/hooks/useCellarCap"
+import { useActiveAsset } from "data/hooks/useActiveAsset"
 
 interface CellarStatsAutomatedProps extends StackProps {
-  tokenPriceTooltip?: string
-  tokenPriceLabel?: string
-  tokenPriceValue?: ReactNode
-  weekChangeTooltip?: string
-  weekChangeLabel?: string
-  weekChangeValue?: ReactNode
-  monthChangeTooltip?: string
-  monthChangeLabel?: string
-  monthChangeValue?: ReactNode
   cellarConfig: ConfigProps
-  currentDeposits?: string
-  cellarCap?: string
-  asset?: string
 }
 
 export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
-  tokenPriceTooltip,
-  tokenPriceLabel,
-  tokenPriceValue,
-  weekChangeTooltip,
-  weekChangeLabel,
-  weekChangeValue,
-  monthChangeTooltip,
-  monthChangeLabel,
-  monthChangeValue,
   cellarConfig,
-  currentDeposits,
-  cellarCap,
-  asset,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
     sm: "transparent",
     md: "neutral.700",
   })
+
+  const { data: tokenPrice } = useTokenPrice(cellarConfig)
+  const { data: dailyChange } = useDailyChange(cellarConfig)
+  const intervalGainPct = useIntervalGain({
+    config: cellarConfig,
+    timeline: intervalGainTimeline(cellarConfig),
+  })
+  const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
+  const { data: cellarCap } = useCellarCap(cellarConfig)
+  const { data: activeAsset } = useActiveAsset(cellarConfig)
 
   return (
     <HStack
@@ -71,22 +71,22 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
       {...rest}
     >
       <VStack spacing={1} align="center">
-        <Heading size="md">{tokenPriceValue}</Heading>
+        <Heading size="md">{tokenPrice ?? <Spinner />}</Heading>
         <Tooltip
           hasArrow
           placement="top"
-          label={tokenPriceTooltip}
+          label={tokenPriceTooltipContent(cellarConfig)}
           bg="surface.bg"
           color="neutral.300"
         >
           <HStack spacing={1} align="center">
-            <CardHeading>{tokenPriceLabel}</CardHeading>
+            <CardHeading>Token price</CardHeading>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>
         </Tooltip>
       </VStack>
       <VStack spacing={1} align="center">
-        {weekChangeValue}
+        <PercentageText data={dailyChange} headingSize="md" arrow />
         <Box
           onMouseEnter={debounce(() => {
             analytics.track("user.tooltip-opened-daily-change")
@@ -95,19 +95,28 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label={weekChangeTooltip}
+            label="% change of current token price vs. token price yesterday"
             bg="surface.bg"
             color="neutral.300"
           >
             <HStack spacing={1} align="center">
-              <CardHeading>{weekChangeLabel}</CardHeading>
+              <CardHeading>1D Change</CardHeading>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
           </Tooltip>
         </Box>
       </VStack>
       <VStack spacing={1} align="center" maxW="7rem">
-        {monthChangeValue}
+        <>
+          {intervalGainPct.isLoading ? (
+            <Spinner />
+          ) : (
+            <PercentageText
+              data={intervalGainPct.data}
+              headingSize="md"
+            />
+          )}
+        </>
         <Box
           onMouseEnter={debounce(() => {
             analytics.track("user.tooltip-opened-monthly-change")
@@ -116,13 +125,13 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           <Tooltip
             hasArrow
             placement="top"
-            label={monthChangeTooltip}
+            label={intervalGainPctTooltipContent(cellarConfig)}
             bg="surface.bg"
             color="neutral.300"
           >
             <HStack spacing={1} align="center">
               <CardHeading textAlign="center">
-                {monthChangeLabel}
+                {intervalGainPctTitleContent(cellarConfig)}
               </CardHeading>
               <InformationIcon color="neutral.300" boxSize={3} />
             </HStack>
@@ -131,9 +140,9 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
       </VStack>
       {isCurrentDepositsEnabled(cellarConfig) && (
         <CurrentDeposits
-          currentDeposits={currentDeposits}
-          cellarCap={cellarCap}
-          asset={asset}
+          currentDeposits={currentDeposits?.value}
+          cellarCap={cellarCap?.value}
+          asset={activeAsset?.symbol}
         />
       )}
     </HStack>
