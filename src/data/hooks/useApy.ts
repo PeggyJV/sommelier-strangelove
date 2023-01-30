@@ -25,7 +25,8 @@ export const useApy = (config: ConfigProps) => {
   const dayDatas = data?.cellar?.dayDatas
 
   const yieldStrategiesEnabled = Boolean(
-    config.cellarNameKey === CellarNameKey.AAVE &&
+    (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+      config.cellarNameKey === CellarNameKey.AAVE) &&
       dayDatas &&
       stakerContract?.provider
   )
@@ -37,8 +38,6 @@ export const useApy = (config: ConfigProps) => {
     CellarNameKey.STEADY_ETH,
     CellarNameKey.STEADY_UNI,
     CellarNameKey.STEADY_MATIC,
-    // Move to yield strategies after subgraph is updated
-    CellarNameKey.REAL_YIELD_USD,
   ]
   const getRewardsApyEnabled = withoutSubgraphDataStrategies.includes(
     config.cellarNameKey
