@@ -71,7 +71,9 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const tvm = useTvm(cellarConfig)
   const countdown = isComingSoon(launchDate)
 
-  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const { data: apy, isLoading: apyLoading } = useApy(
+    cellarDataMap[id]
+  )
   const potentialStakingApy = apyLoading
     ? "-"
     : apy?.potentialStakingApy

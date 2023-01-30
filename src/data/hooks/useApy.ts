@@ -1,16 +1,21 @@
 import { useQuery } from "@tanstack/react-query"
 import { getApy } from "data/actions/CELLAR_V0815/getApy"
-import { CellarNameKey, ConfigProps } from "data/types"
+import { CellarNameKey, CellarDataMap } from "data/types"
 import { useGet10DaysShareValueQuery } from "generated/subgraph"
 import { CellarStakingV0815 } from "src/abi/types"
 import { getPrevious10Days } from "utils/calculateTime"
 import { useCreateContracts } from "./useCreateContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
+import { subDays } from "date-fns"
 
 const previous10Days = getPrevious10Days()
 
-export const useApy = (config: ConfigProps) => {
+export const useApy = (dataMap: CellarDataMap[string]) => {
+  const { config, launchDate } = dataMap
   const { stakerContract } = useCreateContracts(config)
+
+  const launchDay = launchDate ?? subDays(new Date(), 8)
+  const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
   const sommPrice = useCoinGeckoPrice("sommelier")
 
@@ -65,6 +70,7 @@ export const useApy = (config: ConfigProps) => {
         // remove that this after we fix calculation for cellars v2
         hardcodedApy:
           config.cellarNameKey === CellarNameKey.REAL_YIELD_USD,
+        launchEpoch,
       })
     },
     {
