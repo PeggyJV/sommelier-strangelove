@@ -1,7 +1,8 @@
-import { ReactNode, VFC } from "react"
+import { VFC } from "react"
 import {
   Box,
   HStack,
+  Spinner,
   StackProps,
   Text,
   Tooltip,
@@ -13,33 +14,24 @@ import { CardHeading } from "./_typography/CardHeading"
 import { InformationIcon } from "./_icons"
 import { Apy } from "./Apy"
 import { ConfigProps } from "data/types"
+import { useTvm } from "data/hooks/useTvm"
+import { useApy } from "data/hooks/useApy"
 
 interface CellarStatsYieldProps extends StackProps {
-  tvm?: ReactNode
-  apy?: ReactNode
-  apyTooltip?: string
-  rewardsApy?: ReactNode
-  currentDeposits?: string
-  cellarCap?: string
-  asset?: string
   cellarConfig: ConfigProps
 }
 
 export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
-  tvm,
-  apy,
-  apyTooltip,
-  currentDeposits,
-  cellarCap,
-  asset,
   cellarConfig,
-  rewardsApy,
   ...rest
 }) => {
   const borderColor = useBreakpointValue({
     sm: "transparent",
     md: "neutral.700",
   })
+
+  const { data: tvm } = useTvm(cellarConfig)
+  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
 
   return (
     <HStack
@@ -58,7 +50,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
     >
       <VStack spacing={1} align="center">
         <Text as="span" fontSize="21px" fontWeight="bold">
-          {tvm}
+          {tvm ? `${tvm.formatted}` : <Spinner />}
         </Text>
         <Tooltip
           hasArrow
@@ -74,18 +66,18 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
         </Tooltip>
       </VStack>
       <VStack spacing={1} align="center">
-        <Apy apy={apy} />
+        <Apy apy={apyLoading ? <Spinner /> : apy?.apy} />
         <Box>
           <Tooltip
             hasArrow
             placement="top"
-            label={apyTooltip}
+            label={apy?.apyLabel}
             bg="surface.bg"
             color="neutral.300"
           >
             <HStack spacing={1} align="center">
               <CardHeading>Base APY</CardHeading>
-              {apyTooltip && (
+              {apy?.apyLabel && (
                 <InformationIcon color="neutral.300" boxSize={3} />
               )}
             </HStack>
@@ -93,7 +85,10 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
         </Box>
       </VStack>
       <VStack spacing={1} align="center">
-        <Apy apy={rewardsApy} color="lime.base" />
+        <Apy
+          apy={apyLoading ? <Spinner /> : apy?.potentialStakingApy}
+          color="lime.base"
+        />
         <Box>
           <Tooltip
             hasArrow
