@@ -235,45 +235,48 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </Text>
           </Box>
           <Stack direction="column">
-            {position.isLoading
-              ? content.tradedAssets.map((item) => {
-                  const asset = tokenConfig.find(
-                    (v) => v.symbol === item
-                  )
-                  return (
-                    <HStack key={item}>
-                      <Image
-                        alt={asset?.alt}
-                        src={asset?.src}
-                        boxSize={8}
-                      />
+            {position.isLoading ? (
+              <Spinner />
+            ) : position.data?.length !== 0 ? (
+              position.data?.map((item) => {
+                const asset = tokenConfig.find(
+                  (v) => v.address === item.address
+                )
+                return (
+                  <HStack key={item.address}>
+                    <Image
+                      alt={asset?.alt}
+                      src={asset?.src}
+                      boxSize={8}
+                    />
+                    {!countdown ? (
+                      <Text>
+                        {asset?.symbol} ({item.percentage.toFixed(2)}
+                        %)
+                      </Text>
+                    ) : (
                       <Text>{asset?.symbol}</Text>
-                    </HStack>
-                  )
-                })
-              : position.data?.map((item) => {
-                  const asset = tokenConfig.find(
-                    (v) => v.address === item.address
-                  )
-                  return (
-                    <HStack key={item.address}>
-                      <Image
-                        alt={asset?.alt}
-                        src={asset?.src}
-                        boxSize={8}
-                      />
-                      {!countdown ? (
-                        <Text>
-                          {asset?.symbol} (
-                          {item.percentage.toFixed(2)}
-                          %)
-                        </Text>
-                      ) : (
-                        <Text>{asset?.symbol}</Text>
-                      )}
-                    </HStack>
-                  )
-                })}
+                    )}
+                  </HStack>
+                )
+              })
+            ) : (
+              content.tradedAssets?.map((item) => {
+                const asset = tokenConfig.find(
+                  (v) => v.symbol === item
+                )
+                return (
+                  <HStack key={item}>
+                    <Image
+                      alt={asset?.alt}
+                      src={asset?.src}
+                      boxSize={8}
+                    />
+                    <Text>{asset?.symbol}</Text>
+                  </HStack>
+                )
+              })
+            )}
           </Stack>
         </HStack>
         <HStack>
