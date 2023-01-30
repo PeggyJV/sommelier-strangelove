@@ -1,20 +1,21 @@
 import BigNumber from "bignumber.js"
 import { CellarStakingV0815 } from "src/abi/types"
 
+const yearInSecs = 60 * 60 * 24 * 365
+const yearInSecsBN = new BigNumber(yearInSecs)
+
 export const getApy = async ({
   stakerContract,
   sommPrice,
   baseApy,
   dayDatas,
   hardcodedApy,
-  launchEpoch,
 }: {
   stakerContract: CellarStakingV0815
   sommPrice: string
   baseApy?: number
   dayDatas?: { date: number; shareValue: string }[]
   hardcodedApy?: boolean
-  launchEpoch: number
 }) => {
   try {
     const stakingEnd = await stakerContract.endTimestamp()
@@ -43,34 +44,30 @@ export const getApy = async ({
 
     // cellar apy
     const cellarApy = (() => {
-      if (!dayDatas || dayDatas.length === 1 || hardcodedApy) {
+      if (!dayDatas || hardcodedApy) {
         return baseApy || 0
       }
+      const indexThatHaveChanges = dayDatas.findIndex(
+        (data, idx, arr) => {
+          if (idx === 0) return false // return false because first data doesn't have comparison
 
-      // dayDatas is ordered by date desc
-      const seventhDayIdx = 6 // Index of 7 days before today
-      const today = dayDatas[0]
+          const prev = arr[idx - 1].shareValue
+          return prev !== data.shareValue
+        }
+      )
+      if (indexThatHaveChanges === -1) return 0
 
-      // Try to find the index of the day before the launch
-      // then subtract 1 to get the index of the day of the launch
-      const launchIdx =
-        dayDatas.findIndex((day) => day.date < launchEpoch) - 1
+      // dayDatas is in desc order
+      const latestDataChanged =
+        dayDatas[indexThatHaveChanges - 1].shareValue
+      const prevDayLatestData =
+        dayDatas[indexThatHaveChanges].shareValue
 
-      let numDays = 7
-      let prevIdx = seventhDayIdx
-      if (launchIdx >= 0 && launchIdx < seventhDayIdx) {
-        // It has been less than a week since launch
-        numDays = launchIdx + 1
-        prevIdx = launchIdx
-      }
-
-      const todayValue = today.shareValue
-      const previousValue = dayDatas[prevIdx].shareValue
       const yieldGain =
-        (Number(todayValue) - Number(previousValue)) /
-        Number(previousValue)
+        (Number(latestDataChanged) - Number(prevDayLatestData)) /
+        Number(prevDayLatestData)
 
-      return yieldGain * (365 / numDays) * 100
+      return yieldGain * 52 * 100
     })()
 
     // const apyLabel = `Expected APY is the sum of the Cellar APY ${cellarApy.toFixed(
