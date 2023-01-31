@@ -10,7 +10,6 @@ import {
   Text,
   HStack,
   Spinner,
-  useBreakpointValue,
 } from "@chakra-ui/react"
 import { BaseButton, BaseButtonProps } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
@@ -106,14 +105,9 @@ export const ConnectWalletPopover = ({
       }
     },
   })
-  const placement: "bottom" | "bottom-end" | undefined =
-    useBreakpointValue({
-      base: "bottom",
-      md: "bottom-end",
-    })
 
   return (
-    <Popover placement={placement || "bottom"}>
+    <Popover placement="bottom">
       <PopoverTrigger>
         <BaseButton {...styles} {...rest} {...conditionalProps}>
           Connect Wallet
