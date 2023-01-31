@@ -1,7 +1,6 @@
 import {
   BoxProps,
   Heading,
-  HStack,
   Image,
   SimpleGrid,
   Spacer,
@@ -88,17 +87,14 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     >
       <VStack align="stretch" spacing={8}>
         <CardStatRow
-          spacing={{ sm: 4, md: 8, lg: 14 }}
+          gap={{ base: 4, md: 8, lg: 14 }}
           align="flex-start"
           justify="flex-start"
-          direction={{ sm: "column", md: "row" }}
+          direction={{ base: "column", md: "row" }}
           wrap="wrap"
         >
           <SimpleGrid
-            templateColumns={{
-              sm: "max-content",
-              lg: "repeat(2, max-content)",
-            }}
+            templateColumns="repeat(2, max-content)"
             templateRows="1fr 1fr"
             spacing={4}
             alignItems="flex-end"
@@ -147,10 +143,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 "--"
               )}
             </CardStat> */}
-            <Stack
-              spacing={3}
-              direction={{ sm: "row", md: "column", lg: "row" }}
-            >
+            <Stack spacing={3} direction="row">
               {isMounted &&
                 (isConnected ? (
                   <>
@@ -163,10 +156,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             </Stack>
           </SimpleGrid>
           <SimpleGrid
-            templateColumns={{
-              sm: "max-content",
-              md: "repeat(2, max-content)",
-            }}
+            templateColumns="repeat(2, max-content)"
             templateRows="repeat(2, 1fr)"
             spacing={4}
             alignItems="flex-end"
@@ -232,11 +222,18 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               isFuture(stakingEnd.data?.endDate) && (
                 <InnerCard
                   backgroundColor="surface.tertiary"
-                  mt="8"
-                  px="7"
-                  py="7"
+                  mt={8}
+                  px={7}
+                  py={7}
                 >
-                  <HStack>
+                  <Stack
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{
+                      base: "flex-start",
+                      md: "center",
+                    }}
+                    gap={{ base: 0, md: 4 }}
+                  >
                     <Image
                       src="/assets/icons/somm.png"
                       alt="sommelier logo"
@@ -267,7 +264,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                           : "Program Ended"}
                       </Text>
                     </LighterSkeleton>
-                  </HStack>
+                  </Stack>
                 </InnerCard>
               )}
             {isConnected && (

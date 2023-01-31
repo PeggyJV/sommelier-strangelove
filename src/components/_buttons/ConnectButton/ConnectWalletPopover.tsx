@@ -20,7 +20,6 @@ import { analytics } from "utils/analytics"
 import { ConnectButtonProps } from "."
 
 export const ConnectWalletPopover = ({
-  connector: c,
   unstyled,
   ...rest
 }: ConnectButtonProps) => {
@@ -43,12 +42,7 @@ export const ConnectWalletPopover = ({
       ? // connector ready props
         {
           onClick: () => {
-            analytics.track("wallet.connect-started", {
-              connector: c?.name,
-            })
-            // connect({
-            //   connector: c,
-            // })
+            analytics.track("wallet.connect-started")
           },
         }
       : // connector not ready props
@@ -57,7 +51,7 @@ export const ConnectWalletPopover = ({
           href: "https://metamask.io/download",
           target: "_blank",
         }
-  }, [isConnected, c?.name])
+  }, [isConnected])
 
   const styles: BaseButtonProps | false = !unstyled && {
     p: 3,
@@ -98,10 +92,16 @@ export const ConnectWalletPopover = ({
     },
     onSuccess: (data) => {
       const { account } = data
+      toast({
+        title: "Connected",
+        description: "Your wallet is connected",
+        status: "success",
+        isClosable: true,
+      })
       if (account && account.length) {
         analytics.track("wallet.connect-succeeded", {
           account,
-          connector: c?.name,
+          connector: activeConnector?.name,
         })
       }
     },
@@ -146,7 +146,7 @@ export const ConnectWalletPopover = ({
                   fontSize="sm"
                   onClick={() => {
                     analytics.track("wallet.connect-started", {
-                      connector: c?.name,
+                      connector: activeConnector?.name,
                     })
                     connect({ connector: x })
                   }}

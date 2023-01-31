@@ -1,11 +1,5 @@
-import {
-  Center,
-  Heading,
-  HStack,
-  Stack,
-  Text,
-} from "@chakra-ui/react"
-import { ExternalLinkIcon, InformationIcon } from "components/_icons"
+import { Heading, Stack, Text } from "@chakra-ui/react"
+import { ExternalLinkIcon } from "components/_icons"
 import React from "react"
 import { TransparentCard } from "../TransparentCard"
 import { Link } from "components/Link"
@@ -32,10 +26,11 @@ export const BridgeCard: React.FC = () => {
       maxW="432px"
       w="full"
       boxShadow="purpleOutline1"
-      px={12}
+      px={{ base: 5, md: 12 }}
       pt="52px"
       pb="48px"
-      borderRadius="40px"
+      borderRadius={{ base: "32px", md: "40px" }}
+      mx={4}
     >
       <Heading as="h4" fontSize={24} mb="44px">
         Bridge
@@ -55,8 +50,7 @@ export const BridgeCard: React.FC = () => {
           <ExternalLinkIcon boxSize={3} color="purple.base" />
         </Link>
       </Text>
-      {isLarger768 ? (
-        isMounted &&
+      {isMounted &&
         (isConnected ? (
           <FormProvider {...methods}>
             <BridgeForm />
@@ -65,21 +59,7 @@ export const BridgeCard: React.FC = () => {
           <Stack>
             <ConnectButton unstyled />
           </Stack>
-        ))
-      ) : (
-        <Center>
-          <HStack spacing="6px">
-            <InformationIcon color="red.base" boxSize="12px" />
-            <Text
-              fontSize="xs"
-              fontWeight="semibold"
-              color="red.light"
-            >
-              Bridge not yet supported on mobile
-            </Text>
-          </HStack>
-        </Center>
-      )}
+        ))}
     </TransparentCard>
   )
 }
