@@ -184,7 +184,7 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
               setPointActive={setPointActive}
             />
           </Box>
-          <Stack>
+          {/* <Stack>
             <MobileTooltip />
             <Stack
               direction={{ base: "column", md: "row" }}
@@ -208,7 +208,7 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
                 }}
               />
             </Stack>
-          </Stack>
+          </Stack> */}
         </VStack>
       </TransparentCard>
     </Skeleton>
