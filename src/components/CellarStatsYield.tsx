@@ -13,25 +13,28 @@ import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { InformationIcon } from "./_icons"
 import { Apy } from "./Apy"
-import { ConfigProps } from "data/types"
 import { useTvm } from "data/hooks/useTvm"
 import { useApy } from "data/hooks/useApy"
+import { cellarDataMap } from "data/cellarDataMap"
 
 interface CellarStatsYieldProps extends StackProps {
-  cellarConfig: ConfigProps
+  cellarId: string
 }
 
 export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
-  cellarConfig,
+  cellarId,
   ...rest
 }) => {
+  const cellarConfig = cellarDataMap[cellarId].config
   const borderColor = useBreakpointValue({
     sm: "transparent",
     md: "neutral.700",
   })
 
   const { data: tvm } = useTvm(cellarConfig)
-  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const { data: apy, isLoading: apyLoading } = useApy(
+    cellarDataMap[cellarId]
+  )
 
   return (
     <HStack

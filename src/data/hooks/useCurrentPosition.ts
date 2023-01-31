@@ -36,7 +36,10 @@ export const useCurrentPosition = (config: ConfigProps) => {
     async () => {
       try {
         if (!address) throw new Error("address is undefined")
-        if (config.cellar.key === CellarKey.CELLAR_V0816) {
+        if (
+          config.cellar.key === CellarKey.CELLAR_V0816 ||
+          config.cellar.key === CellarKey.CELLAR_V2
+        ) {
           const contract: CellarV0816 = cellarContract
           // Returns max number of assets withdrawable by user
           const maxAssetsOut = await contract
