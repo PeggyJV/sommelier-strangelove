@@ -95,25 +95,27 @@ export const isTokenPriceEnabled = (config: ConfigProps) => {
 }
 
 export const isDailyChangeEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC
-  )
+  return false
+  // return (
+  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_MATIC
+  // )
 }
 
 export const isIntervalGainPctEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC
-  )
+  return false
+  // return (
+  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_MATIC
+  // )
 }
 
 export const lpTokenTooltipContent = (config: ConfigProps) => {
@@ -150,25 +152,26 @@ export const intervalGainPctTitleContent = (config: ConfigProps) => {
 export const intervalGainPctTooltipContent = (
   config: ConfigProps
 ) => {
-  if (
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  )
-    return `% change of token price compared to a benchmark portfolio of USDC`
-  if (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  )
-    return `% change of token price compared to a benchmark portfolio of USDC`
+  return ""
+  // if (
+  //   config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+  //   config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
+  //   config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+  // )
+  //   return `% change of token price compared to a benchmark portfolio of USDC`
   // if (
   //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
   //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
   // )
-  //   return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
-  return ""
+  //   return `% change of token price compared to a benchmark portfolio of USDC`
+  // // if (
+  // //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+  // //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  // // )
+  // //   return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
+  // return ""
 }
 
 export const tokenPriceTooltipContent = (config: ConfigProps) => {

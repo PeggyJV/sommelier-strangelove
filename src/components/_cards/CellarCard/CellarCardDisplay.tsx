@@ -58,7 +58,9 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
         title: protocols,
         icon: protocolsImage[protocols],
       }
-  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const { data: apy, isLoading: apyLoading } = useApy(
+    cellarDataMap[data.cellarId]
+  )
   const stakingEnd = useStakingEnd(cellarConfig)
   const isStakingStillRunning =
     stakingEnd.data?.endDate && isFuture(stakingEnd.data?.endDate)

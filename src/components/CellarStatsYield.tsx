@@ -13,25 +13,34 @@ import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { InformationIcon } from "./_icons"
 import { Apy } from "./Apy"
-import { ConfigProps } from "data/types"
 import { useTvm } from "data/hooks/useTvm"
 import { useApy } from "data/hooks/useApy"
+import { cellarDataMap } from "data/cellarDataMap"
+import { isFuture } from "date-fns"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
 
 interface CellarStatsYieldProps extends StackProps {
-  cellarConfig: ConfigProps
+  cellarId: string
 }
 
 export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
-  cellarConfig,
+  cellarId,
   ...rest
 }) => {
+  const cellarConfig = cellarDataMap[cellarId].config
   const borderColor = useBreakpointValue({
     sm: "transparent",
     md: "neutral.700",
   })
 
   const { data: tvm } = useTvm(cellarConfig)
-  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+
+  const stakingEnd = useStakingEnd(cellarConfig)
+  const isStakingStillRunning =
+    stakingEnd.data?.endDate && isFuture(stakingEnd.data?.endDate)
+  const { data: apy, isLoading: apyLoading } = useApy(
+    cellarDataMap[cellarId]
+  )
 
   return (
     <HStack
@@ -84,24 +93,26 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
           </Tooltip>
         </Box>
       </VStack>
-      <VStack spacing={1} align="center">
-        <Apy
-          apy={apyLoading ? <Spinner /> : apy?.potentialStakingApy}
-          color="lime.base"
-        />
-        <Box>
-          <Tooltip
-            hasArrow
-            placement="top"
-            bg="surface.bg"
-            color="neutral.300"
-          >
-            <HStack spacing={1} align="center">
-              <CardHeading>Rewards APY</CardHeading>
-            </HStack>
-          </Tooltip>
-        </Box>
-      </VStack>
+      {isStakingStillRunning && apy?.potentialStakingApy !== "0.0%" && (
+        <VStack spacing={1} align="center">
+          <Apy
+            apy={apyLoading ? <Spinner /> : apy?.potentialStakingApy}
+            color="lime.base"
+          />
+          <Box>
+            <Tooltip
+              hasArrow
+              placement="top"
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack spacing={1} align="center">
+                <CardHeading>Rewards APY</CardHeading>
+              </HStack>
+            </Tooltip>
+          </Box>
+        </VStack>
+      )}
     </HStack>
   )
 }

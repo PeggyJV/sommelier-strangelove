@@ -167,7 +167,7 @@ export const UsdcChartProvider: FC<{
 }> = ({ children, address }) => {
   const [showLine, setShowLine] = useState<ShowLine>({
     tokenPrice: true,
-    usdc: true,
+    usdc: false,
   })
   const [timeline, setTimeline] = useState<Timeline>("1W")
   // GQL Queries

@@ -53,7 +53,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const cellarConfig = cellarDataMap[id].config
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
-  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const { data: apy, isLoading: apyLoading } = useApy(
+    cellarDataMap[id]
+  )
   const stakingEnd = useStakingEnd(cellarConfig)
 
   const { connectors } = useConnect()

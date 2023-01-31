@@ -36,7 +36,9 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
   const launchDate = cellarDataMap[data.cellarId].launchDate
   const { data: tvm } = useTvm(cellarConfig)
-  const { data: apy, isLoading: apyLoading } = useApy(cellarConfig)
+  const { data: apy, isLoading: apyLoading } = useApy(
+    cellarDataMap[data.cellarId]
+  )
   const intervalGainPct = useIntervalGain({
     config: cellarConfig,
     timeline: intervalGainTimeline(cellarConfig),
