@@ -43,7 +43,7 @@ export const getApy = async ({
 
     // cellar apy
     const cellarApy = (() => {
-      if (!dayDatas || dayDatas.length === 1 || hardcodedApy) {
+      if (!dayDatas || dayDatas?.length === 1 || hardcodedApy) {
         return baseApy || 0
       }
 

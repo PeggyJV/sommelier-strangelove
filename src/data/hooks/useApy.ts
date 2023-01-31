@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import { getApy } from "data/actions/CELLAR_V0815/getApy"
-import { CellarNameKey, CellarDataMap } from "data/types"
+import { getApy } from "data/actions/common/getApy"
+import { getApy as getApyV2 } from "data/actions/CELLAR_V2/getApy"
+
+import { CellarNameKey, CellarDataMap, CellarKey } from "data/types"
 import { useGet10DaysShareValueQuery } from "generated/subgraph"
 import { CellarStakingV0815 } from "src/abi/types"
 import { getPrevious10Days } from "utils/calculateTime"
@@ -14,9 +16,6 @@ export const useApy = (dataMap: CellarDataMap[string]) => {
   const { config, launchDate } = dataMap
   const { stakerContract } = useCreateContracts(config)
 
-  const launchDay = launchDate ?? subDays(new Date(), 8)
-  const launchEpoch = Math.floor(launchDay.getTime() / 1000)
-
   const sommPrice = useCoinGeckoPrice("sommelier")
 
   const [{ fetching, data, error }, reexecute10Days] =
@@ -29,7 +28,7 @@ export const useApy = (dataMap: CellarDataMap[string]) => {
 
   const dayDatas = data?.cellar?.dayDatas
 
-  const yieldStrategiesEnabled = Boolean(
+  const withSubgraphDataStrategies = Boolean(
     (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
       config.cellarNameKey === CellarNameKey.AAVE) &&
       dayDatas &&
@@ -52,7 +51,7 @@ export const useApy = (dataMap: CellarDataMap[string]) => {
   )
 
   const queryEnabled =
-    yieldStrategiesEnabled || withoutSubgraphDataEnabled
+    withSubgraphDataStrategies || withoutSubgraphDataEnabled
 
   const query = useQuery(
     ["USE_APY", config.cellar.address],
@@ -60,16 +59,23 @@ export const useApy = (dataMap: CellarDataMap[string]) => {
       if (!sommPrice.data) {
         throw new Error("Sommelier price is undefined")
       }
+      if (config.cellar.key === CellarKey.CELLAR_V2) {
+        const launchDay = launchDate ?? subDays(new Date(), 8)
+        const launchEpoch = Math.floor(launchDay.getTime() / 1000)
+        return await getApyV2({
+          stakerContract: stakerContract as CellarStakingV0815,
+          sommPrice: sommPrice.data,
+          dayDatas,
+          baseApy: config.baseApy,
+          launchEpoch,
+        })
+      }
 
       return await getApy({
         stakerContract: stakerContract as CellarStakingV0815,
         sommPrice: sommPrice.data,
         dayDatas,
         baseApy: config.baseApy,
-        // remove that this after we fix calculation for cellars v2
-        hardcodedApy:
-          config.cellarNameKey === CellarNameKey.REAL_YIELD_USD,
-        launchEpoch,
       })
     },
     {
