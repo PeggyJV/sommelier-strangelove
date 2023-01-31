@@ -97,12 +97,6 @@ export const ConnectWalletPopover = ({
     },
     onSuccess: (data) => {
       const { account } = data
-      toast({
-        title: "Connected!",
-        description: "Successfully connected to your wallet",
-        status: "success",
-        isClosable: true,
-      })
       if (account && account.length) {
         analytics.track("wallet.connect-succeeded", {
           account,
