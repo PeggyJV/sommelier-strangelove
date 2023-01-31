@@ -4,6 +4,7 @@ export enum StakerKey {
 export enum CellarKey {
   CELLAR_V0815 = "CELLAR_V0815",
   CELLAR_V0816 = "CELLAR_V0816",
+  CELLAR_V2 = "CELLAR_V2",
 }
 export enum CellarRouterKey {
   CELLAR_ROUTER_V0815 = "CELLAR_ROUTER_V0815",
