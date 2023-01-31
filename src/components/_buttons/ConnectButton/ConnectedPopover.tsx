@@ -10,7 +10,6 @@ import {
   useToast,
   Text,
   Stack,
-  useBreakpointValue,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import truncateWalletAddress from "src/utils/truncateWalletAddress"
@@ -103,13 +102,9 @@ export const ConnectedPopover = () => {
   // to make sure the loading is about not about fetching ENS
   const isLoading = isConnecting && !address
   const isEnsLoading = ensAvatarLoading || ensNameLoading
-  const placement: "bottom" | "bottom-end" | undefined =
-    useBreakpointValue({
-      base: "bottom",
-      md: "bottom-end",
-    })
+
   return (
-    <Popover placement={placement}>
+    <Popover placement={"bottom"}>
       <HStack spacing={2}>
         <Tooltip
           hasArrow
