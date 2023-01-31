@@ -32,6 +32,8 @@ import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
   intervalGainTimeline,
+  isDailyChangeEnabled,
+  isIntervalGainPctEnabled,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
@@ -194,28 +196,33 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                   title="Token Price"
                 />
               </VStack>
+              {isDailyChangeEnabled(cellarConfig) && (
+                <VStack flex={1}>
+                  <PercentageText
+                    data={dailyChange}
+                    headingSize="md"
+                  />
+                  <CellarStatsLabel
+                    tooltip="% change of current token price vs. token price yesterday"
+                    title="1D Change"
+                  />
+                </VStack>
+              )}
+              {isIntervalGainPctEnabled(cellarConfig) && (
+                <VStack flex={1} textAlign="center">
+                  <PercentageText
+                    data={intervalGainPct.data}
+                    headingSize="md"
+                  />
 
-              <VStack flex={1}>
-                <PercentageText data={dailyChange} headingSize="md" />
-                <CellarStatsLabel
-                  tooltip="% change of current token price vs. token price yesterday"
-                  title="1D Change"
-                />
-              </VStack>
-
-              <VStack flex={1} textAlign="center">
-                <PercentageText
-                  data={intervalGainPct.data}
-                  headingSize="md"
-                />
-
-                <CellarStatsLabel
-                  title={intervalGainPctTitleContent(cellarConfig)}
-                  tooltip={intervalGainPctTooltipContent(
-                    cellarConfig
-                  )}
-                />
-              </VStack>
+                  <CellarStatsLabel
+                    title={intervalGainPctTitleContent(cellarConfig)}
+                    tooltip={intervalGainPctTooltipContent(
+                      cellarConfig
+                    )}
+                  />
+                </VStack>
+              )}
             </HStack>
           )}
         </>
