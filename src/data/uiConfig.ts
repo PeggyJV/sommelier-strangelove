@@ -199,14 +199,13 @@ export const isEthBtcChartEnabled = (config: ConfigProps) => {
 }
 
 export const isUsdcChartEnabled = (config: ConfigProps) => {
-  return false
-  // return (
-  //   config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-  //   config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  // )
+  return (
+    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+  )
 }
 
 export const bondingPeriodOptions = (
