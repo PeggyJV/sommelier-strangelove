@@ -1,15 +1,19 @@
 import * as React from "react"
-import { ButtonProps, useToast } from "@chakra-ui/react"
+import {
+  ButtonProps,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react"
 import { Connector, useAccount, useConnect } from "wagmi"
 import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
 import { BaseButton, BaseButtonProps } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
-
+import { SelectWalletModal } from "./SelectWalletModal"
 export interface ConnectButtonProps
   extends Omit<ButtonProps, "children"> {
-  connector: Connector
+  connector?: Connector
   unstyled?: boolean
 }
 
@@ -21,30 +25,7 @@ const ConnectButton = ({
   const toast = useToast()
 
   const { isConnected, address, isConnecting } = useAccount()
-  const { connect } = useConnect({
-    onError: (error) => {
-      toast({
-        title: "Connection failed!",
-        description: error.message,
-        status: "error",
-        isClosable: true,
-      })
-
-      analytics.track("wallet.connect-failed", {
-        error: error.name,
-        message: error.message,
-      })
-    },
-    onSuccess: (data) => {
-      const { account } = data
-
-      if (account && account.length) {
-        analytics.track("wallet.connect-succeeded", {
-          account,
-        })
-      }
-    },
-  })
+  const { onClose, isOpen, onOpen } = useDisclosure()
 
   /**
    * - If connector is ready (window.ethereum exists), it'll detect the connector
@@ -54,14 +35,15 @@ const ConnectButton = ({
    *   as an anchor and opens MetaMask download page in a new tab
    */
   const conditionalProps = React.useMemo<ButtonProps>(() => {
-    return c.ready
+    return !isConnected
       ? // connector ready props
         {
           onClick: () => {
             analytics.track("wallet.connect-started")
-            connect({
-              connector: c,
-            })
+            onOpen()
+            // connect({
+            //   connector: c,
+            // })
           },
         }
       : // connector not ready props
@@ -70,7 +52,11 @@ const ConnectButton = ({
           href: "https://metamask.io/download",
           target: "_blank",
         }
-  }, [c, connect])
+  }, [isConnected, onOpen])
+
+  React.useEffect(() => {
+    if (isConnected) onClose()
+  }, [isConnected, onClose])
 
   // Pass custom connect button styles if unstyled prop is not passed to component
   const styles: BaseButtonProps | false = !unstyled && {
@@ -98,12 +84,13 @@ const ConnectButton = ({
 
   return (
     <ClientOnly>
+      <SelectWalletModal isOpen={isOpen} onClose={onClose} />
       {isConnected ? (
         isConnected && <ConnectedPopover />
       ) : (
         <BaseButton
           isLoading={isConnecting}
-          key={c.id}
+          // key={c.id}
           {...styles}
           {...conditionalProps}
           {...rest}

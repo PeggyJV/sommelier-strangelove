@@ -6,7 +6,6 @@ import {
   HStack,
   Image,
 } from "@chakra-ui/react"
-import { useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
@@ -17,7 +16,6 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 export const Nav: VFC<FlexProps> = (props) => {
   const isMounted = useIsMounted()
-  const { connectors } = useConnect()
   const [scrolled, setScrolled] = useState<boolean>(false)
 
   const routes = useRouter()
@@ -99,11 +97,7 @@ export const Nav: VFC<FlexProps> = (props) => {
             })}
           </HStack>
         </HStack>
-
-        {isLarger768 &&
-          connectors.map((c) => (
-            <ConnectButton connector={c} key={c.id} />
-          ))}
+        <ConnectButton />
       </Container>
     </Flex>
   )

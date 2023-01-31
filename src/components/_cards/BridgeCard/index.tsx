@@ -10,7 +10,7 @@ import React from "react"
 import { TransparentCard } from "../TransparentCard"
 import { Link } from "components/Link"
 import { BridgeForm } from "components/_forms/BridgeForm"
-import { useAccount, useConnect } from "wagmi"
+import { useAccount } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { FormProvider, useForm } from "react-hook-form"
 import { useIsMounted } from "hooks/utils/useIsMounted"
@@ -24,7 +24,6 @@ export interface BridgeFormValues {
 export const BridgeCard: React.FC = () => {
   const isMounted = useIsMounted()
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
-  const { connectors } = useConnect()
   const { isConnected } = useAccount()
   const methods = useForm<BridgeFormValues>()
 
@@ -64,9 +63,7 @@ export const BridgeCard: React.FC = () => {
           </FormProvider>
         ) : (
           <Stack>
-            {connectors.map((c) => (
-              <ConnectButton connector={c} key={c.id} unstyled />
-            ))}
+            <ConnectButton unstyled />
           </Stack>
         ))
       ) : (

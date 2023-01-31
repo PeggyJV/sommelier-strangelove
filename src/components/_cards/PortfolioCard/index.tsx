@@ -16,7 +16,7 @@ import { VFC } from "react"
 import { TransparentCard } from "../TransparentCard"
 import { toEther } from "utils/formatCurrency"
 import BondingTableCard from "../BondingTableCard"
-import { useAccount, useConnect } from "wagmi"
+import { useAccount } from "wagmi"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
 import { DepositButton } from "components/_buttons/DepositButton"
@@ -57,8 +57,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     cellarDataMap[id]
   )
   const stakingEnd = useStakingEnd(cellarConfig)
-
-  const { connectors } = useConnect()
 
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData } = lpToken
@@ -160,13 +158,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                     <WithdrawButton disabled={lpTokenDisabled} />
                   </>
                 ) : (
-                  connectors.map((c) => (
-                    <ConnectButton
-                      connector={c}
-                      key={c.id}
-                      unstyled
-                    />
-                  ))
+                  <ConnectButton unstyled />
                 ))}
             </Stack>
           </SimpleGrid>
