@@ -19,6 +19,8 @@ export const getApy = async ({
   try {
     const stakingEnd = await stakerContract.endTimestamp()
     const isStakingOngoing = Date.now() < stakingEnd.toNumber() * 1000
+    const isUsingHardcodedApy =
+      !dayDatas || (dayDatas?.length === 1 && hardcodedApy)
 
     let potentialStakingApy = new BigNumber(0)
     if (isStakingOngoing) {
@@ -43,7 +45,7 @@ export const getApy = async ({
 
     // cellar apy
     const cellarApy = (() => {
-      if (!dayDatas || dayDatas?.length === 1 || hardcodedApy) {
+      if (isUsingHardcodedApy) {
         return baseApy || 0
       }
 
@@ -78,10 +80,9 @@ export const getApy = async ({
     // )}% and the Rewards APY ${potentialStakingApy
     //   .toFixed(1)
     //   .toString()}%.`
-    const apyLabel =
-      cellarApy === baseApy
-        ? "Backtested APY will be updated to live APY next week"
-        : ""
+    const apyLabel = isUsingHardcodedApy
+      ? "Backtested APY, will be updated to live APY next week"
+      : ""
 
     return {
       apy: cellarApy.toFixed(1) + "%",
