@@ -16,6 +16,8 @@ import { Apy } from "./Apy"
 import { useTvm } from "data/hooks/useTvm"
 import { useApy } from "data/hooks/useApy"
 import { cellarDataMap } from "data/cellarDataMap"
+import { isFuture } from "date-fns"
+import { useStakingEnd } from "data/hooks/useStakingEnd"
 
 interface CellarStatsYieldProps extends StackProps {
   cellarId: string
@@ -32,6 +34,10 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
   })
 
   const { data: tvm } = useTvm(cellarConfig)
+
+  const stakingEnd = useStakingEnd(cellarConfig)
+  const isStakingStillRunning =
+    stakingEnd.data?.endDate && isFuture(stakingEnd.data?.endDate)
   const { data: apy, isLoading: apyLoading } = useApy(
     cellarDataMap[cellarId]
   )
@@ -87,24 +93,26 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
           </Tooltip>
         </Box>
       </VStack>
-      <VStack spacing={1} align="center">
-        <Apy
-          apy={apyLoading ? <Spinner /> : apy?.potentialStakingApy}
-          color="lime.base"
-        />
-        <Box>
-          <Tooltip
-            hasArrow
-            placement="top"
-            bg="surface.bg"
-            color="neutral.300"
-          >
-            <HStack spacing={1} align="center">
-              <CardHeading>Rewards APY</CardHeading>
-            </HStack>
-          </Tooltip>
-        </Box>
-      </VStack>
+      {isStakingStillRunning && apy?.potentialStakingApy !== "0.0%" && (
+        <VStack spacing={1} align="center">
+          <Apy
+            apy={apyLoading ? <Spinner /> : apy?.potentialStakingApy}
+            color="lime.base"
+          />
+          <Box>
+            <Tooltip
+              hasArrow
+              placement="top"
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack spacing={1} align="center">
+                <CardHeading>Rewards APY</CardHeading>
+              </HStack>
+            </Tooltip>
+          </Box>
+        </VStack>
+      )}
     </HStack>
   )
 }
