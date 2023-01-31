@@ -13,10 +13,12 @@ import { NAV_LINKS } from "utils/navLinks"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { LogoTextIcon } from "./_icons"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { useScrollDirection } from "hooks/utils/useScrollDirection"
 
 export const Nav: VFC<FlexProps> = (props) => {
   const isMounted = useIsMounted()
   const [scrolled, setScrolled] = useState<boolean>(false)
+  const scrollDirection = useScrollDirection()
 
   const routes = useRouter()
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
@@ -38,9 +40,13 @@ export const Nav: VFC<FlexProps> = (props) => {
     borderBottom: "1px solid",
     borderColor: "purple.dark",
   }
+  const mobileScrollHide =
+    (!isLarger768 && `nav ${scrollDirection === "down" && "down"}`) ||
+    undefined
 
   return (
     <Flex
+      className={mobileScrollHide}
       position="fixed"
       width="100%"
       as="nav"

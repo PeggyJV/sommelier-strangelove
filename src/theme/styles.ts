@@ -57,5 +57,17 @@ export const styles: Styles = {
         opacity: 0,
       },
     },
+    ".nav": {
+      top: "0px",
+      transitionProperty: "all",
+      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      transitionDuration: "500ms",
+    },
+    ".nav.down": {
+      top: "-10rem",
+      transitionProperty: "all",
+      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      transitionDuration: "500ms",
+    },
   },
 }
