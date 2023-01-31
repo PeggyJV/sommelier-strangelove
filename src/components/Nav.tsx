@@ -57,6 +57,8 @@ export const Nav: VFC<FlexProps> = (props) => {
         maxW="container.xl"
         justifyContent="space-between"
         alignItems="center"
+        flexDir={{ base: "column", md: "row" }}
+        gap={{ base: 4, md: 0 }}
       >
         <HStack spacing={10}>
           <Link href="https://www.sommelier.finance/">
