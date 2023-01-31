@@ -187,7 +187,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
               setPointActive={setPointActive}
             />
           </Box>
-          <Stack>
+          {/* <Stack>
             <MobileTooltip />
             <Stack
               direction={{ base: "column", md: "row" }}
@@ -209,8 +209,8 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
                     usdc: !showLine.usdc,
                   }))
                 }}
-              />
-              {/* <Legend
+              /> */}
+          {/* <Legend
                 color="violet.base"
                 title="ETH 50/BTC 50"
                 active={showLine.ethBtc50}
@@ -221,7 +221,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
                   }))
                 }}
               /> */}
-              <Legend
+          {/* <Legend
                 color="turquoise.base"
                 title="ETH"
                 active={showLine.eth}
@@ -245,6 +245,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
               />
             </Stack>
           </Stack>
+          */}
         </VStack>
       </TransparentCard>
     </Skeleton>

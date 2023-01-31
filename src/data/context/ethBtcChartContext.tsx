@@ -174,8 +174,8 @@ export const EthBtcChartProvider: FC<{
 }> = ({ children, address }) => {
   const [showLine, setShowLine] = useState<ShowLine>({
     tokenPrice: true,
-    ethBtc50: true,
-    usdc: true,
+    ethBtc50: false,
+    usdc: false,
     eth: false,
     btc: false,
   })

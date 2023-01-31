@@ -18,6 +18,8 @@ import {
   intervalGainPctTooltipContent,
   intervalGainTimeline,
   isCurrentDepositsEnabled,
+  isDailyChangeEnabled,
+  isIntervalGainPctEnabled,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { ConfigProps } from "data/types"
@@ -85,59 +87,64 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           </HStack>
         </Tooltip>
       </VStack>
-      <VStack spacing={1} align="center">
-        <PercentageText data={dailyChange} headingSize="md" arrow />
-        <Box
-          onMouseEnter={debounce(() => {
-            analytics.track("user.tooltip-opened-daily-change")
-          }, 1000)}
-        >
-          <Tooltip
-            hasArrow
-            placement="top"
-            label="% change of current token price vs. token price yesterday"
-            bg="surface.bg"
-            color="neutral.300"
+      {isDailyChangeEnabled(cellarConfig) && (
+        <VStack spacing={1} align="center">
+          <PercentageText data={dailyChange} headingSize="md" arrow />
+          <Box
+            onMouseEnter={debounce(() => {
+              analytics.track("user.tooltip-opened-daily-change")
+            }, 1000)}
           >
-            <HStack spacing={1} align="center">
-              <CardHeading>1D Change</CardHeading>
-              <InformationIcon color="neutral.300" boxSize={3} />
-            </HStack>
-          </Tooltip>
-        </Box>
-      </VStack>
-      <VStack spacing={1} align="center" maxW="7rem">
-        <>
-          {intervalGainPct.isLoading ? (
-            <Spinner />
-          ) : (
-            <PercentageText
-              data={intervalGainPct.data}
-              headingSize="md"
-            />
-          )}
-        </>
-        <Box
-          onMouseEnter={debounce(() => {
-            analytics.track("user.tooltip-opened-monthly-change")
-          }, 1000)}
-        >
-          <Tooltip
-            hasArrow
-            placement="top"
-            label={intervalGainPctTooltipContent(cellarConfig)}
-            bg="surface.bg"
-            color="neutral.300"
+            <Tooltip
+              hasArrow
+              placement="top"
+              label="% change of current token price vs. token price yesterday"
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack spacing={1} align="center">
+                <CardHeading>1D Change</CardHeading>
+                <InformationIcon color="neutral.300" boxSize={3} />
+              </HStack>
+            </Tooltip>
+          </Box>
+        </VStack>
+      )}
+      {isIntervalGainPctEnabled(cellarConfig) && (
+        <VStack spacing={1} align="center" maxW="7rem">
+          <>
+            {intervalGainPct.isLoading ? (
+              <Spinner />
+            ) : (
+              <PercentageText
+                data={intervalGainPct.data}
+                headingSize="md"
+              />
+            )}
+          </>
+          <Box
+            onMouseEnter={debounce(() => {
+              analytics.track("user.tooltip-opened-monthly-change")
+            }, 1000)}
           >
-            <HStack spacing={1} align="center">
-              <CardHeading textAlign="center">
-                {intervalGainPctTitleContent(cellarConfig)}
-              </CardHeading>
-              <InformationIcon color="neutral.300" boxSize={3} />
-            </HStack>
-          </Tooltip>
-        </Box>
-      </VStack>
+            <Tooltip
+              hasArrow
+              placement="top"
+              label={intervalGainPctTooltipContent(cellarConfig)}
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack spacing={1} align="center">
+                <CardHeading textAlign="center">
+                  {intervalGainPctTitleContent(cellarConfig)}
+                </CardHeading>
+                <InformationIcon color="neutral.300" boxSize={3} />
+              </HStack>
+            </Tooltip>
+          </Box>
+        </VStack>
+      )}
+
       {isCurrentDepositsEnabled(cellarConfig) && (
         <CurrentDeposits
           currentDeposits={currentDeposits?.value}
