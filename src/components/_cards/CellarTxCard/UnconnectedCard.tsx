@@ -1,12 +1,9 @@
 import { Text, VStack } from "@chakra-ui/react"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { VFC } from "react"
-import { useConnect } from "wagmi"
 import { Card } from "../Card"
 
 export const UnconnectedCard: VFC = () => {
-  const { connectors } = useConnect()
-
   return (
     <Card
       display="flex"
@@ -21,9 +18,8 @@ export const UnconnectedCard: VFC = () => {
           <Text color="neutral.400" maxW="30ch" textAlign="center">
             Please connect your wallet to start investing.
           </Text>
-          {connectors.map((c) => (
-            <ConnectButton connector={c} key={c.id} />
-          ))}
+
+          <ConnectButton />
         </VStack>
       </Card>
     </Card>

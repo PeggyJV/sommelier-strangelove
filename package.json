@@ -27,6 +27,7 @@
     "@cosmjs/cosmwasm-stargate": "^0.27.1",
     "@emotion/react": "11.8.1",
     "@emotion/styled": "11.8.1",
+    "@gnosis.pm/safe-apps-wagmi": "^2.1.0",
     "@keplr-wallet/types": "^0.9.12",
     "@next/bundle-analyzer": "^12.1.0",
     "@nivo/bar": "^0.79.1",
