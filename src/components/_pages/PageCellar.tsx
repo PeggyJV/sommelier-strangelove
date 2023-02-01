@@ -75,13 +75,14 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             <CellarStatsAutomated cellarConfig={cellarConfig} />
           )}
         </HStack>
-
-        <VStack spacing={4} align="stretch">
-          <Heading {...h2Styles} pt={12}>
-            Your Portfolio
-          </Heading>
-          <PortfolioCard />
-        </VStack>
+        {isLarger768 && (
+          <VStack spacing={4} align="stretch">
+            <Heading {...h2Styles} pt={12}>
+              Your Portfolio
+            </Heading>
+            <PortfolioCard />
+          </VStack>
+        )}
       </Section>
       <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">

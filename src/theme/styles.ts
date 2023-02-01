@@ -57,40 +57,5 @@ export const styles: Styles = {
         opacity: 0,
       },
     },
-    ".nav": {
-      top: "0px",
-      transitionProperty: "all",
-      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      transitionDuration: "500ms",
-    },
-    ".nav.down": {
-      top: "-10rem",
-      transitionProperty: "all",
-      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      transitionDuration: "500ms",
-    },
-    ".walletconnect-modal__base": {
-      background: "#121214 !important",
-      border: "1px solid #6C4ED9 !important",
-      borderRadius: "24px !important",
-    },
-    ".walletconnect-modal__mobile__toggle": {
-      background: "#1C182A !important",
-      borderRadius: "20px !important",
-    },
-    ".walletconnect-modal__mobile__toggle_selector": {
-      background: "#282045 !important",
-      border: "1px solid #6C4ED9 !important",
-      borderRadius: "16px !important",
-    },
-    ".walletconnect-qrcode__text": {
-      color: "#fff !important",
-    },
-    ".walletconnect-connect__button__text": {
-      color: "#fff !important",
-    },
-    ".walletconnect-search__input": {
-      background: "#1C182A !important",
-    },
   },
 }
