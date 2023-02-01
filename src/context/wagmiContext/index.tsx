@@ -7,8 +7,6 @@ import {
 } from "wagmi"
 import { alchemyProvider } from "wagmi/providers/alchemy"
 import { InjectedConnector } from "wagmi/connectors/injected"
-import { SafeConnector } from "@gnosis.pm/safe-apps-wagmi"
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
 
 const ALCHEMY_URL = "https://eth-mainnet.alchemyapi.io/v2/"
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
@@ -21,14 +19,6 @@ const { chains, provider, webSocketProvider } = configureChains(
 
 const connector = () => {
   return [
-    // @ts-ignore
-    new SafeConnector({ chains }),
-    new WalletConnectConnector({
-      chains,
-      options: {
-        qrcode: true,
-      },
-    }),
     new InjectedConnector({
       chains,
       options: { shimDisconnect: true },
@@ -37,10 +27,9 @@ const connector = () => {
 }
 
 const client = createClient({
-  autoConnect: false,
+  autoConnect: true,
   provider,
   webSocketProvider,
-  // @ts-ignore
   connectors: connector,
 })
 

@@ -1,4 +1,4 @@
-import { ChakraProvider, DarkMode } from "@chakra-ui/react"
+import { ChakraProvider } from "@chakra-ui/react"
 import { DialogProvider } from "context/dialogContext"
 import type { AppProps } from "next/app"
 import PlausibleProvider from "next-plausible"
@@ -68,9 +68,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                       cardType: "summary_large_image",
                     }}
                   />
-                  <DarkMode>
-                    <Component {...pageProps} />
-                  </DarkMode>
+                  <Component {...pageProps} />
                   <AlertDialog />
                 </WagmiProvider>
               </DialogProvider>

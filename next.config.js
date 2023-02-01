@@ -15,27 +15,6 @@ const SentryOptions = {
 let nextConfig = {
   reactStrictMode: true,
   outputFileTracing: false, // Temporary fix for Sentry + Next 12 bug
-  async headers() {
-    return [
-      {
-        source: "/manifest.json",
-        headers: [
-          {
-            key: "Access-Control-Allow-Origin",
-            value: "*",
-          },
-          {
-            key: "Access-Control-Allow-Methods",
-            value: "GET",
-          },
-          {
-            key: "Access-Control-Allow-Headers",
-            value: "X-Requested-With, content-type, Authorization",
-          },
-        ],
-      },
-    ]
-  },
   redirects: async () => {
     // because aave was using "cellars" not "strategies" we should redirect to handle previous user
     return [
