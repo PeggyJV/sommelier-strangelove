@@ -17,6 +17,7 @@ import { useAccount, useConnect } from "wagmi"
 import React from "react"
 import { analytics } from "utils/analytics"
 import { ConnectButtonProps } from "."
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 export const ConnectWalletPopover = ({
   unstyled,
@@ -28,7 +29,7 @@ export const ConnectWalletPopover = ({
     isConnecting,
     connector: activeConnector,
   } = useAccount()
-
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   /**
    * - If connector is ready (window.ethereum exists), it'll detect the connector
    *   color scheme and attempt to connect on click.
@@ -110,7 +111,7 @@ export const ConnectWalletPopover = ({
     <Popover placement="bottom">
       <PopoverTrigger>
         <BaseButton {...styles} {...rest} {...conditionalProps}>
-          Connect Wallet
+          Connect {isLarger768 && "Wallet"}
         </BaseButton>
       </PopoverTrigger>
       <PopoverContent

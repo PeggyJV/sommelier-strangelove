@@ -4,6 +4,8 @@ import { useAccount } from "wagmi"
 import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
 import { ConnectWalletPopover } from "./ConnectWalletPopover"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { MobileConnectedPopover } from "./MobileConnectedPopover"
 export interface ConnectButtonProps
   extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
@@ -11,11 +13,15 @@ export interface ConnectButtonProps
 
 const ConnectButton = (props: ConnectButtonProps) => {
   const { isConnected } = useAccount()
-
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   return (
     <ClientOnly>
       {isConnected ? (
-        isConnected && <ConnectedPopover />
+        isConnected && isLarger768 ? (
+          <ConnectedPopover />
+        ) : (
+          <MobileConnectedPopover />
+        )
       ) : (
         <ConnectWalletPopover {...props} />
       )}
