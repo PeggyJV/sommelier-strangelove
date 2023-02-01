@@ -104,7 +104,7 @@ export const ConnectedPopover = () => {
   const isEnsLoading = ensAvatarLoading || ensNameLoading
 
   return (
-    <Popover placement="bottom-end">
+    <Popover placement={"bottom"}>
       <HStack spacing={2}>
         <Tooltip
           hasArrow

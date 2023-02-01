@@ -6,7 +6,6 @@ import {
   HStack,
   Image,
 } from "@chakra-ui/react"
-import { useConnect } from "wagmi"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
@@ -14,11 +13,12 @@ import { NAV_LINKS } from "utils/navLinks"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { LogoTextIcon } from "./_icons"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { useScrollDirection } from "hooks/utils/useScrollDirection"
 
 export const Nav: VFC<FlexProps> = (props) => {
   const isMounted = useIsMounted()
-  const { connectors } = useConnect()
   const [scrolled, setScrolled] = useState<boolean>(false)
+  const scrollDirection = useScrollDirection()
 
   const routes = useRouter()
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
@@ -40,9 +40,13 @@ export const Nav: VFC<FlexProps> = (props) => {
     borderBottom: "1px solid",
     borderColor: "purple.dark",
   }
+  const mobileScrollHide =
+    (!isLarger768 && `nav ${scrollDirection === "down" && "down"}`) ||
+    undefined
 
   return (
     <Flex
+      className={mobileScrollHide}
       position="fixed"
       width="100%"
       as="nav"
@@ -59,6 +63,8 @@ export const Nav: VFC<FlexProps> = (props) => {
         maxW="container.xl"
         justifyContent="space-between"
         alignItems="center"
+        flexDir={{ base: "column", md: "row" }}
+        gap={{ base: 4, md: 0 }}
       >
         <HStack spacing={10}>
           <Link href="https://www.sommelier.finance/">
@@ -99,11 +105,7 @@ export const Nav: VFC<FlexProps> = (props) => {
             })}
           </HStack>
         </HStack>
-
-        {isLarger768 &&
-          connectors.map((c) => (
-            <ConnectButton connector={c} key={c.id} />
-          ))}
+        <ConnectButton />
       </Container>
     </Flex>
   )
