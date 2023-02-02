@@ -6,12 +6,16 @@ interface PercentageTextProps {
   data?: number
   headingSize?: "sm" | "md" | "lg" | "xl"
   arrow?: boolean
+  arrowT2?: boolean
+  fontWeight?: number
 }
 
 export const PercentageText: VFC<PercentageTextProps> = ({
   data,
   headingSize = "sm",
   arrow,
+  arrowT2,
+  fontWeight = 700,
 }) => {
   const percentageData = data && Math.abs(data).toFixed(2)
   const isDataZero = Number(percentageData) === 0
@@ -40,10 +44,12 @@ export const PercentageText: VFC<PercentageTextProps> = ({
           : "lime.base"
       }
       spacing={1}
+      justifyContent="flex-end"
     >
       {!isDataZero && (
         <PercentageHeading
           arrow={arrow}
+          arrowT2={arrowT2}
           isDataNegative={isDataNegative}
         />
       )}
@@ -52,8 +58,15 @@ export const PercentageText: VFC<PercentageTextProps> = ({
         display="flex"
         alignItems="center"
         columnGap="3px"
+        fontWeight={fontWeight}
+        color={isDataZero && arrowT2 ? "#9E9DA3" : "current"}
       >
-        {valueExists ? percentageData : "--"}%
+        {valueExists
+          ? isDataZero && arrowT2
+            ? "0.00"
+            : percentageData
+          : "--"}
+        %
       </Heading>
     </HStack>
   )

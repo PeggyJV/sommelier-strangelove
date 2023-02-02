@@ -1,8 +1,0 @@
-query GetSingleCellarValue($epoch: Int!, $cellarAddress: ID!) {
-  cellar(id: $cellarAddress) {
-    dayDatas(first: 1, where: { date_gte: $epoch }) {
-      date
-      shareValue
-    }
-  }
-}

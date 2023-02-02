@@ -20,15 +20,18 @@ import { ChartTooltipItem } from "components/_charts/ChartTooltipItem"
 import { format } from "date-fns"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useApyChart } from "data/context/apyChartContext"
-import { useApy } from "data/hooks/useApy"
 import { ApyChart } from "components/_charts/ApyChart"
+import { useStrategyData } from "data/hooks/useStrategyData"
 
 export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
   const { data, timeArray, apyChange, isFetching, isError } =
     useApyChart()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
-  const apy = useApy(cellarDataMap[id])
+
+  const { data: strategyData } = useStrategyData(
+    cellarConfig.cellar.address
+  )
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const [timeline, setTimeline] = useState<string>("1W")
   const [pointActive, setPointActive] = useState<Point>()
@@ -106,7 +109,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
                   <CardHeading>APY since inception</CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
-                      {apy?.data?.apy || "--"}
+                      {strategyData?.baseApy?.formatted || "--"}
                     </Text>
                   </HStack>
                   <Text color="neutral.400" fontSize="0.625rem">

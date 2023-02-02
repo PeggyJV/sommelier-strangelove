@@ -4,7 +4,7 @@ import { Box, Flex, FlexProps, Text } from "@chakra-ui/react"
 export const Disclaimer: VFC<FlexProps> = (props) => {
   return (
     <Flex {...props}>
-      <Box marginTop="98px" color="neutral.300" fontSize="xs">
+      <Box marginTop="64px" color="neutral.300" fontSize="xs">
         <Text marginBottom="1rem">
           This website does not constitute an offer to sell or a
           solicitation of interest to purchase any securities in any

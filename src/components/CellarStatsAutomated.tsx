@@ -11,13 +11,11 @@ import {
 } from "@chakra-ui/react"
 import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
-import { CurrentDeposits } from "./CurrentDeposits"
 import { InformationIcon } from "./_icons"
 import {
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
   intervalGainTimeline,
-  isCurrentDepositsEnabled,
   isDailyChangeEnabled,
   isIntervalGainPctEnabled,
   tokenPriceTooltipContent,
@@ -25,13 +23,8 @@ import {
 import { ConfigProps } from "data/types"
 import { debounce } from "lodash"
 import { analytics } from "utils/analytics"
-import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { PercentageText } from "./PercentageText"
-import { useDailyChange } from "data/hooks/useDailyChange"
-import { useIntervalGain } from "data/hooks/useIntervalGain"
-import { useCurrentDeposits } from "data/hooks/useCurrentDeposits"
-import { useCellarCap } from "data/hooks/useCellarCap"
-import { useActiveAsset } from "data/hooks/useActiveAsset"
+import { useStrategyData } from "data/hooks/useStrategyData"
 
 interface CellarStatsAutomatedProps extends StackProps {
   cellarConfig: ConfigProps
@@ -46,15 +39,13 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
     md: "neutral.700",
   })
 
-  const { data: tokenPrice } = useTokenPrice(cellarConfig)
-  const { data: dailyChange } = useDailyChange(cellarConfig)
-  const intervalGainPct = useIntervalGain({
-    config: cellarConfig,
-    timeline: intervalGainTimeline(cellarConfig),
-  })
-  const { data: currentDeposits } = useCurrentDeposits(cellarConfig)
-  const { data: cellarCap } = useCellarCap(cellarConfig)
-  const { data: activeAsset } = useActiveAsset(cellarConfig)
+  const { data: strategyData, isLoading } = useStrategyData(
+    cellarConfig.cellar.address
+  )
+  const tokenPrice = strategyData?.tokenPrice
+  const dailyChange = strategyData?.changes.daily
+  const intervalGain =
+    strategyData?.changes[intervalGainTimeline(cellarConfig)]
 
   return (
     <HStack
@@ -113,13 +104,10 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
       {isIntervalGainPctEnabled(cellarConfig) && (
         <VStack spacing={1} align="center" maxW="7rem">
           <>
-            {intervalGainPct.isLoading ? (
+            {isLoading ? (
               <Spinner />
             ) : (
-              <PercentageText
-                data={intervalGainPct.data}
-                headingSize="md"
-              />
+              <PercentageText data={intervalGain} headingSize="md" />
             )}
           </>
           <Box
@@ -143,14 +131,6 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
             </Tooltip>
           </Box>
         </VStack>
-      )}
-
-      {isCurrentDepositsEnabled(cellarConfig) && (
-        <CurrentDeposits
-          currentDeposits={currentDeposits?.value}
-          cellarCap={cellarCap?.value}
-          asset={activeAsset?.symbol}
-        />
       )}
     </HStack>
   )

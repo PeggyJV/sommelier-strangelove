@@ -1,0 +1,18 @@
+query GetAllStrategiesData {
+  cellars {
+    id
+    dayDatas(orderBy: date, orderDirection: desc) {
+      date
+      shareValue
+    }
+    tvlTotal
+    asset {
+      id
+      symbol
+      decimals
+    }
+    positions
+    positionDistribution
+    shareValue
+  }
+}

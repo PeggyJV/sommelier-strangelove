@@ -4,10 +4,9 @@ import { CellarCardData } from "./CellarCardDisplay"
 import { Label } from "./Label"
 import { useAccount } from "wagmi"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useNetValue } from "data/hooks/useNetValue"
-import { useUserStakes } from "data/hooks/useUserStakes"
 import { isRewardsEnabled } from "data/uiConfig"
 import { useIsMounted } from "hooks/utils/useIsMounted"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 interface Props extends FlexProps {
   data: CellarCardData
 }
@@ -20,8 +19,11 @@ export const UserStats: React.FC<Props> = ({
   const { isConnected } = useAccount()
 
   const cellarConfig = cellarDataMap[data.cellarId].config
-  const { data: netValue } = useNetValue(cellarConfig)
-  const { data: userStakes } = useUserStakes(cellarConfig)
+  const { data: userData } = useUserStrategyData(
+    cellarConfig.cellar.address
+  )
+  const netValue = userData?.userStrategyData.userData.netValue
+  const userStakes = userData?.userStakes
   const isMounted = useIsMounted()
 
   return (

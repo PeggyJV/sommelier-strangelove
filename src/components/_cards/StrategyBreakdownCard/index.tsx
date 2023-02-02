@@ -15,8 +15,8 @@ import { analytics } from "utils/analytics"
 import { CellarDataMap } from "data/types"
 import { FAQAccordion } from "./FAQAccordion"
 import htmr from "htmr"
-import { isValidURL } from "components/Highlight"
 import { Link } from "components/Link"
+import { isValidURL } from "utils/isValidUrl"
 
 interface StrategyBreakdownProps extends BoxProps {
   cellarDataMap: CellarDataMap

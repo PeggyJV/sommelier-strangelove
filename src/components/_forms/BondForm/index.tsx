@@ -27,10 +27,10 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
-import { useUserStakes } from "data/hooks/useUserStakes"
 import { bondingPeriodOptions } from "data/uiConfig"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 
 interface FormValues {
   depositAmount: number
@@ -43,7 +43,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch: userStakesRefetch } = useUserStakes(cellarConfig)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken, lpTokenInfo } = useUserBalances(cellarConfig)
@@ -129,12 +129,12 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         hash: bondConf,
         onSuccess: () => {
           analytics.track("bond.succeeded", analyticsData)
-          userStakesRefetch()
+          refetch()
           onClose()
         },
         onError: () => analytics.track("bond.failed", analyticsData),
       })
-      userStakesRefetch()
+      refetch()
     } catch (e) {
       console.warn(e)
       const error = e as Error
