@@ -10,6 +10,7 @@ import {
   useToast,
   Text,
   Stack,
+  Portal,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import truncateWalletAddress from "src/utils/truncateWalletAddress"
@@ -159,49 +160,82 @@ export const ConnectedPopover = () => {
           </BaseButton>
         </PopoverTrigger>
       </HStack>
-      <PopoverContent
-        p={2}
-        maxW="max-content"
-        borderWidth={1}
-        borderColor="purple.dark"
-        borderRadius={12}
-        bg="surface.bg"
-        fontWeight="semibold"
-        _focus={{
-          outline: "unset",
-          outlineOffset: "unset",
-          boxShadow: "unset",
-        }}
-      >
-        <PopoverBody p={0}>
-          <Stack>
-            <Link
-              href={`https://etherscan.io/address/${address}`}
-              isExternal
-              py={2}
-              px={4}
-              fontSize="sm"
-              _hover={{
-                bg: "purple.dark",
-                borderColor: "surface.tertiary",
-              }}
-            >
-              <LogoutCircleIcon mr={2} />
-              View on Etherscan
-            </Link>
-            {selectedStrategy && (
-              <>
-                {selectedStrategy.config.cellarNameKey !==
-                  CellarNameKey.AAVE && (
+      <Portal>
+        <PopoverContent
+          p={2}
+          maxW="max-content"
+          borderWidth={1}
+          borderColor="purple.dark"
+          borderRadius={12}
+          bg="surface.bg"
+          fontWeight="semibold"
+          _focus={{
+            outline: "unset",
+            outlineOffset: "unset",
+            boxShadow: "unset",
+          }}
+        >
+          <PopoverBody p={0}>
+            <Stack>
+              <Link
+                href={`https://etherscan.io/address/${address}`}
+                isExternal
+                py={2}
+                px={4}
+                fontSize="sm"
+                _hover={{
+                  bg: "purple.dark",
+                  borderColor: "surface.tertiary",
+                }}
+              >
+                <LogoutCircleIcon mr={2} />
+                View on Etherscan
+              </Link>
+              {selectedStrategy && (
+                <>
+                  {selectedStrategy.config.cellarNameKey !==
+                    CellarNameKey.AAVE && (
+                    <Stack
+                      as="button"
+                      py={2}
+                      px={4}
+                      fontSize="sm"
+                      onClick={() => {
+                        importToken.mutate({
+                          address:
+                            selectedStrategy.config.lpToken.address,
+                        })
+                      }}
+                      _hover={{
+                        cursor: "pointer",
+                        bg: "purple.dark",
+                        borderColor: "surface.tertiary",
+                      }}
+                    >
+                      <HStack>
+                        <Avatar
+                          src={
+                            selectedStrategy.config.lpToken.imagePath
+                          }
+                          size="2xs"
+                        />
+                        <Text fontWeight="semibold">
+                          Import {selectedStrategy.name} to Wallet
+                        </Text>
+                      </HStack>
+                    </Stack>
+                  )}
+
                   <Stack
                     as="button"
                     py={2}
                     px={4}
                     fontSize="sm"
                     onClick={() => {
+                      const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
                       importToken.mutate({
-                        address:
-                          selectedStrategy.config.lpToken.address,
+                        address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                        imageUrl: fullImageUrl,
                       })
                     }}
                     _hover={{
@@ -212,67 +246,36 @@ export const ConnectedPopover = () => {
                   >
                     <HStack>
                       <Avatar
-                        src={
-                          selectedStrategy.config.lpToken.imagePath
-                        }
+                        src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
                         size="2xs"
                       />
                       <Text fontWeight="semibold">
-                        Import {selectedStrategy.name} to Wallet
+                        Import Reward token to Wallet
                       </Text>
                     </HStack>
                   </Stack>
-                )}
+                </>
+              )}
 
-                <Stack
-                  as="button"
-                  py={2}
-                  px={4}
-                  fontSize="sm"
-                  onClick={() => {
-                    const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
-                    importToken.mutate({
-                      address: config.CONTRACT.SOMMELLIER.ADDRESS,
-                      imageUrl: fullImageUrl,
-                    })
-                  }}
-                  _hover={{
-                    cursor: "pointer",
-                    bg: "purple.dark",
-                    borderColor: "surface.tertiary",
-                  }}
-                >
-                  <HStack>
-                    <Avatar
-                      src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
-                      size="2xs"
-                    />
-                    <Text fontWeight="semibold">
-                      Import Reward token to Wallet
-                    </Text>
-                  </HStack>
-                </Stack>
-              </>
-            )}
-
-            <HStack
-              as="button"
-              py={2}
-              px={4}
-              fontSize="sm"
-              onClick={onDisconnect}
-              _hover={{
-                cursor: "pointer",
-                bg: "purple.dark",
-                borderColor: "surface.tertiary",
-              }}
-            >
-              <LogoutCircleIcon />
-              <Text fontWeight="semibold">Disconnect Wallet</Text>
-            </HStack>
-          </Stack>
-        </PopoverBody>
-      </PopoverContent>
+              <HStack
+                as="button"
+                py={2}
+                px={4}
+                fontSize="sm"
+                onClick={onDisconnect}
+                _hover={{
+                  cursor: "pointer",
+                  bg: "purple.dark",
+                  borderColor: "surface.tertiary",
+                }}
+              >
+                <LogoutCircleIcon />
+                <Text fontWeight="semibold">Disconnect Wallet</Text>
+              </HStack>
+            </Stack>
+          </PopoverBody>
+        </PopoverContent>
+      </Portal>
     </Popover>
   )
 }
