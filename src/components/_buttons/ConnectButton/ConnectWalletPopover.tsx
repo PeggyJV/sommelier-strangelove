@@ -59,6 +59,7 @@ export const ConnectWalletPopover = ({
     borderWidth: 1,
     borderRadius: 12,
     borderColor: "surface.secondary",
+    minW: "max-content",
     fontFamily: "Haffer",
     fontSize: 12,
     icon: MoneyWalletIcon,
@@ -115,6 +116,7 @@ export const ConnectWalletPopover = ({
       </PopoverTrigger>
       <PopoverContent
         p={2}
+        w="auto"
         borderWidth={1}
         borderColor="purple.dark"
         borderRadius={12}
@@ -125,6 +127,7 @@ export const ConnectWalletPopover = ({
           outlineOffset: "unset",
           boxShadow: "unset",
         }}
+        zIndex={401}
       >
         <PopoverBody p={0}>
           <Stack>
