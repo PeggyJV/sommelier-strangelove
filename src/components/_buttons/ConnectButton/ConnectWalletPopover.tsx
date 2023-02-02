@@ -59,7 +59,6 @@ export const ConnectWalletPopover = ({
     borderWidth: 1,
     borderRadius: 12,
     borderColor: "surface.secondary",
-    minW: "max-content",
     fontFamily: "Haffer",
     fontSize: 12,
     icon: MoneyWalletIcon,
