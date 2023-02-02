@@ -11,6 +11,7 @@ import {
   Text,
   Stack,
   Portal,
+  Box,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import truncateWalletAddress from "src/utils/truncateWalletAddress"
@@ -33,6 +34,7 @@ import { useBrandedToast } from "hooks/chakra"
 import { config } from "utils/config"
 import { useRouter } from "next/router"
 import { CellarNameKey } from "data/types"
+import Image from "next/image"
 
 export const ConnectedPopover = () => {
   const toast = useToast()
@@ -213,12 +215,23 @@ export const ConnectedPopover = () => {
                       }}
                     >
                       <HStack>
-                        <Avatar
-                          src={
-                            selectedStrategy.config.lpToken.imagePath
-                          }
-                          size="2xs"
-                        />
+                        <Box
+                          borderRadius="50%"
+                          overflow="hidden"
+                          width="24px"
+                          height="24px"
+                        >
+                          <Image
+                            src={
+                              selectedStrategy.config.lpToken
+                                .imagePath
+                            }
+                            alt="token logo"
+                            width={24}
+                            height={24}
+                          />
+                        </Box>
+
                         <Text fontWeight="semibold">
                           Import {selectedStrategy.name} to Wallet
                         </Text>
@@ -245,10 +258,19 @@ export const ConnectedPopover = () => {
                     }}
                   >
                     <HStack>
-                      <Avatar
-                        src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
-                        size="2xs"
-                      />
+                      <Box
+                        borderRadius="50%"
+                        overflow="hidden"
+                        width="24px"
+                        height="24px"
+                      >
+                        <Image
+                          src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
+                          alt="token logo"
+                          width={24}
+                          height={24}
+                        />
+                      </Box>
                       <Text fontWeight="semibold">
                         Import Reward token to Wallet
                       </Text>
