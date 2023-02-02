@@ -115,7 +115,6 @@ export const ConnectWalletPopover = ({
       </PopoverTrigger>
       <PopoverContent
         p={2}
-        maxW="max-content"
         borderWidth={1}
         borderColor="purple.dark"
         borderRadius={12}
