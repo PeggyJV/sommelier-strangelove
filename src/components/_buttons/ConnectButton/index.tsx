@@ -17,7 +17,7 @@ const ConnectButton = (props: ConnectButtonProps) => {
   return (
     <ClientOnly>
       {isConnected ? (
-        isConnected && isLarger768 ? (
+        isLarger768 ? (
           <ConnectedPopover />
         ) : (
           <MobileConnectedPopover />

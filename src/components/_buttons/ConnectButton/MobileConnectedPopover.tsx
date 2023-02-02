@@ -25,9 +25,7 @@ import { analytics } from "utils/analytics"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
-import { config } from "utils/config"
 import { useRouter } from "next/router"
-import { CellarNameKey } from "data/types"
 
 export const MobileConnectedPopover = () => {
   const toast = useToast()
@@ -156,72 +154,6 @@ export const MobileConnectedPopover = () => {
               <LogoutCircleIcon mr={2} />
               View on Etherscan
             </Link>
-            {selectedStrategy &&
-              typeof window.ethereum === "undefined" && (
-                <>
-                  {selectedStrategy.config.cellarNameKey !==
-                    CellarNameKey.AAVE && (
-                    <Stack
-                      as="button"
-                      py={2}
-                      px={4}
-                      fontSize="sm"
-                      onClick={() => {
-                        importToken.mutate({
-                          address:
-                            selectedStrategy.config.lpToken.address,
-                        })
-                      }}
-                      _hover={{
-                        cursor: "pointer",
-                        bg: "purple.dark",
-                        borderColor: "surface.tertiary",
-                      }}
-                    >
-                      <HStack>
-                        <Avatar
-                          src={
-                            selectedStrategy.config.lpToken.imagePath
-                          }
-                          size="2xs"
-                        />
-                        <Text fontWeight="semibold">
-                          Import {selectedStrategy.name} to Wallet
-                        </Text>
-                      </HStack>
-                    </Stack>
-                  )}
-
-                  <Stack
-                    as="button"
-                    py={2}
-                    px={4}
-                    fontSize="sm"
-                    onClick={() => {
-                      const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
-                      importToken.mutate({
-                        address: config.CONTRACT.SOMMELLIER.ADDRESS,
-                        imageUrl: fullImageUrl,
-                      })
-                    }}
-                    _hover={{
-                      cursor: "pointer",
-                      bg: "purple.dark",
-                      borderColor: "surface.tertiary",
-                    }}
-                  >
-                    <HStack>
-                      <Avatar
-                        src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
-                        size="2xs"
-                      />
-                      <Text fontWeight="semibold">
-                        Import Reward token to Wallet
-                      </Text>
-                    </HStack>
-                  </Stack>
-                </>
-              )}
 
             <HStack
               as="button"
