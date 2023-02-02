@@ -10,6 +10,7 @@ import {
   Text,
   HStack,
   Spinner,
+  Portal,
 } from "@chakra-ui/react"
 import { BaseButton, BaseButtonProps } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
@@ -108,67 +109,72 @@ export const ConnectWalletPopover = ({
   })
 
   return (
-    <Popover placement="bottom-end">
+    <Popover placement="bottom">
       <PopoverTrigger>
         <BaseButton {...styles} {...rest} {...conditionalProps}>
           Connect {isLarger768 && "Wallet"}
         </BaseButton>
       </PopoverTrigger>
-      <PopoverContent
-        p={2}
-        maxW="max-content"
-        borderWidth={1}
-        borderColor="purple.dark"
-        borderRadius={12}
-        bg="surface.bg"
-        fontWeight="semibold"
-        _focus={{
-          outline: "unset",
-          outlineOffset: "unset",
-          boxShadow: "unset",
-        }}
-      >
-        <PopoverBody p={0}>
-          <Stack>
-            {connectors
-              .filter((x) => x.ready && x.id !== activeConnector?.id)
-              .map((x) => (
-                <Stack
-                  key={x.id}
-                  as="button"
-                  py={2}
-                  px={4}
-                  fontSize="sm"
-                  onClick={() => {
-                    analytics.track("wallet.connect-started", {
-                      connector: activeConnector?.name,
-                    })
-                    connect({ connector: x })
-                  }}
-                  _hover={{
-                    cursor: "pointer",
-                    bg: "purple.dark",
-                    borderColor: "surface.tertiary",
-                  }}
-                >
-                  <HStack>
-                    {isConnecting && x.id === pendingConnector?.id ? (
-                      <Spinner />
-                    ) : (
-                      <Image
-                        src={`/assets/icons/${x?.name?.toLowerCase()}.svg`}
-                        alt="wallet logo"
-                        boxSize={6}
-                      />
-                    )}
+      <Portal>
+        <PopoverContent
+          p={2}
+          maxW="max-content"
+          borderWidth={1}
+          borderColor="purple.dark"
+          borderRadius={12}
+          bg="surface.bg"
+          fontWeight="semibold"
+          _focus={{
+            outline: "unset",
+            outlineOffset: "unset",
+            boxShadow: "unset",
+          }}
+        >
+          <PopoverBody p={0}>
+            <Stack>
+              {connectors
+                .filter(
+                  (x) => x.ready && x.id !== activeConnector?.id
+                )
+                .map((x) => (
+                  <Stack
+                    key={x.id}
+                    as="button"
+                    py={2}
+                    px={4}
+                    fontSize="sm"
+                    onClick={() => {
+                      analytics.track("wallet.connect-started", {
+                        connector: activeConnector?.name,
+                      })
+                      connect({ connector: x })
+                    }}
+                    _hover={{
+                      cursor: "pointer",
+                      bg: "purple.dark",
+                      borderColor: "surface.tertiary",
+                    }}
+                  >
+                    <HStack>
+                      {isConnecting &&
+                      x.id === pendingConnector?.id ? (
+                        <Spinner />
+                      ) : (
+                        <Image
+                          src={`/assets/icons/${x?.name?.toLowerCase()}.svg`}
+                          alt="wallet logo"
+                          boxSize={6}
+                        />
+                      )}
 
-                    <Text fontWeight="semibold">{x.name}</Text>
-                  </HStack>
-                </Stack>
-              ))}
-          </Stack>
-        </PopoverBody>
-      </PopoverContent>
+                      <Text fontWeight="semibold">{x.name}</Text>
+                    </HStack>
+                  </Stack>
+                ))}
+            </Stack>
+          </PopoverBody>
+        </PopoverContent>
+      </Portal>
     </Popover>
   )
 }
