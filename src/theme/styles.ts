@@ -92,5 +92,10 @@ export const styles: Styles = {
     ".walletconnect-search__input": {
       background: "#1C182A !important",
     },
+    ".walletconnect-modal__footer": {
+      overflowX: "scroll !important",
+      justifyContent: "flex-start !important",
+      paddingBottom: "10px !important",
+    },
   },
 }
