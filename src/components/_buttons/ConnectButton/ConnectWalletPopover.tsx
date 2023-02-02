@@ -108,7 +108,7 @@ export const ConnectWalletPopover = ({
   })
 
   return (
-    <Popover placement="bottom">
+    <Popover placement="bottom-end">
       <PopoverTrigger>
         <BaseButton {...styles} {...rest} {...conditionalProps}>
           Connect {isLarger768 && "Wallet"}

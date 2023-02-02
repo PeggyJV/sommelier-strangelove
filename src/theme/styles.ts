@@ -92,5 +92,8 @@ export const styles: Styles = {
     ".walletconnect-search__input": {
       background: "#1C182A !important",
     },
+    ".walletconnect-modal__footer": {
+      overflow: "scroll !important",
+    },
   },
 }
