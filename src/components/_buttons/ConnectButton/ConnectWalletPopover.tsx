@@ -116,7 +116,6 @@ export const ConnectWalletPopover = ({
       </PopoverTrigger>
       <PopoverContent
         p={2}
-        w="auto"
         borderWidth={1}
         borderColor="purple.dark"
         borderRadius={12}
@@ -127,6 +126,7 @@ export const ConnectWalletPopover = ({
           outlineOffset: "unset",
           boxShadow: "unset",
         }}
+        w="auto"
         zIndex={401}
       >
         <PopoverBody p={0}>

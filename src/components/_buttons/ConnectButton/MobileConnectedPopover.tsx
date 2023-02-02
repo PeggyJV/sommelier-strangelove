@@ -100,7 +100,7 @@ export const MobileConnectedPopover = () => {
   const isEnsLoading = ensAvatarLoading || ensNameLoading
 
   return (
-    <Popover placement="bottom-end">
+    <Popover placement="bottom">
       <PopoverTrigger>
         <BaseButton
           bg="surface.primary"
@@ -127,7 +127,8 @@ export const MobileConnectedPopover = () => {
       </PopoverTrigger>
       <PopoverContent
         p={2}
-        maxW="max-content"
+        w="auto"
+        zIndex={401}
         borderWidth={1}
         borderColor="purple.dark"
         borderRadius={12}
