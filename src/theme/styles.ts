@@ -93,7 +93,9 @@ export const styles: Styles = {
       background: "#1C182A !important",
     },
     ".walletconnect-modal__footer": {
-      overflow: "scroll !important",
+      overflowX: "scroll !important",
+      justifyContent: "flex-start !important",
+      paddingBottom: "10px !important",
     },
   },
 }
