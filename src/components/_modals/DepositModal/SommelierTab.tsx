@@ -529,8 +529,17 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
             Submit
           </BaseButton>
           <Text textAlign="center">
-            Depositing strategy's current active asset will save gas
-            fees
+            Depositing active asset (
+            <Avatar
+              ml="-2.5px"
+              boxSize={6}
+              src={activeAsset?.src}
+              name={activeAsset?.alt}
+              borderWidth={2}
+              borderColor="surface.bg"
+              bg="surface.bg"
+            />
+            {activeAsset?.symbol}) will save gas fees
           </Text>
         </VStack>
       </FormProvider>
