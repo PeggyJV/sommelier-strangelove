@@ -1,5 +1,4 @@
 import {
-  ButtonProps,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -31,28 +30,6 @@ export const ConnectWalletPopover = ({
     connector: activeConnector,
   } = useAccount()
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
-  /**
-   * - If connector is ready (window.ethereum exists), it'll detect the connector
-   *   color scheme and attempt to connect on click.
-   *
-   * - If connector is not ready (window.ethereum does not exist), it'll render
-   *   as an anchor and opens MetaMask download page in a new tab
-   */
-  const conditionalProps = React.useMemo<ButtonProps>(() => {
-    return !isConnected
-      ? // connector ready props
-        {
-          onClick: () => {
-            analytics.track("wallet.connect-started")
-          },
-        }
-      : // connector not ready props
-        {
-          as: "a",
-          href: "https://metamask.io/download",
-          target: "_blank",
-        }
-  }, [isConnected])
 
   const styles: BaseButtonProps | false = !unstyled && {
     p: 3,
@@ -78,7 +55,7 @@ export const ConnectWalletPopover = ({
   }
 
   const { connect, connectors, pendingConnector } = useConnect({
-    onError: (error) => {
+    onError: (error, args) => {
       toast({
         title: "Connection failed!",
         description: error.message,
@@ -89,9 +66,10 @@ export const ConnectWalletPopover = ({
       analytics.track("wallet.connect-failed", {
         error: error.name,
         message: error.message,
+        wallet: args.connector.name,
       })
     },
-    onSuccess: (data) => {
+    onSuccess: (data, args) => {
       const { account } = data
       toast({
         title: "Connected",
@@ -102,7 +80,7 @@ export const ConnectWalletPopover = ({
       if (account && account.length) {
         analytics.track("wallet.connect-succeeded", {
           account,
-          connector: activeConnector?.name,
+          wallet: args.connector.name,
         })
       }
     },
@@ -111,7 +89,7 @@ export const ConnectWalletPopover = ({
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
-        <BaseButton {...styles} {...rest} {...conditionalProps}>
+        <BaseButton {...styles} {...rest}>
           Connect {isLarger768 && "Wallet"}
         </BaseButton>
       </PopoverTrigger>
@@ -145,9 +123,12 @@ export const ConnectWalletPopover = ({
                     px={4}
                     fontSize="sm"
                     onClick={() => {
-                      analytics.track("wallet.connect-started", {
-                        connector: x.name,
-                      })
+                      analytics.track(
+                        "wallet.connect-wallet-selection",
+                        {
+                          wallet: x.name,
+                        }
+                      )
                       connect({ connector: x })
                     }}
                     _hover={{
