@@ -213,7 +213,9 @@ export const isTokenPriceChartEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
   )
 }
 
