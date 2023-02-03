@@ -528,6 +528,10 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           >
             Submit
           </BaseButton>
+          <Text textAlign="center">
+            Depositing strategy's current active asset will save gas
+            fees
+          </Text>
         </VStack>
       </FormProvider>
     </>
