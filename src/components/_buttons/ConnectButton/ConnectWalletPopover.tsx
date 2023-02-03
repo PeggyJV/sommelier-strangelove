@@ -146,7 +146,7 @@ export const ConnectWalletPopover = ({
                     fontSize="sm"
                     onClick={() => {
                       analytics.track("wallet.connect-started", {
-                        connector: activeConnector?.name,
+                        connector: x.name,
                       })
                       connect({ connector: x })
                     }}
