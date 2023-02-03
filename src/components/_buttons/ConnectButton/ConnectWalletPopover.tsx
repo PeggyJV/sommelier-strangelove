@@ -6,7 +6,6 @@ import {
   PopoverTrigger,
   Stack,
   useToast,
-  Image,
   Text,
   HStack,
   Spinner,
@@ -19,6 +18,7 @@ import React from "react"
 import { analytics } from "utils/analytics"
 import { ConnectButtonProps } from "."
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import Image from "next/image"
 
 export const ConnectWalletPopover = ({
   unstyled,
@@ -109,7 +109,7 @@ export const ConnectWalletPopover = ({
   })
 
   return (
-    <Popover placement="bottom" isLazy>
+    <Popover placement="bottom">
       <PopoverTrigger>
         <BaseButton {...styles} {...rest} {...conditionalProps}>
           Connect {isLarger768 && "Wallet"}
@@ -146,7 +146,7 @@ export const ConnectWalletPopover = ({
                     fontSize="sm"
                     onClick={() => {
                       analytics.track("wallet.connect-started", {
-                        connector: activeConnector?.name,
+                        connector: x.name,
                       })
                       connect({ connector: x })
                     }}
@@ -164,7 +164,8 @@ export const ConnectWalletPopover = ({
                         <Image
                           src={`/assets/icons/${x?.name?.toLowerCase()}.svg`}
                           alt="wallet logo"
-                          boxSize={6}
+                          width={24}
+                          height={24}
                         />
                       )}
 
