@@ -6,7 +6,6 @@ import {
   PopoverContent,
   PopoverTrigger,
   Spinner,
-  Tooltip,
   useToast,
   Text,
   Stack,
@@ -21,10 +20,7 @@ import {
 } from "wagmi"
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
-import {
-  LogoutCircleIcon,
-  SettingsSliderIcon,
-} from "components/_icons"
+import { ChevronDownIcon, LogoutCircleIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { cellarDataMap } from "data/cellarDataMap"
@@ -105,60 +101,35 @@ export const ConnectedPopover = () => {
 
   return (
     <Popover placement="bottom">
-      <HStack spacing={2}>
-        <Tooltip
-          hasArrow
-          arrowShadowColor="purple.base"
-          label="Copy to clipboard"
-          placement="bottom"
-          color="neutral.300"
-          bg="surface.bg"
+      <PopoverTrigger>
+        <BaseButton
+          bg="none"
+          borderWidth={2}
+          borderColor="purple.base"
+          borderRadius="full"
+          rightIcon={
+            <HStack>
+              {walletAddressIcon()}
+              <ChevronDownIcon />
+            </HStack>
+          }
+          w="auto"
+          zIndex={401}
+          isLoading={isLoading}
+          // loading state fetching ENS
+          leftIcon={
+            ((isLoading || isEnsLoading) && <Spinner size="xs" />) ||
+            undefined
+          }
+          fontFamily="Haffer"
+          fontSize={12}
+          _hover={{
+            bg: "purple.dark",
+          }}
         >
-          <BaseButton
-            bg="surface.primary"
-            borderWidth={1}
-            borderColor="surface.secondary"
-            borderRadius={12}
-            icon={walletAddressIcon}
-            w="auto"
-            zIndex={401}
-            isLoading={isLoading}
-            // loading state fetching ENS
-            leftIcon={
-              ((isLoading || isEnsLoading) && (
-                <Spinner size="xs" />
-              )) ||
-              undefined
-            }
-            onClick={handleCopyAddressToClipboard}
-            fontFamily="Haffer"
-            fontSize={12}
-            _hover={{
-              bg: "purple.dark",
-              borderColor: "surface.tertiary",
-            }}
-          >
-            {ensName ? ensName : truncateWalletAddress(address)}
-          </BaseButton>
-        </Tooltip>
-        <PopoverTrigger>
-          <BaseButton
-            p={3}
-            bg="surface.primary"
-            borderWidth={1}
-            borderColor="surface.secondary"
-            borderRadius={12}
-            minW="max-content"
-            isLoading={isLoading}
-            _hover={{
-              bg: "purple.dark",
-              borderColor: "surface.tertiary",
-            }}
-          >
-            <SettingsSliderIcon />
-          </BaseButton>
-        </PopoverTrigger>
-      </HStack>
+          {ensName ? ensName : truncateWalletAddress(address)}
+        </BaseButton>
+      </PopoverTrigger>
       <PopoverContent
         p={2}
         maxW="max-content"
@@ -254,7 +225,21 @@ export const ConnectedPopover = () => {
                 </Stack>
               </>
             )}
-
+            <HStack
+              as="button"
+              py={2}
+              px={4}
+              fontSize="sm"
+              onClick={handleCopyAddressToClipboard}
+              _hover={{
+                cursor: "pointer",
+                bg: "purple.dark",
+                borderColor: "surface.tertiary",
+              }}
+            >
+              <LogoutCircleIcon />
+              <Text fontWeight="semibold">Copy to clipboard</Text>
+            </HStack>
             <HStack
               as="button"
               py={2}

@@ -29,7 +29,8 @@ export const ConnectWalletPopover = ({
     isConnecting,
     connector: activeConnector,
   } = useAccount()
-  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
+  const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
+  const isLarger480 = useBetterMediaQuery("(min-width: 480px)")
   /**
    * - If connector is ready (window.ethereum exists), it'll detect the connector
    *   color scheme and attempt to connect on click.
@@ -56,13 +57,13 @@ export const ConnectWalletPopover = ({
   const styles: BaseButtonProps | false = !unstyled && {
     p: 3,
     bg: "surface.primary",
-    borderWidth: 1,
-    borderRadius: 12,
-    borderColor: "surface.secondary",
+    borderWidth: 2,
+    borderRadius: "full",
+    borderColor: "purple.base",
     minW: "max-content",
     fontFamily: "Haffer",
     fontSize: 12,
-    icon: MoneyWalletIcon,
+    icon: isLarger480 && MoneyWalletIcon,
     iconProps: {
       bgColor: "unset",
       borderRadius: "unset",
@@ -111,7 +112,7 @@ export const ConnectWalletPopover = ({
     <Popover placement="bottom" isLazy>
       <PopoverTrigger>
         <BaseButton {...styles} {...rest} {...conditionalProps}>
-          Connect {isLarger768 && "Wallet"}
+          Connect {isLarger992 && "Wallet"}
         </BaseButton>
       </PopoverTrigger>
       <PopoverContent

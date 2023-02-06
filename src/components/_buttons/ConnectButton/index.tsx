@@ -13,11 +13,11 @@ export interface ConnectButtonProps
 
 const ConnectButton = (props: ConnectButtonProps) => {
   const { isConnected } = useAccount()
-  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
+  const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
   return (
     <ClientOnly>
       {isConnected ? (
-        isLarger768 ? (
+        isLarger992 ? (
           <ConnectedPopover />
         ) : (
           <MobileConnectedPopover />
