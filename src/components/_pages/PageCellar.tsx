@@ -16,16 +16,10 @@ import { PerformanceChartByAddressProvider } from "data/context/performanceChart
 import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarNameKey, CellarType } from "data/types"
-import {
-  isEthBtcChartEnabled,
-  isTVMEnabled,
-  isUsdcChartEnabled,
-} from "data/uiConfig"
-import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
-import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
-import { UsdcPerfomanceCard } from "components/_cards/UsdcPerfomanceCard"
-import { UsdcChartProvider } from "data/context/usdcChartContext"
+import { isTokenPriceChartEnabled, isTVMEnabled } from "data/uiConfig"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { TokenPriceChartProvider } from "data/context/tokenPriceChartContext"
+import { TokenPricePerfomanceCard } from "components/_cards/TokenPricePerfomaceCard"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -85,7 +79,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
       </Section>
       <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">
-          {isEthBtcChartEnabled(cellarConfig) && (
+          {/* {isEthBtcChartEnabled(cellarConfig) && (
             <EthBtcChartProvider address={cellarAddress}>
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                 Strategy Perfomance
@@ -100,7 +94,16 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
               </Heading>
               <UsdcPerfomanceCard />
             </UsdcChartProvider>
+          )} */}
+          {isTokenPriceChartEnabled(cellarConfig) && (
+            <TokenPriceChartProvider address={cellarAddress}>
+              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
+                Strategy Perfomance
+              </Heading>
+              <TokenPricePerfomanceCard />
+            </TokenPriceChartProvider>
           )}
+
           <Heading pt={isYieldStrategies ? 0 : 12} {...h2Styles}>
             Strategy Details
           </Heading>

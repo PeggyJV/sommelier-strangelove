@@ -48,7 +48,10 @@ export const Nav: VFC<FlexProps> = (props) => {
   }, [])
 
   const styles: FlexProps | false = scrolled && {
-    bg: "#121214",
+    bg: "rgba(26, 26, 26, 0.5)",
+    backdropFilter: "blur(8px)",
+    borderBottom: "1px solid",
+    borderColor: "purple.dark",
   }
   const mobileScrollHide =
     (!isLarger768 && `nav ${scrollDirection === "down" && "down"}`) ||
