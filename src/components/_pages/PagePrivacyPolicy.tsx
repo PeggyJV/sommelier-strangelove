@@ -13,11 +13,8 @@ const PagePrivacyPolicy: NextPage<PrivacyPolicyProps> = ({
       <Box
         zIndex="2"
         position="relative"
-        maxW={{
-          sm: "37.5rem",
-          lg: "70rem",
-        }}
         paddingTop="4rem"
+        px={{ base: 3, md: "4rem" }}
       >
         <Heading
           marginBottom={{
@@ -33,7 +30,7 @@ const PagePrivacyPolicy: NextPage<PrivacyPolicyProps> = ({
         >
           Privacy Policy
         </Heading>
-        <Box w={{ base: "auto", lg: "42.75rem" }} maxW="container.xl">
+        <Box w={{ base: "auto", lg: "auto" }} maxW="container.xl">
           {data?.content && (
             <PortableText
               value={data.content}
