@@ -4,17 +4,16 @@ import {
   Flex,
   HStack,
   Text,
+  Wrap,
 } from "@chakra-ui/react"
 import { VFC } from "react"
 import { Socials } from "components/Socials"
 import { FooterLink } from "./FooterLink"
 import { ExternalLinkIcon } from "components/_icons"
-import { Disclaimer } from "./Disclaimer"
 
 const Footer: VFC<ContainerProps> = (props) => {
   return (
     <Container maxW="container.lg">
-      <Disclaimer />
       <Container
         as="footer"
         display="flex"
@@ -37,14 +36,53 @@ const Footer: VFC<ContainerProps> = (props) => {
           <Text mb={{ base: 6, sm: 0 }} color="neutral.300">
             &copy; {new Date().getFullYear()} Sommelier
           </Text>
-          <HStack
-            spacing={8}
-            justify="center"
+          <Wrap
+            spacing={{ base: 4, lg: 8 }}
+            justify={{ base: "center", sm: "right" }}
             align="center"
             flexDirection={{ base: "column-reverse", sm: "row" }}
             fontWeight="semibold"
             color="neutral.100"
           >
+            <HStack
+              spacing={8}
+              justify="center"
+              align="center"
+              mt={{ base: 6, sm: 0 }}
+              mb={{ base: 6, sm: 0 }}
+            >
+              <FooterLink href="/user-terms">
+                <HStack align="center" role="group">
+                  <Text as="span">User Terms</Text>
+                  <ExternalLinkIcon
+                    color="purple.base"
+                    _groupHover={{
+                      color: "neutral.100",
+                    }}
+                  />
+                </HStack>
+              </FooterLink>
+            </HStack>
+            <HStack
+              spacing={8}
+              justify="center"
+              align="center"
+              mt={{ base: 6, sm: 0 }}
+              mb={{ base: 6, sm: 0 }}
+            >
+              <FooterLink href="/privacy-policy">
+                <HStack align="center" role="group">
+                  <Text as="span">Privacy Policy</Text>
+                  <ExternalLinkIcon
+                    color="purple.base"
+                    _groupHover={{
+                      color: "neutral.100",
+                    }}
+                  />
+                </HStack>
+              </FooterLink>
+            </HStack>
+
             <HStack
               spacing={8}
               justify="center"
@@ -68,7 +106,7 @@ const Footer: VFC<ContainerProps> = (props) => {
               </FooterLink>
             </HStack>
             <Socials />
-          </HStack>
+          </Wrap>
         </Flex>
       </Container>
     </Container>

@@ -51,3 +51,13 @@ export const sanityFaqQuery = groq`
     }
   }
 }[0]`
+
+export const sanityPrivacyPolicyQuery = groq`
+*[_type == "privacyPolicy"]{
+  ...,
+}`
+
+export const sanityUserTermsQuery = groq`
+*[_type == "userTerms"]{
+  ...,
+}`
