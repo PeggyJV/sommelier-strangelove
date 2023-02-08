@@ -1,4 +1,4 @@
-import { CellarNameKey, ConfigProps } from "./types"
+import { CellarKey, CellarNameKey, ConfigProps } from "./types"
 
 interface BondingPeriod {
   title: string
@@ -323,4 +323,11 @@ export const isUseBigBacktestingModal = (config: ConfigProps) => {
     return "6xl"
   }
   return "2xl"
+}
+
+export const apyLabel = (config: ConfigProps) => {
+  if (config.cellar.key === CellarKey.CELLAR_V2) {
+    return "APY since inception"
+  }
+  return "Base APY"
 }

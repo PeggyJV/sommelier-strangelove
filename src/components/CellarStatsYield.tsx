@@ -18,6 +18,7 @@ import { useApy } from "data/hooks/useApy"
 import { cellarDataMap } from "data/cellarDataMap"
 import { isFuture } from "date-fns"
 import { useStakingEnd } from "data/hooks/useStakingEnd"
+import { apyLabel } from "data/uiConfig"
 
 interface CellarStatsYieldProps extends StackProps {
   cellarId: string
@@ -85,7 +86,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
             color="neutral.300"
           >
             <HStack spacing={1} align="center">
-              <CardHeading>Base APY</CardHeading>
+              <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
               {apy?.apyLabel && (
                 <InformationIcon color="neutral.300" boxSize={3} />
               )}
