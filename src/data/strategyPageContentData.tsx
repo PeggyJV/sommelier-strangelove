@@ -456,7 +456,7 @@ export const strategyPageContentData = {
       Presented results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions.`,
   },
   [config.CONTRACT.REAL_YIELD_USD.SLUG]: {
-    name: "Real Yield USD",
+    name: "Real Yield USD Henri",
     provider: "Seven Seas",
     providerUrl: "https://7seas.capital/",
     description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
