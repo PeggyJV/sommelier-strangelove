@@ -29,6 +29,7 @@ import { usePosition } from "data/hooks/usePosition"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
 import {
+  apyLabel,
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
   intervalGainTimeline,
@@ -171,7 +172,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 <Heading size="md">{apy?.apy || "--"}</Heading>
                 <CellarStatsLabel
                   tooltip={apy?.apyLabel || ""}
-                  title="Base APY"
+                  title={apyLabel(cellarConfig)}
                 />
               </VStack>
               <VStack flex={1}>
