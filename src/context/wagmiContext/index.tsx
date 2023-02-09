@@ -9,6 +9,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy"
 import { InjectedConnector } from "wagmi/connectors/injected"
 import { SafeConnector } from "@gnosis.pm/safe-apps-wagmi"
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet"
 
 const ALCHEMY_URL = "https://eth-mainnet.alchemyapi.io/v2/"
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
@@ -32,6 +33,12 @@ const connector = () => {
     new InjectedConnector({
       chains,
       options: { shimDisconnect: true },
+    }),
+    new CoinbaseWalletConnector({
+      chains,
+      options: {
+        appName: "Sommelier",
+      },
     }),
   ]
 }
