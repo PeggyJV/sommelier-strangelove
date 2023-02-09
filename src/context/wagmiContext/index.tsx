@@ -38,6 +38,7 @@ const connector = () => {
       chains,
       options: {
         appName: "Sommelier",
+        darkMode: true,
       },
     }),
   ]
