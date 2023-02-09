@@ -298,14 +298,10 @@ export const TokenPriceChartProvider: FC<{
     const latestData = series![0].data.at(-1)
     const firstData = series![0].data.at(0)
 
-    const latestDate = format(
-      new Date(String(latestData?.x)),
-      "d MMM yyyy"
-    )
     const dateText = `${format(
       new Date(String(firstData?.x)),
-      "d MMM"
-    )} - ${latestDate}`
+      "d MMM yyyy"
+    )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
     setTokenPriceChange({
@@ -345,7 +341,7 @@ export const TokenPriceChartProvider: FC<{
       Boolean(latestData?.y) || String(latestData?.y) === "0"
     const dateText = `${format(
       new Date(String(firstData?.x)),
-      "d MMM"
+      "d MMM yyyy"
     )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
     setTokenPriceChange({
       xFormatted: dateText,
@@ -463,14 +459,10 @@ export const TokenPriceChartProvider: FC<{
       const latestData = series![0].data.at(-1)
       const firstData = series![0].data.at(0)
 
-      const latestDate = format(
-        new Date(String(latestData?.x)),
-        "d MMM yyyy"
-      )
       const dateText = `${format(
         new Date(String(firstData?.x)),
-        "d MMM"
-      )} - ${latestDate}`
+        "d MMM yyyy"
+      )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
       const valueExists: boolean =
         Boolean(latestData?.y) || String(latestData?.y) === "0"
       setTokenPriceChange({
