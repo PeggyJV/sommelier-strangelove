@@ -103,12 +103,10 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
             >
               <HStack spacing={8}>
                 <VStack spacing={0} align="flex-start">
-                  <CardHeading>
-                    APY average since inception
-                  </CardHeading>
+                  <CardHeading>APY since inception</CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
-                      {apyChange?.average || "--"}
+                      {apy?.data?.apy || "--"}
                     </Text>
                   </HStack>
                   <Text color="neutral.400" fontSize="0.625rem">

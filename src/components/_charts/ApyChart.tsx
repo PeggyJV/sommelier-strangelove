@@ -146,7 +146,6 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
         type: "linear",
         stacked: false,
         max: "auto",
-        min: "auto",
         clamp: true,
         nice: true,
       }}
