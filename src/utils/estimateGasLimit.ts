@@ -53,14 +53,14 @@ export const estimateGasLimitWithRetry = async (
     knownGasLimit,
     1
   )
-  let gasLimitEstimated: BigNumber = BigNumber.from(gasEstimatedRes)
+  let gasLimitEstimated = BigNumber.from(gasEstimatedRes)
 
   let count = 1
   const maxTries = 5
   while (count <= maxTries) {
     try {
       const gasLimit = gasLimitMargin(
-        gasLimitEstimated as BigNumber,
+        gasLimitEstimated,
         PAD[count - 1]
       )
       const tx = await fnCallStatic(...args, {
