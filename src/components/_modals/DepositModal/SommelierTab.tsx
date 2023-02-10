@@ -173,7 +173,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
         cellarSigner.callStatic.deposit,
         [amtInWei, address],
         1000000,
-        1500000
+        2000000
       )
       return cellarSigner.deposit(amtInWei, address, {
         gasLimit: gasLimitEstimated,
@@ -390,12 +390,29 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
         })
       }
     } catch (e) {
-      addToast({
-        heading: cellarName + " Cellar Deposit",
-        body: <Text>Deposit Cancelled</Text>,
-        status: "error",
-        closeHandler: closeAll,
-      })
+      const error = e as Error
+      if (error.message === "GAS_LIMIT_ERROR") {
+        addToast({
+          heading: "Transaction not submitted",
+          body: (
+            <Text>
+              The gas fees are particularly high right now. To avoid a
+              failed transaction leading to wasted gas, we request you
+              try again later
+            </Text>
+          ),
+          status: "info",
+          closeHandler: closeAll,
+        })
+      } else {
+        addToast({
+          heading: cellarName + " Deposit",
+          body: <Text>Deposit Cancelled</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+      }
+
       console.warn("failed to deposit", e)
     }
   }
