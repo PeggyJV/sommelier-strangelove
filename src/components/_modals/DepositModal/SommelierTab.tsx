@@ -172,7 +172,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
         cellarSigner.estimateGas.deposit,
         cellarSigner.callStatic.deposit,
         [amtInWei, address],
-        1200000,
+        1000000,
         2000000
       )
       return cellarSigner.deposit(amtInWei, address, {
