@@ -53,8 +53,7 @@ export const estimateGasLimitWithRetry = async (
     knownGasLimit,
     1
   )
-  let gasLimitEstimated: BigNumber | undefined =
-    BigNumber.from(gasEstimatedRes)
+  let gasLimitEstimated: BigNumber = BigNumber.from(gasEstimatedRes)
 
   let count = 1
   const maxTries = 5
