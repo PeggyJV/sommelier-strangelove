@@ -1,4 +1,5 @@
 import { Datum, Serie } from "@nivo/line"
+import { differenceInDays } from "date-fns"
 import { toInteger } from "lodash"
 import { colors } from "theme/colors"
 import { formatDecimals } from "./bigNumber"
@@ -122,4 +123,34 @@ export const createUsdcChartSeries = ({
 
 export const formatPercentage = (value: string) => {
   return parseFloat(value).toFixed(3)
+}
+
+export const createApyChangeDatum = ({
+  launchEpoch,
+  data,
+}: {
+  launchEpoch: number
+  data?: { date: number; shareValue: string }[]
+}): Datum[] | undefined => {
+  if (!data) return
+  let datum: Datum[] = []
+  // Inception date (configured)
+  const launchDate = new Date(launchEpoch * 1000)
+  // Use yesterday's value, the most recent full day
+  // query is ordered ascending by date, need to reverse it
+  data.map((item, index, arr) => {
+    const current = new Date(item.date * 1000)
+    const daysSince = Math.abs(differenceInDays(current, launchDate))
+
+    const currentValue = Number(item.shareValue)
+    const startValue = 1000000 // 1 as 6 decimals
+    const yieldGain = (currentValue - startValue) / startValue
+    const apy = yieldGain * (365 / daysSince) * 100
+    datum.push({
+      x: new Date(item.date * 1000),
+      y: String(apy.toFixed(1)) + "%",
+      value: apy.toFixed(1),
+    })
+  })
+  return datum
 }

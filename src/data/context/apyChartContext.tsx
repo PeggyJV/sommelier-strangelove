@@ -1,8 +1,8 @@
 import { LineProps, Serie } from "@nivo/line"
-import { format } from "date-fns"
+import { cellarDataMap } from "data/cellarDataMap"
+import { format, subDays } from "date-fns"
 import {
   useGetAllTimeShareValueQuery,
-  useGetHourlyShareValueQuery,
   useGetMonthlyShareValueQuery,
   useGetWeeklyShareValueQuery,
 } from "generated/subgraph"
@@ -18,38 +18,32 @@ import {
 import { colors } from "theme/colors"
 import { OperationContext } from "urql"
 import {
-  getPrevious24Hours,
   getPreviousMonth,
   getPreviousWeek,
 } from "utils/calculateTime"
-import {
-  createTokenPriceChangeDatum,
-  formatPercentage,
-} from "utils/chartHelper"
+import { createApyChangeDatum } from "utils/chartHelper"
 
 export interface DataProps {
   series?: Serie[]
   chartProps: Partial<LineProps>
 }
 
-export interface TokenPriceData {
+export interface ApyData {
   yFormatted: string | number
   xFormatted: string | number
+  average: string | number
 }
 
 export interface ShowLine {
-  tokenPrice: boolean
+  apy: boolean
 }
 
-type Timeline = "1D" | "1W" | "1M" | "ALL"
+type Timeline = "1W" | "1M" | "ALL"
 
-export interface TokenPriceChartContext {
+export interface ApyChartContext {
   isFetching: boolean
   isError: boolean
   data: DataProps
-  reexecuteHourly: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
   reexecuteWeekly: (
     opts?: Partial<OperationContext> | undefined
   ) => void
@@ -63,8 +57,8 @@ export interface TokenPriceChartContext {
     title: string
     onClick: () => void
   }[]
-  tokenPriceChange: TokenPriceData
-  setTokenPriceChange: Dispatch<SetStateAction<TokenPriceData>>
+  apyChange: ApyData
+  setApyChange: Dispatch<SetStateAction<ApyData>>
   showLine: ShowLine
   setShowLine: Dispatch<SetStateAction<ShowLine>>
 }
@@ -124,21 +118,21 @@ const allTimeChartProps: Partial<LineProps> = {
 
 const defaultSerieId = "default"
 
-const initialData: TokenPriceChartContext = {
+const initialData: ApyChartContext = {
   data: {
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   },
   isFetching: true,
   isError: false,
-  reexecuteHourly: () => null,
   reexecuteWeekly: () => null,
   reexecuteMonthly: () => null,
   reexecuteAllTime: () => null,
-  setTokenPriceChange: () => null,
-  tokenPriceChange: {
+  setApyChange: () => null,
+  apyChange: {
     xFormatted: "",
     yFormatted: "",
+    average: "",
   },
   timeArray: [
     {
@@ -147,40 +141,26 @@ const initialData: TokenPriceChartContext = {
     },
   ],
   showLine: {
-    tokenPrice: true,
+    apy: true,
   },
   setShowLine: () => null,
 }
 
-const tokenPriceChartContext =
-  createContext<TokenPriceChartContext>(initialData)
+const apyChartContext = createContext<ApyChartContext>(initialData)
 
-const prev24Hours = getPrevious24Hours()
 const prevWeek = getPreviousWeek()
 const prevMonth = getPreviousMonth()
 
-export const TokenPriceChartProvider: FC<{
+export const ApyChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
   const [showLine, setShowLine] = useState<ShowLine>({
-    tokenPrice: true,
+    apy: true,
   })
   const [timeline, setTimeline] = useState<Timeline>("1W")
-
-  // GQL Queries
-  const [
-    {
-      fetching: hourlyIsFetching,
-      data: hourlyDataRaw,
-      error: hourlyError,
-    },
-    reexecuteHourly,
-  ] = useGetHourlyShareValueQuery({
-    variables: {
-      epoch: prev24Hours,
-      cellarAddress: address,
-    },
-  })
+  const launchDate = Object.values(cellarDataMap).find(
+    (item) => item.config.cellar.address === address
+  )?.launchDate!
   const [
     {
       fetching: weeklyIsFetching,
@@ -219,75 +199,35 @@ export const TokenPriceChartProvider: FC<{
       cellarAddress: address,
     },
   })
-  const hourlyData = hourlyDataRaw?.cellarHourDatas
-  const weeklyData = weeklyDataRaw?.cellar?.dayDatas
+  const weeklyData = weeklyDataRaw?.cellar?.dayDatas.filter(
+    (item) => new Date(item.date * 1000) > launchDate
+  )
   const monthlyData = monthlyDataRaw?.cellar?.dayDatas.filter(
-    (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
+    (item) => new Date(item.date * 1000) > launchDate
   )
   const allTimeData = allTimeDataRaw?.cellar?.dayDatas.filter(
-    (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
+    (item) => new Date(item.date * 1000) > launchDate
   )
+  const launchDay = launchDate ?? subDays(new Date(), 8)
+  const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
   // Functions to update data returned by hook
-  const setDataHourly = () => {
-    setTimeline("1D")
-    const tokenPriceDatum = createTokenPriceChangeDatum(
-      hourlyData?.map((item) => {
-        return {
-          date: item.date,
-          shareValue: item.shareValue,
-        }
-      })
-    )
-
-    const series = [
-      {
-        id: "token-price",
-        data: tokenPriceDatum || [],
-        color: colors.neutral[100],
-      },
-    ]
-
-    setData({
-      series,
-      chartProps: hourlyChartProps,
-    })
-    const latestData = series[0].data.at(-1)
-    const firstData = series[0].data.at(0)
-
-    const valueExists: boolean =
-      Boolean(latestData?.y) || String(latestData?.y) === "0"
-
-    const dateText = `${format(
-      new Date(String(firstData?.x)),
-      "HH:mm d MMM"
-    )} - ${format(
-      new Date(String(latestData?.x)),
-      "HH:mm d MMM yyyy"
-    )}`
-    setTokenPriceChange({
-      xFormatted: dateText,
-      yFormatted: `${
-        valueExists ? formatPercentage(String(latestData?.y)) : "--"
-      }`,
-    })
-  }
-
   const setDataWeekly = () => {
     setTimeline("1W")
-    const tokenPriceDatum = createTokenPriceChangeDatum(
-      weeklyData?.map((item) => {
+    const apyDatum = createApyChangeDatum({
+      data: weeklyData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
         }
-      })
-    )
+      }),
+      launchEpoch,
+    })
 
     const series = [
       {
-        id: "token-price",
-        data: tokenPriceDatum || [],
+        id: "apy",
+        data: apyDatum || [],
         color: colors.neutral[100],
       },
     ]
@@ -298,34 +238,44 @@ export const TokenPriceChartProvider: FC<{
     const latestData = series![0].data.at(-1)
     const firstData = series![0].data.at(0)
 
+    const latestDate = format(
+      new Date(String(latestData?.x)),
+      "d MMM yyyy"
+    )
     const dateText = `${format(
       new Date(String(firstData?.x)),
       "d MMM yyyy"
     )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
-    setTokenPriceChange({
+
+    const average =
+      Number(
+        apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
+      ) / Number(apyDatum?.length)
+
+    setApyChange({
       xFormatted: dateText,
-      yFormatted: `${
-        valueExists ? formatPercentage(String(latestData?.y)) : "--"
-      }`,
+      yFormatted: `${valueExists ? String(latestData?.y) : "--"}`,
+      average: average.toFixed(1) + "%",
     })
   }
 
   const setDataMonthly = () => {
     setTimeline("1M")
-    const tokenPriceDatum = createTokenPriceChangeDatum(
-      monthlyData?.map((item) => {
+    const apyDatum = createApyChangeDatum({
+      data: monthlyData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
         }
-      })
-    )
+      }),
+      launchEpoch,
+    })
     const series = [
       {
-        id: "token-price",
-        data: tokenPriceDatum || [],
+        id: "apy",
+        data: apyDatum || [],
         color: colors.neutral[100],
       },
     ]
@@ -343,28 +293,33 @@ export const TokenPriceChartProvider: FC<{
       new Date(String(firstData?.x)),
       "d MMM yyyy"
     )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
-    setTokenPriceChange({
+    const average =
+      Number(
+        apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
+      ) / Number(apyDatum?.length)
+
+    setApyChange({
       xFormatted: dateText,
-      yFormatted: `${
-        valueExists ? formatPercentage(String(latestData?.y)) : "--"
-      }`,
+      yFormatted: `${valueExists ? String(latestData?.y) : "--"}`,
+      average: average.toFixed(1) + "%",
     })
   }
 
   const setDataAllTime = () => {
     setTimeline("ALL")
-    const tokenPriceDatum = createTokenPriceChangeDatum(
-      allTimeData?.map((item) => {
+    const apyDatum = createApyChangeDatum({
+      data: allTimeData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
         }
-      })
-    )
+      }),
+      launchEpoch,
+    })
     const series = [
       {
-        id: "token-price",
-        data: tokenPriceDatum || [],
+        id: "apy",
+        data: apyDatum || [],
         color: colors.neutral[100],
       },
     ]
@@ -382,11 +337,16 @@ export const TokenPriceChartProvider: FC<{
       new Date(String(firstData?.x)),
       "d MMM yyyy"
     )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
-    setTokenPriceChange({
+
+    const average =
+      Number(
+        apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
+      ) / Number(apyDatum?.length)
+
+    setApyChange({
       xFormatted: dateText,
-      yFormatted: `${
-        valueExists ? formatPercentage(String(latestData?.y)) : "--"
-      }`,
+      yFormatted: `${valueExists ? String(latestData?.y) : "--"}`,
+      average: average.toFixed(1) + "%",
     })
   }
 
@@ -397,27 +357,19 @@ export const TokenPriceChartProvider: FC<{
   })
 
   // Set tvl value
-  const [tokenPriceChange, setTokenPriceChange] =
-    useState<TokenPriceData>({
-      xFormatted: "",
-      yFormatted: "",
-    })
+  const [apyChange, setApyChange] = useState<ApyData>({
+    xFormatted: "",
+    yFormatted: "",
+    average: "",
+  })
 
   // Grouped loading state
   const isFetching =
-    hourlyIsFetching ||
-    weeklyIsFetching ||
-    monthlyIsFetching ||
-    allTimeIsFetching
+    weeklyIsFetching || monthlyIsFetching || allTimeIsFetching
 
-  const isError =
-    !!hourlyError || !!weeklyError || !!monthlyError || !!allTimeError
+  const isError = !!weeklyError || !!monthlyError || !!allTimeError
 
   const timeArray = [
-    {
-      title: "1D",
-      onClick: setDataHourly,
-    },
     {
       title: "1W",
       onClick: setDataWeekly,
@@ -440,13 +392,15 @@ export const TokenPriceChartProvider: FC<{
           shareValue: item.shareValue,
         }
       })
-      const tokenPriceDatum =
-        createTokenPriceChangeDatum(weeklyDataMap)
+      const apyDatum = createApyChangeDatum({
+        data: weeklyDataMap,
+        launchEpoch,
+      })
 
       const series = [
         {
-          id: "token-price",
-          data: tokenPriceDatum || [],
+          id: "apy",
+          data: apyDatum || [],
           color: colors.neutral[100],
         },
       ]
@@ -465,53 +419,57 @@ export const TokenPriceChartProvider: FC<{
       )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
       const valueExists: boolean =
         Boolean(latestData?.y) || String(latestData?.y) === "0"
-      setTokenPriceChange({
+
+      const average =
+        Number(
+          apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
+        ) / Number(apyDatum?.length)
+
+      setApyChange({
         xFormatted: dateText,
-        yFormatted: `${
-          valueExists ? formatPercentage(String(latestData?.y)) : "--"
-        }`,
+        yFormatted: `${valueExists ? String(latestData?.y) : "--"}`,
+        average: average.toFixed(1) + "%",
       })
     }
-  }, [weeklyData, data])
+  }, [weeklyData, data, launchEpoch])
 
   const dataC = {
     ...data,
     series: data.series?.filter((item) => {
-      if (item.id === "token-price") {
-        return showLine.tokenPrice
+      if (item.id === "apy") {
+        return showLine.apy
       }
       return false
     }),
   }
 
   return (
-    <tokenPriceChartContext.Provider
+    <apyChartContext.Provider
       value={{
         isFetching,
         isError,
         data: dataC,
-        reexecuteHourly,
         reexecuteWeekly,
         reexecuteMonthly,
         reexecuteAllTime,
         timeArray,
-        tokenPriceChange,
-        setTokenPriceChange,
+        apyChange,
+        setApyChange,
         showLine,
         setShowLine,
       }}
     >
       {children}
-    </tokenPriceChartContext.Provider>
+    </apyChartContext.Provider>
   )
 }
 
-export const useTokenPriceChart = () => {
-  const context = useContext(tokenPriceChartContext)
+export const useApyChart = () => {
+  const context = useContext(apyChartContext)
 
   if (context === undefined) {
     throw new Error(
-      "This hook must be used within a EthBtcChartProvider."
+      "This hook must be used within a ApyChartProvider."
     )
   }
 
