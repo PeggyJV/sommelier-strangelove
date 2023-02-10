@@ -137,12 +137,28 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       userStakesRefetch()
     } catch (e) {
       console.warn(e)
-      addToast({
-        heading: "Staking LP Tokens",
-        body: <Text>Tx Cancelled</Text>,
-        status: "info",
-        closeHandler: closeAll,
-      })
+      const error = e as Error
+      if (error.message === "GAS_LIMIT_ERROR") {
+        addToast({
+          heading: "Transaction not submitted",
+          body: (
+            <Text>
+              The gas fees are particularly high right now. To avoid a
+              failed transaction leading to wasted gas, we request you
+              try again later
+            </Text>
+          ),
+          status: "error",
+          closeHandler: closeAll,
+        })
+      } else {
+        addToast({
+          heading: "Staking LP Tokens",
+          body: <Text>Tx Cancelled</Text>,
+          status: "info",
+          closeHandler: closeAll,
+        })
+      }
     }
   }
 

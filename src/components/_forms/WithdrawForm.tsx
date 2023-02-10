@@ -56,7 +56,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
 
-  const { addToast, close } = useBrandedToast()
+  const { addToast, close, closeAll } = useBrandedToast()
   const { address } = useAccount()
 
   const id = useRouter().query.id as string
@@ -128,36 +128,67 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
-    const gasLimitEstimated = await estimateGasLimitWithRetry(
-      cellarSigner.estimateGas.redeem,
-      cellarSigner.callStatic.redeem,
-      [amtInWei, address, address],
-      330000,
-      660000
-    )
 
-    const tx = await cellarSigner.redeem(amtInWei, address, address, {
-      gasLimit: gasLimitEstimated,
-    })
+    try {
+      const gasLimitEstimated = await estimateGasLimitWithRetry(
+        cellarSigner.estimateGas.redeem,
+        cellarSigner.callStatic.redeem,
+        [amtInWei, address, address],
+        330000,
+        660000
+      )
 
-    function onSuccess() {
-      analytics.track("withdraw.succeeded", analyticsData)
-      onClose() // Close modal after successful withdraw.
-    }
+      const tx = await cellarSigner.redeem(
+        amtInWei,
+        address,
+        address,
+        {
+          gasLimit: gasLimitEstimated,
+        }
+      )
 
-    function onError(error: Error) {
-      analytics.track("withdraw.failed", {
-        ...analyticsData,
-        error: error.name,
-        message: error.message,
+      const onSuccess = () => {
+        analytics.track("withdraw.succeeded", analyticsData)
+        onClose() // Close modal after successful withdraw.
+      }
+
+      const onError = (error: Error) => {
+        analytics.track("withdraw.failed", {
+          ...analyticsData,
+          error: error.name,
+          message: error.message,
+        })
+      }
+
+      await doHandleTransaction({
+        ...tx,
+        onSuccess,
+        onError,
       })
+    } catch (e) {
+      const error = e as Error
+      if (error.message === "GAS_LIMIT_ERROR") {
+        addToast({
+          heading: "Transaction not submitted",
+          body: (
+            <Text>
+              The gas fees are particularly high right now. To avoid a
+              failed transaction leading to wasted gas, we request you
+              try again later
+            </Text>
+          ),
+          status: "error",
+          closeHandler: closeAll,
+        })
+      } else {
+        addToast({
+          heading: "Withdraw",
+          body: <Text>Withdraw Cancelled</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+      }
     }
-
-    await doHandleTransaction({
-      ...tx,
-      onSuccess,
-      onError,
-    })
 
     refetchUserStakes()
     refetchNetValue()
