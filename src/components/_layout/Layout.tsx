@@ -17,7 +17,7 @@ export const Layout: FC = ({ children }) => {
             as="main"
             flex={1}
             pt={40}
-            maxW="container.lg"
+            maxW="container.xl"
             px={{ base: 4, lg: 4 }}
             flexDir="row"
           >
