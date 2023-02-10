@@ -401,7 +401,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
               try again later
             </Text>
           ),
-          status: "error",
+          status: "info",
           closeHandler: closeAll,
         })
       } else {

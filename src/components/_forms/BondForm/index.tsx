@@ -148,7 +148,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
               try again later
             </Text>
           ),
-          status: "error",
+          status: "info",
           closeHandler: closeAll,
         })
       } else {

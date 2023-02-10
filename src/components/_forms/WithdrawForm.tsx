@@ -177,7 +177,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
               try again later
             </Text>
           ),
-          status: "error",
+          status: "info",
           closeHandler: closeAll,
         })
       } else {
