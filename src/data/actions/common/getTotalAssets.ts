@@ -6,7 +6,7 @@ import { formatCurrency } from "utils/formatCurrency"
 
 export const getTotalAssets = async (
   cellarContract: CellarV0815 | CellarV0816,
-  activeAsset: Token
+  activeAsset: Pick<Token, "address">
 ) => {
   try {
     const totalAssets = await cellarContract.totalAssets()
