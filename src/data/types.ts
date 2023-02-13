@@ -56,6 +56,8 @@ export enum CellarType {
 export interface CellarDataMap {
   [key: string]: {
     name: string
+    slug: string
+    tradedAssets?: string[]
     launchDate?: Date
     cellarType: CellarType
     description: string

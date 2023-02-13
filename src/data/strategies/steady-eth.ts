@@ -10,6 +10,8 @@ import { depositAssetTokenList } from "../tokenConfig"
 
 export const steadyEth = {
   name: "Steady ETH",
+  slug: config.CONTRACT.STEADY_ETH.SLUG,
+  tradedAssets: ["WETH", "USDC"],
   launchDate: new Date(2022, 10, 29, 12, 0, 0, 0), // 29 Nov 2022 12 pm est
   cellarType: CellarType.automatedPortfolio,
   description: `Capture the upside of ETH price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is prioritized over capital growth.`,
