@@ -10,6 +10,7 @@ import { depositAssetTokenList } from "../tokenConfig"
 
 export const aaveStable = {
   name: "aave2",
+  slug: config.CONTRACT.AAVE_V2_STABLE_CELLAR.SLUG,
   cellarType: CellarType.yieldStrategies,
   description:
     "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",

@@ -11,6 +11,8 @@ import { depositAssetTokenList } from "../tokenConfig"
 export const ethBtcMomentum = {
   name: "ETH-BTC Momentum",
   cellarType: CellarType.automatedPortfolio,
+  slug: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG,
+  tradedAssets: ["USDC", "WETH", "WBTC"],
   description:
     "Strategy portfolio has exposure to BTC and ETH with positive price momentum, lower exposure when prices drop.",
   strategyType: "Crypto portfolio",

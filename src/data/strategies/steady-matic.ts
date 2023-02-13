@@ -10,6 +10,8 @@ import { depositAssetTokenList } from "../tokenConfig"
 
 export const steadyMatic = {
   name: "Steady MATIC",
+  slug: config.CONTRACT.STEADY_MATIC.SLUG,
+  tradedAssets: ["USDC", "MATIC"],
   launchDate: new Date(2022, 11, 29, 11, 0, 0, 0), // 29 dec 2022 12 am est
   cellarType: CellarType.automatedPortfolio,
   description: `Capture the upside of MATIC price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,

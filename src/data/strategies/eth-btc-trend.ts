@@ -10,6 +10,8 @@ import { depositAssetTokenList } from "../tokenConfig"
 
 export const ethBtcTrend = {
   name: "ETH-BTC Trend",
+  slug: config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG,
+  tradedAssets: ["USDC", "WETH", "WBTC"],
   cellarType: CellarType.automatedPortfolio,
   description:
     "Strategy portfolio buys BTC and ETH when prices go up. Fully or partially sells both assets when prices go down.",
