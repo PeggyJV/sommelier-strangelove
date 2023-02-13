@@ -397,8 +397,8 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           body: (
             <Text>
               The gas fees are particularly high right now. To avoid a
-              failed transaction leading to wasted gas, we request you
-              try again later
+              failed transaction leading to wasted gas, please try
+              again later.
             </Text>
           ),
           status: "info",
