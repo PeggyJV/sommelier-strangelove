@@ -8,6 +8,7 @@ import {
   HStack,
   Spinner,
   Portal,
+  useDisclosure,
 } from "@chakra-ui/react"
 import { BaseButton, BaseButtonProps } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
@@ -23,6 +24,7 @@ export const ConnectWalletPopover = ({
   unstyled,
   ...rest
 }: ConnectButtonProps) => {
+  const { onOpen, onClose, isOpen } = useDisclosure()
   const { addToast } = useBrandedToast()
   const {
     isConnected,
@@ -84,8 +86,18 @@ export const ConnectWalletPopover = ({
     },
   })
 
+  const openWalletSelection = () => {
+    analytics.track("wallet.connect-started")
+    onOpen()
+  }
+
   return (
-    <Popover placement="bottom">
+    <Popover
+      placement="bottom"
+      isOpen={isOpen}
+      onOpen={openWalletSelection}
+      onClose={onClose}
+    >
       <PopoverTrigger>
         <BaseButton {...styles} {...rest}>
           Connect {isLarger768 && "Wallet"}
