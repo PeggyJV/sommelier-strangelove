@@ -21,7 +21,7 @@ const lime = {
   base: "#BCE051",
   light: "#F6FCE3",
   dark: "#566625",
-  extraDark: "#22290F",
+  extraDark: "#2E200E",
 }
 const turquoise = {
   base: "#43D9A3",

@@ -91,9 +91,9 @@ export const useToastStyles = (status?: Status | "primary") => {
   const dynamicBoxStyles: BoxProps =
     status === "info"
       ? {
-          bg: "orange.dark",
+          bg: "orange.extraDark",
           borderWidth: 1,
-          borderColor: "orange.base",
+          borderColor: "orange.dark",
         }
       : status === "success"
       ? {
@@ -122,7 +122,7 @@ export const useToastStyles = (status?: Status | "primary") => {
   const dynamicStackStyles: StackProps =
     status === "info"
       ? {
-          bg: "orange.dark",
+          bg: "orange.extraDark",
         }
       : status === "success"
       ? {
