@@ -75,6 +75,8 @@ export type CellarDayData = {
   removedLiquidity: Scalars['BigInt'];
   shareProfitRatio: Scalars['BigDecimal'];
   shareValue: Scalars['BigInt'];
+  shareValueHigh: Scalars['BigInt'];
+  shareValueLow: Scalars['BigInt'];
   tvlActive: Scalars['BigInt'];
   tvlInactive: Scalars['BigInt'];
   tvlInvested: Scalars['BigInt'];
@@ -190,6 +192,22 @@ export type CellarDayData_Filter = {
   shareProfitRatio_not?: InputMaybe<Scalars['BigDecimal']>;
   shareProfitRatio_not_in?: InputMaybe<Array<Scalars['BigDecimal']>>;
   shareValue?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_gt?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_gte?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  shareValueHigh_lt?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_lte?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_not?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  shareValueLow?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_gt?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_gte?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  shareValueLow_lt?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_lte?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_not?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   shareValue_gt?: InputMaybe<Scalars['BigInt']>;
   shareValue_gte?: InputMaybe<Scalars['BigInt']>;
   shareValue_in?: InputMaybe<Array<Scalars['BigInt']>>;
@@ -251,6 +269,8 @@ export enum CellarDayData_OrderBy {
   RemovedLiquidity = 'removedLiquidity',
   ShareProfitRatio = 'shareProfitRatio',
   ShareValue = 'shareValue',
+  ShareValueHigh = 'shareValueHigh',
+  ShareValueLow = 'shareValueLow',
   TvlActive = 'tvlActive',
   TvlInactive = 'tvlInactive',
   TvlInvested = 'tvlInvested',
@@ -271,6 +291,8 @@ export type CellarHourData = {
   removedLiquidity: Scalars['BigInt'];
   shareProfitRatio: Scalars['BigDecimal'];
   shareValue: Scalars['BigInt'];
+  shareValueHigh: Scalars['BigInt'];
+  shareValueLow: Scalars['BigInt'];
   tvlActive: Scalars['BigInt'];
   tvlInactive: Scalars['BigInt'];
   tvlInvested: Scalars['BigInt'];
@@ -386,6 +408,22 @@ export type CellarHourData_Filter = {
   shareProfitRatio_not?: InputMaybe<Scalars['BigDecimal']>;
   shareProfitRatio_not_in?: InputMaybe<Array<Scalars['BigDecimal']>>;
   shareValue?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_gt?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_gte?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  shareValueHigh_lt?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_lte?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_not?: InputMaybe<Scalars['BigInt']>;
+  shareValueHigh_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  shareValueLow?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_gt?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_gte?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  shareValueLow_lt?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_lte?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_not?: InputMaybe<Scalars['BigInt']>;
+  shareValueLow_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   shareValue_gt?: InputMaybe<Scalars['BigInt']>;
   shareValue_gte?: InputMaybe<Scalars['BigInt']>;
   shareValue_in?: InputMaybe<Array<Scalars['BigInt']>>;
@@ -447,6 +485,8 @@ export enum CellarHourData_OrderBy {
   RemovedLiquidity = 'removedLiquidity',
   ShareProfitRatio = 'shareProfitRatio',
   ShareValue = 'shareValue',
+  ShareValueHigh = 'shareValueHigh',
+  ShareValueLow = 'shareValueLow',
   TvlActive = 'tvlActive',
   TvlInactive = 'tvlInactive',
   TvlInvested = 'tvlInvested',
@@ -1629,7 +1669,7 @@ export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCel
 export const GetAllTimeShareValueDocument = gql`
     query GetAllTimeShareValue($cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
-    dayDatas(orderDirection: asc, orderBy: date) {
+    dayDatas(orderDirection: desc, orderBy: date) {
       date
       shareValue
     }
