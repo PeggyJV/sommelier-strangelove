@@ -6,7 +6,6 @@ import {
   PopoverContent,
   PopoverTrigger,
   Spinner,
-  useToast,
   Text,
   Stack,
   Portal,
@@ -28,7 +27,6 @@ import { useBrandedToast } from "hooks/chakra"
 import { useRouter } from "next/router"
 
 export const MobileConnectedPopover = () => {
-  const toast = useToast()
   const { addToast, close } = useBrandedToast()
   const { disconnect } = useDisconnect()
   const { address, isConnecting } = useAccount()
@@ -66,10 +64,10 @@ export const MobileConnectedPopover = () => {
     if (address) {
       navigator.clipboard.writeText(address)
 
-      toast({
-        title: "Copied to clipboard",
+      addToast({
+        heading: "Copied to clipboard",
+        body: <Text>Wallet address copied to clipboard</Text>,
         status: "success",
-        isClosable: true,
       })
     }
   }

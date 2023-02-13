@@ -4,11 +4,11 @@ import {
   PopoverContent,
   PopoverTrigger,
   Stack,
-  useToast,
   Text,
   HStack,
   Spinner,
   Portal,
+  useDisclosure,
 } from "@chakra-ui/react"
 import { BaseButton, BaseButtonProps } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
@@ -18,12 +18,14 @@ import { analytics } from "utils/analytics"
 import { ConnectButtonProps } from "."
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import Image from "next/image"
+import { useBrandedToast } from "hooks/chakra"
 
 export const ConnectWalletPopover = ({
   unstyled,
   ...rest
 }: ConnectButtonProps) => {
-  const toast = useToast()
+  const { onOpen, onClose, isOpen } = useDisclosure()
+  const { addToast } = useBrandedToast()
   const {
     isConnected,
     isConnecting,
@@ -56,11 +58,10 @@ export const ConnectWalletPopover = ({
 
   const { connect, connectors, pendingConnector } = useConnect({
     onError: (error, args) => {
-      toast({
-        title: "Connection failed!",
-        description: error.message,
+      addToast({
+        heading: "Connection failed!",
+        body: <Text>{error.message}</Text>,
         status: "error",
-        isClosable: true,
       })
 
       analytics.track("wallet.connect-failed", {
@@ -71,11 +72,10 @@ export const ConnectWalletPopover = ({
     },
     onSuccess: (data, args) => {
       const { account } = data
-      toast({
-        title: "Connected",
-        description: "Your wallet is connected",
+      addToast({
+        heading: "Connected",
+        body: <Text>Your wallet is connected</Text>,
         status: "success",
-        isClosable: true,
       })
       if (account && account.length) {
         analytics.track("wallet.connect-succeeded", {
@@ -86,8 +86,18 @@ export const ConnectWalletPopover = ({
     },
   })
 
+  const openWalletSelection = () => {
+    analytics.track("wallet.connect-started")
+    onOpen()
+  }
+
   return (
-    <Popover placement="bottom">
+    <Popover
+      placement="bottom"
+      isOpen={isOpen}
+      onOpen={openWalletSelection}
+      onClose={onClose}
+    >
       <PopoverTrigger>
         <BaseButton {...styles} {...rest}>
           Connect {isLarger768 && "Wallet"}
