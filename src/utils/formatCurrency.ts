@@ -2,7 +2,6 @@ import { ethers } from "ethers"
 import BigNumber from "bignumber.js"
 
 export const formatCurrency = (value?: string) => {
-  console.log(value)
   const v =
     value &&
     Intl.NumberFormat("en-US", {
