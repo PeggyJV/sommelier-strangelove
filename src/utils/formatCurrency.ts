@@ -2,11 +2,13 @@ import { ethers } from "ethers"
 import BigNumber from "bignumber.js"
 
 export const formatCurrency = (value?: string) => {
+  console.log(value)
   const v =
     value &&
     Intl.NumberFormat("en-US", {
       notation: "compact",
       maximumFractionDigits: 2,
+      minimumFractionDigits: 2,
     }).format(parseFloat(value))
 
   return v
@@ -20,6 +22,7 @@ export const formatUSD = (value?: string) => {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 2,
+      minimumFractionDigits: 2,
     }).format(parseFloat(value))
 
   return v
