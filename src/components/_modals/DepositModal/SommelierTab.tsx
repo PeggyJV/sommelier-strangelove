@@ -396,6 +396,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           ...baseAnalytics,
           stable: tokenSymbol,
           value: depositAmount,
+          message: "GAS_LIMIT_ERROR",
         })
         addToast({
           heading: "Transaction not submitted",
