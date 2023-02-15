@@ -392,6 +392,11 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
     } catch (e) {
       const error = e as Error
       if (error.message === "GAS_LIMIT_ERROR") {
+        analytics.track("deposit.failed", {
+          ...baseAnalytics,
+          stable: tokenSymbol,
+          value: depositAmount,
+        })
         addToast({
           heading: "Transaction not submitted",
           body: (
@@ -405,6 +410,11 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           closeHandler: closeAll,
         })
       } else {
+        analytics.track("deposit.rejected", {
+          ...baseAnalytics,
+          stable: tokenSymbol,
+          value: depositAmount,
+        })
         addToast({
           heading: cellarName + " Deposit",
           body: <Text>Deposit Cancelled</Text>,
