@@ -82,6 +82,7 @@
     "@types/react": "17.0.39",
     "@types/react-dom": "17.0.13",
     "@types/react-slick": "^0.23.10",
+    "@types/react-table": "^7.7.14",
     "@typescript-eslint/eslint-plugin": "5.14.0",
     "@typescript-eslint/parser": "5.14.0",
     "eslint": "8.10.0",
