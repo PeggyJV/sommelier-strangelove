@@ -61,7 +61,7 @@ export const Nav: VFC<FlexProps> = (props) => {
       position="fixed"
       width="100%"
       as="nav"
-      py={4}
+      py="36px"
       fontSize="xl"
       zIndex="sticky"
       transition="ease-in-out 200ms"
@@ -71,7 +71,7 @@ export const Nav: VFC<FlexProps> = (props) => {
     >
       <Container
         display="flex"
-        maxW="container.xl"
+        maxW="1452px"
         justifyContent="space-between"
         alignItems="center"
         flexDir="row"

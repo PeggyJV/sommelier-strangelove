@@ -16,9 +16,9 @@ export const Layout: FC = ({ children }) => {
           <Container
             as="main"
             flex={1}
-            pt={40}
+            pt="120px"
             maxW="container.xl"
-            px={{ base: 4, lg: 4 }}
+            px={{ base: "16px", md: "30px", lg: "40px" }}
             flexDir="row"
           >
             <Flex wrap="wrap-reverse" gap={{ base: "44px", lg: 8 }}>
