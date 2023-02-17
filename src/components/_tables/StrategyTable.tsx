@@ -47,7 +47,7 @@ export const BorderTr: VFC<TableRowProps> = (props) => {
 }
 
 export const BorderTd: VFC<TableCellProps> = (props) => {
-  return <Td {...props} />
+  return <Td {...props} py={7} />
 }
 
 export interface StrategyTableProps {
