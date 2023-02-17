@@ -1,37 +1,122 @@
+import { Avatar, AvatarGroup, Heading, Text } from "@chakra-ui/react"
+import { PercentageText } from "components/PercentageText"
 import { Layout } from "components/_layout/Layout"
+import { StrategySection } from "components/_tables/StrategySection"
 import { StrategyTable } from "components/_tables/StrategyTable"
+import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
+import { tokenConfig } from "data/tokenConfig"
 import type { NextPage } from "next"
+import { CellValue } from "react-table"
+import { protocolsImage } from "utils/protocolsImagePath"
 
 const Home: NextPage = () => {
-  const strategies = [
+  const { data } = useAllStrategiesData()
+  const getTradedAssets = (item: string) => {
+    const asset = tokenConfig.find((v) => v.symbol === item)
+    return asset
+  }
+  console.log(data)
+  const getProtocols = (protocols: string) => {
+    return {
+      title: protocols,
+      icon: protocolsImage[protocols],
+    }
+  }
+
+  const columns = [
     {
-      title: "Real Yield USD",
-      type: "Yield",
-      provider: "Seven Seas",
-      launchDate: new Date("2023-01-25T00:00:00.000Z"),
-      protocols: ["AAVE", "Compound", "Uniswap V3"],
-      strategyAssets: ["USDC", "USDT", "DAI"],
-      tvm: "$1.99M",
-      baseApy: "20%",
-      oneDay: 0.03,
-      icon: "/assets/icons/real-yield-usd.png",
+      Header: "Strategy",
+      accessor: "name",
+      Cell: ({ row }: any) => {
+        return (
+          <StrategySection
+            icon="/assets/icons/real-yield-usd.png"
+            title={row.original.name}
+            provider={row.original.provider.title}
+            type={row.original.type}
+          />
+        )
+      },
     },
     {
-      title: "Steady UNI",
-      type: "Portofolio",
-      provider: "Patache",
-      launchDate: new Date(2022, 11, 29, 11, 0, 0, 0),
-      protocols: ["Uniswap V3"],
-      strategyAssets: ["USDC", "UNI"],
-      tvm: "$1.99M",
-      baseApy: "20%",
-      oneDay: 0.01,
-      icon: "/assets/icons/steady-uni.png",
+      Header: "Protocol",
+      accessor: "protocols",
+      Cell: ({ cell: { value } }: CellValue) => {
+        const protocols = typeof value === "string" ? [value] : value
+        return (
+          <AvatarGroup size="sm" max={3}>
+            {protocols.map((protocol: string) => {
+              const data = getProtocols(protocol)
+              return (
+                <Avatar
+                  name={data.title}
+                  src={data.icon}
+                  key={data.title}
+                  bgColor="white"
+                />
+              )
+            })}
+          </AvatarGroup>
+        )
+      },
+    },
+    {
+      Header: "Assets",
+      accessor: "tradedAssets",
+      Cell: ({ cell: { value } }: CellValue) => {
+        const assets = value?.map((v: any) => v.symbol)
+        return (
+          <AvatarGroup size="sm" max={3}>
+            {assets?.map((asset: string) => {
+              const data = getTradedAssets(asset)
+              return (
+                <Avatar
+                  name={data?.symbol}
+                  src={data?.src}
+                  key={data?.symbol}
+                />
+              )
+            })}
+          </AvatarGroup>
+        )
+      },
+    },
+    {
+      Header: "TVM",
+      accessor: "tvm.formatted",
+      Cell: ({ cell: { value } }: CellValue) => (
+        <Text fontWeight={600} fontSize="12px">
+          {value}
+        </Text>
+      ),
+    },
+    {
+      Header: "Base APY",
+      accessor: "baseApy",
+      Cell: ({ cell: { value } }: CellValue) => (
+        <Text fontWeight={600} fontSize="12px">
+          {value}
+        </Text>
+      ),
+    },
+    {
+      Header: "1D",
+      accessor: "changes.daily",
+      Cell: ({ cell: { value } }: CellValue) => (
+        <PercentageText data={value} arrow fontWeight={500} />
+      ),
     },
   ]
   return (
     <Layout>
-      <StrategyTable strategies={strategies} />
+      <Heading fontSize="1.3125rem" mb="1.6rem">
+        Strategies
+      </Heading>
+      {data ? (
+        <StrategyTable columns={columns} data={data} />
+      ) : (
+        "loading..."
+      )}
     </Layout>
   )
 }
