@@ -3,7 +3,7 @@ import { CellarV0815, CellarV0816 } from "src/abi/types"
 import { formatUSD, toEther } from "utils/formatCurrency"
 import { useToken } from "wagmi"
 
-export const getNetValueWithoutStaking = async ({
+export const getUserShareBalance = async ({
   cellarContract,
   address,
   activeAsset,

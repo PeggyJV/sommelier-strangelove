@@ -5,7 +5,7 @@ import { useActiveAsset } from "./useActiveAsset"
 import { useUserBalances } from "./useUserBalances"
 import { useUserStakes } from "./useUserStakes"
 import { ConfigProps, StakerKey } from "data/types"
-import { getNetValueWithoutStaking } from "data/actions/common/getNetValueWithoutStaking"
+import { getUserShareBalance } from "data/actions/common/getUserShareBalance"
 import { getNetValueWithStaking } from "data/actions/common/getNetValueWithStaking"
 
 export const useNetValue = (config: ConfigProps) => {
@@ -47,7 +47,7 @@ export const useNetValue = (config: ConfigProps) => {
         if (!address) {
           throw new Error("address is undefined")
         }
-        return await getNetValueWithoutStaking({
+        return await getUserShareBalance({
           cellarContract,
           address,
           activeAsset,
