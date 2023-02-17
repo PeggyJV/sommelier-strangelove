@@ -74,8 +74,14 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
   )
   return (
     <TableContainer>
-      <Table {...getTableProps()}>
-        <Thead>
+      <Table
+        {...getTableProps()}
+        variant="unstyled"
+        sx={{
+          borderCollapse: "collapse",
+        }}
+      >
+        <Thead border="none" color="neutral.400">
           {headerGroups.map((headerGroup, index) => (
             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
               {headerGroup.headers.map((column, index) => (
@@ -91,7 +97,10 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
             </Tr>
           ))}
         </Thead>
-        <Tbody {...getTableBodyProps()}>
+        <Tbody
+          backgroundColor="surface.primary"
+          {...getTableBodyProps()}
+        >
           {rows.map((row, indexRow) => {
             prepareRow(row)
             return (
