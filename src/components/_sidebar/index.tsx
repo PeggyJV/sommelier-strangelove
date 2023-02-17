@@ -1,9 +1,10 @@
-import { Flex, Text } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
+import { YourPortofolio } from "./YourPortofolio"
 
 export const Sidebar = () => {
   return (
-    <Flex bg="red">
-      <Text>Sidebar</Text>
+    <Flex>
+      <YourPortofolio />
     </Flex>
   )
 }
