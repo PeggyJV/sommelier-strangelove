@@ -38,7 +38,10 @@ export const getBaseApy = async ({
       return yieldGain * 52 * 100
     })()
 
-    return cellarApy.toFixed(1) + "%"
+    return {
+      formatted: cellarApy.toFixed(1) + "%",
+      value: Number(cellarApy.toFixed(1)),
+    }
   } catch (error) {
     console.warn("Cannot read cellar data", error)
     return

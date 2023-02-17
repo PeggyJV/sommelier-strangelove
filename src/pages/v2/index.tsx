@@ -30,7 +30,7 @@ const Home: NextPage = () => {
       Cell: ({ row }: any) => {
         return (
           <StrategySection
-            icon="/assets/icons/real-yield-usd.png"
+            icon={row.original.logo}
             title={row.original.name}
             provider={row.original.provider.title}
             type={row.original.type}
@@ -65,6 +65,12 @@ const Home: NextPage = () => {
       accessor: "tradedAssets",
       Cell: ({ cell: { value } }: CellValue) => {
         const assets = value?.map((v: any) => v.symbol)
+        if (!assets)
+          return (
+            <Text fontWeight={600} fontSize="12px">
+              --
+            </Text>
+          )
         return (
           <AvatarGroup size="sm" max={3}>
             {assets?.map((asset: string) => {
@@ -95,7 +101,7 @@ const Home: NextPage = () => {
       accessor: "baseApy",
       Cell: ({ cell: { value } }: CellValue) => (
         <Text fontWeight={600} fontSize="12px">
-          {value}
+          {value?.formatted || "--"}
         </Text>
       ),
     },

@@ -9,9 +9,12 @@ import { getActiveAsset } from "./getActiveAsset"
 import { getTotalAssets } from "./getTotalAssets"
 
 import { createClient } from "urql"
-import { isAssetDistributionEnabled } from "data/uiConfig"
+import {
+  isAPYEnabled,
+  isAssetDistributionEnabled,
+} from "data/uiConfig"
 import { getTokenByAddress, getTokenBySymbol } from "./getToken"
-import { add, isBefore, subDays } from "date-fns"
+import { add, isBefore, isFuture, subDays } from "date-fns"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
 import { CellarKey, ConfigProps } from "data/types"
@@ -36,10 +39,10 @@ export const getAllStrategiesData = async ({
   const data = Promise.all(
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
-        const strategyData = Object.values(cellarDataMap).find(
+        const strategy = Object.values(cellarDataMap).find(
           ({ config }) => config.cellar.address === address
         )!
-        const config: ConfigProps = strategyData.config!
+        const config: ConfigProps = strategy.config!
 
         const { cellarContract, stakerContract } = contracts
 
@@ -51,16 +54,18 @@ export const getAllStrategiesData = async ({
             }
           )
           .toPromise()
+
         const dayDatas = resDayDatas.data?.cellar?.dayDatas
 
-        const name = strategyData.name
-        const protocols = strategyData.protocols
-        const type = strategyData.cellarType
-        const provider = strategyData.strategyProvider
-        const launchDate = strategyData.launchDate
+        const name = strategy.name
+        const protocols = strategy.protocols
+        const type = strategy.cellarType
+        const provider = strategy.strategyProvider
+        const launchDate = strategy.launchDate
         const isNew =
           !!launchDate &&
           isBefore(launchDate, add(new Date(), { weeks: 2 }))
+        const logo = config.lpToken.imagePath
 
         const activeAsset = await getActiveAsset(
           cellarContract as CellarV0815 | CellarV0816
@@ -72,7 +77,7 @@ export const getAllStrategiesData = async ({
 
         const tradedAssets = await (async () => {
           if (!isAssetDistributionEnabled(config)) {
-            const assets = strategyData.tradedAssets
+            const assets = strategy.tradedAssets
             if (!assets) return
             const tokens = await Promise.all(
               assets.map(async (v) => {
@@ -98,13 +103,22 @@ export const getAllStrategiesData = async ({
         const stakingEnd = await getStakingEnd(
           stakerContract as CellarStakingV0815
         )
+        const isStakingOngoing =
+          stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
 
-        const rewardsApy = await getRewardsApy({
-          sommPrice,
-          stakerContract: stakerContract as CellarStakingV0815,
-        })
+        const rewardsApy = await (async () => {
+          if (!isStakingOngoing) return
+
+          const apyRes = await getRewardsApy({
+            sommPrice,
+            stakerContract: stakerContract as CellarStakingV0815,
+          })
+          return apyRes
+        })()
 
         const baseApy = await (async () => {
+          if (!isAPYEnabled(config)) return
+
           const datas = resDayDatas.data?.cellar?.dayDatas.slice(
             0,
             10
@@ -122,13 +136,15 @@ export const getAllStrategiesData = async ({
 
           return await getBaseApy({
             baseApy: config.baseApy,
-            dayDatas,
+            dayDatas: datas,
           })
         })()
 
         const changes = getChanges(dayDatas)
 
         return {
+          address,
+          logo,
           name,
           type,
           provider,
@@ -142,6 +158,7 @@ export const getAllStrategiesData = async ({
           rewardsApy,
           baseApy,
           changes,
+          isStakingOngoing,
         }
       }
     )
