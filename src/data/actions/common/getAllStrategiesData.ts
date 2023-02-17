@@ -36,7 +36,7 @@ export const getAllStrategiesData = async ({
   const url = process.env.NEXT_PUBLIC_GRAPH_ENDPOINT!
   const client = createClient({ url })
 
-  const data = Promise.all(
+  const data = await Promise.all(
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
         const strategy = Object.values(cellarDataMap).find(
