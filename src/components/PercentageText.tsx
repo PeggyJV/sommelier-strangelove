@@ -6,12 +6,14 @@ interface PercentageTextProps {
   data?: number
   headingSize?: "sm" | "md" | "lg" | "xl"
   arrow?: boolean
+  fontWeight?: number
 }
 
 export const PercentageText: VFC<PercentageTextProps> = ({
   data,
   headingSize = "sm",
   arrow,
+  fontWeight = 700,
 }) => {
   const percentageData = data && Math.abs(data).toFixed(2)
   const isDataZero = Number(percentageData) === 0
@@ -52,6 +54,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
         display="flex"
         alignItems="center"
         columnGap="3px"
+        fontWeight={fontWeight}
       >
         {valueExists ? percentageData : "--"}%
       </Heading>
