@@ -6,6 +6,7 @@ interface PercentageTextProps {
   data?: number
   headingSize?: "sm" | "md" | "lg" | "xl"
   arrow?: boolean
+  arrowT2?: boolean
   fontWeight?: number
 }
 
@@ -13,6 +14,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
   data,
   headingSize = "sm",
   arrow,
+  arrowT2,
   fontWeight = 700,
 }) => {
   const percentageData = data && Math.abs(data).toFixed(2)
@@ -46,6 +48,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
       {!isDataZero && (
         <PercentageHeading
           arrow={arrow}
+          arrowT2={arrowT2}
           isDataNegative={isDataNegative}
         />
       )}

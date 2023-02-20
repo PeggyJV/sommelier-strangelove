@@ -116,7 +116,7 @@ const Home: NextPage = () => {
       Header: "1D",
       accessor: "changes.daily",
       Cell: ({ cell: { value } }: CellValue) => (
-        <PercentageText data={value} arrow fontWeight={500} />
+        <PercentageText data={value} arrowT2 fontWeight={600} />
       ),
     },
   ]
