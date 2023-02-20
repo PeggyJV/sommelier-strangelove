@@ -1,4 +1,6 @@
 import {
+  Flex,
+  Icon,
   Table,
   TableCellProps,
   TableContainer,
@@ -13,6 +15,8 @@ import { VFC } from "react"
 
 import { useTable, useSortBy } from "react-table"
 import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
+
+import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 
 export const BorderTr: VFC<TableRowProps> = (props) => {
   return (
@@ -72,8 +76,10 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
     },
     useSortBy
   )
+
+  const sortableColumn = ["TVM"]
   return (
-    <TableContainer>
+    <TableContainer pb={28}>
       <Table
         {...getTableProps()}
         variant="unstyled"
@@ -84,16 +90,32 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
         <Thead border="none" color="neutral.400">
           {headerGroups.map((headerGroup, index) => (
             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-              {headerGroup.headers.map((column, index) => (
-                <Th
-                  userSelect="none"
-                  textTransform="unset"
-                  {...column.getHeaderProps()}
-                  key={index}
-                >
-                  {column.render("Header")}
-                </Th>
-              ))}
+              {headerGroup.headers.map((column: any, index) => {
+                return column.canSort ? (
+                  <Th
+                    {...column.getHeaderProps(
+                      column.getSortByToggleProps()
+                    )}
+                    userSelect="none"
+                    textTransform="unset"
+                    key={index}
+                  >
+                    <Flex alignItems="center" gap={2}>
+                      {column.render("Header")}
+                      <Icon as={SortingArrowIcon} boxSize={3} />
+                    </Flex>
+                  </Th>
+                ) : (
+                  <Th
+                    {...column.getHeaderProps()}
+                    userSelect="none"
+                    textTransform="unset"
+                    key={index}
+                  >
+                    {column.render("Header")}
+                  </Th>
+                )
+              })}
             </Tr>
           ))}
         </Thead>

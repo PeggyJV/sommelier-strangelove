@@ -15,7 +15,6 @@ const Home: NextPage = () => {
     const asset = tokenConfig.find((v) => v.symbol === item)
     return asset
   }
-  console.log(data)
   const getProtocols = (protocols: string) => {
     return {
       title: protocols,
@@ -37,6 +36,7 @@ const Home: NextPage = () => {
           />
         )
       },
+      disableSortBy: true,
     },
     {
       Header: "Protocol",
@@ -59,6 +59,7 @@ const Home: NextPage = () => {
           </AvatarGroup>
         )
       },
+      disableSortBy: true,
     },
     {
       Header: "Assets",
@@ -86,18 +87,24 @@ const Home: NextPage = () => {
           </AvatarGroup>
         )
       },
+      disableSortBy: true,
     },
     {
       Header: "TVM",
-      accessor: "tvm.formatted",
-      Cell: ({ cell: { value } }: CellValue) => (
+      accessor: "tvm.value",
+      Cell: ({ row }: any) => (
         <Text fontWeight={600} fontSize="12px">
-          {value}
+          {row.original.tvm.formatted}
         </Text>
       ),
     },
     {
-      Header: "Base APY",
+      Header: () => (
+        <Text>
+          Base APY
+          <br />+ Rewards
+        </Text>
+      ),
       accessor: "baseApy",
       Cell: ({ cell: { value } }: CellValue) => (
         <Text fontWeight={600} fontSize="12px">
