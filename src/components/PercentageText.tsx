@@ -58,8 +58,14 @@ export const PercentageText: VFC<PercentageTextProps> = ({
         alignItems="center"
         columnGap="3px"
         fontWeight={fontWeight}
+        color={isDataZero && arrowT2 ? "#9E9DA3" : "current"}
       >
-        {valueExists ? percentageData : "--"}%
+        {valueExists
+          ? isDataZero && arrowT2
+            ? "0.00"
+            : percentageData
+          : "--"}
+        %
       </Heading>
     </HStack>
   )
