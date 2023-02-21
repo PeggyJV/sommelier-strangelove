@@ -77,7 +77,6 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
     useSortBy
   )
 
-  const sortableColumn = ["TVM"]
   return (
     <TableContainer pb={28}>
       <Table
@@ -111,6 +110,7 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
                     userSelect="none"
                     textTransform="unset"
                     key={index}
+                    maxW={1}
                   >
                     {column.render("Header")}
                   </Th>
@@ -121,6 +121,7 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
         </Thead>
         <Tbody
           backgroundColor="surface.primary"
+          backdropFilter="blur(8px)"
           {...getTableBodyProps()}
         >
           {rows.map((row, indexRow) => {

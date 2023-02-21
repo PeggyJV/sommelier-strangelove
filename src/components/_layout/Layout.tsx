@@ -22,7 +22,7 @@ export const Layout: FC = ({ children }) => {
             flexDir="row"
           >
             <Flex wrap="wrap-reverse" gap={{ base: "44px", lg: 8 }}>
-              <Box w={{ base: "full", lg: "700px" }} flex={7}>
+              <Box w={{ base: "full", lg: "900px" }} flex={7}>
                 {children}
               </Box>
               {isConnected && (
