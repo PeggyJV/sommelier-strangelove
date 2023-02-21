@@ -1,9 +1,4 @@
-import {
-  Button,
-  Heading,
-  HStack,
-  useMediaQuery,
-} from "@chakra-ui/react"
+import { Button, Heading, HStack } from "@chakra-ui/react"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
 import { StrategyTabColumn } from "components/_columns/StrategyTabColumn"
@@ -11,13 +6,14 @@ import { Layout } from "components/_layout/Layout"
 import { StrategyTable } from "components/_tables/StrategyTable"
 import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import type { NextPage } from "next"
 import { useMemo, useState } from "react"
 
 const Home: NextPage = () => {
   const { data } = useAllStrategiesData()
-  const [isMobile] = useMediaQuery("(max-width: 767px)")
-  const [isTab] = useMediaQuery("(max-width: 1023px)")
+  const isMobile = useBetterMediaQuery("(max-width: 767px)")
+  const isTab = useBetterMediaQuery("(max-width: 1023px)")
   const isDesktop = !isTab && !isMobile
   const [type, setType] = useState<string>("All")
   const strategyType = ["All", "Portofolio", "Yield"]
