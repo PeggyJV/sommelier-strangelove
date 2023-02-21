@@ -14,9 +14,9 @@ import {
 import { VFC } from "react"
 
 import { useTable, useSortBy } from "react-table"
-import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
 
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
+import { AllStrategiesData } from "data/actions/types"
 
 export const BorderTr: VFC<TableRowProps> = (props) => {
   return (
@@ -55,7 +55,7 @@ export const BorderTd: VFC<TableCellProps> = (props) => {
 }
 
 export interface StrategyTableProps {
-  data: Awaited<ReturnType<typeof getAllStrategiesData>>
+  data: AllStrategiesData
   columns: any
 }
 

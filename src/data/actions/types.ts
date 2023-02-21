@@ -1,6 +1,7 @@
 import { Provider } from "@wagmi/core"
 import BigNumber from "bignumber.js"
 import { Contract } from "ethers"
+import { getAllStrategiesData } from "./common/getAllStrategiesData"
 
 export interface UserStake {
   amount: BigNumber
@@ -92,3 +93,7 @@ export interface StrategyContracts {
   cellarRouterSigner: Contract
 }
 export type AllContracts = Record<string, StrategyContracts>
+
+export type AllStrategiesData = Awaited<
+  ReturnType<typeof getAllStrategiesData>
+>

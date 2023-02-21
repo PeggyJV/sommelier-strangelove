@@ -4,7 +4,7 @@ import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
 import { StrategyTabColumn } from "components/_columns/StrategyTabColumn"
 import { Layout } from "components/_layout/Layout"
 import { StrategyTable } from "components/_tables/StrategyTable"
-import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
+import { AllStrategiesData } from "data/actions/types"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import type { NextPage } from "next"
@@ -69,11 +69,7 @@ const Home: NextPage = () => {
       {data ? (
         <StrategyTable
           columns={columns}
-          data={
-            strategyData as Awaited<
-              ReturnType<typeof getAllStrategiesData>
-            >
-          }
+          data={strategyData as AllStrategiesData}
         />
       ) : (
         "loading..."

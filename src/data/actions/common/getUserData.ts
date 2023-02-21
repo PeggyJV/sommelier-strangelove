@@ -1,7 +1,6 @@
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
-import { AllContracts } from "../types"
-import { getAllStrategiesData } from "./getAllStrategiesData"
+import { AllContracts, AllStrategiesData } from "../types"
 import { getUserShareBalance } from "./getUserShareBalance"
 import {
   CellarStakingV0815,
@@ -18,7 +17,7 @@ export const getUserData = async ({
   sommPrice,
 }: {
   allContracts: AllContracts
-  strategiesData: Awaited<ReturnType<typeof getAllStrategiesData>>
+  strategiesData: AllStrategiesData
   userAddress: string
   sommPrice: string
 }) => {
