@@ -13,7 +13,7 @@ export const getBaseApy = async ({
 
     const cellarApy = (() => {
       if (isUsingHardcodedApy) {
-        return baseApy || 0
+        return baseApy || undefined
       }
       const indexThatHaveChanges = dayDatas.findIndex(
         (data, idx, arr) => {
@@ -23,7 +23,7 @@ export const getBaseApy = async ({
           return prev !== data.shareValue
         }
       )
-      if (indexThatHaveChanges === -1) return 0
+      if (indexThatHaveChanges === -1) return undefined
 
       // dayDatas is in desc order
       const latestDataChanged =
@@ -37,7 +37,7 @@ export const getBaseApy = async ({
 
       return yieldGain * 52 * 100
     })()
-
+    if (!cellarApy) return
     return {
       formatted: cellarApy.toFixed(1) + "%",
       value: Number(cellarApy.toFixed(1)),

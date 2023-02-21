@@ -16,7 +16,7 @@ export const getBaseApy = async ({
     // cellar apy
     const cellarApy = (() => {
       if (isUsingHardcodedApy) {
-        return baseApy || 0
+        return baseApy || undefined
       }
 
       // dayDatas is ordered by date desc
@@ -41,10 +41,11 @@ export const getBaseApy = async ({
       const yieldGain =
         (Number(todayValue) - Number(previousValue)) /
         Number(previousValue)
-
+      const apy = yieldGain * (365 / numDays) * 100
+      if (apy <= 0) return
       return yieldGain * (365 / numDays) * 100
     })()
-
+    if (!cellarApy) return
     return {
       formatted: cellarApy.toFixed(1) + "%",
       value: Number(cellarApy.toFixed(1)),
