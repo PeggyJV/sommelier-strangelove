@@ -172,8 +172,8 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
         cellarSigner.estimateGas.deposit,
         cellarSigner.callStatic.deposit,
         [amtInWei, address],
-        800000,
-        1200000
+        1000000,
+        2000000
       )
       return cellarSigner.deposit(amtInWei, address, {
         gasLimit: gasLimitEstimated,
@@ -363,7 +363,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
                 Import tokens to wallet
               </Text>
               <Text>
-                Please wait 15 min after the deposit to Sell or Bond
+                Please wait 5 min after the deposit to Sell or Bond
               </Text>
             </>
           ),
@@ -390,12 +390,40 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
         })
       }
     } catch (e) {
-      addToast({
-        heading: cellarName + " Cellar Deposit",
-        body: <Text>Deposit Cancelled</Text>,
-        status: "error",
-        closeHandler: closeAll,
-      })
+      const error = e as Error
+      if (error.message === "GAS_LIMIT_ERROR") {
+        analytics.track("deposit.failed", {
+          ...baseAnalytics,
+          stable: tokenSymbol,
+          value: depositAmount,
+          message: "GAS_LIMIT_ERROR",
+        })
+        addToast({
+          heading: "Transaction not submitted",
+          body: (
+            <Text>
+              The gas fees are particularly high right now. To avoid a
+              failed transaction leading to wasted gas, please try
+              again later.
+            </Text>
+          ),
+          status: "info",
+          closeHandler: closeAll,
+        })
+      } else {
+        analytics.track("deposit.rejected", {
+          ...baseAnalytics,
+          stable: tokenSymbol,
+          value: depositAmount,
+        })
+        addToast({
+          heading: cellarName + " Deposit",
+          body: <Text>Deposit Cancelled</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+      }
+
       console.warn("failed to deposit", e)
     }
   }
@@ -444,7 +472,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
     <>
       <VStack pb={10} spacing={6} align="stretch">
         <VStack align="stretch">
-          <CardHeading>Stragety details</CardHeading>
+          <CardHeading>Strategy details</CardHeading>
           <HStack justify="space-between">
             <Text as="span">Strategy</Text>
             <Text as="span">{cellarName}</Text>
@@ -528,6 +556,19 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           >
             Submit
           </BaseButton>
+          <Text textAlign="center">
+            Depositing active asset (
+            <Avatar
+              ml="-2.5px"
+              boxSize={6}
+              src={activeAsset?.src}
+              name={activeAsset?.alt}
+              borderWidth={2}
+              borderColor="surface.bg"
+              bg="surface.bg"
+            />
+            {activeAsset?.symbol}) will save gas fees
+          </Text>
         </VStack>
       </FormProvider>
     </>

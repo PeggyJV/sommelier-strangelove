@@ -283,6 +283,10 @@ export interface CustomFaqSection
   faqTabs?: FaqTabWithRef[]
 }
 
+export interface PrivacyAndTermsContent {
+  content: BlockContent
+}
+
 export interface StableCoinWithImage
   extends Omit<StableCoin, "image"> {
   image?: {

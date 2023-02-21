@@ -1,4 +1,4 @@
-import { CellarNameKey, ConfigProps } from "./types"
+import { CellarKey, CellarNameKey, ConfigProps } from "./types"
 
 interface BondingPeriod {
   title: string
@@ -95,15 +95,14 @@ export const isTokenPriceEnabled = (config: ConfigProps) => {
 }
 
 export const isDailyChangeEnabled = (config: ConfigProps) => {
-  return false
-  // return (
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_MATIC
-  // )
+  return (
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC
+  )
 }
 
 export const isIntervalGainPctEnabled = (config: ConfigProps) => {
@@ -206,6 +205,21 @@ export const isUsdcChartEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
   )
+}
+
+export const isTokenPriceChartEnabled = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
+    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
+    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+  )
+}
+
+export const isApyChartEnabled = (config: ConfigProps) => {
+  return config.cellar.key === CellarKey.CELLAR_V2
 }
 
 export const bondingPeriodOptions = (
@@ -312,4 +326,11 @@ export const isUseBigBacktestingModal = (config: ConfigProps) => {
     return "6xl"
   }
   return "2xl"
+}
+
+export const apyLabel = (config: ConfigProps) => {
+  if (config.cellar.key === CellarKey.CELLAR_V2) {
+    return "APY since inception"
+  }
+  return "Base APY"
 }

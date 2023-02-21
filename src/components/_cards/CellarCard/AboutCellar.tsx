@@ -3,6 +3,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useApy } from "data/hooks/useApy"
 import { useTvm } from "data/hooks/useTvm"
 import {
+  apyLabel,
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
   intervalGainTimeline,
@@ -95,7 +96,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                   {apy?.apy !== "0.0%" && (
                     <CellarStats
                       tooltip={apy?.apyLabel}
-                      title="Base APY"
+                      title={apyLabel(cellarConfig)}
                       value={apy?.apy || "..."}
                       isLoading={apyLoading}
                     />
