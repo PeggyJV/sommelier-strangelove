@@ -7,12 +7,14 @@ import {
   Text,
 } from "@chakra-ui/react"
 import React from "react"
+import { StrategyDate } from "./StrategyDate"
 
 type StrategySectionProps = {
   icon: string
   title: string
   provider: string
   type: number
+  date?: string
 }
 
 export const StrategySection: React.FC<StrategySectionProps> = ({
@@ -20,6 +22,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   title,
   provider,
   type,
+  date,
 }) => {
   const strategyType = type === 0 ? "Yield" : "Portfolio"
   return (
@@ -38,9 +41,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
           fontSize="0.75rem"
           fontWeight={600}
         >
-          <Text bg="rgba(78, 56, 156, 0.32)" px={1.5} rounded="4">
-            In 3 days
-          </Text>
+          <StrategyDate date={date} />
           <Text color="neutral.400">
             {provider}.{strategyType}
           </Text>
