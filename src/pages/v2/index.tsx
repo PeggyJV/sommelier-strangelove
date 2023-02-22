@@ -1,17 +1,25 @@
-import { Button, Heading, HStack } from "@chakra-ui/react"
+import { Button, Center, Heading, HStack } from "@chakra-ui/react"
+import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
 import { StrategyTabColumn } from "components/_columns/StrategyTabColumn"
 import { Layout } from "components/_layout/Layout"
+import { TransparentSkeleton } from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
-import { AllStrategiesData } from "data/actions/types"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import type { NextPage } from "next"
 import { useMemo, useState } from "react"
 
 const Home: NextPage = () => {
-  const { data } = useAllStrategiesData()
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+    isRefetching,
+  } = useAllStrategiesData()
   const isMobile = useBetterMediaQuery("(max-width: 767px)")
   const isTab = useBetterMediaQuery("(max-width: 1023px)")
   const isDesktop = !isTab && !isMobile
@@ -25,13 +33,15 @@ const Home: NextPage = () => {
 
   const strategyData = useMemo(() => {
     if (type === "Yield") {
-      return data?.filter(({ type }) => type === 0)
+      return data?.filter(({ type }) => type === 0) || []
     }
     if (type === "Portofolio") {
-      return data?.filter(({ type }) => type === 1)
+      return data?.filter(({ type }) => type === 1) || []
     }
-    return data
+    return data || []
   }, [data, type])
+
+  const loading = isFetching || isRefetching || isLoading
 
   return (
     <Layout>
@@ -66,14 +76,28 @@ const Home: NextPage = () => {
           })}
         </HStack>
       </HStack>
-      {data ? (
-        <StrategyTable
-          columns={columns}
-          data={strategyData as AllStrategiesData}
-        />
-      ) : (
-        "loading..."
-      )}
+      <TransparentSkeleton
+        height={loading ? "400px" : "auto"}
+        w="full"
+        borderRadius={20}
+        isLoaded={!loading}
+      >
+        {isError ? (
+          <ErrorCard message="" py="100px">
+            <Center>
+              <Button
+                w="100px"
+                variant="outline"
+                onClick={() => refetch()}
+              >
+                Retry
+              </Button>
+            </Center>
+          </ErrorCard>
+        ) : (
+          <StrategyTable columns={columns} data={strategyData} />
+        )}
+      </TransparentSkeleton>
     </Layout>
   )
 }
