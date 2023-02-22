@@ -2,7 +2,6 @@ import { Box, Container, Flex } from "@chakra-ui/react"
 import Footer from "components/Footer"
 import { Nav } from "components/Nav"
 import { Sidebar } from "components/_sidebar"
-import { rest } from "lodash"
 import { FC } from "react"
 import { useAccount } from "wagmi"
 
@@ -11,7 +10,7 @@ export const Layout: FC = ({ children }) => {
   return (
     <Box>
       <Box display="block">
-        <Flex minH="100vh" bg="#1A1A23" flexDir="column" {...rest}>
+        <Flex minH="100vh" bg="#1A1A23" flexDir="column">
           <Nav />
           <Container
             as="main"
