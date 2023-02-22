@@ -12,11 +12,13 @@ import { FooterLink } from "./FooterLink"
 import { ExternalLinkIcon } from "components/_icons"
 import { Disclaimer } from "./Disclaimer"
 import { About } from "./About"
+import { Overview } from "./Overview"
 
 const Footer: VFC<ContainerProps> = (props) => {
   return (
     <Container maxW="container.lg">
       <About />
+      <Overview />
       <Disclaimer />
       <Container
         as="footer"

@@ -51,7 +51,12 @@ export const About = () => {
           </Button>
         </Link>
       </HStack>
-      <SimpleGrid columns={2} w="full" spacingY="24px">
+      <SimpleGrid
+        columns={{ base: 1, md: 2 }}
+        w="full"
+        spacingY="24px"
+        marginTop="48px"
+      >
         {features.map((feature) => (
           <HStack key={feature.title}>
             <Image
