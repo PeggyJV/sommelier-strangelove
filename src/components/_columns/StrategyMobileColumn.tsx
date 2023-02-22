@@ -13,6 +13,7 @@ export const StrategyMobileColumn = [
           title={row.original.name}
           provider={row.original.provider.title}
           type={row.original.type}
+          date={row.original.launchDate}
         />
       )
     },

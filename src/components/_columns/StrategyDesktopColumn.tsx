@@ -16,6 +16,7 @@ export const StrategyDesktopColumn = [
           title={row.original.name}
           provider={row.original.provider.title}
           type={row.original.type}
+          date={row.original.launchDate}
         />
       )
     },
