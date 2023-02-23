@@ -1,14 +1,7 @@
 import { cellarDataMap } from "data/cellarDataMap"
-import {
-  CellarStakingV0815,
-  CellarV0815,
-  CellarV0816,
-} from "src/abi/types"
+import { CellarStakingV0815 } from "src/abi/types"
 import { AllContracts } from "../types"
-import { getActiveAsset } from "./getActiveAsset"
-import { getTotalAssets } from "./getTotalAssets"
 
-import { createClient } from "urql"
 import {
   isAPYEnabled,
   isAssetDistributionEnabled,
@@ -18,24 +11,21 @@ import { add, isBefore, isFuture, subDays } from "date-fns"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
 import { CellarKey, ConfigProps } from "data/types"
-import {
-  GetAllTimeShareValueDocument,
-  GetAllTimeShareValueQuery,
-} from "generated/subgraph"
+import { GetAllStrategiesDataQuery } from "generated/subgraph"
 import { getBaseApy as getV2BaseApy } from "../CELLAR_V2/getBaseApy"
 import { getBaseApy } from "./getBaseApy"
 import { getChanges } from "./getChanges"
+import { getTvm } from "data/actions/common/getTvm"
 
 export const getAllStrategiesData = async ({
   allContracts,
   sommPrice,
+  sgData,
 }: {
   allContracts: AllContracts
   sommPrice: string
+  sgData: GetAllStrategiesDataQuery
 }) => {
-  const url = process.env.NEXT_PUBLIC_GRAPH_ENDPOINT!
-  const client = createClient({ url })
-
   const data = await Promise.all(
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
@@ -44,18 +34,12 @@ export const getAllStrategiesData = async ({
         )!
         const config: ConfigProps = strategy.config!
 
-        const { cellarContract, stakerContract } = contracts
+        const { stakerContract } = contracts
+        const subgraphData = sgData.cellars.find(
+          (v) => v.id === address
+        )
 
-        const resDayDatas = await client
-          .query<GetAllTimeShareValueQuery>(
-            GetAllTimeShareValueDocument,
-            {
-              cellarAddress: address,
-            }
-          )
-          .toPromise()
-
-        const dayDatas = resDayDatas.data?.cellar?.dayDatas
+        const dayDatas = subgraphData?.dayDatas
 
         const name = strategy.name
         const protocols = strategy.protocols
@@ -67,36 +51,31 @@ export const getAllStrategiesData = async ({
           isBefore(launchDate, add(new Date(), { weeks: 2 }))
         const logo = config.lpToken.imagePath
 
-        const activeAsset = await getActiveAsset(
-          cellarContract as CellarV0815 | CellarV0816
-        )
-        const tvm = await getTotalAssets(
-          cellarContract as CellarV0815 | CellarV0816,
-          activeAsset
-        )
+        const activeAsset =
+          subgraphData?.asset?.id &&
+          getTokenByAddress(subgraphData.asset.id)
 
-        const tradedAssets = await (async () => {
+        const tvm = await getTvm(subgraphData?.tvlTotal)
+
+        const tradedAssets = (() => {
           if (!isAssetDistributionEnabled(config)) {
             const assets = strategy.tradedAssets
             if (!assets) return
-            const tokens = await Promise.all(
-              assets.map(async (v) => {
-                const token = await getTokenBySymbol(v)
-                return token
-              })
-            )
+            const tokens = assets.map((v) => {
+              const token = getTokenBySymbol(v)
+              return token
+            })
+
             return tokens
           }
 
-          const positions = await (
-            cellarContract as CellarV0816
-          ).getPositions()
-          const tokens = await Promise.all(
-            positions.map(async (v) => {
-              const token = await getTokenByAddress(v)
-              return token
-            })
-          )
+          const positions = subgraphData?.positions
+          if (!positions) return
+          const tokens = positions?.map((v) => {
+            const token = getTokenByAddress(v)
+            return token
+          })
+
           return tokens
         })()
 
@@ -119,10 +98,7 @@ export const getAllStrategiesData = async ({
         const baseApy = await (async () => {
           if (!isAPYEnabled(config)) return
 
-          const datas = resDayDatas.data?.cellar?.dayDatas.slice(
-            0,
-            10
-          )
+          const datas = dayDatas?.slice(0, 10)
 
           if (config.cellar.key === CellarKey.CELLAR_V2) {
             const launchDay = launchDate ?? subDays(new Date(), 8)

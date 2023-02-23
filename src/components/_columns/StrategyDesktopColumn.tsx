@@ -1,9 +1,9 @@
 import { Avatar, AvatarGroup, Text } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
 import { StrategySection } from "components/_tables/StrategySection"
+import { Token } from "data/tokenConfig"
 import { CellValue } from "react-table"
 import { getProtocols } from "utils/getProtocols"
-import { getTradedAssets } from "utils/getTradedAssets"
 
 export const StrategyDesktopColumn = [
   {
@@ -49,8 +49,7 @@ export const StrategyDesktopColumn = [
     Header: "Assets",
     accessor: "tradedAssets",
     Cell: ({ cell: { value } }: CellValue) => {
-      const assets = value?.map((v: any) => v.symbol)
-      if (!assets)
+      if (!value)
         return (
           <Text fontWeight={600} fontSize="12px">
             --
@@ -58,13 +57,12 @@ export const StrategyDesktopColumn = [
         )
       return (
         <AvatarGroup size="sm" max={3}>
-          {assets?.map((asset: string) => {
-            const data = getTradedAssets(asset)
+          {value?.map((asset: Token) => {
             return (
               <Avatar
-                name={data?.symbol}
-                src={data?.src}
-                key={data?.symbol}
+                name={asset?.symbol}
+                src={asset?.src}
+                key={asset?.symbol}
               />
             )
           })}

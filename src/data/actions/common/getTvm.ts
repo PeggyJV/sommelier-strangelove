@@ -7,7 +7,7 @@ export const getTvm = async (tvlTotal?: string) => {
     const tvmVal = formatCurrency(calculatedTvl)
 
     return {
-      value: tvmVal,
+      value: calculatedTvl,
       formatted: `$${tvmVal}`,
     }
   } catch (error) {
