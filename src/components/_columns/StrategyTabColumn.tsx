@@ -1,5 +1,6 @@
 import { Text } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { CellValue } from "react-table"
 
@@ -37,11 +38,15 @@ export const StrategyTabColumn = [
       </Text>
     ),
     accessor: "baseApy",
-    Cell: ({ cell: { value } }: CellValue) => (
-      <Text fontWeight={600} fontSize="12px">
-        {value?.formatted || "--"}
-      </Text>
-    ),
+    Cell: ({ row }: any) => {
+      return (
+        <ApyRewardsSection
+          baseApy={row.original.baseApy?.formatted}
+          rewardsApy={row.original.rewardsApy?.formatted}
+          stackingEndDate={row.original.stakingEnd?.endDate}
+        />
+      )
+    },
   },
   {
     Header: "1D",
