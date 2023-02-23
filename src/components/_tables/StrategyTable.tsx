@@ -17,14 +17,25 @@ import { useTable, useSortBy } from "react-table"
 
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { AllStrategiesData } from "data/actions/types"
+import { useRouter } from "next/router"
 
-export const BorderTr: VFC<TableRowProps> = (props) => {
+interface BorderTrProps extends TableRowProps {
+  slug: string
+}
+
+export const BorderTr: VFC<BorderTrProps> = ({ slug, ...props }) => {
+  const router = useRouter()
   return (
     <Tr
       _notLast={{
         borderBottom: "1px solid",
         borderColor: "surface.secondary",
       }}
+      _hover={{
+        bg: "surface.secondary",
+      }}
+      cursor="pointer"
+      onClick={() => router.push(slug)}
       _first={{
         td: {
           _first: {
@@ -127,7 +138,11 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
           {rows.map((row, indexRow) => {
             prepareRow(row)
             return (
-              <BorderTr {...row.getRowProps()} key={indexRow}>
+              <BorderTr
+                {...row.getRowProps()}
+                key={indexRow}
+                slug="/"
+              >
                 {row.cells.map((cell, indexData) => {
                   return (
                     <BorderTd
