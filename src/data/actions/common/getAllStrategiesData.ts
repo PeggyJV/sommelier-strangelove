@@ -15,7 +15,7 @@ import { GetAllStrategiesDataQuery } from "generated/subgraph"
 import { getBaseApy as getV2BaseApy } from "../CELLAR_V2/getBaseApy"
 import { getBaseApy } from "./getBaseApy"
 import { getChanges } from "./getChanges"
-import { getTvm } from "data/actions/common/getTvm"
+import { getTvm } from "./getTvm"
 
 export const getAllStrategiesData = async ({
   allContracts,
@@ -51,9 +51,11 @@ export const getAllStrategiesData = async ({
           isBefore(launchDate, add(new Date(), { weeks: 2 }))
         const logo = config.lpToken.imagePath
 
-        const activeAsset =
-          subgraphData?.asset?.id &&
-          getTokenByAddress(subgraphData.asset.id)
+        const activeAsset = (() => {
+          if (!subgraphData?.asset?.id) return
+          const tokenInfo = getTokenByAddress(subgraphData.asset.id)
+          return { ...tokenInfo, ...subgraphData.asset }
+        })()
 
         const tvm = await getTvm(subgraphData?.tvlTotal)
 

@@ -50,7 +50,7 @@ export const useNetValue = (config: ConfigProps) => {
         return await getUserShareBalance({
           cellarContract,
           address,
-          activeAsset,
+          decimals: activeAsset?.decimals,
         })
       }
       throw new Error("UNKNOWN CONTRACT")

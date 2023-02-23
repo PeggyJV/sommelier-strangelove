@@ -37,7 +37,7 @@ export const getUserData = async ({
           cellarContract: contracts.cellarContract as
             | CellarV0815
             | CellarV0816,
-          activeAsset: strategyData?.activeAsset,
+          decimals: strategyData?.activeAsset?.decimals,
           address: userAddress,
         })
 
@@ -59,7 +59,7 @@ export const getUserData = async ({
         })()
 
         const netValue =
-          shares.value.toNumber() +
+          ((shares && shares.value.toNumber()) || 0) +
           (userStakes
             ? userStakes.claimAllRewardsUSD.toNumber()
             : 0) +
