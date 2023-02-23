@@ -95,6 +95,7 @@ export type CellarDayData_Filter = {
   addedLiquidity_lte?: InputMaybe<Scalars['BigInt']>;
   addedLiquidity_not?: InputMaybe<Scalars['BigInt']>;
   addedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  and?: InputMaybe<Array<InputMaybe<CellarDayData_Filter>>>;
   asset?: InputMaybe<Scalars['String']>;
   asset_?: InputMaybe<TokenErc20_Filter>;
   asset_contains?: InputMaybe<Scalars['String']>;
@@ -169,6 +170,7 @@ export type CellarDayData_Filter = {
   numWallets_lte?: InputMaybe<Scalars['Int']>;
   numWallets_not?: InputMaybe<Scalars['Int']>;
   numWallets_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  or?: InputMaybe<Array<InputMaybe<CellarDayData_Filter>>>;
   positionDistribution?: InputMaybe<Array<Scalars['BigDecimal']>>;
   positionDistribution_contains?: InputMaybe<Array<Scalars['BigDecimal']>>;
   positionDistribution_contains_nocase?: InputMaybe<Array<Scalars['BigDecimal']>>;
@@ -260,7 +262,26 @@ export type CellarDayData_Filter = {
 export enum CellarDayData_OrderBy {
   AddedLiquidity = 'addedLiquidity',
   Asset = 'asset',
+  AssetDecimals = 'asset__decimals',
+  AssetId = 'asset__id',
+  AssetSymbol = 'asset__symbol',
   Cellar = 'cellar',
+  CellarAddedLiquidityAllTime = 'cellar__addedLiquidityAllTime',
+  CellarCurrentDeposits = 'cellar__currentDeposits',
+  CellarDepositLimit = 'cellar__depositLimit',
+  CellarId = 'cellar__id',
+  CellarLiquidityLimit = 'cellar__liquidityLimit',
+  CellarName = 'cellar__name',
+  CellarNumWalletsActive = 'cellar__numWalletsActive',
+  CellarNumWalletsAllTime = 'cellar__numWalletsAllTime',
+  CellarRemovedLiquidityAllTime = 'cellar__removedLiquidityAllTime',
+  CellarShareProfitRatio = 'cellar__shareProfitRatio',
+  CellarShareValue = 'cellar__shareValue',
+  CellarSharesTotal = 'cellar__sharesTotal',
+  CellarTvlActive = 'cellar__tvlActive',
+  CellarTvlInactive = 'cellar__tvlInactive',
+  CellarTvlInvested = 'cellar__tvlInvested',
+  CellarTvlTotal = 'cellar__tvlTotal',
   Date = 'date',
   Earnings = 'earnings',
   Id = 'id',
@@ -311,6 +332,7 @@ export type CellarHourData_Filter = {
   addedLiquidity_lte?: InputMaybe<Scalars['BigInt']>;
   addedLiquidity_not?: InputMaybe<Scalars['BigInt']>;
   addedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  and?: InputMaybe<Array<InputMaybe<CellarHourData_Filter>>>;
   asset?: InputMaybe<Scalars['String']>;
   asset_?: InputMaybe<TokenErc20_Filter>;
   asset_contains?: InputMaybe<Scalars['String']>;
@@ -385,6 +407,7 @@ export type CellarHourData_Filter = {
   numWallets_lte?: InputMaybe<Scalars['Int']>;
   numWallets_not?: InputMaybe<Scalars['Int']>;
   numWallets_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  or?: InputMaybe<Array<InputMaybe<CellarHourData_Filter>>>;
   positionDistribution?: InputMaybe<Array<Scalars['BigDecimal']>>;
   positionDistribution_contains?: InputMaybe<Array<Scalars['BigDecimal']>>;
   positionDistribution_contains_nocase?: InputMaybe<Array<Scalars['BigDecimal']>>;
@@ -476,7 +499,26 @@ export type CellarHourData_Filter = {
 export enum CellarHourData_OrderBy {
   AddedLiquidity = 'addedLiquidity',
   Asset = 'asset',
+  AssetDecimals = 'asset__decimals',
+  AssetId = 'asset__id',
+  AssetSymbol = 'asset__symbol',
   Cellar = 'cellar',
+  CellarAddedLiquidityAllTime = 'cellar__addedLiquidityAllTime',
+  CellarCurrentDeposits = 'cellar__currentDeposits',
+  CellarDepositLimit = 'cellar__depositLimit',
+  CellarId = 'cellar__id',
+  CellarLiquidityLimit = 'cellar__liquidityLimit',
+  CellarName = 'cellar__name',
+  CellarNumWalletsActive = 'cellar__numWalletsActive',
+  CellarNumWalletsAllTime = 'cellar__numWalletsAllTime',
+  CellarRemovedLiquidityAllTime = 'cellar__removedLiquidityAllTime',
+  CellarShareProfitRatio = 'cellar__shareProfitRatio',
+  CellarShareValue = 'cellar__shareValue',
+  CellarSharesTotal = 'cellar__sharesTotal',
+  CellarTvlActive = 'cellar__tvlActive',
+  CellarTvlInactive = 'cellar__tvlInactive',
+  CellarTvlInvested = 'cellar__tvlInvested',
+  CellarTvlTotal = 'cellar__tvlTotal',
   Date = 'date',
   Earnings = 'earnings',
   Id = 'id',
@@ -505,6 +547,7 @@ export type Cellar_Filter = {
   addedLiquidityAllTime_lte?: InputMaybe<Scalars['BigInt']>;
   addedLiquidityAllTime_not?: InputMaybe<Scalars['BigInt']>;
   addedLiquidityAllTime_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  and?: InputMaybe<Array<InputMaybe<Cellar_Filter>>>;
   asset?: InputMaybe<Scalars['String']>;
   asset_?: InputMaybe<TokenErc20_Filter>;
   asset_contains?: InputMaybe<Scalars['String']>;
@@ -595,6 +638,7 @@ export type Cellar_Filter = {
   numWalletsAllTime_lte?: InputMaybe<Scalars['Int']>;
   numWalletsAllTime_not?: InputMaybe<Scalars['Int']>;
   numWalletsAllTime_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  or?: InputMaybe<Array<InputMaybe<Cellar_Filter>>>;
   positionDistribution?: InputMaybe<Array<Scalars['BigDecimal']>>;
   positionDistribution_contains?: InputMaybe<Array<Scalars['BigDecimal']>>;
   positionDistribution_contains_nocase?: InputMaybe<Array<Scalars['BigDecimal']>>;
@@ -676,6 +720,9 @@ export type Cellar_Filter = {
 export enum Cellar_OrderBy {
   AddedLiquidityAllTime = 'addedLiquidityAllTime',
   Asset = 'asset',
+  AssetDecimals = 'asset__decimals',
+  AssetId = 'asset__id',
+  AssetSymbol = 'asset__symbol',
   CurrentDeposits = 'currentDeposits',
   DayDatas = 'dayDatas',
   DepositLimit = 'depositLimit',
@@ -1054,6 +1101,7 @@ export type TokenErc20 = {
 export type TokenErc20_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<TokenErc20_Filter>>>;
   decimals?: InputMaybe<Scalars['Int']>;
   decimals_gt?: InputMaybe<Scalars['Int']>;
   decimals_gte?: InputMaybe<Scalars['Int']>;
@@ -1070,6 +1118,7 @@ export type TokenErc20_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<TokenErc20_Filter>>>;
   symbol?: InputMaybe<Scalars['String']>;
   symbol_contains?: InputMaybe<Scalars['String']>;
   symbol_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -1149,6 +1198,7 @@ export type WalletCellarData = {
 export type WalletCellarData_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<WalletCellarData_Filter>>>;
   currentDeposits?: InputMaybe<Scalars['BigInt']>;
   currentDeposits_gt?: InputMaybe<Scalars['BigInt']>;
   currentDeposits_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1165,6 +1215,7 @@ export type WalletCellarData_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<WalletCellarData_Filter>>>;
   totalDeposits?: InputMaybe<Scalars['BigInt']>;
   totalDeposits_gt?: InputMaybe<Scalars['BigInt']>;
   totalDeposits_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1230,7 +1281,11 @@ export enum WalletCellarData_OrderBy {
   TotalDeposits = 'totalDeposits',
   TotalWithdrawals = 'totalWithdrawals',
   Wallet = 'wallet',
-  WalletAddress = 'walletAddress'
+  WalletAddress = 'walletAddress',
+  WalletCurrentDeposits = 'wallet__currentDeposits',
+  WalletId = 'wallet__id',
+  WalletTotalDeposits = 'wallet__totalDeposits',
+  WalletTotalWithdrawals = 'wallet__totalWithdrawals'
 }
 
 export type WalletCellarShare = {
@@ -1244,6 +1299,7 @@ export type WalletCellarShare = {
 export type WalletCellarShare_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<WalletCellarShare_Filter>>>;
   balance?: InputMaybe<Scalars['BigInt']>;
   balance_gt?: InputMaybe<Scalars['BigInt']>;
   balance_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1281,6 +1337,7 @@ export type WalletCellarShare_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<WalletCellarShare_Filter>>>;
   wallet?: InputMaybe<Scalars['String']>;
   wallet_?: InputMaybe<Wallet_Filter>;
   wallet_contains?: InputMaybe<Scalars['String']>;
@@ -1307,8 +1364,28 @@ export type WalletCellarShare_Filter = {
 export enum WalletCellarShare_OrderBy {
   Balance = 'balance',
   Cellar = 'cellar',
+  CellarAddedLiquidityAllTime = 'cellar__addedLiquidityAllTime',
+  CellarCurrentDeposits = 'cellar__currentDeposits',
+  CellarDepositLimit = 'cellar__depositLimit',
+  CellarId = 'cellar__id',
+  CellarLiquidityLimit = 'cellar__liquidityLimit',
+  CellarName = 'cellar__name',
+  CellarNumWalletsActive = 'cellar__numWalletsActive',
+  CellarNumWalletsAllTime = 'cellar__numWalletsAllTime',
+  CellarRemovedLiquidityAllTime = 'cellar__removedLiquidityAllTime',
+  CellarShareProfitRatio = 'cellar__shareProfitRatio',
+  CellarShareValue = 'cellar__shareValue',
+  CellarSharesTotal = 'cellar__sharesTotal',
+  CellarTvlActive = 'cellar__tvlActive',
+  CellarTvlInactive = 'cellar__tvlInactive',
+  CellarTvlInvested = 'cellar__tvlInvested',
+  CellarTvlTotal = 'cellar__tvlTotal',
   Id = 'id',
-  Wallet = 'wallet'
+  Wallet = 'wallet',
+  WalletCurrentDeposits = 'wallet__currentDeposits',
+  WalletId = 'wallet__id',
+  WalletTotalDeposits = 'wallet__totalDeposits',
+  WalletTotalWithdrawals = 'wallet__totalWithdrawals'
 }
 
 export type WalletDayData = {
@@ -1331,6 +1408,7 @@ export type WalletDayData_Filter = {
   addedLiquidity_lte?: InputMaybe<Scalars['BigInt']>;
   addedLiquidity_not?: InputMaybe<Scalars['BigInt']>;
   addedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  and?: InputMaybe<Array<InputMaybe<WalletDayData_Filter>>>;
   date?: InputMaybe<Scalars['Int']>;
   date_gt?: InputMaybe<Scalars['Int']>;
   date_gte?: InputMaybe<Scalars['Int']>;
@@ -1347,6 +1425,7 @@ export type WalletDayData_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<WalletDayData_Filter>>>;
   removedLiquidity?: InputMaybe<Scalars['BigInt']>;
   removedLiquidity_gt?: InputMaybe<Scalars['BigInt']>;
   removedLiquidity_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1383,12 +1462,17 @@ export enum WalletDayData_OrderBy {
   Date = 'date',
   Id = 'id',
   RemovedLiquidity = 'removedLiquidity',
-  Wallet = 'wallet'
+  Wallet = 'wallet',
+  WalletCurrentDeposits = 'wallet__currentDeposits',
+  WalletId = 'wallet__id',
+  WalletTotalDeposits = 'wallet__totalDeposits',
+  WalletTotalWithdrawals = 'wallet__totalWithdrawals'
 }
 
 export type Wallet_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Wallet_Filter>>>;
   cellarData_?: InputMaybe<WalletCellarData_Filter>;
   cellarShares_?: InputMaybe<WalletCellarShare_Filter>;
   currentDeposits?: InputMaybe<Scalars['BigInt']>;
@@ -1408,6 +1492,7 @@ export type Wallet_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<Wallet_Filter>>>;
   totalDeposits?: InputMaybe<Scalars['BigInt']>;
   totalDeposits_gt?: InputMaybe<Scalars['BigInt']>;
   totalDeposits_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1484,6 +1569,11 @@ export type GetAllCellarsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAllCellarsQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, name: string, tvlActive: string, tvlInactive: string, tvlTotal: string, numWalletsActive: number, numWalletsAllTime: number, sharesTotal: string, shareValue: string, positions: Array<string>, positionDistribution: Array<string>, asset: { __typename?: 'TokenERC20', symbol: string, decimals: number }, dayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string, shareValue: string }> }>, cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
 
 export type CellarDayDatasFragment = { __typename?: 'Query', cellarDayDatas: Array<{ __typename?: 'CellarDayData', id: string, date: number, tvlActive: string, tvlInvested: string, earnings: string }> };
+
+export type GetAllStrategiesDataQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllStrategiesDataQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, tvlTotal: string, positions: Array<string>, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }>, asset: { __typename?: 'TokenERC20', id: string, symbol: string, decimals: number } }> };
 
 export type GetAllTimeShareValueQueryVariables = Exact<{
   cellarAddress: Scalars['ID'];
@@ -1665,6 +1755,28 @@ export const GetAllCellarsDocument = gql`
 
 export function useGetAllCellarsQuery(options?: Omit<Urql.UseQueryArgs<GetAllCellarsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllCellarsQuery>({ query: GetAllCellarsDocument, ...options });
+};
+export const GetAllStrategiesDataDocument = gql`
+    query GetAllStrategiesData {
+  cellars {
+    id
+    dayDatas(orderDirection: desc, orderBy: date) {
+      date
+      shareValue
+    }
+    tvlTotal
+    asset {
+      id
+      symbol
+      decimals
+    }
+    positions
+  }
+}
+    `;
+
+export function useGetAllStrategiesDataQuery(options?: Omit<Urql.UseQueryArgs<GetAllStrategiesDataQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllStrategiesDataQuery>({ query: GetAllStrategiesDataDocument, ...options });
 };
 export const GetAllTimeShareValueDocument = gql`
     query GetAllTimeShareValue($cellarAddress: ID!) {
