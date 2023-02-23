@@ -1,4 +1,5 @@
 import { Button, Center, Heading, HStack } from "@chakra-ui/react"
+import { dehydrate, QueryClient } from "@tanstack/react-query"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -7,9 +8,17 @@ import { Layout } from "components/_layout/Layout"
 import { TransparentSkeleton } from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
+import {
+  GetAllCellarsQuery,
+  GetAllStrategiesDataDocument,
+  GetAllStrategiesDataQueryVariables,
+} from "generated/subgraph"
+import { initUrqlClient } from "context/urql/initUrqlClient"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import type { NextPage } from "next"
+import type { GetServerSideProps, NextPage } from "next"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { useMemo, useState } from "react"
+import { reactQueryConfig } from "utils/reactQueryConfig"
 
 const Home: NextPage = () => {
   const {
@@ -100,6 +109,32 @@ const Home: NextPage = () => {
       </TransparentSkeleton>
     </Layout>
   )
+}
+export const getServerSideProps: GetServerSideProps = async () => {
+  const url = process.env.NEXT_PUBLIC_GRAPH_ENDPOINT!
+  const { ssrCache, urqlClient } = initUrqlClient(url)
+
+  const results = await urqlClient
+    .query<GetAllCellarsQuery, GetAllStrategiesDataQueryVariables>(
+      GetAllStrategiesDataDocument
+    )
+    .toPromise()
+  if (results.error) {
+    throw new Error(results.error.message)
+  }
+
+  const queryClient = new QueryClient(reactQueryConfig)
+  await queryClient.fetchQuery(
+    ["USE_COIN_GECKO_PRICE", "sommelier"],
+    async () => await fetchCoingeckoPrice("sommelier", "usd")
+  )
+  // prefetch and cache the data
+  return {
+    props: {
+      URQL_DATA: ssrCache?.extractData(),
+      dehydratedState: dehydrate(queryClient),
+    },
+  }
 }
 
 export default Home
