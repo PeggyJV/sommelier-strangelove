@@ -6,7 +6,15 @@ import { Highlight } from "components/Highlight"
 import { Layout } from "components/Layout"
 import { Strategy } from "components/Strategy"
 import { NextPage } from "next"
-import { StrategyLandingPageProps } from "pages/strategies/[id]"
+import { CustomFaqSection, HomeWithImages } from "types/sanity"
+
+export interface StrategyLandingPageProps {
+  id: string
+  faqData: CustomFaqSection
+  sectionCellars: HomeWithImages["sectionCellars"]
+  sectionStrategies: HomeWithImages["sectionStrategies"]
+  blocked: boolean
+}
 
 export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   id,
