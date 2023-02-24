@@ -1,23 +1,39 @@
-import PageHome from "components/_pages/PageHome"
-import type { GetStaticProps, NextPage } from "next"
-import { sanityClient } from "src/lib/sanity/client"
-import { sanityFaqQuery } from "src/lib/sanity/queries"
-import { CustomFaqSection } from "types/sanity"
+import { dehydrate, QueryClient } from "@tanstack/react-query"
+import {
+  GetAllStrategiesDataDocument,
+  GetAllStrategiesDataQuery,
+  GetAllStrategiesDataQueryVariables,
+} from "generated/subgraph"
+import { initUrqlClient } from "context/urql/initUrqlClient"
+import type { GetServerSideProps, NextPage } from "next"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
+import { reactQueryConfig } from "utils/reactQueryConfig"
+import { PageHome } from "components/_pages/PageHome"
 
-export interface HomeProps {
-  faqData: CustomFaqSection
+const Home: NextPage = () => {
+  return <PageHome />
 }
+export const getServerSideProps: GetServerSideProps = async () => {
+  const url = process.env.NEXT_PUBLIC_GRAPH_ENDPOINT!
+  const { ssrCache, urqlClient } = initUrqlClient(url)
 
-const Home: NextPage<HomeProps> = ({ faqData }) => {
-  return <PageHome faqData={faqData} />
-}
+  await urqlClient
+    .query<
+      GetAllStrategiesDataQuery,
+      GetAllStrategiesDataQueryVariables
+    >(GetAllStrategiesDataDocument)
+    .toPromise()
 
-export const getStaticProps: GetStaticProps = async () => {
-  const faqData = await sanityClient.fetch(sanityFaqQuery)
-
+  const queryClient = new QueryClient(reactQueryConfig)
+  await queryClient.fetchQuery(
+    ["USE_COIN_GECKO_PRICE", "sommelier"],
+    async () => await fetchCoingeckoPrice("sommelier", "usd")
+  )
+  // prefetch and cache the data
   return {
     props: {
-      faqData,
+      URQL_DATA: ssrCache?.extractData(),
+      dehydratedState: dehydrate(queryClient),
     },
   }
 }
