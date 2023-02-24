@@ -141,7 +141,7 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
               <BorderTr
                 {...row.getRowProps()}
                 key={indexRow}
-                slug="/"
+                slug={"strategies/" + row.original.slug}
               >
                 {row.cells.map((cell, indexData) => {
                   return (

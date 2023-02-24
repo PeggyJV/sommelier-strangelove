@@ -42,6 +42,7 @@ export const getAllStrategiesData = async ({
         const dayDatas = subgraphData?.dayDatas
 
         const name = strategy.name
+        const slug = strategy.slug
         const protocols = strategy.protocols
         const type = strategy.cellarType
         const provider = strategy.strategyProvider
@@ -122,6 +123,7 @@ export const getAllStrategiesData = async ({
 
         return {
           address,
+          slug,
           logo,
           name,
           type,

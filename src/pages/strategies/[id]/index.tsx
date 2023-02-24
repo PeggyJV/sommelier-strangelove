@@ -1,46 +1,29 @@
-import { PageStrategy } from "components/_pages/PageStrategy"
+import PageCellar from "components/_pages/PageCellar"
 import { cellarDataMap } from "data/cellarDataMap"
-import { strategyPageContentData } from "data/strategyPageContentData"
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import { GetServerSideProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
-import { useRouter } from "next/router"
-import { ParsedUrlQuery } from "querystring"
-import { useEffect } from "react"
-import { sanityClient } from "src/lib/sanity/client"
-import {
-  sanityFaqQuery,
-  sanityHomeQuery,
-} from "src/lib/sanity/queries"
-import { CustomFaqSection, HomeWithImages } from "types/sanity"
 import { origin } from "utils/origin"
+import { useRouter } from "next/router"
+import { isComingSoon } from "utils/isComingSoon"
+import { PageComingSoon } from "components/_pages/PageComingSoon"
 
-export interface StrategyLandingPageProps {
+export interface CellarPageProps {
   id: string
-  faqData: CustomFaqSection
-  sectionCellars: HomeWithImages["sectionCellars"]
-  sectionStrategies: HomeWithImages["sectionStrategies"]
+  blocked: boolean
 }
 
-export type Params = ParsedUrlQuery & { id: string }
-
-const StrategyLandingPage: NextPage<StrategyLandingPageProps> = (
-  props
-) => {
+const CellarPage: NextPage<CellarPageProps> = ({ id, blocked }) => {
   const router = useRouter()
-  const landingPageContent = strategyPageContentData[props.id]
+  if (blocked) {
+    return <PageComingSoon />
+  }
+  const content = cellarDataMap[id]
   const URL = `${origin}${router.asPath}`
-
-  useEffect(() => {
-    if (!landingPageContent) {
-      router.replace(`/strategies/${props.id}/manage`)
-    }
-  }, [router, landingPageContent, props.id])
-  if (!landingPageContent) return null
   return (
     <>
       <NextSeo
-        title={`${landingPageContent.name} | Sommelier Finance`}
-        description={landingPageContent.description}
+        title={`${content.name} | Sommelier Finance`}
+        description={content.description}
         openGraph={{
           type: "website",
           url: URL,
@@ -60,38 +43,21 @@ const StrategyLandingPage: NextPage<StrategyLandingPageProps> = (
           cardType: "summary_large_image",
         }}
       />
-      <PageStrategy {...props} />
+      <PageCellar id={id} />
     </>
   )
 }
 
-export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const cellars = Object.keys(cellarDataMap)
-  const paths = cellars.map((cellar) => {
-    return { params: { id: cellar } }
-  })
-
-  return {
-    paths,
-    fallback: false,
-  }
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+}) => {
   const { id } = params || {}
-  const faqData = await sanityClient.fetch(sanityFaqQuery)
-  const home: HomeWithImages = await sanityClient.fetch(
-    sanityHomeQuery
-  )
+  const launchDate = cellarDataMap[id as string].launchDate
+  const blocked =
+    isComingSoon(launchDate) &&
+    process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
 
-  return {
-    props: {
-      id,
-      faqData,
-      sectionCellars: home.sectionCellars,
-      sectionStrategies: home.sectionStrategies,
-    },
-  }
+  return { props: { id, blocked } }
 }
 
-export default StrategyLandingPage
+export default CellarPage
