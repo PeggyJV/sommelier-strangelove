@@ -25,7 +25,7 @@ export const getAllStrategiesData = async ({
               address,
               sgData,
               sommPrice,
-              contracts: allContracts[address],
+              contracts: contracts,
             })
         )
 

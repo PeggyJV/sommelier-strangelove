@@ -58,7 +58,7 @@ export const getStrategyData = async ({
       return { ...tokenInfo, ...subgraphData.asset }
     })()
 
-    const tvm = await getTvm(subgraphData?.tvlTotal)
+    const tvm = getTvm(subgraphData?.tvlTotal)
 
     const tradedAssets = (() => {
       if (!isAssetDistributionEnabled(config)) {
@@ -98,7 +98,7 @@ export const getStrategyData = async ({
       return apyRes
     })()
 
-    const baseApy = await (async () => {
+    const baseApy = (() => {
       if (!isAPYEnabled(config)) return
 
       const datas = dayDatas?.slice(0, 10)
@@ -106,14 +106,14 @@ export const getStrategyData = async ({
       if (config.cellar.key === CellarKey.CELLAR_V2) {
         const launchDay = launchDate ?? subDays(new Date(), 8)
         const launchEpoch = Math.floor(launchDay.getTime() / 1000)
-        return await getV2BaseApy({
+        return getV2BaseApy({
           launchEpoch: launchEpoch,
           baseApy: config.baseApy,
           dayDatas: datas,
         })
       }
 
-      return await getBaseApy({
+      return getBaseApy({
         baseApy: config.baseApy,
         dayDatas: datas,
       })
