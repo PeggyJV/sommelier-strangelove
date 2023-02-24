@@ -1,3 +1,5 @@
+import { differenceInDays } from "date-fns"
+
 export const getBaseApy = async ({
   baseApy,
   dayDatas,
@@ -15,35 +17,23 @@ export const getBaseApy = async ({
 
     // cellar apy
     const cellarApy = (() => {
-      if (isUsingHardcodedApy) {
-        return baseApy || undefined
+      if (isUsingHardcodedApy || dayDatas.length < 2) {
+        return baseApy || 0
       }
 
-      // dayDatas is ordered by date desc
-      const seventhDayIdx = 6 // Index of 7 days before today
-      const today = dayDatas[0]
+      // Inception date (configured)
+      const launchDate = new Date(launchEpoch * 1000)
+      // Use yesterday's value, the most recent full day
+      const yesterday = new Date(dayDatas[1].date * 1000)
+      const daysSince = Math.abs(
+        differenceInDays(yesterday, launchDate)
+      )
 
-      // Try to find the index of the day before the launch
-      // then subtract 1 to get the index of the day of the launch
-      const launchIdx =
-        dayDatas.findIndex((day) => day.date < launchEpoch) - 1
+      const nowValue = Number(dayDatas[1].shareValue)
+      const startValue = 1000000 // 1 as 6 decimals
+      const yieldGain = (nowValue - startValue) / startValue
 
-      let numDays = 7
-      let prevIdx = seventhDayIdx
-      if (launchIdx >= 0 && launchIdx < seventhDayIdx) {
-        // It has been less than a week since launch
-        numDays = launchIdx + 1
-        prevIdx = launchIdx
-      }
-
-      const todayValue = today.shareValue
-      const previousValue = dayDatas[prevIdx].shareValue
-      const yieldGain =
-        (Number(todayValue) - Number(previousValue)) /
-        Number(previousValue)
-      const apy = yieldGain * (365 / numDays) * 100
-      if (apy <= 0) return
-      return yieldGain * (365 / numDays) * 100
+      return yieldGain * (365 / daysSince) * 100
     })()
     if (!cellarApy) return
     return {

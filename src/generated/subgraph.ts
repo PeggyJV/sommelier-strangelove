@@ -1760,7 +1760,7 @@ export const GetAllStrategiesDataDocument = gql`
     query GetAllStrategiesData {
   cellars {
     id
-    dayDatas(orderDirection: desc, orderBy: date) {
+    dayDatas(orderBy: date, orderDirection: desc) {
       date
       shareValue
     }
