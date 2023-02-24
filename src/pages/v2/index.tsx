@@ -9,8 +9,8 @@ import { TransparentSkeleton } from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import {
-  GetAllCellarsQuery,
   GetAllStrategiesDataDocument,
+  GetAllStrategiesDataQuery,
   GetAllStrategiesDataQueryVariables,
 } from "generated/subgraph"
 import { initUrqlClient } from "context/urql/initUrqlClient"
@@ -115,9 +115,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const { ssrCache, urqlClient } = initUrqlClient(url)
 
   const results = await urqlClient
-    .query<GetAllCellarsQuery, GetAllStrategiesDataQueryVariables>(
-      GetAllStrategiesDataDocument
-    )
+    .query<
+      GetAllStrategiesDataQuery,
+      GetAllStrategiesDataQueryVariables
+    >(GetAllStrategiesDataDocument)
     .toPromise()
   if (results.error) {
     throw new Error(results.error.message)
