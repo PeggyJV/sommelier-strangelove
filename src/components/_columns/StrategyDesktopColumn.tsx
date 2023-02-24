@@ -1,8 +1,16 @@
-import { Avatar, AvatarGroup, Text } from "@chakra-ui/react"
+import {
+  Avatar,
+  AvatarGroup,
+  Flex,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
+import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
 import { Token } from "data/tokenConfig"
+import { useState } from "react"
 import { CellValue } from "react-table"
 import { getProtocols } from "utils/getProtocols"
 
@@ -18,6 +26,7 @@ export const StrategyDesktopColumn = [
           provider={row.original.provider.title}
           type={row.original.type}
           date={row.original.launchDate}
+          description={row.original.description}
         />
       )
     },
@@ -28,20 +37,35 @@ export const StrategyDesktopColumn = [
     accessor: "protocols",
     Cell: ({ cell: { value } }: CellValue) => {
       const protocols = typeof value === "string" ? [value] : value
+      const [isHover, setIsHover] = useState(false)
+      const handleMouseOver = () => {
+        setIsHover(true)
+      }
+      const handleMouseLeave = () => {
+        setIsHover(false)
+      }
       return (
-        <AvatarGroup size="sm" max={3}>
-          {protocols.map((protocol: string) => {
-            const data = getProtocols(protocol)
-            return (
-              <Avatar
-                name={data.title}
-                src={data.icon}
-                key={data.title}
-                bgColor="white"
-              />
-            )
-          })}
-        </AvatarGroup>
+        <Flex
+          onMouseLeave={handleMouseLeave}
+          onMouseOver={handleMouseOver}
+          alignItems="center"
+          direction="column"
+        >
+          <AvatarGroup size="sm" max={3}>
+            {protocols.map((protocol: string) => {
+              const data = getProtocols(protocol)
+              return (
+                <Avatar
+                  name={data.title}
+                  src={data.icon}
+                  key={data.title}
+                  bgColor="white"
+                />
+              )
+            })}
+          </AvatarGroup>
+          {isHover && <AvatarTooltip protocols={protocols} />}
+        </Flex>
       )
     },
     disableSortBy: true,
@@ -50,6 +74,13 @@ export const StrategyDesktopColumn = [
     Header: "Assets",
     accessor: "tradedAssets",
     Cell: ({ cell: { value } }: CellValue) => {
+      const [isHover, setIsHover] = useState(false)
+      const handleMouseOver = () => {
+        setIsHover(true)
+      }
+      const handleMouseLeave = () => {
+        setIsHover(false)
+      }
       if (!value)
         return (
           <Text fontWeight={600} fontSize="12px">
@@ -57,17 +88,25 @@ export const StrategyDesktopColumn = [
           </Text>
         )
       return (
-        <AvatarGroup size="sm" max={3}>
-          {value?.map((asset: Token) => {
-            return (
-              <Avatar
-                name={asset?.symbol}
-                src={asset?.src}
-                key={asset?.symbol}
-              />
-            )
-          })}
-        </AvatarGroup>
+        <Flex
+          onMouseLeave={handleMouseLeave}
+          onMouseOver={handleMouseOver}
+          alignItems="center"
+          direction="column"
+        >
+          <AvatarGroup size="sm" max={3}>
+            {value?.map((asset: Token) => {
+              return (
+                <Avatar
+                  name={asset?.symbol}
+                  src={asset?.src}
+                  key={asset?.symbol}
+                />
+              )
+            })}
+          </AvatarGroup>
+          {isHover && <AvatarTooltip tradedAssets={value} />}
+        </Flex>
       )
     },
     disableSortBy: true,
