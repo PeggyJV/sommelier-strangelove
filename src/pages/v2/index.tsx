@@ -114,15 +114,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const url = process.env.NEXT_PUBLIC_GRAPH_ENDPOINT!
   const { ssrCache, urqlClient } = initUrqlClient(url)
 
-  const results = await urqlClient
+  await urqlClient
     .query<
       GetAllStrategiesDataQuery,
       GetAllStrategiesDataQueryVariables
     >(GetAllStrategiesDataDocument)
     .toPromise()
-  if (results.error) {
-    throw new Error(results.error.message)
-  }
 
   const queryClient = new QueryClient(reactQueryConfig)
   await queryClient.fetchQuery(
