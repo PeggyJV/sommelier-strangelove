@@ -29,13 +29,18 @@ export const getAllStrategiesData = async ({
               sommPrice,
               contracts: contracts,
             })
-          }
+          },
+          {}
         )
 
         return result
       }
     )
   )
-  const cleanData = data.filter((d) => d)
+  type Data = Awaited<ReturnType<typeof getStrategyData>>
+  const isData = (item: Data | undefined): item is Data => {
+    return !!item
+  }
+  const cleanData = data.filter(isData)
   return cleanData
 }
