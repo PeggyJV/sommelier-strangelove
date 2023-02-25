@@ -36,6 +36,7 @@
     "@portabletext/react": "^1.0.6",
     "@sentry/nextjs": "6.18.2",
     "@tanstack/react-query": "^4.2.3",
+    "@tanstack/react-query-devtools": "^4.24.10",
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/smart-order-router": "^2.5.30",
     "analytics": "^0.8.1",

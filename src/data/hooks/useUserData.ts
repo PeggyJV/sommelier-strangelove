@@ -16,9 +16,11 @@ export const useUserData = () => {
   const query = useQuery(
     [
       "USE_USER_DATA",
-      !!allContracts,
-      address,
-      { signer: signer?._isSigner },
+      {
+        allContracts: !!allContracts,
+        address,
+        signer: signer?._isSigner,
+      },
     ],
     async () => {
       return await getUserData({

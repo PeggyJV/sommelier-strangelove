@@ -1,9 +1,8 @@
 import { AllContracts } from "../types"
 
 import { GetAllStrategiesDataQuery } from "generated/subgraph"
-import { QueryClient } from "@tanstack/react-query"
-import { reactQueryConfig } from "utils/reactQueryConfig"
 import { getStrategyData } from "./getStrategyData"
+import { reactQueryClient } from "utils/reactQuery"
 
 export const getAllStrategiesData = async ({
   allContracts,
@@ -17,21 +16,26 @@ export const getAllStrategiesData = async ({
   const data = await Promise.all(
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
-        const queryClient = new QueryClient(reactQueryConfig)
-        const result = await queryClient.fetchQuery(
-          ["USE_STRATEGY_DATA", { provider: true, sgData, address }],
-          async () =>
-            await getStrategyData({
+        const result = await reactQueryClient.fetchQuery(
+          ["USE_STRATEGY_DATA", { provider: true, address }],
+          async () => {
+            const subgraphData = sgData.cellars.find(
+              (v) => v.id === address
+            )
+            if (!subgraphData) return
+            return await getStrategyData({
               address,
-              sgData,
+              sgData: subgraphData,
               sommPrice,
               contracts: contracts,
             })
+          }
         )
 
         return result
       }
     )
   )
-  return data
+  const cleanData = data.filter((d) => d)
+  return cleanData
 }

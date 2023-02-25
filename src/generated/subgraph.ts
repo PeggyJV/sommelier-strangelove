@@ -1674,6 +1674,13 @@ export type GetSingleCellarValueQueryVariables = Exact<{
 
 export type GetSingleCellarValueQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }> } | null };
 
+export type GetStrategyDataQueryVariables = Exact<{
+  cellarAddress: Scalars['ID'];
+}>;
+
+
+export type GetStrategyDataQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, tvlTotal: string, positions: Array<string>, shareValue: string, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }>, asset: { __typename?: 'TokenERC20', id: string, symbol: string, decimals: number } } | null };
+
 export type GetWeeklyShareValueQueryVariables = Exact<{
   epoch: Scalars['Int'];
   cellarAddress: Scalars['ID'];
@@ -1998,6 +2005,29 @@ export const GetSingleCellarValueDocument = gql`
 
 export function useGetSingleCellarValueQuery(options: Omit<Urql.UseQueryArgs<GetSingleCellarValueQueryVariables>, 'query'>) {
   return Urql.useQuery<GetSingleCellarValueQuery>({ query: GetSingleCellarValueDocument, ...options });
+};
+export const GetStrategyDataDocument = gql`
+    query GetStrategyData($cellarAddress: ID!) {
+  cellar(id: $cellarAddress) {
+    id
+    dayDatas(orderBy: date, orderDirection: desc) {
+      date
+      shareValue
+    }
+    tvlTotal
+    asset {
+      id
+      symbol
+      decimals
+    }
+    positions
+    shareValue
+  }
+}
+    `;
+
+export function useGetStrategyDataQuery(options: Omit<Urql.UseQueryArgs<GetStrategyDataQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetStrategyDataQuery>({ query: GetStrategyDataDocument, ...options });
 };
 export const GetWeeklyShareValueDocument = gql`
     query GetWeeklyShareValue($epoch: Int!, $cellarAddress: ID!) {

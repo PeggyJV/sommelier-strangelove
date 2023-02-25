@@ -14,10 +14,7 @@ export const useAllStrategiesData = () => {
     useGetAllStrategiesDataQuery()
 
   const query = useQuery(
-    [
-      "USE_ALL_STRATEGIES_DATA",
-      { provider: provider?._isProvider, sgData },
-    ],
+    ["USE_ALL_STRATEGIES_DATA", { provider: provider?._isProvider }],
     async () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,

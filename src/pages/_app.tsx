@@ -11,18 +11,14 @@ import { GlobalFonts } from "theme/GlobalFonts"
 import { GeoProvider } from "context/geoContext"
 import { DefaultSeo } from "next-seo"
 import { useState } from "react"
-import {
-  Hydrate,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query"
+import { Hydrate, QueryClientProvider } from "@tanstack/react-query"
 import UrqlProvider from "context/urql/UrqlProvider"
-import { reactQueryConfig } from "utils/reactQueryConfig"
+import { reactQueryClient } from "utils/reactQuery"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const [queryClient] = useState(
-    () => new QueryClient(reactQueryConfig)
-  )
+  const [queryClient] = useState(() => reactQueryClient)
+
   return (
     <QueryClientProvider
       key="somm-data-provider-query-key"
@@ -71,6 +67,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           </Hydrate>
         </PlausibleProvider>
       </UrqlProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }

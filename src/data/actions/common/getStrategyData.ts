@@ -11,12 +11,12 @@ import { add, isBefore, isFuture, subDays } from "date-fns"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
 import { CellarKey, ConfigProps } from "data/types"
-import { GetAllStrategiesDataQuery } from "generated/subgraph"
 import { getBaseApy as getV2BaseApy } from "../CELLAR_V2/getBaseApy"
 import { getBaseApy } from "./getBaseApy"
 import { getChanges } from "./getChanges"
 import { getTvm } from "./getTvm"
 import { formatDecimals } from "utils/bigNumber"
+import { GetStrategyDataQuery } from "generated/subgraph"
 
 export const getStrategyData = async ({
   address,
@@ -27,7 +27,7 @@ export const getStrategyData = async ({
   address: string
   contracts: StrategyContracts
   sommPrice: string
-  sgData: GetAllStrategiesDataQuery
+  sgData: GetStrategyDataQuery["cellar"]
 }) => {
   const data = await (async () => {
     const strategy = Object.values(cellarDataMap).find(
@@ -36,7 +36,7 @@ export const getStrategyData = async ({
     const config: ConfigProps = strategy.config!
 
     const { stakerContract } = contracts
-    const subgraphData = sgData.cellars.find((v) => v.id === address)
+    const subgraphData = sgData
 
     const dayDatas = subgraphData?.dayDatas
 

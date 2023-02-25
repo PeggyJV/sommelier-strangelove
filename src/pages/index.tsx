@@ -1,4 +1,4 @@
-import { dehydrate, QueryClient } from "@tanstack/react-query"
+import { dehydrate } from "@tanstack/react-query"
 import {
   GetAllStrategiesDataDocument,
   GetAllStrategiesDataQuery,
@@ -7,7 +7,7 @@ import {
 import { initUrqlClient } from "context/urql/initUrqlClient"
 import type { GetServerSideProps, NextPage } from "next"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { reactQueryConfig } from "utils/reactQueryConfig"
+import { reactQueryClient } from "utils/reactQuery"
 import { PageHome } from "components/_pages/PageHome"
 
 const Home: NextPage = () => {
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     >(GetAllStrategiesDataDocument)
     .toPromise()
 
-  const queryClient = new QueryClient(reactQueryConfig)
+  const queryClient = reactQueryClient
   await queryClient.fetchQuery(
     ["USE_COIN_GECKO_PRICE", "sommelier"],
     async () => await fetchCoingeckoPrice("sommelier", "usd")
