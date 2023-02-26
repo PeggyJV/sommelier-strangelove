@@ -1,9 +1,9 @@
 import {
   Avatar,
   AvatarGroup,
+  Box,
   Flex,
   Text,
-  Tooltip,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
@@ -45,11 +45,9 @@ export const StrategyDesktopColumn = [
         setIsHover(false)
       }
       return (
-        <Flex
+        <Box
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseOver}
-          alignItems="center"
-          direction="column"
         >
           <AvatarGroup size="sm" max={3}>
             {protocols.map((protocol: string) => {
@@ -64,8 +62,10 @@ export const StrategyDesktopColumn = [
               )
             })}
           </AvatarGroup>
-          {isHover && <AvatarTooltip protocols={protocols} />}
-        </Flex>
+          <Flex alignItems="center" direction="column">
+            {isHover && <AvatarTooltip protocols={protocols} />}
+          </Flex>
+        </Box>
       )
     },
     disableSortBy: true,
@@ -88,11 +88,9 @@ export const StrategyDesktopColumn = [
           </Text>
         )
       return (
-        <Flex
+        <Box
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseOver}
-          alignItems="center"
-          direction="column"
         >
           <AvatarGroup size="sm" max={3}>
             {value?.map((asset: Token) => {
@@ -105,8 +103,10 @@ export const StrategyDesktopColumn = [
               )
             })}
           </AvatarGroup>
-          {isHover && <AvatarTooltip tradedAssets={value} />}
-        </Flex>
+          <Flex alignItems="center" direction="column">
+            {isHover && <AvatarTooltip tradedAssets={value} />}
+          </Flex>
+        </Box>
       )
     },
     disableSortBy: true,

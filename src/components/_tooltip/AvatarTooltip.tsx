@@ -49,7 +49,7 @@ export const AvatarTooltip: FC<AvatarTooltipProps> = ({
       flexDir="column"
       gap={3}
       rounded="lg"
-      mt={10}
+      mt={4}
     >
       {protocols &&
         protocols.map((protocol: string) => {
