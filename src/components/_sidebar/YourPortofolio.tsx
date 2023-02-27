@@ -1,10 +1,24 @@
-import { HStack, Image, Stack, Text, VStack } from "@chakra-ui/react"
+import {
+  Button,
+  Center,
+  HStack,
+  Image,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/react"
 import { CardBase } from "components/_cards/CardBase"
-import { LighterSkeleton } from "components/_skeleton"
+import { ErrorCard } from "components/_cards/ErrorCard"
+import { SidebarColumn } from "components/_columns/SidebarColumn"
+import {
+  LighterSkeleton,
+  TransparentSkeleton,
+} from "components/_skeleton"
+import { SidebarTable } from "components/_tables/SidebarTable"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 
 export const YourPortofolio = () => {
-  const { data, isLoading } = useUserDataAllStrategies()
+  const { data, isLoading, refetch } = useUserDataAllStrategies()
   return (
     <VStack spacing="32px" w="full">
       <VStack w="full" spacing="9.5px">
@@ -26,7 +40,7 @@ export const YourPortofolio = () => {
             </Text>
           </LighterSkeleton>
         </VStack>
-        <LighterSkeleton
+        <TransparentSkeleton
           isLoaded={!isLoading}
           h={isLoading ? "24px" : "auto"}
           w={isLoading ? "40%" : "auto"}
@@ -49,7 +63,7 @@ export const YourPortofolio = () => {
               SOMM
             </Text>
           </HStack>
-        </LighterSkeleton>
+        </TransparentSkeleton>
       </VStack>
       {Number(data?.totalNetValue?.value) <= 0 && (
         <CardBase w="full">
@@ -68,6 +82,32 @@ export const YourPortofolio = () => {
           </Stack>
         </CardBase>
       )}
+
+      <TransparentSkeleton
+        height={isLoading ? "400px" : "auto"}
+        w="full"
+        borderRadius={20}
+        isLoaded={!isLoading}
+      >
+        {!data ? (
+          <ErrorCard message="" py="100px">
+            <Center>
+              <Button
+                w="100px"
+                variant="outline"
+                onClick={() => refetch()}
+              >
+                Retry
+              </Button>
+            </Center>
+          </ErrorCard>
+        ) : (
+          <SidebarTable
+            columns={SidebarColumn}
+            data={data?.strategies}
+          />
+        )}
+      </TransparentSkeleton>
     </VStack>
   )
 }
