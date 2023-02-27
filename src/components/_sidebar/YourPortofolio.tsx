@@ -15,10 +15,12 @@ import {
   TransparentSkeleton,
 } from "components/_skeleton"
 import { SidebarTable } from "components/_tables/SidebarTable"
+import { useHome } from "data/context/homeContext"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 
 export const YourPortofolio = () => {
   const { data, isLoading, refetch } = useUserDataAllStrategies()
+  const { timeline } = useHome()
   return (
     <VStack spacing="32px" w="full">
       <VStack w="full" spacing="9.5px">
@@ -103,7 +105,7 @@ export const YourPortofolio = () => {
           </ErrorCard>
         ) : (
           <SidebarTable
-            columns={SidebarColumn}
+            columns={SidebarColumn({ timeline })}
             data={data?.strategies}
           />
         )}

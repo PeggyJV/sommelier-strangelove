@@ -3,9 +3,10 @@ import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
 import { StrategyTabColumn } from "components/_columns/StrategyTabColumn"
-import { Layout } from "components/_layout/Layout"
+import { LayoutWithSidebar } from "components/_layout/LayoutWithSidebar"
 import { TransparentSkeleton } from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
+import { useHome } from "data/context/homeContext"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
@@ -24,11 +25,13 @@ export const PageHome = () => {
   const isDesktop = !isTab && !isMobile
   const [type, setType] = useState<string>("All")
   const strategyType = ["All", "Portofolio", "Yield"]
+
+  const { timeline } = useHome()
   const columns = isDesktop
-    ? StrategyDesktopColumn
+    ? StrategyDesktopColumn({ timeline })
     : isTab && !isMobile
-    ? StrategyTabColumn
-    : StrategyMobileColumn
+    ? StrategyTabColumn({ timeline })
+    : StrategyMobileColumn({ timeline })
 
   const strategyData = useMemo(() => {
     if (type === "Yield") {
@@ -43,7 +46,7 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
 
   return (
-    <Layout>
+    <LayoutWithSidebar>
       <HStack mb="1.6rem" justifyContent="space-between">
         <Heading fontSize="1.3125rem">Strategies</Heading>
         <HStack spacing="8px">
@@ -94,9 +97,11 @@ export const PageHome = () => {
             </Center>
           </ErrorCard>
         ) : (
-          <StrategyTable columns={columns} data={strategyData} />
+          <>
+            <StrategyTable columns={columns} data={strategyData} />
+          </>
         )}
       </TransparentSkeleton>
-    </Layout>
+    </LayoutWithSidebar>
   )
 }
