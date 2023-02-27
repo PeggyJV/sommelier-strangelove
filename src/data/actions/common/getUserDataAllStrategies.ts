@@ -62,6 +62,10 @@ export const getUserDataAllStrategies = async ({
     )
   }, 0)
 
+  const filterUserData = userData.filter(
+    (item) => Number(item?.netValue) > 0
+  )
+
   const data = {
     totalNetValue: {
       value: totalNetValue,
@@ -71,9 +75,7 @@ export const getUserDataAllStrategies = async ({
       value: totalSommRewards,
       formatted: toEther(totalSommRewards, 6, false, 2),
     },
-    strategies: userData.map((item) => {
-      if (Number(item?.netValue) > 0) return item?.userStrategyData
-    }),
+    strategies: filterUserData,
   }
 
   return data
