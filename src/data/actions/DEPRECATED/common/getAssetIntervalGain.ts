@@ -1,6 +1,6 @@
+import { MarketChartResponse } from "data/actions/common/fetchMarketChart"
 import { isSameDay, subDays } from "date-fns"
 import { getGainPct } from "utils/getGainPct"
-import { MarketChartResponse } from "./fetchMarketChart"
 
 // shift back coin gecko data is intentional
 export const getAssetIntervalGain = async (
@@ -19,7 +19,7 @@ export const getAssetIntervalGain = async (
     )
     // coingecko returns the latest date with 2 hour value, 00:00 data and latest hour data. We get the 00:00 value with length - 2 index
 
-    if (!endData || !startData) throw new Error("data undefined")
+    if (!endData || !startData) throw new Error("data un defined")
     const result = getGainPct(endData[1], startData[1])
 
     return result
