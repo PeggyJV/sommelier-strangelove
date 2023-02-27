@@ -61,10 +61,11 @@ export const getUserDataAllStrategies = async ({
         : 0)
     )
   }, 0)
-
-  const filterUserData = userData.filter(
-    (item) => Number(item?.netValue) > 0
-  )
+  type Data = Awaited<ReturnType<typeof getUserData>>
+  const isData = (item: Data | undefined): item is Data => {
+    return Number(item?.netValue) > 0
+  }
+  const cleanData = userData.filter(isData)
 
   const data = {
     totalNetValue: {
@@ -75,7 +76,7 @@ export const getUserDataAllStrategies = async ({
       value: totalSommRewards,
       formatted: toEther(totalSommRewards, 6, false, 2),
     },
-    strategies: filterUserData,
+    strategies: cleanData,
   }
 
   return data
