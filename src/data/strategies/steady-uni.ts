@@ -12,6 +12,12 @@ export const steadyUni = {
   name: "Steady UNI",
   slug: config.CONTRACT.STEADY_UNI.SLUG,
   tradedAssets: ["USDC", "UNI"],
+  exchange: [
+    {
+      name: "Sommelier",
+      logo: "/assets/icons/somm.png",
+    },
+  ],
   launchDate: new Date(2022, 11, 29, 11, 0, 0, 0), // 29 dec 2022 12 am est
   cellarType: CellarType.automatedPortfolio,
   description: `Capture the upside of UNI price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,

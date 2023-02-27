@@ -12,6 +12,17 @@ export const ethBtcTrend = {
   name: "ETH-BTC Trend",
   slug: config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG,
   tradedAssets: ["USDC", "WETH", "WBTC"],
+  exchange: [
+    {
+      name: "Sommelier",
+      logo: "/assets/icons/somm.png",
+    },
+    {
+      url: "https://helixapp.com/spot/ethbtctrend-usdt/",
+      name: "Helix",
+      logo: "/assets/icons/helix.png",
+    },
+  ],
   cellarType: CellarType.automatedPortfolio,
   description:
     "Strategy portfolio buys BTC and ETH when prices go up. Fully or partially sells both assets when prices go down.",

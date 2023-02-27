@@ -53,11 +53,23 @@ export enum CellarType {
   automatedPortfolio,
   yieldStrategies,
 }
+
+type Exchange =
+  | {
+      name: string
+      url: string
+      logo: string
+    }
+  | {
+      name: string
+      logo: string
+    }
 export interface CellarDataMap {
   [key: string]: {
     name: string
     slug: string
     tradedAssets?: string[]
+    exchanges?: Exchange[]
     launchDate?: Date
     cellarType: CellarType
     description: string

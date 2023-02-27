@@ -2,11 +2,11 @@ import { Tabs, TabList, TabPanels, TabPanel } from "@chakra-ui/react"
 import { VFC } from "react"
 
 import React from "react"
-import { strategyPageContentData } from "data/strategyPageContentData"
 import { useRouter } from "next/router"
 import { ExchangeTab } from "components/_tabs/ExchangeTab"
 import { CustomTab } from "components/_tabs/CustomTab"
 import { BaseModal, BaseModalProps } from "./BaseModal"
+import { cellarDataMap } from "data/cellarDataMap"
 
 interface ModalWithExchangeTabProps
   extends Pick<BaseModalProps, "onClose" | "isOpen" | "heading"> {
@@ -18,7 +18,7 @@ export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
 ) => {
   const id = useRouter().query.id as string
   const isHavingExchanges =
-    Number(strategyPageContentData[id]?.exchange?.length) > 1
+    Number(cellarDataMap[id]?.exchanges?.length) > 1
 
   return (
     <BaseModal {...props}>
