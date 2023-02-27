@@ -31,7 +31,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
 
   if (!baseApy && !rewardsApy) {
     return (
-      <Text w={20} textAlign="right" fontWeight={550} fontSize="16px">
+      <Text textAlign="right" fontWeight={550} fontSize="16px">
         -
       </Text>
     )
@@ -50,11 +50,11 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         boxShadow="xl"
         shouldWrapChildren
       >
-        <Stack alignItems="flex-end" w={20} spacing={0}>
+        <Stack alignItems="flex-end" spacing={0}>
           <Text fontWeight={550} fontSize="16px">
             {baseApy ?? "-"}
           </Text>
-          <HStack spacing={0}>
+          <HStack spacing={1}>
             <Text
               fontWeight={600}
               fontSize="12px"
@@ -86,7 +86,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     )
   }
   return (
-    <Text w={20} textAlign="right">
+    <Text textAlign="right" fontWeight={550} fontSize="16px">
       -
     </Text>
   )
