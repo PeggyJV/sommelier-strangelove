@@ -74,27 +74,30 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
           </HStack>
         </Tooltip>
       </VStack>
-      <VStack spacing={1} align="center">
-        <Apy
-          apy={isStrategyLoading ? <Spinner /> : baseApy?.formatted}
-        />
-        <Box>
-          <Tooltip
-            hasArrow
-            placement="top"
-            label={apyLabel(cellarConfig)}
-            bg="surface.bg"
-            color="neutral.300"
-          >
-            <HStack spacing={1} align="center">
-              <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
-              {!!apyLabel(cellarConfig) && (
-                <InformationIcon color="neutral.300" boxSize={3} />
-              )}
-            </HStack>
-          </Tooltip>
-        </Box>
-      </VStack>
+      {baseApy && (
+        <VStack spacing={1} align="center">
+          <Apy
+            apy={isStrategyLoading ? <Spinner /> : baseApy?.formatted}
+          />
+          <Box>
+            <Tooltip
+              hasArrow
+              placement="top"
+              label={apyLabel(cellarConfig)}
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack spacing={1} align="center">
+                <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
+                {!!apyLabel(cellarConfig) && (
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                )}
+              </HStack>
+            </Tooltip>
+          </Box>
+        </VStack>
+      )}
+
       {isStakingStillRunning && rewardsApy?.formatted !== "0.0%" && (
         <VStack spacing={1} align="center">
           <Apy
