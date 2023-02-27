@@ -89,7 +89,7 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
   )
 
   return (
-    <TableContainer pb={28}>
+    <TableContainer>
       <Table
         {...getTableProps()}
         variant="unstyled"
@@ -136,7 +136,6 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
         </Thead>
         <Tbody
           backgroundColor="surface.primary"
-          backdropFilter="blur(8px)"
           {...getTableBodyProps()}
         >
           {rows.map((row, indexRow) => {

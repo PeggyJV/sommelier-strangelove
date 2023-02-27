@@ -137,7 +137,6 @@ export const SidebarTable: VFC<StrategyTableProps> = ({
         </Thead>
         <Tbody
           backgroundColor="surface.primary"
-          backdropFilter="blur(8px)"
           {...getTableBodyProps()}
         >
           {rows.map((row, indexRow) => {
