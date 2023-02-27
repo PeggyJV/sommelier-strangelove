@@ -23,8 +23,8 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
-import { useUserStakes } from "data/hooks/useUserStakes"
 import { useGeo } from "context/geoContext"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 interface FormValues {
   withdrawAmount: number
 }
@@ -50,7 +50,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
 
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
-  const { refetch: userStakesRefetch } = useUserStakes(cellarConfig)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData } = lpToken
 
@@ -130,7 +130,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
       onError,
     })
 
-    userStakesRefetch()
+    refetch()
 
     setValue("withdrawAmount", 0)
   }

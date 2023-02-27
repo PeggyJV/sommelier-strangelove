@@ -1,10 +1,10 @@
 import { HStack, Image, Stack, Text, VStack } from "@chakra-ui/react"
-import { CardBase } from "components/Cellars/CardBase"
+import { CardBase } from "components/_cards/CardBase"
 import { LighterSkeleton } from "components/_skeleton"
-import { useUserData } from "data/hooks/useUserData"
+import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 
 export const YourPortofolio = () => {
-  const { data, isLoading } = useUserData()
+  const { data, isLoading } = useUserDataAllStrategies()
   return (
     <VStack spacing="32px" w="full">
       <VStack w="full" spacing="9.5px">

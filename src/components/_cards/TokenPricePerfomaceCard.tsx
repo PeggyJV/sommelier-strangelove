@@ -12,7 +12,6 @@ import { useState, VFC } from "react"
 import { TransparentCard } from "./TransparentCard"
 import { CardHeading } from "components/_typography/CardHeading"
 import { analytics } from "utils/analytics"
-import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { PercentageText } from "components/PercentageText"
@@ -24,13 +23,17 @@ import { format } from "date-fns"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useTokenPriceChart } from "data/context/tokenPriceChartContext"
 import { TokenPriceChart } from "components/_charts/TokenPriceChart"
+import { useStrategyData } from "data/hooks/useStrategyData"
 
 export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
   const { data, timeArray, tokenPriceChange, isFetching, isError } =
     useTokenPriceChart()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
-  const tokenPrice = useTokenPrice(cellarConfig)
+  const { data: strategyData } = useStrategyData(
+    cellarConfig.cellar.address
+  )
+  const tokenPrice = strategyData?.tokenPrice
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const [timeline, setTimeline] = useState<string>("1W")
   const [pointActive, setPointActive] = useState<Point>()
@@ -117,7 +120,7 @@ export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
                   <CardHeading>Token Price</CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
-                      {tokenPrice.data || "--"}
+                      {tokenPrice || "--"}
                     </Text>
                     <PercentageText
                       data={Number(tokenPriceChange?.yFormatted)}

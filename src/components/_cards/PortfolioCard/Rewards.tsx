@@ -6,7 +6,7 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { ExternalLinkIcon } from "components/_icons"
 import { useGeo } from "context/geoContext"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { useUserStakes } from "data/hooks/useUserStakes"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { ConfigProps } from "data/types"
 import { useBrandedToast } from "hooks/chakra"
 import { useIsMounted } from "hooks/utils/useIsMounted"
@@ -23,7 +23,10 @@ export const Rewards = ({
 }) => {
   const isMounted = useIsMounted()
   const { isConnected } = useAccount()
-  const { data: userStakes, refetch } = useUserStakes(cellarConfig)
+  const { data: userData, refetch } = useUserStrategyData(
+    cellarConfig.cellar.address
+  )
+  const { userStakes } = userData || {}
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const { addToast, close } = useBrandedToast()
 

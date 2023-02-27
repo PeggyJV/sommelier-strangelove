@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
-import { getUserData } from "data/actions/common/getUserData"
+import { getUserDataAllStrategies } from "data/actions/common/getUserDataAllStrategies"
 import { useAccount, useSigner } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useAllStrategiesData } from "./useAllStrategiesData"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 
-export const useUserData = () => {
+export const useUserDataAllStrategies = () => {
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
@@ -15,15 +15,15 @@ export const useUserData = () => {
 
   const query = useQuery(
     [
-      "USE_USER_DATA",
+      "USE_USER_DATA_ALL_STRATEGIES",
       {
         allContracts: !!allContracts,
-        address,
         signer: signer?._isSigner,
+        userAddress: address,
       },
     ],
     async () => {
-      return await getUserData({
+      return await getUserDataAllStrategies({
         allContracts: allContracts!,
         strategiesData: strategies.data!,
         userAddress: address!,

@@ -12,6 +12,7 @@ query GetStrategyData($cellarAddress: ID!) {
       decimals
     }
     positions
+    positionDistribution
     shareValue
   }
 }

@@ -1,6 +1,6 @@
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
-import { AllContracts, AllStrategiesData } from "../types"
+import { StrategyContracts, StrategyData } from "../types"
 import { getUserShareBalance } from "./getUserShareBalance"
 import {
   CellarStakingV0815,
@@ -8,114 +8,78 @@ import {
   CellarV0816,
 } from "src/abi/types"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
-import { formatUSD, toEther } from "utils/formatCurrency"
+import { formatUSD } from "utils/formatCurrency"
 
 export const getUserData = async ({
-  allContracts,
-  strategiesData,
+  address,
+  contracts,
+  strategyData,
   userAddress,
   sommPrice,
 }: {
-  allContracts: AllContracts
-  strategiesData: AllStrategiesData
+  address: string
+  contracts: StrategyContracts
+  strategyData: StrategyData
   userAddress: string
   sommPrice: string
 }) => {
-  const userDataRes = await Promise.all(
-    Object.entries(allContracts)?.map(
-      async ([address, contracts]) => {
-        const strategy = Object.values(cellarDataMap).find(
-          ({ config }) => config.cellar.address === address
-        )!
-        const config: ConfigProps = strategy.config!
+  const userDataRes = await (async () => {
+    const strategy = Object.values(cellarDataMap).find(
+      ({ config }) => config.cellar.address === address
+    )!
+    const config: ConfigProps = strategy.config!
 
-        const strategyData = strategiesData.find(
-          (item) => item.address === address
-        )
+    const shares = await getUserShareBalance({
+      cellarContract: contracts.cellarContract as
+        | CellarV0815
+        | CellarV0816,
+      decimals: strategyData?.activeAsset?.decimals,
+      address: userAddress,
+    })
 
-        const shares = await getUserShareBalance({
-          cellarContract: contracts.cellarContract as
-            | CellarV0815
-            | CellarV0816,
-          decimals: strategyData?.activeAsset?.decimals,
-          address: userAddress,
-        })
-
-        const userStakes = await (async () => {
-          if (
-            !contracts.stakerContract ||
-            !contracts.stakerSigner ||
-            config.staker?.key !== StakerKey.CELLAR_STAKING_V0815
-          ) {
-            return
-          }
-
-          return await getUserStakes(
-            userAddress,
-            contracts.stakerContract as CellarStakingV0815,
-            contracts.stakerSigner as CellarStakingV0815,
-            sommPrice
-          )
-        })()
-
-        const netValue =
-          ((shares && shares.value.toNumber()) || 0) +
-          (userStakes
-            ? userStakes.claimAllRewardsUSD.toNumber()
-            : 0) +
-          (userStakes
-            ? Number(userStakes.totalBondedAmount.formatted)
-            : 0)
-
-        const userStrategyData = {
-          strategyData,
-          userData: {
-            netValue: {
-              value: netValue,
-              formatted: formatUSD(String(netValue)),
-            },
-            claimableSommReward:
-              userStakes?.totalClaimAllRewards || undefined,
-          },
-        }
-        if (netValue <= 0) return
-        return {
-          userStakes,
-          netValue,
-          userStrategyData,
-        }
+    const userStakes = await (async () => {
+      if (
+        !contracts.stakerContract ||
+        !contracts.stakerSigner ||
+        config.staker?.key !== StakerKey.CELLAR_STAKING_V0815
+      ) {
+        return
       }
-    )
-  )
 
-  const userData = userDataRes.filter((item) => item !== undefined)
+      return await getUserStakes(
+        userAddress,
+        contracts.stakerContract as CellarStakingV0815,
+        contracts.stakerSigner as CellarStakingV0815,
+        sommPrice
+      )
+    })()
 
-  const totalNetValue = userData.reduce((total, item) => {
-    return total + (item ? item.netValue : 0)
-  }, 0)
-
-  const totalSommRewards = userData.reduce((total, item) => {
-    return (
-      total +
-      (item
-        ? item.userStakes
-          ? item.userStakes.totalClaimAllRewards.value.toNumber()
-          : 0
+    const netValue =
+      ((shares && shares.value.toNumber()) || 0) +
+      (userStakes ? userStakes.claimAllRewardsUSD.toNumber() : 0) +
+      (userStakes
+        ? Number(userStakes.totalBondedAmount.formatted)
         : 0)
-    )
-  }, 0)
 
-  const data = {
-    totalNetValue: {
-      value: totalNetValue,
-      formatted: formatUSD(String(totalNetValue)),
-    },
-    totalSommRewards: {
-      value: totalSommRewards,
-      formatted: toEther(totalSommRewards, 6, false, 2),
-    },
-    strategies: userData.map((item) => item!.userStrategyData),
-  }
+    const userStrategyData = {
+      strategyData,
+      userData: {
+        netValue: {
+          value: netValue,
+          formatted: formatUSD(String(netValue)),
+        },
+        claimableSommReward:
+          userStakes?.totalClaimAllRewards || undefined,
+        userStakes,
+      },
+    }
 
-  return data
+    return {
+      userStakes,
+      netValue,
+      userStrategyData,
+    }
+  })()
+
+  return userDataRes
 }

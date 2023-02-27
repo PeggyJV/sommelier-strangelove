@@ -13,12 +13,10 @@ import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { InformationIcon } from "./_icons"
 import { Apy } from "./Apy"
-import { useTvm } from "data/hooks/useTvm"
-import { useApy } from "data/hooks/useApy"
 import { cellarDataMap } from "data/cellarDataMap"
 import { isFuture } from "date-fns"
-import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { apyLabel } from "data/uiConfig"
+import { useStrategyData } from "data/hooks/useStrategyData"
 
 interface CellarStatsYieldProps extends StackProps {
   cellarId: string
@@ -34,14 +32,15 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
     md: "neutral.700",
   })
 
-  const { data: tvm } = useTvm(cellarConfig)
+  const { data: strategyData, isLoading: isStrategyLoading } =
+    useStrategyData(cellarConfig.cellar.address)
 
-  const stakingEnd = useStakingEnd(cellarConfig)
+  const tvm = strategyData?.tvm
+  const stakingEnd = strategyData?.stakingEnd
   const isStakingStillRunning =
-    stakingEnd.data?.endDate && isFuture(stakingEnd.data?.endDate)
-  const { data: apy, isLoading: apyLoading } = useApy(
-    cellarDataMap[cellarId]
-  )
+    stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
+  const baseApy = strategyData?.baseApy
+  const rewardsApy = strategyData?.rewardsApy
 
   return (
     <HStack
@@ -76,28 +75,32 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
         </Tooltip>
       </VStack>
       <VStack spacing={1} align="center">
-        <Apy apy={apyLoading ? <Spinner /> : apy?.apy} />
+        <Apy
+          apy={isStrategyLoading ? <Spinner /> : baseApy?.formatted}
+        />
         <Box>
           <Tooltip
             hasArrow
             placement="top"
-            label={apy?.apyLabel}
+            label={apyLabel(cellarConfig)}
             bg="surface.bg"
             color="neutral.300"
           >
             <HStack spacing={1} align="center">
               <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
-              {apy?.apyLabel && (
+              {!!apyLabel(cellarConfig) && (
                 <InformationIcon color="neutral.300" boxSize={3} />
               )}
             </HStack>
           </Tooltip>
         </Box>
       </VStack>
-      {isStakingStillRunning && apy?.potentialStakingApy !== "0.0%" && (
+      {isStakingStillRunning && rewardsApy?.formatted !== "0.0%" && (
         <VStack spacing={1} align="center">
           <Apy
-            apy={apyLoading ? <Spinner /> : apy?.potentialStakingApy}
+            apy={
+              isStrategyLoading ? <Spinner /> : rewardsApy?.formatted
+            }
             color="lime.base"
           />
           <Box>

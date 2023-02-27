@@ -1573,7 +1573,7 @@ export type CellarDayDatasFragment = { __typename?: 'Query', cellarDayDatas: Arr
 export type GetAllStrategiesDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllStrategiesDataQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, tvlTotal: string, positions: Array<string>, shareValue: string, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }>, asset: { __typename?: 'TokenERC20', id: string, symbol: string, decimals: number } }> };
+export type GetAllStrategiesDataQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, tvlTotal: string, positions: Array<string>, positionDistribution: Array<string>, shareValue: string, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }>, asset: { __typename?: 'TokenERC20', id: string, symbol: string, decimals: number } }> };
 
 export type GetAllTimeShareValueQueryVariables = Exact<{
   cellarAddress: Scalars['ID'];
@@ -1679,7 +1679,7 @@ export type GetStrategyDataQueryVariables = Exact<{
 }>;
 
 
-export type GetStrategyDataQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, tvlTotal: string, positions: Array<string>, shareValue: string, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }>, asset: { __typename?: 'TokenERC20', id: string, symbol: string, decimals: number } } | null };
+export type GetStrategyDataQuery = { __typename?: 'Query', cellar?: { __typename?: 'Cellar', id: string, tvlTotal: string, positions: Array<string>, positionDistribution: Array<string>, shareValue: string, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }>, asset: { __typename?: 'TokenERC20', id: string, symbol: string, decimals: number } } | null };
 
 export type GetWeeklyShareValueQueryVariables = Exact<{
   epoch: Scalars['Int'];
@@ -1778,6 +1778,7 @@ export const GetAllStrategiesDataDocument = gql`
       decimals
     }
     positions
+    positionDistribution
     shareValue
   }
 }
@@ -2021,6 +2022,7 @@ export const GetStrategyDataDocument = gql`
       decimals
     }
     positions
+    positionDistribution
     shareValue
   }
 }

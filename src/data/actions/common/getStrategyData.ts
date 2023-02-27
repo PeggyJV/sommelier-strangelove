@@ -17,6 +17,7 @@ import { getChanges } from "./getChanges"
 import { getTvm } from "./getTvm"
 import { formatDecimals } from "utils/bigNumber"
 import { GetStrategyDataQuery } from "generated/subgraph"
+import { getPositon } from "./getPosition"
 
 export const getStrategyData = async ({
   address,
@@ -82,6 +83,13 @@ export const getStrategyData = async ({
       return tokens
     })()
 
+    const positionDistribution = (() => {
+      return getPositon(
+        subgraphData?.positions,
+        subgraphData?.positionDistribution
+      )
+    })()
+
     const stakingEnd = await getStakingEnd(
       stakerContract as CellarStakingV0815
     )
@@ -129,25 +137,26 @@ export const getStrategyData = async ({
     })()
 
     return {
-      address,
-      description,
-      slug,
-      logo,
-      name,
-      type,
-      provider,
       activeAsset,
-      tvm,
-      tradedAssets,
-      protocols,
-      launchDate,
-      isNew,
-      stakingEnd,
-      rewardsApy,
+      address,
       baseApy,
       changes,
+      description,
+      isNew,
       isStakingOngoing,
+      launchDate,
+      logo,
+      name,
+      positionDistribution,
+      protocols,
+      provider,
+      rewardsApy,
+      slug,
+      stakingEnd,
       tokenPrice,
+      tradedAssets,
+      tvm,
+      type,
     }
   })()
   return data

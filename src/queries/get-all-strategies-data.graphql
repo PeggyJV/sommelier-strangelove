@@ -12,6 +12,7 @@ query GetAllStrategiesData {
       decimals
     }
     positions
+    positionDistribution
     shareValue
   }
 }

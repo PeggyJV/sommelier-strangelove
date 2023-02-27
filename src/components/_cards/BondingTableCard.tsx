@@ -24,13 +24,13 @@ import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { useUserStakes } from "data/hooks/useUserStakes"
 import { bondingPeriodOptions } from "data/uiConfig"
-import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { formatDistanceToNow, isFuture } from "date-fns"
 import { LighterSkeleton } from "components/_skeleton"
 import { formatDistance } from "utils/formatDistance"
 import { useGeo } from "context/geoContext"
+import { useStrategyData } from "data/hooks/useStrategyData"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -45,12 +45,15 @@ const formatTrancheNumber = (number: number): string => {
 const BondingTableCard: VFC<TableProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
+  const { data: strategyData } = useStrategyData(
+    cellarConfig.cellar.address
+  )
+  const {
+    data: userData,
+    isLoading,
+    refetch,
+  } = useUserStrategyData(cellarConfig.cellar.address)
   const { stakerSigner } = useCreateContracts(cellarConfig)
-  const { data: userStakesRes, refetch: userStakesRefetch } =
-    useUserStakes(cellarConfig)
-  const { userStakes, claimAllRewards } = userStakesRes || {}
-
-  const { doHandleTransaction } = useHandleTransaction()
   const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
     new Set()
   )
@@ -58,7 +61,11 @@ const BondingTableCard: VFC<TableProps> = (props) => {
     new Set()
   )
 
-  const stakingEnd = useStakingEnd(cellarConfig)
+  const stakingEnd = strategyData?.stakingEnd
+  const userDatas = userData?.userStakes
+  const { userStakes, claimAllRewards } = userDatas || {}
+
+  const { doHandleTransaction } = useHandleTransaction()
 
   const geo = useGeo()
 
@@ -85,7 +92,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.delete(id)
         return newState
       })
-      userStakesRefetch()
+      refetch()
     } catch (error) {
       setUnstakeLoading((oldState) => {
         const newState = new Set(oldState)
@@ -121,7 +128,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.delete(id)
         return newState
       })
-      userStakesRefetch()
+      refetch()
     } catch (error) {
       setUnbondLoading((oldState) => {
         const newState = new Set(oldState)
@@ -179,24 +186,19 @@ const BondingTableCard: VFC<TableProps> = (props) => {
       <TableContainer>
         <HStack justifyContent="space-between" px={4} pt={2} pb={4}>
           <Heading fontSize="lg">Active Bonds</Heading>
-          <LighterSkeleton
-            isLoaded={!stakingEnd.isLoading}
-            height={4}
-          >
-            {stakingEnd.data?.endDate &&
-              isFuture(stakingEnd.data?.endDate) && (
-                <Text fontSize="xs">
-                  {stakingEnd.data?.endDate &&
-                  isFuture(stakingEnd.data.endDate)
-                    ? `Ends in ${formatDistanceToNow(
-                        stakingEnd.data.endDate,
-                        {
-                          locale: { formatDistance },
-                        }
-                      )}`
-                    : "Program Ended"}
-                </Text>
-              )}
+          <LighterSkeleton isLoaded={!isLoading} height={4}>
+            {stakingEnd?.endDate && isFuture(stakingEnd?.endDate) && (
+              <Text fontSize="xs">
+                {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
+                  ? `Ends in ${formatDistanceToNow(
+                      stakingEnd.endDate,
+                      {
+                        locale: { formatDistance },
+                      }
+                    )}`
+                  : "Program Ended"}
+              </Text>
+            )}
           </LighterSkeleton>
         </HStack>
 

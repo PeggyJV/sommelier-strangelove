@@ -42,7 +42,7 @@ export const usePosition = (config: ConfigProps) => {
     ],
     async () => {
       if (isEnabled) {
-        return await getPositon(positions, positionDistribution)
+        return getPositon(positions, positionDistribution)
       }
       throw new Error("UNKNOWN CONTRACT")
     },
