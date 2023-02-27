@@ -13,12 +13,16 @@ import { ExternalLinkIcon } from "components/_icons"
 import { Disclaimer } from "./Disclaimer"
 import { About } from "./About"
 import { Overview } from "./Overview"
+import { useRouter } from "next/router"
+import { cellarDataMap } from "data/cellarDataMap"
 
 const Footer: VFC<ContainerProps> = (props) => {
+  const id = useRouter().query.id as string | undefined
+  const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
   return (
     <Container maxW="container.lg">
       <About />
-      <Overview />
+      {!selectedStrategy && <Overview />}
       <Disclaimer />
       <Container
         as="footer"
