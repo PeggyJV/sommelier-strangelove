@@ -1,37 +1,45 @@
 import { PercentageText } from "components/PercentageText"
 import { StrategySection } from "components/_tables/StrategySection"
+import { Timeline } from "data/context/homeContext"
 import { CellValue } from "react-table"
 
-export const SidebarColumn = [
-  {
-    Header: "Strategy",
-    accessor: "name",
-    Cell: ({ row }: any) => {
-      console.log(row)
-      return (
-        <StrategySection
-          icon={row.original.userStrategyData.strategyData.logo}
-          title={row.original.userStrategyData.strategyData.name}
-          description={
-            row.original.userStrategyData.strategyData.description
-          }
-          netValue={
-            row.original.userStrategyData.userData.netValue.formatted
-          }
-          rewards={
-            row.original.userStrategyData.userData.claimableSommReward
-              .formatted
-          }
-        />
-      )
+type SidebarColumnProps = {
+  timeline: Timeline
+}
+
+export const SidebarColumn = ({ timeline }: SidebarColumnProps) => {
+  return [
+    {
+      Header: "Strategy",
+      accessor: "name",
+      Cell: ({ row }: any) => {
+        console.log(row)
+        return (
+          <StrategySection
+            icon={row.original.userStrategyData.strategyData.logo}
+            title={row.original.userStrategyData.strategyData.name}
+            description={
+              row.original.userStrategyData.strategyData.description
+            }
+            netValue={
+              row.original.userStrategyData.userData.netValue
+                .formatted
+            }
+            rewards={
+              row.original.userStrategyData.userData
+                .claimableSommReward.formatted
+            }
+          />
+        )
+      },
+      disableSortBy: true,
     },
-    disableSortBy: true,
-  },
-  {
-    Header: "1D",
-    accessor: "userStrategyData.strategyData.changes.daily",
-    Cell: ({ cell: { value } }: CellValue) => (
-      <PercentageText data={value} arrowT2 fontWeight={600} />
-    ),
-  },
-]
+    {
+      Header: timeline.title,
+      accessor: `userStrategyData.strategyData.changes.${timeline.value}`,
+      Cell: ({ cell: { value } }: CellValue) => (
+        <PercentageText data={value} arrowT2 fontWeight={600} />
+      ),
+    },
+  ]
+}
