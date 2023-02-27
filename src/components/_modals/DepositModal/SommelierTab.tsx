@@ -49,7 +49,7 @@ import { useImportToken } from "hooks/web3/useImportToken"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { CellarNameKey } from "data/types"
 import { useStrategyData } from "data/hooks/useStrategyData"
-import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 
 type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
@@ -91,7 +91,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
-  const { refetch } = useUserDataAllStrategies()
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
