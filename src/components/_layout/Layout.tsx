@@ -1,38 +1,38 @@
-import { Box, Container, Flex } from "@chakra-ui/react"
-import Footer from "components/Footer"
-import { Nav } from "components/Nav"
-import { Sidebar } from "components/_sidebar"
-import { FC } from "react"
-import { useAccount } from "wagmi"
+import { VFC } from "react"
+import { Box, Container, Flex, FlexProps } from "@chakra-ui/react"
+import { BackgroundAssets } from "../BackgroundAssets"
+import { Nav } from "../Nav"
+import Footer from "../Footer"
+import { useAccount, useNetwork } from "wagmi"
+import { WrongNetworkBanner } from "../_banners/WrongNetworkBanner"
+import { useIsMounted } from "hooks/utils/useIsMounted"
 
-export const Layout: FC = ({ children }) => {
+export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   const { isConnected } = useAccount()
+  const { chain } = useNetwork()
+  const isMounted = useIsMounted()
+
   return (
     <Box>
       <Box display="block">
-        <Flex minH="100vh" bg="#1A1A23" flexDir="column">
+        <BackgroundAssets />
+        <Flex minH="100vh" flexDir="column" {...rest}>
           <Nav />
           <Container
             as="main"
             flex={1}
-            pt="120px"
-            maxW="container.xl"
-            px={{ base: "16px", md: "30px", lg: "40px" }}
-            flexDir="row"
+            pt={40}
+            maxW="container.lg"
+            px={{ base: 0, sm: 4 }}
           >
-            <Flex wrap="wrap-reverse" gap={{ base: "44px", lg: 8 }}>
-              <Box w={{ base: "full", lg: "900px" }} flex={7}>
-                {children}
-              </Box>
-              {isConnected && (
-                <Box minW={{ base: "full", lg: "300px" }} flex={3}>
-                  <Sidebar />
-                </Box>
-              )}
-            </Flex>
+            {isMounted && isConnected && chain?.id !== 1 && (
+              <WrongNetworkBanner />
+            )}
+
+            {children}
           </Container>
+          <Footer />
         </Flex>
-        <Footer />
       </Box>
     </Box>
   )

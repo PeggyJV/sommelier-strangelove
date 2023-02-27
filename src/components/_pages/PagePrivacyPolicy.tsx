@@ -1,6 +1,6 @@
 import { Box, Heading } from "@chakra-ui/react"
 import { PortableText } from "@portabletext/react"
-import { Layout } from "components/Layout"
+import { Layout } from "components/_layout/Layout"
 import { PrivacyAndTermsText } from "components/PortableText/PrivacyAndTermsText"
 import { NextPage } from "next"
 import { PrivacyPolicyProps } from "pages/privacy-policy"
