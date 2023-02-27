@@ -44,6 +44,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
           : "lime.base"
       }
       spacing={1}
+      justifyContent="flex-end"
     >
       {!isDataZero && (
         <PercentageHeading

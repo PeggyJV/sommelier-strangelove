@@ -26,7 +26,7 @@ export const StrategyTabColumn = [
     Header: "TVM",
     accessor: "tvm.value",
     Cell: ({ row }: any) => (
-      <Text fontWeight={600} fontSize="12px">
+      <Text fontWeight={600} fontSize="12px" textAlign="right">
         {row.original.tvm.formatted}
       </Text>
     ),

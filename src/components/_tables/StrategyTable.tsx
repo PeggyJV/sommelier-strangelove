@@ -110,7 +110,11 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
                     textTransform="unset"
                     key={index}
                   >
-                    <Flex alignItems="center" gap={2}>
+                    <Flex
+                      alignItems="center"
+                      gap={2}
+                      justifyContent="end"
+                    >
                       {column.render("Header")}
                       <Icon as={SortingArrowIcon} boxSize={3} />
                     </Flex>
