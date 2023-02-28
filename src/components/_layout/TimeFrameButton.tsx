@@ -51,13 +51,13 @@ export const TimeFrameButton = ({
       zIndex={999}
       className={hideShow}
     >
-      {timeArray.map((button, i) => {
+      {timeArray.map((button) => {
         const { title, onClick, value } = button
         const isSelected = value === timeline.value
 
         return (
           <Button
-            key={i}
+            key={value}
             variant="unstyled"
             color="white"
             fontWeight={600}
