@@ -1,19 +1,55 @@
 import { Button, HStack } from "@chakra-ui/react"
 import { useHome } from "data/context/homeContext"
+import { useScrollDirection } from "hooks/utils/useScrollDirection"
+import { useEffect, useState } from "react"
 
-export const TimeFrameButton = () => {
+export const TimeFrameButton = ({
+  containerHeight,
+}: {
+  containerHeight?: number
+}) => {
   const { timeArray, timeline } = useHome()
+
+  const [scrolled, setScrolled] = useState<boolean>(false)
+  const scrollDirection = useScrollDirection()
+
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      if (
+        window.scrollY >=
+        Number(containerHeight) - Number(containerHeight) / 2
+      ) {
+        setScrolled(true)
+      } else {
+        setScrolled(false)
+      }
+    })
+    return () => {
+      window.removeEventListener("scroll", () => {})
+    }
+  }, [containerHeight])
+
+  const hideShow = `timeframe ${
+    scrolled && scrollDirection === "down" && "down"
+  }`
+
   return (
     <HStack
       w="17rem"
       h="20"
       bg="surface.blackTransparent"
       mx="auto"
-      mt={-4}
+      my={8}
       backdropFilter="blur(8px)"
       justifyContent="center"
       rounded="100px"
       boxShadow="2xl"
+      position="fixed"
+      bottom={0}
+      right={0}
+      left={0}
+      zIndex={999}
+      className={hideShow}
     >
       {timeArray.map((button, i) => {
         const { title, onClick, value } = button
@@ -26,7 +62,7 @@ export const TimeFrameButton = () => {
             color="white"
             fontWeight={600}
             fontSize="1rem"
-            p={4}
+            px={4}
             py={1}
             rounded="100px"
             bg={isSelected ? "surface.primary" : "none"}
@@ -34,10 +70,8 @@ export const TimeFrameButton = () => {
             borderColor={
               isSelected ? "purple.dark" : "surface.tertiary"
             }
-            borderWidth={isSelected ? 1 : 0}
-            onClick={() => {
-              onClick()
-            }}
+            borderWidth={isSelected ? 2 : 0}
+            onClick={onClick}
           >
             {title}
           </Button>

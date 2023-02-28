@@ -90,7 +90,7 @@ export const SidebarTable: VFC<StrategyTableProps> = ({
     useSortBy
   )
   return (
-    <TableContainer pb={28}>
+    <TableContainer>
       <Table
         {...getTableProps()}
         variant="unstyled"
