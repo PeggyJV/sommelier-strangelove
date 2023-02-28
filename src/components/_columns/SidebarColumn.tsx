@@ -13,7 +13,6 @@ export const SidebarColumn = ({ timeline }: SidebarColumnProps) => {
       Header: "Strategy",
       accessor: "name",
       Cell: ({ row }: any) => {
-        console.log(row)
         return (
           <StrategySection
             icon={row.original.userStrategyData.strategyData.logo}
