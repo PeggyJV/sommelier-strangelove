@@ -18,12 +18,19 @@ import { useTable, useSortBy } from "react-table"
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { useRouter } from "next/router"
 import { getUserDataAllStrategies } from "data/actions/common/getUserDataAllStrategies"
+import { analytics } from "utils/analytics"
+import { DIRECT, landingType } from "utils/landingType"
 
 interface BorderTrProps extends TableRowProps {
   slug: string
+  name: string
 }
 
-export const BorderTr: VFC<BorderTrProps> = ({ slug, ...props }) => {
+export const BorderTr: VFC<BorderTrProps> = ({
+  slug,
+  name,
+  ...props
+}) => {
   const router = useRouter()
   return (
     <Tr
@@ -35,7 +42,25 @@ export const BorderTr: VFC<BorderTrProps> = ({ slug, ...props }) => {
         bg: "surface.secondary",
       }}
       cursor="pointer"
-      onClick={() => router.push(slug)}
+      onClick={() => {
+        router.push(slug)
+        const landingTyp = landingType()
+        analytics.track("strategy.selection", {
+          strategyCard: name,
+          landingType: landingType(),
+        })
+        if (landingTyp === DIRECT) {
+          analytics.track("strategy.selection.direct", {
+            strategyCard: name,
+            landingType: landingTyp,
+          })
+        } else {
+          analytics.track("strategy.selection.indirect", {
+            strategyCard: name,
+            landingType: landingTyp,
+          })
+        }
+      }}
       _first={{
         td: {
           _first: {
@@ -145,6 +170,7 @@ export const SidebarTable: VFC<StrategyTableProps> = ({
               <BorderTr
                 {...row.getRowProps()}
                 key={indexRow}
+                name={row.original.userStrategyData.strategyData.name}
                 slug={
                   "strategies/" +
                   row.original.userStrategyData.strategyData.slug
