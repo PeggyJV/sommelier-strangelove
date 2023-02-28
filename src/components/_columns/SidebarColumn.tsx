@@ -39,6 +39,7 @@ export const SidebarColumn = ({ timeline }: SidebarColumnProps) => {
       Cell: ({ cell: { value } }: CellValue) => (
         <PercentageText data={value} arrowT2 fontWeight={600} />
       ),
+      sortType: "basic",
     },
   ]
 }

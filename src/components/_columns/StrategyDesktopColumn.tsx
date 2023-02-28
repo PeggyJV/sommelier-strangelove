@@ -152,6 +152,7 @@ export const StrategyDesktopColumn = ({
       Cell: ({ cell: { value } }: CellValue) => (
         <PercentageText data={value} arrowT2 fontWeight={600} />
       ),
+      sortType: "basic",
     },
   ]
 }
