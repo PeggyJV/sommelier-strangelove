@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
+import { CellarType } from "data/types"
 import React from "react"
 import { StrategyDate } from "./StrategyDate"
 
@@ -33,7 +34,8 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   netValue,
   rewards,
 }) => {
-  const strategyType = type === 0 ? "Yield" : "Portfolio"
+  const strategyType =
+    type === CellarType.yieldStrategies ? "Yield" : "Portfolio"
   return (
     <Tooltip
       label={description}

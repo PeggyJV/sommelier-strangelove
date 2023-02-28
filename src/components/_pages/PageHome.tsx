@@ -8,6 +8,7 @@ import { TransparentSkeleton } from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
 import { useHome } from "data/context/homeContext"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
+import { CellarType } from "data/types"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
 
@@ -35,10 +36,18 @@ export const PageHome = () => {
 
   const strategyData = useMemo(() => {
     if (type === "Yield") {
-      return data?.filter(({ type }) => type === 0) || []
+      return (
+        data?.filter(
+          ({ type }) => type === CellarType.yieldStrategies
+        ) || []
+      )
     }
     if (type === "Portofolio") {
-      return data?.filter(({ type }) => type === 1) || []
+      return (
+        data?.filter(
+          ({ type }) => type === CellarType.automatedPortfolio
+        ) || []
+      )
     }
     return data || []
   }, [data, type])
