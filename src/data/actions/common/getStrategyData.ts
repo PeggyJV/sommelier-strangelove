@@ -49,6 +49,7 @@ export const getStrategyData = async ({
     const type = strategy.cellarType
     const provider = strategy.strategyProvider
     const launchDate = strategy.launchDate
+    const stakingLaunchDate = strategy.stakingLaunchDate
     const isNew =
       !!launchDate &&
       isBefore(launchDate, add(new Date(), { weeks: 2 }))
@@ -157,6 +158,7 @@ export const getStrategyData = async ({
       tradedAssets,
       tvm,
       type,
+      stakingLaunchDate,
     }
   })()
   return data

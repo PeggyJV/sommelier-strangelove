@@ -71,6 +71,7 @@ export interface CellarDataMap {
     tradedAssets?: string[]
     exchanges?: Exchange[]
     launchDate?: Date
+    stakingLaunchDate?: Date
     cellarType: CellarType
     description: string
     strategyType: string
