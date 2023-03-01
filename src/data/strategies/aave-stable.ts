@@ -18,6 +18,16 @@ export const aaveStable = {
   strategyTypeTooltip: "Strategy uses Stablecoin lending",
   managementFee: "0.25%",
   protocols: "AAVE",
+  tradedAssets: [
+    "USDC",
+    "BUSD",
+    "DAI",
+    "FRAX",
+    "GUSD",
+    "USDP",
+    "sUSD",
+    "USDT",
+  ],
   strategyAssets: [
     "USDC",
     "GUSD",
