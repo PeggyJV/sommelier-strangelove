@@ -165,7 +165,6 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
         >
           {rows.map((row, indexRow) => {
             prepareRow(row)
-            console.log(row)
             return (
               <BorderTr
                 {...row.getRowProps()}
