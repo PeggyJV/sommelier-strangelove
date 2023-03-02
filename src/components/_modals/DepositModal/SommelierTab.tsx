@@ -33,6 +33,7 @@ import {
 } from "wagmi"
 import { ethers } from "ethers"
 import { useBrandedToast } from "hooks/chakra"
+import { insertEvent } from "utils/supabase"
 
 interface FormValues {
   depositAmount: number
@@ -194,6 +195,11 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
     const slippage = data?.slippage
 
     if (!erc20Contract) return
+    insertEvent({
+      event: "deposit.started",
+      address: address ?? "",
+      cellar: cellarConfig.cellar.address,
+    })
     analytics.track("deposit.started", {
       ...baseAnalytics,
       stable: tokenSymbol,
@@ -329,10 +335,17 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
       refetchNetValue()
 
       if (depositResult?.data?.transactionHash) {
+        insertEvent({
+          event: "deposit.succeeded",
+          address: address ?? "",
+          cellar: cellarConfig.cellar.address,
+          transaction_hash: depositResult.data.transactionHash,
+        })
         analytics.track("deposit.succeeded", {
           ...baseAnalytics,
           stable: tokenSymbol,
           value: depositAmount,
+          transaction_hash: depositResult.data.transactionHash,
         })
 
         activeAssetRefetch()
