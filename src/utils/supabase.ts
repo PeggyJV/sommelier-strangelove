@@ -26,16 +26,19 @@ export async function insertEvent(options: {
   if (!enabled) return
 
   const { event, address, cellar, transaction_hash } = options
+  const user_agent = window.navigator.userAgent
 
   switch (event) {
     case "wallet.connect-succeeded": {
-      await supabase.from("event_connect").insert({ address })
+      await supabase
+        .from("event_connect")
+        .insert({ address, user_agent })
       break
     }
     case "deposit.started": {
       await supabase
         .from("event_deposit_started")
-        .insert({ address, cellar })
+        .insert({ address, cellar, user_agent })
       break
     }
     case "deposit.succeeded": {
@@ -43,6 +46,7 @@ export async function insertEvent(options: {
         address,
         cellar,
         transaction_hash,
+        user_agent,
       })
       break
     }
