@@ -11,10 +11,11 @@ export async function insertEvent(options: {
   event: string
   address: string
   cellar?: string
+  transactionHash?: string
 }) {
   if (!enabled) return
 
-  const { event, address, cellar } = options
+  const { event, address, cellar, transactionHash } = options
 
   switch (event) {
     case "wallet.connect-succeeded": {
@@ -30,7 +31,7 @@ export async function insertEvent(options: {
     case "deposit.succeeded": {
       await supabase
         .from("event_deposit_success")
-        .insert({ address, cellar })
+        .insert({ address, cellar, transactionHash })
       break
     }
   }
