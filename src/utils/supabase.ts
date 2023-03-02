@@ -3,9 +3,19 @@ import { createClient } from "@supabase/supabase-js"
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
 const supabasePubKey = process.env.NEXT_PUBLIC_SUPABASE_PUB_KEY ?? ""
 
+class SupabaseNoop {
+  async from(tableName: string) {
+    return { insert: function (options: any) {} }
+  }
+}
+
 // Create a single supabase client for interacting with your database
-const supabase = createClient(supabaseUrl, supabasePubKey)
 const enabled = supabaseUrl.length > 0 && supabasePubKey.length > 0
+
+let supabase: any = new SupabaseNoop()
+if (enabled) {
+  supabase = createClient(supabaseUrl, supabasePubKey)
+}
 
 export async function insertEvent(options: {
   event: string
