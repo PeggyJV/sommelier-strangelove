@@ -339,13 +339,13 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           event: "deposit.succeeded",
           address: address ?? "",
           cellar: cellarConfig.cellar.address,
-          transactionHash: depositResult.data.transactionHash,
+          transaction_hash: depositResult.data.transactionHash,
         })
         analytics.track("deposit.succeeded", {
           ...baseAnalytics,
           stable: tokenSymbol,
           value: depositAmount,
-          transactionHash: depositResult.data.transactionHash,
+          transaction_hash: depositResult.data.transactionHash,
         })
 
         activeAssetRefetch()
