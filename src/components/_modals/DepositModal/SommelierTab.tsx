@@ -357,10 +357,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
         activeAssetRefetch()
 
-        if (!notifyModal.isOpen) {
-          analytics.track("notify.modal-opened")
-        }
-
         update({
           heading: cellarName + " Cellar Deposit",
           body: (
@@ -398,9 +394,20 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
       activeAssetRefetch()
 
-      props.onClose()
-      //@ts-ignore
-      notifyModal.onOpen()
+      const currentStrategies = window.location.pathname
+        .split("/")[2]
+        .replace(/-/g, " ")
+
+      const isRealYield = currentStrategies === "Real Yield USD"
+
+      if (!notifyModal.isOpen) {
+        analytics.track("notify.modal-opened")
+      }
+      if (isRealYield) {
+        props.onClose()
+        //@ts-ignore
+        notifyModal.onOpen()
+      }
 
       if (depositResult?.error) {
         analytics.track("deposit.failed", {
