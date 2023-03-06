@@ -356,9 +356,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         })
 
         activeAssetRefetch()
-        props.onClose()
-        //@ts-ignore
-        notifyModal.onOpen()
 
         if (!notifyModal.isOpen) {
           analytics.track("notify.modal-opened")
@@ -400,6 +397,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       }
 
       activeAssetRefetch()
+
+      props.onClose()
+      //@ts-ignore
+      notifyModal.onOpen()
 
       if (depositResult?.error) {
         analytics.track("deposit.failed", {
