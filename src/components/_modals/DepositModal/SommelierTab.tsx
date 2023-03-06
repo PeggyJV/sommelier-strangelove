@@ -10,6 +10,7 @@ import {
   Avatar,
   Flex,
   IconButton,
+  UseDisclosureProps,
 } from "@chakra-ui/react"
 import { useEffect, useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
@@ -58,9 +59,15 @@ import { useImportToken } from "hooks/web3/useImportToken"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { CellarNameKey } from "data/types"
 
-type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
+interface DepositModalProps
+  extends Pick<ModalProps, "isOpen" | "onClose"> {
+  notifyModal: UseDisclosureProps
+}
 
-export const SommelierTab: VFC<DepositModalProps> = (props) => {
+export const SommelierTab: VFC<DepositModalProps> = ({
+  notifyModal,
+  ...props
+}) => {
   const id = useRouter().query.id as string
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
@@ -350,6 +357,12 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
 
         activeAssetRefetch()
         props.onClose()
+        //@ts-ignore
+        notifyModal.onOpen()
+
+        if (!notifyModal.isOpen) {
+          analytics.track("notify.modal-opened")
+        }
 
         update({
           heading: cellarName + " Cellar Deposit",
@@ -429,6 +442,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           stable: tokenSymbol,
           value: depositAmount,
         })
+
         addToast({
           heading: cellarName + " Deposit",
           body: <Text>Deposit Cancelled</Text>,
