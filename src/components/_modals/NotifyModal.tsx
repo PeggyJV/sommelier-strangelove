@@ -49,6 +49,10 @@ export const NotifyModal = (
                 name: "email",
                 value: email,
               },
+              {
+                name: "website",
+                value: window.location.href,
+              },
             ],
           },
           config
