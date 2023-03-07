@@ -10,6 +10,7 @@ import {
   Avatar,
   Flex,
   IconButton,
+  UseDisclosureProps,
 } from "@chakra-ui/react"
 import { useEffect, useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
@@ -58,9 +59,15 @@ import { useImportToken } from "hooks/web3/useImportToken"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { CellarNameKey } from "data/types"
 
-type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
+interface DepositModalProps
+  extends Pick<ModalProps, "isOpen" | "onClose"> {
+  notifyModal: UseDisclosureProps
+}
 
-export const SommelierTab: VFC<DepositModalProps> = (props) => {
+export const SommelierTab: VFC<DepositModalProps> = ({
+  notifyModal,
+  ...props
+}) => {
   const id = useRouter().query.id as string
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
@@ -349,7 +356,6 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
         })
 
         activeAssetRefetch()
-        props.onClose()
 
         update({
           heading: cellarName + " Cellar Deposit",
@@ -387,6 +393,21 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
       }
 
       activeAssetRefetch()
+
+      const currentStrategies = window.location.pathname
+        .split("/")[2]
+        .replace(/-/g, " ")
+
+      const isRealYield = currentStrategies === "Real Yield USD"
+
+      if (!notifyModal.isOpen) {
+        analytics.track("notify.modal-opened")
+      }
+      if (isRealYield) {
+        props.onClose()
+        //@ts-ignore
+        notifyModal.onOpen()
+      }
 
       if (depositResult?.error) {
         analytics.track("deposit.failed", {
@@ -429,6 +450,7 @@ export const SommelierTab: VFC<DepositModalProps> = (props) => {
           stable: tokenSymbol,
           value: depositAmount,
         })
+
         addToast({
           heading: cellarName + " Deposit",
           body: <Text>Deposit Cancelled</Text>,
