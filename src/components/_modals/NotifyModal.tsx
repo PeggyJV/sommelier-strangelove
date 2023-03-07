@@ -91,18 +91,18 @@ export const NotifyModal = (
 
   return (
     <BaseModal
-      heading={isRealYield ? "Real Yield USD" : "Get Notified"}
+      heading={
+        isRealYield
+          ? "Get Exclusive Real Yield Updates"
+          : "Get Notified"
+      }
       headingProps={{
         fontSize: "2xl",
       }}
       {...rest}
     >
       <form onSubmit={handleSubmit(sendEmail)}>
-        <Text
-          textTransform="capitalize"
-          color="neutral.300"
-          fontSize="sm"
-        >
+        <Text color="neutral.300" fontSize="sm">
           {isRealYield
             ? "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose."
             : "Sign up for new strategy launch and other product  announcements—we’ll only use your email for this purpose."}
