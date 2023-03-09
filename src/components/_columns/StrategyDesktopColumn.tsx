@@ -3,6 +3,7 @@ import {
   AvatarGroup,
   Box,
   Flex,
+  HStack,
   Text,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
@@ -45,6 +46,9 @@ export const StrategyDesktopColumn = ({
       accessor: "protocols",
       Cell: ({ cell: { value } }: CellValue) => {
         const protocols = typeof value === "string" ? [value] : value
+        const getFirst3Value = protocols.slice(0, 3)
+        const getRemainingValue =
+          protocols.length - getFirst3Value.length
         const [isHover, setIsHover] = useState(false)
         const handleMouseOver = () => {
           setIsHover(true)
@@ -57,19 +61,24 @@ export const StrategyDesktopColumn = ({
             onMouseLeave={handleMouseLeave}
             onMouseOver={handleMouseOver}
           >
-            <AvatarGroup size="sm" max={3}>
-              {protocols.map((protocol: string) => {
-                const data = getProtocols(protocol)
-                return (
-                  <Avatar
-                    name={data.title}
-                    src={data.icon}
-                    key={data.title}
-                    bgColor="white"
-                  />
-                )
-              })}
-            </AvatarGroup>
+            <HStack>
+              <AvatarGroup size="sm" max={3}>
+                {getFirst3Value.map((protocol: string) => {
+                  const data = getProtocols(protocol)
+                  return (
+                    <Avatar
+                      name={data.title}
+                      src={data.icon}
+                      key={data.title}
+                      bgColor="white"
+                    />
+                  )
+                })}
+              </AvatarGroup>
+              {protocols.length > 3 && (
+                <Text fontWeight={600}>+{getRemainingValue}</Text>
+              )}
+            </HStack>
             <Flex alignItems="center" direction="column">
               {isHover && <AvatarTooltip protocols={protocols} />}
             </Flex>
@@ -82,6 +91,8 @@ export const StrategyDesktopColumn = ({
       Header: "Assets",
       accessor: "tradedAssets",
       Cell: ({ cell: { value } }: CellValue) => {
+        const getFirst3Value = value.slice(0, 3)
+        const getRemainingValue = value.length - getFirst3Value.length
         const [isHover, setIsHover] = useState(false)
         const handleMouseOver = () => {
           setIsHover(true)
@@ -100,17 +111,22 @@ export const StrategyDesktopColumn = ({
             onMouseLeave={handleMouseLeave}
             onMouseOver={handleMouseOver}
           >
-            <AvatarGroup size="sm" max={3}>
-              {value?.map((asset: Token) => {
-                return (
-                  <Avatar
-                    name={asset?.symbol}
-                    src={asset?.src}
-                    key={asset?.symbol}
-                  />
-                )
-              })}
-            </AvatarGroup>
+            <HStack>
+              <AvatarGroup size="sm">
+                {getFirst3Value?.map((asset: Token) => {
+                  return (
+                    <Avatar
+                      name={asset?.symbol}
+                      src={asset?.src}
+                      key={asset?.symbol}
+                    />
+                  )
+                })}
+              </AvatarGroup>
+              {value.length > 3 && (
+                <Text fontWeight={600}>+{getRemainingValue}</Text>
+              )}
+            </HStack>
             <Flex alignItems="center" direction="column">
               {isHover && <AvatarTooltip tradedAssets={value} />}
             </Flex>
