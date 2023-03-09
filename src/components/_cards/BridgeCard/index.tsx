@@ -37,7 +37,7 @@ export const BridgeCard: React.FC = () => {
       </Heading>
       <Text fontSize="md" mb="41px">
         Bridge your Ethereum SOMM back home to its native Cosmos
-        representation on Sommelier.{" "}
+        representation on Sommelier or from Sommelier to Ethereum.{" "}
         <Link
           ml={1}
           fontSize="xs"
