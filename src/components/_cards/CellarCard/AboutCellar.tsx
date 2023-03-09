@@ -1,7 +1,5 @@
 import { Flex, Stack, Text } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useApy } from "data/hooks/useApy"
-import { useTvm } from "data/hooks/useTvm"
 import {
   apyLabel,
   intervalGainPctTitleContent,
@@ -18,16 +16,13 @@ import { CellarCardData } from "./CellarCardDisplay"
 
 import { UserStats } from "./UserStats"
 import { CellarStats, CellarStatsLabel } from "./CellarStats"
-import { useDailyChange } from "data/hooks/useDailyChange"
-import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { PercentageText } from "components/PercentageText"
-import { useIntervalGain } from "data/hooks/useIntervalGain"
 import { isComingSoon } from "utils/isComingSoon"
 import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
 import { TransparentSkeleton } from "components/_skeleton"
-import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { isFuture } from "date-fns"
+import { useStrategyData } from "data/hooks/useStrategyData"
 
 interface Props {
   data: CellarCardData
@@ -35,19 +30,23 @@ interface Props {
 
 export const AboutCellar: React.FC<Props> = ({ data }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
-  const launchDate = cellarDataMap[data.cellarId].launchDate
-  const { data: tvm } = useTvm(cellarConfig)
-  const { data: apy, isLoading: apyLoading } = useApy(
-    cellarDataMap[data.cellarId]
+
+  const { data: strategyData, isLoading } = useStrategyData(
+    cellarConfig.cellar.address
   )
-  const intervalGainPct = useIntervalGain({
-    config: cellarConfig,
-    timeline: intervalGainTimeline(cellarConfig),
-  })
+
+  const launchDate = strategyData?.launchDate
+  const tvm = strategyData?.tvm
+  const baseApy = strategyData?.baseApy
+  const rewardsApy = strategyData?.rewardsApy
+  const intervalGain =
+    strategyData?.changes[intervalGainTimeline(cellarConfig)]
+  const stakingEnd = strategyData?.stakingEnd
   const countdown = isComingSoon(launchDate)
-  const stakingEnd = useStakingEnd(cellarConfig)
+
   const isStakingStillRunning =
-    stakingEnd.data?.endDate && isFuture(stakingEnd.data?.endDate)
+    stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
+  const apyTooltip = apyLabel(cellarConfig)
 
   const launchingDate = (() => {
     if (!launchDate) return "Coming soon"
@@ -59,8 +58,8 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
     )} ${COUNT_DOWN_TIMEZONE}`
   })()
 
-  const tokenPrice = useTokenPrice(cellarConfig)
-  const dailyChange = useDailyChange(cellarConfig)
+  const tokenPrice = strategyData?.tokenPrice
+  const dailyChange = strategyData?.changes.daily
   return (
     <>
       {!countdown && (
@@ -76,7 +75,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
             )}
 
             {isAPYEnabled(cellarConfig) &&
-              (apyLoading ? (
+              (isLoading ? (
                 <>
                   <TransparentSkeleton
                     h="14px"
@@ -93,20 +92,20 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                 </>
               ) : (
                 <>
-                  {apy?.apy !== "0.0%" && (
+                  {baseApy?.formatted !== "0.0%" && (
                     <CellarStats
-                      tooltip={apy?.apyLabel}
+                      tooltip={apyTooltip}
                       title={apyLabel(cellarConfig)}
-                      value={apy?.apy || "..."}
-                      isLoading={apyLoading}
+                      value={baseApy?.formatted || "..."}
+                      isLoading={isLoading}
                     />
                   )}
                   {isStakingStillRunning &&
-                    apy?.potentialStakingApy !== "0.0%" && (
+                    rewardsApy?.formatted !== "0.0%" && (
                       <CellarStats
                         title="Rewards APY"
-                        value={apy?.potentialStakingApy || "..."}
-                        isLoading={apyLoading}
+                        value={rewardsApy?.formatted || "..."}
+                        isLoading={isLoading}
                         colorValue="lime.base"
                       />
                     )}
@@ -118,14 +117,14 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
             <CellarStats
               tooltip={tokenPriceTooltipContent(cellarConfig)}
               title="Token price"
-              value={tokenPrice.data || "--"}
-              isLoading={tokenPrice.isLoading}
+              value={tokenPrice || "--"}
+              isLoading={isLoading}
               size="md"
             />
           )}
           {isDailyChangeEnabled(cellarConfig) && (
             <Flex alignItems="center">
-              <PercentageText data={dailyChange.data} arrow />
+              <PercentageText data={dailyChange} arrow />
               <CellarStatsLabel
                 title="1D Change"
                 tooltip="% change of current token price vs. token price yesterday"
@@ -135,7 +134,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
 
           {isIntervalGainPctEnabled(cellarConfig) && (
             <Flex alignItems="center">
-              <PercentageText data={intervalGainPct.data} />
+              <PercentageText data={intervalGain} />
               <CellarStatsLabel
                 title={intervalGainPctTitleContent(cellarConfig)}
                 tooltip={intervalGainPctTooltipContent(cellarConfig)}

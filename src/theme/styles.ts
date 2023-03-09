@@ -69,6 +69,18 @@ export const styles: Styles = {
       transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
       transitionDuration: "500ms",
     },
+    ".timeframe": {
+      bottom: "0px",
+      transitionProperty: "all",
+      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      transitionDuration: "500ms",
+    },
+    ".timeframe.down": {
+      bottom: "-20rem",
+      transitionProperty: "all",
+      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      transitionDuration: "500ms",
+    },
     ".walletconnect-modal__base": {
       background: "#121214 !important",
       border: "1px solid #6C4ED9 !important",

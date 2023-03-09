@@ -1,20 +1,17 @@
 # somm-boilerplate
 
-- [somm-boilerplate](#somm-boilerplate)
-  - [Getting Started](#getting-started)
-- [The Graph / Cellars Subgraph](#the-graph--cellars-subgraph)
-  - [GraphQL Codegen](#graphql-codegen)
-  - [Updating the schema.json](#updating-the-schemajson)
-  - [Using hooks](#using-hooks)
-  - [Parsing BigInt](#parsing-bigint)
-  - [Learn more about graphql-codegen \& urql](#learn-more-about-graphql-codegen--urql)
-- [IP Detection using Vercel's headers](#ip-detection-using-vercels-headers)
-- [Multiple Sources of Truth](#multiple-sources-of-truth)
-  - [Hardcoded values](#hardcoded-values)
-  - [The Subgraph](#the-subgraph)
-  - [Directly querying the contracts](#directly-querying-the-contracts)
-  - [Displaying/Branching UI output](#displayingbranching-ui-output)
-- [Learn More](#learn-more)
+- [Getting Started](#getting-started)
+- [GraphQL Codegen](#graphql-codegen)
+- [Updating the schema.json](#updating-the-schemajson)
+- [Using hooks](#using-hooks)
+- [Parsing BigInt](#parsing-bigint)
+- [Learn more about graphql-codegen \& urql](#learn-more-about-graphql-codegen--urql)
+- [Hardcoded values](#hardcoded-values)
+- [The Subgraph](#the-subgraph)
+- [Data Flow](#data-flow)
+  - [Getting the data](#getting-the-data)
+    - [Data flow](#data-flow-1)
+- [Displaying/Branching UI output](#displayingbranching-ui-output)
 
 ## Getting Started
 
@@ -104,7 +101,7 @@ Files of note:
 
 Though the core workflow of the subgraph is covered above, writing queries and using the generated hooks are a large chunk of working with the cellar route. **An important note about generating hooks**: For whatever reason, if you've written a new gql query and ran the `yarn generate` command to get your new urql hooks, they may not appear. If this is the case, I just delete the `./src/generated/subgraph.ts` file and rerun the script. That usually works 🤘
 
-## Directly querying the contracts
+## Data Flow
 
 Files of note:
 
@@ -113,9 +110,15 @@ Files of note:
 - [`data/hooks/*`](./src/data/hooks/)
 - [`data/actions/*`](./src/data/actions/)
 
-Hooks per output
-![query data](./querying-data.png)
-If there's a new cellar with a different cellar or cellar router or staker contract that has a different ABI and output value, we should create output actions for it inside `data/actions/{CONTRACT_NAME_VERSION}/{outputName}` and branch those actions inside `data/hooks/{outputName}`. If we find the same method and calculation on the smart contract/output, we should put it inside `data/actions/common/{outputName}`
+### Getting the data
+
+If there's a new cellar with a different cellar or cellar router or staker contract that has a different ABI and output value, we should create output actions for it inside `data/actions/{CONTRACT_NAME_VERSION}/{outputName}`.
+
+#### Data flow
+
+![data flow](./data-flow.png)
+
+Data reused to save fetch and data sharing efficiency through react query fetch strategy
 
 ## Displaying/Branching UI output
 

@@ -1,24 +1,17 @@
-import { ModalProps, UseDisclosureProps } from "@chakra-ui/react"
+import { ModalProps } from "@chakra-ui/react"
 import { VFC } from "react"
 
 import { SommelierTab } from "./SommelierTab"
+import React from "react"
 import { ModalWithExchangeTab } from "../ModalWithExchangeTab"
 
-interface DepositModalProps
-  extends Pick<ModalProps, "isOpen" | "onClose"> {
-  notifyModal: UseDisclosureProps
-}
+type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
-export const DepositModal: VFC<DepositModalProps> = ({
-  notifyModal,
-  ...props
-}) => {
+export const DepositModal: VFC<DepositModalProps> = (props) => {
   return (
     <ModalWithExchangeTab
       heading="Buy"
-      sommelierTab={
-        <SommelierTab {...props} notifyModal={notifyModal} />
-      }
+      sommelierTab={<SommelierTab {...props} />}
       {...props}
     />
   )

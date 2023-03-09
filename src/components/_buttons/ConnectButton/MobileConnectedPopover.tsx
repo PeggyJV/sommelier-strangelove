@@ -6,12 +6,14 @@ import {
   PopoverContent,
   PopoverTrigger,
   Spinner,
+  useToast,
   Text,
   Stack,
-  Portal,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
-import truncateWalletAddress from "src/utils/truncateWalletAddress"
+import truncateWalletAddress, {
+  truncateString,
+} from "src/utils/truncateWalletAddress"
 import {
   useAccount,
   useDisconnect,
@@ -20,13 +22,17 @@ import {
 } from "wagmi"
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
-import { LogoutCircleIcon } from "components/_icons"
+import { ChevronDownIcon, LogoutCircleIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
 import { useRouter } from "next/router"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 export const MobileConnectedPopover = () => {
+  const toast = useToast()
+  const isLarger480 = useBetterMediaQuery("(min-width: 480px)")
+
   const { addToast, close } = useBrandedToast()
   const { disconnect } = useDisconnect()
   const { address, isConnecting } = useAccount()
@@ -64,10 +70,10 @@ export const MobileConnectedPopover = () => {
     if (address) {
       navigator.clipboard.writeText(address)
 
-      addToast({
-        heading: "Copied to clipboard",
-        body: <Text>Wallet address copied to clipboard</Text>,
+      toast({
+        title: "Copied to clipboard",
         status: "success",
+        isClosable: true,
       })
     }
   }
@@ -81,10 +87,15 @@ export const MobileConnectedPopover = () => {
       <PopoverTrigger>
         <BaseButton
           bg="surface.primary"
-          borderWidth={1}
-          borderColor="surface.secondary"
-          borderRadius={12}
-          icon={walletAddressIcon}
+          borderWidth={2}
+          borderColor="purple.base"
+          borderRadius="full"
+          rightIcon={
+            <HStack>
+              {walletAddressIcon()}
+              <ChevronDownIcon />
+            </HStack>
+          }
           minW="max-content"
           isLoading={isLoading}
           // loading state fetching ENS
@@ -96,64 +107,79 @@ export const MobileConnectedPopover = () => {
           fontSize={12}
           _hover={{
             bg: "purple.dark",
-            borderColor: "surface.tertiary",
           }}
         >
-          {ensName ? ensName : truncateWalletAddress(address, 3)}
+          {ensName
+            ? isLarger480
+              ? ensName
+              : truncateString(ensName)
+            : truncateWalletAddress(address, isLarger480 ? 3 : 2)}
         </BaseButton>
       </PopoverTrigger>
-      <Portal>
-        <PopoverContent
-          p={2}
-          w="auto"
-          zIndex={401}
-          borderWidth={1}
-          borderColor="purple.dark"
-          borderRadius={12}
-          bg="surface.bg"
-          fontWeight="semibold"
-          _focus={{
-            outline: "unset",
-            outlineOffset: "unset",
-            boxShadow: "unset",
-          }}
-        >
-          <PopoverBody p={0}>
-            <Stack>
-              <Link
-                href={`https://etherscan.io/address/${address}`}
-                isExternal
-                py={2}
-                px={4}
-                fontSize="sm"
-                _hover={{
-                  bg: "purple.dark",
-                  borderColor: "surface.tertiary",
-                }}
-              >
-                <LogoutCircleIcon mr={2} />
-                View on Etherscan
-              </Link>
-
-              <HStack
-                as="button"
-                py={2}
-                px={4}
-                fontSize="sm"
-                onClick={onDisconnect}
-                _hover={{
-                  cursor: "pointer",
-                  bg: "purple.dark",
-                  borderColor: "surface.tertiary",
-                }}
-              >
-                <LogoutCircleIcon />
-                <Text fontWeight="semibold">Disconnect Wallet</Text>
-              </HStack>
-            </Stack>
-          </PopoverBody>
-        </PopoverContent>
-      </Portal>
+      <PopoverContent
+        p={2}
+        w="auto"
+        zIndex={401}
+        borderWidth={1}
+        borderColor="purple.dark"
+        borderRadius={12}
+        bg="surface.bg"
+        fontWeight="semibold"
+        _focus={{
+          outline: "unset",
+          outlineOffset: "unset",
+          boxShadow: "unset",
+        }}
+      >
+        <PopoverBody p={0}>
+          <Stack>
+            <Link
+              href={`https://etherscan.io/address/${address}`}
+              isExternal
+              py={2}
+              px={4}
+              fontSize="sm"
+              _hover={{
+                bg: "purple.dark",
+                borderColor: "surface.tertiary",
+              }}
+            >
+              <LogoutCircleIcon mr={2} />
+              View on Etherscan
+            </Link>
+            <HStack
+              as="button"
+              py={2}
+              px={4}
+              fontSize="sm"
+              onClick={handleCopyAddressToClipboard}
+              _hover={{
+                cursor: "pointer",
+                bg: "purple.dark",
+                borderColor: "surface.tertiary",
+              }}
+            >
+              <LogoutCircleIcon />
+              <Text fontWeight="semibold">Copy to clipboard</Text>
+            </HStack>
+            <HStack
+              as="button"
+              py={2}
+              px={4}
+              fontSize="sm"
+              onClick={onDisconnect}
+              _hover={{
+                cursor: "pointer",
+                bg: "purple.dark",
+                borderColor: "surface.tertiary",
+              }}
+            >
+              <LogoutCircleIcon />
+              <Text fontWeight="semibold">Disconnect Wallet</Text>
+            </HStack>
+          </Stack>
+        </PopoverBody>
+      </PopoverContent>
     </Popover>
   )
 }

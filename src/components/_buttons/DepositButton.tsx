@@ -4,16 +4,14 @@ import { VFC } from "react"
 import { BaseButton } from "./BaseButton"
 import { analytics } from "utils/analytics"
 import { DepositModal } from "components/_modals/DepositModal"
-import { NotifyModal } from "components/_modals/NotifyModal"
 
 export const DepositButton: VFC<ButtonProps> = (props) => {
-  const depositModal = useDisclosure()
-  const notifyModal = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   function onClick() {
-    depositModal.onOpen()
+    onOpen()
 
-    if (!depositModal.isOpen) {
+    if (!isOpen) {
       analytics.track("deposit.modal-opened")
     }
   }
@@ -23,15 +21,7 @@ export const DepositButton: VFC<ButtonProps> = (props) => {
       <BaseButton variant="solid" onClick={onClick} {...props}>
         Buy
       </BaseButton>
-      <DepositModal
-        isOpen={depositModal.isOpen}
-        onClose={depositModal.onClose}
-        notifyModal={notifyModal}
-      />
-      <NotifyModal
-        isOpen={notifyModal.isOpen}
-        onClose={notifyModal.onClose}
-      />
+      <DepositModal isOpen={isOpen} onClose={onClose} />
     </ClientOnly>
   )
 }

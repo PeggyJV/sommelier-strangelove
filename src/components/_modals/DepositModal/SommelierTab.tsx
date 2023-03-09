@@ -10,7 +10,6 @@ import {
   Avatar,
   Flex,
   IconButton,
-  UseDisclosureProps,
 } from "@chakra-ui/react"
 import { useEffect, useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
@@ -25,16 +24,9 @@ import {
 } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
-import {
-  erc20ABI,
-  useSigner,
-  useAccount,
-  useBalance,
-  useToken,
-} from "wagmi"
+import { erc20ABI, useSigner, useAccount, useBalance } from "wagmi"
 import { ethers } from "ethers"
 import { useBrandedToast } from "hooks/chakra"
-import { insertEvent } from "utils/supabase"
 
 interface FormValues {
   depositAmount: number
@@ -50,24 +42,18 @@ import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
 import { isActiveTokenStrategyEnabled } from "data/uiConfig"
-import { useNetValue } from "data/hooks/useNetValue"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { CellarNameKey } from "data/types"
+import { useStrategyData } from "data/hooks/useStrategyData"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 
-interface DepositModalProps
-  extends Pick<ModalProps, "isOpen" | "onClose"> {
-  notifyModal: UseDisclosureProps
-}
+type DepositModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
-export const SommelierTab: VFC<DepositModalProps> = ({
-  notifyModal,
-  ...props
-}) => {
+export const SommelierTab: VFC<DepositModalProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
@@ -105,7 +91,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
-  const { refetch: refetchNetValue } = useNetValue(cellarConfig)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
@@ -138,15 +124,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
-  const {
-    data: activeAsset,
-    refetch: activeAssetRefetch,
-    isLoading: activeAssetLoading,
-  } = useActiveAsset(cellarConfig)
-  const activeAssetToken = useToken({
-    address: activeAsset?.address,
-    chainId: 1,
-  })
+  const { data: strategyData, isLoading } = useStrategyData(
+    cellarConfig.cellar.address
+  )
+
+  const activeAsset = strategyData?.activeAsset
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -167,7 +149,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const isActiveAsset =
     selectedToken?.address?.toLowerCase() ===
-    activeAsset?.address?.toLowerCase()
+    strategyData?.activeAsset?.address?.toLowerCase()
 
   const geo = useGeo()
 
@@ -202,11 +184,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     const slippage = data?.slippage
 
     if (!erc20Contract) return
-    insertEvent({
-      event: "deposit.started",
-      address: address ?? "",
-      cellar: cellarConfig.cellar.address,
-    })
     analytics.track("deposit.started", {
       ...baseAnalytics,
       stable: tokenSymbol,
@@ -313,7 +290,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             slippage,
             activeAsset: {
               address: activeAsset?.address!,
-              decimals: activeAssetToken.data?.decimals!,
+              decimals: activeAsset?.decimals!,
               symbol: activeAsset?.symbol!,
             },
             selectedToken: {
@@ -339,23 +316,16 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
       const depositResult = await waitForDeposit
 
-      refetchNetValue()
+      refetch()
 
       if (depositResult?.data?.transactionHash) {
-        insertEvent({
-          event: "deposit.succeeded",
-          address: address ?? "",
-          cellar: cellarConfig.cellar.address,
-          transaction_hash: depositResult.data.transactionHash,
-        })
         analytics.track("deposit.succeeded", {
           ...baseAnalytics,
           stable: tokenSymbol,
           value: depositAmount,
-          transaction_hash: depositResult.data.transactionHash,
         })
 
-        activeAssetRefetch()
+        props.onClose()
 
         update({
           heading: cellarName + " Cellar Deposit",
@@ -390,23 +360,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           closeHandler: closeAll,
           duration: null, // toast won't close until user presses close button
         })
-      }
-
-      activeAssetRefetch()
-
-      const currentStrategies = window.location.pathname
-        .split("/")[2]
-        .replace(/-/g, " ")
-
-      const isRealYield = currentStrategies === "Real Yield USD"
-
-      if (!notifyModal.isOpen) {
-        analytics.track("notify.modal-opened")
-      }
-      if (isRealYield) {
-        props.onClose()
-        //@ts-ignore
-        notifyModal.onOpen()
       }
 
       if (depositResult?.error) {
@@ -450,7 +403,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           stable: tokenSymbol,
           value: depositAmount,
         })
-
         addToast({
           heading: cellarName + " Deposit",
           body: <Text>Deposit Cancelled</Text>,
@@ -475,8 +427,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     })
   }
 
-  const loading = activeAssetLoading
-
   const currentAsset = getCurrentAsset(
     tokenConfig,
     activeAsset?.address
@@ -495,7 +445,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       0,
       depositAssetTokenConfig.splice(indexOfActiveAsset, 1)[0]
     )
-  }, [activeAsset?.address, currentAsset])
+  }, [activeAsset, currentAsset])
 
   // Close swap settings card if user changed current asset to active asset.
   useEffect(() => {
@@ -515,7 +465,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           {isActiveTokenStrategyEnabled(cellarConfig) && (
             <HStack justify="space-between">
               <Text as="span">Active token strategy</Text>
-              {loading ? (
+              {isLoading ? (
                 <Spinner size="xs" />
               ) : (
                 <HStack spacing={1}>

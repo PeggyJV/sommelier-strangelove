@@ -1,5 +1,8 @@
 import { Provider } from "@wagmi/core"
 import BigNumber from "bignumber.js"
+import { Contract } from "ethers"
+import { getAllStrategiesData } from "./common/getAllStrategiesData"
+import { getStrategyData } from "./common/getStrategyData"
 
 export interface UserStake {
   amount: BigNumber
@@ -82,3 +85,18 @@ export type GetAssetGainChartDataProps = {
   interval: "hourly" | "daily"
   firstDate?: Date
 }
+
+export interface StrategyContracts {
+  cellarContract: Contract
+  cellarSigner: Contract
+  stakerContract?: Contract
+  stakerSigner?: Contract
+  cellarRouterSigner: Contract
+}
+export type AllContracts = Record<string, StrategyContracts>
+
+export type AllStrategiesData = Awaited<
+  ReturnType<typeof getAllStrategiesData>
+>
+
+export type StrategyData = Awaited<ReturnType<typeof getStrategyData>>
