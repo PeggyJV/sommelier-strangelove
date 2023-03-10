@@ -58,7 +58,6 @@ export const TimeFrameButton = ({
         return (
           <Button
             key={value}
-            variant="unstyled"
             color="white"
             fontWeight={600}
             fontSize="1rem"
@@ -70,6 +69,12 @@ export const TimeFrameButton = ({
             borderColor={
               isSelected ? "purple.dark" : "surface.tertiary"
             }
+            _hover={{
+              bg: isSelected ? "surface.primary" : "none",
+            }}
+            _active={{
+              bg: isSelected ? "surface.primary" : "none",
+            }}
             borderWidth={isSelected ? 2 : 0}
             onClick={onClick}
           >
