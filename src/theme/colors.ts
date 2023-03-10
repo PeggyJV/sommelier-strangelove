@@ -54,6 +54,7 @@ const surface = {
   secondary: "rgba(78, 56, 156, 0.16)",
   tertiary: "rgba(78, 56, 156, 0.24)",
   blackTransparent: "rgba(18, 18, 20, 0.8)",
+  quartnerary: "rgba(78, 56, 156, 0.32)",
 }
 
 const gradient = {
