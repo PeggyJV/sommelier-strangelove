@@ -64,16 +64,16 @@ export const TimeFrameButton = ({
             px={4}
             py={1}
             rounded="100px"
-            bg={isSelected ? "surface.primary" : "none"}
+            bg={isSelected ? "surface.quartnerary" : "none"}
             backdropFilter="blur(8px)"
             borderColor={
-              isSelected ? "purple.dark" : "surface.tertiary"
+              isSelected ? "purple.dark" : "surface.quartnerary"
             }
             _hover={{
-              bg: isSelected ? "surface.primary" : "none",
+              bg: isSelected ? "surface.quartnerary" : "none",
             }}
             _active={{
-              bg: isSelected ? "surface.primary" : "none",
+              bg: isSelected ? "surface.quartnerary" : "none",
             }}
             borderWidth={isSelected ? 2 : 0}
             onClick={onClick}
