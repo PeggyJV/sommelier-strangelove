@@ -52,11 +52,15 @@ export const useIntervalGain = ({
 
   const { data: dataToday } = todayData
   const { cellar: cellarToday } = dataToday || {}
-  const { dayDatas: todayDatas } = cellarToday || {}
+  const { dayDatas: todayDataRes } = cellarToday || {}
+  const todayDatas = todayDataRes?.length ? todayDataRes : undefined
 
   const { data: dataPrevious } = previousData
   const { cellar: cellarPrevious } = dataPrevious || {}
-  const { dayDatas: previousDatas } = cellarPrevious || {}
+  const { dayDatas: previousDataRes } = cellarPrevious || {}
+  const previousDatas = previousDataRes?.length
+    ? previousDataRes
+    : undefined
 
   // const ethIntervalGain = useAssetIntervalGain(
   //   "weth",
