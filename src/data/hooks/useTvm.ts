@@ -1,49 +1,32 @@
 import { useQuery } from "@tanstack/react-query"
 import { getTotalAssets } from "data/actions/common/getTotalAssets"
-import { getTvm } from "data/actions/common/getTvm"
 import { CellarKey, ConfigProps } from "data/types"
-import { useGetCellarQuery } from "generated/subgraph"
 import { useActiveAsset } from "./useActiveAsset"
 import { useCreateContracts } from "./useCreateContracts"
 
 export const useTvm = (config: ConfigProps) => {
   const { cellarContract } = useCreateContracts(config)
 
-  const [cellarResult] = useGetCellarQuery({
-    variables: {
-      cellarAddress: config.id,
-      cellarString: config.id,
-    },
-  })
-
-  const activeAsset = useActiveAsset(config)
-
-  const { data } = cellarResult
-  const { cellar } = data || {}
-  const { tvlTotal } = cellar || {}
-
+  const { data: activeAsset } = useActiveAsset(config)
   const queryEnabled = Boolean(
     (config.cellar.key === CellarKey.CELLAR_V0815 ||
       config.cellar.key === CellarKey.CELLAR_V0816 ||
       config.cellar.key === CellarKey.CELLAR_V2) &&
       cellarContract.provider &&
-      (tvlTotal || activeAsset.data)
+      activeAsset
   )
   const query = useQuery(
-    ["USE_TVM", config.cellar.address, activeAsset.data, tvlTotal],
+    ["USE_TVM", config.cellar.address, activeAsset],
     async () => {
       if (
         config.cellar.key === CellarKey.CELLAR_V0815 ||
         config.cellar.key === CellarKey.CELLAR_V0816 ||
         config.cellar.key === CellarKey.CELLAR_V2
       ) {
-        if (tvlTotal) {
-          return await getTvm(tvlTotal)
-        }
-        if (!activeAsset.data) {
+        if (!activeAsset) {
           throw new Error("NO ACTIVE ASSET")
         }
-        return await getTotalAssets(cellarContract, activeAsset.data)
+        return await getTotalAssets(cellarContract, activeAsset)
       }
       throw new Error("UNKNOWN CONTRACT")
     },
