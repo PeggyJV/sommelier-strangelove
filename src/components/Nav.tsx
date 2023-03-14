@@ -102,9 +102,11 @@ export const Nav: VFC<FlexProps> = (props) => {
             >
               {NAV_LINKS.map((item) => {
                 const path = routes.pathname.split("/")[1]
-
+                const isExternal = item.link.includes(
+                  "https://www.sommelier.finance"
+                )
                 const isActive =
-                  (item.link === "https://www.sommelier.finance/"
+                  (isExternal
                     ? false
                     : path === "strategies"
                     ? ""
@@ -146,13 +148,16 @@ export const Nav: VFC<FlexProps> = (props) => {
                 <Stack alignItems="flex-end" py="160px" px="24px">
                   {NAV_LINKS.map((item) => {
                     const path = routes.pathname.split("/")[1]
-
+                    const isExternal = item.link.includes(
+                      "https://www.sommelier.finance"
+                    )
                     const isActive =
-                      (item.link === "https://www.sommelier.finance/"
+                      (isExternal
                         ? false
                         : path === "strategies"
                         ? ""
                         : path) === item.link.split("/")[1]
+
                     return (
                       <Link
                         key={item.link}
