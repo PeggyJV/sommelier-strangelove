@@ -14,6 +14,10 @@ export const NAV_LINKS = (() => {
       link: "https://www.sommelier.finance/",
       title: "About",
     },
+    {
+      link: "https://www.sommelier.finance/audits",
+      title: "Audits",
+    },
   ]
   if (!BRIDGE_PAGE_ENABLED) {
     return links.filter((item) => item.title !== "Bridge")
