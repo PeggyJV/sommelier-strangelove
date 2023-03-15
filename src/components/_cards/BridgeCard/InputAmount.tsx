@@ -50,7 +50,7 @@ export const InputAmount: React.FC = () => {
       (item) => item.coinMinimalDenom === "usomm"
     )?.coinDecimals || 6
 
-  const isBalanceLoading = toEth
+  const isBalanceLoading = toSomm
     ? isConnecting || isLoading
     : isGrazConnecting || isGrazLoading
   const onMaxButtonClick = () => {
