@@ -96,6 +96,16 @@ export const ConnectWalletPopover = ({
     onOpen()
   }
 
+  const filterActiveConnectors = connectors.filter(
+    (x) => x.ready && x.id !== activeConnector?.id
+  )
+  const displayedConnectors = filterActiveConnectors.filter(
+    (obj, index) =>
+      filterActiveConnectors.findIndex(
+        (item) => item.name === obj.name
+      ) === index
+  )
+
   return (
     <Popover
       placement="bottom"
@@ -126,49 +136,44 @@ export const ConnectWalletPopover = ({
         >
           <PopoverBody p={0}>
             <Stack>
-              {connectors
-                .filter(
-                  (x) => x.ready && x.id !== activeConnector?.id
-                )
-                .map((x) => (
-                  <Stack
-                    key={x.id}
-                    as="button"
-                    py={2}
-                    px={4}
-                    fontSize="sm"
-                    onClick={() => {
-                      analytics.track(
-                        "wallet.connect-wallet-selection",
-                        {
-                          wallet: x.name,
-                        }
-                      )
-                      connect({ connector: x })
-                    }}
-                    _hover={{
-                      cursor: "pointer",
-                      bg: "purple.dark",
-                      borderColor: "surface.tertiary",
-                    }}
-                  >
-                    <HStack>
-                      {isConnecting &&
-                      x.id === pendingConnector?.id ? (
-                        <Spinner />
-                      ) : (
-                        <Image
-                          src={`/assets/icons/${x?.name?.toLowerCase()}.svg`}
-                          alt="wallet logo"
-                          width={24}
-                          height={24}
-                        />
-                      )}
+              {displayedConnectors.map((x) => (
+                <Stack
+                  key={x.id}
+                  as="button"
+                  py={2}
+                  px={4}
+                  fontSize="sm"
+                  onClick={() => {
+                    analytics.track(
+                      "wallet.connect-wallet-selection",
+                      {
+                        wallet: x.name,
+                      }
+                    )
+                    connect({ connector: x })
+                  }}
+                  _hover={{
+                    cursor: "pointer",
+                    bg: "purple.dark",
+                    borderColor: "surface.tertiary",
+                  }}
+                >
+                  <HStack>
+                    {isConnecting && x.id === pendingConnector?.id ? (
+                      <Spinner />
+                    ) : (
+                      <Image
+                        src={`/assets/icons/${x?.name?.toLowerCase()}.svg`}
+                        alt="wallet logo"
+                        width={24}
+                        height={24}
+                      />
+                    )}
 
-                      <Text fontWeight="semibold">{x.name}</Text>
-                    </HStack>
-                  </Stack>
-                ))}
+                    <Text fontWeight="semibold">{x.name}</Text>
+                  </HStack>
+                </Stack>
+              ))}
             </Stack>
           </PopoverBody>
         </PopoverContent>
