@@ -5,19 +5,17 @@ import {
   HStack,
   InputProps,
   FormErrorMessage,
-  Image,
   Box,
 } from "@chakra-ui/react"
-import { Link } from "components/Link"
-import { ExternalLinkIcon, InformationIcon } from "components/_icons"
-import { getKeplr, mainnetChains, useAccount } from "graz"
+import { InformationIcon, MoneyWalletIcon } from "components/_icons"
+import { isAddress } from "ethers/lib/utils"
 import { useBrandedToast } from "hooks/chakra"
 import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { validateSommelierAddress } from "utils/validateSommelierAddress"
+import { useAccount } from "wagmi"
 import { BridgeFormValues } from "."
 
-export const InputSommelierAddress: React.FC<InputProps> = ({
+export const InputEthereumAddress: React.FC<InputProps> = ({
   children,
   ...rest
 }) => {
@@ -26,45 +24,22 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
     useFormContext<BridgeFormValues>()
   const isError = !!getFieldState("address").error
   const [isActive, setActive] = useState(false)
-  const { isConnected } = useAccount()
+  const { address, isConnected } = useAccount()
 
   const onAutofillClick = async (isValidateAddress?: boolean) => {
     try {
-      const keplr = getKeplr()
-      const key = await keplr.getKey(mainnetChains.sommelier.chainId)
-      if (!key.bech32Address) throw new Error("Address not defined")
+      if (!address) throw new Error("Address not defined")
       setValue(
         "address",
-        isValidateAddress ? getValues().address : key.bech32Address,
+        isValidateAddress ? getValues().address : address,
         {
           shouldValidate: true,
         }
       )
     } catch (e) {
       const error = e as Error
-      if (error.message === "Keplr is not defined") {
-        return addToast({
-          heading: "Import from Keplr",
-          body: (
-            <>
-              <Text>Keplr not found</Text>
-              <Link
-                display="flex"
-                alignItems="center"
-                href="https://www.keplr.app/download"
-                isExternal
-              >
-                <Text as="span">Install Keplr</Text>
-                <ExternalLinkIcon ml={2} />
-              </Link>
-            </>
-          ),
-          status: "error",
-          closeHandler: closeAll,
-        })
-      }
       addToast({
-        heading: "Import from Keplr",
+        heading: "Import from Wallet",
         body: <Text>{error.message}</Text>,
         status: "error",
         closeHandler: closeAll,
@@ -76,22 +51,18 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
     <Stack spacing={2}>
       <HStack justifyContent="space-between">
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
-          Sommelier Address
+          Ethereum Address
         </Text>
-        {window.keplr !== undefined && isConnected && (
+        {isConnected && (
           <HStack
             as="button"
             spacing={1}
             onClick={() => onAutofillClick()}
           >
             <Text fontWeight="bold" color="white" fontSize="xs">
-              Import from Keplr
+              Import from Wallet
             </Text>
-            <Image
-              src="/assets/images/keplr.png"
-              alt="Keplr logo"
-              width={4}
-            />
+            <MoneyWalletIcon boxSize="10px" />
           </HStack>
         )}
       </HStack>
@@ -108,8 +79,8 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         borderRadius="16px"
       >
         <Input
-          id="sommelierAddress"
-          placeholder="Enter Sommelier address"
+          id="address"
+          placeholder="Enter Ethereum address"
           fontSize="xs"
           fontWeight={700}
           backgroundColor="surface.tertiary"
@@ -123,10 +94,10 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           }}
           type="text"
           {...register("address", {
-            required: "Enter Sommelier address",
+            required: "Enter Ethereum address",
             validate: {
               validAddress: (v) =>
-                validateSommelierAddress(v) || "Address is not valid",
+                isAddress(v) || "Address is not valid",
             },
           })}
           autoComplete="off"
@@ -138,8 +109,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         <HStack spacing="6px">
           <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
-            Address is not valid—make sure Sommelier address is from a
-            Cosmos wallet
+            Address is not valid—make sure your Ethereum address
           </Text>
         </HStack>
       </FormErrorMessage>

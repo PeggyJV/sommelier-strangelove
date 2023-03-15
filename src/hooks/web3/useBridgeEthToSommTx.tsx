@@ -2,7 +2,7 @@ import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
 import { config } from "utils/config"
-import { useContract, useSigner } from "wagmi"
+import { useAccount, useContract, useSigner } from "wagmi"
 import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
 import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
@@ -14,7 +14,7 @@ import { GravityBridge } from "src/abi/types"
 import { analytics } from "utils/analytics"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 
-export const useBridgeTransaction = () => {
+export const useBridgeEthToSommTx = () => {
   const { CONTRACT } = config
   // Currently `close` have a bug it only closes the last toast appeared
   // TODO: Fix `close` and implement it here https://github.com/strangelove-ventures/sommelier/issues/431
@@ -25,6 +25,7 @@ export const useBridgeTransaction = () => {
   const [_, wait] = useWaitForTransaction({
     skip: true,
   })
+  const { address } = useAccount()
 
   const erc20Contract = useContract({
     addressOrName: CONTRACT.SOMMELLIER.ADDRESS,
@@ -89,14 +90,14 @@ export const useBridgeTransaction = () => {
           <Text as="span" fontWeight="bold">
             Destination:
           </Text>
-          <Text as="span">Ethereum Mainnet to Cosmos</Text>
+          <Text as="span">Ethereum Mainnet to Sommelier</Text>
         </HStack>
         <HStack>
           <Text as="span" fontWeight="bold" width="15ch">
             Est. time:
           </Text>
           <Text as="span">
-            10-30 min. Transaction may take additional time to process
+            10-15 min. Transaction may take additional time to process
             after network validation
           </Text>
         </HStack>
@@ -132,7 +133,7 @@ export const useBridgeTransaction = () => {
     />
   )
 
-  const doTransaction = async (props: BridgeFormValues) => {
+  const doEthToSomm = async (props: BridgeFormValues) => {
     try {
       setIsLoading(true)
       addToast({
@@ -149,6 +150,9 @@ export const useBridgeTransaction = () => {
       )
       analytics.track("bridge.approval-required", {
         value: props.amount,
+        path: "ethToSomm",
+        sender: address,
+        receiver: props.address,
       })
       // ERC20 Approval
       const { hash: erc20Hash } = await erc20Contract.approve(
@@ -183,6 +187,9 @@ export const useBridgeTransaction = () => {
       ) {
         analytics.track("bridge.approval-succeeded", {
           value: props.amount,
+          path: "ethToSomm",
+          sender: address,
+          receiver: props.address,
         })
         update({
           heading: "ERC20 Approval",
@@ -194,6 +201,9 @@ export const useBridgeTransaction = () => {
       }
       analytics.track("bridge.contract-started", {
         value: props.amount,
+        path: "ethToSomm",
+        sender: address,
+        receiver: props.address,
       })
       // Bridge transaction
       addToast({
@@ -204,7 +214,7 @@ export const useBridgeTransaction = () => {
         duration: null,
         closeHandler: closeAll,
       })
-      const bytes32 = getBytes32(props.sommelierAddress)
+      const bytes32 = getBytes32(props.address)
       const { hash: bridgeHash } = await bridgeContract.sendToCosmos(
         CONTRACT.SOMMELLIER.ADDRESS,
         bytes32,
@@ -217,6 +227,10 @@ export const useBridgeTransaction = () => {
       if (resultBridge.data?.status !== 1) {
         analytics.track("bridge.contract-failed", {
           value: props.amount,
+          path: "ethToSomm",
+          sender: address,
+          receiver: props.address,
+          txHash: resultBridge.data?.transactionHash,
         })
         setIsLoading(false)
         return update({
@@ -238,6 +252,10 @@ export const useBridgeTransaction = () => {
       ) {
         analytics.track("bridge.contract-succeeded", {
           value: props.amount,
+          path: "ethToSomm",
+          sender: address,
+          receiver: props.address,
+          txHash: resultBridge.data?.transactionHash,
         })
         update({
           heading: "Bridge Initiated",
@@ -256,6 +274,9 @@ export const useBridgeTransaction = () => {
     } catch (e) {
       analytics.track("bridge.failed", {
         value: props.amount,
+        path: "ethToSomm",
+        sender: address,
+        receiver: props.address,
       })
       const error = e as Error
       setIsLoading(false)
@@ -268,5 +289,5 @@ export const useBridgeTransaction = () => {
     }
   }
 
-  return { isLoading, doTransaction }
+  return { isLoading, doEthToSomm }
 }
