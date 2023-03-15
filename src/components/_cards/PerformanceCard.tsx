@@ -49,7 +49,7 @@ export const PerformanceCard: VFC<BoxProps> = (props) => {
             >
               <HStack spacing={8}>
                 <VStack spacing={0} align="flex-start">
-                  <CardHeading>TVM</CardHeading>
+                  <CardHeading>TVL</CardHeading>
                   <Text fontSize="2.5rem" fontWeight="bold">
                     ${tvl?.yFormatted}
                   </Text>

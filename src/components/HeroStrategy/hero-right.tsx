@@ -164,8 +164,8 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                   {tvm.data?.formatted || "--"}
                 </Heading>
                 <CellarStatsLabel
-                  tooltip="Total value managed by Strategy"
-                  title="TVM"
+                  tooltip="Total value locked"
+                  title="TVL"
                 />
               </VStack>
               <VStack flex={1}>
