@@ -50,9 +50,9 @@ export const InputAmount: React.FC = () => {
       (item) => item.coinMinimalDenom === "usomm"
     )?.coinDecimals || 6
 
-  const isBalanceLoading =
-    (toEth && (isConnecting || isLoading)) ||
-    (toSomm && (isGrazConnecting || isGrazLoading))
+  const isBalanceLoading = toEth
+    ? isConnecting || isLoading
+    : isGrazConnecting || isGrazLoading
   const onMaxButtonClick = () => {
     if (!data) return
     const amount = parseFloat(
