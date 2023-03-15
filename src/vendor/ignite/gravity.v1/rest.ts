@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable */
 /* tslint:disable */
 /*
@@ -120,57 +121,57 @@ export interface ProtobufAny {
    * Schemes other than `http`, `https` (or the empty scheme) might be
    * used with implementation specific semantics.
    */
-  "@type"?: string;
+  "@type"?: string
 }
 
 export interface RpcStatus {
   /** @format int32 */
-  code?: number;
-  message?: string;
-  details?: ProtobufAny[];
+  code?: number
+  message?: string
+  details?: ProtobufAny[]
 }
 
 export interface V1BatchTx {
   /** @format uint64 */
-  batch_nonce?: string;
+  batch_nonce?: string
 
   /** @format uint64 */
-  timeout?: string;
-  transactions?: V1SendToEthereum[];
-  token_contract?: string;
+  timeout?: string
+  transactions?: V1SendToEthereum[]
+  token_contract?: string
 
   /** @format uint64 */
-  height?: string;
+  height?: string
 }
 
 /**
  * BatchTxConfirmation is a signature on behalf of a validator for a BatchTx.
  */
 export interface V1BatchTxConfirmation {
-  token_contract?: string;
+  token_contract?: string
 
   /** @format uint64 */
-  batch_nonce?: string;
-  ethereum_signer?: string;
+  batch_nonce?: string
+  ethereum_signer?: string
 
   /** @format byte */
-  signature?: string;
+  signature?: string
 }
 
 export interface V1BatchTxConfirmationsResponse {
-  signatures?: V1BatchTxConfirmation[];
+  signatures?: V1BatchTxConfirmation[]
 }
 
 export interface V1BatchTxFeesResponse {
-  fees?: V1Beta1Coin[];
+  fees?: V1Beta1Coin[]
 }
 
 export interface V1BatchTxResponse {
-  batch?: V1BatchTx;
+  batch?: V1BatchTx
 }
 
 export interface V1BatchTxsResponse {
-  batches?: V1BatchTx[];
+  batches?: V1BatchTx[]
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -181,12 +182,12 @@ export interface V1BatchTxsResponse {
    *          PageResponse page = 2;
    *  }
    */
-  pagination?: V1Beta1PageResponse;
+  pagination?: V1Beta1PageResponse
 }
 
 export interface V1BatchedSendToEthereumsResponse {
   /** cosmos.base.query.v1beta1.PageResponse pagination = 2; */
-  send_to_ethereums?: V1SendToEthereum[];
+  send_to_ethereums?: V1SendToEthereum[]
 }
 
 /**
@@ -195,22 +196,22 @@ from Cosmos to Ethereum.
 */
 export interface V1ContractCallTx {
   /** @format uint64 */
-  invalidation_nonce?: string;
+  invalidation_nonce?: string
 
   /** @format byte */
-  invalidation_scope?: string;
-  address?: string;
+  invalidation_scope?: string
+  address?: string
 
   /** @format byte */
-  payload?: string;
+  payload?: string
 
   /** @format uint64 */
-  timeout?: string;
-  tokens?: V1ERC20Token[];
-  fees?: V1ERC20Token[];
+  timeout?: string
+  tokens?: V1ERC20Token[]
+  fees?: V1ERC20Token[]
 
   /** @format uint64 */
-  height?: string;
+  height?: string
 }
 
 /**
@@ -219,18 +220,18 @@ ContractCallTx.
 */
 export interface V1ContractCallTxConfirmation {
   /** @format byte */
-  invalidation_scope?: string;
+  invalidation_scope?: string
 
   /** @format uint64 */
-  invalidation_nonce?: string;
-  ethereum_signer?: string;
+  invalidation_nonce?: string
+  ethereum_signer?: string
 
   /** @format byte */
-  signature?: string;
+  signature?: string
 }
 
 export interface V1ContractCallTxConfirmationsResponse {
-  signatures?: V1ContractCallTxConfirmation[];
+  signatures?: V1ContractCallTxConfirmation[]
 }
 
 export interface V1ContractCallTxResponse {
@@ -238,11 +239,11 @@ export interface V1ContractCallTxResponse {
    * ContractCallTx represents an individual arbitrary logic call transaction
    * from Cosmos to Ethereum.
    */
-  logic_call?: V1ContractCallTx;
+  logic_call?: V1ContractCallTx
 }
 
 export interface V1ContractCallTxsResponse {
-  calls?: V1ContractCallTx[];
+  calls?: V1ContractCallTx[]
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -253,50 +254,50 @@ export interface V1ContractCallTxsResponse {
    *          PageResponse page = 2;
    *  }
    */
-  pagination?: V1Beta1PageResponse;
+  pagination?: V1Beta1PageResponse
 }
 
 export interface V1DelegateKeysByEthereumSignerResponse {
-  validator_address?: string;
-  orchestrator_address?: string;
+  validator_address?: string
+  orchestrator_address?: string
 }
 
 export interface V1DelegateKeysByOrchestratorResponse {
-  validator_address?: string;
-  ethereum_signer?: string;
+  validator_address?: string
+  ethereum_signer?: string
 }
 
 export interface V1DelegateKeysByValidatorResponse {
-  eth_address?: string;
-  orchestrator_address?: string;
+  eth_address?: string
+  orchestrator_address?: string
 }
 
 export interface V1DelegateKeysResponse {
-  delegate_keys?: V1MsgDelegateKeys[];
+  delegate_keys?: V1MsgDelegateKeys[]
 }
 
 export interface V1DenomToERC20ParamsResponse {
-  base_denom?: string;
-  erc20_name?: string;
-  erc20_symbol?: string;
+  base_denom?: string
+  erc20_name?: string
+  erc20_symbol?: string
 
   /** @format uint64 */
-  erc20_decimals?: string;
+  erc20_decimals?: string
 }
 
 export interface V1DenomToERC20Response {
-  erc20?: string;
-  cosmos_originated?: boolean;
+  erc20?: string
+  cosmos_originated?: boolean
 }
 
 export interface V1ERC20ToDenomResponse {
-  denom?: string;
-  cosmos_originated?: boolean;
+  denom?: string
+  cosmos_originated?: boolean
 }
 
 export interface V1ERC20Token {
-  contract?: string;
-  amount?: string;
+  contract?: string
+  amount?: string
 }
 
 /**
@@ -305,8 +306,8 @@ operator ethereum address and its staking consensus power.
 */
 export interface V1EthereumSigner {
   /** @format uint64 */
-  power?: string;
-  ethereum_address?: string;
+  power?: string
+  ethereum_address?: string
 }
 
 export interface V1LastObservedEthereumHeightResponse {
@@ -314,12 +315,12 @@ export interface V1LastObservedEthereumHeightResponse {
    * LatestEthereumBlockHeight defines the latest observed ethereum block height
    * and the corresponding timestamp value in nanoseconds.
    */
-  last_observed_ethereum_height?: V1LatestEthereumBlockHeight;
+  last_observed_ethereum_height?: V1LatestEthereumBlockHeight
 }
 
 export interface V1LastSubmittedEthereumEventResponse {
   /** @format uint64 */
-  event_nonce?: string;
+  event_nonce?: string
 }
 
 /**
@@ -328,13 +329,13 @@ and the corresponding timestamp value in nanoseconds.
 */
 export interface V1LatestEthereumBlockHeight {
   /** @format uint64 */
-  ethereum_height?: string;
+  ethereum_height?: string
 
   /** @format uint64 */
-  cosmos_height?: string;
+  cosmos_height?: string
 }
 
-export type V1MsgCancelSendToEthereumResponse = object;
+export type V1MsgCancelSendToEthereumResponse = object
 
 /**
 * MsgDelegateKey allows validators to delegate their voting responsibilities
@@ -342,19 +343,19 @@ to a given orchestrator address. This key is then used as an optional
 authentication method for attesting events from Ethereum.
 */
 export interface V1MsgDelegateKeys {
-  validator_address?: string;
-  orchestrator_address?: string;
-  ethereum_address?: string;
+  validator_address?: string
+  orchestrator_address?: string
+  ethereum_address?: string
 
   /** @format byte */
-  eth_signature?: string;
+  eth_signature?: string
 }
 
-export type V1MsgDelegateKeysResponse = object;
+export type V1MsgDelegateKeysResponse = object
 
-export type V1MsgEthereumHeightVoteResponse = object;
+export type V1MsgEthereumHeightVoteResponse = object
 
-export type V1MsgRequestBatchTxResponse = object;
+export type V1MsgRequestBatchTxResponse = object
 
 /**
 * MsgSendToEthereumResponse returns the SendToEthereum transaction ID which
@@ -362,12 +363,12 @@ will be included in the batch tx.
 */
 export interface V1MsgSendToEthereumResponse {
   /** @format uint64 */
-  id?: string;
+  id?: string
 }
 
-export type V1MsgSubmitEthereumEventResponse = object;
+export type V1MsgSubmitEthereumEventResponse = object
 
-export type V1MsgSubmitEthereumTxConfirmationResponse = object;
+export type V1MsgSubmitEthereumTxConfirmationResponse = object
 
 /**
 * contract_hash:
@@ -424,48 +425,48 @@ The first three refer to not submitting a particular message, the third for
 submitting a different ethereum_signature for the same Ethereum event
 */
 export interface V1Params {
-  gravity_id?: string;
-  contract_source_hash?: string;
-  bridge_ethereum_address?: string;
+  gravity_id?: string
+  contract_source_hash?: string
+  bridge_ethereum_address?: string
 
   /** @format uint64 */
-  bridge_chain_id?: string;
+  bridge_chain_id?: string
 
   /** @format uint64 */
-  signed_signer_set_txs_window?: string;
+  signed_signer_set_txs_window?: string
 
   /** @format uint64 */
-  signed_batches_window?: string;
+  signed_batches_window?: string
 
   /** @format uint64 */
-  ethereum_signatures_window?: string;
+  ethereum_signatures_window?: string
 
   /** @format uint64 */
-  target_eth_tx_timeout?: string;
+  target_eth_tx_timeout?: string
 
   /** @format uint64 */
-  average_block_time?: string;
+  average_block_time?: string
 
   /** @format uint64 */
-  average_ethereum_block_time?: string;
+  average_ethereum_block_time?: string
 
   /**
    * TODO: slash fraction for contract call txs too
    * @format byte
    */
-  slash_fraction_signer_set_tx?: string;
+  slash_fraction_signer_set_tx?: string
 
   /** @format byte */
-  slash_fraction_batch?: string;
+  slash_fraction_batch?: string
 
   /** @format byte */
-  slash_fraction_ethereum_signature?: string;
+  slash_fraction_ethereum_signature?: string
 
   /** @format byte */
-  slash_fraction_conflicting_ethereum_signature?: string;
+  slash_fraction_conflicting_ethereum_signature?: string
 
   /** @format uint64 */
-  unbond_slashing_signer_set_txs_window?: string;
+  unbond_slashing_signer_set_txs_window?: string
 }
 
 export interface V1ParamsResponse {
@@ -513,16 +514,16 @@ export interface V1ParamsResponse {
    * The first three refer to not submitting a particular message, the third for
    * submitting a different ethereum_signature for the same Ethereum event
    */
-  params?: V1Params;
+  params?: V1Params
 }
 
 export interface V1SendToEthereum {
   /** @format uint64 */
-  id?: string;
-  sender?: string;
-  ethereum_recipient?: string;
-  erc20_token?: V1ERC20Token;
-  erc20_fee?: V1ERC20Token;
+  id?: string
+  sender?: string
+  ethereum_recipient?: string
+  erc20_token?: V1ERC20Token
+  erc20_fee?: V1ERC20Token
 }
 
 /**
@@ -533,24 +534,24 @@ savings.
 */
 export interface V1SignerSetTx {
   /** @format uint64 */
-  nonce?: string;
+  nonce?: string
 
   /** @format uint64 */
-  height?: string;
-  signers?: V1EthereumSigner[];
+  height?: string
+  signers?: V1EthereumSigner[]
 }
 
 export interface V1SignerSetTxConfirmation {
   /** @format uint64 */
-  signer_set_nonce?: string;
-  ethereum_signer?: string;
+  signer_set_nonce?: string
+  ethereum_signer?: string
 
   /** @format byte */
-  signature?: string;
+  signature?: string
 }
 
 export interface V1SignerSetTxConfirmationsResponse {
-  signatures?: V1SignerSetTxConfirmation[];
+  signatures?: V1SignerSetTxConfirmation[]
 }
 
 export interface V1SignerSetTxResponse {
@@ -560,11 +561,11 @@ export interface V1SignerSetTxResponse {
    * are used to check signatures on Ethereum in order to get significant gas
    * savings.
    */
-  signer_set?: V1SignerSetTx;
+  signer_set?: V1SignerSetTx
 }
 
 export interface V1SignerSetTxsResponse {
-  signer_sets?: V1SignerSetTx[];
+  signer_sets?: V1SignerSetTx[]
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -575,11 +576,11 @@ export interface V1SignerSetTxsResponse {
    *          PageResponse page = 2;
    *  }
    */
-  pagination?: V1Beta1PageResponse;
+  pagination?: V1Beta1PageResponse
 }
 
 export interface V1UnbatchedSendToEthereumsResponse {
-  send_to_ethereums?: V1SendToEthereum[];
+  send_to_ethereums?: V1SendToEthereum[]
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -590,20 +591,20 @@ export interface V1UnbatchedSendToEthereumsResponse {
    *          PageResponse page = 2;
    *  }
    */
-  pagination?: V1Beta1PageResponse;
+  pagination?: V1Beta1PageResponse
 }
 
 export interface V1UnsignedBatchTxsResponse {
   /** Note these are returned with the signature empty */
-  batches?: V1BatchTx[];
+  batches?: V1BatchTx[]
 }
 
 export interface V1UnsignedContractCallTxsResponse {
-  calls?: V1ContractCallTx[];
+  calls?: V1ContractCallTx[]
 }
 
 export interface V1UnsignedSignerSetTxsResponse {
-  signer_sets?: V1SignerSetTx[];
+  signer_sets?: V1SignerSetTx[]
 }
 
 /**
@@ -613,8 +614,8 @@ NOTE: The amount field is an Int which implements the custom method
 signatures required by gogoproto.
 */
 export interface V1Beta1Coin {
-  denom?: string;
-  amount?: string;
+  denom?: string
+  amount?: string
 }
 
 /**
@@ -630,7 +631,7 @@ export interface V1Beta1PageRequest {
    * should be set.
    * @format byte
    */
-  key?: string;
+  key?: string
 
   /**
    * offset is a numeric offset that can be used when key is unavailable.
@@ -638,14 +639,14 @@ export interface V1Beta1PageRequest {
    * be set.
    * @format uint64
    */
-  offset?: string;
+  offset?: string
 
   /**
    * limit is the total number of results to be returned in the result page.
    * If left empty it will default to a value to be set by each app.
    * @format uint64
    */
-  limit?: string;
+  limit?: string
 
   /**
    * count_total is set to true  to indicate that the result set should include
@@ -653,10 +654,10 @@ export interface V1Beta1PageRequest {
    * count_total is only respected when offset is used. It is ignored when key
    * is set.
    */
-  count_total?: boolean;
+  count_total?: boolean
 
   /** reverse is set to true if results are to be returned in the descending order. */
-  reverse?: boolean;
+  reverse?: boolean
 }
 
 /**
@@ -674,14 +675,14 @@ export interface V1Beta1PageResponse {
    * query the next page most efficiently
    * @format byte
    */
-  next_key?: string;
+  next_key?: string
 
   /**
    * total is total number of results available if PageRequest.count_total
    * was set, its value is undefined otherwise
    * @format uint64
    */
-  total?: string;
+  total?: string
 }
 
 import axios, {
@@ -689,38 +690,41 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
   ResponseType,
-} from "axios";
+} from "axios"
 
-export type QueryParamsType = Record<string | number, any>;
+export type QueryParamsType = Record<string | number, any>
 
 export interface FullRequestParams
-  extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
+  extends Omit<
+    AxiosRequestConfig,
+    "data" | "params" | "url" | "responseType"
+  > {
   /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean;
+  secure?: boolean
   /** request path */
-  path: string;
+  path: string
   /** content type of request body */
-  type?: ContentType;
+  type?: ContentType
   /** query params */
-  query?: QueryParamsType;
+  query?: QueryParamsType
   /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseType;
+  format?: ResponseType
   /** request body */
-  body?: unknown;
+  body?: unknown
 }
 
 export type RequestParams = Omit<
   FullRequestParams,
   "body" | "method" | "query" | "path"
->;
+>
 
 export interface ApiConfig<SecurityDataType = unknown>
   extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
   securityWorker?: (
     securityData: SecurityDataType | null
-  ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
-  secure?: boolean;
-  format?: ResponseType;
+  ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void
+  secure?: boolean
+  format?: ResponseType
 }
 
 export enum ContentType {
@@ -730,11 +734,11 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public instance: AxiosInstance;
-  private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
-  private secure?: boolean;
-  private format?: ResponseType;
+  public instance: AxiosInstance
+  private securityData: SecurityDataType | null = null
+  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"]
+  private secure?: boolean
+  private format?: ResponseType
 
   constructor({
     securityWorker,
@@ -745,15 +749,15 @@ export class HttpClient<SecurityDataType = unknown> {
     this.instance = axios.create({
       ...axiosConfig,
       baseURL: axiosConfig.baseURL || "",
-    });
-    this.secure = secure;
-    this.format = format;
-    this.securityWorker = securityWorker;
+    })
+    this.secure = secure
+    this.format = format
+    this.securityWorker = securityWorker
   }
 
   public setSecurityData = (data: SecurityDataType | null) => {
-    this.securityData = data;
-  };
+    this.securityData = data
+  }
 
   private mergeRequestParams(
     params1: AxiosRequestConfig,
@@ -768,12 +772,12 @@ export class HttpClient<SecurityDataType = unknown> {
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
-    };
+    }
   }
 
   private createFormData(input: Record<string, unknown>): FormData {
     return Object.keys(input || {}).reduce((formData, key) => {
-      const property = input[key];
+      const property = input[key]
       formData.append(
         key,
         property instanceof Blob
@@ -781,9 +785,9 @@ export class HttpClient<SecurityDataType = unknown> {
           : typeof property === "object" && property !== null
           ? JSON.stringify(property)
           : `${property}`
-      );
-      return formData;
-    }, new FormData());
+      )
+      return formData
+    }, new FormData())
   }
 
   public request = async <T = any, _E = any>({
@@ -799,9 +803,12 @@ export class HttpClient<SecurityDataType = unknown> {
       ((typeof secure === "boolean" ? secure : this.secure) &&
         this.securityWorker &&
         (await this.securityWorker(this.securityData))) ||
-      {};
-    const requestParams = this.mergeRequestParams(params, secureParams);
-    const responseFormat = (format && this.format) || void 0;
+      {}
+    const requestParams = this.mergeRequestParams(
+      params,
+      secureParams
+    )
+    const responseFormat = (format && this.format) || void 0
 
     if (
       type === ContentType.FormData &&
@@ -809,11 +816,11 @@ export class HttpClient<SecurityDataType = unknown> {
       body !== null &&
       typeof body === "object"
     ) {
-      requestParams.headers.common = { Accept: "*/*" };
-      requestParams.headers.post = {};
-      requestParams.headers.put = {};
+      requestParams.headers.common = { Accept: "*/*" }
+      requestParams.headers.post = {}
+      requestParams.headers.put = {}
 
-      body = this.createFormData(body as Record<string, unknown>);
+      body = this.createFormData(body as Record<string, unknown>)
     }
 
     return this.instance.request({
@@ -828,8 +835,8 @@ export class HttpClient<SecurityDataType = unknown> {
       responseType: responseFormat,
       data: body,
       url: path,
-    });
-  };
+    })
+  }
 }
 
 /**

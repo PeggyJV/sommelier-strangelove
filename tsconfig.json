@@ -30,7 +30,7 @@
     "strict": true,
     "target": "es5"
   },
-  "exclude": ["node_modules", "src/vendor/*"],
+  "exclude": ["node_modules"],
   "include": [
     "next-env.d.ts",
     "env.d.ts",
