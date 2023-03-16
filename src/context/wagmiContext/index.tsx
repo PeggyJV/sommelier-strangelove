@@ -10,6 +10,7 @@ import { InjectedConnector } from "wagmi/connectors/injected"
 import { SafeConnector } from "@gnosis.pm/safe-apps-wagmi"
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet"
+import { MetaMaskConnector } from "wagmi/connectors/metaMask"
 
 const ALCHEMY_URL = "https://eth-mainnet.alchemyapi.io/v2/"
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
@@ -29,6 +30,9 @@ const connector = () => {
       options: {
         qrcode: true,
       },
+    }),
+    new MetaMaskConnector({
+      chains,
     }),
     new InjectedConnector({
       chains,

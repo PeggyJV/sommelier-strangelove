@@ -68,8 +68,8 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
           <Stack spacing={1}>
             {isTVMEnabled(cellarConfig) && (
               <CellarStats
-                tooltip="Total value managed by Strategy"
-                title="TVM"
+                tooltip="Total value locked"
+                title="TVL"
                 value={tvm?.formatted || "..."}
                 size="md"
               />

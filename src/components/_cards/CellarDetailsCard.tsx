@@ -177,11 +177,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           >
             {managementFee}
           </CardStat>
-          <CardStat
-            label="TVM"
-            flex={0}
-            tooltip="Total value managed by Strategy"
-          >
+          <CardStat label="TVL" flex={0} tooltip="Total value locked">
             {tvm?.formatted || "..."}
           </CardStat>
           <CardStat

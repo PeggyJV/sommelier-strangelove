@@ -65,12 +65,12 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
         <Tooltip
           hasArrow
           placement="top"
-          label="Total value managed by Strategy"
+          label="Total value locked"
           bg="surface.bg"
           color="neutral.300"
         >
           <HStack spacing={1} align="center">
-            <CardHeading>TVM</CardHeading>
+            <CardHeading>TVL</CardHeading>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>
         </Tooltip>

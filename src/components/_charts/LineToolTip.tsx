@@ -18,7 +18,7 @@ export const ToolTip: VFC<BoxProps & PointTooltipProps> = forwardRef(
         textTransform="capitalize"
       >
         <Text>date: {data.xFormatted}</Text>
-        <Text>TVM: {data.yFormatted}</Text>
+        <Text>TVL: {data.yFormatted}</Text>
       </Box>
     )
   }
