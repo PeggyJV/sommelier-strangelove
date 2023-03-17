@@ -54,13 +54,17 @@ export const InputAmount: React.FC = () => {
     ? isConnecting || isLoading
     : isGrazConnecting || isGrazLoading
   const onMaxButtonClick = () => {
-    if (!data) return
-    const amount = parseFloat(
-      toSomm
-        ? toEther(data.value, data.decimals, false)
-        : toEther(sommBalance?.amount, sommDecimal, false)
-    )
-    setValue("amount", amount, { shouldValidate: true })
+    if (toSomm && data) {
+      const amount = parseFloat(
+        toEther(data.value, data.decimals, false)
+      )
+      setValue("amount", amount, { shouldValidate: true })
+    } else if (toEth && sommBalance) {
+      const amount = parseFloat(
+        toEther(sommBalance.amount, sommDecimal, false)
+      )
+      setValue("amount", amount, { shouldValidate: true })
+    }
   }
 
   return (
