@@ -1,25 +1,29 @@
-import { Heading, Stack, Text } from "@chakra-ui/react"
+import { Heading, Text } from "@chakra-ui/react"
 import { ExternalLinkIcon } from "components/_icons"
 import React from "react"
 import { TransparentCard } from "../TransparentCard"
 import { Link } from "components/Link"
 import { BridgeForm } from "components/_forms/BridgeForm"
 import { useAccount } from "wagmi"
-import ConnectButton from "components/_buttons/ConnectButton"
 import { FormProvider, useForm } from "react-hook-form"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 export interface BridgeFormValues {
   amount: number
-  sommelierAddress: string
+  address: string
+  type: "TO_SOMMELIER" | "TO_ETHEREUM"
 }
 
 export const BridgeCard: React.FC = () => {
   const isMounted = useIsMounted()
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const { isConnected } = useAccount()
-  const methods = useForm<BridgeFormValues>()
+  const methods = useForm<BridgeFormValues>({
+    defaultValues: {
+      type: "TO_SOMMELIER",
+    },
+  })
 
   return (
     <TransparentCard
@@ -37,7 +41,7 @@ export const BridgeCard: React.FC = () => {
       </Heading>
       <Text fontSize="md" mb="41px">
         Bridge your Ethereum SOMM back home to its native Cosmos
-        representation on Sommelier.{" "}
+        representation on Sommelier or from Sommelier to Ethereum.{" "}
         <Link
           ml={1}
           fontSize="xs"
@@ -50,16 +54,11 @@ export const BridgeCard: React.FC = () => {
           <ExternalLinkIcon boxSize={3} color="purple.base" />
         </Link>
       </Text>
-      {isMounted &&
-        (isConnected ? (
-          <FormProvider {...methods}>
-            <BridgeForm />
-          </FormProvider>
-        ) : (
-          <Stack>
-            <ConnectButton unstyled />
-          </Stack>
-        ))}
+      {isMounted && (
+        <FormProvider {...methods}>
+          <BridgeForm />
+        </FormProvider>
+      )}
     </TransparentCard>
   )
 }

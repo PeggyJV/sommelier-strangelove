@@ -23,6 +23,7 @@ import { insertEvent } from "utils/supabase"
 
 export const ConnectWalletPopover = ({
   unstyled,
+  children,
   ...rest
 }: ConnectButtonProps) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
@@ -115,7 +116,7 @@ export const ConnectWalletPopover = ({
     >
       <PopoverTrigger>
         <BaseButton {...styles} {...rest}>
-          Connect {isLarger768 && "Wallet"}
+          {children || `Connect ${isLarger768 && "Wallet"}`}
         </BaseButton>
       </PopoverTrigger>
       <Portal>
