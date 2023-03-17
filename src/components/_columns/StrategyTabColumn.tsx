@@ -31,7 +31,7 @@ export const StrategyTabColumn = ({
       disableSortBy: true,
     },
     {
-      Header: "TVM",
+      Header: "TVL",
       accessor: "tvm.value",
       Cell: ({ row }: any) => (
         <Text fontWeight={600} fontSize="12px" textAlign="right">

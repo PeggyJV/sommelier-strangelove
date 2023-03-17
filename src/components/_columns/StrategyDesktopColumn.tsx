@@ -5,8 +5,10 @@ import {
   Flex,
   HStack,
   Text,
+  Tooltip,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
@@ -42,7 +44,21 @@ export const StrategyDesktopColumn = ({
       disableSortBy: true,
     },
     {
-      Header: "Protocol",
+      Header: () => (
+        <Tooltip
+          hasArrow
+          arrowShadowColor="purple.base"
+          label="Protocols in which Strategy operates"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack spacing={1}>
+            <Text>Protocol</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
+      ),
       accessor: "protocols",
       Cell: ({ cell: { value } }: CellValue) => {
         const protocols = typeof value === "string" ? [value] : value
@@ -88,7 +104,21 @@ export const StrategyDesktopColumn = ({
       disableSortBy: true,
     },
     {
-      Header: "Assets",
+      Header: () => (
+        <Tooltip
+          hasArrow
+          arrowShadowColor="purple.base"
+          label="Strategy will have exposure to 1 or more of these assets at any given time"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack spacing={1}>
+            <Text>Assets</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
+      ),
       accessor: "tradedAssets",
       Cell: ({ cell: { value } }: CellValue) => {
         const getFirst3Value = value.slice(0, 3)
@@ -136,7 +166,7 @@ export const StrategyDesktopColumn = ({
       disableSortBy: true,
     },
     {
-      Header: "TVM",
+      Header: "TVL",
       accessor: "tvm.value",
       Cell: ({ row }: any) => (
         <Text fontWeight={600} fontSize="12px" textAlign="right">
