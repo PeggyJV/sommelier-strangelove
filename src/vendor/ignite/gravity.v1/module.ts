@@ -350,17 +350,17 @@ export const txClient = (
           toAmino: (msg) => {
             return {
               amount: msg.amount,
-              sender: msg.sender,
-              ethereum_recipient: msg.ethereumRecipient,
               bridge_fee: msg.bridgeFee,
+              ethereum_recipient: msg.ethereumRecipient,
+              sender: msg.sender,
             }
           },
           fromAmino: (msg) => {
             return {
               amount: msg.amount,
-              sender: msg.sender,
-              ethereumRecipient: msg.ethereum_recipient,
               bridgeFee: msg.bridge_fee,
+              ethereumRecipient: msg.ethereum_recipient,
+              sender: msg.sender,
             }
           },
         },
