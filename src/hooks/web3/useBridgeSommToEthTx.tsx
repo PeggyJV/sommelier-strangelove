@@ -149,7 +149,6 @@ export const useBridgeSommToEthTx = () => {
         prefix: "somm",
       }).sendMsgSendToEthereum({
         value: {
-          // "failed to execute message; message index: 0: 900000usomm is smaller than 2000000usomm: insufficient funds"
           ethereumRecipient: props.address,
           amount: {
             amount: String(convertedAmount),
