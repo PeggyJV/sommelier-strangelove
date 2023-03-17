@@ -5,6 +5,7 @@ import { StdFee } from "@cosmjs/launchpad"
 import {
   SigningStargateClient,
   DeliverTxResponse,
+  AminoTypes,
 } from "@cosmjs/stargate"
 import {
   EncodeObject,
@@ -343,13 +344,35 @@ export const txClient = (
           "TxClient:sendMsgSendToEthereum: Unable to sign Tx. Signer is not present."
         )
       }
+      const gravityTypes = {
+        "/gravity.v1.MsgSendToEthereum": {
+          aminoType: "gravity/MsgSendToEthereum",
+          toAmino: (msg: MsgSendToEthereum) => {
+            return {
+              amount: msg.amount,
+              sender: msg.sender,
+              ethereum_recipient: msg.ethereumRecipient,
+              bridge_fee: msg.bridgeFee,
+            }
+          },
+          fromAmino: (msg: MsgSendToEthereum) => {
+            return {
+              amount: msg.amount,
+              sender: msg.sender,
+              ethereumRecipient: msg.ethereum_recipient,
+              bridgeFee: msg.bridge_fee,
+            }
+          },
+        },
+      }
+      const aminoTypes = new AminoTypes(gravityTypes)
       try {
         const { address } = (await signer.getAccounts())[0]
         const signingClient =
           await SigningStargateClient.connectWithSigner(
             addr,
             signer,
-            { registry, prefix }
+            { registry, prefix, aminoTypes: aminoTypes }
           )
         let msg = this.msgSendToEthereum({
           value: MsgSendToEthereum.fromPartial(value),
