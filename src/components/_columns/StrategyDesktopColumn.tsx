@@ -46,7 +46,6 @@ export const StrategyDesktopColumn = ({
     {
       Header: () => (
         <Tooltip
-          hasArrow
           arrowShadowColor="purple.base"
           label="Protocols in which Strategy operates"
           placement="top"
@@ -106,7 +105,6 @@ export const StrategyDesktopColumn = ({
     {
       Header: () => (
         <Tooltip
-          hasArrow
           arrowShadowColor="purple.base"
           label="Strategy will have exposure to 1 or more of these assets at any given time"
           placement="top"
