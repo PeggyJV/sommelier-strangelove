@@ -61,26 +61,6 @@ export const BorderTr: VFC<BorderTrProps> = ({
           })
         }
       }}
-      _first={{
-        td: {
-          _first: {
-            borderTopLeftRadius: 20,
-          },
-          _last: {
-            borderTopRightRadius: 20,
-          },
-        },
-      }}
-      _last={{
-        td: {
-          _first: {
-            borderBottomLeftRadius: 20,
-          },
-          _last: {
-            borderBottomRightRadius: 20,
-          },
-        },
-      }}
       {...props}
     />
   )
@@ -114,17 +94,24 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
   )
 
   return (
-    <TableContainer>
+    <TableContainer rounded="xl">
       <Table
         {...getTableProps()}
         variant="unstyled"
         sx={{
           borderCollapse: "collapse",
         }}
+        rounded="lg"
       >
         <Thead border="none" color="neutral.400">
           {headerGroups.map((headerGroup, index) => (
-            <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
+            <Tr
+              {...headerGroup.getHeaderGroupProps()}
+              key={index}
+              bg="surface.primary"
+              borderBottom="1px solid"
+              borderColor="surface.secondary"
+            >
               {headerGroup.headers.map((column: any, index) => {
                 return column.canSort ? (
                   <Th
