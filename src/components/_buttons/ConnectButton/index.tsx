@@ -9,6 +9,7 @@ import { MobileConnectedPopover } from "./MobileConnectedPopover"
 export interface ConnectButtonProps
   extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
+  children?: React.ReactNode
 }
 
 const ConnectButton = (props: ConnectButtonProps) => {

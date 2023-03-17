@@ -11,6 +11,11 @@ import React, { useState } from "react"
 
 import Image from "next/image"
 import { useAccount, useBalance } from "wagmi"
+import {
+  useBalances as useGrazBalances,
+  useAccount as useGrazAccount,
+  mainnetChains,
+} from "graz"
 import { toEther } from "utils/formatCurrency"
 import { useFormContext } from "react-hook-form"
 import { BridgeFormValues } from "."
@@ -18,8 +23,11 @@ import { InformationIcon } from "components/_icons"
 import { config } from "utils/config"
 
 export const InputAmount: React.FC = () => {
-  const { register, setValue, formState, getFieldState } =
+  const { register, setValue, formState, getFieldState, watch } =
     useFormContext<BridgeFormValues>()
+  const watchType = watch("type")
+  const toSomm = watchType === "TO_SOMMELIER"
+  const toEth = watchType === "TO_ETHEREUM"
 
   const isError = !!getFieldState("amount").error
   const [isActive, setActive] = useState(false)
@@ -30,14 +38,33 @@ export const InputAmount: React.FC = () => {
     watch: true,
   })
 
-  const isBalanceLoading = isConnecting || isLoading
+  const { isConnecting: isGrazConnecting } = useGrazAccount()
+  const {
+    data: grazData,
+    isLoading: isGrazLoading,
+    error: grazError,
+  } = useGrazBalances()
+  const sommBalance = grazData?.find((item) => item.denom === "usomm")
+  const sommDecimal =
+    mainnetChains.sommelier.currencies.find(
+      (item) => item.coinMinimalDenom === "usomm"
+    )?.coinDecimals || 6
 
+  const isBalanceLoading = toSomm
+    ? isConnecting || isLoading
+    : isGrazConnecting || isGrazLoading
   const onMaxButtonClick = () => {
-    if (!data) return
-    const amount = parseFloat(
-      toEther(data.value, data.decimals, false)
-    )
-    setValue("amount", amount, { shouldValidate: true })
+    if (toSomm && data) {
+      const amount = parseFloat(
+        toEther(data.value, data.decimals, false)
+      )
+      setValue("amount", amount, { shouldValidate: true })
+    } else if (toEth && sommBalance) {
+      const amount = parseFloat(
+        toEther(sommBalance.amount, sommDecimal, false)
+      )
+      setValue("amount", amount, { shouldValidate: true })
+    }
   }
 
   return (
@@ -83,6 +110,8 @@ export const InputAmount: React.FC = () => {
             fontSize="lg"
             fontWeight={700}
             textAlign="right"
+            autoComplete="off"
+            autoCorrect="off"
             {...register("amount", {
               required: "Enter amount",
               valueAsNumber: true,
@@ -90,12 +119,27 @@ export const InputAmount: React.FC = () => {
                 positive: (v) =>
                   v > 0 || "You must submit a positive amount.",
                 balance: (v) =>
-                  (data &&
-                    v <=
-                      parseFloat(
-                        toEther(data.value, data.decimals, false)
-                      )) ||
-                  "Insufficient balance",
+                  toSomm
+                    ? (data &&
+                        v <=
+                          parseFloat(
+                            toEther(data.value, data.decimals, false)
+                          )) ||
+                      "Insufficient balance"
+                    : (sommBalance &&
+                        v <=
+                          parseFloat(
+                            toEther(
+                              sommBalance.amount,
+                              sommDecimal,
+                              false
+                            )
+                          )) ||
+                      "Insufficient balance",
+                minimal: (v) =>
+                  toEth
+                    ? v >= 50 || "Amount must be greater than 50"
+                    : true,
               },
             })}
           />
@@ -106,8 +150,12 @@ export const InputAmount: React.FC = () => {
               <>
                 <Text as="span">
                   Available:{" "}
-                  {(data && toEther(data.value, data.decimals)) ||
-                    "--"}
+                  {toSomm
+                    ? (data && toEther(data.value, data.decimals)) ||
+                      "--"
+                    : (sommBalance &&
+                        toEther(sommBalance.amount, sommDecimal)) ||
+                      "--"}
                 </Text>
                 <Button
                   variant="unstyled"
@@ -134,11 +182,13 @@ export const InputAmount: React.FC = () => {
           </Text>
         </HStack>
       )}
-      {error && (
+      {((toEth && grazError) || (toSomm && error)) && (
         <HStack spacing="6px">
           <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
-            {error.message}
+            {(toEth && error?.message) ||
+              // @ts-expect-error
+              (toSomm && grazError?.message)}
           </Text>
         </HStack>
       )}
