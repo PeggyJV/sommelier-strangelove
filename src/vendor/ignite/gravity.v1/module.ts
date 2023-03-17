@@ -347,6 +347,7 @@ export const txClient = (
       const gravityTypes = {
         "/gravity.v1.MsgSendToEthereum": {
           toAmino: (msg) => {
+            console.log(msg)
             return {
               amount: {
                 amount: msg.amount.value,
