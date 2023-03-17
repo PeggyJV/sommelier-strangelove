@@ -354,8 +354,8 @@ export const txClient = (
                 denom: msg.amount.denom,
               },
               bridge_fee: {
-                amount: msg.bridge_fee.amount,
-                denom: msg.bridge_fee.denom,
+                amount: msg.bridgeFee.amount,
+                denom: msg.bridgeFee.denom,
               },
               ethereum_recipient: msg.ethereumRecipient,
               sender: msg.sender,
