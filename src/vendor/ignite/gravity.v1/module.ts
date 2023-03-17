@@ -348,8 +348,14 @@ export const txClient = (
         "/gravity.v1.MsgSendToEthereum": {
           toAmino: (msg) => {
             return {
-              amount: msg.amount,
-              bridge_fee: msg.bridgeFee,
+              amount: {
+                amount: msg.amount.amount,
+                denom: msg.amount.denom,
+              },
+              bridge_fee: {
+                amount: msg.bridge_fee.amount,
+                denom: msg.bridge_fee.denom
+              },
               ethereum_recipient: msg.ethereumRecipient,
               sender: msg.sender,
             }
