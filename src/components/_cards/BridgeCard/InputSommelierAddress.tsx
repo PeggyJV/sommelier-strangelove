@@ -78,33 +78,25 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
           Sommelier Address
         </Text>
-        {window.keplr !== undefined && isConnected && (
-          <HStack
-            as="button"
-            spacing={1}
-            onClick={() => onAutofillClick()}
-          >
-            <Text fontWeight="bold" color="white" fontSize="xs">
-              Import from Keplr
-            </Text>
-            <Image
-              src="/assets/images/keplr.png"
-              alt="Keplr logo"
-              width={4}
-            />
-          </HStack>
-        )}
+        <HStack
+          as="button"
+          spacing={1}
+          onClick={() => onAutofillClick()}
+        >
+          <Text fontWeight="bold" color="white" fontSize="xs">
+            Import from Keplr
+          </Text>
+          <Image
+            src="/assets/images/keplr.png"
+            alt="Keplr logo"
+            width={4}
+          />
+        </HStack>
       </HStack>
       <Box
         onFocus={() => setActive(true)}
         onBlur={() => setActive(false)}
-        boxShadow={
-          isError
-            ? "redOutline1"
-            : isActive
-            ? "purpleOutline1"
-            : "none"
-        }
+        boxShadow={isError ? "redOutline1" : "purpleOutline1"}
         borderRadius="16px"
       >
         <Input

@@ -8,6 +8,7 @@ import {
   Flex,
   HStack,
 } from "@chakra-ui/react"
+import { Link } from "components/Link"
 import { BaseButton } from "components/_buttons/BaseButton"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { BridgeFormValues } from "components/_cards/BridgeCard"
@@ -17,11 +18,12 @@ import { InputEthereumAddress } from "components/_cards/BridgeCard/InputEthereum
 import { InputSommelierAddress } from "components/_cards/BridgeCard/InputSommelierAddress"
 import { SommelierAddress } from "components/_cards/BridgeCard/SommelierAddress"
 import { SommReceivedInEth } from "components/_cards/BridgeCard/SommReceivedInEth"
-import { TimerIcon } from "components/_icons"
+import { ExternalLinkIcon, TimerIcon } from "components/_icons"
 import {
   useAccount as useGrazAccount,
   useConnect as useGrazConnect,
 } from "graz"
+import { useBrandedToast } from "hooks/chakra"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useBridgeEthToSommTx } from "hooks/web3/useBridgeEthToSommTx"
 import { useBridgeSommToEthTx } from "hooks/web3/useBridgeSommToEthTx"
@@ -30,6 +32,7 @@ import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
 
 export const BridgeForm: VFC = () => {
+  const { addToast, closeAll } = useBrandedToast()
   const isMounted = useIsMounted()
   const { watch, handleSubmit, formState, getFieldState, setValue } =
     useFormContext<BridgeFormValues>()
@@ -56,7 +59,7 @@ export const BridgeForm: VFC = () => {
     isEthToSommLoading ||
     isSommToEthLoading
 
-  const { connect } = useGrazConnect()
+  const { connectAsync } = useGrazConnect()
   const { isConnected: isGrazConnected } = useGrazAccount()
 
   const { isConnected } = useAccount()
@@ -146,26 +149,34 @@ export const BridgeForm: VFC = () => {
             {watchType === "TO_SOMMELIER" ? <Somm /> : <Eth />}
           </Stack>
         </HStack>
-        <FormControl
-          isInvalid={formState.errors.amount as boolean | undefined}
-        >
-          <InputAmount />
-        </FormControl>
-        {watchType === "TO_SOMMELIER" ? (
-          <EthereumAddress />
-        ) : (
-          <SommelierAddress />
+        {buttonEnabled && (
+          <>
+            <FormControl
+              isInvalid={
+                formState.errors.amount as boolean | undefined
+              }
+            >
+              <InputAmount />
+            </FormControl>
+            {watchType === "TO_SOMMELIER" ? (
+              <EthereumAddress />
+            ) : (
+              <SommelierAddress />
+            )}
+            <FormControl
+              isInvalid={
+                formState.errors.address as boolean | undefined
+              }
+            >
+              {watchType === "TO_SOMMELIER" ? (
+                <InputSommelierAddress />
+              ) : (
+                <InputEthereumAddress />
+              )}
+            </FormControl>
+            {watchType === "TO_ETHEREUM" && <SommReceivedInEth />}
+          </>
         )}
-        <FormControl
-          isInvalid={formState.errors.address as boolean | undefined}
-        >
-          {watchType === "TO_SOMMELIER" ? (
-            <InputSommelierAddress />
-          ) : (
-            <InputEthereumAddress />
-          )}
-        </FormControl>
-        {watchType === "TO_ETHEREUM" && <SommReceivedInEth />}
       </Stack>
       {isMounted &&
         (buttonEnabled ? (
@@ -186,9 +197,42 @@ export const BridgeForm: VFC = () => {
           <BaseButton
             height="69px"
             fontSize="21px"
-            onClick={() => connect()}
+            onClick={async () => {
+              try {
+                await connectAsync()
+              } catch (e) {
+                const error = e as Error
+                if (error.message === "Keplr is not defined") {
+                  return addToast({
+                    heading: "Connect Keplr Wallet",
+                    body: (
+                      <>
+                        <Text>Keplr not found</Text>
+                        <Link
+                          display="flex"
+                          alignItems="center"
+                          href="https://www.keplr.app/download"
+                          isExternal
+                        >
+                          <Text as="span">Install Keplr</Text>
+                          <ExternalLinkIcon ml={2} />
+                        </Link>
+                      </>
+                    ),
+                    status: "error",
+                    closeHandler: closeAll,
+                  })
+                }
+                addToast({
+                  heading: "Connect Keplr Wallet",
+                  body: <Text>{error.message}</Text>,
+                  status: "error",
+                  closeHandler: closeAll,
+                })
+              }
+            }}
           >
-            Connect Cosmos Wallet
+            Connect Keplr Wallet
           </BaseButton>
         ))}
 

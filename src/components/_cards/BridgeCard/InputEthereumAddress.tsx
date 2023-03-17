@@ -28,7 +28,7 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
 
   const onAutofillClick = async (isValidateAddress?: boolean) => {
     try {
-      if (!address) throw new Error("Address not defined")
+      if (!address) throw new Error("No wallet connected")
       setValue(
         "address",
         isValidateAddress ? getValues().address : address,
@@ -53,29 +53,22 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
           Ethereum Address
         </Text>
-        {isConnected && (
-          <HStack
-            as="button"
-            spacing={1}
-            onClick={() => onAutofillClick()}
-          >
-            <Text fontWeight="bold" color="white" fontSize="xs">
-              Import from Wallet
-            </Text>
-            <MoneyWalletIcon boxSize="10px" />
-          </HStack>
-        )}
+
+        <HStack
+          as="button"
+          spacing={1}
+          onClick={() => onAutofillClick()}
+        >
+          <Text fontWeight="bold" color="white" fontSize="xs">
+            Import ETH address
+          </Text>
+          <MoneyWalletIcon boxSize="10px" />
+        </HStack>
       </HStack>
       <Box
         onFocus={() => setActive(true)}
         onBlur={() => setActive(false)}
-        boxShadow={
-          isError
-            ? "redOutline1"
-            : isActive
-            ? "purpleOutline1"
-            : "none"
-        }
+        boxShadow={isError ? "redOutline1" : "purpleOutline1"}
         borderRadius="16px"
       >
         <Input
