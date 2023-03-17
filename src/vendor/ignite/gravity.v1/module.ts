@@ -350,11 +350,11 @@ export const txClient = (
             console.log(msg)
             return {
               amount: {
-                amount: msg.amount.value,
+                amount: msg.amount.amount,
                 denom: msg.amount.denom,
               },
               bridge_fee: {
-                amount: msg.bridge_fee.value,
+                amount: msg.bridge_fee.amount,
                 denom: msg.bridge_fee.denom,
               },
               ethereum_recipient: msg.ethereumRecipient,
