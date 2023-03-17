@@ -346,7 +346,6 @@ export const txClient = (
       }
       const gravityTypes = {
         "/gravity.v1.MsgSendToEthereum": {
-          aminoType: "gravity/MsgSendToEthereum",
           toAmino: (msg) => {
             return {
               amount: msg.amount,
