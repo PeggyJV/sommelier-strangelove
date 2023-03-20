@@ -89,7 +89,8 @@ export const Nav: VFC<FlexProps> = (props) => {
               const path = routes.pathname.split("/")[1]
 
               const isActive =
-                (item.link === "https://www.sommelier.finance/"
+                (item.link === "https://www.sommelier.finance/" ||
+                item.link === "https://www.sommelier.finance/audits"
                   ? false
                   : path === "strategies"
                   ? ""
@@ -122,83 +123,6 @@ export const Nav: VFC<FlexProps> = (props) => {
               justifyContent="flex-start"
               onClick={onOpen}
             >
-<<<<<<< HEAD
-              {NAV_LINKS.map((item) => {
-                const path = routes.pathname.split("/")[1]
-                const isExternal = item.link.includes(
-                  "https://www.sommelier.finance"
-                )
-                const isActive =
-                  (isExternal
-                    ? false
-                    : path === "strategies"
-                    ? ""
-                    : path) === item.link.split("/")[1]
-
-                return (
-                  <Link
-                    key={item.link}
-                    href={item.link}
-                    color={isActive ? "white" : "neutral.400"}
-                    fontWeight="semibold"
-                  >
-                    {item.title}
-                  </Link>
-                )
-              })}
-            </HStack>
-          )}
-        </HStack>
-        <HStack justifyContent="flex-end">
-          <ConnectButton />
-          <IconButton
-            variant="unstyled"
-            aria-label={"menu"}
-            display={["flex", "flex", "none", "none"]}
-            onClick={onOpen}
-          >
-            <HamburgerIcon />
-          </IconButton>
-          <Drawer
-            placement={"right"}
-            onClose={onClose}
-            isOpen={isOpen && !isLarger768}
-          >
-            <DrawerOverlay />
-            <DrawerContent backgroundColor="#1E163D">
-              <DrawerCloseButton size="lg" />
-              <DrawerBody p={0}>
-                <Stack alignItems="flex-end" py="160px" px="24px">
-                  {NAV_LINKS.map((item) => {
-                    const path = routes.pathname.split("/")[1]
-                    const isExternal = item.link.includes(
-                      "https://www.sommelier.finance"
-                    )
-                    const isActive =
-                      (isExternal
-                        ? false
-                        : path === "strategies"
-                        ? ""
-                        : path) === item.link.split("/")[1]
-
-                    return (
-                      <Link
-                        key={item.link}
-                        href={item.link}
-                        color={isActive ? "white" : "neutral.400"}
-                        fontWeight="semibold"
-                        fontSize="21px"
-                      >
-                        {item.title}
-                      </Link>
-                    )
-                  })}
-                </Stack>
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
-        </HStack>
-=======
               <HamburgerIcon />
             </IconButton>
             <Link href="/">
@@ -229,7 +153,9 @@ export const Nav: VFC<FlexProps> = (props) => {
                   const path = routes.pathname.split("/")[1]
 
                   const isActive =
-                    (item.link === "https://www.sommelier.finance/"
+                    (item.link === "https://www.sommelier.finance/" ||
+                    item.link ===
+                      "https://www.sommelier.finance/audits"
                       ? false
                       : path === "strategies"
                       ? ""
@@ -250,7 +176,6 @@ export const Nav: VFC<FlexProps> = (props) => {
             </DrawerBody>
           </DrawerContent>
         </Drawer>
->>>>>>> c352894 (redesign and refactor overview page v2)
       </Container>
     </Flex>
   )
