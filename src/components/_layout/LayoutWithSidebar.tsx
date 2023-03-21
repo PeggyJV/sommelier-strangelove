@@ -33,11 +33,7 @@ export const LayoutWithSidebar: FC = ({ children }) => {
           justifyContent="center"
           ref={containerRef}
         >
-          <Flex
-            wrap="wrap-reverse"
-            gap={{ base: "44px", lg: 8 }}
-            pb={8}
-          >
+          <Flex wrap="wrap-reverse" gap={{ base: "44px", lg: 8 }}>
             <Box w={{ base: "full", lg: "900px" }} flex={7}>
               {children}
             </Box>
@@ -47,14 +43,8 @@ export const LayoutWithSidebar: FC = ({ children }) => {
               </Box>
             )}
           </Flex>
+          {!isLoading && <TimeFrameButton />}
         </Container>
-        {!isLoading && (
-          <TimeFrameButton
-            containerHeight={
-              containerRef.current?.clientHeight || 500
-            }
-          />
-        )}
       </Flex>
       <Footer />
     </Box>
