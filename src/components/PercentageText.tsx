@@ -1,8 +1,14 @@
-import { Heading, HStack } from "@chakra-ui/react"
-import { VFC } from "react"
+import {
+  Heading,
+  HStack,
+  Skeleton,
+  StackProps,
+} from "@chakra-ui/react"
+import { useHome } from "data/context/homeContext"
+import { useEffect, useState, VFC } from "react"
 import { PercentageHeading } from "./PercentageHeading"
 
-interface PercentageTextProps {
+interface PercentageTextProps extends StackProps {
   data?: number
   headingSize?: "sm" | "md" | "lg" | "xl"
   arrow?: boolean
@@ -16,11 +22,29 @@ export const PercentageText: VFC<PercentageTextProps> = ({
   arrow,
   arrowT2,
   fontWeight = 700,
+  ...props
 }) => {
   const percentageData = data && Math.abs(data).toFixed(2)
   const isDataZero = Number(percentageData) === 0
   const isDataNegative = data && data < 0
   const valueExists: boolean = isDataZero || Boolean(percentageData)
+
+  const { timeline } = useHome()
+  const [value] = useState(timeline.title)
+  const [isUpdated, setIsUpdated] = useState(false)
+
+  useEffect(() => {
+    setIsUpdated(true)
+    const timer = setTimeout(() => {
+      setIsUpdated(false)
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [value])
+
+  if (isUpdated) {
+    return <Skeleton height="20px" />
+  }
+
   if (!data && !isDataZero) {
     return (
       <Heading
@@ -45,6 +69,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
       }
       spacing={1}
       justifyContent="flex-end"
+      {...props}
     >
       {!isDataZero && (
         <PercentageHeading
