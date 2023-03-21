@@ -43,12 +43,12 @@ export const HeroStrategyLeft: VFC<HeroStrategyLeftProps> = ({
         />
         <Stack>
           <Text fontWeight="semibold" fontSize="xl">
-            Automated Portfolio Management Included
+            Automated Portfolio Optimization Included
           </Text>
           <Text>
             Buy the token to get exposure to the strategy portfolio,
             and sell it when you want to exit. Smart contract
-            algorithms manage the rest.
+            algorithms take care of the rest.
           </Text>
         </Stack>
       </HStack>
