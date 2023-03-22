@@ -38,6 +38,7 @@ export const StrategyDesktopColumn = ({
             type={row.original.type}
             date={row.original.launchDate}
             description={row.original.description}
+            w={56}
           />
         )
       },
@@ -75,6 +76,7 @@ export const StrategyDesktopColumn = ({
           <Box
             onMouseLeave={handleMouseLeave}
             onMouseOver={handleMouseOver}
+            w={20}
           >
             <HStack>
               <AvatarGroup size="sm" max={3}>
@@ -138,6 +140,7 @@ export const StrategyDesktopColumn = ({
           <Box
             onMouseLeave={handleMouseLeave}
             onMouseOver={handleMouseOver}
+            w={20}
           >
             <HStack>
               <AvatarGroup size="sm">
