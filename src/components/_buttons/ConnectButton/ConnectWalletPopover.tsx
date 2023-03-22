@@ -117,7 +117,8 @@ export const ConnectWalletPopover = ({
     >
       <PopoverTrigger>
         <BaseButton {...styles} {...rest}>
-          {children || `Connect ${isLarger480 && "Wallet"}`}
+          {children ??
+            `Connect ${Boolean(isLarger480) ? "Wallet" : ""}`}
         </BaseButton>
       </PopoverTrigger>
       <Portal>
