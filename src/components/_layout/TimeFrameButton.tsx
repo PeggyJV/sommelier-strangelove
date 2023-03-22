@@ -26,7 +26,7 @@ export const TimeFrameButton = ({
     return () => {
       window.removeEventListener("scroll", handleScroll)
     }
-  }, [])
+  }, [containerHeight])
 
   return (
     <HStack
