@@ -5,6 +5,7 @@ import {
   HStack,
   Image,
   Stack,
+  StackProps,
   Text,
   Tooltip,
 } from "@chakra-ui/react"
@@ -13,7 +14,7 @@ import { CellarType } from "data/types"
 import React from "react"
 import { StrategyDate } from "./StrategyDate"
 
-type StrategySectionProps = {
+interface StrategySectionProps extends StackProps {
   icon: string
   title: string
   description: string
@@ -33,6 +34,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   date,
   netValue,
   rewards,
+  ...props
 }) => {
   const strategyType =
     type === CellarType.yieldStrategies ? "Yield" : "Portfolio"
@@ -48,7 +50,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
       boxShadow="xl"
       shouldWrapChildren
     >
-      <Stack direction="row" alignItems="center">
+      <Stack direction="row" alignItems="center" {...props}>
         <Image
           boxSize="45px"
           src={icon}
