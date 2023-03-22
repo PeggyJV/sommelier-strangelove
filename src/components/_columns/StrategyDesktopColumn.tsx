@@ -193,8 +193,31 @@ export const StrategyDesktopColumn = ({
     {
       Header: timeline.title,
       accessor: `changes.${timeline.value}`,
-      Cell: ({ cell: { value } }: CellValue) => (
-        <PercentageText data={value} arrowT2 fontWeight={600} />
+      Cell: ({ row }: any) => (
+        <Tooltip
+          label={`Annualized ${row.original.baseApy?.formatted} APY`}
+          color="neutral.100"
+          border="0"
+          fontSize="12px"
+          bg="neutral.900"
+          fontWeight={600}
+          py="4"
+          px="6"
+          boxShadow="xl"
+          shouldWrapChildren
+          isDisabled={
+            !Boolean(
+              Boolean(row.original.baseApy?.formatted) &&
+                row.original.type === 1
+            )
+          }
+        >
+          <PercentageText
+            data={row.original.changes[timeline.value]}
+            arrowT2
+            fontWeight={600}
+          />
+        </Tooltip>
       ),
       sortType: "basic",
     },
