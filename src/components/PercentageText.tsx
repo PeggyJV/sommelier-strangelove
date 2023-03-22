@@ -1,9 +1,4 @@
-import {
-  Heading,
-  HStack,
-  Skeleton,
-  StackProps,
-} from "@chakra-ui/react"
+import { Box, Heading, HStack, StackProps } from "@chakra-ui/react"
 import { useHome } from "data/context/homeContext"
 import { useEffect, useState, VFC } from "react"
 import { PercentageHeading } from "./PercentageHeading"
@@ -37,13 +32,9 @@ export const PercentageText: VFC<PercentageTextProps> = ({
     setIsUpdated(true)
     const timer = setTimeout(() => {
       setIsUpdated(false)
-    }, 1000)
+    }, 500)
     return () => clearTimeout(timer)
   }, [value])
-
-  if (isUpdated) {
-    return <Skeleton height="20px" />
-  }
 
   if (!data && !isDataZero) {
     return (
@@ -71,20 +62,28 @@ export const PercentageText: VFC<PercentageTextProps> = ({
       justifyContent="flex-end"
       {...props}
     >
-      {!isDataZero && (
-        <PercentageHeading
-          arrow={arrow}
-          arrowT2={arrowT2}
-          isDataNegative={isDataNegative}
-        />
-      )}
+      <Box boxSize={4}>
+        {!isDataZero && !isUpdated && (
+          <PercentageHeading
+            arrow={arrow}
+            arrowT2={arrowT2}
+            isDataNegative={isDataNegative}
+          />
+        )}
+      </Box>
       <Heading
         size={headingSize}
         display="flex"
         alignItems="center"
         columnGap="3px"
         fontWeight={fontWeight}
-        color={isDataZero && arrowT2 ? "#9E9DA3" : "current"}
+        color={
+          isUpdated
+            ? "white"
+            : isDataZero && arrowT2
+            ? "#9E9DA3"
+            : "current"
+        }
       >
         {valueExists
           ? isDataZero && arrowT2
