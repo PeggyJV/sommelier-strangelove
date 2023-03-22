@@ -23,17 +23,15 @@ import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { StrategyProvider } from "components/StrategyProvider"
 import { CellarDataMap } from "data/types"
 import { protocolsImage } from "utils/protocolsImagePath"
-import { useTvm } from "data/hooks/useTvm"
 import {
   isAssetDistributionEnabled,
   isTokenAssets,
 } from "data/uiConfig"
-import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { TokenAssets } from "components/TokenAssets"
-import { usePosition } from "data/hooks/usePosition"
 import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { isArray } from "lodash"
+import { useStrategyData } from "data/hooks/useStrategyData"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -55,12 +53,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   cellarDataMap,
 }) => {
   const { barChartTheme } = useNivoThemes()
+  const isLarger400 = useBetterMediaQuery("(min-width: 400px)")
   const theme = useTheme()
-  // const borderColor = useBreakpointValue({
-  //   sm: "purple.dark",
-  //   md: "transparent",
-  //   lg: "purple.dark",
-  // })
   const {
     protocols,
     strategyType,
@@ -76,19 +70,13 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   )
   const performanceSplitKeys = Object.keys(performanceSplit)
   const cellarConfig = cellarDataMap[cellarId].config
-  const { data: tvm } = useTvm(cellarConfig)
-  const { data: activeAsset } = useActiveAsset(cellarConfig)
-  const isLarger400 = useBetterMediaQuery("(min-width: 400px)")
-  const position = usePosition(cellarConfig)
 
-  // Unsure why this was necessary? Nivo acts strangely when there are fewer than three args in an index. Could be refined later.
-  // const moveColors = (colorTheme: string[]): string[] => {
-  //   const lastColor = colorTheme.slice(-1)
-  //   const otherColors = colorTheme.slice(0, -1)
-  //   return [...lastColor, ...otherColors]
-  // }
-
-  // const colors = moveColors(barChartTheme)
+  const { data: strategyData, isLoading } = useStrategyData(
+    cellarConfig.cellar.address
+  )
+  const positionDistribution = strategyData?.positionDistribution
+  const tvm = strategyData?.tvm
+  const activeAsset = strategyData?.activeAsset
 
   const isManyProtocols = isArray(protocols)
   const protocolData = isManyProtocols
@@ -194,10 +182,10 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               )}
 
               {isAssetDistributionEnabled(cellarConfig) &&
-              position.isLoading ? (
+              isLoading ? (
                 <Spinner />
               ) : (
-                position.data?.map((item) => {
+                positionDistribution?.map((item) => {
                   const asset = tokenConfig.find(
                     (v) => v.address === item.address
                   )

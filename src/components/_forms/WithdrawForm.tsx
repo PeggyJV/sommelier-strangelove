@@ -24,21 +24,20 @@ import { useHandleTransaction } from "hooks/web3"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useUserStakes } from "data/hooks/useUserStakes"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
-import { useNetValue } from "data/hooks/useNetValue"
 import { useGeo } from "context/geoContext"
 import { WarningIcon } from "components/_icons"
 import { useCurrentPosition } from "data/hooks/useCurrentPosition"
 import { tokenConfig } from "data/tokenConfig"
-import { useTokenPrice } from "data/hooks/useTokenPrice"
 import BigNumber from "bignumber.js"
 import {
   isAssetDistributionEnabled,
   isWithdrawTokenPriceEnabled,
 } from "data/uiConfig"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { useStrategyData } from "data/hooks/useStrategyData"
 interface FormValues {
   withdrawAmount: number
 }
@@ -62,9 +61,11 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch: refetchUserStakes } = useUserStakes(cellarConfig)
-  const { refetch: refetchNetValue } = useNetValue(cellarConfig)
-  const tokenPrice = useTokenPrice(cellarConfig)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
+  const { data: strategyData } = useStrategyData(
+    cellarConfig.cellar.address
+  )
+  const tokenPrice = strategyData?.tokenPrice
 
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
@@ -190,8 +191,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       }
     }
 
-    refetchUserStakes()
-    refetchNetValue()
+    refetch()
     setValue("withdrawAmount", 0)
   }
 
@@ -387,7 +387,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
           {isWithdrawTokenPriceEnabled(cellarConfig) && (
             <TransactionDetailItem
               title="Token price"
-              value={<Text>{tokenPrice.data}</Text>}
+              value={<Text>{tokenPrice}</Text>}
             />
           )}
           {isAssetDistributionEnabled(cellarConfig) && (

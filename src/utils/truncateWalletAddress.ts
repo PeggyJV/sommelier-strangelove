@@ -8,4 +8,9 @@ const truncateWalletAddress = (
   return `${pre}...${post}`
 }
 
+export const truncateString = (text: string, slice?: number) => {
+  const pre = text.slice(0, slice || 4)
+  return `${pre}...`
+}
+
 export default truncateWalletAddress

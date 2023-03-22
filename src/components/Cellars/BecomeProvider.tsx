@@ -1,7 +1,7 @@
 import { BoxProps, Heading, Link } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
+import { CardBase } from "components/_cards/CardBase"
 import { ArrowRightIcon } from "components/_icons"
-import { CardBase } from "./CardBase"
 
 const heading = "Want to become a strategy provider?"
 const getInTouchUrl = "https://9ftvmgahdx6.typeform.com/to/h6LmcZOD"

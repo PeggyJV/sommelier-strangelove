@@ -14,13 +14,12 @@ import { InlineImage } from "components/InlineImage"
 import { CoinImage } from "./CoinImage"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { formatDistanceToNow, isFuture } from "date-fns"
-import { useApy } from "data/hooks/useApy"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { TransparentSkeleton } from "components/_skeleton"
 import { formatDistance } from "utils/formatDistance"
 import { isComingSoon } from "utils/isComingSoon"
 import { ProtocolDataType } from "../CellarDetailsCard"
+import { useStrategyData } from "data/hooks/useStrategyData"
 export interface CellarCardData {
   cellarId: string
   name: string
@@ -44,8 +43,12 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
 }) => {
   const theme = useTheme()
   const cellarConfig = cellarDataMap[data.cellarId].config
-  const launchDate = cellarDataMap[data.cellarId].launchDate
-  const protocols = data.protocols
+
+  const { data: strategyData, isLoading } = useStrategyData(
+    cellarConfig.cellar.address
+  )
+  const launchDate = strategyData?.launchDate
+  const protocols = strategyData?.protocols!
   const isManyProtocols = typeof protocols === "object"
   const protocolData = isManyProtocols
     ? protocols.map((v) => {
@@ -58,14 +61,12 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
         title: protocols,
         icon: protocolsImage[protocols],
       }
-  const { data: apy, isLoading: apyLoading } = useApy(
-    cellarDataMap[data.cellarId]
-  )
-  const stakingEnd = useStakingEnd(cellarConfig)
+  const rewardsApy = strategyData?.rewardsApy
+  const stakingEnd = strategyData?.stakingEnd
   const isStakingStillRunning =
-    stakingEnd.data?.endDate && isFuture(stakingEnd.data?.endDate)
+    stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
   const comingSoon = isComingSoon(launchDate)
-  const tagLoading = apyLoading || stakingEnd.isLoading
+  const tagLoading = isLoading
 
   return (
     <Card
@@ -89,8 +90,8 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
         overflow="hidden"
       >
         {!comingSoon &&
-          stakingEnd.data?.endDate &&
-          isFuture(stakingEnd.data?.endDate) && (
+          stakingEnd?.endDate &&
+          isFuture(stakingEnd?.endDate) && (
             <Tag
               px={3}
               py={4}
@@ -112,16 +113,13 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
                       color: theme.colors.lime.base,
                     }}
                   >
-                    {apy?.potentialStakingApy}
+                    {rewardsApy?.formatted}
                   </span>
                   <span> &#183; </span>
                   {isStakingStillRunning
-                    ? `${formatDistanceToNow(
-                        stakingEnd.data.endDate,
-                        {
-                          locale: { formatDistance },
-                        }
-                      )} left`
+                    ? `${formatDistanceToNow(stakingEnd.endDate, {
+                        locale: { formatDistance },
+                      })} left`
                     : "Program ends"}
                 </Text>
               </TransparentSkeleton>

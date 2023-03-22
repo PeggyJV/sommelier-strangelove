@@ -15,17 +15,11 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { BuyOrSellModal } from "components/_modals/BuyOrSellModal"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useTokenPrice } from "data/hooks/useTokenPrice"
-import { useDailyChange } from "data/hooks/useDailyChange"
-import { strategyPageContentData } from "data/strategyPageContentData"
 import { VFC } from "react"
 import { PercentageText } from "components/PercentageText"
 import { CellarStatsLabel } from "components/_cards/CellarCard/CellarStats"
-import { useTvm } from "data/hooks/useTvm"
-import { useIntervalGain } from "data/hooks/useIntervalGain"
 import { analytics } from "utils/analytics"
 import { landingType } from "utils/landingType"
-import { usePosition } from "data/hooks/usePosition"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
 import {
@@ -39,12 +33,12 @@ import {
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
 import { formatDistanceToNow, isFuture } from "date-fns"
-import { useApy } from "data/hooks/useApy"
-import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
 import { CellarType } from "data/types"
+import { strategyPageContentData } from "data/strategyPageContentData"
+import { useStrategyData } from "data/hooks/useStrategyData"
 
 interface HeroStrategyRightProps {
   id: string
@@ -59,27 +53,27 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const cellarData = cellarDataMap[id]
   const launchDate = cellarDataMap[id].launchDate
   const cellarConfig = cellarData.config
-  const { data: tokenPrice } = useTokenPrice(cellarConfig)
-  const { data: dailyChange } = useDailyChange(cellarConfig)
-  const { data: stakingEnd } = useStakingEnd(cellarConfig)
-
-  const position = usePosition(cellarConfig)
+  const { data, isLoading } = useStrategyData(
+    cellarData.config.cellar.address
+  )
+  const {
+    tokenPrice,
+    changes,
+    stakingEnd,
+    positionDistribution,
+    tvm,
+    rewardsApy,
+    baseApy,
+  } = data || {}
+  const dailyChange = changes?.daily
   const router = useRouter()
 
-  const intervalGainPct = useIntervalGain({
-    config: cellarConfig,
-    timeline: intervalGainTimeline(cellarConfig),
-  })
+  const intervalGainPct =
+    changes?.[intervalGainTimeline(cellarConfig)]
 
-  const tvm = useTvm(cellarConfig)
   const countdown = isComingSoon(launchDate)
 
-  const { data: apy, isLoading: apyLoading } = useApy(
-    cellarDataMap[id]
-  )
-  const potentialStakingApy = apyLoading
-    ? "-"
-    : apy?.potentialStakingApy
+  const potentialStakingApy = isLoading ? "-" : rewardsApy || "-"
 
   const handleBuyOrSell = () => {
     if (Number(content.exchange?.length) > 1) {
@@ -160,24 +154,24 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               divider={<StackDivider borderColor="purple.dark" />}
             >
               <VStack flex={1}>
-                <Heading size="md">
-                  {tvm.data?.formatted || "--"}
-                </Heading>
+                <Heading size="md">{tvm?.formatted || "--"}</Heading>
                 <CellarStatsLabel
                   tooltip="Total value locked"
                   title="TVL"
                 />
               </VStack>
-              <VStack flex={1}>
-                <Heading size="md">{apy?.apy || "--"}</Heading>
+              <VStack flex={1} textAlign="center">
+                <Heading size="md">
+                  {baseApy?.formatted || "--"}
+                </Heading>
                 <CellarStatsLabel
-                  tooltip={apy?.apyLabel || ""}
+                  tooltip={apyLabel(cellarConfig) || ""}
                   title={apyLabel(cellarConfig)}
                 />
               </VStack>
               <VStack flex={1}>
                 <Heading size="md" color="lime.base">
-                  {apy?.potentialStakingApy || "--"}
+                  {rewardsApy?.formatted || "--"}
                 </Heading>
                 <CellarStatsLabel title={"Rewards APY"} />
               </VStack>
@@ -212,7 +206,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               {isIntervalGainPctEnabled(cellarConfig) && (
                 <VStack flex={1} textAlign="center">
                   <PercentageText
-                    data={intervalGainPct.data}
+                    data={intervalGainPct}
                     headingSize="md"
                   />
 
@@ -245,10 +239,10 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             </Text>
           </Box>
           <Stack direction="column">
-            {position.isLoading ? (
+            {isLoading ? (
               <Spinner />
-            ) : position.data?.length !== 0 ? (
-              position.data?.map((item) => {
+            ) : positionDistribution?.length !== 0 ? (
+              positionDistribution?.map((item) => {
                 const asset = tokenConfig.find(
                   (v) => v.address === item.address
                 )
@@ -305,11 +299,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               </Text>
             </Box>
             <Text>
-              {tvm.isLoading ? (
-                <Spinner />
-              ) : (
-                tvm.data?.formatted || "--"
-              )}
+              {isLoading ? <Spinner /> : tvm?.formatted || "--"}
             </Text>
           </HStack>
         )}

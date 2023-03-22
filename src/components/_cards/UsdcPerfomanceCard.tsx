@@ -12,11 +12,9 @@ import { useState, VFC } from "react"
 import { TransparentCard } from "./TransparentCard"
 import { CardHeading } from "components/_typography/CardHeading"
 import { analytics } from "utils/analytics"
-import { useTokenPrice } from "data/hooks/useTokenPrice"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { PercentageText } from "components/PercentageText"
-import { Legend } from "components/_charts/Legend"
 import { useUsdcChart } from "data/context/usdcChartContext"
 import { UsdcChart } from "components/_charts/UsdcChart"
 import { ErrorCard } from "./ErrorCard"
@@ -25,6 +23,7 @@ import { ChartTooltipItem } from "components/_charts/ChartTooltipItem"
 import { formatPercentage } from "utils/chartHelper"
 import { format } from "date-fns"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { useStrategyData } from "data/hooks/useStrategyData"
 
 export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
   const {
@@ -38,7 +37,10 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
   } = useUsdcChart()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
-  const tokenPrice = useTokenPrice(cellarConfig)
+  const { data: strategyData } = useStrategyData(
+    cellarConfig.cellar.address
+  )
+  const tokenPrice = strategyData?.tokenPrice
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const [timeline, setTimeline] = useState<string>("1W")
   const [pointActive, setPointActive] = useState<Point>()
@@ -125,7 +127,7 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
                   <CardHeading>Token Price</CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
-                      {tokenPrice.data || "--"}
+                      {tokenPrice || "--"}
                     </Text>
                     <PercentageText
                       data={Number(tokenPriceChange?.yFormatted)}
@@ -184,9 +186,9 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
               setPointActive={setPointActive}
             />
           </Box>
-          {/* <Stack>
+          <Stack>
             <MobileTooltip />
-            <Stack
+            {/* <Stack
               direction={{ base: "column", md: "row" }}
               spacing={{ base: 2, md: 4 }}
               alignItems={{
@@ -207,8 +209,8 @@ export const UsdcPerfomanceCard: VFC<BoxProps> = (props) => {
                   }))
                 }}
               />
-            </Stack>
-          </Stack> */}
+            </Stack> */}
+          </Stack>
         </VStack>
       </TransparentCard>
     </Skeleton>

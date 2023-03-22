@@ -10,20 +10,29 @@ import { VFC } from "react"
 import { Socials } from "components/Socials"
 import { FooterLink } from "./FooterLink"
 import { ExternalLinkIcon } from "components/_icons"
+import { Disclaimer } from "./Disclaimer"
+import { About } from "./About"
+import { Overview } from "./Overview"
+import { useRouter } from "next/router"
+import { cellarDataMap } from "data/cellarDataMap"
 
 const Footer: VFC<ContainerProps> = (props) => {
+  const id = useRouter().query.id as string | undefined
+  const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
   return (
     <Container maxW="container.lg">
+      <About />
+      {!selectedStrategy && <Overview />}
+      <Disclaimer />
       <Container
         as="footer"
         display="flex"
         maxW="container.lg"
+        px={0}
         mt={20}
         {...props}
       >
         <Flex
-          ml={2}
-          mr={2}
           borderTop="1px solid"
           borderColor="neutral.700"
           justifyContent="space-between"
