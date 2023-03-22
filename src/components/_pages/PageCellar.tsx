@@ -5,7 +5,7 @@ import {
   HStack,
   VStack,
 } from "@chakra-ui/react"
-import { Layout } from "components/Layout"
+import { Layout } from "components/_layout/Layout"
 import { PerformanceCard } from "components/_cards/PerformanceCard"
 import { Section } from "components/_layout/Section"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"

@@ -14,11 +14,11 @@ import { useState, VFC } from "react"
 import { PortableText } from "@portabletext/react"
 import { HeadingHeavy } from "components/HeadingHeavy"
 import { components } from "./portableText"
-import { SliderStrategy } from "./Carousel/SliderStrategy"
 import Slider from "react-slick"
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 import { ArrowRightIcon } from "components/_icons"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
+import { SliderStrategy } from "./Carousel/sliderStrategy"
 
 interface StrategyProps extends BoxProps {
   data: SectionStrategiesWithImages

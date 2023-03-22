@@ -1,6 +1,6 @@
 query GetAllTimeShareValue($cellarAddress: ID!) {
   cellar(id: $cellarAddress) {
-    dayDatas(orderDirection: asc, orderBy: date) {
+    dayDatas(orderDirection: desc, orderBy: date) {
       date
       shareValue
     }

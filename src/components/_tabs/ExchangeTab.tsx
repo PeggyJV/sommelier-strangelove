@@ -2,17 +2,18 @@ import { Text, Link, HStack, Image, Stack } from "@chakra-ui/react"
 
 import { ExternalLinkIcon } from "components/_icons"
 import React from "react"
-import { strategyPageContentData } from "data/strategyPageContentData"
 import { useRouter } from "next/router"
 import { analytics } from "utils/analytics"
+import { cellarDataMap } from "data/cellarDataMap"
 
 export const ExchangeTab = ({ title }: { title: string }) => {
   const id = useRouter().query.id as string
-  const exchanges = strategyPageContentData[id].exchange
+  const exchanges = cellarDataMap[id].exchanges
 
   return (
     <Stack>
-      {exchanges.length > 1 &&
+      {exchanges &&
+        exchanges.length > 1 &&
         exchanges
           .filter((item) => "url" in item)
           .map((item) => (

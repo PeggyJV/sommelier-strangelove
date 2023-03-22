@@ -1,140 +1,117 @@
-import { NextPage } from "next"
-import { Box, Flex, Heading, VStack } from "@chakra-ui/react"
-import { Layout } from "components/Layout"
-import { CellarCard } from "components/_cards/CellarCard"
-import { Section } from "components/_layout/Section"
-import { GridHome } from "components/GridHome"
-
-import { Link } from "components/Link"
-import { HomeProps } from "pages/index"
-import FAQ from "components/FAQ"
-import { cellarDataMap } from "data/cellarDataMap"
+import { Button, Center, Heading, HStack } from "@chakra-ui/react"
+import { ErrorCard } from "components/_cards/ErrorCard"
+import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
+import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
+import { StrategyTabColumn } from "components/_columns/StrategyTabColumn"
+import { LayoutWithSidebar } from "components/_layout/LayoutWithSidebar"
+import { TransparentSkeleton } from "components/_skeleton"
+import { StrategyTable } from "components/_tables/StrategyTable"
+import { useHome } from "data/context/homeContext"
+import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import { CellarType } from "data/types"
-import { config } from "utils/config"
-import { analytics } from "utils/analytics"
-import { DIRECT, landingType } from "utils/landingType"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { useMemo, useState } from "react"
 
-interface CellarGridItemsType {
-  section: CellarType
-}
+export const PageHome = () => {
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+    isRefetching,
+  } = useAllStrategiesData()
+  const isMobile = useBetterMediaQuery("(max-width: 767px)")
+  const isTab = useBetterMediaQuery("(max-width: 1023px)")
+  const isDesktop = !isTab && !isMobile
+  const [type, setType] = useState<string>("All")
+  const strategyType = ["All", "Portofolio", "Yield"]
 
-const PageHome: NextPage<HomeProps> = ({ faqData }) => {
-  const CellarGridItems = ({ section }: CellarGridItemsType) => {
-    const filteredCellars = Object.values(cellarDataMap).filter(
-      (v) => v.cellarType === section
-    )
+  const { timeline } = useHome()
+  const columns = isDesktop
+    ? StrategyDesktopColumn({ timeline })
+    : isTab && !isMobile
+    ? StrategyTabColumn({ timeline })
+    : StrategyMobileColumn({ timeline })
 
-    const cellars = filteredCellars.map((v) => {
-      return Object.values(config.CONTRACT).find(
-        (item) => item.ADDRESS === v.config.id
-        // @ts-ignore use ts-ignore because we don't have type for config
-      )?.SLUG
-    })
+  const strategyData = useMemo(() => {
+    if (type === "Yield") {
+      return (
+        data?.filter(
+          ({ type }) => type === CellarType.yieldStrategies
+        ) || []
+      )
+    }
+    if (type === "Portofolio") {
+      return (
+        data?.filter(
+          ({ type }) => type === CellarType.automatedPortfolio
+        ) || []
+      )
+    }
+    return data || []
+  }, [data, type])
 
-    // const contentRow =
-    //   cellars.length / 3 < 1 ? 3 : Math.ceil(cellars.length / 3) * 3
-
-    // const totalCellars = cellars.length ?? 0
-    // const numPlaceholderCards = contentRow - totalCellars
-    // const placeholderCardsArray = Array.from(
-    //   Array(numPlaceholderCards).keys()
-    // )
-    return (
-      <>
-        {cellars.map((cellar) => {
-          return (
-            <Link
-              href={`/strategies/${cellar}`}
-              key={cellar}
-              display="flex"
-              borderRadius={28}
-              onClick={() => {
-                const landingTyp = landingType()
-
-                analytics.track("strategy.selection", {
-                  strategyCard: cellarDataMap[cellar].name,
-                  landingType: landingType(),
-                })
-
-                if (landingTyp === DIRECT) {
-                  analytics.track("strategy.selection.direct", {
-                    strategyCard: cellarDataMap[cellar].name,
-                    landingType: landingTyp,
-                  })
-                } else {
-                  analytics.track("strategy.selection.indirect", {
-                    strategyCard: cellarDataMap[cellar].name,
-                    landingType: landingTyp,
-                  })
-                }
-              }}
-            >
-              <CellarCard cellarAddress={cellar} as="li" />
-            </Link>
-          )
-        })}
-        {/* {placeholderCardsArray.map((index) => {
-          const cellarCardData: CellarCardData = {
-            cellarId: "",
-            name: "...",
-            description: "",
-            strategyType: "...",
-            managementFee: "...",
-            protocols: "...",
-          }
-          return (
-            <CellarCardDisplay
-              key={index}
-              data={cellarCardData}
-              as="li"
-              isPlaceholder
-              index={index}
-            />
-          )
-        })} */}
-      </>
-    )
-  }
+  const loading = isFetching || isRefetching || isLoading
 
   return (
-    <Layout>
-      <VStack spacing={6} align="flex-start">
-        <Section w="100%">
-          <Flex
-            w="100%"
-            direction="column"
-            align={{ base: "center", md: "initial" }}
-          >
-            <Box mb={12}>
-              <Heading>Yield Strategies</Heading>
-            </Box>
-            <GridHome>
-              <CellarGridItems section={CellarType.yieldStrategies} />
-            </GridHome>
-          </Flex>
-        </Section>
-        <Section w="100%">
-          <Flex
-            w="100%"
-            direction="column"
-            align={{ base: "center", md: "initial" }}
-          >
-            <Box mb={12}>
-              <Heading>Automated Portfolio</Heading>
-            </Box>
-            <GridHome>
-              <CellarGridItems
-                section={CellarType.automatedPortfolio}
-              />
-            </GridHome>
-          </Flex>
-        </Section>
-      </VStack>
-      <Section pb="0">
-        <FAQ data={faqData.faqTabs} />
-      </Section>
-    </Layout>
+    <LayoutWithSidebar>
+      <HStack mb="1.6rem" justifyContent="space-between">
+        <Heading fontSize="1.3125rem">Strategies</Heading>
+        <HStack spacing="8px">
+          {strategyType.map((strategy: string, i: number) => {
+            const isSelected = strategy === type
+            return (
+              <Button
+                key={i}
+                variant="unstyled"
+                color="white"
+                fontWeight={600}
+                fontSize="1rem"
+                p={4}
+                py={1}
+                rounded="100px"
+                bg={isSelected ? "surface.primary" : "none"}
+                backdropFilter="blur(8px)"
+                borderColor={
+                  isSelected ? "purple.dark" : "surface.tertiary"
+                }
+                borderWidth={isSelected ? 1 : 0}
+                onClick={() => {
+                  setType(strategy)
+                }}
+              >
+                {strategy}
+              </Button>
+            )
+          })}
+        </HStack>
+      </HStack>
+      <TransparentSkeleton
+        height={loading ? "400px" : "auto"}
+        w="full"
+        borderRadius={20}
+        isLoaded={!loading}
+      >
+        {isError ? (
+          <ErrorCard message="" py="100px">
+            <Center>
+              <Button
+                w="100px"
+                variant="outline"
+                onClick={() => refetch()}
+              >
+                Retry
+              </Button>
+            </Center>
+          </ErrorCard>
+        ) : (
+          <>
+            <StrategyTable columns={columns} data={strategyData} />
+          </>
+        )}
+      </TransparentSkeleton>
+    </LayoutWithSidebar>
+
   )
 }
-
-export default PageHome

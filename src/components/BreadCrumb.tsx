@@ -2,11 +2,10 @@ import { VFC } from "react"
 import {
   Breadcrumb as ChBreadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbProps,
 } from "@chakra-ui/react"
 import { ArrowLeftIcon, ChevronRightIcon } from "./_icons"
-import { strategyPageContentData } from "data/strategyPageContentData"
+import { Link } from "./Link"
 
 interface CustomBCProps extends BreadcrumbProps {
   id: string
@@ -24,8 +23,6 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
   //   .split("/")
   //   .filter((v) => v.length > 0)
 
-  const landingPageContent = strategyPageContentData[id]
-
   return (
     <ChBreadcrumb
       separator={
@@ -34,18 +31,16 @@ export const BreadCrumb: VFC<CustomBCProps> = ({
       {...rest}
     >
       <BreadcrumbItem color="neutral.300">
-        <BreadcrumbLink
-          href={landingPageContent ? `/strategies/${id}` : "/"}
+        <Link
+          href="/"
           display="flex"
           justifyContent="space-between"
           alignItems="center"
           gap={3}
         >
           <ArrowLeftIcon />
-          {landingPageContent
-            ? "Back"
-            : "Back to Strategies Overview"}
-        </BreadcrumbLink>
+          Back
+        </Link>
       </BreadcrumbItem>
 
       {/* {asPathNestedRoutes.map((path, i) => {

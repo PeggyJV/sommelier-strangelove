@@ -1,16 +1,28 @@
-import { Center, Text } from "@chakra-ui/react"
+import { BoxProps, Center, Stack, Text } from "@chakra-ui/react"
 import { TransparentCard } from "./TransparentCard"
 
-export const ErrorCard = () => (
+interface ErrorCardProps extends BoxProps {
+  message?: string
+}
+
+export const ErrorCard = ({
+  message,
+  children,
+  ...rest
+}: ErrorCardProps) => (
   <TransparentCard
     px={{ base: 6, sm: 6, md: 8 }}
     py={{ base: 6, md: 8 }}
     overflow="visible"
+    {...rest}
   >
     <Center>
-      <Text color="red.base">
-        Something went wrong, please try again later
-      </Text>
+      <Stack>
+        <Text color="red.400">
+          {message || "Something went wrong, please try again later"}
+        </Text>
+        {children}
+      </Stack>
     </Center>
   </TransparentCard>
 )

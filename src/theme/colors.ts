@@ -40,7 +40,7 @@ const neutral = {
   100: "#FAFAFC",
   200: "#EDEBF5",
   300: "#D9D7E0",
-  400: "#77767A",
+  400: "#9E9DA3",
   500: "#605E66",
   600: "#4C4B52",
   700: "#38373D",
@@ -54,6 +54,7 @@ const surface = {
   secondary: "rgba(78, 56, 156, 0.16)",
   tertiary: "rgba(78, 56, 156, 0.24)",
   blackTransparent: "rgba(18, 18, 20, 0.8)",
+  quartnerary: "rgba(78, 56, 156, 0.32)",
 }
 
 const gradient = {

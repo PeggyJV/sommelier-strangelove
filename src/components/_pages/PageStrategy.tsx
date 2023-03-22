@@ -3,10 +3,17 @@ import { Cellars } from "components/Cellars"
 import { FAQStrategy } from "components/FAQStrategy"
 import { HeroStrategy } from "components/HeroStrategy"
 import { Highlight } from "components/Highlight"
-import { Layout } from "components/Layout"
 import { Strategy } from "components/Strategy"
+import { Layout } from "components/_layout/Layout"
 import { NextPage } from "next"
-import { StrategyLandingPageProps } from "pages/strategies/[id]"
+import { CustomFaqSection, HomeWithImages } from "types/sanity"
+
+export interface StrategyLandingPageProps {
+  id: string
+  faqData: CustomFaqSection
+  sectionCellars: HomeWithImages["sectionCellars"]
+  sectionStrategies: HomeWithImages["sectionStrategies"]
+}
 
 export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   id,

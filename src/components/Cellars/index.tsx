@@ -3,8 +3,7 @@ import { PortableText } from "@portabletext/react"
 import { components } from "components/Strategy/portableText"
 import { NextPage } from "next"
 import { SectionCellarsWithImage } from "types/sanity"
-import { StrategyProviders } from "./StrategyProviders"
-
+import { StrategyProviders } from "./StrategyProvider"
 interface CellarsProps extends BoxProps {
   data: SectionCellarsWithImage
 }

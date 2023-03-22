@@ -24,9 +24,6 @@ import ConnectButton from "components/_buttons/ConnectButton"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useIsMounted } from "hooks/utils/useIsMounted"
-import { useUserStakes } from "data/hooks/useUserStakes"
-import { useNetValue } from "data/hooks/useNetValue"
-import { useActiveAsset } from "data/hooks/useActiveAsset"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { Rewards } from "./Rewards"
 import {
@@ -37,12 +34,12 @@ import {
   lpTokenTooltipContent,
 } from "data/uiConfig"
 import { BondButton } from "components/_buttons/BondButton"
-import { useApy } from "data/hooks/useApy"
 import { InnerCard } from "../InnerCard"
 import { formatDistanceToNow, isFuture } from "date-fns"
-import { useStakingEnd } from "data/hooks/useStakingEnd"
 import { LighterSkeleton } from "components/_skeleton"
 import { formatDistance } from "utils/formatDistance"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { useStrategyData } from "data/hooks/useStrategyData"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
@@ -50,34 +47,34 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const { isConnected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
+
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
-  const { data: apy, isLoading: apyLoading } = useApy(
-    cellarDataMap[id]
-  )
-  const stakingEnd = useStakingEnd(cellarConfig)
 
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData } = lpToken
-
   const lpTokenDisabled =
     !lpTokenData ||
     Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <=
       0
 
-  const userStakes = useUserStakes(cellarConfig)
+  const { data: strategyData, isLoading: isStrategyLoading } =
+    useStrategyData(cellarConfig.cellar.address)
+  const { data: userData, isLoading: isUserDataLoading } =
+    useUserStrategyData(cellarConfig.cellar.address)
 
-  const { data: netValue } = useNetValue(cellarConfig)
-  const { data: activeAsset } = useActiveAsset(cellarConfig)
-
+  const activeAsset = strategyData?.activeAsset
+  const stakingEnd = strategyData?.stakingEnd
   const bondingPeriods = bondingPeriodOptions(cellarConfig)
   const maxMultiplier = bondingPeriods
     .at(-1)
     ?.amount.replace("SOMM", "")
-
-  const isStakingAllowed = stakingEnd.data?.endDate
-    ? isFuture(stakingEnd.data.endDate)
+  const isStakingAllowed = stakingEnd?.endDate
+    ? isFuture(stakingEnd.endDate)
     : true
+
+  const netValue = userData?.userStrategyData.userData?.netValue
+  const userStakes = userData?.userStakes
 
   return (
     <TransparentCard
@@ -197,8 +194,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   >
                     {isMounted &&
                       (isConnected
-                        ? userStakes.data?.totalBondedAmount
-                            .formatted || "..."
+                        ? userStakes?.totalBondedAmount.formatted ||
+                          "..."
                         : "--")}
                   </CardStat>
                 </VStack>
@@ -217,9 +214,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
         {isBondingEnabled(cellarConfig) && (
           <>
             {/* Show if only nothing staked */}
-            {!userStakes.data?.userStakes.length &&
-              stakingEnd.data?.endDate &&
-              isFuture(stakingEnd.data?.endDate) && (
+            {!userStakes?.userStakes.length &&
+              stakingEnd?.endDate &&
+              isFuture(stakingEnd?.endDate) && (
                 <InnerCard
                   backgroundColor="surface.tertiary"
                   mt={8}
@@ -242,21 +239,21 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                     <Heading size="16px">
                       Earn{" "}
                       <span style={{ color: theme.colors.lime.base }}>
-                        {apy?.potentialStakingApy}
+                        {strategyData?.rewardsApy?.formatted}
                       </span>{" "}
                       and {maxMultiplier} in SOMM rewards when you
                       bond.
                     </Heading>
                     <Spacer />
                     <LighterSkeleton
-                      isLoaded={!stakingEnd.isLoading}
+                      isLoaded={!isStrategyLoading}
                       height={4}
                     >
                       <Text fontSize="xs">
-                        {stakingEnd.data?.endDate &&
-                        isFuture(stakingEnd.data.endDate)
+                        {stakingEnd?.endDate &&
+                        isFuture(stakingEnd.endDate)
                           ? `Ends in ${formatDistanceToNow(
-                              stakingEnd.data.endDate,
+                              stakingEnd.endDate,
                               {
                                 locale: { formatDistance },
                               }
@@ -269,12 +266,12 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               )}
             {isConnected && (
               <LighterSkeleton
-                h={!userStakes.isLoading ? "none" : "100px"}
+                h={!isUserDataLoading ? "none" : "100px"}
                 borderRadius={24}
-                isLoaded={!userStakes.isLoading}
+                isLoaded={!isUserDataLoading}
               >
                 {isConnected &&
-                  Boolean(userStakes.data?.userStakes.length) && (
+                  Boolean(userStakes?.userStakes.length) && (
                     <BondingTableCard />
                   )}
               </LighterSkeleton>
