@@ -121,66 +121,61 @@ export const ConnectWalletPopover = ({
             `Connect ${Boolean(isLarger480) ? "Wallet" : ""}`}
         </BaseButton>
       </PopoverTrigger>
-      <Portal>
-        <PopoverContent
-          p={2}
-          borderWidth={1}
-          borderColor="purple.dark"
-          borderRadius={12}
-          bg="surface.bg"
-          fontWeight="semibold"
-          _focus={{
-            outline: "unset",
-            outlineOffset: "unset",
-            boxShadow: "unset",
-          }}
-          w="auto"
-          zIndex={401}
-        >
-          <PopoverBody p={0}>
-            <Stack>
-              {displayedConnectors.map((x) => (
-                <Stack
-                  key={x.id}
-                  as="button"
-                  py={2}
-                  px={4}
-                  fontSize="sm"
-                  onClick={() => {
-                    analytics.track(
-                      "wallet.connect-wallet-selection",
-                      {
-                        wallet: x.name,
-                      }
-                    )
-                    connect({ connector: x })
-                  }}
-                  _hover={{
-                    cursor: "pointer",
-                    bg: "purple.dark",
-                    borderColor: "surface.tertiary",
-                  }}
-                >
-                  <HStack>
-                    {isConnecting && x.id === pendingConnector?.id ? (
-                      <Spinner />
-                    ) : (
-                      <Image
-                        src={`/assets/icons/${x?.name?.toLowerCase()}.svg`}
-                        alt="wallet logo"
-                        width={24}
-                        height={24}
-                      />
-                    )}
+      <PopoverContent
+        p={2}
+        borderWidth={1}
+        borderColor="purple.dark"
+        borderRadius={12}
+        bg="surface.bg"
+        fontWeight="semibold"
+        _focus={{
+          outline: "unset",
+          outlineOffset: "unset",
+          boxShadow: "unset",
+        }}
+        w="auto"
+        zIndex={401}
+      >
+        <PopoverBody p={0} zIndex={999}>
+          <Stack>
+            {displayedConnectors.map((x) => (
+              <Stack
+                key={x.id}
+                as="button"
+                py={2}
+                px={4}
+                fontSize="sm"
+                onClick={() => {
+                  analytics.track("wallet.connect-wallet-selection", {
+                    wallet: x.name,
+                  })
+                  connect({ connector: x })
+                }}
+                _hover={{
+                  cursor: "pointer",
+                  bg: "purple.dark",
+                  borderColor: "surface.tertiary",
+                }}
+              >
+                <HStack>
+                  {isConnecting && x.id === pendingConnector?.id ? (
+                    <Spinner />
+                  ) : (
+                    <Image
+                      src={`/assets/icons/${x?.name?.toLowerCase()}.svg`}
+                      alt="wallet logo"
+                      width={24}
+                      height={24}
+                    />
+                  )}
 
-                    <Text fontWeight="semibold">{x.name}</Text>
-                  </HStack>
-                </Stack>
-              ))}
-            </Stack>
-          </PopoverBody>
-        </PopoverContent>
-      </Portal>
+                  <Text fontWeight="semibold">{x.name}</Text>
+                </HStack>
+              </Stack>
+            ))}
+          </Stack>
+        </PopoverBody>
+      </PopoverContent>
     </Popover>
   )
 }
