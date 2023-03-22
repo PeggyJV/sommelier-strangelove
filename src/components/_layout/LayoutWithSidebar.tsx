@@ -31,10 +31,17 @@ export const LayoutWithSidebar: FC = ({ children }) => {
           px={{ base: "16px", md: "30px", lg: "40px" }}
           flexDir="row"
           justifyContent="center"
-          ref={containerRef}
         >
-          <Flex wrap="wrap-reverse" gap={{ base: "44px", lg: 8 }}>
-            <Box w={{ base: "full", lg: "900px" }} flex={7}>
+          <Flex
+            wrap="wrap-reverse"
+            gap={{ base: "44px", lg: 8 }}
+            pb={8}
+          >
+            <Box
+              w={{ base: "full", lg: "900px" }}
+              flex={7}
+              ref={containerRef}
+            >
               {children}
             </Box>
             {isConnected && (
@@ -43,8 +50,16 @@ export const LayoutWithSidebar: FC = ({ children }) => {
               </Box>
             )}
           </Flex>
-          {!isLoading && <TimeFrameButton />}
         </Container>
+        <Box height={40}>
+          {!isLoading && (
+            <TimeFrameButton
+              containerHeight={
+                containerRef.current?.clientHeight || 500
+              }
+            />
+          )}
+        </Box>
       </Flex>
       <Footer />
     </Box>
