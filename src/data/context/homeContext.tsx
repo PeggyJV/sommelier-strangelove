@@ -18,8 +18,8 @@ const HomeContext = createContext<HomeContextType | null>(null)
 
 export const HomeProvider: FC = ({ children }) => {
   const [state, setState] = useState<Timeline>({
-    value: "daily",
-    title: "1D",
+    value: "allTime",
+    title: "All",
   })
 
   const timeArray = [
