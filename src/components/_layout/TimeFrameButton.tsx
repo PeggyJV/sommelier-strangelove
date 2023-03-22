@@ -12,7 +12,7 @@ export const TimeFrameButton = ({
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY
-      const stopPosition = containerHeight - 140
+      const stopPosition = 120
 
       if (scrollPosition <= stopPosition) {
         setIsFixed(true)
@@ -41,7 +41,10 @@ export const TimeFrameButton = ({
       boxShadow="2xl"
       zIndex={999}
       position={isFixed ? "fixed" : "unset"}
-      top={isFixed ? "85vh" : containerHeight}
+      top={{
+        base: isFixed ? "80vh" : containerHeight,
+        lg: isFixed ? "85vh" : containerHeight,
+      }}
       bottom={0}
       right={0}
       left={0}
