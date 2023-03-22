@@ -112,5 +112,6 @@ export const PageHome = () => {
         )}
       </TransparentSkeleton>
     </LayoutWithSidebar>
+
   )
 }
