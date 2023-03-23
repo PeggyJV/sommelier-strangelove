@@ -73,7 +73,9 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
 
   const countdown = isComingSoon(launchDate)
 
-  const potentialStakingApy = isLoading ? "-" : rewardsApy || "-"
+  const potentialStakingApy = isLoading
+    ? "-"
+    : rewardsApy?.formatted || "-"
 
   const handleBuyOrSell = () => {
     if (Number(content.exchange?.length) > 1) {
