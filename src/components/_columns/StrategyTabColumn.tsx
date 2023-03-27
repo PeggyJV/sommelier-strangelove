@@ -44,7 +44,7 @@ export const StrategyTabColumn = ({
       Header: () => (
         <Text>
           Base APY
-          <br />+ Rewards
+          <br />& Rewards
         </Text>
       ),
       accessor: "baseApy",

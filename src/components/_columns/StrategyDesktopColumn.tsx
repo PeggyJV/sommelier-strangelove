@@ -179,7 +179,7 @@ export const StrategyDesktopColumn = ({
       Header: () => (
         <Text>
           Base APY
-          <br />+ Rewards
+          <br />& Rewards
         </Text>
       ),
       accessor: "baseApy",

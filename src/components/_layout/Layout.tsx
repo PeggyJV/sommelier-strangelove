@@ -1,6 +1,5 @@
 import { VFC } from "react"
 import { Box, Container, Flex, FlexProps } from "@chakra-ui/react"
-import { BackgroundAssets } from "../BackgroundAssets"
 import { Nav } from "../Nav"
 import Footer from "../Footer"
 import { useAccount, useNetwork } from "wagmi"
@@ -13,9 +12,8 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
   const isMounted = useIsMounted()
 
   return (
-    <Box>
+    <Box bg="#1A1A23">
       <Box display="block">
-        <BackgroundAssets />
         <Flex minH="100vh" flexDir="column" {...rest}>
           <Nav />
           <Container
