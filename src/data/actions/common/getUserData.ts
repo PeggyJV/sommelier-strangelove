@@ -1,14 +1,12 @@
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
 import { StrategyContracts, StrategyData } from "../types"
-import { getUserShareBalance } from "./getUserShareBalance"
-import {
-  CellarStakingV0815,
-  CellarV0815,
-  CellarV0816,
-} from "src/abi/types"
+import { CellarStakingV0815 } from "src/abi/types"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { formatUSD } from "utils/formatCurrency"
+import { GetStrategyDataQuery } from "generated/subgraph"
+import { formatDecimals } from "utils/bigNumber"
+import { fetchBalance } from "@wagmi/core"
 
 export const getUserData = async ({
   address,
@@ -16,25 +14,32 @@ export const getUserData = async ({
   strategyData,
   userAddress,
   sommPrice,
+  sgData,
 }: {
   address: string
   contracts: StrategyContracts
   strategyData: StrategyData
   userAddress: string
   sommPrice: string
+  sgData: GetStrategyDataQuery["cellar"]
 }) => {
   const userDataRes = await (async () => {
     const strategy = Object.values(cellarDataMap).find(
       ({ config }) => config.cellar.address === address
     )!
     const config: ConfigProps = strategy.config!
+    const subgraphData = sgData
 
-    const shares = await getUserShareBalance({
-      cellarContract: contracts.cellarContract as
-        | CellarV0815
-        | CellarV0816,
-      decimals: strategyData?.activeAsset?.decimals,
-      address: userAddress,
+    const tokenPrice = (() => {
+      if (!subgraphData?.shareValue) return 1
+
+      const price = formatDecimals(subgraphData.shareValue, 6, 2)
+      return Number(price)
+    })()
+
+    const shares = await fetchBalance({
+      token: config.cellar.address,
+      addressOrName: userAddress,
     })
 
     const userStakes = await (async () => {
@@ -54,12 +59,18 @@ export const getUserData = async ({
       )
     })()
 
+    const bonded = userStakes
+      ? Number(userStakes.totalBondedAmount.formatted)
+      : 0
+
+    const sommRewardsUSD = userStakes
+      ? userStakes.claimAllRewardsUSD.toNumber()
+      : 0
+
+    const userShares = (shares && Number(shares.formatted)) || 0
+
     const netValue =
-      ((shares && shares.value.toNumber()) || 0) +
-      (userStakes ? userStakes.claimAllRewardsUSD.toNumber() : 0) +
-      (userStakes
-        ? Number(userStakes.totalBondedAmount.formatted)
-        : 0)
+      userShares * tokenPrice + bonded * tokenPrice + sommRewardsUSD
 
     const userStrategyData = {
       strategyData,
