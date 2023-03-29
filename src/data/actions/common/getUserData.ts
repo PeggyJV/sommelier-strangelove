@@ -72,11 +72,7 @@ export const getUserData = async ({
 
     const netValue =
       userShares * tokenPrice + bonded * tokenPrice + sommRewardsUSD
-    console.log("userShares", userShares)
-    console.log("tokenPrice", tokenPrice)
-    console.log("bonded", bonded)
-    console.log("sommRewardsUSD", sommRewardsUSD)
-    console.log("netValue", netValue)
+
     const userStrategyData = {
       strategyData,
       userData: {
