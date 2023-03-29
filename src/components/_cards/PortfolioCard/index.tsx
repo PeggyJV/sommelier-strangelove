@@ -171,14 +171,13 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                     mr={2}
                   />
                 )}
-
                 {isMounted &&
                   (isConnected
                     ? (lpTokenData &&
                         toEther(
                           lpTokenData.formatted,
                           lpTokenData.decimals,
-                          false,
+                          true,
                           2
                         )) ||
                       "..."
