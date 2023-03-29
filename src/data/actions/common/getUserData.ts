@@ -70,8 +70,19 @@ export const getUserData = async ({
     const userShares =
       (shares && Number(Number(shares.formatted).toFixed(2))) || 0
 
-    const netValue =
-      userShares * tokenPrice + bonded * tokenPrice + sommRewardsUSD
+    const netValue = (() => {
+      if (
+        shares === undefined ||
+        userStakes === undefined ||
+        bonded === undefined ||
+        !subgraphData?.shareValue
+      ) {
+        return undefined
+      }
+      return (
+        userShares * tokenPrice + bonded * tokenPrice + sommRewardsUSD
+      )
+    })()
 
     const userStrategyData = {
       strategyData,
