@@ -70,11 +70,6 @@ export const getUserData = async ({
     const userShares =
       (shares && Number(Number(shares.formatted).toFixed(2))) || 0
 
-    console.log("raw userShares", userShares)
-    console.log(
-      "formatted userShares",
-      Number(Number(shares.formatted).toFixed(2))
-    )
     const netValue = (() => {
       if (
         shares === undefined ||
