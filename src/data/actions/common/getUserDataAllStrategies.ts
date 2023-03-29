@@ -2,17 +2,20 @@ import { AllContracts, AllStrategiesData } from "../types"
 import { formatUSD, toEther } from "utils/formatCurrency"
 import { reactQueryClient } from "utils/reactQuery"
 import { getUserData } from "./getUserData"
+import { GetAllStrategiesDataQuery } from "generated/subgraph"
 
 export const getUserDataAllStrategies = async ({
   allContracts,
   strategiesData,
   userAddress,
   sommPrice,
+  sgData,
 }: {
   allContracts: AllContracts
   strategiesData: AllStrategiesData
   userAddress: string
   sommPrice: string
+  sgData: GetAllStrategiesDataQuery
 }) => {
   const userDataRes = await Promise.all(
     Object.entries(allContracts)?.map(
@@ -27,12 +30,17 @@ export const getUserDataAllStrategies = async ({
             { signer: true, contractAddress: address, userAddress },
           ],
           async () => {
+            const subgraphData = sgData.cellars.find(
+              (v) => v.id === address
+            )
+            if (!subgraphData) return
             return await getUserData({
               address,
               contracts,
               sommPrice,
               strategyData: strategyData,
               userAddress,
+              sgData: subgraphData,
             })
           }
         )

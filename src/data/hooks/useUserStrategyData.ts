@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUserData } from "data/actions/common/getUserData"
+import { useGetStrategyDataQuery } from "generated/subgraph"
 import { useAccount, useSigner } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
@@ -13,10 +14,19 @@ export const useUserStrategyData = (strategyAddress: string) => {
   const strategyData = useStrategyData(strategyAddress)
   const sommPrice = useCoinGeckoPrice("sommelier")
 
+  const [{ data: sgData, error }, reFetch] = useGetStrategyDataQuery({
+    variables: { cellarAddress: strategyAddress },
+  })
+
   const query = useQuery(
     [
       "USE_USER_DATA",
-      { signer: true, contractAddress: strategyAddress, userAddress },
+      {
+        signer: true,
+        contractAddress: strategyAddress,
+        userAddress,
+        sgData: sgData?.cellar,
+      },
     ],
     async () => {
       return await getUserData({
@@ -25,6 +35,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         strategyData: strategyData.data!,
         userAddress: userAddress!,
         sommPrice: sommPrice.data!,
+        sgData: sgData!.cellar!,
       })
     },
     {
@@ -32,7 +43,8 @@ export const useUserStrategyData = (strategyAddress: string) => {
         !!allContracts &&
         !!signer?._isSigner &&
         !!strategyData.data &&
-        !!sommPrice.data,
+        !!sommPrice.data &&
+        !!sgData?.cellar,
     }
   )
   return query

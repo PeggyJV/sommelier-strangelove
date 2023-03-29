@@ -29,7 +29,6 @@ const coinGeckoSimplePrice = async (
         }),
       },
     })
-    console.log(data)
     const result = await data.json()
     const price = result[baseId][quoteId]
     res.status(200).json({
