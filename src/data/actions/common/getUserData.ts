@@ -67,7 +67,8 @@ export const getUserData = async ({
       ? userStakes.claimAllRewardsUSD.toNumber()
       : 0
 
-    const userShares = (shares && Number(shares.formatted)) || 0
+    const userShares =
+      (shares && Number(Number(shares.formatted).toFixed(2))) || 0
 
     const netValue =
       userShares * tokenPrice + bonded * tokenPrice + sommRewardsUSD
