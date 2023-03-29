@@ -41,7 +41,7 @@ export const useUserDataAllStrategies = () => {
         !!strategies.data &&
         !!address &&
         !!sommPrice.data &&
-        !!sgData,
+        !!sgData?.cellars,
     }
   )
   return query

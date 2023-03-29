@@ -15,14 +15,18 @@ export const useUserStrategyData = (strategyAddress: string) => {
   const sommPrice = useCoinGeckoPrice("sommelier")
 
   const [{ data: sgData, error }, reFetch] = useGetStrategyDataQuery({
-    variables: { cellarAddress: userAddress! },
-    pause: !userAddress,
+    variables: { cellarAddress: strategyAddress },
   })
 
   const query = useQuery(
     [
       "USE_USER_DATA",
-      { signer: true, contractAddress: strategyAddress, userAddress },
+      {
+        signer: true,
+        contractAddress: strategyAddress,
+        userAddress,
+        sgData: sgData?.cellar,
+      },
     ],
     async () => {
       return await getUserData({
@@ -31,7 +35,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         strategyData: strategyData.data!,
         userAddress: userAddress!,
         sommPrice: sommPrice.data!,
-        sgData: sgData?.cellar!,
+        sgData: sgData!.cellar!,
       })
     },
     {
@@ -40,7 +44,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         !!signer?._isSigner &&
         !!strategyData.data &&
         !!sommPrice.data &&
-        !!sgData,
+        !!sgData?.cellar,
     }
   )
   return query
