@@ -387,7 +387,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       const isRealYield = currentStrategies === "Real Yield USD"
 
       if (!notifyModal.isOpen) {
-        analytics.track("notify.modal-opened")
+        analytics.track(`${currentStrategies}-notify.modal-opened`)
       }
       if (isRealYield) {
         props.onClose()
