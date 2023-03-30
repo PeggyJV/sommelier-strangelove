@@ -90,11 +90,17 @@ export const realYieldUsd = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor.",
+        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. and you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
     {
       question: "What are the risks?",
       answer: `Risks include the typical risks associated with using stablecoins in DeFi. This includes smart contract risk and stablecoin depeg risk. Additionally, in the Cellars V2 architecture, Uniswap V3 liquidity positions are non-withdrawable. Because of this, withdrawing those assets from the strategy may not be possible at all times. However, the strategy provider, SevenSeas, will ensure that some percentage of funds are always kept in liquid positions to be withdrawn.This type of technical limitation is also present in other stablecoin yield opportunities like Origin USD (a Convex position may inhibit withdrawals) and Yearn positions.`,
+    },
+    {
+      question:
+        "What actions vault takes in extreme market situations/volatility cases?",
+      answer:
+        "In extreme market conditions, the vault will seek to take a conservative capital preservation stance.",
     },
   ],
 }
