@@ -227,9 +227,12 @@ export const UsdcChartProvider: FC<{
   const monthlyData = monthlyDataRaw?.cellar?.dayDatas.filter(
     (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
   )
-  const allTimeData = allTimeDataRaw?.cellar?.dayDatas.filter(
-    (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
-  )
+  // data inverted
+  const allTimeData = allTimeDataRaw?.cellar?.dayDatas
+    .filter(
+      (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
+    )
+    .reverse()
 
   // Functions to update data returned by hook
   const setDataHourly = (data: UsdcGainChartData) => {

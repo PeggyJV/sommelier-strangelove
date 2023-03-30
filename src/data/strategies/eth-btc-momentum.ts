@@ -113,6 +113,11 @@ export const ethBtcMomentum = {
   },
   faq: [
     {
+      question: "Are the smart contracts audited?",
+      answer:
+        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+    },
+    {
       question: "Who decides how to rebalance assets in the cellar?",
       answer:
         "All rebalancing decisions are based on quantitative rules that are developed from historical price movements. The rules are dynamic and can change as market conditions change. The strategy gets information about price movements and market conditions from a range of quantitative metrics. Humans run the backtests and use simulation models and data science methods to develop the rules, but the rebalancing decision is made automatically by the computer following the quantitative rules that have been set for it.",

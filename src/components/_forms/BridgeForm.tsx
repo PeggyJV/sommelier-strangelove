@@ -102,84 +102,96 @@ export const BridgeForm: VFC = () => {
     </HStack>
   )
   return (
-    <Stack
-      spacing="40px"
-      as="form"
-      onSubmit={
-        watchType === "TO_SOMMELIER"
-          ? handleSubmit(doEthToSomm)
-          : handleSubmit(doSommToEth)
-      }
-    >
-      <Stack spacing={6}>
-        <HStack justifyContent="space-between">
-          <Stack flex={1}>
-            <Text fontWeight="bold" color="neutral.400" fontSize="xs">
-              From
-            </Text>
-            {watchType === "TO_SOMMELIER" ? <Eth /> : <Somm />}
-          </Stack>
+    <Stack spacing="40px">
+      <Stack
+        spacing="40px"
+        as="form"
+        onSubmit={
+          watchType === "TO_SOMMELIER"
+            ? handleSubmit(doEthToSomm)
+            : handleSubmit(doSommToEth)
+        }
+      >
+        <Stack spacing={6}>
+          <HStack justifyContent="space-between">
+            <Stack flex={1}>
+              <Text
+                fontWeight="bold"
+                color="neutral.400"
+                fontSize="xs"
+              >
+                From
+              </Text>
+              {watchType === "TO_SOMMELIER" ? <Eth /> : <Somm />}
+            </Stack>
 
-          <Flex justifyContent={"center"} alignSelf="flex-end" pb={2}>
-            <IconButton
-              aria-label="swap icon"
-              variant="unstyled"
-              size="sm"
-              icon={
-                <Image
-                  src="/assets/images/swap.svg"
-                  alt="swap icon"
-                />
-              }
-              disabled={isLoading}
-              onClick={() =>
-                setValue(
-                  "type",
-                  watchType === "TO_SOMMELIER"
-                    ? "TO_ETHEREUM"
-                    : "TO_SOMMELIER"
-                )
-              }
-            />
-          </Flex>
-          <Stack flex={1}>
-            <Text fontWeight="bold" color="neutral.400" fontSize="xs">
-              To
-            </Text>
-            {watchType === "TO_SOMMELIER" ? <Somm /> : <Eth />}
-          </Stack>
-        </HStack>
-        {buttonEnabled && (
-          <>
-            <FormControl
-              isInvalid={
-                formState.errors.amount as boolean | undefined
-              }
+            <Flex
+              justifyContent={"center"}
+              alignSelf="flex-end"
+              pb={2}
             >
-              <InputAmount />
-            </FormControl>
-            {watchType === "TO_SOMMELIER" ? (
-              <EthereumAddress />
-            ) : (
-              <SommelierAddress />
-            )}
-            <FormControl
-              isInvalid={
-                formState.errors.address as boolean | undefined
-              }
-            >
+              <IconButton
+                aria-label="swap icon"
+                variant="unstyled"
+                size="sm"
+                icon={
+                  <Image
+                    src="/assets/images/swap.svg"
+                    alt="swap icon"
+                  />
+                }
+                disabled={isLoading}
+                onClick={() =>
+                  setValue(
+                    "type",
+                    watchType === "TO_SOMMELIER"
+                      ? "TO_ETHEREUM"
+                      : "TO_SOMMELIER"
+                  )
+                }
+              />
+            </Flex>
+            <Stack flex={1}>
+              <Text
+                fontWeight="bold"
+                color="neutral.400"
+                fontSize="xs"
+              >
+                To
+              </Text>
+              {watchType === "TO_SOMMELIER" ? <Somm /> : <Eth />}
+            </Stack>
+          </HStack>
+          {buttonEnabled && (
+            <>
+              <FormControl
+                isInvalid={
+                  formState.errors.amount as boolean | undefined
+                }
+              >
+                <InputAmount />
+              </FormControl>
               {watchType === "TO_SOMMELIER" ? (
-                <InputSommelierAddress />
+                <EthereumAddress />
               ) : (
-                <InputEthereumAddress />
+                <SommelierAddress />
               )}
-            </FormControl>
-            {watchType === "TO_ETHEREUM" && <SommReceivedInEth />}
-          </>
-        )}
-      </Stack>
-      {isMounted &&
-        (buttonEnabled ? (
+              <FormControl
+                isInvalid={
+                  formState.errors.address as boolean | undefined
+                }
+              >
+                {watchType === "TO_SOMMELIER" ? (
+                  <InputSommelierAddress />
+                ) : (
+                  <InputEthereumAddress />
+                )}
+              </FormControl>
+              {watchType === "TO_ETHEREUM" && <SommReceivedInEth />}
+            </>
+          )}
+        </Stack>
+        {buttonEnabled && (
           <BaseButton
             disabled={isDisabled}
             isLoading={isLoading}
@@ -189,52 +201,56 @@ export const BridgeForm: VFC = () => {
           >
             Bridge $SOMM
           </BaseButton>
-        ) : toSomm ? (
-          <ConnectButton unstyled height="69px" fontSize="21px">
-            Connect Ethereum Wallet
-          </ConnectButton>
-        ) : (
-          <BaseButton
-            height="69px"
-            fontSize="21px"
-            onClick={async () => {
-              try {
-                await connectAsync()
-              } catch (e) {
-                const error = e as Error
-                if (error.message === "Keplr is not defined") {
-                  return addToast({
-                    heading: "Connect Keplr Wallet",
-                    body: (
-                      <>
-                        <Text>Keplr not found</Text>
-                        <Link
-                          display="flex"
-                          alignItems="center"
-                          href="https://www.keplr.app/download"
-                          isExternal
-                        >
-                          <Text as="span">Install Keplr</Text>
-                          <ExternalLinkIcon ml={2} />
-                        </Link>
-                      </>
-                    ),
-                    status: "error",
-                    closeHandler: closeAll,
-                  })
-                }
-                addToast({
+        )}
+      </Stack>
+
+      {isMounted && !buttonEnabled && toSomm && (
+        <ConnectButton unstyled height="69px" fontSize="21px">
+          Connect Ethereum Wallet
+        </ConnectButton>
+      )}
+      {isMounted && !buttonEnabled && toEth && (
+        <BaseButton
+          height="69px"
+          fontSize="21px"
+          onClick={async () => {
+            try {
+              await connectAsync()
+            } catch (e) {
+              const error = e as Error
+              if (error.message === "Keplr is not defined") {
+                return addToast({
                   heading: "Connect Keplr Wallet",
-                  body: <Text>{error.message}</Text>,
+                  body: (
+                    <>
+                      <Text>Keplr not found</Text>
+                      <Link
+                        display="flex"
+                        alignItems="center"
+                        href="https://www.keplr.app/download"
+                        isExternal
+                      >
+                        <Text as="span">Install Keplr</Text>
+                        <ExternalLinkIcon ml={2} />
+                      </Link>
+                    </>
+                  ),
                   status: "error",
                   closeHandler: closeAll,
                 })
               }
-            }}
-          >
-            Connect Keplr Wallet
-          </BaseButton>
-        ))}
+              addToast({
+                heading: "Connect Keplr Wallet",
+                body: <Text>{error.message}</Text>,
+                status: "error",
+                closeHandler: closeAll,
+              })
+            }
+          }}
+        >
+          Connect Keplr Wallet
+        </BaseButton>
+      )}
 
       <Center>
         <TimerIcon color="orange.base" boxSize="12px" mr="6px" />

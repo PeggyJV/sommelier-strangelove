@@ -205,9 +205,10 @@ export const ApyChartProvider: FC<{
   const monthlyData = monthlyDataRaw?.cellar?.dayDatas.filter(
     (item) => new Date(item.date * 1000) > launchDate
   )
-  const allTimeData = allTimeDataRaw?.cellar?.dayDatas.filter(
-    (item) => new Date(item.date * 1000) > launchDate
-  )
+  // data inverted
+  const allTimeData = allTimeDataRaw?.cellar?.dayDatas
+    .filter((item) => new Date(item.date * 1000) > launchDate)
+    .reverse()
   const launchDay = launchDate ?? subDays(new Date(), 8)
   const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
