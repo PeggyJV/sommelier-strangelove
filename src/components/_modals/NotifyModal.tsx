@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import axios from "axios"
 import { useBrandedToast } from "hooks/chakra"
 import { useEffect } from "react"
+import { analytics } from "utils/analytics"
 
 export const NotifyModal = (
   rest: Pick<ModalProps, "isOpen" | "onClose">
@@ -58,6 +59,7 @@ export const NotifyModal = (
           config
         )
         .then(() => {
+          analytics.track(`${currentStrategies}-notify.modal-submit`)
           addToast({
             heading: "Signed up successfully",
             status: "primary",
