@@ -17,11 +17,10 @@ export const LayoutWithSidebar: FC = ({ children }) => {
   return (
     <Box display="block">
       <Flex
-        // minH="100vh"
+        minH="100vh"
         bg="#1A1A23"
         flexDir="column"
         position="relative"
-        ref={containerRef}
       >
         <Nav />
         <Container
@@ -38,7 +37,11 @@ export const LayoutWithSidebar: FC = ({ children }) => {
             gap={{ base: "44px", lg: 8 }}
             pb={8}
           >
-            <Box w={{ base: "full", lg: "900px" }} flex={7}>
+            <Box
+              w={{ base: "full", lg: "900px" }}
+              flex={7}
+              ref={containerRef}
+            >
               {children}
             </Box>
             {isConnected && (
