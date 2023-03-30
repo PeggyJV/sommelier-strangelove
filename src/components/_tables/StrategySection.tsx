@@ -68,7 +68,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             {date && <StrategyDate date={date} />}
             {provider && strategyType && (
               <Text color="neutral.400">
-                {provider}.{strategyType}
+                {provider} · {strategyType}
               </Text>
             )}
             {netValue && (
