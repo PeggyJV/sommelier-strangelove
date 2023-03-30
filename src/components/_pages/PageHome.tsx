@@ -57,7 +57,7 @@ export const PageHome = () => {
   return (
     <LayoutWithSidebar>
       <HStack mb="1.6rem" justifyContent="space-between">
-        <Heading fontSize="1.3125rem">Strategies</Heading>
+        <Heading fontSize="1.3125rem">All strategies</Heading>
         <HStack spacing="8px">
           {strategyType.map((strategy: string, i: number) => {
             const isSelected = strategy === type
