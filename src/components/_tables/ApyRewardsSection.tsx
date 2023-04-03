@@ -36,10 +36,10 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
       </Text>
     )
   }
-  if (rewardsApy && !rewardsComplete) {
-    return (
+  return (
+    <Stack alignItems="flex-end" spacing={0}>
       <Tooltip
-        label={`Rewards end in ${daysLeft} days`}
+        label={`Base APY`}
         color="neutral.100"
         border="0"
         fontSize="12px"
@@ -50,10 +50,23 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         boxShadow="xl"
         shouldWrapChildren
       >
-        <Stack alignItems="flex-end" spacing={0}>
-          <Text fontWeight={550} fontSize="16px">
-            {baseApy ?? "-"}
-          </Text>
+        <Text fontWeight={550} fontSize="16px">
+          {baseApy ?? "-"}
+        </Text>
+      </Tooltip>
+      {rewardsApy && (
+        <Tooltip
+          label={`Rewards end in ${daysLeft} days`}
+          color="neutral.100"
+          border="0"
+          fontSize="12px"
+          bg="neutral.900"
+          fontWeight={600}
+          py="4"
+          px="6"
+          boxShadow="xl"
+          shouldWrapChildren
+        >
           <HStack spacing={1}>
             <Text
               fontWeight={600}
@@ -62,6 +75,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             >
               +{rewardsApy}
             </Text>
+
             <CircularProgress
               value={percentage}
               color="white"
@@ -81,13 +95,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               </CircularProgressLabel>
             </CircularProgress>
           </HStack>
-        </Stack>
-      </Tooltip>
-    )
-  }
-  return (
-    <Text textAlign="right" fontWeight={550} fontSize="16px">
-      -
-    </Text>
+        </Tooltip>
+      )}
+    </Stack>
   )
 }
