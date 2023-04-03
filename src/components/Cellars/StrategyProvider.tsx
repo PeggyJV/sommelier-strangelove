@@ -33,7 +33,7 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
             <Image
               width={243}
               height={100}
-              alt="clear gate"
+              alt="ClearGate"
               src="/assets/logos/clear-gate.webp"
             />
           </CardBase>
