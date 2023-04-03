@@ -6,6 +6,7 @@ import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import { FC, useRef } from "react"
 import { useAccount } from "wagmi"
 import { TimeFrameButton } from "./TimeFrameButton"
+import { useInView } from "react-intersection-observer"
 
 export const LayoutWithSidebar: FC = ({ children }) => {
   const { isConnected } = useAccount()
@@ -13,15 +14,12 @@ export const LayoutWithSidebar: FC = ({ children }) => {
   const { isLoading } = useAllStrategiesData()
 
   const containerRef = useRef<HTMLDivElement>(null)
-
+  const { ref, inView } = useInView({
+    threshold: 0,
+  })
   return (
     <Box display="block">
-      <Flex
-        minH="100vh"
-        bg="#1A1A23"
-        flexDir="column"
-        position="relative"
-      >
+      <Flex bg="#1A1A23" flexDir="column" position="relative">
         <Nav />
         <Container
           as="main"
@@ -52,16 +50,12 @@ export const LayoutWithSidebar: FC = ({ children }) => {
           </Flex>
         </Container>
         <Box height={40}>
-          {!isLoading && (
-            <TimeFrameButton
-              containerHeight={
-                containerRef.current?.clientHeight || 500
-              }
-            />
-          )}
+          {!isLoading && <TimeFrameButton inView={inView} />}
         </Box>
       </Flex>
-      <Footer />
+      <Box ref={ref}>
+        <Footer />
+      </Box>
     </Box>
   )
 }

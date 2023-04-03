@@ -5,7 +5,7 @@ import { config } from "utils/config"
 export const strategyPageContentData = {
   [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: {
     name: "ETH-BTC Trend Strategy",
-    provider: "Cleargate Capital",
+    provider: "ClearGate",
     providerUrl: "https://cleargate.capital/",
     description:
       "Strategy portfolio buys BTC and ETH when prices go up. Fully or partially sells both assets when prices go down.",
@@ -70,7 +70,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG]: {
     name: "ETH-BTC Momentum Strategy",
-    provider: "Cleargate Capital",
+    provider: "ClearGate",
     providerUrl: "https://cleargate.capital/",
     description:
       "Strategy portfolio has exposure to BTC and ETH with positive price momentum, lower exposure when prices drop.",

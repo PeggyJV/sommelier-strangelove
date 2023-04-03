@@ -35,7 +35,7 @@ export const ethBtcMomentum = {
   },
   strategyProvider: {
     logo: "/assets/images/clear-gate.png",
-    title: "Clear Gate",
+    title: "ClearGate",
     href: "https://cleargate.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
