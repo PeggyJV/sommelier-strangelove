@@ -21,7 +21,7 @@ export const Overview = () => {
       >
         <VStack spacing="8px">
           <Text fontSize="16px" fontWeight="bold">
-            TVM
+            TVL
           </Text>
           <LighterSkeleton
             isLoaded={!isLoading}
