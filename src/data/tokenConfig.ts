@@ -116,6 +116,27 @@ export const tokenConfig: Token[] = [
     address: "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
     coinGeckoId: "matic-network",
   },
+  {
+    src: "/assets/icons/cbETH.png",
+    alt: "cbETH logo",
+    symbol: "cbETH",
+    address: "0xbe9895146f7af43049ca1c1ae358b0541ea49704",
+    coinGeckoId: "coinbase-wrapped-staked-eth",
+  },
+  {
+    src: "/assets/icons/rETH.png",
+    alt: "rETH logo",
+    symbol: "rETH",
+    address: "0xae78736cd615f374d3085123a210448e74fc6393",
+    coinGeckoId: "rocket-pool-eth",
+  },
+  {
+    src: "/assets/icons/stETH.png",
+    alt: "stETH logo",
+    symbol: "stETH",
+    address: "0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
+    coinGeckoId: "staked-ether",
+  },
 ]
 
 export const depositAssetTokenList = [
@@ -130,6 +151,9 @@ export const depositAssetTokenList = [
   "sUSD",
   "TUSD",
   "USDT",
+  "cbETH",
+  "rETH",
+  "stETH",
 ]
 
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
