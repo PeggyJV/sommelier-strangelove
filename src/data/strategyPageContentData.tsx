@@ -501,4 +501,47 @@ export const strategyPageContentData = {
         <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
       `,
   },
+  [config.CONTRACT.REAL_YIELD_ETH.SLUG]: {
+    name: "Real Yield ETH",
+    provider: "Seven Seas",
+    providerUrl: "https://7seas.capital/",
+    description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    ticker: (
+      <>
+        <Image
+          alt="real yield usd icon"
+          src="/assets/icons/real-yield-eth.png"
+          boxSize={8}
+        />
+        <Text>YieldETH</Text>
+      </>
+    ),
+    tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
+    alternativeTo: "Lending or LPing ETH LSTs",
+
+    strategyHighlights: {
+      card: [
+        `Accumulates leverage in a way that is highly capital efficient and significantly reduces gas and flash loan fees.`,
+        `Active strategy which optimally allocates capital across key protocols for max yield.`,
+        `Optimizes Uniswap V3 tick ranges.`,
+      ],
+      description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.`,
+    },
+    howItWorks: `The vault will initially generate yield using two primary techniques, but has the ability to integrate with other protocols for new capabilities in the future. The techniques used in the first version of the vault are:
+    <br/><br/>
+    1. Leveraged Staking: This method involves a continuous cycle of exchanging ETH for an ETH denominated LST, utilizing the LST as collateral on Aave or Compound, borrowing more ETH, and repeating the cycle. This process is commonly referred to as “looping.”
+    <br/>
+    2.Liquidity Provisioning: This approach involves providing liquidity to ETH/ ETH denominated LST trading pairs on Uniswap V3. As a liquidity provider (LP), the vault deposits both ETH and an LST into a liquidity pool, earning fees from traders who swap between the two tokens.
+    <br/><br/>
+    Sommelier’s novel architecture gives the vault advanced capabilities when it comes to both leveraged staking and liquidity provision strategies. More specifically, for leveraged staking, the vault uses a sophisticated solution to accumulate leverage that is highly capital efficient and significantly reduces gas and flash loan fees frequently associated with typical leverage practices. While the vault is leveraged, its smart contract enforces a minimum 1.05 health factor during each rebalance as a safety precaution and the vault closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.
+    <br/><br/>
+    For the liquidity provision strategies, the vault’s ability to run off-chain computation combined with Seven Seas’ deep Uniswap V3 experience, positions the vault to be a top performing LP in the pools that it utilizes. The vault will be able to dynamically adapt to changing price movements to quote the optimal tick range(s) that collect the most fees while minimizing impermanent loss.
+    `,
+  },
 }

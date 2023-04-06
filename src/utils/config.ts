@@ -102,6 +102,11 @@ export const config = {
       SLUG: "Real-Yield-USD",
       ABI: cellarV0816,
     },
+    REAL_YIELD_ETH: {
+      ADDRESS: "0xb5b29320d2dde5ba5bafa1ebcd270052070483ec",
+      SLUG: "Real-Yield-ETH",
+      ABI: cellarV0816,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -144,6 +149,10 @@ export const config = {
     },
     REAL_YIELD_USD_STAKER: {
       ADDRESS: "0x8510f22bd1932afb4753b6b3edf5db00c7e7a748",
+      ABI: cellarStakingV0815,
+    },
+    REAL_YIELD_ETH_STAKER: {
+      ADDRESS: "0x955a31153e6764FE892757AcE79123ae996B0aFB",
       ABI: cellarStakingV0815,
     },
   },
