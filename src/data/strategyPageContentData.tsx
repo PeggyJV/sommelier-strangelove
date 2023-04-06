@@ -515,7 +515,7 @@ export const strategyPageContentData = {
     ticker: (
       <>
         <Image
-          alt="real yield usd icon"
+          alt="real yield eth icon"
           src="/assets/icons/real-yield-eth.png"
           boxSize={8}
         />
