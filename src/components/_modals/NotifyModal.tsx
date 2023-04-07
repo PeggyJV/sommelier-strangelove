@@ -85,16 +85,24 @@ export const NotifyModal = (
 
   const isDisabled = validateEmail(watch("email")) === null
 
-  const currentStrategies = window.location.pathname
-    .split("/")[2]
-    .replace(/-/g, " ")
+  let currentStrategies = ""
+  let isManage = false
+  if (typeof window !== "undefined") {
+    currentStrategies = window.location.pathname
+      .split("/")[2]
+      .replace(/-/g, " ")
+    isManage =
+      window.location.pathname.split("/").slice(-1).pop() === "manage"
+  }
 
-  const isRealYield = currentStrategies === "Real Yield USD"
+  const isRealYield =
+    currentStrategies === "Real Yield USD" ||
+    currentStrategies === "Real Yield ETH"
 
   return (
     <BaseModal
       heading={
-        isRealYield
+        isRealYield && isManage
           ? "Get Exclusive Real Yield Updates"
           : "Get Notified"
       }
@@ -105,7 +113,7 @@ export const NotifyModal = (
     >
       <form onSubmit={handleSubmit(sendEmail)}>
         <Text color="neutral.300" fontSize="sm">
-          {isRealYield
+          {isRealYield && isManage
             ? "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose."
             : "Sign up for new strategy launch and other product  announcements—we’ll only use your email for this purpose."}
         </Text>
