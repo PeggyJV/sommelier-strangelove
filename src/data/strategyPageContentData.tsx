@@ -503,7 +503,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: {
     name: "Real Yield ETH",
-    provider: "Seven Seas",
+    provider: "Seven Seas & DeFine Logic Labs",
     providerUrl: "https://7seas.capital/",
     description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
     exchange: [
@@ -531,7 +531,10 @@ export const strategyPageContentData = {
         `Active strategy which optimally allocates capital across key protocols for max yield.`,
         `Optimizes Uniswap V3 tick ranges.`,
       ],
-      description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.`,
+      description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
+      <br/><br/>
+      Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      `,
     },
     howItWorks: `The vault will initially generate yield using two primary techniques, but has the ability to integrate with other protocols for new capabilities in the future. The techniques used in the first version of the vault are:
     <br/><br/>

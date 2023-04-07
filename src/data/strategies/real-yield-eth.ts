@@ -34,7 +34,7 @@ export const realYieldEth = {
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
-    title: "Seven Seas",
+    title: "Seven Seas & DeFine Logic Labs",
     href: "https://7seas.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
@@ -49,7 +49,9 @@ export const realYieldEth = {
       - Active strategy which optimally allocates capital across key protocols for max yield.
 
       - Optimizes Uniswap  V3 tick ranges.`,
-    description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.`,
+    description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
+    <br/><br/>
+    Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
   },
   depositTokens: {
     list: ["stETH", "cbETH", "rETH", "WETH"],
