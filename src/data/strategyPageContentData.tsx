@@ -505,7 +505,7 @@ export const strategyPageContentData = {
     name: "Real Yield ETH",
     provider: "Seven Seas",
     providerUrl: "https://7seas.capital/",
-    description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
+    description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
     exchange: [
       {
         name: "Sommelier",
