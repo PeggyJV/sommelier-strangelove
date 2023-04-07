@@ -43,12 +43,12 @@ export const HeroStrategyLeft: VFC<HeroStrategyLeftProps> = ({
         />
         <Stack>
           <Text fontWeight="semibold" fontSize="xl">
-            Automated Portfolio Optimization Included
+            Automated Portfolio Optimization
           </Text>
           <Text>
-            Buy the token to get exposure to the strategy portfolio,
-            and sell it when you want to exit. Smart contract
-            algorithms take care of the rest.
+            Deposit your tokens into the vault and let the vault and
+            its automated rebalances optimize them across DeFi
+            opportunities.
           </Text>
         </Stack>
       </HStack>
