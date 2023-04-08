@@ -1,4 +1,4 @@
-import { Stack, Text, useDisclosure } from "@chakra-ui/react"
+import { Link, Stack, Text, useDisclosure } from "@chakra-ui/react"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { BaseModal } from "./BaseModal"
 
@@ -16,7 +16,14 @@ export const RestrictedModal = (
         <Text>
           Make sure your VPN settings are updated to your real
           location, and you are not using Safari Private browsing,
-          then try again. To learn more, view our terms of service.
+          then try again. To learn more, view our{" "}
+          <Link
+            href="https://app.sommelier.finance/user-terms"
+            isExternal
+            textDecor="underline"
+          >
+            terms of service.
+          </Link>
         </Text>
         <BaseButton
           size="lg"
