@@ -189,6 +189,7 @@ export const StrategyDesktopColumn = ({
             baseApy={row.original.baseApy?.formatted}
             rewardsApy={row.original.rewardsApy?.formatted}
             stackingEndDate={row.original.stakingEnd?.endDate}
+            date={row.original.launchDate}
           />
         )
       },

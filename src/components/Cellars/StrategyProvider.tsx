@@ -48,6 +48,14 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
             />
           </CardBase>
         </Link>
+        <CardBase justifyContent="center" h="full" px={0}>
+          <Image
+            width={243}
+            height={100}
+            alt="Define Logic Labs"
+            src="/assets/logos/define-logic-labs.webp"
+          />
+        </CardBase>
         <BecomeProvider />
       </Grid>
     </Box>
