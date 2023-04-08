@@ -528,7 +528,7 @@ export const strategyPageContentData = {
     strategyHighlights: {
       card: [
         `Accumulates leverage in a way that is highly capital efficient and significantly reduces gas and flash loan fees.`,
-        `Active strategy which optimally allocates capital across key protocols for max yield.`,
+        `Active strategy which optimally allocates capital across key protocols for best-in-class yield`,
         `Optimizes Uniswap V3 tick ranges.`,
       ],
       description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
@@ -536,7 +536,7 @@ export const strategyPageContentData = {
       Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
     },
-    howItWorks: `The vault will initially generate yield using two primary techniques, but has the ability to integrate with other protocols for new capabilities in the future. The techniques used in techniques initially used in the vault are:
+    howItWorks: `The vault will initially generate yield using two primary techniques, but has the ability to integrate with other protocols for new capabilities in the future. The techniques initially used in the vault:
     <br/><br/>
     1. Leveraged Staking: This method involves a continuous cycle of exchanging ETH for an ETH denominated LST, utilizing the LST as collateral on Aave or Compound, borrowing more ETH, and repeating the cycle. This process is commonly referred to as “looping.”
     <br/><br/>
