@@ -527,7 +527,7 @@ export const strategyPageContentData = {
 
     strategyHighlights: {
       card: [
-        `Accumulates leverage in a way that is highly capital efficient and significantly reduces gas and flash loan fees.`,
+        `Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.`,
         `Active strategy which optimally allocates capital across key protocols for best-in-class yield`,
         `Optimizes Uniswap V3 tick ranges.`,
       ],
