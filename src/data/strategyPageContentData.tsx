@@ -528,7 +528,7 @@ export const strategyPageContentData = {
     strategyHighlights: {
       card: [
         `Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.`,
-        `Active strategy which optimally allocates capital across key protocols for best-in-class yield`,
+        `Dynamically allocates capital across key protocols for best-in-class yield`,
         `Optimizes Uniswap V3 tick ranges.`,
       ],
       description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
