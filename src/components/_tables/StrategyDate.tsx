@@ -1,6 +1,6 @@
 import { Box, Text } from "@chakra-ui/react"
 import { intervalToDuration } from "date-fns"
-import { format, zonedTimeToUtc, utcToZonedTime } from "date-fns-tz"
+import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
 
 type StrategyDateProps = {
