@@ -81,6 +81,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
       {...props}
       backgroundColor="surface.secondary"
       p={8}
+      overflow="none"
+      zIndex={1}
     >
       <VStack align="stretch" spacing={8}>
         <CardStatRow

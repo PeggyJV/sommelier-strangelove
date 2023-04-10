@@ -111,6 +111,7 @@ export const getStrategyData = async ({
       if (!isAPYEnabled(config)) return
 
       const datas = dayDatas?.slice(0, 10)
+      console.log(datas)
 
       if (config.cellar.key === CellarKey.CELLAR_V2) {
         const launchDay = launchDate ?? subDays(new Date(), 8)

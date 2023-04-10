@@ -43,6 +43,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
         display="flex"
         alignItems="center"
         columnGap="3px"
+        justifyContent="flex-end"
       >
         --
       </Heading>
