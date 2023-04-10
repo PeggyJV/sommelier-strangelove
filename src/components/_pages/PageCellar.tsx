@@ -26,6 +26,7 @@ import { TokenPriceChartProvider } from "data/context/tokenPriceChartContext"
 import { TokenPricePerfomanceCard } from "components/_cards/TokenPricePerfomaceCard"
 import { ApyChartProvider } from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
+import { isComingSoon } from "utils/isComingSoon"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -47,9 +48,10 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
 
-  // const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
+  const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
   const isRealYield =
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
 
   return (
     <Layout>
@@ -102,7 +104,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             </UsdcChartProvider>
           )} */}
 
-          {isApyChartEnabled(cellarConfig) && (
+          {!notLaunched && isApyChartEnabled(cellarConfig) && (
             <ApyChartProvider address={cellarAddress}>
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                 Strategy Perfomance

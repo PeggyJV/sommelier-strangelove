@@ -24,7 +24,8 @@ export const isRewardsEnabled = (config: ConfigProps) => {
 export const isTokenAssets = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
 }
 
@@ -41,7 +42,8 @@ export const intervalGainTimeline = (config: ConfigProps) => {
 export const depositAssetDefaultValue = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   ) {
     return "USDT"
   }
@@ -51,28 +53,32 @@ export const depositAssetDefaultValue = (config: ConfigProps) => {
 export const isCurrentDepositsEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
 }
 
 export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
 }
 
 export const isTVMEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
 }
 
 export const isAPYEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
 }
 
@@ -120,7 +126,8 @@ export const isIntervalGainPctEnabled = (config: ConfigProps) => {
 export const lpTokenTooltipContent = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
     return "Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
   if (
@@ -137,7 +144,8 @@ export const intervalGainPctTitleContent = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
     return "1W Change vs USDC"
   if (
@@ -203,7 +211,8 @@ export const isUsdcChartEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
 }
 
@@ -227,7 +236,8 @@ export const bondingPeriodOptions = (
 ): BondingPeriod[] => {
   if (
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   ) {
     return [
       {
@@ -322,7 +332,10 @@ export const isWithdrawTokenPriceEnabled = (config: ConfigProps) => {
 }
 
 export const isUseBigBacktestingModal = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD) {
+  if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+  ) {
     return "6xl"
   }
   return "2xl"
