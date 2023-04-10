@@ -89,11 +89,13 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
       endColor="surface.secondary"
       borderRadius={{ base: 0, sm: 24 }}
       isLoaded={!isFetching}
+      overflow="none"
     >
       <TransparentCard
         px={{ base: 6, sm: 6, md: 8 }}
         py={{ base: 6, md: 8 }}
         overflow="visible"
+        zIndex={1}
         {...props}
       >
         <VStack spacing={6} align="stretch">

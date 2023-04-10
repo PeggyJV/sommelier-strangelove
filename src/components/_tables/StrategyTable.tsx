@@ -94,7 +94,7 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
   )
 
   return (
-    <TableContainer rounded="xl">
+    <TableContainer rounded="xl" overflow="hidden">
       <Table
         {...getTableProps()}
         variant="unstyled"
