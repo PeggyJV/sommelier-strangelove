@@ -17,7 +17,6 @@ export const realYieldEth = {
       logo: "/assets/icons/somm.png",
     },
   ],
-  // launchDate: new Date("2023-04-12T04:00:00.000Z"),
   launchDate: new Date(2023, 3, 12, 11, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
