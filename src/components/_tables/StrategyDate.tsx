@@ -1,5 +1,7 @@
 import { Box, Text } from "@chakra-ui/react"
 import { intervalToDuration } from "date-fns"
+import { format, zonedTimeToUtc, utcToZonedTime } from "date-fns-tz"
+import { COUNT_DOWN_TIMEZONE } from "utils/config"
 
 type StrategyDateProps = {
   date?: string
@@ -9,9 +11,13 @@ export const StrategyDate = (props: StrategyDateProps) => {
   // before launch = launch date - date now
   // after launch more than 1 month = none
   const { date } = props
+  const dateTz = zonedTimeToUtc(date!, "EST")
+  const et = utcToZonedTime(dateTz, COUNT_DOWN_TIMEZONE)
+  console.log
+
   const { days, months } = intervalToDuration({
-    start: new Date(date ?? 0),
-    end: new Date(Date.now()),
+    start: et,
+    end: utcToZonedTime(Date.now(), COUNT_DOWN_TIMEZONE),
   })
 
   const isLaunched = date
