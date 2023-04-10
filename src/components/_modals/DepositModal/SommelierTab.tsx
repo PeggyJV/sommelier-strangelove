@@ -165,7 +165,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     amtInWei: ethers.BigNumber,
     address?: string
   ) => {
-    if (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD) {
+    if (
+      cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+      cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+    ) {
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         cellarSigner.estimateGas.deposit,
         cellarSigner.callStatic.deposit,

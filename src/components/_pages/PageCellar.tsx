@@ -24,7 +24,10 @@ import {
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { TokenPriceChartProvider } from "data/context/tokenPriceChartContext"
 import { TokenPricePerfomanceCard } from "components/_cards/TokenPricePerfomaceCard"
-import { ApyChartProvider } from "data/context/apyChartContext"
+import {
+  ApyChartProvider,
+  useApyChart,
+} from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -49,7 +52,8 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
 
   // const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
   const isRealYield =
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
 
   return (
     <Layout>
