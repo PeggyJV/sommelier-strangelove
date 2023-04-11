@@ -167,7 +167,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             }
           >
             <CardStat
-              label="Platform Fees"
+              label="Platform Fee"
               flex={0}
               tooltip={
                 managementFeeTooltip || "Platform management fee"
