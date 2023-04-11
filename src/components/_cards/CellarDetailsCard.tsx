@@ -70,6 +70,9 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   )
   const performanceSplitKeys = Object.keys(performanceSplit)
   const cellarConfig = cellarDataMap[cellarId].config
+  const performanceFee =
+    (performanceSplit["protocol"] ?? 0) +
+    (performanceSplit["strategy provider"] ?? 0)
 
   const { data: strategyData, isLoading } = useStrategyData(
     cellarConfig.cellar.address
@@ -164,13 +167,24 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             }
           >
             <CardStat
-              label="Total Fees"
+              label="Platform Fees"
               flex={0}
               tooltip={
                 managementFeeTooltip || "Platform management fee"
               }
             >
               {managementFee}
+            </CardStat>
+            <CardStat
+              label="Performance fee"
+              flex={0}
+              tooltip={`Strategy earned performance fee split: Protocol ${
+                performanceSplit["protocol"] ?? 0
+              }%, Strategy Provider ${
+                performanceSplit["strategy provider"] ?? 0
+              }%`}
+            >
+              {performanceFee}%
             </CardStat>
             <CardStat label="Deposit and Exit Fees" flex={0}>
               0.0%
