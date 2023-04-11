@@ -42,7 +42,7 @@ export const realYieldEth = {
   strategyBreakdown: {
     goals: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
 
-    highlights: `The cellar:
+    highlights: `The vault:
 
       - Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.
 
@@ -91,12 +91,6 @@ export const realYieldEth = {
     {
       question: "What are the risks?",
       answer: `It is important to acknowledge the inherent smart contract risk in the Sommelier contracts (despite extensive auditing) and the protocols the vault interacts with. Additionally, the vault utilizes leverage to generate yield, which poses a risk of liquidation. To help reduce this risk, the vault’s smart contracts enforce a minimum 1.05 health factor during each rebalance as a safety measure, and the vault closely monitors on-chain conditions to mitigate liquidation risk. Furthermore, the vault does not manage de-peg risk beyond the initial selection of widely used ETH liquid staked tokens. Lastly, it’s worth noting that withdrawing 100% of assets from the vault may not always be possible. Specifically, Uniswap V3 LP positions held by the vault are ineligible for immediate withdrawals, meaning users can only withdraw from certain Aave, Compound, and holding positions. Nevertheless, 7Seas and Define Logic Labs will ensure a percentage of funds are consistently maintained in liquid positions for withdrawal. This is also the case for Real Yield USD and some Yearn positions.`,
-    },
-    {
-      question:
-        "What actions vault takes in extreme market situations/volatility cases?",
-      answer:
-        "In extreme market conditions, the vault will seek to take a conservative capital preservation stance.",
     },
   ],
 }

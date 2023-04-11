@@ -43,7 +43,7 @@ export const ethBtcMomentum = {
   strategyBreakdown: {
     goals: `ETH-BTC Momentum strategy aims to provide a better risk-return tradeoff than holding ETH and/or BTC. The strategy reacts to positive price movement to buy ETH and/or BTC and decreases positions otherwise. The goal is to overperform simple buy-and-hold strategy, decrease losses during market downturn, and re-establish the long position after prices start to go up, so that Sommelier users will not miss out any subsequent price appreciation.`,
 
-    highlights: `The cellar:
+    highlights: `The vault:
 
       - Holds a combination of BTC and ETH with smart rebalancing to suit market conditions
 

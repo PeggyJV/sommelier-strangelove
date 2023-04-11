@@ -48,7 +48,7 @@ export const steadyEth = {
   strategyBreakdown: {
     goals: `Catch trends early by predicting the significant movement of prices consistently and accurately. Capture the majority of ETH price breakouts, and limit losses through trailing stops.`,
 
-    highlights: `The cellar:
+    highlights: `The vault:
 
       - “Risk first” approach - capital preservation is prioritized over capital growth.
 
