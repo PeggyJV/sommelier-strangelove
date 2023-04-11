@@ -156,15 +156,27 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               </>
             )}
           </CardStat>
-          <CardStat
-            label="Total Fees"
-            flex={0}
-            tooltip={
-              managementFeeTooltip || "Platform management fee"
+          <Stack
+            direction={{ base: "column", lg: "row" }}
+            spacing={4}
+            justifyContent={
+              isManyProtocols ? "normal" : "space-between"
             }
           >
-            {managementFee}
-          </CardStat>
+            <CardStat
+              label="Total Fees"
+              flex={0}
+              tooltip={
+                managementFeeTooltip || "Platform management fee"
+              }
+            >
+              {managementFee}
+            </CardStat>
+            <CardStat label="Deposit and Exit Fees" flex={0}>
+              0.0%
+            </CardStat>
+          </Stack>
+
           <CardStat label="TVL" flex={0} tooltip="Total value locked">
             {tvm?.formatted || "..."}
           </CardStat>
