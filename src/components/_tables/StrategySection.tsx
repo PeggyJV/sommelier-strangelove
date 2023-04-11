@@ -25,6 +25,13 @@ interface StrategySectionProps extends StackProps {
   rewards?: string
 }
 
+export const formatText = (text: string) => {
+  if (text.length > 19) {
+    return text.substring(0, 19) + "..."
+  }
+  return text
+}
+
 export const StrategySection: React.FC<StrategySectionProps> = ({
   icon,
   title,
@@ -68,7 +75,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             {date && <StrategyDate date={date} />}
             {provider && strategyType && (
               <Text color="neutral.400">
-                {provider} · {strategyType}
+                {formatText(`${provider} · ${strategyType}`)}
               </Text>
             )}
             {netValue && (
