@@ -47,7 +47,7 @@ export const ethBtcTrend = {
   },
   strategyBreakdown: {
     goals: `ETH-BTC Trend strategy aims to provide a better risk-return tradeoff than holding ETH and/or BTC. The strategy follows upward price trends and exits the market when no positive trend is detected. The goal is to overperform simple buy and hold strategy, cut losses during market downturn, and re-establish the long position after prices start to go up, so that Sommelier users will not miss out any subsequent price appreciation.`,
-    highlights: `The cellar:
+    highlights: `The vault:
 
       - Holds a combination of BTC and ETH with smart rebalancing depending on market conditions
 

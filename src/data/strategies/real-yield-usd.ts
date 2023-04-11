@@ -40,7 +40,7 @@ export const realYieldUsd = {
   strategyBreakdown: {
     goals: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
 
-    highlights: `The cellar:
+    highlights: `The vault:
 
       - The only active strategy which optimally allocates capital across key protocols for max yield.
 

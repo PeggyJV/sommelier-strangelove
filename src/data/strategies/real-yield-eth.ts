@@ -42,7 +42,7 @@ export const realYieldEth = {
   strategyBreakdown: {
     goals: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
 
-    highlights: `The cellar:
+    highlights: `The vault:
 
       - Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.
 

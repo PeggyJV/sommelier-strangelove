@@ -43,7 +43,7 @@ export const steadyMatic = {
   strategyBreakdown: {
     goals: `Capture the upside of MATIC price breakouts, manage downside through trailing stops.`,
 
-    highlights: `The cellar:
+    highlights: `The vault:
 
       - "Risk first" approach - capital preservation is prioritized over capital growth.
 
