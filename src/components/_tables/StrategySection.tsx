@@ -8,6 +8,7 @@ import {
   StackProps,
   Text,
   Tooltip,
+  chakra,
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
 import { CellarType } from "data/types"
@@ -27,9 +28,16 @@ interface StrategySectionProps extends StackProps {
 
 export const formatText = (text: string) => {
   if (text.length > 19) {
-    return text.substring(0, 19) + "..."
+    return (
+      <Text color="neutral.400">
+        {text.substring(0, 19)}
+        <chakra.span letterSpacing="-4px" ml={-0.5}>
+          ...
+        </chakra.span>
+      </Text>
+    )
   }
-  return text
+  return <Text color="neutral.400">{text}</Text>
 }
 
 export const StrategySection: React.FC<StrategySectionProps> = ({
@@ -73,11 +81,9 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             fontWeight={600}
           >
             {date && <StrategyDate date={date} />}
-            {provider && strategyType && (
-              <Text color="neutral.400">
-                {formatText(`${provider} · ${strategyType}`)}
-              </Text>
-            )}
+            {provider &&
+              strategyType &&
+              formatText(`${provider} · ${strategyType}`)}
             {netValue && (
               <Text
                 color="neutral.400"
