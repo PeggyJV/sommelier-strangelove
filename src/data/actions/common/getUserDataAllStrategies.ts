@@ -40,6 +40,7 @@ export const getUserDataAllStrategies = async ({
               address,
               contracts,
               sommPrice,
+              wethPrice,
               strategyData: strategyData,
               userAddress,
               sgData: subgraphData,
