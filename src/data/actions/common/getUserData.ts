@@ -50,7 +50,10 @@ export const getUserData = async ({
         decimals,
         2
       )
-      return Number(price) * Number(wethPrice)
+
+      return address === RYETH_ADDRESS
+        ? Number(price) * Number(wethPrice)
+        : Number(price)
     })()
 
     const shares = await fetchBalance({
