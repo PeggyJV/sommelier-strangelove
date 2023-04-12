@@ -17,6 +17,7 @@ export const getUserData = async ({
   strategyData,
   userAddress,
   sommPrice,
+  wethPrice,
   sgData,
 }: {
   address: string
@@ -24,6 +25,7 @@ export const getUserData = async ({
   strategyData: StrategyData
   userAddress: string
   sommPrice: string
+  wethPrice: string
   sgData: GetStrategyDataQuery["cellar"]
 }) => {
   const userDataRes = await (async () => {
@@ -48,7 +50,7 @@ export const getUserData = async ({
         decimals,
         2
       )
-      return Number(price)
+      return Number(price) * Number(wethPrice)
     })()
 
     const shares = await fetchBalance({

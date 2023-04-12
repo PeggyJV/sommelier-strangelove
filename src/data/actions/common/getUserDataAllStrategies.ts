@@ -9,12 +9,14 @@ export const getUserDataAllStrategies = async ({
   strategiesData,
   userAddress,
   sommPrice,
+  wethPrice,
   sgData,
 }: {
   allContracts: AllContracts
   strategiesData: AllStrategiesData
   userAddress: string
   sommPrice: string
+  wethPrice: string
   sgData: GetAllStrategiesDataQuery
 }) => {
   const userDataRes = await Promise.all(
