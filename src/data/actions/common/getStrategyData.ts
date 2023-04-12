@@ -18,6 +18,8 @@ import { getTvm } from "./getTvm"
 import { formatDecimals } from "utils/bigNumber"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { getPositon } from "./getPosition"
+import { config } from "utils/config"
+const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const getStrategyData = async ({
   address,
@@ -60,7 +62,7 @@ export const getStrategyData = async ({
       return { ...tokenInfo, ...subgraphData.asset }
     })()
 
-    const tvm = getTvm(subgraphData?.tvlTotal)
+    let tvm = getTvm(subgraphData?.tvlTotal)
 
     const tradedAssets = (() => {
       if (!isAssetDistributionEnabled(config)) {

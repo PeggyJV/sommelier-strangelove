@@ -4,6 +4,10 @@ import { useGetStrategyDataQuery } from "generated/subgraph"
 import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
+import { config } from "utils/config"
+import { formatCurrency } from "utils/formatCurrency"
+import { BigNumber } from "bignumber.js"
+const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const useStrategyData = (address: string) => {
   const provider = useProvider()
@@ -14,18 +18,32 @@ export const useStrategyData = (address: string) => {
     variables: { cellarAddress: address },
   })
 
+  const { data: wethPrice } = useCoinGeckoPrice("weth")
+
   const query = useQuery(
     [
       "USE_STRATEGY_DATA",
       { provider: provider?._isProvider, address },
     ],
     async () => {
-      return await getStrategyData({
+      const result = await getStrategyData({
         address,
         contracts: allContracts![address]!,
         sommPrice: sommPrice!,
         sgData: sgData?.cellar!,
       })
+
+      if (address === RYETH_ADDRESS) {
+        const val = new BigNumber(result?.tvm?.value ?? "0")
+        const tvm = val.times(wethPrice ?? "1").toString()
+
+        result.tvm = {
+          value: tvm,
+          formatted: `${formatCurrency(tvm)}`,
+        }
+      }
+
+      return result
     },
     {
       enabled: !!allContracts && !!sommPrice && !!sgData,
