@@ -1,4 +1,10 @@
 import { differenceInDays } from "date-fns"
+import BigNumber from "bignumber.js"
+import { realYieldEth } from "../../strategies/real-yield-eth"
+
+const RYETH_LAUNCH_EPOCH = Math.floor(
+  realYieldEth.launchDate.getTime() / 1000
+)
 
 export const getBaseApy = ({
   baseApy,
@@ -28,11 +34,17 @@ export const getBaseApy = ({
       differenceInDays(yesterday, launchDate)
     )
 
-    const nowValue = Number(dayDatas[1].shareValue)
-    const startValue = 1000000 // 1 as 6 decimals
-    const yieldGain = (nowValue - startValue) / startValue
+    // FIXME: use the correct start value by multiplying 1 * decimals
+    // get decimals from subgraph via cellar.asset.decimals
+    let startValue = new BigNumber("1000000")
+    if (launchEpoch === RYETH_LAUNCH_EPOCH) {
+      startValue = new BigNumber("1000000000000000000")
+    }
 
-    return yieldGain * (365 / daysSince) * 100
+    const nowValue = new BigNumber(dayDatas[1].shareValue)
+    const yieldGain = nowValue.minus(startValue).div(startValue)
+
+    return yieldGain.times(365).div(daysSince).times(100).toNumber()
   })()
   if (!cellarApy) return
   return {

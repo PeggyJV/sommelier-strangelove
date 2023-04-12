@@ -30,6 +30,7 @@ export const useStrategyData = (address: string) => {
         address,
         contracts: allContracts![address]!,
         sommPrice: sommPrice!,
+        wethPrice: wethPrice!,
         sgData: sgData?.cellar!,
       })
 

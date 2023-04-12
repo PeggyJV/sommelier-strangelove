@@ -25,11 +25,13 @@ export const getStrategyData = async ({
   address,
   contracts,
   sommPrice,
+  wethPrice,
   sgData,
 }: {
   address: string
   contracts: StrategyContracts
   sommPrice: string
+  wethPrice: string
   sgData: GetStrategyDataQuery["cellar"]
 }) => {
   const data = await (async () => {
@@ -102,8 +104,16 @@ export const getStrategyData = async ({
     const rewardsApy = await (async () => {
       if (!isStakingOngoing) return
 
+      // FIXME
+      // Fetch asset price from coingecko based on subgraph cellar.asset.id
+      let assetPrice = "1" // USDC
+      if (address === RYETH_ADDRESS) {
+        assetPrice = wethPrice
+      }
+
       const apyRes = await getRewardsApy({
         sommPrice,
+        assetPrice,
         stakerContract: stakerContract as CellarStakingV0815,
       })
       return apyRes
