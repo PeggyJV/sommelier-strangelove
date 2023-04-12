@@ -54,7 +54,7 @@ export const realYieldEth = {
     Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
   },
   depositTokens: {
-    list: ["stETH", "cbETH", "rETH", "WETH"],
+    list: ["cbETH", "rETH", "WETH"],
   },
 
   config: {

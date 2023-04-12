@@ -579,7 +579,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           >
             Submit
           </BaseButton>
-          <Text textAlign="center">
+          {/* <Text textAlign="center">
             Depositing active asset (
             <Avatar
               ml="-2.5px"
@@ -591,6 +591,21 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               bg="surface.bg"
             />
             {activeAsset?.symbol}) will save gas fees
+          </Text> */}
+          <Text textAlign="center">
+            Current Base asset is (
+            <Avatar
+              ml="-2.5px"
+              boxSize={6}
+              src={activeAsset?.src}
+              name={activeAsset?.alt}
+              borderWidth={2}
+              borderColor="surface.bg"
+              bg="surface.bg"
+            />
+            {activeAsset?.symbol}) There could be high slippage when
+            depositing non base assets. Please swap outside our app
+            for better returns.
           </Text>
         </VStack>
       </FormProvider>
