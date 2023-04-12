@@ -13,6 +13,7 @@ export const useUserDataAllStrategies = () => {
   const { data: allContracts } = useAllContracts()
   const strategies = useAllStrategiesData()
   const sommPrice = useCoinGeckoPrice("sommelier")
+  const wethPrice = useCoinGeckoPrice("weth")
   const [{ data: sgData, error }, reFetch] =
     useGetAllStrategiesDataQuery()
 
@@ -31,6 +32,7 @@ export const useUserDataAllStrategies = () => {
         strategiesData: strategies.data!,
         userAddress: address!,
         sommPrice: sommPrice.data!,
+        wethPrice: wethPrice.data!,
         sgData: sgData!,
       })
     },

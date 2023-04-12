@@ -7,6 +7,9 @@ import { formatUSD } from "utils/formatCurrency"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { formatDecimals } from "utils/bigNumber"
 import { fetchBalance } from "@wagmi/core"
+import { config } from "utils/config"
+
+const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const getUserData = async ({
   address,
@@ -14,6 +17,7 @@ export const getUserData = async ({
   strategyData,
   userAddress,
   sommPrice,
+  wethPrice,
   sgData,
 }: {
   address: string
@@ -21,6 +25,7 @@ export const getUserData = async ({
   strategyData: StrategyData
   userAddress: string
   sommPrice: string
+  wethPrice: string
   sgData: GetStrategyDataQuery["cellar"]
 }) => {
   const userDataRes = await (async () => {
@@ -33,8 +38,19 @@ export const getUserData = async ({
     const tokenPrice = (() => {
       if (!subgraphData?.shareValue) return 1
 
-      const price = formatDecimals(subgraphData.shareValue, 6, 2)
-      return Number(price)
+      // FIXME:
+      // Use subgraph data to determine number of decimals from the underlying asset
+      // cellar.asset.decimals
+      let decimals = 6
+      if (address === RYETH_ADDRESS) {
+        decimals = 18
+      }
+      const price = formatDecimals(
+        subgraphData.shareValue,
+        decimals,
+        2
+      )
+      return Number(price) * Number(wethPrice)
     })()
 
     const shares = await fetchBalance({

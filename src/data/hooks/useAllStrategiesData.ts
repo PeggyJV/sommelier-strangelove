@@ -10,6 +10,7 @@ export const useAllStrategiesData = () => {
 
   const { data: allContracts } = useAllContracts()
   const { data: sommPrice } = useCoinGeckoPrice("sommelier")
+  const { data: wethPrice } = useCoinGeckoPrice("weth")
   const [{ data: sgData, error }, reFetch] =
     useGetAllStrategiesDataQuery()
 
@@ -19,6 +20,7 @@ export const useAllStrategiesData = () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,
         sommPrice: sommPrice!,
+        wethPrice: wethPrice!,
         sgData: sgData!,
       })
     },
