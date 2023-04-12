@@ -232,10 +232,17 @@ export const ApyChartProvider: FC<{
         color: colors.neutral[100],
       },
     ]
+
     setData({
       series,
       chartProps: dayChartProps,
     })
+
+    // If we have no data yet, skip setting apy change
+    if (series![0].data.length === 0) {
+      return
+    }
+
     const latestData = series![0].data.at(-1)
     const firstData = series![0].data.at(0)
 
@@ -280,10 +287,16 @@ export const ApyChartProvider: FC<{
         color: colors.neutral[100],
       },
     ]
+
     setData({
       series,
       chartProps: monthChartProps,
     })
+
+    // If we have no data yet, skip setting apy change
+    if (series![0].data.length === 0) {
+      return
+    }
 
     const latestData = series[0].data.at(-1)
     const firstData = series[0].data.at(0)
@@ -328,6 +341,11 @@ export const ApyChartProvider: FC<{
       series,
       chartProps: allTimeChartProps,
     })
+
+    // If we have no data yet, skip setting apy change
+    if (series![0].data.length === 0) {
+      return
+    }
 
     const latestData = series[0].data.at(-1)
     const firstData = series[0].data.at(0)
@@ -410,6 +428,11 @@ export const ApyChartProvider: FC<{
         series,
         chartProps: dayChartProps,
       })
+
+      // If we have no data yet, skip setting apy change
+      if (series![0].data.length === 0) {
+        return
+      }
 
       const latestData = series![0].data.at(-1)
       const firstData = series![0].data.at(0)
