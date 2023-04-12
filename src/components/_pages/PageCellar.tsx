@@ -48,7 +48,8 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
 
-  const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
+  const isRealYieldEth =
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   const isRealYield =
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
@@ -104,7 +105,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             </UsdcChartProvider>
           )} */}
 
-          {!notLaunched && isApyChartEnabled(cellarConfig) && (
+          {!isRealYieldEth && isApyChartEnabled(cellarConfig) && (
             <ApyChartProvider address={cellarAddress}>
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                 Strategy Perfomance
