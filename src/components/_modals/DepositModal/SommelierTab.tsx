@@ -603,9 +603,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               borderColor="surface.bg"
               bg="surface.bg"
             />
-            {activeAsset?.symbol}) There could be high slippage when
-            depositing non base assets. Please swap outside our app
-            for better returns.
+            {activeAsset?.symbol}).
+            <br />
+            There could be high slippage when depositing non base
+            assets. Please swap outside our app for better returns.
           </Text>
         </VStack>
       </FormProvider>
