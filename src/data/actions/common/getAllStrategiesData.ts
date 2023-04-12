@@ -7,10 +7,12 @@ import { reactQueryClient } from "utils/reactQuery"
 export const getAllStrategiesData = async ({
   allContracts,
   sommPrice,
+  wethPrice,
   sgData,
 }: {
   allContracts: AllContracts
   sommPrice: string
+  wethPrice: string
   sgData: GetAllStrategiesDataQuery
 }) => {
   const data = await Promise.all(
@@ -27,6 +29,7 @@ export const getAllStrategiesData = async ({
               address,
               sgData: subgraphData,
               sommPrice,
+              wethPrice,
               contracts: contracts,
             })
           },

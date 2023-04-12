@@ -4,9 +4,11 @@ import { CellarStakingV0815 } from "src/abi/types"
 export const getRewardsApy = async ({
   stakerContract,
   sommPrice,
+  assetPrice,
 }: {
   stakerContract: CellarStakingV0815
   sommPrice: string
+  assetPrice: string
 }) => {
   try {
     const stakingEnd = await stakerContract.endTimestamp()
@@ -24,7 +26,12 @@ export const getRewardsApy = async ({
       const totalDepositWithBoost = new BigNumber(
         totalDepositWithBoostRes.toString()
       ).dividedBy(new BigNumber(10).pow(18))
-      const withUserDeposit = totalDepositWithBoost.plus(10000)
+
+      // Assuming a user deposits 10k worth of the asset
+      const userDeposit = new BigNumber(10000).div(assetPrice)
+      const withUserDeposit = totalDepositWithBoost
+        .plus(userDeposit)
+        .times(assetPrice)
 
       potentialStakingApy = rewardRate
         .multipliedBy(sommPrice)

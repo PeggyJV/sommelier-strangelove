@@ -13,6 +13,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
   const { data: allContracts } = useAllContracts()
   const strategyData = useStrategyData(strategyAddress)
   const sommPrice = useCoinGeckoPrice("sommelier")
+  const wethPrice = useCoinGeckoPrice("weth")
 
   const [{ data: sgData, error }, reFetch] = useGetStrategyDataQuery({
     variables: { cellarAddress: strategyAddress },
@@ -35,6 +36,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         strategyData: strategyData.data!,
         userAddress: userAddress!,
         sommPrice: sommPrice.data!,
+        wethPrice: wethPrice.data!,
         sgData: sgData!.cellar!,
       })
     },
