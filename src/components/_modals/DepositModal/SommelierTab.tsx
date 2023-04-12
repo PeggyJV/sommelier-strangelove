@@ -387,9 +387,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         .split("/")[2]
         .replace(/-/g, " ")
 
-      const isRealYield =
-        currentStrategies === "Real Yield USD" ||
-        currentStrategies === "Real Yield ETH"
+      const isRealYield = currentStrategies === "Real Yield USD"
 
       if (!notifyModal.isOpen) {
         analytics.track(`${currentStrategies}-notify.modal-opened`)
