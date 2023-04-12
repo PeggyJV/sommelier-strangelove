@@ -66,9 +66,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const activeAsset = strategyData?.activeAsset
   const stakingEnd = strategyData?.stakingEnd
   const bondingPeriods = bondingPeriodOptions(cellarConfig)
-  const maxMultiplier = bondingPeriods
-    .at(-1)
-    ?.amount.replace("SOMM", "")
+  const maxMultiplier = bondingPeriods[
+    bondingPeriods.length - 1
+  ]?.amount.replace("SOMM", "")
   const isStakingAllowed = stakingEnd?.endDate
     ? isFuture(stakingEnd.endDate)
     : true
