@@ -36,7 +36,7 @@ import { formatDistanceToNow, isFuture } from "date-fns"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
-import { CellarType } from "data/types"
+import { CellarNameKey, CellarType } from "data/types"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
@@ -99,6 +99,8 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
     cellarData.cellarType === CellarType.yieldStrategies
   const isAutomatedPortfolio =
     cellarData.cellarType === CellarType.automatedPortfolio
+  const isRYETH =
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
@@ -164,10 +166,14 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               </VStack>
               <VStack flex={1} textAlign="center">
                 <Heading size="md">
-                  {baseApy?.formatted || "--"}
+                  {isRYETH ? "10%" : baseApy?.formatted || "--"}
                 </Heading>
                 <CellarStatsLabel
-                  tooltip={apyLabel(cellarConfig) || ""}
+                  tooltip={
+                    isRYETH
+                      ? "Estimated Apy"
+                      : apyLabel(cellarConfig) || ""
+                  }
                   title={apyLabel(cellarConfig)}
                 />
               </VStack>
