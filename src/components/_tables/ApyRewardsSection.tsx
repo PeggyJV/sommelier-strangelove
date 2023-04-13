@@ -76,9 +76,28 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         boxShadow="xl"
         shouldWrapChildren
       >
-        <Text fontWeight={550} fontSize="16px">
-          {baseApy ?? "-"}
-        </Text>
+        {!isOneWeekAfterLaunch ? (
+          <Tooltip
+            label={`Estimated APY`}
+            color="neutral.100"
+            border="0"
+            fontSize="12px"
+            bg="neutral.900"
+            fontWeight={600}
+            py="4"
+            px="6"
+            boxShadow="xl"
+            shouldWrapChildren
+          >
+            <Text textAlign="right" fontWeight={550} fontSize="16px">
+              10%
+            </Text>
+          </Tooltip>
+        ) : (
+          <Text fontWeight={550} fontSize="16px">
+            {baseApy ?? "-"}
+          </Text>
+        )}
       </Tooltip>
       {rewardsApy && (
         <Tooltip
