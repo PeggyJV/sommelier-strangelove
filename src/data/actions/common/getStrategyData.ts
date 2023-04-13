@@ -39,6 +39,7 @@ export const getStrategyData = async ({
       ({ config }) => config.cellar.address === address
     )!
     const config: ConfigProps = strategy.config!
+    const isRYETH = config.cellarNameKey === "REAL_YIELD_ETH"
 
     const { stakerContract } = contracts
     const subgraphData = sgData
@@ -64,7 +65,10 @@ export const getStrategyData = async ({
       return { ...tokenInfo, ...subgraphData.asset }
     })()
 
-    let tvm = getTvm(subgraphData?.tvlTotal)
+    let tvm = isRYETH
+      ? //@ts-ignore
+        getTvm(Number(subgraphData!.tvlTotal) * Number(wethPrice))
+      : getTvm(subgraphData?.tvlTotal)
 
     const tradedAssets = (() => {
       if (!isAssetDistributionEnabled(config)) {
