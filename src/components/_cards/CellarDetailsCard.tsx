@@ -94,10 +94,16 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
         icon: protocolsImage[protocols],
       }
 
-  const gridColumn = isManyProtocols
-    ? { base: isLarger400 ? 2 : 1, sm: 2, md: 2, lg: 2 }
-    : { base: isLarger400 ? 2 : 1, sm: 2, md: 3, lg: 4 }
+  // const gridColumn = isManyProtocols
+  //   ? { base: isLarger400 ? 2 : 1, sm: 2, md: 2, lg: 2 }
+  //   : { base: isLarger400 ? 2 : 1, sm: 2, md: 3, lg: 4 }
 
+  const gridColumn = {
+    base: isLarger400 ? 2 : 1,
+    sm: 2,
+    md: 2,
+    lg: 2,
+  }
   return (
     <TransparentCard
       px={{ base: 0, sm: 6, md: 8 }}
@@ -162,9 +168,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           <Stack
             direction={{ base: "column", lg: "row" }}
             spacing={4}
-            justifyContent={
-              isManyProtocols ? "normal" : "space-between"
-            }
+            justifyContent="normal"
           >
             <CardStat
               label="Platform Fee"

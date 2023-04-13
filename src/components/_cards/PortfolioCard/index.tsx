@@ -93,7 +93,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           wrap="wrap"
         >
           <SimpleGrid
-            templateColumns="repeat(2, max-content)"
+            templateColumns={{
+              base: "repeat(1, max-content)",
+              md: "repeat(2, max-content)",
+            }}
             templateRows="1fr 1fr"
             spacing={4}
             alignItems="flex-end"
