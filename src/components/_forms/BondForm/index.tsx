@@ -280,7 +280,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
           Bond
         </BaseButton>
         <Text textAlign="center">
-          Please wait 5 min after the deposit to Bond
+          Please wait 10 min after the deposit to Bond
         </Text>
       </VStack>
     </FormProvider>
