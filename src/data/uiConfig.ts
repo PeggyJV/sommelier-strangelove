@@ -342,6 +342,9 @@ export const isUseBigBacktestingModal = (config: ConfigProps) => {
 
 export const apyLabel = (config: ConfigProps) => {
   if (config.cellar.key === CellarKey.CELLAR_V2) {
+    if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
+      return "Estimated APY"
+    }
     return "APY since inception"
   }
   return "Base APY"

@@ -169,11 +169,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                   {isRYETH ? "10%" : baseApy?.formatted || "--"}
                 </Heading>
                 <CellarStatsLabel
-                  tooltip={
-                    isRYETH
-                      ? "Estimated Apy"
-                      : apyLabel(cellarConfig) || ""
-                  }
+                  tooltip={apyLabel(cellarConfig) || ""}
                   title={apyLabel(cellarConfig)}
                 />
               </VStack>
