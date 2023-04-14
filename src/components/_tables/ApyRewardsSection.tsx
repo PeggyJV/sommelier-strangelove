@@ -33,7 +33,6 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const numWeeks = 1
   launchDate.setDate(launchDate.getDate() + numWeeks * 7)
   const isOneWeekAfterLaunch = new Date() > launchDate
-  console.log(isOneWeekAfterLaunch)
 
   if (!baseApy && !rewardsApy) {
     if (!isOneWeekAfterLaunch) {

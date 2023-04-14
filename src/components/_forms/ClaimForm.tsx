@@ -31,9 +31,6 @@ export const ClaimForm: VFC = () => {
   const isError = errors.claimAmount
   const setMax = () => setValue("claimAmount", 100000)
 
-  // need to do something meaningful with this data
-  console.log({ data })
-
   return (
     <VStack
       as="form"

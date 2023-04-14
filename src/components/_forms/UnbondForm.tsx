@@ -32,9 +32,6 @@ export const UnbondForm: VFC = () => {
   const isError = errors.unbondAmount
   const setMax = () => setValue("unbondAmount", 100000)
 
-  // need to do something meaningful with this data
-  console.log({ data })
-
   return (
     <VStack
       as="form"
