@@ -279,13 +279,16 @@ export const ApyChartProvider: FC<{
     const firstData = series![0].data.at(0)
 
     const latestDate = format(
-      new Date(String(latestData?.x)),
+      new Date(String(latestData?.x ?? new Date())),
       "d MMM yyyy"
     )
     const dateText = `${format(
-      new Date(String(firstData?.x)),
+      new Date(String(firstData?.x ?? new Date())),
       "d MMM yyyy"
-    )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
+    )} - ${format(
+      new Date(String(latestData?.x ?? new Date())),
+      "d MMM yyyy"
+    )}`
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
 
@@ -343,9 +346,12 @@ export const ApyChartProvider: FC<{
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
     const dateText = `${format(
-      new Date(String(firstData?.x)),
+      new Date(String(firstData?.x ?? new Date())),
       "d MMM yyyy"
-    )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
+    )} - ${format(
+      new Date(String(latestData?.x ?? new Date())),
+      "d MMM yyyy"
+    )}`
     let average =
       Number(
         apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
@@ -399,9 +405,12 @@ export const ApyChartProvider: FC<{
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
     const dateText = `${format(
-      new Date(String(firstData?.x)),
+      new Date(String(firstData?.x ?? new Date())),
       "d MMM yyyy"
-    )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
+    )} - ${format(
+      new Date(String(latestData?.x ?? new Date())),
+      "d MMM yyyy"
+    )}`
 
     let average =
       Number(
@@ -492,9 +501,12 @@ export const ApyChartProvider: FC<{
       const firstData = series![0].data.at(0)
 
       const dateText = `${format(
-        new Date(String(firstData?.x)),
+        new Date(String(firstData?.x ?? new Date())),
         "d MMM yyyy"
-      )} - ${format(new Date(String(latestData?.x)), "d MMM yyyy")}`
+      )} - ${format(
+        new Date(String(latestData?.x ?? new Date())),
+        "d MMM yyyy"
+      )}`
       const valueExists: boolean =
         Boolean(latestData?.y) || String(latestData?.y) === "0"
 
