@@ -107,7 +107,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
             <Tooltip
               hasArrow
               placement="top"
-              label="Estimated Apy"
+              label={apyLabel(cellarConfig)}
               bg="surface.bg"
               color="neutral.300"
             >

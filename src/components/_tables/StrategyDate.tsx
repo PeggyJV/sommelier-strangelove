@@ -13,7 +13,6 @@ export const StrategyDate = (props: StrategyDateProps) => {
   const { date } = props
   const dateTz = zonedTimeToUtc(date!, "EST")
   const et = utcToZonedTime(dateTz, COUNT_DOWN_TIMEZONE)
-  console.log
 
   const { days, months } = intervalToDuration({
     start: et,
