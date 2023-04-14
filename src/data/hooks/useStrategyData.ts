@@ -51,7 +51,8 @@ export const useStrategyData = (address: string) => {
       return result
     },
     {
-      enabled: !!allContracts && !!sommPrice && !!sgData,
+      enabled:
+        !!allContracts && !!sommPrice && !!wethPrice && !!sgData,
     }
   )
 
