@@ -5,15 +5,16 @@ export const fetchCoingeckoPrice = async (
   base: string,
   quote: string
 ) => {
+  const baseId = base.toLowerCase()
+  const quoteId = quote.toLowerCase()
+  const url = getUrl(baseId, quoteId)
+
   try {
-    const baseId = base.toLowerCase()
-    const quoteId = quote.toLowerCase()
-    const url = getUrl(baseId, quoteId)
     const data = await fetch(url)
     const result = await data.json()
 
     return result.price ? result.price + "" : undefined
-  } catch (_) {
-    return undefined
+  } catch (error) {
+    throw Error(error as string)
   }
 }

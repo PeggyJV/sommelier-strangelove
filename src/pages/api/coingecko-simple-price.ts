@@ -35,7 +35,9 @@ const coinGeckoSimplePrice = async (
       price,
     })
   } catch (error) {
-    res.status(500).send({ error: "failed to fetch data" })
+    res
+      .status(500)
+      .send({ error: "failed to fetch data", message: error })
   }
 }
 
