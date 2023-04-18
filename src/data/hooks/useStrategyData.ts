@@ -34,20 +34,6 @@ export const useStrategyData = (address: string) => {
         sgData: sgData?.cellar!,
       })
 
-      // if (address === RYETH_ADDRESS) {
-      //   const val = new BigNumber(result.tvm?.value ?? "0")
-      //   const tvm = val.times(wethPrice ?? "1").toString()
-
-      //   console.log({ resultTvm: result.tvm, val, tvm, wethPrice })
-      //   console.log("tvmBefore", result.tvm)
-
-      //   result.tvm = {
-      //     value: tvm,
-      //     formatted: `${formatCurrency(tvm)}`,
-      //   }
-      //   console.log("tvmAfter", result.tvm)
-      // }
-
       return result
     },
     {
