@@ -46,6 +46,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         !!signer?._isSigner &&
         !!strategyData.data &&
         !!sommPrice.data &&
+        !!wethPrice.data &&
         !!sgData?.cellar,
     }
   )

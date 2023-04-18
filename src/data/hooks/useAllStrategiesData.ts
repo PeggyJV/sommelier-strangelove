@@ -25,7 +25,8 @@ export const useAllStrategiesData = () => {
       })
     },
     {
-      enabled: !!allContracts && !!sommPrice && !!sgData,
+      enabled:
+        !!allContracts && !!sommPrice && !!sgData && !!wethPrice,
     }
   )
 
