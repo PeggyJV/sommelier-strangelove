@@ -25,7 +25,7 @@ export const PageHome = () => {
   const isTab = useBetterMediaQuery("(max-width: 1023px)")
   const isDesktop = !isTab && !isMobile
   const [type, setType] = useState<string>("All")
-  const strategyType = ["All", "Portofolio", "Yield"]
+  const strategyType = ["All", "Portfolio", "Yield"]
 
   const { timeline } = useHome()
   const columns = isDesktop
@@ -42,7 +42,7 @@ export const PageHome = () => {
         ) || []
       )
     }
-    if (type === "Portofolio") {
+    if (type === "Portfolio") {
       return (
         data?.filter(
           ({ type }) => type === CellarType.automatedPortfolio
