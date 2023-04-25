@@ -604,7 +604,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             {activeAsset?.symbol}).
             <br />
             There could be high slippage when depositing non base
-            assets. Please swap outside our app for better returns.
+            assets. Please swap outside our app for better rates.
           </Text>
         </VStack>
       </FormProvider>
