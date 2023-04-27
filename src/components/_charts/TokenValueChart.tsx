@@ -234,7 +234,7 @@ const TokenChart: React.FC = () => {
           <VStack>
             <Heading>
               ${" "}
-              {(pointActive?.data as { price?: number }).price ||
+              {(pointActive?.data as { price?: number })?.price ||
                 tokenData[tokenData.length - 1].tokenPrice}{" "}
             </Heading>
             <Text as="span">
@@ -315,7 +315,7 @@ const TokenChart: React.FC = () => {
               enablePoints
               tooltip={(props) => {
                 const date = (pointActive?.data as { date?: string })
-                  .date
+                  ?.date
                 if (!date) {
                   return null
                 }
