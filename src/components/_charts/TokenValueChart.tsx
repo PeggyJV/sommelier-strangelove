@@ -11,6 +11,8 @@ import { Point, PointSymbolProps, Serie } from "@nivo/line"
 import { PercentageText } from "components/PercentageText"
 import { CardBase } from "components/_cards/CardBase"
 import { TransparentCard } from "components/_cards/TransparentCard"
+import { TokenValueColumn } from "components/_columns/TokenValueColumn"
+import { TokenValueTable } from "components/_tables/TokenValueTable"
 import { format, isSameDay } from "date-fns"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
@@ -139,6 +141,20 @@ const secondTokenData: TokenData[] = [
   },
 ]
 
+const dummytableData = [
+  {
+    title: "Token Value",
+    price: 1.94,
+    changes: {
+      daily: 0.2,
+      weekly: 0.3,
+      monthly: 0.4,
+      yearly: 0.5,
+      allTime: 0.6,
+    },
+  },
+]
+
 const chartData: Serie[] = [
   {
     id: "first",
@@ -204,8 +220,6 @@ const TokenChart: React.FC = () => {
   const Point: FunctionComponent<PointSymbolProps> = ({
     color,
     datum,
-    size,
-    borderWidth,
   }) => {
     const active = isSameDay(
       new Date(String(datum.x)),
@@ -216,12 +230,10 @@ const TokenChart: React.FC = () => {
 
     if (isRebalance) {
       return (
-        <g cursor="pointer">
-          <ChartPointRebalance
-            fill={color}
-            stroke={colors.neutral[100]}
-          />
-        </g>
+        <ChartPointRebalance
+          fill={color}
+          stroke={colors.neutral[100]}
+        />
       )
     }
 
@@ -282,7 +294,7 @@ const TokenChart: React.FC = () => {
                 setPointActive(undefined)
               }}
               data={filteredChartData || []}
-              margin={{ bottom: 110, left: 100, right: 100, top: 50 }}
+              margin={{ bottom: 110, left: 26, right: 6, top: 20 }}
               yScale={{
                 type: "linear",
                 stacked: false,
@@ -356,7 +368,7 @@ const TokenChart: React.FC = () => {
           </Box>
           {pointActive && (
             <CardBase
-              left={pointActive?.x + 20}
+              left={pointActive?.x}
               position="absolute"
               boxShadow="0px 0px 34px rgba(0,0,0,0.55)"
               bgColor="neutral.900"
@@ -418,6 +430,10 @@ const TokenChart: React.FC = () => {
             }}
           />
         </Stack>
+        <TokenValueTable
+          columns={TokenValueColumn}
+          data={dummytableData}
+        />
       </TransparentCard>
     </Skeleton>
   )
