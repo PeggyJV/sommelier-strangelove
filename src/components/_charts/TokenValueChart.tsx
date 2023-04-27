@@ -180,18 +180,32 @@ const TokenChart: React.FC = () => {
 
   const onMouseMove = (
     point: Point & {
-      data: { price: number }
+      data: { price: number; isRebalance: boolean }
     }
   ) => {
+    if (point.data.isRebalance) {
+      const rects = document.getElementsByTagName("rect")
+      for (let i = 0; i < rects.length; i++) {
+        rects[i].style.cursor = "pointer"
+      }
+    } else {
+      const rects = document.getElementsByTagName("rect")
+      for (let i = 0; i < rects.length; i++) {
+        rects[i].style.cursor = "default"
+      }
+    }
     setPointActive(point)
   }
   const lineColors = useMemo(() => {
     return chartData.map((item) => item.color)
   }, [])
   const { chartTheme } = useNivoThemes()
+
   const Point: FunctionComponent<PointSymbolProps> = ({
     color,
     datum,
+    size,
+    borderWidth,
   }) => {
     const active = isSameDay(
       new Date(String(datum.x)),
@@ -202,10 +216,12 @@ const TokenChart: React.FC = () => {
 
     if (isRebalance) {
       return (
-        <ChartPointRebalance
-          fill={color}
-          stroke={colors.neutral[100]}
-        />
+        <g cursor="pointer">
+          <ChartPointRebalance
+            fill={color}
+            stroke={colors.neutral[100]}
+          />
+        </g>
       )
     }
 
@@ -215,8 +231,6 @@ const TokenChart: React.FC = () => {
 
     return null
   }
-
-  // console.log("pointActive", pointActive)
 
   return (
     <Skeleton
@@ -257,6 +271,9 @@ const TokenChart: React.FC = () => {
           </VStack>
           <Box height={400}>
             <LineChart
+              onClick={(point) => {
+                console.log("point", point)
+              }}
               animate={false}
               colors={lineColors}
               crosshairType="x"
@@ -344,24 +361,32 @@ const TokenChart: React.FC = () => {
               boxShadow="0px 0px 34px rgba(0,0,0,0.55)"
               bgColor="neutral.900"
               maxW="261px"
+              minW="260px"
               maxH="104px"
               bottom={20}
             >
-              <Box>
+              <Box w="100%">
                 {filteredChartData?.map((item) => {
                   const index = pointActive.id.split(".")[1]
                   const itemData = item.data[parseInt(index)]
                   return (
                     <Box key={item.id}>
-                      <HStack color="#D9D7E0">
-                        <Box
-                          boxSize="8px"
-                          backgroundColor={item.color}
-                          borderRadius={2}
-                        />
-                        <Text>{itemData.name}: </Text>
-                        <Text>{itemData.price}</Text>
-
+                      <HStack
+                        justifyContent="space-between"
+                        w="100%"
+                        color="#D9D7E0"
+                      >
+                        {filteredChartData.length > 1 && (
+                          <Box
+                            boxSize="8px"
+                            backgroundColor={item.color}
+                            borderRadius={2}
+                          />
+                        )}
+                        <HStack>
+                          <Text>{itemData.name}: </Text>
+                          <Text>{itemData.price}</Text>
+                        </HStack>
                         <Text textAlign="right">{itemData.y} %</Text>
                       </HStack>
                     </Box>
