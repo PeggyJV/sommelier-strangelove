@@ -1,4 +1,4 @@
-import { Text, Tooltip } from "@chakra-ui/react"
+import { Box, HStack, Text, Tooltip } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
 
 const TooltipCell = (accessor: string) => {
@@ -23,6 +23,7 @@ const TooltipCell = (accessor: string) => {
         }
       >
         <PercentageText
+          highlightAnimate={false}
           data={row.values[accessor]}
           arrowT2
           fontWeight={600}
@@ -34,15 +35,32 @@ const TooltipCell = (accessor: string) => {
   return cell
 }
 
-export const TokenValueColumn = [
+export const TokenValueColumn = (isCompareable: boolean) => [
   {
     Header: "Title",
     accessor: "title",
     disableSortBy: true,
+    Cell: ({ row }: any) => {
+      return (
+        <HStack width={"142px"}>
+          {isCompareable && (
+            <Box
+              boxSize="8px"
+              backgroundColor={row.original.color}
+              borderRadius={2}
+            />
+          )}
+          <Text>{row.original.title}</Text>
+        </HStack>
+      )
+    },
   },
   {
-    Header: "Price",
+    Header: () => <Text textAlign="right">Price</Text>,
     accessor: "price",
+    Cell: ({ row }: any) => (
+      <Text textAlign="right">{row.original.price}</Text>
+    ),
     disableSortBy: true,
   },
   {

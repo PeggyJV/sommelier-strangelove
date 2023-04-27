@@ -37,6 +37,8 @@ interface TokenData {
   tokenPrice: number
 }
 
+const staticColorArray = ["white", "#ED4A7D"]
+
 const tokenData: TokenData[] = [
   {
     name: "Token",
@@ -152,6 +154,7 @@ const dummytableData = [
       yearly: 0.5,
       allTime: 0.6,
     },
+    color: "white",
   },
 ]
 
@@ -298,8 +301,8 @@ const TokenChart: React.FC = () => {
               yScale={{
                 type: "linear",
                 stacked: false,
-                max: "auto",
-                min: "auto",
+                max: 3,
+                min: -3,
               }}
               axisBottom={{
                 renderTick: (tick) => {
@@ -332,6 +335,31 @@ const TokenChart: React.FC = () => {
                 tickRotation: 0,
               }}
               axisLeft={{
+                tickValues: [-3, "-2", "-1", 0, "1", "2", 3],
+                renderTick: (tick) => {
+                  return (
+                    <g
+                      transform={`translate(${tick.x - 20},${
+                        tick.y
+                      })`}
+                    >
+                      <text
+                        x={0}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        style={{
+                          fill: "#9E9DA3",
+                          fontSize: 12,
+                          fontWeight: 600,
+                        }}
+                      >
+                        {typeof tick.value === "string"
+                          ? "-"
+                          : tick.value}
+                      </text>
+                    </g>
+                  )
+                },
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
@@ -375,7 +403,7 @@ const TokenChart: React.FC = () => {
               maxW="261px"
               minW="260px"
               maxH="104px"
-              bottom={20}
+              bottom={"180px"}
             >
               <Box w="100%">
                 {filteredChartData?.map((item) => {
@@ -408,6 +436,7 @@ const TokenChart: React.FC = () => {
             </CardBase>
           )}
         </VStack>
+
         <Stack
           direction={{ base: "column", md: "row" }}
           spacing={{ base: 2, md: 4 }}
@@ -431,7 +460,7 @@ const TokenChart: React.FC = () => {
           />
         </Stack>
         <TokenValueTable
-          columns={TokenValueColumn}
+          columns={TokenValueColumn(true)}
           data={dummytableData}
         />
       </TransparentCard>

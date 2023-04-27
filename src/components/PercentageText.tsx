@@ -9,6 +9,7 @@ interface PercentageTextProps extends StackProps {
   arrow?: boolean
   arrowT2?: boolean
   fontWeight?: number
+  highlightAnimate?: boolean
 }
 
 export const PercentageText: VFC<PercentageTextProps> = ({
@@ -17,6 +18,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
   arrow,
   arrowT2,
   fontWeight = 700,
+  highlightAnimate = true,
   ...props
 }) => {
   const percentageData = data && Math.abs(data).toFixed(2)
@@ -29,12 +31,15 @@ export const PercentageText: VFC<PercentageTextProps> = ({
   const [isUpdated, setIsUpdated] = useState(false)
 
   useEffect(() => {
+    if (!highlightAnimate) {
+      return
+    }
     setIsUpdated(true)
     const timer = setTimeout(() => {
       setIsUpdated(false)
     }, 500)
     return () => clearTimeout(timer)
-  }, [value])
+  }, [value, highlightAnimate])
 
   if (!data && !isDataZero) {
     return (
