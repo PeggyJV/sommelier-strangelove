@@ -168,7 +168,9 @@ const chartData: Serie[] = [
 
 const TokenChart: React.FC = () => {
   const [pointActive, setPointActive] = useState<Point>()
-  const [showLine, setShowLine] = useState({
+  const [showLine, setShowLine] = useState<{
+    [key: string]: boolean
+  }>({
     first: true,
     second: false,
   })
@@ -232,8 +234,8 @@ const TokenChart: React.FC = () => {
           <VStack>
             <Heading>
               ${" "}
-              {pointActive?.data.price ||
-                tokenData[tokenData.length - 1].tokenPrice}
+              {(pointActive?.data as { price?: number }).price ||
+                tokenData[tokenData.length - 1].tokenPrice}{" "}
             </Heading>
             <Text as="span">
               <PercentageText
@@ -311,8 +313,9 @@ const TokenChart: React.FC = () => {
               pointLabelYOffset={-12}
               fill={[{ match: "*", id: "gradientA" }]}
               enablePoints
-              tooltip={() => {
-                const date = pointActive?.data.date
+              tooltip={(props) => {
+                const date = (pointActive?.data as { date?: string })
+                  .date
                 if (!date) {
                   return null
                 }
@@ -320,9 +323,12 @@ const TokenChart: React.FC = () => {
                   new Date(String(date)),
                   "MMM d, ''yy, h:mm a"
                 )
-
                 return (
-                  <Text mb={4} color="#9E9DA3">
+                  <Text
+                    marginLeft={props.point.x === 0 ? 150 : 0}
+                    mb={4}
+                    color="#9E9DA3"
+                  >
                     {formattedDate}
                   </Text>
                 )
@@ -339,7 +345,6 @@ const TokenChart: React.FC = () => {
               bgColor="neutral.900"
               maxW="261px"
               maxH="104px"
-              // w="200px"
               bottom={20}
             >
               <Box>
@@ -359,7 +364,6 @@ const TokenChart: React.FC = () => {
 
                         <Text textAlign="right">{itemData.y} %</Text>
                       </HStack>
-                      {/* <Text>{item.data[index].price}</Text> */}
                     </Box>
                   )
                 })}

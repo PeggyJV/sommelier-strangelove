@@ -26,5 +26,6 @@
     "statusBar.foreground": "#FEFAF1",
     "titleBar.activeBackground": "#460644",
     "titleBar.activeForeground": "#FEFAF1"
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

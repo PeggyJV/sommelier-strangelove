@@ -24,6 +24,7 @@ import { ChartTooltipItem } from "components/_charts/ChartTooltipItem"
 import { formatPercentage } from "utils/chartHelper"
 import { format } from "date-fns"
 import { useStrategyData } from "data/hooks/useStrategyData"
+import { Legend } from "components/_charts/Legend"
 
 export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
   const {
@@ -191,7 +192,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
           </Box>
           <Stack>
             <MobileTooltip />
-            {/* <Stack
+            <Stack
               direction={{ base: "column", md: "row" }}
               spacing={{ base: 2, md: 4 }}
               alignItems={{
@@ -245,7 +246,7 @@ export const EthBtcPerfomanceCard: VFC<BoxProps> = (props) => {
                   }))
                 }}
               />
-            </Stack> */}
+            </Stack>
           </Stack>
         </VStack>
       </TransparentCard>
