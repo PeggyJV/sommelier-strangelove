@@ -216,6 +216,8 @@ const TokenChart: React.FC = () => {
     return tableData.filter((item) => showLine[item.id])
   }, [showLine])
 
+  const pointActiveIndex = pointActive?.id.split(".")[1]
+
   const onMouseMove = (
     point: Point & {
       data: { price: number; isRebalance: boolean }
@@ -316,7 +318,7 @@ const TokenChart: React.FC = () => {
                 setPointActive(undefined)
               }}
               data={filteredChartData || []}
-              margin={{ bottom: 110, left: 26, right: 6, top: 20 }}
+              margin={{ bottom: 110, left: 30, right: 26, top: 20 }}
               yScale={{
                 type: "linear",
                 stacked: false,
@@ -413,9 +415,15 @@ const TokenChart: React.FC = () => {
               xFormat={(value) => format(new Date(value), "MMM, d")}
             />
           </Box>
-          {pointActive && (
+          {pointActive && pointActiveIndex && (
             <CardBase
-              left={pointActive?.x}
+              zIndex={9}
+              left={
+                parseInt(pointActiveIndex) ===
+                filteredChartData[0].data.length - 1
+                  ? pointActive?.x - 150
+                  : pointActive?.x
+              }
               position="absolute"
               boxShadow="0px 0px 34px rgba(0,0,0,0.55)"
               bgColor="neutral.900"
