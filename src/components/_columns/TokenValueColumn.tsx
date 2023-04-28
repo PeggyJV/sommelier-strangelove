@@ -85,6 +85,13 @@ export const TokenValueColumn = (isCompareable: boolean) => [
     align: "right",
   },
   {
+    Header: () => <Text textAlign="right">1Y</Text>,
+    accessor: "changes.yearly",
+    Cell: TooltipCell("changes.yearly"),
+    disableSortBy: true,
+    align: "right",
+  },
+  {
     Header: () => <Text textAlign="right">All</Text>,
     accessor: "changes.allTime",
     Cell: TooltipCell("changes.allTime"),

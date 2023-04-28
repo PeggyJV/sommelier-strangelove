@@ -143,20 +143,33 @@ const secondTokenData: TokenData[] = [
   },
 ]
 
-const dummytableData = [
-  {
-    title: "Token Value",
-    price: 1.94,
-    changes: {
-      daily: 0.2,
-      weekly: 0.3,
-      monthly: 0.4,
-      yearly: 0.5,
-      allTime: 0.6,
-    },
-    color: "white",
+const dummyTableData = {
+  id: "first",
+  title: "Token Value",
+  price: 1.94,
+  changes: {
+    daily: 0.2,
+    weekly: 0.3,
+    monthly: 0.4,
+    yearly: 0.5,
+    allTime: 0.6,
   },
-]
+  color: "white",
+}
+
+const dummyTableData2 = {
+  id: "second",
+  title: "USDC",
+  price: 2,
+  changes: {
+    daily: 0.1,
+    weekly: 0.2,
+    monthly: 0.3,
+    yearly: -0.1,
+    allTime: 0.2,
+  },
+  color: "#ED4A7D",
+}
 
 const chartData: Serie[] = [
   {
@@ -185,6 +198,8 @@ const chartData: Serie[] = [
   },
 ]
 
+const tableData = [dummyTableData, dummyTableData2]
+
 const TokenChart: React.FC = () => {
   const [pointActive, setPointActive] = useState<Point>()
   const [showLine, setShowLine] = useState<{
@@ -195,6 +210,10 @@ const TokenChart: React.FC = () => {
   })
   const filteredChartData = useMemo(() => {
     return chartData.filter((item) => showLine[item.id])
+  }, [showLine])
+
+  const filteredTableData = useMemo(() => {
+    return tableData.filter((item) => showLine[item.id])
   }, [showLine])
 
   const onMouseMove = (
@@ -461,7 +480,7 @@ const TokenChart: React.FC = () => {
         </Stack>
         <TokenValueTable
           columns={TokenValueColumn(true)}
-          data={dummytableData}
+          data={filteredTableData || []}
         />
       </TransparentCard>
     </Skeleton>
