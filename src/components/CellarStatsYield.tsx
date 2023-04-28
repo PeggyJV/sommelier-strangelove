@@ -17,7 +17,6 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { isFuture } from "date-fns"
 import { apyLabel } from "data/uiConfig"
 import { useStrategyData } from "data/hooks/useStrategyData"
-import { CellarNameKey } from "data/types"
 
 interface CellarStatsYieldProps extends StackProps {
   cellarId: string
@@ -42,8 +41,6 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
     stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
   const baseApy = strategyData?.baseApy
   const rewardsApy = strategyData?.rewardsApy
-  const isRYETH =
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
 
   return (
     <HStack
@@ -77,32 +74,11 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
           </HStack>
         </Tooltip>
       </VStack>
-      {baseApy && !isRYETH && (
+      {baseApy && (
         <VStack spacing={1} align="center">
           <Apy
             apy={isStrategyLoading ? <Spinner /> : baseApy?.formatted}
           />
-          <Box>
-            <Tooltip
-              hasArrow
-              placement="top"
-              label={apyLabel(cellarConfig)}
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={1} align="center">
-                <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
-                {!!apyLabel(cellarConfig) && (
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                )}
-              </HStack>
-            </Tooltip>
-          </Box>
-        </VStack>
-      )}
-      {isRYETH && (
-        <VStack spacing={1} align="center">
-          <Apy apy="10%" />
           <Box>
             <Tooltip
               hasArrow

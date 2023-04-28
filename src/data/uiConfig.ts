@@ -77,7 +77,8 @@ export const isTVMEnabled = (config: ConfigProps) => {
 export const isAPYEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
 }
 

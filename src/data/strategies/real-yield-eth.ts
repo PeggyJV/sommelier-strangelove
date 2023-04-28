@@ -59,7 +59,7 @@ export const realYieldEth = {
 
   config: {
     id: config.CONTRACT.REAL_YIELD_ETH.ADDRESS,
-    baseApy: 4.4,
+    baseApy: 10,
     cellarNameKey: CellarNameKey.REAL_YIELD_ETH,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_ETH.ADDRESS,
