@@ -17,12 +17,11 @@ export const getBaseApy = ({
   hardcodedApy?: boolean
   launchEpoch: number
 }) => {
-  const isUsingHardcodedApy =
-    !dayDatas || (dayDatas?.length === 1 && hardcodedApy)
-
+  const isDataNotValid =
+    !dayDatas || dayDatas?.length === 1 || dayDatas?.length < 2
   // cellar apy
   const cellarApy = (() => {
-    if (isUsingHardcodedApy || dayDatas.length < 2) {
+    if (isDataNotValid || hardcodedApy) {
       return baseApy || 0
     }
 

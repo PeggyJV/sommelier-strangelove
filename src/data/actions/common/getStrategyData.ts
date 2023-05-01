@@ -10,7 +10,7 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { add, isBefore, isFuture, subDays } from "date-fns"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
-import { CellarKey, ConfigProps } from "data/types"
+import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { getBaseApy as getV2BaseApy } from "../CELLAR_V2/getBaseApy"
 import { getBaseApy } from "./getBaseApy"
 import { getChanges } from "./getChanges"
@@ -135,6 +135,9 @@ export const getStrategyData = async ({
           launchEpoch: launchEpoch,
           baseApy: config.baseApy,
           dayDatas: datas,
+          hardcodedApy:
+            // TODO: remove this when we have confirmation for RYETH APY
+            config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH,
         })
       }
 
