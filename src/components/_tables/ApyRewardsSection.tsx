@@ -9,18 +9,22 @@ import {
 import { LogoIcon } from "components/_icons"
 import { FC } from "react"
 import { differenceInDays, subDays } from "date-fns"
+import { baseApyHoverLabel } from "data/uiConfig"
+import { cellarDataMap } from "data/cellarDataMap"
 
 type ApyRewardsSectionProps = {
   baseApy?: string
   rewardsApy?: string
   stackingEndDate: string
   date?: Date
+  cellarId: string
 }
 
 export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   props
 ) => {
-  const { baseApy, date, rewardsApy, stackingEndDate } = props
+  const { baseApy, date, rewardsApy, stackingEndDate, cellarId } =
+    props
   const endDate = new Date(stackingEndDate).getTime()
   const startDate = subDays(endDate, 30).getTime()
   const now = new Date(Date.now()).getTime()
@@ -33,7 +37,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const numWeeks = 1
   launchDate.setDate(launchDate.getDate() + numWeeks * 7)
   const isOneWeekAfterLaunch = new Date() > launchDate
-
+  const cellarConfig = cellarDataMap[cellarId].config
   if (!baseApy && !rewardsApy) {
     if (!isOneWeekAfterLaunch) {
       return (
@@ -64,7 +68,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   return (
     <Stack alignItems="flex-end" spacing={0}>
       <Tooltip
-        label={`Base APY`}
+        label={baseApyHoverLabel(cellarConfig)}
         color="neutral.100"
         border="0"
         fontSize="12px"

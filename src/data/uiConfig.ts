@@ -353,3 +353,20 @@ export const apyLabel = (config: ConfigProps) => {
   }
   return "Base APY"
 }
+
+export const apyHoverLabel = (config: ConfigProps) => {
+  if (config.cellar.key === CellarKey.CELLAR_V2) {
+    if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
+      return "Expected ETH Yield"
+    }
+    return "APY since inception"
+  }
+  return "Base APY"
+}
+
+export const baseApyHoverLabel = (config: ConfigProps) => {
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
+    return "Expected ETH Yield"
+  }
+  return "Base APY"
+}

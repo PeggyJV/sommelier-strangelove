@@ -51,6 +51,7 @@ export const StrategyTabColumn = ({
       Cell: ({ row }: any) => {
         return (
           <ApyRewardsSection
+            cellarId={row.original.slug}
             baseApy={row.original.baseApy?.formatted}
             rewardsApy={row.original.rewardsApy?.formatted}
             stackingEndDate={row.original.stakingEnd?.endDate}

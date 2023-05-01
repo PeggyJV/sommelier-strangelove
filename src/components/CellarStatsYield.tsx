@@ -15,7 +15,7 @@ import { InformationIcon } from "./_icons"
 import { Apy } from "./Apy"
 import { cellarDataMap } from "data/cellarDataMap"
 import { isFuture } from "date-fns"
-import { apyLabel } from "data/uiConfig"
+import { apyHoverLabel, apyLabel } from "data/uiConfig"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
 interface CellarStatsYieldProps extends StackProps {
@@ -83,7 +83,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
             <Tooltip
               hasArrow
               placement="top"
-              label={apyLabel(cellarConfig)}
+              label={apyHoverLabel(cellarConfig)}
               bg="surface.bg"
               color="neutral.300"
             >

@@ -23,6 +23,7 @@ import { landingType } from "utils/landingType"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
 import {
+  apyHoverLabel,
   apyLabel,
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
@@ -167,7 +168,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                   {baseApy?.formatted || "--"}
                 </Heading>
                 <CellarStatsLabel
-                  tooltip={apyLabel(cellarConfig) || ""}
+                  tooltip={apyHoverLabel(cellarConfig) || ""}
                   title={apyLabel(cellarConfig)}
                 />
               </VStack>
