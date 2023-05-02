@@ -43,9 +43,9 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
     cellarConfig.cellar.address
   )
   const tokenPrice = strategyData?.tokenPrice
-  const dailyChange = strategyData?.changes.daily
+  const dailyChange = strategyData?.changes?.daily
   const intervalGain =
-    strategyData?.changes[intervalGainTimeline(cellarConfig)]
+    strategyData?.changes?.[intervalGainTimeline(cellarConfig)]
 
   return (
     <HStack
@@ -64,7 +64,9 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
       {...rest}
     >
       <VStack spacing={1} align="center">
-        <Heading size="md">{tokenPrice ?? <Spinner />}</Heading>
+        <Heading size="md">
+          {isLoading ? <Spinner /> : tokenPrice || "--"}
+        </Heading>
         <Tooltip
           hasArrow
           placement="top"

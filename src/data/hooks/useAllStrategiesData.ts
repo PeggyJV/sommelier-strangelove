@@ -21,7 +21,7 @@ export const useAllStrategiesData = () => {
         allContracts: allContracts!,
         sommPrice: sommPrice!,
         wethPrice: wethPrice!,
-        sgData: sgData!,
+        sgData: sgData,
       })
     },
     {

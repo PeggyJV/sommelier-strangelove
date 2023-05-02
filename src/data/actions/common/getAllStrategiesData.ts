@@ -3,6 +3,7 @@ import { AllContracts } from "../types"
 import { GetAllStrategiesDataQuery } from "generated/subgraph"
 import { getStrategyData } from "./getStrategyData"
 import { reactQueryClient } from "utils/reactQuery"
+import { cellarDataMap } from "data/cellarDataMap"
 
 export const getAllStrategiesData = async ({
   allContracts,
@@ -13,7 +14,7 @@ export const getAllStrategiesData = async ({
   allContracts: AllContracts
   sommPrice: string
   wethPrice: string
-  sgData: GetAllStrategiesDataQuery
+  sgData?: GetAllStrategiesDataQuery
 }) => {
   const data = await Promise.all(
     Object.entries(allContracts)?.map(
@@ -21,10 +22,15 @@ export const getAllStrategiesData = async ({
         const result = await reactQueryClient.fetchQuery(
           ["USE_STRATEGY_DATA", { provider: true, address }],
           async () => {
-            const subgraphData = sgData.cellars.find(
-              (v) => v.id === address
+            const subgraphData =
+              sgData && sgData?.cellars?.find((v) => v.id === address)
+            // TODO: Remove this if it's not using test contract
+            const isTestContract = Boolean(
+              Object.values(cellarDataMap).find(
+                (item) => item.config.cellar.address === address
+              )
             )
-            if (!subgraphData) return
+            if (!isTestContract ? !subgraphData : false) return
             return await getStrategyData({
               address,
               sgData: subgraphData,

@@ -107,6 +107,11 @@ export const config = {
       SLUG: "Real-Yield-ETH",
       ABI: cellarV0816,
     },
+    DEFI_STARS: {
+      ADDRESS: "0x03df2A53Cbed19B824347D6a45d09016C2D1676a",
+      SLUG: "DeFi-Stars",
+      ABI: cellarV0816,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",

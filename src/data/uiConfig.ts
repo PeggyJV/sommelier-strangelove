@@ -10,6 +10,9 @@ interface BondingPeriod {
 type BondingValueOptions = 0 | 1 | 2
 
 export const isBondingEnabled = (config: ConfigProps) => {
+  if (config.cellarNameKey === CellarNameKey.DEFI_STARS) {
+    return false
+  }
   return true
 }
 

@@ -7,6 +7,6 @@ export const getTvm = (tvlTotal?: string) => {
 
   return {
     value: calculatedTvl,
-    formatted: `$${tvmVal}`,
+    formatted: calculatedTvl && `$${tvmVal}`,
   }
 }
