@@ -16,7 +16,12 @@ import { TokenValueTable } from "components/_tables/TokenValueTable"
 import { format, isSameDay } from "date-fns"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
-import React, { FunctionComponent, useMemo, useState } from "react"
+import React, {
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 import { colors } from "theme/colors"
 import { ChartPoint } from "./ChartPoint"
 import { ChartPointRebalance } from "./ChartPointRelabance"
@@ -201,6 +206,7 @@ const chartData: Serie[] = [
 const tableData = [dummyTableData, dummyTableData2]
 
 const TokenChart: React.FC = () => {
+  const [selectedPoint, setSelectedPoint] = useState<Point>()
   const [pointActive, setPointActive] = useState<Point>()
   const [showLine, setShowLine] = useState<{
     [key: string]: boolean
@@ -216,7 +222,10 @@ const TokenChart: React.FC = () => {
     return tableData.filter((item) => showLine[item.id])
   }, [showLine])
 
-  const pointActiveIndex = pointActive?.id.split(".")[1]
+  const pointActiveIndex =
+    pointActive?.id.split(".")[1] ||
+    selectedPoint?.id.split(".")[1] ||
+    "0"
 
   const onMouseMove = (
     point: Point & {
@@ -236,6 +245,15 @@ const TokenChart: React.FC = () => {
     }
     setPointActive(point)
   }
+
+  useEffect(() => {
+    if (pointActive) {
+      if (pointActive.id !== selectedPoint?.id) {
+        setSelectedPoint(pointActive)
+      }
+    }
+  }, [pointActive, selectedPoint])
+
   const lineColors = useMemo(() => {
     return chartData.map((item) => item.color)
   }, [])
@@ -308,7 +326,12 @@ const TokenChart: React.FC = () => {
           <Box height={400}>
             <LineChart
               onClick={(point) => {
-                console.log("point", point)
+                if (
+                  (point.data as { isRebalance?: boolean })
+                    ?.isRebalance
+                ) {
+                  setSelectedPoint(point)
+                }
               }}
               animate={false}
               colors={lineColors}
@@ -415,14 +438,17 @@ const TokenChart: React.FC = () => {
               xFormat={(value) => format(new Date(value), "MMM, d")}
             />
           </Box>
-          {pointActive && pointActiveIndex && (
+          {((pointActive && pointActiveIndex) || selectedPoint) && (
             <CardBase
               zIndex={9}
               left={
                 parseInt(pointActiveIndex) ===
                 filteredChartData[0].data.length - 1
-                  ? pointActive?.x - 150
-                  : pointActive?.x
+                  ? pointActive?.x ||
+                    0 - 150 ||
+                    selectedPoint?.x ||
+                    0 - 150
+                  : pointActive?.x || selectedPoint?.x
               }
               position="absolute"
               boxShadow="0px 0px 34px rgba(0,0,0,0.55)"
@@ -434,8 +460,8 @@ const TokenChart: React.FC = () => {
             >
               <Box w="100%">
                 {filteredChartData?.map((item) => {
-                  const index = pointActive.id.split(".")[1]
-                  const itemData = item.data[parseInt(index)]
+                  const itemData =
+                    item.data[parseInt(pointActiveIndex)]
                   return (
                     <Box key={item.id}>
                       <HStack

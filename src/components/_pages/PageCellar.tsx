@@ -18,7 +18,6 @@ import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarNameKey, CellarType } from "data/types"
 import {
   isApyChartEnabled,
-  isEthBtcChartEnabled,
   isTokenPriceChartEnabled,
   isTVMEnabled,
 } from "data/uiConfig"
@@ -29,8 +28,6 @@ import { ApyChartProvider } from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
 import { isComingSoon } from "utils/isComingSoon"
 import { TokenChart } from "components/_charts/TokenValueChart"
-import { EthBtcChartProvider } from "data/context/ethBtcChartContext"
-import { EthBtcPerfomanceCard } from "components/_cards/EthBtcPerfomanceCard"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
