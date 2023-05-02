@@ -8,7 +8,7 @@ export const Overview = () => {
   const { data, isLoading } = useAllStrategiesData()
 
   const totalTVM = data?.reduce((acc, item) => {
-    return acc + Number(item.tvm.value)
+    return acc + Number(item?.tvm?.value)
   }, 0)
 
   return (
