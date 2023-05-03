@@ -25,6 +25,7 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
               height={100}
               alt="seven seas"
               src="/assets/logos/seven-seas.webp"
+              objectFit="scale-down"
             />
           </CardBase>
         </Link>
@@ -35,6 +36,7 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
               height={100}
               alt="ClearGate"
               src="/assets/logos/clear-gate.webp"
+              objectFit="scale-down"
             />
           </CardBase>
         </Link>
@@ -45,6 +47,7 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
               height={100}
               alt="patache"
               src="/assets/logos/patache.webp"
+              objectFit="scale-down"
             />
           </CardBase>
         </Link>
@@ -54,6 +57,16 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
             height={100}
             alt="Define Logic Labs"
             src="/assets/logos/define-logic-labs.webp"
+            objectFit="scale-down"
+          />
+        </CardBase>
+        <CardBase justifyContent="center" h="full" px={0}>
+          <Image
+            width={243}
+            height={100}
+            alt="Define Logic Labs"
+            src="/assets/logos/algolab.webp"
+            objectFit="scale-down"
           />
         </CardBase>
         <BecomeProvider />
