@@ -25,7 +25,7 @@ export const defiStars = {
   managementFee: "20%",
   managementFeeTooltip:
     "Platform fee split: 15% for Strategy provider and 0.5% for protocol",
-  protocols: "Uniswap V3",
+  protocols: ["Uniswap V3", "1inch", "0x"],
   strategyAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   performanceSplit: {
     protocol: 1.5,
