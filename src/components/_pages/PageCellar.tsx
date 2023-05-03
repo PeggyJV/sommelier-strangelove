@@ -28,6 +28,7 @@ import { ApyChartProvider } from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
 import { isComingSoon } from "utils/isComingSoon"
 import { TokenChart } from "components/_charts/TokenValueChart"
+import { NewApyChart } from "components/_charts/NewApyChart"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -121,9 +122,11 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             </TokenPriceChartProvider>
           )}
 
-          <TokenPriceChartProvider address={cellarAddress}>
+          {/* <TokenPriceChartProvider address={cellarAddress}>
             <TokenChart />
           </TokenPriceChartProvider>
+
+          <NewApyChart /> */}
 
           <Heading pt={isYieldStrategies ? 0 : 12} {...h2Styles}>
             Strategy Details

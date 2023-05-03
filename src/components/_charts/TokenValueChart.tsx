@@ -3,6 +3,7 @@ import {
   Heading,
   HStack,
   Skeleton,
+  Spacer,
   Stack,
   Text,
   VStack,
@@ -26,6 +27,13 @@ import { colors } from "theme/colors"
 import { ChartPoint } from "./ChartPoint"
 import { ChartPointRebalance } from "./ChartPointRelabance"
 import { Legend } from "./Legend"
+import {
+  subDays,
+  subWeeks,
+  subMonths,
+  endOfMonth,
+  setDay,
+} from "date-fns"
 
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
@@ -34,119 +42,88 @@ const LineChart = dynamic(
   }
 )
 
-interface TokenData {
+const staticColorArray = ["white", "#ED4A7D"]
+
+type TokenData = {
   name: string
-  date: string
+  date: Date
   percentChange: number
   rebalancing: boolean
   tokenPrice: number
 }
 
-const staticColorArray = ["white", "#ED4A7D"]
+type windowDate = "1W" | "1M" | "1Y" | "1YperWeek"
 
-const tokenData: TokenData[] = [
-  {
-    name: "Token",
-    date: "2023-04-18T00:00:00Z",
-    percentChange: -0.2,
-    rebalancing: false,
-    tokenPrice: 100.0,
-  },
-  {
-    name: "Token",
-    date: "2023-04-19T00:00:00Z",
-    percentChange: 0.1,
-    rebalancing: false,
-    tokenPrice: 97.65,
-  },
-  {
-    name: "Token",
-    date: "2023-04-20T00:00:00Z",
-    percentChange: -0.1,
-    rebalancing: true,
-    tokenPrice: 102.23,
-  },
-  {
-    name: "Token",
-    date: "2023-04-21T00:00:00Z",
-    percentChange: 0.2,
-    rebalancing: false,
-    tokenPrice: 100.34,
-  },
-  {
-    name: "Token",
-    date: "2023-04-22T00:00:00Z",
-    percentChange: 0.1,
-    rebalancing: false,
-    tokenPrice: 101.23,
-  },
-  {
-    name: "Token",
-    date: "2023-04-23T00:00:00Z",
-    percentChange: -0.1,
-    rebalancing: false,
-    tokenPrice: 97.99,
-  },
-  {
-    name: "Token",
-    date: "2023-04-24T00:00:00Z",
-    percentChange: -0.2,
-    rebalancing: false,
-    tokenPrice: 99.59,
-  },
-]
+function generateTokenData(
+  tokenName: string,
+  windowDate: windowDate,
+  hasRebalancing: boolean
+): TokenData[] {
+  const data: TokenData[] = []
+  let dateCount: number
+  let rebalanceFrequency: number
 
-const secondTokenData: TokenData[] = [
-  {
-    name: "USDC",
-    date: "2023-04-18T00:00:00Z",
-    percentChange: -0.1,
-    rebalancing: false,
-    tokenPrice: 98.5,
-  },
-  {
-    name: "USDC",
-    date: "2023-04-19T00:00:00Z",
-    percentChange: 0.3,
-    rebalancing: false,
-    tokenPrice: 105.2,
-  },
-  {
-    name: "USDC",
-    date: "2023-04-20T00:00:00Z",
-    percentChange: -0.2,
-    rebalancing: false,
-    tokenPrice: 100.0,
-  },
-  {
-    name: "USDC",
-    date: "2023-04-21T00:00:00Z",
-    percentChange: 0.1,
-    rebalancing: false,
-    tokenPrice: 103.6,
-  },
-  {
-    name: "USDC",
-    date: "2023-04-22T00:00:00Z",
-    percentChange: -0.3,
-    rebalancing: false,
-    tokenPrice: 98.7,
-  },
-  {
-    name: "USDC",
-    date: "2023-04-23T00:00:00Z",
-    percentChange: 0.2,
-    rebalancing: false,
-    tokenPrice: 102.4,
-  },
-  {
-    name: "USDC",
-    date: "2023-04-24T00:00:00Z",
-    percentChange: -0.1,
-    rebalancing: false,
-    tokenPrice: 97.8,
-  },
-]
+  switch (windowDate) {
+    case "1W":
+      dateCount = 7
+      rebalanceFrequency = 1
+      break
+    case "1M":
+      dateCount = 30
+      rebalanceFrequency = 2
+      break
+    case "1Y":
+      dateCount = 12
+      rebalanceFrequency = 2
+      break
+    case "1YperWeek":
+      dateCount = 52
+      rebalanceFrequency = 24
+      break
+    default:
+      throw new Error("Invalid windowDate parameter")
+  }
+
+  let tokenPrice = 100
+  let rebalanceCounter = 0
+
+  for (let i = 0; i < dateCount; i++) {
+    let date = new Date()
+
+    if (windowDate === "1Y") {
+      date = endOfMonth(subMonths(date, i))
+    } else if (windowDate === "1YperWeek") {
+      date = setDay(subWeeks(date, i), 5)
+    } else {
+      date = subDays(date, i)
+    }
+
+    const percentChange = parseFloat(
+      (Math.random() * 2 - 1).toFixed(2)
+    )
+    tokenPrice = parseFloat(
+      (tokenPrice * (1 + percentChange)).toFixed(2)
+    )
+    const rebalancing =
+      hasRebalancing &&
+      rebalanceCounter < rebalanceFrequency &&
+      Math.random() < 0.5
+
+    if (rebalancing) {
+      rebalanceCounter++
+    }
+
+    data.unshift({
+      name: tokenName,
+      date: date,
+      percentChange,
+      rebalancing,
+      tokenPrice,
+    })
+  }
+
+  return data
+}
 
 const dummyTableData = {
   id: "first",
@@ -176,36 +153,52 @@ const dummyTableData2 = {
   color: "#ED4A7D",
 }
 
-const chartData: Serie[] = [
-  {
-    id: "first",
-    color: "white",
-    data: tokenData.map((item) => ({
-      x: item.date,
-      y: item.percentChange,
-      price: item.tokenPrice,
-      isRebalance: item.rebalancing,
-      date: item.date,
-      name: item.name,
-    })),
-  },
-  {
-    id: "second",
-    color: "#ED4A7D",
-    data: secondTokenData.map((item) => ({
-      x: item.date,
-      y: item.percentChange,
-      price: item.tokenPrice,
-      isRebalance: item.rebalancing,
-      date: item.date,
-      name: item.name,
-    })),
-  },
-]
-
 const tableData = [dummyTableData, dummyTableData2]
 
-const TokenChart: React.FC = () => {
+const TokenChart = ({
+  windowDate = "1M",
+}: {
+  windowDate?: windowDate
+}) => {
+  const tokenData = useMemo(
+    () => generateTokenData("ETH", windowDate, true),
+    [windowDate]
+  )
+
+  const secondTokenData = useMemo(
+    () => generateTokenData("USDC", windowDate, false),
+    [windowDate]
+  )
+
+  const chartData: Serie[] = useMemo(
+    () => [
+      {
+        id: "first",
+        color: "white",
+        data: tokenData.map((item) => ({
+          x: item.date,
+          y: item.percentChange,
+          price: item.tokenPrice,
+          isRebalance: item.rebalancing,
+          date: item.date,
+          name: item.name,
+        })),
+      },
+      {
+        id: "second",
+        color: "#ED4A7D",
+        data: secondTokenData.map((item) => ({
+          x: item.date,
+          y: item.percentChange,
+          price: item.tokenPrice,
+          isRebalance: item.rebalancing,
+          date: item.date,
+          name: item.name,
+        })),
+      },
+    ],
+    [tokenData, secondTokenData]
+  )
   const [selectedPoint, setSelectedPoint] = useState<Point>()
   const [pointActive, setPointActive] = useState<Point>()
   const [showLine, setShowLine] = useState<{
@@ -216,6 +209,7 @@ const TokenChart: React.FC = () => {
   })
   const filteredChartData = useMemo(() => {
     return chartData.filter((item) => showLine[item.id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showLine])
 
   const filteredTableData = useMemo(() => {
@@ -249,14 +243,18 @@ const TokenChart: React.FC = () => {
   useEffect(() => {
     if (pointActive) {
       if (pointActive.id !== selectedPoint?.id) {
-        setSelectedPoint(pointActive)
+        const selectedPointIndex = selectedPoint?.id.split(".")[1]
+        if (pointActiveIndex !== selectedPointIndex) {
+          setSelectedPoint(undefined)
+        }
       }
     }
-  }, [pointActive, selectedPoint])
+  }, [pointActive, selectedPoint, pointActiveIndex])
 
   const lineColors = useMemo(() => {
     return chartData.map((item) => item.color)
-  }, [])
+  }, [chartData])
+
   const { chartTheme } = useNivoThemes()
 
   const Point: FunctionComponent<PointSymbolProps> = ({
@@ -284,6 +282,27 @@ const TokenChart: React.FC = () => {
     }
 
     return null
+  }
+
+  const renderFrequency = (windowDate: windowDate) => {
+    let frequency: string
+
+    switch (windowDate) {
+      case "1W":
+        frequency = "every day"
+        break
+      case "1M":
+        frequency = "every 2 days"
+        break
+      case "1Y":
+      case "1YperWeek":
+        frequency = "every 20 days"
+        break
+      default:
+        throw new Error("Invalid windowDate parameter")
+    }
+
+    return frequency
   }
 
   return (
@@ -348,6 +367,12 @@ const TokenChart: React.FC = () => {
                 max: 3,
                 min: -3,
               }}
+              xScale={{
+                type: "time",
+                format: "%d",
+                useUTC: false,
+                precision: "day",
+              }}
               axisBottom={{
                 renderTick: (tick) => {
                   return (
@@ -357,6 +382,11 @@ const TokenChart: React.FC = () => {
                       })`}
                     >
                       <text
+                        transform={
+                          windowDate !== "1W"
+                            ? "rotate(45, 0, 0)"
+                            : undefined
+                        }
                         x={0}
                         textAnchor="middle"
                         dominantBaseline="middle"
@@ -374,9 +404,9 @@ const TokenChart: React.FC = () => {
                     </g>
                   )
                 },
+                tickValues: renderFrequency(windowDate),
                 tickSize: 5,
                 tickPadding: 5,
-                tickRotation: 0,
               }}
               axisLeft={{
                 tickValues: [-3, "-2", "-1", 0, "1", "2", 3],
@@ -441,15 +471,16 @@ const TokenChart: React.FC = () => {
           {((pointActive && pointActiveIndex) || selectedPoint) && (
             <CardBase
               zIndex={9}
-              left={
-                parseInt(pointActiveIndex) ===
-                filteredChartData[0].data.length - 1
-                  ? pointActive?.x ||
-                    0 - 150 ||
-                    selectedPoint?.x ||
-                    0 - 150
-                  : pointActive?.x || selectedPoint?.x
-              }
+              // left={
+              //   parseInt(pointActiveIndex) ===
+              //   filteredChartData[0].data.length - 1
+              //     ? pointActive?.x ||
+              //       0 - 150 ||
+              //       selectedPoint?.x ||
+              //       0 - 150
+              //     : pointActive?.x || selectedPoint?.x
+              // }
+              left={selectedPoint?.x || pointActive?.x}
               position="absolute"
               boxShadow="0px 0px 34px rgba(0,0,0,0.55)"
               bgColor="neutral.900"
@@ -458,14 +489,15 @@ const TokenChart: React.FC = () => {
               maxH="104px"
               bottom={"180px"}
             >
-              <Box w="100%">
+              <Box w="100%" textAlign="left">
                 {filteredChartData?.map((item) => {
                   const itemData =
                     item.data[parseInt(pointActiveIndex)]
                   return (
                     <Box key={item.id}>
                       <HStack
-                        justifyContent="space-between"
+                        justifyContent="flex-start"
+                        alignItems="center"
                         w="100%"
                         color="#D9D7E0"
                       >
@@ -476,10 +508,12 @@ const TokenChart: React.FC = () => {
                             borderRadius={2}
                           />
                         )}
-                        <HStack>
-                          <Text>{itemData.name}: </Text>
-                          <Text>{itemData.price}</Text>
-                        </HStack>
+
+                        <Text>{itemData.name}:</Text>
+                        <Text textAlign="right">
+                          {itemData.price}
+                        </Text>
+                        <Spacer />
                         <Text textAlign="right">{itemData.y} %</Text>
                       </HStack>
                     </Box>

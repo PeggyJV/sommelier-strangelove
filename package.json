@@ -70,6 +70,7 @@
     "react-jazzicon": "^1.0.4",
     "react-slick": "^0.29.0",
     "react-table": "^7.8.0",
+    "recharts": "^2.5.0",
     "sanity-codegen": "^0.9.8",
     "slick-carousel": "^1.8.1",
     "slugify": "^1.6.5",
