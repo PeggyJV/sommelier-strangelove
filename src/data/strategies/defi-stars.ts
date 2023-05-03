@@ -17,7 +17,7 @@ export const defiStars = {
       logo: "/assets/icons/somm.png",
     },
   ],
-  launchDate: new Date(2023, 5, 10, 10, 0, 0, 0), // May 10, 2023. 3 pm UTC
+  launchDate: new Date(2023, 4, 10, 10, 0, 0, 0), // May 10, 2023. 3 pm UTC
   cellarType: CellarType.automatedPortfolio,
   description: `Capture the upside of UNI price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
