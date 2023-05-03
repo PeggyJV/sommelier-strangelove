@@ -4,23 +4,20 @@ import {
   CellarNameKey,
   CellarRouterKey,
   CellarType,
-  StakerKey,
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
 export const defiStars = {
   name: "DeFi Stars",
   slug: config.CONTRACT.DEFI_STARS.SLUG,
-  // TODO: UPDATE TOKEN CONFIG AND ADD ASSETS
-  // tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
-  tradedAssets: ["USDC"],
+  tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   exchange: [
     {
       name: "Sommelier",
       logo: "/assets/icons/somm.png",
     },
   ],
-  launchDate: new Date(2022, 11, 29, 11, 0, 0, 0), // 29 dec 2022 12 am est
+  launchDate: new Date(2023, 5, 10, 10, 0, 0, 0), // May 10, 2023. 3 pm UTC
   cellarType: CellarType.automatedPortfolio,
   description: `Capture the upside of UNI price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
@@ -29,9 +26,7 @@ export const defiStars = {
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: "Uniswap V3",
-  // TODO: UPDATE TOKEN CONFIG AND ADD ASSETS
-  // strategyAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
-  strategyAssets: ["USDC"],
+  strategyAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   performanceSplit: {
     protocol: 1.5,
     "strategy provider": 0.5,
