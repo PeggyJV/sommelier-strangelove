@@ -1,5 +1,5 @@
 import { cellarDataMap } from "data/cellarDataMap"
-import { CellarStakingV0815 } from "src/abi/types"
+import { CellarStakingV0815, CellarV0816 } from "src/abi/types"
 import { StrategyContracts } from "../types"
 
 import {
@@ -19,6 +19,7 @@ import { formatDecimals } from "utils/bigNumber"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { getPositon } from "./getPosition"
 import { config } from "utils/config"
+import { getActiveAsset } from "../DEPRECATED/common/getActiveAsset"
 const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const getStrategyData = async ({
@@ -42,7 +43,7 @@ export const getStrategyData = async ({
       const config: ConfigProps = strategy.config!
       const isRYETH = config.cellarNameKey === "REAL_YIELD_ETH"
 
-      const { stakerContract } = contracts
+      const { stakerContract, cellarContract } = contracts
       const subgraphData = sgData
 
       const dayDatas = subgraphData?.dayDatas
@@ -60,8 +61,15 @@ export const getStrategyData = async ({
         !!launchDate &&
         isBefore(launchDate, add(new Date(), { weeks: 2 }))
 
-      const activeAsset = (() => {
-        if (!subgraphData?.asset?.id) return
+      const activeAsset = await (async () => {
+        if (!subgraphData?.asset?.id) {
+          const aAsset = await getActiveAsset(
+            cellarContract as CellarV0816
+          )
+          if (!aAsset) return
+          const tokenInfo = getTokenByAddress(aAsset.address)
+          return { ...tokenInfo, ...aAsset }
+        }
         const tokenInfo = getTokenByAddress(subgraphData.asset.id)
         return { ...tokenInfo, ...subgraphData.asset }
       })()
