@@ -22,9 +22,9 @@ export const defiStars = {
   description: `Capture the upside of UNI price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "2%",
+  managementFee: "20%",
   managementFeeTooltip:
-    "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+    "Platform fee split: 15% for Strategy provider and 0.5% for protocol",
   protocols: "Uniswap V3",
   strategyAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   performanceSplit: {
