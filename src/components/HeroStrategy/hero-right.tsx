@@ -244,7 +244,8 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           <Stack direction="column">
             {isLoading ? (
               <Spinner />
-            ) : positionDistribution?.length !== 0 ? (
+            ) : positionDistribution?.length !== 0 &&
+              positionDistribution !== undefined ? (
               positionDistribution?.map((item) => {
                 const asset = tokenConfig.find(
                   (v) => v.address === item.address
@@ -255,6 +256,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                       alt={asset?.alt}
                       src={asset?.src}
                       boxSize={8}
+                      rounded="full"
                     />
                     {!countdown ? (
                       <Text>
@@ -278,6 +280,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                       alt={asset?.alt}
                       src={asset?.src}
                       boxSize={8}
+                      rounded="full"
                     />
                     <Text>{asset?.symbol}</Text>
                   </HStack>
