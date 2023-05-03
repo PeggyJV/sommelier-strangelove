@@ -480,7 +480,14 @@ const TokenChart = ({
               //       0 - 150
               //     : pointActive?.x || selectedPoint?.x
               // }
-              left={selectedPoint?.x || pointActive?.x}
+              left={
+                parseInt(pointActiveIndex) ===
+                filteredChartData[0].data.length - 1
+                  ? (selectedPoint?.x ?? pointActive?.x ?? 0) - 150
+                  : parseInt(pointActiveIndex) === 0
+                  ? selectedPoint?.x ?? pointActive?.x ?? 0
+                  : (selectedPoint?.x ?? pointActive?.x ?? 0) - 50
+              }
               position="absolute"
               boxShadow="0px 0px 34px rgba(0,0,0,0.55)"
               bgColor="neutral.900"
