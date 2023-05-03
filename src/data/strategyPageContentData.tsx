@@ -550,15 +550,13 @@ export const strategyPageContentData = {
   [config.CONTRACT.DEFI_STARS.SLUG]: {
     name: "DeFi Stars",
     provider: "AlgoLab",
-    // TODO: PROVIDER URL MISSING
-    providerUrl: "https://www.algoreturns.com/patache/",
+    providerUrl: "https://beta.algolab.ro/",
     description: `A long-only approach with established DeFi assets and derivatives tokens during the uptrend market periods. React quickly to market changes by managing downtrends`,
-    // TODO: PROVIDER IMAGE MISSING
     ticker: (
       <>
         <Image
           alt="defi stars icon"
-          src="/assets/icons/steady-uni.png"
+          src="/assets/icons/defi-stars.png"
           boxSize={8}
         />
         <Text>STAR</Text>
