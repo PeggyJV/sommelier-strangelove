@@ -26,7 +26,10 @@ export const SidebarColumn = ({ timeline }: SidebarColumnProps) => {
             }
             rewards={
               row.original.userStrategyData.userData
-                .claimableSommReward.formatted
+                .claimableSommReward?.value
+                ? row.original.userStrategyData.userData
+                    .claimableSommReward?.formatted
+                : "--"
             }
           />
         )
