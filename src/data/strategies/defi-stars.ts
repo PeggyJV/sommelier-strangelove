@@ -71,7 +71,7 @@ export const defiStars = {
     cellarNameKey: CellarNameKey.DEFI_STARS,
     lpToken: {
       address: config.CONTRACT.DEFI_STARS.ADDRESS,
-      imagePath: "/assets/icons/steady-uni.png",
+      imagePath: "/assets/icons/defi-stars.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,

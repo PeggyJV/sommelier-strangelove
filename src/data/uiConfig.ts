@@ -373,3 +373,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   }
   return "Base APY"
 }
+
+export const isNoAPY = (config: ConfigProps) => {
+  return config.cellarNameKey === CellarNameKey.DEFI_STARS
+}
