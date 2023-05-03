@@ -34,6 +34,7 @@ export const defiStars = {
   strategyProvider: {
     logo: "/assets/images/algo-lab.png",
     title: "AlgoLab",
+    href: "https://beta.algolab.ro/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
