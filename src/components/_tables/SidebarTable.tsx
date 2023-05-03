@@ -170,10 +170,13 @@ export const SidebarTable: VFC<StrategyTableProps> = ({
               <BorderTr
                 {...row.getRowProps()}
                 key={indexRow}
-                name={row.original.userStrategyData.strategyData.name}
+                name={
+                  row.original.userStrategyData.strategyData?.name ||
+                  "--"
+                }
                 slug={
                   "strategies/" +
-                  row.original.userStrategyData.strategyData.slug
+                  row.original.userStrategyData.strategyData?.slug
                 }
               >
                 {row.cells.map((cell, indexData) => {

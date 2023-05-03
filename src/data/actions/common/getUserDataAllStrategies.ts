@@ -23,7 +23,7 @@ export const getUserDataAllStrategies = async ({
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
         const strategyData = strategiesData.find(
-          (item) => item.address === address
+          (item) => item?.address === address
         )
         if (!strategyData) return
         const result = await reactQueryClient.fetchQuery(

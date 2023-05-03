@@ -85,7 +85,7 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
     headerGroups,
     rows,
     prepareRow,
-  } = useTable(
+  } = useTable<any>(
     {
       columns,
       data,
