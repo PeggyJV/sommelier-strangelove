@@ -32,9 +32,8 @@ export const defiStars = {
     "strategy provider": 0.5,
   },
   strategyProvider: {
-    logo: "/assets/images/patache.png",
-    title: "Patache",
-    href: "https://www.algoreturns.com/patache/",
+    logo: "/assets/images/algo-lab.png",
+    title: "AlgoLab",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
