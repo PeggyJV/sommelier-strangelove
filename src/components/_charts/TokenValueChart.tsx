@@ -285,7 +285,7 @@ const TokenChart = ({
   }
 
   const renderFrequency = (windowDate: windowDate) => {
-    let frequency: string
+    let frequency: string | undefined
 
     switch (windowDate) {
       case "1W":
@@ -295,6 +295,8 @@ const TokenChart = ({
         frequency = "every 2 days"
         break
       case "1Y":
+        frequency = undefined
+        break
       case "1YperWeek":
         frequency = "every 20 days"
         break
