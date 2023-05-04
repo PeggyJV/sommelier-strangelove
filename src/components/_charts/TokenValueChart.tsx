@@ -21,6 +21,7 @@ import React, {
   FunctionComponent,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react"
 import { colors } from "theme/colors"
@@ -169,6 +170,8 @@ const TokenChart = ({
     () => generateTokenData("USDC", windowDate, false),
     [windowDate]
   )
+  const divRef = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState<number>(0)
 
   const chartData: Serie[] = useMemo(
     () => [
@@ -307,8 +310,39 @@ const TokenChart = ({
     return frequency
   }
 
+  useEffect(() => {
+    const currentDiv = divRef.current
+
+    if (currentDiv) {
+      setWidth(currentDiv.offsetWidth)
+    }
+
+    const handleResize = (entries: ResizeObserverEntry[]) => {
+      for (const entry of entries) {
+        if (entry.target === currentDiv) {
+          setWidth(entry.contentRect.width)
+        }
+      }
+    }
+
+    const resizeObserver = new ResizeObserver(handleResize)
+    if (currentDiv) {
+      resizeObserver.observe(currentDiv)
+    }
+
+    return () => {
+      if (currentDiv) {
+        resizeObserver.unobserve(currentDiv)
+      }
+    }
+  }, [])
+
+  const pointX = selectedPoint?.x ?? pointActive?.x ?? 0
+  console.log("selectedPoint?.x", pointActive?.x, width)
+
   return (
     <Skeleton
+      ref={divRef}
       startColor="surface.primary"
       endColor="surface.secondary"
       borderRadius={{ base: 0, sm: 24 }}
@@ -473,22 +507,12 @@ const TokenChart = ({
           {((pointActive && pointActiveIndex) || selectedPoint) && (
             <CardBase
               zIndex={9}
-              // left={
-              //   parseInt(pointActiveIndex) ===
-              //   filteredChartData[0].data.length - 1
-              //     ? pointActive?.x ||
-              //       0 - 150 ||
-              //       selectedPoint?.x ||
-              //       0 - 150
-              //     : pointActive?.x || selectedPoint?.x
-              // }
               left={
-                parseInt(pointActiveIndex) ===
-                filteredChartData[0].data.length - 1
-                  ? (selectedPoint?.x ?? pointActive?.x ?? 0) - 150
+                pointX > ((width > 800 ? 80 : 50) / 100) * width
+                  ? pointX - 150
                   : parseInt(pointActiveIndex) === 0
-                  ? selectedPoint?.x ?? pointActive?.x ?? 0
-                  : (selectedPoint?.x ?? pointActive?.x ?? 0) - 50
+                  ? pointX
+                  : pointX - 50
               }
               position="absolute"
               boxShadow="0px 0px 34px rgba(0,0,0,0.55)"
