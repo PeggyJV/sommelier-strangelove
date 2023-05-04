@@ -2,6 +2,7 @@ import {
   Box,
   Heading,
   HStack,
+  Link,
   Skeleton,
   Spacer,
   Stack,
@@ -35,6 +36,7 @@ import {
   endOfMonth,
   setDay,
 } from "date-fns"
+import { IoIosArrowForward } from "react-icons/io"
 
 const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
@@ -338,8 +340,7 @@ const TokenChart = ({
   }, [])
 
   const pointX = selectedPoint?.x ?? pointActive?.x ?? 0
-  console.log("selectedPoint?.x", pointActive?.x, width)
-
+  const currentActivePoint = selectedPoint || pointActive
   return (
     <Skeleton
       ref={divRef}
@@ -528,6 +529,23 @@ const TokenChart = ({
                     item.data[parseInt(pointActiveIndex)]
                   return (
                     <Box key={item.id}>
+                      {(
+                        currentActivePoint?.data as {
+                          isRebalance?: boolean
+                        }
+                      ).isRebalance && (
+                        <Link
+                          href="https://etherscan.io/"
+                          isExternal
+                          _hover={{ textDecoration: "none" }}
+                        >
+                          <HStack mb={2}>
+                            <Text>View rebalance</Text>
+                            <Spacer />
+                            <IoIosArrowForward fontSize={"20px"} />
+                          </HStack>
+                        </Link>
+                      )}
                       <HStack
                         justifyContent="flex-start"
                         alignItems="center"
