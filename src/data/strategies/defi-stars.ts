@@ -22,14 +22,14 @@ export const defiStars = {
   description: `Capture the upside of UNI price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "20%",
+  managementFee: "2%",
   managementFeeTooltip:
-    "Platform fee split: 15% for Strategy provider and 0.5% for protocol",
+    "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: ["Uniswap V3", "1inch", "0x"],
   strategyAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   performanceSplit: {
-    protocol: 1.5,
-    "strategy provider": 0.5,
+    protocol: 5,
+    "strategy provider": 15,
   },
   strategyProvider: {
     logo: "/assets/images/algo-lab.png",
@@ -39,8 +39,7 @@ export const defiStars = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    // TODO: DATA NOT EXIST YET
-    goals: `Capture the upside of UNI price breakouts, manage downside through trailing stops.`,
+    goals: `Capture upside of a basket of blue chip DeFi assets with responsive drawdown protection.`,
 
     highlights: `The vault:
 
@@ -48,7 +47,7 @@ export const defiStars = {
 
       - Carefully balanced asset allocation targets based on our custom trend indicator. Individual asset volatility and risk aversion management.
 
-      - Automatic order size and execution frequency to improve trend reaction while reducing fees and slippage`,
+      - Automatic order size and execution frequency to improve trend reaction while reducing fees and slippage.`,
     description: `The vault provides users with a strategy to achieve strong growth in their portfolio by focusing only on high-cap assets that offer significant rewards in a future with simplified DeFi adoption. The vault's initial portfolio includes MKR, AAVE, COMP, LDO, CRV as speculative tokens and USDC as a base asset, with a default portfolio distribution of 50% USDC to reduce risk and capture later opportunities.
 
     To evaluate the effectiveness of the proposed strategy, we compare the portfolio's performance against a benchmark scenario of holding assets with no stop plans for price or with no stop plans for price levels and time periods. We evaluate the strategy using Return on Equity (ROE), Maximum Drawdown (MDD), and Sharpe ratio, which is a popular indicator for portfolio tracking.
@@ -61,9 +60,8 @@ export const defiStars = {
   //     "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
   //   value: "84.15%",
   // },
-  // TODO: DATA NOT EXIST YET
   depositTokens: {
-    list: ["WBTC", "WETH", ...depositAssetTokenList],
+    list: ["USDC"],
   },
 
   config: {

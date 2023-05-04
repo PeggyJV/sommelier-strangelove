@@ -60,15 +60,17 @@ export const StrategyProviders: React.FC<BoxProps> = (props) => {
             objectFit="scale-down"
           />
         </CardBase>
-        <CardBase justifyContent="center" h="full" px={0}>
-          <Image
-            width={243}
-            height={100}
-            alt="Define Logic Labs"
-            src="/assets/logos/algolab.webp"
-            objectFit="scale-down"
-          />
-        </CardBase>
+        <Link isExternal href="https://beta.algolab.ro/">
+          <CardBase justifyContent="center" h="full" px={0}>
+            <Image
+              width={243}
+              height={100}
+              alt="Define Logic Labs"
+              src="/assets/logos/algolab.webp"
+              objectFit="scale-down"
+            />
+          </CardBase>
+        </Link>
         <BecomeProvider />
       </Grid>
     </Box>

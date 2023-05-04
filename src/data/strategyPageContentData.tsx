@@ -551,7 +551,7 @@ export const strategyPageContentData = {
     name: "DeFi Stars",
     provider: "AlgoLab",
     providerUrl: "https://beta.algolab.ro/",
-    description: `A long-only approach with established DeFi assets and derivatives tokens during the uptrend market periods. React quickly to market changes by managing downtrends`,
+    description: `A long-only approach with established DeFi assets and derivatives tokens during the uptrend market periods. React quickly to market changes by managing downtrends.`,
     ticker: (
       <>
         <Image
@@ -559,7 +559,7 @@ export const strategyPageContentData = {
           src="/assets/icons/defi-stars.png"
           boxSize={8}
         />
-        <Text>STAR</Text>
+        <Text>STARS</Text>
       </>
     ),
     tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
@@ -574,7 +574,7 @@ export const strategyPageContentData = {
       card: [
         `Maximum capital growth preference, well suited for portfolios with an initial basket of MKR, AAVE, COMP, LDO, CRV, and USDC.`,
         `Carefully balanced asset allocation targets based on our custom trend indicator. Individual asset volatility and risk aversion management.`,
-        `Automatic order size and execution frequency to improve trend reaction while reducing fees and slippage`,
+        `Automatic order size and execution frequency to improve trend reaction while reducing fees and slippage.`,
       ],
       description: `The vault provides users with a strategy to achieve strong growth in their portfolio by focusing only on high-cap assets that offer significant rewards in a future with simplified DeFi adoption. The vault's initial portfolio includes MKR, AAVE, COMP, LDO, CRV as speculative tokens and USDC as a base asset, with a default portfolio distribution of 50% USDC to reduce risk and capture later opportunities.
       <br/><br/>
