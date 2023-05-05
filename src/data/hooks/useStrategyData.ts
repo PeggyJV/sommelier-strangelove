@@ -4,7 +4,6 @@ import { useGetStrategyDataQuery } from "generated/subgraph"
 import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
-import { CellarNameKey } from "data/types"
 import { cellarDataMap } from "data/cellarDataMap"
 // import { config } from "utils/config"
 // // import { formatCurrency } from "utils/formatCurrency"
@@ -20,11 +19,10 @@ export const useStrategyData = (address: string) => {
     variables: { cellarAddress: address },
   })
 
-  // TODO: Remove this if it's not using test contract
-  const isTestContract = Boolean(
+  const isNoSubgraph = Boolean(
     Object.values(cellarDataMap).find(
       (item) => item.config.cellar.address === address
-    )
+    )?.config.noSubgraph
   )
 
   const { data: wethPrice } = useCoinGeckoPrice("weth")
@@ -50,8 +48,7 @@ export const useStrategyData = (address: string) => {
         !!allContracts &&
         !!sommPrice &&
         !!wethPrice &&
-        // TODO: Remove this if it's not using test contract
-        (!isTestContract ? !!sgData : true),
+        (isNoSubgraph || !!sgData),
     }
   )
 

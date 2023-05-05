@@ -9,7 +9,7 @@ import {
 import { LogoIcon } from "components/_icons"
 import { FC } from "react"
 import { differenceInDays, subDays } from "date-fns"
-import { baseApyHoverLabel, isNoAPY } from "data/uiConfig"
+import { baseApyHoverLabel } from "data/uiConfig"
 import { cellarDataMap } from "data/cellarDataMap"
 
 type ApyRewardsSectionProps = {
@@ -37,38 +37,11 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   launchDate.setDate(launchDate.getDate() + numWeeks * 7)
   const isOneWeekAfterLaunch = new Date() > launchDate
   const cellarConfig = cellarDataMap[cellarId].config
-  if (isNoAPY(cellarConfig)) {
-    return (
-      <Text fontWeight={550} fontSize="16px" textAlign="right">
-        -
-      </Text>
-    )
-  }
 
   if (!baseApy && !rewardsApy) {
-    if (!isOneWeekAfterLaunch) {
-      return (
-        <Tooltip
-          label={`Estimated APY`}
-          color="neutral.100"
-          border="0"
-          fontSize="12px"
-          bg="neutral.900"
-          fontWeight={600}
-          py="4"
-          px="6"
-          boxShadow="xl"
-          shouldWrapChildren
-        >
-          <Text textAlign="right" fontWeight={550} fontSize="16px">
-            10%
-          </Text>
-        </Tooltip>
-      )
-    }
     return (
       <Text textAlign="right" fontWeight={550} fontSize="16px">
-        -
+        --
       </Text>
     )
   }
