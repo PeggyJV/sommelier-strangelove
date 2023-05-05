@@ -56,6 +56,7 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
 
         <HStack
           as="button"
+          type="button"
           spacing={1}
           onClick={() => onAutofillClick()}
         >

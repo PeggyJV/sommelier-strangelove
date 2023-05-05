@@ -27,7 +27,7 @@ import { useBrandedToast } from "hooks/chakra"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useBridgeEthToSommTx } from "hooks/web3/useBridgeEthToSommTx"
 import { useBridgeSommToEthTx } from "hooks/web3/useBridgeSommToEthTx"
-import { VFC } from "react"
+import { useEffect, VFC } from "react"
 import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
 
@@ -42,6 +42,11 @@ export const BridgeForm: VFC = () => {
   const toEth = watchType === "TO_ETHEREUM"
   const watchAmount = watch("amount")
   const watchSommelierAddress = watch("address")
+
+  useEffect(() => {
+    setValue("address", "")
+    setValue("amount", 0)
+  }, [watchType])
 
   const { isLoading: isEthToSommLoading, doEthToSomm } =
     useBridgeEthToSommTx()
