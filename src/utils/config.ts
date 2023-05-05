@@ -160,6 +160,10 @@ export const config = {
       ADDRESS: "0x955a31153e6764FE892757AcE79123ae996B0aFB",
       ABI: cellarStakingV0815,
     },
+    DEFI_STARS_STAKER: {
+      ADDRESS: "0x0349B3c56aDB9E39b5d75fc1df52eEE313dD80D1",
+      ABI: cellarStakingV0815,
+    },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",

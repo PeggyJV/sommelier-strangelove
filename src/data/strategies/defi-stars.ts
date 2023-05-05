@@ -4,8 +4,8 @@ import {
   CellarNameKey,
   CellarRouterKey,
   CellarType,
+  StakerKey,
 } from "../types"
-import { depositAssetTokenList } from "../tokenConfig"
 
 export const defiStars = {
   name: "DeFi Stars",
@@ -81,11 +81,11 @@ export const defiStars = {
       abi: config.CONTRACT.DEFI_STARS.ABI,
       key: CellarKey.CELLAR_V0816,
     },
-    // staker: {
-    //   address: config.CONTRACT.DEFI_STARS_STAKER.ADDRESS,
-    //   abi: config.CONTRACT.DEFI_STARS_STAKER.ABI,
-    //   key: StakerKey.CELLAR_STAKING_V0815,
-    // },
+    staker: {
+      address: config.CONTRACT.DEFI_STARS_STAKER.ADDRESS,
+      abi: config.CONTRACT.DEFI_STARS_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0815,
+    },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   },
   faq: [
