@@ -30,6 +30,7 @@ export const defiStars = {
   performanceSplit: {
     protocol: 5,
     "strategy provider": 15,
+    Depositors: 80,
   },
   strategyProvider: {
     logo: "/assets/images/algo-lab.png",
