@@ -20,11 +20,10 @@ export const useUserStrategyData = (strategyAddress: string) => {
     variables: { cellarAddress: strategyAddress },
   })
 
-  // TODO: Remove this if it's not using test contract
-  const isTestContract = Boolean(
+  const isNoSubgraph = Boolean(
     Object.values(cellarDataMap).find(
       (item) => item.config.cellar.address === strategyAddress
-    )
+    )?.config.noSubgraph
   )
   const query = useQuery(
     [
@@ -53,8 +52,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         !!signer?._isSigner &&
         !!sommPrice.data &&
         !!wethPrice.data &&
-        // TODO: Remove this if it's not using test contract
-        (!isTestContract ? !!sgData && !sgData?.cellar : true),
+        (isNoSubgraph || !!sgData),
     }
   )
   return query

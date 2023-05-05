@@ -34,12 +34,6 @@ export const getUserData = async ({
     )!
     const config: ConfigProps = strategy.config!
     const subgraphData = sgData
-    // TODO: Remove this if it's not using test contract
-    const isTestContract = Boolean(
-      Object.values(cellarDataMap).find(
-        (item) => item.config.cellar.address === address
-      )
-    )
 
     const tokenPrice = (() => {
       if (!subgraphData?.shareValue) return 1
@@ -97,13 +91,7 @@ export const getUserData = async ({
 
     const netValue = (() => {
       if (
-        // TODO: revert this if it's not using test contract
-        // shares === undefined ||
-        // userStakes === undefined ||
-        // bonded === undefined ||
-        // !subgraphData?.shareValue
-
-        !isTestContract
+        Boolean(subgraphData?.shareValue)
           ? shares === undefined ||
             userStakes === undefined ||
             bonded === undefined ||

@@ -20,6 +20,7 @@ import { GetStrategyDataQuery } from "generated/subgraph"
 import { getPositon } from "./getPosition"
 import { config } from "utils/config"
 import { getActiveAsset } from "../DEPRECATED/common/getActiveAsset"
+import { isComingSoon } from "utils/isComingSoon"
 const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const getStrategyData = async ({
@@ -74,7 +75,9 @@ export const getStrategyData = async ({
         return { ...tokenInfo, ...subgraphData.asset }
       })()
 
-      let tvm = isRYETH
+      let tvm = isComingSoon(launchDate)
+        ? undefined
+        : isRYETH
         ? //@ts-ignore
           getTvm(Number(subgraphData!.tvlTotal) * Number(wethPrice))
         : getTvm(subgraphData?.tvlTotal)
@@ -116,6 +119,7 @@ export const getStrategyData = async ({
         stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
 
       const rewardsApy = await (async () => {
+        if (isComingSoon(launchDate)) return
         if (!isStakingOngoing) return
 
         // FIXME
@@ -134,6 +138,7 @@ export const getStrategyData = async ({
       })()
 
       const baseApy = (() => {
+        if (isComingSoon(launchDate)) return
         if (!isAPYEnabled(config)) return
 
         const datas = dayDatas?.slice(0, 10)
@@ -157,9 +162,14 @@ export const getStrategyData = async ({
         })
       })()
 
-      const changes = dayDatas && getChanges(dayDatas)
+      const changes =
+        (!isComingSoon(launchDate) &&
+          dayDatas &&
+          getChanges(dayDatas)) ||
+        undefined
 
       const tokenPrice = (() => {
+        if (isComingSoon(launchDate)) return
         if (!subgraphData?.shareValue) return
 
         const price = formatDecimals(subgraphData.shareValue, 6, 2)

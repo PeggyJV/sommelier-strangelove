@@ -59,7 +59,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
     >
       <VStack spacing={1} align="center">
         <Text as="span" fontSize="21px" fontWeight="bold">
-          {tvm ? `${tvm.formatted}` : <Spinner />}
+          {tvm ? `${tvm?.formatted}` : <Spinner />}
         </Text>
         <Tooltip
           hasArrow

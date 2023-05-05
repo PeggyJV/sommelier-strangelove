@@ -196,7 +196,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           </Stack>
 
           <CardStat label="TVL" flex={0} tooltip="Total value locked">
-            {tvm?.formatted || "..."}
+            {tvm?.formatted || "--"}
           </CardStat>
           <CardStat
             label="strategy assets"
