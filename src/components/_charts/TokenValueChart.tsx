@@ -359,9 +359,12 @@ const TokenChart = ({
           <VStack>
             <Heading>
               ${" "}
-              {(pointActive?.data as { price?: number })?.price ||
-                tokenData[tokenData.length - 1].tokenPrice}{" "}
+              {(
+                (pointActive?.data as { price?: number })?.price ||
+                tokenData[tokenData.length - 1].tokenPrice
+              ).toFixed(2)}{" "}
             </Heading>
+
             <Text as="span">
               <PercentageText
                 as="span"
@@ -475,7 +478,7 @@ const TokenChart = ({
                       >
                         {typeof tick.value === "string"
                           ? "-"
-                          : tick.value}
+                          : `${tick.value} %`}{" "}
                       </text>
                     </g>
                   )

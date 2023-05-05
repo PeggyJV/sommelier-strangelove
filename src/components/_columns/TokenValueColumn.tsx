@@ -59,7 +59,7 @@ export const TokenValueColumn = (isCompareable: boolean) => [
     Header: () => <Text textAlign="right">Price</Text>,
     accessor: "price",
     Cell: ({ row }: any) => (
-      <Text textAlign="right">{row.original.price}</Text>
+      <Text textAlign="right">$ {row.original.price}</Text>
     ),
     disableSortBy: true,
   },
