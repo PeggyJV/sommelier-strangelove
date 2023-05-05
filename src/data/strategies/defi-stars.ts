@@ -13,7 +13,7 @@ export const defiStars = {
   tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   launchDate: new Date(2023, 4, 10, 10, 0, 0, 0), // May 10, 2023. 3 pm UTC
   cellarType: CellarType.automatedPortfolio,
-  description: `Capture the upside of UNI price breakouts, manage downside through trailing stops. "Risk first" approach - capital preservation is prioritized over capital growth.`,
+  description: `A long-only approach with established DeFi assets and derivatives tokens during the uptrend market periods. React quickly to market changes by managing downtrends.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2%",
