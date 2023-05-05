@@ -3,6 +3,7 @@ import { formatUSD, toEther } from "utils/formatCurrency"
 import { reactQueryClient } from "utils/reactQuery"
 import { getUserData } from "./getUserData"
 import { GetAllStrategiesDataQuery } from "generated/subgraph"
+import { cellarDataMap } from "data/cellarDataMap"
 
 export const getUserDataAllStrategies = async ({
   allContracts,
@@ -19,11 +20,13 @@ export const getUserDataAllStrategies = async ({
   wethPrice: string
   sgData: GetAllStrategiesDataQuery
 }) => {
+  // TODO: Remove this if it's not using test contract
+
   const userDataRes = await Promise.all(
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
         const strategyData = strategiesData.find(
-          (item) => item.address === address
+          (item) => item?.address === address
         )
         if (!strategyData) return
         const result = await reactQueryClient.fetchQuery(
@@ -35,7 +38,13 @@ export const getUserDataAllStrategies = async ({
             const subgraphData = sgData.cellars.find(
               (v) => v.id === address
             )
-            if (!subgraphData) return
+            // TODO: Remove this if it's not using test contract
+            const isTestContract = Boolean(
+              Object.values(cellarDataMap).find(
+                (item) => item.config.cellar.address === address
+              )
+            )
+            if (!isTestContract ? !subgraphData : false) return
             return await getUserData({
               address,
               contracts,

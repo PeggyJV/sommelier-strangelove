@@ -25,7 +25,8 @@ export const isTokenAssets = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.DEFI_STARS
   )
 }
 
@@ -244,17 +245,17 @@ export const bondingPeriodOptions = (
   ) {
     return [
       {
-        title: "7D",
+        title: "7 Days",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "14D",
+        title: "14 Days",
         amount: "1.3x SOMM",
         value: 1,
       },
       {
-        title: "21D",
+        title: "21 Days",
         amount: "1.5x SOMM",
         value: 2,
       },
@@ -262,7 +263,8 @@ export const bondingPeriodOptions = (
   }
   if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+    config.cellarNameKey === CellarNameKey.DEFI_STARS
   ) {
     return [
       {
@@ -306,6 +308,7 @@ export const bondingPeriodOptions = (
       },
     ]
   }
+
   return []
 }
 
@@ -369,4 +372,8 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     return "Expected ETH Yield"
   }
   return "Base APY"
+}
+
+export const isNoAPY = (config: ConfigProps) => {
+  return config.cellarNameKey === CellarNameKey.DEFI_STARS
 }

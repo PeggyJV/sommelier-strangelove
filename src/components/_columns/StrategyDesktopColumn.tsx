@@ -171,7 +171,7 @@ export const StrategyDesktopColumn = ({
       accessor: "tvm.value",
       Cell: ({ row }: any) => (
         <Text fontWeight={600} fontSize="12px" textAlign="right">
-          {row.original.tvm.formatted}
+          {row.original.tvm.formatted ?? "--"}
         </Text>
       ),
     },
@@ -218,7 +218,7 @@ export const StrategyDesktopColumn = ({
           }
         >
           <PercentageText
-            data={row.original.changes[timeline.value]}
+            data={row.original.changes?.[timeline.value]}
             arrowT2
             fontWeight={600}
           />

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUserData } from "data/actions/common/getUserData"
+import { cellarDataMap } from "data/cellarDataMap"
 import { useGetStrategyDataQuery } from "generated/subgraph"
 import { useAccount, useSigner } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
@@ -19,6 +20,12 @@ export const useUserStrategyData = (strategyAddress: string) => {
     variables: { cellarAddress: strategyAddress },
   })
 
+  // TODO: Remove this if it's not using test contract
+  const isTestContract = Boolean(
+    Object.values(cellarDataMap).find(
+      (item) => item.config.cellar.address === strategyAddress
+    )
+  )
   const query = useQuery(
     [
       "USE_USER_DATA",
@@ -37,17 +44,17 @@ export const useUserStrategyData = (strategyAddress: string) => {
         userAddress: userAddress!,
         sommPrice: sommPrice.data!,
         wethPrice: wethPrice.data!,
-        sgData: sgData!.cellar!,
+        sgData: sgData!.cellar,
       })
     },
     {
       enabled:
         !!allContracts &&
         !!signer?._isSigner &&
-        !!strategyData.data &&
         !!sommPrice.data &&
         !!wethPrice.data &&
-        !!sgData?.cellar,
+        // TODO: Remove this if it's not using test contract
+        (!isTestContract ? !!sgData && !sgData?.cellar : true),
     }
   )
   return query

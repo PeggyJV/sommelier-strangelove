@@ -40,7 +40,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const baseApy = strategyData?.baseApy
   const rewardsApy = strategyData?.rewardsApy
   const intervalGain =
-    strategyData?.changes[intervalGainTimeline(cellarConfig)]
+    strategyData?.changes?.[intervalGainTimeline(cellarConfig)]
   const stakingEnd = strategyData?.stakingEnd
   const countdown = isComingSoon(launchDate)
 
@@ -59,7 +59,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   })()
 
   const tokenPrice = strategyData?.tokenPrice
-  const dailyChange = strategyData?.changes.daily
+  const dailyChange = strategyData?.changes?.daily
   return (
     <>
       {!countdown && (

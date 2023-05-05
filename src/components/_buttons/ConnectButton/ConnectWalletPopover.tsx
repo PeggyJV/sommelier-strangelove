@@ -7,7 +7,6 @@ import {
   Text,
   HStack,
   Spinner,
-  Portal,
   useDisclosure,
 } from "@chakra-ui/react"
 import { BaseButton, BaseButtonProps } from "../BaseButton"

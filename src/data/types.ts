@@ -21,6 +21,7 @@ export enum CellarNameKey {
   STEADY_MATIC = "STEADY_MATIC",
   REAL_YIELD_USD = "REAL_YIELD_USD",
   REAL_YIELD_ETH = "REAL_YIELD_ETH",
+  DEFI_STARS = "DEFI_STARS",
 }
 
 export interface ConfigProps {

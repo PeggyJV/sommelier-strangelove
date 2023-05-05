@@ -547,4 +547,54 @@ export const strategyPageContentData = {
     For the liquidity provision strategies, the vault’s ability to run off-chain computation combined with Seven Seas’ deep Uniswap V3 experience, positions the vault to be a top performing LP in the pools that it utilizes. The vault will be able to dynamically adapt to changing price movements to quote the optimal tick range(s) that collect the most fees while minimizing impermanent loss.
     `,
   },
+  [config.CONTRACT.DEFI_STARS.SLUG]: {
+    name: "DeFi Stars",
+    provider: "AlgoLab",
+    providerUrl: "https://beta.algolab.ro/",
+    description: `A long-only approach with established DeFi assets and derivatives tokens during the uptrend market periods. React quickly to market changes by managing downtrends.`,
+    ticker: (
+      <>
+        <Image
+          alt="defi stars icon"
+          src="/assets/icons/defi-stars.png"
+          boxSize={8}
+        />
+        <Text>STARS</Text>
+      </>
+    ),
+    tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
+    alternativeTo: "DPI",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Maximum capital growth preference, well suited for portfolios with an initial basket of MKR, AAVE, COMP, LDO, CRV, and USDC.`,
+        `Carefully balanced asset allocation targets based on our custom trend indicator. Individual asset volatility and risk aversion management.`,
+        `Automatic order size and execution frequency to improve trend reaction while reducing fees and slippage.`,
+      ],
+      description: `The vault provides users with a strategy to achieve strong growth in their portfolio by focusing only on high-cap assets that offer significant rewards in a future with simplified DeFi adoption. The vault's initial portfolio includes MKR, AAVE, COMP, LDO, CRV as speculative tokens and USDC as a base asset, with a default portfolio distribution of 50% USDC to reduce risk and capture later opportunities.
+      <br/><br/>
+      To evaluate the effectiveness of the proposed strategy, we compare the portfolio's performance against a benchmark scenario of holding assets with no stop plans for price or with no stop plans for price levels and time periods. We evaluate the strategy using Return on Equity (ROE), Maximum Drawdown (MDD), and Sharpe ratio, which is a popular indicator for portfolio tracking.
+      <br/><br/>
+      Overall, DeFi Stars provides a disciplined and diversified exposure to the DeFi sector, helping users manage downside volatility and optimize returns over time. The rebalancing strategy offers a significant improvement over the benchmark scenario and can help users achieve their goals.`,
+    },
+    howItWorks: `Continuously monitoring high-cap DeFi assets and derivatives tokens for performance/capitalization changes allows us to obtain the best portfolio diversification for our strategy. Our strategy will have an initial best 5 assets and a stablecoin.
+    <br/><br/>
+    The vault reacts quickly to market changes by capturing upside breakouts and managing downtrends. It also utilizes a long-only approach in established DeFi assets during markup periods.
+    <br/><br/>
+    Our system is running parallel backtesting using machine learning algorithms to determine the most optimized parameters to use for the trend indicators, allocation range buffers, and dynamic stop loss.
+    <br/><br/>
+    Trend detection is based on a custom indicator set by optimized parameters. The trend is used to determine the direction for portfolio rebalancing for each asset.
+    <br/><br/>
+    Actual portfolio allocation will appear different than our targeted portfolio as a result of the allocation speed of change over time. This speed of change is another optimized parameter from our previous step.
+    <br/><br/>
+    Gas fees will be inferred and monitored, and based on our current TVL, we will run periodic opportunistic decisions to decide if and when to execute rebalancing swaps transactions inside our vault.
+    <br/><br/>
+    Disclaimer: Simplified for narrative purposes. Actual algorithm(s) may vary.
+    `,
+  },
 }
