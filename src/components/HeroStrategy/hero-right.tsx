@@ -127,7 +127,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
       ) : (
         <>
           <BaseButton w="full" h="50px" onClick={handleBuyOrSell}>
-            Buy / Sell
+            Deposit / Withdraw
           </BaseButton>
           <BuyOrSellModal
             exchange={content.exchange}
