@@ -222,8 +222,8 @@ const TokenChart = ({
   }, [showLine])
 
   const pointActiveIndex =
-    pointActive?.id.split(".")[1] ||
     selectedPoint?.id.split(".")[1] ||
+    pointActive?.id.split(".")[1] ||
     "0"
 
   const onMouseMove = (
@@ -245,16 +245,16 @@ const TokenChart = ({
     setPointActive(point)
   }
 
-  useEffect(() => {
-    if (pointActive) {
-      if (pointActive.id !== selectedPoint?.id) {
-        const selectedPointIndex = selectedPoint?.id.split(".")[1]
-        if (pointActiveIndex !== selectedPointIndex) {
-          setSelectedPoint(undefined)
-        }
-      }
-    }
-  }, [pointActive, selectedPoint, pointActiveIndex])
+  // useEffect(() => {
+  //   if (pointActive) {
+  //     if (pointActive.id !== selectedPoint?.id) {
+  //       const selectedPointIndex = selectedPoint?.id.split(".")[1]
+  //       if (pointActiveIndex !== selectedPointIndex) {
+  //         setSelectedPoint(undefined)
+  //       }
+  //     }
+  //   }
+  // }, [pointActive, selectedPoint, pointActiveIndex])
 
   const lineColors = useMemo(() => {
     return chartData.map((item) => item.color)
@@ -341,6 +341,7 @@ const TokenChart = ({
 
   const pointX = selectedPoint?.x ?? pointActive?.x ?? 0
   const currentActivePoint = selectedPoint || pointActive
+
   return (
     <Skeleton
       ref={divRef}
@@ -382,6 +383,14 @@ const TokenChart = ({
           <Box height={400}>
             <LineChart
               onClick={(point) => {
+                if (
+                  selectedPoint &&
+                  (point.data as { date?: Date }).date ===
+                    (selectedPoint?.data as { date?: Date }).date
+                ) {
+                  setSelectedPoint(undefined)
+                  return
+                }
                 if (
                   (point.data as { isRebalance?: boolean })
                     ?.isRebalance
@@ -505,7 +514,7 @@ const TokenChart = ({
               xFormat={(value) => format(new Date(value), "MMM, d")}
             />
           </Box>
-          {((pointActive && pointActiveIndex) || selectedPoint) && (
+          {(selectedPoint || (pointActive && pointActiveIndex)) && (
             <CardBase
               zIndex={9}
               left={
@@ -520,7 +529,6 @@ const TokenChart = ({
               bgColor="neutral.900"
               maxW="261px"
               minW="260px"
-              maxH="104px"
               bottom={"180px"}
             >
               <Box w="100%" textAlign="left">
