@@ -380,7 +380,7 @@ const TokenChart = ({
               </Text>
             </Text>
           </VStack>
-          <Box height={400}>
+          <Box height={230}>
             <LineChart
               onClick={(point) => {
                 if (
@@ -520,9 +520,11 @@ const TokenChart = ({
               left={
                 pointX > ((width > 800 ? 80 : 50) / 100) * width
                   ? pointX - 150
+                  : pointX < ((width > 800 ? 5 : 50) / 100) * width
+                  ? pointX + 10
                   : parseInt(pointActiveIndex) === 0
-                  ? pointX
-                  : pointX - 50
+                  ? pointX + 10
+                  : pointX - 60
               }
               position="absolute"
               boxShadow="0px 0px 34px rgba(0,0,0,0.55)"
