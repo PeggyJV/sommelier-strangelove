@@ -11,12 +11,6 @@ export const realYieldEth = {
   name: "Real Yield ETH",
   slug: config.CONTRACT.REAL_YIELD_ETH.SLUG,
   tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
-  exchange: [
-    {
-      name: "Sommelier",
-      logo: "/assets/icons/somm.png",
-    },
-  ],
   launchDate: new Date(2023, 3, 12, 11, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,

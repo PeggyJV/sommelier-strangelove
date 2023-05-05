@@ -26,11 +26,6 @@ export const strategyPageContentData = {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
-      {
-        url: "https://helixapp.com/spot/ethbtctrend-usdt/",
-        name: "Helix",
-        logo: "/assets/icons/helix.png",
-      },
     ],
     strategyHighlights: {
       card: [
@@ -152,11 +147,6 @@ export const strategyPageContentData = {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
-      {
-        url: "https://helixapp.com/spot/steadyeth-usdt/",
-        name: "Helix",
-        logo: "/assets/icons/helix.png",
-      },
     ],
     strategyHighlights: {
       card: [
@@ -224,11 +214,6 @@ export const strategyPageContentData = {
       {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
-      },
-      {
-        url: "https://helixapp.com/spot/steadybtc-usdt/",
-        name: "Helix",
-        logo: "/assets/icons/helix.png",
       },
     ],
     strategyHighlights: {

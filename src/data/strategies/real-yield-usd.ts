@@ -11,12 +11,6 @@ export const realYieldUsd = {
   name: "Real Yield USD",
   slug: config.CONTRACT.REAL_YIELD_USD.SLUG,
   tradedAssets: ["USDC", "USDT", "DAI"],
-  exchange: [
-    {
-      name: "Sommelier",
-      logo: "/assets/icons/somm.png",
-    },
-  ],
   launchDate: new Date("2023-01-25T00:00:00.000Z"),
   cellarType: CellarType.yieldStrategies,
   description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
