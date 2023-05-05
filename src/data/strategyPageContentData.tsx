@@ -563,7 +563,7 @@ export const strategyPageContentData = {
       ],
       description: `The vault provides users with a strategy to achieve strong growth in their portfolio by focusing only on high-cap assets that offer significant rewards in a future with simplified DeFi adoption. The vault's initial portfolio includes MKR, AAVE, COMP, LDO, CRV as speculative tokens and USDC as a base asset, with a default portfolio distribution of 50% USDC to reduce risk and capture later opportunities.
       <br/><br/>
-      To evaluate the effectiveness of the proposed strategy, we compare the portfolio's performance against a benchmark scenario of holding assets with no stop plans for price or with no stop plans for price levels and time periods. We evaluate the strategy using Return on Equity (ROE), Maximum Drawdown (MDD), and Sharpe ratio, which is a popular indicator for portfolio tracking.
+      To evaluate the effectiveness of the proposed strategy, we compare the portfolio's performance against a benchmark scenario of holding assets with no stop plans for price. We evaluate the strategy using Return on Equity (ROE), Maximum Drawdown (MDD), and Sharpe ratio, which is a popular indicator for portfolio tracking.
       <br/><br/>
       Overall, DeFi Stars provides a disciplined and diversified exposure to the DeFi sector, helping users manage downside volatility and optimize returns over time. The rebalancing strategy offers a significant improvement over the benchmark scenario and can help users achieve their goals.`,
     },
@@ -575,7 +575,7 @@ export const strategyPageContentData = {
     <br/><br/>
     Trend detection is based on a custom indicator set by optimized parameters. The trend is used to determine the direction for portfolio rebalancing for each asset.
     <br/><br/>
-    Actual portfolio allocation will appear different than our targeted portfolio as a result of the allocation speed of change over time. This speed of change is another optimized parameter from our previous step.
+    Actual portfolio allocation will appear different than our targeted portfolio as a result of the rate of allocation over time. This rate of change is another optimized parameter from our previous step.
     <br/><br/>
     Gas fees will be inferred and monitored, and based on our current TVL, we will run periodic opportunistic decisions to decide if and when to execute rebalancing swaps transactions inside our vault.
     <br/><br/>
