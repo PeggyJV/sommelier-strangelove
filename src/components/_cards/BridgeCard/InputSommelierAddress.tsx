@@ -80,6 +80,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         </Text>
         <HStack
           as="button"
+          type="button"
           spacing={1}
           onClick={() => onAutofillClick()}
         >

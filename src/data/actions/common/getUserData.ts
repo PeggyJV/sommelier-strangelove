@@ -26,7 +26,7 @@ export const getUserData = async ({
   userAddress: string
   sommPrice: string
   wethPrice: string
-  sgData: GetStrategyDataQuery["cellar"]
+  sgData?: GetStrategyDataQuery["cellar"]
 }) => {
   const userDataRes = await (async () => {
     const strategy = Object.values(cellarDataMap).find(
@@ -91,10 +91,12 @@ export const getUserData = async ({
 
     const netValue = (() => {
       if (
-        shares === undefined ||
-        userStakes === undefined ||
-        bonded === undefined ||
-        !subgraphData?.shareValue
+        Boolean(subgraphData?.shareValue)
+          ? shares === undefined ||
+            userStakes === undefined ||
+            bonded === undefined ||
+            !subgraphData?.shareValue
+          : false
       ) {
         return undefined
       }

@@ -13,7 +13,7 @@ export const getAllStrategiesData = async ({
   allContracts: AllContracts
   sommPrice: string
   wethPrice: string
-  sgData: GetAllStrategiesDataQuery
+  sgData?: GetAllStrategiesDataQuery
 }) => {
   const data = await Promise.all(
     Object.entries(allContracts)?.map(
@@ -21,10 +21,8 @@ export const getAllStrategiesData = async ({
         const result = await reactQueryClient.fetchQuery(
           ["USE_STRATEGY_DATA", { provider: true, address }],
           async () => {
-            const subgraphData = sgData.cellars.find(
-              (v) => v.id === address
-            )
-            if (!subgraphData) return
+            const subgraphData =
+              sgData && sgData?.cellars?.find((v) => v.id === address)
             return await getStrategyData({
               address,
               sgData: subgraphData,

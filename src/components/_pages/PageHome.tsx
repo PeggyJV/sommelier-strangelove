@@ -38,14 +38,14 @@ export const PageHome = () => {
     if (type === "Yield") {
       return (
         data?.filter(
-          ({ type }) => type === CellarType.yieldStrategies
+          (item) => item?.type === CellarType.yieldStrategies
         ) || []
       )
     }
     if (type === "Portfolio") {
       return (
         data?.filter(
-          ({ type }) => type === CellarType.automatedPortfolio
+          (item) => item?.type === CellarType.automatedPortfolio
         ) || []
       )
     }

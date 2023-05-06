@@ -137,6 +137,41 @@ export const tokenConfig: Token[] = [
     address: "0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
     coinGeckoId: "staked-ether",
   },
+  {
+    src: "/assets/icons/comp.png",
+    alt: "COMP logo",
+    symbol: "COMP",
+    address: "0xc00e94cb662c3520282e6f5717214004a7f26888",
+    coinGeckoId: "compound-governance-token",
+  },
+  {
+    src: "/assets/icons/crv.png",
+    alt: "CRV logo",
+    symbol: "CRV",
+    address: "0xd533a949740bb3306d119cc777fa900ba034cd52",
+    coinGeckoId: "curve-dao-token",
+  },
+  {
+    src: "/assets/icons/ldo.png",
+    alt: "LDO logo",
+    symbol: "LDO",
+    address: "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
+    coinGeckoId: "lido-dao",
+  },
+  {
+    src: "/assets/icons/mkr.png",
+    alt: "MKR logo",
+    symbol: "MKR",
+    address: "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+    coinGeckoId: "maker",
+  },
+  {
+    src: "/assets/icons/aave.png",
+    alt: "AAVE logo",
+    symbol: "AAVE",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "aave",
+  },
 ]
 
 export const depositAssetTokenList = [
@@ -154,6 +189,11 @@ export const depositAssetTokenList = [
   "cbETH",
   "rETH",
   "stETH",
+  "COMP",
+  "CRV",
+  "LDO",
+  "MKR",
+  "AAVE",
 ]
 
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(

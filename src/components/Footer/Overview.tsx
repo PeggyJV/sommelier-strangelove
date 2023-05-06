@@ -3,13 +3,22 @@ import { TransparentCard } from "components/_cards/TransparentCard"
 import { LighterSkeleton } from "components/_skeleton"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import { formatUSD } from "utils/formatCurrency"
+import { isComingSoon } from "utils/isComingSoon"
 
 export const Overview = () => {
   const { data, isLoading } = useAllStrategiesData()
 
   const totalTVM = data?.reduce((acc, item) => {
-    return acc + Number(item.tvm.value)
+    if (item && item.tvm && item.tvm.value) {
+      return acc + Number(item.tvm.value)
+    }
+    return acc
   }, 0)
+
+  const totalLaunchedStrategies = data?.filter((item) => {
+    const countdown = isComingSoon(item?.launchDate)
+    return !countdown
+  })
 
   return (
     <TransparentCard marginTop="48px" py="30px">
@@ -43,7 +52,7 @@ export const Overview = () => {
             height={isLoading ? "60px" : "auto"}
           >
             <Text fontWeight="bold" fontSize="40px">
-              {String(data?.length)}
+              {String(totalLaunchedStrategies?.length)}
             </Text>
           </LighterSkeleton>
         </VStack>
