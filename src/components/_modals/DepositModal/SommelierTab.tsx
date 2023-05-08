@@ -534,18 +534,21 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               position="relative" // anchors the swap settings card, which is positioned as absolute
             >
               <CardHeading pb={2}>enter amount</CardHeading>
-              <IconButton
-                aria-label="swap settings"
-                colorScheme="transparent"
-                disabled={isActiveAsset}
-                color="neutral.300"
-                icon={<FiSettings />}
-                onClick={() => {
-                  setShowSwapSettings(!showSwapSettings)
-                }}
-              />
-
-              {showSwapSettings && <SwapSettingsCard />}
+              {!isActiveAsset && depositTokens.length > 1 && (
+                <>
+                  <IconButton
+                    aria-label="swap settings"
+                    colorScheme="transparent"
+                    disabled={isActiveAsset}
+                    color="neutral.300"
+                    icon={<FiSettings />}
+                    onClick={() => {
+                      setShowSwapSettings(!showSwapSettings)
+                    }}
+                  />
+                  {showSwapSettings && <SwapSettingsCard />}
+                </>
+              )}
             </Flex>
 
             <ModalMenu
@@ -590,22 +593,24 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             />
             {activeAsset?.symbol}) will save gas fees
           </Text> */}
-          <Text textAlign="center">
-            Current Base asset is (
-            <Avatar
-              ml="-2.5px"
-              boxSize={6}
-              src={activeAsset?.src}
-              name={activeAsset?.alt}
-              borderWidth={2}
-              borderColor="surface.bg"
-              bg="surface.bg"
-            />
-            {activeAsset?.symbol}).
-            <br />
-            There could be high slippage when depositing non base
-            assets. Please swap outside our app for better rates.
-          </Text>
+          {depositTokens.length > 1 && (
+            <Text textAlign="center">
+              Current Base asset is (
+              <Avatar
+                ml="-2.5px"
+                boxSize={6}
+                src={activeAsset?.src}
+                name={activeAsset?.alt}
+                borderWidth={2}
+                borderColor="surface.bg"
+                bg="surface.bg"
+              />
+              {activeAsset?.symbol}).
+              <br />
+              There could be high slippage when depositing non base
+              assets. Please swap outside our app for better rates.
+            </Text>
+          )}
         </VStack>
       </FormProvider>
     </>

@@ -108,7 +108,7 @@ export const Menu: VFC<MenuProps> = ({
             ) : (
               <Text as="span">Select Token</Text>
             )}
-            <Icon as={FaChevronDown} />
+            {depositTokens.length > 1 && <Icon as={FaChevronDown} />}
           </HStack>
         </MenuButton>
         <MenuList
