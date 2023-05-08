@@ -22,7 +22,10 @@ export const getAllStrategiesData = async ({
           ["USE_STRATEGY_DATA", { provider: true, address }],
           async () => {
             const subgraphData =
-              sgData && sgData?.cellars?.find((v) => v.id === address)
+              sgData &&
+              sgData?.cellars?.find(
+                (v) => v.id.toLowerCase() === address.toLowerCase()
+              )
             return await getStrategyData({
               address,
               sgData: subgraphData,

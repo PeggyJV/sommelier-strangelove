@@ -39,7 +39,9 @@ export const getStrategyData = async ({
   const data = await (async () => {
     try {
       const strategy = Object.values(cellarDataMap).find(
-        ({ config }) => config.cellar.address === address
+        ({ config }) =>
+          config.cellar.address.toLowerCase() ===
+          address.toLowerCase()
       )!
       const config: ConfigProps = strategy.config!
       const isRYETH = config.cellarNameKey === "REAL_YIELD_ETH"

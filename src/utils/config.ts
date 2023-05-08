@@ -108,7 +108,7 @@ export const config = {
       ABI: cellarV0816,
     },
     DEFI_STARS: {
-      ADDRESS: "0x03df2A53Cbed19B824347D6a45d09016C2D1676a",
+      ADDRESS: "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
       SLUG: "DeFi-Stars",
       ABI: cellarV0816,
     },
@@ -161,7 +161,7 @@ export const config = {
       ABI: cellarStakingV0815,
     },
     DEFI_STARS_STAKER: {
-      ADDRESS: "0x0349B3c56aDB9E39b5d75fc1df52eEE313dD80D1",
+      ADDRESS: "0x0349b3c56adb9e39b5d75fc1df52eee313dd80d1",
       ABI: cellarStakingV0815,
     },
   },
