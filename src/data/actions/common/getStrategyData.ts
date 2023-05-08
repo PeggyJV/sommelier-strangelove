@@ -150,9 +150,6 @@ export const getStrategyData = async ({
             launchEpoch: launchEpoch,
             baseApy: config.baseApy,
             dayDatas: datas,
-            hardcodedApy:
-              // TODO: remove this when we have confirmation for RYETH APY
-              config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH,
           })
         }
 
