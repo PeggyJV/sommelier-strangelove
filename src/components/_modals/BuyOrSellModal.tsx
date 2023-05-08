@@ -29,7 +29,7 @@ export const BuyOrSellModal = ({
 }: BuyOrSellModalProps) => {
   return (
     <BaseModal
-      heading="Buy / Sell"
+      heading="Deposit / Withdraw"
       headingProps={{
         fontSize: "2xl",
       }}

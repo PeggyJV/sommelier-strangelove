@@ -16,7 +16,7 @@ type WithdrawModalProps = Pick<ModalProps, "isOpen" | "onClose">
 export const WithdrawModal: VFC<WithdrawModalProps> = (props) => {
   return (
     <ModalWithExchangeTab
-      heading="Sell"
+      heading="Withdraw"
       sommelierTab={<SommelierTab {...props} />}
       {...props}
     />

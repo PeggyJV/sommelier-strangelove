@@ -15,7 +15,7 @@ export const DepositModal: VFC<DepositModalProps> = ({
 }) => {
   return (
     <ModalWithExchangeTab
-      heading="Buy"
+      heading="Deposit"
       sommelierTab={
         <SommelierTab {...props} notifyModal={notifyModal} />
       }
