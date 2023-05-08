@@ -120,6 +120,7 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
   }
 
   const hourlyAxisBottom = useMemo<any>(() => {
+    console.log("timeline", timeline)
     if (timeline === "1D") {
       return {
         axisBottom: {
@@ -138,7 +139,11 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
         },
       }
     }
-    if (timeline === "1Y" || timeline === "ALL") {
+    if (
+      timeline === "1Y" ||
+      timeline === "ALL" ||
+      timeline === "All"
+    ) {
       // show format in month.year
       return {
         axisBottom: {
