@@ -27,6 +27,8 @@ import { TokenPricePerfomanceCard } from "components/_cards/TokenPricePerfomaceC
 import { ApyChartProvider } from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
 import { isComingSoon } from "utils/isComingSoon"
+import { TokenChart } from "components/_charts/TokenValueChart"
+import { NewApyChart } from "components/_charts/NewApyChart"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -87,15 +89,14 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
       </Section>
       <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">
-          {/* {isEthBtcChartEnabled(cellarConfig) && (
-            <EthBtcChartProvider address={cellarAddress}>
-              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                Strategy Perfomance
-              </Heading>
-              <EthBtcPerfomanceCard />
-            </EthBtcChartProvider>
-          )}
-          {isUsdcChartEnabled(cellarConfig) && (
+          {/* <EthBtcChartProvider address={cellarAddress}>
+            <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
+              Strategy Perfomance
+            </Heading>
+            <EthBtcPerfomanceCard />
+          </EthBtcChartProvider> */}
+
+          {/* {isUsdcChartEnabled(cellarConfig) && (
             <UsdcChartProvider address={cellarAddress}>
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                 Strategy Perfomance
@@ -120,6 +121,12 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
               <TokenPricePerfomanceCard />
             </TokenPriceChartProvider>
           )}
+
+          {/* <TokenPriceChartProvider address={cellarAddress}>
+            <TokenChart />
+          </TokenPriceChartProvider>
+
+          <NewApyChart /> */}
 
           <Heading pt={isYieldStrategies ? 0 : 12} {...h2Styles}>
             Strategy Details
