@@ -24,7 +24,9 @@ export const ExchangeTab = ({ title }: { title: string }) => {
               onClick={() => {
                 analytics.track(
                   `${
-                    title === "buy" ? "deposit" : "withdraw"
+                    title.toLocaleLowerCase() === "deposit"
+                      ? "deposit"
+                      : "withdraw"
                   }.exchange`,
                   {
                     platformSelection: `${item.name}`,
