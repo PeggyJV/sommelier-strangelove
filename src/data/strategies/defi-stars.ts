@@ -62,7 +62,6 @@ export const defiStars = {
   config: {
     id: config.CONTRACT.DEFI_STARS.ADDRESS,
     cellarNameKey: CellarNameKey.DEFI_STARS,
-    noSubgraph: true,
     lpToken: {
       address: config.CONTRACT.DEFI_STARS.ADDRESS,
       imagePath: "/assets/icons/defi-stars.png",
