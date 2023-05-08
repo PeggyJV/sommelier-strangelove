@@ -10,7 +10,7 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { add, isBefore, isFuture, subDays } from "date-fns"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
-import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
+import { CellarKey, ConfigProps } from "data/types"
 import { getBaseApy as getV2BaseApy } from "../CELLAR_V2/getBaseApy"
 import { getBaseApy } from "./getBaseApy"
 import { getChanges } from "./getChanges"
@@ -39,7 +39,9 @@ export const getStrategyData = async ({
   const data = await (async () => {
     try {
       const strategy = Object.values(cellarDataMap).find(
-        ({ config }) => config.cellar.address === address
+        ({ config }) =>
+          config.cellar.address.toLowerCase() ===
+          address.toLowerCase()
       )!
       const config: ConfigProps = strategy.config!
       const isRYETH = config.cellarNameKey === "REAL_YIELD_ETH"
@@ -62,6 +64,10 @@ export const getStrategyData = async ({
         !!launchDate &&
         isBefore(launchDate, add(new Date(), { weeks: 2 }))
 
+      const hideValue =
+        isComingSoon(launchDate) &&
+        process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
+
       const activeAsset = await (async () => {
         if (!subgraphData?.asset?.id) {
           const aAsset = await getActiveAsset(
@@ -75,7 +81,7 @@ export const getStrategyData = async ({
         return { ...tokenInfo, ...subgraphData.asset }
       })()
 
-      let tvm = isComingSoon(launchDate)
+      let tvm = hideValue
         ? undefined
         : isRYETH
         ? //@ts-ignore
@@ -119,7 +125,7 @@ export const getStrategyData = async ({
         stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
 
       const rewardsApy = await (async () => {
-        if (isComingSoon(launchDate)) return
+        if (hideValue) return
         if (!isStakingOngoing) return
 
         // FIXME
@@ -138,7 +144,7 @@ export const getStrategyData = async ({
       })()
 
       const baseApy = (() => {
-        if (isComingSoon(launchDate)) return
+        if (hideValue) return
         if (!isAPYEnabled(config)) return
 
         const datas = dayDatas?.slice(0, 10)
@@ -160,13 +166,10 @@ export const getStrategyData = async ({
       })()
 
       const changes =
-        (!isComingSoon(launchDate) &&
-          dayDatas &&
-          getChanges(dayDatas)) ||
-        undefined
+        (!hideValue && dayDatas && getChanges(dayDatas)) || undefined
 
       const tokenPrice = (() => {
-        if (isComingSoon(launchDate)) return
+        if (hideValue) return
         if (!subgraphData?.shareValue) return
 
         const price = formatDecimals(subgraphData.shareValue, 6, 2)

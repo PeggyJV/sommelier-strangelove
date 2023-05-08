@@ -16,12 +16,14 @@ export const useStrategyData = (address: string) => {
   const { data: allContracts } = useAllContracts()
   const { data: sommPrice } = useCoinGeckoPrice("sommelier")
   const [{ data: sgData, error }, reFetch] = useGetStrategyDataQuery({
-    variables: { cellarAddress: address },
+    variables: { cellarAddress: address.toLowerCase() },
   })
 
   const isNoSubgraph = Boolean(
     Object.values(cellarDataMap).find(
-      (item) => item.config.cellar.address === address
+      (item) =>
+        item.config.cellar.address.toLowerCase() ===
+        address.toLowerCase()
     )?.config.noSubgraph
   )
 
