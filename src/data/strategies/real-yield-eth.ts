@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import {
+  CellarData,
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
@@ -7,7 +8,7 @@ import {
   StakerKey,
 } from "../types"
 
-export const realYieldEth = {
+export const realYieldEth: CellarData = {
   name: "Real Yield ETH",
   slug: config.CONTRACT.REAL_YIELD_ETH.SLUG,
   tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],

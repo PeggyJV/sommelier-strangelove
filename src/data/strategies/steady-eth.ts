@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import {
+  CellarData,
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
@@ -8,7 +9,8 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
-export const steadyEth = {
+export const steadyEth: CellarData = {
+  deprecated: true,
   name: "Steady ETH",
   slug: config.CONTRACT.STEADY_ETH.SLUG,
   tradedAssets: ["WETH", "USDC"],

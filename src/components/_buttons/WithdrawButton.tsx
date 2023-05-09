@@ -4,7 +4,11 @@ import { SecondaryButton } from "./SecondaryButton"
 import { analytics } from "utils/analytics"
 import { WithdrawModal } from "components/_modals/WithdrawModal"
 
-export const WithdrawButton: VFC<ButtonProps> = (props) => {
+export const WithdrawButton: VFC<
+  ButtonProps & {
+    isDeprecated?: boolean
+  }
+> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function closeModal() {
@@ -15,7 +19,7 @@ export const WithdrawButton: VFC<ButtonProps> = (props) => {
   return (
     <>
       <SecondaryButton onClick={onOpen} {...props}>
-        Withdraw
+        {props.isDeprecated ? "Withdraw Only" : "Withdraw"}
       </SecondaryButton>
       <WithdrawModal isOpen={isOpen} onClose={closeModal} />
     </>

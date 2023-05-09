@@ -149,8 +149,13 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               {isMounted &&
                 (isConnected ? (
                   <>
-                    <DepositButton disabled={!isConnected} />
-                    <WithdrawButton disabled={lpTokenDisabled} />
+                    {!strategyData?.deprecated && (
+                      <DepositButton disabled={!isConnected} />
+                    )}
+                    <WithdrawButton
+                      isDeprecated={strategyData?.deprecated}
+                      disabled={lpTokenDisabled}
+                    />
                   </>
                 ) : (
                   <ConnectButton unstyled />

@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import {
+  CellarData,
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
@@ -8,7 +9,8 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
-export const steadyBtc = {
+export const steadyBtc: CellarData = {
+  deprecated: true,
   name: "Steady BTC",
   slug: config.CONTRACT.STEADY_BTC.SLUG,
   tradedAssets: ["WBTC", "USDC"],

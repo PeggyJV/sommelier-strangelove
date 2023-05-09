@@ -67,41 +67,47 @@ type Exchange =
       name: string
       logo: string
     }
-export interface CellarDataMap {
-  [key: string]: {
-    name: string
-    slug: string
-    tradedAssets?: string[]
-    exchanges?: Exchange[]
-    launchDate?: Date
-    stakingLaunchDate?: Date
-    cellarType: CellarType
-    description: string
-    strategyType: string
-    strategyTypeTooltip?: string
-    managementFee: string
-    managementFeeTooltip?: string
-    protocols: string | string[]
-    strategyAssets: string[]
-    performanceSplit: {
-      [key: string]: number
-    }
-    strategyBreakdown: {
-      [key: string]: string
-    }
-    strategyProvider?: {
-      logo?: string
-      title?: string
-      href?: string
-      tooltip?: string
-    }
-    depositTokens: {
-      list: string[]
-    }
-    config: ConfigProps
-    faq?: {
-      question: string
-      answer: string
-    }[]
+
+export interface CellarData {
+  deprecated?: boolean
+  name: string
+  slug: string
+  tradedAssets?: string[]
+  exchanges?: Exchange[]
+  launchDate?: Date
+  stakingLaunchDate?: Date
+  cellarType: CellarType
+  description: string
+  strategyType: string
+  strategyTypeTooltip?: string
+  managementFee: string
+  managementFeeTooltip?: string
+  protocols: string | string[]
+  strategyAssets: string[]
+  performanceSplit: {
+    [key: string]: number
   }
+  strategyBreakdown: {
+    [key: string]: string
+  }
+  strategyProvider?: {
+    logo?: string
+    title?: string
+    href?: string
+    tooltip?: string
+  }
+  depositTokens: {
+    list: string[]
+  }
+  overrideApy?: {
+    [key: string]: string
+  }
+  config: ConfigProps
+  faq?: {
+    question: string
+    answer: string
+  }[]
+}
+export interface CellarDataMap {
+  [key: string]: CellarData
 }
