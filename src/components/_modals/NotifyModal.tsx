@@ -6,6 +6,8 @@ import axios from "axios"
 import { useBrandedToast } from "hooks/chakra"
 import { useEffect } from "react"
 import { analytics } from "utils/analytics"
+import { useRouter } from "next/router"
+import { cellarDataMap } from "data/cellarDataMap"
 
 export const NotifyModal = (
   rest: Pick<ModalProps, "isOpen" | "onClose">
@@ -95,17 +97,15 @@ export const NotifyModal = (
       window.location.pathname.split("/").slice(-1).pop() === "manage"
   }
 
-  const isRealYield =
-    currentStrategies === "Real Yield USD" ||
-    currentStrategies === "Real Yield ETH"
+  const id = useRouter().query.id as string
+  const cellarData = cellarDataMap[id]
+
+  const isPopUpEnable =
+    cellarData.popUpTitle && cellarData.popUpDescription && isManage
 
   return (
     <BaseModal
-      heading={
-        isRealYield && isManage
-          ? "Get Exclusive Real Yield Updates"
-          : "Get Notified"
-      }
+      heading={isPopUpEnable ? cellarData.popUpTitle : "Get Notified"}
       headingProps={{
         fontSize: "2xl",
       }}
@@ -113,8 +113,8 @@ export const NotifyModal = (
     >
       <form onSubmit={handleSubmit(sendEmail)}>
         <Text color="neutral.300" fontSize="sm">
-          {isRealYield && isManage
-            ? "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose."
+          {isPopUpEnable
+            ? cellarData.popUpDescription
             : "Sign up for new strategy launch and other product  announcements—we’ll only use your email for this purpose."}
         </Text>
         <Input

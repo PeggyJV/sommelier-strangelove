@@ -11,6 +11,9 @@ import {
 export const defiStars: CellarData = {
   name: "DeFi Stars",
   slug: config.CONTRACT.DEFI_STARS.SLUG,
+  popUpTitle: "Get Exclusive DeFi Stars Updates",
+  popUpDescription:
+    "Thank you for your trust. As a DeFi Stars vault user, you’re eligible for exclusive strategy updates directly from the strategist AlgoLab. Delivered to your inbox every week. We’ll only use your email for this purpose.",
   tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   launchDate: new Date(2023, 4, 10, 10, 0, 0, 0), // May 10, 2023. 3 pm UTC
   cellarType: CellarType.automatedPortfolio,
