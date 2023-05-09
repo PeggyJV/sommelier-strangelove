@@ -186,14 +186,6 @@ export const depositAssetTokenList = [
   "sUSD",
   "TUSD",
   "USDT",
-  "cbETH",
-  "rETH",
-  "stETH",
-  "COMP",
-  "CRV",
-  "LDO",
-  "MKR",
-  "AAVE",
 ]
 
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
