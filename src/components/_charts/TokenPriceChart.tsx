@@ -120,11 +120,35 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
   }
 
   const hourlyAxisBottom = useMemo<any>(() => {
+    console.log("timeline", timeline)
     if (timeline === "1D") {
       return {
         axisBottom: {
-          format: "%d %H:%M",
+          format: "%d.%b %H:%M",
           tickValues: isLarger768 ? "every 3 hours" : "every 6 hours",
+        },
+      }
+    }
+    if (timeline === "1W" || timeline === "1M") {
+      // show format in day.month
+      return {
+        axisBottom: {
+          format: "%d.%b",
+          tickValues:
+            timeline === "1W" ? "every 1 day" : "every 2 days",
+        },
+      }
+    }
+    if (
+      timeline === "1Y" ||
+      timeline === "ALL" ||
+      timeline === "All"
+    ) {
+      // show format in month.year
+      return {
+        axisBottom: {
+          format: "%b.%y",
+          tickValues: "every 1 month",
         },
       }
     }
@@ -163,10 +187,39 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
         min: "auto",
       }}
       axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
         tickRotation: 0,
         legendPosition: "middle",
+        renderTick: (tick) => {
+          return (
+            <g
+              transform={`translate(${tick.x + 3},${tick.y})`}
+              style={{ opacity: 1 }}
+            >
+              <line
+                x1="0"
+                x2="-3"
+                y1="0"
+                y2="0"
+                style={{
+                  stroke: "rgb(237, 235, 245)",
+                  strokeWidth: 1,
+                }}
+              />
+              <text
+                transform="translate(-4, 0)"
+                textAnchor="end"
+                dominantBaseline="central"
+                style={{
+                  fontFamily: "sans-serif",
+                  fontSize: 9,
+                  fill: "rgb(237, 235, 245)",
+                }}
+              >
+                {tick.value} %
+              </text>
+            </g>
+          )
+        },
       }}
     />
   )

@@ -11,21 +11,17 @@ import {
 } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
-import { VFC } from "react"
-import { TransparentCard } from "../TransparentCard"
-import { toEther } from "utils/formatCurrency"
-import BondingTableCard from "../BondingTableCard"
-import { useAccount } from "wagmi"
-import { getTokenConfig, Token } from "data/tokenConfig"
 import { TokenAssets } from "components/TokenAssets"
+import { BondButton } from "components/_buttons/BondButton"
+import ConnectButton from "components/_buttons/ConnectButton"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
-import ConnectButton from "components/_buttons/ConnectButton"
-import { useRouter } from "next/router"
+import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useIsMounted } from "hooks/utils/useIsMounted"
+import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserBalances } from "data/hooks/useUserBalances"
-import { Rewards } from "./Rewards"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { getTokenConfig, Token } from "data/tokenConfig"
 import {
   bondingPeriodOptions,
   isBondButtonEnabled,
@@ -33,13 +29,17 @@ import {
   isRewardsEnabled,
   lpTokenTooltipContent,
 } from "data/uiConfig"
-import { BondButton } from "components/_buttons/BondButton"
-import { InnerCard } from "../InnerCard"
 import { formatDistanceToNow, isFuture } from "date-fns"
-import { LighterSkeleton } from "components/_skeleton"
+import { useIsMounted } from "hooks/utils/useIsMounted"
+import { useRouter } from "next/router"
+import { VFC } from "react"
+import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
-import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { useStrategyData } from "data/hooks/useStrategyData"
+import { useAccount } from "wagmi"
+import BondingTableCard from "../BondingTableCard"
+import { InnerCard } from "../InnerCard"
+import { TransparentCard } from "../TransparentCard"
+import { Rewards } from "./Rewards"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
@@ -149,8 +149,13 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               {isMounted &&
                 (isConnected ? (
                   <>
-                    <DepositButton disabled={!isConnected} />
-                    <WithdrawButton disabled={lpTokenDisabled} />
+                    {!strategyData?.deprecated && (
+                      <DepositButton disabled={!isConnected} />
+                    )}
+                    <WithdrawButton
+                      isDeprecated={strategyData?.deprecated}
+                      disabled={lpTokenDisabled}
+                    />
                   </>
                 ) : (
                   <ConnectButton unstyled />

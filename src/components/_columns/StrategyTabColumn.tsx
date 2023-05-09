@@ -25,6 +25,7 @@ export const StrategyTabColumn = ({
             type={row.original.type}
             date={row.original.launchDate}
             description={row.original.description}
+            isDeprecated={row.original.deprecated}
             w={56}
           />
         )

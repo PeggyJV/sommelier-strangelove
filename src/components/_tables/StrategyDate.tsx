@@ -5,6 +5,7 @@ import { COUNT_DOWN_TIMEZONE } from "utils/config"
 
 type StrategyDateProps = {
   date?: string
+  deprecated?: boolean
 }
 export const StrategyDate = (props: StrategyDateProps) => {
   // After launch until 1 month = new
@@ -22,6 +23,14 @@ export const StrategyDate = (props: StrategyDateProps) => {
   const isLaunched = date
     ? new Date(date) < new Date(Date.now())
     : true
+
+  if (props.deprecated) {
+    return (
+      <Text bg="gray" px={1.5} rounded="4">
+        Deprecated
+      </Text>
+    )
+  }
 
   if (months! > 0 && date === undefined) {
     return <Box />

@@ -196,6 +196,9 @@ export const tokenPriceTooltipContent = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
   )
     return `The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for`
+  if (config.cellarNameKey === CellarNameKey.DEFI_STARS)
+    return "The dollar value of the COMP, CRV, LDO, MKR, AAVE and USDC that 1 token can be redeemed for"
+
   return ""
 }
 
@@ -369,7 +372,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
 
 export const baseApyHoverLabel = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
-    return "Expected ETH Yield"
+    return "ETH Yield since inception"
   }
   return "Base APY"
 }

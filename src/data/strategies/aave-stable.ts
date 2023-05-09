@@ -5,10 +5,11 @@ import {
   StakerKey,
   CellarType,
   CellarNameKey,
+  CellarData,
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
-export const aaveStable = {
+export const aaveStable: CellarData = {
   name: "aave2",
   slug: config.CONTRACT.AAVE_V2_STABLE_CELLAR.SLUG,
   cellarType: CellarType.yieldStrategies,

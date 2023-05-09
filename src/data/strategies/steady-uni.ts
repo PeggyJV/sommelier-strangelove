@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import {
+  CellarData,
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
@@ -8,7 +9,8 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
-export const steadyUni = {
+export const steadyUni: CellarData = {
+  deprecated: true,
   name: "Steady UNI",
   slug: config.CONTRACT.STEADY_UNI.SLUG,
   tradedAssets: ["USDC", "UNI"],

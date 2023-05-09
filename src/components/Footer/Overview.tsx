@@ -16,8 +16,10 @@ export const Overview = () => {
   }, 0)
 
   const totalLaunchedStrategies = data?.filter((item) => {
-    const countdown = isComingSoon(item?.launchDate)
-    return !countdown
+    const hideValue =
+      isComingSoon(item?.launchDate) &&
+      process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
+    return !hideValue
   })
 
   return (
