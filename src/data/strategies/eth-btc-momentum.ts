@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import {
+  CellarData,
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
@@ -8,7 +9,7 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
-export const ethBtcMomentum = {
+export const ethBtcMomentum: CellarData = {
   name: "ETH-BTC Momentum",
   cellarType: CellarType.automatedPortfolio,
   slug: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG,

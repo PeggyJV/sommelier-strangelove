@@ -1,26 +1,26 @@
 import { cellarDataMap } from "data/cellarDataMap"
-import { CellarStakingV0815, CellarV0816 } from "src/abi/types"
-import { StrategyContracts } from "../types"
-
+import { CellarKey, ConfigProps } from "data/types"
 import {
   isAPYEnabled,
   isAssetDistributionEnabled,
 } from "data/uiConfig"
-import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { add, isBefore, isFuture, subDays } from "date-fns"
+import { GetStrategyDataQuery } from "generated/subgraph"
+import { CellarStakingV0815, CellarV0816 } from "src/abi/types"
+import { formatDecimals } from "utils/bigNumber"
+import { config } from "utils/config"
+import { isComingSoon } from "utils/isComingSoon"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
-import { CellarKey, ConfigProps } from "data/types"
 import { getBaseApy as getV2BaseApy } from "../CELLAR_V2/getBaseApy"
+import { getActiveAsset } from "../DEPRECATED/common/getActiveAsset"
+import { StrategyContracts } from "../types"
 import { getBaseApy } from "./getBaseApy"
 import { getChanges } from "./getChanges"
-import { getTvm } from "./getTvm"
-import { formatDecimals } from "utils/bigNumber"
-import { GetStrategyDataQuery } from "generated/subgraph"
 import { getPositon } from "./getPosition"
-import { config } from "utils/config"
-import { getActiveAsset } from "../DEPRECATED/common/getActiveAsset"
-import { isComingSoon } from "utils/isComingSoon"
+import { getTokenByAddress, getTokenBySymbol } from "./getToken"
+import { getTvm } from "./getTvm"
+
 const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const getStrategyData = async ({
@@ -50,7 +50,7 @@ export const getStrategyData = async ({
       const subgraphData = sgData
 
       const dayDatas = subgraphData?.dayDatas
-
+      const deprecated = strategy.deprecated
       const slug = strategy.slug
       const name = strategy.name
       const description = strategy.description
@@ -198,6 +198,7 @@ export const getStrategyData = async ({
         tvm,
         type,
         stakingLaunchDate,
+        deprecated,
       }
     } catch (e) {
       console.error(address, e)

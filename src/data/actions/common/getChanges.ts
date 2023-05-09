@@ -1,9 +1,15 @@
 export const getChanges = (
   dayDatas?: { date: number; shareValue: string }[]
 ) => {
+  const cleanData = dayDatas?.map((d) => ({
+    ...d,
+    shareValue:
+      d.shareValue === "0" ? undefined : Number(d.shareValue),
+  }))
+
   const daily = (() => {
-    const first = dayDatas?.[0]
-    const last = dayDatas?.[1]
+    const first = cleanData?.[0]
+    const last = cleanData?.[1]
     if (!first || !last) return
     const change =
       ((Number(first?.shareValue) - Number(last?.shareValue)) /
@@ -13,8 +19,8 @@ export const getChanges = (
   })()
 
   const weekly = (() => {
-    const first = dayDatas?.[0]
-    const last = dayDatas?.[6]
+    const first = cleanData?.[0]
+    const last = cleanData?.[6]
     if (!first || !last) return
     const change =
       ((Number(first?.shareValue) - Number(last?.shareValue)) /
@@ -24,8 +30,8 @@ export const getChanges = (
   })()
 
   const monthly = (() => {
-    const first = dayDatas?.[0]
-    const last = dayDatas?.[30]
+    const first = cleanData?.[0]
+    const last = cleanData?.[30]
     if (!first || !last) return
     const change =
       ((Number(first?.shareValue) - Number(last?.shareValue)) /
@@ -35,8 +41,8 @@ export const getChanges = (
   })()
 
   const allTime = (() => {
-    const first = dayDatas?.[0]
-    const last = dayDatas?.at(-1)
+    const first = cleanData?.[0]
+    const last = cleanData?.at(-1)
     if (!first || !last) return
     const change =
       ((Number(first?.shareValue) - Number(last?.shareValue)) /

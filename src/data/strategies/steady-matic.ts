@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import {
+  CellarData,
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
@@ -8,7 +9,8 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
-export const steadyMatic = {
+export const steadyMatic: CellarData = {
+  deprecated: true,
   name: "Steady MATIC",
   slug: config.CONTRACT.STEADY_MATIC.SLUG,
   tradedAssets: ["USDC", "MATIC"],

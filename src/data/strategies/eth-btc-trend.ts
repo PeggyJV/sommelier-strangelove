@@ -1,5 +1,6 @@
 import { config } from "utils/config"
 import {
+  CellarData,
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
@@ -8,7 +9,7 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 
-export const ethBtcTrend = {
+export const ethBtcTrend: CellarData = {
   name: "ETH-BTC Trend",
   slug: config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG,
   tradedAssets: ["USDC", "WETH", "WBTC"],
