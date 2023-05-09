@@ -6,6 +6,7 @@ import axios from "axios"
 import { useBrandedToast } from "hooks/chakra"
 import { useEffect } from "react"
 import { analytics } from "utils/analytics"
+import { popUpText } from "utils/popUpText"
 
 export const NotifyModal = (
   rest: Pick<ModalProps, "isOpen" | "onClose">
@@ -95,16 +96,12 @@ export const NotifyModal = (
       window.location.pathname.split("/").slice(-1).pop() === "manage"
   }
 
-  const isRealYield =
-    currentStrategies === "Real Yield USD" ||
-    currentStrategies === "Real Yield ETH"
+  const content = popUpText(currentStrategies)
 
   return (
     <BaseModal
       heading={
-        isRealYield && isManage
-          ? "Get Exclusive Real Yield Updates"
-          : "Get Notified"
+        content && isManage && content.heading ? content.heading : ""
       }
       headingProps={{
         fontSize: "2xl",
@@ -113,9 +110,7 @@ export const NotifyModal = (
     >
       <form onSubmit={handleSubmit(sendEmail)}>
         <Text color="neutral.300" fontSize="sm">
-          {isRealYield && isManage
-            ? "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose."
-            : "Sign up for new strategy launch and other product  announcements—we’ll only use your email for this purpose."}
+          {content && isManage && content.text}
         </Text>
         <Input
           {...register("email")}

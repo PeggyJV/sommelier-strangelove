@@ -387,12 +387,15 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         .split("/")[2]
         .replace(/-/g, " ")
 
-      const isRealYield = currentStrategies === "Real Yield USD"
+      const isPopUpEnable =
+        currentStrategies === "Real Yield USD" ||
+        currentStrategies === "Real Yield ETH" ||
+        currentStrategies === "DeFi Stars"
 
       if (!notifyModal.isOpen) {
         analytics.track(`${currentStrategies}-notify.modal-opened`)
       }
-      if (isRealYield) {
+      if (isPopUpEnable) {
         props.onClose()
         //@ts-ignore
         notifyModal.onOpen()
