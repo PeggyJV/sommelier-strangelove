@@ -3,7 +3,9 @@ import BigNumber from "bignumber.js"
 import { realYieldEth } from "../../strategies/real-yield-eth"
 
 const RYETH_LAUNCH_EPOCH = Math.floor(
-  realYieldEth.launchDate.getTime() / 1000
+  realYieldEth.launchDate
+    ? realYieldEth.launchDate.getTime() / 1000
+    : 0
 )
 
 export const getBaseApy = ({
