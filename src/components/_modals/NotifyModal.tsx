@@ -6,7 +6,8 @@ import axios from "axios"
 import { useBrandedToast } from "hooks/chakra"
 import { useEffect } from "react"
 import { analytics } from "utils/analytics"
-import { popUpText } from "utils/popUpText"
+import { useRouter } from "next/router"
+import { cellarDataMap } from "data/cellarDataMap"
 
 export const NotifyModal = (
   rest: Pick<ModalProps, "isOpen" | "onClose">
@@ -96,13 +97,15 @@ export const NotifyModal = (
       window.location.pathname.split("/").slice(-1).pop() === "manage"
   }
 
-  const content = popUpText(currentStrategies)
+  const id = useRouter().query.id as string
+  const cellarData = cellarDataMap[id]
+
+  const isPopUpEnable =
+    cellarData.popUpTitle && cellarData.popUpDescription && isManage
 
   return (
     <BaseModal
-      heading={
-        content && isManage && content.heading ? content.heading : ""
-      }
+      heading={isPopUpEnable ? cellarData.popUpTitle : "Get Notified"}
       headingProps={{
         fontSize: "2xl",
       }}
@@ -110,7 +113,9 @@ export const NotifyModal = (
     >
       <form onSubmit={handleSubmit(sendEmail)}>
         <Text color="neutral.300" fontSize="sm">
-          {content && isManage && content.text}
+          {isPopUpEnable
+            ? cellarData.popUpDescription
+            : "Sign up for new strategy launch and other product  announcements—we’ll only use your email for this purpose."}
         </Text>
         <Input
           {...register("email")}
