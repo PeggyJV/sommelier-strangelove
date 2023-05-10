@@ -25,9 +25,9 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { bondingPeriodOptions } from "data/uiConfig"
-import { formatDistanceToNow, isFuture } from "date-fns"
-import { LighterSkeleton } from "components/_skeleton"
+import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { formatDistance } from "utils/formatDistance"
+import { LighterSkeleton } from "components/_skeleton"
 import { useGeo } from "context/geoContext"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
@@ -190,8 +190,8 @@ const BondingTableCard: VFC<TableProps> = (props) => {
             {stakingEnd?.endDate && isFuture(stakingEnd?.endDate) && (
               <Text fontSize="xs">
                 {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
-                  ? `Ends in ${formatDistanceToNow(
-                      stakingEnd.endDate,
+                  ? `Ends in ${formatDistanceToNowStrict(
+                      stakingEnd?.endDate,
                       {
                         locale: { formatDistance },
                       }

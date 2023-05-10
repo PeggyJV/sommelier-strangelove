@@ -13,7 +13,7 @@ import { ComingSoon } from "./ComingSoon"
 import { InlineImage } from "components/InlineImage"
 import { CoinImage } from "./CoinImage"
 import { protocolsImage } from "utils/protocolsImagePath"
-import { formatDistanceToNow, isFuture } from "date-fns"
+import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { cellarDataMap } from "data/cellarDataMap"
 import { TransparentSkeleton } from "components/_skeleton"
 import { formatDistance } from "utils/formatDistance"
@@ -117,9 +117,12 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
                   </span>
                   <span> &#183; </span>
                   {isStakingStillRunning
-                    ? `${formatDistanceToNow(stakingEnd.endDate, {
-                        locale: { formatDistance },
-                      })} left`
+                    ? `${formatDistanceToNowStrict(
+                        stakingEnd?.endDate,
+                        {
+                          locale: { formatDistance },
+                        }
+                      )} left`
                     : "Program ends"}
                 </Text>
               </TransparentSkeleton>

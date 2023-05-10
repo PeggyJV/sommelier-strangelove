@@ -29,7 +29,7 @@ import {
   isRewardsEnabled,
   lpTokenTooltipContent,
 } from "data/uiConfig"
-import { formatDistanceToNow, isFuture } from "date-fns"
+import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
 import { VFC } from "react"
@@ -261,7 +261,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       <Text fontSize="xs">
                         {stakingEnd?.endDate &&
                         isFuture(stakingEnd.endDate)
-                          ? `Ends in ${formatDistanceToNow(
+                          ? `Ends in ${formatDistanceToNowStrict(
                               stakingEnd.endDate,
                               {
                                 locale: { formatDistance },

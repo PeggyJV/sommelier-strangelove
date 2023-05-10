@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
 import { FC } from "react"
-import { formatDistanceToNow, subDays } from "date-fns"
+import { formatDistanceToNowStrict, subDays } from "date-fns"
 import { baseApyHoverLabel } from "data/uiConfig"
 import { cellarDataMap } from "data/cellarDataMap"
 
@@ -59,7 +59,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
       </Tooltip>
       {rewardsApy && (
         <Tooltip
-          label={`${formatDistanceToNow(
+          label={`Ends in ${formatDistanceToNowStrict(
             new Date(stackingEndDate)
           )} left`}
           color="neutral.100"
