@@ -103,7 +103,10 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
     try {
       await doApprove(data.depositAmount, {
         onSuccess: () => analytics.track("bond.approval-succeeded"),
-        onError: () => analytics.track("bond.approval-failed"),
+        onError: (error) => {
+          analytics.track("bond.approval-failed")
+          throw error
+        },
       })
 
       const amtInBigNumber = new BigNumber(data.depositAmount)
