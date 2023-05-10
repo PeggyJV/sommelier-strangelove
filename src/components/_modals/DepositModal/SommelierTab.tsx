@@ -373,7 +373,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 Import tokens to wallet
               </Text>
               <Text>
-                Please wait 10 min after the deposit to Sell or Bond
+                Please wait 10 min after the deposit to Withdraw or
+                Bond
               </Text>
             </>
           ),
