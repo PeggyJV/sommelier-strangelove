@@ -387,12 +387,13 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         .split("/")[2]
         .replace(/-/g, " ")
 
-      const isRealYield = currentStrategies === "Real Yield USD"
+      const isPopUpEnable =
+        cellarData.popUpTitle && cellarData.popUpDescription
 
       if (!notifyModal.isOpen) {
         analytics.track(`${currentStrategies}-notify.modal-opened`)
       }
-      if (isRealYield) {
+      if (isPopUpEnable) {
         props.onClose()
         //@ts-ignore
         notifyModal.onOpen()
@@ -439,6 +440,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           stable: tokenSymbol,
           value: depositAmount,
         })
+
         addToast({
           heading: cellarName + " Deposit",
           body: <Text>Deposit Cancelled</Text>,
