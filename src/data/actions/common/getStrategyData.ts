@@ -62,7 +62,7 @@ export const getStrategyData = async ({
       const stakingLaunchDate = strategy.stakingLaunchDate
       const isNew =
         !!launchDate &&
-        isBefore(launchDate, add(new Date(), { weeks: 2 }))
+        isBefore(launchDate, add(new Date(), { weeks: 4 }))
 
       const hideValue =
         isComingSoon(launchDate) &&
