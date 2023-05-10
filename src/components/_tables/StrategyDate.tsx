@@ -16,7 +16,7 @@ export const StrategyDate = (props: StrategyDateProps) => {
   const dateTz = date && zonedTimeToUtc(date, "EST")
 
   const isNew =
-    date && isBefore(new Date(date), add(new Date(), { weeks: 4 }))
+    date && isBefore(new Date(), add(new Date(date), { weeks: 4 }))
 
   if (props.deprecated) {
     return (
