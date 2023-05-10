@@ -99,18 +99,18 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       duration: bondingPeriodOptions(cellarConfig)[bondPeriod],
     }
     analytics.track("bond.started", analyticsData)
-    await doApprove(data.depositAmount, {
-      onSuccess: () => analytics.track("bond.approval-succeeded"),
-      onError: () => analytics.track("bond.approval-failed"),
-    })
-
-    const amtInBigNumber = new BigNumber(data.depositAmount)
-    const depositAmtInWei = ethers.utils.parseUnits(
-      amtInBigNumber.toFixed(),
-      18
-    )
 
     try {
+      await doApprove(data.depositAmount, {
+        onSuccess: () => analytics.track("bond.approval-succeeded"),
+        onError: () => analytics.track("bond.approval-failed"),
+      })
+
+      const amtInBigNumber = new BigNumber(data.depositAmount)
+      const depositAmtInWei = ethers.utils.parseUnits(
+        amtInBigNumber.toFixed(),
+        18
+      )
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         stakerSigner.estimateGas.stake,
         stakerSigner.callStatic.stake,
