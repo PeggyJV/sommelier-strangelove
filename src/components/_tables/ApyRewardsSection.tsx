@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
 import { FC } from "react"
-import { differenceInDays, subDays } from "date-fns"
+import { formatDistanceToNowStrict, subDays } from "date-fns"
 import { baseApyHoverLabel } from "data/uiConfig"
 import { cellarDataMap } from "data/cellarDataMap"
 
@@ -30,7 +30,6 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const range = endDate - startDate
   const current = now - startDate
   const percentage = (current / range) * 100
-  const daysLeft = differenceInDays(endDate, now)
   const cellarConfig = cellarDataMap[cellarId].config
 
   if (!baseApy && !rewardsApy) {
@@ -60,7 +59,9 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
       </Tooltip>
       {rewardsApy && (
         <Tooltip
-          label={`Rewards end in ${daysLeft} days`}
+          label={`Ends in ${formatDistanceToNowStrict(
+            new Date(stackingEndDate)
+          )} left`}
           color="neutral.100"
           border="0"
           fontSize="12px"

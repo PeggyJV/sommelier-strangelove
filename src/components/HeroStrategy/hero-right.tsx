@@ -33,7 +33,7 @@ import {
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
-import { formatDistanceToNow, isFuture } from "date-fns"
+import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
@@ -330,8 +330,8 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 >
                   {stakingEnd?.endDate
                     ? isFuture(stakingEnd?.endDate) &&
-                      `${formatDistanceToNow(
-                        stakingEnd?.endDate
+                      `${formatDistanceToNowStrict(
+                        stakingEnd.endDate
                       )} left`
                     : "Program Ended"}
                 </Text>

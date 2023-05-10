@@ -102,6 +102,7 @@ export const useApproveERC20 = ({
           status: "info",
           closeHandler: closeAll,
         })
+        throw e
       }
     }
   }

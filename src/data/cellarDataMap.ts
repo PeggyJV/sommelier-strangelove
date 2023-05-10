@@ -20,13 +20,13 @@ if (config.cleargate.enabled) {
     [config.CONTRACT.DEFI_STARS.SLUG]: defiStars,
     [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
     [config.CONTRACT.REAL_YIELD_USD.SLUG]: realYieldUsd,
+    [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: ethBtcTrend,
+    [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG]: ethBtcMomentum,
+    [config.CONTRACT.AAVE_V2_STABLE_CELLAR.SLUG]: aaveStable,
     [config.CONTRACT.STEADY_UNI.SLUG]: steadyUni,
     [config.CONTRACT.STEADY_MATIC.SLUG]: steadyMatic,
     [config.CONTRACT.STEADY_ETH.SLUG]: steadyEth,
     [config.CONTRACT.STEADY_BTC.SLUG]: steadyBtc,
-    [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: ethBtcTrend,
-    [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG]: ethBtcMomentum,
-    [config.CONTRACT.AAVE_V2_STABLE_CELLAR.SLUG]: aaveStable,
   }
 } else {
   cellarConfig = {
