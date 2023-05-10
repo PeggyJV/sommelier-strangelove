@@ -1,5 +1,5 @@
 import { Text } from "@chakra-ui/react"
-import { add, formatDistance, isBefore } from "date-fns"
+import { add, formatDistanceStrict, isBefore } from "date-fns"
 import { zonedTimeToUtc } from "date-fns-tz"
 import { isComingSoon } from "utils/isComingSoon"
 
@@ -29,7 +29,7 @@ export const StrategyDate = (props: StrategyDateProps) => {
   if (!!comingSoon) {
     return (
       <Text bg="rgba(78, 56, 156, 0.32)" px={1.5} rounded="4">
-        in {dateTz && formatDistance(dateTz, new Date())}
+        in {dateTz && formatDistanceStrict(dateTz, new Date())}
       </Text>
     )
   } else if (isNew) {
