@@ -142,7 +142,11 @@ export const EthBtcChart: VFC<EthBtcChartProps> = ({
         },
       }
     }
-    if (timeline === "1Y" || timeline === "ALL") {
+    if (
+      timeline === "1Y" ||
+      timeline === "ALL" ||
+      timeline === "All"
+    ) {
       // show format in month.year
       return {
         axisBottom: {
@@ -169,7 +173,7 @@ export const EthBtcChart: VFC<EthBtcChartProps> = ({
         ]),
       ]}
       fill={[{ match: "*", id: "gradientA" }]}
-      margin={{ bottom: 110, left: 26, right: 6, top: 20 }}
+      margin={{ bottom: 110, left: 26, right: 18, top: 20 }}
       theme={chartTheme}
       onMouseMove={onMouseMove}
       onMouseLeave={() => {
