@@ -26,6 +26,11 @@ export const strategyPageContentData = {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
+      {
+        name: "Rhino ( L2 deposit option )",
+        logo: "/assets/icons/rhino-fi.svg",
+        url: "https://app.rhino.fi/strategy/ETHBTCTREND",
+      },
     ],
     strategyHighlights: {
       card: [
@@ -85,6 +90,11 @@ export const strategyPageContentData = {
       {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
+      },
+      {
+        name: "Rhino ( L2 deposit option )",
+        logo: "/assets/icons/rhino-fi.svg",
+        url: "https://app.rhino.fi/strategy/ETHBTCMOMENTUM",
       },
     ],
     strategyHighlights: {
@@ -450,6 +460,11 @@ export const strategyPageContentData = {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
+      {
+        name: "Rhino ( L2 deposit option )",
+        logo: "/assets/icons/rhino-fi.svg",
+        url: "https://app.rhino.fi/invest/YIELDUSD/supply",
+      },
     ],
     ticker: (
       <>
@@ -495,6 +510,11 @@ export const strategyPageContentData = {
       {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
+      },
+      {
+        name: "Rhino ( L2 deposit option )",
+        logo: "/assets/icons/rhino-fi.svg",
+        url: "https://app.rhino.fi/invest/YIELDETH/supply",
       },
     ],
     ticker: (

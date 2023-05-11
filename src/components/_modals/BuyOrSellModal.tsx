@@ -120,10 +120,6 @@ export const BuyOrSellModal = ({
             </Link>
           )
         })}
-        <Text pt="12px" fontSize="sm" color="neutral.300">
-          Token are shares of the strategy's liquidity pool and can be
-          bought or sold on both Sommelier and exchanges.
-        </Text>
       </Stack>
     </BaseModal>
   )
