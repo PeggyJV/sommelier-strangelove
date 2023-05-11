@@ -170,7 +170,7 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
         ]),
       ]}
       fill={[{ match: "*", id: "gradientA" }]}
-      margin={{ bottom: 110, left: 26, right: 6, top: 20 }}
+      margin={{ bottom: 110, left: 26, right: 18, top: 20 }}
       theme={chartTheme}
       onMouseMove={onMouseMove}
       onMouseLeave={() => {

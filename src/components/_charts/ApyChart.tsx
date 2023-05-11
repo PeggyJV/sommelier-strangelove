@@ -126,7 +126,11 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
         },
       }
     }
-    if (timeline === "1Y" || timeline === "ALL") {
+    if (
+      timeline === "1Y" ||
+      timeline === "ALL" ||
+      timeline === "All"
+    ) {
       // show format in month.year
       return {
         axisBottom: {
@@ -151,7 +155,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
           { offset: 100, color: "inherit", opacity: 0 },
         ]),
       ]}
-      margin={{ bottom: 110, left: 35, right: 6, top: 20 }}
+      margin={{ bottom: 110, left: 35, right: 18, top: 20 }}
       theme={chartTheme}
       onMouseMove={onMouseMove}
       onMouseLeave={() => {
