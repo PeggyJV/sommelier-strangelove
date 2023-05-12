@@ -3,7 +3,7 @@ import { ConfigProps, StakerKey } from "data/types"
 import { StrategyContracts, StrategyData } from "../types"
 import { CellarStakingV0815 } from "src/abi/types"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
-import { formatUSD } from "utils/formatCurrency"
+import { formatUSD, toEther } from "utils/formatCurrency"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { formatDecimals } from "utils/bigNumber"
 import { fetchBalance } from "@wagmi/core"
@@ -86,8 +86,14 @@ export const getUserData = async ({
       ? userStakes.claimAllRewardsUSD.toNumber()
       : 0
 
+    const sommRewardsRaw = userStakes
+      ? userStakes?.totalClaimAllRewards.value.toNumber()
+      : 0
+
     const userShares =
       (shares && Number(Number(shares.formatted).toFixed(2))) || 0
+
+    const netValueInAsset = userShares + bonded + sommRewardsRaw
 
     const netValue = (() => {
       if (
@@ -111,6 +117,14 @@ export const getUserData = async ({
         netValue: {
           value: netValue,
           formatted: formatUSD(String(netValue)),
+        },
+        netValueInAsset: {
+          value: netValueInAsset,
+          formatted: `${toEther(
+            String(netValueInAsset),
+            subgraphData?.asset.decimals,
+            5
+          )} ${subgraphData?.asset.symbol}`,
         },
         claimableSommReward:
           userStakes?.totalClaimAllRewards || undefined,
