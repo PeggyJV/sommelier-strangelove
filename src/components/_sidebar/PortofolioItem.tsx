@@ -7,7 +7,7 @@ export const PortofolioItem = (props: StackProps) => {
       px={8}
       py={4}
       borderBottom="1px solid"
-      borderColor="rgba(255, 255, 255, 0.05)"
+      borderColor="surface.secondary"
       w="100%"
       justifyContent="space-between"
       alignItems="center"

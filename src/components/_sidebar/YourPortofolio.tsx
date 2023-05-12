@@ -34,7 +34,7 @@ export const YourPortofolio = () => {
             w="100%"
             borderTop="1px solid"
             borderBottom="1px solid"
-            borderColor="rgba(255, 255, 255, 0.05)"
+            borderColor="surface.secondary"
           >
             <Text fontSize={12} fontWeight={600} color="neutral.400">
               Strategy
@@ -60,7 +60,7 @@ export const YourPortofolio = () => {
             py={4}
             pl={12}
             pb={1}
-            borderColor="rgba(255, 255, 255, 0.05)"
+            borderColor="surface.secondary"
             w="100%"
             justifyContent="space-between"
             alignItems="center"
