@@ -123,7 +123,7 @@ export const getUserData = async ({
           formatted: `${toEther(
             String(netValueInAsset),
             subgraphData?.asset.decimals,
-            5
+            netValueInAsset > 0 ? 5 : 2
           )} ${subgraphData?.asset.symbol}`,
         },
         claimableSommReward:
