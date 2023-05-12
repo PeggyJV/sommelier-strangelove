@@ -1,5 +1,5 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react"
-import { CardBase } from "components/_cards/CardBase"
+import { TransparentCard } from "components/_cards/TransparentCard"
 import { LogoIcon } from "components/_icons"
 import { useHome } from "data/context/homeContext"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
@@ -9,8 +9,13 @@ export const YourPortofolio = () => {
   const { data, isLoading, refetch } = useUserDataAllStrategies()
   const { timeline } = useHome()
   return (
-    <VStack spacing="32px" w="full">
-      <CardBase fontFamily="Haffer" w="100%" paddingX={0} pt={3}>
+    <VStack spacing="32px" w="full" mt={16}>
+      <TransparentCard
+        fontFamily="Haffer"
+        w="100%"
+        paddingX={0}
+        pt={3}
+      >
         <VStack alignItems="flex-start" w="100%" spacing={0}>
           <Text marginX="auto" fontWeight={600} fontSize="16px">
             Your total balance
@@ -88,7 +93,7 @@ export const YourPortofolio = () => {
             </VStack>
           </HStack>
         </VStack>
-      </CardBase>
+      </TransparentCard>
     </VStack>
   )
 }
