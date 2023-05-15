@@ -8,6 +8,7 @@ import { GetStrategyDataQuery } from "generated/subgraph"
 import { formatDecimals } from "utils/bigNumber"
 import { fetchBalance } from "@wagmi/core"
 import { config } from "utils/config"
+import { BigNumber } from "ethers"
 
 const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
@@ -93,7 +94,19 @@ export const getUserData = async ({
     const userShares =
       (shares && Number(Number(shares.formatted).toFixed(2))) || 0
 
-    const netValueInAsset = userShares + bonded + sommRewardsRaw
+    const netValueInAsset = (() => {
+      if (
+        Boolean(subgraphData?.shareValue)
+          ? shares === undefined ||
+            userStakes === undefined ||
+            bonded === undefined ||
+            !subgraphData?.shareValue
+          : false
+      ) {
+        return undefined
+      }
+      return userShares + bonded + sommRewardsRaw
+    })()
 
     const netValue = (() => {
       if (
@@ -120,11 +133,13 @@ export const getUserData = async ({
         },
         netValueInAsset: {
           value: netValueInAsset,
-          formatted: `${toEther(
-            String(netValueInAsset),
-            subgraphData?.asset.decimals,
-            netValueInAsset > 0 ? 5 : 2
-          )} ${subgraphData?.asset.symbol}`,
+          formatted: netValueInAsset
+            ? `${toEther(
+                BigNumber.from(String(netValueInAsset)),
+                subgraphData?.asset.decimals,
+                netValueInAsset > 0 ? 5 : 2
+              )} ${subgraphData?.asset.symbol}`
+            : "--",
         },
         claimableSommReward:
           userStakes?.totalClaimAllRewards || undefined,
