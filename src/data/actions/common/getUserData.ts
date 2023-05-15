@@ -1,16 +1,15 @@
+import { fetchBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
-import { StrategyContracts, StrategyData } from "../types"
-import { CellarStakingV0815 } from "src/abi/types"
-import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
-import { formatUSD, toEther } from "utils/formatCurrency"
+import { ethers } from "ethers"
 import { GetStrategyDataQuery } from "generated/subgraph"
+import { CellarStakingV0815 } from "src/abi/types"
 import { formatDecimals } from "utils/bigNumber"
-import { fetchBalance } from "@wagmi/core"
 import { config } from "utils/config"
+import { formatUSD, toEther } from "utils/formatCurrency"
+import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
+import { StrategyContracts, StrategyData } from "../types"
 
-import BigNumber from "bignumber.js"
-import { BigNumber as EthersBignumber, ethers } from "ethers"
 const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const getUserData = async ({
@@ -89,10 +88,9 @@ export const getUserData = async ({
       : 0
 
     const sommRewardsRaw = userStakes
-      ? ethers.utils.formatUnits(
-          userStakes?.totalClaimAllRewards.value.toNumber(),
-          subgraphData?.asset.decimals
-        )
+      ? address === RYETH_ADDRESS
+        ? userStakes.claimAllRewardsUSD.toNumber() * Number(wethPrice)
+        : userStakes.claimAllRewardsUSD.toNumber()
       : 0
 
     const userShares =
