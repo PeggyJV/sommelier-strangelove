@@ -84,8 +84,9 @@ export const getStrategyData = async ({
       let tvm = hideValue
         ? undefined
         : isRYETH
-        ? //@ts-ignore
-          getTvm(Number(subgraphData!.tvlTotal) * Number(wethPrice))
+        ? getTvm(
+            String(Number(subgraphData!.tvlTotal) * Number(wethPrice))
+          )
         : getTvm(subgraphData?.tvlTotal)
 
       const tradedAssets = (() => {

@@ -1,14 +1,10 @@
 import { LineProps, Serie } from "@nivo/line"
 import { cellarDataMap } from "data/cellarDataMap"
-import {
-  format,
-  subDays,
-  startOfDay,
-  differenceInDays,
-} from "date-fns"
+import { format, subDays } from "date-fns"
 import {
   useGetAllTimeShareValueQuery,
   useGetMonthlyShareValueQuery,
+  useGetStrategyDataQuery,
   useGetWeeklyShareValueQuery,
 } from "generated/subgraph"
 import {
@@ -166,9 +162,15 @@ export const ApyChartProvider: FC<{
     apy: true,
   })
   const [timeline, setTimeline] = useState<Timeline>("1W")
-  const launchDate = Object.values(cellarDataMap).find(
+  const cellarData = Object.values(cellarDataMap).find(
     (item) => item.config.cellar.address === address
-  )?.launchDate!
+  )
+  const launchDate = cellarData?.launchDate!
+  const [{ data: sgData }] = useGetStrategyDataQuery({
+    variables: { cellarAddress: address.toLowerCase() },
+  })
+  const getDecimals = sgData?.cellar?.asset.decimals ?? 18
+
   const [
     {
       fetching: weeklyIsFetching,
@@ -219,24 +221,6 @@ export const ApyChartProvider: FC<{
     .filter((item) => new Date(item.date * 1000) > launchDate)
     .reverse()
 
-  if (address === RYETH_ADDRESS) {
-    const today = new Date()
-    const startOfToday = startOfDay(today)
-    const numDays = differenceInDays(launchDate, today)
-    const fakeData = []
-
-    for (let i = 0; i <= numDays + 1; i++) {
-      fakeData.push({
-        date: subDays(startOfToday, i).getTime() / 1000,
-        shareValue: "1",
-      })
-    }
-
-    weeklyData = fakeData
-    monthlyData = fakeData
-    allTimeData = fakeData.reverse()
-  }
-
   const launchDay = launchDate ?? subDays(new Date(), 8)
   const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
@@ -251,16 +235,8 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
+      decimals: getDecimals,
     })
-
-    if (address === RYETH_ADDRESS) {
-      apyDatum = apyDatum?.map((d) => {
-        d.y = "10.0%"
-        d.value = "10.0"
-
-        return d
-      })
-    }
 
     const series = [
       {
@@ -297,10 +273,6 @@ export const ApyChartProvider: FC<{
         apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
       ) / Number(apyDatum?.length)
 
-    if (address === RYETH_ADDRESS) {
-      average = 10.0
-    }
-
     setApyChange({
       xFormatted: dateText,
       yFormatted: `${valueExists ? String(latestData?.y) : "--"}`,
@@ -318,15 +290,8 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
+      decimals: getDecimals,
     })
-    if (address === RYETH_ADDRESS) {
-      apyDatum = apyDatum?.map((d) => {
-        d.y = "10.0%"
-        d.value = "10.0"
-
-        return d
-      })
-    }
     const series = [
       {
         id: "apy",
@@ -357,10 +322,6 @@ export const ApyChartProvider: FC<{
         apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
       ) / Number(apyDatum?.length)
 
-    if (address === RYETH_ADDRESS) {
-      average = 10.0
-    }
-
     setApyChange({
       xFormatted: dateText,
       yFormatted: `${valueExists ? String(latestData?.y) : "--"}`,
@@ -378,15 +339,8 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
+      decimals: getDecimals,
     })
-    if (address === RYETH_ADDRESS) {
-      apyDatum = apyDatum?.map((d) => {
-        d.y = "10.0%"
-        d.value = "10.0"
-
-        return d
-      })
-    }
     const series = [
       {
         id: "apy",
@@ -416,10 +370,6 @@ export const ApyChartProvider: FC<{
       Number(
         apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
       ) / Number(apyDatum?.length)
-
-    if (address === RYETH_ADDRESS) {
-      average = 10.0
-    }
 
     setApyChange({
       xFormatted: dateText,
@@ -473,16 +423,8 @@ export const ApyChartProvider: FC<{
       let apyDatum = createApyChangeDatum({
         data: weeklyDataMap,
         launchEpoch,
+        decimals: getDecimals,
       })
-
-      if (address === RYETH_ADDRESS) {
-        apyDatum = apyDatum?.map((d) => {
-          d.y = "10.0%"
-          d.value = "10.0"
-
-          return d
-        })
-      }
 
       const series = [
         {
@@ -514,9 +456,6 @@ export const ApyChartProvider: FC<{
         Number(
           apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
         ) / Number(apyDatum?.length)
-      if (address === RYETH_ADDRESS) {
-        average = 10.0
-      }
 
       setApyChange({
         xFormatted: dateText,

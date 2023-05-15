@@ -233,10 +233,7 @@ export const isTokenPriceChartEnabled = (config: ConfigProps) => {
 }
 
 export const isApyChartEnabled = (config: ConfigProps) => {
-  return (
-    config.cellar.key === CellarKey.CELLAR_V2 &&
-    config.cellarNameKey !== CellarNameKey.REAL_YIELD_ETH
-  )
+  return config.cellar.key === CellarKey.CELLAR_V2
 }
 
 export const bondingPeriodOptions = (
