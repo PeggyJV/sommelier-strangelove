@@ -105,8 +105,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             alignItems="flex-end"
           >
             <CardStat
-              label="net value"
-              tooltip="Current value of your assets in Strategy"
+              label="Net Value"
+              tooltip="Net value of assets in the strategy including SOMM rewards"
             >
               {isMounted &&
                 (isConnected ? netValue?.formatted || "..." : "--")}
@@ -114,8 +114,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
             {showNetValueInAsset(cellarConfig) && (
               <CardStat
-                label="Eth Value"
-                tooltip="Total Assets Denominated in ETH"
+                label="Base Asset Value"
+                tooltip="
+                  Total value of assets denominated in base asset ($WETH) excluding SOMM rewards
+                "
               >
                 {isMounted &&
                   (isConnected
