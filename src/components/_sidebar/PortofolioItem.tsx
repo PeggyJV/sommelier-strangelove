@@ -1,6 +1,5 @@
 import { StackProps, HStack, VStack, Text } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { isStrategyUsingEth } from "data/uiConfig"
 import Image from "next/image"
@@ -10,10 +9,8 @@ import { toEther } from "utils/formatCurrency"
 interface PortofolioItemProps extends StackProps {
   icon: string
   title: string
-  netValue: {
-    value: number | string
-    formatted: string
-  }
+  netValueUsd: string
+  netValueInAsset: string
   tokenPrice: {
     value: number | string
     formatted: string
@@ -24,19 +21,15 @@ interface PortofolioItemProps extends StackProps {
 export const PortofolioItem: FC<PortofolioItemProps> = ({
   icon,
   title,
-  netValue,
+  netValueUsd,
+  netValueInAsset,
   tokenPrice,
   slug,
   ...props
 }) => {
   const cellarData = cellarDataMap[slug]
   const { lpToken } = useUserBalances(cellarData.config)
-  const { data: wethPrice } = useCoinGeckoPrice("weth")
   const { data: lpTokenData } = lpToken
-  const formattedNetValue =
-    isStrategyUsingEth(cellarData.config) === "ETH"
-      ? `${Number(netValue.value) * Number(wethPrice)} ETH`
-      : `${netValue.value} USDC`
   return (
     <HStack
       px={8}
@@ -74,7 +67,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
               )} Tokens`}
           </Text>
           <Text fontWeight={500} fontSize={12} color="neutral.400">
-            1 token = {tokenPrice.value}{" "}
+            1 token = {Number(tokenPrice.value)}{" "}
             {isStrategyUsingEth(cellarData.config)} (
             {tokenPrice.formatted})
           </Text>
@@ -88,10 +81,10 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
         textAlign="right"
       >
         <Text as="h6" fontSize={16} fontWeight={700}>
-          {netValue.formatted}
+          {netValueUsd}
         </Text>
         <Text fontWeight={500} fontSize={12} color="neutral.400">
-          {formattedNetValue}
+          {netValueInAsset}
         </Text>
       </VStack>
     </HStack>

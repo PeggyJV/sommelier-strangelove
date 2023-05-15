@@ -180,14 +180,18 @@ export const getStrategyData = async ({
 
       const token = (() => {
         if (hideValue) return
-        if (!subgraphData?.shareValue) return
+        if (!subgraphData) return
 
         if (isRYETH) {
-          getTokenPrice(
-            String(Number(subgraphData!.tvlTotal) * Number(wethPrice))
+          return getTokenPrice(
+            String(Number(subgraphData.shareValue)),
+            subgraphData.asset.decimals
           )
         }
-        return getTokenPrice(subgraphData.shareValue)
+        return getTokenPrice(
+          subgraphData.shareValue,
+          subgraphData.asset.decimals
+        )
       })()
 
       return {

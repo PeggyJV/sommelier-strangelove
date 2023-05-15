@@ -1,11 +1,15 @@
 import { formatDecimals } from "utils/bigNumber"
 import { formatCurrency } from "utils/formatCurrency"
 
-export const getTokenPrice = (shareValue?: string) => {
+export const getTokenPrice = (
+  shareValue?: string,
+  decimals?: number
+) => {
   const calculatedshareValue =
-    shareValue && formatDecimals(shareValue, 6, 4)
+    shareValue && formatDecimals(shareValue, decimals, 4)
   const shareValueFormatted =
-    shareValue && formatCurrency(formatDecimals(shareValue, 6, 2))
+    shareValue &&
+    formatCurrency(formatDecimals(shareValue, decimals, 2))
 
   return {
     value: calculatedshareValue,

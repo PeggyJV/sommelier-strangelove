@@ -27,6 +27,7 @@ export const YourPortofolio = () => {
       formatted: formatted ?? "0",
     }
   }
+
   return (
     <VStack spacing="32px" w="full" mt={16}>
       <TransparentCard
@@ -88,14 +89,14 @@ export const YourPortofolio = () => {
                       strategy.userStrategyData.strategyData?.name ??
                       ""
                     }
-                    netValue={valueAndFormatted({
-                      value:
-                        strategy.userStrategyData.userData?.netValue
-                          .value,
-                      formatted:
-                        strategy.userStrategyData.userData?.netValue
-                          .formatted,
-                    })}
+                    netValueUsd={
+                      strategy.userStrategyData.userData?.netValue
+                        .formatted ?? ""
+                    }
+                    netValueInAsset={
+                      strategy.userStrategyData.userData
+                        ?.netValueInAsset.formatted ?? ""
+                    }
                     tokenPrice={valueAndFormatted({
                       value:
                         strategy.userStrategyData.strategyData?.token
