@@ -1,13 +1,32 @@
-import { Box, HStack, Text, VStack } from "@chakra-ui/react"
+import {
+  Box,
+  Button,
+  Center,
+  HStack,
+  Text,
+  VStack,
+} from "@chakra-ui/react"
+import { ErrorCard } from "components/_cards/ErrorCard"
 import { TransparentCard } from "components/_cards/TransparentCard"
 import { LogoIcon } from "components/_icons"
-import { useHome } from "data/context/homeContext"
+import { LighterSkeleton } from "components/_skeleton"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 import { PortofolioItem } from "./PortofolioItem"
 
 export const YourPortofolio = () => {
   const { data, isLoading, refetch } = useUserDataAllStrategies()
-  const { timeline } = useHome()
+  const valueAndFormatted = ({
+    value,
+    formatted,
+  }: {
+    value?: number | string
+    formatted?: string
+  }) => {
+    return {
+      value: value ?? 0,
+      formatted: formatted ?? "0",
+    }
+  }
   return (
     <VStack spacing="32px" w="full" mt={16}>
       <TransparentCard
@@ -20,14 +39,24 @@ export const YourPortofolio = () => {
           <Text marginX="auto" fontWeight={600} fontSize="16px">
             Your total balance
           </Text>
-          <Text
-            as="h3"
-            fontWeight={700}
-            fontSize="40px"
-            marginX="auto !important"
+          <LighterSkeleton
+            isLoaded={!isLoading}
+            h={isLoading ? "60px" : "auto"}
+            m="auto"
+            w="full"
           >
-            $ 250.000
-          </Text>
+            <Text
+              as="h3"
+              fontWeight={700}
+              fontSize="40px"
+              w="full"
+              textAlign="center"
+              mt="8px"
+              mb="10px"
+            >
+              {data?.totalNetValue.formatted}
+            </Text>
+          </LighterSkeleton>
           <Box
             py="19px"
             px={8}
@@ -40,10 +69,62 @@ export const YourPortofolio = () => {
               Strategy
             </Text>
           </Box>
-          <Box w="100%">
-            <PortofolioItem />
-            <PortofolioItem />
-          </Box>
+          <LighterSkeleton
+            isLoaded={!isLoading}
+            h={isLoading ? "300px" : "auto"}
+            m="auto"
+            w="full"
+          >
+            <Box w="100%">
+              {data ? (
+                data.strategies.map((strategy) => (
+                  <PortofolioItem
+                    key={strategy.userStrategyData.strategyData?.name}
+                    icon={
+                      strategy.userStrategyData.strategyData?.logo ??
+                      ""
+                    }
+                    title={
+                      strategy.userStrategyData.strategyData?.name ??
+                      ""
+                    }
+                    netValue={valueAndFormatted({
+                      value:
+                        strategy.userStrategyData.userData?.netValue
+                          .value,
+                      formatted:
+                        strategy.userStrategyData.userData?.netValue
+                          .formatted,
+                    })}
+                    tokenPrice={valueAndFormatted({
+                      value:
+                        strategy.userStrategyData.strategyData?.token
+                          ?.value,
+                      formatted:
+                        strategy.userStrategyData.strategyData?.token
+                          ?.formatted,
+                    })}
+                    slug={
+                      strategy.userStrategyData.strategyData?.slug ??
+                      ""
+                    }
+                  />
+                ))
+              ) : (
+                <ErrorCard message="" py="100px">
+                  <Center>
+                    <Button
+                      w="100px"
+                      variant="outline"
+                      onClick={() => refetch()}
+                    >
+                      Retry
+                    </Button>
+                  </Center>
+                </ErrorCard>
+              )}
+            </Box>
+          </LighterSkeleton>
           <Box
             py="19px"
             px={8}
@@ -55,43 +136,54 @@ export const YourPortofolio = () => {
               Unclaimed Rewards
             </Text>
           </Box>
-          <HStack
-            px={8}
-            py={4}
-            pl={12}
-            pb={1}
-            borderColor="surface.secondary"
-            w="100%"
-            justifyContent="space-between"
-            alignItems="center"
+          <LighterSkeleton
+            isLoaded={!isLoading}
+            h={isLoading ? "60px" : "auto"}
+            m="auto"
+            w="full"
           >
-            <HStack spacing={4}>
-              <LogoIcon color="red.normal" p={0} boxSize="30px" />
-              <HStack spacing={0} h="100%" alignItems="flex-start">
-                <Text as="h6" fontSize={16} fontWeight={700}>
-                  SOMM
-                </Text>
-              </HStack>
-            </HStack>
-            <VStack
-              spacing={0}
-              h="100%"
-              alignSelf="baseline"
-              alignItems="flex-end"
-              textAlign="right"
+            <HStack
+              px={8}
+              py={4}
+              pl={12}
+              pb={1}
+              borderColor="surface.secondary"
+              w="100%"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              <Text as="h6" fontSize={16} fontWeight={700}>
-                $15.04
-              </Text>
-              <Text
-                fontWeight={500}
-                fontSize={12}
-                color="neutral.400"
+              <HStack spacing={4}>
+                <LogoIcon color="red.normal" p={0} boxSize="30px" />
+                <HStack spacing={0} h="100%" alignItems="flex-start">
+                  <Text as="h6" fontSize={16} fontWeight={700}>
+                    SOMM
+                  </Text>
+                </HStack>
+              </HStack>
+              <VStack
+                spacing={0}
+                h="100%"
+                alignSelf="baseline"
+                alignItems="flex-end"
+                textAlign="right"
               >
-                1,103.00 SOMM
-              </Text>
-            </VStack>
-          </HStack>
+                <Text as="h6" fontSize={16} fontWeight={700}>
+                  {data?.totalSommRewardsInUsd}
+                </Text>
+                <Text
+                  fontWeight={500}
+                  fontSize={12}
+                  color="neutral.400"
+                >
+                  {`${
+                    data?.totalSommRewards.value === 0
+                      ? "0.00"
+                      : data?.totalSommRewards.formatted
+                  } SOMM`}
+                </Text>
+              </VStack>
+            </HStack>
+          </LighterSkeleton>
         </VStack>
       </TransparentCard>
     </VStack>

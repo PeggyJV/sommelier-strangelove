@@ -1,7 +1,42 @@
 import { StackProps, HStack, VStack, Text } from "@chakra-ui/react"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
+import { useUserBalances } from "data/hooks/useUserBalances"
+import { isStrategyUsingEth } from "data/uiConfig"
 import Image from "next/image"
+import { FC } from "react"
+import { toEther } from "utils/formatCurrency"
 
-export const PortofolioItem = (props: StackProps) => {
+interface PortofolioItemProps extends StackProps {
+  icon: string
+  title: string
+  netValue: {
+    value: number | string
+    formatted: string
+  }
+  tokenPrice: {
+    value: number | string
+    formatted: string
+  }
+  slug: string
+}
+
+export const PortofolioItem: FC<PortofolioItemProps> = ({
+  icon,
+  title,
+  netValue,
+  tokenPrice,
+  slug,
+  ...props
+}) => {
+  const cellarData = cellarDataMap[slug]
+  const { lpToken } = useUserBalances(cellarData.config)
+  const { data: wethPrice } = useCoinGeckoPrice("weth")
+  const { data: lpTokenData } = lpToken
+  const formattedNetValue =
+    isStrategyUsingEth(cellarData.config) === "ETH"
+      ? `${Number(netValue.value) * Number(wethPrice)} ETH`
+      : `${netValue.value} USDC`
   return (
     <HStack
       px={8}
@@ -13,28 +48,38 @@ export const PortofolioItem = (props: StackProps) => {
       alignItems="center"
       {...props}
     >
-      <Image
-        height={45}
-        width={45}
-        src={"/assets/icons/defi-stars.png"}
-        alt="strategy icon"
-      />
-      <VStack
-        spacing={0}
-        h="100%"
-        alignSelf="baseline"
-        alignItems="flex-start"
-      >
-        <Text as="h6" fontSize={16} fontWeight={700}>
-          Real Yield USD
-        </Text>
-        <Text fontWeight={500} fontSize={12} color="neutral.400">
-          984.00 Tokens
-        </Text>
-        <Text fontWeight={500} fontSize={12} color="neutral.400">
-          1 token = 1.03 USDC ($1.03)
-        </Text>
-      </VStack>
+      <HStack>
+        <Image
+          height={45}
+          width={45}
+          src={icon}
+          alt="strategy icon"
+        />
+        <VStack
+          spacing={0}
+          h="100%"
+          alignSelf="baseline"
+          alignItems="flex-start"
+        >
+          <Text as="h6" fontSize={16} fontWeight={700}>
+            {title}
+          </Text>
+          <Text fontWeight={500} fontSize={12} color="neutral.400">
+            {lpTokenData &&
+              `${toEther(
+                lpTokenData.formatted,
+                lpTokenData.decimals,
+                true,
+                2
+              )} Tokens`}
+          </Text>
+          <Text fontWeight={500} fontSize={12} color="neutral.400">
+            1 token = {tokenPrice.value}{" "}
+            {isStrategyUsingEth(cellarData.config)} (
+            {tokenPrice.formatted})
+          </Text>
+        </VStack>
+      </HStack>
       <VStack
         spacing={0}
         h="100%"
@@ -43,10 +88,10 @@ export const PortofolioItem = (props: StackProps) => {
         textAlign="right"
       >
         <Text as="h6" fontSize={16} fontWeight={700}>
-          $1,103.00
+          {netValue.formatted}
         </Text>
         <Text fontWeight={500} fontSize={12} color="neutral.400">
-          1,103.00 USDC
+          {formattedNetValue}
         </Text>
       </VStack>
     </HStack>
