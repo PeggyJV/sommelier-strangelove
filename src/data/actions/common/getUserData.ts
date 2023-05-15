@@ -1,15 +1,12 @@
 import { fetchBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
-import { ConfigProps, StakerKey } from "data/types"
+import { CellarNameKey, ConfigProps, StakerKey } from "data/types"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { CellarStakingV0815 } from "src/abi/types"
 import { formatDecimals } from "utils/bigNumber"
-import { config } from "utils/config"
 import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
-
-const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const getUserData = async ({
   address,
@@ -42,7 +39,7 @@ export const getUserData = async ({
       // Use subgraph data to determine number of decimals from the underlying asset
       // cellar.asset.decimals
       let decimals = 6
-      if (address === RYETH_ADDRESS) {
+      if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
         decimals = 18
       }
       const price = formatDecimals(
@@ -51,7 +48,7 @@ export const getUserData = async ({
         2
       )
 
-      return address === RYETH_ADDRESS
+      return config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
         ? Number(price) * Number(wethPrice)
         : Number(price)
     })()
@@ -87,8 +84,8 @@ export const getUserData = async ({
       : 0
 
     const sommRewardsRaw = userStakes
-      ? address === RYETH_ADDRESS
-        ? userStakes.claimAllRewardsUSD.toNumber() * Number(wethPrice)
+      ? config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+        ? userStakes.claimAllRewardsUSD.toNumber() / Number(wethPrice)
         : userStakes.claimAllRewardsUSD.toNumber()
       : 0
 
@@ -135,7 +132,7 @@ export const getUserData = async ({
         netValueInAsset: {
           value: netValueInAsset,
           formatted: netValueInAsset
-            ? `${netValueInAsset.toFixed(2)} ${
+            ? `${netValueInAsset.toFixed(5)} ${
                 subgraphData?.asset.symbol
               }`
             : "--",
