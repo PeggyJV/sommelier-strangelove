@@ -1,12 +1,11 @@
 import { fetchBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
-import { ethers } from "ethers"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { CellarStakingV0815 } from "src/abi/types"
 import { formatDecimals } from "utils/bigNumber"
 import { config } from "utils/config"
-import { formatUSD, toEther } from "utils/formatCurrency"
+import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
 
@@ -126,11 +125,6 @@ export const getUserData = async ({
       )
     })()
 
-    const netValueInDecimals = ethers.utils.parseUnits(
-      netValueInAsset ? netValueInAsset.toString() : "0",
-      subgraphData?.asset.decimals
-    )
-
     const userStrategyData = {
       strategyData,
       userData: {
@@ -141,11 +135,9 @@ export const getUserData = async ({
         netValueInAsset: {
           value: netValueInAsset,
           formatted: netValueInAsset
-            ? `${toEther(
-                netValueInDecimals.toString(),
-                subgraphData?.asset.decimals,
-                netValueInAsset > 0 ? 5 : 2
-              )} ${subgraphData?.asset.symbol}`
+            ? `${netValueInAsset.toFixed(2)} ${
+                subgraphData?.asset.symbol
+              }`
             : "--",
         },
         claimableSommReward:
