@@ -10,7 +10,7 @@ import { fetchBalance } from "@wagmi/core"
 import { config } from "utils/config"
 
 import BigNumber from "bignumber.js"
-import { BigNumber as EthersBignumber } from "ethers"
+import { BigNumber as EthersBignumber, ethers } from "ethers"
 const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const getUserData = async ({
@@ -89,7 +89,10 @@ export const getUserData = async ({
       : 0
 
     const sommRewardsRaw = userStakes
-      ? userStakes?.totalClaimAllRewards.value.toNumber()
+      ? ethers.utils.formatUnits(
+          userStakes?.totalClaimAllRewards.value.toNumber(),
+          subgraphData?.asset.decimals
+        )
       : 0
 
     const userShares =
@@ -106,7 +109,7 @@ export const getUserData = async ({
       ) {
         return undefined
       }
-      return userShares + bonded + sommRewardsRaw
+      return userShares + bonded + Number(sommRewardsRaw)
     })()
 
     const netValue = (() => {
@@ -125,10 +128,11 @@ export const getUserData = async ({
       )
     })()
 
-    const netValueInDecimals = netValueInAsset
-      ? netValueInAsset * 10 ** (subgraphData?.asset.decimals || 6)
-      : 0
-    console.log("calculateNetValue", netValueInDecimals)
+    const netValueInDecimals = ethers.utils.parseUnits(
+      netValueInAsset ? netValueInAsset.toString() : "0",
+      subgraphData?.asset.decimals
+    )
+
     const userStrategyData = {
       strategyData,
       userData: {
