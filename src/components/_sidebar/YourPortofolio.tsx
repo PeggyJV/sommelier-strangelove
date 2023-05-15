@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   HStack,
+  Link,
   Text,
   VStack,
 } from "@chakra-ui/react"
@@ -37,7 +38,12 @@ export const YourPortofolio = () => {
         pt={3}
       >
         <VStack alignItems="flex-start" w="100%" spacing={0}>
-          <Text marginX="auto" fontWeight={600} fontSize="16px">
+          <Text
+            marginX="auto"
+            fontWeight={600}
+            fontSize="16px"
+            mt={3}
+          >
             Your total balance
           </Text>
           <LighterSkeleton
@@ -52,7 +58,6 @@ export const YourPortofolio = () => {
               fontSize="40px"
               w="full"
               textAlign="center"
-              mt="8px"
               mb="10px"
             >
               {data?.totalNetValue.formatted}
@@ -108,6 +113,10 @@ export const YourPortofolio = () => {
                     slug={
                       strategy.userStrategyData.strategyData?.slug ??
                       ""
+                    }
+                    description={
+                      strategy.userStrategyData.strategyData
+                        ?.description ?? ""
                     }
                   />
                 ))
@@ -169,7 +178,7 @@ export const YourPortofolio = () => {
                 textAlign="right"
               >
                 <Text as="h6" fontSize={16} fontWeight={700}>
-                  {data?.totalSommRewardsInUsd}
+                  ${data?.totalSommRewardsInUsd.toFixed(2)}
                 </Text>
                 <Text
                   fontWeight={500}

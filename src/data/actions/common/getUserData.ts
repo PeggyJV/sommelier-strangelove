@@ -1,6 +1,7 @@
 import { fetchBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { CellarNameKey, ConfigProps, StakerKey } from "data/types"
+import { showNetValueInAsset } from "data/uiConfig"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { CellarStakingV0815 } from "src/abi/types"
 import { formatDecimals } from "utils/bigNumber"
@@ -132,9 +133,9 @@ export const getUserData = async ({
         netValueInAsset: {
           value: netValueInAsset,
           formatted: netValueInAsset
-            ? `${netValueInAsset.toFixed(5)} ${
-                subgraphData?.asset.symbol
-              }`
+            ? `${netValueInAsset.toFixed(
+                showNetValueInAsset(config) ? 5 : 2
+              )} ${subgraphData?.asset.symbol}`
             : "--",
         },
         claimableSommReward:
