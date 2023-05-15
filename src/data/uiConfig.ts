@@ -376,3 +376,10 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   }
   return "Base APY"
 }
+
+export const showNetValueInAsset = (config: ConfigProps) => {
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
+    return true
+  }
+  return false
+}

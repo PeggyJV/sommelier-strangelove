@@ -28,6 +28,7 @@ import {
   isBondingEnabled,
   isRewardsEnabled,
   lpTokenTooltipContent,
+  showNetValueInAsset,
 } from "data/uiConfig"
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
@@ -75,6 +76,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
+  const valueInAssets =
+    userData?.userStrategyData.userData?.netValueInAsset
 
   return (
     <TransparentCard
@@ -108,6 +111,18 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               {isMounted &&
                 (isConnected ? netValue?.formatted || "..." : "--")}
             </CardStat>
+
+            {showNetValueInAsset(cellarConfig) && (
+              <CardStat
+                label="Eth Value"
+                tooltip="Total Assets Denominated in ETH"
+              >
+                {isMounted &&
+                  (isConnected
+                    ? valueInAssets?.formatted || "..."
+                    : "--")}
+              </CardStat>
+            )}
 
             <CardStat
               label="deposit assets"
