@@ -85,6 +85,13 @@ export const YourPortofolio = () => {
               {data ? (
                 data.strategies.map((strategy) => (
                   <PortofolioItem
+                    symbol={
+                      strategy.userStrategyData.userData.symbol || ""
+                    }
+                    bondedToken={Number(
+                      strategy?.userStakes?.totalBondedAmount.value ??
+                        0
+                    )}
                     key={strategy.userStrategyData.strategyData?.name}
                     icon={
                       strategy.userStrategyData.strategyData?.logo ??
@@ -95,12 +102,13 @@ export const YourPortofolio = () => {
                       ""
                     }
                     netValueUsd={
-                      strategy.userStrategyData.userData?.netValue
-                        .formatted ?? ""
+                      strategy.userStrategyData.userData
+                        ?.valueWithoutRewards.formatted ?? ""
                     }
                     netValueInAsset={
                       strategy.userStrategyData.userData
-                        ?.netValueInAsset.formatted ?? ""
+                        ?.netValueWithoutRewardsInAsset.formatted ??
+                      ""
                     }
                     tokenPrice={valueAndFormatted({
                       value:

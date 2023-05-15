@@ -107,6 +107,20 @@ export const getUserData = async ({
       return userShares + bonded + Number(sommRewardsRaw)
     })()
 
+    const netValueWithoutRewardsInAsset = (() => {
+      if (
+        Boolean(subgraphData?.shareValue)
+          ? shares === undefined ||
+            userStakes === undefined ||
+            bonded === undefined ||
+            !subgraphData?.shareValue
+          : false
+      ) {
+        return undefined
+      }
+      return userShares + bonded
+    })()
+
     const netValue = (() => {
       if (
         Boolean(subgraphData?.shareValue)
@@ -121,6 +135,20 @@ export const getUserData = async ({
       return (
         userShares * tokenPrice + bonded * tokenPrice + sommRewardsUSD
       )
+    })()
+
+    const netValueWithoutRewards = (() => {
+      if (
+        Boolean(subgraphData?.shareValue)
+          ? shares === undefined ||
+            userStakes === undefined ||
+            bonded === undefined ||
+            !subgraphData?.shareValue
+          : false
+      ) {
+        return undefined
+      }
+      return userShares * tokenPrice + bonded * tokenPrice
     })()
 
     const userStrategyData = {
@@ -138,9 +166,22 @@ export const getUserData = async ({
               )} ${subgraphData?.asset.symbol}`
             : "--",
         },
+        netValueWithoutRewardsInAsset: {
+          value: netValueWithoutRewardsInAsset,
+          formatted: netValueWithoutRewardsInAsset
+            ? `${netValueWithoutRewardsInAsset.toFixed(
+                showNetValueInAsset(config) ? 5 : 2
+              )} ${subgraphData?.asset.symbol}`
+            : "--",
+        },
+        valueWithoutRewards: {
+          value: netValueWithoutRewards,
+          formatted: formatUSD(String(netValueWithoutRewards)),
+        },
         claimableSommReward:
           userStakes?.totalClaimAllRewards || undefined,
         userStakes,
+        symbol: subgraphData?.asset.symbol,
       },
     }
 

@@ -13,9 +13,11 @@ import { isStrategyUsingEth } from "data/uiConfig"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { FC } from "react"
-import { toEther } from "utils/formatCurrency"
+import { formatUSD, toEther } from "utils/formatCurrency"
 import { DIRECT, landingType } from "utils/landingType"
 import { analytics } from "utils/analytics"
+import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
+import { CellarNameKey } from "data/types"
 
 interface PortofolioItemProps extends StackProps {
   icon: string
@@ -26,8 +28,10 @@ interface PortofolioItemProps extends StackProps {
     value: number | string
     formatted: string
   }
+  bondedToken: number
   slug: string
   description: string
+  symbol: string
 }
 
 export const PortofolioItem: FC<PortofolioItemProps> = ({
@@ -38,12 +42,16 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
   tokenPrice,
   slug,
   description,
+  bondedToken,
+  symbol,
   ...props
 }) => {
-  console.log(netValueInAsset)
   const cellarData = cellarDataMap[slug]
   const { lpToken } = useUserBalances(cellarData.config)
   const { data: lpTokenData } = lpToken
+  const { data: wethPrice } = useCoinGeckoPrice("weth")
+  const { data: usdcPrice } = useCoinGeckoPrice("usd-coin")
+
   const router = useRouter()
   return (
     <Tooltip
@@ -116,16 +124,27 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             <Text fontWeight={500} fontSize={12} color="neutral.400">
               {lpTokenData &&
                 `${toEther(
-                  lpTokenData.formatted,
+                  (
+                    Number(lpTokenData?.value) + bondedToken
+                  ).toString(),
                   lpTokenData.decimals,
                   true,
                   2
                 )} Tokens`}
             </Text>
             <Text fontWeight={500} fontSize={12} color="neutral.400">
-              1 token = {Number(tokenPrice.value).toFixed(3)}{" "}
-              {isStrategyUsingEth(cellarData.config)} (
-              {tokenPrice.formatted})
+              1 token = {Number(tokenPrice.value).toFixed(3)} {symbol}{" "}
+              (
+              {formatUSD(
+                (
+                  Number(tokenPrice.value) *
+                  (cellarData?.config?.cellarNameKey ===
+                  CellarNameKey.REAL_YIELD_ETH
+                    ? Number(wethPrice)
+                    : Number(usdcPrice))
+                ).toString()
+              )}
+              )
             </Text>
           </VStack>
         </Stack>
