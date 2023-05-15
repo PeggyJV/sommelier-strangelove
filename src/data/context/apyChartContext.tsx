@@ -1,10 +1,10 @@
 import { LineProps, Serie } from "@nivo/line"
 import { cellarDataMap } from "data/cellarDataMap"
+import { useStrategyData } from "data/hooks/useStrategyData"
 import { format, subDays } from "date-fns"
 import {
   useGetAllTimeShareValueQuery,
   useGetMonthlyShareValueQuery,
-  useGetStrategyDataQuery,
   useGetWeeklyShareValueQuery,
 } from "generated/subgraph"
 import {
@@ -23,9 +23,6 @@ import {
   getPreviousWeek,
 } from "utils/calculateTime"
 import { createApyChangeDatum } from "utils/chartHelper"
-import { config } from "utils/config"
-
-const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export interface DataProps {
   series?: Serie[]
@@ -166,10 +163,9 @@ export const ApyChartProvider: FC<{
     (item) => item.config.cellar.address === address
   )
   const launchDate = cellarData?.launchDate!
-  const [{ data: sgData }] = useGetStrategyDataQuery({
-    variables: { cellarAddress: address.toLowerCase() },
-  })
-  const getDecimals = sgData?.cellar?.asset.decimals ?? 18
+  const { data: strategyData, isLoading: isStrategyDataLoading } =
+    useStrategyData(cellarData!.config.cellar.address)
+  const decimals = strategyData?.activeAsset?.decimals ?? 6
 
   const [
     {
@@ -235,7 +231,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: getDecimals,
+      decimals: decimals,
     })
 
     const series = [
@@ -290,7 +286,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: getDecimals,
+      decimals: decimals,
     })
     const series = [
       {
@@ -339,7 +335,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: getDecimals,
+      decimals: decimals,
     })
     const series = [
       {
@@ -393,7 +389,10 @@ export const ApyChartProvider: FC<{
 
   // Grouped loading state
   const isFetching =
-    weeklyIsFetching || monthlyIsFetching || allTimeIsFetching
+    weeklyIsFetching ||
+    monthlyIsFetching ||
+    allTimeIsFetching ||
+    isStrategyDataLoading
 
   const isError = !!weeklyError || !!monthlyError || !!allTimeError
 
@@ -413,7 +412,7 @@ export const ApyChartProvider: FC<{
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
-    if (weeklyData && idIsDefault) {
+    if (weeklyData && idIsDefault && strategyData) {
       const weeklyDataMap = weeklyData?.map((item) => {
         return {
           date: item.date,
@@ -423,7 +422,7 @@ export const ApyChartProvider: FC<{
       let apyDatum = createApyChangeDatum({
         data: weeklyDataMap,
         launchEpoch,
-        decimals: getDecimals,
+        decimals: decimals,
       })
 
       const series = [
@@ -463,7 +462,7 @@ export const ApyChartProvider: FC<{
         average: average.toFixed(1) + "%",
       })
     }
-  }, [weeklyData, data, launchEpoch])
+  }, [weeklyData, data, launchEpoch, strategyData])
 
   const dataC = {
     ...data,
