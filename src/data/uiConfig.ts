@@ -380,7 +380,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
 export const showNetValueInAsset = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.DEFI_STARS
   ) {
     return true
   }

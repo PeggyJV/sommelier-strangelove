@@ -8,8 +8,9 @@ import { GetStrategyDataQuery } from "generated/subgraph"
 import { formatDecimals } from "utils/bigNumber"
 import { fetchBalance } from "@wagmi/core"
 import { config } from "utils/config"
-import { BigNumber } from "ethers"
 
+import BigNumber from "bignumber.js"
+import { BigNumber as EthersBignumber } from "ethers"
 const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const getUserData = async ({
@@ -124,6 +125,10 @@ export const getUserData = async ({
       )
     })()
 
+    const netValueInDecimals = netValueInAsset
+      ? netValueInAsset * 10 ** (subgraphData?.asset.decimals || 6)
+      : 0
+    console.log("calculateNetValue", netValueInDecimals)
     const userStrategyData = {
       strategyData,
       userData: {
@@ -135,7 +140,7 @@ export const getUserData = async ({
           value: netValueInAsset,
           formatted: netValueInAsset
             ? `${toEther(
-                BigNumber.from(String(netValueInAsset)),
+                netValueInDecimals.toString(),
                 subgraphData?.asset.decimals,
                 netValueInAsset > 0 ? 5 : 2
               )} ${subgraphData?.asset.symbol}`
