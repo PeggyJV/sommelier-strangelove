@@ -1,4 +1,5 @@
 import {
+  Avatar,
   BoxProps,
   Heading,
   Image,
@@ -115,9 +116,21 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             {showNetValueInAsset(cellarConfig) && (
               <CardStat
                 label="Base Asset Value"
-                tooltip="
-                  Total value of assets denominated in base asset ($WETH) excluding SOMM rewards
-                "
+                tooltip={
+                  <Text>
+                    Total value of assets denominated in base asset
+                    <Avatar
+                      ml="-2.5px"
+                      boxSize={6}
+                      src={activeAsset?.src}
+                      name={activeAsset?.alt}
+                      borderWidth={2}
+                      borderColor="surface.bg"
+                      bg="surface.bg"
+                    />
+                    {activeAsset?.symbol}. excluding SOMM rewards
+                  </Text>
+                }
               >
                 {isMounted &&
                   (isConnected
