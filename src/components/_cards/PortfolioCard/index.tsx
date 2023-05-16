@@ -1,4 +1,5 @@
 import {
+  Avatar,
   BoxProps,
   Heading,
   Image,
@@ -28,6 +29,7 @@ import {
   isBondingEnabled,
   isRewardsEnabled,
   lpTokenTooltipContent,
+  showNetValueInAsset,
 } from "data/uiConfig"
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
@@ -75,6 +77,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
+  const valueInAssets =
+    userData?.userStrategyData.userData?.netValueInAsset
 
   return (
     <TransparentCard
@@ -102,12 +106,38 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             alignItems="flex-end"
           >
             <CardStat
-              label="net value"
-              tooltip="Current value of your assets in Strategy"
+              label="Net Value"
+              tooltip="Net value of assets in the strategy including SOMM rewards"
             >
               {isMounted &&
                 (isConnected ? netValue?.formatted || "..." : "--")}
             </CardStat>
+
+            {showNetValueInAsset(cellarConfig) && (
+              <CardStat
+                label="Base Asset Value"
+                tooltip={
+                  <Text>
+                    Total value of assets denominated in base asset
+                    <Avatar
+                      ml="-2.5px"
+                      boxSize={6}
+                      src={activeAsset?.src}
+                      name={activeAsset?.alt}
+                      borderWidth={2}
+                      borderColor="surface.bg"
+                      bg="surface.bg"
+                    />
+                    {activeAsset?.symbol}. excluding SOMM rewards
+                  </Text>
+                }
+              >
+                {isMounted &&
+                  (isConnected
+                    ? valueInAssets?.formatted || "..."
+                    : "--")}
+              </CardStat>
+            )}
 
             <CardStat
               label="deposit assets"

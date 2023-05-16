@@ -227,15 +227,13 @@ export const isTokenPriceChartEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+    config.cellarNameKey === CellarNameKey.DEFI_STARS
   )
 }
 
 export const isApyChartEnabled = (config: ConfigProps) => {
-  return (
-    config.cellar.key === CellarKey.CELLAR_V2 &&
-    config.cellarNameKey !== CellarNameKey.REAL_YIELD_ETH
-  )
+  return config.cellar.key === CellarKey.CELLAR_V2
 }
 
 export const bondingPeriodOptions = (
@@ -375,4 +373,11 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     return "APY denominated in ETH"
   }
   return "Base APY"
+}
+
+export const showNetValueInAsset = (config: ConfigProps) => {
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
+    return true
+  }
+  return false
 }

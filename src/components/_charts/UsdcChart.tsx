@@ -137,7 +137,11 @@ export const UsdcChart: VFC<UsdcChartProps> = ({
         axisBottom: {
           format: "%d.%b",
           tickValues:
-            timeline === "1W" ? "every 1 day" : "every 2 days",
+            timeline === "1W"
+              ? "every 1 day"
+              : isLarger768
+              ? "every 2 days"
+              : "every 5 days",
         },
       }
     }
