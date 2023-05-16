@@ -190,6 +190,54 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
         max: "auto",
         min: "auto",
       }}
+      axisBottom={{
+        renderTick: (tick) => {
+          const day = tick.value.getDate()
+          const month = tick.value.toLocaleString("default", {
+            month: "short",
+          })
+          if (timeline === "1W") {
+            return (
+              <g transform={`translate(${tick.x},${tick.y + 20})`}>
+                <text
+                  x={0}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={{
+                    fill: "white",
+                    fontSize: 12,
+                    fontWeight: 600,
+                  }}
+                >
+                  {format(new Date(String(tick.value)), "MMM, d")}
+                </text>
+              </g>
+            )
+          }
+          return (
+            <g transform={`translate(${tick.x},${tick.y + 20})`}>
+              <text
+                x={0}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                style={{
+                  fill: "white",
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
+                <tspan x="0" dy="0">
+                  {day}
+                </tspan>
+                <tspan x="0" dy="15">
+                  {month}
+                </tspan>
+              </text>
+            </g>
+          )
+        },
+        ...hourlyAxisBottom.axisBottom,
+      }}
       axisLeft={{
         tickRotation: 0,
         legendPosition: "middle",
