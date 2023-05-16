@@ -147,14 +147,6 @@ export const getUserData = async ({
       return (userShares + bonded) * tokenPrice
     })()
 
-    console.log(
-      "netValueWithoutRewards",
-      netValueWithoutRewards,
-      tokenPrice,
-      userShares,
-      bonded
-    )
-
     const userStrategyData = {
       strategyData,
       userData: {
