@@ -1,6 +1,7 @@
 import { fetchBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { CellarNameKey, ConfigProps, StakerKey } from "data/types"
+import { showNetValueInAsset } from "data/uiConfig"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { CellarStakingV0815 } from "src/abi/types"
 import { formatDecimals } from "utils/bigNumber"
@@ -42,11 +43,7 @@ export const getUserData = async ({
       if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
         decimals = 18
       }
-      const price = formatDecimals(
-        subgraphData.shareValue,
-        decimals,
-        2
-      )
+      const price = formatDecimals(subgraphData.shareValue, decimals)
 
       return config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
         ? Number(price) * Number(wethPrice)
@@ -106,6 +103,20 @@ export const getUserData = async ({
       return userShares + bonded + Number(sommRewardsRaw)
     })()
 
+    const netValueWithoutRewardsInAsset = (() => {
+      if (
+        Boolean(subgraphData?.shareValue)
+          ? shares === undefined ||
+            userStakes === undefined ||
+            bonded === undefined ||
+            !subgraphData?.shareValue
+          : false
+      ) {
+        return undefined
+      }
+      return userShares + bonded
+    })()
+
     const netValue = (() => {
       if (
         Boolean(subgraphData?.shareValue)
@@ -122,6 +133,28 @@ export const getUserData = async ({
       )
     })()
 
+    const netValueWithoutRewards = (() => {
+      if (
+        Boolean(subgraphData?.shareValue)
+          ? shares === undefined ||
+            userStakes === undefined ||
+            bonded === undefined ||
+            !subgraphData?.shareValue
+          : false
+      ) {
+        return undefined
+      }
+      return (userShares + bonded) * tokenPrice
+    })()
+
+    console.log(
+      "netValueWithoutRewards",
+      netValueWithoutRewards,
+      tokenPrice,
+      userShares,
+      bonded
+    )
+
     const userStrategyData = {
       strategyData,
       userData: {
@@ -132,14 +165,27 @@ export const getUserData = async ({
         netValueInAsset: {
           value: netValueInAsset,
           formatted: netValueInAsset
-            ? `${netValueInAsset.toFixed(5)} ${
-                subgraphData?.asset.symbol
-              }`
+            ? `${netValueInAsset.toFixed(
+                showNetValueInAsset(config) ? 5 : 2
+              )} ${subgraphData?.asset.symbol}`
             : "--",
+        },
+        netValueWithoutRewardsInAsset: {
+          value: netValueWithoutRewardsInAsset,
+          formatted: netValueWithoutRewardsInAsset
+            ? `${netValueWithoutRewardsInAsset.toFixed(
+                showNetValueInAsset(config) ? 5 : 2
+              )} ${subgraphData?.asset.symbol}`
+            : "--",
+        },
+        valueWithoutRewards: {
+          value: netValueWithoutRewards,
+          formatted: formatUSD(String(netValueWithoutRewards)),
         },
         claimableSommReward:
           userStakes?.totalClaimAllRewards || undefined,
         userStakes,
+        symbol: subgraphData?.asset.symbol,
       },
     }
 

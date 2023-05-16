@@ -73,6 +73,17 @@ export const getUserDataAllStrategies = async ({
         : 0)
     )
   }, 0)
+
+  const totalSommRewardsInUsd = userData.reduce((total, item) => {
+    return (
+      total +
+      (item
+        ? item.userStakes
+          ? item.userStakes.claimAllRewardsUSD.toNumber()
+          : 0
+        : 0)
+    )
+  }, 0)
   type Data = Awaited<ReturnType<typeof getUserData>>
   const isData = (item: Data | undefined): item is Data => {
     return Number(item?.netValue) > 0
@@ -88,6 +99,7 @@ export const getUserDataAllStrategies = async ({
       value: totalSommRewards,
       formatted: toEther(totalSommRewards, 6, false, 2),
     },
+    totalSommRewardsInUsd,
     strategies: cleanData,
   }
 
