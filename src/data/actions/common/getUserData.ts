@@ -82,15 +82,15 @@ export const getUserData = async ({
     const sommRewardsUSD = userStakes
       ? userStakes.claimAllRewardsUSD.toNumber()
       : 0
-
     const sommRewardsRaw = userStakes
       ? config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-        ? userStakes.claimAllRewardsUSD.toNumber() / Number(wethPrice)
+        ? userStakes.claimAllRewardsUSD.toNumber() /
+          parseFloat(wethPrice)
         : userStakes.claimAllRewardsUSD.toNumber()
       : 0
 
     const userShares =
-      (shares && Number(Number(shares.formatted).toFixed(2))) || 0
+      (shares && Number(Number(shares.formatted).toFixed(5))) || 0
 
     const netValueInAsset = (() => {
       if (
