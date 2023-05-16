@@ -128,9 +128,11 @@ export const formatPercentage = (value: string) => {
 export const createApyChangeDatum = ({
   launchEpoch,
   data,
+  decimals,
 }: {
   launchEpoch: number
   data?: { date: number; shareValue: string }[]
+  decimals: number
 }): Datum[] | undefined => {
   if (!data) return
   let datum: Datum[] = []
@@ -143,7 +145,7 @@ export const createApyChangeDatum = ({
     const daysSince = Math.abs(differenceInDays(current, launchDate))
 
     const currentValue = Number(item.shareValue)
-    const startValue = 1000000 // 1 as 6 decimals
+    const startValue = 10 ** decimals
     const yieldGain = (currentValue - startValue) / startValue
     const apy = yieldGain * (365 / daysSince) * 100
     datum.push({
