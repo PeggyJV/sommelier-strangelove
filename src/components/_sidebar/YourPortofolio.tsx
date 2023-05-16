@@ -3,7 +3,6 @@ import {
   Button,
   Center,
   HStack,
-  Link,
   Text,
   VStack,
 } from "@chakra-ui/react"
@@ -107,8 +106,7 @@ export const YourPortofolio = () => {
                     }
                     netValueInAsset={
                       strategy.userStrategyData.userData
-                        ?.netValueWithoutRewardsInAsset.formatted ??
-                      ""
+                        ?.netValueWithoutRewardsInAsset.value ?? 0
                     }
                     tokenPrice={valueAndFormatted({
                       value:

@@ -43,11 +43,7 @@ export const getUserData = async ({
       if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
         decimals = 18
       }
-      const price = formatDecimals(
-        subgraphData.shareValue,
-        decimals,
-        2
-      )
+      const price = formatDecimals(subgraphData.shareValue, decimals)
 
       return config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
         ? Number(price) * Number(wethPrice)
@@ -148,8 +144,16 @@ export const getUserData = async ({
       ) {
         return undefined
       }
-      return userShares * tokenPrice + bonded * tokenPrice
+      return (userShares + bonded) * tokenPrice
     })()
+
+    console.log(
+      "netValueWithoutRewards",
+      netValueWithoutRewards,
+      tokenPrice,
+      userShares,
+      bonded
+    )
 
     const userStrategyData = {
       strategyData,

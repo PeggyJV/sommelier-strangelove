@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useUserBalances } from "data/hooks/useUserBalances"
-import { isStrategyUsingEth } from "data/uiConfig"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { FC } from "react"
@@ -18,12 +17,13 @@ import { DIRECT, landingType } from "utils/landingType"
 import { analytics } from "utils/analytics"
 import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
 import { CellarNameKey } from "data/types"
+import { showNetValueInAsset } from "data/uiConfig"
 
 interface PortofolioItemProps extends StackProps {
   icon: string
   title: string
   netValueUsd: string
-  netValueInAsset: string
+  netValueInAsset: number
   tokenPrice: {
     value: number | string
     formatted: string
@@ -47,11 +47,22 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
   ...props
 }) => {
   const cellarData = cellarDataMap[slug]
+
   const { lpToken } = useUserBalances(cellarData.config)
   const { data: lpTokenData } = lpToken
-  const { data: wethPrice } = useCoinGeckoPrice("weth")
-  const { data: usdcPrice } = useCoinGeckoPrice("usd-coin")
-
+  const token = () => {
+    switch (symbol) {
+      case "WETH":
+        return "weth"
+      case "USDC":
+        return "usd-coin"
+      case "USDT":
+        return "tether"
+      default:
+        return "weth"
+    }
+  }
+  const { data: coinGeckoPrice } = useCoinGeckoPrice(token())
   const router = useRouter()
   return (
     <Tooltip
@@ -134,17 +145,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             </Text>
             <Text fontWeight={500} fontSize={12} color="neutral.400">
               1 token = {Number(tokenPrice.value).toFixed(3)} {symbol}{" "}
-              (
-              {formatUSD(
-                (
-                  Number(tokenPrice.value) *
-                  (cellarData?.config?.cellarNameKey ===
-                  CellarNameKey.REAL_YIELD_ETH
-                    ? Number(wethPrice)
-                    : Number(usdcPrice))
-                ).toString()
-              )}
-              )
+              ({formatUSD(coinGeckoPrice?.toString(), 4)})
             </Text>
           </VStack>
         </Stack>
@@ -159,7 +160,10 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             {netValueUsd}
           </Text>
           <Text fontWeight={500} fontSize={12} color="neutral.400">
-            {netValueInAsset}
+            {(netValueInAsset * Number(tokenPrice.value)).toFixed(
+              showNetValueInAsset(cellarData.config) ? 5 : 2
+            )}
+            {symbol}
           </Text>
         </VStack>
       </HStack>
