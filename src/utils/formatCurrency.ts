@@ -13,14 +13,14 @@ export const formatCurrency = (value?: string) => {
   return v
 }
 
-export const formatUSD = (value?: string) => {
+export const formatUSD = (value?: string, maximumDigit?: number) => {
   const v =
     value &&
     Intl.NumberFormat("en-US", {
       notation: "compact",
       style: "currency",
       currency: "USD",
-      maximumFractionDigits: 2,
+      maximumFractionDigits: maximumDigit || 2,
       minimumFractionDigits: 2,
     }).format(parseFloat(value))
 

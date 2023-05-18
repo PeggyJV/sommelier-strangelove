@@ -20,6 +20,7 @@ import { getChanges } from "./getChanges"
 import { getPositon } from "./getPosition"
 import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
+import { getTokenPrice } from "./getTokenPrice"
 
 const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
@@ -177,6 +178,22 @@ export const getStrategyData = async ({
         return `$${price}`
       })()
 
+      const token = (() => {
+        if (hideValue) return
+        if (!subgraphData) return
+
+        if (isRYETH) {
+          return getTokenPrice(
+            String(Number(subgraphData.shareValue)),
+            subgraphData.asset.decimals
+          )
+        }
+        return getTokenPrice(
+          subgraphData.shareValue,
+          subgraphData.asset.decimals
+        )
+      })()
+
       return {
         activeAsset,
         address,
@@ -200,6 +217,7 @@ export const getStrategyData = async ({
         type,
         stakingLaunchDate,
         deprecated,
+        token,
       }
     } catch (e) {
       console.error(address, e)
