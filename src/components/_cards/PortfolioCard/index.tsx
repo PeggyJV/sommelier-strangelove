@@ -35,7 +35,7 @@ import {
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
-import { useMemo, VFC } from "react"
+import { VFC } from "react"
 import { formatDecimals } from "utils/bigNumber"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
