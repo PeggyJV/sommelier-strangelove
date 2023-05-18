@@ -12,7 +12,6 @@ export const getPreviewRedeem = async ({
   try {
     const convertedValue = ethers.utils.parseUnits(`${value}`, 18)
     const shares = await cellarContract.previewRedeem(convertedValue)
-    console.log("Shares", shares)
     return {
       value: shares,
     }
