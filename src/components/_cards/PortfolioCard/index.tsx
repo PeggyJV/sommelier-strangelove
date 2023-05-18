@@ -80,12 +80,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
 
-  const valueInAssets = useMemo(() => {
-    return userData?.userStrategyData.userData?.netValueInAsset
-  }, [userData?.userStrategyData.userData?.netValueInAsset])
-  const staticCelarConfig = useMemo(() => {
-    return cellarConfig
-  }, [cellarConfig])
+  const valueInAssets =
+    userData?.userStrategyData.userData?.netValueInAsset
+  const staticCelarConfig = cellarConfig
 
   const { data, isLoading } = useGetPreviewRedeem({
     cellarConfig: staticCelarConfig,
