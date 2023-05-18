@@ -19,6 +19,7 @@ import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
+import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
@@ -35,6 +36,7 @@ import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
 import { VFC } from "react"
+import { formatDecimals } from "utils/bigNumber"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
 import { useAccount } from "wagmi"
@@ -77,8 +79,15 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
+
   const valueInAssets =
     userData?.userStrategyData.userData?.netValueInAsset
+  const staticCelarConfig = cellarConfig
+
+  const { data, isLoading } = useGetPreviewRedeem({
+    cellarConfig: staticCelarConfig,
+    value: valueInAssets?.value || 0,
+  })
 
   return (
     <TransparentCard
@@ -133,8 +142,11 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 }
               >
                 {isMounted &&
-                  (isConnected
-                    ? valueInAssets?.formatted || "..."
+                  (isConnected && !isLoading
+                    ? formatDecimals(
+                        data?.toString() || "0",
+                        lpTokenData?.decimals
+                      )
                     : "--")}
               </CardStat>
             )}
