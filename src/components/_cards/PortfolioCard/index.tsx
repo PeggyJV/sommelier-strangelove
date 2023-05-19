@@ -81,7 +81,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const userStakes = userData?.userStakes
 
   const valueInAssets =
-    userData?.userStrategyData.userData?.netValueInAsset
+    userData?.userStrategyData.userData?.netValueWithoutRewardsInAsset
   const staticCelarConfig = cellarConfig
 
   const { data, isLoading } = useGetPreviewRedeem({
@@ -143,10 +143,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               >
                 {isMounted &&
                   (isConnected && !isLoading
-                    ? formatDecimals(
+                    ? `${formatDecimals(
                         data?.toString() || "0",
                         lpTokenData?.decimals
-                      )
+                      )} ${activeAsset?.symbol}`
                     : "--")}
               </CardStat>
             )}
