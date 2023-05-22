@@ -123,7 +123,9 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
           format: "%d.%b",
           tickValues:
             timeline === "1W"
-              ? "every 1 day"
+              ? isLarger768
+                ? "every 1 day"
+                : "every 2 days"
               : isLarger768
               ? "every 2 days"
               : "every 5 days",
@@ -135,7 +137,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
       timeline === "ALL" ||
       timeline === "All"
     ) {
-      if (data.series && data.series.length < 30) {
+      if (data.series && data.series[0].data.length < 30) {
         return {
           axisBottom: {
             format: "%d.%b",
@@ -143,7 +145,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
           },
         }
       }
-      if (data.series && data.series.length < 120) {
+      if (data.series && data.series[0].data.length < 60) {
         return {
           axisBottom: {
             format: "%d.%b",
@@ -164,39 +166,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
   return (
     <LineChart
       {...data.chartProps}
-      axisBottom={{
-        renderTick: isLarger768
-          ? undefined
-          : (tick) => {
-              const day = tick.value.getDate()
-              const month = tick.value.toLocaleString("default", {
-                month: "short",
-              })
-
-              return (
-                <g transform={`translate(${tick.x},${tick.y + 20})`}>
-                  <text
-                    x={0}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    style={{
-                      fill: "white",
-                      fontSize: 12,
-                      fontWeight: 600,
-                    }}
-                  >
-                    <tspan x="0" dy="0">
-                      {day}
-                    </tspan>
-                    <tspan x="0" dy="15">
-                      {month}
-                    </tspan>
-                  </text>
-                </g>
-              )
-            },
-        ...hourlyAxisBottom.axisBottom,
-      }}
+      {...hourlyAxisBottom}
       data={data.series || []}
       colors={lineColors}
       animate={false}
