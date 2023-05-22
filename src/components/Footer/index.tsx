@@ -100,7 +100,7 @@ const Footer: VFC<ContainerProps> = (props) => {
               mb={{ base: 6, sm: 0 }}
             >
               <FooterLink
-                href="https://www.notion.so/Sommelier-Documentation-006e748753e34a1299f9b1d6ae3a4544"
+                href="https://sommelier-finance.gitbook.io/sommelier-documentation"
                 isExternal
               >
                 <HStack align="center" role="group">
