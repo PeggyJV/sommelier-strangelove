@@ -138,7 +138,9 @@ export const UsdcChart: VFC<UsdcChartProps> = ({
           format: "%d.%b",
           tickValues:
             timeline === "1W"
-              ? "every 1 day"
+              ? isLarger768
+                ? "every 1 day"
+                : "every 2 days"
               : isLarger768
               ? "every 2 days"
               : "every 5 days",
@@ -150,6 +152,24 @@ export const UsdcChart: VFC<UsdcChartProps> = ({
       timeline === "ALL" ||
       timeline === "All"
     ) {
+      if (data.series && data.series[0].data.length < 30) {
+        return {
+          axisBottom: {
+            format: "%d.%b",
+            tickValues: isLarger768 ? "every 3 days" : "every 5 days",
+          },
+        }
+      }
+      if (data.series && data.series[0].data.length < 60) {
+        return {
+          axisBottom: {
+            format: "%d.%b",
+            tickValues: isLarger768
+              ? "every 5 days"
+              : "every 10 days",
+          },
+        }
+      }
       // show format in month.year
       return {
         axisBottom: {
@@ -158,7 +178,7 @@ export const UsdcChart: VFC<UsdcChartProps> = ({
         },
       }
     }
-  }, [isLarger768, timeline])
+  }, [isLarger768, timeline, data])
 
   return (
     <LineChart
