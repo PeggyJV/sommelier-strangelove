@@ -157,7 +157,7 @@ export const EthBtcChart: VFC<EthBtcChartProps> = ({
         return {
           axisBottom: {
             format: "%d.%b",
-            tickValues: "every 3 days",
+            tickValues: isLarger768 ? "every 3 days" : "every 5 days",
           },
         }
       }
@@ -165,7 +165,9 @@ export const EthBtcChart: VFC<EthBtcChartProps> = ({
         return {
           axisBottom: {
             format: "%d.%b",
-            tickValues: "every 5 days",
+            tickValues: isLarger768
+              ? "every 5 days"
+              : "every 10 days",
           },
         }
       }
