@@ -51,6 +51,16 @@ export const depositAssetDefaultValue = (config: ConfigProps) => {
   return "USDC"
 }
 
+export const isBondedDisabled = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+  )
+}
+
 export const isCurrentDepositsEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
