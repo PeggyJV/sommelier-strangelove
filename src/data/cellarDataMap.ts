@@ -15,11 +15,13 @@ import {
   realYieldLink,
   realYield1Inch,
   realYieldENS,
+  realYieldSNX,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
+    [config.CONTRACT.REAL_YIELD_SNX.SLUG]: realYieldSNX,
     [config.CONTRACT.REAL_YIELD_ENS.SLUG]: realYieldENS,
     [config.CONTRACT.REAL_YIELD_1Inch.SLUG]: realYield1Inch,
     [config.CONTRACT.REAL_YIELD_LINK.SLUG]: realYieldLink,

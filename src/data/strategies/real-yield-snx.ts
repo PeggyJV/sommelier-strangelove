@@ -8,10 +8,10 @@ import {
   StakerKey,
 } from "../types"
 
-export const realYield1Inch: CellarData = {
-  name: "Real Yield 1Inch",
-  slug: config.CONTRACT.REAL_YIELD_1Inch.SLUG,
-  tradedAssets: ["1Inch", "WETH", "YieldETH"],
+export const realYieldSNX: CellarData = {
+  name: "Real Yield SNX",
+  slug: config.CONTRACT.REAL_YIELD_SNX.SLUG,
+  tradedAssets: ["SNX", "WETH", "YieldETH"],
   launchDate: new Date(2023, 4, 31, 14, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
@@ -21,7 +21,7 @@ export const realYield1Inch: CellarData = {
   managementFeeTooltip:
     "Platform fee split: 0% for Strategy provider and 0% for protocol",
   protocols: ["AAVE"],
-  strategyAssets: ["1Inch", "WETH", "YieldETH"],
+  strategyAssets: ["SNX", "WETH", "YieldETH"],
   performanceSplit: {
     depositors: 100,
   },
@@ -45,14 +45,14 @@ export const realYield1Inch: CellarData = {
     `,
   },
   depositTokens: {
-    list: ["1Inch"],
+    list: ["SNX"],
   },
 
   config: {
     noSubgraph: true,
     id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
     baseApy: 4.4,
-    cellarNameKey: CellarNameKey.REAL_YIELD_1INCH,
+    cellarNameKey: CellarNameKey.REAL_YIELD_SNX,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
       imagePath: "/assets/icons/real-yield-usd.png",

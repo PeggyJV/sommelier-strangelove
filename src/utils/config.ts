@@ -122,6 +122,11 @@ export const config = {
       SLUG: "Real-Yield-1Inch",
       ABI: cellarV0816,
     },
+    REAL_YIELD_SNX: {
+      ADDRESS: "0x97e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
+      SLUG: "Real-Yield-SNX",
+      ABI: cellarV0816,
+    },
     DEFI_STARS: {
       ADDRESS: "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
       SLUG: "DeFi-Stars",
