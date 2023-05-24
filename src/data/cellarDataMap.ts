@@ -16,11 +16,13 @@ import {
   realYield1Inch,
   realYieldENS,
   realYieldSNX,
+  realYieldUNI,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
+    [config.CONTRACT.REAL_YIELD_UNI.SLUG]: realYieldUNI,
     [config.CONTRACT.REAL_YIELD_SNX.SLUG]: realYieldSNX,
     [config.CONTRACT.REAL_YIELD_ENS.SLUG]: realYieldENS,
     [config.CONTRACT.REAL_YIELD_1Inch.SLUG]: realYield1Inch,
