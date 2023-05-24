@@ -186,6 +186,13 @@ export const tokenConfig: Token[] = [
     address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
     coinGeckoId: "eth",
   },
+  {
+    src: "/assets/icons/1Inch.png",
+    alt: "1Inch logo",
+    symbol: "1Inch",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "1inch",
+  },
 ]
 
 export const depositAssetTokenList = [
