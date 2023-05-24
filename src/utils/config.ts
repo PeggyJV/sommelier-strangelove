@@ -112,6 +112,11 @@ export const config = {
       SLUG: "Real-Yield-LINK",
       ABI: cellarV0816,
     },
+    REAL_YIELD_ENS: {
+      ADDRESS: "0x97e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
+      SLUG: "Real-Yield-ENS",
+      ABI: cellarV0816,
+    },
     REAL_YIELD_1Inch: {
       ADDRESS: "0x97e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
       SLUG: "Real-Yield-1Inch",

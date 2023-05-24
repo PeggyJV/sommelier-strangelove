@@ -11,7 +11,7 @@ import {
 export const realYieldLink: CellarData = {
   name: "Real Yield LINK",
   slug: config.CONTRACT.REAL_YIELD_LINK.SLUG,
-  tradedAssets: ["LINK", "ETH", "stETH"],
+  tradedAssets: ["LINK", "WETH", "YieldETH"],
   launchDate: new Date(2023, 4, 31, 14, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
@@ -21,7 +21,7 @@ export const realYieldLink: CellarData = {
   managementFeeTooltip:
     "Platform fee split: 0% for Strategy provider and 0% for protocol",
   protocols: ["AAVE"],
-  strategyAssets: ["LINK", "ETH", "stETH"],
+  strategyAssets: ["LINK", "WETH", "YieldETH"],
   performanceSplit: {
     depositors: 100,
   },
