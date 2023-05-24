@@ -63,7 +63,7 @@ export const realYield1Inch: CellarData = {
       key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
-      address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+      address: config.CONTRACT.REAL_YIELD_1Inch.ADDRESS,
       abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: CellarKey.CELLAR_V2,
     },

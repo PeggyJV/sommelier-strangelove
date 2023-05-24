@@ -108,27 +108,27 @@ export const config = {
       ABI: cellarV0816,
     },
     REAL_YIELD_LINK: {
-      ADDRESS: "0x97e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
+      ADDRESS: "0x01e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
       SLUG: "Real-Yield-LINK",
       ABI: cellarV0816,
     },
     REAL_YIELD_ENS: {
-      ADDRESS: "0x97e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
+      ADDRESS: "0x02e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
       SLUG: "Real-Yield-ENS",
       ABI: cellarV0816,
     },
     REAL_YIELD_1Inch: {
-      ADDRESS: "0x97e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
+      ADDRESS: "0x03e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
       SLUG: "Real-Yield-1Inch",
       ABI: cellarV0816,
     },
     REAL_YIELD_SNX: {
-      ADDRESS: "0x97e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
+      ADDRESS: "0x04e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
       SLUG: "Real-Yield-SNX",
       ABI: cellarV0816,
     },
     REAL_YIELD_UNI: {
-      ADDRESS: "0x97e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
+      ADDRESS: "0x05e6e0a40a3d02f12d1cec30ebfbae04e37c129e",
       SLUG: "Real-Yield-UNI",
       ABI: cellarV0816,
     },
