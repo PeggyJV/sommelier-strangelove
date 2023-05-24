@@ -690,7 +690,7 @@ export const strategyPageContentData = {
           src="/assets/icons/defi-stars.png"
           boxSize={8}
         />
-        <Text>RY1INCH</Text>
+        <Text>RYENS</Text>
       </>
     ),
     tradedAssets: ["LINK", "WETH", "YieldETH"],

@@ -14,11 +14,13 @@ import {
   defiStars,
   realYieldLink,
   realYield1Inch,
+  realYieldENS,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
+    [config.CONTRACT.REAL_YIELD_ENS.SLUG]: realYieldENS,
     [config.CONTRACT.REAL_YIELD_1Inch.SLUG]: realYield1Inch,
     [config.CONTRACT.REAL_YIELD_LINK.SLUG]: realYieldLink,
     [config.CONTRACT.DEFI_STARS.SLUG]: defiStars,
