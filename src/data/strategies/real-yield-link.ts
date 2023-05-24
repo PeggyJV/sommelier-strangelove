@@ -52,7 +52,7 @@ export const realYieldLink: CellarData = {
     noSubgraph: true,
     id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
     baseApy: 4.4,
-    cellarNameKey: CellarNameKey.REAL_YIELD_USD,
+    cellarNameKey: CellarNameKey.REAL_YIELD_LINK,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
       imagePath: "/assets/icons/real-yield-usd.png",
