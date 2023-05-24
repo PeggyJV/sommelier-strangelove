@@ -172,6 +172,20 @@ export const tokenConfig: Token[] = [
     address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
     coinGeckoId: "aave",
   },
+  {
+    src: "/assets/icons/aave.png",
+    alt: "LINK logo",
+    symbol: "LINK",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "link",
+  },
+  {
+    src: "/assets/icons/aave.png",
+    alt: "ETH logo",
+    symbol: "ETH",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "eth",
+  },
 ]
 
 export const depositAssetTokenList = [
@@ -186,6 +200,8 @@ export const depositAssetTokenList = [
   "sUSD",
   "TUSD",
   "USDT",
+  "LINK",
+  "ETH",
 ]
 
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(

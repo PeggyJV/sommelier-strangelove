@@ -11,18 +11,18 @@ import {
 export const realYieldLink: CellarData = {
   name: "Real Yield LINK",
   slug: config.CONTRACT.REAL_YIELD_LINK.SLUG,
-  popUpTitle: "Get Exclusive Real Yield Updates",
-  popUpDescription:
-    "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
+  // popUpTitle: "Get Exclusive Real Yield Updates",
+  // popUpDescription:
+  //   "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
   tradedAssets: ["LINK", "ETH", "stETH"],
   launchDate: new Date(2023, 4, 31, 14, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "0.5%",
+  managementFee: "0%",
   managementFeeTooltip:
-    "Platform fee split: 0.4% for Strategy provider and 0.1% for protocol",
+    "Platform fee split: 0% for Strategy provider and 0% for protocol",
   protocols: ["AAVE"],
   strategyAssets: ["LINK", "ETH", "stETH"],
   performanceSplit: {
@@ -52,7 +52,7 @@ export const realYieldLink: CellarData = {
     //   `,
   },
   depositTokens: {
-    list: ["USDC", "USDT", "DAI"],
+    list: ["LINK"],
   },
 
   config: {
