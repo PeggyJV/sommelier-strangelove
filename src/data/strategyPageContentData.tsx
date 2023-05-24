@@ -606,7 +606,7 @@ export const strategyPageContentData = {
     name: "Real Yield Link",
     provider: "Seven Seas & DeFine Logic Labs",
     providerUrl: "https://sevenseas.capital/",
-    description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).`,
+    description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
     ticker: (
       <>
         {
