@@ -19,7 +19,7 @@ export const getUserDataAllStrategies = async ({
   sommPrice: string
   sgData?: GetAllStrategiesDataQuery
 }) => {
-  if (!sgData) return []
+  if (!sgData) return undefined
   const userDataRes = await Promise.all(
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
@@ -96,7 +96,7 @@ export const getUserDataAllStrategies = async ({
   const isData = (item: Data | undefined): item is Data => {
     return Number(item?.netValue) > 0
   }
-  const cleanData = userData.filter((item) => !!item)
+  const cleanData = userData.filter(isData)
 
   const data = {
     totalNetValue: {
