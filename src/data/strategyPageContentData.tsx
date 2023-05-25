@@ -617,7 +617,7 @@ export const strategyPageContentData = {
       <>
         <Image
           alt="defi stars icon"
-          src="/assets/icons/defi-stars.png"
+          src="/assets/icons/real-yield-link.png"
           boxSize={8}
         />
         <Text>RYLINK</Text>
@@ -652,7 +652,7 @@ export const strategyPageContentData = {
         {}
         <Image
           alt="RY1INCH icon"
-          src="/assets/icons/defi-stars.png"
+          src="/assets/icons/real-yield-one-inch.png"
           boxSize={8}
         />
         <Text>RY1INCH</Text>
@@ -687,7 +687,7 @@ export const strategyPageContentData = {
         {}
         <Image
           alt="RYENS icon"
-          src="/assets/icons/defi-stars.png"
+          src="/assets/icons/real-yield-ens.png"
           boxSize={8}
         />
         <Text>RYENS</Text>
@@ -747,8 +747,8 @@ export const strategyPageContentData = {
     howItWorks: `
     The way the vault achieves this is by taking your deposited token, supplying it on Aave as collateral to borrow ETH and then depositing that ETH into the Real Yield ETH vault. For context, the Real Yield ETH vault generates yield from leveraged staking and LPing ETH and ETH LSTs. The desired net effect is that the yield earned through Real Yield ETH will be greater than the borrow costs of the ETH allowing the vault to purchase more of your deposit token to add to your position. It’s important to note that these vaults and the Real Yield ETH vault take on leverage. However, Sommelier’s novel architecture gives vaults advanced capabilities when it comes to taking on and monitoring these positions. While leveraged, the vault smart contract enforces a minimum health factor during each rebalance as a safety precaution. The vault also closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.`,
   },
-  [config.CONTRACT.REAL_YIELD_SNX.SLUG]: {
-    name: "Real Yield SNX",
+  [config.CONTRACT.REAL_YIELD_UNI.SLUG]: {
+    name: "Real Yield UNI",
     provider: "Seven Seas & DeFine Logic Labs",
     providerUrl: "https://sevenseas.capital/",
     description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
@@ -757,7 +757,7 @@ export const strategyPageContentData = {
         {}
         <Image
           alt="RYUNI icon"
-          src="/assets/icons/defi-stars.png"
+          src="/assets/icons/real-yield-uni.png"
           boxSize={8}
         />
         <Text>RYUNI</Text>

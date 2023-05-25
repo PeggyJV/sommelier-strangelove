@@ -5,7 +5,6 @@ import {
   CellarNameKey,
   CellarRouterKey,
   CellarType,
-  StakerKey,
 } from "../types"
 
 export const realYieldLink: CellarData = {
@@ -55,7 +54,7 @@ export const realYieldLink: CellarData = {
     cellarNameKey: CellarNameKey.REAL_YIELD_LINK,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
-      imagePath: "/assets/icons/real-yield-usd.png",
+      imagePath: "/assets/icons/real-yield-link.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
@@ -67,12 +66,6 @@ export const realYieldLink: CellarData = {
       abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: CellarKey.CELLAR_V2,
     },
-    staker: {
-      address: config.CONTRACT.REAL_YIELD_USD_STAKER.ADDRESS,
-      abi: config.CONTRACT.REAL_YIELD_USD_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0815,
-    },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   },
   faq: [
     {

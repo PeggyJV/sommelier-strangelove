@@ -173,7 +173,7 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "aave",
   },
   {
-    src: "/assets/icons/chainlink.png",
+    src: "/assets/icons/link.jpeg",
     alt: "LINK logo",
     symbol: "LINK",
     address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
@@ -187,14 +187,14 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "eth",
   },
   {
-    src: "/assets/icons/1Inch.png",
+    src: "/assets/icons/one-inch.png",
     alt: "1Inch logo",
     symbol: "1Inch",
     address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
     coinGeckoId: "1inch",
   },
   {
-    src: "/assets/icons/ens.png",
+    src: "/assets/icons/ens.jpeg",
     alt: "Ens logo",
     symbol: "Ens",
     address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
@@ -206,6 +206,13 @@ export const tokenConfig: Token[] = [
     symbol: "SNX",
     address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
     coinGeckoId: "snx",
+  },
+  {
+    src: "/assets/icons/real-yield-eth.png",
+    alt: "real-yield-eth logo",
+    symbol: "YieldETH",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "y-eth",
   },
 ]
 

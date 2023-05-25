@@ -55,7 +55,7 @@ export const realYieldUNI: CellarData = {
     cellarNameKey: CellarNameKey.REAL_YIELD_UNI,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
-      imagePath: "/assets/icons/real-yield-usd.png",
+      imagePath: "/assets/icons/real-yield-uni.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
@@ -67,12 +67,6 @@ export const realYieldUNI: CellarData = {
       abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: CellarKey.CELLAR_V2,
     },
-    staker: {
-      address: config.CONTRACT.REAL_YIELD_USD_STAKER.ADDRESS,
-      abi: config.CONTRACT.REAL_YIELD_USD_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0815,
-    },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
   },
   faq: [
     {

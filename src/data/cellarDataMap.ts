@@ -22,14 +22,14 @@ import {
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
+    [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
+    [config.CONTRACT.REAL_YIELD_USD.SLUG]: realYieldUsd,
     [config.CONTRACT.REAL_YIELD_UNI.SLUG]: realYieldUNI,
     [config.CONTRACT.REAL_YIELD_SNX.SLUG]: realYieldSNX,
     [config.CONTRACT.REAL_YIELD_ENS.SLUG]: realYieldENS,
     [config.CONTRACT.REAL_YIELD_1Inch.SLUG]: realYield1Inch,
     [config.CONTRACT.REAL_YIELD_LINK.SLUG]: realYieldLink,
     [config.CONTRACT.DEFI_STARS.SLUG]: defiStars,
-    [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
-    [config.CONTRACT.REAL_YIELD_USD.SLUG]: realYieldUsd,
     [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: ethBtcTrend,
     [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG]: ethBtcMomentum,
     [config.CONTRACT.AAVE_V2_STABLE_CELLAR.SLUG]: aaveStable,
