@@ -5,10 +5,8 @@ import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { cellarDataMap } from "data/cellarDataMap"
-// import { config } from "utils/config"
-// // import { formatCurrency } from "utils/formatCurrency"
-// // import { BigNumber } from "bignumber.js"
-// // const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
+import { useUserBalances } from "./useUserBalances"
+import { tokenConfig } from "data/tokenConfig"
 
 export const useStrategyData = (address: string) => {
   const provider = useProvider()
@@ -18,16 +16,18 @@ export const useStrategyData = (address: string) => {
   const [{ data: sgData, error }, reFetch] = useGetStrategyDataQuery({
     variables: { cellarAddress: address.toLowerCase() },
   })
-
-  const isNoSubgraph = Boolean(
-    Object.values(cellarDataMap).find(
-      (item) =>
-        item.config.cellar.address.toLowerCase() ===
-        address.toLowerCase()
-    )?.config.noSubgraph
+  const config = Object.values(cellarDataMap).find(
+    (item) =>
+      item.config.cellar.address.toLowerCase() ===
+      address.toLowerCase()
+  )!.config
+  const isNoSubgraph = Boolean(config!.noSubgraph)
+  const baseAsset = tokenConfig.find(
+    (token) => token.symbol === sgData?.cellar!.asset.symbol
+  )?.coinGeckoId
+  const { data: baseAssetPrice } = useCoinGeckoPrice(
+    baseAsset ?? "usd-coin"
   )
-
-  const { data: wethPrice } = useCoinGeckoPrice("weth")
 
   const query = useQuery(
     [
@@ -39,18 +39,17 @@ export const useStrategyData = (address: string) => {
         address,
         contracts: allContracts![address]!,
         sommPrice: sommPrice!,
-        wethPrice: wethPrice!,
         sgData: sgData?.cellar!,
+        decimals: sgData?.cellar?.asset.decimals ?? 6,
+        baseAssetPrice: baseAssetPrice!,
+        symbol: sgData?.cellar!.asset.symbol ?? "USDC",
       })
 
       return result
     },
     {
       enabled:
-        !!allContracts &&
-        !!sommPrice &&
-        !!wethPrice &&
-        (isNoSubgraph || !!sgData),
+        !!allContracts && !!sommPrice && (isNoSubgraph || !!sgData),
     }
   )
 
