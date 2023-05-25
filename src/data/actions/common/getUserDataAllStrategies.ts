@@ -19,7 +19,6 @@ export const getUserDataAllStrategies = async ({
   sommPrice: string
   sgData?: GetAllStrategiesDataQuery
 }) => {
-  if (!sgData) return undefined
   const userDataRes = await Promise.all(
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
@@ -33,7 +32,7 @@ export const getUserDataAllStrategies = async ({
             { signer: true, contractAddress: address, userAddress },
           ],
           async () => {
-            const subgraphData = sgData.cellars.find(
+            const subgraphData = sgData!.cellars.find(
               (v) => v.id === address
             )!
             const baseAsset = tokenConfig.find(
