@@ -1,4 +1,5 @@
 import {
+  Avatar,
   BoxProps,
   Heading,
   Image,
@@ -18,6 +19,7 @@ import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
+import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
@@ -28,11 +30,13 @@ import {
   isBondingEnabled,
   isRewardsEnabled,
   lpTokenTooltipContent,
+  showNetValueInAsset,
 } from "data/uiConfig"
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
 import { VFC } from "react"
+import { formatDecimals } from "utils/bigNumber"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
 import { useAccount } from "wagmi"
@@ -76,6 +80,15 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
 
+  const valueInAssets =
+    userData?.userStrategyData.userData?.netValueWithoutRewardsInAsset
+  const staticCelarConfig = cellarConfig
+
+  const { data, isLoading } = useGetPreviewRedeem({
+    cellarConfig: staticCelarConfig,
+    value: valueInAssets?.value || 0,
+  })
+
   return (
     <TransparentCard
       {...props}
@@ -102,12 +115,41 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             alignItems="flex-end"
           >
             <CardStat
-              label="net value"
-              tooltip="Current value of your assets in Strategy"
+              label="Net Value"
+              tooltip="Net value of assets in the strategy including SOMM rewards"
             >
               {isMounted &&
                 (isConnected ? netValue?.formatted || "..." : "--")}
             </CardStat>
+
+            {showNetValueInAsset(cellarConfig) && (
+              <CardStat
+                label="Base Asset Value"
+                tooltip={
+                  <Text>
+                    Total value of assets denominated in base asset
+                    <Avatar
+                      ml="-2.5px"
+                      boxSize={6}
+                      src={activeAsset?.src}
+                      name={activeAsset?.alt}
+                      borderWidth={2}
+                      borderColor="surface.bg"
+                      bg="surface.bg"
+                    />
+                    {activeAsset?.symbol}. excluding SOMM rewards
+                  </Text>
+                }
+              >
+                {isMounted &&
+                  (isConnected && !isLoading
+                    ? `${formatDecimals(
+                        data?.toString() || "0",
+                        lpTokenData?.decimals
+                      )} ${activeAsset?.symbol}`
+                    : "--")}
+              </CardStat>
+            )}
 
             <CardStat
               label="deposit assets"

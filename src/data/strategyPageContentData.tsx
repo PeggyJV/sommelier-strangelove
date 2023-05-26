@@ -27,7 +27,7 @@ export const strategyPageContentData = {
         logo: "/assets/icons/somm.png",
       },
       {
-        name: "Rhino",
+        name: "Rhino ( L2 deposit option )",
         logo: "/assets/icons/rhino-fi.svg",
         url: "https://app.rhino.fi/strategy/ETHBTCTREND",
       },
@@ -92,7 +92,7 @@ export const strategyPageContentData = {
         logo: "/assets/icons/somm.png",
       },
       {
-        name: "Rhino",
+        name: "Rhino ( L2 deposit option )",
         logo: "/assets/icons/rhino-fi.svg",
         url: "https://app.rhino.fi/strategy/ETHBTCMOMENTUM",
       },
@@ -461,7 +461,7 @@ export const strategyPageContentData = {
         logo: "/assets/icons/somm.png",
       },
       {
-        name: "Rhino",
+        name: "Rhino ( L2 deposit option )",
         logo: "/assets/icons/rhino-fi.svg",
         url: "https://app.rhino.fi/invest/YIELDUSD/supply",
       },
@@ -512,7 +512,7 @@ export const strategyPageContentData = {
         logo: "/assets/icons/somm.png",
       },
       {
-        name: "Rhino",
+        name: "Rhino ( L2 deposit option )",
         logo: "/assets/icons/rhino-fi.svg",
         url: "https://app.rhino.fi/invest/YIELDETH/supply",
       },

@@ -22,15 +22,12 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useApyChart } from "data/context/apyChartContext"
 import { ApyChart } from "components/_charts/ApyChart"
 import { useStrategyData } from "data/hooks/useStrategyData"
-import { config } from "utils/config"
-const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
 
 export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
   const { data, timeArray, apyChange, isFetching, isError } =
     useApyChart()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
-  const cellarAddress = cellarConfig.cellar.address
 
   const { data: strategyData } = useStrategyData(
     cellarConfig.cellar.address
@@ -87,9 +84,6 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
   }
 
   let baseApy = strategyData?.baseApy?.formatted ?? "--"
-  if (cellarAddress === RYETH_ADDRESS) {
-    baseApy = "10.0%"
-  }
 
   return (
     <Skeleton

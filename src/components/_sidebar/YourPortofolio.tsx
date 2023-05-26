@@ -1,115 +1,207 @@
 import {
+  Box,
   Button,
   Center,
   HStack,
-  Image,
-  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react"
-import { CardBase } from "components/_cards/CardBase"
 import { ErrorCard } from "components/_cards/ErrorCard"
-import { SidebarColumn } from "components/_columns/SidebarColumn"
-import {
-  LighterSkeleton,
-  TransparentSkeleton,
-} from "components/_skeleton"
-import { SidebarTable } from "components/_tables/SidebarTable"
-import { useHome } from "data/context/homeContext"
+import { TransparentCard } from "components/_cards/TransparentCard"
+import { LogoIcon } from "components/_icons"
+import { LighterSkeleton } from "components/_skeleton"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
+import { PortofolioItem } from "./PortofolioItem"
 
 export const YourPortofolio = () => {
   const { data, isLoading, refetch } = useUserDataAllStrategies()
-  const { timeline } = useHome()
+  const valueAndFormatted = ({
+    value,
+    formatted,
+  }: {
+    value?: number | string
+    formatted?: string
+  }) => {
+    return {
+      value: value ?? 0,
+      formatted: formatted ?? "0",
+    }
+  }
+
   return (
-    <VStack spacing="32px" w="full">
-      <VStack w="full" spacing="9.5px">
-        <VStack spacing="16px" w="full">
-          <Text textAlign="center" fontWeight="bold" fontSize="21px">
-            Your Portfolio
+    <VStack spacing="32px" w="full" mt={16}>
+      <TransparentCard
+        fontFamily="Haffer"
+        w="100%"
+        paddingX={0}
+        pt={3}
+      >
+        <VStack alignItems="flex-start" w="100%" spacing={0}>
+          <Text
+            marginX="auto"
+            fontWeight={600}
+            fontSize="16px"
+            mt={3}
+          >
+            Your total balance
           </Text>
           <LighterSkeleton
             isLoaded={!isLoading}
             h={isLoading ? "60px" : "auto"}
-            w={isLoading ? "75%" : "auto"}
+            m="auto"
+            w="full"
           >
             <Text
+              as="h3"
+              fontWeight={700}
+              fontSize="40px"
+              w="full"
               textAlign="center"
-              fontWeight="bold"
-              fontSize="48px"
+              mb="10px"
             >
               {data?.totalNetValue.formatted}
             </Text>
           </LighterSkeleton>
-        </VStack>
-        <TransparentSkeleton
-          isLoaded={!isLoading}
-          h={isLoading ? "24px" : "auto"}
-          w={isLoading ? "40%" : "auto"}
-        >
-          <HStack spacing="8px">
-            <Image
-              src="/assets/icons/rewards.svg"
-              alt="somm rewards icon"
-              h="24px"
-              w="24px"
-            />
-            <Text
-              fontWeight="semibold"
-              fontSize="16px"
-              color="neutral.400"
+          <Box
+            py="19px"
+            px={8}
+            w="100%"
+            borderTop="1px solid"
+            borderBottom="1px solid"
+            borderColor="surface.secondary"
+          >
+            <Text fontSize={12} fontWeight={600} color="neutral.400">
+              Strategy
+            </Text>
+          </Box>
+          <LighterSkeleton
+            isLoaded={!isLoading}
+            h={isLoading ? "300px" : "auto"}
+            m="auto"
+            w="full"
+          >
+            <Box w="100%">
+              {data ? (
+                data.strategies.map((strategy) => (
+                  <PortofolioItem
+                    symbol={
+                      strategy.userStrategyData.userData.symbol || ""
+                    }
+                    bondedToken={Number(
+                      strategy?.userStakes?.totalBondedAmount.value ??
+                        0
+                    )}
+                    key={strategy.userStrategyData.strategyData?.name}
+                    icon={
+                      strategy.userStrategyData.strategyData?.logo ??
+                      ""
+                    }
+                    title={
+                      strategy.userStrategyData.strategyData?.name ??
+                      ""
+                    }
+                    netValueUsd={
+                      strategy.userStrategyData.userData
+                        ?.valueWithoutRewards.formatted ?? ""
+                    }
+                    netValueInAsset={
+                      strategy.userStrategyData.userData
+                        ?.netValueWithoutRewardsInAsset.value ?? 0
+                    }
+                    tokenPrice={valueAndFormatted({
+                      value:
+                        strategy.userStrategyData.strategyData?.token
+                          ?.value,
+                      formatted:
+                        strategy.userStrategyData.strategyData?.token
+                          ?.formatted,
+                    })}
+                    slug={
+                      strategy.userStrategyData.strategyData?.slug ??
+                      ""
+                    }
+                    description={
+                      strategy.userStrategyData.strategyData
+                        ?.description ?? ""
+                    }
+                  />
+                ))
+              ) : (
+                <ErrorCard message="" py="100px">
+                  <Center>
+                    <Button
+                      w="100px"
+                      variant="outline"
+                      onClick={() => refetch()}
+                    >
+                      Retry
+                    </Button>
+                  </Center>
+                </ErrorCard>
+              )}
+            </Box>
+          </LighterSkeleton>
+          <Box
+            py="19px"
+            px={8}
+            w="100%"
+            borderBottom="1px solid"
+            borderColor="surface.secondary"
+          >
+            <Text fontSize={12} fontWeight={600} color="neutral.400">
+              Unclaimed Rewards
+            </Text>
+          </Box>
+          <LighterSkeleton
+            isLoaded={!isLoading}
+            h={isLoading ? "60px" : "auto"}
+            m="auto"
+            w="full"
+          >
+            <HStack
+              px={8}
+              py={4}
+              pl={12}
+              pb={1}
+              borderColor="surface.secondary"
+              w="100%"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              {data?.totalSommRewards.value === 0
-                ? "0.00"
-                : data?.totalSommRewards.formatted}{" "}
-              SOMM
-            </Text>
-          </HStack>
-        </TransparentSkeleton>
-      </VStack>
-      {Number(data?.totalNetValue?.value) <= 0 && (
-        <CardBase w="full">
-          <Stack>
-            <Text fontWeight="bold" fontSize="16px">
-              Select a strategy to start earning
-            </Text>
-            <Text
-              fontWeight="semibold"
-              fontSize="12px"
-              color="neutral.400"
-            >
-              Start earning with smart automatic strategies on the
-              Sommelier marketplace
-            </Text>
-          </Stack>
-        </CardBase>
-      )}
-
-      <TransparentSkeleton
-        height={isLoading ? "400px" : "auto"}
-        w="full"
-        borderRadius={20}
-        isLoaded={!isLoading}
-      >
-        {!data ? (
-          <ErrorCard message="" py="100px">
-            <Center>
-              <Button
-                w="100px"
-                variant="outline"
-                onClick={() => refetch()}
+              <HStack spacing={4}>
+                <LogoIcon color="red.normal" p={0} boxSize="30px" />
+                <HStack spacing={0} h="100%" alignItems="flex-start">
+                  <Text as="h6" fontSize={16} fontWeight={700}>
+                    SOMM
+                  </Text>
+                </HStack>
+              </HStack>
+              <VStack
+                spacing={0}
+                h="100%"
+                alignSelf="baseline"
+                alignItems="flex-end"
+                textAlign="right"
               >
-                Retry
-              </Button>
-            </Center>
-          </ErrorCard>
-        ) : (
-          <SidebarTable
-            columns={SidebarColumn({ timeline })}
-            data={data?.strategies}
-          />
-        )}
-      </TransparentSkeleton>
+                <Text as="h6" fontSize={16} fontWeight={700}>
+                  ${data?.totalSommRewardsInUsd.toFixed(2)}
+                </Text>
+                <Text
+                  fontWeight={500}
+                  fontSize={12}
+                  color="neutral.400"
+                >
+                  {`${
+                    data?.totalSommRewards.value === 0
+                      ? "0.00"
+                      : data?.totalSommRewards.formatted
+                  } SOMM`}
+                </Text>
+              </VStack>
+            </HStack>
+          </LighterSkeleton>
+        </VStack>
+      </TransparentCard>
     </VStack>
   )
 }

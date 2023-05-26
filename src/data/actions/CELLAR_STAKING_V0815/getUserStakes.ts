@@ -67,6 +67,7 @@ export const getUserStakes = async (
     )
 
     const userStakeData: StakerUserData = {
+      // It's actually list of claimable rewards
       claimAllRewards: convertedClaimAllRewards,
       claimAllRewardsUSD,
       totalBondedAmount: {

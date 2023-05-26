@@ -120,7 +120,6 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
   }
 
   const hourlyAxisBottom = useMemo<any>(() => {
-    console.log("timeline", timeline)
     if (timeline === "1D") {
       return {
         axisBottom: {
@@ -135,7 +134,13 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
         axisBottom: {
           format: "%d.%b",
           tickValues:
-            timeline === "1W" ? "every 1 day" : "every 2 days",
+            timeline === "1W"
+              ? isLarger768
+                ? "every 1 day"
+                : "every 2 days"
+              : isLarger768
+              ? "every 2 days"
+              : "every 5 days",
         },
       }
     }
@@ -144,6 +149,24 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
       timeline === "ALL" ||
       timeline === "All"
     ) {
+      if (data.series && data.series[0].data.length < 30) {
+        return {
+          axisBottom: {
+            format: "%d.%b",
+            tickValues: isLarger768 ? "every 3 days" : "every 5 days",
+          },
+        }
+      }
+      if (data.series && data.series[0].data.length < 60) {
+        return {
+          axisBottom: {
+            format: "%d.%b",
+            tickValues: isLarger768
+              ? "every 5 days"
+              : "every 10 days",
+          },
+        }
+      }
       // show format in month.year
       return {
         axisBottom: {
@@ -152,7 +175,7 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
         },
       }
     }
-  }, [isLarger768, timeline])
+  }, [isLarger768, timeline, data])
 
   return (
     <LineChart
