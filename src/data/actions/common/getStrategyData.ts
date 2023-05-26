@@ -64,6 +64,7 @@ export const getStrategyData = async ({
       const isNew =
         !!launchDate &&
         isBefore(launchDate, add(new Date(), { weeks: 4 }))
+      const isContractNotReady = strategy.isContractNotReady
 
       const hideValue =
         isComingSoon(launchDate) &&
@@ -71,12 +72,17 @@ export const getStrategyData = async ({
 
       const activeAsset = await (async () => {
         if (!subgraphData?.asset?.id) {
-          const aAsset = await getActiveAsset(
-            cellarContract as CellarV0816
-          )
-          if (!aAsset) return
-          const tokenInfo = getTokenByAddress(aAsset.address)
-          return { ...tokenInfo, ...aAsset }
+          try {
+            const aAsset = await getActiveAsset(
+              cellarContract as CellarV0816
+            )
+            if (!aAsset) return
+            const tokenInfo = getTokenByAddress(aAsset.address)
+            return { ...tokenInfo, ...aAsset }
+          } catch (e) {
+            console.log(e)
+            return undefined
+          }
         }
         const tokenInfo = getTokenByAddress(subgraphData.asset.id)
         return { ...tokenInfo, ...subgraphData.asset }
@@ -202,6 +208,7 @@ export const getStrategyData = async ({
         description,
         isNew,
         isStakingOngoing,
+        isContractNotReady,
         launchDate,
         logo,
         name,

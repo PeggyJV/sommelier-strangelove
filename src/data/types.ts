@@ -22,6 +22,11 @@ export enum CellarNameKey {
   REAL_YIELD_USD = "REAL_YIELD_USD",
   REAL_YIELD_ETH = "REAL_YIELD_ETH",
   DEFI_STARS = "DEFI_STARS",
+  REAL_YIELD_LINK = "REAL_YIELD_LINK",
+  REAL_YIELD_1INCH = "REALY_YIELD_1INCH",
+  REAL_YIELD_ENS = "REAY_YIELD_ENS",
+  REAL_YIELD_SNX = "REAL_YIELD_SNX",
+  REAL_YIELD_UNI = "REAL_YIELD_UNI",
 }
 
 export interface ConfigProps {
@@ -69,6 +74,7 @@ type Exchange =
     }
 
 export interface CellarData {
+  isContractNotReady?: boolean
   deprecated?: boolean
   name: string
   slug: string

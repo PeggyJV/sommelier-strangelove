@@ -14,7 +14,8 @@ import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 import { PortofolioItem } from "./PortofolioItem"
 
 export const YourPortofolio = () => {
-  const { data, isLoading, refetch } = useUserDataAllStrategies()
+  const { data, isLoading, isError, refetch } =
+    useUserDataAllStrategies()
   const valueAndFormatted = ({
     value,
     formatted,
@@ -81,7 +82,7 @@ export const YourPortofolio = () => {
             w="full"
           >
             <Box w="100%">
-              {data ? (
+              {!isError && data ? (
                 data.strategies.map((strategy) => (
                   <PortofolioItem
                     symbol={
@@ -126,6 +127,8 @@ export const YourPortofolio = () => {
                     }
                   />
                 ))
+              ) : data?.strategies.length === 0 ? (
+                <h1>start </h1>
               ) : (
                 <ErrorCard message="" py="100px">
                   <Center>

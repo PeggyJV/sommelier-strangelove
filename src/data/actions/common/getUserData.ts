@@ -114,7 +114,7 @@ export const getUserData = async ({
       ) {
         return undefined
       }
-      return userShares + bonded
+      return (userShares + bonded) * tokenPrice
     })()
 
     const netValue = (() => {
@@ -128,9 +128,7 @@ export const getUserData = async ({
       ) {
         return undefined
       }
-      return (
-        userShares * tokenPrice + bonded * tokenPrice + sommRewardsUSD
-      )
+      return (userShares + bonded) * tokenPrice + sommRewardsUSD
     })()
 
     const netValueWithoutRewards = (() => {

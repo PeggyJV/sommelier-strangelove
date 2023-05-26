@@ -1,6 +1,12 @@
 // TODO: Move content to a cms
-import { Image, Text } from "@chakra-ui/react"
+import { effect, Image, position, Text } from "@chakra-ui/react"
+import { time } from "console"
+import { add } from "date-fns"
+import { be } from "date-fns/locale"
+import { on } from "events"
+import { at, some, take, each } from "lodash"
 import { config } from "utils/config"
+import { chain } from "wagmi"
 
 export const strategyPageContentData = {
   [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: {
@@ -601,5 +607,195 @@ export const strategyPageContentData = {
     <br/><br/>
     Disclaimer: Simplified for narrative purposes. Actual algorithm(s) may vary.
     `,
+  },
+  [config.CONTRACT.REAL_YIELD_LINK.SLUG]: {
+    name: "Real Yield LINK",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
+    ticker: (
+      <>
+        <Image
+          alt="defi stars icon"
+          src="/assets/icons/real-yield-link.png"
+          boxSize={8}
+        />
+        <Text>RYLINK</Text>
+      </>
+    ),
+    tradedAssets: ["LINK", "WETH", "YieldETH"],
+    alternativeTo: "Lending",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Automated leverage monitoring and yield compounding.`,
+        `Organic yield powered by an "arbitrage" between Ethereum staking rates and ETH borrow costs.`,
+        `No lockups, withdraw your tokens at any time.`,
+      ],
+      description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
+      <br/><br/>
+      Note that Real Yield LINK and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+
+      `,
+    },
+    howItWorks: `
+    The way the vault achieves this is by taking your deposited Real Yield LINK, supplying it on Aave as collateral to borrow ETH and then depositing that ETH into the Real Yield ETH vault. For context, the Real Yield ETH vault generates yield from leveraged staking and LPing ETH and ETH LSTs. The desired net effect is that the yield earned through Real Yield ETH will be greater than the borrow costs of the ETH allowing the vault to purchase more of your deposit token to add to your position. It’s important to note that these vaults and the Real Yield ETH vault take on leverage. However, Sommelier’s novel architecture gives vaults advanced capabilities when it comes to taking on and monitoring these positions. While leveraged, the vault smart contract enforces a minimum health factor during each rebalance as a safety precaution. The vault also closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.`,
+  },
+  [config.CONTRACT.REAL_YIELD_1Inch.SLUG]: {
+    name: "Real Yield 1INCH",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="RY1INCH icon"
+          src="/assets/icons/real-yield-one-inch.png"
+          boxSize={8}
+        />
+        <Text>RY1INCH</Text>
+      </>
+    ),
+    tradedAssets: ["1Inch", "WETH", "YieldETH"],
+    alternativeTo: "Lending",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Automated leverage monitoring and yield compounding.`,
+        `Organic yield powered by an "arbitrage" between Ethereum staking rates and ETH borrow costs.`,
+        `No lockups, withdraw your tokens at any time.`,
+      ],
+      description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
+      <br/><br/>
+      Note that Real Yield 1INCH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+`,
+    },
+    howItWorks: `
+    The way the vault achieves this is by taking your Real Yield 1INCH, supplying it on Aave as collateral to borrow ETH and then depositing that ETH into the Real Yield ETH vault. For context, the Real Yield ETH vault generates yield from leveraged staking and LPing ETH and ETH LSTs. The desired net effect is that the yield earned through Real Yield ETH will be greater than the borrow costs of the ETH allowing the vault to purchase more of your deposit token to add to your position. It’s important to note that these vaults and the Real Yield ETH vault take on leverage. However, Sommelier’s novel architecture gives vaults advanced capabilities when it comes to taking on and monitoring these positions. While leveraged, the vault smart contract enforces a minimum health factor during each rebalance as a safety precaution. The vault also closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.`,
+  },
+  [config.CONTRACT.REAL_YIELD_ENS.SLUG]: {
+    name: "Real Yield ENS",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="RYENS icon"
+          src="/assets/icons/real-yield-ens.png"
+          boxSize={8}
+        />
+        <Text>RYENS</Text>
+      </>
+    ),
+    tradedAssets: ["ENS", "WETH", "YieldETH"],
+    alternativeTo: "Lending",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Automated leverage monitoring and yield compounding.`,
+        `Organic yield powered by an "arbitrage" between Ethereum staking rates and ETH borrow costs.`,
+        `No lockups, withdraw your tokens at any time.`,
+      ],
+      description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
+      <br/><br/>
+      Note that Real Yield ENS and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+`,
+    },
+    howItWorks: `
+    The way the vault achieves this is by taking your Real Yield ENS, supplying it on Aave as collateral to borrow ETH and then depositing that ETH into the Real Yield ETH vault. For context, the Real Yield ETH vault generates yield from leveraged staking and LPing ETH and ETH LSTs. The desired net effect is that the yield earned through Real Yield ETH will be greater than the borrow costs of the ETH allowing the vault to purchase more of your deposit token to add to your position. It’s important to note that these vaults and the Real Yield ETH vault take on leverage. However, Sommelier’s novel architecture gives vaults advanced capabilities when it comes to taking on and monitoring these positions. While leveraged, the vault smart contract enforces a minimum health factor during each rebalance as a safety precaution. The vault also closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.`,
+  },
+  [config.CONTRACT.REAL_YIELD_SNX.SLUG]: {
+    name: "Real Yield SNX",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="RYSNX icon"
+          src="/assets/icons/defi-stars.png"
+          boxSize={8}
+        />
+        <Text>RYSNX</Text>
+      </>
+    ),
+    tradedAssets: ["SNX", "WETH", "YieldETH"],
+    alternativeTo: "Lending",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Automated leverage monitoring and yield compounding.`,
+        `Organic yield powered by an "arbitrage" between Ethereum staking rates and ETH borrow costs.`,
+        `No lockups, withdraw your tokens at any time.`,
+      ],
+      description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
+      <br/><br/>
+      Note that Real Yield SNX and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+`,
+    },
+    howItWorks: `
+    The way the vault achieves this is by taking your deposited Real Yield SNX, supplying it on Aave as collateral to borrow ETH and then depositing that ETH into the Real Yield ETH vault. For context, the Real Yield ETH vault generates yield from leveraged staking and LPing ETH and ETH LSTs. The desired net effect is that the yield earned through Real Yield ETH will be greater than the borrow costs of the ETH allowing the vault to purchase more of your deposit token to add to your position. It’s important to note that these vaults and the Real Yield ETH vault take on leverage. However, Sommelier’s novel architecture gives vaults advanced capabilities when it comes to taking on and monitoring these positions. While leveraged, the vault smart contract enforces a minimum health factor during each rebalance as a safety precaution. The vault also closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.`,
+  },
+  [config.CONTRACT.REAL_YIELD_UNI.SLUG]: {
+    name: "Real Yield UNI",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="RYUNI icon"
+          src="/assets/icons/real-yield-uni.png"
+          boxSize={8}
+        />
+        <Text>RYUNI</Text>
+      </>
+    ),
+    tradedAssets: ["UNI", "WETH", "YieldETH"],
+    alternativeTo: "Lending",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Automated leverage monitoring and yield compounding.`,
+        `Organic yield powered by an "arbitrage" between Ethereum staking rates and ETH borrow costs.`,
+        `No lockups, withdraw your tokens at any time.`,
+      ],
+      description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
+      <br/><br/>
+      Note that Real Yield UNI and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+`,
+    },
+    howItWorks: `
+    The way the vault achieves this is by taking your deposited Real Yield UNI, supplying it on Aave as collateral to borrow ETH and then depositing that ETH into the Real Yield ETH vault. For context, the Real Yield ETH vault generates yield from leveraged staking and LPing ETH and ETH LSTs. The desired net effect is that the yield earned through Real Yield ETH will be greater than the borrow costs of the ETH allowing the vault to purchase more of your deposit token to add to your position. It’s important to note that these vaults and the Real Yield ETH vault take on leverage. However, Sommelier’s novel architecture gives vaults advanced capabilities when it comes to taking on and monitoring these positions. While leveraged, the vault smart contract enforces a minimum health factor during each rebalance as a safety precaution. The vault also closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.`,
   },
 }

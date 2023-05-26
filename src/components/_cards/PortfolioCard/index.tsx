@@ -27,6 +27,7 @@ import { getTokenConfig, Token } from "data/tokenConfig"
 import {
   bondingPeriodOptions,
   isBondButtonEnabled,
+  isBondedDisabled,
   isBondingEnabled,
   isRewardsEnabled,
   lpTokenTooltipContent,
@@ -204,62 +205,66 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 ))}
             </Stack>
           </SimpleGrid>
-          <SimpleGrid
-            templateColumns="repeat(2, max-content)"
-            templateRows="repeat(2, 1fr)"
-            spacing={4}
-            alignItems="flex-end"
-          >
-            <VStack align="flex-start">
-              <CardStat
-                label="tokens"
-                tooltip={lpTokenTooltipContent(cellarConfig)}
+          {!isBondedDisabled(cellarConfig) && (
+            <>
+              <SimpleGrid
+                templateColumns="repeat(2, max-content)"
+                templateRows="repeat(2, 1fr)"
+                spacing={4}
+                alignItems="flex-end"
               >
-                {cellarConfig.lpToken.imagePath && (
-                  <Image
-                    src={cellarConfig.lpToken.imagePath}
-                    alt="lp token image"
-                    height="24px"
-                    mr={2}
-                  />
-                )}
-                {isMounted &&
-                  (isConnected
-                    ? (lpTokenData &&
-                        toEther(
-                          lpTokenData.formatted,
-                          lpTokenData.decimals,
-                          true,
-                          2
-                        )) ||
-                      "..."
-                    : "--")}
-              </CardStat>
-            </VStack>
-            {isBondingEnabled(cellarConfig) && (
-              <>
                 <VStack align="flex-start">
                   <CardStat
-                    label="bonded tokens"
-                    tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
+                    label="tokens"
+                    tooltip={lpTokenTooltipContent(cellarConfig)}
                   >
+                    {cellarConfig.lpToken.imagePath && (
+                      <Image
+                        src={cellarConfig.lpToken.imagePath}
+                        alt="lp token image"
+                        height="24px"
+                        mr={2}
+                      />
+                    )}
                     {isMounted &&
                       (isConnected
-                        ? userStakes?.totalBondedAmount.formatted ||
+                        ? (lpTokenData &&
+                            toEther(
+                              lpTokenData.formatted,
+                              lpTokenData.decimals,
+                              true,
+                              2
+                            )) ||
                           "..."
                         : "--")}
                   </CardStat>
                 </VStack>
-                {isBondButtonEnabled(cellarConfig) &&
-                  isStakingAllowed &&
-                  isMounted && (
-                    <BondButton disabled={lpTokenDisabled} />
-                  )}
-              </>
-            )}
-          </SimpleGrid>
-          {isRewardsEnabled(cellarConfig) && (
-            <Rewards cellarConfig={cellarConfig} />
+                {isBondingEnabled(cellarConfig) && (
+                  <>
+                    <VStack align="flex-start">
+                      <CardStat
+                        label="bonded tokens"
+                        tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
+                      >
+                        {isMounted &&
+                          (isConnected
+                            ? userStakes?.totalBondedAmount
+                                .formatted || "..."
+                            : "--")}
+                      </CardStat>
+                    </VStack>
+                    {isBondButtonEnabled(cellarConfig) &&
+                      isStakingAllowed &&
+                      isMounted && (
+                        <BondButton disabled={lpTokenDisabled} />
+                      )}
+                  </>
+                )}
+              </SimpleGrid>
+              {isRewardsEnabled(cellarConfig) && (
+                <Rewards cellarConfig={cellarConfig} />
+              )}
+            </>
           )}
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
