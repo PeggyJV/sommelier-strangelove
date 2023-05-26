@@ -6,10 +6,8 @@ import {
   CellarRouterKey,
   CellarType,
 } from "../types"
-
 export const realYieldUNI: CellarData = {
-  isContractReady: false,
-
+  isContractNotReady: true,
   name: "Real Yield UNI",
   slug: config.CONTRACT.REAL_YIELD_UNI.SLUG,
   tradedAssets: ["UNI", "WETH", "YieldETH"],

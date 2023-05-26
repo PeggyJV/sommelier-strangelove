@@ -8,7 +8,7 @@ import {
 } from "../types"
 
 export const realYieldSNX: CellarData = {
-  isContractReady: false,
+  isContractNotReady: true,
 
   name: "Real Yield SNX",
   slug: config.CONTRACT.REAL_YIELD_SNX.SLUG,

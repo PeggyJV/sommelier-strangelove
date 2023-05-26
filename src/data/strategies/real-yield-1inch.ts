@@ -8,7 +8,7 @@ import {
 } from "../types"
 
 export const realYield1Inch: CellarData = {
-  isContractReady: false,
+  isContractNotReady: true,
 
   name: "Real Yield 1INCH",
   slug: config.CONTRACT.REAL_YIELD_1Inch.SLUG,
