@@ -27,8 +27,6 @@ export const PageHome = () => {
   const [type, setType] = useState<string>("All")
   const strategyType = ["All", "Portfolio", "Yield"]
 
-  console.log("data", data)
-
   const { timeline } = useHome()
   const columns = isDesktop
     ? StrategyDesktopColumn({ timeline })
