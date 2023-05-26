@@ -1,6 +1,6 @@
 import { fetchBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
-import { CellarNameKey, ConfigProps, StakerKey } from "data/types"
+import { ConfigProps, StakerKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { CellarStakingV0815 } from "src/abi/types"
@@ -15,16 +15,20 @@ export const getUserData = async ({
   strategyData,
   userAddress,
   sommPrice,
-  wethPrice,
   sgData,
+  baseAssetPrice,
+  decimals,
+  symbol,
 }: {
   address: string
   contracts: StrategyContracts
   strategyData: StrategyData
   userAddress: string
   sommPrice: string
-  wethPrice: string
   sgData?: GetStrategyDataQuery["cellar"]
+  decimals: number
+  baseAssetPrice: string
+  symbol: string
 }) => {
   const userDataRes = await (async () => {
     const strategy = Object.values(cellarDataMap).find(
@@ -36,17 +40,10 @@ export const getUserData = async ({
     const tokenPrice = (() => {
       if (!subgraphData?.shareValue) return 1
 
-      // FIXME:
-      // Use subgraph data to determine number of decimals from the underlying asset
-      // cellar.asset.decimals
-      let decimals = 6
-      if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
-        decimals = 18
-      }
       const price = formatDecimals(subgraphData.shareValue, decimals)
 
-      return config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-        ? Number(price) * Number(wethPrice)
+      return symbol !== "USDC"
+        ? Number(price) * Number(baseAssetPrice)
         : Number(price)
     })()
 
@@ -80,9 +77,9 @@ export const getUserData = async ({
       ? userStakes.claimAllRewardsUSD.toNumber()
       : 0
     const sommRewardsRaw = userStakes
-      ? config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+      ? symbol !== "USDC"
         ? userStakes.claimAllRewardsUSD.toNumber() /
-          parseFloat(wethPrice)
+          parseFloat(baseAssetPrice)
         : userStakes.claimAllRewardsUSD.toNumber()
       : 0
 

@@ -16,7 +16,6 @@ import { formatUSD, toEther } from "utils/formatCurrency"
 import { DIRECT, landingType } from "utils/landingType"
 import { analytics } from "utils/analytics"
 import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
-import { CellarNameKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
 
 interface PortofolioItemProps extends StackProps {

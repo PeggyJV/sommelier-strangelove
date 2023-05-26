@@ -7,10 +7,8 @@ import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 
 export const useAllStrategiesData = () => {
   const provider = useProvider()
-
   const { data: allContracts } = useAllContracts()
   const { data: sommPrice } = useCoinGeckoPrice("sommelier")
-  const { data: wethPrice } = useCoinGeckoPrice("weth")
   const [{ data: sgData, error }, reFetch] =
     useGetAllStrategiesDataQuery()
 
@@ -20,13 +18,11 @@ export const useAllStrategiesData = () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,
         sommPrice: sommPrice!,
-        wethPrice: wethPrice!,
         sgData: sgData,
       })
     },
     {
-      enabled:
-        !!allContracts && !!sommPrice && !!sgData && !!wethPrice,
+      enabled: !!allContracts && !!sommPrice && !!sgData,
     }
   )
 
