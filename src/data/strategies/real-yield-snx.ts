@@ -5,10 +5,11 @@ import {
   CellarNameKey,
   CellarRouterKey,
   CellarType,
-  StakerKey,
 } from "../types"
 
 export const realYieldSNX: CellarData = {
+  isContractReady: false,
+
   name: "Real Yield SNX",
   slug: config.CONTRACT.REAL_YIELD_SNX.SLUG,
   tradedAssets: ["SNX", "WETH", "YieldETH"],

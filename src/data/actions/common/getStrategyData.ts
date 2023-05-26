@@ -64,6 +64,7 @@ export const getStrategyData = async ({
       const isNew =
         !!launchDate &&
         isBefore(launchDate, add(new Date(), { weeks: 4 }))
+      const isContractReady = strategy.isContractReady
 
       const hideValue =
         isComingSoon(launchDate) &&
@@ -207,6 +208,7 @@ export const getStrategyData = async ({
         description,
         isNew,
         isStakingOngoing,
+        isContractReady,
         launchDate,
         logo,
         name,

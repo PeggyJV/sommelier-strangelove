@@ -5,10 +5,11 @@ import {
   CellarNameKey,
   CellarRouterKey,
   CellarType,
-  StakerKey,
 } from "../types"
 
 export const realYieldENS: CellarData = {
+  isContractReady: false,
+
   name: "Real Yield ENS",
   slug: config.CONTRACT.REAL_YIELD_ENS.SLUG,
   tradedAssets: ["ENS", "WETH", "YieldETH"],

@@ -27,7 +27,8 @@ export const getUserDataAllStrategies = async ({
         const strategyData = strategiesData.find(
           (item) => item?.address === address
         )
-        if (!strategyData) return
+
+        if (!strategyData || !strategyData.isContractReady) return
         const result = await reactQueryClient.fetchQuery(
           [
             "USE_USER_DATA",

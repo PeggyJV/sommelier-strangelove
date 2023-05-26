@@ -74,6 +74,7 @@ type Exchange =
     }
 
 export interface CellarData {
+  isContractReady?: boolean
   deprecated?: boolean
   name: string
   slug: string
