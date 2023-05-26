@@ -172,6 +172,48 @@ export const tokenConfig: Token[] = [
     address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
     coinGeckoId: "aave",
   },
+  {
+    src: "/assets/icons/link.jpeg",
+    alt: "LINK logo",
+    symbol: "LINK",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "link",
+  },
+  {
+    src: "/assets/icons/eth.png",
+    alt: "ETH logo",
+    symbol: "ETH",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "eth",
+  },
+  {
+    src: "/assets/icons/one-inch.png",
+    alt: "1Inch logo",
+    symbol: "1Inch",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "1inch",
+  },
+  {
+    src: "/assets/icons/ens.jpeg",
+    alt: "Ens logo",
+    symbol: "Ens",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "ens",
+  },
+  {
+    src: "/assets/icons/snx.png",
+    alt: "SNX logo",
+    symbol: "SNX",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "snx",
+  },
+  {
+    src: "/assets/icons/real-yield-eth.png",
+    alt: "real-yield-eth logo",
+    symbol: "YieldETH",
+    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    coinGeckoId: "y-eth",
+  },
 ]
 
 export const depositAssetTokenList = [
@@ -186,6 +228,8 @@ export const depositAssetTokenList = [
   "sUSD",
   "TUSD",
   "USDT",
+  "LINK",
+  "ETH",
 ]
 
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
