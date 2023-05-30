@@ -25,7 +25,6 @@ export const getUserDataAllStrategies = async ({
         const strategyData = strategiesData.find(
           (item) => item?.address === address
         )
-
         if (!strategyData || strategyData.isContractNotReady) return
         const result = await reactQueryClient.fetchQuery(
           [
@@ -33,11 +32,11 @@ export const getUserDataAllStrategies = async ({
             { signer: true, contractAddress: address, userAddress },
           ],
           async () => {
-            const subgraphData = sgData!.cellars.find(
+            const subgraphData = sgData?.cellars.find(
               (v) => v.id === address
-            )!
+            )
             const baseAsset = tokenConfig.find(
-              (token) => token.symbol === subgraphData.asset.symbol
+              (token) => token.symbol === subgraphData?.asset.symbol
             )
             const baseAssetPrice = await fetchCoingeckoPrice(
               baseAsset?.coinGeckoId ?? "usd-coin",
@@ -50,9 +49,9 @@ export const getUserDataAllStrategies = async ({
               strategyData: strategyData,
               userAddress,
               sgData: subgraphData,
-              decimals: subgraphData.asset.decimals ?? 6,
+              decimals: subgraphData?.asset.decimals ?? 6,
               baseAssetPrice: baseAssetPrice!,
-              symbol: subgraphData.asset.symbol ?? "USDC",
+              symbol: subgraphData?.asset.symbol ?? "USDC",
             })
           }
         )

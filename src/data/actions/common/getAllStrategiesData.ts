@@ -24,23 +24,28 @@ export const getAllStrategiesData = async ({
           async () => {
             const subgraphData = sgData.cellars.find(
               (v) => v.id.toLowerCase() === address.toLowerCase()
-            )!
+            )
             const baseAsset = tokenConfig.find(
-              (token) => token.symbol === subgraphData.asset.symbol
+              (token) => token.symbol === subgraphData?.asset.symbol
             )
             const baseAssetPrice = await fetchCoingeckoPrice(
               baseAsset?.coinGeckoId ?? "usd-coin",
               "usd"
             )
-            return await getStrategyData({
-              address,
-              sgData: subgraphData,
-              sommPrice,
-              contracts: contracts,
-              decimals: subgraphData.asset.decimals ?? 6,
-              baseAssetPrice: baseAssetPrice!,
-              symbol: subgraphData.asset.symbol ?? "USDC",
-            })
+            try {
+              console.log("run getstrategy")
+              return await getStrategyData({
+                address,
+                sgData: subgraphData,
+                sommPrice,
+                contracts: contracts,
+                decimals: subgraphData?.asset.decimals ?? 6,
+                baseAssetPrice: baseAssetPrice!,
+                symbol: subgraphData?.asset.symbol ?? "USDC",
+              })
+            } catch (error) {
+              console.error(error)
+            }
           },
           {}
         )
@@ -49,6 +54,7 @@ export const getAllStrategiesData = async ({
       }
     )
   )
+  console.log("data", data)
   type Data = Awaited<ReturnType<typeof getStrategyData>>
   const isData = (item: Data | null): item is Data => {
     return !!item
