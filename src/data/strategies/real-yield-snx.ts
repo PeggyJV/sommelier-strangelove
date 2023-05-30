@@ -8,8 +8,6 @@ import {
 } from "../types"
 
 export const realYieldSNX: CellarData = {
-  isContractNotReady: true,
-
   name: "Real Yield SNX",
   slug: config.CONTRACT.REAL_YIELD_SNX.SLUG,
   tradedAssets: ["SNX", "WETH", "YieldETH"],
