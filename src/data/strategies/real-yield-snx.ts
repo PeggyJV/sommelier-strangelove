@@ -48,7 +48,6 @@ export const realYieldSNX: CellarData = {
   },
 
   config: {
-    noSubgraph: true,
     id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_SNX,
