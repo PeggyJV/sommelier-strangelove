@@ -42,14 +42,17 @@ export const useStrategyData = (address: string) => {
         sgData: sgData?.cellar!,
         decimals: sgData?.cellar?.asset.decimals ?? 6,
         baseAssetPrice: baseAssetPrice!,
-        symbol: sgData?.cellar!.asset.symbol ?? "USDC",
+        symbol: sgData?.cellar?.asset.symbol ?? "USDC",
       })
 
       return result
     },
     {
       enabled:
-        !!allContracts && !!sommPrice && (isNoSubgraph || !!sgData),
+        !!allContracts &&
+        !!sommPrice &&
+        (isNoSubgraph || !!sgData) &&
+        !!baseAssetPrice,
     }
   )
 

@@ -57,9 +57,9 @@ export const useUserStrategyData = (strategyAddress: string) => {
         userAddress: userAddress!,
         sommPrice: sommPrice.data!,
         sgData: sgData!.cellar,
-        decimals: sgData?.cellar!.asset.decimals ?? 6,
+        decimals: sgData?.cellar?.asset.decimals ?? 6,
         baseAssetPrice: baseAssetPrice!,
-        symbol: sgData?.cellar!.asset.symbol ?? "USDC",
+        symbol: sgData?.cellar?.asset.symbol ?? "USDC",
       })
     },
     {
