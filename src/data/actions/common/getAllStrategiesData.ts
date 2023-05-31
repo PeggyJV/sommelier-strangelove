@@ -33,7 +33,6 @@ export const getAllStrategiesData = async ({
               "usd"
             )
             try {
-              console.log("run getstrategy")
               return await getStrategyData({
                 address,
                 sgData: subgraphData,
@@ -54,7 +53,6 @@ export const getAllStrategiesData = async ({
       }
     )
   )
-  console.log("data", data)
   type Data = Awaited<ReturnType<typeof getStrategyData>>
   const isData = (item: Data | null): item is Data => {
     return !!item

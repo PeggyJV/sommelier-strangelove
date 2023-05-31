@@ -1,10 +1,15 @@
+import { BigNumber, constants } from "ethers"
 import { fetchBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
 import { GetStrategyDataQuery } from "generated/subgraph"
-import { CellarStakingV0815 } from "src/abi/types"
-import { formatDecimals } from "utils/bigNumber"
+import { CellarV0815, CellarStakingV0815 } from "src/abi/types"
+import {
+  convertDecimals,
+  formatDecimals,
+  ZERO,
+} from "utils/bigNumber"
 import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
@@ -69,6 +74,25 @@ export const getUserData = async ({
       )
     })()
 
+    const totalAssets = await (async () => {
+      if (!contracts.cellarContract) {
+        return ZERO
+      }
+
+      const cellarContract = contracts.cellarContract as CellarV0815
+      const bonded =
+        // Coerce from bignumber.js to ethers BN
+        BigNumber.from(
+          userStakes?.totalBondedAmount?.value.toString()
+        ) ?? constants.Zero
+      const totalShares = shares.value.add(bonded)
+      const assets = await cellarContract.convertToAssets(totalShares)
+
+      return convertDecimals(assets.toString(), decimals)
+    })()
+
+    const numTotalAssets = Number(totalAssets.toNumber().toFixed(5))
+
     const bonded = userStakes
       ? Number(userStakes.totalBondedAmount.formatted)
       : 0
@@ -83,63 +107,41 @@ export const getUserData = async ({
         : userStakes.claimAllRewardsUSD.toNumber()
       : 0
 
-    const userShares =
-      (shares && Number(Number(shares.formatted).toFixed(5))) || 0
+    const isLoaded = Boolean(subgraphData?.shareValue)
+      ? shares === undefined ||
+        userStakes === undefined ||
+        bonded === undefined ||
+        !subgraphData?.shareValue
+      : false
 
     const netValueInAsset = (() => {
-      if (
-        Boolean(subgraphData?.shareValue)
-          ? shares === undefined ||
-            userStakes === undefined ||
-            bonded === undefined ||
-            !subgraphData?.shareValue
-          : false
-      ) {
+      if (isLoaded) {
         return undefined
       }
-      return userShares + bonded + Number(sommRewardsRaw)
+      return numTotalAssets + Number(sommRewardsRaw)
     })()
 
     const netValueWithoutRewardsInAsset = (() => {
-      if (
-        Boolean(subgraphData?.shareValue)
-          ? shares === undefined ||
-            userStakes === undefined ||
-            bonded === undefined ||
-            !subgraphData?.shareValue
-          : false
-      ) {
+      if (isLoaded) {
         return undefined
       }
-      return (userShares + bonded) * tokenPrice
+      return numTotalAssets
     })()
 
+    // Denoted in USD
     const netValue = (() => {
-      if (
-        Boolean(subgraphData?.shareValue)
-          ? shares === undefined ||
-            userStakes === undefined ||
-            bonded === undefined ||
-            !subgraphData?.shareValue
-          : false
-      ) {
+      if (isLoaded) {
         return undefined
       }
-      return (userShares + bonded) * tokenPrice + sommRewardsUSD
+      return numTotalAssets * tokenPrice + sommRewardsUSD
     })()
 
+    // Denoted in USD
     const netValueWithoutRewards = (() => {
-      if (
-        Boolean(subgraphData?.shareValue)
-          ? shares === undefined ||
-            userStakes === undefined ||
-            bonded === undefined ||
-            !subgraphData?.shareValue
-          : false
-      ) {
+      if (isLoaded) {
         return undefined
       }
-      return (userShares + bonded) * tokenPrice
+      return numTotalAssets * tokenPrice
     })()
 
     const userStrategyData = {

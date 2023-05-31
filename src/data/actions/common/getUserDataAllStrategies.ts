@@ -42,17 +42,21 @@ export const getUserDataAllStrategies = async ({
               baseAsset?.coinGeckoId ?? "usd-coin",
               "usd"
             )
-            return await getUserData({
-              address,
-              contracts,
-              sommPrice,
-              strategyData: strategyData,
-              userAddress,
-              sgData: subgraphData,
-              decimals: subgraphData?.asset.decimals ?? 6,
-              baseAssetPrice: baseAssetPrice!,
-              symbol: subgraphData?.asset.symbol ?? "USDC",
-            })
+            try {
+              return await getUserData({
+                address,
+                contracts,
+                sommPrice,
+                strategyData: strategyData,
+                userAddress,
+                sgData: subgraphData,
+                decimals: subgraphData?.asset.decimals ?? 6,
+                baseAssetPrice: baseAssetPrice!,
+                symbol: subgraphData?.asset.symbol ?? "USDC",
+              })
+            } catch (error) {
+              console.error(error)
+            }
           }
         )
         return result
