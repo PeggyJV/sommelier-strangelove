@@ -8,8 +8,6 @@ import {
 } from "../types"
 
 export const realYieldSNX: CellarData = {
-  isContractNotReady: true,
-
   name: "Real Yield SNX",
   slug: config.CONTRACT.REAL_YIELD_SNX.SLUG,
   tradedAssets: ["SNX", "WETH", "YieldETH"],
@@ -49,7 +47,6 @@ The purpose of this vault is to provide token holders with a passive yield oppor
   },
 
   config: {
-    noSubgraph: true,
     id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_SNX,

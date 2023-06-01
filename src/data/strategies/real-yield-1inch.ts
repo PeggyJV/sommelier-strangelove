@@ -8,8 +8,6 @@ import {
 } from "../types"
 
 export const realYield1Inch: CellarData = {
-  isContractNotReady: true,
-
   name: "Real Yield 1INCH",
   slug: config.CONTRACT.REAL_YIELD_1Inch.SLUG,
   tradedAssets: ["1Inch", "WETH", "YieldETH"],
@@ -49,7 +47,6 @@ export const realYield1Inch: CellarData = {
   },
 
   config: {
-    noSubgraph: true,
     id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_1INCH,

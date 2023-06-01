@@ -3,31 +3,28 @@ import { formatUSD, toEther } from "utils/formatCurrency"
 import { reactQueryClient } from "utils/reactQuery"
 import { getUserData } from "./getUserData"
 import { GetAllStrategiesDataQuery } from "generated/subgraph"
+import { tokenConfig } from "data/tokenConfig"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 
 export const getUserDataAllStrategies = async ({
   allContracts,
   strategiesData,
   userAddress,
   sommPrice,
-  wethPrice,
   sgData,
 }: {
   allContracts: AllContracts
   strategiesData: AllStrategiesData
   userAddress: string
   sommPrice: string
-  wethPrice: string
-  sgData: GetAllStrategiesDataQuery
+  sgData?: GetAllStrategiesDataQuery
 }) => {
-  // TODO: Remove this if it's not using test contract
-
   const userDataRes = await Promise.all(
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
         const strategyData = strategiesData.find(
           (item) => item?.address === address
         )
-
         if (!strategyData || strategyData.isContractNotReady) return
         const result = await reactQueryClient.fetchQuery(
           [
@@ -35,18 +32,31 @@ export const getUserDataAllStrategies = async ({
             { signer: true, contractAddress: address, userAddress },
           ],
           async () => {
-            const subgraphData = sgData.cellars.find(
+            const subgraphData = sgData?.cellars.find(
               (v) => v.id === address
             )
-            return await getUserData({
-              address,
-              contracts,
-              sommPrice,
-              wethPrice,
-              strategyData: strategyData,
-              userAddress,
-              sgData: subgraphData,
-            })
+            const baseAsset = tokenConfig.find(
+              (token) => token.symbol === subgraphData?.asset.symbol
+            )
+            const baseAssetPrice = await fetchCoingeckoPrice(
+              baseAsset?.coinGeckoId ?? "usd-coin",
+              "usd"
+            )
+            try {
+              return await getUserData({
+                address,
+                contracts,
+                sommPrice,
+                strategyData: strategyData,
+                userAddress,
+                sgData: subgraphData,
+                decimals: subgraphData?.asset.decimals ?? 6,
+                baseAssetPrice: baseAssetPrice!,
+                symbol: subgraphData?.asset.symbol ?? "USDC",
+              })
+            } catch (error) {
+              console.error(error)
+            }
           }
         )
         return result
@@ -54,7 +64,7 @@ export const getUserDataAllStrategies = async ({
     )
   )
 
-  const userData = userDataRes.filter((item) => item !== undefined)
+  const userData = userDataRes.filter((item) => !!item)
 
   const totalNetValue = (() => {
     let total = 0
