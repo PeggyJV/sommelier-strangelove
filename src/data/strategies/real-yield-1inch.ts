@@ -52,7 +52,8 @@ export const realYield1Inch: CellarData = {
     cellarNameKey: CellarNameKey.REAL_YIELD_1INCH,
     lpToken: {
       address: config.CONTRACT.ONE_INCH.ADDRESS,
-      imagePath: "/assets/icons/one-inch.png",
+      imagePath: "/assets/icons/real-yield-one-inch.png",
+      tokenPath: "/assets/icons/one-inch.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
