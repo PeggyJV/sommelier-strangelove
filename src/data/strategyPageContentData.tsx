@@ -732,7 +732,7 @@ export const strategyPageContentData = {
         {}
         <Image
           alt="RYSNX icon"
-          src="/assets/icons/defi-stars.png"
+          src="/assets/icons/real-yield-snx.png"
           boxSize={8}
         />
         <Text>RYSNX</Text>
