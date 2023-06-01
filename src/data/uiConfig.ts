@@ -95,7 +95,11 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX
   )
 }
 
