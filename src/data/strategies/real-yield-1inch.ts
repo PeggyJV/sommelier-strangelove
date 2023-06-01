@@ -11,7 +11,7 @@ export const realYield1Inch: CellarData = {
   name: "Real Yield 1INCH",
   slug: config.CONTRACT.REAL_YIELD_1Inch.SLUG,
   tradedAssets: ["1Inch", "WETH", "YieldETH"],
-  launchDate: new Date(2023, 4, 31, 14, 0, 0, 0),
+  launchDate: new Date(2023, 5, 5, 14, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
   strategyType: "Yield",
@@ -47,12 +47,12 @@ export const realYield1Inch: CellarData = {
   },
 
   config: {
-    id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+    id: config.CONTRACT.ONE_INCH.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_1INCH,
     lpToken: {
-      address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
-      imagePath: "/assets/icons/real-yield-one-inch.png",
+      address: config.CONTRACT.ONE_INCH.ADDRESS,
+      imagePath: "/assets/icons/one-inch.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,

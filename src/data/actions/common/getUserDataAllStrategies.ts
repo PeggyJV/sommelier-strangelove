@@ -25,7 +25,7 @@ export const getUserDataAllStrategies = async ({
         const strategyData = strategiesData.find(
           (item) => item?.address === address
         )
-        if (!strategyData || strategyData.isContractNotReady) return
+
         const result = await reactQueryClient.fetchQuery(
           [
             "USE_USER_DATA",
@@ -42,6 +42,7 @@ export const getUserDataAllStrategies = async ({
               baseAsset?.coinGeckoId ?? "usd-coin",
               "usd"
             )
+            console.log("strategyData", strategyData)
             try {
               return await getUserData({
                 address,
@@ -55,7 +56,7 @@ export const getUserDataAllStrategies = async ({
                 symbol: subgraphData?.asset.symbol ?? "USDC",
               })
             } catch (error) {
-              console.error(error)
+              console.log("error", error)
             }
           }
         )

@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 import { getStrategyData } from "data/actions/common/getStrategyData"
+import { cellarDataMap } from "data/cellarDataMap"
+import { tokenConfig } from "data/tokenConfig"
 import { useGetStrategyDataQuery } from "generated/subgraph"
 import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
-import { cellarDataMap } from "data/cellarDataMap"
-import { useUserBalances } from "./useUserBalances"
-import { tokenConfig } from "data/tokenConfig"
 
 export const useStrategyData = (address: string) => {
   const provider = useProvider()

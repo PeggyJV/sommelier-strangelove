@@ -153,7 +153,6 @@ export const getStrategyData = async ({
       const baseApy = (() => {
         if (hideValue) return
         if (!isAPYEnabled(config)) return
-
         const datas = dayDatas?.slice(0, 10)
 
         if (config.cellar.key === CellarKey.CELLAR_V2) {
@@ -180,7 +179,11 @@ export const getStrategyData = async ({
         if (hideValue) return
         if (!subgraphData?.shareValue) return
 
-        const price = formatDecimals(subgraphData.shareValue, 6, 2)
+        const price = formatDecimals(
+          subgraphData.shareValue,
+          decimals,
+          2
+        )
         return `$${price}`
       })()
 

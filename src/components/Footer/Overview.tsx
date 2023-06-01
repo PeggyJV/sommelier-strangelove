@@ -54,7 +54,13 @@ export const Overview = () => {
             height={isLoading ? "60px" : "auto"}
           >
             <Text fontWeight="bold" fontSize="40px">
-              {String(totalLaunchedStrategies?.length)}
+              {String(
+                totalLaunchedStrategies?.filter((strategies) =>
+                  strategies?.launchDate
+                    ? strategies?.launchDate <= new Date()
+                    : true
+                ).length
+              )}
             </Text>
           </LighterSkeleton>
         </VStack>

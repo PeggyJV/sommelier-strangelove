@@ -205,7 +205,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 ))}
             </Stack>
           </SimpleGrid>
-          {!isBondedDisabled(cellarConfig) && (
+          {!isBondedDisabled(cellarConfig) ? (
             <>
               <SimpleGrid
                 templateColumns="repeat(2, max-content)"
@@ -265,6 +265,33 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 <Rewards cellarConfig={cellarConfig} />
               )}
             </>
+          ) : (
+            <VStack align="flex-start">
+              <CardStat
+                label="tokens"
+                tooltip={lpTokenTooltipContent(cellarConfig)}
+              >
+                {cellarConfig.lpToken.tokenPath && (
+                  <Image
+                    src={cellarConfig.lpToken.tokenPath}
+                    alt="lp token image"
+                    height="24px"
+                    mr={2}
+                  />
+                )}
+                {isMounted &&
+                  (isConnected
+                    ? (lpTokenData &&
+                        toEther(
+                          lpTokenData.formatted,
+                          lpTokenData.decimals,
+                          true,
+                          2
+                        )) ||
+                      "..."
+                    : "--")}
+              </CardStat>
+            </VStack>
           )}
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
