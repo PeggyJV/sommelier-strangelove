@@ -58,7 +58,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
               <ChartTooltipItem
                 key={item.id}
                 backgroundColor={item.color}
-                name="APY since iasdnception"
+                name="APY since inception"
                 percentage={`${String(
                   data.series?.find((s) => s.id === item.id)?.data[
                     Number(i)
