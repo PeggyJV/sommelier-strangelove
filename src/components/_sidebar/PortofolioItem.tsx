@@ -17,6 +17,7 @@ import { DIRECT, landingType } from "utils/landingType"
 import { analytics } from "utils/analytics"
 import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
 import { showNetValueInAsset } from "data/uiConfig"
+import { tokenConfig } from "data/tokenConfig"
 
 interface PortofolioItemProps extends StackProps {
   icon: string
@@ -49,19 +50,15 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
 
   const { lpToken } = useUserBalances(cellarData.config)
   const { data: lpTokenData } = lpToken
-  const token = () => {
-    switch (symbol) {
-      case "WETH":
-        return "weth"
-      case "USDC":
-        return "usd-coin"
-      case "USDT":
-        return "tether"
-      default:
-        return "weth"
-    }
-  }
-  const { data: coinGeckoPrice } = useCoinGeckoPrice(token())
+
+  const baseAsset = tokenConfig.find(
+    (token) => token.symbol === symbol
+  )?.coinGeckoId
+
+  const { data: coinGeckoPrice } = useCoinGeckoPrice(
+    baseAsset || "usdc-coin"
+  )
+
   const router = useRouter()
   return (
     <Tooltip

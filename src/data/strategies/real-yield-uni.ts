@@ -10,7 +10,7 @@ export const realYieldUNI: CellarData = {
   name: "Real Yield UNI",
   slug: config.CONTRACT.REAL_YIELD_UNI.SLUG,
   tradedAssets: ["UNI", "WETH", "YieldETH"],
-  launchDate: new Date(2023, 4, 31, 14, 0, 0, 0),
+  launchDate: new Date(2023, 5, 5, 14, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
   strategyType: "Yield",
@@ -46,11 +46,11 @@ export const realYieldUNI: CellarData = {
   },
 
   config: {
-    id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+    id: config.CONTRACT.REAL_YIELD_UNI.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_UNI,
     lpToken: {
-      address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+      address: config.CONTRACT.REAL_YIELD_UNI.ADDRESS,
       imagePath: "/assets/icons/real-yield-uni.png",
     },
     cellarRouter: {

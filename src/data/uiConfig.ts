@@ -26,7 +26,12 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
-    config.cellarNameKey === CellarNameKey.DEFI_STARS
+    config.cellarNameKey === CellarNameKey.DEFI_STARS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK
   )
 }
 
@@ -89,7 +94,12 @@ export const isAPYEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX
   )
 }
 
@@ -108,6 +118,16 @@ export const isTokenPriceEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC
+  )
+}
+
+export const showTokenPriceInsteadOfApy = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK
   )
 }
 

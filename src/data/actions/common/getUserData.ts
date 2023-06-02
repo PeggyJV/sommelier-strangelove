@@ -83,11 +83,16 @@ export const getUserData = async ({
       const bonded =
         // Coerce from bignumber.js to ethers BN
         BigNumber.from(
-          userStakes?.totalBondedAmount?.value.toString()
+          userStakes?.totalBondedAmount?.value
+            ? userStakes?.totalBondedAmount?.value.toString()
+            : "0"
         ) ?? constants.Zero
       const totalShares = shares.value.add(bonded)
-      const assets = await cellarContract.convertToAssets(totalShares)
+      let assets = await cellarContract.convertToAssets(totalShares)
 
+      if (typeof assets === "undefined") {
+        assets = constants.Zero
+      }
       return convertDecimals(assets.toString(), decimals)
     })()
 
@@ -107,40 +112,29 @@ export const getUserData = async ({
         : userStakes.claimAllRewardsUSD.toNumber()
       : 0
 
-    const isLoaded = Boolean(subgraphData?.shareValue)
-      ? shares === undefined ||
-        userStakes === undefined ||
-        bonded === undefined ||
-        !subgraphData?.shareValue
-      : false
+    //TODO: Use this IsLoaded for the netValuInAsset, netValueWithoutRewardsInAsset, netValue,and valueWithoutRewards
+    // const isLoaded = Boolean(subgraphData?.shareValue)
+    //   ? shares === undefined ||
+    //     userStakes === undefined ||
+    //     bonded === undefined ||
+    //     !subgraphData?.shareValue
+    //   : false
 
     const netValueInAsset = (() => {
-      if (isLoaded) {
-        return undefined
-      }
       return numTotalAssets + Number(sommRewardsRaw)
     })()
 
     const netValueWithoutRewardsInAsset = (() => {
-      if (isLoaded) {
-        return undefined
-      }
       return numTotalAssets
     })()
 
     // Denoted in USD
     const netValue = (() => {
-      if (isLoaded) {
-        return undefined
-      }
       return numTotalAssets * tokenPrice + sommRewardsUSD
     })()
 
     // Denoted in USD
     const netValueWithoutRewards = (() => {
-      if (isLoaded) {
-        return undefined
-      }
       return numTotalAssets * tokenPrice
     })()
 
