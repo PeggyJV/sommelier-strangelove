@@ -271,9 +271,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 label="tokens"
                 tooltip={lpTokenTooltipContent(cellarConfig)}
               >
-                {cellarConfig.lpToken.tokenPath && (
+                {cellarConfig.lpToken.imagePath && (
                   <Image
-                    src={cellarConfig.lpToken.tokenPath}
+                    src={cellarConfig.lpToken.imagePath}
                     alt="lp token image"
                     height="24px"
                     mr={2}
