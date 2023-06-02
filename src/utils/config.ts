@@ -56,21 +56,6 @@ export const config = {
       ADDRESS: "0x8bdd3d5b889f3d0d735eb4db5d87782df2b4647d",
       ABI: cellarV0816,
     },
-    UNI: {
-      ADDRESS: "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
-    },
-    SNX: {
-      ADDRESS: "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f",
-    },
-    LINK: {
-      ADDRESS: "0x514910771af9ca656af840dff83e8264ecf986ca",
-    },
-    ENS: {
-      ADDRESS: "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72",
-    },
-    ONE_INCH: {
-      ADDRESS: "0x111111111117dc0aa78b770fa6a738034120c302",
-    },
     // Cellars
     AAVE_V2_STABLE_CELLAR: {
       // ADDRESS: "0xb03f18c2d28c29fa3811184f028c5bf6f11c2659",

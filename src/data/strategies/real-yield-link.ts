@@ -48,11 +48,11 @@ export const realYieldLink: CellarData = {
   },
 
   config: {
-    id: config.CONTRACT.LINK.ADDRESS,
+    id: config.CONTRACT.REAL_YIELD_LINK.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_LINK,
     lpToken: {
-      address: config.CONTRACT.LINK.ADDRESS,
+      address: config.CONTRACT.REAL_YIELD_LINK.ADDRESS,
       imagePath: "/assets/icons/real-yield-link.png",
       tokenPath: "/assets/icons/link.jpeg",
     },

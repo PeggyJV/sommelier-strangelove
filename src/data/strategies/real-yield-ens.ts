@@ -48,11 +48,11 @@ export const realYieldENS: CellarData = {
   },
 
   config: {
-    id: config.CONTRACT.ENS.ADDRESS,
+    id: config.CONTRACT.REAL_YIELD_ENS.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_ENS,
     lpToken: {
-      address: config.CONTRACT.ENS.ADDRESS,
+      address: config.CONTRACT.REAL_YIELD_ENS.ADDRESS,
       imagePath: "/assets/icons/real-yield-ens.png",
       tokenPath: "/assets/icons/ens.jpeg",
     },

@@ -46,11 +46,11 @@ export const realYieldUNI: CellarData = {
   },
 
   config: {
-    id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+    id: config.CONTRACT.REAL_YIELD_UNI.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_UNI,
     lpToken: {
-      address: config.CONTRACT.UNI.ADDRESS,
+      address: config.CONTRACT.REAL_YIELD_UNI.ADDRESS,
       imagePath: "/assets/icons/real-yield-uni.png",
       tokenPath: "/assets/icons/uniswap.png",
     },
