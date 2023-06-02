@@ -42,7 +42,6 @@ export const getUserDataAllStrategies = async ({
               baseAsset?.coinGeckoId ?? "usd-coin",
               "usd"
             )
-            console.log("strategyData", strategyData)
             try {
               return await getUserData({
                 address,

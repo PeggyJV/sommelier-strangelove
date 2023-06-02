@@ -190,7 +190,6 @@ export const getStrategyData = async ({
       const token = (() => {
         if (hideValue) return
         if (!subgraphData) return
-
         return getTokenPrice(
           subgraphData.shareValue,
           subgraphData.asset.decimals
