@@ -93,7 +93,6 @@ export const getUserStakes = async (
     }
     return userStakeData
   } catch (error) {
-    console.log("stake", error)
     console.warn(error)
 
     throw error
