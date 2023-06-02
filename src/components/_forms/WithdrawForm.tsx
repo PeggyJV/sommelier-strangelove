@@ -278,10 +278,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
               <Image
                 width="16px"
                 height="16px"
-                src={
-                  cellarConfig.lpToken.tokenPath ||
-                  cellarConfig.lpToken.imagePath
-                }
+                src={cellarConfig.lpToken.imagePath}
                 alt="coinlogo"
               />
               <Text fontWeight="semibold">{lpTokenData?.symbol}</Text>

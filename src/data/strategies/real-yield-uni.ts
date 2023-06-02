@@ -52,7 +52,6 @@ export const realYieldUNI: CellarData = {
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_UNI.ADDRESS,
       imagePath: "/assets/icons/real-yield-uni.png",
-      tokenPath: "/assets/icons/uniswap.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,

@@ -54,7 +54,6 @@ export const realYieldENS: CellarData = {
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_ENS.ADDRESS,
       imagePath: "/assets/icons/real-yield-ens.png",
-      tokenPath: "/assets/icons/ens.jpeg",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,

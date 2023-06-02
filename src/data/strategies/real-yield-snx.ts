@@ -52,7 +52,6 @@ The purpose of this vault is to provide token holders with a passive yield oppor
     cellarNameKey: CellarNameKey.REAL_YIELD_SNX,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_SNX.ADDRESS,
-      tokenPath: "/assets/icons/snx.png",
       imagePath: "/assets/icons/real-yield-snx.png",
     },
     cellarRouter: {
