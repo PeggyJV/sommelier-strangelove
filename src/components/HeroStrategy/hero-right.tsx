@@ -30,6 +30,7 @@ import {
   intervalGainTimeline,
   isDailyChangeEnabled,
   isIntervalGainPctEnabled,
+  showTokenPriceInsteadOfApy,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
@@ -173,10 +174,22 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 />
               </VStack>
               <VStack flex={1}>
-                <Heading size="md" color="lime.base">
-                  {rewardsApy?.formatted || "--"}
-                </Heading>
-                <CellarStatsLabel title={"Rewards APY"} />
+                {showTokenPriceInsteadOfApy(cellarConfig) ? (
+                  <>
+                    <Heading size="md">{tokenPrice || "--"}</Heading>
+                    <CellarStatsLabel
+                      tooltip={tokenPriceTooltipContent(cellarConfig)}
+                      title="Token Price"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Heading size="md" color="lime.base">
+                      {rewardsApy?.formatted || "--"}
+                    </Heading>
+                    <CellarStatsLabel title={"Rewards APY"} />
+                  </>
+                )}
               </VStack>
             </HStack>
           )}

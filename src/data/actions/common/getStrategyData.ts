@@ -8,7 +8,6 @@ import { add, isBefore, isFuture, subDays } from "date-fns"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { CellarStakingV0815, CellarV0816 } from "src/abi/types"
 import { formatDecimals } from "utils/bigNumber"
-import { config } from "utils/config"
 import { isComingSoon } from "utils/isComingSoon"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
@@ -22,20 +21,22 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 
-const RYETH_ADDRESS = config.CONTRACT.REAL_YIELD_ETH.ADDRESS
-
 export const getStrategyData = async ({
   address,
   contracts,
   sommPrice,
-  wethPrice,
   sgData,
+  decimals,
+  baseAssetPrice,
+  symbol,
 }: {
   address: string
   contracts: StrategyContracts
   sommPrice: string
-  wethPrice: string
   sgData?: GetStrategyDataQuery["cellar"]
+  decimals: number
+  baseAssetPrice: string
+  symbol: string
 }) => {
   const data = await (async () => {
     try {
@@ -45,11 +46,9 @@ export const getStrategyData = async ({
           address.toLowerCase()
       )!
       const config: ConfigProps = strategy.config!
-      const isRYETH = config.cellarNameKey === "REAL_YIELD_ETH"
 
       const { stakerContract, cellarContract } = contracts
       const subgraphData = sgData
-
       const dayDatas = subgraphData?.dayDatas
       const deprecated = strategy.deprecated
       const slug = strategy.slug
@@ -90,9 +89,11 @@ export const getStrategyData = async ({
 
       let tvm = hideValue
         ? undefined
-        : isRYETH
+        : symbol !== "USDC"
         ? getTvm(
-            String(Number(subgraphData!.tvlTotal) * Number(wethPrice))
+            String(
+              Number(subgraphData!.tvlTotal) * Number(baseAssetPrice)
+            )
           )
         : getTvm(subgraphData?.tvlTotal)
 
@@ -136,11 +137,9 @@ export const getStrategyData = async ({
         if (hideValue) return
         if (!isStakingOngoing) return
 
-        // FIXME
-        // Fetch asset price from coingecko based on subgraph cellar.asset.id
-        let assetPrice = "1" // USDC
-        if (address === RYETH_ADDRESS) {
-          assetPrice = wethPrice
+        let assetPrice = "1"
+        if (symbol !== "USDC") {
+          assetPrice = baseAssetPrice!
         }
 
         const apyRes = await getRewardsApy({
@@ -154,7 +153,6 @@ export const getStrategyData = async ({
       const baseApy = (() => {
         if (hideValue) return
         if (!isAPYEnabled(config)) return
-
         const datas = dayDatas?.slice(0, 10)
 
         if (config.cellar.key === CellarKey.CELLAR_V2) {
@@ -164,6 +162,7 @@ export const getStrategyData = async ({
             launchEpoch: launchEpoch,
             baseApy: config.baseApy,
             dayDatas: datas,
+            decimals: decimals,
           })
         }
 
@@ -180,20 +179,17 @@ export const getStrategyData = async ({
         if (hideValue) return
         if (!subgraphData?.shareValue) return
 
-        const price = formatDecimals(subgraphData.shareValue, 6, 2)
+        const price = formatDecimals(
+          subgraphData.shareValue,
+          decimals,
+          2
+        )
         return `$${price}`
       })()
 
       const token = (() => {
         if (hideValue) return
         if (!subgraphData) return
-
-        if (isRYETH) {
-          return getTokenPrice(
-            String(Number(subgraphData.shareValue)),
-            subgraphData.asset.decimals
-          )
-        }
         return getTokenPrice(
           subgraphData.shareValue,
           subgraphData.asset.decimals

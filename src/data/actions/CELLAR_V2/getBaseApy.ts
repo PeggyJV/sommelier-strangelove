@@ -1,21 +1,18 @@
 import { differenceInDays } from "date-fns"
 import BigNumber from "bignumber.js"
-import { realYieldEth } from "../../strategies/real-yield-eth"
-
-const RYETH_LAUNCH_EPOCH = Math.floor(
-  realYieldEth.launchDate!.getTime() / 1000
-)
 
 export const getBaseApy = ({
   baseApy,
   dayDatas,
   hardcodedApy,
   launchEpoch,
+  decimals,
 }: {
   baseApy?: number
   dayDatas?: { date: number; shareValue: string }[]
   hardcodedApy?: boolean
   launchEpoch: number
+  decimals: number
 }) => {
   const isDataNotValid =
     !dayDatas || dayDatas?.length === 1 || dayDatas?.length < 2
@@ -33,12 +30,7 @@ export const getBaseApy = ({
       differenceInDays(yesterday, launchDate)
     )
 
-    // FIXME: use the correct start value by multiplying 1 * decimals
-    // get decimals from subgraph via cellar.asset.decimals
-    let startValue = new BigNumber("1000000")
-    if (launchEpoch === RYETH_LAUNCH_EPOCH) {
-      startValue = new BigNumber("1000000000000000000")
-    }
+    let startValue = new BigNumber(10 ** decimals)
 
     const nowValue = new BigNumber(dayDatas[1].shareValue)
     const yieldGain = nowValue.minus(startValue).div(startValue)

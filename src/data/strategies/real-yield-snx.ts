@@ -8,12 +8,10 @@ import {
 } from "../types"
 
 export const realYieldSNX: CellarData = {
-  isContractNotReady: true,
-
   name: "Real Yield SNX",
   slug: config.CONTRACT.REAL_YIELD_SNX.SLUG,
   tradedAssets: ["SNX", "WETH", "YieldETH"],
-  launchDate: new Date(2023, 4, 31, 14, 0, 0, 0),
+  launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
   strategyType: "Yield",
@@ -42,20 +40,18 @@ export const realYieldSNX: CellarData = {
       - No lockups, withdraw your tokens at any time.`,
 
     description: `
-    The way the vault achieves this is by taking your deposited token, supplying it on Aave as collateral to borrow ETH and then depositing that ETH into a leveraged staking loop as well as the Real Yield ETH vault. For context, the Real Yield ETH vault generates yield from leveraged staking and LPing ETH and ETH LSTs. The desired net effect is that the yield earned through leveraged staking and Real Yield ETH will be greater than the borrow costs of the ETH allowing the vault to purchase more of your deposit token to add to your position. It’s important to note that these vaults and the Real Yield ETH vault take on leverage. However, Sommelier’s novel architecture gives vaults advanced capabilities when it comes to taking on and monitoring these positions. While leveraged, the vault smart contract enforces a minimum health factor during each rebalance as a safety precaution. The vault also closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.
-    `,
+The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).    `,
   },
   depositTokens: {
     list: ["SNX"],
   },
 
   config: {
-    noSubgraph: true,
-    id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+    id: config.CONTRACT.REAL_YIELD_SNX.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_SNX,
     lpToken: {
-      address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+      address: config.CONTRACT.REAL_YIELD_SNX.ADDRESS,
       imagePath: "/assets/icons/real-yield-snx.png",
     },
     cellarRouter: {

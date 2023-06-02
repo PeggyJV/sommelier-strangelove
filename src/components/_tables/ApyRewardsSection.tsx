@@ -61,7 +61,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         <Tooltip
           label={`Ends in ${formatDistanceToNowStrict(
             new Date(stackingEndDate)
-          )} left`}
+          )}`}
           color="neutral.100"
           border="0"
           fontSize="12px"

@@ -8,11 +8,10 @@ import {
 } from "../types"
 
 export const realYieldENS: CellarData = {
-  isContractNotReady: true,
   name: "Real Yield ENS",
   slug: config.CONTRACT.REAL_YIELD_ENS.SLUG,
   tradedAssets: ["ENS", "WETH", "YieldETH"],
-  launchDate: new Date(2023, 4, 31, 14, 0, 0, 0),
+  launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
   strategyType: "Yield",
@@ -49,12 +48,11 @@ export const realYieldENS: CellarData = {
   },
 
   config: {
-    noSubgraph: true,
-    id: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+    id: config.CONTRACT.REAL_YIELD_ENS.ADDRESS,
     baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_ENS,
     lpToken: {
-      address: config.CONTRACT.REAL_YIELD_USD.ADDRESS,
+      address: config.CONTRACT.REAL_YIELD_ENS.ADDRESS,
       imagePath: "/assets/icons/real-yield-ens.png",
     },
     cellarRouter: {
