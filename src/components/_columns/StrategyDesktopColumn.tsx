@@ -170,9 +170,22 @@ export const StrategyDesktopColumn = ({
     {
       Header: "TVL",
       accessor: "tvm.value",
-      Cell: ({ row }: any) => (
+      Cell: ({
+        row: {
+          original: { launchDate, tvm },
+        },
+      }: {
+        row: {
+          original: {
+            launchDate: number
+            tvm: { value: number; formatted: string }
+          }
+        }
+      }) => (
         <Text fontWeight={600} fontSize="12px" textAlign="right">
-          {row.original.tvm?.formatted ?? "--"}
+          {launchDate && launchDate > Date.now()
+            ? "--"
+            : tvm?.formatted ?? "--"}
         </Text>
       ),
     },
