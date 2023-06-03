@@ -172,8 +172,6 @@ export const getUserData = async ({
       },
     }
 
-    console.log("userStrategyData", userStrategyData)
-
     return {
       userStakes,
       netValue,
