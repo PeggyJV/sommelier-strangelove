@@ -84,7 +84,7 @@ export const getUserData = async ({
         // Coerce from bignumber.js to ethers BN
         BigNumber.from(
           userStakes?.totalBondedAmount?.value
-            ? userStakes?.totalBondedAmount?.value.toString()
+            ? userStakes?.totalBondedAmount?.value.toFixed()
             : "0"
         ) ?? constants.Zero
       const totalShares = shares.value.add(bonded)
@@ -171,6 +171,8 @@ export const getUserData = async ({
         symbol: subgraphData?.asset.symbol,
       },
     }
+
+    console.log("userStrategyData", userStrategyData)
 
     return {
       userStakes,
