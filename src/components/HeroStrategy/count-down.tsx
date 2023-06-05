@@ -52,11 +52,7 @@ export const CountDown: FC<CountDownProps> = ({
         {isTwoDaysAfterLaunch ? (
           <Link
             isExternal
-            href={
-              isTwoDaysAfterLaunch
-                ? "https://medium.com/@sommelier.finance/maximize-rewards-and-minimize-fees-by-becoming-an-early-yielder-16fc24a6dd6"
-                : "https://medium.com/@sommelier.finance/were-launching-real-yield-vaults-for-1inch-ens-link-snx-and-uni-c9f31f83909e"
-            }
+            href="https://medium.com/@sommelier.finance/maximize-rewards-and-minimize-fees-by-becoming-an-early-yielder-16fc24a6dd6"
             display="flex"
             gap={1}
             alignItems="center"
