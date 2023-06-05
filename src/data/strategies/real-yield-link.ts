@@ -11,7 +11,7 @@ export const realYieldLink: CellarData = {
   name: "Real Yield LINK",
   slug: config.CONTRACT.REAL_YIELD_LINK.SLUG,
   tradedAssets: ["LINK", "WETH", "YieldETH"],
-  launchDate: new Date(2022, 5, 5, 12, 0, 0, 0),
+  launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
   strategyType: "Yield",
