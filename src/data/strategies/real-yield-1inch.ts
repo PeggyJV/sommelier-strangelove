@@ -10,7 +10,7 @@ import {
 export const realYield1Inch: CellarData = {
   name: "Real Yield 1INCH",
   slug: config.CONTRACT.REAL_YIELD_1Inch.SLUG,
-  tradedAssets: ["1Inch", "WETH", "YieldETH"],
+  tradedAssets: ["1INCH", "WETH", "YieldETH"],
   launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
@@ -20,7 +20,7 @@ export const realYield1Inch: CellarData = {
   managementFeeTooltip:
     "Platform fee split: 0% for Strategy provider and 0% for protocol",
   protocols: ["AAVE"],
-  strategyAssets: ["1Inch", "WETH", "YieldETH"],
+  strategyAssets: ["1INCH", "WETH", "YieldETH"],
   performanceSplit: {
     depositors: 100,
   },
@@ -43,7 +43,7 @@ export const realYield1Inch: CellarData = {
     The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).    `,
   },
   depositTokens: {
-    list: ["1Inch"],
+    list: ["1INCH"],
   },
 
   config: {
