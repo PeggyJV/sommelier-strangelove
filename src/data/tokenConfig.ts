@@ -173,7 +173,7 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "aave",
   },
   {
-    src: "/assets/icons/link.jpeg",
+    src: "/assets/icons/chainlink.png",
     alt: "LINK logo",
     symbol: "LINK",
     address: "0x514910771af9ca656af840dff83e8264ecf986ca",
@@ -187,7 +187,7 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "1inch",
   },
   {
-    src: "/assets/icons/ens.jpg",
+    src: "/assets/icons/ens.png",
     alt: "Ens logo",
     symbol: "ENS",
     address: "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72",
