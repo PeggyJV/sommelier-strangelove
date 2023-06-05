@@ -85,9 +85,11 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     userData?.userStrategyData.userData?.netValueWithoutRewardsInAsset
   const staticCelarConfig = cellarConfig
 
+  const totalShares =
+    userData?.userStrategyData.userData?.totalShares.value
   const { data, isLoading } = useGetPreviewRedeem({
     cellarConfig: staticCelarConfig,
-    value: valueInAssets?.value || 0,
+    value: totalShares?.toString(),
   })
 
   return (
