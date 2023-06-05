@@ -662,7 +662,7 @@ export const strategyPageContentData = {
         <Text>RY1INCH</Text>
       </>
     ),
-    tradedAssets: ["1Inch", "WETH", "YieldETH"],
+    tradedAssets: ["1INCH", "WETH", "YieldETH"],
     alternativeTo: "Lending",
     exchange: [
       {
