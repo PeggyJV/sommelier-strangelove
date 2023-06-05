@@ -43,9 +43,9 @@ export const CountDown: FC<CountDownProps> = ({
           ? "Early Yielder program"
           : "Launching on"}
       </Text>
-      <Heading size={isTwoDaysAfterLaunch ? "lg" : "xl"}>
+      <Heading fontSize={isTwoDaysAfterLaunch ? "25px" : "36px"}>
         {isTwoDaysAfterLaunch
-          ? "Deposit into the vault before the deadline to maximize rewards and minimize gas fees."
+          ? "Deposit before the deadline to maximize rewards and minimize gas gees."
           : day}
       </Heading>
       <Text fontWeight="bold">
