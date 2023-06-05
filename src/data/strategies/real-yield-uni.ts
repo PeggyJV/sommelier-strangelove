@@ -10,7 +10,8 @@ export const realYieldUNI: CellarData = {
   name: "Real Yield UNI",
   slug: config.CONTRACT.REAL_YIELD_UNI.SLUG,
   tradedAssets: ["UNI", "WETH", "YieldETH"],
-  launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
+  // TODO: NEED TO UPDATE THE LAUNCH DATE BEFORE MOVING THIS UPDATE TO STAGING THE CORRECT LAUNCH DATE IS new Date(2023, 5, 5, 12, 0, 0, 0)
+  launchDate: new Date(2023, 5, 4, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
   strategyType: "Yield",
