@@ -187,7 +187,7 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "1inch",
   },
   {
-    src: "/assets/icons/ens.jpeg",
+    src: "/assets/icons/ens.jpg",
     alt: "Ens logo",
     symbol: "ENS",
     address: "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72",
