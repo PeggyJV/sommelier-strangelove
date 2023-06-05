@@ -182,7 +182,7 @@ export const tokenConfig: Token[] = [
   {
     src: "/assets/icons/one-inch.png",
     alt: "1Inch logo",
-    symbol: "1Inch",
+    symbol: "1INCH",
     address: "0x111111111117dc0aa78b770fa6a738034120c302",
     coinGeckoId: "1inch",
   },
