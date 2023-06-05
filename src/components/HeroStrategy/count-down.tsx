@@ -45,7 +45,7 @@ export const CountDown: FC<CountDownProps> = ({
       </Text>
       <Heading fontSize={isTwoDaysAfterLaunch ? "25px" : "36px"}>
         {isTwoDaysAfterLaunch
-          ? "Deposit before the deadline to maximize rewards and minimize gas gees."
+          ? "Deposit before the deadline to maximize rewards and minimize gas fees."
           : day}
       </Heading>
       <Text fontWeight="bold">
