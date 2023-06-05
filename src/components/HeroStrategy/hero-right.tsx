@@ -34,7 +34,11 @@ import {
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
-import { formatDistanceToNowStrict, isFuture } from "date-fns"
+import {
+  addDays,
+  formatDistanceToNowStrict,
+  isFuture,
+} from "date-fns"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
@@ -54,6 +58,10 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const notifyModal = useDisclosure()
   const cellarData = cellarDataMap[id]
   const launchDate = cellarDataMap[id].launchDate
+  const twoDaysAfterLaunch = addDays(
+    launchDate ?? new Date(Date.now()),
+    2
+  )
   const cellarConfig = cellarData.config
   const { data, isLoading } = useStrategyData(
     cellarData.config.cellar.address
@@ -74,6 +82,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
     changes?.[intervalGainTimeline(cellarConfig)]
 
   const countdown = isComingSoon(launchDate)
+  const isTwoDaysCountdown = isComingSoon(twoDaysAfterLaunch)
 
   const potentialStakingApy = isLoading
     ? "-"
@@ -104,6 +113,12 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
+      {!countdown && isTwoDaysCountdown && (
+        <CountDown
+          launchDate={twoDaysAfterLaunch}
+          isTwoDaysAfterLaunch={isTwoDaysCountdown}
+        />
+      )}
       {countdown && launchDate ? (
         <>
           <CountDown launchDate={launchDate} />
