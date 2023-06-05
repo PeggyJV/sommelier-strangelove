@@ -74,20 +74,21 @@ export const getUserData = async ({
       )
     })()
 
+    const bonded =
+      // Coerce from bignumber.js to ethers BN
+      BigNumber.from(
+        userStakes?.totalBondedAmount?.value
+          ? userStakes?.totalBondedAmount?.value.toFixed()
+          : "0"
+      ) ?? constants.Zero
+    const totalShares = shares.value.add(bonded)
+
     const totalAssets = await (async () => {
       if (!contracts.cellarContract) {
         return ZERO
       }
 
       const cellarContract = contracts.cellarContract as CellarV0815
-      const bonded =
-        // Coerce from bignumber.js to ethers BN
-        BigNumber.from(
-          userStakes?.totalBondedAmount?.value
-            ? userStakes?.totalBondedAmount?.value.toFixed()
-            : "0"
-        ) ?? constants.Zero
-      const totalShares = shares.value.add(bonded)
       let assets = await cellarContract.convertToAssets(totalShares)
 
       if (typeof assets === "undefined") {
@@ -97,10 +98,6 @@ export const getUserData = async ({
     })()
 
     const numTotalAssets = Number(totalAssets.toNumber().toFixed(5))
-
-    const bonded = userStakes
-      ? Number(userStakes.totalBondedAmount.formatted)
-      : 0
 
     const sommRewardsUSD = userStakes
       ? userStakes.claimAllRewardsUSD.toNumber()
@@ -169,6 +166,9 @@ export const getUserData = async ({
           userStakes?.totalClaimAllRewards || undefined,
         userStakes,
         symbol: subgraphData?.asset.symbol,
+        totalShares: {
+          value: totalShares,
+        },
       },
     }
 
