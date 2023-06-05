@@ -1,4 +1,3 @@
-import { ethers } from "ethers"
 import { CellarV0815, CellarV0816 } from "src/abi/types"
 
 export const getPreviewRedeem = async ({
@@ -6,12 +5,11 @@ export const getPreviewRedeem = async ({
   value,
 }: {
   cellarContract: CellarV0815 | CellarV0816
-  value?: number
+  value?: string
 }) => {
   if (!value) return
   try {
-    const convertedValue = ethers.utils.parseUnits(`${value}`, 18)
-    const shares = await cellarContract.previewRedeem(convertedValue)
+    const shares = await cellarContract.previewRedeem(value)
     return {
       value: shares,
     }

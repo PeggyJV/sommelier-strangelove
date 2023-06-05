@@ -180,7 +180,10 @@ export const getStrategyData = async ({
         if (!subgraphData?.shareValue) return
 
         const price = formatDecimals(
-          subgraphData.shareValue,
+          (
+            parseFloat(subgraphData.shareValue) *
+            parseFloat(baseAssetPrice)
+          ).toString(),
           decimals,
           2
         )

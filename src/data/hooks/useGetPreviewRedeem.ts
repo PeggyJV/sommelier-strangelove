@@ -9,7 +9,7 @@ export const useGetPreviewRedeem = ({
   value,
 }: {
   cellarConfig: ConfigProps
-  value: number
+  value?: string
 }) => {
   const { cellarContract } = useCreateContracts(cellarConfig)
   const user = useAccount()
@@ -19,7 +19,7 @@ export const useGetPreviewRedeem = ({
       { config: cellarConfig.id, value, userAddress: user.address },
     ],
     async () => {
-      if (!cellarContract || !value) throw new Error("Missing data")
+      if (!cellarContract) throw new Error("Missing data")
       const data = await getPreviewRedeem({
         cellarContract,
         value,
