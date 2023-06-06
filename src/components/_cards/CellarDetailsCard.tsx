@@ -1,37 +1,41 @@
-import dynamic from "next/dynamic"
 import {
+  Box,
   BoxProps,
   Circle,
   HStack,
+  Icon,
+  Image,
+  Link,
+  SimpleGrid,
+  Spinner,
+  Stack,
   Text,
   Tooltip,
   useTheme,
   VStack,
-  Image,
-  SimpleGrid,
-  Stack,
-  Spinner,
 } from "@chakra-ui/react"
-import { CardHeading } from "components/_typography/CardHeading"
-import { VFC } from "react"
-import { useNivoThemes } from "hooks/nivo"
 import { CardStat } from "components/CardStat"
-import { InformationIcon } from "components/_icons"
-import { TransparentCard } from "./TransparentCard"
-import { tokenConfig } from "data/tokenConfig"
-import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { StrategyProvider } from "components/StrategyProvider"
+import { TokenAssets } from "components/TokenAssets"
+import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
+import { InformationIcon } from "components/_icons"
+import { CardHeading } from "components/_typography/CardHeading"
+import { useStrategyData } from "data/hooks/useStrategyData"
+import { tokenConfig } from "data/tokenConfig"
 import { CellarDataMap } from "data/types"
-import { protocolsImage } from "utils/protocolsImagePath"
 import {
   isAssetDistributionEnabled,
   isTokenAssets,
 } from "data/uiConfig"
-import { TokenAssets } from "components/TokenAssets"
-import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
+import { useNivoThemes } from "hooks/nivo"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { isArray } from "lodash"
-import { useStrategyData } from "data/hooks/useStrategyData"
+import dynamic from "next/dynamic"
+import { VFC } from "react"
+import { FaExternalLinkAlt } from "react-icons/fa"
+import { protocolsImage } from "utils/protocolsImagePath"
+import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
+import { TransparentCard } from "./TransparentCard"
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -64,6 +68,8 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     strategyAssets,
     performanceSplit,
     strategyProvider,
+    name,
+    config: { id },
   } = cellarDataMap[cellarId]
   const cellarStrategyAssets = tokenConfig.filter((token) =>
     strategyAssets?.includes(token.symbol)
@@ -231,6 +237,16 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               )}
             </HStack>
           </CardStat>
+          <CardStat label="Link to contract" flex={0}>
+            <Link
+              href={`https://etherscan.io/address/${id.toLowerCase()}`}
+              target="_blank"
+            >
+              {name}
+              <Icon as={FaExternalLinkAlt} color="purple.base" />
+            </Link>
+          </CardStat>
+          <Box></Box>
           <VStack
             width="lg"
             spacing={2}
