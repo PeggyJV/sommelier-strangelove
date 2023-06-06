@@ -6,6 +6,7 @@ import {
   Link,
   Icon,
 } from "@chakra-ui/react"
+import { analytics } from "utils/analytics"
 import { format, zonedTimeToUtc, utcToZonedTime } from "date-fns-tz"
 import { FC } from "react"
 import Countdown from "react-countdown"
@@ -56,6 +57,9 @@ export const CountDown: FC<CountDownProps> = ({
             display="flex"
             gap={1}
             alignItems="center"
+            onClick={() =>
+              analytics.track("click.early-yielder-program")
+            }
           >
             How it works
             <Icon as={FiArrowRight} size="xl" w={4} h={4} />
