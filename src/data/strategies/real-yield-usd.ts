@@ -26,7 +26,9 @@ export const realYieldUsd: CellarData = {
   protocols: ["AAVE", "Compound", "Uniswap V3"],
   strategyAssets: ["USDC", "USDT", "DAI"],
   performanceSplit: {
-    depositors: 100,
+    depositors: 80,
+    "strategy provider": 15,
+    protocol: 5,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
