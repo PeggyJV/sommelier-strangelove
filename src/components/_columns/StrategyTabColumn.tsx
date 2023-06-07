@@ -73,7 +73,7 @@ export const StrategyTabColumn = ({
       Cell: ({ row }: any) => (
         <VStack>
           <Tooltip
-            label={`Annualized ${row.original.baseApy?.formatted} APY`}
+            label={`Token price change`}
             color="neutral.100"
             border="0"
             fontSize="12px"
@@ -97,7 +97,7 @@ export const StrategyTabColumn = ({
             />
           </Tooltip>
           <Tooltip
-            label={`Token price change`}
+            label={`Token price`}
             color="neutral.100"
             border="0"
             fontSize="12px"
