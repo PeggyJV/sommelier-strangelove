@@ -215,7 +215,7 @@ export const StrategyDesktopColumn = ({
         <Text>
           {timeline.title}
           <br />
-          token
+          Token Price Change
         </Text>
       ),
       accessor: `changes.${timeline.value}`,

@@ -66,7 +66,7 @@ export const StrategyTabColumn = ({
         <Text>
           {timeline.title}
           <br />
-          token
+          Token Price Change
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
