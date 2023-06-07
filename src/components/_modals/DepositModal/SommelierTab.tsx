@@ -70,6 +70,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const depositTokens = cellarData.depositTokens.list
   const { addToast, update, close, closeAll } = useBrandedToast()
 
+  const currentStrategies = window.location.pathname
+    .split("/")[2]
+    .replace(/-/g, " ")
+
   const importToken = useImportToken({
     onSuccess: (data) => {
       addToast({
@@ -384,10 +388,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         })
       }
 
-      const currentStrategies = window.location.pathname
-        .split("/")[2]
-        .replace(/-/g, " ")
-
       const isPopUpEnable =
         cellarData.popUpTitle && cellarData.popUpDescription
 
@@ -610,8 +610,30 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               />
               {activeAsset?.symbol}).
               <br />
-              There could be high slippage when depositing non base
-              assets. Please swap outside our app for better rates.
+              {currentStrategies === "Real Yield ETH" ? (
+                <>
+                  <Text>
+                    {" "}
+                    There could be high slippage when depositing
+                    non-base assets. Also, we don’t currently accept
+                    ETH as a deposit asset. Please swap ETH or
+                    non-base assets outside our app for better rates.
+                  </Text>
+                  <br />
+                  <Text>
+                    You can use the following external services to
+                    acquire WETH:{" "}
+                  </Text>{" "}
+                  <Link
+                    href="https://wrapeth.com/"
+                    textDecor="underline"
+                  >
+                    https://wrapeth.com/
+                  </Link>
+                </>
+              ) : (
+                " There could be high slippage when depositing non base assets. Please swap outside our app for better rates."
+              )}
             </Text>
           )}
         </VStack>
