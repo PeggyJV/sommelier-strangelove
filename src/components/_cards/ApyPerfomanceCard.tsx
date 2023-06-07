@@ -22,6 +22,7 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useApyChart } from "data/context/apyChartContext"
 import { ApyChart } from "components/_charts/ApyChart"
 import { useStrategyData } from "data/hooks/useStrategyData"
+import { apyChartLabel } from "data/uiConfig"
 
 export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
   const { data, timeArray, apyChange, isFetching, isError } =
@@ -111,7 +112,9 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
             >
               <HStack spacing={8}>
                 <VStack spacing={0} align="flex-start">
-                  <CardHeading>APY since inception</CardHeading>
+                  <CardHeading>
+                    {apyChartLabel(cellarConfig)}
+                  </CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
                       {baseApy}

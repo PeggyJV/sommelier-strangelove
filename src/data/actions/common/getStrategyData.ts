@@ -1,8 +1,10 @@
 import { cellarDataMap } from "data/cellarDataMap"
 import { CellarKey, ConfigProps } from "data/types"
 import {
+  estimatedApyValue,
   isAPYEnabled,
   isAssetDistributionEnabled,
+  isEstimatedApyEnable,
 } from "data/uiConfig"
 import { add, isBefore, isFuture, subDays } from "date-fns"
 import { GetStrategyDataQuery } from "generated/subgraph"
@@ -199,10 +201,14 @@ export const getStrategyData = async ({
         )
       })()
 
+      const baseApyValue = isEstimatedApyEnable(config)
+        ? estimatedApyValue(config)
+        : baseApy
+
       return {
         activeAsset,
         address,
-        baseApy,
+        baseApy: baseApyValue,
         changes,
         description,
         isNew,

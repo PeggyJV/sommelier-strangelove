@@ -18,6 +18,7 @@ import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarNameKey, CellarType } from "data/types"
 import {
   isApyChartEnabled,
+  isEstimatedApyEnable,
   isTokenPriceChartEnabled,
   isTVMEnabled,
 } from "data/uiConfig"
@@ -104,14 +105,16 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             </UsdcChartProvider>
           )} */}
 
-          {!notLaunched && isApyChartEnabled(cellarConfig) && (
-            <ApyChartProvider address={cellarAddress}>
-              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                Strategy Perfomance
-              </Heading>
-              <ApyPerfomanceCard />
-            </ApyChartProvider>
-          )}
+          {!notLaunched &&
+            isApyChartEnabled(cellarConfig) &&
+            !isEstimatedApyEnable(cellarConfig) && (
+              <ApyChartProvider address={cellarAddress}>
+                <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
+                  Strategy Perfomance
+                </Heading>
+                <ApyPerfomanceCard />
+              </ApyChartProvider>
+            )}
           {isTokenPriceChartEnabled(cellarConfig) && (
             <TokenPriceChartProvider address={cellarAddress}>
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
