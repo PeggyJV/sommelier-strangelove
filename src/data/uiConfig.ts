@@ -397,6 +397,7 @@ export const apyLabel = (config: ConfigProps) => {
   return "Base APY"
 }
 
+// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const apyHoverLabel = (config: ConfigProps) => {
   if (config.cellar.key === CellarKey.CELLAR_V2) {
     if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
@@ -416,6 +417,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
   return "Base APY"
 }
 
+// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const baseApyHoverLabel = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
     return "APY denominated in ETH"
@@ -432,6 +434,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   return "Base APY"
 }
 
+// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const isEstimatedApyEnable = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
@@ -445,6 +448,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
   return false
 }
 
+// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const apyChartLabel = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
@@ -458,6 +462,7 @@ export const apyChartLabel = (config: ConfigProps) => {
   return "APY since inception"
 }
 
+// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const estimatedApyValue = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK) {
     return {
