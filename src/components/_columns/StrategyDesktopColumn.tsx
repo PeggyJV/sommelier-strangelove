@@ -6,6 +6,7 @@ import {
   HStack,
   Text,
   Tooltip,
+  VStack,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
 import { InformationIcon } from "components/_icons"
@@ -210,33 +211,57 @@ export const StrategyDesktopColumn = ({
       },
     },
     {
-      Header: timeline.title,
+      Header: () => (
+        <Text>
+          {timeline.title}
+          <br />
+          Token Price
+        </Text>
+      ),
       accessor: `changes.${timeline.value}`,
       Cell: ({ row }: any) => (
-        <Tooltip
-          label={`Annualized ${row.original.baseApy?.formatted} APY`}
-          color="neutral.100"
-          border="0"
-          fontSize="12px"
-          bg="neutral.900"
-          fontWeight={600}
-          py="4"
-          px="6"
-          boxShadow="xl"
-          shouldWrapChildren
-          isDisabled={
-            !Boolean(
-              Boolean(row.original.baseApy?.formatted) &&
-                row.original.type === 1
-            )
-          }
-        >
-          <PercentageText
-            data={row.original.changes?.[timeline.value]}
-            arrowT2
+        <VStack>
+          <Tooltip
+            label={`Token price change`}
+            color="neutral.100"
+            border="0"
+            fontSize="12px"
+            bg="neutral.900"
             fontWeight={600}
-          />
-        </Tooltip>
+            py="4"
+            px="6"
+            boxShadow="xl"
+            shouldWrapChildren
+          >
+            <PercentageText
+              data={row.original.changes?.[timeline.value]}
+              arrowT2
+              fontWeight={600}
+            />
+          </Tooltip>
+          <Tooltip
+            label={`Token price`}
+            color="neutral.100"
+            border="0"
+            fontSize="12px"
+            bg="neutral.900"
+            fontWeight={600}
+            py="4"
+            px="6"
+            boxShadow="xl"
+            shouldWrapChildren
+          >
+            <HStack spacing={1}>
+              <Text
+                fontWeight={600}
+                fontSize="12px"
+                color="neutral.400"
+              >
+                {row.original.tokenPrice}
+              </Text>
+            </HStack>
+          </Tooltip>
+        </VStack>
       ),
       sortType: "basic",
     },
