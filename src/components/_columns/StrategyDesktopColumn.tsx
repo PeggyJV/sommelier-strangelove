@@ -215,7 +215,7 @@ export const StrategyDesktopColumn = ({
         <Text>
           {timeline.title}
           <br />
-          Token Price Change
+          Token Price
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
@@ -232,12 +232,6 @@ export const StrategyDesktopColumn = ({
             px="6"
             boxShadow="xl"
             shouldWrapChildren
-            isDisabled={
-              !Boolean(
-                Boolean(row.original.baseApy?.formatted) &&
-                  row.original.type === 1
-              )
-            }
           >
             <PercentageText
               data={row.original.changes?.[timeline.value]}

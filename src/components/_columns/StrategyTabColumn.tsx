@@ -66,7 +66,7 @@ export const StrategyTabColumn = ({
         <Text>
           {timeline.title}
           <br />
-          Token Price Change
+          Token Prices
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
@@ -83,12 +83,6 @@ export const StrategyTabColumn = ({
             px="6"
             boxShadow="xl"
             shouldWrapChildren
-            isDisabled={
-              !Boolean(
-                Boolean(row.original.baseApy?.formatted) &&
-                  row.original.type === 1
-              )
-            }
           >
             <PercentageText
               data={row.original.changes?.[timeline.value]}
