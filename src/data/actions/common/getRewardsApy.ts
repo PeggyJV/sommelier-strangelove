@@ -40,7 +40,7 @@ export const getRewardsApy = async ({
         .multipliedBy(100)
     }
     return {
-      formatted: potentialStakingApy.toFixed(1).toString() + "%",
+      formatted: potentialStakingApy.toFixed(2).toString() + "%",
       value: Number(potentialStakingApy.toFixed(1)),
     }
   } catch (error) {
