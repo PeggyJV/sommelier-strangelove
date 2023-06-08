@@ -194,10 +194,10 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 performanceSplit["strategy provider"] ?? 0
               }%`}
             >
-              {performanceFee}%
+              {performanceFee}.00%
             </CardStat>
             <CardStat label="Deposit and Exit Fees" flex={0}>
-              0.0%
+              0.00%
             </CardStat>
           </Stack>
 

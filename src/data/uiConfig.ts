@@ -467,31 +467,31 @@ export const estimatedApyValue = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK) {
     return {
       value: 3,
-      formatted: "3%",
+      formatted: "3.00%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH) {
     return {
       value: 1.6,
-      formatted: "1.6%",
+      formatted: "1.60%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX) {
     return {
       value: 3.7,
-      formatted: "3.7%",
+      formatted: "3.70%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI) {
     return {
       value: 2.6,
-      formatted: "2.6%",
+      formatted: "2.60%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS) {
     return {
       value: 1.9,
-      formatted: "1.9%",
+      formatted: "1.90%",
     }
   }
 }
