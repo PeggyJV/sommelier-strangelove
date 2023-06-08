@@ -18,7 +18,7 @@ export const ethBtcMomentum: CellarData = {
     "Strategy portfolio has exposure to BTC and ETH with positive price momentum, lower exposure when prices drop.",
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "2%",
+  managementFee: "2.00%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: "Uniswap V3",

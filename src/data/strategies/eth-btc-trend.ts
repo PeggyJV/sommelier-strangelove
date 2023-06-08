@@ -19,7 +19,7 @@ export const ethBtcTrend: CellarData = {
     "Strategy portfolio buys BTC and ETH when prices go up. Fully or partially sells both assets when prices go down.",
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "2%",
+  managementFee: "2.00%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: "Uniswap V3",
