@@ -26,8 +26,8 @@ export const steadyUni: CellarData = {
   strategyAssets: ["USDC"],
   performanceSplit: {
     depositors: 90,
-    protocol: 2.5,
     "strategy provider": 7.5,
+    protocol: 2.5,
   },
   strategyProvider: {
     logo: "/assets/images/patache.png",
