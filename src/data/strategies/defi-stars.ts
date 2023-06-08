@@ -26,9 +26,9 @@ export const defiStars: CellarData = {
   protocols: ["Uniswap V3", "1inch", "0x"],
   strategyAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   performanceSplit: {
-    protocol: 5,
-    "strategy provider": 15,
     Depositors: 80,
+    "strategy provider": 15,
+    protocol: 5,
   },
   strategyProvider: {
     logo: "/assets/images/algo-lab.png",

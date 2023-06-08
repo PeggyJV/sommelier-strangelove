@@ -27,8 +27,8 @@ export const realYieldEth: CellarData = {
   strategyAssets: ["stETH", "cbETH", "rETH", "WETH"],
   performanceSplit: {
     depositors: 80,
-    protocol: 5,
     "strategy provider": 15,
+    protocol: 5,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
