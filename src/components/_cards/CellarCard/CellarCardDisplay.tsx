@@ -107,7 +107,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
                 endColor="surface.secondary"
               >
                 <Text>
-                  Expected Rewards APY{" "}
+                  Rewards APY{" "}
                   <span
                     style={{
                       color: theme.colors.lime.base,
