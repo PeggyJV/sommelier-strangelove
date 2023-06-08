@@ -38,7 +38,7 @@ export const getBaseApy = ({
   })()
   if (!cellarApy) return
   return {
-    formatted: cellarApy.toFixed(1) + "%",
+    formatted: cellarApy.toFixed(2) + "%",
     value: Number(cellarApy.toFixed(1)),
   }
 }
