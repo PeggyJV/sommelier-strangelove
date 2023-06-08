@@ -347,7 +347,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                 </Text>
               </Box>
               <Flex wrap="wrap" gap={2}>
-                <Text>{`Expected Rewards APY ${potentialStakingApy}`}</Text>
+                <Text>{`Rewards APY ${potentialStakingApy}`}</Text>
                 <Text
                   py={1}
                   px={2}

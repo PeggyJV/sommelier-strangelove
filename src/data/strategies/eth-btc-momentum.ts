@@ -25,8 +25,8 @@ export const ethBtcMomentum: CellarData = {
   strategyAssets: ["WBTC", "WETH", "USDC"],
   performanceSplit: {
     depositors: 90,
-    protocol: 2.5,
     "strategy provider": 7.5,
+    protocol: 2.5,
   },
   strategyProvider: {
     logo: "/assets/images/clear-gate.png",
