@@ -615,8 +615,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 <>
                   <Text>
                     {" "}
-                    Please swap ETH or non-base assets outside our app
-                    for better rates.
+                    Please swap ETH or other non-base asset outside
+                    our app for better rates.
                   </Text>
                   <br />
                   <Text>
