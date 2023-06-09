@@ -613,11 +613,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               {currentStrategies === "Real Yield ETH" ? (
                 <>
                   <Text>
-                    {" "}
-                    There could be high slippage when depositing
-                    non-base assets. Also, we don’t currently accept
-                    ETH as a deposit asset. Please swap ETH or
-                    non-base assets outside our app for better rates.
+                    Please swap ETH or non-base assets outside our app
+                    for better rates.
                   </Text>
                   <br />
                   <Text>
