@@ -31,7 +31,7 @@ export const toEther = (
   val: ethers.BigNumberish | undefined,
   decimals = 18,
   format?: boolean | number,
-  precision = 3
+  precision = 2
 ) => {
   if (!val || val === "--") return "--"
   try {
