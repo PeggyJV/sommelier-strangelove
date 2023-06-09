@@ -31,6 +31,7 @@ import { LighterSkeleton } from "components/_skeleton"
 import { useGeo } from "context/geoContext"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { differenceInDays } from "date-fns"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -139,9 +140,9 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   }
 
   const renderBondAction = (unbondTimestamp: number, i: number) => {
-    const unbondTime = new Date(
-      unbondTimestamp * 1000
-    ).toLocaleDateString()
+    const unbondTime = new Date(unbondTimestamp * 1000)
+
+    const differenceDays = differenceInDays(unbondTime, new Date())
 
     const canUnstake =
       unbondTimestamp * 1000 < Date.now() &&
@@ -171,7 +172,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         </SecondaryButton>
       )
     } else {
-      return <Text>{unbondTime}</Text>
+      return (
+        <Text>
+          Unbound in {differenceDays} day
+          {differenceDays > 1 ? "s" : ""}
+        </Text>
+      )
     }
   }
 
