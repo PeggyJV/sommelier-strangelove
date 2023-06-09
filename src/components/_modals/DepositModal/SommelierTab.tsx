@@ -596,7 +596,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             />
             {activeAsset?.symbol}) will save gas fees
           </Text> */}
-          {depositTokens.length > 1 && (
+          {(depositTokens.length > 1 ||
+            currentStrategies === "Real Yield ETH") && (
             <Text textAlign="center">
               Current Base asset is (
               <Avatar
@@ -613,6 +614,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               {currentStrategies === "Real Yield ETH" ? (
                 <>
                   <Text>
+                    {" "}
                     Please swap ETH or non-base assets outside our app
                     for better rates.
                   </Text>
