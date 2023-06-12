@@ -401,7 +401,7 @@ export const apyLabel = (config: ConfigProps) => {
 export const apyHoverLabel = (config: ConfigProps) => {
   if (config.cellar.key === CellarKey.CELLAR_V2) {
     if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
-      return "APY denominated in ETH"
+      return "APY since inception denominated in ETH"
     }
     if (
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
@@ -420,7 +420,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const baseApyHoverLabel = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
-    return "APY denominated in ETH"
+    return "APY since inception denominated in ETH"
   }
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
