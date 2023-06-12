@@ -132,6 +132,11 @@ export const config = {
       SLUG: "Real-Yield-UNI",
       ABI: cellarV0816,
     },
+    REAL_YIELD_BTC: {
+      ADDRESS: "0x6a6af5393dc23d7e3db28d28ef422db7c4093216",
+      SLUG: "Real-Yield-BTC",
+      ABI: cellarV0816,
+    },
     DEFI_STARS: {
       ADDRESS: "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
       SLUG: "DeFi-Stars",
