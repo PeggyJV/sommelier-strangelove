@@ -345,11 +345,10 @@ export const txClient = (
         )
       }
       const gravityTypes = {
-        "/gravity.v1.MsgSendToEthereum": {
+        "gravity-bridge/MsgSendToEthereum": {
           toAmino: (msg) => {
             console.log(msg)
             return {
-              msgs: {
                 amount: {
                   amount: msg.amount.amount,
                   denom: msg.amount.denom,
@@ -361,14 +360,13 @@ export const txClient = (
                 ethereum_recipient: msg.ethereumRecipient,
                 sender: msg.sender,
               }
-            }
           },
           fromAmino: (msg) => {
             return {
-              amount: msg.msgs.amount,
-              bridgeFee: msg.msgs.bridge_fee,
-              ethereumRecipient: msg.msgs.ethereum_recipient,
-              sender: msg.msgs.sender,
+              amount: msg.amount,
+              bridgeFee: msg.bridge_fee,
+              ethereumRecipient: msg.ethereum_recipient,
+              sender: msg.sender,
             }
           },
         },
