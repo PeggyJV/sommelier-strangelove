@@ -378,7 +378,7 @@ export const txClient = (
           await SigningStargateClient.connectWithSigner(
             addr,
             signer,
-            { registry, prefix, aminoTypes: aminoTypes }
+            { registry, prefix}
           )
         let msg = this.msgSendToEthereum({
           value: MsgSendToEthereum.fromPartial(value),
