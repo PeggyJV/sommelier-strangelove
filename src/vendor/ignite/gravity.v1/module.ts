@@ -189,7 +189,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgCancelSendToEthereum: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -224,7 +224,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgRequestBatchTx: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -259,7 +259,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgEthereumHeightVote: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -294,7 +294,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgDelegateKeys: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -329,7 +329,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgSubmitEthereumTxConfirmation: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -345,7 +345,7 @@ export const txClient = (
         )
       }
       const gravityTypes = {
-        "gravity-bridge/MsgSendToEthereum": {
+        "/gravity.v1.MsgSendToEthereum": {
           toAmino: (msg) => {
             console.log(msg)
             return {
@@ -392,7 +392,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgSendToEthereum: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -427,7 +427,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgSubmitEthereumEvent: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -443,7 +443,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgCancelSendToEthereum: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -459,7 +459,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgRequestBatchTx: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -475,7 +475,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgEthereumHeightVote: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -489,7 +489,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgDelegateKeys: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -505,7 +505,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgSubmitEthereumTxConfirmation: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -521,7 +521,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgSendToEthereum: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -537,7 +537,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgSubmitEthereumEvent: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
