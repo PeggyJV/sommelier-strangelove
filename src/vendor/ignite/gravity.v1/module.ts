@@ -5,6 +5,7 @@ import { StdFee } from "@cosmjs/launchpad"
 import {
   SigningStargateClient,
   DeliverTxResponse,
+  AminoTypes,
 } from "@cosmjs/stargate"
 import {
   EncodeObject,
@@ -188,7 +189,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgCancelSendToEthereum: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -223,7 +224,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgRequestBatchTx: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -258,7 +259,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgEthereumHeightVote: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -293,7 +294,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgDelegateKeys: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -328,7 +329,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgSubmitEthereumTxConfirmation: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -343,13 +344,41 @@ export const txClient = (
           "TxClient:sendMsgSendToEthereum: Unable to sign Tx. Signer is not present."
         )
       }
+      const gravityTypes = {
+        "/gravity.v1.MsgSendToEthereum": {
+          aminoType: "gravity-bridge/MsgSendToEthereum",
+          toAmino: (msg) => {
+            return {
+                amount: {
+                  amount: msg.amount.amount,
+                  denom: msg.amount.denom,
+                },
+                bridge_fee: {
+                  amount: msg.bridgeFee.amount,
+                  denom: msg.bridgeFee.denom,
+                },
+                ethereum_recipient: msg.ethereumRecipient,
+                sender: msg.sender,
+              }
+          },
+          fromAmino: (msg) => {
+            return {
+              amount: msg.amount,
+              bridgeFee: msg.bridge_fee,
+              ethereumRecipient: msg.ethereum_recipient,
+              sender: msg.sender,
+            }
+          },
+        },
+      }
+      const aminoTypes = new AminoTypes(gravityTypes)
       try {
         const { address } = (await signer.getAccounts())[0]
         const signingClient =
           await SigningStargateClient.connectWithSigner(
             addr,
             signer,
-            { registry, prefix }
+            { registry, prefix, aminoTypes: aminoTypes }
           )
         let msg = this.msgSendToEthereum({
           value: MsgSendToEthereum.fromPartial(value),
@@ -363,7 +392,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgSendToEthereum: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -398,7 +427,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:sendMsgSubmitEthereumEvent: Could not broadcast Tx: " +
-            e.message
+          e.message
         )
       }
     },
@@ -414,7 +443,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgCancelSendToEthereum: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -430,7 +459,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgRequestBatchTx: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -446,7 +475,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgEthereumHeightVote: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -460,7 +489,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgDelegateKeys: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -476,7 +505,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgSubmitEthereumTxConfirmation: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -492,7 +521,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgSendToEthereum: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
@@ -508,7 +537,7 @@ export const txClient = (
       } catch (e: any) {
         throw new Error(
           "TxClient:MsgSubmitEthereumEvent: Could not create message: " +
-            e.message
+          e.message
         )
       }
     },
