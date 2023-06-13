@@ -349,6 +349,8 @@ export const txClient = (
           toAmino: (msg) => {
             console.log(msg)
             return {
+                type: "gravity-bridge/MsgSendToEthereum",
+                value: {
                 amount: {
                   amount: msg.amount.amount,
                   denom: msg.amount.denom,
@@ -360,13 +362,14 @@ export const txClient = (
                 ethereum_recipient: msg.ethereumRecipient,
                 sender: msg.sender,
               }
+            }
           },
           fromAmino: (msg) => {
             return {
-              amount: msg.amount,
-              bridgeFee: msg.bridge_fee,
-              ethereumRecipient: msg.ethereum_recipient,
-              sender: msg.sender,
+              amount: msg.value.amount,
+              bridgeFee: msg.value.bridge_fee,
+              ethereumRecipient: msg.value.ethereum_recipient,
+              sender: msg.value.sender,
             }
           },
         },
@@ -378,7 +381,7 @@ export const txClient = (
           await SigningStargateClient.connectWithSigner(
             addr,
             signer,
-            { registry, prefix}
+            { registry, prefix, aminoTypes: aminoTypes }
           )
         let msg = this.msgSendToEthereum({
           value: MsgSendToEthereum.fromPartial(value),
