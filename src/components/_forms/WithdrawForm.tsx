@@ -483,7 +483,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
         Submit
       </BaseButton>
       <Text textAlign="center">
-        Please wait {waitTime(cellarConfig)} min after the deposit to
+        Please wait {waitTime(cellarConfig)} after the deposit to
         Withdraw
       </Text>
     </VStack>
