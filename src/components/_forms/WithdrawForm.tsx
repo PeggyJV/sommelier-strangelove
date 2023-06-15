@@ -35,6 +35,7 @@ import BigNumber from "bignumber.js"
 import {
   isAssetDistributionEnabled,
   isWithdrawTokenPriceEnabled,
+  waitTime,
 } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
@@ -482,7 +483,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
         Submit
       </BaseButton>
       <Text textAlign="center">
-        Please wait 10 min after the deposit to Withdraw
+        Please wait {waitTime(cellarConfig)} min after the deposit to
+        Withdraw
       </Text>
     </VStack>
   )

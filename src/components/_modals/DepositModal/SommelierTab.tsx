@@ -45,7 +45,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
-import { isActiveTokenStrategyEnabled } from "data/uiConfig"
+import { isActiveTokenStrategyEnabled, waitTime } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
@@ -377,8 +377,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 Import tokens to wallet
               </Text>
               <Text>
-                Please wait 10 min after the deposit to Withdraw or
-                Bond
+                Please wait {waitTime(cellarConfig)}10 min after the
+                deposit to Withdraw or Bond
               </Text>
             </>
           ),
