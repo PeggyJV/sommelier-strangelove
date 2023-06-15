@@ -504,7 +504,7 @@ export const showNetValueInAsset = (config: ConfigProps) => {
 }
 
 export const waitTime = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD) {
     return "24 hours"
   }
   return "10 min"
