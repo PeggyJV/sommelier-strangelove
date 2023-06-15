@@ -66,7 +66,7 @@ export const StrategyTabColumn = ({
         <Text>
           {timeline.title}
           <br />
-          Token Prices
+          {/* Token Prices */}
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
@@ -90,7 +90,7 @@ export const StrategyTabColumn = ({
               fontWeight={600}
             />
           </Tooltip>
-          <Tooltip
+          {/* <Tooltip
             label={`Token price`}
             color="neutral.100"
             border="0"
@@ -111,7 +111,7 @@ export const StrategyTabColumn = ({
                 {row.original.tokenPrice}
               </Text>
             </HStack>
-          </Tooltip>
+          </Tooltip> */}
         </VStack>
       ),
       sortType: "basic",
