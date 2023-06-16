@@ -3,7 +3,6 @@ import {
   FormControl,
   FormErrorMessage,
   Icon,
-  Text,
   VStack,
   Button,
   HStack,
@@ -12,6 +11,7 @@ import {
   Image,
   Stack,
   Avatar,
+  Text,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -35,6 +35,7 @@ import BigNumber from "bignumber.js"
 import {
   isAssetDistributionEnabled,
   isWithdrawTokenPriceEnabled,
+  waitTime,
 } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
@@ -482,7 +483,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
         Submit
       </BaseButton>
       <Text textAlign="center">
-        Please wait 10 min after the deposit to Withdraw
+        Please wait {waitTime(cellarConfig)} after the deposit to
+        Withdraw
       </Text>
     </VStack>
   )
