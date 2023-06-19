@@ -84,7 +84,10 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
     return <ErrorCard />
   }
 
-  let baseApy = strategyData?.baseApy?.formatted ?? "--"
+  let baseApy = strategyData?.baseApy?.formatted ?? "0.00%"
+  let rewardsApy = strategyData?.rewardsApy?.formatted ?? "0.00%"
+  let baseApySumRewards =
+    strategyData?.baseApySumRewards.formatted ?? "0.00%"
 
   return (
     <Skeleton
@@ -113,11 +116,14 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
               <HStack spacing={8}>
                 <VStack spacing={0} align="flex-start">
                   <CardHeading>
-                    {apyChartLabel(cellarConfig)}
+                    <Text>
+                      {apyChartLabel(cellarConfig)} {baseApy}
+                    </Text>
+                    <Text>Rewards APY {rewardsApy}</Text>
                   </CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
-                      {baseApy}
+                      {baseApySumRewards}
                     </Text>
                   </HStack>
                   <Text color="neutral.400" fontSize="0.625rem">

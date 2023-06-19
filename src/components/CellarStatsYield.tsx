@@ -41,6 +41,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
     stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
   const baseApy = strategyData?.baseApy
   const rewardsApy = strategyData?.rewardsApy
+  const baseApySumRewards = strategyData?.baseApySumRewards
 
   return (
     <HStack
@@ -74,16 +75,32 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
           </HStack>
         </Tooltip>
       </VStack>
-      {baseApy && (
+      {baseApySumRewards && (
         <VStack spacing={1} align="center">
           <Apy
-            apy={isStrategyLoading ? <Spinner /> : baseApy?.formatted}
+            apy={
+              isStrategyLoading ? (
+                <Spinner />
+              ) : (
+                baseApySumRewards?.formatted
+              )
+            }
           />
           <Box>
             <Tooltip
               hasArrow
               placement="top"
-              label={apyHoverLabel(cellarConfig)}
+              label={
+                <>
+                  <Text>
+                    {apyHoverLabel(cellarConfig)}{" "}
+                    {baseApy?.formatted ?? "0.00%"}
+                  </Text>
+                  <Text>
+                    Rewards APY {rewardsApy?.formatted ?? "0.00%"}
+                  </Text>
+                </>
+              }
               bg="surface.bg"
               color="neutral.300"
             >
@@ -92,29 +109,6 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                 {!!apyLabel(cellarConfig) && (
                   <InformationIcon color="neutral.300" boxSize={3} />
                 )}
-              </HStack>
-            </Tooltip>
-          </Box>
-        </VStack>
-      )}
-
-      {isStakingStillRunning && rewardsApy?.formatted !== "0.0%" && (
-        <VStack spacing={1} align="center">
-          <Apy
-            apy={
-              isStrategyLoading ? <Spinner /> : rewardsApy?.formatted
-            }
-            color="lime.base"
-          />
-          <Box>
-            <Tooltip
-              hasArrow
-              placement="top"
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={1} align="center">
-                <CardHeading>Rewards APY</CardHeading>
               </HStack>
             </Tooltip>
           </Box>

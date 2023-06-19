@@ -205,10 +205,20 @@ export const getStrategyData = async ({
         ? estimatedApyValue(config)
         : baseApy
 
+      const baseApySumRewards = {
+        formatted:
+          (
+            (baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0)
+          ).toFixed(2) + "%",
+        value: (baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0),
+      }
+      console.log(`baseApySumRewards: ${baseApySumRewards}`)
+
       return {
         activeAsset,
         address,
         baseApy: baseApyValue,
+        baseApySumRewards,
         changes,
         description,
         isNew,
