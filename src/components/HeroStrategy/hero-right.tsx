@@ -25,6 +25,7 @@ import { isComingSoon } from "utils/isComingSoon"
 import {
   apyHoverLabel,
   apyLabel,
+  baseApyHoverLabel,
   intervalGainPctTitleContent,
   intervalGainPctTooltipContent,
   intervalGainTimeline,
@@ -184,7 +185,19 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                   {baseApy?.formatted || "--"}
                 </Heading>
                 <CellarStatsLabel
-                  tooltip={apyHoverLabel(cellarConfig) || ""}
+                  tooltip={
+                    (
+                      <VStack>
+                        <Text fontWeight={600} fontSize="12px">
+                          {baseApyHoverLabel(cellarConfig)}{" "}
+                          {baseApy?.formatted || "--"}
+                        </Text>
+                        <Text fontWeight={600} fontSize="12px">
+                          Rewards APY {rewardsApy?.formatted || "--"}
+                        </Text>
+                      </VStack>
+                    ) || ""
+                  }
                   title={apyLabel(cellarConfig)}
                 />
               </VStack>

@@ -6,6 +6,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react"
 import { InformationIcon } from "components/_icons"
+import { ReactNode } from "react"
 import { Label } from "./Label"
 
 interface CellarStatsProps {
@@ -45,7 +46,7 @@ export const CellarStatsLabel = ({
   tooltip,
   title,
 }: {
-  tooltip?: string
+  tooltip?: string | ReactNode
   title: string
 }) => {
   return (

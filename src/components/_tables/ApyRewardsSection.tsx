@@ -5,12 +5,13 @@ import {
   Stack,
   Text,
   Tooltip,
+  VStack,
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
-import { FC } from "react"
-import { formatDistanceToNowStrict, subDays } from "date-fns"
-import { baseApyHoverLabel } from "data/uiConfig"
 import { cellarDataMap } from "data/cellarDataMap"
+import { baseApyHoverLabel } from "data/uiConfig"
+import { formatDistanceToNowStrict, subDays } from "date-fns"
+import { FC } from "react"
 
 type ApyRewardsSectionProps = {
   baseApy?: string
@@ -42,7 +43,16 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   return (
     <Stack alignItems="flex-end" spacing={0}>
       <Tooltip
-        label={baseApyHoverLabel(cellarConfig)}
+        label={
+          <VStack>
+            <Text fontWeight={600} fontSize="12px">
+              {baseApyHoverLabel(cellarConfig)} {baseApy}
+            </Text>
+            <Text fontWeight={600} fontSize="12px">
+              Rewards APY {rewardsApy}
+            </Text>
+          </VStack>
+        }
         color="neutral.100"
         border="0"
         fontSize="12px"
