@@ -29,6 +29,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
     <Layout>
       <Box px={{ base: 4, sm: 0 }}>
         <Link
+          mb={4}
           color="neutral.300"
           href={`/strategies/${id}/manage`}
           display="flex"
