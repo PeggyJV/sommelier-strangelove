@@ -57,13 +57,14 @@ import { update } from "lodash"
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
   notifyModal: UseDisclosureProps
+  id?: string
 }
 
 export const SommelierTab: VFC<DepositModalProps> = ({
   notifyModal,
   ...props
 }) => {
-  const id = useRouter().query.id as string
+  const id = (useRouter().query.id as string) || (props.id as string)
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
@@ -71,9 +72,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const depositTokens = cellarData.depositTokens.list
   const { addToast, update, close, closeAll } = useBrandedToast()
 
-  const currentStrategies = window.location.pathname
-    .split("/")[2]
-    .replace(/-/g, " ")
+  const currentStrategies =
+    window.location.pathname?.split("/")[2]?.replace(/-/g, " ") ||
+    id ||
+    ""
 
   const importToken = useImportToken({
     onSuccess: (data) => {
@@ -556,6 +558,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             </Flex>
 
             <ModalMenu
+              id={id}
               depositTokens={depositTokens}
               setSelectedToken={trackedSetSelectedToken}
               activeAsset={activeAsset?.address}

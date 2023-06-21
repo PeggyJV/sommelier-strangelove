@@ -9,6 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { DepositButton } from "components/_buttons/DepositButton"
 import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
@@ -267,6 +268,13 @@ export const StrategyDesktopColumn = ({
         </VStack>
       ),
       sortType: "basic",
+    },
+    {
+      Header: () => <Text>Deposit</Text>,
+      id: "deposit",
+      Cell: ({ row }: any) => {
+        return <DepositButton id={row.original.slug} />
+      },
     },
   ]
 }

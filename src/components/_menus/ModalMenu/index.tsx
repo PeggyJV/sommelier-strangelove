@@ -13,6 +13,7 @@ export interface ModalMenuProps {
     symbol: string
     value: BigNumber
   }
+  id?: string
 }
 
 export const ModalMenu: VFC<ModalMenuProps> = ({
@@ -20,6 +21,7 @@ export const ModalMenu: VFC<ModalMenuProps> = ({
   activeAsset,
   selectedTokenBalance,
   setSelectedToken,
+  id,
 }) => {
   const { control } = useFormContext()
 
@@ -30,6 +32,7 @@ export const ModalMenu: VFC<ModalMenuProps> = ({
       render={({ field: { value, onChange } }) => {
         return (
           <Menu
+            id={id}
             depositTokens={depositTokens}
             value={value}
             activeAsset={activeAsset}

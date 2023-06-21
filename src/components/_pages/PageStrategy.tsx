@@ -24,7 +24,6 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   sectionCellars,
   sectionStrategies,
 }) => {
-  const router = useRouter()
   return (
     <Layout>
       <Box px={{ base: 4, sm: 0 }}>

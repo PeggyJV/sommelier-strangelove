@@ -30,6 +30,7 @@ export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
   value: Token
   onChange: (...events: any[]) => void
+  id?: string
 }
 
 export const Menu: VFC<MenuProps> = ({
@@ -38,6 +39,7 @@ export const Menu: VFC<MenuProps> = ({
   selectedTokenBalance,
   value,
   onChange,
+  id: _id,
 }) => {
   const { colors } = useTheme()
   const menuRef = useRef(null)
@@ -49,7 +51,7 @@ export const Menu: VFC<MenuProps> = ({
     false,
     6
   )}`
-  const id = useRouter().query.id as string
+  const id = (useRouter().query.id as string) || _id || ""
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
 

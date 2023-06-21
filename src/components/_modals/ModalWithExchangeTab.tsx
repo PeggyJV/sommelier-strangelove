@@ -11,12 +11,13 @@ import { cellarDataMap } from "data/cellarDataMap"
 interface ModalWithExchangeTabProps
   extends Pick<BaseModalProps, "onClose" | "isOpen" | "heading"> {
   sommelierTab: React.ReactNode
+  id?: string
 }
 
 export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
   props
 ) => {
-  const id = useRouter().query.id as string
+  const id = (useRouter().query.id as string) || props.id || ""
   const isHavingExchanges =
     Number(cellarDataMap[id]?.exchanges?.length) > 1
 

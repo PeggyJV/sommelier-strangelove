@@ -7,6 +7,7 @@ import { ModalWithExchangeTab } from "../ModalWithExchangeTab"
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
   notifyModal: UseDisclosureProps
+  id?: string
 }
 
 export const DepositModal: VFC<DepositModalProps> = ({
@@ -15,9 +16,14 @@ export const DepositModal: VFC<DepositModalProps> = ({
 }) => {
   return (
     <ModalWithExchangeTab
+      id={props.id}
       heading="Deposit"
       sommelierTab={
-        <SommelierTab {...props} notifyModal={notifyModal} />
+        <SommelierTab
+          {...props}
+          notifyModal={notifyModal}
+          id={props.id}
+        />
       }
       {...props}
     />

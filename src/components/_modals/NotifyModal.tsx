@@ -10,7 +10,9 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 
 export const NotifyModal = (
-  rest: Pick<ModalProps, "isOpen" | "onClose">
+  rest: Pick<ModalProps, "isOpen" | "onClose"> & {
+    id?: string
+  }
 ) => {
   const { addToast, closeAll } = useBrandedToast()
   const formGuId = "9810be6f-df66-4685-be9a-0486852db1aa"
@@ -90,14 +92,16 @@ export const NotifyModal = (
   let currentStrategies = ""
   let isManage = false
   if (typeof window !== "undefined") {
-    currentStrategies = window.location.pathname
-      .split("/")[2]
-      .replace(/-/g, " ")
+    currentStrategies =
+      window?.location?.pathname?.split("/")[2]?.replace(/-/g, " ") ||
+      rest.id ||
+      ""
     isManage =
+      rest.id !== null ||
       window.location.pathname.split("/").slice(-1).pop() === "manage"
   }
 
-  const id = useRouter().query.id as string
+  const id = (useRouter().query.id as string) || rest.id || ""
   const cellarData = cellarDataMap[id]
 
   const isPopUpEnable =
