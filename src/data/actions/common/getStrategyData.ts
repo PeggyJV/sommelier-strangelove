@@ -159,21 +159,12 @@ export const getStrategyData = async ({
         const launchDay = launchDate ?? subDays(new Date(), 8)
         const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
-        if (strategy.startingShareValue != null) {
-          return getApyInception({
-            launchEpoch: launchEpoch,
-            baseApy: config.baseApy,
-            dayDatas: datas,
-            decimals: decimals,
-            startingShareValue: strategy.startingShareValue,
-          })
-        }
-
         return getApyInception({
           launchEpoch: launchEpoch,
           baseApy: config.baseApy,
           dayDatas: datas,
           decimals: decimals,
+          startingShareValue: strategy.startingShareValue,
         })
       })()
 

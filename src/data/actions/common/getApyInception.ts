@@ -14,7 +14,7 @@ export const getApyInception = ({
   hardcodedApy?: boolean
   launchEpoch: number
   decimals: number
-  startingShareValue?: string
+  startingShareValue?: string | undefined | null
 }) => {
   const isDataNotValid =
     !dayDatas || dayDatas?.length === 1 || dayDatas?.length < 2
