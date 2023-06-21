@@ -88,6 +88,7 @@ export interface CellarData {
   description: string
   strategyType: string
   strategyTypeTooltip?: string
+  startingShareValue?: string
   managementFee: string
   managementFeeTooltip?: string
   protocols: string | string[]
