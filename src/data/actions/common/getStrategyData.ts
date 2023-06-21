@@ -13,7 +13,6 @@ import { formatDecimals } from "utils/bigNumber"
 import { isComingSoon } from "utils/isComingSoon"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
-import { getBaseApy as getV2BaseApy } from "../CELLAR_V2/getBaseApy"
 import { getActiveAsset } from "../DEPRECATED/common/getActiveAsset"
 import { StrategyContracts } from "../types"
 import { getChanges } from "./getChanges"
@@ -21,6 +20,7 @@ import { getPositon } from "./getPosition"
 import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
+import { getApyInception } from "./getApyInception"
 
 export const getStrategyData = async ({
   address,
@@ -160,7 +160,7 @@ export const getStrategyData = async ({
         const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
         if (strategy.startingShareValue != null) {
-          return getV2BaseApy({
+          return getApyInception({
             launchEpoch: launchEpoch,
             baseApy: config.baseApy,
             dayDatas: datas,
@@ -169,7 +169,7 @@ export const getStrategyData = async ({
           })
         }
 
-        return getV2BaseApy({
+        return getApyInception({
           launchEpoch: launchEpoch,
           baseApy: config.baseApy,
           dayDatas: datas,

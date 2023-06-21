@@ -1,7 +1,7 @@
 import { differenceInDays } from "date-fns"
 import BigNumber from "bignumber.js"
 
-export const getBaseApy = ({
+export const getApyInception = ({
   baseApy,
   dayDatas,
   hardcodedApy,
