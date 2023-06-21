@@ -14,7 +14,7 @@ export const ethBtcTrend: CellarData = {
   slug: config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG,
   tradedAssets: ["USDC", "WETH", "WBTC"],
   cellarType: CellarType.automatedPortfolio,
-  launchDate: new Date(2022, 5, 5, 12, 0, 0, 0),
+  launchDate: new Date("2022-10-28T00:00:00.000Z"),
   description:
     "Strategy portfolio buys BTC and ETH when prices go up. Fully or partially sells both assets when prices go down.",
   strategyType: "Crypto portfolio",
