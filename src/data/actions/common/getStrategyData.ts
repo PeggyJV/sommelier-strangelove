@@ -1,5 +1,5 @@
 import { cellarDataMap } from "data/cellarDataMap"
-import { CellarKey, ConfigProps } from "data/types"
+import { ConfigProps } from "data/types"
 import {
   estimatedApyValue,
   isAPYEnabled,
@@ -16,7 +16,6 @@ import { getRewardsApy } from "./getRewardsApy"
 import { getBaseApy as getV2BaseApy } from "../CELLAR_V2/getBaseApy"
 import { getActiveAsset } from "../DEPRECATED/common/getActiveAsset"
 import { StrategyContracts } from "../types"
-import { getBaseApy } from "./getBaseApy"
 import { getChanges } from "./getChanges"
 import { getPositon } from "./getPosition"
 import { getTokenByAddress, getTokenBySymbol } from "./getToken"
@@ -157,20 +156,24 @@ export const getStrategyData = async ({
         if (!isAPYEnabled(config)) return
         const datas = dayDatas?.slice(0, 10)
 
-        if (config.cellar.key === CellarKey.CELLAR_V2) {
-          const launchDay = launchDate ?? subDays(new Date(), 8)
-          const launchEpoch = Math.floor(launchDay.getTime() / 1000)
+        const launchDay = launchDate ?? subDays(new Date(), 8)
+        const launchEpoch = Math.floor(launchDay.getTime() / 1000)
+
+        if (strategy.startingShareValue != null) {
           return getV2BaseApy({
             launchEpoch: launchEpoch,
             baseApy: config.baseApy,
             dayDatas: datas,
             decimals: decimals,
+            startingShareValue: strategy.startingShareValue,
           })
         }
 
-        return getBaseApy({
+        return getV2BaseApy({
+          launchEpoch: launchEpoch,
           baseApy: config.baseApy,
           dayDatas: datas,
+          decimals: decimals,
         })
       })()
 
