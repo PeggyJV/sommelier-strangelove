@@ -127,12 +127,14 @@ export const getUserData = async ({
 
     // Denoted in USD
     const netValue = (() => {
-      return numTotalAssets * tokenPrice + sommRewardsUSD
+      return totalAssets
+        .multipliedBy(baseAssetPrice)
+        .plus(sommRewardsUSD)
     })()
 
     // Denoted in USD
     const netValueWithoutRewards = (() => {
-      return numTotalAssets * tokenPrice
+      return totalAssets.multipliedBy(baseAssetPrice)
     })()
 
     const userStrategyData = {
