@@ -2,6 +2,7 @@ import {
   CircularProgress,
   CircularProgressLabel,
   HStack,
+  Stack,
   Text,
   Tooltip,
 } from "@chakra-ui/react"
@@ -15,7 +16,6 @@ type ApyRewardsSectionProps = {
   baseApy?: string
   rewardsApy?: string
   stackingEndDate: string
-  baseApySumRewards?: string
   date?: Date
   cellarId: string
 }
@@ -23,13 +23,7 @@ type ApyRewardsSectionProps = {
 export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   props
 ) => {
-  const {
-    baseApy,
-    rewardsApy,
-    stackingEndDate,
-    cellarId,
-    baseApySumRewards,
-  } = props
+  const { baseApy, rewardsApy, stackingEndDate, cellarId } = props
   const endDate = new Date(stackingEndDate).getTime()
   const startDate = subDays(endDate, 30).getTime()
   const now = new Date(Date.now()).getTime()
@@ -38,7 +32,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const percentage = (current / range) * 100
   const cellarConfig = cellarDataMap[cellarId].config
 
-  if (!baseApySumRewards) {
+  if (!baseApy && !rewardsApy) {
     return (
       <Text textAlign="right" fontWeight={550} fontSize="16px">
         --
@@ -46,21 +40,9 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     )
   }
   return (
-    <HStack
-      alignItems="center"
-      spacing={0}
-      alignContent="center"
-      gap={2}
-    >
+    <Stack alignItems="flex-end" spacing={0}>
       <Tooltip
-        label={
-          <>
-            <Text>
-              {baseApyHoverLabel(cellarConfig)} {baseApy ?? "0.00%"}
-            </Text>
-            <Text>Rewards APY {rewardsApy ?? "0.00%"}</Text>
-          </>
-        }
+        label={baseApyHoverLabel(cellarConfig)}
         color="neutral.100"
         border="0"
         fontSize="12px"
@@ -72,12 +54,12 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         shouldWrapChildren
       >
         <Text fontWeight={550} fontSize="16px">
-          {baseApySumRewards ?? "-"}
+          {baseApy ?? "--"}
         </Text>
       </Tooltip>
       {rewardsApy && (
         <Tooltip
-          label={`Rewards ends in ${formatDistanceToNowStrict(
+          label={`Ends in ${formatDistanceToNowStrict(
             new Date(stackingEndDate)
           )}`}
           color="neutral.100"
@@ -91,6 +73,14 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
           shouldWrapChildren
         >
           <HStack spacing={1}>
+            <Text
+              fontWeight={600}
+              fontSize="12px"
+              color="neutral.400"
+            >
+              +{rewardsApy}
+            </Text>
+
             <CircularProgress
               value={percentage}
               color="white"
@@ -112,6 +102,6 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
           </HStack>
         </Tooltip>
       )}
-    </HStack>
+    </Stack>
   )
 }
