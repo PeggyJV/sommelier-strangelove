@@ -3,7 +3,6 @@ import {
   FormControl,
   FormErrorMessage,
   Icon,
-  Text,
   VStack,
   Button,
   HStack,
@@ -12,6 +11,7 @@ import {
   Image,
   Stack,
   Avatar,
+  Text,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"

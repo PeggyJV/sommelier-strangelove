@@ -52,6 +52,7 @@ import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { CellarNameKey } from "data/types"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { update } from "lodash"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
