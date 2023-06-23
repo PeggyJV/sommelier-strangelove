@@ -56,6 +56,9 @@ export const StrategyTabColumn = ({
             rewardsApy={row.original.rewardsApy?.formatted}
             stackingEndDate={row.original.stakingEnd?.endDate}
             date={row.original.launchDate}
+            baseApySumRewards={
+              row.original.baseApySumRewards?.formatted
+            }
           />
         )
       },
