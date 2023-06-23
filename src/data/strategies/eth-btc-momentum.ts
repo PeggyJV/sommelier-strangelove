@@ -13,7 +13,7 @@ export const ethBtcMomentum: CellarData = {
   name: "ETH-BTC Momentum",
   cellarType: CellarType.automatedPortfolio,
   slug: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG,
-  launchDate: new Date(2022, 5, 5, 12, 0, 0, 0),
+  launchDate: new Date("2022-10-28T00:00:00.000Z"),
   description:
     "Strategy portfolio has exposure to BTC and ETH with positive price momentum, lower exposure when prices drop.",
   strategyType: "Crypto portfolio",

@@ -56,7 +56,7 @@ export const StrategyDesktopColumn = ({
           bg="surface.bg"
         >
           <HStack spacing={1}>
-            <Text>Protocol</Text>
+            <Text>Protocols</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
         </Tooltip>
@@ -206,6 +206,9 @@ export const StrategyDesktopColumn = ({
             rewardsApy={row.original.rewardsApy?.formatted}
             stackingEndDate={row.original.stakingEnd?.endDate}
             date={row.original.launchDate}
+            baseApySumRewards={
+              row.original.baseApySumRewards?.formatted
+            }
           />
         )
       },
@@ -215,7 +218,7 @@ export const StrategyDesktopColumn = ({
         <Text>
           {timeline.title}
           <br />
-          Token Price
+          {/* Token Price */}
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
@@ -239,7 +242,7 @@ export const StrategyDesktopColumn = ({
               fontWeight={600}
             />
           </Tooltip>
-          <Tooltip
+          {/* <Tooltip
             label={`Token price`}
             color="neutral.100"
             border="0"
@@ -260,7 +263,7 @@ export const StrategyDesktopColumn = ({
                 {row.original.tokenPrice}
               </Text>
             </HStack>
-          </Tooltip>
+          </Tooltip> */}
         </VStack>
       ),
       sortType: "basic",

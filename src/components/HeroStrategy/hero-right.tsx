@@ -74,6 +74,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
     tvm,
     rewardsApy,
     baseApy,
+    baseApySumRewards,
   } = data || {}
   const dailyChange = changes?.daily
   const router = useRouter()
@@ -181,15 +182,25 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               </VStack>
               <VStack flex={1} textAlign="center">
                 <Heading size="md">
-                  {baseApy?.formatted || "--"}
+                  {baseApySumRewards?.formatted || "--"}
                 </Heading>
                 <CellarStatsLabel
-                  tooltip={apyHoverLabel(cellarConfig) || ""}
+                  tooltip={
+                    <>
+                      <Text>
+                        {apyHoverLabel(cellarConfig)}{" "}
+                        {baseApy?.formatted ?? "0.00%"}
+                      </Text>
+                      <Text>
+                        Rewards APY {rewardsApy?.formatted ?? "0.00%"}
+                      </Text>
+                    </>
+                  }
                   title={apyLabel(cellarConfig)}
                 />
               </VStack>
-              <VStack flex={1}>
-                {showTokenPriceInsteadOfApy(cellarConfig) ? (
+              {showTokenPriceInsteadOfApy(cellarConfig) && (
+                <VStack flex={1}>
                   <>
                     <Heading size="md">{tokenPrice || "--"}</Heading>
                     <CellarStatsLabel
@@ -197,15 +208,8 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                       title="Token Price"
                     />
                   </>
-                ) : (
-                  <>
-                    <Heading size="md" color="lime.base">
-                      {rewardsApy?.formatted || "--"}
-                    </Heading>
-                    <CellarStatsLabel title={"Rewards APY"} />
-                  </>
-                )}
-              </VStack>
+                </VStack>
+              )}
             </HStack>
           )}
           {isAutomatedPortfolio && (

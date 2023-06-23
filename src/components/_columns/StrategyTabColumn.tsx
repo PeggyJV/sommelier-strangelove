@@ -1,9 +1,8 @@
-import { HStack, Text, Tooltip, VStack } from "@chakra-ui/react"
+import { Text, Tooltip, VStack } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
-import { CellValue } from "react-table"
 
 type StrategyTabColumnProps = {
   timeline: Timeline
@@ -57,6 +56,9 @@ export const StrategyTabColumn = ({
             rewardsApy={row.original.rewardsApy?.formatted}
             stackingEndDate={row.original.stakingEnd?.endDate}
             date={row.original.launchDate}
+            baseApySumRewards={
+              row.original.baseApySumRewards?.formatted
+            }
           />
         )
       },
@@ -66,7 +68,7 @@ export const StrategyTabColumn = ({
         <Text>
           {timeline.title}
           <br />
-          Token Prices
+          {/* Token Prices */}
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
@@ -90,7 +92,7 @@ export const StrategyTabColumn = ({
               fontWeight={600}
             />
           </Tooltip>
-          <Tooltip
+          {/* <Tooltip
             label={`Token price`}
             color="neutral.100"
             border="0"
@@ -111,7 +113,7 @@ export const StrategyTabColumn = ({
                 {row.original.tokenPrice}
               </Text>
             </HStack>
-          </Tooltip>
+          </Tooltip> */}
         </VStack>
       ),
       sortType: "basic",
