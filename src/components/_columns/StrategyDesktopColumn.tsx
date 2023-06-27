@@ -216,7 +216,7 @@ export const StrategyDesktopColumn = ({
     {
       Header: () => (
         <Text>
-          {timeline.title}
+          {`${timeline.title} Token Price`}
           <br />
           {/* Token Price */}
         </Text>
