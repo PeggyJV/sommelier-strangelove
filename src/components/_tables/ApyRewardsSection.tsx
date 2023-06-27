@@ -53,7 +53,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     return (
       <Stack alignItems="flex-end" spacing={0}>
         <Tooltip
-          label={baseApyHoverLabel(cellarConfig)}
+          label={baseApy ? baseApyHoverLabel(cellarConfig) : ""}
           color="neutral.100"
           border="0"
           fontSize="12px"
@@ -70,7 +70,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         </Tooltip>
         {rewardsApy && (
           <Tooltip
-            label={`Ends in ${formatDistanceToNowStrict(
+            label={`Rewards ends in ${formatDistanceToNowStrict(
               new Date(stackingEndDate)
             )}`}
             color="neutral.100"
