@@ -25,7 +25,7 @@ export const LayoutWithSidebar: FC = ({ children }) => {
           as="main"
           flex={1}
           pt={{ base: "120px", lg: "140px" }}
-          maxW="1360px"
+          maxW="1460px"
           px={{ base: "16px", md: "30px", lg: "40px" }}
           flexDir="row"
           justifyContent="center"
