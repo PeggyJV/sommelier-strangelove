@@ -271,14 +271,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               {isRewardsEnabled(cellarConfig) && (
                 <Rewards cellarConfig={cellarConfig} />
               )}
-              <CardStat label="Strategy Details">
-                <HStack as={Link} href={`/strategies/${slug}`}>
-                  <Text as="span" fontWeight="bold" fontSize={21}>
-                    {strategyData?.name}
-                  </Text>
-                  <Icon as={FaExternalLinkAlt} color="purple.base" />
-                </HStack>
-              </CardStat>
             </>
           ) : (
             <VStack align="flex-start">
@@ -308,6 +300,19 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               </CardStat>
             </VStack>
           )}
+
+          <CardStat label="Strategy Details">
+            {strategyData ? (
+              <HStack as={Link} href={`/strategies/${slug}`}>
+                <Text as="span" fontWeight="bold" fontSize={21}>
+                  {strategyData?.name}
+                </Text>
+                <Icon as={FaExternalLinkAlt} color="purple.base" />
+              </HStack>
+            ) : (
+              <Text>Loading...</Text>
+            )}
+          </CardStat>
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
           <>

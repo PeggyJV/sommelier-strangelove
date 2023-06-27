@@ -20,7 +20,7 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
             as="main"
             flex={1}
             pt={40}
-            maxW="1200px"
+            maxW="1300px"
             px={{ base: 0, sm: 4 }}
           >
             {isMounted && isConnected && chain?.id !== 1 && (
