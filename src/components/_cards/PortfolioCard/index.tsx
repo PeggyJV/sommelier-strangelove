@@ -2,7 +2,10 @@ import {
   Avatar,
   BoxProps,
   Heading,
+  HStack,
+  Icon,
   Image,
+  Link,
   SimpleGrid,
   Spacer,
   Stack,
@@ -37,6 +40,7 @@ import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
 import { VFC } from "react"
+import { FaExternalLinkAlt } from "react-icons/fa"
 import { formatDecimals } from "utils/bigNumber"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
@@ -52,6 +56,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const { isConnected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
+  const slug = cellarDataMap[id].slug
 
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
@@ -266,6 +271,14 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               {isRewardsEnabled(cellarConfig) && (
                 <Rewards cellarConfig={cellarConfig} />
               )}
+              <CardStat label="Strategy Details">
+                <HStack as={Link} href={`/strategies/${slug}`}>
+                  <Text as="span" fontWeight="bold" fontSize={21}>
+                    {strategyData?.name}
+                  </Text>
+                  <Icon as={FaExternalLinkAlt} color="purple.base" />
+                </HStack>
+              </CardStat>
             </>
           ) : (
             <VStack align="flex-start">
