@@ -9,16 +9,20 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
-import { DepositButton } from "components/_buttons/DepositButton"
+import { BaseButton } from "components/_buttons/BaseButton"
 import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
 import { Timeline } from "data/context/homeContext"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
+import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useState } from "react"
 import { CellValue } from "react-table"
+import { analytics } from "utils/analytics"
 import { getProtocols } from "utils/getProtocols"
+import { useAccount } from "wagmi"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
@@ -27,6 +31,10 @@ type StrategyDesktopColumnProps = {
 export const StrategyDesktopColumn = ({
   timeline,
 }: StrategyDesktopColumnProps) => {
+  const isMounted = useIsMounted()
+  const { isConnected } = useAccount()
+  const { setIsOpen } = useDepositModalStore()
+
   return [
     {
       Header: "Strategy",
@@ -273,7 +281,19 @@ export const StrategyDesktopColumn = ({
       Header: () => <Text>Deposit</Text>,
       id: "deposit",
       Cell: ({ row }: any) => {
-        return <DepositButton id={row.original.slug} />
+        return (
+          <BaseButton
+            variant="solid"
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsOpen(row.original.slug)
+
+              analytics.track("deposit.modal-opened")
+            }}
+          >
+            Deposit
+          </BaseButton>
+        )
       },
     },
   ]

@@ -1,62 +1,62 @@
 import {
-  HStack,
-  ModalProps,
-  Text,
-  VStack,
-  FormControl,
-  FormErrorMessage,
-  Icon,
-  Spinner,
   Avatar,
   Flex,
+  FormControl,
+  FormErrorMessage,
+  HStack,
+  Icon,
   IconButton,
+  ModalProps,
+  Spinner,
+  Text,
   UseDisclosureProps,
+  VStack,
 } from "@chakra-ui/react"
-import { useEffect, useState, VFC } from "react"
-import { FormProvider, useForm } from "react-hook-form"
+import { fetchSigner } from "@wagmi/core"
+import { Link } from "components/Link"
 import { BaseButton } from "components/_buttons/BaseButton"
-import { AiOutlineInfo } from "react-icons/ai"
-import { FiSettings } from "react-icons/fi"
+import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
+import { ExternalLinkIcon } from "components/_icons"
 import { ModalMenu } from "components/_menus/ModalMenu"
+import { CardHeading } from "components/_typography/CardHeading"
+import { useGeo } from "context/geoContext"
+import { cellarDataMap } from "data/cellarDataMap"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
+import { useStrategyData } from "data/hooks/useStrategyData"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import {
   depositAssetTokenConfig,
   Token as TokenType,
   tokenConfig,
 } from "data/tokenConfig"
-import { Link } from "components/Link"
-import { config } from "utils/config"
-import { erc20ABI, useSigner, useAccount, useBalance } from "wagmi"
+import { CellarNameKey } from "data/types"
+import { isActiveTokenStrategyEnabled, waitTime } from "data/uiConfig"
 import { ethers } from "ethers"
 import { useBrandedToast } from "hooks/chakra"
+import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { useImportToken } from "hooks/web3/useImportToken"
+import { useRouter } from "next/router"
+import { useEffect, useState, VFC } from "react"
+import { FormProvider, useForm } from "react-hook-form"
+import { AiOutlineInfo } from "react-icons/ai"
+import { FiSettings } from "react-icons/fi"
+import { analytics } from "utils/analytics"
+import { config } from "utils/config"
+import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
+import { getCurrentAsset } from "utils/getCurrentAsset"
 import { insertEvent } from "utils/supabase"
+import { erc20ABI, useAccount, useBalance } from "wagmi"
 
 interface FormValues {
   depositAmount: number
   slippage: number
   selectedToken: TokenType
 }
-import { CardHeading } from "components/_typography/CardHeading"
-import { getCurrentAsset } from "utils/getCurrentAsset"
-import { ExternalLinkIcon } from "components/_icons"
-import { analytics } from "utils/analytics"
-import { useRouter } from "next/router"
-import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
-import { cellarDataMap } from "data/cellarDataMap"
-import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
-import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
-import { isActiveTokenStrategyEnabled, waitTime } from "data/uiConfig"
-import { useGeo } from "context/geoContext"
-import { useImportToken } from "hooks/web3/useImportToken"
-import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
-import { CellarNameKey } from "data/types"
-import { useStrategyData } from "data/hooks/useStrategyData"
-import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { update } from "lodash"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
-  notifyModal: UseDisclosureProps
+  notifyModal?: UseDisclosureProps
   id?: string
 }
 
@@ -65,6 +65,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   ...props
 }) => {
   const id = (useRouter().query.id as string) || (props.id as string)
+
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
@@ -74,7 +75,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const currentStrategies =
     window.location.pathname?.split("/")[2]?.replace(/-/g, " ") ||
-    id ||
+    id.replace(/-/g, " ") ||
     ""
 
   const importToken = useImportToken({
@@ -102,8 +103,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     cellarName,
     cellarAddress,
   }
-
-  const { data: signer } = useSigner()
   const { address } = useAccount()
 
   const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
@@ -156,10 +155,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     watch: true,
   })
 
-  const erc20Contract =
-    selectedToken?.address &&
-    new ethers.Contract(selectedToken?.address, erc20ABI, signer!)
-
   const depositAndSwap = useDepositAndSwap(cellarConfig)
 
   const isActiveAsset =
@@ -200,7 +195,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
     // if swap slippage is not set, use default value
     const slippage = data?.slippage
-
+    const signer = await fetchSigner()
+    const erc20Contract =
+      selectedToken?.address &&
+      new ethers.Contract(selectedToken?.address, erc20ABI, signer!)
     if (!erc20Contract) return
     insertEvent({
       event: "deposit.started",
@@ -394,7 +392,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       const isPopUpEnable =
         cellarData.popUpTitle && cellarData.popUpDescription
 
-      if (!notifyModal.isOpen) {
+      if (!notifyModal?.isOpen) {
         analytics.track(`${currentStrategies}-notify.modal-opened`)
       }
       if (isPopUpEnable) {

@@ -40,7 +40,8 @@ export const BorderTr: VFC<BorderTrProps> = ({
         bg: "surface.secondary",
       }}
       cursor="pointer"
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation()
         router.push(slug)
         // const landingTyp = landingType()
         // analytics.track("strategy.selection", {

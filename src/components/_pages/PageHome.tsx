@@ -4,10 +4,13 @@ import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
 import { StrategyTabColumn } from "components/_columns/StrategyTabColumn"
 import { LayoutWithSidebar } from "components/_layout/LayoutWithSidebar"
+import { SommelierTab } from "components/_modals/DepositModal/SommelierTab"
+import { ModalWithExchangeTab } from "components/_modals/ModalWithExchangeTab"
 import { TransparentSkeleton } from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
 import { useHome } from "data/context/homeContext"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { CellarType } from "data/types"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
@@ -53,6 +56,8 @@ export const PageHome = () => {
   }, [data, type])
 
   const loading = isFetching || isRefetching || isLoading
+
+  const { isOpen, onClose, setIsOpen, id } = useDepositModalStore()
 
   return (
     <LayoutWithSidebar>
@@ -110,6 +115,13 @@ export const PageHome = () => {
             <StrategyTable columns={columns} data={strategyData} />
           </>
         )}
+        <ModalWithExchangeTab
+          isOpen={isOpen}
+          onClose={onClose}
+          sommelierTab={
+            <SommelierTab isOpen={isOpen} onClose={onClose} id={id} />
+          }
+        />
       </TransparentSkeleton>
     </LayoutWithSidebar>
   )
