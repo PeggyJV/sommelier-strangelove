@@ -82,9 +82,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             fontSize="0.75rem"
             fontWeight={600}
           >
-            {date && (
-              <StrategyDate date={date} deprecated={isDeprecated} />
-            )}
+            <StrategyDate date={date} deprecated={isDeprecated} />
             {provider &&
               strategyType &&
               formatText(`${provider} · ${strategyType}`)}
