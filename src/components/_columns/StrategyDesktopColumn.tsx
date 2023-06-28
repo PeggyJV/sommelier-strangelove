@@ -9,6 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { BaseButton } from "components/_buttons/BaseButton"
 import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
@@ -17,14 +18,17 @@ import { Timeline } from "data/context/homeContext"
 import { Token } from "data/tokenConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
+import { analytics } from "utils/analytics"
 import { getProtocols } from "utils/getProtocols"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
+  onDepositModalOpen: (id: string) => void
 }
 
 export const StrategyDesktopColumn = ({
   timeline,
+  onDepositModalOpen,
 }: StrategyDesktopColumnProps) => {
   return [
     {
@@ -267,6 +271,24 @@ export const StrategyDesktopColumn = ({
         </VStack>
       ),
       sortType: "basic",
+    },
+    {
+      Header: () => <Text>Deposit</Text>,
+      id: "deposit",
+      Cell: ({ row }: any) => {
+        return (
+          <BaseButton
+            variant="solid"
+            onClick={(e) => {
+              e.stopPropagation()
+              onDepositModalOpen(row.original.slug)
+              analytics.track("deposit.modal-opened")
+            }}
+          >
+            Deposit
+          </BaseButton>
+        )
+      },
     },
   ]
 }

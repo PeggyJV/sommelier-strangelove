@@ -1,15 +1,19 @@
 import { Text, Tooltip, VStack } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { BaseButton } from "components/_buttons/BaseButton"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
+import { analytics } from "utils/analytics"
 
 type StrategyTabColumnProps = {
   timeline: Timeline
+  onDepositModalOpen: (id: string) => void
 }
 
 export const StrategyTabColumn = ({
   timeline,
+  onDepositModalOpen,
 }: StrategyTabColumnProps) => {
   return [
     {
@@ -117,6 +121,24 @@ export const StrategyTabColumn = ({
         </VStack>
       ),
       sortType: "basic",
+    },
+    {
+      Header: () => <Text>Deposit</Text>,
+      id: "deposit",
+      Cell: ({ row }: any) => {
+        return (
+          <BaseButton
+            variant="solid"
+            onClick={(e) => {
+              e.stopPropagation()
+              onDepositModalOpen(row.original.slug)
+              analytics.track("deposit.modal-opened")
+            }}
+          >
+            Deposit
+          </BaseButton>
+        )
+      },
     },
   ]
 }
