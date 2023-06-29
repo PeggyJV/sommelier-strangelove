@@ -132,6 +132,11 @@ export const config = {
       SLUG: "Real-Yield-UNI",
       ABI: cellarV0816,
     },
+    FRAXIMAL: {
+      ADDRESS: "0x6a6af5393dc23d7e3db28d28ef422db7c40932b1",
+      SLUG: "Fraximal",
+      ABI: cellarV0816,
+    },
     DEFI_STARS: {
       ADDRESS: "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
       SLUG: "DeFi-Stars",
@@ -183,6 +188,10 @@ export const config = {
     },
     REAL_YIELD_ETH_STAKER: {
       ADDRESS: "0x955a31153e6764FE892757AcE79123ae996B0aFB",
+      ABI: cellarStakingV0815,
+    },
+    FRAXIMAL_STAKER: {
+      ADDRESS: "0x955a31153e6764FE892757AcE79123ae996B0aFA",
       ABI: cellarStakingV0815,
     },
     DEFI_STARS_STAKER: {

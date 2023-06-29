@@ -798,4 +798,46 @@ export const strategyPageContentData = {
     howItWorks: `
     The way the vault achieves this is by taking your deposited UNI token, supplying it on Aave as collateral to borrow ETH and then depositing that ETH into the Real Yield ETH vault. For context, the Real Yield ETH vault generates yield from leveraged staking and LPing ETH and ETH LSTs. The desired net effect is that the yield earned through Real Yield ETH will be greater than the borrow costs of the ETH allowing the vault to purchase more of your deposit token to add to your position. It’s important to note that these vaults and the Real Yield ETH vault take on leverage. However, Sommelier’s novel architecture gives vaults advanced capabilities when it comes to taking on and monitoring these positions. While leveraged, the vault smart contract enforces a minimum health factor during each rebalance as a safety precaution. The vault also closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.`,
   },
+  [config.CONTRACT.FRAXIMAL.SLUG]: {
+    name: "Fraximal",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `The best way to get involved in Fraxlend - automated rebalances for maximum yield.`,
+    // NEED UPDATE
+    ticker: (
+      <>
+        <Image
+          alt="RYUNI icon"
+          src="/assets/icons/real-yield-uni.png"
+          boxSize={8}
+        />
+        <Text>FRAXI</Text>
+      </>
+    ),
+    tradedAssets: ["FRAX"],
+    alternativeTo: "Manual Fraxlend optimization",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      // NEED UPDATE
+      card: [
+        `Automated leverage monitoring and yield compounding.`,
+        `Organic yield powered by an "arbitrage" between Ethereum staking rates and ETH borrow costs.`,
+        `No lockups, withdraw your tokens at any time.`,
+      ],
+      description: `The Fraximal vault is poised to offer users the best way to get involved in Fraxlend through automated repositioning to ensure the vault captures optimized yields, while avoiding the on-going gas costs of rebalancing.
+      <br/><br/>
+      Note that Fraximal and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: `
+    Captures highest interest rates available at any given moment.
+    Mitigates risk by ensuring that the vault is not overly exposed to any specific
+    lending pool at a time.
+    Fully automated with built-in autocompounding.
+    `,
+  },
 }
