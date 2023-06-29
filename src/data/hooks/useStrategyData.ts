@@ -37,10 +37,10 @@ export const useStrategyData = (address: string) => {
       const result = await getStrategyData({
         address,
         contracts: allContracts![address]!,
-        sommPrice: sommPrice!,
-        sgData: sgData?.cellar!,
+        sommPrice: sommPrice ?? "0",
+        sgData: sgData?.cellar,
         decimals: sgData?.cellar?.asset.decimals ?? 6,
-        baseAssetPrice: baseAssetPrice!,
+        baseAssetPrice: baseAssetPrice ?? "0",
         symbol: sgData?.cellar?.asset.symbol ?? "USDC",
       })
 
