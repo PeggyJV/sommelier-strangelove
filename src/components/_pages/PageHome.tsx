@@ -25,8 +25,8 @@ export const PageHome = () => {
     isFetching,
     isRefetching,
   } = useAllStrategiesData()
-  const isMobile = useBetterMediaQuery("(max-width: 767px)")
-  const isTab = useBetterMediaQuery("(max-width: 1023px)")
+  const isMobile = useBetterMediaQuery("(max-width: 900px)")
+  const isTab = useBetterMediaQuery("(max-width: 1600px)")
   const isDesktop = !isTab && !isMobile
   const [type, setType] = useState<string>("All")
   const strategyType = ["All", "Trading", "Yield"]

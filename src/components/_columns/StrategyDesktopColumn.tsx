@@ -277,16 +277,23 @@ export const StrategyDesktopColumn = ({
       id: "deposit",
       Cell: ({ row }: any) => {
         return (
-          <BaseButton
-            variant="solid"
-            onClick={(e) => {
-              e.stopPropagation()
-              onDepositModalOpen(row.original.slug)
-              analytics.track("deposit.modal-opened")
-            }}
+          <Tooltip
+            label="Connect your wallet first"
+            shouldWrapChildren
+            display={row.original.deprecated ? "inline" : "none"}
           >
-            Deposit
-          </BaseButton>
+            <BaseButton
+              disabled={row.original.deprecated}
+              variant="solid"
+              onClick={(e) => {
+                e.stopPropagation()
+                onDepositModalOpen(row.original.slug)
+                analytics.track("deposit.modal-opened")
+              }}
+            >
+              Deposit
+            </BaseButton>
+          </Tooltip>
         )
       },
     },

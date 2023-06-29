@@ -25,18 +25,18 @@ export const LayoutWithSidebar: FC = ({ children }) => {
           as="main"
           flex={1}
           pt={{ base: "120px", lg: "140px" }}
-          maxW="1460px"
-          px={{ base: "16px", md: "30px", lg: "40px" }}
+          maxW="2000px"
+          px={{ base: "8px", md: "16px", lg: "30px" }}
           flexDir="row"
           justifyContent="center"
         >
           <Flex
-            wrap="wrap-reverse"
+            flexDir={{ base: "column-reverse", xl: "row" }}
             gap={{ base: "44px", lg: 8 }}
             pb={8}
           >
             <Box
-              w={{ base: "full", lg: "900px" }}
+              w={{ base: "full", xl: "900px" }}
               flex={7}
               ref={containerRef}
             >

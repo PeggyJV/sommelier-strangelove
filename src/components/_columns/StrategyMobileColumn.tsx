@@ -1,4 +1,4 @@
-import { Text } from "@chakra-ui/react"
+import { Text, Tooltip } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { StrategySection } from "components/_tables/StrategySection"
@@ -47,16 +47,23 @@ export const StrategyMobileColumn = ({
       id: "deposit",
       Cell: ({ row }: any) => {
         return (
-          <BaseButton
-            variant="solid"
-            onClick={(e) => {
-              e.stopPropagation()
-              onDepositModalOpen(row.original.slug)
-              analytics.track("deposit.modal-opened")
-            }}
+          <Tooltip
+            label="Connect your wallet first"
+            shouldWrapChildren
+            display={row.original.deprecated ? "inline" : "none"}
           >
-            Deposit
-          </BaseButton>
+            <BaseButton
+              disabled={row.original.deprecated}
+              variant="solid"
+              onClick={(e) => {
+                e.stopPropagation()
+                onDepositModalOpen(row.original.slug)
+                analytics.track("deposit.modal-opened")
+              }}
+            >
+              Deposit
+            </BaseButton>
+          </Tooltip>
         )
       },
     },
