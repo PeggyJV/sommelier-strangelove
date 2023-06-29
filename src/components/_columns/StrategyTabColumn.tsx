@@ -5,6 +5,7 @@ import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
 import { analytics } from "utils/analytics"
+import { useAccount } from "wagmi"
 
 type StrategyTabColumnProps = {
   timeline: Timeline
@@ -15,6 +16,8 @@ export const StrategyTabColumn = ({
   timeline,
   onDepositModalOpen,
 }: StrategyTabColumnProps) => {
+  const { isConnected } = useAccount()
+
   return [
     {
       Header: "Strategy",
@@ -128,12 +131,16 @@ export const StrategyTabColumn = ({
       Cell: ({ row }: any) => {
         return (
           <Tooltip
-            label="Connect your wallet first"
+            label={
+              !isConnected
+                ? "Connect your wallet first"
+                : "Strategy Deprecated"
+            }
             shouldWrapChildren
             display={row.original.deprecated ? "inline" : "none"}
           >
             <BaseButton
-              disabled={row.original.deprecated}
+              disabled={row.original.deprecated || !isConnected}
               variant="solid"
               onClick={(e) => {
                 e.stopPropagation()

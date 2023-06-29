@@ -5,6 +5,7 @@ import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
 import { CellValue } from "react-table"
 import { analytics } from "utils/analytics"
+import { useAccount } from "wagmi"
 
 type StrategyMobileColumnProps = {
   timeline: Timeline
@@ -15,6 +16,7 @@ export const StrategyMobileColumn = ({
   timeline,
   onDepositModalOpen,
 }: StrategyMobileColumnProps) => {
+  const { isConnected } = useAccount()
   return [
     {
       Header: "Strategy",
@@ -48,12 +50,16 @@ export const StrategyMobileColumn = ({
       Cell: ({ row }: any) => {
         return (
           <Tooltip
-            label="Connect your wallet first"
+            label={
+              !isConnected
+                ? "Connect your wallet first"
+                : "Strategy Deprecated"
+            }
             shouldWrapChildren
             display={row.original.deprecated ? "inline" : "none"}
           >
             <BaseButton
-              disabled={row.original.deprecated}
+              disabled={row.original.deprecated || !isConnected}
               variant="solid"
               onClick={(e) => {
                 e.stopPropagation()

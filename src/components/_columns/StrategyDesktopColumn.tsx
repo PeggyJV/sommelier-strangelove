@@ -20,6 +20,7 @@ import { useState } from "react"
 import { CellValue } from "react-table"
 import { analytics } from "utils/analytics"
 import { getProtocols } from "utils/getProtocols"
+import { useAccount } from "wagmi"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
@@ -30,6 +31,8 @@ export const StrategyDesktopColumn = ({
   timeline,
   onDepositModalOpen,
 }: StrategyDesktopColumnProps) => {
+  const { isConnected } = useAccount()
+
   return [
     {
       Header: "Strategy",
@@ -278,12 +281,16 @@ export const StrategyDesktopColumn = ({
       Cell: ({ row }: any) => {
         return (
           <Tooltip
-            label="Connect your wallet first"
+            label={
+              !isConnected
+                ? "Connect your wallet first"
+                : "Strategy Deprecated"
+            }
             shouldWrapChildren
             display={row.original.deprecated ? "inline" : "none"}
           >
             <BaseButton
-              disabled={row.original.deprecated}
+              disabled={row.original.deprecated || !isConnected}
               variant="solid"
               onClick={(e) => {
                 e.stopPropagation()
