@@ -57,7 +57,6 @@ export const fraximal: CellarData = {
   config: {
     noSubgraph: true,
     id: config.CONTRACT.FRAXIMAL.ADDRESS,
-    baseApy: 10,
     cellarNameKey: CellarNameKey.FRAXIMAL,
     lpToken: {
       address: config.CONTRACT.FRAXIMAL.ADDRESS,
