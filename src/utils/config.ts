@@ -133,7 +133,7 @@ export const config = {
       ABI: cellarV0816,
     },
     FRAXIMAL: {
-      ADDRESS: "0x6a6af5393dc23d7e3db28d28ef422db7c40932b1",
+      ADDRESS: "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
       SLUG: "Fraximal",
       ABI: cellarV0816,
     },
@@ -191,7 +191,7 @@ export const config = {
       ABI: cellarStakingV0815,
     },
     FRAXIMAL_STAKER: {
-      ADDRESS: "0x955a31153e6764FE892757AcE79123ae996B0aFA",
+      ADDRESS: "0x290a42e913083edf5aefb241f8a12b306c19f8f9",
       ABI: cellarStakingV0815,
     },
     DEFI_STARS_STAKER: {
