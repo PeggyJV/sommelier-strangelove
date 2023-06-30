@@ -20,15 +20,14 @@ export const fraximal: CellarData = {
   description: `The best way to get involved in Fraxlend - automated rebalances for maximum yield.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "2.00%",
-  managementFeeTooltip:
-    "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+  managementFee: "0.00%",
+  managementFeeTooltip: "Platform fee 0.00%",
   protocols: ["Fraxlend"],
   strategyAssets: ["FRAX"],
   performanceSplit: {
     depositors: 80,
-    "strategy provider": 15,
-    protocol: 5,
+    "strategy provider": 16,
+    protocol: 4,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
