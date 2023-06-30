@@ -62,7 +62,7 @@ export const fraximal: CellarData = {
     cellarNameKey: CellarNameKey.FRAXIMAL,
     lpToken: {
       address: config.CONTRACT.FRAXIMAL.ADDRESS,
-      imagePath: "/assets/icons/real-yield-eth.png",
+      imagePath: "/assets/icons/fraximal.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
