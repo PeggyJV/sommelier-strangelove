@@ -825,19 +825,16 @@ export const strategyPageContentData = {
     strategyHighlights: {
       // NEED UPDATE
       card: [
-        `Automated leverage monitoring and yield compounding.`,
-        `Organic yield powered by an "arbitrage" between Ethereum staking rates and ETH borrow costs.`,
-        `No lockups, withdraw your tokens at any time.`,
+        `Captures highest interest rates available at any given moment.`,
+        `Mitigates risk by ensuring that the vault is not overly exposed to any specific lending pool at a time.`,
+        `Fully automated with built-in autocompounding.`,
       ],
       description: `The Fraximal vault is poised to offer users the best way to get involved in Fraxlend through automated repositioning to ensure the vault captures optimized yields, while avoiding the on-going gas costs of rebalancing.
       <br/><br/>
       Note that Fraximal and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: `
-    Captures highest interest rates available at any given moment.
-    Mitigates risk by ensuring that the vault is not overly exposed to any specific
-    lending pool at a time.
-    Fully automated with built-in autocompounding.
+    On Fraxlend, the yield offered to FRAX suppliers is characteristically volatile, which offers opportunities but also requires constant monitoring and repositioning. The money market accepts a wide variety of smaller cap tokens as collateral, making for fluctuating yield opportunities ranging from 0.5% to more than 20%. This vault will automate the process of capturing the highest interest rates available at any given moment, while also mitigating risk by ensuring that the vault is not overly exposed to any specific lending pool at a time.
     `,
   },
 }
