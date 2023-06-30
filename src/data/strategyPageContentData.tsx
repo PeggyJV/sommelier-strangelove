@@ -808,7 +808,7 @@ export const strategyPageContentData = {
       <>
         <Image
           alt="RYUNI icon"
-          src="/assets/icons/real-yield-uni.png"
+          src="/assets/icons/fraximal.png"
           boxSize={8}
         />
         <Text>FRAXI</Text>
