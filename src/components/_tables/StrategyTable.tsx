@@ -18,6 +18,7 @@ import { useTable, useSortBy } from "react-table"
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { AllStrategiesData } from "data/actions/types"
 import { useRouter } from "next/router"
+import { isComingSoon } from "utils/isComingSoon"
 
 interface BorderTrProps extends TableRowProps {
   slug: string
@@ -154,11 +155,15 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
         >
           {rows.map((row, indexRow) => {
             prepareRow(row)
+            const countdown = isComingSoon(row.original.launchDate)
+            const href = countdown
+              ? "strategies/" + row.original.slug
+              : "strategies/" + row.original.slug + "/manage"
             return (
               <BorderTr
                 {...row.getRowProps()}
                 key={indexRow}
-                slug={"strategies/" + row.original.slug + "/manage"}
+                slug={href}
                 name={row.original.name}
               >
                 {row.cells.map((cell, indexData) => {
