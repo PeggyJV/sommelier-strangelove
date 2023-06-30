@@ -66,7 +66,7 @@ export const StrategyTabColumn = ({
     {
       Header: () => (
         <Text>
-          {timeline.title}
+          {`${timeline.title} Token Price`}
           <br />
           {/* Token Prices */}
         </Text>
