@@ -70,7 +70,7 @@ export const StrategyMobileColumn = ({
               onClick={(e) => {
                 e.stopPropagation()
                 onDepositModalOpen(row.original.slug)
-                analytics.track("deposit.modal-opened")
+                analytics.track("home.deposit.modal-opened")
               }}
             >
               Deposit
