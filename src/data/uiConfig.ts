@@ -296,29 +296,6 @@ export const bondingPeriodOptions = (
   if (config.cellarNameKey === CellarNameKey.FRAXIMAL) {
     return [
       {
-        title: "7 Days",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Days",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Days",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
-  if (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-    config.cellarNameKey === CellarNameKey.DEFI_STARS
-  ) {
-    return [
-      {
         title: "5 Days",
         amount: "1.1x SOMM",
         value: 0,
@@ -331,6 +308,29 @@ export const bondingPeriodOptions = (
       {
         title: "14 Days",
         amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
+  if (
+    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
+    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
+    config.cellarNameKey === CellarNameKey.DEFI_STARS
+  ) {
+    return [
+      {
+        title: "10 Days",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Days",
+        amount: "1.2x SOMM",
+        value: 1,
+      },
+      {
+        title: "20 Days",
+        amount: "1.25x SOMM",
         value: 2,
       },
     ]
