@@ -6,6 +6,8 @@ import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
 import { analytics } from "utils/analytics"
 import { useAccount } from "wagmi"
+import { formatDistanceStrict, isBefore } from "date-fns"
+import { zonedTimeToUtc } from "date-fns-tz"
 
 type StrategyTabColumnProps = {
   timeline: Timeline
@@ -129,24 +131,35 @@ export const StrategyTabColumn = ({
       Header: () => <Text>Deposit</Text>,
       id: "deposit",
       Cell: ({ row }: any) => {
+        const date = new Date(row?.original?.launchDate as Date)
+        const dateTz = date && zonedTimeToUtc(date, "EST")
+        const isBeforeLaunch = isBefore(dateTz, new Date())
         return (
           <Tooltip
             bg="surface.bg"
             color="neutral.300"
             label={
-              !isConnected
+              !isBeforeLaunch
+                ? "Not yet available"
+                : !isConnected
                 ? "Connect your wallet first"
                 : "Strategy Deprecated"
             }
             shouldWrapChildren
             display={
-              row.original.deprecated || !isConnected
+              row.original.deprecated ||
+              !isConnected ||
+              !isBeforeLaunch
                 ? "inline"
                 : "none"
             }
           >
             <BaseButton
-              disabled={row.original.deprecated || !isConnected}
+              disabled={
+                row.original.deprecated ||
+                !isConnected ||
+                !isBeforeLaunch
+              }
               variant="solid"
               onClick={(e) => {
                 e.stopPropagation()
