@@ -96,7 +96,7 @@ export const getStrategyData = async ({
               Number(subgraphData!.tvlTotal) * Number(baseAssetPrice)
             )
           )
-        : getTvm(subgraphData?.tvlTotal)
+        : getTvm(subgraphData!.tvlTotal)
 
       const tradedAssets = (() => {
         if (!isAssetDistributionEnabled(config)) {
