@@ -6,8 +6,10 @@ import {
   HStack,
   Text,
   Tooltip,
+  VStack,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { BaseButton } from "components/_buttons/BaseButton"
 import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
@@ -16,15 +18,21 @@ import { Timeline } from "data/context/homeContext"
 import { Token } from "data/tokenConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
+import { analytics } from "utils/analytics"
 import { getProtocols } from "utils/getProtocols"
+import { useAccount } from "wagmi"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
+  onDepositModalOpen: (id: string) => void
 }
 
 export const StrategyDesktopColumn = ({
   timeline,
+  onDepositModalOpen,
 }: StrategyDesktopColumnProps) => {
+  const { isConnected } = useAccount()
+
   return [
     {
       Header: "Strategy",
@@ -55,7 +63,7 @@ export const StrategyDesktopColumn = ({
           bg="surface.bg"
         >
           <HStack spacing={1}>
-            <Text>Protocol</Text>
+            <Text>Protocols</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
         </Tooltip>
@@ -205,40 +213,102 @@ export const StrategyDesktopColumn = ({
             rewardsApy={row.original.rewardsApy?.formatted}
             stackingEndDate={row.original.stakingEnd?.endDate}
             date={row.original.launchDate}
+            baseApySumRewards={
+              row.original.baseApySumRewards?.formatted
+            }
           />
         )
       },
     },
     {
-      Header: timeline.title,
+      Header: () => (
+        <Text>
+          {`${timeline.title} Token Price`}
+          <br />
+          {/* Token Price */}
+        </Text>
+      ),
       accessor: `changes.${timeline.value}`,
       Cell: ({ row }: any) => (
-        <Tooltip
-          label={`Annualized ${row.original.baseApy?.formatted} APY`}
-          color="neutral.100"
-          border="0"
-          fontSize="12px"
-          bg="neutral.900"
-          fontWeight={600}
-          py="4"
-          px="6"
-          boxShadow="xl"
-          shouldWrapChildren
-          isDisabled={
-            !Boolean(
-              Boolean(row.original.baseApy?.formatted) &&
-                row.original.type === 1
-            )
-          }
-        >
-          <PercentageText
-            data={row.original.changes?.[timeline.value]}
-            arrowT2
+        <VStack>
+          <Tooltip
+            label={`Token price change`}
+            color="neutral.100"
+            border="0"
+            fontSize="12px"
+            bg="neutral.900"
             fontWeight={600}
-          />
-        </Tooltip>
+            py="4"
+            px="6"
+            boxShadow="xl"
+            shouldWrapChildren
+          >
+            <PercentageText
+              data={row.original.changes?.[timeline.value]}
+              arrowT2
+              fontWeight={600}
+            />
+          </Tooltip>
+          {/* <Tooltip
+            label={`Token price`}
+            color="neutral.100"
+            border="0"
+            fontSize="12px"
+            bg="neutral.900"
+            fontWeight={600}
+            py="4"
+            px="6"
+            boxShadow="xl"
+            shouldWrapChildren
+          >
+            <HStack spacing={1}>
+              <Text
+                fontWeight={600}
+                fontSize="12px"
+                color="neutral.400"
+              >
+                {row.original.tokenPrice}
+              </Text>
+            </HStack>
+          </Tooltip> */}
+        </VStack>
       ),
       sortType: "basic",
+    },
+    {
+      Header: () => <Text>Deposit</Text>,
+      id: "deposit",
+      Cell: ({ row }: any) => {
+        return (
+          <Tooltip
+            bg="surface.bg"
+            color="neutral.300"
+            label={
+              !isConnected
+                ? "Connect your wallet first"
+                : "Strategy Deprecated"
+            }
+            shouldWrapChildren
+            display={
+              row.original.deprecated || !isConnected
+                ? "inline"
+                : "none"
+            }
+          >
+            <BaseButton
+              disabled={row.original.deprecated || !isConnected}
+              variant="solid"
+              onClick={(e) => {
+                e.stopPropagation()
+                onDepositModalOpen(row.original.slug)
+                analytics.track("home.deposit.modal-opened")
+              }}
+            >
+              Deposit
+            </BaseButton>
+          </Tooltip>
+        )
+      },
     },
   ]
 }

@@ -14,19 +14,23 @@ export const ethBtcTrend: CellarData = {
   slug: config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG,
   tradedAssets: ["USDC", "WETH", "WBTC"],
   cellarType: CellarType.automatedPortfolio,
+  launchDate: new Date("2022-10-28T00:00:00.000Z"),
   description:
     "Strategy portfolio buys BTC and ETH when prices go up. Fully or partially sells both assets when prices go down.",
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "2%",
+  // There was an issue at launch with the ETH-BTC Trend Cellar
+  // where the initial share value was about $2
+  startingShareValue: "1999911",
+  managementFee: "2.00%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: "Uniswap V3",
   strategyAssets: ["WBTC", "WETH", "USDC"],
   performanceSplit: {
     depositors: 90,
-    protocol: 2.5,
     "strategy provider": 7.5,
+    protocol: 2.5,
   },
   strategyProvider: {
     logo: "/assets/images/clear-gate.png",

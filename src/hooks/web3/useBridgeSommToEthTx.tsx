@@ -20,7 +20,7 @@ export const useBridgeSommToEthTx = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const { data } = useAccount()
-  const { signerAuto } = useSigners()
+  const { signerAmino } = useSigners()
 
   const TxHashToastBody = ({
     title,
@@ -144,7 +144,7 @@ export const useBridgeSommToEthTx = () => {
         receiver: props.address,
       })
       const res = await txClient({
-        signer: signerAuto || undefined,
+        signer: signerAmino || undefined,
         addr: "https://rpc.sommelier.strange.love",
         prefix: "somm",
       }).sendMsgSendToEthereum({

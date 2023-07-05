@@ -20,15 +20,15 @@ export const defiStars: CellarData = {
   description: `A long-only approach with established DeFi assets and derivatives tokens during the uptrend market periods. React quickly to market changes by managing downtrends.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "2%",
+  managementFee: "2.00%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: ["Uniswap V3", "1inch", "0x"],
   strategyAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   performanceSplit: {
-    protocol: 5,
-    "strategy provider": 15,
     Depositors: 80,
+    "strategy provider": 15,
+    protocol: 5,
   },
   strategyProvider: {
     logo: "/assets/images/algo-lab.png",

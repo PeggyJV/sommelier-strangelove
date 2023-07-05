@@ -274,8 +274,8 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         </VStack>
         <Text fontSize="xs">
           After triggering 'Unbond,' you will need to wait through the
-          bonding period you selected (7, 14, or 21 days), after which
-          your LP tokens can be unstaked and withdrawn.
+          bonding period you selected, after which your LP tokens can
+          be unstaked and withdrawn.
         </Text>
         <BaseButton
           type="submit"

@@ -27,6 +27,7 @@ export enum CellarNameKey {
   REAL_YIELD_ENS = "REAY_YIELD_ENS",
   REAL_YIELD_SNX = "REAL_YIELD_SNX",
   REAL_YIELD_UNI = "REAL_YIELD_UNI",
+  FRAXIMAL = "FRAXIMAL",
 }
 
 export interface ConfigProps {
@@ -88,6 +89,7 @@ export interface CellarData {
   description: string
   strategyType: string
   strategyTypeTooltip?: string
+  startingShareValue?: string
   managementFee: string
   managementFeeTooltip?: string
   protocols: string | string[]

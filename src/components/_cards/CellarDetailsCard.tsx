@@ -1,6 +1,7 @@
 import {
   Box,
   BoxProps,
+  Button,
   Circle,
   HStack,
   Icon,
@@ -18,7 +19,7 @@ import { CardStat } from "components/CardStat"
 import { StrategyProvider } from "components/StrategyProvider"
 import { TokenAssets } from "components/TokenAssets"
 import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
-import { InformationIcon } from "components/_icons"
+import { ArrowRightIcon, InformationIcon } from "components/_icons"
 import { CardHeading } from "components/_typography/CardHeading"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { tokenConfig } from "data/tokenConfig"
@@ -31,6 +32,7 @@ import { useNivoThemes } from "hooks/nivo"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { isArray } from "lodash"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/router"
 import { VFC } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { protocolsImage } from "utils/protocolsImagePath"
@@ -69,11 +71,13 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     performanceSplit,
     strategyProvider,
     name,
+    slug,
     config: { id },
   } = cellarDataMap[cellarId]
   const cellarStrategyAssets = tokenConfig.filter((token) =>
     strategyAssets?.includes(token.symbol)
   )
+  const router = useRouter()
   const performanceSplitKeys = Object.keys(performanceSplit)
   const cellarConfig = cellarDataMap[cellarId].config
   const performanceFee =
@@ -194,10 +198,10 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 performanceSplit["strategy provider"] ?? 0
               }%`}
             >
-              {performanceFee}%
+              {performanceFee}.00%
             </CardStat>
             <CardStat label="Deposit and Exit Fees" flex={0}>
-              0.0%
+              0.00%
             </CardStat>
           </Stack>
 
@@ -246,7 +250,18 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               <Icon as={FaExternalLinkAlt} color="purple.base" />
             </Link>
           </CardStat>
-          <Box></Box>
+          <CardStat label="Strategy Details" flex={0}>
+            <Button
+              onClick={() => router.push(`/strategies/${slug}`)}
+              variant="outline"
+              borderColor="purple.base"
+              borderWidth={2}
+              mt={1}
+            >
+              <Text mr={2} fontSize={"sm"}>{`View More`}</Text>
+              <ArrowRightIcon />
+            </Button>
+          </CardStat>
           <VStack
             width="lg"
             spacing={2}

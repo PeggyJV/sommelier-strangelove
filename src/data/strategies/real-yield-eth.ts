@@ -13,22 +13,22 @@ export const realYieldEth: CellarData = {
   slug: config.CONTRACT.REAL_YIELD_ETH.SLUG,
   popUpTitle: "Get Exclusive Real Yield Updates",
   popUpDescription:
-    "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
+    "Thank you for your trust. As a user of the Real Yield vault, you are eligible to receive exclusive strategy updates directly from the strategist - 7 Seas as well as updates on upcoming product launches. Rest assured that we will only use your email for this purpose.    ",
   tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
   launchDate: new Date(2023, 3, 12, 11, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "2%",
+  managementFee: "2.00%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: ["AAVE", "Compound", "Uniswap V3"],
   strategyAssets: ["stETH", "cbETH", "rETH", "WETH"],
   performanceSplit: {
     depositors: 80,
-    protocol: 5,
     "strategy provider": 15,
+    protocol: 5,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -52,7 +52,7 @@ export const realYieldEth: CellarData = {
     Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
   },
   depositTokens: {
-    list: ["cbETH", "rETH", "WETH"],
+    list: ["WETH"],
   },
 
   config: {

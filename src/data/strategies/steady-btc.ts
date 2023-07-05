@@ -19,15 +19,15 @@ export const steadyBtc: CellarData = {
   description: `Capture the upside of BTC price breakouts, manage downside through trailing stops. “Risk first” approach - capital preservation is prioritized over capital growth.`,
   strategyType: "Crypto portfolio",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "2%",
+  managementFee: "2.00%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
   protocols: "Uniswap V3",
   strategyAssets: ["WBTC", "USDC"],
   performanceSplit: {
     depositors: 90,
-    protocol: 2.5,
     "strategy provider": 7.5,
+    protocol: 2.5,
   },
   strategyProvider: {
     logo: "/assets/images/patache.png",

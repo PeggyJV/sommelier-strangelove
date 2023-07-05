@@ -16,7 +16,7 @@ export const realYieldSNX: CellarData = {
   description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "0%",
+  managementFee: "0.00%",
   managementFeeTooltip:
     "Platform fee split: 0% for Strategy provider and 0% for protocol",
   protocols: ["AAVE"],
