@@ -69,6 +69,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         !!sommPrice.data &&
         !!lpToken &&
         !!baseAssetPrice &&
+        !!strategyData.data &&
         (isNoSubgraph || !!sgData),
     }
   )
