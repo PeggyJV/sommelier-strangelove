@@ -131,6 +131,8 @@ export const StrategyTabColumn = ({
       Cell: ({ row }: any) => {
         return (
           <Tooltip
+            bg="surface.bg"
+            color="neutral.300"
             label={
               !isConnected
                 ? "Connect your wallet first"
