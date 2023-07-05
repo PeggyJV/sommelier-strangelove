@@ -347,7 +347,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
 
       <Text fontSize="xs" textAlign="center" pt={4}>
         After triggering 'Unbond,' you will need to wait through the
-        bonding period you selected (7, 14, or 21 days),
+        bonding period you selected,
         <br />
         after which your LP tokens can be unstaked and withdrawn.
       </Text>
