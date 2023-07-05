@@ -1,15 +1,22 @@
+import { Text, Tooltip } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { BaseButton } from "components/_buttons/BaseButton"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
 import { CellValue } from "react-table"
+import { analytics } from "utils/analytics"
+import { useAccount } from "wagmi"
 
 type StrategyMobileColumnProps = {
   timeline: Timeline
+  onDepositModalOpen: (id: string) => void
 }
 
 export const StrategyMobileColumn = ({
   timeline,
+  onDepositModalOpen,
 }: StrategyMobileColumnProps) => {
+  const { isConnected } = useAccount()
   return [
     {
       Header: "Strategy",
@@ -36,6 +43,42 @@ export const StrategyMobileColumn = ({
         <PercentageText data={value} arrowT2 fontWeight={600} />
       ),
       sortType: "basic",
+    },
+    {
+      Header: () => <Text>Deposit</Text>,
+      id: "deposit",
+      Cell: ({ row }: any) => {
+        console.log("row.original", row.original)
+        return (
+          <Tooltip
+            bg="surface.bg"
+            color="neutral.300"
+            label={
+              !isConnected
+                ? "Connect your wallet first"
+                : "Strategy Deprecated"
+            }
+            shouldWrapChildren
+            display={
+              row.original.deprecated || !isConnected
+                ? "inline"
+                : "none"
+            }
+          >
+            <BaseButton
+              disabled={row.original.deprecated || !isConnected}
+              variant="solid"
+              onClick={(e) => {
+                e.stopPropagation()
+                onDepositModalOpen(row.original.slug)
+                analytics.track("home.deposit.modal-opened")
+              }}
+            >
+              Deposit
+            </BaseButton>
+          </Tooltip>
+        )
+      },
     },
   ]
 }

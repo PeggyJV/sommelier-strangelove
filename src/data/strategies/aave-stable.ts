@@ -14,6 +14,7 @@ export const aaveStable: CellarData = {
   name: "aave2",
   slug: config.CONTRACT.AAVE_V2_STABLE_CELLAR.SLUG,
   cellarType: CellarType.yieldStrategies,
+  launchDate: new Date(2023, 4, 10, 10, 0, 0, 0), // May 10, 2023. 3 pm UTC
   description:
     "The Aave stablecoin strategy aims to select the optimal stablecoin lending position available to lend across Aave markets on a continuous basis.",
   strategyType: "Stablecoin",

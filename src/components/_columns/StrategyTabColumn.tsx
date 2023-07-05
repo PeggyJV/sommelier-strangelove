@@ -1,16 +1,25 @@
 import { Text, Tooltip, VStack } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { BaseButton } from "components/_buttons/BaseButton"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
+import { analytics } from "utils/analytics"
+import { useAccount } from "wagmi"
+import { formatDistanceStrict, isBefore } from "date-fns"
+import { zonedTimeToUtc } from "date-fns-tz"
 
 type StrategyTabColumnProps = {
   timeline: Timeline
+  onDepositModalOpen: (id: string) => void
 }
 
 export const StrategyTabColumn = ({
   timeline,
+  onDepositModalOpen,
 }: StrategyTabColumnProps) => {
+  const { isConnected } = useAccount()
+
   return [
     {
       Header: "Strategy",
@@ -117,6 +126,52 @@ export const StrategyTabColumn = ({
         </VStack>
       ),
       sortType: "basic",
+    },
+    {
+      Header: () => <Text>Deposit</Text>,
+      id: "deposit",
+      Cell: ({ row }: any) => {
+        const date = new Date(row?.original?.launchDate as Date)
+        const dateTz = date && zonedTimeToUtc(date, "EST")
+        const isBeforeLaunch = isBefore(dateTz, new Date())
+        return (
+          <Tooltip
+            bg="surface.bg"
+            color="neutral.300"
+            label={
+              !isBeforeLaunch
+                ? "Not yet available"
+                : !isConnected
+                ? "Connect your wallet first"
+                : "Strategy Deprecated"
+            }
+            shouldWrapChildren
+            display={
+              row.original.deprecated ||
+              !isConnected ||
+              !isBeforeLaunch
+                ? "inline"
+                : "none"
+            }
+          >
+            <BaseButton
+              disabled={
+                row.original.deprecated ||
+                !isConnected ||
+                !isBeforeLaunch
+              }
+              variant="solid"
+              onClick={(e) => {
+                e.stopPropagation()
+                onDepositModalOpen(row.original.slug)
+                analytics.track("home.deposit.modal-opened")
+              }}
+            >
+              Deposit
+            </BaseButton>
+          </Tooltip>
+        )
+      },
     },
   ]
 }
