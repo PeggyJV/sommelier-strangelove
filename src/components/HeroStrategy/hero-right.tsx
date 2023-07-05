@@ -114,12 +114,12 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
-      {!countdown && isTwoDaysCountdown && (
+      {/* {!countdown && isTwoDaysCountdown && (
         <CountDown
           launchDate={twoDaysAfterLaunch}
           isTwoDaysAfterLaunch={isTwoDaysCountdown}
         />
-      )}
+      )} */}
       {countdown && launchDate ? (
         <>
           <CountDown launchDate={launchDate} />
