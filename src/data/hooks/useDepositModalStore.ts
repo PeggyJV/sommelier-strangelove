@@ -11,7 +11,7 @@ export const useDepositModalStore = create<DepositModalStore>(
   (set) => ({
     isOpen: false,
     id: "",
-    onClose: () => set({ isOpen: false }),
+    onClose: () => set({ isOpen: false, id: "" }),
     setIsOpen: (id: string) => set({ isOpen: true, id: id }),
   })
 )
