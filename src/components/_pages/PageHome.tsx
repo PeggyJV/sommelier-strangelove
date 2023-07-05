@@ -130,13 +130,15 @@ export const PageHome = () => {
             <StrategyTable columns={columns} data={strategyData} />
           </>
         )}
-        <ModalWithExchangeTab
-          isOpen={isOpen}
-          onClose={onClose}
-          sommelierTab={
-            <SommelierTab isOpen={isOpen} onClose={onClose} />
-          }
-        />
+        {id && (
+          <ModalWithExchangeTab
+            isOpen={isOpen}
+            onClose={onClose}
+            sommelierTab={
+              <SommelierTab isOpen={isOpen} onClose={onClose} />
+            }
+          />
+        )}
       </TransparentSkeleton>
     </LayoutWithSidebar>
   )
