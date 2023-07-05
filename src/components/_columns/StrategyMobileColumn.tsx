@@ -56,7 +56,11 @@ export const StrategyMobileColumn = ({
                 : "Strategy Deprecated"
             }
             shouldWrapChildren
-            display={row.original.deprecated ? "inline" : "none"}
+            display={
+              row.original.deprecated || !isConnected
+                ? "inline"
+                : "none"
+            }
           >
             <BaseButton
               disabled={row.original.deprecated || !isConnected}
