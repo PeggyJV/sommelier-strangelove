@@ -15,6 +15,7 @@ import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
 import { Timeline } from "data/context/homeContext"
+import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
@@ -24,7 +25,13 @@ import { useAccount } from "wagmi"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
-  onDepositModalOpen: (id: string) => void
+  onDepositModalOpen: ({
+    id,
+    type,
+  }: {
+    id: string
+    type: DepositModalType
+  }) => void
 }
 
 export const StrategyDesktopColumn = ({
@@ -284,9 +291,9 @@ export const StrategyDesktopColumn = ({
             bg="surface.bg"
             color="neutral.300"
             label={
-              !isConnected
-                ? "Connect your wallet first"
-                : "Strategy Deprecated"
+              row.original.deprecated
+                ? "Strategy Deprecated"
+                : "Connect your wallet first"
             }
             shouldWrapChildren
             display={
@@ -300,11 +307,14 @@ export const StrategyDesktopColumn = ({
               variant="solid"
               onClick={(e) => {
                 e.stopPropagation()
-                onDepositModalOpen(row.original.slug)
+                onDepositModalOpen({
+                  id: row.original.slug,
+                  type: "deposit",
+                })
                 analytics.track("home.deposit.modal-opened")
               }}
             >
-              Deposit
+              {row.original.deprecated ? "Closed" : "Deposit"}
             </BaseButton>
           </Tooltip>
         )

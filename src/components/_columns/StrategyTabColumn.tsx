@@ -8,10 +8,17 @@ import { analytics } from "utils/analytics"
 import { useAccount } from "wagmi"
 import { formatDistanceStrict, isBefore } from "date-fns"
 import { zonedTimeToUtc } from "date-fns-tz"
+import { DepositModalType } from "data/hooks/useDepositModalStore"
 
 type StrategyTabColumnProps = {
   timeline: Timeline
-  onDepositModalOpen: (id: string) => void
+  onDepositModalOpen: ({
+    id,
+    type,
+  }: {
+    id: string
+    type: DepositModalType
+  }) => void
 }
 
 export const StrategyTabColumn = ({
@@ -139,11 +146,9 @@ export const StrategyTabColumn = ({
             bg="surface.bg"
             color="neutral.300"
             label={
-              !isBeforeLaunch
-                ? "Not yet available"
-                : !isConnected
-                ? "Connect your wallet first"
-                : "Strategy Deprecated"
+              row.original.deprecated
+                ? "Strategy Deprecated"
+                : "Connect your wallet first"
             }
             shouldWrapChildren
             display={
@@ -163,11 +168,14 @@ export const StrategyTabColumn = ({
               variant="solid"
               onClick={(e) => {
                 e.stopPropagation()
-                onDepositModalOpen(row.original.slug)
+                onDepositModalOpen({
+                  id: row.original.slug,
+                  type: "deposit",
+                })
                 analytics.track("home.deposit.modal-opened")
               }}
             >
-              Deposit
+              {row.original.deprecated ? "Closed" : "Deposit"}
             </BaseButton>
           </Tooltip>
         )
