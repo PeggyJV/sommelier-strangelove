@@ -52,18 +52,19 @@ import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { CellarNameKey } from "data/types"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { update } from "lodash"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
-  notifyModal: UseDisclosureProps
+  notifyModal?: UseDisclosureProps
 }
 
 export const SommelierTab: VFC<DepositModalProps> = ({
   notifyModal,
   ...props
 }) => {
-  const id = useRouter().query.id as string
+  const { id: _id } = useDepositModalStore()
+  const id = (useRouter().query.id as string) || _id
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
@@ -71,9 +72,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const depositTokens = cellarData.depositTokens.list
   const { addToast, update, close, closeAll } = useBrandedToast()
 
-  const currentStrategies = window.location.pathname
-    .split("/")[2]
-    .replace(/-/g, " ")
+  const currentStrategies =
+    window.location.pathname?.split("/")[2]?.replace(/-/g, " ") ||
+    id.replace(/-/g, " ") ||
+    ""
 
   const importToken = useImportToken({
     onSuccess: (data) => {
@@ -392,7 +394,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       const isPopUpEnable =
         cellarData.popUpTitle && cellarData.popUpDescription
 
-      if (!notifyModal.isOpen) {
+      if (!notifyModal?.isOpen) {
         analytics.track(`${currentStrategies}-notify.modal-opened`)
       }
       if (isPopUpEnable) {

@@ -7,6 +7,7 @@ import { ExchangeTab } from "components/_tabs/ExchangeTab"
 import { CustomTab } from "components/_tabs/CustomTab"
 import { BaseModal, BaseModalProps } from "./BaseModal"
 import { cellarDataMap } from "data/cellarDataMap"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 
 interface ModalWithExchangeTabProps
   extends Pick<BaseModalProps, "onClose" | "isOpen" | "heading"> {
@@ -16,7 +17,9 @@ interface ModalWithExchangeTabProps
 export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
   props
 ) => {
-  const id = useRouter().query.id as string
+  const { id: _id } = useDepositModalStore()
+
+  const id = (useRouter().query.id as string) || _id
   const isHavingExchanges =
     Number(cellarDataMap[id]?.exchanges?.length) > 1
 
