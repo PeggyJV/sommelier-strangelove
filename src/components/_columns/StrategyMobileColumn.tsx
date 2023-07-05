@@ -48,7 +48,6 @@ export const StrategyMobileColumn = ({
       Header: () => <Text>Deposit</Text>,
       id: "deposit",
       Cell: ({ row }: any) => {
-        console.log("row.original", row.original)
         return (
           <Tooltip
             bg="surface.bg"
