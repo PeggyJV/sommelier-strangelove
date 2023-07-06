@@ -190,7 +190,7 @@ export const StrategyDesktopColumn = ({
           }
         }
       }) => (
-        <Text fontWeight={600} fontSize="12px" textAlign="right">
+        <Text fontWeight={550} fontSize="16px" textAlign="right">
           {launchDate && launchDate > Date.now()
             ? "--"
             : tvm?.formatted ?? "--"}
