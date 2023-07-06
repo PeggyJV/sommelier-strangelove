@@ -86,8 +86,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
 
-  const valueInAssets =
-    userData?.userStrategyData.userData?.netValueWithoutRewardsInAsset
   const staticCelarConfig = cellarConfig
 
   const totalShares =
