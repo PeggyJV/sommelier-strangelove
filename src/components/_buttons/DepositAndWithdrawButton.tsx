@@ -106,11 +106,19 @@ export function DepositAndWithdrawButton({
         variant="solid"
         onClick={(e) => {
           e.stopPropagation()
+          analytics.track("home.deposit.modal-opened")
+
+          if (row.original.deprecated) {
+            onDepositModalOpen({
+              id: row.original.slug,
+              type: "withdraw",
+            })
+            return
+          }
           onDepositModalOpen({
             id: row.original.slug,
             type: "deposit",
           })
-          analytics.track("home.deposit.modal-opened")
         }}
       >
         {getButtonText(row.original.deprecated, lpTokenDisabled)}
