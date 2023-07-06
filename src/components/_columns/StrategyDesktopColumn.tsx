@@ -9,30 +9,33 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
-import { BaseButton } from "components/_buttons/BaseButton"
+import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
 import { Timeline } from "data/context/homeContext"
+import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
-import { analytics } from "utils/analytics"
 import { getProtocols } from "utils/getProtocols"
-import { useAccount } from "wagmi"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
-  onDepositModalOpen: (id: string) => void
+  onDepositModalOpen: ({
+    id,
+    type,
+  }: {
+    id: string
+    type: DepositModalType
+  }) => void
 }
 
 export const StrategyDesktopColumn = ({
   timeline,
   onDepositModalOpen,
 }: StrategyDesktopColumnProps) => {
-  const { isConnected } = useAccount()
-
   return [
     {
       Header: "Strategy",
@@ -278,37 +281,12 @@ export const StrategyDesktopColumn = ({
     {
       Header: () => <Text>Deposit</Text>,
       id: "deposit",
-      Cell: ({ row }: any) => {
-        return (
-          <Tooltip
-            bg="surface.bg"
-            color="neutral.300"
-            label={
-              !isConnected
-                ? "Connect your wallet first"
-                : "Strategy Deprecated"
-            }
-            shouldWrapChildren
-            display={
-              row.original.deprecated || !isConnected
-                ? "inline"
-                : "none"
-            }
-          >
-            <BaseButton
-              disabled={row.original.deprecated || !isConnected}
-              variant="solid"
-              onClick={(e) => {
-                e.stopPropagation()
-                onDepositModalOpen(row.original.slug)
-                analytics.track("home.deposit.modal-opened")
-              }}
-            >
-              Deposit
-            </BaseButton>
-          </Tooltip>
-        )
-      },
+      Cell: ({ row }: any) => (
+        <DepositAndWithdrawButton
+          row={row}
+          onDepositModalOpen={onDepositModalOpen}
+        />
+      ),
     },
   ]
 }
