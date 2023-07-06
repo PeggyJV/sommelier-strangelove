@@ -110,8 +110,6 @@ export const PageHome = () => {
 
   const loading = isFetching || isRefetching || isLoading
 
-  console.log(isOpen && modalType === "deposit")
-
   return (
     <LayoutWithSidebar>
       <HStack mb="1.6rem" justifyContent="space-between">
@@ -168,28 +166,24 @@ export const PageHome = () => {
             <StrategyTable columns={columns} data={strategyData} />
           </>
         )}
-        <ModalWithExchangeTab
-          isOpen={isOpen && modalType === "deposit"}
-          onClose={onClose}
-          sommelierTab={
-            <SommelierTab
+
+        {id && (
+          <>
+            <ModalWithExchangeTab
               isOpen={isOpen && modalType === "deposit"}
               onClose={onClose}
+              sommelierTab={
+                <SommelierTab
+                  isOpen={isOpen && modalType === "deposit"}
+                  onClose={onClose}
+                />
+              }
             />
-          }
-        />
-        <WithdrawModal
-          isOpen={isOpen && modalType === "withdraw"}
-          onClose={onClose}
-        />
-        {id && (
-          <ModalWithExchangeTab
-            isOpen={isOpen}
-            onClose={onClose}
-            sommelierTab={
-              <SommelierTab isOpen={isOpen} onClose={onClose} />
-            }
-          />
+            <WithdrawModal
+              isOpen={isOpen && modalType === "withdraw"}
+              onClose={onClose}
+            />
+          </>
         )}
       </TransparentSkeleton>
     </LayoutWithSidebar>

@@ -9,7 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
-import { BaseButton } from "components/_buttons/BaseButton"
+import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
@@ -19,9 +19,7 @@ import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
-import { analytics } from "utils/analytics"
 import { getProtocols } from "utils/getProtocols"
-import { useAccount } from "wagmi"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
@@ -38,8 +36,6 @@ export const StrategyDesktopColumn = ({
   timeline,
   onDepositModalOpen,
 }: StrategyDesktopColumnProps) => {
-  const { isConnected } = useAccount()
-
   return [
     {
       Header: "Strategy",
@@ -285,40 +281,12 @@ export const StrategyDesktopColumn = ({
     {
       Header: () => <Text>Deposit</Text>,
       id: "deposit",
-      Cell: ({ row }: any) => {
-        return (
-          <Tooltip
-            bg="surface.bg"
-            color="neutral.300"
-            label={
-              row.original.deprecated
-                ? "Strategy Deprecated"
-                : "Connect your wallet first"
-            }
-            shouldWrapChildren
-            display={
-              row.original.deprecated || !isConnected
-                ? "inline"
-                : "none"
-            }
-          >
-            <BaseButton
-              disabled={row.original.deprecated || !isConnected}
-              variant="solid"
-              onClick={(e) => {
-                e.stopPropagation()
-                onDepositModalOpen({
-                  id: row.original.slug,
-                  type: "deposit",
-                })
-                analytics.track("home.deposit.modal-opened")
-              }}
-            >
-              {row.original.deprecated ? "Closed" : "Deposit"}
-            </BaseButton>
-          </Tooltip>
-        )
-      },
+      Cell: ({ row }: any) => (
+        <DepositAndWithdrawButton
+          row={row}
+          onDepositModalOpen={onDepositModalOpen}
+        />
+      ),
     },
   ]
 }
