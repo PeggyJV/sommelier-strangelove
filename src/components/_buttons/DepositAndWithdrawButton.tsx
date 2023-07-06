@@ -1,31 +1,84 @@
 import { Tooltip } from "@chakra-ui/react"
+import { cellarDataMap } from "data/cellarDataMap"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
+import { useUserBalances } from "data/hooks/useUserBalances"
 import { isBefore } from "date-fns"
 import { zonedTimeToUtc } from "date-fns-tz"
 import { analytics } from "utils/analytics"
+import { toEther } from "utils/formatCurrency"
 import { useAccount } from "wagmi"
 import { BaseButton } from "./BaseButton"
 
 type DepositAndWithdrawButtonProps = {
   row: any
-  onDepositModalOpen: ({
-    id,
-    type,
-  }: {
+  onDepositModalOpen: (arg: {
     id: string
     type: DepositModalType
   }) => void
 }
 
+type LPDataType = {
+  formatted: string
+  decimals: number
+}
+
+const checkLPtokenDisabled = (lpTokenData: LPDataType | undefined) =>
+  !lpTokenData ||
+  Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <= 0
+
+const checkIsBeforeLaunch = (launchDate: string | undefined) => {
+  const date = new Date(launchDate as string)
+  const dateTz = zonedTimeToUtc(date, "EST")
+  return isBefore(dateTz, new Date())
+}
+
+const checkDisplay = (
+  isDeprecated: boolean,
+  lpTokenDisabled: boolean,
+  isConnected: boolean,
+  isBeforeLaunch: boolean
+) =>
+  isDeprecated
+    ? lpTokenDisabled || !isConnected || !isBeforeLaunch
+      ? "inline"
+      : "none"
+    : !isConnected && !isDeprecated && lpTokenDisabled
+    ? "inline"
+    : "none"
+
+const checkButtonDisabled = (
+  isDeprecated: boolean,
+  lpTokenDisabled: boolean,
+  isConnected: boolean,
+  isBeforeLaunch: boolean
+) =>
+  isDeprecated
+    ? lpTokenDisabled
+      ? true
+      : false
+    : false || !isConnected || !isBeforeLaunch
+
+const getButtonText = (
+  isDeprecated: boolean,
+  lpTokenDisabled: boolean
+) =>
+  isDeprecated ? (lpTokenDisabled ? "Closed" : "Withdraw") : "Deposit"
+
 export function DepositAndWithdrawButton({
   row,
   onDepositModalOpen,
 }: DepositAndWithdrawButtonProps) {
-  const { isConnected } = useAccount()
+  const id = row.original.slug
+  const cellarConfig = cellarDataMap[id].config
+  const { lpToken } = useUserBalances(cellarConfig)
+  const { data: lpTokenData } = lpToken
 
-  const date = new Date(row?.original?.launchDate as Date)
-  const dateTz = date && zonedTimeToUtc(date, "EST")
-  const isBeforeLaunch = isBefore(dateTz, new Date())
+  const lpTokenDisabled = checkLPtokenDisabled(lpTokenData)
+  const { isConnected } = useAccount()
+  const isBeforeLaunch = checkIsBeforeLaunch(
+    row?.original?.launchDate
+  )
+
   return (
     <Tooltip
       bg="surface.bg"
@@ -36,16 +89,20 @@ export function DepositAndWithdrawButton({
           : "Connect your wallet first"
       }
       shouldWrapChildren
-      display={
-        row.original.deprecated || !isConnected || !isBeforeLaunch
-          ? "inline"
-          : "none"
-      }
+      display={checkDisplay(
+        row.original.deprecated,
+        lpTokenDisabled,
+        isConnected,
+        isBeforeLaunch
+      )}
     >
       <BaseButton
-        disabled={
-          row.original.deprecated || !isConnected || !isBeforeLaunch
-        }
+        disabled={checkButtonDisabled(
+          row.original.deprecated,
+          lpTokenDisabled,
+          isConnected,
+          isBeforeLaunch
+        )}
         variant="solid"
         onClick={(e) => {
           e.stopPropagation()
@@ -56,7 +113,7 @@ export function DepositAndWithdrawButton({
           analytics.track("home.deposit.modal-opened")
         }}
       >
-        {row.original.deprecated ? "Closed" : "Deposit"}
+        {getButtonText(row.original.deprecated, lpTokenDisabled)}
       </BaseButton>
     </Tooltip>
   )
