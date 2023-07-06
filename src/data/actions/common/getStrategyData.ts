@@ -206,7 +206,6 @@ export const getStrategyData = async ({
           ).toFixed(2) + "%",
         value: (baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0),
       }
-      console.log(`baseApySumRewards: ${baseApySumRewards}`)
 
       return {
         activeAsset,

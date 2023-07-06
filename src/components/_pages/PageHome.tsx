@@ -38,6 +38,7 @@ export const PageHome = () => {
     onClose,
     setIsOpen,
     type: modalType,
+    id,
   } = useDepositModalStore()
 
   const { timeline } = useHome()
@@ -181,6 +182,15 @@ export const PageHome = () => {
           isOpen={isOpen && modalType === "withdraw"}
           onClose={onClose}
         />
+        {id && (
+          <ModalWithExchangeTab
+            isOpen={isOpen}
+            onClose={onClose}
+            sommelierTab={
+              <SommelierTab isOpen={isOpen} onClose={onClose} />
+            }
+          />
+        )}
       </TransparentSkeleton>
     </LayoutWithSidebar>
   )
