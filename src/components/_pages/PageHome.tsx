@@ -172,6 +172,7 @@ export const PageHome = () => {
         {id && (
           <>
             <ModalWithExchangeTab
+              heading="Deposit"
               isOpen={isOpen && modalType === "deposit"}
               onClose={onClose}
               sommelierTab={
