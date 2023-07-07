@@ -133,7 +133,7 @@ export const config = {
       ABI: cellarV0816,
     },
     REAL_YIELD_BTC: {
-      ADDRESS: "0x6a6af5393dc23d7e3db28d28ef422db7c4093216",
+      ADDRESS: "0x0274a704a6d9129f90a62ddc6f6024b33ecdad36",
       SLUG: "Real-Yield-BTC",
       ABI: cellarV0816,
     },
@@ -193,6 +193,10 @@ export const config = {
     },
     REAL_YIELD_ETH_STAKER: {
       ADDRESS: "0x955a31153e6764FE892757AcE79123ae996B0aFB",
+      ABI: cellarStakingV0815,
+    },
+    REAL_YIELD_BTC_STAKER: {
+      ADDRESS: "0x1eFF374fd9AA7266504144da861Fff9BBd31828e",
       ABI: cellarStakingV0815,
     },
     FRAXIMAL_STAKER: {
