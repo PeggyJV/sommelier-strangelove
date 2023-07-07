@@ -522,14 +522,14 @@ export const estimatedApyValue = (config: ConfigProps) => {
   }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS) {
     return {
-      value: 5,
-      formatted: "5.00%",
+      value: 1.9,
+      formatted: "1.90%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC) {
     return {
-      value: 1.9,
-      formatted: "1.90%",
+      value: 5,
+      formatted: "5.00%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.FRAXIMAL) {
