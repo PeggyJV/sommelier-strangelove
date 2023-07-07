@@ -1,16 +1,25 @@
-import { HStack, Text, Tooltip, VStack } from "@chakra-ui/react"
+import { Text, Tooltip, VStack } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
-import { CellValue } from "react-table"
+import { DepositModalType } from "data/hooks/useDepositModalStore"
 
 type StrategyTabColumnProps = {
   timeline: Timeline
+  onDepositModalOpen: ({
+    id,
+    type,
+  }: {
+    id: string
+    type: DepositModalType
+  }) => void
 }
 
 export const StrategyTabColumn = ({
   timeline,
+  onDepositModalOpen,
 }: StrategyTabColumnProps) => {
   return [
     {
@@ -36,7 +45,7 @@ export const StrategyTabColumn = ({
       Header: "TVL",
       accessor: "tvm.value",
       Cell: ({ row }: any) => (
-        <Text fontWeight={600} fontSize="12px" textAlign="right">
+        <Text fontWeight={550} fontSize="16px" textAlign="right">
           {row.original.tvm?.formatted}
         </Text>
       ),
@@ -57,6 +66,9 @@ export const StrategyTabColumn = ({
             rewardsApy={row.original.rewardsApy?.formatted}
             stackingEndDate={row.original.stakingEnd?.endDate}
             date={row.original.launchDate}
+            baseApySumRewards={
+              row.original.baseApySumRewards?.formatted
+            }
           />
         )
       },
@@ -64,9 +76,9 @@ export const StrategyTabColumn = ({
     {
       Header: () => (
         <Text>
-          {timeline.title}
+          {`${timeline.title} Token Price`}
           <br />
-          Token Prices
+          {/* Token Prices */}
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
@@ -90,7 +102,7 @@ export const StrategyTabColumn = ({
               fontWeight={600}
             />
           </Tooltip>
-          <Tooltip
+          {/* <Tooltip
             label={`Token price`}
             color="neutral.100"
             border="0"
@@ -111,10 +123,20 @@ export const StrategyTabColumn = ({
                 {row.original.tokenPrice}
               </Text>
             </HStack>
-          </Tooltip>
+          </Tooltip> */}
         </VStack>
       ),
       sortType: "basic",
+    },
+    {
+      Header: () => <Text>Deposit</Text>,
+      id: "deposit",
+      Cell: ({ row }: any) => (
+        <DepositAndWithdrawButton
+          row={row}
+          onDepositModalOpen={onDepositModalOpen}
+        />
+      ),
     },
   ]
 }

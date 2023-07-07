@@ -25,6 +25,7 @@ import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { depositAssetDefaultValue } from "data/uiConfig"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -49,7 +50,8 @@ export const Menu: VFC<MenuProps> = ({
     false,
     6
   )}`
-  const id = useRouter().query.id as string
+  const { id: _id } = useDepositModalStore()
+  const id = (useRouter().query.id as string) || _id
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
 

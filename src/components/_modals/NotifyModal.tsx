@@ -91,10 +91,11 @@ export const NotifyModal = (
   let isManage = false
   if (typeof window !== "undefined") {
     currentStrategies = window.location.pathname
-      .split("/")[2]
-      .replace(/-/g, " ")
+      ?.split("/")[2]
+      ?.replace(/-/g, " ")
     isManage =
-      window.location.pathname.split("/").slice(-1).pop() === "manage"
+      window.location.pathname?.split("/")?.slice(-1).pop() ===
+      "manage"
   }
 
   const id = useRouter().query.id as string

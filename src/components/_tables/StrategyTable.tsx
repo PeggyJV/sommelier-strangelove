@@ -18,8 +18,7 @@ import { useTable, useSortBy } from "react-table"
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { AllStrategiesData } from "data/actions/types"
 import { useRouter } from "next/router"
-import { DIRECT, landingType } from "utils/landingType"
-import { analytics } from "utils/analytics"
+import { isComingSoon } from "utils/isComingSoon"
 
 interface BorderTrProps extends TableRowProps {
   slug: string
@@ -44,22 +43,22 @@ export const BorderTr: VFC<BorderTrProps> = ({
       cursor="pointer"
       onClick={() => {
         router.push(slug)
-        const landingTyp = landingType()
-        analytics.track("strategy.selection", {
-          strategyCard: name,
-          landingType: landingType(),
-        })
-        if (landingTyp === DIRECT) {
-          analytics.track("strategy.selection.direct", {
-            strategyCard: name,
-            landingType: landingTyp,
-          })
-        } else {
-          analytics.track("strategy.selection.indirect", {
-            strategyCard: name,
-            landingType: landingTyp,
-          })
-        }
+        // const landingTyp = landingType()
+        // analytics.track("strategy.selection", {
+        //   strategyCard: name,
+        //   landingType: landingType(),
+        // })
+        // if (landingTyp === DIRECT) {
+        //   analytics.track("strategy.selection.direct", {
+        //     strategyCard: name,
+        //     landingType: landingTyp,
+        //   })
+        // } else {
+        //   analytics.track("strategy.selection.indirect", {
+        //     strategyCard: name,
+        //     landingType: landingTyp,
+        //   })
+        // }
       }}
       {...props}
     />
@@ -156,11 +155,16 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
         >
           {rows.map((row, indexRow) => {
             prepareRow(row)
+            const countdown = isComingSoon(row.original.launchDate)
+            const href = countdown
+              ? "strategies/" + row.original.slug
+              : "strategies/" + row.original.slug + "/manage"
             return (
               <BorderTr
+                opacity={row.original.deprecated ? 0.5 : 1}
                 {...row.getRowProps()}
                 key={indexRow}
-                slug={"strategies/" + row.original.slug}
+                slug={href}
                 name={row.original.name}
               >
                 {row.cells.map((cell, indexData) => {

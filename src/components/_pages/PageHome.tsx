@@ -4,10 +4,17 @@ import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
 import { StrategyTabColumn } from "components/_columns/StrategyTabColumn"
 import { LayoutWithSidebar } from "components/_layout/LayoutWithSidebar"
+import { SommelierTab } from "components/_modals/DepositModal/SommelierTab"
+import { ModalWithExchangeTab } from "components/_modals/ModalWithExchangeTab"
+import { WithdrawModal } from "components/_modals/WithdrawModal"
 import { TransparentSkeleton } from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
 import { useHome } from "data/context/homeContext"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
+import {
+  DepositModalType,
+  useDepositModalStore,
+} from "data/hooks/useDepositModalStore"
 import { CellarType } from "data/types"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
@@ -21,18 +28,67 @@ export const PageHome = () => {
     isFetching,
     isRefetching,
   } = useAllStrategiesData()
-  const isMobile = useBetterMediaQuery("(max-width: 767px)")
-  const isTab = useBetterMediaQuery("(max-width: 1023px)")
+  const isMobile = useBetterMediaQuery("(max-width: 900px)")
+  const isTab = useBetterMediaQuery("(max-width: 1600px)")
   const isDesktop = !isTab && !isMobile
   const [type, setType] = useState<string>("All")
-  const strategyType = ["All", "Portfolio", "Yield"]
+  const strategyType = ["All", "Trading", "Yield"]
+  const {
+    isOpen,
+    onClose,
+    setIsOpen,
+    type: modalType,
+    id,
+  } = useDepositModalStore()
 
   const { timeline } = useHome()
   const columns = isDesktop
-    ? StrategyDesktopColumn({ timeline })
+    ? StrategyDesktopColumn({
+        timeline,
+        onDepositModalOpen: ({
+          id,
+          type,
+        }: {
+          id: string
+          type: DepositModalType
+        }) => {
+          setIsOpen({
+            id,
+            type,
+          })
+        },
+      })
     : isTab && !isMobile
-    ? StrategyTabColumn({ timeline })
-    : StrategyMobileColumn({ timeline })
+    ? StrategyTabColumn({
+        timeline,
+        onDepositModalOpen: ({
+          id,
+          type,
+        }: {
+          id: string
+          type: DepositModalType
+        }) => {
+          setIsOpen({
+            id,
+            type,
+          })
+        },
+      })
+    : StrategyMobileColumn({
+        timeline,
+        onDepositModalOpen: ({
+          id,
+          type,
+        }: {
+          id: string
+          type: DepositModalType
+        }) => {
+          setIsOpen({
+            id,
+            type,
+          })
+        },
+      })
 
   const strategyData = useMemo(() => {
     if (type === "Yield") {
@@ -42,7 +98,7 @@ export const PageHome = () => {
         ) || []
       )
     }
-    if (type === "Portfolio") {
+    if (type === "Trading") {
       return (
         data?.filter(
           (item) => item?.type === CellarType.automatedPortfolio
@@ -108,6 +164,28 @@ export const PageHome = () => {
         ) : (
           <>
             <StrategyTable columns={columns} data={strategyData} />
+          </>
+        )}
+
+        {console.log("modalType", modalType)}
+
+        {id && (
+          <>
+            <ModalWithExchangeTab
+              heading="Deposit"
+              isOpen={isOpen && modalType === "deposit"}
+              onClose={onClose}
+              sommelierTab={
+                <SommelierTab
+                  isOpen={isOpen && modalType === "deposit"}
+                  onClose={onClose}
+                />
+              }
+            />
+            <WithdrawModal
+              isOpen={isOpen && modalType === "withdraw"}
+              onClose={onClose}
+            />
           </>
         )}
       </TransparentSkeleton>

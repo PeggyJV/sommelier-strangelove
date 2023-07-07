@@ -30,6 +30,7 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.FRAXIMAL ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK
   )
@@ -92,14 +93,14 @@ export const isTVMEnabled = (config: ConfigProps) => {
 
 export const isAPYEnabled = (config: ConfigProps) => {
   return (
-    config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.FRAXIMAL
   )
 }
 
@@ -292,6 +293,25 @@ export const bondingPeriodOptions = (
       },
     ]
   }
+  if (config.cellarNameKey === CellarNameKey.FRAXIMAL) {
+    return [
+      {
+        title: "5 Days",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "10 Days",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "14 Days",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
   if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
@@ -388,7 +408,8 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+      config.cellarNameKey === CellarNameKey.FRAXIMAL
     ) {
       return "Estimated APY"
     }
@@ -401,14 +422,15 @@ export const apyLabel = (config: ConfigProps) => {
 export const apyHoverLabel = (config: ConfigProps) => {
   if (config.cellar.key === CellarKey.CELLAR_V2) {
     if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
-      return "APY since inception denominated in ETH"
+      return "ETH APY since inception"
     }
     if (
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+      config.cellarNameKey === CellarNameKey.FRAXIMAL
     ) {
       return "Estimated APY"
     }
@@ -420,14 +442,15 @@ export const apyHoverLabel = (config: ConfigProps) => {
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const baseApyHoverLabel = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
-    return "APY since inception denominated in ETH"
+    return "ETH APY since inception"
   }
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.FRAXIMAL
   ) {
     return "Estimated APY"
   }
@@ -441,7 +464,8 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.FRAXIMAL
   ) {
     return true
   }
@@ -455,7 +479,8 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.FRAXIMAL
   ) {
     return "Estimated APY"
   }
@@ -494,6 +519,12 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "1.90%",
     }
   }
+  if (config.cellarNameKey === CellarNameKey.FRAXIMAL) {
+    return {
+      value: 6,
+      formatted: "6.00%",
+    }
+  }
 }
 
 export const showNetValueInAsset = (config: ConfigProps) => {
@@ -501,4 +532,11 @@ export const showNetValueInAsset = (config: ConfigProps) => {
     return true
   }
   return false
+}
+
+export const waitTime = (config: ConfigProps) => {
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD) {
+    return "24 hours"
+  }
+  return "10 min"
 }

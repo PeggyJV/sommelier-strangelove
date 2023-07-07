@@ -9,11 +9,13 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
 import { Timeline } from "data/context/homeContext"
+import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
@@ -21,10 +23,18 @@ import { getProtocols } from "utils/getProtocols"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
+  onDepositModalOpen: ({
+    id,
+    type,
+  }: {
+    id: string
+    type: DepositModalType
+  }) => void
 }
 
 export const StrategyDesktopColumn = ({
   timeline,
+  onDepositModalOpen,
 }: StrategyDesktopColumnProps) => {
   return [
     {
@@ -56,7 +66,7 @@ export const StrategyDesktopColumn = ({
           bg="surface.bg"
         >
           <HStack spacing={1}>
-            <Text>Protocol</Text>
+            <Text>Protocols</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
         </Tooltip>
@@ -183,7 +193,7 @@ export const StrategyDesktopColumn = ({
           }
         }
       }) => (
-        <Text fontWeight={600} fontSize="12px" textAlign="right">
+        <Text fontWeight={550} fontSize="16px" textAlign="right">
           {launchDate && launchDate > Date.now()
             ? "--"
             : tvm?.formatted ?? "--"}
@@ -206,6 +216,9 @@ export const StrategyDesktopColumn = ({
             rewardsApy={row.original.rewardsApy?.formatted}
             stackingEndDate={row.original.stakingEnd?.endDate}
             date={row.original.launchDate}
+            baseApySumRewards={
+              row.original.baseApySumRewards?.formatted
+            }
           />
         )
       },
@@ -213,9 +226,9 @@ export const StrategyDesktopColumn = ({
     {
       Header: () => (
         <Text>
-          {timeline.title}
+          {`${timeline.title} Token Price`}
           <br />
-          Token Price
+          {/* Token Price */}
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
@@ -239,7 +252,7 @@ export const StrategyDesktopColumn = ({
               fontWeight={600}
             />
           </Tooltip>
-          <Tooltip
+          {/* <Tooltip
             label={`Token price`}
             color="neutral.100"
             border="0"
@@ -260,10 +273,20 @@ export const StrategyDesktopColumn = ({
                 {row.original.tokenPrice}
               </Text>
             </HStack>
-          </Tooltip>
+          </Tooltip> */}
         </VStack>
       ),
       sortType: "basic",
+    },
+    {
+      Header: () => <Text>Deposit</Text>,
+      id: "deposit",
+      Cell: ({ row }: any) => (
+        <DepositAndWithdrawButton
+          row={row}
+          onDepositModalOpen={onDepositModalOpen}
+        />
+      ),
     },
   ]
 }

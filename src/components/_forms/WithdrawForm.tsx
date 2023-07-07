@@ -3,7 +3,6 @@ import {
   FormControl,
   FormErrorMessage,
   Icon,
-  Text,
   VStack,
   Button,
   HStack,
@@ -12,6 +11,7 @@ import {
   Image,
   Stack,
   Avatar,
+  Text,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -35,9 +35,11 @@ import BigNumber from "bignumber.js"
 import {
   isAssetDistributionEnabled,
   isWithdrawTokenPriceEnabled,
+  waitTime,
 } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 interface FormValues {
   withdrawAmount: number
 }
@@ -55,10 +57,12 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
 
+  const { id: _id } = useDepositModalStore()
+
   const { addToast, close, closeAll } = useBrandedToast()
   const { address } = useAccount()
 
-  const id = useRouter().query.id as string
+  const id = (useRouter().query.id as string) || _id
   const cellarConfig = cellarDataMap[id].config
 
   const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
@@ -482,7 +486,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
         Submit
       </BaseButton>
       <Text textAlign="center">
-        Please wait 10 min after the deposit to Withdraw
+        Please wait {waitTime(cellarConfig)} after the deposit to
+        Withdraw
       </Text>
     </VStack>
   )

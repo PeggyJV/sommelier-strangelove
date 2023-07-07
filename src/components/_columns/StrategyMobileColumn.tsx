@@ -1,14 +1,25 @@
+import { Text } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
+import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
+import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { CellValue } from "react-table"
 
 type StrategyMobileColumnProps = {
   timeline: Timeline
+  onDepositModalOpen: ({
+    id,
+    type,
+  }: {
+    id: string
+    type: DepositModalType
+  }) => void
 }
 
 export const StrategyMobileColumn = ({
   timeline,
+  onDepositModalOpen,
 }: StrategyMobileColumnProps) => {
   return [
     {
@@ -36,6 +47,16 @@ export const StrategyMobileColumn = ({
         <PercentageText data={value} arrowT2 fontWeight={600} />
       ),
       sortType: "basic",
+    },
+    {
+      Header: () => <Text>Deposit</Text>,
+      id: "deposit",
+      Cell: ({ row }: any) => (
+        <DepositAndWithdrawButton
+          row={row}
+          onDepositModalOpen={onDepositModalOpen}
+        />
+      ),
     },
   ]
 }

@@ -13,7 +13,7 @@ export const realYieldEth: CellarData = {
   slug: config.CONTRACT.REAL_YIELD_ETH.SLUG,
   popUpTitle: "Get Exclusive Real Yield Updates",
   popUpDescription:
-    "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
+    "Thank you for your trust. As a user of the Real Yield vault, you are eligible to receive exclusive strategy updates directly from the strategist - 7 Seas as well as updates on upcoming product launches. Rest assured that we will only use your email for this purpose.    ",
   tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
   launchDate: new Date(2023, 3, 12, 11, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
