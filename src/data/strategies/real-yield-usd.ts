@@ -23,7 +23,7 @@ export const realYieldUsd: CellarData = {
   managementFee: "0.50%",
   managementFeeTooltip:
     "Platform fee split: 0.4% for Strategy provider and 0.1% for protocol",
-  protocols: ["AAVE", "Compound", "Uniswap V3"],
+  protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
   strategyAssets: ["USDC", "USDT", "DAI"],
   performanceSplit: {
     depositors: 80,
@@ -38,7 +38,7 @@ export const realYieldUsd: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
+    goals: `The only strategy in DeFi to maximize USDC, USDT, and DAI yields across Aave, Compound, Morpho and Uniswap V3.`,
 
     highlights: `The vault:
 
