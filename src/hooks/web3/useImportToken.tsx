@@ -25,6 +25,7 @@ export const doImportToken: DoImportToken = async ({
       throw new Error("No wallet installed")
     }
     const tokenData = await fetchToken({
+      //@ts-ignore
       address,
     })
     if (!tokenData) {
@@ -35,8 +36,10 @@ export const doImportToken: DoImportToken = async ({
     )?.config.lpToken.imagePath
     const fullImageUrl = `${window.origin}${imgUrl}`
     const res = await window.ethereum.request({
+      //@ts-ignore
       method: "wallet_watchAsset",
       params: {
+        //@ts-ignore
         type: "ERC20",
         options: {
           address: address,

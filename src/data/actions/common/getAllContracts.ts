@@ -9,34 +9,37 @@ export const getAllContracts = async () => {
   let contracts: AllContracts = {}
   Object.values(cellarDataMap).forEach(({ config }) => {
     const cellarContract = getContract({
-      addressOrName: config.cellar.address,
-      contractInterface: config.cellar.abi as ContractInterface,
+      address: config.cellar.address,
+      abi: config.cellar.abi as ContractInterface,
       signerOrProvider: provider,
     })
     const cellarSigner = getContract({
-      addressOrName: config.cellar.address,
-      contractInterface: config.cellar.abi as ContractInterface,
+      address: config.cellar.address,
+      abi: config.cellar.abi as ContractInterface,
+      // @ts-ignore
       signerOrProvider: signer,
     })
 
     const stakerContract =
       config.staker &&
       getContract({
-        addressOrName: config.staker.address,
-        contractInterface: config.staker.abi as ContractInterface,
+        address: config.staker.address,
+        abi: config.staker.abi as ContractInterface,
         signerOrProvider: provider,
       })
     const stakerSigner =
       config.staker &&
       getContract({
-        addressOrName: config.staker.address,
-        contractInterface: config.staker.abi as ContractInterface,
+        address: config.staker.address,
+        abi: config.staker.abi as ContractInterface,
+        // @ts-ignore
         signerOrProvider: signer,
       })
 
     const cellarRouterSigner = getContract({
-      addressOrName: config.cellarRouter.address,
-      contractInterface: config.cellarRouter.abi as ContractInterface,
+      addres: config.cellarRouter.address,
+      abi: config.cellarRouter.abi as ContractInterface,
+      // @ts-ignore
       signerOrProvider: signer,
     })
 
