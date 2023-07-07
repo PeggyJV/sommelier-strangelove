@@ -167,8 +167,6 @@ export const PageHome = () => {
           </>
         )}
 
-        {console.log("modalType", modalType)}
-
         {id && (
           <>
             <ModalWithExchangeTab
