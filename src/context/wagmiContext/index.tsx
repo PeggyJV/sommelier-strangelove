@@ -12,7 +12,7 @@ import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet"
 import { MetaMaskConnector } from "wagmi/connectors/metaMask"
 
 const ALCHEMY_URL = "https://eth-mainnet.alchemyapi.io/v2/"
-const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
+const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY || ""
 const alchemyRpc = `${ALCHEMY_URL}${ALCHEMY_API_KEY}`
 
 const { chains, provider, webSocketProvider } = configureChains(
@@ -25,7 +25,7 @@ const connector = () => {
     new WalletConnectConnector({
       chains,
       options: {
-        projectId: process.env.WALLETCONNECT_PROJECT_ID,
+        projectId: process.env.WALLETCONNECT_PROJECT_ID || "",
         showQrModal: true,
       },
     }),
