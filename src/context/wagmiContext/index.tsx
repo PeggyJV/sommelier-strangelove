@@ -1,9 +1,9 @@
 import { ReactNode } from "react"
 import {
-  chain,
   configureChains,
   createClient,
   WagmiConfig,
+  mainnet,
 } from "wagmi"
 import { alchemyProvider } from "wagmi/providers/alchemy"
 import { InjectedConnector } from "wagmi/connectors/injected"
@@ -17,8 +17,8 @@ const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
 const alchemyRpc = `${ALCHEMY_URL}${ALCHEMY_API_KEY}`
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.mainnet],
-  [alchemyProvider({ apiKey: ALCHEMY_API_KEY })]
+  [mainnet],
+  [alchemyProvider({ apiKey: ALCHEMY_API_KEY || "" })]
 )
 
 const connector = () => {
@@ -28,7 +28,7 @@ const connector = () => {
     new WalletConnectConnector({
       chains,
       options: {
-        qrcode: true,
+        projectId: process.env.WALLETCONNECT_PROJECT_I || "",
       },
     }),
     new MetaMaskConnector({
