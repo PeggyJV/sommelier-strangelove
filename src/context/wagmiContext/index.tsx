@@ -32,13 +32,13 @@ const { chains, provider, webSocketProvider } = configureChains(
 
 const connector = () => {
   return [
-    new WalletConnectConnector({
-      chains,
-      options: {
-        projectId: process.env.WALLETCONNECT_PROJECT_ID ?? "",
-        showQrModal: true,
-      },
-    }),
+    // new WalletConnectConnector({
+    //   chains,
+    //   options: {
+    //     projectId: process.env.WALLETCONNECT_PROJECT_ID ?? "",
+    //     showQrModal: true,
+    //   },
+    // }),
     new MetaMaskConnector({
       chains,
     }),
