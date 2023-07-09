@@ -18,7 +18,7 @@ const alchemyRpc = `${ALCHEMY_URL}${ALCHEMY_API_KEY}`
 
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.mainnet],
-  [alchemyProvider({ apiKey: ALCHEMY_API_KEY })]
+  [alchemyProvider({ apiKey: ALCHEMY_API_KEY || "" })]
 )
 
 const connector = () => {
@@ -28,7 +28,8 @@ const connector = () => {
     new WalletConnectConnector({
       chains,
       options: {
-        qrcode: true,
+        projectId: process.env.WALLETCONNECT_PROJECT_ID || "",
+        showQrModal: true,
       },
     }),
     new MetaMaskConnector({
