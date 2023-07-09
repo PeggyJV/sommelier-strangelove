@@ -26,7 +26,8 @@ const { chains, provider, webSocketProvider } = configureChains(
       apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY!,
     }),
     publicProvider(),
-  ]
+  ],
+  { targetQuorum: 1 }
 )
 
 const connector = () => {
