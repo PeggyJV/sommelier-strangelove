@@ -136,14 +136,14 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
     try {
       const gasLimitEstimated = await estimateGasLimitWithRetry(
-        cellarSigner.estimateGas.redeem,
-        cellarSigner.callStatic.redeem,
+        cellarSigner?.estimateGas.redeem,
+        cellarSigner?.callStatic.redeem,
         [amtInWei, address, address],
         330000,
         660000
       )
 
-      const tx = await cellarSigner.redeem(
+      const tx = await cellarSigner?.redeem(
         amtInWei,
         address,
         address,

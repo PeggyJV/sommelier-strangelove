@@ -26,7 +26,6 @@ export const FAQTabs: React.FC<FAQTabsProps> = ({
           <Tab
             key={faqTab._id}
             color="neutral.400"
-            flexShrink="0"
             fontSize="xl"
             _selected={{ color: "neutral.100", bg: "purple.base" }}
             onClick={() => {

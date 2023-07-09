@@ -109,7 +109,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
     analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
-    const tx = await cellarSigner.redeem(amtInWei, address, address)
+    const tx = await cellarSigner?.redeem(amtInWei, address, address)
 
     function onSuccess() {
       analytics.track("withdraw.succeeded", analyticsData)

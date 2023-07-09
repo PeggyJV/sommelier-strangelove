@@ -1,13 +1,12 @@
 import { ReactNode } from "react"
 import {
-  chain,
+  mainnet,
   configureChains,
   createClient,
   WagmiConfig,
 } from "wagmi"
 import { alchemyProvider } from "wagmi/providers/alchemy"
 import { InjectedConnector } from "wagmi/connectors/injected"
-import { SafeConnector } from "@gnosis.pm/safe-apps-wagmi"
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet"
 import { MetaMaskConnector } from "wagmi/connectors/metaMask"
@@ -17,14 +16,12 @@ const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
 const alchemyRpc = `${ALCHEMY_URL}${ALCHEMY_API_KEY}`
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.mainnet],
+  [mainnet],
   [alchemyProvider({ apiKey: ALCHEMY_API_KEY || "" })]
 )
 
 const connector = () => {
   return [
-    // @ts-ignore
-    new SafeConnector({ chains }),
     new WalletConnectConnector({
       chains,
       options: {

@@ -6,7 +6,7 @@ import { be } from "date-fns/locale"
 import { on } from "events"
 import { at, some, take, each } from "lodash"
 import { config } from "utils/config"
-import { chain } from "wagmi"
+import { mainnet } from "wagmi"
 
 export const strategyPageContentData = {
   [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: {
