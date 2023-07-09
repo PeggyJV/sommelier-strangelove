@@ -161,6 +161,7 @@ export const StrategyTable: VFC<StrategyTableProps> = ({
               : "strategies/" + row.original.slug + "/manage"
             return (
               <BorderTr
+                opacity={row.original.deprecated ? 0.5 : 1}
                 {...row.getRowProps()}
                 key={indexRow}
                 slug={href}
