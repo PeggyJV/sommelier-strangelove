@@ -17,7 +17,7 @@ const alchemyRpc = `${ALCHEMY_URL}${ALCHEMY_API_KEY}`
 
 const { chains, provider, webSocketProvider } = configureChains(
   [mainnet],
-  [alchemyProvider({ apiKey: ALCHEMY_API_KEY || "" })]
+  [alchemyProvider({ apiKey: ALCHEMY_API_KEY })]
 )
 
 const connector = () => {
@@ -25,7 +25,7 @@ const connector = () => {
     new WalletConnectConnector({
       chains,
       options: {
-        projectId: process.env.WALLETCONNECT_PROJECT_ID || "",
+        projectId: process.env.WALLETCONNECT_PROJECT_ID,
         showQrModal: true,
       },
     }),
