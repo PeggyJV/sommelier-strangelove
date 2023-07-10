@@ -17,12 +17,14 @@ import {
   realYieldENS,
   realYieldSNX,
   realYieldUNI,
+  realYieldBTC,
   fraximal,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
+    [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,
     [config.CONTRACT.FRAXIMAL.SLUG]: fraximal,
     [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
     [config.CONTRACT.REAL_YIELD_USD.SLUG]: realYieldUsd,
