@@ -1,12 +1,11 @@
 // TODO: Move content to a cms
-import { effect, Image, position, Text } from "@chakra-ui/react"
-import { time } from "console"
-import { add } from "date-fns"
-import { be } from "date-fns/locale"
-import { on } from "events"
-import { at, some, take, each } from "lodash"
+import { Image, Text } from "@chakra-ui/react"
+// import { time } from "console"
+// import { add } from "date-fns"
+// import { be } from "date-fns/locale"
+// import { on } from "events"
+// import { at, some, take, each } from "lodash"
 import { config } from "utils/config"
-import { chain } from "wagmi"
 
 export const strategyPageContentData = {
   [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: {
@@ -803,11 +802,10 @@ export const strategyPageContentData = {
     provider: "Seven Seas & DeFine Logic Labs",
     providerUrl: "https://sevenseas.capital/",
     description: `The best way to get involved in Fraxlend - automated rebalances for maximum yield.`,
-    // NEED UPDATE
     ticker: (
       <>
         <Image
-          alt="RYUNI icon"
+          alt="FRAXIMAL icon"
           src="/assets/icons/fraximal.png"
           boxSize={8}
         />
@@ -823,7 +821,6 @@ export const strategyPageContentData = {
       },
     ],
     strategyHighlights: {
-      // NEED UPDATE
       card: [
         `Captures highest interest rates available at any given moment.`,
         `Mitigates risk by ensuring that the vault is not overly exposed to any specific lending pool at a time.`,

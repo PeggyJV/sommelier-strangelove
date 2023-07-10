@@ -93,7 +93,7 @@ export const getStrategyData = async ({
         : symbol !== "USDC"
         ? getTvm(
             String(
-              Number(subgraphData!.tvlTotal) * Number(baseAssetPrice)
+              Number(subgraphData?.tvlTotal) * Number(baseAssetPrice)
             )
           )
         : getTvm(subgraphData!.tvlTotal)
