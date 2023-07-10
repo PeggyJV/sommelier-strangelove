@@ -406,7 +406,6 @@ export const apyLabel = (config: ConfigProps) => {
     if (
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.FRAXIMAL
@@ -427,7 +426,6 @@ export const apyHoverLabel = (config: ConfigProps) => {
     if (
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.FRAXIMAL
@@ -447,7 +445,6 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.FRAXIMAL
@@ -462,7 +459,6 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.FRAXIMAL
@@ -477,7 +473,6 @@ export const apyChartLabel = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.FRAXIMAL
@@ -489,12 +484,6 @@ export const apyChartLabel = (config: ConfigProps) => {
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const estimatedApyValue = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK) {
-    return {
-      value: 3,
-      formatted: "3.00%",
-    }
-  }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH) {
     return {
       value: 1.6,
