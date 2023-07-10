@@ -12,7 +12,7 @@ export const realYieldBTC: CellarData = {
   name: "Real Yield BTC",
   slug: config.CONTRACT.REAL_YIELD_BTC.SLUG,
   tradedAssets: ["WBTC"],
-  launchDate: new Date(2023, 6, 12, 10, 0, 0, 0),
+  launchDate: new Date(2023, 6, 13, 10, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize WBTC-denominated yields through a dynamic and evolving set of strategies.`,
   strategyType: "Yield",
