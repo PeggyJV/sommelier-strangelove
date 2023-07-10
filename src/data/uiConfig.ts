@@ -275,7 +275,8 @@ export const bondingPeriodOptions = (
   if (
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   ) {
     return [
       {
