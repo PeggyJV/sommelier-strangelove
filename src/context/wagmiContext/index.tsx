@@ -77,5 +77,9 @@ export const WagmiProvider = ({
 }: {
   children: ReactNode
 }) => {
+  console.log(
+    "WagmiProvider and WalletConnect ID " +
+      process.env.WALLETCONNECT_PROJECT_ID
+  )
   return <WagmiConfig client={client}>{children}</WagmiConfig>
 }
