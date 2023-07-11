@@ -62,11 +62,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
 
   const { lpToken } = useUserBalances(cellarConfig)
+  console.log(lpToken)
   const { data: lpTokenData } = lpToken
   const lpTokenDisabled =
-    !lpTokenData ||
-    Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <=
-      0
+    !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
 
   const { data: strategyData, isLoading: isStrategyLoading } =
     useStrategyData(cellarConfig.cellar.address)
