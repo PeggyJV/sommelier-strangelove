@@ -62,7 +62,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
 
   const { lpToken } = useUserBalances(cellarConfig)
-  console.log(lpToken)
   const { data: lpTokenData } = lpToken
   const lpTokenDisabled =
     !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
