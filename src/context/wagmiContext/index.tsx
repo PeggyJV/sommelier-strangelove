@@ -21,13 +21,14 @@ const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
 const alchemyRpc = `${ALCHEMY_URL}${ALCHEMY_API_KEY}`
 const WALLETCONNECT_PROJECT_ID =
   process.env.NEXT_WALLETCONNECT_PROJECT_ID
+const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY
 
 const { chains, provider, webSocketProvider } = configureChains(
   [mainnet],
   [
     alchemyProvider({ apiKey: ALCHEMY_API_KEY! }),
     infuraProvider({
-      apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY!,
+      apiKey: INFURA_API_KEY!,
     }),
     publicProvider(),
   ],
@@ -79,6 +80,5 @@ export const WagmiProvider = ({
 }: {
   children: ReactNode
 }) => {
-  console.log("WagmiProvider Project ID: ", WALLETCONNECT_PROJECT_ID)
   return <WagmiConfig client={client}>{children}</WagmiConfig>
 }
