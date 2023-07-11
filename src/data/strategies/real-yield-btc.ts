@@ -57,7 +57,7 @@ export const realYieldBTC: CellarData = {
     cellarNameKey: CellarNameKey.REAL_YIELD_BTC,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_BTC.ADDRESS,
-      imagePath: "/assets/icons/real-yield-ens.png",
+      imagePath: "/assets/icons/real-yield-btc.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
