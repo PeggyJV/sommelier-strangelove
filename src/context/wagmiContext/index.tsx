@@ -61,6 +61,7 @@ const client = createClient({
   provider,
   // @ts-ignore
   connectors: connector,
+  webSocketProvider,
 })
 
 export const WagmiProvider = ({
