@@ -36,6 +36,8 @@ const { chains, provider, webSocketProvider } = configureChains(
 )
 
 const connector = () => {
+  console.log("WALLETCONNECT_PROJECT_ID", WALLETCONNECT_PROJECT_ID)
+
   return [
     new WalletConnectConnector({
       chains,
