@@ -42,7 +42,9 @@ const connector = () => {
     new WalletConnectConnector({
       chains,
       options: {
-        projectId: WALLETCONNECT_PROJECT_ID!,
+        projectId:
+          WALLETCONNECT_PROJECT_ID ||
+          "c11d8ffaefb8ba4361ae510ed7690cb8",
         showQrModal: true,
       },
     }),
