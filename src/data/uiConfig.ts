@@ -32,7 +32,8 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.FRAXIMAL ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   )
 }
 
