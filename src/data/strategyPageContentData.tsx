@@ -844,7 +844,7 @@ export const strategyPageContentData = {
         {}
         <Image
           alt="YieldBTC icon"
-          src="/assets/icons/real-yield-ens.png"
+          src="/assets/icons/real-yield-btc.png"
           boxSize={8}
         />
         <Text>YieldBTC</Text>
