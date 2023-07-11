@@ -53,7 +53,6 @@ export const realYieldBTC: CellarData = {
   },
 
   config: {
-    noSubgraph: true,
     id: config.CONTRACT.REAL_YIELD_BTC.ADDRESS,
     cellarNameKey: CellarNameKey.REAL_YIELD_BTC,
     lpToken: {
