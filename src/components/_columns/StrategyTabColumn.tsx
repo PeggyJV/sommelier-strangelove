@@ -59,6 +59,14 @@ export const StrategyTabColumn = ({
       ),
       accessor: "baseApy",
       Cell: ({ row }: any) => {
+        const launchDate = row.original.launchDate
+        if (launchDate && launchDate > Date.now()) {
+          return (
+            <Text fontWeight={550} fontSize="16px" textAlign="right">
+              --
+            </Text>
+          )
+        }
         return (
           <ApyRewardsSection
             cellarId={row.original.slug}
