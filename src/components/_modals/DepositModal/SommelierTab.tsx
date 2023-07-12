@@ -53,6 +53,7 @@ import { CellarNameKey } from "data/types"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { FaExternalLinkAlt } from "react-icons/fa"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -632,9 +633,47 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                   >
                     https://wrapeth.com/
                   </Link>
+                  <br />
+                  <br />
+                  <Link
+                    href={
+                      "https://app.rhino.fi/invest/YIELDETH/supply"
+                    }
+                    isExternal
+                    role="group"
+                    textAlign="center"
+                  >
+                    <Text as="span">Buy and sell on exchange </Text>
+                    <Icon
+                      as={FaExternalLinkAlt}
+                      color="purple.base"
+                    />
+                  </Link>
                 </>
               ) : (
-                " There could be high slippage when depositing non base assets. Please swap outside our app for better rates."
+                <>
+                  <Text>
+                    There could be high slippage when depositing non
+                    base assets. Please swap outside our app for
+                    better rates.
+                  </Text>
+                  <br />
+                  <br />
+                  <Link
+                    href={
+                      "https://app.rhino.fi/invest/YIELDUSD/supply"
+                    }
+                    isExternal
+                    role="group"
+                    textAlign="center"
+                  >
+                    <Text as="span">Buy and sell on exchange </Text>
+                    <Icon
+                      as={FaExternalLinkAlt}
+                      color="purple.base"
+                    />
+                  </Link>
+                </>
               )}
             </Text>
           )}

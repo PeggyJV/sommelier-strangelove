@@ -78,7 +78,14 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   const setMax = () =>
     setValue(
       "depositAmount",
-      parseFloat(toEther(lpTokenData?.formatted, 18, false) || "")
+      parseFloat(
+        toEther(
+          lpTokenData?.formatted,
+          lpTokenData?.decimals,
+          false,
+          6
+        )
+      )
     )
 
   const geo = useGeo()
@@ -230,7 +237,12 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
                       balance: (v) =>
                         v <=
                           parseFloat(
-                            toEther(lpTokenData?.formatted, 18, false)
+                            toEther(
+                              lpTokenData?.formatted,
+                              lpTokenData?.decimals,
+                              false,
+                              6
+                            )
                           ) || "Insufficient balance",
                     },
                   })}
@@ -239,7 +251,14 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
               <HStack spacing={0} fontSize="10px">
                 <Text as="span">
                   Available:{" "}
-                  {toEther(lpTokenData?.formatted, 18, false)}
+                  {(lpTokenData &&
+                    toEther(
+                      lpTokenData.value,
+                      lpTokenData.decimals,
+                      false,
+                      6
+                    )) ||
+                    "--"}
                 </Text>
                 <Button
                   variant="unstyled"
