@@ -48,12 +48,12 @@ const connector = () => {
         showQrModal: true,
       },
     }),
-    new WalletConnectLegacyConnector({
-      chains,
-      options: {
-        qrcode: true,
-      },
-    }),
+    // new WalletConnectLegacyConnector({
+    //   chains,
+    //   options: {
+    //     qrcode: true,
+    //   },
+    // }),
     new MetaMaskConnector({
       chains,
     }),
