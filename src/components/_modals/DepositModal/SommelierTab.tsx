@@ -153,7 +153,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const { data: selectedTokenBalance } = useBalance({
     address: address,
-    token: getAddress(selectedToken?.address || ""),
+    token: getAddress(
+      selectedToken?.address ||
+        "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    ), //WETH Address
     formatUnits: "wei",
     watch: true,
   })
