@@ -23,7 +23,7 @@ export const realYieldEth: CellarData = {
   managementFee: "2.00%",
   managementFeeTooltip:
     "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
-  protocols: ["AAVE", "Compound", "Uniswap V3"],
+  protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
   strategyAssets: ["stETH", "cbETH", "rETH", "WETH"],
   performanceSplit: {
     depositors: 80,
@@ -38,7 +38,7 @@ export const realYieldEth: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
+    goals: `Maximize ETH yield through leveraged staking across Aave, Compound and Morpho and liquidity provision of ETH liquid staking tokens on Uniswap V3.`,
 
     highlights: `The vault:
 

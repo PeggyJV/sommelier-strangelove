@@ -1,10 +1,10 @@
 // TODO: Move content to a cms
-import { effect, Image, position, Text } from "@chakra-ui/react"
-import { time } from "console"
-import { add } from "date-fns"
-import { be } from "date-fns/locale"
-import { on } from "events"
-import { at, some, take, each } from "lodash"
+import { Image, Text } from "@chakra-ui/react"
+// import { time } from "console"
+// import { add } from "date-fns"
+// import { be } from "date-fns/locale"
+// import { on } from "events"
+// import { at, some, take, each } from "lodash"
 import { config } from "utils/config"
 import { mainnet } from "wagmi"
 
@@ -803,11 +803,10 @@ export const strategyPageContentData = {
     provider: "Seven Seas & DeFine Logic Labs",
     providerUrl: "https://sevenseas.capital/",
     description: `The best way to get involved in Fraxlend - automated rebalances for maximum yield.`,
-    // NEED UPDATE
     ticker: (
       <>
         <Image
-          alt="RYUNI icon"
+          alt="FRAXIMAL icon"
           src="/assets/icons/fraximal.png"
           boxSize={8}
         />
@@ -823,7 +822,6 @@ export const strategyPageContentData = {
       },
     ],
     strategyHighlights: {
-      // NEED UPDATE
       card: [
         `Captures highest interest rates available at any given moment.`,
         `Mitigates risk by ensuring that the vault is not overly exposed to any specific lending pool at a time.`,
@@ -836,5 +834,42 @@ export const strategyPageContentData = {
     howItWorks: `
     On Fraxlend, the yield offered to FRAX suppliers is characteristically volatile, which offers opportunities but also requires constant monitoring and repositioning. The money market accepts a wide variety of smaller cap tokens as collateral, making for fluctuating yield opportunities ranging from 0.5% to more than 20%. This vault will automate the process of capturing the highest interest rates available at any given moment, while also mitigating risk by ensuring that the vault is not overly exposed to any specific lending pool at a time.
     `,
+  },
+  [config.CONTRACT.REAL_YIELD_BTC.SLUG]: {
+    name: "Real Yield BTC",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Maximize WBTC-denominated yields through a dynamic and evolving set of strategies.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="YieldBTC icon"
+          src="/assets/icons/real-yield-btc.png"
+          boxSize={8}
+        />
+        <Text>YieldBTC</Text>
+      </>
+    ),
+    tradedAssets: ["WBTC"],
+    alternativeTo: "Lending WBTC",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Capable of pursuing multiple WBTC yield sources.`,
+        `24/7 leverage monitoring reduces liquidiation risk.`,
+        `Fully automated with built-in autocompounding.`,
+      ],
+      description: `The primary goal of Real Yield BTC is to make available sustainable WBTC-denominated yields through a dynamic and evolving set of strategies. Initially, the vault will use Morpho for efficient leveraged ETH staking against WBTC collateral. The vault may additionally borrow ETH to deposit into Real Yield ETH. In the future, there is a possibility for Real Yield BTC to evolve its capabilities by making use of other protocol integrations or Sommelier vaults.
+      <br/><br/>
+      Note that Real Yield BTC and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: `
+    The vault will enable WBTC as collateral on Morpho to borrow ETH and then leverage stake. Any yield generated from staking in excess of the borrow cost is used to purchase WBTC to add to your position.`,
   },
 }
