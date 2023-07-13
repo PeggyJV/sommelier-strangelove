@@ -1,6 +1,5 @@
 import { getContract, getProvider, fetchSigner } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
-import { ContractInterface } from "ethers"
 import { AllContracts } from "../types"
 
 export const getAllContracts = async () => {
@@ -9,35 +8,35 @@ export const getAllContracts = async () => {
   let contracts: AllContracts = {}
   Object.values(cellarDataMap).forEach(({ config }) => {
     const cellarContract = getContract({
-      addressOrName: config.cellar.address,
-      contractInterface: config.cellar.abi as ContractInterface,
+      address: config.cellar.address,
+      abi: config.cellar.abi,
       signerOrProvider: provider,
     })
     const cellarSigner = getContract({
-      addressOrName: config.cellar.address,
-      contractInterface: config.cellar.abi as ContractInterface,
-      signerOrProvider: signer,
+      address: config.cellar.address,
+      abi: config.cellar.abi,
+      signerOrProvider: signer || undefined,
     })
 
     const stakerContract =
       config.staker &&
       getContract({
-        addressOrName: config.staker.address,
-        contractInterface: config.staker.abi as ContractInterface,
+        address: config.staker.address,
+        abi: config.staker.abi,
         signerOrProvider: provider,
       })
     const stakerSigner =
       config.staker &&
       getContract({
-        addressOrName: config.staker.address,
-        contractInterface: config.staker.abi as ContractInterface,
-        signerOrProvider: signer,
+        address: config.staker.address,
+        abi: config.staker.abi,
+        signerOrProvider: signer || undefined,
       })
 
     const cellarRouterSigner = getContract({
-      addressOrName: config.cellarRouter.address,
-      contractInterface: config.cellarRouter.abi as ContractInterface,
-      signerOrProvider: signer,
+      address: config.cellarRouter.address,
+      abi: config.cellarRouter.abi,
+      signerOrProvider: signer || undefined,
     })
 
     const contract = {

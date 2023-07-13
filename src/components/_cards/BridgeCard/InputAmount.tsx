@@ -11,6 +11,7 @@ import React, { useState } from "react"
 
 import Image from "next/image"
 import { useAccount, useBalance } from "wagmi"
+import { getAddress } from "ethers/lib/utils.js"
 import {
   useBalances as useGrazBalances,
   useAccount as useGrazAccount,
@@ -33,8 +34,8 @@ export const InputAmount: React.FC = () => {
   const [isActive, setActive] = useState(false)
   const { address, isConnecting } = useAccount()
   const { data, error, isLoading } = useBalance({
-    addressOrName: address,
-    token: config.CONTRACT.SOMMELLIER.ADDRESS,
+    address: address,
+    token: getAddress(config.CONTRACT.SOMMELLIER.ADDRESS),
     watch: true,
   })
 
