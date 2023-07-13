@@ -15,26 +15,26 @@ export const useCreateContracts = (config: ConfigProps) => {
     )
   })()
   const cellarSigner = useContract({
-    addressOrName: config.cellar.address,
-    contractInterface: config.cellar.abi as ContractInterface,
+    address: config.cellar.address,
+    abi: config.cellar.abi,
     signerOrProvider: signer,
   })
   const stakerContract = (() => {
     if (!config.staker || !provider) return
     return new ethers.Contract(
       config.staker.address,
-      config.staker.abi as ContractInterface,
+      config.staker.abi,
       provider
     )
   })()
   const cellarContract = useContract({
-    addressOrName: config.cellar.address,
-    contractInterface: config.cellar.abi as ContractInterface,
+    address: config.cellar.address,
+    abi: config.cellar.abi,
     signerOrProvider: provider,
   })
   const cellarRouterSigner = useContract({
-    addressOrName: config.cellarRouter.address,
-    contractInterface: config.cellarRouter.abi as ContractInterface,
+    address: config.cellarRouter.address,
+    abi: config.cellarRouter.abi,
     signerOrProvider: signer,
   })
 

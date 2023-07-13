@@ -2,6 +2,8 @@ import { useMutation } from "@tanstack/react-query"
 import { fetchToken } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { MutationEventArgs } from "types/hooks"
+import { getAddress } from "ethers/lib/utils.js"
+import { Address } from "wagmi"
 type Args = {
   address: string
   imageUrl?: string
@@ -25,7 +27,7 @@ export const doImportToken: DoImportToken = async ({
       throw new Error("No wallet installed")
     }
     const tokenData = await fetchToken({
-      address,
+      address: getAddress(address),
     })
     if (!tokenData) {
       throw new Error("Token data is undefined")
@@ -39,7 +41,7 @@ export const doImportToken: DoImportToken = async ({
       params: {
         type: "ERC20",
         options: {
-          address: address,
+          address: address as Address,
           symbol: tokenData.symbol,
           decimals: tokenData.decimals,
           image: imageUrl || fullImageUrl,

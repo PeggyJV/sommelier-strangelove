@@ -13,6 +13,7 @@ import {
 import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
+import { getAddress } from "ethers/lib/utils.js"
 
 export const getUserData = async ({
   address,
@@ -53,8 +54,8 @@ export const getUserData = async ({
     })()
 
     const shares = await fetchBalance({
-      token: config.cellar.address,
-      addressOrName: userAddress,
+      token: getAddress(config.cellar.address),
+      address: getAddress(userAddress),
     })
 
     const userStakes = await (async () => {

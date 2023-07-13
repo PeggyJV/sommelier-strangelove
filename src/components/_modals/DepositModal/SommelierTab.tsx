@@ -27,6 +27,8 @@ import { Link } from "components/Link"
 import { config } from "utils/config"
 import { erc20ABI, useSigner, useAccount, useBalance } from "wagmi"
 import { ethers } from "ethers"
+import { getAddress } from "ethers/lib/utils.js"
+
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
 
@@ -151,8 +153,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   })
 
   const { data: selectedTokenBalance } = useBalance({
-    addressOrName: address,
-    token: selectedToken?.address,
+    address: address,
+    token: getAddress(
+      selectedToken?.address ||
+        "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    ), //WETH Address
     formatUnits: "wei",
     watch: true,
   })
@@ -178,18 +183,18 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
     ) {
       const gasLimitEstimated = await estimateGasLimitWithRetry(
-        cellarSigner.estimateGas.deposit,
-        cellarSigner.callStatic.deposit,
+        cellarSigner?.estimateGas.deposit,
+        cellarSigner?.callStatic.deposit,
         [amtInWei, address],
         1000000,
         2000000
       )
-      return cellarSigner.deposit(amtInWei, address, {
+      return cellarSigner?.deposit(amtInWei, address, {
         gasLimit: gasLimitEstimated,
       })
     }
 
-    return cellarSigner.deposit(amtInWei, address)
+    return cellarSigner?.deposit(amtInWei, address)
   }
 
   const onSubmit = async (data: any, e: any) => {

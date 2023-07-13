@@ -13,6 +13,7 @@ import { getBytes32 } from "utils/getBytes32"
 import { GravityBridge } from "src/abi/types"
 import { analytics } from "utils/analytics"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { getAddress } from "ethers/lib/utils.js"
 
 export const useBridgeEthToSommTx = () => {
   const { CONTRACT } = config
@@ -28,16 +29,16 @@ export const useBridgeEthToSommTx = () => {
   const { address } = useAccount()
 
   const erc20Contract = useContract({
-    addressOrName: CONTRACT.SOMMELLIER.ADDRESS,
-    contractInterface: CONTRACT.SOMMELLIER.ABI,
+    address: CONTRACT.SOMMELLIER.ADDRESS,
+    abi: CONTRACT.SOMMELLIER.ABI,
     signerOrProvider: signer,
-  })
+  })!
 
-  const bridgeContract: GravityBridge = useContract({
-    addressOrName: CONTRACT.BRIDGE.ADDRESS,
-    contractInterface: CONTRACT.BRIDGE.ABI,
+  const bridgeContract = useContract({
+    address: CONTRACT.BRIDGE.ADDRESS,
+    abi: CONTRACT.BRIDGE.ABI,
     signerOrProvider: signer,
-  })
+  })!
 
   const TxHashToastBody = ({
     title,
@@ -156,7 +157,7 @@ export const useBridgeEthToSommTx = () => {
       })
       // ERC20 Approval
       const { hash: erc20Hash } = await erc20Contract.approve(
-        CONTRACT.BRIDGE.ADDRESS,
+        getAddress(CONTRACT.BRIDGE.ADDRESS),
         convertedAmount
       )
       const waitForApproval = wait({

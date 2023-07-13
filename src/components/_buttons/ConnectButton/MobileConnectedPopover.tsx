@@ -39,7 +39,7 @@ export const MobileConnectedPopover = () => {
   })
   const { data: ensAvatar, isLoading: ensAvatarLoading } =
     useEnsAvatar({
-      addressOrName: address,
+      address: address,
     })
 
   const id = useRouter().query.id as string | undefined

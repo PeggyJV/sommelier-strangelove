@@ -182,7 +182,6 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
           borderBottomRightRadius={24}
           borderBottomLeftRadius={24}
           position="relative"
-          flexGrow="1"
           flexDirection="column"
           justifyContent="space-between"
         >

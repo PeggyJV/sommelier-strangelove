@@ -37,7 +37,7 @@ export const ConnectedPopover = () => {
   })
   const { data: ensAvatar, isLoading: ensAvatarLoading } =
     useEnsAvatar({
-      addressOrName: address,
+      address: address,
     })
   const importToken = useImportToken({
     onSuccess: (data) => {

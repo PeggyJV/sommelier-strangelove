@@ -42,18 +42,18 @@ export interface ConfigProps {
   }
   cellarRouter: {
     address: string
-    abi: unknown
+    abi: readonly {}[]
     key: CellarRouterKey
   }
   cellar: {
     address: string
-    abi: unknown
+    abi: readonly {}[]
     key: CellarKey
   }
   // staker optional because there will be a cellar without staker contract
   staker?: {
     address: string
-    abi: unknown
+    abi: readonly {}[]
     key: StakerKey
   }
   rewardTokenAddress?: string

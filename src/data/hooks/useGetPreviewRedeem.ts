@@ -3,6 +3,7 @@ import { getPreviewRedeem } from "data/actions/common/getPreviewShare"
 import { ConfigProps } from "data/types"
 import { useAccount } from "wagmi"
 import { useCreateContracts } from "./useCreateContracts"
+import { CellarV0816 } from "src/abi/types"
 
 export const useGetPreviewRedeem = ({
   cellarConfig,
@@ -12,6 +13,8 @@ export const useGetPreviewRedeem = ({
   value?: string
 }) => {
   const { cellarContract } = useCreateContracts(cellarConfig)
+  const signer01 = cellarContract as CellarV0816
+
   const user = useAccount()
   return useQuery(
     [
@@ -21,7 +24,7 @@ export const useGetPreviewRedeem = ({
     async () => {
       if (!cellarContract) throw new Error("Missing data")
       const data = await getPreviewRedeem({
-        cellarContract,
+        cellarContract: signer01,
         value,
       })
       if (!data)

@@ -40,7 +40,7 @@ export const useCurrentPosition = (config: ConfigProps) => {
           config.cellar.key === CellarKey.CELLAR_V0816 ||
           config.cellar.key === CellarKey.CELLAR_V2
         ) {
-          const contract: CellarV0816 = cellarContract
+          const contract: CellarV0816 = cellarContract as CellarV0816
           // Returns max number of assets withdrawable by user
           const maxAssetsOut = await contract
             .maxWithdraw(address)
