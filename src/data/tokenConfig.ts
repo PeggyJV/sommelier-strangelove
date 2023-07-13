@@ -19,7 +19,7 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "weth",
   },
   {
-    src: "/assets/icons/btc.png",
+    src: "/assets/icons/wbtc.png",
     alt: "Bitcoin logo",
     symbol: "WBTC",
     address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
@@ -206,13 +206,6 @@ export const tokenConfig: Token[] = [
     symbol: "YieldETH",
     address: "0xb5b29320d2dde5ba5bafa1ebcd270052070483ec",
     coinGeckoId: "y-eth",
-  },
-  {
-    src: "/assets/icons/wbtc.png",
-    alt: "WBTC logo",
-    symbol: "WBTC",
-    address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
-    coinGeckoId: "wrapped-bitcoin",
   },
 ]
 

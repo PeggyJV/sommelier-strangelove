@@ -11,7 +11,7 @@ import {
 export const realYieldBTC: CellarData = {
   name: "Real Yield BTC",
   slug: config.CONTRACT.REAL_YIELD_BTC.SLUG,
-  tradedAssets: ["WBTC"],
+  tradedAssets: ["WBTC", "WETH"],
   launchDate: new Date(2023, 6, 13, 10, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize WBTC-denominated yields through a dynamic and evolving set of strategies.`,
@@ -20,8 +20,8 @@ export const realYieldBTC: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "Platform fee split: 0.75% for Strategy provider and 0.25% for protocol",
-  protocols: ["Morpho"],
-  strategyAssets: ["WBTC"],
+  protocols: ["Morpho", "AAVE"],
+  strategyAssets: ["WBTC", "WETH"],
   performanceSplit: {
     depositors: 80,
     "strategy provider": 15,
@@ -39,8 +39,8 @@ export const realYieldBTC: CellarData = {
 
     highlights: `
       - Capable of pursuing multiple WBTC yield sources.
-      - 24/7 leverage monitoring reduces liquidiation risk.
-      - Fully automated with built-in autocompounding. `,
+      - 24/7 leverage monitoring reduces liquidation risk.
+      - Fully automated with built-in auto compounding.`,
 
     description: `
     The primary goal of Real Yield BTC is to make available sustainable WBTC-denominated yields through a dynamic and evolving set of strategies. Initially, the vault will use Morpho for efficient leveraged ETH staking against WBTC collateral. The vault may additionally borrow ETH to deposit into Real Yield ETH. In the future, there is a possibility for Real Yield BTC to evolve its capabilities by making use of other protocol integrations or Sommelier vaults.
@@ -80,7 +80,7 @@ export const realYieldBTC: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the ENS of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
   ],
 }
