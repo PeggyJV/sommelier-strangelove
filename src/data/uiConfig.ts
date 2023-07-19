@@ -452,8 +452,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
-    config.cellarNameKey === CellarNameKey.FRAXIMAL
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   ) {
     return "Estimated APY"
   }
@@ -467,8 +466,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
-    config.cellarNameKey === CellarNameKey.FRAXIMAL
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   ) {
     return true
   }
@@ -482,8 +480,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
-    config.cellarNameKey === CellarNameKey.FRAXIMAL
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   ) {
     return "Estimated APY"
   }
@@ -520,12 +517,6 @@ export const estimatedApyValue = (config: ConfigProps) => {
     return {
       value: 5,
       formatted: "5.00%",
-    }
-  }
-  if (config.cellarNameKey === CellarNameKey.FRAXIMAL) {
-    return {
-      value: 6,
-      formatted: "6.00%",
     }
   }
 }
