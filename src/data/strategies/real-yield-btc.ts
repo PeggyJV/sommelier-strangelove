@@ -20,7 +20,7 @@ export const realYieldBTC: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "Platform fee split: 0.75% for Strategy provider and 0.25% for protocol",
-  protocols: ["Morpho", "AAVE"],
+  protocols: ["Morpho", "AAVE", "Uniswap V3"],
   strategyAssets: ["WBTC", "WETH"],
   performanceSplit: {
     depositors: 80,
