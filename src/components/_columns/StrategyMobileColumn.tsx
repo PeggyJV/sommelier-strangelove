@@ -41,12 +41,26 @@ export const StrategyMobileColumn = ({
       disableSortBy: true,
     },
     {
-      Header: timeline.title,
-      accessor: `changes.${timeline.value}`,
-      Cell: ({ cell: { value } }: CellValue) => (
-        <PercentageText data={value} arrowT2 fontWeight={600} />
+      Header: "TVL",
+      accessor: "tvm.value",
+      Cell: ({
+        row: {
+          original: { launchDate, tvm },
+        },
+      }: {
+        row: {
+          original: {
+            launchDate: number
+            tvm: { value: number; formatted: string }
+          }
+        }
+      }) => (
+        <Text fontWeight={550} fontSize="16px" textAlign="right">
+          {launchDate && launchDate > Date.now()
+            ? "--"
+            : tvm?.formatted ?? "--"}
+        </Text>
       ),
-      sortType: "basic",
     },
     {
       Header: () => <Text>Deposit</Text>,
