@@ -66,7 +66,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
               <ChartTooltipItem
                 key={item.id}
                 backgroundColor={item.color}
-                name="APY since inception"
+                name="Base APY"
                 percentage={`${String(
                   data.series?.find((s) => s.id === item.id)?.data[
                     Number(i)
