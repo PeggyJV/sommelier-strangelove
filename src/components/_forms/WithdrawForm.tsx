@@ -371,8 +371,8 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
                 fontWeight="semibold"
                 color="orange.light"
               >
-                Tokens are swapped to the actively traded strategy
-                assets which may include multiple assets in varying
+                Tokens are swapped to the actively traded vault assets
+                which may include multiple assets in varying
                 distribution
               </Text>
             </HStack>
@@ -385,7 +385,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
         </Text>
         <Stack>
           <TransactionDetailItem
-            title="Strategy"
+            title="Vault"
             value={<Text>{cellarDataMap[id].name}</Text>}
           />
           {isWithdrawTokenPriceEnabled(cellarConfig) && (

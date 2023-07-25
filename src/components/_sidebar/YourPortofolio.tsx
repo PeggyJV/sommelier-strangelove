@@ -72,7 +72,7 @@ export const YourPortofolio = () => {
             borderColor="surface.secondary"
           >
             <Text fontSize={12} fontWeight={600} color="neutral.400">
-              Strategy
+              Vault
             </Text>
           </Box>
           <LighterSkeleton
