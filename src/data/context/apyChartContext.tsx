@@ -6,6 +6,7 @@ import {
   useGetAllTimeShareValueQuery,
   useGetMonthlyShareValueQuery,
   useGetWeeklyShareValueQuery,
+  useGetHourlyShareValueQuery
 } from "generated/subgraph"
 import {
   createContext,
@@ -166,6 +167,8 @@ export const ApyChartProvider: FC<{
   const { data: strategyData, isLoading: isStrategyDataLoading } =
     useStrategyData(cellarData!.config.cellar.address)
   const decimals = strategyData?.activeAsset?.decimals ?? 6
+  const launchDay = launchDate ?? subDays(new Date(), 8)
+  const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
   const [
     {
@@ -205,26 +208,24 @@ export const ApyChartProvider: FC<{
       cellarAddress: address,
     },
   })
+
   let weeklyData = weeklyDataRaw?.cellar?.dayDatas.filter(
     (item) => new Date(item.date * 1000) > launchDate
   )
-
   let monthlyData = monthlyDataRaw?.cellar?.dayDatas.filter(
     (item) => new Date(item.date * 1000) > launchDate
   )
+
   // data inverted
   let allTimeData = allTimeDataRaw?.cellar?.dayDatas
     .filter((item) => new Date(item.date * 1000) > launchDate)
     .reverse()
 
-  const launchDay = launchDate ?? subDays(new Date(), 8)
-  const launchEpoch = Math.floor(launchDay.getTime() / 1000)
-
   // Functions to update data returned by hook
   const setDataWeekly = () => {
     setTimeline("1W")
     let apyDatum = createApyChangeDatum({
-      data: weeklyData?.map((item) => {
+      data: allTimeData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
@@ -232,6 +233,8 @@ export const ApyChartProvider: FC<{
       }),
       launchEpoch,
       decimals: decimals,
+      smooth: true,
+      daysRendered: 7,
     })
 
     const series = [
@@ -279,7 +282,7 @@ export const ApyChartProvider: FC<{
   const setDataMonthly = () => {
     setTimeline("1M")
     let apyDatum = createApyChangeDatum({
-      data: monthlyData?.map((item) => {
+      data: allTimeData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
@@ -287,6 +290,8 @@ export const ApyChartProvider: FC<{
       }),
       launchEpoch,
       decimals: decimals,
+      smooth: true,
+      daysRendered: 30,
     })
     const series = [
       {
@@ -336,6 +341,8 @@ export const ApyChartProvider: FC<{
       }),
       launchEpoch,
       decimals: decimals,
+      smooth: false,
+      daysRendered: 0,
     })
     const series = [
       {
@@ -348,7 +355,6 @@ export const ApyChartProvider: FC<{
       series,
       chartProps: allTimeChartProps,
     })
-
     const latestData = series[0].data.at(-1)
     const firstData = series[0].data.at(0)
 
@@ -413,16 +419,17 @@ export const ApyChartProvider: FC<{
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
     if (weeklyData && idIsDefault && strategyData) {
-      const weeklyDataMap = weeklyData?.map((item) => {
-        return {
-          date: item.date,
-          shareValue: item.shareValue,
-        }
-      })
       let apyDatum = createApyChangeDatum({
-        data: weeklyDataMap,
+        data: allTimeData?.map((item) => {
+          return {
+            date: item.date,
+            shareValue: item.shareValue,
+          }
+        }),
         launchEpoch,
         decimals: decimals,
+        smooth: true,
+        daysRendered: 7,
       })
 
       const series = [
@@ -462,7 +469,7 @@ export const ApyChartProvider: FC<{
         average: average.toFixed(1) + "%",
       })
     }
-  }, [weeklyData, data, launchEpoch, strategyData])
+  }, [allTimeData, data, launchEpoch, strategyData])
 
   const dataC = {
     ...data,
