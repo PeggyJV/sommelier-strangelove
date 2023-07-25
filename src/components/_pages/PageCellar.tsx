@@ -110,7 +110,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             !isEstimatedApyEnable(cellarConfig) && (
               <ApyChartProvider address={cellarAddress}>
                 <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                  Strategy Perfomance
+                  Vault Perfomance
                 </Heading>
                 <ApyPerfomanceCard />
               </ApyChartProvider>
@@ -118,14 +118,14 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
           {isTokenPriceChartEnabled(cellarConfig) && (
             <TokenPriceChartProvider address={cellarAddress}>
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                Strategy Perfomance
+                Vault Perfomance
               </Heading>
               <TokenPricePerfomanceCard />
             </TokenPriceChartProvider>
           )}
 
           <Heading pt={isYieldStrategies ? 0 : 12} {...h2Styles}>
-            Strategy Details
+            Vault Details
           </Heading>
           <CellarDetailsCard
             cellarDataMap={cellarDataMap}
@@ -136,7 +136,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
               address={cellarAddress}
             >
               <Heading pt={12} {...h2Styles}>
-                Cellar Performance
+                Vault Performance
               </Heading>
               <PerformanceCard />
             </PerformanceChartByAddressProvider>

@@ -46,7 +46,7 @@ export const Overview = () => {
         </VStack>
         <VStack spacing="8px">
           <Text fontSize="16px" fontWeight="bold">
-            Total Strategies
+            Total Vaults
           </Text>
           <LighterSkeleton
             isLoaded={!isLoading}
