@@ -193,6 +193,9 @@ export const createApyChangeDatum = ({
         differenceInDays(current, launchDate)
       )
 
+      // If days since is 0, skip the calculation to avoid dividing by 0
+      if (daysSince === 0) return 0
+
       const currentValue = Number(item.shareValue)
       const startValue = 10 ** decimals
       const yieldGain = (currentValue - startValue) / startValue
@@ -200,6 +203,12 @@ export const createApyChangeDatum = ({
 
       return apy
     })
+  }
+
+  // Drop the first value if it's 0 
+  if (apyValues[0] === 0) {
+    apyValues.shift()
+    data.shift()
   }
 
   // Modify apyValues to be the last daysRendered worth of values
