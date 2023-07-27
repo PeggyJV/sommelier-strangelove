@@ -38,7 +38,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                     <HomeProvider>
                       <DefaultSeo
                         title="Sommelier Finance"
-                        description="Access to risk-managed, multi chain strategies powered by off-chain computation"
+                        description="Access to risk-managed, multi chain vaults powered by off-chain computation"
                         openGraph={{
                           type: "website",
                           url: "https://app.sommelier.finance/",
@@ -48,7 +48,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                               url: "https://app.sommelier.finance/ogimage.png",
                               width: 1200,
                               height: 630,
-                              alt: "Your dynamic DeFi strategy connoisseur",
+                              alt: "Your dynamic DeFi vault connoisseur",
                             },
                           ],
                         }}

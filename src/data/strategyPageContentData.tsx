@@ -305,7 +305,7 @@ export const strategyPageContentData = {
     strategyHighlights: {
       card: [
         `“Risk first” approach - capital preservation is prioritized over capital growth.`,
-        `Always defined risk for every position prevailing from trade inception until trade exit. Increased risk profile for Steady UNI/MATIC strategies vs Steady ETH or Steady BTC.`,
+        `Always defined risk for every position prevailing from trade inception until trade exit. Increased risk profile for Steady UNI/MATIC vaults vs Steady ETH or Steady BTC.`,
         `Each trade strategy comprises two independent trade orders: 1 "Workhorse"  with a fixed target to lock in some return and stop + 1 "Racehorse" with a trailing stop to capture market upside.`,
       ],
       description: `Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a "risk first" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional "home runs."
@@ -394,7 +394,7 @@ export const strategyPageContentData = {
     strategyHighlights: {
       card: [
         `“Risk first” approach - capital preservation is prioritized over capital growth.`,
-        `Always defined risk for every position prevailing from trade inception until trade exit. Increased risk profile for Steady UNI/MATIC strategies vs Steady ETH or Steady BTC.`,
+        `Always defined risk for every position prevailing from trade inception until trade exit. Increased risk profile for Steady UNI/MATIC vaults vs Steady ETH or Steady BTC.`,
         `Each trade strategy comprises two independent trade orders: 1 "Workhorse"  with a fixed target to lock in some return and stop + 1 "Racehorse" with a trailing stop to capture market upside.`,
       ],
       description: `Patache has pursued a pragmatic approach to developing a trading strategy instead of a strict theoretical framework. A foundation of our pragmatic approach is a "risk first" paradigm – capital preservation is prioritized over capital growth. The strategy emphasizes principal protection and steady, consistent returns while pursuing occasional "home runs."
@@ -496,7 +496,7 @@ export const strategyPageContentData = {
       <br/><br/>
       By “real yield” we mean yield that results from trading or lending activity (fees) rather than resulting from incentives. The primary sources of real yield exist on lending platforms like Aave and Compound, and decentralized exchanges like Uniswap. Because of this, Real Yield USD focuses on these three protocols and simultaneously allocates capital to Aave and Compound lending pools and Uniswap V3 LP pools in order to maximize yield.
       <br/><br/>
-      One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can actively optimize Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies.`,
+      One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can actively optimize Uniswap V3 tick ranges. Many other yield vaults can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing vaults.`,
     },
     howItWorks: `Determining the optimal allocation of stablecoins across these three protocols for the highest yield is non-trivial and requires off-chain computation.
     <br/><br/>
@@ -553,9 +553,9 @@ export const strategyPageContentData = {
     <br/><br/>
     2. Liquidity Provisioning: This approach involves providing liquidity to ETH/ ETH denominated LST trading pairs on Uniswap V3. As a liquidity provider (LP), the vault deposits both ETH and an LST into a liquidity pool, earning fees from traders who swap between the two tokens.
     <br/><br/>
-    Sommelier’s novel architecture gives the vault advanced capabilities when it comes to both leveraged staking and liquidity provision strategies. More specifically, for leveraged staking, the vault uses a sophisticated solution to accumulate leverage that is highly capital efficient and significantly reduces gas and flash loan fees frequently associated with typical leverage practices. While the vault is leveraged, its smart contract enforces a minimum 1.05 health factor during each rebalance as a safety precaution and the vault closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.
+    Sommelier’s novel architecture gives the vault advanced capabilities when it comes to both leveraged staking and liquidity provision vaults. More specifically, for leveraged staking, the vault uses a sophisticated solution to accumulate leverage that is highly capital efficient and significantly reduces gas and flash loan fees frequently associated with typical leverage practices. While the vault is leveraged, its smart contract enforces a minimum 1.05 health factor during each rebalance as a safety precaution and the vault closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.
     <br/><br/>
-    For the liquidity provision strategies, the vault’s ability to run off-chain computation combined with Seven Seas’ deep Uniswap V3 experience, positions the vault to be a top performing LP in the pools that it utilizes. The vault will be able to dynamically adapt to changing price movements to quote the optimal tick range(s) that collect the most fees while minimizing impermanent loss.
+    For the liquidity provision vaults, the vault’s ability to run off-chain computation combined with Seven Seas’ deep Uniswap V3 experience, positions the vault to be a top performing LP in the pools that it utilizes. The vault will be able to dynamically adapt to changing price movements to quote the optimal tick range(s) that collect the most fees while minimizing impermanent loss.
     `,
   },
   [config.CONTRACT.DEFI_STARS.SLUG]: {
@@ -839,7 +839,7 @@ export const strategyPageContentData = {
     name: "Real Yield BTC",
     provider: "Seven Seas & DeFine Logic Labs",
     providerUrl: "https://sevenseas.capital/",
-    description: `Maximize WBTC-denominated yields through a dynamic and evolving set of strategies.`,
+    description: `Maximize WBTC-denominated yields through a dynamic and evolving set of vaults.`,
     ticker: (
       <>
         {}
@@ -865,7 +865,7 @@ export const strategyPageContentData = {
         `24/7 leverage monitoring reduces liquidation risk.`,
         `Fully automated with built-in auto compounding.`,
       ],
-      description: `The primary goal of Real Yield BTC is to make available sustainable WBTC-denominated yields through a dynamic and evolving set of strategies. Initially, the vault will use Morpho for efficient leveraged ETH staking against WBTC collateral. The vault may additionally borrow ETH to deposit into Real Yield ETH. In the future, there is a possibility for Real Yield BTC to evolve its capabilities by making use of other protocol integrations or Sommelier vaults.
+      description: `The primary goal of Real Yield BTC is to make available sustainable WBTC-denominated yields through a dynamic and evolving set of vaults. Initially, the vault will use Morpho for efficient leveraged ETH staking against WBTC collateral. The vault may additionally borrow ETH to deposit into Real Yield ETH. In the future, there is a possibility for Real Yield BTC to evolve its capabilities by making use of other protocol integrations or Sommelier vaults.
       <br/><br/>
       Note that Real Yield BTC and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },

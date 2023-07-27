@@ -10,7 +10,7 @@ type SidebarColumnProps = {
 export const SidebarColumn = ({ timeline }: SidebarColumnProps) => {
   return [
     {
-      Header: "Strategy",
+      Header: "Vault",
       accessor: "name",
       Cell: ({ row }: any) => {
         return (

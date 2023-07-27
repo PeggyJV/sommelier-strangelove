@@ -136,7 +136,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           px={{ base: 6, sm: 0 }}
         >
           <CardStat
-            label="strategy type"
+            label="vault type"
             flex={0}
             tooltip={strategyTypeTooltip}
           >
