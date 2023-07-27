@@ -121,10 +121,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
       return {
         axisBottom: {
           format: "%d.%b",
-          tickValues:
-              isLarger768
-              ? "every 2 days"
-              : "every 5 days",
+          tickValues: isLarger768 ? "every 2 days" : "every 5 days",
         },
       }
     }
@@ -191,6 +188,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
         max: "auto",
         clamp: true,
         nice: true,
+        stepSize: 1,
       }}
       axisLeft={{
         renderTick: (tick) => {
@@ -219,7 +217,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
                   fill: "rgb(237, 235, 245)",
                 }}
               >
-                {tick.value} %
+                {tick.value} % 
               </text>
             </g>
           )
@@ -228,6 +226,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
         tickPadding: 5,
         tickRotation: 0,
         legendPosition: "middle",
+        tickValues: 5,
       }}
     />
   )

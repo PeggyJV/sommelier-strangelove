@@ -181,7 +181,10 @@ export const createApyChangeDatum = ({
 
     // Apply rolling average twice over the smoothDuration to smooth out the APY curve
     apyValues = rollingAverage(apyValues, smoothDuration)
-    apyValues = rollingAverage(apyValues, smoothDuration)
+
+    // last smoothing is always over 7 days
+    apyValues = rollingAverage(apyValues, 7)
+
   } else {
     // Calculate overall (non daily) APY values without smoothing
     apyValues = data.map((item) => {
@@ -200,7 +203,7 @@ export const createApyChangeDatum = ({
   }
 
   // Modify apyValues to be the last daysRendered worth of values
-  if (daysRendered > 0) {
+  if (daysRendered > 0 && apyValues.length > daysRendered) {
     apyValues.splice(0, apyValues.length - daysRendered)
     // Update all the dates as well
     data.splice(0, data.length - daysRendered)

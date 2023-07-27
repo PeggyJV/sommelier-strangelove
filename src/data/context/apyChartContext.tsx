@@ -233,7 +233,7 @@ export const ApyChartProvider: FC<{
       launchEpoch,
       decimals: decimals,
       smooth: true,
-      daysSmoothed: 7,
+      daysSmoothed: 14,
       daysRendered: 30,
     })
 
@@ -422,7 +422,7 @@ export const ApyChartProvider: FC<{
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
-    if (monthlyData && idIsDefault && strategyData) {
+    if (allTimeData && idIsDefault && strategyData) {
       let apyDatum = createApyChangeDatum({
         data: allTimeData?.map((item) => {
           return {
@@ -472,7 +472,7 @@ export const ApyChartProvider: FC<{
       setApyChange({
         xFormatted: dateText,
         yFormatted: `${valueExists ? String(latestData?.y) : "--"}`,
-        average: 'average.toFixed(1)' + "%",
+        average: average.toFixed(1) + "%",
       })
     }
   }, [allTimeData, data, launchEpoch, strategyData])
@@ -510,9 +510,6 @@ export const ApyChartProvider: FC<{
 
 export const useApyChart = () => {
   const context = useContext(apyChartContext)
-
-  console.log("----")
-  console.log(context)
 
   if (context === undefined) {
     throw new Error(
