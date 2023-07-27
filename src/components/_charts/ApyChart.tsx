@@ -66,7 +66,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
               <ChartTooltipItem
                 key={item.id}
                 backgroundColor={item.color}
-                name="APY since inception"
+                name={item.label + " Moving Average APY"}
                 percentage={`${String(
                   data.series?.find((s) => s.id === item.id)?.data[
                     Number(i)
@@ -116,17 +116,13 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
         },
       }
     }
-    if (timeline === "1W" || timeline === "1M") {
+    if (timeline === "7D" || timeline === "30D") {
       // show format in day.month
       return {
         axisBottom: {
           format: "%d.%b",
           tickValues:
-            timeline === "1W"
-              ? isLarger768
-                ? "every 1 day"
-                : "every 2 days"
-              : isLarger768
+              isLarger768
               ? "every 2 days"
               : "every 5 days",
         },

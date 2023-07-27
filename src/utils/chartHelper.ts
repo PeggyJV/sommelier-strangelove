@@ -141,13 +141,15 @@ export const createApyChangeDatum = ({
   data,
   decimals,
   smooth,
+  daysSmoothed,
   daysRendered,
 }: {
   launchEpoch: number
   data?: { date: number; shareValue: string }[]
   decimals: number
-  smooth: boolean,
-  daysRendered: number,
+  smooth: boolean
+  daysSmoothed: number
+  daysRendered: number
 }): Datum[] | undefined => {
   if (!data) return
   const datum: Datum[] = []
@@ -158,8 +160,8 @@ export const createApyChangeDatum = ({
   // If we're smoothing, apply rolling average twice over the smoothDuration
   // to smooth out the APY curve
   // Don't smooth if we don't have suffieicnt data, or we're showing data from
-  if (smooth && data.length > daysRendered * 2 && daysRendered > 0) {
-    const smoothDuration = daysRendered // Set the number of days for the rolling average
+  if (smooth && data.length > daysSmoothed * 2 && daysSmoothed > 0) {
+    const smoothDuration = daysSmoothed // Set the number of days for the rolling average
 
     // Calculate daily APY values
     apyValues = data.map((item, index) => {
@@ -204,9 +206,6 @@ export const createApyChangeDatum = ({
     data.splice(0, data.length - daysRendered)
   }
 
-  console.log(apyValues)
-  console.log("&&")
-
   // Construct the final datum array with the smoothed APY values
   data.forEach((item, index) => {
     const apyValue = apyValues[index]
@@ -214,7 +213,7 @@ export const createApyChangeDatum = ({
       datum.push({
         x: new Date(item.date * 1000),
         y: String(apyValue.toFixed(1)) + "%",
-        value: apyValue, 
+        value: apyValue,
       })
     }
   })
