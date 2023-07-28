@@ -18,7 +18,7 @@ export const GeoBanner: VFC = () => {
       <VStack align="flex-start">
         <Heading size="sm">Service Unavailable</Heading>
         <Text>
-          Strategies are not available to people or companies who are
+          Vaults are not available to people or companies who are
           residents of, or are located, incorporated or have
           registered agent in, the United States or a restricted
           territory.

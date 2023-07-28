@@ -38,7 +38,7 @@ export const StrategyDesktopColumn = ({
 }: StrategyDesktopColumnProps) => {
   return [
     {
-      Header: "Strategy",
+      Header: "Vault",
       accessor: "name",
       Cell: ({ row }: any) => {
         return (
@@ -60,7 +60,7 @@ export const StrategyDesktopColumn = ({
       Header: () => (
         <Tooltip
           arrowShadowColor="purple.base"
-          label="Protocols in which Strategy operates"
+          label="Protocols in which Vault operates"
           placement="top"
           color="neutral.300"
           bg="surface.bg"
@@ -120,7 +120,7 @@ export const StrategyDesktopColumn = ({
       Header: () => (
         <Tooltip
           arrowShadowColor="purple.base"
-          label="Strategy will have exposure to 1 or more of these assets at any given time"
+          label="Vault will have exposure to 1 or more of these assets at any given time"
           placement="top"
           color="neutral.300"
           bg="surface.bg"

@@ -141,7 +141,7 @@ export const steadyEth: CellarData = {
     {
       question: "When should the strategy be used?",
       answer:
-        "Strategies are best suited to investors who fully understand their risk appetite. The algorithm does not have any “timing” bias.",
+        "Vaults are best suited to investors who fully understand their risk appetite. The algorithm does not have any “timing” bias.",
     },
   ],
 }

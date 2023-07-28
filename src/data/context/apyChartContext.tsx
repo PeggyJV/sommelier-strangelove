@@ -39,7 +39,7 @@ export interface ShowLine {
   apy: boolean
 }
 
-type Timeline = "1W" | "1M" | "ALL"
+type Timeline = "7D" | "30D" | "ALL"
 
 export interface ApyChartContext {
   isFetching: boolean
@@ -158,7 +158,7 @@ export const ApyChartProvider: FC<{
   const [showLine, setShowLine] = useState<ShowLine>({
     apy: true,
   })
-  const [timeline, setTimeline] = useState<Timeline>("1W")
+  const [timeline, setTimeline] = useState<Timeline>("30D")
   const cellarData = Object.values(cellarDataMap).find(
     (item) => item.config.cellar.address === address
   )
@@ -166,6 +166,8 @@ export const ApyChartProvider: FC<{
   const { data: strategyData, isLoading: isStrategyDataLoading } =
     useStrategyData(cellarData!.config.cellar.address)
   const decimals = strategyData?.activeAsset?.decimals ?? 6
+  const launchDay = launchDate ?? subDays(new Date(), 8)
+  const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
   const [
     {
@@ -205,26 +207,24 @@ export const ApyChartProvider: FC<{
       cellarAddress: address,
     },
   })
+
   let weeklyData = weeklyDataRaw?.cellar?.dayDatas.filter(
     (item) => new Date(item.date * 1000) > launchDate
   )
-
   let monthlyData = monthlyDataRaw?.cellar?.dayDatas.filter(
     (item) => new Date(item.date * 1000) > launchDate
   )
+
   // data inverted
   let allTimeData = allTimeDataRaw?.cellar?.dayDatas
     .filter((item) => new Date(item.date * 1000) > launchDate)
     .reverse()
 
-  const launchDay = launchDate ?? subDays(new Date(), 8)
-  const launchEpoch = Math.floor(launchDay.getTime() / 1000)
-
   // Functions to update data returned by hook
   const setDataWeekly = () => {
-    setTimeline("1W")
+    setTimeline("7D")
     let apyDatum = createApyChangeDatum({
-      data: weeklyData?.map((item) => {
+      data: allTimeData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
@@ -232,6 +232,9 @@ export const ApyChartProvider: FC<{
       }),
       launchEpoch,
       decimals: decimals,
+      smooth: true,
+      daysSmoothed: 14,
+      daysRendered: 30,
     })
 
     const series = [
@@ -239,12 +242,13 @@ export const ApyChartProvider: FC<{
         id: "apy",
         data: apyDatum || [],
         color: colors.neutral[100],
+        label: "7D",
       },
     ]
 
     setData({
       series,
-      chartProps: dayChartProps,
+      chartProps: monthChartProps, // Note the use of month chart props here, this is due to the fixed time window
     })
 
     const latestData = series![0].data.at(-1)
@@ -277,9 +281,9 @@ export const ApyChartProvider: FC<{
   }
 
   const setDataMonthly = () => {
-    setTimeline("1M")
+    setTimeline("30D")
     let apyDatum = createApyChangeDatum({
-      data: monthlyData?.map((item) => {
+      data: allTimeData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
@@ -287,12 +291,16 @@ export const ApyChartProvider: FC<{
       }),
       launchEpoch,
       decimals: decimals,
+      smooth: true,
+      daysSmoothed: 30,
+      daysRendered: 30,
     })
     const series = [
       {
         id: "apy",
         data: apyDatum || [],
         color: colors.neutral[100],
+        label: "30D",
       },
     ]
 
@@ -336,19 +344,22 @@ export const ApyChartProvider: FC<{
       }),
       launchEpoch,
       decimals: decimals,
+      smooth: false,
+      daysSmoothed: 0,
+      daysRendered: 0,
     })
     const series = [
       {
         id: "apy",
         data: apyDatum || [],
         color: colors.neutral[100],
+        label: "All time",
       },
     ]
     setData({
       series,
       chartProps: allTimeChartProps,
     })
-
     const latestData = series[0].data.at(-1)
     const firstData = series[0].data.at(0)
 
@@ -398,31 +409,32 @@ export const ApyChartProvider: FC<{
 
   const timeArray = [
     {
-      title: "1W",
+      title: "7D",
       onClick: setDataWeekly,
     },
     {
-      title: "1M",
+      title: "30D",
       onClick: setDataMonthly,
     },
-    { title: "All", onClick: setDataAllTime },
   ]
 
-  // Set weekly data by default
+  // Set monthly data by default
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
-    if (weeklyData && idIsDefault && strategyData) {
-      const weeklyDataMap = weeklyData?.map((item) => {
-        return {
-          date: item.date,
-          shareValue: item.shareValue,
-        }
-      })
+    if (allTimeData && idIsDefault && strategyData) {
       let apyDatum = createApyChangeDatum({
-        data: weeklyDataMap,
+        data: allTimeData?.map((item) => {
+          return {
+            date: item.date,
+            shareValue: item.shareValue,
+          }
+        }),
         launchEpoch,
         decimals: decimals,
+        smooth: true,
+        daysSmoothed: 30,
+        daysRendered: 30,
       })
 
       const series = [
@@ -430,12 +442,13 @@ export const ApyChartProvider: FC<{
           id: "apy",
           data: apyDatum || [],
           color: colors.neutral[100],
+          label: "30D",
         },
       ]
 
       setData({
         series,
-        chartProps: dayChartProps,
+        chartProps: monthChartProps,
       })
 
       const latestData = series![0].data.at(-1)
@@ -462,7 +475,7 @@ export const ApyChartProvider: FC<{
         average: average.toFixed(1) + "%",
       })
     }
-  }, [weeklyData, data, launchEpoch, strategyData])
+  }, [allTimeData, data, launchEpoch, strategyData])
 
   const dataC = {
     ...data,

@@ -85,7 +85,7 @@ export function DepositAndWithdrawButton({
       color="neutral.300"
       label={
         row.original.deprecated
-          ? "Strategy Deprecated"
+          ? "Vault Deprecated"
           : "Connect your wallet first"
       }
       shouldWrapChildren

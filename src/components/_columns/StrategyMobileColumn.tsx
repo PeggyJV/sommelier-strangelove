@@ -23,7 +23,7 @@ export const StrategyMobileColumn = ({
 }: StrategyMobileColumnProps) => {
   return [
     {
-      Header: "Strategy",
+      Header: "Vault",
       accessor: "name",
       Cell: ({ row }: any) => {
         return (

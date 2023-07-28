@@ -4,7 +4,7 @@ export const NAV_LINKS = (() => {
   const links = [
     {
       link: "/",
-      title: "Strategies",
+      title: "Vaults",
     },
     {
       link: "/bridge",
@@ -17,6 +17,10 @@ export const NAV_LINKS = (() => {
     {
       link: "https://www.sommelier.finance/audits",
       title: "Audits",
+    },
+    {
+      link: "https://www.sommelier.finance/staking",
+      title: "Staking",
     },
   ]
   if (!BRIDGE_PAGE_ENABLED) {
