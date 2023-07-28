@@ -90,7 +90,9 @@ export const Nav: VFC<FlexProps> = (props) => {
 
               const isActive =
                 (item.link === "https://www.sommelier.finance/" ||
-                item.link === "https://www.sommelier.finance/audits"
+                item.link ===
+                  "https://www.sommelier.finance/audits" ||
+                item.link === "https://www.sommelier.finance/staking"
                   ? false
                   : path === "strategies"
                   ? ""
@@ -155,7 +157,9 @@ export const Nav: VFC<FlexProps> = (props) => {
                   const isActive =
                     (item.link === "https://www.sommelier.finance/" ||
                     item.link ===
-                      "https://www.sommelier.finance/audits"
+                      "https://www.sommelier.finance/audits" ||
+                    item.link ===
+                      "https://www.sommelier.finance/staking"
                       ? false
                       : path === "strategies"
                       ? ""
