@@ -66,7 +66,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
               <ChartTooltipItem
                 key={item.id}
                 backgroundColor={item.color}
-                name="APY since inception"
+                name={item.label + " Moving Average APY"}
                 percentage={`${String(
                   data.series?.find((s) => s.id === item.id)?.data[
                     Number(i)
@@ -116,19 +116,12 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
         },
       }
     }
-    if (timeline === "1W" || timeline === "1M") {
+    if (timeline === "7D" || timeline === "30D") {
       // show format in day.month
       return {
         axisBottom: {
           format: "%d.%b",
-          tickValues:
-            timeline === "1W"
-              ? isLarger768
-                ? "every 1 day"
-                : "every 2 days"
-              : isLarger768
-              ? "every 2 days"
-              : "every 5 days",
+          tickValues: isLarger768 ? "every 2 days" : "every 5 days",
         },
       }
     }
@@ -195,6 +188,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
         max: "auto",
         clamp: true,
         nice: true,
+        stepSize: 1,
       }}
       axisLeft={{
         renderTick: (tick) => {
@@ -223,7 +217,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
                   fill: "rgb(237, 235, 245)",
                 }}
               >
-                {tick.value} %
+                {tick.value} % 
               </text>
             </g>
           )
@@ -232,6 +226,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
         tickPadding: 5,
         tickRotation: 0,
         legendPosition: "middle",
+        tickValues: 5,
       }}
     />
   )

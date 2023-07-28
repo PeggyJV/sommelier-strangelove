@@ -34,7 +34,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
     cellarConfig.cellar.address
   )
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
-  const [timeline, setTimeline] = useState<string>("1W")
+  const [timeline, setTimeline] = useState<string>("30D")
   const [pointActive, setPointActive] = useState<Point>()
 
   const MobileTooltip = () => {
@@ -117,13 +117,12 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
                 <VStack spacing={0} align="flex-start">
                   <CardHeading>
                     <Text>
-                      {apyChartLabel(cellarConfig)} {baseApy}
+                      {timeline} {apyChartLabel(cellarConfig)}
                     </Text>
-                    <Text>Rewards APY {rewardsApy}</Text>
                   </CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
-                      {baseApySumRewards}
+                      {apyChange?.yFormatted}
                     </Text>
                   </HStack>
                   <Text color="neutral.400" fontSize="0.625rem">
@@ -131,45 +130,50 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
                   </Text>
                 </VStack>
               </HStack>
-              <HStack spacing={2}>
-                {timeArray.map((button, i) => {
-                  const { title, onClick } = button
-                  const isSelected = title === timeline
+              <VStack spacing={0} align="flex-start" paddingTop="-1.5rem">
+                <Text fontSize="1rem" fontWeight="bold" paddingBottom="1rem">
+                  Moving Average
+                </Text>
+                <HStack spacing={2}>
+                  {timeArray.map((button, i) => {
+                    const { title, onClick } = button
+                    const isSelected = title === timeline
 
-                  return (
-                    <Button
-                      key={i}
-                      variant="unstyled"
-                      p={4}
-                      py={1}
-                      color={isSelected ? "white" : "neutral.400"}
-                      bg={
-                        isSelected
-                          ? "surface.tertiary"
-                          : "surface.secondary"
-                      }
-                      borderRadius={8}
-                      borderWidth={1}
-                      borderColor={
-                        isSelected
-                          ? "purple.dark"
-                          : "surface.tertiary"
-                      }
-                      backdropFilter="blur(8px)"
-                      fontSize="sm"
-                      fontWeight="semibold"
-                      onClick={() => {
-                        const eventName = `cellar.strategy-apy-perfomance-selected-${title}`
-                        analytics.safeTrack(eventName.toLowerCase())
-                        setTimeline(title)
-                        onClick()
-                      }}
-                    >
-                      {title}
-                    </Button>
-                  )
-                })}
-              </HStack>
+                    return (
+                      <Button
+                        key={i}
+                        variant="unstyled"
+                        p={4}
+                        py={1}
+                        color={isSelected ? "white" : "neutral.400"}
+                        bg={
+                          isSelected
+                            ? "surface.tertiary"
+                            : "surface.secondary"
+                        }
+                        borderRadius={8}
+                        borderWidth={1}
+                        borderColor={
+                          isSelected
+                            ? "purple.dark"
+                            : "surface.tertiary"
+                        }
+                        backdropFilter="blur(8px)"
+                        fontSize="sm"
+                        fontWeight="semibold"
+                        onClick={() => {
+                          const eventName = `cellar.strategy-apy-perfomance-selected-${title}`
+                          analytics.safeTrack(eventName.toLowerCase())
+                          setTimeline(title)
+                          onClick()
+                        }}
+                      >
+                        {title}
+                      </Button>
+                    )
+                  })}
+                </HStack>
+              </VStack>
             </HStack>
             <ApyChart
               timeline={timeline}
