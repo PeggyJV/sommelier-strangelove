@@ -1563,7 +1563,7 @@ export type GetPositionQueryVariables = Exact<{
 export type GetPositionQuery = { __typename?: 'Query', walletCellarData?: { __typename?: 'WalletCellarData', id: string, currentDeposits: string } | null };
 
 export type GetAllStrategiesDataQueryVariables = Exact<{
-  monthoAgoEpoch: Scalars['Int'];
+  monthAgoEpoch: Scalars['Int'];
 }>;
 
 
@@ -1645,7 +1645,7 @@ export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQ
   return Urql.useQuery<GetPositionQuery>({ query: GetPositionDocument, ...options });
 };
 export const GetAllStrategiesDataDocument = gql`
-    query GetAllStrategiesData($monthoAgoEpoch: Int!) {
+    query GetAllStrategiesData($monthAgoEpoch: Int!) {
   cellars {
     id
     dayDatas: dayDatas(orderBy: date, orderDirection: desc, first: 2) {
@@ -1656,7 +1656,7 @@ export const GetAllStrategiesDataDocument = gql`
       orderBy: date
       orderDirection: desc
       first: 1
-      where: {date_lte: $monthoAgoEpoch}
+      where: {date_lte: $monthAgoEpoch}
     ) {
       date
       shareValue

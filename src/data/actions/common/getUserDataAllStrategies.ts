@@ -32,7 +32,7 @@ export const getUserDataAllStrategies = async ({
             { signer: true, contractAddress: address, userAddress },
           ],
           async () => {
-            let subgraphData = sgData?.cellars.find(
+            const subgraphData = sgData?.cellars.find(
               (v) => v.id === address
             )
             const baseAsset = tokenConfig.find(
@@ -60,7 +60,7 @@ export const getUserDataAllStrategies = async ({
                 )
               }
             }
-            
+
             try {
               return await getUserData({
                 address,

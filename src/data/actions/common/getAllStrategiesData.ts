@@ -22,7 +22,7 @@ export const getAllStrategiesData = async ({
         const result = await reactQueryClient.fetchQuery(
           ["USE_STRATEGY_DATA", { provider: true, address }],
           async () => {
-            let subgraphData = sgData.cellars.find(
+            const subgraphData = sgData.cellars.find(
               (v) => v.id.toLowerCase() === address.toLowerCase()
             )
             const baseAsset = tokenConfig.find(

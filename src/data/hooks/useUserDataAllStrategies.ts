@@ -17,7 +17,7 @@ export const useUserDataAllStrategies = () => {
     useGetAllStrategiesDataQuery({
       variables: {
         // Get unix time 30 days ago
-        monthoAgoEpoch: Math.floor(Date.now() / 1000) - 2592000,
+        monthAgoEpoch: Math.floor(Date.now() / 1000) - 2592000,
       },
     })
   const query = useQuery(
