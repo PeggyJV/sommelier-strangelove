@@ -9,8 +9,14 @@ export const useAllStrategiesData = () => {
   const provider = useProvider()
   const { data: allContracts } = useAllContracts()
   const { data: sommPrice } = useCoinGeckoPrice("sommelier")
+  
   const [{ data: sgData, error }, reFetch] =
-    useGetAllStrategiesDataQuery()
+    useGetAllStrategiesDataQuery({
+      variables: {
+        // Get unix time 30 days ago
+        monthAgoEpoch: Math.floor(Date.now() / 1000) - 2592000,
+      },
+    })
 
   const query = useQuery(
     ["USE_ALL_STRATEGIES_DATA", { provider: provider?._isProvider }],
