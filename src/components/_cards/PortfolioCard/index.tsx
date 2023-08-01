@@ -196,7 +196,13 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 (isConnected ? (
                   <>
                     {!strategyData?.deprecated && (
-                      <DepositButton disabled={!isConnected} />
+                      <DepositButton disabled={(() => {                        
+                        if (strategyData?.slug == "Real-Yield-BTC" || strategyData?.slug == "Real-Yield-ETH") {
+                          return true;
+                        }
+
+                        return !isConnected;
+                      })()} />
                     )}
                     <WithdrawButton
                       isDeprecated={strategyData?.deprecated}
