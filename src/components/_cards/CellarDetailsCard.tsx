@@ -210,10 +210,6 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               0.00%
             </CardStat>
           </Stack>
-
-          <CardStat label="TVL" flex={0} tooltip="Total value locked">
-            {tvm?.formatted || "--"}
-          </CardStat>
           <CardStat
             label="strategy assets"
             tooltip="Strategy will have exposure to 1 or more of these assets at any given time"
@@ -256,68 +252,6 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               <Icon as={FaExternalLinkAlt} color="purple.base" />
             </Link>
           </CardStat>
-          <CardStat label="Strategy Details" flex={0}>
-            <Button
-              onClick={() => router.push(`/strategies/${slug}`)}
-              variant="outline"
-              borderColor="purple.base"
-              borderWidth={2}
-              mt={1}
-            >
-              <Text mr={2} fontSize={"sm"}>{`View More`}</Text>
-              <ArrowRightIcon />
-            </Button>
-          </CardStat>
-          <VStack
-            width="lg"
-            spacing={2}
-            align="stretch"
-            maxW={{ base: "100%", md: "150%" }}
-          >
-            <HStack spacing={1} align="center">
-              <Tooltip
-                hasArrow
-                placement="top"
-                label="Strategy earned performance split"
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <HStack align="center" spacing={1}>
-                  <CardHeading>performance split</CardHeading>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
-            </HStack>
-            <Stack h="4px">
-              {/* @ts-ignore */}
-              <BarChart
-                layout="horizontal"
-                colors={barChartTheme}
-                borderColor={theme.colors.neutral[800]}
-                borderWidth={1}
-                borderRadius={2}
-                keys={performanceSplitKeys}
-                data={[performanceSplit]}
-              />
-            </Stack>
-            <HStack spacing={8}>
-              {Object.entries(performanceSplit).map(
-                ([key, value], i) => {
-                  return (
-                    <HStack key={i} spacing={1}>
-                      <Circle size={2} bg={barChartTheme[i]} />
-                      <Text
-                        fontSize="0.625rem"
-                        textTransform="capitalize"
-                      >
-                        {value}% {key}
-                      </Text>
-                    </HStack>
-                  )
-                }
-              )}
-            </HStack>
-          </VStack>
         </SimpleGrid>
         <StrategyBreakdownCard
           cellarDataMap={cellarDataMap}
