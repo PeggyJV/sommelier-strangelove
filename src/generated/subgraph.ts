@@ -1562,10 +1562,12 @@ export type GetPositionQueryVariables = Exact<{
 
 export type GetPositionQuery = { __typename?: 'Query', walletCellarData?: { __typename?: 'WalletCellarData', id: string, currentDeposits: string } | null };
 
-export type GetAllStrategiesDataQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllStrategiesDataQueryVariables = Exact<{
+  monthAgoEpoch: Scalars['Int'];
+}>;
 
 
-export type GetAllStrategiesDataQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, tvlTotal: string, positions: Array<string>, positionDistribution: Array<string>, shareValue: string, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }>, asset: { __typename?: 'TokenERC20', id: string, symbol: string, decimals: number } }> };
+export type GetAllStrategiesDataQuery = { __typename?: 'Query', cellars: Array<{ __typename?: 'Cellar', id: string, tvlTotal: string, positions: Array<string>, positionDistribution: Array<string>, shareValue: string, dayDatas: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }>, lastMonthData: Array<{ __typename?: 'CellarDayData', date: number, shareValue: string }>, asset: { __typename?: 'TokenERC20', id: string, symbol: string, decimals: number } }> };
 
 export type GetAllTimeShareValueQueryVariables = Exact<{
   cellarAddress: Scalars['ID'];
@@ -1640,13 +1642,22 @@ export const GetPositionDocument = gql`
     `;
 
 export function useGetPositionQuery(options: Omit<Urql.UseQueryArgs<GetPositionQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetPositionQuery, GetPositionQueryVariables>({ query: GetPositionDocument, ...options });
+  return Urql.useQuery<GetPositionQuery>({ query: GetPositionDocument, ...options });
 };
 export const GetAllStrategiesDataDocument = gql`
-    query GetAllStrategiesData {
+    query GetAllStrategiesData($monthAgoEpoch: Int!) {
   cellars {
     id
-    dayDatas(orderBy: date, orderDirection: desc) {
+    dayDatas: dayDatas(orderBy: date, orderDirection: desc, first: 2) {
+      date
+      shareValue
+    }
+    lastMonthData: dayDatas(
+      orderBy: date
+      orderDirection: desc
+      first: 1
+      where: {date_lte: $monthAgoEpoch}
+    ) {
       date
       shareValue
     }
@@ -1663,8 +1674,8 @@ export const GetAllStrategiesDataDocument = gql`
 }
     `;
 
-export function useGetAllStrategiesDataQuery(options?: Omit<Urql.UseQueryArgs<GetAllStrategiesDataQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetAllStrategiesDataQuery, GetAllStrategiesDataQueryVariables>({ query: GetAllStrategiesDataDocument, ...options });
+export function useGetAllStrategiesDataQuery(options: Omit<Urql.UseQueryArgs<GetAllStrategiesDataQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllStrategiesDataQuery>({ query: GetAllStrategiesDataDocument, ...options });
 };
 export const GetAllTimeShareValueDocument = gql`
     query GetAllTimeShareValue($cellarAddress: ID!) {
@@ -1678,7 +1689,7 @@ export const GetAllTimeShareValueDocument = gql`
     `;
 
 export function useGetAllTimeShareValueQuery(options: Omit<Urql.UseQueryArgs<GetAllTimeShareValueQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetAllTimeShareValueQuery, GetAllTimeShareValueQueryVariables>({ query: GetAllTimeShareValueDocument, ...options });
+  return Urql.useQuery<GetAllTimeShareValueQuery>({ query: GetAllTimeShareValueDocument, ...options });
 };
 export const GetAllTimeTvlByAddressDocument = gql`
     query GetAllTimeTVLByAddress($cellarAddress: ID!) {
@@ -1692,7 +1703,7 @@ export const GetAllTimeTvlByAddressDocument = gql`
     `;
 
 export function useGetAllTimeTvlByAddressQuery(options: Omit<Urql.UseQueryArgs<GetAllTimeTvlByAddressQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetAllTimeTvlByAddressQuery, GetAllTimeTvlByAddressQueryVariables>({ query: GetAllTimeTvlByAddressDocument, ...options });
+  return Urql.useQuery<GetAllTimeTvlByAddressQuery>({ query: GetAllTimeTvlByAddressDocument, ...options });
 };
 export const GetHourlyShareValueDocument = gql`
     query GetHourlyShareValue($epoch: Int!, $cellarAddress: String, $skip: Int) {
@@ -1710,7 +1721,7 @@ export const GetHourlyShareValueDocument = gql`
     `;
 
 export function useGetHourlyShareValueQuery(options: Omit<Urql.UseQueryArgs<GetHourlyShareValueQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetHourlyShareValueQuery, GetHourlyShareValueQueryVariables>({ query: GetHourlyShareValueDocument, ...options });
+  return Urql.useQuery<GetHourlyShareValueQuery>({ query: GetHourlyShareValueDocument, ...options });
 };
 export const GetHourlyTvlByAddressDocument = gql`
     query GetHourlyTVLByAddress($epoch: Int!, $cellarAddress: String) {
@@ -1726,7 +1737,7 @@ export const GetHourlyTvlByAddressDocument = gql`
     `;
 
 export function useGetHourlyTvlByAddressQuery(options: Omit<Urql.UseQueryArgs<GetHourlyTvlByAddressQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetHourlyTvlByAddressQuery, GetHourlyTvlByAddressQueryVariables>({ query: GetHourlyTvlByAddressDocument, ...options });
+  return Urql.useQuery<GetHourlyTvlByAddressQuery>({ query: GetHourlyTvlByAddressDocument, ...options });
 };
 export const GetMonthlyShareValueDocument = gql`
     query GetMonthlyShareValue($epoch: Int!, $cellarAddress: ID!) {
@@ -1745,7 +1756,7 @@ export const GetMonthlyShareValueDocument = gql`
     `;
 
 export function useGetMonthlyShareValueQuery(options: Omit<Urql.UseQueryArgs<GetMonthlyShareValueQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetMonthlyShareValueQuery, GetMonthlyShareValueQueryVariables>({ query: GetMonthlyShareValueDocument, ...options });
+  return Urql.useQuery<GetMonthlyShareValueQuery>({ query: GetMonthlyShareValueDocument, ...options });
 };
 export const GetStrategyDataDocument = gql`
     query GetStrategyData($cellarAddress: ID!) {
@@ -1769,7 +1780,7 @@ export const GetStrategyDataDocument = gql`
     `;
 
 export function useGetStrategyDataQuery(options: Omit<Urql.UseQueryArgs<GetStrategyDataQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetStrategyDataQuery, GetStrategyDataQueryVariables>({ query: GetStrategyDataDocument, ...options });
+  return Urql.useQuery<GetStrategyDataQuery>({ query: GetStrategyDataDocument, ...options });
 };
 export const GetWeeklyShareValueDocument = gql`
     query GetWeeklyShareValue($epoch: Int!, $cellarAddress: ID!) {
@@ -1788,7 +1799,7 @@ export const GetWeeklyShareValueDocument = gql`
     `;
 
 export function useGetWeeklyShareValueQuery(options: Omit<Urql.UseQueryArgs<GetWeeklyShareValueQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetWeeklyShareValueQuery, GetWeeklyShareValueQueryVariables>({ query: GetWeeklyShareValueDocument, ...options });
+  return Urql.useQuery<GetWeeklyShareValueQuery>({ query: GetWeeklyShareValueDocument, ...options });
 };
 export const GetWeeklyTvlByAdressDocument = gql`
     query GetWeeklyTVLByAdress($epoch: Int!, $cellarAddress: ID!) {
@@ -1807,5 +1818,5 @@ export const GetWeeklyTvlByAdressDocument = gql`
     `;
 
 export function useGetWeeklyTvlByAdressQuery(options: Omit<Urql.UseQueryArgs<GetWeeklyTvlByAdressQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetWeeklyTvlByAdressQuery, GetWeeklyTvlByAdressQueryVariables>({ query: GetWeeklyTvlByAdressDocument, ...options });
+  return Urql.useQuery<GetWeeklyTvlByAdressQuery>({ query: GetWeeklyTvlByAdressDocument, ...options });
 };
