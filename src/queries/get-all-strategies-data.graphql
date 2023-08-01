@@ -1,7 +1,20 @@
-query GetAllStrategiesData {
+query GetAllStrategiesData($monthoAgoEpoch: Int!) {
   cellars {
     id
-    dayDatas(orderBy: date, orderDirection: desc) {
+    dayDatas: dayDatas(
+      orderBy: date
+      orderDirection: desc
+      first: 2
+    ) {
+      date
+      shareValue
+    }
+    lastMonthData: dayDatas(
+      orderBy: date
+      orderDirection: desc
+      first: 1
+      where: { date_lte: $monthoAgoEpoch }
+    ) {
       date
       shareValue
     }

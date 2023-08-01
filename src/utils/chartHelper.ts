@@ -32,7 +32,7 @@ export const createTokenPriceChangeDatum = (
     const firstData = data[0]
     if (firstData) {
       const current = item.shareValue
-      const change = firstData
+      const change = firstData.date + 1
         ? ((toInteger(current) - toInteger(firstData.shareValue)) /
             toInteger(firstData.shareValue)) *
           100

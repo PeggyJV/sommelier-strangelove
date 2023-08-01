@@ -14,8 +14,12 @@ export const useUserDataAllStrategies = () => {
   const strategies = useAllStrategiesData()
   const sommPrice = useCoinGeckoPrice("sommelier")
   const [{ data: sgData, error }, reFetch] =
-    useGetAllStrategiesDataQuery()
-
+    useGetAllStrategiesDataQuery({
+      variables: {
+        // Get unix time 30 days ago
+        monthoAgoEpoch: Math.floor(Date.now() / 1000) - 2592000,
+      },
+    })
   const query = useQuery(
     [
       "USE_USER_DATA_ALL_STRATEGIES",
