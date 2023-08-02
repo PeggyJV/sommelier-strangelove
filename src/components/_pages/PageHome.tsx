@@ -118,8 +118,7 @@ export const PageHome = () => {
           "A new SOMM incentive program for the Fraximal vault will go to vote soon. If it passes, additional incentives will flow for 30 days beginning August 4th."
         }
       />
-      <HStack mb="1.6rem" justifyContent="space-between">
-        <Heading fontSize="1.3125rem">All vaults</Heading>
+      <HStack mb="1.6rem">
         <HStack spacing="8px">
           {strategyType.map((strategy: string, i: number) => {
             const isSelected = strategy === type
