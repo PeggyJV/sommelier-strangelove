@@ -130,8 +130,16 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
                   </Text>
                 </VStack>
               </HStack>
-              <VStack spacing={0} align="flex-start" paddingTop="-1.5rem">
-                <Text fontSize="1rem" fontWeight="bold" paddingBottom="1rem">
+              <VStack
+                spacing={0}
+                align="flex-start"
+                paddingTop="-1.5rem"
+              >
+                <Text
+                  fontSize="1rem"
+                  fontWeight="bold"
+                  paddingBottom="1rem"
+                >
                   Moving Average
                 </Text>
                 <HStack spacing={2}>
