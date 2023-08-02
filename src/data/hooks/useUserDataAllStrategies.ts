@@ -5,21 +5,33 @@ import { useAccount, useSigner } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useAllStrategiesData } from "./useAllStrategiesData"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
+import { fetchGraphCellarStrategyData } from "queries/get-all-strategies-data"
+import { useState, useEffect } from "react"
+import { GetAllStrategiesDataQuery } from "generated/subgraph"
 
 export const useUserDataAllStrategies = () => {
   const { data: signer } = useSigner()
   const { address } = useAccount()
-
   const { data: allContracts } = useAllContracts()
   const strategies = useAllStrategiesData()
   const sommPrice = useCoinGeckoPrice("sommelier")
-  const [{ data: sgData, error }, reFetch] =
-    useGetAllStrategiesDataQuery({
-      variables: {
-        // Get unix time 30 days ago
-        monthAgoEpoch: Math.floor(Date.now() / 1000) - 2592000,
-      },
-    })
+
+  const [sgData, setSgData] = useState<
+    GetAllStrategiesDataQuery | undefined>(undefined)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetchGraphCellarStrategyData()
+      .then(({ data, error }) => {
+        if (error) {
+          setError(error)
+        } else {
+          setSgData(data)
+        }
+      })
+      .catch((error) => setError(error))
+  }, [])
+
   const query = useQuery(
     [
       "USE_USER_DATA_ALL_STRATEGIES",
@@ -48,5 +60,9 @@ export const useUserDataAllStrategies = () => {
         !!sgData?.cellars,
     }
   )
-  return query
+
+  return {
+    ...query,
+    isError: Boolean(error) || query.isError,
+  }
 }
