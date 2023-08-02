@@ -18,10 +18,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
-import {
-  isTokenPriceChartEnabledApp,
-  isTokenPriceEnabledApp,
-} from "data/uiConfig"
+import { isTokenPriceEnabledApp } from "data/uiConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
 import { getProtocols } from "utils/getProtocols"
