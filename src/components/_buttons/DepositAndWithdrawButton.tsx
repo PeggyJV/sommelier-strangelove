@@ -47,23 +47,16 @@ const checkDisplay = (
     : "none"
 
 const checkButtonDisabled = (
-  id: string,
   isDeprecated: boolean,
   lpTokenDisabled: boolean,
   isConnected: boolean,
   isBeforeLaunch: boolean
-) => {
-  if (id === "Real-Yield-BTC" || id === "Real-Yield-ETH") {
-    return true;
-  }
-
-  return isDeprecated
+) =>
+  isDeprecated
     ? lpTokenDisabled
       ? true
       : false
     : false || !isConnected || !isBeforeLaunch
-
-}
 
 const getButtonText = (
   isDeprecated: boolean,
@@ -96,8 +89,7 @@ export function DepositAndWithdrawButton({
           : "Connect your wallet first"
       }
       shouldWrapChildren
-      display={
-        checkDisplay(
+      display={checkDisplay(
         row.original.deprecated,
         lpTokenDisabled,
         isConnected,
@@ -105,9 +97,7 @@ export function DepositAndWithdrawButton({
       )}
     >
       <BaseButton
-        disabled={
-          checkButtonDisabled(
-          row.original.slug,
+        disabled={checkButtonDisabled(
           row.original.deprecated,
           lpTokenDisabled,
           isConnected,
