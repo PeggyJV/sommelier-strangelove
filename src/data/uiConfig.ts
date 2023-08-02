@@ -113,6 +113,20 @@ export const isRewardAPYEnabled = (config: ConfigProps) => {
   )
 }
 
+export const isTokenPriceEnabledApp = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
+    config.cellarNameKey === CellarNameKey.FRAXIMAL ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
+    config.cellarNameKey === CellarNameKey.AAVE
+  )
+}
+
 export const isTokenPriceEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
@@ -477,7 +491,7 @@ export const apyChartLabel = (config: ConfigProps) => {
   ) {
     return "Estimated APY"
   }
-  return  "Moving Average APY"
+  return "Moving Average APY"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
