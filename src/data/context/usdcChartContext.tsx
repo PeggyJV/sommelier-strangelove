@@ -220,7 +220,7 @@ export const UsdcChartProvider: FC<{
   >(undefined)
   const [monthlyIsFetching, setMonthlyIsFetching] = useState(false)
   const [monthlyError, setMonthlyError] = useState(null)
-  const [reexecuteMonthlyyTrigger, setReexecuteMonthlyTrigger] =
+  const [reexecuteMonthlyTrigger, setReexecuteMonthlyTrigger] =
     useState(0) // a state variable to trigger re-fetch
 
   // useCallback is used to prevent unnecessary re-renders when passing this function down to child components
@@ -230,7 +230,7 @@ export const UsdcChartProvider: FC<{
 
   useEffect(() => {
     setMonthlyIsFetching(true)
-    fetchMonthlyShareValueData(address)
+    fetchMonthlyShareValueData(prevMonth, address)
       .then((data) => {
         setMonthlyDataRaw(data)
         setMonthlyIsFetching(false)
@@ -239,7 +239,7 @@ export const UsdcChartProvider: FC<{
         setMonthlyError(error)
         setMonthlyIsFetching(false)
       })
-  }, [prevMonth, address, reexecuteMonthlyyTrigger]) // re-execute the effect when 'prevMonth' or 'address' changes
+  }, [prevMonth, address, reexecuteMonthlyTrigger]) // re-execute the effect when 'prevMonth' or 'address' changes
 
   const [allTimeDataRaw, setAllTimeDataRaw] = useState<
     GetAllTimeShareValueQuery | undefined

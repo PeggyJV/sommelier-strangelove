@@ -13,13 +13,12 @@ const graphAllTimeShareValueData = async (
     const { cellarAddress } = req.query
 
     const query = `
-    query GetAllTimeTVLByAddress($cellarAddress: ID!) {
-        cellar(id: $cellarAddress) {
-          id
-          dayDatas(orderDirection: asc, orderBy: date) {
-            date
-            tvlTotal
-          }
+    query GetAllTimeShareValue($cellarAddress: ID!) {
+      cellar(id: $cellarAddress) {
+        dayDatas(orderDirection: desc, orderBy: date) {
+          date
+          shareValue
+        }
       }
     }
     `

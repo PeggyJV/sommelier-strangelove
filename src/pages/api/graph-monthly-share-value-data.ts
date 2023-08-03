@@ -10,25 +10,22 @@ const graphMonthlyShareValueData = async (
   res: NextApiResponse
 ) => {
   try {
-    const { cellarAddress } = req.query
+    let { epoch, cellarAddress } = req.query
+    // Cast epoch to number
+    const epochNumber = Number(epoch)
 
     const query = `
-    query GetStrategyData($cellarAddress: ID!) {
+    query GetMonthlyShareValue($epoch: Int!, $cellarAddress: ID!) {
       cellar(id: $cellarAddress) {
-        id
-        dayDatas(orderBy: date, orderDirection: desc) {
+        dayDatas(
+          first: 31
+          orderDirection: asc
+          orderBy: date
+          where: { date_gte: $epoch }
+        ) {
           date
           shareValue
         }
-        tvlTotal
-        asset {
-          id
-          symbol
-          decimals
-        }
-        positions
-        positionDistribution
-        shareValue
       }
     }
     `
@@ -40,7 +37,7 @@ const graphMonthlyShareValueData = async (
       },
       body: JSON.stringify({
         query,
-        variables: { cellarAddress },
+        variables: { epoch: epochNumber, cellarAddress },
       }),
     })
 

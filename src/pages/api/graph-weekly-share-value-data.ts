@@ -15,16 +15,16 @@ const graphWeeklyShareValueData = async (
     const epochNumber = Number(epoch)
 
     const query = `
-    query GetWeeklyTVLByAdress($epoch: Int!, $cellarAddress: ID!) {
+    query GetWeeklyShareValue($epoch: Int!, $cellarAddress: ID!) {
       cellar(id: $cellarAddress) {
         dayDatas(
           first: 7
           orderDirection: asc
           orderBy: date
-          where: {date_gte: $epoch}
+          where: { date_gte: $epoch }
         ) {
           date
-          tvlTotal
+          shareValue
         }
       }
     }
