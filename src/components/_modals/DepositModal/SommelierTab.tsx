@@ -501,6 +501,60 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       setShowSwapSettings(false)
   }, [currentAsset?.address, selectedToken?.address])
 
+const strategyMessages: Record<string, () => JSX.Element> = {
+  "Real Yield ETH": () => (
+    <>
+      <Text textAlign="center">
+        You can use the following external services to acquire WETH:{" "}
+        <Link href="https://wrapeth.com/" textDecor="underline">
+          https://wrapeth.com/
+        </Link>
+      </Text>
+      <Link
+        href={"https://app.rhino.fi/invest/YIELDETH/supply"}
+        isExternal
+        role="group"
+        textAlign="center"
+      >
+        <Text as="span">
+          Buy and sell gassless on rhino.fi &nbsp;
+        </Text>
+        <Icon as={FaExternalLinkAlt} color="purple.base" />
+      </Link>
+    </>
+  ),
+  "Real Yield USD": () => (
+    <>
+      <Link
+        href={"https://app.rhino.fi/invest/YIELDUSD/supply"}
+        isExternal
+        role="group"
+        textAlign="center"
+      >
+        <Text as="span">
+          Buy and sell gassless on rhino.fi &nbsp;
+        </Text>
+        <Icon as={FaExternalLinkAlt} color="purple.base" />
+      </Link>
+    </>
+  ),
+  "Real Yield BTC": () => (
+    <>
+      <Link
+        href={"https://app.rhino.fi/invest/YIELDBTC/supply"}
+        isExternal
+        role="group"
+        textAlign="center"
+      >
+        <Text as="span">
+          Buy and sell gassless on rhino.fi &nbsp;
+        </Text>
+        <Icon as={FaExternalLinkAlt} color="purple.base" />
+      </Link>
+    </>
+  ),
+}
+
   return (
     <>
       <VStack pb={10} spacing={6} align="stretch">
@@ -605,82 +659,33 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             />
             {activeAsset?.symbol}) will save gas fees
           </Text> */}
-          {(depositTokens.length > 1 ||
-            currentStrategies === "Real Yield ETH") && (
+          {depositTokens.length > 1 && (
             <Text textAlign="center">
-              Current Base asset is (
-              <Avatar
-                ml="-2.5px"
-                boxSize={6}
-                src={activeAsset?.src}
-                name={activeAsset?.alt}
-                borderWidth={2}
-                borderColor="surface.bg"
-                bg="surface.bg"
-              />
-              {activeAsset?.symbol}).
-              <br />
-              {currentStrategies === "Real Yield ETH" ? (
-                <>
-                  <Text>
-                    {" "}
-                    Please swap ETH or other non-base asset outside
-                    our app for better rates.
-                  </Text>
-                  <br />
-                  <Text>
-                    You can use the following external services to
-                    acquire WETH:{" "}
-                  </Text>{" "}
-                  <Link
-                    href="https://wrapeth.com/"
-                    textDecor="underline"
-                  >
-                    https://wrapeth.com/
-                  </Link>
-                  <br />
-                  <br />
-                  <Link
-                    href={
-                      "https://app.rhino.fi/invest/YIELDETH/supply"
-                    }
-                    isExternal
-                    role="group"
-                    textAlign="center"
-                  >
-                    <Text as="span">Buy and sell on exchange </Text>
-                    <Icon
-                      as={FaExternalLinkAlt}
-                      color="purple.base"
-                    />
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Text>
-                    There could be high slippage when depositing non
-                    base assets. Please swap outside our app for
-                    better rates.
-                  </Text>
-                  <br />
-                  <br />
-                  <Link
-                    href={
-                      "https://app.rhino.fi/invest/YIELDUSD/supply"
-                    }
-                    isExternal
-                    role="group"
-                    textAlign="center"
-                  >
-                    <Text as="span">Buy and sell on exchange </Text>
-                    <Icon
-                      as={FaExternalLinkAlt}
-                      color="purple.base"
-                    />
-                  </Link>
-                </>
-              )}
+              <Text textAlign="center">
+                Current Base asset is (
+                <Avatar
+                  ml="-2.5px"
+                  boxSize={6}
+                  src={activeAsset?.src}
+                  name={activeAsset?.alt}
+                  borderWidth={2}
+                  borderColor="surface.bg"
+                  bg="surface.bg"
+                />
+                {activeAsset?.symbol}).
+                <br />
+                <br />
+              </Text>
+              <Text>
+                There could be high slippage when depositing non base
+                assets. Please swap outside our app for better rates.
+              </Text>
             </Text>
+          )}
+          {strategyMessages[currentStrategies] ? (
+            strategyMessages[currentStrategies]()
+          ) : (
+            <></>
           )}
         </VStack>
       </FormProvider>
