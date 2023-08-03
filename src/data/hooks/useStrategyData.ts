@@ -2,19 +2,36 @@ import { useQuery } from "@tanstack/react-query"
 import { getStrategyData } from "data/actions/common/getStrategyData"
 import { cellarDataMap } from "data/cellarDataMap"
 import { tokenConfig } from "data/tokenConfig"
-import { useGetStrategyDataQuery } from "generated/subgraph"
+import { GetStrategyDataQuery } from "generated/subgraph"
 import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
+import { fetchGraphIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
+import { useState, useEffect } from "react"
 
 export const useStrategyData = (address: string) => {
   const provider = useProvider()
 
   const { data: allContracts } = useAllContracts()
   const { data: sommPrice } = useCoinGeckoPrice("sommelier")
-  const [{ data: sgData, error }, reFetch] = useGetStrategyDataQuery({
-    variables: { cellarAddress: address.toLowerCase() },
-  })
+
+  const [sgData, setSgData] = useState<
+    GetStrategyDataQuery | undefined
+  >(undefined)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetchGraphIndividualCellarStrategyData(address.toLowerCase())
+      .then(({ data, error }) => {
+        if (error) {
+          setError(error)
+        } else {
+          setSgData(data)
+        }
+      })
+      .catch((error) => setError(error))
+  }, [])
+
   const config = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address.toLowerCase() ===
@@ -57,10 +74,6 @@ export const useStrategyData = (address: string) => {
 
   return {
     ...query,
-    isError: Boolean(error) || query.isError,
-    refetch: () => {
-      reFetch()
-      query.refetch()
-    },
+    isError: Boolean(error) || query.isError
   }
 }

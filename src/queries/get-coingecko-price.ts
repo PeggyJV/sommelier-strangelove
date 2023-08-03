@@ -15,6 +15,7 @@ export const fetchCoingeckoPrice = async (
 
     return result.price ? result.price + "" : undefined
   } catch (error) {
+    console.log("Error fetching Coingecko Price", error)
     throw Error(error as string)
   }
 }
