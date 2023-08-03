@@ -11,7 +11,7 @@ export const fetchGraphCellarStrategyData = async (
 
     return result.result
   } catch (error) {
-    console.log("Error fetching Graph Cellar Strategy Data", error)
+    console.log("Error fetching Graph Aggregate Cellar Strategy Data", error)
     throw Error(error as string)
   }
 }

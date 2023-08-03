@@ -47,7 +47,7 @@ const coinGeckoSimplePrice = async (
     const price = result[baseId][quoteId]
     res.setHeader(
       "Cache-Control",
-      "public, max-age=60, s-maxage=60, stale-while-revalidate=7200"
+      "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
     )
     res.setHeader("Access-Control-Allow-Origin", baseUrl)
     res.status(200).json({

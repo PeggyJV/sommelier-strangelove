@@ -3,10 +3,13 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { format, subDays } from "date-fns"
 import {
-  useGetAllTimeShareValueQuery,
-  useGetMonthlyShareValueQuery,
-  useGetWeeklyShareValueQuery,
+  GetAllTimeShareValueQuery,
+  GetMonthlyShareValueQuery,
+  GetWeeklyShareValueQuery,
 } from "generated/subgraph"
+import { fetchWeeklyShareValueData } from "queries/get-weekly-share-value-data"
+import { fetchMonthlyShareValueData } from "queries/get-monthly-share-value-data"
+import { fetchAllTimeShareValueData } from "queries/get-all-time-share-value-data"
 import {
   createContext,
   Dispatch,
@@ -15,6 +18,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useCallback,
 } from "react"
 import { colors } from "theme/colors"
 import { OperationContext } from "urql"
@@ -169,44 +173,83 @@ export const ApyChartProvider: FC<{
   const launchDay = launchDate ?? subDays(new Date(), 8)
   const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
-  const [
-    {
-      fetching: weeklyIsFetching,
-      data: weeklyDataRaw,
-      error: weeklyError,
-    },
-    reexecuteWeekly,
-  ] = useGetWeeklyShareValueQuery({
-    variables: {
-      epoch: prevWeek,
-      cellarAddress: address,
-    },
-  })
-  const [
-    {
-      fetching: monthlyIsFetching,
-      data: monthlyDataRaw,
-      error: monthlyError,
-    },
-    reexecuteMonthly,
-  ] = useGetMonthlyShareValueQuery({
-    variables: {
-      epoch: prevMonth,
-      cellarAddress: address,
-    },
-  })
-  const [
-    {
-      fetching: allTimeIsFetching,
-      data: allTimeDataRaw,
-      error: allTimeError,
-    },
-    reexecuteAllTime,
-  ] = useGetAllTimeShareValueQuery({
-    variables: {
-      cellarAddress: address,
-    },
-  })
+  const [weeklyDataRaw, setWeeklyDataRaw] = useState<
+    GetWeeklyShareValueQuery | undefined
+  >(undefined)
+  const [weeklyIsFetching, setWeeklyIsFetching] = useState(false)
+  const [weeklyError, setWeeklyError] = useState(null)
+  const [reexecuteWeeklyTrigger, setReexecuteWeeklyTrigger] =
+    useState(0) // a state variable to trigger re-fetch
+
+  // useCallback is used to prevent unnecessary re-renders when passing this function down to child components
+  const reexecuteWeekly = useCallback(() => {
+    setReexecuteWeeklyTrigger((prevState) => prevState + 1)
+  }, [])
+
+  useEffect(() => {
+    setWeeklyIsFetching(true)
+    fetchWeeklyShareValueData(prevWeek, address)
+      .then((data) => {
+        setWeeklyDataRaw(data)
+        setWeeklyIsFetching(false)
+      })
+      .catch((error) => {
+        setWeeklyError(error)
+        setWeeklyIsFetching(false)
+      })
+  }, [prevWeek, address, reexecuteWeeklyTrigger]) // re-execute the effect when 'prevWeek' or 'address' changes
+
+  const [monthlyDataRaw, setMonthlyDataRaw] = useState<
+    GetMonthlyShareValueQuery | undefined
+  >(undefined)
+  const [monthlyIsFetching, setMonthlyIsFetching] = useState(false)
+  const [monthlyError, setMonthlyError] = useState(null)
+  const [reexecuteMonthlyTrigger, setReexecuteMonthlyTrigger] =
+    useState(0) // a state variable to trigger re-fetch
+
+  // useCallback is used to prevent unnecessary re-renders when passing this function down to child components
+  const reexecuteMonthly = useCallback(() => {
+    setReexecuteMonthlyTrigger((prevState) => prevState + 1)
+  }, [])
+
+  useEffect(() => {
+    setMonthlyIsFetching(true)
+    fetchMonthlyShareValueData(prevMonth, address)
+      .then((data) => {
+        setMonthlyDataRaw(data)
+        setMonthlyIsFetching(false)
+      })
+      .catch((error) => {
+        setMonthlyError(error)
+        setMonthlyIsFetching(false)
+      })
+  }, [prevMonth, address, reexecuteMonthlyTrigger]) // re-execute the effect when 'prevMonth' or 'address' changes
+
+  const [allTimeDataRaw, setAllTimeDataRaw] = useState<
+    GetAllTimeShareValueQuery | undefined
+  >(undefined)
+  const [allTimeIsFetching, setAllTimeIsFetching] = useState(false)
+  const [allTimeError, setAllTimeError] = useState(null)
+  const [reexecuteAllTimeTrigger, setReexecuteAllTimeTrigger] =
+    useState(0) // a state variable to trigger re-fetch
+
+  // useCallback is used to prevent unnecessary re-renders when passing this function down to child components
+  const reexecuteAllTime = useCallback(() => {
+    setReexecuteAllTimeTrigger((prevState) => prevState + 1)
+  }, [])
+
+  useEffect(() => {
+    setAllTimeIsFetching(true)
+    fetchAllTimeShareValueData(address)
+      .then((data) => {
+        setAllTimeDataRaw(data)
+        setAllTimeIsFetching(false)
+      })
+      .catch((error) => {
+        setAllTimeError(error)
+        setAllTimeIsFetching(false)
+      })
+  }, [address, reexecuteAllTimeTrigger])
 
   let weeklyData = weeklyDataRaw?.cellar?.dayDatas.filter(
     (item) => new Date(item.date * 1000) > launchDate
