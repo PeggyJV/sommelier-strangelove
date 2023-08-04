@@ -49,9 +49,6 @@ export const LayoutWithSidebar: FC = ({ children }) => {
             )}
           </Flex>
         </Container>
-        <Box height={40}>
-          {!isLoading && <TimeFrameButton inView={inView} />}
-        </Box>
       </Flex>
       <Box ref={ref}>
         <Footer />
