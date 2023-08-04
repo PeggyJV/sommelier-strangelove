@@ -113,11 +113,6 @@ export const PageHome = () => {
 
   return (
     <LayoutWithSidebar>
-      <InfoBanner
-        text={
-          "A new SOMM incentive program for the Fraximal vault will go to vote soon. If it passes, additional incentives will flow for 30 days beginning August 4th."
-        }
-      />
       <HStack mb="1.6rem">
         <HStack spacing="8px">
           {strategyType.map((strategy: string, i: number) => {
