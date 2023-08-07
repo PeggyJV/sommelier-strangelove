@@ -12,6 +12,7 @@ import {
   Stack,
   Avatar,
   Text,
+  Link
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -40,6 +41,7 @@ import {
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+
 interface FormValues {
   withdrawAmount: number
 }
@@ -172,31 +174,63 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       })
     } catch (e) {
       const error = e as Error
-      if (error.message === "GAS_LIMIT_ERROR") {
+
+      // TODO: Logic Check
+
+      // Check if there's enough redeemable assets
+      if (true) {
         addToast({
-          heading: "Transaction not submitted",
+          heading: "Transaction not submitted.",
           body: (
             <Text>
-              The gas fees are particularly high right now. To avoid a
-              failed transaction leading to wasted gas, please try
-              again later.
+              You are attempting to withdraw beyond the the liquid
+              reserve. The strategist will need to initiate a
+              rebalance to service your full withdrawal. Please send a
+              message in our{" "}
+              {
+                <Link
+                  href="https://discord.com/channels/814266181267619840/814279703622844426"
+                  isExternal
+                  textDecoration="underline"
+                >
+                  Discord Support channel
+                </Link>
+              }{" "}
+              tagging @StrategistSupport
             </Text>
           ),
           status: "info",
           closeHandler: closeAll,
-        })
+          duration: null, // Persist this toast until user closes it.
+        }) 
       } else {
-        addToast({
-          heading: "Withdraw",
-          body: <Text>Withdraw Cancelled</Text>,
-          status: "error",
-          closeHandler: closeAll,
-        })
+        if (error.message === "GAS_LIMIT_ERROR") {
+          addToast({
+            heading: "Transaction not submitted",
+            body: (
+              <Text>
+                The gas fees are particularly high right now. To avoid a
+                failed transaction leading to wasted gas, please try
+                again later.
+              </Text>
+            ),
+            status: "info",
+            closeHandler: closeAll,
+          })
+        } else {
+          addToast({
+            heading: "Withdraw",
+            body: <Text>Withdraw Cancelled</Text>,
+            status: "error",
+            closeHandler: closeAll,
+          })
+        }
+
+        console.log("AAAA")
+        refetch()
+        setValue("withdrawAmount", 0)
       }
     }
-
-    refetch()
-    setValue("withdrawAmount", 0)
   }
 
   function fixed(num: number, fixed: number) {
