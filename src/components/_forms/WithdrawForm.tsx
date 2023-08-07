@@ -41,6 +41,7 @@ import {
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
 
 interface FormValues {
   withdrawAmount: number
@@ -175,8 +176,15 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     } catch (e) {
       const error = e as Error
 
-      // TODO: Logic Check
+      // Get Redeemable Assets
+      const redeemableAssets: string = await fetchCellarRedeemableReserves(id)
+      // TODO: previewRedeem on the shares the user is attempting to withdraw
+      
+      console.log("---")
+      console.log(redeemableAssets)
+      console.log("---")
 
+      // TODO: Do real check below
       // Check if there's enough redeemable assets
       if (true) {
         addToast({
@@ -226,7 +234,6 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
           })
         }
 
-        console.log("AAAA")
         refetch()
         setValue("withdrawAmount", 0)
       }
