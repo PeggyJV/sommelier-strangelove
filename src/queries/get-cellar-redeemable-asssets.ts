@@ -8,7 +8,7 @@ export const fetchCellarRedeemableReserves = async (cellarId: string) => {
     const data = await fetch(url)
     const result = await data.json()
 
-    return result ? result : undefined
+    return result ? result.totalAssetsWithdrawable : undefined
   } catch (error) {
     console.log("Error fetching Cellar Redeemable Assets", error)
     throw Error(error as string)

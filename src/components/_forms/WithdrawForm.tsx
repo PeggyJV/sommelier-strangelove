@@ -42,6 +42,7 @@ import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
+import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 
 interface FormValues {
   withdrawAmount: number
@@ -177,16 +178,26 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       const error = e as Error
 
       // Get Redeemable Assets
-      const redeemableAssets: string = await fetchCellarRedeemableReserves(id)
-      // TODO: previewRedeem on the shares the user is attempting to withdraw
-      
-      console.log("---")
-      console.log(redeemableAssets)
-      console.log("---")
+      const redeemableAssets: number = parseInt(await fetchCellarRedeemableReserves(id))
 
-      // TODO: Do real check below
-      // Check if there's enough redeemable assets
-      if (true) {
+      // previewRedeem on the shares the user is attempting to withdraw
+      // Only get previewRedeem on 1 share to optimize caching and do relevant math below
+      const previewRedeem: number = parseInt(await fetchCellarPreviewRedeem(id, BigInt(1e18)))
+      const redeemAmt: number = Math.floor(previewRedeem * watchWithdrawAmount)
+      const redeemingMoreThanAvailible = redeemAmt > redeemableAssets
+
+      /*
+      console.log("---")
+      console.log("Reedemable assets: ", redeemableAssets)
+      console.log("Withdraw amount: ", watchWithdrawAmount)
+      console.log("Preview redeem: ", previewRedeem)
+      console.log("Redeeming amt: ", redeemAmt)
+      console.log("Redeeming more than availible: ", redeemingMoreThanAvailible)
+      console.log("---")
+      */
+
+      // Check if attempting to withdraw more than availible
+      if (redeemingMoreThanAvailible) {
         addToast({
           heading: "Transaction not submitted.",
           body: (
@@ -210,15 +221,15 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
           status: "info",
           closeHandler: closeAll,
           duration: null, // Persist this toast until user closes it.
-        }) 
+        })
       } else {
         if (error.message === "GAS_LIMIT_ERROR") {
           addToast({
             heading: "Transaction not submitted",
             body: (
               <Text>
-                The gas fees are particularly high right now. To avoid a
-                failed transaction leading to wasted gas, please try
+                The gas fees are particularly high right now. To avoid
+                a failed transaction leading to wasted gas, please try
                 again later.
               </Text>
             ),
