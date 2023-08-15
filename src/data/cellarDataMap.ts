@@ -19,11 +19,13 @@ import {
   realYieldUNI,
   realYieldBTC,
   fraximal,
+  turboSWETH,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
-  cellarConfig = {
+  cellarConfig = { // ! NOTE THIS DETERMINES INITIAL ORDERING
+    [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
     [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,
     [config.CONTRACT.FRAXIMAL.SLUG]: fraximal,
     [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,

@@ -1,8 +1,10 @@
 import cellarRouterV0815 from "../abi/cellar-router-v0.8.15.json"
 import cellarRouterV0816 from "../abi/cellar-router-v0.8.16.json"
 import cellarStakingV0815 from "../abi/cellar-staking-v.0.8.15.json"
+import cellarStakingV0821 from "../abi/cellar-staking-v0.8.21.json"
 import cellarV0815 from "../abi/cellar-v0.8.15.json"
 import cellarV0816 from "../abi/cellar-v0.8.16.json"
+import cellarV0821 from "../abi/cellar-v0.8.21.json"
 import gravityBridge from "../abi/gravityBridge.json"
 import { erc20ABI } from "wagmi"
 
@@ -147,6 +149,11 @@ export const config = {
       SLUG: "DeFi-Stars",
       ABI: cellarV0816,
     },
+    TURBO_SWETH: {
+      ADDRESS: "0xd33dad974b938744dac81fe00ac67cb5aa13958e",
+      SLUG: "Turbo-SWETH",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -206,6 +213,10 @@ export const config = {
     DEFI_STARS_STAKER: {
       ADDRESS: "0x0349b3c56adb9e39b5d75fc1df52eee313dd80d1",
       ABI: cellarStakingV0815,
+    },
+    TURBO_SWETH_STAKER: {
+      ADDRTESS: "0x8930ad2b661a3192d4b88f8bd02870a1db035589",
+      ABI: cellarStakingV0821,
     },
   },
   cleargate: {

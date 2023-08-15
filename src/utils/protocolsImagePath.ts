@@ -7,4 +7,5 @@ export const protocolsImage: { [key: string]: string } = {
   "1inch": `${baseIconPath}/one-inch.png`,
   "0x": `${baseIconPath}/zero-x.png`,
   Morpho: `${baseIconPath}/morpho.png`,
+  Balancer: `${baseIconPath}/balancer.png`,
 }
