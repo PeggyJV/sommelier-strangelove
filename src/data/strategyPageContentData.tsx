@@ -907,8 +907,6 @@ export const strategyPageContentData = {
       <br/><br/>
       Note that Turbo SWETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
-
-    // TODO FIX
-    howItWorks: `lorem ipsum`,
+    howItWorks: `The vault engages in tick optimization by pairing SWETH and WETH on Uniswap V3 to generate yield for depositors and to improve swap efficiency for SWETH. As the Swell ecosystem grows and SWETH integrates with additional applications the vault may take advantage of other yield opportunities that are whitelisted by governance. `,
   },
 }
