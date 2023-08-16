@@ -248,7 +248,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               href={`https://etherscan.io/address/${id.toLowerCase()}`}
               target="_blank"
             >
-              {name}
+              {`${name} `}
               <Icon as={FaExternalLinkAlt} color="purple.base" />
             </Link>
           </CardStat>

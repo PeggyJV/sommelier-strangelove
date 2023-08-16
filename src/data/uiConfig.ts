@@ -385,17 +385,17 @@ export const bondingPeriodOptions = (
     return [
       {
         title: "7 Days",
-        amount: "1.0x SOMM",
+        amount: "1.0x BLACKPEARL",
         value: 0,
       },
       {
         title: "21 Days",
-        amount: "1.25x SOMM",
+        amount: "1.25x BLACKPEARL",
         value: 1,
       },
       {
         title: "30 Days",
-        amount: "1.5x SOMM",
+        amount: "1.5x BLACKPEARL",
         value: 2,
       },
     ]

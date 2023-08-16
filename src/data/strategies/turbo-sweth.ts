@@ -81,8 +81,13 @@ export const turboSWETH: CellarData = {
       abi: config.CONTRACT.TURBO_SWETH.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS, // TODO: This is black pearls
-    //!!!!!!!
+    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+    customRewardWithoutAPY: {
+      tokenSymbol: "BLACKPEARL",
+      tokenDisplayName: "Black Pearl",
+      tokenAddress: "0x677365ac7ca3e9efe12a29a001737a3db265e8af",
+      imagePath: "/assets/icons/blackpearl.png",
+    },
   },
   faq: [
     {

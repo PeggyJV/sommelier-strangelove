@@ -55,6 +55,18 @@ export const Rewards = ({
   const claimAllDisabled =
     !isConnected || !userRewards || parseInt(userRewards) <= 0
 
+  let rewardTokenAddress = config.CONTRACT.SOMMELLIER.ADDRESS
+  let rewardTokenImageUrl = config.CONTRACT.SOMMELLIER.IMAGE_PATH
+  let rewardTokenName = "SOMM"
+
+  // Custom processing for if reward is not SOMM
+  // -- Check if cellar config has customRewardWithoutAPY field
+  if (cellarConfig.customRewardWithoutAPY) {
+    rewardTokenAddress = cellarConfig.customRewardWithoutAPY.tokenAddress
+    rewardTokenImageUrl = cellarConfig.customRewardWithoutAPY.imagePath
+    rewardTokenName = cellarConfig.customRewardWithoutAPY.tokenSymbol
+  }
+
   const { doHandleTransaction } = useHandleTransaction()
 
   const geo = useGeo()
@@ -73,7 +85,7 @@ export const Rewards = ({
       onError: () => analytics.track("rewards.claim-failed"),
       toastBody: {
         successWithParams: (result) => {
-          const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
+          const fullImageUrl = `${window.origin}${rewardTokenImageUrl}`
           return (
             <>
               <Text>Successful</Text>
@@ -89,7 +101,7 @@ export const Rewards = ({
               <Text
                 onClick={() => {
                   importToken.mutate({
-                    address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                    address: rewardTokenAddress,
                     imageUrl: fullImageUrl,
                   })
                 }}
@@ -115,11 +127,11 @@ export const Rewards = ({
       <VStack align="flex-start">
         <CardStat
           label="rewards"
-          tooltip="Amount of SOMM earned and available to be claimed"
+          tooltip={`Amount of ${rewardTokenName} earned and available to be claimed`}
         >
           <InlineImage
-            src="/assets/icons/somm.png"
-            alt="sommelier logo"
+            src={rewardTokenImageUrl}
+            alt={`${rewardTokenName} logo`}
             boxSize={5}
           />
           {isMounted &&

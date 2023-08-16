@@ -60,6 +60,7 @@ export interface ConfigProps {
     key: StakerKey
   }
   rewardTokenAddress?: string
+  customRewardWithoutAPY?: CustomRewardWithoutAPY
 }
 
 export enum CellarType {
@@ -77,6 +78,13 @@ type Exchange =
       name: string
       logo: string
     }
+
+export interface CustomRewardWithoutAPY {
+  tokenSymbol: string
+  tokenDisplayName: string
+  tokenAddress: string
+  imagePath: string
+}
 
 export interface CellarData {
   isContractNotReady?: boolean

@@ -64,7 +64,7 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
                 m={0}
                 opacity={0}
                 type="radio"
-                value={value}
+                value={"value"}
                 css={
                   value === bondingPeriod
                     ? {
@@ -90,7 +90,7 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
               <Text as="span" fontWeight="bold" pb={1} fontSize="xl">
                 {title}
               </Text>
-              <Text as="span" fontSize="sm">
+              <Text as="span" fontSize="sm" textAlign="center">
                 {amount}
               </Text>
             </Flex>
