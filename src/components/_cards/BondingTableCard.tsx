@@ -32,6 +32,7 @@ import { useGeo } from "context/geoContext"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { differenceInDays } from "date-fns"
+import { config } from "utils/config"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -262,7 +263,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
-                label="Amount of SOMM earned and available to be claimed"
+                label={`Amount of ${cellarConfig?.customRewardWithoutAPY?.tokenSymbol ?? "SOMM"} rewards earned and available to be claimed`}
                 placement="top"
                 bg="surface.bg"
                 color="neutral.300"
@@ -273,7 +274,10 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text>SOMM Rewards</Text>
+                    <Text>
+                      {
+                        cellarConfig?.customRewardWithoutAPY?.tokenSymbol ?? "SOMM"
+                      } Rewards</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -324,14 +328,27 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     </Td>
                     <Td>{lockMap[lock].title}</Td>
                     <Td>
-                      {claimAllRewards
-                        ? toEther(
-                            claimAllRewards[i]?.toString() || "0",
-                            6,
-                            false,
-                            2
-                          )
-                        : "0.00"}
+                      <HStack spacing={2}>
+                        <Image
+                          src={
+                            cellarConfig?.customRewardWithoutAPY
+                              ?.imagePath ??
+                            config.CONTRACT.SOMMELLIER.IMAGE_PATH
+                          }
+                          alt="reward token image"
+                          height="20px"
+                        />
+                        <Text textAlign="right">
+                          {claimAllRewards
+                            ? toEther(
+                                claimAllRewards[i]?.toString() || "0",
+                                6,
+                                false,
+                                2
+                              )
+                            : "0.00"}
+                        </Text>
+                      </HStack>
                     </Td>
                     <Td fontWeight="normal">
                       <Flex justify="flex-end">
