@@ -51,7 +51,7 @@ export const turboSWETH: CellarData = {
     `,
   },
   depositTokens: {
-    list: ["SWETH"],
+    list: ["WETH"],
   },
   overrideApy: {
     title: "Backtested APY",
