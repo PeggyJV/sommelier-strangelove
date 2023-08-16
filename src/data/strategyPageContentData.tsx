@@ -1,4 +1,3 @@
-// TODO: Move content to a cms
 import { Image, Text } from "@chakra-ui/react"
 // import { time } from "console"
 // import { add } from "date-fns"
@@ -881,7 +880,7 @@ export const strategyPageContentData = {
         {}
         <Image
           alt="TurboSWETH icon"
-          src="/assets/icons/sweth.png" // TODO: CHANGE ICON ONCE EXISTS
+          src="/assets/icons/turbo-sweth.png"
           boxSize={8}
         />
         <Text>TurboSWETH</Text>
