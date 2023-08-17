@@ -115,7 +115,7 @@ export const PageHome = () => {
     <LayoutWithSidebar>
       <InfoBanner
         text={
-          "A new SOMM incentive program for the Real Yield ETH vault will go to vote soon. If it passes, additional incentives will flow for 30 days beginning August 16th."
+          "A new SOMM incentive program for the Real Yield ETH vault will go to vote soon. If it passes, additional incentives will flow for 30 days beginning August 17th."
         }
       />
       <HStack mb="1.6rem">
