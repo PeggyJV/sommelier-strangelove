@@ -18,7 +18,7 @@ export const realYieldENS: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "0.00%",
   managementFeeTooltip:
-    "Platform fee split: 0% for Strategy provider and 0% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE"],
   strategyAssets: ["ENS", "WETH", "YieldETH"],
   performanceSplit: {

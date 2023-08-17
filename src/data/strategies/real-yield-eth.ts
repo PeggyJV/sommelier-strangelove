@@ -22,7 +22,7 @@ export const realYieldEth: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
   managementFeeTooltip:
-    "Platform fee split: 0.75% for Strategy provider and 0.25% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
   strategyAssets: ["stETH", "cbETH", "rETH", "WETH"],
   performanceSplit: {

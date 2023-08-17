@@ -22,7 +22,7 @@ export const defiStars: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2.00%",
   managementFeeTooltip:
-    "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Uniswap V3", "1inch", "0x"],
   strategyAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   performanceSplit: {

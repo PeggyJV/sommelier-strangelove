@@ -21,7 +21,8 @@ export const fraximal: CellarData = {
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "0.00%",
-  managementFeeTooltip: "Platform fee 0.00%",
+  managementFeeTooltip:
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Fraxlend"],
   strategyAssets: ["FRAX"],
   performanceSplit: {

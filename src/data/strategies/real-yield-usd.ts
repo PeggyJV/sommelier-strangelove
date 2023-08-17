@@ -20,9 +20,9 @@ export const realYieldUsd: CellarData = {
   description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
   strategyType: "Stablecoin",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "0.50%",
+  managementFee: "0.00%",
   managementFeeTooltip:
-    "Platform fee split: 0.4% for Strategy provider and 0.1% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
   strategyAssets: ["USDC", "USDT", "DAI"],
   performanceSplit: {
