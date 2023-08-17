@@ -15,3 +15,4 @@ studio/node_modules
 *.log
 .vscode/
 !.env.example
+.env*.local
