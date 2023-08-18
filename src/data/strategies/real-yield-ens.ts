@@ -10,6 +10,8 @@ import {
 export const realYieldENS: CellarData = {
   name: "Real Yield ENS",
   slug: config.CONTRACT.REAL_YIELD_ENS.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x18ea937aba6053bc232d9ae2c42abe7a8a2be440",
   tradedAssets: ["ENS", "WETH", "YieldETH"],
   launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,

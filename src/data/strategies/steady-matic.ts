@@ -13,6 +13,8 @@ export const steadyMatic: CellarData = {
   deprecated: true,
   name: "Steady MATIC",
   slug: config.CONTRACT.STEADY_MATIC.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x05641a27C82799AaF22b436F20A3110410f29652",
   tradedAssets: ["USDC", "MATIC"],
   launchDate: new Date(2022, 11, 29, 11, 0, 0, 0), // 29 dec 2022 12 am est
   cellarType: CellarType.automatedPortfolio,

@@ -11,6 +11,7 @@ import {
 export const realYieldEth: CellarData = {
   name: "Real Yield ETH",
   slug: config.CONTRACT.REAL_YIELD_ETH.SLUG,
+  dashboard: "https://ryeth.sevenseas.capital/",
   popUpTitle: "Get Exclusive Real Yield Updates",
   popUpDescription:
     "Thank you for your trust. As a user of the Real Yield vault, you are eligible to receive exclusive strategy updates directly from the strategist - 7 Seas as well as updates on upcoming product launches. Rest assured that we will only use your email for this purpose.    ",

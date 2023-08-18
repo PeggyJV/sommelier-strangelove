@@ -10,6 +10,8 @@ import {
 export const realYieldSNX: CellarData = {
   name: "Real Yield SNX",
   slug: config.CONTRACT.REAL_YIELD_SNX.SLUG,
+  dashboard:
+    "https://debank.com/profile/0xcbf2250f33c4161e18d4a2fa47464520af5216b5",
   tradedAssets: ["SNX", "WETH", "YieldETH"],
   launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
