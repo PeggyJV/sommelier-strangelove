@@ -1,4 +1,5 @@
 import { BigNumber, constants } from "ethers"
+import { BigNumber as BigNumJS} from "bignumber.js"
 import { fetchBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
@@ -14,6 +15,7 @@ import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
 import { getAddress } from "ethers/lib/utils.js"
+import { config as cellarConfig } from "utils/config"
 
 export const getUserData = async ({
   address,
@@ -58,11 +60,12 @@ export const getUserData = async ({
       address: getAddress(userAddress),
     })
 
-    const userStakes = await (async () => {
+    const userStakes = await(async () => {
       if (
         !contracts.stakerContract ||
         !contracts.stakerSigner ||
-        (config.staker?.key !== StakerKey.CELLAR_STAKING_V0815 && config.staker?.key !== StakerKey.CELLAR_STAKING_V0821)
+        (config.staker?.key !== StakerKey.CELLAR_STAKING_V0815 &&
+          config.staker?.key !== StakerKey.CELLAR_STAKING_V0821)
       ) {
         return
       }
@@ -75,9 +78,18 @@ export const getUserData = async ({
       )
     })()
 
-    console.log(userStakes)
-    console.log("TIRE")
+    // !!! TODO: We need to rewrite this file and most of the incentive code, pushing this unitl the new staking contracts come out
+    // This is a manual override per strategy
 
+    // We dont want to show rewards APY, or amounts as they're all in PEARLS so override values to 0
+    // TODO: strategy data rewardAPYs need reworking as well
+    if (sgData?.id === cellarConfig.CONTRACT.TURBO_SWETH.ADDRESS) {
+      if (userStakes) {
+        userStakes.claimAllRewardsUSD = new BigNumJS(0)
+        userStakes.totalClaimAllRewards.value = new BigNumJS(0)
+        userStakes.totalClaimAllRewards.formatted = "0"
+      }
+    }
 
     const bonded =
       // Coerce from bignumber.js to ethers BN
@@ -88,7 +100,7 @@ export const getUserData = async ({
       ) ?? constants.Zero
     const totalShares = shares.value.add(bonded)
 
-    const totalAssets = await (async () => {
+    const totalAssets = await(async () => {
       if (!contracts.cellarContract) {
         return ZERO
       }
@@ -104,10 +116,10 @@ export const getUserData = async ({
 
     const numTotalAssets = Number(totalAssets.toNumber().toFixed(5))
 
-    const sommRewardsUSD = userStakes
+    let sommRewardsUSD = userStakes
       ? userStakes.claimAllRewardsUSD.toNumber()
       : 0
-    const sommRewardsRaw = userStakes
+    let sommRewardsRaw = userStakes
       ? symbol !== "USDC"
         ? userStakes.claimAllRewardsUSD.toNumber() /
           parseFloat(baseAssetPrice)
@@ -178,9 +190,6 @@ export const getUserData = async ({
         },
       },
     }
-
-    console.log()
-    console.log("YAYAYA")
 
     return {
       userStakes,
