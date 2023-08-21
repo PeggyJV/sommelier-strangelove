@@ -150,7 +150,7 @@ export const config = {
       ABI: cellarV0816,
     },
     TURBO_SWETH: {
-      ADDRESS: "0xd33dad974b938744dac81fe00ac67cb5aa13958e",
+      ADDRESS: "0xa966c34f94bed0ea5c781bf1d87055d7b190cbf0",
       SLUG: "Turbo-SWETH",
       ABI: cellarV0821,
     },

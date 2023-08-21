@@ -83,10 +83,10 @@ export const turboSWETH: CellarData = {
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     customRewardWithoutAPY: {
-      tokenSymbol: "BLACKPEARL",
-      tokenDisplayName: "Black Pearl",
+      tokenSymbol: "PEARL",
+      tokenDisplayName: "Pearl",
       tokenAddress: "0x677365ac7ca3e9efe12a29a001737a3db265e8af",
-      imagePath: "/assets/icons/blackpearl.png",
+      imagePath: "/assets/icons/pearl.svg",
     },
   },
   faq: [
