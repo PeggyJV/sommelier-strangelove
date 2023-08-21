@@ -60,6 +60,8 @@ export const turboSWETH: CellarData = {
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
     value: "5.00%",
   },
+  dashboard:
+    "https://debank.com/profile/0xa966c34f94bed0ea5c781bf1d87055d7b190cbf0",
   config: {
     id: config.CONTRACT.TURBO_SWETH.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_SWETH,
