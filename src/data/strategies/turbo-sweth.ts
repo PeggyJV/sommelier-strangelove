@@ -100,6 +100,7 @@ export const turboSWETH: CellarData = {
       showClaim: false,
       logo: PearlIcon,
       logoSize: "15px",
+      customRewardLongMessage: "Earn 6 PEARL per SWETH of TVL deposited.",
     },
   },
   faq: [

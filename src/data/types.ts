@@ -95,6 +95,7 @@ export interface CustomRewardWithoutAPY {
   customRewardAPYTooltip?: string
   logo?: VFC<IconProps> 
   logoSize?: string
+  customRewardLongMessage?: string
 }
 
 export interface CellarData {
