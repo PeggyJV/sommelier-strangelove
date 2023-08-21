@@ -13,6 +13,8 @@ export const steadyUni: CellarData = {
   deprecated: true,
   name: "Steady UNI",
   slug: config.CONTRACT.STEADY_UNI.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x6f069f711281618467dae7873541ecc082761b33",
   tradedAssets: ["USDC", "UNI"],
   launchDate: new Date(2022, 11, 29, 11, 0, 0, 0), // 29 dec 2022 12 am est
   cellarType: CellarType.automatedPortfolio,

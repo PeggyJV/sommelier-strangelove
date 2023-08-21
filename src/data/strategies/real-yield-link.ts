@@ -10,6 +10,7 @@ import {
 export const realYieldLink: CellarData = {
   name: "Real Yield LINK",
   slug: config.CONTRACT.REAL_YIELD_LINK.SLUG,
+  dashboard: "https://rygov.sevenseas.capital/",
   tradedAssets: ["LINK", "WETH", "YieldETH"],
   launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,

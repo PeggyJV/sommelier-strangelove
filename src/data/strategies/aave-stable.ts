@@ -13,6 +13,8 @@ export const aaveStable: CellarData = {
   deprecated: true,
   name: "aave2",
   slug: config.CONTRACT.AAVE_V2_STABLE_CELLAR.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x7bAD5DF5E11151Dc5Ee1a648800057C5c934c0d5",
   cellarType: CellarType.yieldStrategies,
   launchDate: new Date(2023, 4, 10, 10, 0, 0, 0), // May 10, 2023. 3 pm UTC
   description:

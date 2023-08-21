@@ -11,6 +11,7 @@ import {
 export const realYieldUsd: CellarData = {
   name: "Real Yield USD",
   slug: config.CONTRACT.REAL_YIELD_USD.SLUG,
+  dashboard: "https://ryusd.sevenseas.capital/",
   popUpTitle: "Get Exclusive Real Yield Updates",
   popUpDescription:
     "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
