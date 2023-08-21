@@ -260,31 +260,36 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               >
                 Period
               </Th>
-              <Tooltip
-                hasArrow
-                arrowShadowColor="purple.base"
-                label={`Amount of ${cellarConfig?.customRewardWithoutAPY?.tokenSymbol ?? "SOMM"} rewards earned and available to be claimed`}
-                placement="top"
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <Th
-                  fontSize={10}
-                  fontWeight="normal"
-                  textTransform="capitalize"
-                >
-                  <HStack spacing={1} align="center">
-                    <Text>
-                      {
-                        cellarConfig?.customRewardWithoutAPY?.tokenSymbol ?? "SOMM"
-                      } Rewards</Text>
-                    <InformationIcon
+              {
+                cellarConfig.customRewardWithoutAPY?.showRewards === true || cellarConfig.customRewardWithoutAPY === undefined ? (
+                  <>
+                    <Tooltip
+                      hasArrow
+                      arrowShadowColor="purple.base"
+                      label={`Amount of ${cellarConfig?.customRewardWithoutAPY?.tokenSymbol ?? "SOMM"} rewards earned and available to be claimed`}
+                      placement="top"
+                      bg="surface.bg"
                       color="neutral.300"
-                      boxSize={3}
-                    />
-                  </HStack>
-                </Th>
-              </Tooltip>
+                    >
+                      <Th
+                        fontSize={10}
+                        fontWeight="normal"
+                        textTransform="capitalize"
+                      >
+                        <HStack spacing={1} align="center">
+                          <Text>
+                            {
+                              cellarConfig?.customRewardWithoutAPY?.tokenSymbol ?? "SOMM"
+                            } Rewards</Text>
+                          <InformationIcon
+                            color="neutral.300"
+                            boxSize={3}
+                          />
+                        </HStack>
+                      </Th>
+                    </Tooltip>
+                    </>) : null
+                  }
               <Th />
             </Tr>
           </Thead>
@@ -328,27 +333,34 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     </Td>
                     <Td>{lockMap[lock].title}</Td>
                     <Td>
-                      <HStack spacing={2}>
-                        <Image
-                          src={
-                            cellarConfig?.customRewardWithoutAPY
-                              ?.imagePath ??
-                            config.CONTRACT.SOMMELLIER.IMAGE_PATH
-                          }
-                          alt="reward token image"
-                          height="20px"
-                        />
-                        <Text textAlign="right">
-                          {claimAllRewards
-                            ? toEther(
-                                claimAllRewards[i]?.toString() || "0",
-                                6,
-                                false,
-                                2
-                              )
-                            : "0.00"}
-                        </Text>
-                      </HStack>
+                      { /*!!!!!!!! TODO: this needs to be rewritten */ }
+                      {
+                        cellarConfig.customRewardWithoutAPY?.showRewards === true || cellarConfig.customRewardWithoutAPY === undefined ? (
+                          <>
+                            <HStack spacing={2}>
+                                <Image
+                                  src={
+                                    cellarConfig?.customRewardWithoutAPY
+                                      ?.imagePath ??
+                                    config.CONTRACT.SOMMELLIER.IMAGE_PATH
+                                  }
+                                  alt="reward token image"
+                                  height="20px"
+                                />
+                                <Text textAlign="right">
+                                  {claimAllRewards
+                                    ? toEther(
+                                        claimAllRewards[i]?.toString() || "0",
+                                        6,
+                                        false,
+                                        2
+                                      )
+                                    : "0.00"}
+                                </Text>
+                              </HStack>
+                            </>
+                        ) : null
+                      }
                     </Td>
                     <Td fontWeight="normal">
                       <Flex justify="flex-end">

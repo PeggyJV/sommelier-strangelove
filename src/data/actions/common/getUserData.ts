@@ -62,7 +62,7 @@ export const getUserData = async ({
       if (
         !contracts.stakerContract ||
         !contracts.stakerSigner ||
-        config.staker?.key !== StakerKey.CELLAR_STAKING_V0815
+        (config.staker?.key !== StakerKey.CELLAR_STAKING_V0815 && config.staker?.key !== StakerKey.CELLAR_STAKING_V0821)
       ) {
         return
       }
@@ -74,6 +74,10 @@ export const getUserData = async ({
         sommPrice
       )
     })()
+
+    console.log(userStakes)
+    console.log("TIRE")
+
 
     const bonded =
       // Coerce from bignumber.js to ethers BN
@@ -174,6 +178,9 @@ export const getUserData = async ({
         },
       },
     }
+
+    console.log()
+    console.log("YAYAYA")
 
     return {
       userStakes,
