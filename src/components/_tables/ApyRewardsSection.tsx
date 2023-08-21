@@ -6,7 +6,7 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react"
-import { LogoIcon } from "components/_icons"
+import { LogoIcon, PearlIcon } from "components/_icons"
 import { FC } from "react"
 import { formatDistanceToNowStrict, subDays } from "date-fns"
 import { baseApyHoverLabel } from "data/uiConfig"
@@ -40,6 +40,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const percentage = (current / range) * 100
   const cellarConfig = cellarDataMap[cellarId].config
   const cellarType = cellarDataMap[cellarId].cellarType
+  const LogoComponent = cellarConfig.customRewardWithoutAPY?.logo ?? LogoIcon
 
   if (!baseApy && !rewardsApy) {
     return (
@@ -126,7 +127,11 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                   {baseApyHoverLabel(cellarConfig)}{" "}
                   {baseApy ?? "0.00%"}
                 </Text>
-                <Text>Rewards APY {rewardsApy ?? "0.00%"}</Text>
+                <Text>
+                  {cellarConfig.customRewardWithoutAPY
+                    ?.customRewardAPYTooltip ??
+                    `Rewards APY ${rewardsApy ?? "0.00%"}`}
+                </Text>
               </>
             }
             color="neutral.100"
@@ -169,11 +174,14 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                     display="flex"
                     alignItems="center"
                   >
-                    <LogoIcon
+                    <LogoComponent
                       mx="auto"
                       color="red.normal"
                       p={0}
-                      boxSize="9px"
+                      boxSize={
+                        cellarConfig.customRewardWithoutAPY?.logoSize ??
+                        "9px"
+                      }
                     />
                   </CircularProgressLabel>
                 </CircularProgress>

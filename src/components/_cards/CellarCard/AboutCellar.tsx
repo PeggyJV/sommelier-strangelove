@@ -103,8 +103,15 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                   {isStakingStillRunning &&
                     rewardsApy?.formatted !== "0.0%" && (
                       <CellarStats
-                        title="Rewards APY"
-                        value={rewardsApy?.formatted || "..."}
+                        title={
+                          cellarConfig.customRewardWithoutAPY
+                            ?.customRewardAPYTooltip ?? "Rewards APY"
+                        }
+                        value={
+                          cellarConfig.customRewardWithoutAPY
+                            ?.customRewardAPYTooltip ??
+                          (rewardsApy?.formatted || "...")
+                        }
                         isLoading={isLoading}
                         colorValue="lime.base"
                       />

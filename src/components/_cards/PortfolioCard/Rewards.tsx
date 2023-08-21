@@ -62,8 +62,10 @@ export const Rewards = ({
   // Custom processing for if reward is not SOMM
   // -- Check if cellar config has customRewardWithoutAPY field
   if (cellarConfig.customRewardWithoutAPY) {
-    rewardTokenAddress = cellarConfig.customRewardWithoutAPY.tokenAddress
-    rewardTokenImageUrl = cellarConfig.customRewardWithoutAPY.imagePath
+    rewardTokenAddress =
+      cellarConfig.customRewardWithoutAPY.tokenAddress
+    rewardTokenImageUrl =
+      cellarConfig.customRewardWithoutAPY.imagePath
     rewardTokenName = cellarConfig.customRewardWithoutAPY.tokenSymbol
   }
 
@@ -123,29 +125,46 @@ export const Rewards = ({
       templateRows="repeat(2, 1fr)"
       spacing={4}
       alignItems="flex-end"
+      maxWidth={"10em"}
     >
       <VStack align="flex-start">
         <CardStat
-          label="rewards"
-          tooltip={`Amount of ${rewardTokenName} earned and available to be claimed`}
+          label={
+            cellarConfig?.customRewardWithoutAPY
+              ?.customRewardHeader ?? "rewards"
+          }
+          tooltip={
+            cellarConfig?.customRewardWithoutAPY
+              ?.customRewardMessageTooltip ??
+            `Amount of ${rewardTokenName} earned and available to be claimed`
+          }
         >
           <InlineImage
             src={rewardTokenImageUrl}
             alt={`${rewardTokenName} logo`}
             boxSize={5}
           />
-          {isMounted &&
-            (isConnected
-              ? userStakes?.totalClaimAllRewards.formatted || "..."
-              : "--")}
+          <Text
+            textAlign="center"
+          >
+            {isMounted &&
+              (cellarConfig.customRewardWithoutAPY
+                ?.customRewardMessage ??
+                (isConnected
+                  ? userStakes?.totalClaimAllRewards.formatted ||
+                    "..."
+                  : "--"))}
+          </Text>
         </CardStat>
       </VStack>
-      <BaseButton
-        disabled={claimAllDisabled}
-        onClick={handleClaimAll}
-      >
-        Claim All
-      </BaseButton>
+      {cellarConfig?.customRewardWithoutAPY?.showClaim !== false ? (
+        <BaseButton
+          disabled={claimAllDisabled}
+          onClick={handleClaimAll}
+        >
+          Claim All
+        </BaseButton>
+      ) : null}
     </SimpleGrid>
   )
 }

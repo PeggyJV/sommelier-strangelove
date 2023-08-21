@@ -7,6 +7,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
+import { PearlIcon } from "components/_icons"
 
 export const turboSWETH: CellarData = {
   name: "Turbo SWETH",
@@ -87,6 +88,16 @@ export const turboSWETH: CellarData = {
       tokenDisplayName: "Pearl",
       tokenAddress: "0x677365ac7ca3e9efe12a29a001737a3db265e8af",
       imagePath: "/assets/icons/pearl.svg",
+      customRewardMessageTooltip:
+        "Rewards to be distributed from Swell via airdrop at a later date",
+      customRewardMessage: "6 PEARL/SWETH",
+      customRewardHeader: "Daily Reward Rate",
+      customRewardAPYTooltip:
+        "Daily Reward Rate: 6 PEARL per SWETH of TVL",
+      showRewards: false,
+      showClaim: false,
+      logo: PearlIcon,
+      logoSize: "15px",
     },
   },
   faq: [
@@ -97,3 +108,4 @@ export const turboSWETH: CellarData = {
     },
   ],
 }
+

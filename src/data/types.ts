@@ -1,3 +1,6 @@
+import { IconProps } from "@chakra-ui/react"
+import { VFC } from "react"
+
 export enum StakerKey {
   CELLAR_STAKING_V0815 = "CELLAR_STAKING_V0815",
   CELLAR_STAKING_V0821 = "CELLAR_STAKING_V0821",
@@ -84,6 +87,14 @@ export interface CustomRewardWithoutAPY {
   tokenDisplayName: string
   tokenAddress: string
   imagePath: string
+  customRewardMessageTooltip?: string
+  customRewardMessage?: string
+  customRewardHeader?: string
+  showRewards?: boolean
+  showClaim?: boolean
+  customRewardAPYTooltip?: string
+  logo?: VFC<IconProps> 
+  logoSize?: string
 }
 
 export interface CellarData {
