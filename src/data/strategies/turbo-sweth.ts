@@ -20,7 +20,7 @@ export const turboSWETH: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
   managementFeeTooltip:
-    "Platform fee split: 0.75% for Strategy provider and 0.25% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Uniswap V3", "Balancer"],
   strategyAssets: ["SWETH", "WETH"],
   performanceSplit: {
@@ -51,9 +51,6 @@ export const turboSWETH: CellarData = {
     Note that Turbo SWETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
   },
-  depositTokens: {
-    list: ["WETH"],
-  },
   overrideApy: {
     title: "Backtested APY",
     tooltip:
@@ -62,6 +59,9 @@ export const turboSWETH: CellarData = {
   },
   dashboard:
     "https://debank.com/profile/0xa966c34f94bed0ea5c781bf1d87055d7b190cbf0",
+  depositTokens: {
+    list: ["WETH"],
+  },
   config: {
     id: config.CONTRACT.TURBO_SWETH.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_SWETH,
@@ -80,8 +80,8 @@ export const turboSWETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
     },
     staker: {
-      address: config.CONTRACT.TURBO_SWETH.ADDRESS,
-      abi: config.CONTRACT.TURBO_SWETH.ABI,
+      address: config.CONTRACT.TURBO_SWETH_STAKER.ADDRESS,
+      abi: config.CONTRACT.TURBO_SWETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,

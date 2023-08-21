@@ -150,7 +150,7 @@ export const config = {
       ABI: cellarV0816,
     },
     TURBO_SWETH: {
-      ADDRESS: "0xa966c34f94bed0ea5c781bf1d87055d7b190cbf0",
+      ADDRESS: "0xd33dad974b938744dac81fe00ac67cb5aa13958e",
       SLUG: "Turbo-SWETH",
       ABI: cellarV0821,
     },
@@ -215,7 +215,7 @@ export const config = {
       ABI: cellarStakingV0815,
     },
     TURBO_SWETH_STAKER: {
-      ADDRTESS: "0x8930ad2b661a3192d4b88f8bd02870a1db035589",
+      ADDRESS: "0xa966c34F94bed0Ea5C781Bf1D87055d7b190CBf0",
       ABI: cellarStakingV0821,
     },
   },
