@@ -13,6 +13,8 @@ export const steadyUni: CellarData = {
   deprecated: true,
   name: "Steady UNI",
   slug: config.CONTRACT.STEADY_UNI.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x6f069f711281618467dae7873541ecc082761b33",
   tradedAssets: ["USDC", "UNI"],
   launchDate: new Date(2022, 11, 29, 11, 0, 0, 0), // 29 dec 2022 12 am est
   cellarType: CellarType.automatedPortfolio,
@@ -21,7 +23,7 @@ export const steadyUni: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2.00%",
   managementFeeTooltip:
-    "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: "Uniswap V3",
   strategyAssets: ["USDC"],
   performanceSplit: {

@@ -10,6 +10,8 @@ import {
 export const realYieldSNX: CellarData = {
   name: "Real Yield SNX",
   slug: config.CONTRACT.REAL_YIELD_SNX.SLUG,
+  dashboard:
+    "https://debank.com/profile/0xcbf2250f33c4161e18d4a2fa47464520af5216b5",
   tradedAssets: ["SNX", "WETH", "YieldETH"],
   launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
@@ -18,7 +20,7 @@ export const realYieldSNX: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "0.00%",
   managementFeeTooltip:
-    "Platform fee split: 0% for Strategy provider and 0% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE"],
   strategyAssets: ["SNX", "WETH", "YieldETH"],
   performanceSplit: {

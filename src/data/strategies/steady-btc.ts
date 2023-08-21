@@ -13,6 +13,8 @@ export const steadyBtc: CellarData = {
   deprecated: true,
   name: "Steady BTC",
   slug: config.CONTRACT.STEADY_BTC.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
   tradedAssets: ["WBTC", "USDC"],
   launchDate: new Date(2022, 10, 29, 12, 0, 0, 0), // 29 Nov 2022 12 pm est
   cellarType: CellarType.automatedPortfolio,
@@ -21,7 +23,7 @@ export const steadyBtc: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2.00%",
   managementFeeTooltip:
-    "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: "Uniswap V3",
   strategyAssets: ["WBTC", "USDC"],
   performanceSplit: {

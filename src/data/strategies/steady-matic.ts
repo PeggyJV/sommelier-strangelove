@@ -13,6 +13,8 @@ export const steadyMatic: CellarData = {
   deprecated: true,
   name: "Steady MATIC",
   slug: config.CONTRACT.STEADY_MATIC.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x05641a27C82799AaF22b436F20A3110410f29652",
   tradedAssets: ["USDC", "MATIC"],
   launchDate: new Date(2022, 11, 29, 11, 0, 0, 0), // 29 dec 2022 12 am est
   cellarType: CellarType.automatedPortfolio,
@@ -21,7 +23,7 @@ export const steadyMatic: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2.00%",
   managementFeeTooltip:
-    "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: "Uniswap V3",
   strategyAssets: ["USDC"],
   performanceSplit: {

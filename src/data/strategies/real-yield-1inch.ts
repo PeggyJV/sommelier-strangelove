@@ -10,6 +10,8 @@ import {
 export const realYield1Inch: CellarData = {
   name: "Real Yield 1INCH",
   slug: config.CONTRACT.REAL_YIELD_1Inch.SLUG,
+  dashboard:
+    "https://debank.com/profile/0xc7b69e15d86c5c1581dacce3cacaf5b68cd6596f",
   tradedAssets: ["1INCH", "WETH", "YieldETH"],
   launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
@@ -18,7 +20,7 @@ export const realYield1Inch: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "0.00%",
   managementFeeTooltip:
-    "Platform fee split: 0% for Strategy provider and 0% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE"],
   strategyAssets: ["1INCH", "WETH", "YieldETH"],
   performanceSplit: {

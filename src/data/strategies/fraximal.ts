@@ -11,6 +11,7 @@ import {
 export const fraximal: CellarData = {
   name: "Fraximal",
   slug: config.CONTRACT.FRAXIMAL.SLUG,
+  dashboard: "https://fraximal.sevenseas.capital/",
   popUpTitle: "Get Exclusive Fraximal Updates",
   popUpDescription:
     "Thank you for your trust. As a user of the Fraximal vault, you are eligible to receive exclusive strategy updates directly from the strategist - 7 Seas as well as updates on upcoming product launches. Rest assured that we will only use your email for this purpose.",
@@ -21,7 +22,8 @@ export const fraximal: CellarData = {
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "0.00%",
-  managementFeeTooltip: "Platform fee 0.00%",
+  managementFeeTooltip:
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Fraxlend"],
   strategyAssets: ["FRAX"],
   performanceSplit: {

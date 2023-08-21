@@ -11,6 +11,7 @@ import {
 export const realYieldBTC: CellarData = {
   name: "Real Yield BTC",
   slug: config.CONTRACT.REAL_YIELD_BTC.SLUG,
+  dashboard: "https://rybtc.sevenseas.capital/",
   tradedAssets: ["WBTC", "WETH"],
   launchDate: new Date(2023, 6, 13, 10, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
@@ -19,7 +20,7 @@ export const realYieldBTC: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
   managementFeeTooltip:
-    "Platform fee split: 0.75% for Strategy provider and 0.25% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Morpho", "AAVE", "Uniswap V3"],
   strategyAssets: ["WBTC", "WETH"],
   performanceSplit: {

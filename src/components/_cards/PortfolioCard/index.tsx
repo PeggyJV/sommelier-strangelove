@@ -57,6 +57,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const slug = cellarDataMap[id].slug
+  const dashboard = cellarDataMap[id].dashboard
 
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
@@ -297,9 +298,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             </VStack>
           )}
 
-          <CardStat label="Strategy Details">
+          <CardStat label="Strategy Dashboard">
             {strategyData ? (
-              <HStack as={Link} href={`/strategies/${slug}`}>
+              <HStack as={Link} href={`${dashboard}`}>
                 <Text as="span" fontWeight="bold" fontSize={21}>
                   {strategyData?.name}
                 </Text>

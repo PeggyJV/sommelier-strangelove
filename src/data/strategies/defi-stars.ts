@@ -11,6 +11,8 @@ import {
 export const defiStars: CellarData = {
   name: "DeFi Stars",
   slug: config.CONTRACT.DEFI_STARS.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x03df2a53cbed19b824347d6a45d09016c2d1676a",
   popUpTitle: "Get Exclusive DeFi Stars Updates",
   popUpDescription:
     "Thank you for your trust. As a DeFi Stars vault user, you’re eligible for exclusive strategy updates directly from the strategist AlgoLab. Delivered to your inbox every week. We’ll only use your email for this purpose.",
@@ -22,7 +24,7 @@ export const defiStars: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "2.00%",
   managementFeeTooltip:
-    "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Uniswap V3", "1inch", "0x"],
   strategyAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   performanceSplit: {

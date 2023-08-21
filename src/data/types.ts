@@ -102,6 +102,7 @@ export interface CellarData {
   deprecated?: boolean
   name: string
   slug: string
+  dashboard: string
   popUpTitle?: string
   popUpDescription?: string
   tradedAssets?: string[]

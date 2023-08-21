@@ -10,6 +10,7 @@ import {
 export const realYieldLink: CellarData = {
   name: "Real Yield LINK",
   slug: config.CONTRACT.REAL_YIELD_LINK.SLUG,
+  dashboard: "https://rygov.sevenseas.capital/",
   tradedAssets: ["LINK", "WETH", "YieldETH"],
   launchDate: new Date(2023, 5, 5, 12, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
@@ -18,7 +19,7 @@ export const realYieldLink: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "0.00%",
   managementFeeTooltip:
-    "Platform fee split: 0% for Strategy provider and 0% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE"],
   strategyAssets: ["LINK", "WETH", "YieldETH"],
   performanceSplit: {

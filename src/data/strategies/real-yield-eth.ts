@@ -11,6 +11,7 @@ import {
 export const realYieldEth: CellarData = {
   name: "Real Yield ETH",
   slug: config.CONTRACT.REAL_YIELD_ETH.SLUG,
+  dashboard: "https://ryeth.sevenseas.capital/",
   popUpTitle: "Get Exclusive Real Yield Updates",
   popUpDescription:
     "Thank you for your trust. As a user of the Real Yield vault, you are eligible to receive exclusive strategy updates directly from the strategist - 7 Seas as well as updates on upcoming product launches. Rest assured that we will only use your email for this purpose.    ",
@@ -22,7 +23,7 @@ export const realYieldEth: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
   managementFeeTooltip:
-    "Platform fee split: 0.75% for Strategy provider and 0.25% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
   strategyAssets: ["stETH", "cbETH", "rETH", "WETH"],
   performanceSplit: {

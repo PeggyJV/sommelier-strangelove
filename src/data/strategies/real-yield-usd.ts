@@ -11,6 +11,7 @@ import {
 export const realYieldUsd: CellarData = {
   name: "Real Yield USD",
   slug: config.CONTRACT.REAL_YIELD_USD.SLUG,
+  dashboard: "https://ryusd.sevenseas.capital/",
   popUpTitle: "Get Exclusive Real Yield Updates",
   popUpDescription:
     "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
@@ -20,9 +21,9 @@ export const realYieldUsd: CellarData = {
   description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
   strategyType: "Stablecoin",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "0.50%",
+  managementFee: "0.00%",
   managementFeeTooltip:
-    "Platform fee split: 0.4% for Strategy provider and 0.1% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
   strategyAssets: ["USDC", "USDT", "DAI"],
   performanceSplit: {

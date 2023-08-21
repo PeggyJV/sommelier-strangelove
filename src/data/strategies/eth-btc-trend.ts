@@ -12,6 +12,8 @@ import { depositAssetTokenList } from "../tokenConfig"
 export const ethBtcTrend: CellarData = {
   name: "ETH-BTC Trend",
   slug: config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
   tradedAssets: ["USDC", "WETH", "WBTC"],
   cellarType: CellarType.automatedPortfolio,
   launchDate: new Date("2022-10-28T00:00:00.000Z"),
@@ -24,7 +26,7 @@ export const ethBtcTrend: CellarData = {
   startingShareValue: "1999911",
   managementFee: "2.00%",
   managementFeeTooltip:
-    "Platform fee split: 1.5% for Strategy provider and 0.5% for protocol",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: "Uniswap V3",
   strategyAssets: ["WBTC", "WETH", "USDC"],
   performanceSplit: {
