@@ -11,6 +11,8 @@ import {
 export const defiStars: CellarData = {
   name: "DeFi Stars",
   slug: config.CONTRACT.DEFI_STARS.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x03df2a53cbed19b824347d6a45d09016c2d1676a",
   popUpTitle: "Get Exclusive DeFi Stars Updates",
   popUpDescription:
     "Thank you for your trust. As a DeFi Stars vault user, you’re eligible for exclusive strategy updates directly from the strategist AlgoLab. Delivered to your inbox every week. We’ll only use your email for this purpose.",

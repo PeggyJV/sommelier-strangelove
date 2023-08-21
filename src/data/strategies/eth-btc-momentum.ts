@@ -13,6 +13,8 @@ export const ethBtcMomentum: CellarData = {
   name: "ETH-BTC Momentum",
   cellarType: CellarType.automatedPortfolio,
   slug: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x6E2dAc3b9E9ADc0CbbaE2D0B9Fd81952a8D33872",
   launchDate: new Date("2022-10-28T00:00:00.000Z"),
   description:
     "Strategy portfolio has exposure to BTC and ETH with positive price momentum, lower exposure when prices drop.",

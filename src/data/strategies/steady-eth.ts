@@ -13,6 +13,8 @@ export const steadyEth: CellarData = {
   deprecated: true,
   name: "Steady ETH",
   slug: config.CONTRACT.STEADY_ETH.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x3F07A84eCdf494310D397d24c1C78B041D2fa622",
   tradedAssets: ["WETH", "USDC"],
   launchDate: new Date(2022, 10, 29, 12, 0, 0, 0), // 29 Nov 2022 12 pm est
   cellarType: CellarType.automatedPortfolio,

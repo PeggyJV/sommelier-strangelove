@@ -11,6 +11,7 @@ import {
 export const realYieldBTC: CellarData = {
   name: "Real Yield BTC",
   slug: config.CONTRACT.REAL_YIELD_BTC.SLUG,
+  dashboard: "https://rybtc.sevenseas.capital/",
   tradedAssets: ["WBTC", "WETH"],
   launchDate: new Date(2023, 6, 13, 10, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,

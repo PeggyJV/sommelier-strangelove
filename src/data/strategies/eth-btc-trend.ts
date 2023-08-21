@@ -12,6 +12,8 @@ import { depositAssetTokenList } from "../tokenConfig"
 export const ethBtcTrend: CellarData = {
   name: "ETH-BTC Trend",
   slug: config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x6b7f87279982d919Bbf85182DDeAB179B366D8f2",
   tradedAssets: ["USDC", "WETH", "WBTC"],
   cellarType: CellarType.automatedPortfolio,
   launchDate: new Date("2022-10-28T00:00:00.000Z"),

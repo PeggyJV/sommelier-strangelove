@@ -13,6 +13,8 @@ export const steadyBtc: CellarData = {
   deprecated: true,
   name: "Steady BTC",
   slug: config.CONTRACT.STEADY_BTC.SLUG,
+  dashboard:
+    "https://debank.com/profile/0x4986fd36b6b16f49b43282ee2e24c5cf90ed166d",
   tradedAssets: ["WBTC", "USDC"],
   launchDate: new Date(2022, 10, 29, 12, 0, 0, 0), // 29 Nov 2022 12 pm est
   cellarType: CellarType.automatedPortfolio,
