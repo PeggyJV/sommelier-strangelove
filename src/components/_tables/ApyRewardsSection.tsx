@@ -41,6 +41,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const cellarConfig = cellarDataMap[cellarId].config
   const cellarType = cellarDataMap[cellarId].cellarType
   const LogoComponent = cellarConfig.customRewardWithoutAPY?.logo ?? LogoIcon
+  const isStakingOngoing = now < endDate
 
   if (!baseApy && !rewardsApy) {
     return (
@@ -128,8 +129,9 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                   {baseApy ?? "0.00%"}
                 </Text>
                 <Text>
-                  {cellarConfig.customRewardWithoutAPY
-                    ?.customRewardAPYTooltip ??
+                  {(isStakingOngoing &&
+                    cellarConfig.customRewardWithoutAPY
+                      ?.customRewardAPYTooltip) ??
                     `Rewards APY ${rewardsApy ?? "0.00%"}`}
                 </Text>
               </>
@@ -179,8 +181,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                       color="red.normal"
                       p={0}
                       boxSize={
-                        cellarConfig.customRewardWithoutAPY?.logoSize ??
-                        "9px"
+                        cellarConfig.customRewardWithoutAPY
+                          ?.logoSize ?? "9px"
                       }
                     />
                   </CircularProgressLabel>

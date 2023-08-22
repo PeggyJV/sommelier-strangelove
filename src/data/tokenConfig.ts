@@ -209,8 +209,8 @@ export const tokenConfig: Token[] = [
   },
   {
     src: "/assets/icons/sweth.png",
-    alt: "SWETH logo",
-    symbol: "SWETH",
+    alt: "swETH logo",
+    symbol: "swETH",
     address: "0xf951e335afb289353dc249e82926178eac7ded78",
     coinGeckoId: "sweth",
   },

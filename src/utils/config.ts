@@ -151,7 +151,7 @@ export const config = {
     },
     TURBO_SWETH: {
       ADDRESS: "0xd33dad974b938744dac81fe00ac67cb5aa13958e",
-      SLUG: "Turbo-SWETH",
+      SLUG: "Turbo-swETH",
       ABI: cellarV0821,
     },
     // Router

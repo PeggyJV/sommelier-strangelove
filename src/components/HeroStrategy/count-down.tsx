@@ -26,8 +26,7 @@ export const CountDown: FC<CountDownProps> = ({
   launchDate,
   isTwoDaysAfterLaunch,
 }) => {
-  const dateTz = zonedTimeToUtc(launchDate, "EST")
-  const et = utcToZonedTime(dateTz, COUNT_DOWN_TIMEZONE)
+  const et = utcToZonedTime(launchDate, COUNT_DOWN_TIMEZONE)
   const day = format(et, "iii MMM d")
   const hour = format(et, "h:mmaaa")
 
@@ -81,7 +80,7 @@ export const CountDown: FC<CountDownProps> = ({
         maxW="20rem"
       >
         <Countdown
-          date={dateTz}
+          date={launchDate}
           zeroPadDays={2}
           zeroPadTime={2}
           renderer={({

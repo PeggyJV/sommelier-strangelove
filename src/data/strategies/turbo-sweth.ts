@@ -10,19 +10,19 @@ import {
 import { PearlIcon } from "components/_icons"
 
 export const turboSWETH: CellarData = {
-  name: "Turbo SWETH",
+  name: "Turbo swETH",
   slug: config.CONTRACT.TURBO_SWETH.SLUG,
-  tradedAssets: ["SWETH", "WETH"],
-  launchDate: new Date("2023-08-24T13:00:00.000Z"),
+  tradedAssets: ["swETH", "WETH"],
+  launchDate: new Date(Date.UTC(2023, 7, 24, 13, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
-  description: `Turbocharge your SWETH across an evolving set of LP strategies.`,
+  description: `Turbocharge your swETH across an evolving set of LP strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Uniswap V3", "Balancer"],
-  strategyAssets: ["SWETH", "WETH"],
+  strategyAssets: ["swETH", "WETH"],
   performanceSplit: {
     depositors: 75,
     "strategy provider": 18.75,
@@ -36,19 +36,19 @@ export const turboSWETH: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Turbocharge your SWETH across an evolving set of LP strategies.`,
+    goals: `Turbocharge your swETH across an evolving set of LP strategies.`,
 
     highlights: `
-      - Capable of pursuing multiple SWETH yield opportunities.
+      - Capable of pursuing multiple swETH yield opportunities.
       - Uniswap V3 tick optimization.
-      - Fully automated with built-in auto compounding.`,
+      - Fully automated with built-in auto-compounding.`,
 
     description: `
-    The initial phase of Turbo SWETH will concentrate on optimizing ticks within Uniswap v3 SWETH-ETH pairs due to the vault’s potential to capture sustainable real yield. The vault may also undertake a "peg defense" strategy by cost-effectively acquiring SWETH from the market and establishing a narrow liquidity range close to parity. This strategic move aims to arbitrage the SWETH peg to its implied value enhancing yield for vault users.
+    The initial phase of Turbo swETH will concentrate on optimizing ticks within Uniswap v3 swETH-ETH pairs due to the vault’s potential to capture sustainable real yield. The vault may also undertake a "peg defense" strategy by cost-effectively acquiring swETH from the market and establishing a narrow liquidity range close to parity. This strategic move aims to arbitrage the swETH peg to its implied value enhancing yield for vault users.
 
-    Lastly, the vault will have the option to allocate to SWETH pools on Balancer if yields are favorable, ensuring that Turbo SWETH users access the best possible yields. As SWETH's presence continues to expand across the Liquid Staking DeFi ecosystem and Sommelier's roster of protocol integrations widens, the Turbo SWETH vault stands poised to tap into emerging yield opportunities.
+    Lastly, the vault will have the option to allocate to swETH pools on Balancer if yields are favorable, ensuring that Turbo swETH users access the best possible yields. As swETH's presence continues to expand across the Liquid Staking DeFi ecosystem and Sommelier's roster of protocol integrations widens, the Turbo swETH vault stands poised to tap into emerging yield opportunities.
 
-    Note that Turbo SWETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Turbo swETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
   },
   overrideApy: {
@@ -92,15 +92,15 @@ export const turboSWETH: CellarData = {
       imagePath: "/assets/icons/pearl.svg",
       customRewardMessageTooltip:
         "View your Pearls at https://app.swellnetwork.io/voyage",
-      customRewardMessage: "6 PEARL per SWETH",
+      customRewardMessage: "6 PEARL per swETH",
       customRewardHeader: "Daily Reward Rate",
-      customRewardAPYTooltip: "Daily Reward Rate: 6 PEARL per SWETH",
+      customRewardAPYTooltip: "Daily Reward Rate: 6 PEARL per swETH",
       showRewards: false,
       showClaim: false,
       logo: PearlIcon,
       logoSize: "15px",
       customRewardLongMessage:
-        "Earn 6 PEARL per SWETH of TVL deposited.",
+        "Earn 6 PEARL per swETH of TVL deposited.",
       rewardHyperLink: "https://app.swellnetwork.io/voyage",
       customColumnHeader: "View Pearls",
       customColumnHeaderToolTip:
