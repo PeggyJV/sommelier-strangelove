@@ -97,9 +97,13 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                     {baseApy?.formatted ?? "0.00%"}
                   </Text>
                   <Text>
-                    {cellarConfig.customRewardWithoutAPY
-                      ?.customRewardAPYTooltip ??
-                      `Rewards APY ${rewardsApy ?? "0.00%"}`}{" "}
+                    {isStakingStillRunning
+                      ? cellarConfig.customRewardWithoutAPY
+                          ?.customRewardAPYTooltip ??
+                        `Rewards APY ${
+                          rewardsApy?.formatted ?? "0.00%"
+                        }`
+                      : null}
                   </Text>
                 </>
               }

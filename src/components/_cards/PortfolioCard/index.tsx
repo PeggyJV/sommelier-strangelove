@@ -78,9 +78,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const maxMultiplier = bondingPeriods[
     bondingPeriods.length - 1
   ]?.amount.replace("SOMM", "")
+
   const isStakingAllowed = stakingEnd?.endDate
     ? isFuture(stakingEnd.endDate)
-    : true
+    : false
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes

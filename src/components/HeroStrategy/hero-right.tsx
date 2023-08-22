@@ -192,11 +192,14 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                         {baseApy?.formatted ?? "0.00%"}
                       </Text>
                       <Text>
-                        {cellarConfig.customRewardWithoutAPY
-                          ?.customRewardAPYTooltip ??
-                          `Rewards APY ${
-                            rewardsApy?.formatted ?? "0.00%"
-                          }`}
+                        {!countdown &&
+                          stakingEnd?.endDate &&
+                          isFuture(stakingEnd?.endDate) &&
+                          (cellarConfig.customRewardWithoutAPY
+                            ?.customRewardAPYTooltip ??
+                            `Rewards APY ${
+                              rewardsApy?.formatted ?? "0.00%"
+                            }`)}
                       </Text>
                     </>
                   }
