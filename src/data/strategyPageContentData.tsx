@@ -883,7 +883,7 @@ export const strategyPageContentData = {
           src="/assets/icons/turbo-sweth.png"
           boxSize={8}
         />
-        <Text>TurboswETH</Text>
+        <Text>TurboSWETH</Text>
       </>
     ),
     tradedAssets: ["swETH", "WETH"],

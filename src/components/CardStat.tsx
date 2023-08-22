@@ -55,7 +55,6 @@ export const CardStat: VFC<CardStatProps> = ({
         <Flex
           align="center"
           whiteSpace="break-spaces"
-          maxWidth={"13em"}
           fontSize="20px"
           fontWeight="bold"
         >
