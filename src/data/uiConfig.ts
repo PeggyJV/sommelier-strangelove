@@ -384,19 +384,9 @@ export const bondingPeriodOptions = (
   ) {
     return [
       {
-        title: "7 Days",
-        amount: "1.0x PEARL",
+        title: "14 Days",
+        amount: "6 PEARL per swETH per day",
         value: 0,
-      },
-      {
-        title: "21 Days",
-        amount: "1.25x PEARL",
-        value: 1,
-      },
-      {
-        title: "30 Days",
-        amount: "1.5x PEARL",
-        value: 2,
       },
     ]
   }

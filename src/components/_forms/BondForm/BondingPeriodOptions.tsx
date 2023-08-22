@@ -64,7 +64,7 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
                 m={0}
                 opacity={0}
                 type="radio"
-                value={"value"}
+                value={value}
                 css={
                   value === bondingPeriod
                     ? {
