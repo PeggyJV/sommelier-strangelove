@@ -13,7 +13,7 @@ export const turboSWETH: CellarData = {
   name: "Turbo SWETH",
   slug: config.CONTRACT.TURBO_SWETH.SLUG,
   tradedAssets: ["SWETH", "WETH"],
-  launchDate: new Date("2023-08-24T14:00:00.000Z"),
+  launchDate: new Date("2023-08-24T13:00:00.000Z"),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your SWETH across an evolving set of LP strategies.`,
   strategyType: "Yield",
@@ -91,16 +91,21 @@ export const turboSWETH: CellarData = {
       tokenAddress: "0x677365ac7ca3e9efe12a29a001737a3db265e8af",
       imagePath: "/assets/icons/pearl.svg",
       customRewardMessageTooltip:
-        "Rewards to be distributed from Swell via airdrop at a later date",
-      customRewardMessage: "6 PEARL/SWETH",
+        "View your Pearls at https://app.swellnetwork.io/voyage",
+      customRewardMessage: "6 PEARL per SWETH",
       customRewardHeader: "Daily Reward Rate",
-      customRewardAPYTooltip:
-        "Daily Reward Rate: 6 PEARL per SWETH of TVL",
+      customRewardAPYTooltip: "Daily Reward Rate: 6 PEARL per SWETH",
       showRewards: false,
       showClaim: false,
       logo: PearlIcon,
       logoSize: "15px",
-      customRewardLongMessage: "Earn 6 PEARL per SWETH of TVL deposited.",
+      customRewardLongMessage:
+        "Earn 6 PEARL per SWETH of TVL deposited.",
+      rewardHyperLink: "https://app.swellnetwork.io/voyage",
+      customColumnHeader: "View Pearls",
+      customColumnHeaderToolTip:
+        "View your Pearls at https://app.swellnetwork.io/voyage",
+      customColumnValue: "https://app.swellnetwork.io/voyage",
     },
   },
   faq: [

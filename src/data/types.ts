@@ -93,9 +93,13 @@ export interface CustomRewardWithoutAPY {
   showRewards?: boolean
   showClaim?: boolean
   customRewardAPYTooltip?: string
-  logo?: VFC<IconProps> 
+  logo?: VFC<IconProps>
   logoSize?: string
   customRewardLongMessage?: string
+  rewardHyperLink?: string
+  customColumnHeader?: string
+  customColumnHeaderToolTip?: string
+  customColumnValue?: string
 }
 
 export interface CellarData {

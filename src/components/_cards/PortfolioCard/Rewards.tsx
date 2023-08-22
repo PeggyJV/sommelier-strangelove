@@ -125,37 +125,44 @@ export const Rewards = ({
       templateRows="repeat(2, 1fr)"
       spacing={4}
       alignItems="flex-end"
-      maxWidth={"10em"}
     >
       <VStack align="flex-start">
-        <CardStat
-          label={
+        <a
+          href={cellarConfig?.customRewardWithoutAPY?.rewardHyperLink}
+          target="_blank"
+          rel="noreferrer"
+          title={
             cellarConfig?.customRewardWithoutAPY
-              ?.customRewardHeader ?? "rewards"
-          }
-          tooltip={
-            cellarConfig?.customRewardWithoutAPY
-              ?.customRewardMessageTooltip ??
-            `Amount of ${rewardTokenName} earned and available to be claimed`
+              ?.customRewardMessageTooltip
           }
         >
-          <InlineImage
-            src={rewardTokenImageUrl}
-            alt={`${rewardTokenName} logo`}
-            boxSize={5}
-          />
-          <Text
-            textAlign="center"
+          <CardStat
+            label={
+              cellarConfig?.customRewardWithoutAPY
+                ?.customRewardHeader ?? "rewards"
+            }
+            tooltip={
+              cellarConfig?.customRewardWithoutAPY
+                ?.customRewardMessageTooltip ??
+              `Amount of ${rewardTokenName} earned and available to be claimed`
+            }
           >
-            {isMounted &&
-              (cellarConfig.customRewardWithoutAPY
-                ?.customRewardMessage ??
-                (isConnected
-                  ? userStakes?.totalClaimAllRewards.formatted ||
-                    "..."
-                  : "--"))}
-          </Text>
-        </CardStat>
+            <InlineImage
+              src={rewardTokenImageUrl}
+              alt={`${rewardTokenName} logo`}
+              boxSize={5}
+            />
+            <Text textAlign="center">
+              {isMounted &&
+                (cellarConfig.customRewardWithoutAPY
+                  ?.customRewardMessage ??
+                  (isConnected
+                    ? userStakes?.totalClaimAllRewards.formatted ||
+                      "..."
+                    : "--"))}
+            </Text>
+          </CardStat>
+        </a>
       </VStack>
       {cellarConfig?.customRewardWithoutAPY?.showClaim !== false ? (
         <BaseButton

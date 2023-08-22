@@ -54,8 +54,9 @@ export const CardStat: VFC<CardStatProps> = ({
       <HStack spacing={1} align="center">
         <Flex
           align="center"
-          whiteSpace="nowrap"
-          fontSize="21px"
+          whiteSpace="break-spaces"
+          maxWidth={"13em"}
+          fontSize="20px"
           fontWeight="bold"
         >
           {children}

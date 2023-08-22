@@ -14,6 +14,8 @@ import {
   Text,
   Heading,
   Image,
+  Icon,
+  Link
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { toEther } from "utils/formatCurrency"
@@ -33,6 +35,7 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { differenceInDays } from "date-fns"
 import { config } from "utils/config"
+import { FaExternalLinkAlt } from "react-icons/fa"
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -260,36 +263,74 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               >
                 Period
               </Th>
-              {
-                cellarConfig.customRewardWithoutAPY?.showRewards === true || cellarConfig.customRewardWithoutAPY === undefined ? (
-                  <>
-                    <Tooltip
-                      hasArrow
-                      arrowShadowColor="purple.base"
-                      label={`Amount of ${cellarConfig?.customRewardWithoutAPY?.tokenSymbol ?? "SOMM"} rewards earned and available to be claimed`}
-                      placement="top"
-                      bg="surface.bg"
-                      color="neutral.300"
+              {cellarConfig.customRewardWithoutAPY?.showRewards ===
+                true ||
+              cellarConfig.customRewardWithoutAPY === undefined ? (
+                <>
+                  <Tooltip
+                    hasArrow
+                    arrowShadowColor="purple.base"
+                    label={`Amount of ${
+                      cellarConfig?.customRewardWithoutAPY
+                        ?.tokenSymbol ?? "SOMM"
+                    } rewards earned and available to be claimed`}
+                    placement="top"
+                    bg="surface.bg"
+                    color="neutral.300"
+                  >
+                    <Th
+                      fontSize={10}
+                      fontWeight="normal"
+                      textTransform="capitalize"
                     >
-                      <Th
-                        fontSize={10}
-                        fontWeight="normal"
-                        textTransform="capitalize"
-                      >
-                        <HStack spacing={1} align="center">
-                          <Text>
-                            {
-                              cellarConfig?.customRewardWithoutAPY?.tokenSymbol ?? "SOMM"
-                            } Rewards</Text>
-                          <InformationIcon
-                            color="neutral.300"
-                            boxSize={3}
-                          />
-                        </HStack>
-                      </Th>
-                    </Tooltip>
-                    </>) : null
-                  }
+                      <HStack spacing={1} align="center">
+                        <Text>
+                          {cellarConfig?.customRewardWithoutAPY
+                            ?.tokenSymbol ?? "SOMM"}{" "}
+                          Rewards
+                        </Text>
+                        <InformationIcon
+                          color="neutral.300"
+                          boxSize={3}
+                        />
+                      </HStack>
+                    </Th>
+                  </Tooltip>
+                </>
+              ) : (
+                <>
+                  <Tooltip
+                    hasArrow
+                    arrowShadowColor="purple.base"
+                    label={
+                      cellarConfig?.customRewardWithoutAPY
+                        ?.customColumnHeaderToolTip
+                    }
+                    placement="top"
+                    bg="surface.bg"
+                    color="neutral.300"
+                  >
+                    <Th
+                      fontSize={10}
+                      fontWeight="normal"
+                      textTransform="capitalize"
+                    >
+                      <HStack spacing={1} align="center">
+                        <Text>
+                          {
+                            cellarConfig?.customRewardWithoutAPY
+                              ?.customColumnHeader
+                          }
+                        </Text>
+                        <InformationIcon
+                          color="neutral.300"
+                          boxSize={3}
+                        />
+                      </HStack>
+                    </Th>
+                  </Tooltip>
+                </>
+              )}
               <Th />
             </Tr>
           </Thead>
@@ -333,34 +374,60 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     </Td>
                     <Td>{lockMap[lock].title}</Td>
                     <Td>
-                      { /*!!!!!!!! TODO: this needs to be rewritten */ }
-                      {
-                        cellarConfig.customRewardWithoutAPY?.showRewards === true || cellarConfig.customRewardWithoutAPY === undefined ? (
-                          <>
-                            <HStack spacing={2}>
-                                <Image
-                                  src={
-                                    cellarConfig?.customRewardWithoutAPY
-                                      ?.imagePath ??
-                                    config.CONTRACT.SOMMELLIER.IMAGE_PATH
-                                  }
-                                  alt="reward token image"
-                                  height="20px"
-                                />
-                                <Text textAlign="right">
-                                  {claimAllRewards
-                                    ? toEther(
-                                        claimAllRewards[i]?.toString() || "0",
-                                        6,
-                                        false,
-                                        2
-                                      )
-                                    : "0.00"}
-                                </Text>
-                              </HStack>
-                            </>
-                        ) : null
-                      }
+                      {/*!!!!!!!! TODO: this needs to be rewritten */}
+                      {cellarConfig.customRewardWithoutAPY
+                        ?.showRewards === true ||
+                      cellarConfig.customRewardWithoutAPY ===
+                        undefined ? (
+                        <>
+                          <HStack spacing={2}>
+                            <Image
+                              src={
+                                cellarConfig?.customRewardWithoutAPY
+                                  ?.imagePath ??
+                                config.CONTRACT.SOMMELLIER.IMAGE_PATH
+                              }
+                              alt="reward token image"
+                              height="20px"
+                            />
+                            <Text textAlign="right">
+                              {claimAllRewards
+                                ? toEther(
+                                    claimAllRewards[i]?.toString() ||
+                                      "0",
+                                    6,
+                                    false,
+                                    2
+                                  )
+                                : "0.00"}
+                            </Text>
+                          </HStack>
+                        </>
+                      ) : (
+                        <>
+                          <HStack
+                            as={Link}
+                            href={`${cellarConfig?.customRewardWithoutAPY.customColumnValue}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Text
+                              as="span"
+                              fontWeight="bold"
+                              fontSize={16}
+                            >
+                              {
+                                cellarConfig?.customRewardWithoutAPY
+                                  .customColumnValue
+                              }
+                            </Text>
+                            <Icon
+                              as={FaExternalLinkAlt}
+                              color="purple.base"
+                            />
+                          </HStack>
+                        </>
+                      )}
                     </Td>
                     <Td fontWeight="normal">
                       <Flex justify="flex-end">

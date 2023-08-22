@@ -104,7 +104,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     >
       <VStack align="stretch" spacing={8}>
         <CardStatRow
-          gap={{ base: 4, md: 8, lg: 14 }}
+          gap={{ base: 4, md: 8, lg: 12 }}
           align="flex-start"
           justify="flex-start"
           direction={{ base: "column", md: "row" }}
@@ -300,7 +300,12 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
-              <HStack as={Link} href={`${dashboard}`}>
+              <HStack
+                as={Link}
+                href={`${dashboard}`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Text as="span" fontWeight="bold" fontSize={21}>
                   {strategyData?.name}
                 </Text>
