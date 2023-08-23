@@ -40,7 +40,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const percentage = (current / range) * 100
   const cellarConfig = cellarDataMap[cellarId].config
   const cellarType = cellarDataMap[cellarId].cellarType
-  const LogoComponent = cellarConfig.customRewardWithoutAPY?.logo ?? LogoIcon
+  const LogoComponent =
+    cellarConfig.customRewardWithoutAPY?.logo ?? LogoIcon
   const isStakingOngoing = now < endDate
 
   if (!baseApy && !rewardsApy) {
@@ -129,9 +130,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                   {baseApy ?? "0.00%"}
                 </Text>
                 <Text>
-                  {(isStakingOngoing &&
-                    cellarConfig.customRewardWithoutAPY
-                      ?.customRewardAPYTooltip) ??
+                  {cellarConfig.customRewardWithoutAPY
+                    ?.customRewardAPYTooltip ??
                     `Rewards APY ${rewardsApy ?? "0.00%"}`}
                 </Text>
               </>

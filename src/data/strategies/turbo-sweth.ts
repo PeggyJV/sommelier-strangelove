@@ -97,8 +97,6 @@ export const turboSWETH: CellarData = {
       customRewardAPYTooltip: "Daily Reward Rate: 6 PEARL per swETH",
       showRewards: false,
       showClaim: false,
-      logo: PearlIcon,
-      logoSize: "15px",
       customRewardLongMessage:
         "Earn 6 PEARL per swETH of TVL deposited.",
       rewardHyperLink: "https://app.swellnetwork.io/voyage",

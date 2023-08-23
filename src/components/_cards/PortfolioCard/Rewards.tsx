@@ -125,7 +125,7 @@ export const Rewards = ({
       templateRows="repeat(2, 1fr)"
       spacing={4}
       alignItems="flex-end"
-      display={claimAllDisabled ? "none" : "grid"}
+      //display={claimAllDisabled ? "none" : "grid"}
     >
       <VStack align="flex-start">
         <a
