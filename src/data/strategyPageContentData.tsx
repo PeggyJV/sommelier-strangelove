@@ -460,7 +460,7 @@ export const strategyPageContentData = {
     name: "Real Yield USD",
     provider: "Seven Seas",
     providerUrl: "https://7seas.capital/",
-    description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
+    description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
     exchange: [
       {
         name: "Sommelier",
