@@ -372,7 +372,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                         </Text>
                       </HStack>
                     </Td>
-                    <Td>{lockMap[lock].title}</Td>
+                    {/* This handles edge case if users go outside of UI and us staking contract directly for a non ux lock period */}
+                    <Td>
+                      {(lockMap[lock] && lockMap[lock].title) ||
+                        (Object.values(lockMap).length > 0 &&
+                          Object.values(lockMap).slice(-1)[0].title)}
+                    </Td>
                     <Td>
                       {/*!!!!!!!! TODO: this needs to be rewritten */}
                       {cellarConfig.customRewardWithoutAPY
