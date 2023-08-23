@@ -17,7 +17,7 @@ export const realYieldUsd: CellarData = {
   tradedAssets: ["USDC", "USDT", "DAI"],
   launchDate: new Date("2023-01-25T00:00:00.000Z"),
   cellarType: CellarType.yieldStrategies,
-  description: `The only strategy in Defi to maximize USDC, USDT, and DAI yields across Aave, Compound and Uniswap V3.`,
+  description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
   strategyType: "Stablecoin",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "0.00%",
@@ -38,7 +38,7 @@ export const realYieldUsd: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `The only strategy in DeFi to maximize USDC, USDT, and DAI yields across Aave, Compound, Morpho and Uniswap V3.`,
+    goals: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
 
     highlights: `The vault:
 
