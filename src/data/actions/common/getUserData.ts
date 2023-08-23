@@ -81,8 +81,8 @@ export const getUserData = async ({
     // !!! TODO: We need to rewrite this file and most of the incentive code, pushing this unitl the new staking contracts come out
     // This is a manual override per strategy
 
-    // We dont want to show rewards APY, or amounts as they're all in PEARLS so override values to 0
     // TODO: strategy data rewardAPYs need reworking as well
+    /*
     if (sgData?.id === cellarConfig.CONTRACT.TURBO_SWETH.ADDRESS) {
       if (userStakes) {
         userStakes.claimAllRewardsUSD = new BigNumJS(0)
@@ -90,6 +90,7 @@ export const getUserData = async ({
         userStakes.totalClaimAllRewards.formatted = "0"
       }
     }
+    */
 
     const bonded =
       // Coerce from bignumber.js to ethers BN

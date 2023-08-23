@@ -98,7 +98,7 @@ export const turboSWETH: CellarData = {
       showRewards: false,
       showClaim: false,
       customRewardLongMessage:
-        "Earn 6 PEARL per swETH of TVL deposited.",
+        "Earn 6 PEARL per swETH of TVL deposited when you bond.",
       rewardHyperLink: "https://app.swellnetwork.io/voyage",
       customColumnHeader: "View Pearls",
       customColumnHeaderToolTip:
