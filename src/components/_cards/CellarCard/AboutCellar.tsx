@@ -50,7 +50,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
 
   const launchingDate = (() => {
     if (!launchDate) return "Coming soon"
-    const dateTz = zonedTimeToUtc(new Date(launchDate), "EST")
+    const dateTz = new Date(launchDate)
     const et = utcToZonedTime(dateTz, COUNT_DOWN_TIMEZONE)
     return `${format(
       et,

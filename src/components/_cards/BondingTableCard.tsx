@@ -178,7 +178,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
     } else {
       return (
         <Text>
-          Unbound in {differenceDays} day
+          Unbond in {differenceDays} day
           {differenceDays > 1 ? "s" : ""}
         </Text>
       )
@@ -200,7 +200,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
             {stakingEnd?.endDate && isFuture(stakingEnd?.endDate) && (
               <Text fontSize="xs">
                 {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
-                  ? `Ends in ${formatDistanceToNowStrict(
+                  ? `Rewards program ends in ${formatDistanceToNowStrict(
                       stakingEnd?.endDate,
                       {
                         locale: { formatDistance },
