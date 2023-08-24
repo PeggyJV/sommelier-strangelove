@@ -24,9 +24,9 @@ export const turboSWETH: CellarData = {
   protocols: ["Uniswap V3", "Balancer"],
   strategyAssets: ["swETH", "WETH"],
   performanceSplit: {
-    depositors: 75,
-    "strategy provider": 18.75,
-    protocol: 6.25,
+    depositors: 80,
+    "strategy provider": 15,
+    protocol: 5,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
