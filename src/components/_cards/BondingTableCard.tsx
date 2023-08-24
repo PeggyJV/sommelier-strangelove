@@ -174,7 +174,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
     } else {
       return (
         <Text>
-          Unbound in {differenceDays} day
+          Unbond in {differenceDays} day
           {differenceDays > 1 ? "s" : ""}
         </Text>
       )
