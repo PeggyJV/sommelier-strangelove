@@ -13,7 +13,7 @@ export const StrategyDate = (props: StrategyDateProps) => {
   // after launch more than 1 month = none
   const { date } = props
   const comingSoon = date && isComingSoon(new Date(date))
-  const dateTz = date && zonedTimeToUtc(date, "EST")
+  const dateTz = date && new Date(date)
 
   const isNew =
     date && isBefore(new Date(), add(new Date(date), { weeks: 4 }))
