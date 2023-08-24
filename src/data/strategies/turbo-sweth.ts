@@ -58,7 +58,7 @@ export const turboSWETH: CellarData = {
     value: "5.00%",
   },
   dashboard:
-    "https://debank.com/profile/0xa966c34f94bed0ea5c781bf1d87055d7b190cbf0",
+    "https://debank.com/profile/0xd33dAd974b938744dAC81fE00ac67cb5AA13958E",
   depositTokens: {
     list: ["WETH"],
   },
@@ -94,9 +94,12 @@ export const turboSWETH: CellarData = {
         "View your Pearls at https://app.swellnetwork.io/voyage",
       customRewardMessage: "Up to 12 PEARL per swETH",
       customRewardHeader: "Daily Reward Rate",
-      customRewardAPYTooltip: "Daily Reward Rate: Up to 12 PEARL per swETH",
+      customRewardAPYTooltip:
+        "Daily Reward Rate: Up to 12 PEARL per swETH",
       showRewards: false,
       showClaim: false,
+      logo: PearlIcon,
+      logoSize: "15px",
       customRewardLongMessage:
         "Earn up to 12 PEARL per swETH of TVL deposited when you bond.",
       rewardHyperLink: "https://app.swellnetwork.io/voyage",
@@ -104,6 +107,7 @@ export const turboSWETH: CellarData = {
       customColumnHeaderToolTip:
         "View your Pearls at https://app.swellnetwork.io/voyage",
       customColumnValue: "https://app.swellnetwork.io/voyage",
+      stakingDurationOverride: new Date(Date.UTC(2023, 8, 24, 13, 0, 0, 0)),
     },
   },
   faq: [

@@ -200,9 +200,7 @@ export const getStrategyData = async ({
         : baseApy
 
       if (
-        (!config.customRewardWithoutAPY ||
-        config.customRewardWithoutAPY.showRewards === undefined ||
-        config.customRewardWithoutAPY.showRewards === false) && rewardsApy
+        (config.customRewardWithoutAPY?.showRewards === false) && rewardsApy
       ) {
         rewardsApy.value = 0
       }
