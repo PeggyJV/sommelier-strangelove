@@ -60,26 +60,6 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
             htmr(content.strategyHighlights.description)}
         </Text>
       </Stack>
-      <Stack spacing="40px">
-        <Heading>How it Works</Heading>
-        <Text maxW="40rem" color="#D9D7E0">
-          {expandHowItWorks
-            ? htmr(content.howItWorks)
-            : howItWorks[0]}
-        </Text>
-        {howItWorks.length > 1 && (
-          <Box>
-            <SecondaryButton
-              rightIcon={
-                expandHowItWorks ? <BsChevronUp /> : <BsChevronDown />
-              }
-              onClick={() => setExpandHowItWorks(!expandHowItWorks)}
-            >
-              {expandHowItWorks ? "View Less" : "View More"}
-            </SecondaryButton>
-          </Box>
-        )}
-      </Stack>
       {content.backtestingText && (
         <Stack maxW="40rem" spacing="40px">
           <Heading size="lg">

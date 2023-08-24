@@ -24,7 +24,7 @@ export const realYieldUsd: CellarData = {
   managementFee: "0.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
+  protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho", "Maker"],
   strategyAssets: ["USDC", "USDT", "DAI"],
   performanceSplit: {
     depositors: 80,

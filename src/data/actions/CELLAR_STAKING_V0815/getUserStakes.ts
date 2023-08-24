@@ -58,6 +58,7 @@ export const getUserStakes = async (
       })
     })
 
+    //!!!!!!!! TODO This is hardcoded for somm
     const claimAllRewardsUSD = totalClaimAllRewards
       .div(new BigNumber(10).pow(6)) // convert from 6 decimals
       .multipliedBy(new BigNumber(sommelierPrice))

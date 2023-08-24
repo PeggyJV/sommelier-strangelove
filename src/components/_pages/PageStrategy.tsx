@@ -40,9 +40,9 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
         </Link>
         <HeroStrategy id={id} />
         <Highlight id={id} />
-        <Cellars data={sectionCellars} mt={52} />
-        <Strategy data={sectionStrategies} mt={52} />
-        <FAQStrategy data={faqData} mt={52} />
+        {/*<Cellars data={sectionCellars} mt={52} />*/}
+        {/*<Strategy data={sectionStrategies} mt={52} />*/}
+        {/*<FAQStrategy data={faqData} mt={52} />*/}
       </Box>
     </Layout>
   )

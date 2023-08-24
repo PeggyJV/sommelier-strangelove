@@ -48,7 +48,10 @@ export const StrategyTabColumn = ({
       accessor: "tvm.value",
       Cell: ({ row }: any) => (
         <Text fontWeight={550} fontSize="16px" textAlign="right">
-          {row.original.tvm?.formatted}
+          {row.original.launchDate &&
+          row.original.launchDate > Date.now()
+            ? "--"
+            : row.original.tvm?.formatted ?? "--"}
         </Text>
       ),
     },
@@ -93,30 +96,30 @@ export const StrategyTabColumn = ({
       ),
       accessor: `changes.${timeline.value}`,
       Cell: ({ row }: any) => {
-          const cellarConfig = cellarDataMap[row.original.slug].config
+        const cellarConfig = cellarDataMap[row.original.slug].config
 
-          if (!isTokenPriceEnabledApp(cellarConfig))
-            return (
-              <VStack>
-                <Tooltip
-                  label={`Token price change`}
-                  color="neutral.100"
-                  border="0"
-                  fontSize="12px"
-                  bg="neutral.900"
+        if (!isTokenPriceEnabledApp(cellarConfig))
+          return (
+            <VStack>
+              <Tooltip
+                label={`Token price change`}
+                color="neutral.100"
+                border="0"
+                fontSize="12px"
+                bg="neutral.900"
+                fontWeight={600}
+                py="4"
+                px="6"
+                boxShadow="xl"
+                shouldWrapChildren
+              >
+                <PercentageText
+                  data={row.original.changes?.[timeline.value]}
+                  arrowT2
                   fontWeight={600}
-                  py="4"
-                  px="6"
-                  boxShadow="xl"
-                  shouldWrapChildren
-                >
-                  <PercentageText
-                    data={row.original.changes?.[timeline.value]}
-                    arrowT2
-                    fontWeight={600}
-                  />
-                </Tooltip>
-                {/* <Tooltip
+                />
+              </Tooltip>
+              {/* <Tooltip
                   label={`Token price`}
                   color="neutral.100"
                   border="0"
@@ -138,16 +141,16 @@ export const StrategyTabColumn = ({
                     </Text>
                   </HStack>
                 </Tooltip> */}
-              </VStack>
-            )
-          
-            return (
-              <Text fontWeight={550} fontSize="16px" textAlign="center">
-                --
-              </Text>
-            )
-          },
-        sortType: "basic",
+            </VStack>
+          )
+
+        return (
+          <Text fontWeight={550} fontSize="16px" textAlign="center">
+            --
+          </Text>
+        )
+      },
+      sortType: "basic",
     },
     {
       Header: () => <Text>Deposit</Text>,

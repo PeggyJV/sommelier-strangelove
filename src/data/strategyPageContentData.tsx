@@ -1,4 +1,3 @@
-// TODO: Move content to a cms
 import { Image, Text } from "@chakra-ui/react"
 // import { time } from "console"
 // import { add } from "date-fns"
@@ -6,7 +5,6 @@ import { Image, Text } from "@chakra-ui/react"
 // import { on } from "events"
 // import { at, some, take, each } from "lodash"
 import { config } from "utils/config"
-import { mainnet } from "wagmi"
 
 export const strategyPageContentData = {
   [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: {
@@ -863,7 +861,7 @@ export const strategyPageContentData = {
       card: [
         `Capable of pursuing multiple WBTC yield sources.`,
         `24/7 leverage monitoring reduces liquidation risk.`,
-        `Fully automated with built-in auto compounding.`,
+        `Fully automated with built-in auto-compounding.`,
       ],
       description: `The primary goal of Real Yield BTC is to make available sustainable WBTC-denominated yields through a dynamic and evolving set of vaults. Initially, the vault will use Morpho for efficient leveraged ETH staking against WBTC collateral. The vault may additionally borrow ETH to deposit into Real Yield ETH. In the future, there is a possibility for Real Yield BTC to evolve its capabilities by making use of other protocol integrations or Sommelier vaults.
       <br/><br/>
@@ -871,5 +869,43 @@ export const strategyPageContentData = {
     },
     howItWorks: `
     The vault will enable WBTC as collateral on Morpho to borrow ETH and then leverage stake. Any yield generated from staking in excess of the borrow cost is used to purchase WBTC to add to your position.`,
+  },
+  [config.CONTRACT.TURBO_SWETH.SLUG]: {
+    name: "Turbo swETH",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Turbocharge your swETH across an evolving set of LP strategies.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="TurboSWETH icon"
+          src="/assets/icons/turbo-sweth.png"
+          boxSize={8}
+        />
+        <Text>TurboSWETH</Text>
+      </>
+    ),
+    tradedAssets: ["swETH", "WETH"],
+    alternativeTo: "Holding swETH",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Capable of pursuing multiple swETH yield opportunities.`,
+        `Uniswap V3 tick optimization.`,
+        `Fully automated with built-in auto-compounding.`,
+      ],
+      description: `The initial phase of Turbo swETH will concentrate on optimizing ticks within Uniswap v3 swETH-ETH pairs due to the vault’s potential to capture sustainable real yield. The vault may also undertake a "peg defense" strategy by cost-effectively acquiring swETH from the market and establishing a narrow liquidity range close to parity. This strategic move aims to arbitrage the swETH peg to its implied value enhancing yield for vault users.
+      <br/><br/>
+      Lastly, the vault will have the option to allocate to swETH pools on Balancer if yields are favorable, ensuring that Turbo swETH users access the best possible yields. As swETH's presence continues to expand across the Liquid Staking DeFi ecosystem and Sommelier's roster of protocol integrations widens, the Turbo swETH vault stands poised to tap into emerging yield opportunities.
+      <br/><br/>
+      Note that Turbo swETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: `The vault engages in tick optimization by pairing swETH and WETH on Uniswap V3 to generate yield for depositors and to improve swap efficiency for swETH. As the Swell ecosystem grows and swETH integrates with additional applications the vault may take advantage of other yield opportunities that are whitelisted by governance. `,
   },
 }
