@@ -113,6 +113,11 @@ export const PageHome = () => {
 
   return (
     <LayoutWithSidebar>
+      <InfoBanner
+        text={
+          "A new SOMM incentive program for the Turbo swETH vault will go to vote soon. If it passes, additional incentives will flow for 15 days beginning August 30th."
+        }
+      />
       <HStack mb="1.6rem">
         <HStack spacing="8px">
           {strategyType.map((strategy: string, i: number) => {

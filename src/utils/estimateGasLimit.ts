@@ -62,7 +62,8 @@ export const estimateGasLimitWithRetry = async (
       const gasLimit = gasLimitMargin(
         gasLimitEstimated,
         PAD[count - 1]
-      )
+      ).mul(2.0) // 2x margin -- users hate gas limits
+      
       const tx = await fnCallStatic(...args, {
         gasLimit,
       })
@@ -72,10 +73,12 @@ export const estimateGasLimitWithRetry = async (
       }
     } catch (e) {
       if (count === maxTries) {
-        const lastTryGasLimit = BigNumber.from(maxGasLimit || 1000000)
+        const lastTryGasLimit = BigNumber.from(1).mul(
+          BigNumber.from(10).pow(30)
+        ) // Last try limit is very high -- users hate the gas limits
         try {
           const tx = await fnCallStatic(...args, {
-            gasLimitEstimated: lastTryGasLimit,
+            gasLimit: lastTryGasLimit,
           })
           if (tx) {
             gasLimitEstimated = lastTryGasLimit

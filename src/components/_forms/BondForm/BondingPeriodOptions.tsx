@@ -90,7 +90,7 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
               <Text as="span" fontWeight="bold" pb={1} fontSize="xl">
                 {title}
               </Text>
-              <Text as="span" fontSize="sm">
+              <Text as="span" fontSize="sm" textAlign="center">
                 {amount}
               </Text>
             </Flex>

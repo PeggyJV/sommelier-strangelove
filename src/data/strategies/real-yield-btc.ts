@@ -41,7 +41,7 @@ export const realYieldBTC: CellarData = {
     highlights: `
       - Capable of pursuing multiple WBTC yield sources.
       - 24/7 leverage monitoring reduces liquidation risk.
-      - Fully automated with built-in auto compounding.`,
+      - Fully automated with built-in auto-compounding.`,
 
     description: `
     The primary goal of Real Yield BTC is to make available sustainable WBTC-denominated yields through a dynamic and evolving set of strategies. Initially, the vault will use Morpho for efficient leveraged ETH staking against WBTC collateral. The vault may additionally borrow ETH to deposit into Real Yield ETH. In the future, there is a possibility for Real Yield BTC to evolve its capabilities by making use of other protocol integrations or Sommelier vaults.

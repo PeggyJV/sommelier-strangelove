@@ -78,9 +78,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const maxMultiplier = bondingPeriods[
     bondingPeriods.length - 1
   ]?.amount.replace("SOMM", "")
+
   const isStakingAllowed = stakingEnd?.endDate
     ? isFuture(stakingEnd.endDate)
-    : true
+    : false
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
@@ -104,7 +105,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     >
       <VStack align="stretch" spacing={8}>
         <CardStatRow
-          gap={{ base: 4, md: 8, lg: 14 }}
+          gap={{ base: 4, md: 8, lg: 12 }}
           align="flex-start"
           justify="flex-start"
           direction={{ base: "column", md: "row" }}
@@ -300,7 +301,12 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
-              <HStack as={Link} href={`${dashboard}`}>
+              <HStack
+                as={Link}
+                href={`${dashboard}`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Text as="span" fontWeight="bold" fontSize={21}>
                   {strategyData?.name}
                 </Text>
@@ -331,19 +337,42 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                     }}
                     gap={{ base: 0, md: 4 }}
                   >
-                    <Image
-                      src="/assets/icons/somm.png"
-                      alt="sommelier logo"
-                      boxSize={6}
-                    />
-                    <Heading size="16px">
-                      Earn{" "}
-                      <span style={{ color: theme.colors.lime.base }}>
-                        {strategyData?.rewardsApy?.formatted}
-                      </span>{" "}
-                      and {maxMultiplier} in SOMM rewards when you
-                      bond.
-                    </Heading>
+                    {cellarConfig.customRewardWithoutAPY ? (
+                      <>
+                        <Image
+                          src={
+                            cellarConfig.customRewardWithoutAPY
+                              ?.imagePath
+                          }
+                          alt={`${cellarConfig.customRewardWithoutAPY?.tokenSymbol} logo`}
+                          boxSize={6}
+                        />
+                        <Heading size="16px">
+                          {
+                            cellarConfig.customRewardWithoutAPY
+                              ?.customRewardLongMessage
+                          }
+                        </Heading>
+                      </>
+                    ) : (
+                      <>
+                        <Image
+                          src="/assets/icons/somm.png"
+                          alt="sommelier logo"
+                          boxSize={6}
+                        />
+                        <Heading size="16px">
+                          Earn{" "}
+                          <span
+                            style={{ color: theme.colors.lime.base }}
+                          >
+                            {strategyData?.rewardsApy?.formatted}
+                          </span>{" "}
+                          and {maxMultiplier} in SOMM rewards when you
+                          bond.
+                        </Heading>
+                      </>
+                    )}
                     <Spacer />
                     <LighterSkeleton
                       isLoaded={!isStrategyLoading}

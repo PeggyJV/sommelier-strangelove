@@ -207,6 +207,13 @@ export const tokenConfig: Token[] = [
     address: "0xb5b29320d2dde5ba5bafa1ebcd270052070483ec",
     coinGeckoId: "y-eth",
   },
+  {
+    src: "/assets/icons/sweth.png",
+    alt: "swETH logo",
+    symbol: "swETH",
+    address: "0xf951e335afb289353dc249e82926178eac7ded78",
+    coinGeckoId: "sweth",
+  },
 ]
 
 export const depositAssetTokenList = [

@@ -1,10 +1,15 @@
+import { IconProps } from "@chakra-ui/react"
+import { VFC } from "react"
+
 export enum StakerKey {
   CELLAR_STAKING_V0815 = "CELLAR_STAKING_V0815",
+  CELLAR_STAKING_V0821 = "CELLAR_STAKING_V0821",
 }
 export enum CellarKey {
   CELLAR_V0815 = "CELLAR_V0815",
   CELLAR_V0816 = "CELLAR_V0816",
   CELLAR_V2 = "CELLAR_V2",
+  CELLAR_V2PT5 = "CELLAR_V2PT5",
 }
 export enum CellarRouterKey {
   CELLAR_ROUTER_V0815 = "CELLAR_ROUTER_V0815",
@@ -29,6 +34,7 @@ export enum CellarNameKey {
   REAL_YIELD_SNX = "REAL_YIELD_SNX",
   REAL_YIELD_UNI = "REAL_YIELD_UNI",
   FRAXIMAL = "FRAXIMAL",
+  TURBO_SWETH = "TURBO_SWETH",
 }
 
 export interface ConfigProps {
@@ -57,6 +63,7 @@ export interface ConfigProps {
     key: StakerKey
   }
   rewardTokenAddress?: string
+  customRewardWithoutAPY?: CustomRewardWithoutAPY
 }
 
 export enum CellarType {
@@ -74,6 +81,26 @@ type Exchange =
       name: string
       logo: string
     }
+
+export interface CustomRewardWithoutAPY {
+  tokenSymbol: string
+  tokenDisplayName: string
+  tokenAddress: string
+  imagePath: string
+  customRewardMessageTooltip?: string
+  customRewardMessage?: string
+  customRewardHeader?: string
+  showRewards?: boolean
+  showClaim?: boolean
+  customRewardAPYTooltip?: string
+  logo?: VFC<IconProps>
+  logoSize?: string
+  customRewardLongMessage?: string
+  rewardHyperLink?: string
+  customColumnHeader?: string
+  customColumnHeaderToolTip?: string
+  customColumnValue?: string
+}
 
 export interface CellarData {
   isContractNotReady?: boolean

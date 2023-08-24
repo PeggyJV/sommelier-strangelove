@@ -55,6 +55,20 @@ export const Rewards = ({
   const claimAllDisabled =
     !isConnected || !userRewards || parseInt(userRewards) <= 0
 
+  let rewardTokenAddress = config.CONTRACT.SOMMELLIER.ADDRESS
+  let rewardTokenImageUrl = config.CONTRACT.SOMMELLIER.IMAGE_PATH
+  let rewardTokenName = "SOMM"
+
+  // Custom processing for if reward is not SOMM
+  // -- Check if cellar config has customRewardWithoutAPY field
+  if (cellarConfig.customRewardWithoutAPY) {
+    rewardTokenAddress =
+      cellarConfig.customRewardWithoutAPY.tokenAddress
+    rewardTokenImageUrl =
+      cellarConfig.customRewardWithoutAPY.imagePath
+    rewardTokenName = cellarConfig.customRewardWithoutAPY.tokenSymbol
+  }
+
   const { doHandleTransaction } = useHandleTransaction()
 
   const geo = useGeo()
@@ -73,7 +87,7 @@ export const Rewards = ({
       onError: () => analytics.track("rewards.claim-failed"),
       toastBody: {
         successWithParams: (result) => {
-          const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
+          const fullImageUrl = `${window.origin}${rewardTokenImageUrl}`
           return (
             <>
               <Text>Successful</Text>
@@ -89,7 +103,7 @@ export const Rewards = ({
               <Text
                 onClick={() => {
                   importToken.mutate({
-                    address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                    address: rewardTokenAddress,
                     imageUrl: fullImageUrl,
                   })
                 }}
@@ -111,29 +125,54 @@ export const Rewards = ({
       templateRows="repeat(2, 1fr)"
       spacing={4}
       alignItems="flex-end"
+      //display={claimAllDisabled ? "none" : "grid"}
     >
       <VStack align="flex-start">
-        <CardStat
-          label="rewards"
-          tooltip="Amount of SOMM earned and available to be claimed"
+        <a
+          href={cellarConfig?.customRewardWithoutAPY?.rewardHyperLink}
+          target="_blank"
+          rel="noreferrer"
+          title={
+            cellarConfig?.customRewardWithoutAPY
+              ?.customRewardMessageTooltip
+          }
         >
-          <InlineImage
-            src="/assets/icons/somm.png"
-            alt="sommelier logo"
-            boxSize={5}
-          />
-          {isMounted &&
-            (isConnected
-              ? userStakes?.totalClaimAllRewards.formatted || "..."
-              : "--")}
-        </CardStat>
+          <CardStat
+            label={
+              cellarConfig?.customRewardWithoutAPY
+                ?.customRewardHeader ?? "rewards"
+            }
+            tooltip={
+              cellarConfig?.customRewardWithoutAPY
+                ?.customRewardMessageTooltip ??
+              `Amount of ${rewardTokenName} earned and available to be claimed`
+            }
+          >
+            <InlineImage
+              src={rewardTokenImageUrl}
+              alt={`${rewardTokenName} logo`}
+              boxSize={5}
+            />
+            <Text textAlign="center">
+              {isMounted &&
+                (cellarConfig.customRewardWithoutAPY
+                  ?.customRewardMessage ??
+                  (isConnected
+                    ? userStakes?.totalClaimAllRewards.formatted ||
+                      "..."
+                    : "--"))}
+            </Text>
+          </CardStat>
+        </a>
       </VStack>
-      <BaseButton
-        disabled={claimAllDisabled}
-        onClick={handleClaimAll}
-      >
-        Claim All
-      </BaseButton>
+      {cellarConfig?.customRewardWithoutAPY?.showClaim !== false ? (
+        <BaseButton
+          disabled={claimAllDisabled}
+          onClick={handleClaimAll}
+        >
+          Claim All
+        </BaseButton>
+      ) : null}
     </SimpleGrid>
   )
 }

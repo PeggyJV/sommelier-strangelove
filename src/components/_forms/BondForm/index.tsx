@@ -31,6 +31,7 @@ import { bondingPeriodOptions } from "data/uiConfig"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { CellarNameKey } from "data/types"
 
 interface FormValues {
   depositAmount: number
@@ -306,9 +307,12 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         >
           Bond
         </BaseButton>
-        <Text textAlign="center">
-          Please wait 10 min after the deposit to Bond
-        </Text>
+        {cellarConfig?.cellarNameKey !==
+          CellarNameKey.TURBO_SWETH && (
+          <Text textAlign="center">
+            Please wait 10 min after the deposit to Bond
+          </Text>
+        )}
       </VStack>
     </FormProvider>
   )

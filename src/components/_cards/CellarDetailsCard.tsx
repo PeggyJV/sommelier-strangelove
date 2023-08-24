@@ -14,6 +14,7 @@ import {
   Tooltip,
   useTheme,
   VStack,
+  Wrap
 } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { StrategyProvider } from "components/StrategyProvider"
@@ -152,21 +153,18 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             pr={{ sm: 2, lg: 8 }}
           >
             {isManyProtocols ? (
-              <Stack
-                spacing={3}
-                direction={{ base: "column", lg: "row" }}
-              >
-                {(protocolData as ProtocolDataType[]).map((v, i) => (
-                  <HStack key={i} spacing={2}>
-                    <Image
-                      src={v.icon}
-                      alt="Protocol Icon"
-                      boxSize={6}
-                    />
-                    <Text>{v.title}</Text>
-                  </HStack>
-                ))}
-              </Stack>
+              <Wrap spacing={3}>
+                  {(protocolData as ProtocolDataType[]).map((v, i) => (
+                    <HStack key={i} spacing={2}>
+                      <Image
+                        src={v.icon}
+                        alt="Protocol Icon"
+                        boxSize={6}
+                      />
+                      <Text>{v.title}</Text>
+                    </HStack>
+                  ))}
+              </Wrap>
             ) : (
               <>
                 <Image

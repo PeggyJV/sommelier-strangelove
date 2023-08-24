@@ -100,15 +100,21 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                       isLoading={isLoading}
                     />
                   )}
-                  {isStakingStillRunning &&
-                    rewardsApy?.formatted !== "0.0%" && (
-                      <CellarStats
-                        title="Rewards APY"
-                        value={rewardsApy?.formatted || "..."}
-                        isLoading={isLoading}
-                        colorValue="lime.base"
-                      />
-                    )}
+                  {rewardsApy?.formatted !== "0.0%" && (
+                    <CellarStats
+                      title={
+                        cellarConfig.customRewardWithoutAPY
+                          ?.customRewardAPYTooltip ?? "Rewards APY"
+                      }
+                      value={
+                        cellarConfig.customRewardWithoutAPY
+                          ?.customRewardAPYTooltip ??
+                        (rewardsApy?.formatted || "...")
+                      }
+                      isLoading={isLoading}
+                      colorValue="lime.base"
+                    />
+                  )}
                 </>
               ))}
           </Stack>
