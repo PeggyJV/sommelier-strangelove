@@ -28,8 +28,7 @@ const checkLPtokenDisabled = (lpTokenData: LPDataType | undefined) =>
 
 const checkIsBeforeLaunch = (launchDate: string | undefined) => {
   const date = new Date(launchDate as string)
-  const dateTz = zonedTimeToUtc(date, "EST")
-  return isBefore(dateTz, new Date())
+  return isBefore(date, new Date())
 }
 
 const checkDisplay = (
