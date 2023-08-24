@@ -74,7 +74,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         {rewardsApy && (
           <Tooltip
             label={`Rewards ends in ${formatDistanceToNowStrict(
-              new Date(stackingEndDate)
+              cellarConfig.customRewardWithoutAPY
+                ?.stakingDurationOverride ?? new Date(stackingEndDate)
             )}`}
             color="neutral.100"
             border="0"
@@ -153,7 +154,9 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
           {rewardsApy && (
             <Tooltip
               label={`Rewards ends in ${formatDistanceToNowStrict(
-                new Date(stackingEndDate)
+                cellarConfig.customRewardWithoutAPY
+                  ?.stakingDurationOverride ??
+                  new Date(stackingEndDate)
               )}`}
               color="neutral.100"
               border="0"

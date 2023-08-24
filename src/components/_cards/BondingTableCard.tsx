@@ -15,7 +15,7 @@ import {
   Heading,
   Image,
   Icon,
-  Link
+  Link,
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { toEther } from "utils/formatCurrency"
@@ -201,7 +201,9 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               <Text fontSize="xs">
                 {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
                   ? `Rewards program ends in ${formatDistanceToNowStrict(
-                      stakingEnd?.endDate,
+                      cellarConfig.customRewardWithoutAPY
+                        ?.stakingDurationOverride ??
+                        stakingEnd?.endDate,
                       {
                         locale: { formatDistance },
                       }
@@ -264,8 +266,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 Period
               </Th>
               {cellarConfig.customRewardWithoutAPY?.showRewards ===
-                true ||
-              cellarConfig.customRewardWithoutAPY === undefined ? (
+              true ? (
                 <>
                   <Tooltip
                     hasArrow

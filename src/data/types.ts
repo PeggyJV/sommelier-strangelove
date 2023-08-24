@@ -100,6 +100,7 @@ export interface CustomRewardWithoutAPY {
   customColumnHeader?: string
   customColumnHeaderToolTip?: string
   customColumnValue?: string
+  stakingDurationOverride?: Date
 }
 
 export interface CellarData {
