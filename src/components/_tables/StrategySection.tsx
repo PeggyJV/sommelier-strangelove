@@ -85,7 +85,12 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             fontWeight={600}
           >
             {customStrategyHighlight !== undefined ? (
-              <Text bg="violet.base" rounded="4" paddingLeft={".5em"} paddingRight={".5em"}>
+              <Text
+                bg="purple.base"
+                rounded="4"
+                paddingLeft={".5em"}
+                paddingRight={".5em"}
+              >
                 {customStrategyHighlight}
               </Text>
             ) : null}
