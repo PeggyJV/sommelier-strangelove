@@ -351,7 +351,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       <Text fontSize="xs">
                         {stakingEnd?.endDate &&
                         isFuture(stakingEnd.endDate)
-                          ? `Ends in ${formatDistanceToNowStrict(
+                          ? `Rewards program ends in ${formatDistanceToNowStrict(
                               stakingEnd.endDate,
                               {
                                 locale: { formatDistance },

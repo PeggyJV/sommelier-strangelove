@@ -196,7 +196,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
             {stakingEnd?.endDate && isFuture(stakingEnd?.endDate) && (
               <Text fontSize="xs">
                 {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
-                  ? `Ends in ${formatDistanceToNowStrict(
+                  ? `Rewards program ends in ${formatDistanceToNowStrict(
                       stakingEnd?.endDate,
                       {
                         locale: { formatDistance },
