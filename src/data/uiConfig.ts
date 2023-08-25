@@ -33,7 +33,7 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.FRAXIMAL ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC || 
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH
   )
 }
@@ -102,7 +102,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
-    config.cellarNameKey === CellarNameKey.FRAXIMAL || 
+    config.cellarNameKey === CellarNameKey.FRAXIMAL ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH
   )
 }
@@ -125,7 +125,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
-    config.cellarNameKey === CellarNameKey.AAVE || 
+    config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH
   )
 }
@@ -379,9 +379,7 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-  if (
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH
-  ) {
+  if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     return [
       {
         title: "14 Days",
@@ -430,15 +428,15 @@ export const isUseBigBacktestingModal = (config: ConfigProps) => {
 }
 
 export const apyLabel = (config: ConfigProps) => {
-  if (config.cellar.key === CellarKey.CELLAR_V2) {
-    if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
-      return "ETH Yield"
-    }
+  if (
+    config.cellar.key !== CellarKey.CELLAR_V0815 &&
+    config.cellar.key !== CellarKey.CELLAR_V0816
+  ) {
     if (
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI || 
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.TURBO_SWETH
     ) {
       return "Estimated APY"
@@ -450,15 +448,15 @@ export const apyLabel = (config: ConfigProps) => {
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const apyHoverLabel = (config: ConfigProps) => {
-  if (config.cellar.key === CellarKey.CELLAR_V2) {
-    if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
-      return "ETH APY since inception"
-    }
+  if (
+    config.cellar.key !== CellarKey.CELLAR_V0815 &&
+    config.cellar.key !== CellarKey.CELLAR_V0816
+  ) {
     if (
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI || 
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.TURBO_SWETH
     ) {
       return "Estimated APY"
@@ -470,14 +468,12 @@ export const apyHoverLabel = (config: ConfigProps) => {
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const baseApyHoverLabel = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
-    return "ETH APY since inception"
-  }
   if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI || 
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH
   ) {
     return "Estimated APY"
@@ -491,7 +487,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI || 
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH
   ) {
     return true
@@ -505,7 +501,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI || 
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH
   ) {
     return "Estimated APY"
