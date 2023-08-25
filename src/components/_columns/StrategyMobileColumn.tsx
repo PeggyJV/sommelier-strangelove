@@ -35,6 +35,9 @@ export const StrategyMobileColumn = ({
             date={row.original.launchDate}
             description={row.original.description}
             isDeprecated={row.original.deprecated}
+            customStrategyHighlight={
+              row.original.config.customStrategyHighlight
+            }
           />
         )
       },

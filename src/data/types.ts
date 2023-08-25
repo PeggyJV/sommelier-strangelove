@@ -64,6 +64,7 @@ export interface ConfigProps {
   }
   rewardTokenAddress?: string
   customRewardWithoutAPY?: CustomRewardWithoutAPY
+  customStrategyHighlight?: string
 }
 
 export enum CellarType {
