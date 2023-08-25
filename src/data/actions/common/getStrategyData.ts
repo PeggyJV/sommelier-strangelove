@@ -239,6 +239,7 @@ export const getStrategyData = async ({
         stakingLaunchDate,
         deprecated,
         token,
+        config
       }
     } catch (e) {
       console.error(address, e)

@@ -25,6 +25,7 @@ interface StrategySectionProps extends StackProps {
   netValue?: string
   rewards?: string
   isDeprecated?: boolean
+  customStrategyHighlight?: string
 }
 
 export const formatText = (text: string) => {
@@ -51,6 +52,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   netValue,
   rewards,
   isDeprecated,
+  customStrategyHighlight,
   ...props
 }) => {
   const strategyType =
@@ -82,6 +84,16 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             fontSize="0.75rem"
             fontWeight={600}
           >
+            {customStrategyHighlight !== undefined ? (
+              <Text
+                bg="purple.base"
+                rounded="4"
+                paddingLeft={".5em"}
+                paddingRight={".5em"}
+              >
+                {customStrategyHighlight}
+              </Text>
+            ) : null}
             <StrategyDate date={date} deprecated={isDeprecated} />
             {provider &&
               strategyType &&
