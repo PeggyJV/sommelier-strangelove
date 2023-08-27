@@ -1,4 +1,4 @@
-import { SimpleGrid, VStack, Text } from "@chakra-ui/react"
+import { SimpleGrid, VStack, Text, HStack } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { InlineImage } from "components/InlineImage"
 import { Link } from "components/Link"
@@ -122,55 +122,88 @@ export const Rewards = ({
   return (
     <SimpleGrid
       templateColumns="max-content"
-      templateRows="repeat(2, 1fr)"
+      templateRows={
+        cellarConfig.customRewardWithoutAPY?.showSommRewards
+          ? ""
+          : "repeat(2, 1fr)"
+      }
       spacing={4}
       alignItems="flex-end"
       //display={claimAllDisabled ? "none" : "grid"}
     >
       <VStack align="flex-start">
-        <a
-          href={cellarConfig?.customRewardWithoutAPY?.rewardHyperLink}
-          target="_blank"
-          rel="noreferrer"
-          title={
-            cellarConfig?.customRewardWithoutAPY
-              ?.customRewardMessageTooltip
-          }
-        >
-          <CardStat
-            label={
-              cellarConfig?.customRewardWithoutAPY
-                ?.customRewardHeader ?? "rewards"
+        <HStack>
+          <a
+            href={
+              cellarConfig?.customRewardWithoutAPY?.rewardHyperLink
             }
-            tooltip={
+            target="_blank"
+            rel="noreferrer"
+            title={
               cellarConfig?.customRewardWithoutAPY
-                ?.customRewardMessageTooltip ??
-              `Amount of ${rewardTokenName} earned and available to be claimed`
+                ?.customRewardMessageTooltip
             }
           >
-            <InlineImage
-              src={rewardTokenImageUrl}
-              alt={`${rewardTokenName} logo`}
-              boxSize={5}
-            />
-            <Text textAlign="center">
-              {isMounted &&
-                (cellarConfig.customRewardWithoutAPY
-                  ?.customRewardMessage ??
-                  (isConnected
-                    ? userStakes?.totalClaimAllRewards.formatted ||
-                      "..."
-                    : "--"))}
-            </Text>
-          </CardStat>
-        </a>
+            <CardStat
+              label={
+                cellarConfig?.customRewardWithoutAPY
+                  ?.customRewardHeader ?? "rewards"
+              }
+              tooltip={
+                cellarConfig?.customRewardWithoutAPY
+                  ?.customRewardMessageTooltip ??
+                `Amount of ${rewardTokenName} earned and available to be claimed`
+              }
+            >
+              <InlineImage
+                src={rewardTokenImageUrl}
+                alt={`${rewardTokenName} logo`}
+                boxSize={5}
+              />
+              <Text textAlign="center">
+                {isMounted &&
+                  (cellarConfig.customRewardWithoutAPY
+                    ?.customRewardMessage ??
+                    (isConnected
+                      ? userStakes?.totalClaimAllRewards.formatted ||
+                        "..."
+                      : "--"))}
+              </Text>
+            </CardStat>
+          </a>
+        </HStack>
+        {cellarConfig.customRewardWithoutAPY?.showSommRewards ? (
+          <>
+            <br />
+            <HStack>
+              <CardStat
+                label={"SOMM Rewards"}
+                tooltip={`Amount of SOMM earned and available to be claimed`}
+              >
+                <InlineImage
+                  src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
+                  alt={`SOMM logo`}
+                  boxSize={5}
+                />
+                <Text textAlign="center">
+                  {isMounted &&
+                    (isConnected
+                      ? userStakes?.totalClaimAllRewards.formatted ||
+                        "..."
+                      : "--")}
+                </Text>
+              </CardStat>
+            </HStack>
+          </>
+        ) : null}
       </VStack>
       {cellarConfig?.customRewardWithoutAPY?.showClaim !== false ? (
         <BaseButton
           disabled={claimAllDisabled}
           onClick={handleClaimAll}
         >
-          Claim All
+          {cellarConfig?.customRewardWithoutAPY?.customClaimMsg ??
+            `Claim All`}
         </BaseButton>
       ) : null}
     </SimpleGrid>
