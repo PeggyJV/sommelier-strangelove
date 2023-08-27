@@ -85,8 +85,6 @@ export const getUserDataAllStrategies = async ({
 
   const userData = userDataRes.filter((item) => !!item)
 
-  console.log(userData)
-
   const totalNetValue = (() => {
     let total = 0
     userData.forEach((item) => {
