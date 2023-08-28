@@ -1,4 +1,4 @@
-import { initUrqlClient } from "context/urql/initUrqlClient"
+import { initUrqlClient } from "context/DEPRECATED/urql/initUrqlClient"
 import { useMemo } from "react"
 /**
  * Simple hook to initialize the client with the pageProps.
