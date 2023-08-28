@@ -21,7 +21,7 @@ export const turboSWETH: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Uniswap V3", "Balancer"],
+  protocols: ["Uniswap V3", "Balancer", "Morpho"],
   strategyAssets: ["swETH", "WETH"],
   performanceSplit: {
     depositors: 80,
