@@ -80,7 +80,7 @@ export const turboSWETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
     },
     staker: {
-      address: config.CONTRACT.TURBO_SWETH_STAKER.ADDRESS, 
+      address: config.CONTRACT.TURBO_SWETH_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_SWETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
@@ -109,7 +109,10 @@ export const turboSWETH: CellarData = {
         "View your Pearls at https://app.swellnetwork.io/voyage",
       customColumnValue: "https://app.swellnetwork.io/voyage",
       showSommRewards: true,
-      customIconToolTipMsg: "Double PEARLS ends in "
+      customIconToolTipMsg: "Double PEARLS ends in ",
+      stakingDurationOverride: new Date(
+        Date.UTC(2023, 8, 24, 13, 0, 0, 0)
+      ),
     },
   },
   faq: [
