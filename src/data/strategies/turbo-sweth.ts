@@ -93,11 +93,12 @@ export const turboSWETH: CellarData = {
       customRewardMessageTooltip:
         "View your Pearls at https://app.swellnetwork.io/voyage",
       customRewardMessage: "Up to 12 PEARL per swETH",
-      customRewardHeader: "Daily Reward Rate",
+      customRewardHeader: "Daily Pearl Reward Rate",
       customRewardAPYTooltip:
-        "Daily Reward Rate: Up to 12 PEARL per swETH",
+        "Daily PEARL Rewards Rate: Up to 12 PEARL per swETH",
       showRewards: false,
-      showClaim: false,
+      showClaim: true,
+      customClaimMsg: "Claim All SOMM",
       logo: PearlIcon,
       logoSize: "15px",
       customRewardLongMessage:
@@ -107,7 +108,11 @@ export const turboSWETH: CellarData = {
       customColumnHeaderToolTip:
         "View your Pearls at https://app.swellnetwork.io/voyage",
       customColumnValue: "https://app.swellnetwork.io/voyage",
-      stakingDurationOverride: new Date(Date.UTC(2023, 8, 24, 13, 0, 0, 0)),
+      showSommRewards: true,
+      customIconToolTipMsg: "Double PEARLS ends in ",
+      stakingDurationOverride: new Date(
+        Date.UTC(2023, 8, 24, 13, 0, 0, 0)
+      ),
     },
   },
   faq: [

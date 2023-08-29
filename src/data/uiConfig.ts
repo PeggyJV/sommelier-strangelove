@@ -383,7 +383,7 @@ export const bondingPeriodOptions = (
     return [
       {
         title: "14 Days",
-        amount: "Up to 12 PEARL per swETH per day",
+        amount: "Up to 12 PEARL per swETH daily + SOMM Rewards",
         value: 0,
       },
     ]

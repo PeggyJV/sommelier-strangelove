@@ -93,6 +93,7 @@ export interface CustomRewardWithoutAPY {
   customRewardHeader?: string
   showRewards?: boolean
   showClaim?: boolean
+  customClaimMsg?: string
   customRewardAPYTooltip?: string
   logo?: VFC<IconProps>
   logoSize?: string
@@ -102,6 +103,8 @@ export interface CustomRewardWithoutAPY {
   customColumnHeaderToolTip?: string
   customColumnValue?: string
   stakingDurationOverride?: Date
+  showSommRewards?: boolean
+  customIconToolTipMsg?: string
 }
 
 export interface CellarData {
