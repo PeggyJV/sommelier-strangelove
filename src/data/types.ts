@@ -35,6 +35,7 @@ export enum CellarNameKey {
   REAL_YIELD_UNI = "REAL_YIELD_UNI",
   FRAXIMAL = "FRAXIMAL",
   TURBO_SWETH = "TURBO_SWETH",
+  TURBO_GHO = "TURBO_GHO",
 }
 
 export interface ConfigProps {

@@ -214,6 +214,20 @@ export const tokenConfig: Token[] = [
     address: "0xf951e335afb289353dc249e82926178eac7ded78",
     coinGeckoId: "sweth",
   },
+  {
+    src: "/assets/icons/gho.png",
+    alt: "GHO logo",
+    symbol: "GHO",
+    address: "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
+    coinGeckoId: "gho",
+  },
+  {
+    src: "/assets/icons/liquity-usd-logo.png",
+    alt: "LUSD logo",
+    symbol: "LUSD",
+    address: "0x5f98805a4e8be255a32880fdec7f6728c6568ba0",
+    coinGeckoId: "liquity-usd",
+  },
 ]
 
 export const depositAssetTokenList = [

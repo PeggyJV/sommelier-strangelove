@@ -154,6 +154,12 @@ export const config = {
       SLUG: "Turbo-SWETH",
       ABI: cellarV0821,
     },
+    // need to add correct contract address
+    TURBO_GHO: {
+      ADDRESS: "0xd33dad974b938744dac81fe00ac67cb5aa13958e",
+      SLUG: "Turbo-GHO",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -215,6 +221,11 @@ export const config = {
       ABI: cellarStakingV0815,
     },
     TURBO_SWETH_STAKER: {
+      ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
+      ABI: cellarStakingV0821,
+    },
+    // need to add correct contract address
+    TURBO_GHO_STAKER: {
       ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
       ABI: cellarStakingV0821,
     },
