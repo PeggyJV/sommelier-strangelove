@@ -154,7 +154,6 @@ export const config = {
       SLUG: "Turbo-SWETH",
       ABI: cellarV0821,
     },
-    // need to add correct contract address
     TURBO_GHO: {
       ADDRESS: "0xcf05F416863F86ad37200379B298B7e43A3bF2bE",
       SLUG: "Turbo-GHO",
@@ -224,11 +223,11 @@ export const config = {
       ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
       ABI: cellarStakingV0821,
     },
-    // need to add correct contract address
-    TURBO_GHO_STAKER: {
-      ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
-      ABI: cellarStakingV0821,
-    },
+    // // need to add correct contract address
+    // TURBO_GHO_STAKER: {
+    //   ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
+    //   ABI: cellarStakingV0821,
+    // },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",

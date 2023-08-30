@@ -80,11 +80,11 @@ export const turboGHO: CellarData = {
       abi: config.CONTRACT.TURBO_GHO.ABI,
       key: CellarKey.CELLAR_V2PT5,
     },
-    staker: {
-      address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS,
-      abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0821,
-    },
+    // staker: {
+    //   address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS,
+    //   abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
+    //   key: StakerKey.CELLAR_STAKING_V0821,
+    // },
     // rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     // customRewardWithoutAPY: {
     //   tokenSymbol: "PEARL",
