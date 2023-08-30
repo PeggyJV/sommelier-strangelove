@@ -58,8 +58,7 @@ export const turboGHO: CellarData = {
     value: "5.00%",
   },
   dashboard:
-    // need to update
-    "https://debank.com/profile/0xd33dAd974b938744dAC81fE00ac67cb5AA13958E",
+    "https://debank.com/profile/0xcf05F416863F86ad37200379B298B7e43A3bF2bE",
   depositTokens: {
     list: ["GHO"],
   },
