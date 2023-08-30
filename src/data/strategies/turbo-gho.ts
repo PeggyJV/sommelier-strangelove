@@ -13,7 +13,7 @@ export const turboGHO: CellarData = {
   name: "Turbo GHO",
   slug: config.CONTRACT.TURBO_GHO.SLUG,
   tradedAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
-  launchDate: new Date(Date.UTC(2023, 7, 31, 13, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 7, 29, 13, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your GHO across an evolving set of LP strategies.`,
   strategyType: "Yield",
@@ -21,7 +21,7 @@ export const turboGHO: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Uniswap V3", "Balancer", "Morpho"],
+  protocols: ["Uniswap V3", "Balancer"],
   strategyAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
   performanceSplit: {
     depositors: 80,
@@ -85,37 +85,37 @@ export const turboGHO: CellarData = {
       abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    customRewardWithoutAPY: {
-      tokenSymbol: "PEARL",
-      tokenDisplayName: "Pearl",
-      tokenAddress: "0x677365ac7ca3e9efe12a29a001737a3db265e8af",
-      imagePath: "/assets/icons/pearl.svg",
-      customRewardMessageTooltip:
-        "View your Pearls at https://app.swellnetwork.io/voyage",
-      customRewardMessage: "Up to 12 PEARL per swETH",
-      customRewardHeader: "Daily Pearl Reward Rate",
-      customRewardAPYTooltip:
-        "Daily PEARL Rewards Rate: Up to 12 PEARL per swETH",
-      showRewards: false,
-      showClaim: true,
-      customClaimMsg: "Claim All SOMM",
-      logo: PearlIcon,
-      logoSize: "15px",
-      customRewardLongMessage:
-        "Earn up to 12 PEARL per swETH of TVL deposited when you bond.",
-      rewardHyperLink: "https://app.swellnetwork.io/voyage",
-      customColumnHeader: "View Pearls",
-      customColumnHeaderToolTip:
-        "View your Pearls at https://app.swellnetwork.io/voyage",
-      customColumnValue: "https://app.swellnetwork.io/voyage",
-      showSommRewards: true,
-      customIconToolTipMsg: "Double PEARLS ends in ",
-      // need to update
-      stakingDurationOverride: new Date(
-        Date.UTC(2023, 8, 24, 13, 0, 0, 0)
-      ),
-    },
+    // rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+    // customRewardWithoutAPY: {
+    //   tokenSymbol: "PEARL",
+    //   tokenDisplayName: "Pearl",
+    //   tokenAddress: "0x677365ac7ca3e9efe12a29a001737a3db265e8af",
+    //   imagePath: "/assets/icons/pearl.svg",
+    //   customRewardMessageTooltip:
+    //     "View your Pearls at https://app.swellnetwork.io/voyage",
+    //   customRewardMessage: "Up to 12 PEARL per swETH",
+    //   customRewardHeader: "Daily Pearl Reward Rate",
+    //   customRewardAPYTooltip:
+    //     "Daily PEARL Rewards Rate: Up to 12 PEARL per swETH",
+    //   showRewards: false,
+    //   showClaim: true,
+    //   customClaimMsg: "Claim All SOMM",
+    //   logo: PearlIcon,
+    //   logoSize: "15px",
+    //   customRewardLongMessage:
+    //     "Earn up to 12 PEARL per swETH of TVL deposited when you bond.",
+    //   rewardHyperLink: "https://app.swellnetwork.io/voyage",
+    //   customColumnHeader: "View Pearls",
+    //   customColumnHeaderToolTip:
+    //     "View your Pearls at https://app.swellnetwork.io/voyage",
+    //   customColumnValue: "https://app.swellnetwork.io/voyage",
+    //   showSommRewards: true,
+    //   customIconToolTipMsg: "Double PEARLS ends in ",
+    //   // need to update
+    //   stakingDurationOverride: new Date(
+    //     Date.UTC(2023, 8, 24, 13, 0, 0, 0)
+    //   ),
+    // },
   },
   faq: [
     {

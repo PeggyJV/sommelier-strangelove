@@ -156,7 +156,7 @@ export const config = {
     },
     // need to add correct contract address
     TURBO_GHO: {
-      ADDRESS: "0xd33dad974b938744dac81fe00ac67cb5aa13958e",
+      ADDRESS: "0xcf05F416863F86ad37200379B298B7e43A3bF2bE",
       SLUG: "Turbo-GHO",
       ABI: cellarV0821,
     },
