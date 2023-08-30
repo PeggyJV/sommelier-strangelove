@@ -67,7 +67,7 @@ export const turboGHO: CellarData = {
     cellarNameKey: CellarNameKey.TURBO_GHO,
     lpToken: {
       address: config.CONTRACT.TURBO_GHO.ADDRESS,
-      imagePath: "/assets/icons/turbo-GHO.png",
+      imagePath: "/assets/icons/turbo-gho.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
