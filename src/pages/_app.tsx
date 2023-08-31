@@ -11,6 +11,7 @@ import { GlobalFonts } from "theme/GlobalFonts"
 import { GeoProvider } from "context/geoContext"
 import { DefaultSeo } from "next-seo"
 import { useState } from "react"
+import UrqlProvider from "context/urql/UrqlProvider"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { reactQueryClient } from "utils/reactQuery"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
@@ -24,47 +25,49 @@ const App = ({ Component, pageProps }: AppProps) => {
       key="somm-data-provider-query-key"
       client={queryClient}
     >
-      <PlausibleProvider
-        domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
-      >
-        <ChakraProvider theme={theme}>
-          <GeoProvider>
-            <GlobalFonts />
-            <DialogProvider>
-              <WagmiProvider>
-                <HomeProvider>
-                  <DefaultSeo
-                    title="Sommelier Finance"
-                    description="Access to risk-managed, multi chain vaults powered by off-chain computation"
-                    openGraph={{
-                      type: "website",
-                      url: "https://app.sommelier.finance/",
-                      site_name: "Sommelier Finance",
-                      images: [
-                        {
-                          url: "https://app.sommelier.finance/ogimage.png",
-                          width: 1200,
-                          height: 630,
-                          alt: "Your dynamic DeFi vault connoisseur",
-                        },
-                      ],
-                    }}
-                    twitter={{
-                      handle: "@sommfinance",
-                      site: "@site",
-                      cardType: "summary_large_image",
-                    }}
-                  />
-                  <DarkMode>
-                    <Component {...pageProps} />
-                  </DarkMode>
-                  <AlertDialog />
-                </HomeProvider>
-              </WagmiProvider>
-            </DialogProvider>
-          </GeoProvider>
-        </ChakraProvider>
-      </PlausibleProvider>
+      <UrqlProvider pageProps={pageProps}>
+        <PlausibleProvider
+          domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
+        >
+          <ChakraProvider theme={theme}>
+            <GeoProvider>
+              <GlobalFonts />
+              <DialogProvider>
+                <WagmiProvider>
+                  <HomeProvider>
+                    <DefaultSeo
+                      title="Sommelier Finance"
+                      description="Access to risk-managed, multi chain vaults powered by off-chain computation"
+                      openGraph={{
+                        type: "website",
+                        url: "https://app.sommelier.finance/",
+                        site_name: "Sommelier Finance",
+                        images: [
+                          {
+                            url: "https://app.sommelier.finance/ogimage.png",
+                            width: 1200,
+                            height: 630,
+                            alt: "Your dynamic DeFi vault connoisseur",
+                          },
+                        ],
+                      }}
+                      twitter={{
+                        handle: "@sommfinance",
+                        site: "@site",
+                        cardType: "summary_large_image",
+                      }}
+                    />
+                    <DarkMode>
+                      <Component {...pageProps} />
+                    </DarkMode>
+                    <AlertDialog />
+                  </HomeProvider>
+                </WagmiProvider>
+              </DialogProvider>
+            </GeoProvider>
+          </ChakraProvider>
+        </PlausibleProvider>
+      </UrqlProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
