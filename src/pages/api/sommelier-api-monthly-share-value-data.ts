@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
-const sommelierAPIWeeklyShareValueData = async (
+const sommelierAPIMonthlyShareValueData = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
@@ -35,12 +35,12 @@ const sommelierAPIWeeklyShareValueData = async (
         // Multiply by 1e18 and drop any decimals
         shareValue: Math.floor(dayData.share_price * 1e18).toString(),
       })
-    )    
+    )
 
     // Order by descending date
     transformedData.sort((a: any, b: any) => b.date - a.date)
-    // Trim off to only be the most recent 7 days
-    transformedData = transformedData.splice(0, 7)
+    // Trim off to only be the most recent 31 days
+    transformedData = transformedData.splice(0, 31)
 
     const formattedResult = {
       result: {
@@ -67,4 +67,4 @@ const sommelierAPIWeeklyShareValueData = async (
   }
 }
 
-export default sommelierAPIWeeklyShareValueData
+export default sommelierAPIMonthlyShareValueData

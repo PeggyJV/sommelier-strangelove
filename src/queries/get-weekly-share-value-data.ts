@@ -1,5 +1,5 @@
 const getUrl = (epoch: number, cellarAddress: string) =>
-  `/api/graph-weekly-share-value-data?epoch=${epoch}&cellarAddress=${cellarAddress}`
+  `/api/sommelier-api-weekly-share-value-data?epoch=${epoch}&cellarAddress=${cellarAddress}`
 
 export const fetchWeeklyShareValueData = async (
   epoch: number,
