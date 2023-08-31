@@ -323,39 +323,96 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             {!userStakes?.userStakes.length &&
               stakingEnd?.endDate &&
               isFuture(stakingEnd?.endDate) && (
-                <InnerCard
-                  backgroundColor="surface.tertiary"
-                  mt={8}
-                  px={7}
-                  py={7}
-                >
-                  <Stack
-                    flexDir={{ base: "column", md: "row" }}
-                    alignItems={{
-                      base: "flex-start",
-                      md: "center",
-                    }}
-                    gap={{ base: 0, md: 4 }}
+                <>
+                  <InnerCard
+                    backgroundColor="surface.tertiary"
+                    mt={8}
+                    px={7}
+                    py={7}
                   >
-                    {cellarConfig.customRewardWithoutAPY ? (
-                      <>
-                        <Image
-                          src={
-                            cellarConfig.customRewardWithoutAPY
-                              ?.imagePath
-                          }
-                          alt={`${cellarConfig.customRewardWithoutAPY?.tokenSymbol} logo`}
-                          boxSize={6}
-                        />
-                        <Heading size="16px">
-                          {
-                            cellarConfig.customRewardWithoutAPY
-                              ?.customRewardLongMessage
-                          }
-                        </Heading>
-                      </>
-                    ) : (
-                      <>
+                    <Stack
+                      flexDir={{ base: "column", md: "row" }}
+                      alignItems={{
+                        base: "flex-start",
+                        md: "center",
+                      }}
+                      gap={{ base: 0, md: 4 }}
+                    >
+                      {cellarConfig.customRewardWithoutAPY ? (
+                        <>
+                          <Image
+                            src={
+                              cellarConfig.customRewardWithoutAPY
+                                ?.imagePath
+                            }
+                            alt={`${cellarConfig.customRewardWithoutAPY?.tokenSymbol} logo`}
+                            boxSize={6}
+                          />
+                          <Heading size="16px">
+                            {
+                              cellarConfig.customRewardWithoutAPY
+                                ?.customRewardLongMessage
+                            }
+                          </Heading>
+                        </>
+                      ) : (
+                        <>
+                          <Image
+                            src="/assets/icons/somm.png"
+                            alt="sommelier logo"
+                            boxSize={6}
+                          />
+                          <Heading size="16px">
+                            Earn{" "}
+                            <span
+                              style={{
+                                color: theme.colors.lime.base,
+                              }}
+                            >
+                              {strategyData?.rewardsApy?.formatted}
+                            </span>{" "}
+                            and {maxMultiplier} in SOMM rewards when
+                            you bond.
+                          </Heading>
+                        </>
+                      )}
+                      <Spacer />
+                      <LighterSkeleton
+                        isLoaded={!isStrategyLoading}
+                        height={4}
+                      >
+                        <Text fontSize="xs">
+                          {stakingEnd?.endDate &&
+                          isFuture(stakingEnd.endDate)
+                            ? `Rewards program ends in ${formatDistanceToNowStrict(
+                                cellarConfig.customRewardWithoutAPY
+                                  ?.stakingDurationOverride ??
+                                  stakingEnd.endDate,
+                                {
+                                  locale: { formatDistance },
+                                }
+                              )}`
+                            : "Program Ended"}
+                        </Text>
+                      </LighterSkeleton>
+                    </Stack>
+                  </InnerCard>
+                  {cellarConfig.customRewardWithoutAPY
+                    ?.showSommRewards ? (
+                    <InnerCard
+                      backgroundColor="surface.tertiary"
+                      mt={8}
+                      px={7}
+                      py={7}
+                    >
+                      <Stack
+                        flexDir={{ base: "column", md: "row" }}
+                        alignItems={{
+                          base: "flex-start",
+                          md: "center",
+                        }}
+                        gap={{ base: 0, md: 4 }}
+                      >
                         <Image
                           src="/assets/icons/somm.png"
                           alt="sommelier logo"
@@ -364,36 +421,35 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                         <Heading size="16px">
                           Earn{" "}
                           <span
-                            style={{ color: theme.colors.lime.base }}
+                            style={{
+                              color: theme.colors.lime.base,
+                            }}
                           >
                             {strategyData?.rewardsApy?.formatted}
                           </span>{" "}
-                          and {maxMultiplier} in SOMM rewards when you
-                          bond.
+                          APY in SOMM rewards when you bond.
                         </Heading>
-                      </>
-                    )}
-                    <Spacer />
-                    <LighterSkeleton
-                      isLoaded={!isStrategyLoading}
-                      height={4}
-                    >
-                      <Text fontSize="xs">
-                        {stakingEnd?.endDate &&
-                        isFuture(stakingEnd.endDate)
-                          ? `Rewards program ends in ${formatDistanceToNowStrict(
-                              cellarConfig.customRewardWithoutAPY
-                                ?.stakingDurationOverride ??
-                                stakingEnd.endDate,
-                              {
-                                locale: { formatDistance },
-                              }
-                            )}`
-                          : "Program Ended"}
-                      </Text>
-                    </LighterSkeleton>
-                  </Stack>
-                </InnerCard>
+                        <Spacer />
+                        <LighterSkeleton
+                          isLoaded={!isStrategyLoading}
+                          height={4}
+                        >
+                          <Text fontSize="xs">
+                            {stakingEnd?.endDate &&
+                            isFuture(stakingEnd.endDate)
+                              ? `Rewards program ends in ${formatDistanceToNowStrict(
+                                  stakingEnd.endDate,
+                                  {
+                                    locale: { formatDistance },
+                                  }
+                                )}`
+                              : "Program Ended"}
+                          </Text>
+                        </LighterSkeleton>
+                      </Stack>
+                    </InnerCard>
+                  ) : null}
+                </>
               )}
             {isConnected && (
               <LighterSkeleton

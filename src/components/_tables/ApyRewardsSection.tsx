@@ -52,6 +52,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     )
   }
   // TODO: EXTRACT THIS CODE TO COMPONENTS
+  // TODO: Why the conditional logic?
   if (cellarType === CellarType.automatedPortfolio)
     return (
       <Stack alignItems="flex-end" spacing={0}>
@@ -122,13 +123,19 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   else
     return (
       <Stack alignItems="flex-end">
-        <HStack spacing={0} alignContent="center" gap={2}>
+        <HStack spacing={0} alignContent="center" gap={1}>
           <Tooltip
             label={
               <>
                 <Text>
                   {baseApyHoverLabel(cellarConfig)}{" "}
                   {baseApy ?? "0.00%"}
+                </Text>
+                <Text>
+                  {cellarConfig.customRewardWithoutAPY
+                    ?.showSommRewards
+                    ? `SOMM Rewards APY ${rewardsApy ?? "0.00%"}`
+                    : null}
                 </Text>
                 <Text>
                   {cellarConfig.customRewardWithoutAPY
@@ -153,7 +160,10 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
           </Tooltip>
           {rewardsApy && (
             <Tooltip
-              label={`Rewards ends in ${formatDistanceToNowStrict(
+              label={`${
+                cellarConfig.customRewardWithoutAPY
+                  ?.customIconToolTipMsg ?? "Rewards ends in"
+              } ${formatDistanceToNowStrict(
                 cellarConfig.customRewardWithoutAPY
                   ?.stakingDurationOverride ??
                   new Date(stackingEndDate)
@@ -193,6 +203,44 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               </HStack>
             </Tooltip>
           )}
+          {rewardsApy &&
+            cellarConfig.customRewardWithoutAPY?.showSommRewards && (
+              <Tooltip
+                label={`SOMM Rewards ends in ${formatDistanceToNowStrict(
+                  new Date(stackingEndDate)
+                )}`}
+                color="neutral.100"
+                border="0"
+                fontSize="12px"
+                bg="neutral.900"
+                fontWeight={600}
+                py="4"
+                px="6"
+                boxShadow="xl"
+                shouldWrapChildren
+              >
+                <HStack spacing={1}>
+                  <CircularProgress
+                    value={percentage}
+                    color="white"
+                    trackColor="none"
+                    size="25px"
+                  >
+                    <CircularProgressLabel
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <LogoIcon
+                        mx="auto"
+                        color="red.normal"
+                        p={0}
+                        boxSize={"9px"}
+                      />
+                    </CircularProgressLabel>
+                  </CircularProgress>
+                </HStack>
+              </Tooltip>
+            )}
         </HStack>
       </Stack>
     )
