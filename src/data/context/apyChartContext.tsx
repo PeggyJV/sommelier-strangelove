@@ -274,7 +274,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: decimals,
+      decimals: 18, // Cellar decimals
       smooth: true,
       daysSmoothed: 14,
       daysRendered: 30,
@@ -333,7 +333,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: decimals,
+      decimals: 18, // Cellar decimals
       smooth: true,
       daysSmoothed: 30,
       daysRendered: 30,
@@ -386,7 +386,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: decimals,
+      decimals: 18, // Cellar decimals
       smooth: false,
       daysSmoothed: 0,
       daysRendered: 0,
@@ -474,7 +474,7 @@ export const ApyChartProvider: FC<{
           }
         }),
         launchEpoch,
-        decimals: decimals,
+        decimals: 18, // Cellar decimals
         smooth: true,
         daysSmoothed: 30,
         daysRendered: 30,
