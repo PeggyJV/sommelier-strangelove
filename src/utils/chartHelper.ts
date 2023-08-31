@@ -212,7 +212,7 @@ export const createApyChangeDatum = ({
   }
 
   // Modify apyValues to be the last daysRendered worth of values
-  if (daysRendered > 0 && apyValues.length > daysRendered) {
+  if (daysRendered > 0 && apyValues.length >= daysRendered) {
     apyValues.splice(0, apyValues.length - daysRendered)
     // Update all the dates as well
     data.splice(0, data.length - daysRendered)
