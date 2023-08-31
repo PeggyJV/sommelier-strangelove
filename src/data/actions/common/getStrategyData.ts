@@ -199,12 +199,6 @@ export const getStrategyData = async ({
         ? estimatedApyValue(config)
         : baseApy
 
-      if (
-        (config.customRewardWithoutAPY?.showRewards === false) && rewardsApy
-      ) {
-        rewardsApy.value = 0
-      }
-
       const baseApySumRewards = {
         formatted:
           (

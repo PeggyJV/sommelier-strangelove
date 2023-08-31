@@ -265,16 +265,42 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               >
                 Period
               </Th>
-              {cellarConfig.customRewardWithoutAPY?.showRewards ===
-              true ? (
+              <Tooltip
+                hasArrow
+                arrowShadowColor="purple.base"
+                label={`Amount of ${
+                  cellarConfig?.customRewardWithoutAPY?.tokenSymbol ??
+                  "SOMM"
+                } rewards earned and available to be claimed`}
+                placement="top"
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <Th
+                  fontSize={10}
+                  fontWeight="normal"
+                  textTransform="capitalize"
+                >
+                  <HStack spacing={1} align="center">
+                    <Text>
+                      {cellarConfig?.customRewardWithoutAPY
+                        ?.tokenSymbol ?? "SOMM"}{" "}
+                      Rewards
+                    </Text>
+                    <InformationIcon
+                      color="neutral.300"
+                      boxSize={3}
+                    />
+                  </HStack>
+                </Th>
+              </Tooltip>
+              {cellarConfig.customRewardWithoutAPY
+                ?.showSommRewards === true ? (
                 <>
                   <Tooltip
                     hasArrow
                     arrowShadowColor="purple.base"
-                    label={`Amount of ${
-                      cellarConfig?.customRewardWithoutAPY
-                        ?.tokenSymbol ?? "SOMM"
-                    } rewards earned and available to be claimed`}
+                    label={`Amount of SOMM rewards earned and available to be claimed`}
                     placement="top"
                     bg="surface.bg"
                     color="neutral.300"
@@ -285,11 +311,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                       textTransform="capitalize"
                     >
                       <HStack spacing={1} align="center">
-                        <Text>
-                          {cellarConfig?.customRewardWithoutAPY
-                            ?.tokenSymbol ?? "SOMM"}{" "}
-                          Rewards
-                        </Text>
+                        <Text>SOMM Rewards</Text>
                         <InformationIcon
                           color="neutral.300"
                           boxSize={3}
@@ -298,40 +320,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     </Th>
                   </Tooltip>
                 </>
-              ) : (
-                <>
-                  <Tooltip
-                    hasArrow
-                    arrowShadowColor="purple.base"
-                    label={
-                      cellarConfig?.customRewardWithoutAPY
-                        ?.customColumnHeaderToolTip
-                    }
-                    placement="top"
-                    bg="surface.bg"
-                    color="neutral.300"
-                  >
-                    <Th
-                      fontSize={10}
-                      fontWeight="normal"
-                      textTransform="capitalize"
-                    >
-                      <HStack spacing={1} align="center">
-                        <Text>
-                          {
-                            cellarConfig?.customRewardWithoutAPY
-                              ?.customColumnHeader
-                          }
-                        </Text>
-                        <InformationIcon
-                          color="neutral.300"
-                          boxSize={3}
-                        />
-                      </HStack>
-                    </Th>
-                  </Tooltip>
-                </>
-              )}
+              ) : null}
               <Th />
             </Tr>
           </Thead>
@@ -434,6 +423,34 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                           </HStack>
                         </>
                       )}
+                    </Td>
+                    <Td>
+                      {/*!!!!!!!! TODO: this needs to be rewritten */}
+                      {cellarConfig.customRewardWithoutAPY
+                        ?.showSommRewards ? (
+                        <>
+                          <HStack spacing={2}>
+                            <Image
+                              src={
+                                config.CONTRACT.SOMMELLIER.IMAGE_PATH
+                              }
+                              alt="reward token image"
+                              height="20px"
+                            />
+                            <Text textAlign="right">
+                              {claimAllRewards
+                                ? toEther(
+                                    claimAllRewards[i]?.toString() ||
+                                      "0",
+                                    6,
+                                    false,
+                                    2
+                                  )
+                                : "0.00"}
+                            </Text>
+                          </HStack>
+                        </>
+                      ) : null}
                     </Td>
                     <Td fontWeight="normal">
                       <Flex justify="flex-end">
