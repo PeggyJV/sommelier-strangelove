@@ -42,24 +42,6 @@ export const getUserDataAllStrategies = async ({
               baseAsset?.coinGeckoId ?? "usd-coin",
               "usd"
             )
-            // Alter dayDatas to add in monthly data
-            if (
-              subgraphData?.lastMonthData &&
-              subgraphData?.dayDatas
-            ) {
-              // Check if not empty
-              if (
-                subgraphData.lastMonthData.length != 0 &&
-                subgraphData.dayDatas.length != 0
-              ) {
-                // Insert first months day data at beginning of dayDatas
-                subgraphData?.dayDatas.splice(
-                  0,
-                  0,
-                  subgraphData.lastMonthData[0]
-                )
-              }
-            }
 
             try {
               return await getUserData({

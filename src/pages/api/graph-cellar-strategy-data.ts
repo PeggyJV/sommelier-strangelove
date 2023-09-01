@@ -22,15 +22,6 @@ const graphCellarStratgyData = async (
             date
             shareValue
           }
-          lastMonthData: dayDatas(
-            orderBy: date
-            orderDirection: desc
-            first: 1
-            where: { date_lte: $monthAgoEpoch}
-          ) {
-            date
-            shareValue
-          }
           tvlTotal
           asset {
             id

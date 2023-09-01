@@ -400,9 +400,6 @@ export const isAssetDistributionEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC
-    // From subgraph Real yield usd returning empty array, so disabling for now.
-    // ||
-    // config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
   )
 }
 
