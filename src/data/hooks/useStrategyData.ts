@@ -38,9 +38,7 @@ export const useStrategyData = (address: string) => {
       address.toLowerCase()
   )!.config
   const isNoSubgraph = Boolean(config!.noSubgraph)
-  const baseAsset = tokenConfig.find(
-    (token) => token.symbol === sgData?.cellar?.asset.symbol
-  )?.coinGeckoId
+  const baseAsset = config.baseAsset.coinGeckoId
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
   )
@@ -56,9 +54,7 @@ export const useStrategyData = (address: string) => {
         contracts: allContracts![address]!,
         sommPrice: sommPrice ?? "0",
         sgData: sgData?.cellar,
-        decimals: sgData?.cellar?.asset.decimals ?? 6,
         baseAssetPrice: baseAssetPrice ?? "0",
-        symbol: sgData?.cellar?.asset.symbol ?? "USDC",
       })
 
       return result

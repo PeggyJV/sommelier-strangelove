@@ -27,17 +27,13 @@ export const getStrategyData = async ({
   contracts,
   sommPrice,
   sgData,
-  decimals,
   baseAssetPrice,
-  symbol,
 }: {
   address: string
   contracts: StrategyContracts
   sommPrice: string
   sgData?: GetStrategyDataQuery["cellar"]
-  decimals: number
   baseAssetPrice: string
-  symbol: string
 }) => {
   const data = await (async () => {
     try {
@@ -47,6 +43,8 @@ export const getStrategyData = async ({
           address.toLowerCase()
       )!
       const config: ConfigProps = strategy.config!
+      const decimals = config.baseAsset.decimals
+      const symbol = config.baseAsset.symbol
 
       const { stakerContract, cellarContract } = contracts
       const subgraphData = sgData

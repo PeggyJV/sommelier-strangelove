@@ -100,3 +100,48 @@ export type AllStrategiesData = Awaited<
 >
 
 export type StrategyData = Awaited<ReturnType<typeof getStrategyData>>
+
+export type GetAllTimeShareValueQuery = {
+  __typename?: "Query" | undefined
+  cellar?:
+    | {
+        __typename?: "Cellar" | undefined
+        dayDatas: Array<{
+          __typename?: "CellarDayData"
+          date: number
+          shareValue: string
+        }>
+      }
+    | null
+    | undefined
+}
+
+export type GetMonthlyShareValueQuery = {
+  __typename?: "Query" | undefined
+  cellar?:
+    | {
+        __typename?: "Cellar" | undefined
+        dayDatas: Array<{
+          __typename?: "CellarDayData"
+          date: number
+          shareValue: string
+        }>
+      }
+    | null
+    | undefined
+}
+
+export type GetWeeklyShareValueQuery = {
+  __typename?: "Query" | undefined
+  cellar?:
+    | {
+        __typename?: "Cellar" | undefined
+        dayDatas: Array<{
+          __typename?: "CellarDayData"
+          date: number
+          shareValue: string
+        }>
+      }
+    | null
+    | undefined
+}

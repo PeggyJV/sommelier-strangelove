@@ -7,6 +7,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
+import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const fraximal: CellarData = {
   name: "Fraximal",
@@ -80,6 +81,7 @@ export const fraximal: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+    baseAsset: tokenConfigMap.FRAX,
   },
   faq: [
     {

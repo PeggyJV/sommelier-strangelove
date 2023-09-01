@@ -48,9 +48,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
     )?.config.noSubgraph
   )
   const { lpToken } = useUserBalances(config)
-  const baseAsset = tokenConfig.find(
-    (token) => token.symbol === sgData?.cellar?.asset.symbol
-  )?.coinGeckoId
+  const baseAsset = config.baseAsset.coinGeckoId
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
   )
@@ -72,10 +70,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         strategyData: strategyData.data!,
         userAddress: userAddress!,
         sommPrice: sommPrice.data ?? "0",
-        sgData: sgData?.cellar,
-        decimals: sgData?.cellar?.asset.decimals ?? 6,
         baseAssetPrice: baseAssetPrice ?? "0",
-        symbol: sgData?.cellar?.asset.symbol ?? "USDC",
       })
     },
     {

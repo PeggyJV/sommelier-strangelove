@@ -68,10 +68,7 @@ export const getUserDataAllStrategies = async ({
                 sommPrice,
                 strategyData: strategyData,
                 userAddress,
-                sgData: subgraphData,
-                decimals: subgraphData?.asset.decimals ?? 6,
                 baseAssetPrice: baseAssetPrice!,
-                symbol: subgraphData?.asset.symbol ?? "USDC",
               })
             } catch (error) {
               console.log("error", error)

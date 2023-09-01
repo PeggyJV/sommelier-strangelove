@@ -6,6 +6,7 @@ import {
   CellarRouterKey,
   CellarType,
 } from "../types"
+import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const realYieldSNX: CellarData = {
   name: "Real Yield SNX",
@@ -66,6 +67,7 @@ The purpose of this vault is to provide token holders with a passive yield oppor
       abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: CellarKey.CELLAR_V2,
     },
+    baseAsset: tokenConfigMap.SNX,
   },
   faq: [
     {
