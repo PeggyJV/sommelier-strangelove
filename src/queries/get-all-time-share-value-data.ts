@@ -1,5 +1,5 @@
 const getUrl = (cellarAddress: string) =>
-  `/api/graph-all-time-share-value-data?cellarAddress=${cellarAddress}`
+  `/api/sommelier-api-all-time-share-value-data?cellarAddress=${cellarAddress}`
 
 export const fetchAllTimeShareValueData = async (
   cellarAddress: string
