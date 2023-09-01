@@ -13,7 +13,7 @@ import { formatDecimals } from "utils/bigNumber"
 import { isComingSoon } from "utils/isComingSoon"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
-import { getActiveAsset } from "../DEPRECATED/common/getActiveAsset"
+import { getActiveAsset } from "./getActiveAsset"
 import { StrategyContracts } from "../types"
 import { getChanges } from "./getChanges"
 import { getPositon } from "./getPosition"
@@ -233,7 +233,7 @@ export const getStrategyData = async ({
         stakingLaunchDate,
         deprecated,
         token,
-        config
+        config,
       }
     } catch (e) {
       console.error(address, e)
