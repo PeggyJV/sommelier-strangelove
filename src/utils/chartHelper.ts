@@ -40,7 +40,7 @@ export const createTokenPriceChangeDatum = (
       datum.push({
         x: new Date(item.date * 1000),
         y: String(change),
-        value: formatDecimals(current, 6, 6),
+        value: formatDecimals(current, 18, 6),
       })
     }
   })
@@ -212,7 +212,7 @@ export const createApyChangeDatum = ({
   }
 
   // Modify apyValues to be the last daysRendered worth of values
-  if (daysRendered > 0 && apyValues.length > daysRendered) {
+  if (daysRendered > 0 && apyValues.length >= daysRendered) {
     apyValues.splice(0, apyValues.length - daysRendered)
     // Update all the dates as well
     data.splice(0, data.length - daysRendered)
