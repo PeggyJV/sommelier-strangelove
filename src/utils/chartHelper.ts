@@ -40,7 +40,7 @@ export const createTokenPriceChangeDatum = (
       datum.push({
         x: new Date(item.date * 1000),
         y: String(change),
-        value: formatDecimals(current, 6, 6),
+        value: formatDecimals(current, 18, 6),
       })
     }
   })
