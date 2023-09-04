@@ -46,7 +46,7 @@ export const getStrategyData = async ({
       const decimals = config.baseAsset.decimals
       const symbol = config.baseAsset.symbol
 
-      const { stakerContract, cellarContract } = contracts
+      const { stakerContract } = contracts
       const subgraphData = sgData
       const dayDatas = subgraphData?.dayDatas
       const deprecated = strategy.deprecated
@@ -69,21 +69,8 @@ export const getStrategyData = async ({
         process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
 
       const activeAsset = await (async () => {
-        if (!subgraphData?.asset?.id) {
-          try {
-            const aAsset = await getActiveAsset(
-              cellarContract as CellarV0816
-            )
-            if (!aAsset) return
-            const tokenInfo = getTokenByAddress(aAsset.address)
-            return { ...tokenInfo, ...aAsset }
-          } catch (e) {
-            console.log(e)
-            return undefined
-          }
-        }
-        const tokenInfo = getTokenByAddress(subgraphData.asset.id)
-        return { ...tokenInfo, ...subgraphData.asset }
+        const tokenInfo = getTokenByAddress(config.baseAsset.address)
+        return { ...tokenInfo, ...config.baseAsset }
       })()
 
       let tvm = hideValue
@@ -189,7 +176,7 @@ export const getStrategyData = async ({
         if (!subgraphData) return
         return getTokenPrice(
           subgraphData.shareValue,
-          subgraphData.asset.decimals
+          config.baseAsset.decimals
         )
       })()
 

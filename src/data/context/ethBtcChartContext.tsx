@@ -4,10 +4,11 @@ import { useEthBtcGainChartData } from "data/hooks/useEthBtcGainChartData"
 import { format } from "date-fns"
 import {
   GetAllTimeShareValueQuery,
-  useGetHourlyShareValueQuery,
+  GetHourlyShareValueQuery,
   GetMonthlyShareValueQuery,
   GetWeeklyShareValueQuery,
 } from "generated/subgraph"
+import { fetchHourlyShareValueData } from "queries/get-hourly-share-value-data"
 import { fetchWeeklyShareValueData } from "queries/get-weekly-share-value-data"
 import { fetchMonthlyShareValueData } from "queries/get-monthly-share-value-data"
 import { fetchAllTimeShareValueData } from "queries/get-all-time-share-value-data"
@@ -185,20 +186,31 @@ export const EthBtcChartProvider: FC<{
   })
   const [timeline, setTimeline] = useState<Timeline>("1W")
 
-  // GQL Queries
-  const [
-    {
-      fetching: hourlyIsFetching,
-      data: hourlyDataRaw,
-      error: hourlyError,
-    },
-    reexecuteHourly,
-  ] = useGetHourlyShareValueQuery({
-    variables: {
-      epoch: prev24Hours,
-      cellarAddress: address,
-    },
-  })
+  const [hourlyDataRaw, setHourlyDataRaw] = useState<
+    GetHourlyShareValueQuery | undefined
+  >(undefined)
+  const [hourlyIsFetching, setHourlyIsFetching] = useState(false)
+  const [hourlyError, setHourlyError] = useState(null)
+  const [reexecuteHourlyTrigger, setReexecuteHourlyTrigger] =
+    useState(0) // a state variable to trigger re-fetch
+
+  // useCallback is used to prevent unnecessary re-renders when passing this function down to child components
+  const reexecuteHourly = useCallback(() => {
+    setReexecuteHourlyTrigger((prevState) => prevState + 1)
+  }, [])
+
+  useEffect(() => {
+    setHourlyIsFetching(true)
+    fetchHourlyShareValueData(prev24Hours, address)
+      .then((data) => {
+        setHourlyDataRaw(data)
+        setHourlyIsFetching(false)
+      })
+      .catch((error) => {
+        setHourlyError(error)
+        setHourlyIsFetching(false)
+      })
+  }, [prev24Hours, address, reexecuteHourlyTrigger]) // re-execute the effect when 'prev24Hours' or 'address' changes
 
   const [weeklyDataRaw, setWeeklyDataRaw] = useState<
     GetWeeklyShareValueQuery | undefined

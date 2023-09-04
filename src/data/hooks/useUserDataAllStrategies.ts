@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUserDataAllStrategies } from "data/actions/common/getUserDataAllStrategies"
-import { useGetAllStrategiesDataQuery } from "generated/subgraph"
 import { useAccount, useSigner } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useAllStrategiesData } from "./useAllStrategiesData"

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUserData } from "data/actions/common/getUserData"
 import { cellarDataMap } from "data/cellarDataMap"
-import { tokenConfig } from "data/tokenConfig"
 import { GetStrategyDataQuery } from "generated/subgraph"
 import { useAccount, useSigner } from "wagmi"
 import { useAllContracts } from "./useAllContracts"

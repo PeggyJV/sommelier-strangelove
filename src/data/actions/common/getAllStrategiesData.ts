@@ -32,7 +32,7 @@ export const getAllStrategiesData = async ({
               baseAsset?.coinGeckoId ?? "usd-coin",
               "usd"
             )
-            
+
             try {
               return await getStrategyData({
                 address,
