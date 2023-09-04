@@ -117,7 +117,7 @@ export interface CellarData {
   dashboard: string
   popUpTitle?: string
   popUpDescription?: string
-  tradedAssets?: string[]
+  tradedAssets: string[]
   exchanges?: Exchange[]
   launchDate?: Date
   stakingLaunchDate?: Date

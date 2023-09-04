@@ -27,7 +27,6 @@ const graphIndividualStratData = async (
           decimals
         }
         positions
-        positionDistribution
         shareValue
       }
     }

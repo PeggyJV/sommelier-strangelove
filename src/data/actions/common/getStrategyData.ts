@@ -3,19 +3,17 @@ import { ConfigProps } from "data/types"
 import {
   estimatedApyValue,
   isAPYEnabled,
-  isAssetDistributionEnabled,
   isEstimatedApyEnable,
 } from "data/uiConfig"
 import { add, isBefore, isFuture, subDays } from "date-fns"
 import { GetStrategyDataQuery } from "generated/subgraph"
-import { CellarStakingV0815, CellarV0816 } from "src/abi/types"
+import { CellarStakingV0815 } from "src/abi/types"
 import { formatDecimals } from "utils/bigNumber"
 import { isComingSoon } from "utils/isComingSoon"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
 import { StrategyContracts } from "../types"
 import { getChanges } from "./getChanges"
-import { getPositon } from "./getPosition"
 import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
@@ -83,35 +81,15 @@ export const getStrategyData = async ({
         : getTvm(subgraphData?.tvlTotal)
 
       const tradedAssets = (() => {
-        if (!isAssetDistributionEnabled(config)) {
-          const assets = strategy.tradedAssets
-          if (!assets) return
-          const tokens = assets.map((v) => {
-            const token = getTokenBySymbol(v)
-            return token
-          })
-
-          return tokens
-        }
-
-        const positions = subgraphData?.positions
-        if (!positions) return
-        const tokens = positions?.map((v) => {
-          const token = getTokenByAddress(v)
+        const assets = strategy.tradedAssets
+        if (!assets) return
+        const tokens = assets.map((v) => {
+          const token = getTokenBySymbol(v)
           return token
         })
 
         return tokens
       })()
-
-      const positionDistribution = (() => {
-        if (!subgraphData) return
-        return getPositon(
-          subgraphData?.positions,
-          subgraphData?.positionDistribution
-        )
-      })()
-
       const stakingEnd = await getStakingEnd(
         stakerContract as CellarStakingV0815
       )
@@ -204,7 +182,6 @@ export const getStrategyData = async ({
         launchDate,
         logo,
         name,
-        positionDistribution,
         protocols,
         provider,
         rewardsApy,

@@ -29,7 +29,6 @@ const graphCellarStratgyData = async (
             decimals
           }
           positions
-          positionDistribution
           shareValue
         }
       }

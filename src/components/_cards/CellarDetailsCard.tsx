@@ -1,17 +1,12 @@
 import {
-  Box,
   BoxProps,
-  Button,
-  Circle,
   HStack,
   Icon,
   Image,
   Link,
   SimpleGrid,
-  Spinner,
   Stack,
   Text,
-  Tooltip,
   useTheme,
   VStack,
   Wrap
@@ -19,16 +14,9 @@ import {
 import { CardStat } from "components/CardStat"
 import { StrategyProvider } from "components/StrategyProvider"
 import { TokenAssets } from "components/TokenAssets"
-import { PositionDistribution } from "components/TokenAssets/PositionDistribution"
-import { ArrowRightIcon, InformationIcon } from "components/_icons"
-import { CardHeading } from "components/_typography/CardHeading"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { tokenConfig } from "data/tokenConfig"
 import { CellarDataMap } from "data/types"
-import {
-  isAssetDistributionEnabled,
-  isTokenAssets,
-} from "data/uiConfig"
 import { useNivoThemes } from "hooks/nivo"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { isArray } from "lodash"
@@ -94,8 +82,6 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
   const { data: strategyData, isLoading } = useStrategyData(
     cellarConfig.cellar.address
   )
-  const positionDistribution = strategyData?.positionDistribution
-  const tvm = strategyData?.tvm
   const activeAsset = strategyData?.activeAsset
 
   const isManyProtocols = isArray(protocols)
@@ -213,32 +199,11 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             tooltip="Strategy will have exposure to 1 or more of these assets at any given time"
           >
             <HStack>
-              {isTokenAssets(cellarConfig) && (
-                <TokenAssets
-                  tokens={cellarStrategyAssets}
-                  activeAsset={activeAsset?.address || ""}
-                  displaySymbol
-                />
-              )}
-
-              {isAssetDistributionEnabled(cellarConfig) &&
-              isLoading ? (
-                <Spinner />
-              ) : (
-                positionDistribution?.map((item) => {
-                  const asset = tokenConfig.find(
-                    (v) => v.address === item.address
-                  )
-                  return (
-                    <PositionDistribution
-                      key={item.address}
-                      address={item.address}
-                      percentage={`${item.percentage.toFixed(2)}%`}
-                      src={asset?.src}
-                    />
-                  )
-                })
-              )}
+              <TokenAssets
+                tokens={cellarStrategyAssets}
+                activeAsset={activeAsset?.address || ""}
+                displaySymbol
+              />
             </HStack>
           </CardStat>
           <CardStat label="Link to contract" flex={0}>

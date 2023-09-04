@@ -86,6 +86,7 @@ export const ethBtcMomentum: CellarData = {
   depositTokens: {
     list: ["WBTC", "WETH", ...depositAssetTokenList],
   },
+  tradedAssets: ["USDC", "WETH", "WBTC"],
   config: {
     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
     cellarNameKey: CellarNameKey.ETH_BTC_MOM,
