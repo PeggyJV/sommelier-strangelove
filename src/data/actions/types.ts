@@ -145,3 +145,12 @@ export type GetWeeklyShareValueQuery = {
     | null
     | undefined
 }
+
+export type GetHourlyShareValueQuery = {
+  __typename?: "Query" | undefined
+  cellarHourDatas: Array<{
+    __typename?: "CellarHourData"
+    date: number
+    shareValue: string
+  }>
+}

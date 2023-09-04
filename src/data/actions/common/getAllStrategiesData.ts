@@ -4,7 +4,8 @@ import { GetAllStrategiesDataQuery } from "generated/subgraph"
 import { getStrategyData } from "./getStrategyData"
 import { reactQueryClient } from "utils/reactQuery"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { tokenConfig } from "data/tokenConfig"
+import { cellarDataMap } from "data/cellarDataMap"
+import { ConfigProps } from "data/types"
 
 export const getAllStrategiesData = async ({
   allContracts,
@@ -25,9 +26,15 @@ export const getAllStrategiesData = async ({
             const subgraphData = sgData.cellars.find(
               (v) => v.id.toLowerCase() === address.toLowerCase()
             )
-            const baseAsset = tokenConfig.find(
-              (token) => token.symbol === subgraphData?.asset.symbol
-            )
+            
+            const strategy = Object.values(cellarDataMap).find(
+              ({ config }) =>
+                config.cellar.address.toLowerCase() ===
+                address.toLowerCase()
+            )!
+            const config: ConfigProps = strategy.config!
+
+            const baseAsset = config.baseAsset
             const baseAssetPrice = await fetchCoingeckoPrice(
               baseAsset?.coinGeckoId ?? "usd-coin",
               "usd"

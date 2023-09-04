@@ -5,7 +5,7 @@ import {
   GetHourlyShareValueQuery,
   GetMonthlyShareValueQuery,
   GetWeeklyShareValueQuery,
-} from "generated/subgraph"
+} from "data/actions/types"
 import { fetchHourlyShareValueData } from "queries/get-hourly-share-value-data"
 import { fetchWeeklyShareValueData } from "queries/get-weekly-share-value-data"
 import { fetchMonthlyShareValueData } from "queries/get-monthly-share-value-data"
