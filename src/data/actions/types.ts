@@ -154,3 +154,33 @@ export type GetHourlyShareValueQuery = {
     shareValue: string
   }>
 }
+
+export type GetStrategyDataQuery = {
+  __typename?: "Query"
+  cellar?: {
+    __typename?: "Cellar"
+    id: string
+    tvlTotal: string
+    shareValue: string
+    dayDatas: Array<{
+      __typename?: "CellarDayData"
+      date: number
+      shareValue: string
+    }>
+  } | null
+}
+
+export type GetAllStrategiesDataQuery = {
+  __typename?: "Query"
+  cellars: Array<{
+    __typename?: "Cellar"
+    id: string
+    tvlTotal: string
+    shareValue: string
+    dayDatas: Array<{
+      __typename?: "CellarDayData"
+      date: number
+      shareValue: string
+    }>
+  }>
+}

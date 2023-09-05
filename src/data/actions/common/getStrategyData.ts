@@ -6,7 +6,7 @@ import {
   isEstimatedApyEnable,
 } from "data/uiConfig"
 import { add, isBefore, isFuture, subDays } from "date-fns"
-import { GetStrategyDataQuery } from "generated/subgraph"
+import { GetStrategyDataQuery } from "data/actions/types"
 import { CellarStakingV0815 } from "src/abi/types"
 import { formatDecimals } from "utils/bigNumber"
 import { isComingSoon } from "utils/isComingSoon"
@@ -23,13 +23,13 @@ export const getStrategyData = async ({
   address,
   contracts,
   sommPrice,
-  sgData,
+  stratData,
   baseAssetPrice,
 }: {
   address: string
   contracts: StrategyContracts
   sommPrice: string
-  sgData?: GetStrategyDataQuery["cellar"]
+  stratData?: GetStrategyDataQuery["cellar"]
   baseAssetPrice: string
 }) => {
   const data = await (async () => {
@@ -44,8 +44,8 @@ export const getStrategyData = async ({
       const symbol = config.baseAsset.symbol
 
       const { stakerContract } = contracts
-      const subgraphData = sgData
-      const dayDatas = subgraphData?.dayDatas
+      const strategyData = stratData
+      const dayDatas = strategyData?.dayDatas
       const deprecated = strategy.deprecated
       const slug = strategy.slug
       const name = strategy.name
@@ -75,10 +75,10 @@ export const getStrategyData = async ({
         : symbol !== "USDC"
         ? getTvm(
             String(
-              Number(subgraphData?.tvlTotal) * Number(baseAssetPrice)
+              Number(strategyData?.tvlTotal) * Number(baseAssetPrice)
             )
           )
-        : getTvm(subgraphData?.tvlTotal)
+        : getTvm(strategyData?.tvlTotal)
 
       const tradedAssets = (() => {
         const assets = strategy.tradedAssets
@@ -135,24 +135,22 @@ export const getStrategyData = async ({
 
       const tokenPrice = (() => {
         if (hideValue) return
-        if (!subgraphData?.shareValue) return
+        if (!strategyData?.shareValue) return
 
-        const price = formatDecimals(
+        let price = parseFloat(
           (
-            parseFloat(subgraphData.shareValue) *
-            parseFloat(baseAssetPrice)
-          ).toString(),
-          decimals,
-          2
+            (Number(strategyData.shareValue) / 1e18) *
+            Number(baseAssetPrice)
+          ).toFixed(2)
         )
         return `$${price}`
       })()
 
       const token = (() => {
         if (hideValue) return
-        if (!subgraphData) return
+        if (!strategyData) return
         return getTokenPrice(
-          subgraphData.shareValue,
+          strategyData.shareValue,
           config.baseAsset.decimals
         )
       })()

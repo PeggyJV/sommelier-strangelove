@@ -9,7 +9,6 @@ import {
   isDailyChangeEnabled,
   isIntervalGainPctEnabled,
   isTokenPriceEnabled,
-  isTVMEnabled,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CellarCardData } from "./CellarCardDisplay"
@@ -65,15 +64,6 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
       {!countdown && (
         <Stack mx={2} spacing={1}>
           <Stack spacing={1}>
-            {isTVMEnabled(cellarConfig) && (
-              <CellarStats
-                tooltip="Total value locked"
-                title="TVL"
-                value={tvm?.formatted || "..."}
-                size="md"
-              />
-            )}
-
             {isAPYEnabled(cellarConfig) &&
               (isLoading ? (
                 <>

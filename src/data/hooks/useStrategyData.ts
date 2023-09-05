@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { getStrategyData } from "data/actions/common/getStrategyData"
 import { cellarDataMap } from "data/cellarDataMap"
-import { GetStrategyDataQuery } from "generated/subgraph"
+import { GetStrategyDataQuery } from "src/data/actions/types"
 import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
@@ -14,7 +14,7 @@ export const useStrategyData = (address: string) => {
   const { data: allContracts } = useAllContracts()
   const { data: sommPrice } = useCoinGeckoPrice("sommelier")
 
-  const [sgData, setSgData] = useState<
+  const [stratData, setStratData] = useState<
     GetStrategyDataQuery | undefined
   >(undefined)
   const [error, setError] = useState(null)
@@ -25,7 +25,7 @@ export const useStrategyData = (address: string) => {
         if (error) {
           setError(error)
         } else {
-          setSgData(data)
+          setStratData(data)
         }
       })
       .catch((error) => setError(error))
@@ -41,7 +41,6 @@ export const useStrategyData = (address: string) => {
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
   )
-
   const query = useQuery(
     [
       "USE_STRATEGY_DATA",
@@ -52,7 +51,7 @@ export const useStrategyData = (address: string) => {
         address,
         contracts: allContracts![address]!,
         sommPrice: sommPrice ?? "0",
-        sgData: sgData?.cellar,
+        stratData: stratData?.cellar,
         baseAssetPrice: baseAssetPrice ?? "0",
       })
 
@@ -62,7 +61,7 @@ export const useStrategyData = (address: string) => {
       enabled:
         !!allContracts &&
         !!sommPrice &&
-        (isNoDataSource === false || !!sgData) &&
+        (isNoDataSource || !!stratData) &&
         !!baseAssetPrice,
     }
   )

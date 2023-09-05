@@ -4,24 +4,6 @@ import { toInteger } from "lodash"
 import { colors } from "theme/colors"
 import { formatDecimals } from "./bigNumber"
 
-export const createTVLSeries = (
-  data?: { date: number; tvlTotal: string }[]
-): Serie[] | undefined => {
-  if (!data) return
-
-  return [
-    {
-      id: "tvl",
-      data: data.map((item) => {
-        return {
-          x: new Date(item.date * 1000),
-          y: formatDecimals(item.tvlTotal, 18),
-        }
-      }),
-    },
-  ]
-}
-
 export const createTokenPriceChangeDatum = (
   data?: { date: number; shareValue: string }[]
 ): Datum[] | undefined => {

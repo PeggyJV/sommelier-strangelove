@@ -1,6 +1,5 @@
 import { AllContracts } from "../types"
-
-import { GetAllStrategiesDataQuery } from "generated/subgraph"
+import { GetAllStrategiesDataQuery } from "data/actions/types"
 import { getStrategyData } from "./getStrategyData"
 import { reactQueryClient } from "utils/reactQuery"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
@@ -43,7 +42,7 @@ export const getAllStrategiesData = async ({
             try {
               return await getStrategyData({
                 address,
-                sgData: subgraphData,
+                stratData: subgraphData,
                 sommPrice,
                 contracts: contracts,
                 baseAssetPrice: baseAssetPrice!,
