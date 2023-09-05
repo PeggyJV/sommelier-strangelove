@@ -42,7 +42,7 @@ export interface ConfigProps {
   id: string
   baseApy?: number
   cellarNameKey: CellarNameKey
-  noSubgraph?: boolean
+  isNoDataSource?: boolean
   lpToken: {
     address: string
     imagePath: string

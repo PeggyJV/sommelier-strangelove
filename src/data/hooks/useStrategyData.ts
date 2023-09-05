@@ -36,7 +36,7 @@ export const useStrategyData = (address: string) => {
       item.config.cellar.address.toLowerCase() ===
       address.toLowerCase()
   )!.config
-  const isNoSubgraph = Boolean(config!.noSubgraph)
+  const isNoDataSource = Boolean(config!.isNoDataSource)
   const baseAsset = config.baseAsset.coinGeckoId
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
@@ -62,7 +62,7 @@ export const useStrategyData = (address: string) => {
       enabled:
         !!allContracts &&
         !!sommPrice &&
-        (isNoSubgraph || !!sgData) &&
+        (isNoDataSource || !!sgData) &&
         !!baseAssetPrice,
     }
   )

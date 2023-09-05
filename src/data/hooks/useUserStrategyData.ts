@@ -21,10 +21,10 @@ export const useUserStrategyData = (strategyAddress: string) => {
       strategyAddress.toLowerCase()
   )!.config
 
-  const isNoSubgraph = Boolean(
+  const isNoDataSource = Boolean(
     Object.values(cellarDataMap).find(
       (item) => item.config.cellar.address === strategyAddress
-    )?.config.noSubgraph
+    )?.config.isNoDataSource
   )
   const { lpToken } = useUserBalances(config)
   const baseAsset = config.baseAsset.coinGeckoId
@@ -38,7 +38,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
       {
         signer: true,
         contractAddress: strategyAddress,
-        userAddress
+        userAddress,
       },
     ],
     async () => {
@@ -59,7 +59,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         !!lpToken &&
         !!baseAssetPrice &&
         !!strategyData.data &&
-        (isNoSubgraph),
+        isNoDataSource,
     }
   )
   return query
