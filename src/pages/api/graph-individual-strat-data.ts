@@ -21,12 +21,6 @@ const graphIndividualStratData = async (
           shareValue
         }
         tvlTotal
-        asset {
-          id
-          symbol
-          decimals
-        }
-        positions
         shareValue
       }
     }

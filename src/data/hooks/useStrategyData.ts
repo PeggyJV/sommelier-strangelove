@@ -62,7 +62,7 @@ export const useStrategyData = (address: string) => {
       enabled:
         !!allContracts &&
         !!sommPrice &&
-        (isNoDataSource || !!sgData) &&
+        (isNoDataSource === false || !!sgData) &&
         !!baseAssetPrice,
     }
   )

@@ -31,7 +31,6 @@ export const useUserStrategyData = (strategyAddress: string) => {
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
   )
-
   const query = useQuery(
     [
       "USE_USER_DATA",
@@ -59,7 +58,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         !!lpToken &&
         !!baseAssetPrice &&
         !!strategyData.data &&
-        isNoDataSource,
+        isNoDataSource === false,
     }
   )
   return query
