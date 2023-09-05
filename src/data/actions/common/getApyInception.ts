@@ -42,7 +42,12 @@ export const getApyInception = ({
       startValue = new BigNumber(startingShareValue)
     }
 
-    const nowValue = new BigNumber(dayDatas[1].shareValue)
+    // Now val must have same amt of digits as startValue
+    const nowValue = new BigNumber(
+      new BigNumber(dayDatas[1].shareValue)
+        .toString()
+        .substring(0, startValue.toString().length)
+    )
     const yieldGain = nowValue.minus(startValue).div(startValue)
 
     // Take the gains since inception and annualize it to get APY since inception
