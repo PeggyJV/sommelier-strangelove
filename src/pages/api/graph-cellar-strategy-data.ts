@@ -10,6 +10,7 @@ const graphCellarStratgyData = async (
   res: NextApiResponse
 ) => {
   try {
+    // TODO: Change this to hourly data for round 3 to test out. Should be ok?
     const query = `
       query GetAllStrategiesData($monthAgoEpoch: Int!) {
         cellars {
@@ -17,28 +18,11 @@ const graphCellarStratgyData = async (
           dayDatas: dayDatas(
             orderBy: date
             orderDirection: desc
-            first: 2
-          ) {
-            date
-            shareValue
-          }
-          lastMonthData: dayDatas(
-            orderBy: date
-            orderDirection: desc
-            first: 1
-            where: { date_lte: $monthAgoEpoch}
-          ) {
+            where: { date_gte: $monthAgoEpoch } ) {
             date
             shareValue
           }
           tvlTotal
-          asset {
-            id
-            symbol
-            decimals
-          }
-          positions
-          positionDistribution
           shareValue
         }
       }

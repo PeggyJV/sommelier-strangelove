@@ -1,10 +1,10 @@
 import { AllContracts } from "../types"
-
-import { GetAllStrategiesDataQuery } from "generated/subgraph"
+import { GetAllStrategiesDataQuery } from "data/actions/types"
 import { getStrategyData } from "./getStrategyData"
 import { reactQueryClient } from "utils/reactQuery"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { tokenConfig } from "data/tokenConfig"
+import { cellarDataMap } from "data/cellarDataMap"
+import { ConfigProps } from "data/types"
 
 export const getAllStrategiesData = async ({
   allContracts,
@@ -25,42 +25,27 @@ export const getAllStrategiesData = async ({
             const subgraphData = sgData.cellars.find(
               (v) => v.id.toLowerCase() === address.toLowerCase()
             )
-            const baseAsset = tokenConfig.find(
-              (token) => token.symbol === subgraphData?.asset.symbol
-            )
+            
+            const strategy = Object.values(cellarDataMap).find(
+              ({ config }) =>
+                config.cellar.address.toLowerCase() ===
+                address.toLowerCase()
+            )!
+            const config: ConfigProps = strategy.config!
+
+            const baseAsset = config.baseAsset
             const baseAssetPrice = await fetchCoingeckoPrice(
               baseAsset?.coinGeckoId ?? "usd-coin",
               "usd"
             )
 
-            // Alter dayDatas to add in monthly data 
-            if (
-              subgraphData?.lastMonthData &&
-              subgraphData?.dayDatas
-            ) {
-              // Check if not empty
-              if (
-                subgraphData.lastMonthData.length != 0 &&
-                subgraphData.dayDatas.length != 0
-              ) {
-                // Insert first months day data at beginning of dayDatas
-                subgraphData?.dayDatas.splice(
-                  0,
-                  0,
-                  subgraphData.lastMonthData[0]
-                )
-              }
-            }
-            
             try {
               return await getStrategyData({
                 address,
-                sgData: subgraphData,
+                stratData: subgraphData,
                 sommPrice,
                 contracts: contracts,
-                decimals: subgraphData?.asset.decimals ?? 6,
                 baseAssetPrice: baseAssetPrice!,
-                symbol: subgraphData?.asset.symbol ?? "USDC",
               })
             } catch (error) {
               console.error(error)

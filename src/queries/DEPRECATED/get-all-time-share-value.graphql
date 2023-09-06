@@ -1,8 +1,0 @@
-query GetAllTimeShareValue($cellarAddress: ID!) {
-  cellar(id: $cellarAddress) {
-    dayDatas(orderDirection: desc, orderBy: date) {
-      date
-      shareValue
-    }
-  }
-}

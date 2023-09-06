@@ -7,6 +7,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
+import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const realYieldUsd: CellarData = {
   name: "Real Yield USD",
@@ -87,6 +88,7 @@ export const realYieldUsd: CellarData = {
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     customStrategyHighlight: "Now using DSR",
+    baseAsset: tokenConfigMap.USDC,
   },
   faq: [
     {

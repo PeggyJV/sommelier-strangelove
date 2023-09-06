@@ -7,6 +7,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
+import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const defiStars: CellarData = {
   name: "DeFi Stars",
@@ -88,6 +89,7 @@ export const defiStars: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+    baseAsset: tokenConfigMap.USDC,
   },
   faq: [
     {

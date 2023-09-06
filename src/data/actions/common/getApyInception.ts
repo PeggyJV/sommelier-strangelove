@@ -3,21 +3,20 @@ import BigNumber from "bignumber.js"
 
 export const getApyInception = ({
   baseApy,
-  dayDatas,
+  shareData,
   hardcodedApy,
   launchEpoch,
   decimals,
   startingShareValue,
 }: {
   baseApy?: number
-  dayDatas?: { date: number; shareValue: string }[]
+  shareData?: { date: number; shareValue: string } | undefined | null
   hardcodedApy?: boolean
   launchEpoch: number
   decimals: number
   startingShareValue?: string | undefined | null
 }) => {
-  const isDataNotValid =
-    !dayDatas || dayDatas?.length === 1 || dayDatas?.length < 2
+  const isDataNotValid = !shareData
 
   // cellar apy
   const cellarApy = (() => {
@@ -27,8 +26,7 @@ export const getApyInception = ({
 
     // Inception date (configured)
     const launchDate = new Date(launchEpoch * 1000)
-    // Use yesterday's value, the most recent full day
-    const yesterday = new Date(dayDatas[1].date * 1000)
+    const yesterday = new Date(shareData.date * 1000)
     const daysSince = Math.abs(
       differenceInDays(yesterday, launchDate)
     )
@@ -42,7 +40,12 @@ export const getApyInception = ({
       startValue = new BigNumber(startingShareValue)
     }
 
-    const nowValue = new BigNumber(dayDatas[1].shareValue)
+    // Now val must have same amt of digits as startValue
+    const nowValue = new BigNumber(
+      new BigNumber(shareData.shareValue)
+        .toString()
+        .substring(0, startValue.toString().length)
+    )
     const yieldGain = nowValue.minus(startValue).div(startValue)
 
     // Take the gains since inception and annualize it to get APY since inception

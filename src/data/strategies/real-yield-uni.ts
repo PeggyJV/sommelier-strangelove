@@ -6,6 +6,8 @@ import {
   CellarRouterKey,
   CellarType,
 } from "../types"
+import { tokenConfigMap } from "src/data/tokenConfig"
+
 export const realYieldUNI: CellarData = {
   name: "Real Yield UNI",
   slug: config.CONTRACT.REAL_YIELD_UNI.SLUG,
@@ -65,6 +67,7 @@ export const realYieldUNI: CellarData = {
       abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: CellarKey.CELLAR_V2,
     },
+    baseAsset: tokenConfigMap.UNI,
   },
   faq: [
     {

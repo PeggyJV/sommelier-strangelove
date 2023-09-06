@@ -2,22 +2,20 @@ import { AllContracts, AllStrategiesData } from "../types"
 import { formatUSD, toEther } from "utils/formatCurrency"
 import { reactQueryClient } from "utils/reactQuery"
 import { getUserData } from "./getUserData"
-import { GetAllStrategiesDataQuery } from "generated/subgraph"
-import { tokenConfig } from "data/tokenConfig"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
+import { cellarDataMap } from "data/cellarDataMap"
+import { ConfigProps } from "data/types"
 
 export const getUserDataAllStrategies = async ({
   allContracts,
   strategiesData,
   userAddress,
   sommPrice,
-  sgData,
 }: {
   allContracts: AllContracts
   strategiesData: AllStrategiesData
   userAddress: string
   sommPrice: string
-  sgData?: GetAllStrategiesDataQuery
 }) => {
   const userDataRes = await Promise.all(
     Object.entries(allContracts)?.map(
@@ -32,34 +30,18 @@ export const getUserDataAllStrategies = async ({
             { signer: true, contractAddress: address, userAddress },
           ],
           async () => {
-            const subgraphData = sgData?.cellars.find(
-              (v) => v.id === address
-            )
-            const baseAsset = tokenConfig.find(
-              (token) => token.symbol === subgraphData?.asset.symbol
-            )
+            const strategy = Object.values(cellarDataMap).find(
+              ({ config }) =>
+                config.cellar.address.toLowerCase() ===
+                address.toLowerCase()
+            )!
+            const config: ConfigProps = strategy.config!
+
+            const baseAsset = config.baseAsset
             const baseAssetPrice = await fetchCoingeckoPrice(
               baseAsset?.coinGeckoId ?? "usd-coin",
               "usd"
             )
-            // Alter dayDatas to add in monthly data
-            if (
-              subgraphData?.lastMonthData &&
-              subgraphData?.dayDatas
-            ) {
-              // Check if not empty
-              if (
-                subgraphData.lastMonthData.length != 0 &&
-                subgraphData.dayDatas.length != 0
-              ) {
-                // Insert first months day data at beginning of dayDatas
-                subgraphData?.dayDatas.splice(
-                  0,
-                  0,
-                  subgraphData.lastMonthData[0]
-                )
-              }
-            }
 
             try {
               return await getUserData({
@@ -68,10 +50,7 @@ export const getUserDataAllStrategies = async ({
                 sommPrice,
                 strategyData: strategyData,
                 userAddress,
-                sgData: subgraphData,
-                decimals: subgraphData?.asset.decimals ?? 6,
                 baseAssetPrice: baseAssetPrice!,
-                symbol: subgraphData?.asset.symbol ?? "USDC",
               })
             } catch (error) {
               console.log("error", error)

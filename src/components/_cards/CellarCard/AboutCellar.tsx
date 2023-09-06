@@ -2,14 +2,9 @@ import { Flex, Stack, Text } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import {
   apyLabel,
-  intervalGainPctTitleContent,
-  intervalGainPctTooltipContent,
-  intervalGainTimeline,
   isAPYEnabled,
   isDailyChangeEnabled,
-  isIntervalGainPctEnabled,
   isTokenPriceEnabled,
-  isTVMEnabled,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CellarCardData } from "./CellarCardDisplay"
@@ -36,11 +31,8 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   )
 
   const launchDate = strategyData?.launchDate
-  const tvm = strategyData?.tvm
   const baseApy = strategyData?.baseApy
   const rewardsApy = strategyData?.rewardsApy
-  const intervalGain =
-    strategyData?.changes?.[intervalGainTimeline(cellarConfig)]
   const stakingEnd = strategyData?.stakingEnd
   const countdown = isComingSoon(launchDate)
 
@@ -65,15 +57,6 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
       {!countdown && (
         <Stack mx={2} spacing={1}>
           <Stack spacing={1}>
-            {isTVMEnabled(cellarConfig) && (
-              <CellarStats
-                tooltip="Total value locked"
-                title="TVL"
-                value={tvm?.formatted || "..."}
-                size="md"
-              />
-            )}
-
             {isAPYEnabled(cellarConfig) &&
               (isLoading ? (
                 <>
@@ -134,16 +117,6 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
               <CellarStatsLabel
                 title="1D Change"
                 tooltip="% change of current token price vs. token price yesterday"
-              />
-            </Flex>
-          )}
-
-          {isIntervalGainPctEnabled(cellarConfig) && (
-            <Flex alignItems="center">
-              <PercentageText data={intervalGain} />
-              <CellarStatsLabel
-                title={intervalGainPctTitleContent(cellarConfig)}
-                tooltip={intervalGainPctTooltipContent(cellarConfig)}
               />
             </Flex>
           )}

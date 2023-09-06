@@ -6,7 +6,7 @@ import {
   GetAllTimeShareValueQuery,
   GetMonthlyShareValueQuery,
   GetWeeklyShareValueQuery,
-} from "generated/subgraph"
+} from "src/data/actions/types"
 import { fetchWeeklyShareValueData } from "queries/get-weekly-share-value-data"
 import { fetchMonthlyShareValueData } from "queries/get-monthly-share-value-data"
 import { fetchAllTimeShareValueData } from "queries/get-all-time-share-value-data"
@@ -169,7 +169,6 @@ export const ApyChartProvider: FC<{
   const launchDate = cellarData?.launchDate!
   const { data: strategyData, isLoading: isStrategyDataLoading } =
     useStrategyData(cellarData!.config.cellar.address)
-  const decimals = strategyData?.activeAsset?.decimals ?? 6
   const launchDay = launchDate ?? subDays(new Date(), 8)
   const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 

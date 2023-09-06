@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
+import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const ethBtcMomentum: CellarData = {
   name: "ETH-BTC Momentum",
@@ -85,6 +86,7 @@ export const ethBtcMomentum: CellarData = {
   depositTokens: {
     list: ["WBTC", "WETH", ...depositAssetTokenList],
   },
+  tradedAssets: ["USDC", "WETH", "WBTC"],
   config: {
     id: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
     cellarNameKey: CellarNameKey.ETH_BTC_MOM,
@@ -107,6 +109,7 @@ export const ethBtcMomentum: CellarData = {
       abi: config.CONTRACT.ETH_BTC_MOMENTUM_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
+    baseAsset: tokenConfigMap.USDC,
   },
   faq: [
     {

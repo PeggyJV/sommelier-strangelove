@@ -14,7 +14,7 @@ export const fetchWeeklyShareValueData = async (
     return result.result.data
   } catch (error) {
     console.log(
-      "Error fetching Graph Weekly Share Value Data",
+      "Error fetching Weekly Share Value Data",
       error
     )
     throw Error(error as string)
