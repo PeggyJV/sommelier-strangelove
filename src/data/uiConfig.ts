@@ -443,7 +443,7 @@ export const apyLabel = (config: ConfigProps) => {
     }
     return "Net APY"
   }
-  return "Base APY"
+  return "APY since inception"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
@@ -463,7 +463,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
     }
     return "APY since inception"
   }
-  return "Base APY"
+  return "APY since inception"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
@@ -477,7 +477,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   ) {
     return "Estimated APY"
   }
-  return "Base APY"
+  return "APY since inception"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE

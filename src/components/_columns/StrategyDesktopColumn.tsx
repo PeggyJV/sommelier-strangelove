@@ -207,10 +207,18 @@ export const StrategyDesktopColumn = ({
     },
     {
       Header: () => (
-        <Text>
-          Base APY
-          <br />& Rewards
-        </Text>
+        <Tooltip
+          arrowShadowColor="purple.base"
+          label="APY before any platform and strategy provider fees, inclusive of rewards program earnings when an active rewards program is in place"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack spacing={1}>
+            <Text>Net APY</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
       ),
       accessor: "baseApy",
       Cell: ({ row }: any) => {

@@ -1,4 +1,4 @@
-import { Text, Tooltip, VStack } from "@chakra-ui/react"
+import { Text, Tooltip, VStack, HStack } from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
@@ -7,6 +7,7 @@ import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { isTokenPriceEnabledApp } from "data/uiConfig"
 import { cellarDataMap } from "data/cellarDataMap"
+import { InformationIcon } from "components/_icons"
 
 type StrategyTabColumnProps = {
   timeline: Timeline
@@ -37,7 +38,9 @@ export const StrategyTabColumn = ({
             date={row.original.launchDate}
             description={row.original.description}
             isDeprecated={row.original.deprecated}
-            customStrategyHighlight={row.original.config.customStrategyHighlight}
+            customStrategyHighlight={
+              row.original.config.customStrategyHighlight
+            }
             w={56}
           />
         )
@@ -58,10 +61,18 @@ export const StrategyTabColumn = ({
     },
     {
       Header: () => (
-        <Text>
-          Base APY
-          <br />& Rewards
-        </Text>
+        <Tooltip
+          arrowShadowColor="purple.base"
+          label="APY before any platform and strategy provider fees, inclusive of rewards program earnings when an active rewards program is in place"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack spacing={1}>
+            <Text>Net APY</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
       ),
       accessor: "baseApy",
       Cell: ({ row }: any) => {
