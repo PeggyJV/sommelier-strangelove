@@ -85,23 +85,6 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
       </Section>
       <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">
-          {/* {isEthBtcChartEnabled(cellarConfig) && (
-            <EthBtcChartProvider address={cellarAddress}>
-              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                Strategy Perfomance
-              </Heading>
-              <EthBtcPerfomanceCard />
-            </EthBtcChartProvider>
-          )}
-          {isUsdcChartEnabled(cellarConfig) && (
-            <UsdcChartProvider address={cellarAddress}>
-              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                Strategy Perfomance
-              </Heading>
-              <UsdcPerfomanceCard />
-            </UsdcChartProvider>
-          )} */}
-
           {!notLaunched &&
             isApyChartEnabled(cellarConfig) &&
             !isEstimatedApyEnable(cellarConfig) && (

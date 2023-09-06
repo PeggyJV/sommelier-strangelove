@@ -215,13 +215,6 @@ export const tokenPriceTooltipContent = (config: ConfigProps) => {
   return ""
 }
 
-export const isEthBtcChartEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  )
-}
-
 export const isUsdcChartEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||

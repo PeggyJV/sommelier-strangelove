@@ -571,7 +571,7 @@ export const useTokenPriceChart = () => {
 
   if (context === undefined) {
     throw new Error(
-      "This hook must be used within a EthBtcChartProvider."
+      "This hook must be used within a TokenPriceChartProvider."
     )
   }
 

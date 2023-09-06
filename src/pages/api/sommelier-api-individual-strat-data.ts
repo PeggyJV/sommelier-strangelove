@@ -3,6 +3,16 @@ import { NextApiRequest, NextApiResponse } from "next"
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
+async function fetchData(url: string) {
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  return response.json()
+}
+
 const sommelierAPIIndividualStratData = async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -10,24 +20,18 @@ const sommelierAPIIndividualStratData = async (
   try {
     let { cellarAddress } = req.query
 
-    // TODO: Generalize for multichain
-    const data = await fetch(
-      `https://api.sommelier.finance/dailyData/ethereum/${cellarAddress}/0/latest`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    const unix_timestamp_2_hours_ago =
+      Math.floor(Date.now() / 1000) - 7200
 
-    if (data.status !== 200) {
-      throw new Error("failed to fetch data")
-    }
+    const dailyDataUrl = `https://api.sommelier.finance/dailyData/ethereum/${cellarAddress}/0/latest`
+    const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/ethereum/${cellarAddress}/${unix_timestamp_2_hours_ago}/latest`
 
-    const fetchedData = await data.json()
+    const [dailyData, hourlyData] = await Promise.all([
+      fetchData(dailyDataUrl),
+      fetchData(hourlyDataUrl),
+    ])
 
-    let transformedData = fetchedData.Response.map(
+    let transformedDailyData = dailyData.Response.map(
       (dayData: any) => ({
         date: dayData.unix_seconds,
         // Multiply by 1e18 and drop any decimals
@@ -36,35 +40,37 @@ const sommelierAPIIndividualStratData = async (
     )
 
     // Order by descending date
-    transformedData.sort((a: any, b: any) => b.date - a.date)
+    transformedDailyData.sort((a: any, b: any) => b.date - a.date)
 
-    // Most recent
-    const baseAssetTvl = BigInt(
-      Math.floor(Number(fetchedData.Response[0].total_assets) * 1e18) //FE expects everything to be 18 digits regardless of asset
+    // Do the same for hourly data
+    let transformedHourlyData = hourlyData.Response.map(
+      (hourData: any) => ({
+        date: hourData.unix_seconds,
+        // Multiply by 1e18 and drop any decimals
+        shareValue: Math.floor(
+          hourData.share_price * 1e18
+        ).toString(),
+        total_assets: hourData.total_assets,
+      })
     )
 
+    // Order by descending date
+    transformedHourlyData.sort((a: any, b: any) => b.date - a.date)
 
+    // Most recent hourly
+    const baseAssetTvl = BigInt(
+      Math.floor(Number(transformedHourlyData[0].total_assets) * 1e18) // FE expects everything to be 18 digits regardless of asset
+    )
 
-
-
-
-
-
-
-
-
-
-
-    
     // TODO: Get shareValue and TvlTotal from latest hourly data async
     const formattedResult = {
       result: {
         data: {
           cellar: {
             id: cellarAddress,
-            tvlTotal: String(baseAssetTvl),
-            shareValue: transformedData[0].shareValue, // Most recent
-            dayDatas: transformedData,
+            tvlTotal: String(baseAssetTvl), // Most recent hourly
+            shareValue: transformedHourlyData[0].shareValue, // Most recent hourly
+            dayDatas: transformedDailyData,
           },
         },
       },

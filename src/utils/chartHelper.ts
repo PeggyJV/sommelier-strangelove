@@ -29,55 +29,6 @@ export const createTokenPriceChangeDatum = (
   return datum
 }
 
-export const createEthBtcChartSeries = ({
-  tokenPrice,
-  ethBtc50,
-  weth,
-  wbtc,
-  usdc,
-}: {
-  tokenPrice?: Datum[]
-  ethBtc50?: Datum[]
-  weth?: Datum[]
-  wbtc?: Datum[]
-  usdc?: Datum[]
-}): Serie[] => {
-  const minimal = Math.min(
-    Number(tokenPrice?.length),
-    // Number(ethBtc50?.length),
-    Number(usdc?.length),
-    Number(weth?.length),
-    Number(wbtc?.length)
-  )
-  return [
-    {
-      id: "token-price",
-      data: tokenPrice?.slice(0, minimal) || [],
-      color: colors.neutral[100],
-    },
-    // {
-    //   id: "eth-btc-50",
-    //   data: ethBtc50?.slice(0, minimal) || [],
-    //   color: colors.violet.base,
-    // },
-    {
-      id: "usdc",
-      data: usdc?.slice(0, minimal) || [],
-      color: colors.violet.base,
-    },
-    {
-      id: "weth",
-      data: weth?.slice(0, minimal) || [],
-      color: colors.turquoise.base,
-    },
-    {
-      id: "wbtc",
-      data: wbtc?.slice(0, minimal) || [],
-      color: colors.orange.base,
-    },
-  ]
-}
-
 export const createUsdcChartSeries = ({
   tokenPrice,
   usdc,
