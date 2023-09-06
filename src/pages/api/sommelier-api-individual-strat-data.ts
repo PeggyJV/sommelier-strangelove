@@ -37,7 +37,7 @@ const sommelierAPIIndividualStratData = async (
         // Multiply by 1e18 and drop any decimals
         shareValue: Math.floor(dayData.share_price * 1e18).toString(),
       })
-    )
+    )    
 
     // Order by descending date
     transformedDailyData.sort((a: any, b: any) => b.date - a.date)

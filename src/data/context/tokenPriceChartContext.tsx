@@ -286,7 +286,6 @@ export const TokenPriceChartProvider: FC<{
     .filter(
       (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
     )
-    .reverse()
 
   // Functions to update data returned by hook
   const setDataHourly = () => {
@@ -312,8 +311,8 @@ export const TokenPriceChartProvider: FC<{
       series,
       chartProps: hourlyChartProps,
     })
-    const latestData = series[0].data.at(-1)
-    const firstData = series[0].data.at(0)
+    const latestData = series[0].data.at(0)
+    const firstData = series[0].data.at(-1)
 
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
@@ -355,8 +354,8 @@ export const TokenPriceChartProvider: FC<{
       series,
       chartProps: dayChartProps,
     })
-    const latestData = series![0].data.at(-1)
-    const firstData = series![0].data.at(0)
+    const latestData = series![0].data.at(0)
+    const firstData = series![0].data.at(-1)
 
     const dateText = `${format(
       new Date(String(firstData?.x)),
@@ -394,8 +393,8 @@ export const TokenPriceChartProvider: FC<{
       chartProps: monthChartProps,
     })
 
-    const latestData = series[0].data.at(-1)
-    const firstData = series[0].data.at(0)
+    const latestData = series[0].data.at(0)
+    const firstData = series[0].data.at(-1)
 
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
@@ -433,8 +432,8 @@ export const TokenPriceChartProvider: FC<{
       chartProps: allTimeChartProps,
     })
 
-    const latestData = series[0].data.at(-1)
-    const firstData = series[0].data.at(0)
+    const latestData = series[0].data.at(0)
+    const firstData = series[0].data.at(-1)
 
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
@@ -516,8 +515,8 @@ export const TokenPriceChartProvider: FC<{
         chartProps: dayChartProps,
       })
 
-      const latestData = series![0].data.at(-1)
-      const firstData = series![0].data.at(0)
+      const latestData = series![0].data.at(0)
+      const firstData = series![0].data.at(-1)
 
       const dateText = `${format(
         new Date(String(firstData?.x)),

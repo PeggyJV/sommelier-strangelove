@@ -10,7 +10,7 @@ export const createTokenPriceChangeDatum = (
 
   let datum: Datum[] = []
   data.map((item, index, arr) => {
-    const firstData = data[0]
+    const firstData = data[data.length - 1]
     if (firstData) {
       const current = item.shareValue
       const change = firstData
