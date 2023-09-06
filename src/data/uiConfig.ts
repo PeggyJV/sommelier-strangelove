@@ -441,7 +441,7 @@ export const apyLabel = (config: ConfigProps) => {
     ) {
       return "Estimated APY"
     }
-    return "APY since inception"
+    return "Net APY"
   }
   return "Base APY"
 }
