@@ -288,15 +288,35 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
             {errors.depositAmount?.message}
           </FormErrorMessage>
         </FormControl>
+        <Text fontSize="xs">
+          <strong>
+            Bonding, Unbonding & Unstaking: A Quick Guide
+          </strong>
+          <br />
+          <br />
+          <strong>Bonding:</strong>
+          <br />
+          Deposit crypto into our strategy and receive strategy
+          tokens. "Bond" these tokens to earn extra rewards.
+          <br />
+          <br />
+          <strong>Unbonding:</strong>
+          <br />
+          Your tokens are locked for the chosen bonding period. Click
+          "Unbond" to initiate the unbonding process. Tokens remain
+          locked for the duration of your chosen period after you
+          click "Unbond."
+          <br />
+          <br />
+          <strong>Unstaking:</strong>
+          <br />
+          Once the unbonding period is over, click "Unstake" to move
+          tokens from the Bonding contract to your wallet.
+        </Text>
         <VStack align="stretch">
-          <CardHeading>Bonding Period</CardHeading>
+          <CardHeading>Choose bonding period here:</CardHeading>
           <BondingPeriodOptions cellarConfig={cellarConfig} />
         </VStack>
-        <Text fontSize="xs">
-          After triggering 'Unbond,' you will need to wait through the
-          bonding period you selected, after which your LP tokens can
-          be unstaked and withdrawn.
-        </Text>
         <BaseButton
           type="submit"
           isDisabled={isDisabled}

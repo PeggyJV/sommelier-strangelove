@@ -263,7 +263,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 fontWeight="normal"
                 textTransform="capitalize"
               >
-                Period
+                Chosed Bonding Period
               </Th>
               <Tooltip
                 hasArrow
@@ -464,11 +464,28 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         </Table>
       </TableContainer>
 
-      <Text fontSize="xs" textAlign="center" pt={4}>
-        After triggering 'Unbond,' you will need to wait through the
-        bonding period you selected,
+      <Text fontSize="xs" pt={4}>
+        <strong>Bonding, Unbonding & Unstaking: A Quick Guide</strong>
         <br />
-        after which your LP tokens can be unstaked and withdrawn.
+        <br />
+        <strong>Bonding:</strong>
+        <br />
+        Deposit crypto into our strategy and receive strategy tokens.
+        "Bond" these tokens to earn extra rewards.
+        <br />
+        <br />
+        <strong>Unbonding:</strong>
+        <br />
+        Your tokens are locked for the chosen bonding period. Click
+        "Unbond" to initiate the unbonding process. Tokens remain
+        locked for the duration of your chosen period after you click
+        "Unbond."
+        <br />
+        <br />
+        <strong>Unstaking:</strong>
+        <br />
+        Once the unbonding period is over, click "Unstake" to move
+        tokens from the Bonding contract to your wallet.
       </Text>
     </InnerCard>
   )
