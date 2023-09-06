@@ -289,13 +289,13 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
           </FormErrorMessage>
         </FormControl>
         <VStack align="stretch">
-          <CardHeading>Bonding Period</CardHeading>
+          <CardHeading>Unbonding Period</CardHeading>
           <BondingPeriodOptions cellarConfig={cellarConfig} />
         </VStack>
         <Text fontSize="xs">
           After triggering 'Unbond,' you will need to wait through the
-          bonding period you selected, after which your LP tokens can
-          be unstaked and withdrawn.
+          unbonding period you selected, after which your LP tokens
+          can be unstaked and withdrawn.
         </Text>
         <BaseButton
           type="submit"
