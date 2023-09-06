@@ -8,7 +8,6 @@ import {
 import { add, isBefore, isFuture, subDays } from "date-fns"
 import { GetStrategyDataQuery } from "data/actions/types"
 import { CellarStakingV0815 } from "src/abi/types"
-import { formatDecimals } from "utils/bigNumber"
 import { isComingSoon } from "utils/isComingSoon"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
@@ -116,7 +115,6 @@ export const getStrategyData = async ({
       const baseApy = (() => {
         if (hideValue) return
         if (!isAPYEnabled(config)) return
-        const datas = dayDatas?.slice(0, 10)
 
         const launchDay = launchDate ?? subDays(new Date(), 8)
         const launchEpoch = Math.floor(launchDay.getTime() / 1000)
@@ -124,12 +122,13 @@ export const getStrategyData = async ({
         return getApyInception({
           launchEpoch: launchEpoch,
           baseApy: config.baseApy,
-          dayDatas: datas,
+          shareData: dayDatas ? dayDatas[0] : undefined,
           decimals: decimals,
           startingShareValue: strategy.startingShareValue,
         })
       })()
 
+      //! NOTE: This only applies to token prices
       const changes =
         (!hideValue && dayDatas && getChanges(dayDatas)) || undefined
 

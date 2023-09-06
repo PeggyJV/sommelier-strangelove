@@ -2,12 +2,8 @@ import { Flex, Stack, Text } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import {
   apyLabel,
-  intervalGainPctTitleContent,
-  intervalGainPctTooltipContent,
-  intervalGainTimeline,
   isAPYEnabled,
   isDailyChangeEnabled,
-  isIntervalGainPctEnabled,
   isTokenPriceEnabled,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
@@ -35,11 +31,8 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   )
 
   const launchDate = strategyData?.launchDate
-  const tvm = strategyData?.tvm
   const baseApy = strategyData?.baseApy
   const rewardsApy = strategyData?.rewardsApy
-  const intervalGain =
-    strategyData?.changes?.[intervalGainTimeline(cellarConfig)]
   const stakingEnd = strategyData?.stakingEnd
   const countdown = isComingSoon(launchDate)
 
@@ -124,16 +117,6 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
               <CellarStatsLabel
                 title="1D Change"
                 tooltip="% change of current token price vs. token price yesterday"
-              />
-            </Flex>
-          )}
-
-          {isIntervalGainPctEnabled(cellarConfig) && (
-            <Flex alignItems="center">
-              <PercentageText data={intervalGain} />
-              <CellarStatsLabel
-                title={intervalGainPctTitleContent(cellarConfig)}
-                tooltip={intervalGainPctTooltipContent(cellarConfig)}
               />
             </Flex>
           )}

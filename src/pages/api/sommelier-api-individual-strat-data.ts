@@ -43,6 +43,20 @@ const sommelierAPIIndividualStratData = async (
       Math.floor(Number(fetchedData.Response[0].total_assets) * 1e18) //FE expects everything to be 18 digits regardless of asset
     )
 
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    // TODO: Get shareValue and TvlTotal from latest hourly data async
     const formattedResult = {
       result: {
         data: {

@@ -17,7 +17,6 @@ import {
   intervalGainPctTooltipContent,
   intervalGainTimeline,
   isDailyChangeEnabled,
-  isIntervalGainPctEnabled,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { ConfigProps } from "data/types"
@@ -44,8 +43,6 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
   )
   const tokenPrice = strategyData?.tokenPrice
   const dailyChange = strategyData?.changes?.daily
-  const intervalGain =
-    strategyData?.changes?.[intervalGainTimeline(cellarConfig)]
 
   return (
     <HStack
@@ -97,37 +94,6 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
             >
               <HStack spacing={1} align="center">
                 <CardHeading>1D Change</CardHeading>
-                <InformationIcon color="neutral.300" boxSize={3} />
-              </HStack>
-            </Tooltip>
-          </Box>
-        </VStack>
-      )}
-      {isIntervalGainPctEnabled(cellarConfig) && (
-        <VStack spacing={1} align="center" maxW="7rem">
-          <>
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <PercentageText data={intervalGain} headingSize="md" />
-            )}
-          </>
-          <Box
-            onMouseEnter={debounce(() => {
-              analytics.track("user.tooltip-opened-monthly-change")
-            }, 1000)}
-          >
-            <Tooltip
-              hasArrow
-              placement="top"
-              label={intervalGainPctTooltipContent(cellarConfig)}
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={1} align="center">
-                <CardHeading textAlign="center">
-                  {intervalGainPctTitleContent(cellarConfig)}
-                </CardHeading>
                 <InformationIcon color="neutral.300" boxSize={3} />
               </HStack>
             </Tooltip>

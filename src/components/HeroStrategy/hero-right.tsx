@@ -29,7 +29,6 @@ import {
   intervalGainPctTooltipContent,
   intervalGainTimeline,
   isDailyChangeEnabled,
-  isIntervalGainPctEnabled,
   showTokenPriceInsteadOfApy,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
@@ -238,21 +237,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                   <CellarStatsLabel
                     tooltip="% change of current token price vs. token price yesterday"
                     title="1D Change"
-                  />
-                </VStack>
-              )}
-              {isIntervalGainPctEnabled(cellarConfig) && (
-                <VStack flex={1} textAlign="center">
-                  <PercentageText
-                    data={intervalGainPct}
-                    headingSize="md"
-                  />
-
-                  <CellarStatsLabel
-                    title={intervalGainPctTitleContent(cellarConfig)}
-                    tooltip={intervalGainPctTooltipContent(
-                      cellarConfig
-                    )}
                   />
                 </VStack>
               )}

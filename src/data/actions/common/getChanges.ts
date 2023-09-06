@@ -31,7 +31,7 @@ export const getChanges = (
 
   const monthly = (() => {
     const first = cleanData?.[0]
-    const last = cleanData?.[cleanData.length - 1]
+    const last = cleanData?.[29]
 
     if (!first || !last) return
 
