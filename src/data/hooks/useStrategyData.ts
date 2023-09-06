@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { getStrategyData } from "data/actions/common/getStrategyData"
 import { cellarDataMap } from "data/cellarDataMap"
-import { tokenConfig } from "data/tokenConfig"
-import { GetStrategyDataQuery } from "generated/subgraph"
+import { GetStrategyDataQuery } from "src/data/actions/types"
 import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
@@ -15,7 +14,7 @@ export const useStrategyData = (address: string) => {
   const { data: allContracts } = useAllContracts()
   const { data: sommPrice } = useCoinGeckoPrice("sommelier")
 
-  const [sgData, setSgData] = useState<
+  const [stratData, setStratData] = useState<
     GetStrategyDataQuery | undefined
   >(undefined)
   const [error, setError] = useState(null)
@@ -26,7 +25,7 @@ export const useStrategyData = (address: string) => {
         if (error) {
           setError(error)
         } else {
-          setSgData(data)
+          setStratData(data)
         }
       })
       .catch((error) => setError(error))
@@ -37,14 +36,11 @@ export const useStrategyData = (address: string) => {
       item.config.cellar.address.toLowerCase() ===
       address.toLowerCase()
   )!.config
-  const isNoSubgraph = Boolean(config!.noSubgraph)
-  const baseAsset = tokenConfig.find(
-    (token) => token.symbol === sgData?.cellar?.asset.symbol
-  )?.coinGeckoId
+  const isNoDataSource = Boolean(config!.isNoDataSource)
+  const baseAsset = config.baseAsset.coinGeckoId
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
   )
-
   const query = useQuery(
     [
       "USE_STRATEGY_DATA",
@@ -55,10 +51,8 @@ export const useStrategyData = (address: string) => {
         address,
         contracts: allContracts![address]!,
         sommPrice: sommPrice ?? "0",
-        sgData: sgData?.cellar,
-        decimals: sgData?.cellar?.asset.decimals ?? 6,
+        stratData: stratData?.cellar,
         baseAssetPrice: baseAssetPrice ?? "0",
-        symbol: sgData?.cellar?.asset.symbol ?? "USDC",
       })
 
       return result
@@ -67,7 +61,7 @@ export const useStrategyData = (address: string) => {
       enabled:
         !!allContracts &&
         !!sommPrice &&
-        (isNoSubgraph || !!sgData) &&
+        (isNoDataSource || !!stratData) &&
         !!baseAssetPrice,
     }
   )

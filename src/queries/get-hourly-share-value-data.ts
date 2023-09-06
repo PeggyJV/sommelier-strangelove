@@ -1,7 +1,7 @@
 const getUrl = (epoch: number, cellarAddress: string) =>
-  `/api/sommelier-api-monthly-share-value-data?epoch=${epoch}&cellarAddress=${cellarAddress}`
+  `/api/sommelier-api-hourly-share-value-data?epoch=${epoch}&cellarAddress=${cellarAddress}`
 
-export const fetchMonthlyShareValueData = async (
+export const fetchHourlyShareValueData = async (
   epoch: number,
   cellarAddress: string
 ) => {
@@ -14,7 +14,7 @@ export const fetchMonthlyShareValueData = async (
     return result.result.data
   } catch (error) {
     console.log(
-      "Error fetching Monthly Share Value Data",
+      "Error fetching hourly Share Value Data",
       error
     )
     throw Error(error as string)

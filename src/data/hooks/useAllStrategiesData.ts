@@ -5,7 +5,7 @@ import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchGraphCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
-import { GetAllStrategiesDataQuery } from "generated/subgraph"
+import { GetAllStrategiesDataQuery } from "data/actions/types"
 
 export const useAllStrategiesData = () => {
   const provider = useProvider()

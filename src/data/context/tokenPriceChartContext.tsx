@@ -2,10 +2,11 @@ import { LineProps, Serie } from "@nivo/line"
 import { format } from "date-fns"
 import {
   GetAllTimeShareValueQuery,
-  useGetHourlyShareValueQuery,
+  GetHourlyShareValueQuery,
   GetMonthlyShareValueQuery,
   GetWeeklyShareValueQuery,
-} from "generated/subgraph"
+} from "data/actions/types"
+import { fetchHourlyShareValueData } from "queries/get-hourly-share-value-data"
 import { fetchWeeklyShareValueData } from "queries/get-weekly-share-value-data"
 import { fetchMonthlyShareValueData } from "queries/get-monthly-share-value-data"
 import { fetchAllTimeShareValueData } from "queries/get-all-time-share-value-data"
@@ -171,20 +172,31 @@ export const TokenPriceChartProvider: FC<{
   })
   const [timeline, setTimeline] = useState<Timeline>("1W")
 
-  // GQL Queries
-  const [
-    {
-      fetching: hourlyIsFetching,
-      data: hourlyDataRaw,
-      error: hourlyError,
-    },
-    reexecuteHourly,
-  ] = useGetHourlyShareValueQuery({
-    variables: {
-      epoch: prev24Hours,
-      cellarAddress: address,
-    },
-  })
+  const [hourlyDataRaw, setHourlyDataRaw] = useState<
+    GetHourlyShareValueQuery | undefined
+  >(undefined)
+  const [hourlyIsFetching, setHourlyIsFetching] = useState(false)
+  const [hourlyError, setHourlyError] = useState(null)
+  const [reexecuteHourlyTrigger, setReexecuteHourlyTrigger] =
+    useState(0) // a state variable to trigger re-fetch
+
+  // useCallback is used to prevent unnecessary re-renders when passing this function down to child components
+  const reexecuteHourly = useCallback(() => {
+    setReexecuteHourlyTrigger((prevState) => prevState + 1)
+  }, [])
+
+  useEffect(() => {
+    setHourlyIsFetching(true)
+    fetchHourlyShareValueData(prev24Hours, address)
+      .then((data) => {
+        setHourlyDataRaw(data)
+        setHourlyIsFetching(false)
+      })
+      .catch((error) => {
+        setHourlyError(error)
+        setHourlyIsFetching(false)
+      })
+  }, [prev24Hours, address, reexecuteHourlyTrigger]) // re-execute the effect when 'prev24Hours' or 'address' changes
 
   const [weeklyDataRaw, setWeeklyDataRaw] = useState<
     GetWeeklyShareValueQuery | undefined
@@ -274,7 +286,6 @@ export const TokenPriceChartProvider: FC<{
     .filter(
       (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
     )
-    .reverse()
 
   // Functions to update data returned by hook
   const setDataHourly = () => {
@@ -300,8 +311,8 @@ export const TokenPriceChartProvider: FC<{
       series,
       chartProps: hourlyChartProps,
     })
-    const latestData = series[0].data.at(-1)
-    const firstData = series[0].data.at(0)
+    const latestData = series[0].data.at(0)
+    const firstData = series[0].data.at(-1)
 
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
@@ -343,8 +354,8 @@ export const TokenPriceChartProvider: FC<{
       series,
       chartProps: dayChartProps,
     })
-    const latestData = series![0].data.at(-1)
-    const firstData = series![0].data.at(0)
+    const latestData = series![0].data.at(0)
+    const firstData = series![0].data.at(-1)
 
     const dateText = `${format(
       new Date(String(firstData?.x)),
@@ -382,8 +393,8 @@ export const TokenPriceChartProvider: FC<{
       chartProps: monthChartProps,
     })
 
-    const latestData = series[0].data.at(-1)
-    const firstData = series[0].data.at(0)
+    const latestData = series[0].data.at(0)
+    const firstData = series[0].data.at(-1)
 
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
@@ -421,8 +432,8 @@ export const TokenPriceChartProvider: FC<{
       chartProps: allTimeChartProps,
     })
 
-    const latestData = series[0].data.at(-1)
-    const firstData = series[0].data.at(0)
+    const latestData = series[0].data.at(0)
+    const firstData = series[0].data.at(-1)
 
     const valueExists: boolean =
       Boolean(latestData?.y) || String(latestData?.y) === "0"
@@ -504,8 +515,8 @@ export const TokenPriceChartProvider: FC<{
         chartProps: dayChartProps,
       })
 
-      const latestData = series![0].data.at(-1)
-      const firstData = series![0].data.at(0)
+      const latestData = series![0].data.at(0)
+      const firstData = series![0].data.at(-1)
 
       const dateText = `${format(
         new Date(String(firstData?.x)),
@@ -559,7 +570,7 @@ export const useTokenPriceChart = () => {
 
   if (context === undefined) {
     throw new Error(
-      "This hook must be used within a EthBtcChartProvider."
+      "This hook must be used within a TokenPriceChartProvider."
     )
   }
 

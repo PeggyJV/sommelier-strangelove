@@ -1,5 +1,5 @@
 const getUrl = (cellarAddress: string) =>
-  `/api/graph-individual-strat-data?cellarAddress=${cellarAddress}`
+  `/api/sommelier-api-individual-strat-data?cellarAddress=${cellarAddress}`
 
 export const fetchGraphIndividualCellarStrategyData = async (cellarAddress: string) => {
   const url = getUrl(cellarAddress)
@@ -11,7 +11,7 @@ export const fetchGraphIndividualCellarStrategyData = async (cellarAddress: stri
     return result.result
   } catch (error) {
     console.log(
-      "Error fetching Graph Individual Cellar Strategy Data",
+      "Error fetching Individual Cellar Strategy Data",
       error
     )
     throw Error(error as string)

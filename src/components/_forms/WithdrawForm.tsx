@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, VFC } from "react"
+import React, { useEffect, VFC } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -10,9 +10,8 @@ import {
   Spinner,
   Image,
   Stack,
-  Avatar,
   Text,
-  Link
+  Link,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -29,15 +28,8 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
-import { WarningIcon } from "components/_icons"
 import { useCurrentPosition } from "data/hooks/useCurrentPosition"
-import { tokenConfig } from "data/tokenConfig"
-import BigNumber from "bignumber.js"
-import {
-  isAssetDistributionEnabled,
-  isWithdrawTokenPriceEnabled,
-  waitTime,
-} from "data/uiConfig"
+import { waitTime } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
@@ -178,12 +170,18 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       const error = e as Error
 
       // Get Redeemable Assets
-      const redeemableAssets: number = parseInt(await fetchCellarRedeemableReserves(id))
+      const redeemableAssets: number = parseInt(
+        await fetchCellarRedeemableReserves(id)
+      )
 
       // previewRedeem on the shares the user is attempting to withdraw
       // Only get previewRedeem on 1 share to optimize caching and do relevant math below
-      const previewRedeem: number = parseInt(await fetchCellarPreviewRedeem(id, BigInt(1e18)))
-      const redeemAmt: number = Math.floor(previewRedeem * watchWithdrawAmount)
+      const previewRedeem: number = parseInt(
+        await fetchCellarPreviewRedeem(id, BigInt(1e18))
+      )
+      const redeemAmt: number = Math.floor(
+        previewRedeem * watchWithdrawAmount
+      )
       const redeemingMoreThanAvailible = redeemAmt > redeemableAssets
 
       /*
@@ -270,45 +268,6 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     currentPosition.refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const estimatedUSD = useMemo(() => {
-    let total = 0
-    currentPosition.data?.positions
-      ?.filter((item) => Number(item.withdrawable) > 0)
-      .forEach((item) => {
-        const withdrawable =
-          Number(item.withdrawable) / Math.pow(10, item.decimals)
-
-        const resultWithdraw = new BigNumber(watchWithdrawAmount || 0)
-          .div(
-            new BigNumber(
-              toEther(
-                lpTokenData?.formatted,
-                lpTokenData?.decimals,
-                false,
-                6
-              )
-            )
-          )
-          .times(withdrawable)
-
-        const resultWithdrawUSD = resultWithdraw
-          .times(item.usdPrice)
-          .toNumber()
-        total += resultWithdrawUSD
-      })
-    return total
-  }, [
-    currentPosition.data?.positions,
-    lpTokenData?.decimals,
-    lpTokenData?.formatted,
-    watchWithdrawAmount,
-  ])
-
-  const currentPositionLoading =
-    currentPosition.isLoading ||
-    currentPosition.isRefetching ||
-    currentPosition.isFetching
 
   return (
     <VStack
@@ -415,20 +374,6 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
             />
             {errors.withdrawAmount?.message}
           </FormErrorMessage>
-          {isAssetDistributionEnabled(cellarConfig) && (
-            <HStack pt={2}>
-              <WarningIcon color="orange.base" boxSize="12px" />
-              <Text
-                fontSize="xs"
-                fontWeight="semibold"
-                color="orange.light"
-              >
-                Tokens are swapped to the actively traded vault assets
-                which may include multiple assets in varying
-                distribution
-              </Text>
-            </HStack>
-          )}
         </Stack>
       </FormControl>
       <Stack>
@@ -440,90 +385,6 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
             title="Vault"
             value={<Text>{cellarDataMap[id].name}</Text>}
           />
-          {isWithdrawTokenPriceEnabled(cellarConfig) && (
-            <TransactionDetailItem
-              title="Token price"
-              value={<Text>{tokenPrice}</Text>}
-            />
-          )}
-          {isAssetDistributionEnabled(cellarConfig) && (
-            <>
-              <TransactionDetailItem
-                title="Assets"
-                value={
-                  currentPositionLoading ? (
-                    <Spinner />
-                  ) : currentPosition.isError ? (
-                    <Text>(Can't load)</Text>
-                  ) : (
-                    currentPosition.data?.positions.map((item) => {
-                      if (!item) return <Text>--</Text>
-                      const token = tokenConfig.find(
-                        (token) =>
-                          token.address === item.address.toLowerCase()
-                      )
-                      const withdrawable =
-                        Number(item.withdrawable) /
-                        Math.pow(10, item.decimals)
-
-                      const percentage = item.ratio
-                        .times(100)
-                        .toNumber()
-
-                      const resultWithdraw = new BigNumber(
-                        watchWithdrawAmount || 0
-                      )
-                        .div(
-                          new BigNumber(
-                            toEther(
-                              lpTokenData?.formatted,
-                              lpTokenData?.decimals,
-                              false,
-                              6
-                            )
-                          )
-                        )
-                        .times(withdrawable)
-                        .toNumber()
-
-                      return (
-                        <HStack
-                          key={item.address}
-                          justifyContent="space-between"
-                        >
-                          <Avatar
-                            boxSize={6}
-                            src={token?.src}
-                            name={token?.alt}
-                            borderWidth={2}
-                            borderColor="surface.bg"
-                            bg="surface.bg"
-                          />
-                          <Text>
-                            {fixed(resultWithdraw, 8)} {token?.symbol}{" "}
-                            ({fixed(percentage, 2)}
-                            %)
-                          </Text>
-                        </HStack>
-                      )
-                    })
-                  )
-                }
-              />
-              <TransactionDetailItem
-                title="Estimated USD"
-                value={
-                  currentPositionLoading ? (
-                    <Spinner />
-                  ) : currentPosition.isError ? (
-                    <Text>(Can't load)</Text>
-                  ) : (
-                    <Text>≈ ${fixed(estimatedUSD || 0, 6)}</Text>
-                  )
-                }
-              />
-            </>
-          )}
         </Stack>
       </Stack>
 

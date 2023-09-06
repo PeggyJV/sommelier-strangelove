@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { PearlIcon } from "components/_icons"
+import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const turboSWETH: CellarData = {
   name: "Turbo swETH",
@@ -114,6 +115,7 @@ export const turboSWETH: CellarData = {
         Date.UTC(2023, 8, 24, 13, 0, 0, 0)
       ),
     },
+    baseAsset: tokenConfigMap.WETH,
   },
   faq: [
     {
