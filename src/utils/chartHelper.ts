@@ -1,7 +1,6 @@
 import { Datum, Serie } from "@nivo/line"
 import { differenceInDays } from "date-fns"
 import { toInteger } from "lodash"
-import { colors } from "theme/colors"
 import { formatDecimals } from "./bigNumber"
 
 export const createTokenPriceChangeDatum = (
@@ -27,31 +26,6 @@ export const createTokenPriceChangeDatum = (
     }
   })
   return datum
-}
-
-export const createUsdcChartSeries = ({
-  tokenPrice,
-  usdc,
-}: {
-  tokenPrice?: Datum[]
-  usdc?: Datum[]
-}): Serie[] => {
-  const minimal = Math.min(
-    Number(tokenPrice?.length),
-    Number(usdc?.length)
-  )
-  return [
-    {
-      id: "token-price",
-      data: tokenPrice?.slice(0, minimal) || [],
-      color: colors.neutral[100],
-    },
-    {
-      id: "usdc",
-      data: usdc?.slice(0, minimal) || [],
-      color: colors.violet.base,
-    },
-  ]
 }
 
 export const formatPercentage = (value: string) => {
