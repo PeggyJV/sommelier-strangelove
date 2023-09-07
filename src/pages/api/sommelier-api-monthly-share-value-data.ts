@@ -61,9 +61,14 @@ const sommelierAPIMonthlyShareValueData = async (
     // Format similar to subgraph queries so as to not rewrite large swaths of code
     res.status(200).json(formattedResult)
   } catch (error) {
+    console.error(error)
     res
       .status(500)
-      .send({ error: "failed to fetch data", message: error })
+      .send({
+        error: "failed to fetch data",
+        message:
+          (error as Error).message || "An unknown error occurred",
+      })
   }
 }
 
