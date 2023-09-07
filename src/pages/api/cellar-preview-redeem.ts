@@ -44,9 +44,14 @@ const cellarPreviewRedeem = async (
       sharesValue: shareValue.toString(), // Convert the result to string to ensure it can be serialized in JSON
     })
   } catch (error) {
+    console.error(error)
     res
       .status(500)
-      .send({ error: "failed to fetch data", message: error })
+      .send({
+        error: "failed to fetch data",
+        message:
+          (error as Error).message || "An unknown error occurred",
+      })
   }
 }
 

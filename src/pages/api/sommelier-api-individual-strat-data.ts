@@ -20,11 +20,11 @@ const sommelierAPIIndividualStratData = async (
   try {
     let { cellarAddress } = req.query
 
-    const unix_timestamp_2_hours_ago =
-      Math.floor(Date.now() / 1000) - 7200
+    const unix_timestamp_24_hours_ago =
+      Math.floor(Date.now() / 1000) - 24 * 60 * 60
 
     const dailyDataUrl = `https://api.sommelier.finance/dailyData/ethereum/${cellarAddress}/0/latest`
-    const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/ethereum/${cellarAddress}/${unix_timestamp_2_hours_ago}/latest`
+    const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/ethereum/${cellarAddress}/${unix_timestamp_24_hours_ago}/latest`
 
     const [dailyData, hourlyData] = await Promise.all([
       fetchData(dailyDataUrl),
@@ -85,9 +85,13 @@ const sommelierAPIIndividualStratData = async (
     // Format similar to subgraph queries so as to not rewrite large swaths of code
     res.status(200).json(formattedResult)
   } catch (error) {
+    console.error(error)
     res
       .status(500)
-      .send({ error: "failed to fetch data", message: error })
+      .send({
+        error: "failed to fetch data",
+        message: (error as Error).message || "An unknown error occurred",
+      })
   }
 }
 
