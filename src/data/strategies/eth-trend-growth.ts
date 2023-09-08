@@ -14,7 +14,7 @@ export const ethTrendGrowth: CellarData = {
   slug: config.CONTRACT.ETH_TREND_GROWTH.SLUG,
   dashboard: "https://rybtc.sevenseas.capital/",
   tradedAssets: ["USDC", "YieldETH", "YieldUSD"],
-  launchDate: new Date(2023, 9, 7, 10, 0, 0, 0),
+  launchDate: new Date(Date.UTC(2023, 7, 29, 13, 0, 0, 0)),
   cellarType: CellarType.automatedPortfolio,
   description: `Maximize your yield while outperforming the market.`,
   strategyType: "Crypto portfolio",

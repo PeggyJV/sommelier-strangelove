@@ -908,7 +908,7 @@ export const strategyPageContentData = {
     },
     howItWorks: `The vault engages in tick optimization by pairing swETH and WETH on Uniswap V3 to generate yield for depositors and to improve swap efficiency for swETH. As the Swell ecosystem grows and swETH integrates with additional applications the vault may take advantage of other yield opportunities that are whitelisted by governance. `,
   },
-  config.CONTRACT.ETH_TREND_GROWTH.SLUG]: {
+  [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: {
     name: "ETH Trend Growth",
     provider: "Silver Sun Capital Investments & Seven Seas",
     providerUrl: "https://sevenseas.capital/",
@@ -917,7 +917,7 @@ export const strategyPageContentData = {
       <>
         {}
         <Image
-          alt="ETH Trend Growth  icon"
+          alt="ETH Trend Growth icon"
           src="/assets/icons/eth-trend-growth.png"
           boxSize={8}
         />
