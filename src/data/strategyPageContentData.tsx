@@ -908,4 +908,37 @@ export const strategyPageContentData = {
     },
     howItWorks: `The vault engages in tick optimization by pairing swETH and WETH on Uniswap V3 to generate yield for depositors and to improve swap efficiency for swETH. As the Swell ecosystem grows and swETH integrates with additional applications the vault may take advantage of other yield opportunities that are whitelisted by governance. `,
   },
+  config.CONTRACT.ETH_TREND_GROWTH.SLUG]: {
+    name: "ETH Trend Growth",
+    provider: "Silver Sun Capital Investments & Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Maximize your yield while outperforming the market.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="ETH Trend Growth  icon"
+          src="/assets/icons/eth-trend-growth.png"
+          boxSize={8}
+        />
+        <Text>ETHTrendGrowth</Text>
+      </>
+    ),
+    tradedAssets: ["USDC", "YieldETH", "YieldUSD"],
+    alternativeTo: "TODO",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `- Rebalance between Real Yield ETH and Real Yield USD to maximize real yield in any market environment.
+        - Use trend following strategies to gain exposure to ETH during uptrends to maximize exposure to upside volatility and then fully exit to stablecoins to avoid drawdowns.`,
+      ],
+      description: `We have been optimizing our trend-following strategy with ETH over the past 2 years to identify the best indicators that best determine when we should be fully exposed to ETH to maximize exposure to upside volatility while also setting a dynamic stop loss to minimize drawdowns. Since this strategy is focused on the daily timeframe, the trading costs are minimal to execute this strategy, and the yields from Real Yield ETH will be helpful to grow the ETH position since the average trade is held for 2-3 months based on the backtested data. When the trend-following strategy flips bearish and it is confirmed via a daily market close, the long ETH position is exited to Real Yield USD so stablecoin yield is generated while the strategy is not exposed to ETH downside volatility which minimizes drawdowns.`,
+    },
+    howItWorks: `TODO`,
+  },
 }

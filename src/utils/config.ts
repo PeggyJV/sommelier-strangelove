@@ -154,6 +154,11 @@ export const config = {
       SLUG: "Turbo-SWETH",
       ABI: cellarV0821,
     },
+    ETH_TREND_GROWTH: {
+      ADDRESS: "0xcf05F416863F86ad37200379B298B7e43A3bF2bE",
+      SLUG: "ETH-Trend_Growth",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -218,6 +223,11 @@ export const config = {
       ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
       ABI: cellarStakingV0821,
     },
+    // // need to add correct contract address
+    // ETH_TREND_GROWTH_STAKER: {
+    //   ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
+    //   ABI: cellarStakingV0821,
+    // },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
