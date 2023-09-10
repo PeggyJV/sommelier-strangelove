@@ -65,6 +65,14 @@ export const turboGHO: CellarData = {
   config: {
     id: config.CONTRACT.TURBO_GHO.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_GHO,
+    baseAsset: {
+      src: "/assets/icons/usdc.png",
+      alt: "USD Coin logo",
+      symbol: "USDC",
+      address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      coinGeckoId: "usd-coin",
+      decimals: 6,
+    },
     lpToken: {
       address: config.CONTRACT.TURBO_GHO.ADDRESS,
       imagePath: "/assets/icons/turbo-gho.png",
