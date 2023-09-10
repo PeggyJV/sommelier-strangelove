@@ -156,7 +156,7 @@ export const config = {
     },
     ETH_TREND_GROWTH: {
       ADDRESS: "0xcf05F416863F86ad37200379B298B7e43A3bF2bE",
-      SLUG: "ETH-Trend_Growth",
+      SLUG: "ETH-Trend-Growth",
       ABI: cellarV0821,
     },
     // Router
