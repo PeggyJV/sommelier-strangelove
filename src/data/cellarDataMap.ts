@@ -27,6 +27,7 @@ let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
     // ! NOTE THIS DETERMINES INITIAL ORDERING
+    [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,
     [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
     [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
     [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,

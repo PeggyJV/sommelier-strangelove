@@ -13,7 +13,7 @@ export const turboGHO: CellarData = {
   name: "Turbo GHO",
   slug: config.CONTRACT.TURBO_GHO.SLUG,
   tradedAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
-  launchDate: new Date(Date.UTC(2023, 9, 14, 13, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 8, 14, 13, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your GHO across an evolving set of LP strategies.`,
   strategyType: "Yield",
