@@ -224,7 +224,7 @@ export const config = {
       ABI: cellarStakingV0821,
     },
 
-    URBO_GHO_STAKER: {
+    TURBO_GHO_STAKER: {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
       ABI: cellarStakingV0821,
     },

@@ -7,7 +7,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
-import { PearlIcon } from "components/_icons"
+import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const turboGHO: CellarData = {
   name: "Turbo GHO",
@@ -65,14 +65,6 @@ export const turboGHO: CellarData = {
   config: {
     id: config.CONTRACT.TURBO_GHO.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_GHO,
-    baseAsset: {
-      src: "/assets/icons/usdc.png",
-      alt: "USD Coin logo",
-      symbol: "USDC",
-      address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      coinGeckoId: "usd-coin",
-      decimals: 6,
-    },
     lpToken: {
       address: config.CONTRACT.TURBO_GHO.ADDRESS,
       imagePath: "/assets/icons/turbo-gho.png",
@@ -87,42 +79,12 @@ export const turboGHO: CellarData = {
       abi: config.CONTRACT.TURBO_GHO.ABI,
       key: CellarKey.CELLAR_V2PT5,
     },
-    // staker: {
-    //   address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS,
-    //   abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
-    //   key: StakerKey.CELLAR_STAKING_V0821,
-    // },
-    // rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    // customRewardWithoutAPY: {
-    //   tokenSymbol: "PEARL",
-    //   tokenDisplayName: "Pearl",
-    //   tokenAddress: "0x677365ac7ca3e9efe12a29a001737a3db265e8af",
-    //   imagePath: "/assets/icons/pearl.svg",
-    //   customRewardMessageTooltip:
-    //     "View your Pearls at https://app.swellnetwork.io/voyage",
-    //   customRewardMessage: "Up to 12 PEARL per swETH",
-    //   customRewardHeader: "Daily Pearl Reward Rate",
-    //   customRewardAPYTooltip:
-    //     "Daily PEARL Rewards Rate: Up to 12 PEARL per swETH",
-    //   showRewards: false,
-    //   showClaim: true,
-    //   customClaimMsg: "Claim All SOMM",
-    //   logo: PearlIcon,
-    //   logoSize: "15px",
-    //   customRewardLongMessage:
-    //     "Earn up to 12 PEARL per swETH of TVL deposited when you bond.",
-    //   rewardHyperLink: "https://app.swellnetwork.io/voyage",
-    //   customColumnHeader: "View Pearls",
-    //   customColumnHeaderToolTip:
-    //     "View your Pearls at https://app.swellnetwork.io/voyage",
-    //   customColumnValue: "https://app.swellnetwork.io/voyage",
-    //   showSommRewards: true,
-    //   customIconToolTipMsg: "Double PEARLS ends in ",
-    //   // need to update
-    //   stakingDurationOverride: new Date(
-    //     Date.UTC(2023, 8, 24, 13, 0, 0, 0)
-    //   ),
-    // },
+    staker: {
+      address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS,
+      abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
+    },
+    baseAsset: tokenConfigMap.USDC,
   },
   faq: [
     {
