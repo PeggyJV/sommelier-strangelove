@@ -250,6 +250,7 @@ export const tokenConfig: Token[] = [
     symbol: "GHO",
     address: "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
     coinGeckoId: "gho",
+    decimals: 18,
   },
   {
     src: "/assets/icons/liquity-usd-logo.png",
@@ -257,6 +258,7 @@ export const tokenConfig: Token[] = [
     symbol: "LUSD",
     address: "0x5f98805a4e8be255a32880fdec7f6728c6568ba0",
     coinGeckoId: "liquity-usd",
+    decimals: 18,
   },
 ]
 
