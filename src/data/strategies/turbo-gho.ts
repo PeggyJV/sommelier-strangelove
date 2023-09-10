@@ -13,15 +13,15 @@ export const turboGHO: CellarData = {
   name: "Turbo GHO",
   slug: config.CONTRACT.TURBO_GHO.SLUG,
   tradedAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
-  launchDate: new Date(Date.UTC(2023, 7, 29, 13, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 9, 14, 13, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your GHO across an evolving set of LP strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "1.00%",
+  managementFee: "0.50%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Uniswap V3", "Balancer"],
+  protocols: ["Uniswap V3", "AAVE", "Morpho", "Spark Protocol"],
   strategyAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
   performanceSplit: {
     depositors: 80,
@@ -58,9 +58,9 @@ export const turboGHO: CellarData = {
     value: "5.00%",
   },
   dashboard:
-    "https://debank.com/profile/0xcf05F416863F86ad37200379B298B7e43A3bF2bE",
+    "https://debank.com/profile/0x0C190DEd9Be5f512Bd72827bdaD4003e9Cc7975C",
   depositTokens: {
-    list: ["GHO"],
+    list: ["USDC"],
   },
   config: {
     id: config.CONTRACT.TURBO_GHO.ADDRESS,

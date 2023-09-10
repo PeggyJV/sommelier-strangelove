@@ -9,4 +9,5 @@ export const protocolsImage: { [key: string]: string } = {
   Morpho: `${baseIconPath}/morpho.png`,
   Balancer: `${baseIconPath}/balancer.png`,
   Maker: `${baseIconPath}/maker.svg`,
+  "Spark Protocol": `${baseIconPath}/spark.png`,
 }
