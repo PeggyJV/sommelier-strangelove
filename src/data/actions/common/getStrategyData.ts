@@ -3,20 +3,16 @@ import { ConfigProps } from "data/types"
 import {
   estimatedApyValue,
   isAPYEnabled,
-  isAssetDistributionEnabled,
   isEstimatedApyEnable,
 } from "data/uiConfig"
 import { add, isBefore, isFuture, subDays } from "date-fns"
-import { GetStrategyDataQuery } from "generated/subgraph"
-import { CellarStakingV0815, CellarV0816 } from "src/abi/types"
-import { formatDecimals } from "utils/bigNumber"
+import { GetStrategyDataQuery } from "data/actions/types"
+import { CellarStakingV0815 } from "src/abi/types"
 import { isComingSoon } from "utils/isComingSoon"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
-import { getActiveAsset } from "../DEPRECATED/common/getActiveAsset"
 import { StrategyContracts } from "../types"
 import { getChanges } from "./getChanges"
-import { getPositon } from "./getPosition"
 import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
@@ -26,18 +22,14 @@ export const getStrategyData = async ({
   address,
   contracts,
   sommPrice,
-  sgData,
-  decimals,
+  stratData,
   baseAssetPrice,
-  symbol,
 }: {
   address: string
   contracts: StrategyContracts
   sommPrice: string
-  sgData?: GetStrategyDataQuery["cellar"]
-  decimals: number
+  stratData?: GetStrategyDataQuery["cellar"]
   baseAssetPrice: string
-  symbol: string
 }) => {
   const data = await (async () => {
     try {
@@ -47,10 +39,12 @@ export const getStrategyData = async ({
           address.toLowerCase()
       )!
       const config: ConfigProps = strategy.config!
+      const decimals = config.baseAsset.decimals
+      const symbol = config.baseAsset.symbol
 
-      const { stakerContract, cellarContract } = contracts
-      const subgraphData = sgData
-      const dayDatas = subgraphData?.dayDatas
+      const { stakerContract } = contracts
+      const strategyData = stratData
+      const dayDatas = strategyData?.dayDatas
       const deprecated = strategy.deprecated
       const slug = strategy.slug
       const name = strategy.name
@@ -71,21 +65,8 @@ export const getStrategyData = async ({
         process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
 
       const activeAsset = await (async () => {
-        if (!subgraphData?.asset?.id) {
-          try {
-            const aAsset = await getActiveAsset(
-              cellarContract as CellarV0816
-            )
-            if (!aAsset) return
-            const tokenInfo = getTokenByAddress(aAsset.address)
-            return { ...tokenInfo, ...aAsset }
-          } catch (e) {
-            console.log(e)
-            return undefined
-          }
-        }
-        const tokenInfo = getTokenByAddress(subgraphData.asset.id)
-        return { ...tokenInfo, ...subgraphData.asset }
+        const tokenInfo = getTokenByAddress(config.baseAsset.address)
+        return { ...tokenInfo, ...config.baseAsset }
       })()
 
       let tvm = hideValue
@@ -93,41 +74,21 @@ export const getStrategyData = async ({
         : symbol !== "USDC"
         ? getTvm(
             String(
-              Number(subgraphData?.tvlTotal) * Number(baseAssetPrice)
+              Number(strategyData?.tvlTotal) * Number(baseAssetPrice)
             )
           )
-        : getTvm(subgraphData?.tvlTotal)
+        : getTvm(strategyData?.tvlTotal)
 
       const tradedAssets = (() => {
-        if (!isAssetDistributionEnabled(config)) {
-          const assets = strategy.tradedAssets
-          if (!assets) return
-          const tokens = assets.map((v) => {
-            const token = getTokenBySymbol(v)
-            return token
-          })
-
-          return tokens
-        }
-
-        const positions = subgraphData?.positions
-        if (!positions) return
-        const tokens = positions?.map((v) => {
-          const token = getTokenByAddress(v)
+        const assets = strategy.tradedAssets
+        if (!assets) return
+        const tokens = assets.map((v) => {
+          const token = getTokenBySymbol(v)
           return token
         })
 
         return tokens
       })()
-
-      const positionDistribution = (() => {
-        if (!subgraphData) return
-        return getPositon(
-          subgraphData?.positions,
-          subgraphData?.positionDistribution
-        )
-      })()
-
       const stakingEnd = await getStakingEnd(
         stakerContract as CellarStakingV0815
       )
@@ -154,7 +115,6 @@ export const getStrategyData = async ({
       const baseApy = (() => {
         if (hideValue) return
         if (!isAPYEnabled(config)) return
-        const datas = dayDatas?.slice(0, 10)
 
         const launchDay = launchDate ?? subDays(new Date(), 8)
         const launchEpoch = Math.floor(launchDay.getTime() / 1000)
@@ -162,36 +122,35 @@ export const getStrategyData = async ({
         return getApyInception({
           launchEpoch: launchEpoch,
           baseApy: config.baseApy,
-          dayDatas: datas,
+          shareData: dayDatas ? dayDatas[0] : undefined,
           decimals: decimals,
           startingShareValue: strategy.startingShareValue,
         })
       })()
 
+      //! NOTE: This only applies to token prices
       const changes =
         (!hideValue && dayDatas && getChanges(dayDatas)) || undefined
 
       const tokenPrice = (() => {
         if (hideValue) return
-        if (!subgraphData?.shareValue) return
+        if (!strategyData?.shareValue) return
 
-        const price = formatDecimals(
+        let price = parseFloat(
           (
-            parseFloat(subgraphData.shareValue) *
-            parseFloat(baseAssetPrice)
-          ).toString(),
-          decimals,
-          2
+            (Number(strategyData.shareValue) / 1e18) *
+            Number(baseAssetPrice)
+          ).toFixed(2)
         )
         return `$${price}`
       })()
 
       const token = (() => {
         if (hideValue) return
-        if (!subgraphData) return
+        if (!strategyData) return
         return getTokenPrice(
-          subgraphData.shareValue,
-          subgraphData.asset.decimals
+          strategyData.shareValue,
+          config.baseAsset.decimals
         )
       })()
 
@@ -220,7 +179,6 @@ export const getStrategyData = async ({
         launchDate,
         logo,
         name,
-        positionDistribution,
         protocols,
         provider,
         rewardsApy,
@@ -233,7 +191,7 @@ export const getStrategyData = async ({
         stakingLaunchDate,
         deprecated,
         token,
-        config
+        config,
       }
     } catch (e) {
       console.error(address, e)

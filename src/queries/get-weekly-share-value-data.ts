@@ -1,5 +1,5 @@
 const getUrl = (epoch: number, cellarAddress: string) =>
-  `/api/graph-weekly-share-value-data?epoch=${epoch}&cellarAddress=${cellarAddress}`
+  `/api/sommelier-api-weekly-share-value-data?epoch=${epoch}&cellarAddress=${cellarAddress}`
 
 export const fetchWeeklyShareValueData = async (
   epoch: number,
@@ -14,7 +14,7 @@ export const fetchWeeklyShareValueData = async (
     return result.result.data
   } catch (error) {
     console.log(
-      "Error fetching Graph Weekly Share Value Data",
+      "Error fetching Weekly Share Value Data",
       error
     )
     throw Error(error as string)

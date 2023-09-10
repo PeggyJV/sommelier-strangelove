@@ -6,13 +6,11 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { Layout } from "components/_layout/Layout"
-import { PerformanceCard } from "components/_cards/PerformanceCard"
 import { Section } from "components/_layout/Section"
 import CellarDetailsCard from "components/_cards/CellarDetailsCard"
 import { CellarStatsYield } from "components/CellarStatsYield"
 import { BreadCrumb } from "components/BreadCrumb"
 import { cellarDataMap } from "data/cellarDataMap"
-import { PerformanceChartByAddressProvider } from "data/context/performanceChartByAddressContext"
 import { PortfolioCard } from "components/_cards/PortfolioCard"
 import { CellarStatsAutomated } from "components/CellarStatsAutomated"
 import { CellarNameKey, CellarType } from "data/types"
@@ -20,7 +18,6 @@ import {
   isApyChartEnabled,
   isEstimatedApyEnable,
   isTokenPriceChartEnabled,
-  isTVMEnabled,
 } from "data/uiConfig"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { TokenPriceChartProvider } from "data/context/tokenPriceChartContext"
@@ -88,23 +85,6 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
       </Section>
       <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">
-          {/* {isEthBtcChartEnabled(cellarConfig) && (
-            <EthBtcChartProvider address={cellarAddress}>
-              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                Strategy Perfomance
-              </Heading>
-              <EthBtcPerfomanceCard />
-            </EthBtcChartProvider>
-          )}
-          {isUsdcChartEnabled(cellarConfig) && (
-            <UsdcChartProvider address={cellarAddress}>
-              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                Strategy Perfomance
-              </Heading>
-              <UsdcPerfomanceCard />
-            </UsdcChartProvider>
-          )} */}
-
           {!notLaunched &&
             isApyChartEnabled(cellarConfig) &&
             !isEstimatedApyEnable(cellarConfig) && (
@@ -131,16 +111,6 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             cellarDataMap={cellarDataMap}
             cellarId={id}
           />
-          {isTVMEnabled(cellarConfig) && !isRealYield && (
-            <PerformanceChartByAddressProvider
-              address={cellarAddress}
-            >
-              <Heading pt={12} {...h2Styles}>
-                Vault Performance
-              </Heading>
-              <PerformanceCard />
-            </PerformanceChartByAddressProvider>
-          )}
         </VStack>
       </Section>
     </Layout>

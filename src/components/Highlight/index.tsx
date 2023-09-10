@@ -62,10 +62,6 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
       </Stack>
       {content.backtestingText && (
         <Stack maxW="40rem" spacing="40px">
-          <Heading size="lg">
-            All strategies available on Sommelier marketplace are
-            comprehensively backtested.
-          </Heading>
           {isValidURL(content.backtestingText) ? (
             <Box>
               <SecondaryButton

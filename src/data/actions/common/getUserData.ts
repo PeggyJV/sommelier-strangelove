@@ -4,7 +4,6 @@ import { fetchBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
-import { GetStrategyDataQuery } from "generated/subgraph"
 import { CellarV0815, CellarStakingV0815 } from "src/abi/types"
 import {
   convertDecimals,
@@ -23,37 +22,22 @@ export const getUserData = async ({
   strategyData,
   userAddress,
   sommPrice,
-  sgData,
   baseAssetPrice,
-  decimals,
-  symbol,
 }: {
   address: string
   contracts: StrategyContracts
   strategyData: StrategyData
   userAddress: string
   sommPrice: string
-  sgData?: GetStrategyDataQuery["cellar"]
-  decimals: number
   baseAssetPrice: string
-  symbol: string
 }) => {
   const userDataRes = await (async () => {
     const strategy = Object.values(cellarDataMap).find(
       ({ config }) => config.cellar.address === address
     )!
     const config: ConfigProps = strategy.config!
-    const subgraphData = sgData
-
-    const tokenPrice = (() => {
-      if (!subgraphData?.shareValue) return 1
-
-      const price = formatDecimals(subgraphData.shareValue, decimals)
-
-      return symbol !== "USDC"
-        ? Number(price) * Number(baseAssetPrice)
-        : Number(price)
-    })()
+    const decimals = config.baseAsset.decimals
+    const symbol = config.baseAsset.symbol
 
     const shares = await fetchBalance({
       token: getAddress(config.cellar.address),
@@ -79,18 +63,7 @@ export const getUserData = async ({
     })()
 
     // !!! TODO: We need to rewrite this file and most of the incentive code, pushing this unitl the new staking contracts come out
-    // This is a manual override per strategy
-
-    // TODO: strategy data rewardAPYs need reworking as well
-    /*
-    if (sgData?.id === cellarConfig.CONTRACT.TURBO_SWETH.ADDRESS) {
-      if (userStakes) {
-        userStakes.claimAllRewardsUSD = new BigNumJS(0)
-        userStakes.totalClaimAllRewards.value = new BigNumJS(0)
-        userStakes.totalClaimAllRewards.formatted = "0"
-      }
-    }
-    */
+    // Can do a manual override per strategy if needed here
 
     const bonded =
       // Coerce from bignumber.js to ethers BN
@@ -127,14 +100,6 @@ export const getUserData = async ({
         : userStakes.claimAllRewardsUSD.toNumber()
       : 0
 
-    //TODO: Use this IsLoaded for the netValuInAsset, netValueWithoutRewardsInAsset, netValue,and valueWithoutRewards
-    // const isLoaded = Boolean(subgraphData?.shareValue)
-    //   ? shares === undefined ||
-    //     userStakes === undefined ||
-    //     bonded === undefined ||
-    //     !subgraphData?.shareValue
-    //   : false
-
     const netValueInAsset = (() => {
       return numTotalAssets + Number(sommRewardsRaw)
     })()
@@ -167,7 +132,7 @@ export const getUserData = async ({
           formatted: netValueInAsset
             ? `${netValueInAsset.toFixed(
                 showNetValueInAsset(config) ? 5 : 2
-              )} ${subgraphData?.asset.symbol}`
+              )} ${config.baseAsset.symbol}`
             : "--",
         },
         netValueWithoutRewardsInAsset: {
@@ -175,7 +140,7 @@ export const getUserData = async ({
           formatted: netValueWithoutRewardsInAsset
             ? `${netValueWithoutRewardsInAsset.toFixed(
                 showNetValueInAsset(config) ? 5 : 2
-              )} ${subgraphData?.asset.symbol}`
+              )} ${config.baseAsset.symbol}`
             : "--",
         },
         valueWithoutRewards: {
@@ -185,7 +150,7 @@ export const getUserData = async ({
         claimableSommReward:
           userStakes?.totalClaimAllRewards || undefined,
         userStakes,
-        symbol: subgraphData?.asset.symbol,
+        symbol: config.baseAsset.symbol,
         totalShares: {
           value: totalShares,
         },

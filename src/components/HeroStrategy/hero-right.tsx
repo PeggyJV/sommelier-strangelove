@@ -29,7 +29,6 @@ import {
   intervalGainPctTooltipContent,
   intervalGainTimeline,
   isDailyChangeEnabled,
-  isIntervalGainPctEnabled,
   showTokenPriceInsteadOfApy,
   tokenPriceTooltipContent,
 } from "data/uiConfig"
@@ -70,7 +69,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
     tokenPrice,
     changes,
     stakingEnd,
-    positionDistribution,
     tvm,
     rewardsApy,
     baseApy,
@@ -242,21 +240,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                   />
                 </VStack>
               )}
-              {isIntervalGainPctEnabled(cellarConfig) && (
-                <VStack flex={1} textAlign="center">
-                  <PercentageText
-                    data={intervalGainPct}
-                    headingSize="md"
-                  />
-
-                  <CellarStatsLabel
-                    title={intervalGainPctTitleContent(cellarConfig)}
-                    tooltip={intervalGainPctTooltipContent(
-                      cellarConfig
-                    )}
-                  />
-                </VStack>
-              )}
             </HStack>
           )}
         </>
@@ -280,31 +263,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           <Stack direction="column">
             {isLoading ? (
               <Spinner />
-            ) : positionDistribution?.length !== 0 &&
-              positionDistribution !== undefined ? (
-              positionDistribution?.map((item) => {
-                const asset = tokenConfig.find(
-                  (v) => v.address === item.address
-                )
-                return (
-                  <HStack key={item.address}>
-                    <Image
-                      alt={asset?.alt}
-                      src={asset?.src}
-                      boxSize={8}
-                      rounded="full"
-                    />
-                    {!countdown ? (
-                      <Text>
-                        {asset?.symbol} ({item.percentage.toFixed(2)}
-                        %)
-                      </Text>
-                    ) : (
-                      <Text>{asset?.symbol}</Text>
-                    )}
-                  </HStack>
-                )
-              })
             ) : (
               content.tradedAssets?.map((item) => {
                 const asset = tokenConfig.find(

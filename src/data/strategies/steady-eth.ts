@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
+import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const steadyEth: CellarData = {
   deprecated: true,
@@ -110,6 +111,7 @@ export const steadyEth: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+    baseAsset: tokenConfigMap.USDC,
   },
   faq: [
     {

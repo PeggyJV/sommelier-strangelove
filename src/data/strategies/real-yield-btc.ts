@@ -7,6 +7,7 @@ import {
   CellarType,
   StakerKey,
 } from "../types"
+import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const realYieldBTC: CellarData = {
   name: "Real Yield BTC",
@@ -76,6 +77,7 @@ export const realYieldBTC: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+    baseAsset: tokenConfigMap.WBTC,
   },
   faq: [
     {

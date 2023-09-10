@@ -34,8 +34,7 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_GHO
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH
   )
 }
 
@@ -82,14 +81,6 @@ export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  )
-}
-
-export const isTVMEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
   )
 }
 
@@ -163,18 +154,6 @@ export const isDailyChangeEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
     config.cellarNameKey === CellarNameKey.STEADY_MATIC
   )
-}
-
-export const isIntervalGainPctEnabled = (config: ConfigProps) => {
-  return false
-  // return (
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_MATIC
-  // )
 }
 
 export const lpTokenTooltipContent = (config: ConfigProps) => {
@@ -253,24 +232,6 @@ export const tokenPriceTooltipContent = (config: ConfigProps) => {
     return "The dollar value of the COMP, CRV, LDO, MKR, AAVE and USDC that 1 token can be redeemed for"
 
   return ""
-}
-
-export const isEthBtcChartEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  )
-}
-
-export const isUsdcChartEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-  )
 }
 
 export const isTokenPriceChartEnabled = (config: ConfigProps) => {
@@ -404,31 +365,6 @@ export const bondingPeriodOptions = (
   return []
 }
 
-export const isAssetDistributionEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC
-    // From subgraph Real yield usd returning empty array, so disabling for now.
-    // ||
-    // config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  )
-}
-
-export const isWithdrawTokenPriceEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC
-  )
-}
-
 export const isUseBigBacktestingModal = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
@@ -454,9 +390,9 @@ export const apyLabel = (config: ConfigProps) => {
     ) {
       return "Estimated APY"
     }
-    return "APY since inception"
+    return "Net APY"
   }
-  return "Base APY"
+  return "APY since inception"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
@@ -477,7 +413,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
     }
     return "APY since inception"
   }
-  return "Base APY"
+  return "APY since inception"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
@@ -492,7 +428,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   ) {
     return "Estimated APY"
   }
-  return "Base APY"
+  return "APY since inception"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
