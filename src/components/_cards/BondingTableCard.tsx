@@ -155,8 +155,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
     if (canUnstake)
       return (
         <Tooltip
+          hasArrow
+          arrowShadowColor="purple.base"
           label="Click to initiate a transaction that will transfer your LP tokens from the bonding contract directly to your wallet"
           placement="top"
+          bg="surface.bg"
+          color="neutral.300"
         >
           <SecondaryButton
             isLoading={unstakeLoading.has(i)}
@@ -172,8 +176,13 @@ const BondingTableCard: VFC<TableProps> = (props) => {
     if (unbondTimestamp.toString() === "0") {
       return (
         <Tooltip
+          hasArrow
+          arrowShadowColor="purple.base"
           label="Click to initiate the unbonding process. After clicking, the countdown will begin based on the unbonding period you've selected. Once the countdown ends, your tokens will be unlocked and available for withdrawal"
           placement="top"
+          placement="top"
+          bg="surface.bg"
+          color="neutral.300"
         >
           <SecondaryButton
             isLoading={unbondLoading.has(i)}
@@ -188,8 +197,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
     } else {
       return (
         <Tooltip
+          hasArrow
+          arrowShadowColor="purple.base"
           label="Days remaining until your tokens are available for withdrawal"
           placement="top"
+          bg="surface.bg"
+          color="neutral.300"
         >
           <Text>
             LP Tokens Unlock in {differenceDays} day
