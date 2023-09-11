@@ -180,7 +180,6 @@ const BondingTableCard: VFC<TableProps> = (props) => {
           arrowShadowColor="purple.base"
           label="Click to initiate the unbonding process. After clicking, the countdown will begin based on the unbonding period you've selected. Once the countdown ends, your tokens will be unlocked and available for withdrawal"
           placement="top"
-          placement="top"
           bg="surface.bg"
           color="neutral.300"
         >
