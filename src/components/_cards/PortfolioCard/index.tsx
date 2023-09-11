@@ -220,7 +220,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               >
                 <VStack align="flex-start">
                   <CardStat
-                    label="tokens"
+                    label="Available LP Tokens"
                     tooltip={lpTokenTooltipContent(cellarConfig)}
                   >
                     {cellarConfig.lpToken.imagePath && (

@@ -1,4 +1,4 @@
-import { ButtonProps, useDisclosure } from "@chakra-ui/react"
+import { ButtonProps, useDisclosure, Tooltip } from "@chakra-ui/react"
 import { BondModal } from "components/_modals/BondModal"
 import { VFC } from "react"
 import { BaseButton } from "./BaseButton"
@@ -8,9 +8,14 @@ export const BondButton: VFC<ButtonProps> = (props) => {
 
   return (
     <>
-      <BaseButton onClick={onOpen} {...props}>
-        Bond
-      </BaseButton>
+      <Tooltip
+        label="Bond your LP tokens after depositing to earn liquidity mining rewards."
+        placement="top"
+      >
+        <BaseButton onClick={onOpen} {...props}>
+          Start Earning
+        </BaseButton>
+      </Tooltip>
       <BondModal isOpen={isOpen} onClose={onClose} />
     </>
   )

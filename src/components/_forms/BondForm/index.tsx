@@ -11,6 +11,8 @@ import {
   ModalProps,
   Text,
   VStack,
+  Tooltip,
+  Th,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -32,6 +34,7 @@ import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { CellarNameKey } from "data/types"
+import { InformationIcon } from "components/_icons"
 
 interface FormValues {
   depositAmount: number
@@ -289,7 +292,28 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
           </FormErrorMessage>
         </FormControl>
         <VStack align="stretch">
-          <CardHeading>Unbonding Period</CardHeading>
+          <CardHeading>
+            <Tooltip
+              hasArrow
+              arrowShadowColor="purple.base"
+              label="Unbond period is waiting time after you have triggered unbond action"
+              placement="top"
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <Th
+                fontSize={10}
+                fontWeight="normal"
+                textTransform="capitalize"
+              >
+                <HStack spacing={1} align="center">
+                  <Text>Unbonding period</Text>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Th>
+            </Tooltip>
+          </CardHeading>
+
           <BondingPeriodOptions cellarConfig={cellarConfig} />
         </VStack>
         <Text fontSize="xs">
