@@ -30,7 +30,7 @@ export const turboGHO: CellarData = {
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
-    title: "Sevens Seas & DeFine Logic Labs",
+    title: "Seven Seas & DeFine Logic Labs",
     href: "https://sevenseas.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
@@ -44,9 +44,7 @@ export const turboGHO: CellarData = {
       - Fully automated with built-in auto-compounding.`,
 
     description: `
-    The initial phase of Turbo GHO will concentrate on optimizing ticks within Uniswap v3 GHO-stablecoin pairs due to the vault’s potential to capture sustainable real yield. The vault will have the option to allocate to GHO pools on Balancer if yields are favorable, ensuring that GHO users access the best possible yields. Lastly, the vault will have the ability to borrow against GHO as part of hedging or looping strategies.
-
-    As GHO’s presence continues to expand across the DeFi ecosystem and Sommelier's roster of protocol integrations widens, the Turbo GHO vault stands poised to tap into emerging yield opportunities.
+    Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, DAI, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies, on Aave, Morpho, and the Spark protocol.
     
     Note that Turbo GHO and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
