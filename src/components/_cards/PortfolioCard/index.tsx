@@ -248,7 +248,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   <>
                     <VStack align="flex-start">
                       <CardStat
-                        label="bonded tokens"
+                        label="Bonded LP Tokens"
                         tooltip="Bonded LP tokens earn yield from strategy and accrue Liquidity Mining rewards based on bonding period length"
                       >
                         {isMounted &&

@@ -296,7 +296,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
             <Tooltip
               hasArrow
               arrowShadowColor="purple.base"
-              label="Unbond period is waiting time after you have triggered unbond action"
+              label="When you choose to unbond your tokens, this period represents the time you must wait before your tokens are fully unbonded and accessible. The duration of the unbonding period is determined by the period you selected during the unbond transaction. Until the unbonding period is complete, your tokens remain locked"
               placement="top"
               bg="surface.bg"
               color="neutral.300"
@@ -316,11 +316,11 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
 
           <BondingPeriodOptions cellarConfig={cellarConfig} />
         </VStack>
-        <Text fontSize="xs">
+        {/* <Text fontSize="xs">
           After triggering 'Unbond,' you will need to wait through the
           unbonding period you selected, after which your LP tokens
           can be unstaked and withdrawn.
-        </Text>
+        </Text> */}
         <BaseButton
           type="submit"
           isDisabled={isDisabled}

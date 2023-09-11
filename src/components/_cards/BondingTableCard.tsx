@@ -154,33 +154,48 @@ const BondingTableCard: VFC<TableProps> = (props) => {
 
     if (canUnstake)
       return (
-        <SecondaryButton
-          isLoading={unstakeLoading.has(i)}
-          disabled={unstakeLoading.has(i)}
-          size="sm"
-          onClick={() => handleUnstake(i)}
+        <Tooltip
+          label="Click to initiate a transaction that will transfer your LP tokens from the bonding contract directly to your wallet"
+          placement="top"
         >
-          Unstake
-        </SecondaryButton>
+          <SecondaryButton
+            isLoading={unstakeLoading.has(i)}
+            disabled={unstakeLoading.has(i)}
+            size="sm"
+            onClick={() => handleUnstake(i)}
+          >
+            Withdraw LP Tokens
+          </SecondaryButton>
+        </Tooltip>
       )
 
     if (unbondTimestamp.toString() === "0") {
       return (
-        <SecondaryButton
-          isLoading={unbondLoading.has(i)}
-          disabled={unbondLoading.has(i)}
-          size="sm"
-          onClick={() => handleUnBond(i)}
+        <Tooltip
+          label="Click to initiate the unbonding process. After clicking, the countdown will begin based on the unbonding period you've selected. Once the countdown ends, your tokens will be unlocked and available for withdrawal"
+          placement="top"
         >
-          Unbond
-        </SecondaryButton>
+          <SecondaryButton
+            isLoading={unbondLoading.has(i)}
+            disabled={unbondLoading.has(i)}
+            size="sm"
+            onClick={() => handleUnBond(i)}
+          >
+            Start Unbond
+          </SecondaryButton>
+        </Tooltip>
       )
     } else {
       return (
-        <Text>
-          Unbond in {differenceDays} day
-          {differenceDays > 1 ? "s" : ""}
-        </Text>
+        <Tooltip
+          label="Days remaining until your tokens are available for withdrawal"
+          placement="top"
+        >
+          <Text>
+            LP Tokens Unlock in {differenceDays} day
+            {differenceDays > 1 ? "s" : ""}
+          </Text>
+        </Tooltip>
       )
     }
   }
@@ -250,7 +265,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   textTransform="capitalize"
                 >
                   <HStack spacing={1} align="center">
-                    <Text>Bonded Tokens</Text>
+                    <Text>Bonded LP Tokens</Text>
                     <InformationIcon
                       color="neutral.300"
                       boxSize={3}
@@ -258,13 +273,28 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   </HStack>
                 </Th>
               </Tooltip>
-              <Th
-                fontSize={10}
-                fontWeight="normal"
-                textTransform="capitalize"
+              <Tooltip
+                hasArrow
+                arrowShadowColor="purple.base"
+                label="When you choose to unbond your tokens, this period represents the time you must wait before your tokens are fully unbonded and accessible. The duration of the unbonding period is determined by the period you selected during the unbond transaction. Until the unbonding period is complete, your tokens remain locked"
+                placement="top"
+                bg="surface.bg"
+                color="neutral.300"
               >
-                Period
-              </Th>
+                <Th
+                  fontSize={10}
+                  fontWeight="normal"
+                  textTransform="capitalize"
+                >
+                  <HStack spacing={1} align="center">
+                    <Text>Selected Unbonding Period</Text>
+                    <InformationIcon
+                      color="neutral.300"
+                      boxSize={3}
+                    />
+                  </HStack>
+                </Th>
+              </Tooltip>
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
@@ -463,13 +493,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
           </Tbody>
         </Table>
       </TableContainer>
-
-      <Text fontSize="xs" textAlign="center" pt={4}>
+      {/* <Text fontSize="xs" textAlign="center" pt={4}>
         After triggering 'Unbond,' you will need to wait through the
         unbonding period you selected,
         <br />
         after which your LP tokens can be unstaked and withdrawn.
-      </Text>
+      </Text> */}
     </InnerCard>
   )
 }
