@@ -11,7 +11,7 @@ export const BondButton: VFC<ButtonProps> = (props) => {
       <Tooltip
         hasArrow
         arrowShadowColor="purple.base"
-        label="Bond your LP tokens after depositing to earn liquidity mining rewards."
+        label="Bond your LP tokens after depositing to earn liquidity mining rewards"
         placement="top"
         bg="surface.bg"
         color="neutral.300"
