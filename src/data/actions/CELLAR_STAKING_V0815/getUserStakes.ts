@@ -3,12 +3,14 @@ import { ethers } from "ethers"
 import { CellarStakingV0815 } from "src/abi/types"
 import { toEther } from "utils/formatCurrency"
 import { StakerUserData, UserStake } from "../types"
+import { ConfigProps } from "data/types"
 
 export const getUserStakes = async (
   address: string,
   stakerContract: CellarStakingV0815,
   stakerSigner: CellarStakingV0815,
-  sommelierPrice: string
+  sommelierPrice: string,
+  strategyConfig: ConfigProps
 ) => {
   try {
     if (!stakerSigner.provider || !stakerSigner.signer) {
@@ -75,7 +77,7 @@ export const getUserStakes = async (
         value: totalBondedAmount,
         formatted: toEther(
           ethers.utils.parseUnits(totalBondedAmount?.toFixed(), 0),
-          18, // NEEDS TO BE CELLAR DECIMALS
+          strategyConfig.cellar.decimals, // Must be cellar decimals
           false,
           2
         ),
@@ -84,7 +86,7 @@ export const getUserStakes = async (
         value: totalClaimAllRewards,
         formatted: toEther(
           totalClaimAllRewards?.toFixed(),
-          6,
+          6, // TODO: Post incentive refractor this must be the incentive asset decimals (Hardcoded for somm)
           false,
           2
         ),

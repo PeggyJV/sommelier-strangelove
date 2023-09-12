@@ -58,7 +58,8 @@ export const getUserData = async ({
         userAddress,
         contracts.stakerContract as CellarStakingV0815,
         contracts.stakerSigner as CellarStakingV0815,
-        sommPrice
+        sommPrice,
+        config
       )
     })()
 
