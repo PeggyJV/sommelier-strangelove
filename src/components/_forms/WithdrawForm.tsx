@@ -177,7 +177,10 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       // previewRedeem on the shares the user is attempting to withdraw
       // Only get previewRedeem on 1 share to optimize caching and do relevant math below
       const previewRedeem: number = parseInt(
-        await fetchCellarPreviewRedeem(id, BigInt(1e18))
+        await fetchCellarPreviewRedeem(
+          id,
+          BigInt(10 ** cellarConfig.cellar.decimals)
+        )
       )
       const redeemAmt: number = Math.floor(
         previewRedeem * watchWithdrawAmount
