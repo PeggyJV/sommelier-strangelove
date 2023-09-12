@@ -358,7 +358,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                           height="20px"
                         />
                         <Text textAlign="right">
-                          {toEther(amount.toFixed())}
+                          {(Number(amount) / (10 ** cellarConfig.cellar.decimals)).toPrecision(2)}
                         </Text>
                       </HStack>
                     </Td>
