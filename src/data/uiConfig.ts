@@ -353,13 +353,23 @@ export const bondingPeriodOptions = (
     ]
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
-    return [
-      {
-        title: "TODO",
-        amount: "TODO",
-        value: 0,
-      },
-    ]
+     return [
+       {
+         title: "7 Days",
+         amount: "1.1x SOMM",
+         value: 0,
+       },
+       {
+         title: "14 Days",
+         amount: "1.3x SOMM",
+         value: 1,
+       },
+       {
+         title: "21 Days",
+         amount: "1.5x SOMM",
+         value: 2,
+       },
+     ]
   }
 
   return []
