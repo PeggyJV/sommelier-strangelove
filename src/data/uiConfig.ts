@@ -91,11 +91,17 @@ export const isRewardAPYEnabled = (config: ConfigProps) => {
 
 export const isTokenPriceEnabledApp = (config: ConfigProps) => {
   return (
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
+    config.cellarNameKey === CellarNameKey.FRAXIMAL ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.AAVE ||
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH
   )
 }
 
