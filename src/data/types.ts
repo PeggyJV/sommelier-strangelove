@@ -159,3 +159,7 @@ export interface CellarData {
 export interface CellarDataMap {
   [key: string]: CellarData
 }
+
+export interface CellarAddressDataMap {
+  [key: string]: CellarData
+}

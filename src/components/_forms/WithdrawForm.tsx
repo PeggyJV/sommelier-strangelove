@@ -128,7 +128,10 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
     analytics.track("withdraw.started", analyticsData)
 
-    const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
+    const amtInWei = ethers.utils.parseUnits(
+      `${withdrawAmount}`,
+      cellarConfig.cellar.decimals
+    )
 
     try {
       const gasLimitEstimated = await estimateGasLimitWithRetry(
