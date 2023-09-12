@@ -70,6 +70,7 @@ export const realYieldBTC: CellarData = {
       address: config.CONTRACT.REAL_YIELD_BTC.ADDRESS,
       abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: CellarKey.CELLAR_V2,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.REAL_YIELD_BTC_STAKER.ADDRESS,

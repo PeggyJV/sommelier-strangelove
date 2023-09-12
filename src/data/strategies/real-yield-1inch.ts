@@ -66,6 +66,7 @@ export const realYield1Inch: CellarData = {
       address: config.CONTRACT.REAL_YIELD_1Inch.ADDRESS,
       abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: CellarKey.CELLAR_V2,
+      decimals: 18,
     },
     baseAsset: tokenConfigMap["1INCH"],
   },

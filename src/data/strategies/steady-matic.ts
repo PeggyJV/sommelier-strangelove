@@ -165,6 +165,7 @@ Presented results are based on historical back tests. Past performance is not in
       address: config.CONTRACT.STEADY_MATIC.ADDRESS,
       abi: config.CONTRACT.STEADY_MATIC.ABI,
       key: CellarKey.CELLAR_V0816,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.STEADY_MATIC_STAKER.ADDRESS,

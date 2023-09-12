@@ -75,7 +75,7 @@ export const getUserStakes = async (
         value: totalBondedAmount,
         formatted: toEther(
           ethers.utils.parseUnits(totalBondedAmount?.toFixed(), 0),
-          18,
+          18, // NEEDS TO BE CELLAR DECIMALS
           false,
           2
         ),
