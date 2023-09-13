@@ -165,6 +165,7 @@ Presented results are based on historical back tests. Past performance is not in
       address: config.CONTRACT.STEADY_UNI.ADDRESS,
       abi: config.CONTRACT.STEADY_UNI.ABI,
       key: CellarKey.CELLAR_V0816,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.STEADY_UNI_STAKER.ADDRESS,
@@ -172,7 +173,7 @@ Presented results are based on historical back tests. Past performance is not in
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    baseAsset: tokenConfigMap.USDC
+    baseAsset: tokenConfigMap.USDC,
   },
   faq: [
     {

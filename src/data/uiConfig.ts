@@ -21,6 +21,23 @@ export const isRewardsEnabled = (config: ConfigProps) => {
   return true
 }
 
+export const isTokenAssets = (config: ConfigProps) => {
+  return (
+    config.cellarNameKey === CellarNameKey.AAVE ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.DEFI_STARS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.FRAXIMAL ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH
+  )
+}
+
 export const intervalGainTimeline = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
@@ -78,7 +95,8 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
     config.cellarNameKey === CellarNameKey.FRAXIMAL ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_GHO
   )
 }
 
@@ -101,7 +119,8 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_GHO
   )
 }
 
@@ -139,17 +158,13 @@ export const isDailyChangeEnabled = (config: ConfigProps) => {
 
 export const lpTokenTooltipContent = (config: ConfigProps) => {
   if (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   )
-    return "Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
-  if (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  )
+    return "Unbonded LP tokens earn yield from the vault but do not earn liquidity mining rewards"
+  else
     return "The LP tokens represent a user's share of the pool and can always be redeemed for the original tokens"
-  return ""
 }
 
 export const intervalGainPctTitleContent = (config: ConfigProps) => {
@@ -242,17 +257,17 @@ export const bondingPeriodOptions = (
   ) {
     return [
       {
-        title: "7 Days",
+        title: "7 Day Unbonding",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "14 Days",
+        title: "14 Day Unbonding",
         amount: "1.3x SOMM",
         value: 1,
       },
       {
-        title: "21 Days",
+        title: "21 Day Unbonding",
         amount: "1.5x SOMM",
         value: 2,
       },
@@ -261,17 +276,17 @@ export const bondingPeriodOptions = (
   if (config.cellarNameKey === CellarNameKey.FRAXIMAL) {
     return [
       {
-        title: "5 Days",
+        title: "5 Day Unbonding",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "10 Days",
+        title: "10 Day Unbonding",
         amount: "1.3x SOMM",
         value: 1,
       },
       {
-        title: "14 Days",
+        title: "14 Day Unbonding",
         amount: "1.5x SOMM",
         value: 2,
       },
@@ -284,17 +299,17 @@ export const bondingPeriodOptions = (
   ) {
     return [
       {
-        title: "10 Days",
+        title: "10 Day Unbonding",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "14 Days",
+        title: "14 Day Unbonding",
         amount: "1.2x SOMM",
         value: 1,
       },
       {
-        title: "20 Days",
+        title: "20 Day Unbonding",
         amount: "1.25x SOMM",
         value: 2,
       },
@@ -308,17 +323,17 @@ export const bondingPeriodOptions = (
   ) {
     return [
       {
-        title: "10 Days",
+        title: "10 Day Unbonding",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "14 Days",
+        title: "14 Day Unbonding",
         amount: "1.2x SOMM",
         value: 1,
       },
       {
-        title: "20 Days",
+        title: "20 Day Unbonding",
         amount: "1.25x SOMM",
         value: 2,
       },
@@ -327,11 +342,30 @@ export const bondingPeriodOptions = (
   if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     return [
       {
-        title: "14 Days",
+        title: "14 Day Unbonding",
         amount: "Up to 12 PEARL per swETH daily + SOMM Rewards",
         value: 0,
       },
     ]
+  }
+  if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
+     return [
+       {
+         title: "7 Day Unbonding",
+         amount: "1.1x SOMM",
+         value: 0,
+       },
+       {
+         title: "14 Day Unbonding",
+         amount: "1.3x SOMM",
+         value: 1,
+       },
+       {
+         title: "21 Day Unbonding",
+         amount: "1.5x SOMM",
+         value: 2,
+       },
+     ]
   }
 
   return []
@@ -357,7 +391,8 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_SWETH
+      config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+      config.cellarNameKey === CellarNameKey.TURBO_GHO
     ) {
       return "Estimated APY"
     }
@@ -377,7 +412,8 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_SWETH
+      config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+      config.cellarNameKey === CellarNameKey.TURBO_GHO
     ) {
       return "Estimated APY"
     }
@@ -393,7 +429,8 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_GHO
   ) {
     return "Estimated APY"
   }
@@ -407,7 +444,8 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_GHO
   ) {
     return true
   }
@@ -421,7 +459,8 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_GHO
   ) {
     return "Estimated APY"
   }
@@ -460,6 +499,13 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "5.0%",
     }
   }
+  // NEED TO UPDATE
+  if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
+    return {
+      value: 5.0,
+      formatted: "5.0%",
+    }
+  }
 }
 
 export const showNetValueInAsset = (config: ConfigProps) => {
@@ -474,6 +520,10 @@ export const waitTime = (config: ConfigProps) => {
     return "24 hours"
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
+    return null // No wait time
+  }
+  // NEED TO UPDATE
+  if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
     return null // No wait time
   }
   return "10 min"
