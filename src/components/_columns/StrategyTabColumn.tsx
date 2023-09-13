@@ -127,6 +127,7 @@ export const StrategyTabColumn = ({
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
+      disableSortBy: true, // Added this line to disable sorting
       Cell: ({ row }: any) => {
         const cellarConfig = cellarDataMap[row.original.slug].config
 
@@ -151,7 +152,8 @@ export const StrategyTabColumn = ({
                   fontWeight={600}
                 />
               </Tooltip>
-              {/* <Tooltip
+              {/* Commented tooltip section
+                <Tooltip
                   label={`Token price`}
                   color="neutral.100"
                   border="0"

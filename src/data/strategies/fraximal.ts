@@ -72,6 +72,7 @@ export const fraximal: CellarData = {
       address: config.CONTRACT.FRAXIMAL.ADDRESS,
       abi: config.CONTRACT.FRAXIMAL.ABI,
       key: CellarKey.CELLAR_V2,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.FRAXIMAL_STAKER.ADDRESS,

@@ -31,7 +31,7 @@ export const turboSWETH: CellarData = {
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
-    title: "Sevens Seas & DeFine Logic Labs",
+    title: "Seven Seas & DeFine Logic Labs",
     href: "https://sevenseas.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
@@ -79,6 +79,7 @@ export const turboSWETH: CellarData = {
       address: config.CONTRACT.TURBO_SWETH.ADDRESS,
       abi: config.CONTRACT.TURBO_SWETH.ABI,
       key: CellarKey.CELLAR_V2PT5,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.TURBO_SWETH_STAKER.ADDRESS,
@@ -125,4 +126,3 @@ export const turboSWETH: CellarData = {
     },
   ],
 }
-
