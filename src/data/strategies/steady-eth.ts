@@ -104,6 +104,7 @@ export const steadyEth: CellarData = {
       address: config.CONTRACT.STEADY_ETH.ADDRESS,
       abi: config.CONTRACT.STEADY_ETH.ABI,
       key: CellarKey.CELLAR_V0816,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.STEADY_ETH_STAKER.ADDRESS,

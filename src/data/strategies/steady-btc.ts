@@ -104,6 +104,7 @@ export const steadyBtc: CellarData = {
       address: config.CONTRACT.STEADY_BTC.ADDRESS,
       abi: config.CONTRACT.STEADY_BTC.ABI,
       key: CellarKey.CELLAR_V0816,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.STEADY_BTC_STAKER.ADDRESS,

@@ -36,6 +36,7 @@ export enum CellarNameKey {
   REAL_YIELD_UNI = "REAL_YIELD_UNI",
   FRAXIMAL = "FRAXIMAL",
   TURBO_SWETH = "TURBO_SWETH",
+  TURBO_GHO = "TURBO_GHO",
 }
 
 export interface ConfigProps {
@@ -56,6 +57,7 @@ export interface ConfigProps {
     address: string
     abi: readonly {}[]
     key: CellarKey
+    decimals: number
   }
   // staker optional because there will be a cellar without staker contract
   staker?: {
@@ -155,5 +157,9 @@ export interface CellarData {
   }[]
 }
 export interface CellarDataMap {
+  [key: string]: CellarData
+}
+
+export interface CellarAddressDataMap {
   [key: string]: CellarData
 }

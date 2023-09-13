@@ -29,7 +29,7 @@ export const realYieldENS: CellarData = {
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
-    title: "Sevens Seas & DeFine Logic Labs",
+    title: "Seven Seas & DeFine Logic Labs",
     href: "https://sevenseas.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
@@ -67,6 +67,7 @@ export const realYieldENS: CellarData = {
       address: config.CONTRACT.REAL_YIELD_ENS.ADDRESS,
       abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: CellarKey.CELLAR_V2,
+      decimals: 18,
     },
     baseAsset: tokenConfigMap.ENS,
   },

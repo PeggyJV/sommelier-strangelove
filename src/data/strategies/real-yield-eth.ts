@@ -74,6 +74,7 @@ export const realYieldEth: CellarData = {
       address: config.CONTRACT.REAL_YIELD_ETH.ADDRESS,
       abi: config.CONTRACT.REAL_YIELD_ETH.ABI,
       key: CellarKey.CELLAR_V2,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.REAL_YIELD_ETH_STAKER.ADDRESS,

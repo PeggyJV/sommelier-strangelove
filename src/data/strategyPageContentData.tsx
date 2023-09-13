@@ -908,4 +908,39 @@ export const strategyPageContentData = {
     },
     howItWorks: `The vault engages in tick optimization by pairing swETH and WETH on Uniswap V3 to generate yield for depositors and to improve swap efficiency for swETH. As the Swell ecosystem grows and swETH integrates with additional applications the vault may take advantage of other yield opportunities that are whitelisted by governance. `,
   },
+  [config.CONTRACT.TURBO_GHO.SLUG]: {
+    name: "Turbo GHO",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Turbocharge your GHO across an evolving set of LP strategies.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="TurboGHO icon"
+          src="/assets/icons/turbo-gho.png"
+          boxSize={8}
+        />
+        <Text>Turbo GHO</Text>
+      </>
+    ),
+    tradedAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
+    alternativeTo: "Holding GHO",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Capable of pursuing multiple GHO yield opportunities.`,
+        `Uniswap V3 tick optimization.`,
+        `Fully automated with built-in auto-compounding.`,
+      ],
+      description: `Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, DAI, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies, on Aave, Morpho, and the Spark protocol. <br/><br/>
+      Note that Turbo GHO and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: `The initial phase of Turbo GHO will concentrate on optimizing ticks within Uniswap v3 GHO-stablecoin pairs due to the vault’s potential to capture sustainable real yield. The vault will have the option to allocate to GHO pools on Balancer if yields are favorable, ensuring that GHO users access the best possible yields. Lastly, the vault will have the ability to borrow against GHO as part of hedging or looping strategies.`,
+  },
 }

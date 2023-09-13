@@ -82,6 +82,7 @@ export const aaveStable: CellarData = {
       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
       abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
       key: CellarKey.CELLAR_V0815,
+      decimals: 18
     },
     staker: {
       address: config.CONTRACT.AAVE_STAKER.ADDRESS,

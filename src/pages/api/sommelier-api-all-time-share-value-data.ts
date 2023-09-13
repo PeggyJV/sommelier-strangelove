@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import { CellaAddressDataMap } from "data/cellarDataMap"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -26,12 +27,17 @@ const sommelierAPIAllTimeShareValueData = async (
     }
 
     const fetchedData = await data.json()
+    let cellarDecimals =
+      CellaAddressDataMap[cellarAddress!.toString().toLowerCase()]
+        .config.cellar.decimals
 
     let transformedData = fetchedData.Response.map(
       (dayData: any) => ({
         date: dayData.unix_seconds,
-        // Multiply by 1e18 and drop any decimals
-        shareValue: Math.floor(dayData.share_price * 1e18).toString(),
+        // Multiply by cellarDecimals and drop any decimals
+        shareValue: Math.floor(
+          dayData.share_price * 10 ** cellarDecimals
+        ).toString(),
       })
     )
 
