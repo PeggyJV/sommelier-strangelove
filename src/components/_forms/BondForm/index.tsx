@@ -120,7 +120,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       const amtInBigNumber = new BigNumber(data.depositAmount)
       const depositAmtInWei = ethers.utils.parseUnits(
         amtInBigNumber.toFixed(),
-        18
+        cellarConfig.cellar.decimals
       )
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         stakerSigner.estimateGas.stake,
