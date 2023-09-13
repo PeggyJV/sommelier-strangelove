@@ -76,6 +76,7 @@ export const turboGHO: CellarData = {
       address: config.CONTRACT.TURBO_GHO.ADDRESS,
       abi: config.CONTRACT.TURBO_GHO.ABI,
       key: CellarKey.CELLAR_V2PT5,
+      decimals: 6,
     },
     staker: {
       address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS,

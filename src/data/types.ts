@@ -57,6 +57,7 @@ export interface ConfigProps {
     address: string
     abi: readonly {}[]
     key: CellarKey
+    decimals: number
   }
   // staker optional because there will be a cellar without staker contract
   staker?: {
@@ -156,5 +157,9 @@ export interface CellarData {
   }[]
 }
 export interface CellarDataMap {
+  [key: string]: CellarData
+}
+
+export interface CellarAddressDataMap {
   [key: string]: CellarData
 }

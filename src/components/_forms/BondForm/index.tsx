@@ -307,12 +307,12 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         >
           Bond
         </BaseButton>
-        {cellarConfig?.cellarNameKey !==
-          CellarNameKey.TURBO_SWETH && (
-          <Text textAlign="center">
-            Please wait 10 min after the deposit to Bond
-          </Text>
-        )}
+        {cellarConfig?.cellarNameKey !== CellarNameKey.TURBO_SWETH &&
+          cellarConfig?.cellarNameKey !== CellarNameKey.TURBO_GHO && (
+            <Text textAlign="center">
+              Please wait 10 min after the deposit to Bond
+            </Text>
+          )}
       </VStack>
     </FormProvider>
   )

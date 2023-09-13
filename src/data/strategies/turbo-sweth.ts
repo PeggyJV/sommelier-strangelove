@@ -79,6 +79,7 @@ export const turboSWETH: CellarData = {
       address: config.CONTRACT.TURBO_SWETH.ADDRESS,
       abi: config.CONTRACT.TURBO_SWETH.ABI,
       key: CellarKey.CELLAR_V2PT5,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.TURBO_SWETH_STAKER.ADDRESS,

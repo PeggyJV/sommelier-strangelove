@@ -66,6 +66,7 @@ The purpose of this vault is to provide token holders with a passive yield oppor
       address: config.CONTRACT.REAL_YIELD_SNX.ADDRESS,
       abi: config.CONTRACT.REAL_YIELD_USD.ABI,
       key: CellarKey.CELLAR_V2,
+      decimals: 18,
     },
     baseAsset: tokenConfigMap.SNX,
   },
