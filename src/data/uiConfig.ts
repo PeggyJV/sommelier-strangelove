@@ -143,7 +143,7 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   )
-    return "Unbonded LP tokens earn yield from the vault but do not earn liquidity mining rewards."
+    return "Unbonded LP tokens earn yield from the vault but do not earn liquidity mining rewards"
   else
     return "The LP tokens represent a user's share of the pool and can always be redeemed for the original tokens"
 }
