@@ -243,6 +243,18 @@ export const StrategyDesktopColumn = ({
           />
         )
       },
+      sortType: (rowA, rowB) => {
+        // Convert the value to number, if it doesn't exist, default to 0
+        const valA = parseFloat(
+          rowA.original.baseApySumRewards?.formatted || "0"
+        )
+        const valB = parseFloat(
+          rowB.original.baseApySumRewards?.formatted || "0"
+        )
+
+        // Sort from highest to lowest
+        return valB - valA
+      },
     },
     {
       Header: () => (
