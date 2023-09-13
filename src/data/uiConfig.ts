@@ -143,7 +143,7 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   )
-    return "Unbonded LP tokens earn interest from strategy but do not earn Liquidity Mining rewards"
+    return "Unbonded LP tokens earn yield from the vault but do not earn liquidity mining rewards."
   else
     return "The LP tokens represent a user's share of the pool and can always be redeemed for the original tokens"
 }
@@ -238,17 +238,17 @@ export const bondingPeriodOptions = (
   ) {
     return [
       {
-        title: "7 Days Unbonding",
+        title: "7 Day Unbonding",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "14 Days Unbonding",
+        title: "14 Day Unbonding",
         amount: "1.3x SOMM",
         value: 1,
       },
       {
-        title: "21 Days Unbonding",
+        title: "21 Day Unbonding",
         amount: "1.5x SOMM",
         value: 2,
       },
@@ -257,17 +257,17 @@ export const bondingPeriodOptions = (
   if (config.cellarNameKey === CellarNameKey.FRAXIMAL) {
     return [
       {
-        title: "5 Days Unbonding",
+        title: "5 Day Unbonding",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "10 Days Unbonding",
+        title: "10 Day Unbonding",
         amount: "1.3x SOMM",
         value: 1,
       },
       {
-        title: "14 Days Unbonding",
+        title: "14 Day Unbonding",
         amount: "1.5x SOMM",
         value: 2,
       },
@@ -280,17 +280,17 @@ export const bondingPeriodOptions = (
   ) {
     return [
       {
-        title: "10 Days Unbonding",
+        title: "10 Day Unbonding",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "14 Days Unbonding",
+        title: "14 Day Unbonding",
         amount: "1.2x SOMM",
         value: 1,
       },
       {
-        title: "20 Days Unbonding",
+        title: "20 Day Unbonding",
         amount: "1.25x SOMM",
         value: 2,
       },
@@ -304,17 +304,17 @@ export const bondingPeriodOptions = (
   ) {
     return [
       {
-        title: "10 Days Unbonding",
+        title: "10 Day Unbonding",
         amount: "1.1x SOMM",
         value: 0,
       },
       {
-        title: "14 Days Unbonding",
+        title: "14 Day Unbonding",
         amount: "1.2x SOMM",
         value: 1,
       },
       {
-        title: "20 Days Unbonding",
+        title: "20 Day Unbonding",
         amount: "1.25x SOMM",
         value: 2,
       },
@@ -323,7 +323,7 @@ export const bondingPeriodOptions = (
   if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     return [
       {
-        title: "14 Days Unbonding",
+        title: "14 Day Unbonding",
         amount: "Up to 12 PEARL per swETH daily + SOMM Rewards",
         value: 0,
       },

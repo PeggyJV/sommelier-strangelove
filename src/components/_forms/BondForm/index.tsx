@@ -296,7 +296,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
             <Tooltip
               hasArrow
               arrowShadowColor="purple.base"
-              label="When you choose to unbond your tokens, this period represents the time you must wait before your tokens are fully unbonded and accessible. The duration of the unbonding period is determined by the period you selected during the unbond transaction. Until the unbonding period is complete, your tokens remain locked"
+              label="This is the period you must wait before your tokens are transferable/withdrawable"
               placement="top"
               bg="surface.bg"
               color="neutral.300"

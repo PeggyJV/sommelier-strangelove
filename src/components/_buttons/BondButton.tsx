@@ -17,7 +17,7 @@ export const BondButton: VFC<ButtonProps> = (props) => {
         color="neutral.300"
       >
         <BaseButton onClick={onOpen} {...props}>
-          Start Earning
+          Boost Yield
         </BaseButton>
       </Tooltip>
       <BondModal isOpen={isOpen} onClose={onClose} />
