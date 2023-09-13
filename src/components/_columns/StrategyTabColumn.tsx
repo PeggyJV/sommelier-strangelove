@@ -20,6 +20,14 @@ type StrategyTabColumnProps = {
   }) => void
 }
 
+type RowData = {
+  original: {
+    baseApySumRewards?: {
+      formatted?: string
+    }
+  }
+}
+
 export const StrategyTabColumn = ({
   timeline,
   onDepositModalOpen,
@@ -97,6 +105,18 @@ export const StrategyTabColumn = ({
           />
         )
       },
+      sortType: (rowA: RowData, rowB: RowData) => {
+        // Convert the value to number, if it doesn't exist, default to 0
+        const valA = parseFloat(
+          rowA.original.baseApySumRewards?.formatted || "0"
+        )
+        const valB = parseFloat(
+          rowB.original.baseApySumRewards?.formatted || "0"
+        )
+
+        // Sort from highest to lowest
+        return valB - valA
+      },
     },
     {
       Header: () => (
@@ -162,7 +182,7 @@ export const StrategyTabColumn = ({
           </Text>
         )
       },
-      sortType: "basic",
+      disableSortBy: true,
     },
     {
       Header: () => <Text>Deposit</Text>,
