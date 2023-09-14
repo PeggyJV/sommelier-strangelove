@@ -108,6 +108,7 @@ export const getStrategyData = async ({
           sommPrice,
           assetPrice,
           stakerContract: stakerContract as CellarStakingV0815,
+          cellarConfig: config,
         })
         return apyRes
       })()
