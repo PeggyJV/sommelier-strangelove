@@ -1,8 +1,7 @@
 const getUrl = () =>
   `/api/graph-cellar-strategy-data`
 
-export const fetchGraphCellarStrategyData = async (
-) => {
+export const fetchGraphCellarStrategyData = async () => {
   const url = getUrl()
 
   try {
