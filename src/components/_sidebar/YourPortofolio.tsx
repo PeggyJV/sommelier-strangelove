@@ -187,7 +187,10 @@ export const YourPortofolio = () => {
                 textAlign="right"
               >
                 <Text as="h6" fontSize={16} fontWeight={700}>
-                  ${data?.totalSommRewardsInUsd.toFixed(2)}
+                  $
+                  {Number(data?.totalSommRewardsInUsd
+                    .toFixed(2))
+                    .toLocaleString()}
                 </Text>
                 <Text
                   fontWeight={500}

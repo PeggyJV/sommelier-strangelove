@@ -400,7 +400,10 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                           height="20px"
                         />
                         <Text textAlign="right">
-                          {(Number(amount) / (10 ** cellarConfig.cellar.decimals)).toPrecision(2)}
+                          {(+(
+                            Number(amount) /
+                            10 ** cellarConfig.cellar.decimals
+                          ).toPrecision(2)).toLocaleString()}
                         </Text>
                       </HStack>
                     </Td>
@@ -429,13 +432,16 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                             />
                             <Text textAlign="right">
                               {claimAllRewards
-                                ? toEther(
-                                    claimAllRewards[i]?.toString() ||
-                                      "0",
-                                    6,
-                                    false,
-                                    2
-                                  )
+                                ? Number(
+                                    toEther(
+                                      claimAllRewards[
+                                        i
+                                      ]?.toString() || "0",
+                                      6,
+                                      false,
+                                      2
+                                    )
+                                  ).toLocaleString()
                                 : "0.00"}
                             </Text>
                           </HStack>

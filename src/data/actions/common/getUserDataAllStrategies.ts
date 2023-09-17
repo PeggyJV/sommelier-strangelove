@@ -106,7 +106,9 @@ export const getUserDataAllStrategies = async ({
     },
     totalSommRewards: {
       value: totalSommRewards,
-      formatted: toEther(totalSommRewards, 6, false, 2),
+      formatted: Number(
+        toEther(totalSommRewards, 6, false, 2)
+      ).toLocaleString(),
     },
     totalSommRewardsInUsd,
     strategies: cleanData,
