@@ -13,7 +13,7 @@ export const fetchAllTimeShareValueData = async (
     return result.result.data
   } catch (error) {
     console.log(
-      "Error fetching Graph All Time Share Value Data",
+      "Error fetching All Time Share Value Data",
       error
     )
     throw Error(error as string)
