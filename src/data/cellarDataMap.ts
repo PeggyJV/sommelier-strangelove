@@ -58,6 +58,7 @@ if (config.cleargate.enabled) {
 // Create another map of String to CellarData
 let cellarAddressConfig: CellarAddressDataMap 
   cellarAddressConfig = {
+    [config.CONTRACT.ETH_TREND_GROWTH.ADDRESS.toLowerCase()]: ethTrendGrowth,
     [config.CONTRACT.TURBO_GHO.ADDRESS.toLowerCase()]: turboGHO,
     [config.CONTRACT.TURBO_SWETH.ADDRESS.toLowerCase()]: turboSWETH,
     [config.CONTRACT.REAL_YIELD_ETH.ADDRESS.toLowerCase()]:
