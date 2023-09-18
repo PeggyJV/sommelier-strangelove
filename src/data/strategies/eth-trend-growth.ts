@@ -12,7 +12,8 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 export const ethTrendGrowth: CellarData = {
   name: "ETH Trend Growth",
   slug: config.CONTRACT.ETH_TREND_GROWTH.SLUG,
-  dashboard: "https://rybtc.sevenseas.capital/",
+  dashboard:
+    "https://debank.com/profile/0x6c51041a91c91c86f3f08a72cb4d3f67f1208897",
   tradedAssets: ["USDC", "YieldETH", "YieldUSD"],
   launchDate: new Date(Date.UTC(2023, 7, 29, 13, 0, 0, 0)),
   cellarType: CellarType.automatedPortfolio,
