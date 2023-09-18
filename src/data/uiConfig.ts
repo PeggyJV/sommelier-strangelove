@@ -95,7 +95,6 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
     config.cellarNameKey === CellarNameKey.FRAXIMAL ||
-    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   )
@@ -120,7 +119,6 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   )
@@ -133,7 +131,8 @@ export const isTokenPriceEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC || 
+    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH
   )
 }
 
@@ -228,6 +227,8 @@ export const tokenPriceTooltipContent = (config: ConfigProps) => {
     return `The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for`
   if (config.cellarNameKey === CellarNameKey.DEFI_STARS)
     return "The dollar value of the COMP, CRV, LDO, MKR, AAVE and USDC that 1 token can be redeemed for"
+  if (config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH)
+    return "The dollar value that 1 token can be redeemed for"
 
   return ""
 }
@@ -240,7 +241,9 @@ export const isTokenPriceChartEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-    config.cellarNameKey === CellarNameKey.DEFI_STARS
+    config.cellarNameKey === CellarNameKey.DEFI_STARS 
+    // ! Enable a bit post launch 
+    //config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH
   )
 }
 
@@ -317,6 +320,25 @@ export const bondingPeriodOptions = (
       },
     ]
   }
+  if (config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH) {
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
   if (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
@@ -351,23 +373,23 @@ export const bondingPeriodOptions = (
     ]
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
-     return [
-       {
-         title: "7 Day Unbonding",
-         amount: "1.1x SOMM",
-         value: 0,
-       },
-       {
-         title: "14 Day Unbonding",
-         amount: "1.3x SOMM",
-         value: 1,
-       },
-       {
-         title: "21 Day Unbonding",
-         amount: "1.5x SOMM",
-         value: 2,
-       },
-     ]
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
   }
 
   return []
@@ -393,7 +415,6 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
       config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
       config.cellarNameKey === CellarNameKey.TURBO_GHO
     ) {
@@ -415,7 +436,6 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
       config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
       config.cellarNameKey === CellarNameKey.TURBO_GHO
     ) {
@@ -433,7 +453,6 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   ) {
@@ -449,7 +468,6 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   ) {
@@ -465,7 +483,6 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   ) {
