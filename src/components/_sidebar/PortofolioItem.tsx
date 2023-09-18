@@ -18,6 +18,7 @@ import { analytics } from "utils/analytics"
 import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
 import { showNetValueInAsset } from "data/uiConfig"
 import { tokenConfig } from "data/tokenConfig"
+import BigNumber from "bignumber.js"
 
 interface PortofolioItemProps extends StackProps {
   icon: string
@@ -131,13 +132,23 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             <Text fontWeight={500} fontSize={12} color="neutral.400">
               {lpTokenData &&
                 `${toEther(
-                  (
-                    Number(lpTokenData?.value) + bondedToken
-                  ).toString(),
-                  lpTokenData.decimals,
+                  new BigNumber(
+                    new BigNumber(
+                      lpTokenData?.value.toString()
+                    ).toFixed()
+                  )
+                    .plus(
+                      new BigNumber(
+                        new BigNumber(
+                          bondedToken.toString()
+                        ).toFixed()
+                      )
+                    )
+                    .toFixed(),
+                  lpTokenData?.decimals,
                   true,
                   2
-                )} Tokens`}
+                ).toLocaleString()} Tokens`}
             </Text>
             <Text fontWeight={500} fontSize={12} color="neutral.400">
               1 token = {Number(tokenPrice.value).toFixed(3)} {symbol}{" "}

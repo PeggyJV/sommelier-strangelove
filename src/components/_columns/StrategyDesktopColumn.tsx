@@ -33,6 +33,13 @@ type StrategyDesktopColumnProps = {
     type: DepositModalType
   }) => void
 }
+type RowData = {
+  original: {
+    baseApySumRewards?: {
+      formatted?: string
+    }
+  }
+}
 
 export const StrategyDesktopColumn = ({
   timeline,
@@ -242,6 +249,18 @@ export const StrategyDesktopColumn = ({
             }
           />
         )
+      },
+      sortType: (rowA: RowData, rowB: RowData) => {
+        // Convert the value to number, if it doesn't exist, default to 0
+        const valA = parseFloat(
+          rowA.original.baseApySumRewards?.formatted || "0"
+        )
+        const valB = parseFloat(
+          rowB.original.baseApySumRewards?.formatted || "0"
+        )
+
+        // Sort from highest to lowest
+        return valB - valA
       },
     },
     {

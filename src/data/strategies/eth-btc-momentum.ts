@@ -103,6 +103,7 @@ export const ethBtcMomentum: CellarData = {
       address: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS,
       abi: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ABI,
       key: CellarKey.CELLAR_V0816,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.ETH_BTC_MOMENTUM_STAKER.ADDRESS,

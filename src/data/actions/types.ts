@@ -184,3 +184,8 @@ export type GetAllStrategiesDataQuery = {
     }>
   }>
 }
+
+export type GetTVLDataQuery = {
+  [address: string]: number;
+  'total_tvl': number;
+}

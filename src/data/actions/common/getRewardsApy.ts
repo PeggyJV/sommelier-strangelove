@@ -1,14 +1,17 @@
 import BigNumber from "bignumber.js"
 import { CellarStakingV0815 } from "src/abi/types"
+import { ConfigProps } from "data/types"
 
 export const getRewardsApy = async ({
   stakerContract,
   sommPrice,
   assetPrice,
+  cellarConfig,
 }: {
   stakerContract: CellarStakingV0815
   sommPrice: string
   assetPrice: string
+  cellarConfig: ConfigProps
 }) => {
   try {
     const stakingEnd = await stakerContract.endTimestamp()
@@ -25,7 +28,7 @@ export const getRewardsApy = async ({
         await stakerContract.totalDepositsWithBoost()
       const totalDepositWithBoost = new BigNumber(
         totalDepositWithBoostRes.toString()
-      ).dividedBy(new BigNumber(10).pow(18))
+      ).dividedBy(new BigNumber(10).pow(cellarConfig.cellar.decimals))
 
       // Assuming a user deposits 10k worth of the asset
       const userDeposit = new BigNumber(10000).div(assetPrice)

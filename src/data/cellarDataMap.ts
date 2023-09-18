@@ -1,6 +1,6 @@
 // TODO: Move content to a cms
 import { config } from "utils/config"
-import { CellarDataMap } from "./types"
+import { CellarDataMap, CellarAddressDataMap } from "./types"
 import {
   aaveStable,
   ethBtcTrend,
@@ -21,6 +21,7 @@ import {
   fraximal,
   turboSWETH,
   ethTrendGrowth,
+  turboGHO,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
@@ -28,6 +29,7 @@ if (config.cleargate.enabled) {
   cellarConfig = {
     // ! NOTE THIS DETERMINES INITIAL ORDERING
     [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: ethTrendGrowth,
+    [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,
     [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
     [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
     [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,
@@ -53,4 +55,40 @@ if (config.cleargate.enabled) {
   }
 }
 
+// Create another map of String to CellarData
+let cellarAddressConfig: CellarAddressDataMap 
+  cellarAddressConfig = {
+    [config.CONTRACT.TURBO_GHO.ADDRESS.toLowerCase()]: turboGHO,
+    [config.CONTRACT.TURBO_SWETH.ADDRESS.toLowerCase()]: turboSWETH,
+    [config.CONTRACT.REAL_YIELD_ETH.ADDRESS.toLowerCase()]:
+      realYieldEth,
+    [config.CONTRACT.REAL_YIELD_BTC.ADDRESS.toLowerCase()]:
+      realYieldBTC,
+    [config.CONTRACT.REAL_YIELD_USD.ADDRESS.toLowerCase()]:
+      realYieldUsd,
+    [config.CONTRACT.FRAXIMAL.ADDRESS.toLowerCase()]: fraximal,
+    [config.CONTRACT.REAL_YIELD_LINK.ADDRESS.toLowerCase()]:
+      realYieldLink,
+    [config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS.toLowerCase()]:
+      ethBtcTrend,
+    [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.ADDRESS.toLowerCase()]:
+      ethBtcMomentum,
+    [config.CONTRACT.DEFI_STARS.ADDRESS.toLowerCase()]: defiStars,
+    [config.CONTRACT.REAL_YIELD_ENS.ADDRESS.toLowerCase()]:
+      realYieldENS,
+    [config.CONTRACT.REAL_YIELD_UNI.ADDRESS.toLowerCase()]:
+      realYieldUNI,
+    [config.CONTRACT.REAL_YIELD_SNX.ADDRESS.toLowerCase()]:
+      realYieldSNX,
+    [config.CONTRACT.REAL_YIELD_1Inch.ADDRESS.toLowerCase()]:
+      realYield1Inch,
+    [config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS.toLowerCase()]:
+      aaveStable,
+    [config.CONTRACT.STEADY_UNI.ADDRESS.toLowerCase()]: steadyUni,
+    [config.CONTRACT.STEADY_MATIC.ADDRESS.toLowerCase()]: steadyMatic,
+    [config.CONTRACT.STEADY_ETH.ADDRESS.toLowerCase()]: steadyEth,
+    [config.CONTRACT.STEADY_BTC.ADDRESS.toLowerCase()]: steadyBtc,
+  }
+
+export const CellaAddressDataMap = cellarAddressConfig
 export const cellarDataMap = cellarConfig

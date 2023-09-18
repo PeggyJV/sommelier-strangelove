@@ -1,19 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { CellaAddressDataMap } from "data/cellarDataMap"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
-const sommelierAPIAllTimeShareValueData = async (
+const sommelierAPITVL = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
   try {
-    let { cellarAddress } = req.query
-
     // TODO: Generalize for multichain
     const data = await fetch(
-      `https://api.sommelier.finance/dailyData/ethereum/${cellarAddress}/0/latest`,
+      `https://api.sommelier.finance/tvl`,
       {
         method: "GET",
         headers: {
@@ -27,36 +24,14 @@ const sommelierAPIAllTimeShareValueData = async (
     }
 
     const fetchedData = await data.json()
-    let cellarDecimals =
-      CellaAddressDataMap[cellarAddress!.toString().toLowerCase()]
-        .config.cellar.decimals
-
-    let transformedData = fetchedData.Response.map(
-      (dayData: any) => ({
-        date: dayData.unix_seconds,
-        // Multiply by cellarDecimals and drop any decimals
-        shareValue: Math.floor(
-          dayData.share_price * 10 ** cellarDecimals
-        ).toString(),
-      })
-    )
-
-    // Order by descending date
-    transformedData.sort((a: any, b: any) => b.date - a.date)
 
     const formattedResult = {
-      result: {
-        data: {
-          cellar: {
-            dayDatas: transformedData,
-          },
-        },
-      },
+      result: {data: fetchedData.Response},
     }
 
     res.setHeader(
       "Cache-Control",
-      "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
+      "public, maxage=60, s-maxage=60, stale-while-revalidate=3600"
     )
     res.setHeader("Access-Control-Allow-Origin", baseUrl)
 
@@ -74,4 +49,4 @@ const sommelierAPIAllTimeShareValueData = async (
   }
 }
 
-export default sommelierAPIAllTimeShareValueData
+export default sommelierAPITVL

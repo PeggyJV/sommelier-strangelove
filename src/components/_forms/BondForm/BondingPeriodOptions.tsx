@@ -49,7 +49,7 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
               as="label"
               key={i}
               flex={1}
-              px={4}
+              px={3.3}
               py={2}
               _hover={{
                 cursor: "pointer",
@@ -87,7 +87,7 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
                 h="calc(100% + 1rem)"
                 zIndex="hide"
               />
-              <Text as="span" fontWeight="bold" pb={1} fontSize="xl">
+              <Text as="span" fontWeight="bold" fontSize="xl" textAlign="center">
                 {title}
               </Text>
               <Text as="span" fontSize="sm" textAlign="center">
