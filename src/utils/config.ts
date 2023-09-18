@@ -155,7 +155,7 @@ export const config = {
       ABI: cellarV0821,
     },
     ETH_TREND_GROWTH: {
-      ADDRESS: "0xcf05F416863F86ad37200379B298B7e43A3bF2bE",
+      ADDRESS: "0x6c51041a91c91c86f3f08a72cb4d3f67f1208897",
       SLUG: "ETH-Trend-Growth",
       ABI: cellarV0821,
     },

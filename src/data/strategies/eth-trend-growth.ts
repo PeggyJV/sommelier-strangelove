@@ -50,14 +50,6 @@ export const ethTrendGrowth: CellarData = {
   config: {
     id: config.CONTRACT.ETH_TREND_GROWTH.ADDRESS,
     cellarNameKey: CellarNameKey.ETH_TREND_GROWTH,
-    baseAsset: {
-      src: "/assets/icons/usdc.png",
-      alt: "USD Coin logo",
-      symbol: "USDC",
-      address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      coinGeckoId: "usd-coin",
-      decimals: 6,
-    },
     lpToken: {
       address: config.CONTRACT.ETH_TREND_GROWTH.ADDRESS,
       imagePath: "/assets/icons/eth-trend-growth.png",
@@ -78,6 +70,7 @@ export const ethTrendGrowth: CellarData = {
     //   abi: config.CONTRACT.ETH_TREND_GROWTH_STAKER.ABI,
     //   key: StakerKey.CELLAR_STAKING_V0821,
     // },
+    baseAsset: tokenConfigMap.WETH,
   },
   faq: [
     {
