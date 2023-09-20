@@ -245,6 +245,14 @@ export const tokenConfig: Token[] = [
     decimals: 18,
   },
   {
+    src: "/assets/icons/real-yield-usd.png",
+    alt: "real-yield-usd logo",
+    symbol: "YieldUSD",
+    address: "0x97e6E0a40a3D02F12d1cEC30ebfbAE04e37C119E",
+    coinGeckoId: "y-usd",
+    decimals: 18,
+  },
+  {
     src: "/assets/icons/gho.png",
     alt: "GHO logo",
     symbol: "GHO",

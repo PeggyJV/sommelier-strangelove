@@ -154,6 +154,11 @@ export const config = {
       SLUG: "Turbo-SWETH",
       ABI: cellarV0821,
     },
+    ETH_TREND_GROWTH: {
+      ADDRESS: "0x6c51041a91c91c86f3f08a72cb4d3f67f1208897",
+      SLUG: "ETH-Trend-Growth",
+      ABI: cellarV0821,
+    },
     TURBO_GHO: {
       ADDRESS: "0x0C190DEd9Be5f512Bd72827bdaD4003e9Cc7975C",
       SLUG: "Turbo-GHO",
@@ -223,7 +228,11 @@ export const config = {
       ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
       ABI: cellarStakingV0821,
     },
-
+    //! need to add correct contract address
+    ETH_TREND_GROWTH_STAKER: {
+      ADDRESS: "0xb1D3948F4DCd7Aa5e89449080F3D88870aD0137A",
+      ABI: cellarStakingV0821,
+    },
     TURBO_GHO_STAKER: {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
       ABI: cellarStakingV0821,

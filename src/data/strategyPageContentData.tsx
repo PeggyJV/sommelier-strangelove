@@ -943,4 +943,39 @@ export const strategyPageContentData = {
     },
     howItWorks: `The initial phase of Turbo GHO will concentrate on optimizing ticks within Uniswap v3 GHO-stablecoin pairs due to the vault’s potential to capture sustainable real yield. The vault will have the option to allocate to GHO pools on Balancer if yields are favorable, ensuring that GHO users access the best possible yields. Lastly, the vault will have the ability to borrow against GHO as part of hedging or looping strategies.`,
   },
+  [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: {
+    name: "ETH Trend Growth",
+    provider: "Silver Sun Capital Investments & Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Maximize your yield while outperforming the market.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="ETH Trend Growth icon"
+          src="/assets/icons/eth-trend-growth.png"
+          boxSize={8}
+        />
+        <Text>ETHTrendGrowth</Text>
+      </>
+    ),
+    tradedAssets: ["USDC", "YieldETH", "YieldUSD"],
+    alternativeTo: "Lending USDC",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Rebalance between Real Yield ETH and Real Yield USD to maximize real yield in any market environment.`,
+        `Use trend following strategies to gain exposure to ETH during uptrends to maximize exposure to upside volatility and then fully exit to stablecoins to avoid drawdowns.`,
+      ],
+      description: `We have been optimizing our trend-following strategy with ETH over the past 2 years to identify the best indicators that best determine when we should be fully exposed to ETH to maximize exposure to upside volatility while also setting a dynamic stop loss to minimize drawdowns. Since this strategy is focused on the daily timeframe, the trading costs are minimal to execute this strategy, and the yields from Real Yield ETH will be helpful to grow the ETH position since the average trade is held for 2-3 months based on the backtested data. When the trend-following strategy flips bearish and it is confirmed via a daily market close, the long ETH position is exited to Real Yield USD so stablecoin yield is generated while the strategy is not exposed to ETH downside volatility which minimizes drawdowns.
+       <br/><br/>
+      Note that ETH Trend Growth and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
 }

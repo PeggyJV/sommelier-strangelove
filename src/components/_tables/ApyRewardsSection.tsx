@@ -56,22 +56,6 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   if (cellarType === CellarType.automatedPortfolio)
     return (
       <Stack alignItems="flex-end" spacing={0}>
-        <Tooltip
-          label={baseApy ? baseApyHoverLabel(cellarConfig) : ""}
-          color="neutral.100"
-          border="0"
-          fontSize="12px"
-          bg="neutral.900"
-          fontWeight={600}
-          py="4"
-          px="6"
-          boxShadow="xl"
-          shouldWrapChildren
-        >
-          <Text fontWeight={550} fontSize="16px">
-            {baseApy ?? "--"}
-          </Text>
-        </Tooltip>
         {rewardsApy && (
           <Tooltip
             label={`Rewards ends in ${formatDistanceToNowStrict(
@@ -89,12 +73,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             shouldWrapChildren
           >
             <HStack spacing={1}>
-              <Text
-                fontWeight={600}
-                fontSize="12px"
-                color="neutral.400"
-              >
-                +{rewardsApy}
+              <Text fontWeight={550} fontSize="16px">
+                {rewardsApy}
               </Text>
 
               <CircularProgress

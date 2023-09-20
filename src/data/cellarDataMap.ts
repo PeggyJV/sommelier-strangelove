@@ -20,6 +20,7 @@ import {
   realYieldBTC,
   fraximal,
   turboSWETH,
+  ethTrendGrowth,
   turboGHO,
 } from "./strategies"
 
@@ -27,6 +28,7 @@ let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
     // ! NOTE THIS DETERMINES INITIAL ORDERING
+    [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: ethTrendGrowth,
     [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,
     [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
     [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
@@ -56,6 +58,7 @@ if (config.cleargate.enabled) {
 // Create another map of String to CellarData
 let cellarAddressConfig: CellarAddressDataMap 
   cellarAddressConfig = {
+    [config.CONTRACT.ETH_TREND_GROWTH.ADDRESS.toLowerCase()]: ethTrendGrowth,
     [config.CONTRACT.TURBO_GHO.ADDRESS.toLowerCase()]: turboGHO,
     [config.CONTRACT.TURBO_SWETH.ADDRESS.toLowerCase()]: turboSWETH,
     [config.CONTRACT.REAL_YIELD_ETH.ADDRESS.toLowerCase()]:

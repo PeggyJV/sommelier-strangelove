@@ -139,7 +139,7 @@ export const getStrategyData = async ({
 
         let price = parseFloat(
           (
-            (Number(strategyData.shareValue) / 1e18) *
+            (Number(strategyData.shareValue) / (10**config.cellar.decimals)) *
             Number(baseAssetPrice)
           ).toFixed(2)
         )
