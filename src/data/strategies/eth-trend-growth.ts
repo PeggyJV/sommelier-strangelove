@@ -15,7 +15,7 @@ export const ethTrendGrowth: CellarData = {
   dashboard:
     "https://debank.com/profile/0x6c51041a91c91c86f3f08a72cb4d3f67f1208897",
   tradedAssets: ["USDC", "YieldETH", "YieldUSD"],
-  launchDate: new Date(Date.UTC(2023, 8, 21, 16, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 8, 21, 18, 0, 0, 0)),
   cellarType: CellarType.automatedPortfolio,
   description: `Maximize your yield while outperforming the market.`,
   strategyType: "Crypto portfolio",
