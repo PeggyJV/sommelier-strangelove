@@ -131,7 +131,8 @@ export const isTokenPriceEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC
+    config.cellarNameKey === CellarNameKey.STEADY_MATIC || 
+    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH
   )
 }
 
@@ -226,6 +227,8 @@ export const tokenPriceTooltipContent = (config: ConfigProps) => {
     return `The dollar value of the ETH, BTC, and USDC that 1 token can be redeemed for`
   if (config.cellarNameKey === CellarNameKey.DEFI_STARS)
     return "The dollar value of the COMP, CRV, LDO, MKR, AAVE and USDC that 1 token can be redeemed for"
+  if (config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH)
+    return "The dollar value that 1 token can be redeemed for"
 
   return ""
 }
@@ -238,7 +241,9 @@ export const isTokenPriceChartEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
     config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-    config.cellarNameKey === CellarNameKey.DEFI_STARS
+    config.cellarNameKey === CellarNameKey.DEFI_STARS 
+    // ! Enable a bit post launch 
+    //config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH
   )
 }
 
@@ -315,6 +320,25 @@ export const bondingPeriodOptions = (
       },
     ]
   }
+  if (config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH) {
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
   if (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
@@ -349,23 +373,23 @@ export const bondingPeriodOptions = (
     ]
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
-     return [
-       {
-         title: "7 Day Unbonding",
-         amount: "1.1x SOMM",
-         value: 0,
-       },
-       {
-         title: "14 Day Unbonding",
-         amount: "1.3x SOMM",
-         value: 1,
-       },
-       {
-         title: "21 Day Unbonding",
-         amount: "1.5x SOMM",
-         value: 2,
-       },
-     ]
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
   }
 
   return []
@@ -499,7 +523,6 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "5.0%",
     }
   }
-  // NEED TO UPDATE
   if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
     return {
       value: 5.0,
@@ -522,7 +545,6 @@ export const waitTime = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     return null // No wait time
   }
-  // NEED TO UPDATE
   if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
     return null // No wait time
   }
