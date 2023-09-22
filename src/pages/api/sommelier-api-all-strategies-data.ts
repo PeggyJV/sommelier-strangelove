@@ -25,6 +25,7 @@ const sommelierAPIAllStrategiesData = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
+  let fetchedData: any = null
   try {
     // Make monthAgoEpoch nearest full day 30 days ago
     const now = new Date()
@@ -57,7 +58,7 @@ const sommelierAPIAllStrategiesData = async (
       )
     }
 
-    const fetchedData = await allStrategyDataResponse.json()
+    fetchedData = await allStrategyDataResponse.json()
     console.log("HM")
     console.log(fetchedData)
 
@@ -122,9 +123,9 @@ const sommelierAPIAllStrategiesData = async (
   } catch (error) {
     console.log("test")
 
-    
+
     res.status(500).send({
-      error: "CellaAddressDataMap: ",
+      error: `res: ${fetchedData.Response}`,
       message:
         (error as Error).message || "An unknown error occurred",
     })
