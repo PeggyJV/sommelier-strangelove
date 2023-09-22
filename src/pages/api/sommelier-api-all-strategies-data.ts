@@ -108,7 +108,7 @@ const sommelierAPIAllStrategiesData = async (
 
     res.setHeader(
       "Cache-Control",
-      "public, maxage=60, s-maxage=60, stale-while-revalidate=3600"
+      "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
     )
     res.setHeader("Access-Control-Allow-Origin", baseUrl)
 
