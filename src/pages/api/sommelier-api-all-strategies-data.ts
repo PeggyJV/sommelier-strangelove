@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { CellaAddressDataMap } from "data/cellarDataMap"
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/"
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
 interface CellarType {
   id: string
