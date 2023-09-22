@@ -6,8 +6,8 @@ const baseUrl =
 
 interface CellarType {
   id: string
-  dayDatas: any // Replace 'any' with a more specific type if possible
-  shareValue: any // Replace 'any' with a more specific type if possible
+  dayDatas: any
+  shareValue: any 
   tvlTotal: number
 }
 
@@ -74,7 +74,7 @@ const sommelierAPIAllStrategiesData = async (
 
     // For each key perform transofrmation
     Object.keys(fetchedData.Response).forEach((cellarAddress) => {
-      console.log(cellarAddress!.toString().toLowerCase())
+      console.log(cellarAddress.toString())
 
       let cellarDecimals =
         CellaAddressDataMap[cellarAddress!.toString().toLowerCase()]
@@ -120,11 +120,11 @@ const sommelierAPIAllStrategiesData = async (
     // Format similar to subgraph queries so as to not rewrite large swaths of code
     res.status(200).json(returnObj)
   } catch (error) {
-    console.error(error)
     console.log("test")
-    console.log(CellaAddressDataMap)
+
+    
     res.status(500).send({
-      error: "failed to fetch data",
+      error: "CellaAddressDataMap: ",
       message:
         (error as Error).message || "An unknown error occurred",
     })
