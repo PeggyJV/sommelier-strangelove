@@ -37,7 +37,7 @@ const sommelierAPIAllStrategiesData = async (
 
     // TODO: Generalize for multichain
     let allStrategyData = `https://api.sommelier.finance/dailyData/ethereum/allCellars/${monthAgoEpoch}/latest`
-    let tvlData = `https://api.sommelier.finance/tvl`
+    let tvlData = `${baseUrl}api/sommelier-api-tvl` // Hit local endpoint for cached data
 
     const [allStrategyDataResponse, tvlDataResponse] =
       await Promise.all([
@@ -89,7 +89,7 @@ const sommelierAPIAllStrategiesData = async (
       transformedData.sort((a: any, b: any) => b.date - a.date)
       
       // Get tvl
-      let tvl = fetchedTVL.Response[cellarAddress]
+      let tvl = fetchedTVL.result.data[cellarAddress]
 
       if (tvl === undefined) {
         tvl = 0
