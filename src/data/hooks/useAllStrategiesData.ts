@@ -3,7 +3,7 @@ import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
 import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
-import { fetchGraphCellarStrategyData } from "queries/get-all-strategies-data"
+import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
 import { GetAllStrategiesDataQuery } from "data/actions/types"
 
@@ -18,7 +18,7 @@ export const useAllStrategiesData = () => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetchGraphCellarStrategyData()
+    fetchCellarStrategyData()
       .then(({ data, error }) => {
         if (error) {
           setError(error)
