@@ -69,6 +69,7 @@ const sommelierAPIAllStrategiesData = async (
 
     const fetchedTVL = await tvlDataResponse.json()
 
+    console.log("Map: ")
     console.log(CellaAddressDataMap)
 
 
