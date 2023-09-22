@@ -69,10 +69,6 @@ const sommelierAPIAllStrategiesData = async (
 
     const fetchedTVL = await tvlDataResponse.json()
 
-    console.log("Map: ")
-    console.log(CellaAddressDataMap)
-
-
     // For each key perform transofrmation
     Object.keys(fetchedData.Response).forEach((cellarAddress) => {
       console.log(cellarAddress!.toString().toLowerCase())
