@@ -58,6 +58,9 @@ const sommelierAPIAllStrategiesData = async (
     }
 
     const fetchedData = await allStrategyDataResponse.json()
+    console.log("HM")
+    console.log(fetchedData)
+
 
     let returnObj = {
       result: {
@@ -118,6 +121,8 @@ const sommelierAPIAllStrategiesData = async (
     res.status(200).json(returnObj)
   } catch (error) {
     console.error(error)
+    console.log("test")
+    console.log(CellaAddressDataMap)
     res.status(500).send({
       error: "failed to fetch data",
       message:
