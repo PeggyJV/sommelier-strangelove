@@ -71,7 +71,7 @@ export const getStrategyData = async ({
 
       let tvm = hideValue
         ? undefined
-        : String(Number(strategyData?.tvlTotal))
+        : getTvm(String(Number(strategyData?.tvlTotal)))
 
       const tradedAssets = (() => {
         const assets = strategy.tradedAssets
