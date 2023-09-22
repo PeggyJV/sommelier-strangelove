@@ -146,7 +146,7 @@ export const getStrategyData = async ({
         if (!strategyData) return
         return getTokenPrice(
           strategyData.shareValue,
-          config.baseAsset.decimals
+          18 // Share values are always standardized to 18 decimals in their API
         )
       })()
 
