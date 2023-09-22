@@ -75,6 +75,15 @@ const sommelierAPIAllStrategiesData = async (
 
     // For each key perform transofrmation
     Object.keys(fetchedData.Response).forEach((cellarAddress) => {
+      // If the cellar address is not in the CellaAddressDataMap skip it
+      if (
+        CellaAddressDataMap[cellarAddress!.toString().toLowerCase()] ===
+        undefined
+      ) {
+        console.log(cellarAddress)
+        return
+      }
+
       console.log(cellarAddress.toString())
 
       let cellarDecimals =
@@ -93,7 +102,7 @@ const sommelierAPIAllStrategiesData = async (
 
       // Order by descending date
       transformedData.sort((a: any, b: any) => b.date - a.date)
-      
+
       // Get tvl
       let tvl = fetchedTVL.Response[cellarAddress]
 
