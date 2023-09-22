@@ -7,7 +7,7 @@ const baseUrl =
 interface CellarType {
   id: string
   dayDatas: any
-  shareValue: any 
+  shareValue: any
   tvlTotal: number
 }
 
@@ -25,7 +25,6 @@ const sommelierAPIAllStrategiesData = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  let fetchedData: any = null
   try {
     // Make monthAgoEpoch nearest full day 30 days ago
     const now = new Date()
@@ -58,10 +57,7 @@ const sommelierAPIAllStrategiesData = async (
       )
     }
 
-    fetchedData = await allStrategyDataResponse.json()
-    console.log("HM")
-    console.log(fetchedData)
-
+    const fetchedData = await allStrategyDataResponse.json()
 
     let returnObj = {
       result: {
@@ -77,14 +73,13 @@ const sommelierAPIAllStrategiesData = async (
     Object.keys(fetchedData.Response).forEach((cellarAddress) => {
       // If the cellar address is not in the CellaAddressDataMap skip it
       if (
-        CellaAddressDataMap[cellarAddress!.toString().toLowerCase()] ===
-        undefined
+        CellaAddressDataMap[
+          cellarAddress!.toString().toLowerCase()
+        ] === undefined
       ) {
-        console.log(cellarAddress)
+        console.warn(`${cellarAddress} not a valid cellar address`)
         return
       }
-
-      console.log(cellarAddress.toString())
 
       let cellarDecimals =
         CellaAddressDataMap[cellarAddress!.toString().toLowerCase()]
@@ -130,11 +125,8 @@ const sommelierAPIAllStrategiesData = async (
     // Format similar to subgraph queries so as to not rewrite large swaths of code
     res.status(200).json(returnObj)
   } catch (error) {
-    console.log("test")
-
-
     res.status(500).send({
-      error: `res: ${fetchedData.Response}`,
+      error: `could not fetch data`,
       message:
         (error as Error).message || "An unknown error occurred",
     })
