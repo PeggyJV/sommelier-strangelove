@@ -12,7 +12,7 @@ export const useAllStrategiesData = () => {
   const { data: allContracts } = useAllContracts()
   const { data: sommPrice } = useCoinGeckoPrice("sommelier")
 
-  const [sgData, setSgData] = useState<
+  const [cellarData, setcellarData] = useState<
     GetAllStrategiesDataQuery | undefined
   >(undefined)
   const [error, setError] = useState(null)
@@ -23,7 +23,7 @@ export const useAllStrategiesData = () => {
         if (error) {
           setError(error)
         } else {
-          setSgData(data)
+          setcellarData(data)
         }
       })
       .catch((error) => setError(error))
@@ -35,11 +35,11 @@ export const useAllStrategiesData = () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,
         sommPrice: sommPrice!,
-        sgData: sgData,
+        cellarData: cellarData,
       })
     },
     {
-      enabled: !!allContracts && !!sommPrice && !!sgData,
+      enabled: !!allContracts && !!sommPrice && !!cellarData,
     }
   )
 
