@@ -367,7 +367,7 @@ export const bondingPeriodOptions = (
     return [
       {
         title: "14 Day Unbonding",
-        amount: "Up to 12 PEARL per swETH daily + SOMM Rewards",
+        amount: "Up to 6 PEARL per swETH daily + SOMM Rewards",
         value: 0,
       },
     ]
