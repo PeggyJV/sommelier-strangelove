@@ -152,6 +152,7 @@ export const StrategyTabColumn = ({
                   fontWeight={600}
                 />
               </Tooltip>
+              {}
             </VStack>
           )
 
