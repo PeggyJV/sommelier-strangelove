@@ -56,12 +56,14 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
+import { useEnsoRoutes, TokenMap, EnsoRouteConfig,  } from "data/hooks/useEnsoRoutes"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
   notifyModal?: UseDisclosureProps
 }
 
+//! This handles all deposits, not just the tab
 export const SommelierTab: VFC<DepositModalProps> = ({
   notifyModal,
   ...props
@@ -108,6 +110,44 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const { data: signer } = useSigner()
   const { address } = useAccount()
+
+  // New enso route config
+  const ensoRouteConfig: EnsoRouteConfig = {
+    fromAddress: address!,
+    tokensIn: [
+      {
+        address: "0x4fabb145d64652a948d72533023f6e7a623c7c53",
+        amountBaseDenom: Number(1000000000000000000),
+      },
+    ],
+    tokenOut: "0x0c190ded9be5f512bd72827bdad4003e9cc7975c",
+    slippage: 3,
+  }
+
+  const { response, error, loading } = useEnsoRoutes(ensoRouteConfig)
+
+  // wait for response and print
+  console.log("HERE")
+  console.log(response)
+  console.log(error)
+  console.log(loading)
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
 
   const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
 

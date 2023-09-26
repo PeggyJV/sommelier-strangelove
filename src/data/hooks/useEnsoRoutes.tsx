@@ -1,3 +1,4 @@
+import { ar } from "date-fns/locale"
 import { useState, useEffect } from "react"
 // Enso Docs can be found at https://www.enso.finance/developers or https://docs.enso.finance/
 
@@ -30,33 +31,37 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
 
         const actions = config.tokensIn.map((tokenIn) => {
           return {
-            tokenIn: tokenIn.address,
-            tokenOut: config.tokenOut,
-            amountIn: tokenIn.amountBaseDenom,
-            slippage: config.slippage * 100,
+            protocol: "enso",
+            action: "route",
+            args: {
+              tokenIn: tokenIn.address,
+              tokenOut: config.tokenOut,
+              amountIn: String(tokenIn.amountBaseDenom),
+              slippage: String(config.slippage * 100),
+            }
           }
         })
 
         // TODO, do we need to checksum addresses?
 
-
-
         // TODO: Generalize for multichain
         const response = await fetch(
           `https://api.enso.finance/api/v1/shortcuts/bundle?chainId=1&fromAddress=${config.fromAddress}`,
           {
-            method: "GET",
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${ensoApiKey}`,
             },
-            body: JSON.stringify({ actions: actions }),
+            body: JSON.stringify(actions),
           }
         )
+        console.log("Hm")
 
         if (response.status !== 200) {
           throw new Error("failed to fetch data")
         }
+
 
         const result = await response.json()
 
