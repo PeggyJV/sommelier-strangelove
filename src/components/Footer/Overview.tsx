@@ -1,26 +1,38 @@
 import { Stack, Text, VStack } from "@chakra-ui/react"
 import { TransparentCard } from "components/_cards/TransparentCard"
 import { LighterSkeleton } from "components/_skeleton"
-import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import { formatUSD } from "utils/formatCurrency"
-import { isComingSoon } from "utils/isComingSoon"
+import { fetchTVLData } from "queries/get-all-tvl"
+import { useEffect, useState } from "react"
+import { GetTVLDataQuery } from "src/data/actions/types"
+import { cellarDataMap } from "src/data/cellarDataMap"
 
 export const Overview = () => {
-  const { data, isLoading } = useAllStrategiesData()
+  const [tvlData, setTotalTVL] = useState<GetTVLDataQuery | null>(
+    null
+  )
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoadingTVL] = useState(false) // Added isLoadingTVL state
 
-  const totalTVM = data?.reduce((acc, item) => {
-    if (item && item.tvm && item.tvm.value) {
-      return acc + Number(item.tvm.value)
-    }
-    return acc
-  }, 0)
+  useEffect(() => {
+    setIsLoadingTVL(true) // Set loading state to true before fetching data
+    fetchTVLData()
+      .then((response) => {
+        setTotalTVL(response)
+      })
+      .catch((error) => {
+        console.log("Error from fetchTVLData", error) // Log errors
+        setError(error)
+      })
+      .finally(() => {
+        setIsLoadingTVL(false) // Reset loading state in either case (success/failure)
+      })
+  }, [])
 
-  const totalLaunchedStrategies = data?.filter((item) => {
-    const hideValue =
-      isComingSoon(item?.launchDate) &&
-      process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
-    return !hideValue
-  })
+  const totalTVM: Number = tvlData?.total_tvl ?? 0
+
+  // Just length of map cellarDataMap
+  const totalLaunchedStrategies = Object.keys(cellarDataMap).length
 
   return (
     <TransparentCard marginTop="48px" py="30px">
@@ -54,13 +66,7 @@ export const Overview = () => {
             height={isLoading ? "60px" : "auto"}
           >
             <Text fontWeight="bold" fontSize="40px">
-              {String(
-                totalLaunchedStrategies?.filter((strategies) =>
-                  strategies?.launchDate
-                    ? strategies?.launchDate <= new Date()
-                    : true
-                ).length
-              )}
+              {String(totalLaunchedStrategies)}
             </Text>
           </LighterSkeleton>
         </VStack>

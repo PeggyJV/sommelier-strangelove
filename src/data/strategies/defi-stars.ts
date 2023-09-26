@@ -82,6 +82,7 @@ export const defiStars: CellarData = {
       address: config.CONTRACT.DEFI_STARS.ADDRESS,
       abi: config.CONTRACT.DEFI_STARS.ABI,
       key: CellarKey.CELLAR_V0816,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.DEFI_STARS_STAKER.ADDRESS,

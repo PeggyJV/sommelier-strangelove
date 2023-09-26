@@ -3,7 +3,7 @@ import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
 import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
-import { fetchGraphCellarStrategyData } from "queries/get-all-strategies-data"
+import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
 import { GetAllStrategiesDataQuery } from "data/actions/types"
 
@@ -12,18 +12,18 @@ export const useAllStrategiesData = () => {
   const { data: allContracts } = useAllContracts()
   const { data: sommPrice } = useCoinGeckoPrice("sommelier")
 
-  const [sgData, setSgData] = useState<
+  const [cellarData, setcellarData] = useState<
     GetAllStrategiesDataQuery | undefined
   >(undefined)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetchGraphCellarStrategyData()
+    fetchCellarStrategyData()
       .then(({ data, error }) => {
         if (error) {
           setError(error)
         } else {
-          setSgData(data)
+          setcellarData(data)
         }
       })
       .catch((error) => setError(error))
@@ -35,11 +35,11 @@ export const useAllStrategiesData = () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,
         sommPrice: sommPrice!,
-        sgData: sgData,
+        cellarData: cellarData,
       })
     },
     {
-      enabled: !!allContracts && !!sommPrice && !!sgData,
+      enabled: !!allContracts && !!sommPrice && !!cellarData,
     }
   )
 

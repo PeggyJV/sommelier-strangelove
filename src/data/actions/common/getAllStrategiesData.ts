@@ -9,23 +9,23 @@ import { ConfigProps } from "data/types"
 export const getAllStrategiesData = async ({
   allContracts,
   sommPrice,
-  sgData,
+  cellarData,
 }: {
   allContracts: AllContracts
   sommPrice: string
-  sgData?: GetAllStrategiesDataQuery
+  cellarData?: GetAllStrategiesDataQuery
 }) => {
-  if (!sgData) return []
+  if (!cellarData) return []
   const data = await Promise.all(
     Object.entries(allContracts)?.map(
       async ([address, contracts]) => {
         const result = await reactQueryClient.fetchQuery(
           ["USE_STRATEGY_DATA", { provider: true, address }],
           async () => {
-            const subgraphData = sgData.cellars.find(
+            const cleanCellarData = cellarData.cellars.find(
               (v) => v.id.toLowerCase() === address.toLowerCase()
             )
-            
+
             const strategy = Object.values(cellarDataMap).find(
               ({ config }) =>
                 config.cellar.address.toLowerCase() ===
@@ -42,7 +42,7 @@ export const getAllStrategiesData = async ({
             try {
               return await getStrategyData({
                 address,
-                stratData: subgraphData,
+                stratData: cleanCellarData,
                 sommPrice,
                 contracts: contracts,
                 baseAssetPrice: baseAssetPrice!,

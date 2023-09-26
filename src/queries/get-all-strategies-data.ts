@@ -1,8 +1,7 @@
 const getUrl = () =>
-  `/api/graph-cellar-strategy-data`
+  `/api/sommelier-api-all-strategies-data`
 
-export const fetchGraphCellarStrategyData = async (
-) => {
+export const fetchCellarStrategyData = async () => {
   const url = getUrl()
 
   try {
@@ -11,7 +10,7 @@ export const fetchGraphCellarStrategyData = async (
 
     return result.result
   } catch (error) {
-    console.log("Error fetching Graph Aggregate Cellar Strategy Data", error)
+    console.log("Error fetching Aggregate Cellar Strategy Data", error)
     throw Error(error as string)
   }
 }

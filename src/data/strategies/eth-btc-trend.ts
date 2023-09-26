@@ -105,6 +105,7 @@ export const ethBtcTrend: CellarData = {
       address: config.CONTRACT.ETH_BTC_TREND_CELLAR.ADDRESS,
       abi: config.CONTRACT.ETH_BTC_TREND_CELLAR.ABI,
       key: CellarKey.CELLAR_V0816,
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.ETH_BTC_TREND_STAKER.ADDRESS,

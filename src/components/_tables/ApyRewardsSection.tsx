@@ -6,7 +6,7 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react"
-import { LogoIcon, PearlIcon } from "components/_icons"
+import { LogoIcon } from "components/_icons"
 import { FC } from "react"
 import { formatDistanceToNowStrict, subDays } from "date-fns"
 import { baseApyHoverLabel } from "data/uiConfig"
@@ -42,7 +42,11 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const cellarType = cellarDataMap[cellarId].cellarType
   const LogoComponent =
     cellarConfig.customRewardWithoutAPY?.logo ?? LogoIcon
-  const isStakingOngoing = now < endDate
+  const isStakingOverrideOngoing = cellarConfig.customRewardWithoutAPY
+    ?.stakingDurationOverride
+    ? cellarConfig.customRewardWithoutAPY.stakingDurationOverride.getTime() >
+      endDate
+    : undefined
 
   if (!baseApy && !rewardsApy) {
     return (
@@ -56,22 +60,6 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   if (cellarType === CellarType.automatedPortfolio)
     return (
       <Stack alignItems="flex-end" spacing={0}>
-        <Tooltip
-          label={baseApy ? baseApyHoverLabel(cellarConfig) : ""}
-          color="neutral.100"
-          border="0"
-          fontSize="12px"
-          bg="neutral.900"
-          fontWeight={600}
-          py="4"
-          px="6"
-          boxShadow="xl"
-          shouldWrapChildren
-        >
-          <Text fontWeight={550} fontSize="16px">
-            {baseApy ?? "--"}
-          </Text>
-        </Tooltip>
         {rewardsApy && (
           <Tooltip
             label={`Rewards ends in ${formatDistanceToNowStrict(
@@ -89,12 +77,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             shouldWrapChildren
           >
             <HStack spacing={1}>
-              <Text
-                fontWeight={600}
-                fontSize="12px"
-                color="neutral.400"
-              >
-                +{rewardsApy}
+              <Text fontWeight={550} fontSize="16px">
+                {rewardsApy}
               </Text>
 
               <CircularProgress
@@ -158,56 +142,65 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               {baseApySumRewards ?? "-"}
             </Text>
           </Tooltip>
-          {rewardsApy && (
-            <Tooltip
-              label={`${
-                cellarConfig.customRewardWithoutAPY
-                  ?.customIconToolTipMsg ?? "Rewards ends in"
-              } ${formatDistanceToNowStrict(
-                cellarConfig.customRewardWithoutAPY
-                  ?.stakingDurationOverride ??
-                  new Date(stackingEndDate)
-              )}`}
-              color="neutral.100"
-              border="0"
-              fontSize="12px"
-              bg="neutral.900"
-              fontWeight={600}
-              py="4"
-              px="6"
-              boxShadow="xl"
-              shouldWrapChildren
-            >
-              <HStack spacing={1}>
-                <CircularProgress
-                  value={percentage}
-                  color="white"
-                  trackColor="none"
-                  size="25px"
-                >
-                  <CircularProgressLabel
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <LogoComponent
-                      mx="auto"
-                      color="red.normal"
-                      p={0}
-                      boxSize={
-                        cellarConfig.customRewardWithoutAPY
-                          ?.logoSize ?? "9px"
-                      }
-                    />
-                  </CircularProgressLabel>
-                </CircularProgress>
-              </HStack>
-            </Tooltip>
-          )}
           {rewardsApy &&
-            cellarConfig.customRewardWithoutAPY?.showSommRewards && (
+            (isStakingOverrideOngoing !== undefined &&
+              isStakingOverrideOngoing === true) && (
               <Tooltip
-                label={`SOMM Rewards ends in ${formatDistanceToNowStrict(
-                  new Date(stackingEndDate)
+                label={`${
+                  cellarConfig.customRewardWithoutAPY
+                    ?.customIconToolTipMsg ?? "Rewards ends in"
+                } ${formatDistanceToNowStrict(
+                  cellarConfig.customRewardWithoutAPY
+                    ?.stakingDurationOverride ??
+                    new Date(stackingEndDate)
+                )}`}
+                color="neutral.100"
+                border="0"
+                fontSize="12px"
+                bg="neutral.900"
+                fontWeight={600}
+                py="4"
+                px="6"
+                boxShadow="xl"
+                shouldWrapChildren
+              >
+                <HStack spacing={1}>
+                  <CircularProgress
+                    value={percentage}
+                    color="white"
+                    trackColor="none"
+                    size="25px"
+                  >
+                    <CircularProgressLabel
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <LogoComponent
+                        mx="auto"
+                        color="red.normal"
+                        p={0}
+                        boxSize={
+                          cellarConfig.customRewardWithoutAPY
+                            ?.logoSize ?? "9px"
+                        }
+                      />
+                    </CircularProgressLabel>
+                  </CircularProgress>
+                </HStack>
+              </Tooltip>
+            )}
+          {rewardsApy &&
+            (cellarConfig.customRewardWithoutAPY?.showSommRewards ===
+              undefined ||
+              cellarConfig.customRewardWithoutAPY
+                ?.showSommRewards) && (
+              <Tooltip
+                label={`${
+                  cellarConfig.customRewardWithoutAPY?.showSommRewards
+                    ? "SOMM Rewards ends in"
+                    : "Rewards ends in"
+                } ${formatDistanceToNowStrict(
+                    new Date(stackingEndDate)
                 )}`}
                 color="neutral.100"
                 border="0"

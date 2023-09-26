@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import { CellaAddressDataMap } from "data/cellarDataMap"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -31,11 +32,15 @@ const sommelierAPIIndividualStratData = async (
       fetchData(hourlyDataUrl),
     ])
 
+    let cellarDecimals = CellaAddressDataMap[cellarAddress!.toString().toLowerCase()].config.cellar.decimals
+
     let transformedDailyData = dailyData.Response.map(
       (dayData: any) => ({
         date: dayData.unix_seconds,
-        // Multiply by 1e18 and drop any decimals
-        shareValue: Math.floor(dayData.share_price * 1e18).toString(),
+        // Multiply by cellarDecimals and drop any decimals
+        shareValue: Math.floor(
+          dayData.share_price * (10 ** cellarDecimals)
+        ).toString(),
       })
     )    
 
@@ -46,11 +51,12 @@ const sommelierAPIIndividualStratData = async (
     let transformedHourlyData = hourlyData.Response.map(
       (hourData: any) => ({
         date: hourData.unix_seconds,
-        // Multiply by 1e18 and drop any decimals
+        // Multiply by cellarDecimals and drop any decimals
         shareValue: Math.floor(
-          hourData.share_price * 1e18
+          hourData.share_price * (10 ** cellarDecimals)
         ).toString(),
         total_assets: hourData.total_assets,
+        tvl: hourData.tvl,
       })
     )
 
@@ -59,7 +65,7 @@ const sommelierAPIIndividualStratData = async (
 
     // Most recent hourly
     const baseAssetTvl = BigInt(
-      Math.floor(Number(transformedHourlyData[0].total_assets) * 1e18) // FE expects everything to be 18 digits regardless of asset
+      Math.floor(Number(transformedHourlyData[0].tvl)) // !! Note this TVL may be up to 1 hour stale bc it doesnt use the tvl api endpoint, not a huge deal but might be weird at launches 
     )
 
     // TODO: Get shareValue and TvlTotal from latest hourly data async

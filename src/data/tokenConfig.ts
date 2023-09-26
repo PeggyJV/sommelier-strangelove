@@ -244,6 +244,30 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "sweth",
     decimals: 18,
   },
+  {
+    src: "/assets/icons/real-yield-usd.png",
+    alt: "real-yield-usd logo",
+    symbol: "YieldUSD",
+    address: "0x97e6E0a40a3D02F12d1cEC30ebfbAE04e37C119E",
+    coinGeckoId: "y-usd",
+    decimals: 18,
+  },
+  {
+    src: "/assets/icons/gho.png",
+    alt: "GHO logo",
+    symbol: "GHO",
+    address: "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
+    coinGeckoId: "gho",
+    decimals: 18,
+  },
+  {
+    src: "/assets/icons/liquity-usd-logo.png",
+    alt: "LUSD logo",
+    symbol: "LUSD",
+    address: "0x5f98805a4e8be255a32880fdec7f6728c6568ba0",
+    coinGeckoId: "liquity-usd",
+    decimals: 18,
+  },
 ]
 
 // Creatae a map from each token symbol to its config
