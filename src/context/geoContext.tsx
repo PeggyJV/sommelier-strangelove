@@ -11,7 +11,7 @@ import {
 import { analytics } from "utils/analytics"
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/"
 
 type CheckIPState = {
   country: string | null
@@ -35,7 +35,7 @@ export const GeoProvider: FC<ReactNode> = ({ children }) => {
 
   useEffect(() => {
     const getRegionData = async () => {
-      const res = await fetch(`${BASE_URL}/api/geo`, {
+      const res = await fetch(`${BASE_URL}api/geo`, {
         method: "GET",
       })
       const data = await res.json()

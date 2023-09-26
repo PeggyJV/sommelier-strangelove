@@ -56,6 +56,7 @@ const sommelierAPIIndividualStratData = async (
           hourData.share_price * (10 ** cellarDecimals)
         ).toString(),
         total_assets: hourData.total_assets,
+        tvl: hourData.tvl,
       })
     )
 
@@ -64,7 +65,7 @@ const sommelierAPIIndividualStratData = async (
 
     // Most recent hourly
     const baseAssetTvl = BigInt(
-      Math.floor(Number(transformedHourlyData[0].total_assets) * 1e18) // FE expects total assets to be 18 digits regardless of asset
+      Math.floor(Number(transformedHourlyData[0].tvl)) // !! Note this TVL may be up to 1 hour stale bc it doesnt use the tvl api endpoint, not a huge deal but might be weird at launches 
     )
 
     // TODO: Get shareValue and TvlTotal from latest hourly data async

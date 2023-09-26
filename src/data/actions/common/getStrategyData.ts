@@ -71,13 +71,7 @@ export const getStrategyData = async ({
 
       let tvm = hideValue
         ? undefined
-        : symbol !== "USDC"
-        ? getTvm(
-            String(
-              Number(strategyData?.tvlTotal) * Number(baseAssetPrice)
-            )
-          )
-        : getTvm(strategyData?.tvlTotal)
+        : getTvm(String(Number(strategyData?.tvlTotal)))
 
       const tradedAssets = (() => {
         const assets = strategy.tradedAssets
@@ -139,7 +133,8 @@ export const getStrategyData = async ({
 
         let price = parseFloat(
           (
-            (Number(strategyData.shareValue) / (10**config.cellar.decimals)) *
+            (Number(strategyData.shareValue) /
+              10 ** config.cellar.decimals) *
             Number(baseAssetPrice)
           ).toFixed(2)
         )
@@ -151,7 +146,7 @@ export const getStrategyData = async ({
         if (!strategyData) return
         return getTokenPrice(
           strategyData.shareValue,
-          config.baseAsset.decimals
+          18 // Share values are always standardized to 18 decimals in their API
         )
       })()
 
