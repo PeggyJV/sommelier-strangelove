@@ -170,7 +170,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             {(netValueInAsset * Number(tokenPrice.value)).toFixed(
               showNetValueInAsset(cellarData.config) ? 5 : 2
             )}
-            {symbol}
+            {` ${symbol}`}
           </Text>
         </VStack>
       </HStack>

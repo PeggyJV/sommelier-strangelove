@@ -5,7 +5,7 @@ import { GetStrategyDataQuery } from "src/data/actions/types"
 import { useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
-import { fetchGraphIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
+import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
 import { useState, useEffect } from "react"
 
 export const useStrategyData = (address: string) => {
@@ -20,7 +20,7 @@ export const useStrategyData = (address: string) => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetchGraphIndividualCellarStrategyData(address.toLowerCase())
+    fetchIndividualCellarStrategyData(address.toLowerCase())
       .then(({ data, error }) => {
         if (error) {
           setError(error)

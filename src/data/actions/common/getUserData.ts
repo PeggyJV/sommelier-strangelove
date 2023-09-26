@@ -7,7 +7,6 @@ import { showNetValueInAsset } from "data/uiConfig"
 import { CellarV0815, CellarStakingV0815 } from "src/abi/types"
 import {
   convertDecimals,
-  formatDecimals,
   ZERO,
 } from "utils/bigNumber"
 import { formatUSD } from "utils/formatCurrency"
