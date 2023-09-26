@@ -308,7 +308,7 @@ export const StrategyDesktopColumn = ({
           </Text>
         )
       },
-      sortType: "basic",
+      disableSortBy: true,
     },
     {
       Header: () => <Text>Deposit</Text>,
