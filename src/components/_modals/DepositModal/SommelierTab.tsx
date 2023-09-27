@@ -401,7 +401,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         cellarData.popUpTitle && cellarData.popUpDescription
 
       if (!notifyModal?.isOpen) {
-        // analytics.track(`${currentStrategies}-notify.modal-opened`)
+        analytics.track(`${currentStrategies}-notify.modal-opened`)
       }
       if (isPopUpEnable) {
         props.onClose()
