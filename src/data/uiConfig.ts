@@ -77,13 +77,6 @@ export const isCurrentDepositsEnabled = (config: ConfigProps) => {
   )
 }
 
-export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  )
-}
-
 export const isAPYEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||

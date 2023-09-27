@@ -42,12 +42,11 @@ import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
-import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
-import { isActiveTokenStrategyEnabled, waitTime } from "data/uiConfig"
+import { waitTime } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
@@ -56,7 +55,11 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { useEnsoRoutes, TokenMap, EnsoRouteConfig,  } from "data/hooks/useEnsoRoutes"
+import {
+  useEnsoRoutes,
+  TokenMap,
+  EnsoRouteConfig,
+} from "data/hooks/useEnsoRoutes"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -75,6 +78,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
   const depositTokens = cellarData.depositTokens.list
+
+  // TODO: Deposit tokens????
+  // USDC, DAI, USDT, frax, gho, weth, eth, steth,  wsteth, cbeth, reth, sweth, uni, aave, 1inch, wbtc, ... all tokens that strategies have sfrxETH, tBTC, LUSD
+
   const { addToast, update, close, closeAll } = useBrandedToast()
 
   const currentStrategies =
@@ -131,23 +138,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   console.log(response)
   console.log(error)
   console.log(loading)
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
 
   const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
 
@@ -272,6 +262,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       selectedTokenBalance?.decimals
     )
 
+    // TODO: Split approvals out if enso is being used instead
     let needsApproval
     try {
       needsApproval = allowance.lt(amtInWei)
@@ -353,7 +344,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       // cellar's current asset.
       const response = isActiveAsset
         ? await deposit(amtInWei, address)
-        : await depositAndSwap.mutateAsync({
+        : // TODO: Below part needs to change to enso swap instead
+          await depositAndSwap.mutateAsync({
             cellarAddress: cellarConfig.cellar.address,
             depositAmount: depositAmount,
             slippage,
@@ -541,59 +533,53 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       setShowSwapSettings(false)
   }, [currentAsset?.address, selectedToken?.address])
 
-const strategyMessages: Record<string, () => JSX.Element> = {
-  "Real Yield ETH": () => (
-    <>
-      <Text textAlign="center">
-        You can use the following external services to acquire WETH:{" "}
-        <Link href="https://wrapeth.com/" textDecor="underline">
-          https://wrapeth.com/
+  const strategyMessages: Record<string, () => JSX.Element> = {
+    "Real Yield ETH": () => (
+      <>
+        <Link
+          href={"https://app.rhino.fi/invest/YIELDETH/supply"}
+          isExternal
+          role="group"
+          textAlign="center"
+        >
+          <Text as="span">
+            Buy and sell gassless on rhino.fi &nbsp;
+          </Text>
+          <Icon as={FaExternalLinkAlt} color="purple.base" />
         </Link>
-      </Text>
-      <Link
-        href={"https://app.rhino.fi/invest/YIELDETH/supply"}
-        isExternal
-        role="group"
-        textAlign="center"
-      >
-        <Text as="span">
-          Buy and sell gassless on rhino.fi &nbsp;
-        </Text>
-        <Icon as={FaExternalLinkAlt} color="purple.base" />
-      </Link>
-    </>
-  ),
-  "Real Yield USD": () => (
-    <>
-      <Link
-        href={"https://app.rhino.fi/invest/YIELDUSD/supply"}
-        isExternal
-        role="group"
-        textAlign="center"
-      >
-        <Text as="span">
-          Buy and sell gassless on rhino.fi &nbsp;
-        </Text>
-        <Icon as={FaExternalLinkAlt} color="purple.base" />
-      </Link>
-    </>
-  ),
-  "Real Yield BTC": () => (
-    <>
-      <Link
-        href={"https://app.rhino.fi/invest/YIELDBTC/supply"}
-        isExternal
-        role="group"
-        textAlign="center"
-      >
-        <Text as="span">
-          Buy and sell gassless on rhino.fi &nbsp;
-        </Text>
-        <Icon as={FaExternalLinkAlt} color="purple.base" />
-      </Link>
-    </>
-  ),
-}
+      </>
+    ),
+    "Real Yield USD": () => (
+      <>
+        <Link
+          href={"https://app.rhino.fi/invest/YIELDUSD/supply"}
+          isExternal
+          role="group"
+          textAlign="center"
+        >
+          <Text as="span">
+            Buy and sell gassless on rhino.fi &nbsp;
+          </Text>
+          <Icon as={FaExternalLinkAlt} color="purple.base" />
+        </Link>
+      </>
+    ),
+    "Real Yield BTC": () => (
+      <>
+        <Link
+          href={"https://app.rhino.fi/invest/YIELDBTC/supply"}
+          isExternal
+          role="group"
+          textAlign="center"
+        >
+          <Text as="span">
+            Buy and sell gassless on rhino.fi &nbsp;
+          </Text>
+          <Icon as={FaExternalLinkAlt} color="purple.base" />
+        </Link>
+      </>
+    ),
+  }
 
   return (
     <>
@@ -604,26 +590,24 @@ const strategyMessages: Record<string, () => JSX.Element> = {
             <Text as="span">Strategy</Text>
             <Text as="span">{cellarName}</Text>
           </HStack>
-          {isActiveTokenStrategyEnabled(cellarConfig) && (
-            <HStack justify="space-between">
-              <Text as="span">Active token strategy</Text>
-              {isLoading ? (
-                <Spinner size="xs" />
-              ) : (
-                <HStack spacing={1}>
-                  <Avatar
-                    boxSize={6}
-                    src={currentAsset?.src}
-                    name={currentAsset?.alt}
-                    borderWidth={2}
-                    borderColor="surface.bg"
-                    bg="surface.bg"
-                  />
-                  <Text as="span">{currentAsset?.symbol}</Text>
-                </HStack>
-              )}
-            </HStack>
-          )}
+          <HStack justify="space-between">
+            <Text as="span">Base Asset</Text>
+            {isLoading ? (
+              <Spinner size="xs" />
+            ) : (
+              <HStack spacing={1}>
+                <Avatar
+                  boxSize={6}
+                  src={currentAsset?.src}
+                  name={currentAsset?.alt}
+                  borderWidth={2}
+                  borderColor="surface.bg"
+                  bg="surface.bg"
+                />
+                <Text as="span">{currentAsset?.symbol}</Text>
+              </HStack>
+            )}
+          </HStack>
         </VStack>
       </VStack>
       <FormProvider {...methods}>
@@ -634,29 +618,6 @@ const strategyMessages: Record<string, () => JSX.Element> = {
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <FormControl isInvalid={isError as boolean | undefined}>
-            <Flex
-              alignItems="center"
-              justifyContent="space-between"
-              position="relative" // anchors the swap settings card, which is positioned as absolute
-            >
-              <CardHeading pb={2}>enter amount</CardHeading>
-              {!isActiveAsset && depositTokens.length > 1 && (
-                <>
-                  <IconButton
-                    aria-label="swap settings"
-                    colorScheme="transparent"
-                    disabled={isActiveAsset}
-                    color="neutral.300"
-                    icon={<FiSettings />}
-                    onClick={() => {
-                      setShowSwapSettings(!showSwapSettings)
-                    }}
-                  />
-                  {showSwapSettings && <SwapSettingsCard />}
-                </>
-              )}
-            </Flex>
-
             <ModalMenu
               depositTokens={depositTokens}
               setSelectedToken={trackedSetSelectedToken}
@@ -699,7 +660,7 @@ const strategyMessages: Record<string, () => JSX.Element> = {
             />
             {activeAsset?.symbol}) will save gas fees
           </Text> */}
-          {depositTokens.length > 1 && (
+          {/*depositTokens.length > 1 && (
             <Text textAlign="center">
               <Text textAlign="center">
                 Current Base asset is (
@@ -721,7 +682,7 @@ const strategyMessages: Record<string, () => JSX.Element> = {
                 assets. Please swap outside our app for better rates.
               </Text>
             </Text>
-          )}
+                )*/}
           {strategyMessages[currentStrategies] ? (
             strategyMessages[currentStrategies]()
           ) : (
