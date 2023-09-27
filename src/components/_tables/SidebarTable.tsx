@@ -45,20 +45,20 @@ export const BorderTr: VFC<BorderTrProps> = ({
       onClick={() => {
         router.push(slug)
         const landingTyp = landingType()
-        analytics.track("strategy.selection", {
-          strategyCard: name,
-          landingType: landingType(),
-        })
-        if (landingTyp === DIRECT) {
-          analytics.track("strategy.selection.direct", {
-            strategyCard: name,
-            landingType: landingTyp,
-          })
-        } else {
-          analytics.track("strategy.selection.indirect", {
-            strategyCard: name,
-            landingType: landingTyp,
-          })
+        // analytics.track("strategy.selection", {
+        //   strategyCard: name,
+        //   landingType: landingType(),
+        // })
+        // if (landingTyp === DIRECT) {
+          // analytics.track("strategy.selection.direct", {
+          //   strategyCard: name,
+          //   landingType: landingTyp,
+          // })
+        // } else {
+          // analytics.track("strategy.selection.indirect", {
+          //   strategyCard: name,
+          //   landingType: landingTyp,
+          // })
         }
       }}
       _first={{

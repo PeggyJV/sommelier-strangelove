@@ -12,7 +12,7 @@ export const WithdrawButton: VFC<
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function closeModal() {
-    analytics.track("withdraw.cancelled")
+    // analytics.track("withdraw.cancelled")
     onClose()
   }
 

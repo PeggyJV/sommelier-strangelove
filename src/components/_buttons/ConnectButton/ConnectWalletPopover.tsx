@@ -93,7 +93,7 @@ export const ConnectWalletPopover = ({
   })
 
   const openWalletSelection = () => {
-    analytics.track("wallet.connect-started")
+    // analytics.track("wallet.connect-started")
     onOpen()
   }
 
@@ -145,9 +145,9 @@ export const ConnectWalletPopover = ({
                 px={4}
                 fontSize="sm"
                 onClick={() => {
-                  analytics.track("wallet.connect-wallet-selection", {
-                    wallet: x.name,
-                  })
+                  // analytics.track("wallet.connect-wallet-selection", {
+                  //   wallet: x.name,
+                  // })
                   connect({ connector: x })
                 }}
                 _hover={{

@@ -149,12 +149,12 @@ export const useBridgeEthToSommTx = () => {
         String(props.amount),
         CONTRACT.SOMMELLIER.DECIMALS
       )
-      analytics.track("bridge.approval-required", {
-        value: props.amount,
-        path: "ethToSomm",
-        sender: address,
-        receiver: props.address,
-      })
+      // analytics.track("bridge.approval-required", {
+      //   value: props.amount,
+      //   path: "ethToSomm",
+      //   sender: address,
+      //   receiver: props.address,
+      // })
       // ERC20 Approval
       const { hash: erc20Hash } = await erc20Contract.approve(
         getAddress(CONTRACT.BRIDGE.ADDRESS),
@@ -165,9 +165,9 @@ export const useBridgeEthToSommTx = () => {
       })
       const resultApproval = await waitForApproval
       if (resultApproval.data?.status !== 1) {
-        analytics.track("bridge.approval-failed", {
-          value: props.amount,
-        })
+        // analytics.track("bridge.approval-failed", {
+        //   value: props.amount,
+        // })
         setIsLoading(false)
         return update({
           heading: "ERC20 Approval",
@@ -186,12 +186,12 @@ export const useBridgeEthToSommTx = () => {
         resultApproval?.data?.transactionHash &&
         resultApproval.data?.status === 1
       ) {
-        analytics.track("bridge.approval-succeeded", {
-          value: props.amount,
-          path: "ethToSomm",
-          sender: address,
-          receiver: props.address,
-        })
+        // analytics.track("bridge.approval-succeeded", {
+        //   value: props.amount,
+        //   path: "ethToSomm",
+        //   sender: address,
+        //   receiver: props.address,
+        // })
         update({
           heading: "ERC20 Approval",
           body: <TxHashToastBody title="Approved" hash={erc20Hash} />,
@@ -200,12 +200,12 @@ export const useBridgeEthToSommTx = () => {
           closeHandler: closeAll,
         })
       }
-      analytics.track("bridge.contract-started", {
-        value: props.amount,
-        path: "ethToSomm",
-        sender: address,
-        receiver: props.address,
-      })
+      // analytics.track("bridge.contract-started", {
+      //   value: props.amount,
+      //   path: "ethToSomm",
+      //   sender: address,
+      //   receiver: props.address,
+      // })
       // Bridge transaction
       addToast({
         heading: "Loading",

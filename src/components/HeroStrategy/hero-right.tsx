@@ -89,16 +89,16 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
 
   const handleBuyOrSell = () => {
     if (Number(content.exchange?.length) > 1) {
-      analytics.track("strategy.buy-sell", {
-        strategyCard: cellarData.name,
-        landingType: landingType(),
-      })
+      // analytics.track("strategy.buy-sell", {
+      //   strategyCard: cellarData.name,
+      //   landingType: landingType(),
+      // })
       buyOrSellModal.onOpen()
     } else {
-      analytics.track("strategy.buy-sell", {
-        strategyCard: cellarData.name,
-        landingType: landingType(),
-      })
+      // analytics.track("strategy.buy-sell", {
+      //   strategyCard: cellarData.name,
+      //   landingType: landingType(),
+      // })
       router.push({
         pathname: `/strategies/${id}/manage`,
       })
@@ -125,10 +125,10 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             w="full"
             h="60px"
             onClick={() => {
-              analytics.track("strategy.notify-me", {
-                strategyCard: cellarData.name,
-                landingType: landingType(),
-              })
+              // analytics.track("strategy.notify-me", {
+              //   strategyCard: cellarData.name,
+              //   landingType: landingType(),
+              // })
               notifyModal.onOpen()
             }}
           >
@@ -153,10 +153,10 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           <Link
             href={`/strategies/${id}/manage`}
             onClick={() => {
-              analytics.track("strategy.manage-portfolio", {
-                strategyCard: cellarData.name,
-                landingType: landingType(),
-              })
+              // analytics.track("strategy.manage-portfolio", {
+              //   strategyCard: cellarData.name,
+              //   landingType: landingType(),
+              // })
             }}
             textDecoration="none"
           >

@@ -48,7 +48,7 @@ export const GeoProvider: FC<ReactNode> = ({ children }) => {
   const isRestrictedAndOpenModal = () => {
     if (ctx.isRestricted) {
       restrictedModal.onOpen()
-      analytics.track("user.modal-access-restricted-opened")
+      //   analytics.track("user.modal-access-restricted-opened")
       return true
     }
     return false
