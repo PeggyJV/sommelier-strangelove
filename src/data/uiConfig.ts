@@ -367,7 +367,7 @@ export const bondingPeriodOptions = (
     return [
       {
         title: "14 Day Unbonding",
-        amount: "Up to 6 PEARL per swETH daily + SOMM Rewards",
+        amount: "Up to 12 PEARL per swETH daily + SOMM Rewards",
         value: 0,
       },
     ]
@@ -435,11 +435,13 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_GHO
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI 
     ) {
       return "Estimated APY"
+    } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
+      return "Estimated swETH APY"
+    } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
+      return "Estimated Base + GHO APY"
     }
     return "APY since inception"
   }
@@ -452,11 +454,13 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_GHO
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI 
   ) {
     return "Estimated APY"
+  } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
+    return "Estimated swETH APY"
+  } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
+    return "Estimated Base + GHO APY"
   }
   return "APY since inception"
 }
