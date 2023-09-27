@@ -33,6 +33,7 @@ type StrategyDesktopColumnProps = {
     type: DepositModalType
   }) => void
 }
+
 type RowData = {
   original: {
     baseApySumRewards?: {
@@ -263,12 +264,12 @@ export const StrategyDesktopColumn = ({
         return valB - valA
       },
     },
+
     {
       Header: () => (
         <Text>
           {`${timeline.title} Token Price`}
           <br />
-          {/* Token Price */}
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
@@ -296,28 +297,6 @@ export const StrategyDesktopColumn = ({
                   fontWeight={600}
                 />
               </Tooltip>
-              {/* <Tooltip
-  label={`Token price`}
-  color="neutral.100"
-  border="0"
-  fontSize="12px"
-  bg="neutral.900"
-  fontWeight={600}
-  py="4"
-  px="6"
-  boxShadow="xl"
-  shouldWrapChildren
-  >
-  <HStack spacing={1}>
-  <Text
-  fontWeight={600}
-  fontSize="12px"
-  color="neutral.400"
-  >
-  {row.original.tokenPrice}
-  </Text>
-  </HStack>
-  </Tooltip> */}
             </VStack>
           )
 
@@ -327,8 +306,10 @@ export const StrategyDesktopColumn = ({
           </Text>
         )
       },
-      sortType: "basic",
+      disableSortBy: true, // This line disables sorting for this column
     },
+
+    // Deposit column
     {
       Header: () => <Text>Deposit</Text>,
       id: "deposit",
