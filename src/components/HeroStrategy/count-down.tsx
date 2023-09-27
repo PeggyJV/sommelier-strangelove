@@ -56,9 +56,10 @@ export const CountDown: FC<CountDownProps> = ({
             display="flex"
             gap={1}
             alignItems="center"
-            onClick={() =>
+            onClick={() => {
               // analytics.track("click.early-yielder-program")
-            }
+              return null
+            }}
           >
             How it works
             <Icon as={FiArrowRight} size="xl" w={4} h={4} />
