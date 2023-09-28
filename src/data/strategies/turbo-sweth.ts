@@ -51,6 +51,12 @@ export const turboSWETH: CellarData = {
 
     Note that Turbo swETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
+    Risks: `
+    All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Some of the specific risks related to this vault are:
+   
+    - This vault has exposure to swETH, an LST that is not redeemable until Q1 2024, which makes this LST more susceptible to depegs than its redeemable counterparts.
+   
+    - Because withdrawals can only be facilitated based on the available ETH-swETH liquidity in the market, it is possible to receive swETH upon withdrawal even if you deposited ETH.`,
   },
   overrideApy: {
     title: "Backtested APY",

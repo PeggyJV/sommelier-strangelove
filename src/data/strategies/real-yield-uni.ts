@@ -44,6 +44,9 @@ export const realYieldUNI: CellarData = {
 
     description: `
     The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).    `,
+    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Some of the specific risks related to this vault are:
+
+    - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.`,
   },
   depositTokens: {
     list: ["UNI"],

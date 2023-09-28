@@ -47,6 +47,9 @@ export const ethTrendGrowth: CellarData = {
     
     Note that ETH Trend Growth and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
+    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Some of the specific risks related to this vault are:
+
+- This vault is denominated in USDC but exposes you to volatile crypto assets, which carry a risk of potential loss.`,
   },
   depositTokens: {
     list: ["USDC"],
