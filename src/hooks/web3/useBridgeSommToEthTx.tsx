@@ -145,7 +145,7 @@ export const useBridgeSommToEthTx = () => {
       })
       const res = await txClient({
         signer: signerAmino || undefined,
-        addr: "https://rpc.sommelier.strange.love",
+        addr: "https://sommelier-rpc.polkachu.com/",
         prefix: "somm",
       }).sendMsgSendToEthereum({
         value: {

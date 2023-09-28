@@ -13,8 +13,8 @@ import { BRIDGE_PAGE_ENABLED } from "utils/constants"
 import { origin } from "utils/origin"
 const chain: GrazChain = {
   ...mainnetChains.sommelier,
-  rpc: "https://rpc.sommelier.strange.love/",
-  rest: "https://api.sommelier.strange.love/",
+  rpc: "https://sommelier-rpc.polkachu.com/",
+  rest: "https://sommelier-api.polkachu.com/",
 }
 
 configureGraz({
