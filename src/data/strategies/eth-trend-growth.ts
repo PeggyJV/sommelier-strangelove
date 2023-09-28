@@ -31,9 +31,9 @@ export const ethTrendGrowth: CellarData = {
     protocol: 5,
   },
   strategyProvider: {
-    logo: "/assets/images/seven-seas.png",
+    logo: "/assets/images/silver-sun.webp",
     title: "Silver Sun Capital Investments & Seven Seas",
-    href: "https://sevenseas.capital/",
+    href: "https://www.silversun-capitalinvestments.com/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },

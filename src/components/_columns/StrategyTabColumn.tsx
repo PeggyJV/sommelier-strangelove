@@ -20,6 +20,14 @@ type StrategyTabColumnProps = {
   }) => void
 }
 
+type RowData = {
+  original: {
+    baseApySumRewards?: {
+      formatted?: string
+    }
+  }
+}
+
 export const StrategyTabColumn = ({
   timeline,
   onDepositModalOpen,
@@ -28,23 +36,21 @@ export const StrategyTabColumn = ({
     {
       Header: "Vault",
       accessor: "name",
-      Cell: ({ row }: any) => {
-        return (
-          <StrategySection
-            icon={row.original.logo}
-            title={row.original.name}
-            provider={row.original.provider.title}
-            type={row.original.type}
-            date={row.original.launchDate}
-            description={row.original.description}
-            isDeprecated={row.original.deprecated}
-            customStrategyHighlight={
-              row.original.config.customStrategyHighlight
-            }
-            w={56}
-          />
-        )
-      },
+      Cell: ({ row }: any) => (
+        <StrategySection
+          icon={row.original.logo}
+          title={row.original.name}
+          provider={row.original.provider.title}
+          type={row.original.type}
+          date={row.original.launchDate}
+          description={row.original.description}
+          isDeprecated={row.original.deprecated}
+          customStrategyHighlight={
+            row.original.config.customStrategyHighlight
+          }
+          w={56}
+        />
+      ),
       disableSortBy: true,
     },
     {
@@ -97,17 +103,24 @@ export const StrategyTabColumn = ({
           />
         )
       },
+      sortType: (rowA: RowData, rowB: RowData) => {
+        const valA = parseFloat(
+          rowA.original.baseApySumRewards?.formatted || "0"
+        )
+        const valB = parseFloat(
+          rowB.original.baseApySumRewards?.formatted || "0"
+        )
+        return valB - valA
+      },
     },
     {
       Header: () => (
         <Text>
           {`${timeline.title} Token Price`}
           <br />
-          {/* Token Prices */}
         </Text>
       ),
       accessor: `changes.${timeline.value}`,
-      disableSortBy: true, // Added this line to disable sorting
       Cell: ({ row }: any) => {
         const cellarConfig = cellarDataMap[row.original.slug].config
 
@@ -132,29 +145,6 @@ export const StrategyTabColumn = ({
                   fontWeight={600}
                 />
               </Tooltip>
-              {/* Commented tooltip section
-                <Tooltip
-                  label={`Token price`}
-                  color="neutral.100"
-                  border="0"
-                  fontSize="12px"
-                  bg="neutral.900"
-                  fontWeight={600}
-                  py="4"
-                  px="6"
-                  boxShadow="xl"
-                  shouldWrapChildren
-                >
-                  <HStack spacing={1}>
-                    <Text
-                      fontWeight={600}
-                      fontSize="12px"
-                      color="neutral.400"
-                    >
-                      {row.original.tokenPrice}
-                    </Text>
-                  </HStack>
-                </Tooltip> */}
             </VStack>
           )
 
@@ -164,7 +154,7 @@ export const StrategyTabColumn = ({
           </Text>
         )
       },
-      sortType: "basic",
+      disableSortBy: true, // This line disables sorting for this column
     },
     {
       Header: () => <Text>Deposit</Text>,

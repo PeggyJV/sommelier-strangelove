@@ -946,7 +946,7 @@ export const strategyPageContentData = {
   [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: {
     name: "ETH Trend Growth",
     provider: "Silver Sun Capital Investments & Seven Seas",
-    providerUrl: "https://sevenseas.capital/",
+    providerUrl: "https://www.silversun-capitalinvestments.com/",
     description: `Maximize your yield while outperforming the market.`,
     ticker: (
       <>
