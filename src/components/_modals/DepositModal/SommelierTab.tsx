@@ -60,6 +60,7 @@ import {
   TokenMap,
   EnsoRouteConfig,
 } from "data/hooks/useEnsoRoutes"
+import { acceptedDepositTokenMap } from "src/data/tokenConfig"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -77,10 +78,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
-  const depositTokens = cellarData.depositTokens.list
-
-  // TODO: Deposit tokens????
-  // USDC, DAI, USDT, frax, gho, weth, eth, steth,  wsteth, cbeth, reth, sweth, uni, aave, 1inch, wbtc, ... all tokens that strategies have sfrxETH, tBTC, LUSD
+  let depositTokens = Object.keys(acceptedDepositTokenMap)
 
   const { addToast, update, close, closeAll } = useBrandedToast()
 
@@ -134,10 +132,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { response, error, loading } = useEnsoRoutes(ensoRouteConfig)
 
   // wait for response and print
-  console.log("HERE")
-  console.log(response)
-  console.log(error)
-  console.log(loading)
+  //console.log("HERE")
+  //console.log(response)
+  //console.log(error)
+  //console.log(loading)
 
   const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
 
@@ -166,7 +164,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         stable: value.symbol,
       })
     }
-
     setSelectedToken(value)
   }
 
@@ -177,6 +174,16 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   )
 
   const activeAsset = strategyData?.activeAsset
+
+  // Drop active asset from deposit tokens
+  depositTokens = depositTokens.filter(
+    (token) => token !== activeAsset?.symbol
+  )
+
+  // Put actice asset at the top of the token list
+  if (activeAsset) {
+    depositTokens.unshift(activeAsset.symbol)
+  }
 
   const [_, wait] = useWaitForTransaction({
     skip: true,

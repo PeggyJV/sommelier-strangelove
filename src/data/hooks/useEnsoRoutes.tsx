@@ -56,7 +56,7 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
             body: JSON.stringify(actions),
           }
         )
-        console.log("Hm")
+        console.log("Enso??")
 
         if (response.status !== 200) {
           throw new Error("failed to fetch data")

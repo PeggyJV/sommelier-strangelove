@@ -24,7 +24,6 @@ import { ModalMenuProps } from "."
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { depositAssetDefaultValue } from "data/uiConfig"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 
 export interface MenuProps
@@ -120,11 +119,12 @@ export const Menu: VFC<MenuProps> = ({
           zIndex="overlay"
           boxShadow={`0 2px 24px 0 ${colors.surface.tertiary}`}
           w={menuDims?.borderBox.width}
+          maxH="30em"
+          overflowY="auto"
+          scrollBehavior="smooth"
         >
           <MenuOptionGroup
-            defaultValue={
-              activeAsset && depositAssetDefaultValue(cellarConfig)
-            }
+            defaultValue={depositTokenConfig[0].symbol} // Active asset should always be first, so make it default without searching to make this feel fast
             type="radio"
           >
             <Box pt={4} pb={2} pl={10}>

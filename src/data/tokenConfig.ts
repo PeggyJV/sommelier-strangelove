@@ -270,6 +270,47 @@ export const tokenConfig: Token[] = [
   },
 ]
 
+let acceptedDepositTokens = [
+  "USDC",
+  "GHO",
+  "USDT",
+  "DAI",
+  "LUSD",
+  "swETH",
+  "WETH",
+  "stETH",
+  "cbETH",
+  "rETH",
+  "WBTC",
+  "FRAX",
+  "LINK",
+  "COMP",
+  "CRV",
+  "LDO",
+  "MKR",
+  "AAVE",
+  "ENS",
+  "UNI",
+  "SNX",
+  "1INCH",
+  "MATIC",
+]
+
+let depositTokenMap = tokenConfig.reduce((map, token) => {
+  if (acceptedDepositTokens.includes(token.symbol)) {
+    map[token.symbol] = token
+  }
+  return map
+}, {} as { [symbol: string]: Token })
+
+// sort map by symbol
+export const acceptedDepositTokenMap = Object.keys(depositTokenMap)
+  .sort()
+  .reduce((obj, key) => {
+    obj[key] = depositTokenMap[key]
+    return obj
+  }, {} as { [symbol: string]: Token })
+
 // Creatae a map from each token symbol to its config
 export const tokenConfigMap = tokenConfig.reduce((map, token) => {
   map[token.symbol] = token

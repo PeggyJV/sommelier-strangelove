@@ -48,17 +48,6 @@ export const intervalGainTimeline = (config: ConfigProps) => {
   return "weekly"
 }
 
-export const depositAssetDefaultValue = (config: ConfigProps) => {
-  if (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-  ) {
-    return "USDT"
-  }
-  return "USDC"
-}
-
 export const isBondedDisabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||

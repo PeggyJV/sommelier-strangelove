@@ -228,7 +228,6 @@ export const config = {
       ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
       ABI: cellarStakingV0821,
     },
-    //! need to add correct contract address
     ETH_TREND_GROWTH_STAKER: {
       ADDRESS: "0xb1D3948F4DCd7Aa5e89449080F3D88870aD0137A",
       ABI: cellarStakingV0821,
