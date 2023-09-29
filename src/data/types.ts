@@ -70,6 +70,7 @@ export interface ConfigProps {
   customRewardWithoutAPY?: CustomRewardWithoutAPY
   customStrategyHighlight?: string
   baseAsset: Token
+  feePromotion?: string
 }
 
 export enum CellarType {

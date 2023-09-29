@@ -21,7 +21,7 @@ export const turboSWETH: CellarData = {
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "0.00%",
   managementFeeTooltip:
-    "Promotional 0 fee period Sponsored by Swell. An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
   protocols: ["Uniswap V3", "Balancer", "Morpho"],
   strategyAssets: ["swETH", "WETH"],
   performanceSplit: {
@@ -117,7 +117,7 @@ export const turboSWETH: CellarData = {
       ),
     },
     baseAsset: tokenConfigMap.WETH,
-    customStrategyHighlight: "Sponsored by Swell",
+    feePromotion: "Promotional 0 fee period sponsored by Swell",
   },
   faq: [
     {
