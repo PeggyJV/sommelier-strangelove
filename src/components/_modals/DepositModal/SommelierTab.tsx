@@ -652,7 +652,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
-          <CardHeading>Transaction details</CardHeading>
+          <CardHeading paddingTop="2em">Transaction details</CardHeading>
           <HStack justify="space-between">
             <HStack spacing={1} align="center">
               <Tooltip
