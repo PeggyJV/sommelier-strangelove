@@ -10,6 +10,7 @@ import {
   Avatar,
   Flex,
   IconButton,
+  Tooltip,
   UseDisclosureProps,
 } from "@chakra-ui/react"
 import { useEffect, useState, VFC } from "react"
@@ -31,6 +32,7 @@ import { getAddress } from "ethers/lib/utils.js"
 
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
+import { InformationIcon } from "components/_icons"
 
 interface FormValues {
   depositAmount: number
@@ -620,7 +622,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       <FormProvider {...methods}>
         <VStack
           as="form"
-          spacing={8}
+          spacing={5}
           align="stretch"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
@@ -644,6 +646,37 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
+          <CardHeading>Transaction details</CardHeading>
+          <HStack spacing={1} align="center">
+            <Tooltip
+              hasArrow
+              label="Percent of price slippage you are willing to accept for a trade. Higher slippage tolerance means your transaction is more likely to succeed, but you may get a worse price."
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack spacing={1} align="center">
+                <CardHeading fontSize="small">
+                  Slippage Tolerance
+                </CardHeading>
+                <InformationIcon color="neutral.300" boxSize={3} />
+              </HStack>
+            </Tooltip>
+          </HStack>
+          <HStack spacing={1} align="center">
+            <Tooltip
+              hasArrow
+              label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack spacing={1} align="center">
+                <CardHeading fontSize="small">
+                  Estimated Tokens Out
+                </CardHeading>
+                <InformationIcon color="neutral.300" boxSize={3} />
+              </HStack>
+            </Tooltip>
+          </HStack>
           <BaseButton
             type="submit"
             isDisabled={isDisabled}
