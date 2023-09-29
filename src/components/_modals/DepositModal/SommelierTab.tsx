@@ -12,7 +12,13 @@ import {
   IconButton,
   Tooltip,
   UseDisclosureProps,
+  Box,
+  Input,
+  InputGroup,
+  InputRightAddon,
+  useTheme
 } from "@chakra-ui/react"
+
 import { useEffect, useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -83,10 +89,13 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
-  
+  const [slippageValue, setSlippageValue] = useState("1")
+  const theme = useTheme()
+
   // Drop active asset from deposit tokens to put active asset at the top of the token list
-  let depositTokens = Object.keys(acceptedDepositTokenMap)
-    .filter((token) => token !== cellarConfig.baseAsset.symbol)
+  let depositTokens = Object.keys(acceptedDepositTokenMap).filter(
+    (token) => token !== cellarConfig.baseAsset.symbol
+  )
   depositTokens.unshift(cellarConfig.baseAsset.symbol)
 
   const { addToast, update, close, closeAll } = useBrandedToast()
@@ -673,8 +682,61 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 </HStack>
               </Tooltip>
             ) : (
-              // TODO: Need slippage form
-              <Text pr={2}>{watch("slippage")}%</Text>
+              <Box maxW="200px">
+                <InputGroup>
+                  <Input
+                    type="number"
+                    min={0}
+                    max={20}
+                    placeholder="0"
+                    width="4.5em"
+                    value={
+                      slippageValue !== undefined ? slippageValue : ""
+                    }
+                    onChange={(e) => {
+                      const inputValue = e.target.value
+
+                      // If input is empty, set state to an empty string and return
+                      if (inputValue === "") {
+                        setSlippageValue("")
+                        return
+                      }
+
+                      // Parse the input value to a float with 2 decimal places
+                      const num = parseFloat(inputValue)
+
+                      // If number is between 0 and 20, update the state
+                      if (!isNaN(num) && num >= 0 && num <= 20) {
+                        setSlippageValue(String(num))
+                      } else {
+                        addToast({
+                          heading: "Invalid Slippage Tolerance",
+                          body: (
+                            <Text>
+                              Slippage tolerance must be between 0 and
+                              20%
+                            </Text>
+                          ),
+                          status: "warning",
+                          closeHandler: closeAll,
+                        })
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const inputValue = e.target.value
+                      if (
+                        !inputValue ||
+                        isNaN(parseFloat(inputValue))
+                      ) {
+                        setSlippageValue("0")
+                      }
+                    }}
+                  />
+                  <InputRightAddon
+                    children="%"
+                  />
+                </InputGroup>
+              </Box>
             )}
           </HStack>
           <HStack justify="space-between">
