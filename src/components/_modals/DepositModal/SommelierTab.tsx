@@ -129,7 +129,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     slippage: 3,
   }
 
-  const { response, error, loading } = useEnsoRoutes(ensoRouteConfig)
+  //const { response, error, loading } = useEnsoRoutes(ensoRouteConfig)
 
   // wait for response and print
   //console.log("HERE")

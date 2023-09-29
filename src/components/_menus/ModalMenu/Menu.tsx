@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   HStack,
+  VStack,
   Icon,
   Image,
   Input,
@@ -13,9 +14,8 @@ import {
   Text,
   useDimensions,
   useTheme,
-  VStack,
 } from "@chakra-ui/react"
-import { useRef, VFC } from "react"
+import { useRef, VFC, useState, useEffect } from "react"
 import { FaChevronDown } from "react-icons/fa"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
@@ -25,6 +25,7 @@ import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -42,7 +43,7 @@ export const Menu: VFC<MenuProps> = ({
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const menuDims = useDimensions(menuRef, true)
-  const { register, setValue, clearErrors } = useFormContext()
+  const { register, setValue, clearErrors, watch } = useFormContext()
   const availableBalance = `${toEther(
     selectedTokenBalance?.value,
     selectedTokenBalance?.decimals,
@@ -54,7 +55,12 @@ export const Menu: VFC<MenuProps> = ({
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
 
+  const rawDepositAmount = watch("depositAmount")
   const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
+  const [selectedToken, setSelectedToken] = useState<
+    Token | undefined
+  >(depositTokenConfig[0]) // First one is always active asset
+
   const setMax = () => {
     analytics.track("deposit.max-selected", {
       value: selectedTokenBalance?.value?.toString(),
@@ -72,6 +78,33 @@ export const Menu: VFC<MenuProps> = ({
       )
     )
   }
+  const [displayedBalance, setDisplayedBalance] = useState(0)
+  const [isLoadingPrice, setIsLoadingPrice] = useState(false) // TODO: if coingecko ends up being kinda slow use this to render loading icon
+  useEffect(() => {
+    const fetchAndUpdateBalance = async () => {
+      if (rawDepositAmount) {
+        setIsLoadingPrice(true) // Start the loading state
+
+        try {
+          const price = await fetchCoingeckoPrice(
+            selectedToken!.coinGeckoId,
+            "usd"
+          )
+          console.log("price", price)
+          const newBalance = rawDepositAmount * Number(price || 0)
+          setDisplayedBalance(newBalance)
+        } catch (error) {
+          console.error("Error fetching price:", error)
+        }
+
+        setIsLoadingPrice(false) // End the loading state
+      } else {
+        setDisplayedBalance(0)
+      }
+    }
+
+    fetchAndUpdateBalance()
+  }, [rawDepositAmount])
 
   return (
     <HStack
@@ -90,78 +123,104 @@ export const Menu: VFC<MenuProps> = ({
         alignItems: "center",
       }}
     >
-      {/* @ts-ignore using string where number is expected. This is to ensure popover is always placed at the top of button, no matter the height value. */}
-      <ChMenu offset={["10%", "100%"]} placement="bottom">
-        <MenuButton
-          as={Box}
-          border="none"
-          borderRadius={16}
-          appearance="none"
-          fontSize="lg"
-          fontWeight={700}
-        >
-          <HStack>
-            {value ? (
-              <HStack spacing={1}>
-                <Image boxSize={5} src={value.src} alt={value.alt} />
-                <span>{value.symbol}</span>
-              </HStack>
-            ) : (
-              <Text as="span">Select Token</Text>
-            )}
-            {depositTokens.length > 1 && <Icon as={FaChevronDown} />}
-          </HStack>
-        </MenuButton>
-        <MenuList
-          bg="surface.bg"
-          borderColor="purple.base"
-          borderRadius={16}
-          zIndex="overlay"
-          boxShadow={`0 2px 24px 0 ${colors.surface.tertiary}`}
-          w={menuDims?.borderBox.width}
-          maxH="30em"
-          overflowY="auto"
-          scrollBehavior="smooth"
-        >
-          <MenuOptionGroup
-            defaultValue={depositTokenConfig[0].symbol} // Active asset should always be first, so make it default without searching to make this feel fast
-            type="radio"
+      <VStack w="100%" spacing={0} align="flex-start">
+        {/* @ts-ignore using string where number is expected. This is to ensure popover is always placed at the top of button, no matter the height value. */}
+        <ChMenu offset={["10%", "100%"]} placement="bottom">
+          <MenuButton
+            as={Box}
+            border="none"
+            borderRadius={16}
+            appearance="none"
+            fontSize="lg"
+            fontWeight={700}
           >
-            <Box pt={4} pb={2} pl={10}>
-              <Text color="neutral.400">Select deposit asset</Text>
-            </Box>
-            {depositTokenConfig.map((token) => {
-              const { address, src, alt, symbol } = token
-              const isActiveAsset =
-                token.address.toUpperCase() ===
-                activeAsset?.toUpperCase()
+            <HStack>
+              {value ? (
+                <HStack spacing={1}>
+                  <Image
+                    boxSize={5}
+                    src={value.src}
+                    alt={value.alt}
+                  />
+                  <span>{value.symbol}</span>
+                </HStack>
+              ) : (
+                <Text as="span">Select Token</Text>
+              )}
+              {depositTokens.length > 1 && (
+                <Icon as={FaChevronDown} />
+              )}
+            </HStack>
+          </MenuButton>
+          <MenuList
+            bg="surface.bg"
+            borderColor="purple.base"
+            borderRadius={16}
+            zIndex="overlay"
+            boxShadow={`0 2px 24px 0 ${colors.surface.tertiary}`}
+            w={menuDims?.borderBox.width}
+            maxH="30em"
+            overflowY="auto"
+            scrollBehavior="smooth"
+          >
+            <MenuOptionGroup
+              defaultValue={depositTokenConfig[0].symbol} // Active asset should always be first, so make it default without searching to make this feel fast
+              type="radio"
+            >
+              <Box pt={4} pb={2} pl={10}>
+                <Text color="neutral.400">Select deposit asset</Text>
+              </Box>
+              {depositTokenConfig.map((token) => {
+                const { address, src, alt, symbol } = token
+                const isActiveAsset =
+                  token.address.toUpperCase() ===
+                  activeAsset?.toUpperCase()
 
-              // Set default selected token to active asset.
-              if (isActiveAsset && !value) onChange(token)
+                // Set default selected token to active asset.
+                if (isActiveAsset && !value) onChange(token)
 
-              return (
-                <MenuItemOption
-                  key={address}
-                  value={symbol}
-                  borderRadius={8}
-                  _hover={{ bg: "rgba(96, 80, 155, 0.4)" }}
-                  onClick={() => {
-                    clearErrors()
-                    onChange(token)
-                  }}
-                >
-                  <HStack justify="space-between">
-                    <HStack>
-                      <Image boxSize={5} src={src} alt={alt} />
-                      <span>{symbol}</span>
+                return (
+                  <MenuItemOption
+                    key={address}
+                    value={symbol}
+                    borderRadius={8}
+                    _hover={{ bg: "rgba(96, 80, 155, 0.4)" }}
+                    onClick={() => {
+                      clearErrors()
+                      onChange(token)
+                      setSelectedToken(token)
+                      setDisplayedBalance(0)
+                      setValue("depositAmount", 0)
+                    }}
+                  >
+                    <HStack justify="space-between">
+                      <HStack>
+                        <Image boxSize={5} src={src} alt={alt} />
+                        <span>{symbol}</span>
+                      </HStack>
                     </HStack>
-                  </HStack>
-                </MenuItemOption>
-              )
-            })}
-          </MenuOptionGroup>
-        </MenuList>
-      </ChMenu>
+                  </MenuItemOption>
+                )
+              })}
+            </MenuOptionGroup>
+          </MenuList>
+        </ChMenu>
+        <HStack spacing={0} fontSize="10px" paddingTop="0.75em">
+          <Text as="span">Available: {availableBalance}</Text>
+          <Button
+            variant="unstyled"
+            p={0}
+            w="max-content"
+            h="max-content"
+            textTransform="uppercase"
+            onClick={setMax}
+            fontSize="inherit"
+            fontWeight={600}
+          >
+            max
+          </Button>
+        </HStack>
+      </VStack>
       <VStack spacing={0} align="flex-end">
         <Input
           variant="unstyled"
@@ -173,6 +232,7 @@ export const Menu: VFC<MenuProps> = ({
           fontSize="lg"
           fontWeight={700}
           textAlign="right"
+          width="100%"
           {...register("depositAmount", {
             onChange: (event) => {
               if (event && event.target) {
@@ -215,20 +275,10 @@ export const Menu: VFC<MenuProps> = ({
             },
           })}
         />
-        <HStack spacing={0} fontSize="10px">
-          <Text as="span">Available: {availableBalance}</Text>
-          <Button
-            variant="unstyled"
-            p={0}
-            w="max-content"
-            h="max-content"
-            textTransform="uppercase"
-            onClick={setMax}
-            fontSize="inherit"
-            fontWeight={600}
-          >
-            max
-          </Button>
+        <HStack spacing={0} fontSize="11px" textAlign="right" pr="2">
+          <Text as="span">
+            $ {Number(displayedBalance.toFixed(2)).toLocaleString()}
+          </Text>
         </HStack>
       </VStack>
     </HStack>
