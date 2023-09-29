@@ -647,35 +647,41 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             </FormErrorMessage>
           </FormControl>
           <CardHeading>Transaction details</CardHeading>
-          <HStack spacing={1} align="center">
-            <Tooltip
-              hasArrow
-              label="Percent of price slippage you are willing to accept for a trade. Higher slippage tolerance means your transaction is more likely to succeed, but you may get a worse price."
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={1} align="center">
-                <CardHeading fontSize="small">
-                  Slippage Tolerance
-                </CardHeading>
-                <InformationIcon color="neutral.300" boxSize={3} />
-              </HStack>
-            </Tooltip>
+          <HStack justify="space-between">
+            <HStack spacing={1} align="center">
+              <Tooltip
+                hasArrow
+                label="Percent of price slippage you are willing to accept for a trade. Higher slippage tolerance means your transaction is more likely to succeed, but you may get a worse price."
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={1} align="center">
+                  <CardHeading fontSize="small">
+                    Slippage Tolerance
+                  </CardHeading>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+            </HStack>
+            <Text pr={2}>Test1</Text>
           </HStack>
-          <HStack spacing={1} align="center">
-            <Tooltip
-              hasArrow
-              label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={1} align="center">
-                <CardHeading fontSize="small">
-                  Estimated Tokens Out
-                </CardHeading>
-                <InformationIcon color="neutral.300" boxSize={3} />
-              </HStack>
-            </Tooltip>
+          <HStack justify="space-between">
+            <HStack spacing={1} align="center">
+              <Tooltip
+                hasArrow
+                label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={1} align="center">
+                  <CardHeading fontSize="small">
+                    Estimated Tokens Out
+                  </CardHeading>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+            </HStack>
+            <Text pr={2}>Test2</Text>
           </HStack>
           <BaseButton
             type="submit"
