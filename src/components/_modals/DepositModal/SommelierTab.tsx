@@ -32,7 +32,10 @@ import { getAddress } from "ethers/lib/utils.js"
 
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
-import { InformationIcon } from "components/_icons"
+import {
+  InformationIcon,
+  GreenCheckCircleIcon,
+} from "components/_icons"
 
 interface FormValues {
   depositAmount: number
@@ -80,7 +83,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
+  
+  // Drop active asset from deposit tokens to put active asset at the top of the token list
   let depositTokens = Object.keys(acceptedDepositTokenMap)
+    .filter((token) => token !== cellarConfig.baseAsset.symbol)
+  depositTokens.unshift(cellarConfig.baseAsset.symbol)
 
   const { addToast, update, close, closeAll } = useBrandedToast()
 
@@ -176,16 +183,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   )
 
   const activeAsset = strategyData?.activeAsset
-
-  // Drop active asset from deposit tokens
-  depositTokens = depositTokens.filter(
-    (token) => token !== activeAsset?.symbol
-  )
-
-  // Put actice asset at the top of the token list
-  if (activeAsset) {
-    depositTokens.unshift(activeAsset.symbol)
-  }
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -663,7 +660,22 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 </HStack>
               </Tooltip>
             </HStack>
-            <Text pr={2}>Test1</Text>
+            {selectedToken?.symbol === activeAsset?.symbol ? (
+              <Tooltip
+                hasArrow
+                label="No slippage when depositing with a vault's base asset."
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack pr={2}>
+                  <GreenCheckCircleIcon></GreenCheckCircleIcon>
+                  <Text fontFamily={"inherit"}>None</Text>
+                </HStack>
+              </Tooltip>
+            ) : (
+              // TODO: Need slippage form
+              <Text pr={2}>{watch("slippage")}%</Text>
+            )}
           </HStack>
           <HStack justify="space-between">
             <HStack spacing={1} align="center">
