@@ -739,6 +739,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               </Box>
             )}
           </HStack>
+          {selectedToken?.symbol !== activeAsset?.symbol ? (
           <HStack justify="space-between">
             <HStack spacing={1} align="center">
               <Tooltip
@@ -755,8 +756,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 </HStack>
               </Tooltip>
             </HStack>
-            <Text pr={2}>Test2</Text>
+            <Text pr={2}>TODO: Need Enso</Text>
           </HStack>
+          ) : <></>}
           <BaseButton
             type="submit"
             isDisabled={isDisabled}
