@@ -116,7 +116,7 @@ export const PageHome = () => {
       {
         <InfoBanner
           text={
-            "Incentive proposals for Real Yield ETH and Turbo swETH are progressing through governance. If they pass, new Real Yield ETH incentives will begin on October 2nd, and Turbo swETH incentives will commence on October 4th."
+            "An incentive proposal for Turbo swETH is progressing through governance. If it passes incentives will commence on October 4th."
           }
         />
       }
