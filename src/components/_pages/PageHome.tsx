@@ -113,11 +113,13 @@ export const PageHome = () => {
 
   return (
     <LayoutWithSidebar>
-      {/*<InfoBanner
-        text={
-          "A new SOMM incentive program for the Real Yield BTC vault will go to vote soon. If it passes, additional incentives will flow for 30 days beginning September 7th."
-        }
-      />*/}
+      {
+        <InfoBanner
+          text={
+            "Incentive proposals for Real Yield ETH and Turbo swETH are progressing through governance. If they pass, new Real Yield ETH incentives will begin on October 2nd, and Turbo swETH incentives will commence on October 4th."
+          }
+        />
+      }
       <HStack mb="1.6rem">
         <HStack spacing="8px">
           {strategyType.map((strategy: string, i: number) => {
