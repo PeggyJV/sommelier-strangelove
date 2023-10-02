@@ -649,7 +649,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
-          <CardHeading paddingTop="2em">Transaction details</CardHeading>
+          <CardHeading paddingTop="2em">
+            Transaction details
+          </CardHeading>
           <HStack justify="space-between">
             <HStack spacing={1} align="center">
               <Tooltip
@@ -729,33 +731,57 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                       }
                     }}
                   />
-                  <InputRightAddon
-                    children="%"
-                  />
+                  <InputRightAddon children="%" />
                 </InputGroup>
               </Box>
             )}
           </HStack>
           {selectedToken?.symbol !== activeAsset?.symbol ? (
-          <HStack justify="space-between">
-            <HStack spacing={1} align="center">
-              <Tooltip
-                hasArrow
-                label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <HStack spacing={1} align="center">
-                  <CardHeading fontSize="small">
-                    Estimated Tokens Out
-                  </CardHeading>
-                  <InformationIcon color="neutral.300" boxSize={3} />
+            <HStack justify="space-between">
+              <HStack spacing={1} align="center">
+                <Tooltip
+                  hasArrow
+                  label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
+                  bg="surface.bg"
+                  color="neutral.300"
+                >
+                  <HStack spacing={1} align="center">
+                    <CardHeading fontSize="small">
+                      Estimated Tokens Out
+                    </CardHeading>
+                    <InformationIcon
+                      color="neutral.300"
+                      boxSize={3}
+                    />
+                  </HStack>
+                </Tooltip>
+              </HStack>
+              <VStack spacing={0} align="flex-end">
+                <Text
+                  pr="2"
+                  fontSize="lg"
+                  fontWeight={700}
+                  textAlign="right"
+                  width="100%"
+                >
+                  {Number("2000").toLocaleString()} YieldETH
+                </Text>
+                <HStack
+                  spacing={0}
+                  fontSize="11px"
+                  textAlign="right"
+                  pr="2"
+                >
+                  <Text as="span">
+                    $ {Number("1999.2").toLocaleString()}
+                  </Text>
                 </HStack>
-              </Tooltip>
+              </VStack>
+              {/*<Text pr={2}>TODO: Need Enso</Text>*/}
             </HStack>
-            <Text pr={2}>TODO: Need Enso</Text>
-          </HStack>
-          ) : <></>}
+          ) : (
+            <></>
+          )}
           <BaseButton
             type="submit"
             isDisabled={isDisabled}
