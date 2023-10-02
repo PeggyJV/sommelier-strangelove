@@ -116,7 +116,7 @@ export const PageHome = () => {
       {
         <InfoBanner
           text={
-            "An incentive proposal for Turbo swETH is progressing through governance. If it passes incentives will commence on October 4th."
+            "An incentive proposal for Turbo swETH is progressing through governance. If it passes incentives will commence on October 5th."
           }
         />
       }
