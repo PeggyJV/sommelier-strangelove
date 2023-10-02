@@ -8,8 +8,6 @@ import {
   Icon,
   Spinner,
   Avatar,
-  Flex,
-  IconButton,
   Tooltip,
   UseDisclosureProps,
   Box,
@@ -23,7 +21,6 @@ import { useEffect, useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
-import { FiSettings } from "react-icons/fi"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import {
   depositAssetTokenConfig,
@@ -89,7 +86,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
-  const [slippageValue, setSlippageValue] = useState("1")
+  const [slippageValue, setSlippageValue] = useState("3")
   const theme = useTheme()
 
   // Drop active asset from deposit tokens to put active asset at the top of the token list

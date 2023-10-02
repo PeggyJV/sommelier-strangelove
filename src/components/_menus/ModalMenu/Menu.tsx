@@ -26,6 +26,9 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
+import {
+  ActiveAssetIcon
+} from "components/_icons"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -194,9 +197,23 @@ export const Menu: VFC<MenuProps> = ({
                     }}
                   >
                     <HStack justify="space-between">
-                      <HStack>
+                      <HStack width="100%">
                         <Image boxSize={5} src={src} alt={alt} />
                         <span>{symbol}</span>
+                        {isActiveAsset && (
+                          <HStack
+                            justifyItems={"right"}
+                            width="100%"
+                            justifyContent="flex-end"
+                            alignItems="flex-start"
+                            p={3}
+                          >
+                            <ActiveAssetIcon boxSize={5} alignSelf="center"/>
+                            <Text fontSize="xs" fontWeight={600}>
+                              Base asset
+                            </Text>
+                          </HStack>
+                        )}
                       </HStack>
                     </HStack>
                   </MenuItemOption>
