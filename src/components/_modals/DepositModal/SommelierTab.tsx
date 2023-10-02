@@ -731,7 +731,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                       }
                     }}
                   />
-                  <InputRightAddon children="%" />
+                  <InputRightAddon>
+                    %
+                  </InputRightAddon>
                 </InputGroup>
               </Box>
             )}
@@ -764,7 +766,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                   textAlign="right"
                   width="100%"
                 >
-                  {Number("2000").toLocaleString()} YieldETH
+                  {Number("2000").toLocaleString()} {cellarData.name}
                 </Text>
                 <HStack
                   spacing={0}

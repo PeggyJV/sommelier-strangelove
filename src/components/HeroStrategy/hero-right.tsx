@@ -25,9 +25,6 @@ import { isComingSoon } from "utils/isComingSoon"
 import {
   apyHoverLabel,
   apyLabel,
-  intervalGainPctTitleContent,
-  intervalGainPctTooltipContent,
-  intervalGainTimeline,
   isDailyChangeEnabled,
   showTokenPriceInsteadOfApy,
   tokenPriceTooltipContent,
@@ -77,11 +74,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const dailyChange = changes?.daily
   const router = useRouter()
 
-  const intervalGainPct =
-    changes?.[intervalGainTimeline(cellarConfig)]
-
   const countdown = isComingSoon(launchDate)
-  const isTwoDaysCountdown = isComingSoon(twoDaysAfterLaunch)
 
   const potentialStakingApy = isLoading
     ? "-"
@@ -112,12 +105,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
-      {/* {!countdown && isTwoDaysCountdown && (
-        <CountDown
-          launchDate={twoDaysAfterLaunch}
-          isTwoDaysAfterLaunch={isTwoDaysCountdown}
-        />
-      )} */}
       {countdown && launchDate ? (
         <>
           <CountDown launchDate={launchDate} />

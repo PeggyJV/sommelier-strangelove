@@ -7,7 +7,7 @@ import {
   Icon,
 } from "@chakra-ui/react"
 import { analytics } from "utils/analytics"
-import { format, zonedTimeToUtc, utcToZonedTime } from "date-fns-tz"
+import { format, utcToZonedTime } from "date-fns-tz"
 import { FC } from "react"
 import Countdown from "react-countdown"
 import { FiArrowRight } from "react-icons/fi"

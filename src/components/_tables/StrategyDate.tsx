@@ -1,6 +1,5 @@
 import { Text } from "@chakra-ui/react"
 import { add, formatDistanceStrict, isBefore } from "date-fns"
-import { zonedTimeToUtc } from "date-fns-tz"
 import { isComingSoon } from "utils/isComingSoon"
 
 type StrategyDateProps = {

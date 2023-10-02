@@ -13,9 +13,6 @@ import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { InformationIcon } from "./_icons"
 import {
-  intervalGainPctTitleContent,
-  intervalGainPctTooltipContent,
-  intervalGainTimeline,
   isDailyChangeEnabled,
   tokenPriceTooltipContent,
 } from "data/uiConfig"

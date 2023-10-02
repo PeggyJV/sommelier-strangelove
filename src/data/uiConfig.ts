@@ -38,16 +38,6 @@ export const isTokenAssets = (config: ConfigProps) => {
   )
 }
 
-export const intervalGainTimeline = (config: ConfigProps) => {
-  if (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  ) {
-    return "monthly"
-  }
-  return "weekly"
-}
-
 export const isBondedDisabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
@@ -148,49 +138,6 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
     return "Unbonded LP tokens earn yield from the vault but do not earn liquidity mining rewards"
   else
     return "The LP tokens represent a user's share of the pool and can always be redeemed for the original tokens"
-}
-
-export const intervalGainPctTitleContent = (config: ConfigProps) => {
-  if (
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-  )
-    return "1W Change vs USDC"
-  if (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  )
-    return "1M Change vs USDC"
-  return ""
-}
-
-export const intervalGainPctTooltipContent = (
-  config: ConfigProps
-) => {
-  return ""
-  // if (
-  //   config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-  //   config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  // )
-  //   return `% change of token price compared to a benchmark portfolio of USDC`
-  // if (
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  // )
-  //   return `% change of token price compared to a benchmark portfolio of USDC`
-  // // if (
-  // //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-  // //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  // // )
-  // //   return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
-  // return ""
 }
 
 export const tokenPriceTooltipContent = (config: ConfigProps) => {
