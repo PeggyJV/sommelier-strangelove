@@ -731,15 +731,13 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                       }
                     }}
                   />
-                  <InputRightAddon>
-                    %
-                  </InputRightAddon>
+                  <InputRightAddon>%</InputRightAddon>
                 </InputGroup>
               </Box>
             )}
           </HStack>
           {selectedToken?.symbol !== activeAsset?.symbol ? (
-            <HStack justify="space-between">
+            <HStack justify="space-between" align="center">
               <HStack spacing={1} align="center">
                 <Tooltip
                   hasArrow
@@ -766,7 +764,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                   textAlign="right"
                   width="100%"
                 >
-                  {Number("2000").toLocaleString()} {cellarData.name}
+                  ≈ {Number("2000").toLocaleString()}
                 </Text>
                 <HStack
                   spacing={0}
