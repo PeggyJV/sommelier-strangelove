@@ -25,6 +25,9 @@ type RowData = {
     baseApySumRewards?: {
       formatted?: string
     }
+    activeAsset: {
+      symbol: string
+    }
   }
 }
 
@@ -34,7 +37,11 @@ export const StrategyTabColumn = ({
 }: StrategyTabColumnProps) => {
   return [
     {
-      Header: "Vault",
+      Header: () => (
+        <span style={{ textAlign: "left", width: "100%" }}>
+          Vault
+        </span>
+      ),
       accessor: "name",
       Cell: ({ row }: any) => (
         <StrategySection
@@ -51,7 +58,21 @@ export const StrategyTabColumn = ({
           w={56}
         />
       ),
-      disableSortBy: true,
+      disableSortBy: false,
+      sortType: (rowA: RowData, rowB: RowData) => {
+        // Sort by active asset asset
+        const valA =
+          rowA.original.activeAsset?.symbol.toLowerCase() || ""
+        const valB =
+          rowB.original.activeAsset?.symbol.toLowerCase() || ""
+
+        // Normal Sorting
+        if (valA > valB) return 1
+
+        if (valB > valA) return -1
+
+        return 0
+      },
     },
     {
       Header: "TVL",
