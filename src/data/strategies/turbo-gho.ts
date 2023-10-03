@@ -84,6 +84,7 @@ export const turboGHO: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0821,
     },
     baseAsset: tokenConfigMap.USDC,
+    customStrategyHighlight: "Emergent Asset",
   },
   faq: [
     {
