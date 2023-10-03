@@ -114,8 +114,8 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
         <Stack direction="row">
           <Box>
             <Image
-              height={45}
-              width={45}
+              height={40}
+              width={40}
               src={icon}
               alt="strategy icon"
             />

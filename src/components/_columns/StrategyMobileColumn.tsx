@@ -65,15 +65,5 @@ export const StrategyMobileColumn = ({
         </Text>
       ),
     },
-    {
-      Header: () => <Text>Deposit</Text>,
-      id: "deposit",
-      Cell: ({ row }: any) => (
-        <DepositAndWithdrawButton
-          row={row}
-          onDepositModalOpen={onDepositModalOpen}
-        />
-      ),
-    },
   ]
 }

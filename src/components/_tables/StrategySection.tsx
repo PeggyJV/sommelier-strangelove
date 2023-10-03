@@ -71,7 +71,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
     >
       <Stack direction="row" alignItems="center" {...props}>
         <Image
-          boxSize="45px"
+          boxSize="40px"
           src={icon}
           rounded="full"
           alt="strategy icon"
