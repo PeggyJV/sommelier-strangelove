@@ -8,7 +8,7 @@ export const UnstakeButton: VFC<ButtonProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function closeModal() {
-    analytics.track("unstake.cancelled")
+    // analytics.track("unstake.cancelled")
     onClose()
   }
 

@@ -57,9 +57,9 @@ export const Menu: VFC<MenuProps> = ({
 
   const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
   const setMax = () => {
-    analytics.track("deposit.max-selected", {
-      value: selectedTokenBalance?.value?.toString(),
-    })
+    // analytics.track("deposit.max-selected", {
+    //   value: selectedTokenBalance?.value?.toString(),
+    // })
 
     return setValue(
       "depositAmount",
@@ -176,9 +176,9 @@ export const Menu: VFC<MenuProps> = ({
           {...register("depositAmount", {
             onChange: (event) => {
               if (event && event.target) {
-                analytics.track("deposit.amount-selected", {
-                  value: event.target.value,
-                })
+                // analytics.track("deposit.amount-selected", {
+                //   value: event.target.value,
+                // })
               }
             },
             required: "Enter amount",

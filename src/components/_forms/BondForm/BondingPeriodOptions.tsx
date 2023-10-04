@@ -23,9 +23,9 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
 
   useEffect(() => {
     if (bondingPeriod !== null) {
-      analytics.track("bond.duration-selected", {
-        duration: bondingPeriod.title,
-      })
+      // analytics.track("bond.duration-selected", {
+      //   duration: bondingPeriod.title,
+      // })
     }
   }, [bondingPeriod])
 
@@ -87,7 +87,12 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
                 h="calc(100% + 1rem)"
                 zIndex="hide"
               />
-              <Text as="span" fontWeight="bold" fontSize="xl" textAlign="center">
+              <Text
+                as="span"
+                fontWeight="bold"
+                fontSize="xl"
+                textAlign="center"
+              >
                 {title}
               </Text>
               <Text as="span" fontSize="sm" textAlign="center">

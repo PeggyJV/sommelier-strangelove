@@ -22,16 +22,16 @@ export const ExchangeTab = ({ title }: { title: string }) => {
               // @ts-expect-error - typescript expect url is undefined
               href={item.url}
               onClick={() => {
-                analytics.track(
-                  `${
-                    title.toLocaleLowerCase() === "deposit"
-                      ? "deposit"
-                      : "withdraw"
-                  }.exchange`,
-                  {
-                    platformSelection: `${item.name}`,
-                  }
-                )
+                // analytics.track(
+                //   `${
+                //     title.toLocaleLowerCase() === "deposit"
+                //       ? "deposit"
+                //       : "withdraw"
+                //   }.exchange`,
+                //   {
+                //     platformSelection: `${item.name}`,
+                //   }
+                // )
               }}
               target="_blank"
             >

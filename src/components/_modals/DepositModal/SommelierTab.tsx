@@ -131,10 +131,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   function trackedSetSelectedToken(value: TokenType | null) {
     if (value && value !== selectedToken) {
-      analytics.track("deposit.stable-selected", {
-        ...baseAnalytics,
-        stable: value.symbol,
-      })
+      // analytics.track("deposit.stable-selected", {
+      //   ...baseAnalytics,
+      //   stable: value.symbol,
+      // })
     }
 
     setSelectedToken(value)
@@ -213,11 +213,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       address: address ?? "",
       cellar: cellarConfig.cellar.address,
     })
-    analytics.track("deposit.started", {
-      ...baseAnalytics,
-      stable: tokenSymbol,
-      value: depositAmount,
-    })
+    // analytics.track("deposit.started", {
+    //   ...baseAnalytics,
+    //   stable: tokenSymbol,
+    //   value: depositAmount,
+    // })
 
     // check if approval exists
     const allowance = await erc20Contract.allowance(
@@ -241,11 +241,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     }
 
     if (needsApproval) {
-      analytics.track("deposit.approval-required", {
+      /* analytics.track("deposit.approval-required", {
         ...baseAnalytics,
-        stable: tokenSymbol,
+       stable: tokenSymbol,
         value: depositAmount,
-      })
+      })*/
 
       try {
         const { hash } = await erc20Contract.approve(
@@ -265,11 +265,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         const waitForApproval = wait({ confirmations: 1, hash })
         const result = await waitForApproval
         if (result?.data?.transactionHash) {
-          analytics.track("deposit.approval-granted", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-          })
+          // analytics.track("deposit.approval-granted", {
+          //   ...baseAnalytics,
+          //   stable: tokenSymbol,
+          //   value: depositAmount,
+          // })
 
           update({
             heading: "ERC20 Approval",
@@ -278,11 +278,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             closeHandler: closeAll,
           })
         } else if (result?.error) {
-          analytics.track("deposit.approval-failed", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-          })
+          // analytics.track("deposit.approval-failed", {
+          //   ...baseAnalytics,
+          //   stable: tokenSymbol,
+          //   value: depositAmount,
+          // })
 
           update({
             heading: "ERC20 Approval",
@@ -292,11 +292,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           })
         }
       } catch (e) {
-        analytics.track("deposit.approval-cancelled", {
-          ...baseAnalytics,
-          stable: tokenSymbol,
-          value: depositAmount,
-        })
+        // analytics.track("deposit.approval-cancelled", {
+        //   ...baseAnalytics,
+        //   stable: tokenSymbol,
+        //   value: depositAmount,
+        // })
 
         addToast({
           heading: "ERC20 Approval",
@@ -501,59 +501,59 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       setShowSwapSettings(false)
   }, [currentAsset?.address, selectedToken?.address])
 
-const strategyMessages: Record<string, () => JSX.Element> = {
-  "Real Yield ETH": () => (
-    <>
-      <Text textAlign="center">
-        You can use the following external services to acquire WETH:{" "}
-        <Link href="https://wrapeth.com/" textDecor="underline">
-          https://wrapeth.com/
+  const strategyMessages: Record<string, () => JSX.Element> = {
+    "Real Yield ETH": () => (
+      <>
+        <Text textAlign="center">
+          You can use the following external services to acquire WETH:{" "}
+          <Link href="https://wrapeth.com/" textDecor="underline">
+            https://wrapeth.com/
+          </Link>
+        </Text>
+        <Link
+          href={"https://app.rhino.fi/invest/YIELDETH/supply"}
+          isExternal
+          role="group"
+          textAlign="center"
+        >
+          <Text as="span">
+            Buy and sell gassless on rhino.fi &nbsp;
+          </Text>
+          <Icon as={FaExternalLinkAlt} color="purple.base" />
         </Link>
-      </Text>
-      <Link
-        href={"https://app.rhino.fi/invest/YIELDETH/supply"}
-        isExternal
-        role="group"
-        textAlign="center"
-      >
-        <Text as="span">
-          Buy and sell gassless on rhino.fi &nbsp;
-        </Text>
-        <Icon as={FaExternalLinkAlt} color="purple.base" />
-      </Link>
-    </>
-  ),
-  "Real Yield USD": () => (
-    <>
-      <Link
-        href={"https://app.rhino.fi/invest/YIELDUSD/supply"}
-        isExternal
-        role="group"
-        textAlign="center"
-      >
-        <Text as="span">
-          Buy and sell gassless on rhino.fi &nbsp;
-        </Text>
-        <Icon as={FaExternalLinkAlt} color="purple.base" />
-      </Link>
-    </>
-  ),
-  "Real Yield BTC": () => (
-    <>
-      <Link
-        href={"https://app.rhino.fi/invest/YIELDBTC/supply"}
-        isExternal
-        role="group"
-        textAlign="center"
-      >
-        <Text as="span">
-          Buy and sell gassless on rhino.fi &nbsp;
-        </Text>
-        <Icon as={FaExternalLinkAlt} color="purple.base" />
-      </Link>
-    </>
-  ),
-}
+      </>
+    ),
+    "Real Yield USD": () => (
+      <>
+        <Link
+          href={"https://app.rhino.fi/invest/YIELDUSD/supply"}
+          isExternal
+          role="group"
+          textAlign="center"
+        >
+          <Text as="span">
+            Buy and sell gassless on rhino.fi &nbsp;
+          </Text>
+          <Icon as={FaExternalLinkAlt} color="purple.base" />
+        </Link>
+      </>
+    ),
+    "Real Yield BTC": () => (
+      <>
+        <Link
+          href={"https://app.rhino.fi/invest/YIELDBTC/supply"}
+          isExternal
+          role="group"
+          textAlign="center"
+        >
+          <Text as="span">
+            Buy and sell gassless on rhino.fi &nbsp;
+          </Text>
+          <Icon as={FaExternalLinkAlt} color="purple.base" />
+        </Link>
+      </>
+    ),
+  }
 
   return (
     <>

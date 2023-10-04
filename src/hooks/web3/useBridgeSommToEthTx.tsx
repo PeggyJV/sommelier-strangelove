@@ -137,12 +137,12 @@ export const useBridgeSommToEthTx = () => {
         String(amountReceived),
         6
       )
-      analytics.track("bridge.contract-started", {
-        value: props.amount,
-        path: "sommToEth",
-        sender: data?.bech32Address,
-        receiver: props.address,
-      })
+      // analytics.track("bridge.contract-started", {
+      //   value: props.amount,
+      //   path: "sommToEth",
+      //   sender: data?.bech32Address,
+      //   receiver: props.address,
+      // })
       const res = await txClient({
         signer: signerAmino || undefined,
         addr: "https://sommelier-rpc.polkachu.com/",

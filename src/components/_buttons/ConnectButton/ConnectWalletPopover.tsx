@@ -60,6 +60,9 @@ export const ConnectWalletPopover = ({
 
   const { connect, connectors, pendingConnector } = useConnect({
     onError: (error, args) => {
+      const currentPageLink =
+        typeof window !== "undefined" ? window.location.href : "N/A"
+
       addToast({
         heading: "Connection failed!",
         body: <Text>{error.message}</Text>,
@@ -70,30 +73,41 @@ export const ConnectWalletPopover = ({
         error: error.name,
         message: error.message,
         wallet: args.connector.name,
+        pageLink: currentPageLink, // Added
+        // Add other data like walletSoftware and walletVersion if available
       })
     },
     onSuccess: (data, args) => {
       const { account } = data
+      const walletSoftware = args.connector.name
+      //const walletVersion = args.connector.version // Placeholder. Adjust based on where you get this info.
+      const currentPageLink =
+        typeof window !== "undefined" ? window.location.href : "N/A"
+
       addToast({
         heading: "Connected",
         body: <Text>Your wallet is connected</Text>,
         status: "success",
       })
+
       if (account && account.length) {
         insertEvent({
           event: "wallet.connect-succeeded",
           address: account,
         })
+
         analytics.track("wallet.connect-succeeded", {
           account,
           wallet: args.connector.name,
+          walletSoftware,
+          //walletVersion,
+          pageLink: currentPageLink,
         })
       }
     },
   })
 
   const openWalletSelection = () => {
-    analytics.track("wallet.connect-started")
     onOpen()
   }
 
@@ -144,12 +158,7 @@ export const ConnectWalletPopover = ({
                 py={2}
                 px={4}
                 fontSize="sm"
-                onClick={() => {
-                  analytics.track("wallet.connect-wallet-selection", {
-                    wallet: x.name,
-                  })
-                  connect({ connector: x })
-                }}
+                onClick={() => connect({ connector: x })}
                 _hover={{
                   cursor: "pointer",
                   bg: "purple.dark",
@@ -167,7 +176,6 @@ export const ConnectWalletPopover = ({
                       height={24}
                     />
                   )}
-
                   <Text fontWeight="semibold">{x.name}</Text>
                 </HStack>
               </Stack>

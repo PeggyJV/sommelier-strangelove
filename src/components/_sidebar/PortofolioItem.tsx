@@ -93,20 +93,20 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
         onClick={() => {
           router.push(`strategies/${slug}`)
           const landingTyp = landingType()
-          analytics.track("strategy.selection", {
-            strategyCard: name,
-            landingType: landingType(),
-          })
+          // analytics.track("strategy.selection", {
+          //   strategyCard: name,
+          //   landingType: landingType(),
+          // })
           if (landingTyp === DIRECT) {
-            analytics.track("strategy.selection.direct", {
+            /*  analytics.track("strategy.selection.direct", {
               strategyCard: name,
               landingType: landingTyp,
-            })
+            })*/
           } else {
-            analytics.track("strategy.selection.indirect", {
+            /* analytics.track("strategy.selection.indirect", {
               strategyCard: name,
               landingType: landingTyp,
-            })
+            })*/
           }
         }}
         {...props}
