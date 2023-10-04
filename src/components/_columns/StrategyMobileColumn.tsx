@@ -17,13 +17,28 @@ type StrategyMobileColumnProps = {
   }) => void
 }
 
+type RowData = {
+  original: {
+    baseApySumRewards?: {
+      formatted?: string
+    }
+    activeAsset: {
+      symbol: string
+    }
+  }
+}
+
 export const StrategyMobileColumn = ({
   timeline,
   onDepositModalOpen,
 }: StrategyMobileColumnProps) => {
   return [
     {
-      Header: "Vault",
+      Header: () => (
+        <span style={{ textAlign: "left", width: "100%" }}>
+          Vault
+        </span>
+      ),
       accessor: "name",
       Cell: ({ row }: any) => {
         return (
@@ -41,7 +56,21 @@ export const StrategyMobileColumn = ({
           />
         )
       },
-      disableSortBy: true,
+      disableSortBy: false,
+      sortType: (rowA: RowData, rowB: RowData) => {
+        // Sort by active asset asset
+        const valA =
+          rowA.original.activeAsset?.symbol.toLowerCase() || ""
+        const valB =
+          rowB.original.activeAsset?.symbol.toLowerCase() || ""
+
+        // Normal Sorting
+        if (valA > valB) return 1
+
+        if (valB > valA) return -1
+
+        return 0
+      },
     },
     {
       Header: "TVL",
@@ -63,16 +92,6 @@ export const StrategyMobileColumn = ({
             ? "--"
             : tvm?.formatted ?? "--"}
         </Text>
-      ),
-    },
-    {
-      Header: () => <Text>Deposit</Text>,
-      id: "deposit",
-      Cell: ({ row }: any) => (
-        <DepositAndWithdrawButton
-          row={row}
-          onDepositModalOpen={onDepositModalOpen}
-        />
       ),
     },
   ]

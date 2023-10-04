@@ -49,7 +49,7 @@ export const getStrategyData = async ({
       const slug = strategy.slug
       const name = strategy.name
       const description = strategy.description
-      const logo = config.lpToken.imagePath
+      const logo = config.baseAsset.src
       const protocols = strategy.protocols
       const type = strategy.cellarType
       const provider = strategy.strategyProvider
@@ -146,7 +146,7 @@ export const getStrategyData = async ({
         if (!strategyData) return
         return getTokenPrice(
           strategyData.shareValue,
-          18 // Share values are always standardized to 18 decimals in their API
+          config.cellar.decimals 
         )
       })()
 

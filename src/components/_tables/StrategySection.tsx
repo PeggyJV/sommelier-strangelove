@@ -29,10 +29,10 @@ interface StrategySectionProps extends StackProps {
 }
 
 export const formatText = (text: string) => {
-  if (text.length > 19) {
+  if (text.length > 25) {
     return (
       <Text color="neutral.400">
-        {text.substring(0, 19)}
+        {text.substring(0, 25)}
         <chakra.span letterSpacing="-4px" ml={-0.5}>
           ...
         </chakra.span>
@@ -71,7 +71,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
     >
       <Stack direction="row" alignItems="center" {...props}>
         <Image
-          boxSize="45px"
+          boxSize="40px"
           src={icon}
           rounded="full"
           alt="strategy icon"
