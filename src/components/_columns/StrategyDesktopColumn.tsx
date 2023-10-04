@@ -43,7 +43,7 @@ type RowData = {
   }
 }
 
-function trackVaultInteraction(vaultName) {
+function trackVaultInteraction(vaultName: string) {
   analytics.track("vault.interacted", {
     vault: vaultName,
   })
