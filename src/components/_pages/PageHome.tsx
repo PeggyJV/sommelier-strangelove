@@ -19,6 +19,7 @@ import { CellarType } from "data/types"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
 import { InfoBanner } from "components/_banners/InfoBanner"
+import { analytics } from "utils/analytics"
 
 export const PageHome = () => {
   const {
@@ -139,6 +140,13 @@ export const PageHome = () => {
                 }
                 borderWidth={isSelected ? 1 : 0}
                 onClick={() => {
+                  // Adding tracking code for each button
+                  analytics.track(
+                    `strategy.${strategy.toLowerCase()}.selected`,
+                    {
+                      selectedType: strategy,
+                    }
+                  )
                   setType(strategy)
                 }}
               >

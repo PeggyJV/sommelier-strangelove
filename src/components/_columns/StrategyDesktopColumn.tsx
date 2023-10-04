@@ -22,6 +22,7 @@ import { isTokenPriceEnabledApp } from "data/uiConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
 import { getProtocols } from "utils/getProtocols"
+import { analytics } from "utils/analytics"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
@@ -42,6 +43,12 @@ type RowData = {
   }
 }
 
+function trackVaultInteraction(vaultName) {
+  analytics.track("vault.interacted", {
+    vault: vaultName,
+  })
+}
+
 export const StrategyDesktopColumn = ({
   timeline,
   onDepositModalOpen,
@@ -54,6 +61,7 @@ export const StrategyDesktopColumn = ({
         return (
           <StrategySection
             icon={row.original.logo}
+            onClick={() => trackVaultInteraction(row.original.name)}
             title={row.original.name}
             provider={row.original.provider.title}
             type={row.original.type}
