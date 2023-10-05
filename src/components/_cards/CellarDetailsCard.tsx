@@ -9,7 +9,7 @@ import {
   Text,
   useTheme,
   VStack,
-  Wrap
+  Wrap,
 } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { StrategyProvider } from "components/StrategyProvider"
@@ -140,16 +140,16 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           >
             {isManyProtocols ? (
               <Wrap spacing={3}>
-                  {(protocolData as ProtocolDataType[]).map((v, i) => (
-                    <HStack key={i} spacing={2}>
-                      <Image
-                        src={v.icon}
-                        alt="Protocol Icon"
-                        boxSize={6}
-                      />
-                      <Text>{v.title}</Text>
-                    </HStack>
-                  ))}
+                {(protocolData as ProtocolDataType[]).map((v, i) => (
+                  <HStack key={i} spacing={2}>
+                    <Image
+                      src={v.icon}
+                      alt="Protocol Icon"
+                      boxSize={6}
+                    />
+                    <Text>{v.title}</Text>
+                  </HStack>
+                ))}
               </Wrap>
             ) : (
               <>
