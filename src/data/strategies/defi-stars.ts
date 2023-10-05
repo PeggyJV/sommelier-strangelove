@@ -55,9 +55,8 @@ export const defiStars: CellarData = {
     To evaluate the effectiveness of the proposed strategy, we compare the portfolio's performance against a benchmark scenario of holding assets with no stop plans for price or with no stop plans for price levels and time periods. We evaluate the strategy using Return on Equity (ROE), Maximum Drawdown (MDD), and Sharpe ratio, which is a popular indicator for portfolio tracking.
 
     Overall, DeFi Stars provides a disciplined and diversified exposure to the DeFi sector, helping users manage downside volatility and optimize returns over time. The rebalancing strategy offers a significant improvement over the benchmark scenario and can help users achieve their goals.`,
-    risks: `
-    All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Some of the specific risks related to this vault are:
-
+    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    
     - This vault is denominated in USDC but exposes you to volatile crypto assets, which carry a risk of potential loss.`,
   },
   // overrideApy: {
