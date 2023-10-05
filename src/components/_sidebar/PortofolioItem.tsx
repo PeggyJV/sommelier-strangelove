@@ -91,7 +91,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
         alignItems="center"
         cursor="pointer"
         onClick={() => {
-          router.push(`strategies/${slug}`)
+          router.push(`strategies/${slug}/manage`)
           const landingTyp = landingType()
           // analytics.track("strategy.selection", {
           //   strategyCard: name,
