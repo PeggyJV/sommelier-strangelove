@@ -27,6 +27,7 @@ interface StrategySectionProps extends StackProps {
   rewards?: string
   isDeprecated?: boolean
   customStrategyHighlight?: string
+  customStrategyHighlightColor?: string
 }
 
 export const formatText = (text: string, isMobile: boolean) => {
@@ -68,6 +69,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   rewards,
   isDeprecated,
   customStrategyHighlight,
+  customStrategyHighlightColor,
   ...props
 }) => {
   const [isMobile, setIsMobile] = useState(
@@ -125,7 +127,11 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             <StrategyDate date={date} deprecated={isDeprecated} />
             {customStrategyHighlight !== undefined ? (
               <Text
-                bg="purple.base"
+                bg={
+                  (customStrategyHighlightColor !== undefined)
+                    ? customStrategyHighlightColor
+                    : "purple.base"
+                }
                 rounded="4"
                 paddingLeft={".5em"}
                 paddingRight={".5em"}

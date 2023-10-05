@@ -17,6 +17,7 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { getApyInception } from "./getApyInception"
+import BigNumber from "bignumber.js"
 
 export const getStrategyData = async ({
   address,
@@ -107,7 +108,37 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      const baseApy = (() => {
+      const baseApy = (() => {    
+        if (config.show7DayAPYTooltip === true) {
+          if (dayDatas === undefined || dayDatas.length < 8) {
+            return {
+              formatted: "0.00%",
+              value: 0,
+            }
+          }
+
+          let movingAvg7D = 0
+
+          for (let i = 0; i < 7; i++) {
+            // Get annualized apy for each shareValue
+            let nowValue = new BigNumber(dayDatas![i].shareValue)
+            let startValue = new BigNumber(dayDatas![i+1].shareValue)
+
+            let yieldGain = nowValue.minus(startValue).div(startValue)
+
+            // Take the gains since inception and annualize it to get APY since inception
+            let dailyApy = yieldGain.times(365).times(100).toNumber()
+
+            movingAvg7D += dailyApy
+          }
+          movingAvg7D = movingAvg7D / 7
+
+          return {
+            formatted: movingAvg7D.toFixed(2) + "%",
+            value: Number(movingAvg7D.toFixed(2)),
+          }
+        }   
+
         if (hideValue) return
         if (!isAPYEnabled(config)) return
 

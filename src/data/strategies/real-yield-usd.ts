@@ -92,6 +92,7 @@ export const realYieldUsd: CellarData = {
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     customStrategyHighlight: "Now using DSR",
+    customStrategyHighlightColor: "orange.base",
     baseAsset: tokenConfigMap.USDC,
   },
   faq: [

@@ -408,14 +408,14 @@ export const isUseBigBacktestingModal = (config: ConfigProps) => {
 export const apyLabel = (config: ConfigProps) => {
   if (
     config.cellar.key !== CellarKey.CELLAR_V0815 &&
-    config.cellar.key !== CellarKey.CELLAR_V0816
+    config.cellar.key !== CellarKey.CELLAR_V0816 || 
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH 
   ) {
     if (
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
       config.cellarNameKey === CellarNameKey.TURBO_GHO
     ) {
       return "Estimated APY"
@@ -439,7 +439,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
     ) {
       return "Estimated APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
-      return "Estimated swETH APY"
+      return "7 Day Moving Average APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
       return "Estimated Base + GHO APY"
     }
@@ -458,7 +458,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   ) {
     return "Estimated APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
-    return "Estimated swETH APY"
+    return "7 Day Moving Average APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
     return "Estimated Base + GHO APY"
   }
@@ -472,7 +472,6 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   ) {
     return true
@@ -519,12 +518,6 @@ export const estimatedApyValue = (config: ConfigProps) => {
     return {
       value: 1.9,
       formatted: "1.90%",
-    }
-  }
-  if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
-    return {
-      value: 5.0,
-      formatted: "5.0%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
