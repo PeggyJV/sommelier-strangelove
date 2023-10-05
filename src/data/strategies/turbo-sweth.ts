@@ -113,7 +113,7 @@ export const turboSWETH: CellarData = {
       showSommRewards: true,
       customIconToolTipMsg: "Double PEARLS ends in ",
       stakingDurationOverride: new Date(
-        Date.UTC(2023, 11, 4, 0, 0, 0, 0)
+        Date.UTC(2023, 11, 5, 0, 0, 0, 0)
       ),
     },
     baseAsset: tokenConfigMap.WETH,
