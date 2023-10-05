@@ -170,29 +170,41 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             spacing={4}
             justifyContent="normal"
           >
-            <CardStat
-              label="Platform Fee"
-              flex={0}
-              tooltip={
-                managementFeeTooltip || "Platform management fee"
-              }
-            >
-              {managementFee}
-            </CardStat>
-            <CardStat
-              label="Performance fee"
-              flex={0}
-              tooltip={`Strategy earned performance fee split: Protocol ${
-                performanceSplit["protocol"] ?? 0
-              }%, Strategy Provider ${
-                performanceSplit["strategy provider"] ?? 0
-              }%`}
-            >
-              {performanceFee}.00%
-            </CardStat>
-            <CardStat label="Deposit and Exit Fees" flex={0}>
-              0.00%
-            </CardStat>
+            <VStack>
+              <HStack>
+                <CardStat
+                  label="Platform Fee"
+                  flex={0}
+                  tooltip={
+                    managementFeeTooltip || "Platform management fee"
+                  }
+                >
+                  {managementFee}
+                </CardStat>
+                <CardStat
+                  label="Performance fee"
+                  flex={0}
+                  tooltip={`Strategy earned performance fee split: Protocol ${
+                    performanceSplit["protocol"] ?? 0
+                  }%, Strategy Provider ${
+                    performanceSplit["strategy provider"] ?? 0
+                  }%`}
+                >
+                  {performanceFee}.00%
+                </CardStat>
+                <CardStat label="Deposit and Exit Fees" flex={0}>
+                  0.00%
+                </CardStat>
+              </HStack>
+              {cellarConfig.feePromotion && (
+                <Text
+                  fontSize="sm"
+                  fontWeight="bold"
+                >
+                  {cellarConfig.feePromotion}
+                </Text>
+              )}
+            </VStack>
           </Stack>
           <CardStat
             label="strategy assets"
