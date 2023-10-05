@@ -88,6 +88,7 @@ export const turboGHO: CellarData = {
     },
     baseAsset: tokenConfigMap.USDC,
     customStrategyHighlight: "Emergent Asset",
+    customStrategyHighlightColor: "purple.base"
   },
   faq: [
     {

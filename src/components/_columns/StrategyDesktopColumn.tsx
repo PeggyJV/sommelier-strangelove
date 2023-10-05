@@ -79,6 +79,9 @@ export const StrategyDesktopColumn = ({
             customStrategyHighlight={
               row.original.config.customStrategyHighlight
             }
+            customStrategyHighlightColor={
+              row.original.config.customStrategyHighlightColor
+            }
           />
         )
       },
