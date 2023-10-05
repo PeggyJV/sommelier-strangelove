@@ -66,10 +66,10 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
             <Box>
               <SecondaryButton
                 onClick={() => {
-                  analytics.track("strategy.view-backtesting", {
-                    strategyCard: cellarData.name,
-                    landingType: landingType(),
-                  })
+                  // analytics.track("strategy.view-backtesting", {
+                  //   strategyCard: cellarData.name,
+                  //   landingType: landingType(),
+                  // })
                   router.push(content.backtestingText)
                 }}
               >
@@ -80,10 +80,10 @@ export const Highlight: VFC<HighlightProps> = ({ id }) => {
             <Box>
               <SecondaryButton
                 onClick={() => {
-                  analytics.track("strategy.view-backtesting", {
-                    strategyCard: cellarData.name,
-                    landingType: landingType(),
-                  })
+                  // analytics.track("strategy.view-backtesting", {
+                  //   strategyCard: cellarData.name,
+                  //   landingType: landingType(),
+                  // })
                   onOpen()
                 }}
               >

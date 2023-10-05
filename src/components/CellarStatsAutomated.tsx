@@ -82,7 +82,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           <PercentageText data={dailyChange} headingSize="md" arrow />
           <Box
             onMouseEnter={debounce(() => {
-              analytics.track("user.tooltip-opened-daily-change")
+              // analytics.track("user.tooltip-opened-daily-change")
             }, 1000)}
           >
             <Tooltip

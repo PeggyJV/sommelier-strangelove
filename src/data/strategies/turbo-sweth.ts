@@ -19,15 +19,15 @@ export const turboSWETH: CellarData = {
   description: `Turbocharge your swETH across an evolving set of LP strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "1.00%",
+  managementFee: "0.00%",
   managementFeeTooltip:
-    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
+    "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
   protocols: ["Uniswap V3", "Balancer", "Morpho"],
   strategyAssets: ["swETH", "WETH"],
   performanceSplit: {
-    depositors: 80,
-    "strategy provider": 15,
-    protocol: 5,
+    depositors: 100, //80,
+    "strategy provider": 0, //15,
+    protocol: 0, //5,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -51,6 +51,11 @@ export const turboSWETH: CellarData = {
 
     Note that Turbo swETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
+    Risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+   
+    - This vault has exposure to swETH, an LST that is not redeemable until Q1 2024, which makes this LST more susceptible to depegs than its redeemable counterparts.
+   
+    - Because withdrawals can only be facilitated based on the available ETH-swETH liquidity in the market, it is possible to receive swETH upon withdrawal even if you deposited ETH.`,
   },
   overrideApy: {
     title: "Backtested APY",
@@ -94,17 +99,17 @@ export const turboSWETH: CellarData = {
       imagePath: "/assets/icons/pearl.svg",
       customRewardMessageTooltip:
         "View your Pearls at https://app.swellnetwork.io/voyage",
-      customRewardMessage: "Up to 6 PEARL per swETH",
+      customRewardMessage: "Up to 12 PEARL per swETH",
       customRewardHeader: "Daily Pearl Reward Rate",
       customRewardAPYTooltip:
-        "Daily PEARL Rewards Rate: Up to 6 PEARL per swETH",
+        "Daily PEARL Rewards Rate: Up to 12 PEARL per swETH",
       showRewards: false,
       showClaim: true,
       customClaimMsg: "Claim All SOMM",
       logo: PearlIcon,
       logoSize: "15px",
       customRewardLongMessage:
-        "Earn up to 6 PEARL per swETH of TVL deposited when you bond.",
+        "Earn up to 12 PEARL per swETH of TVL deposited when you bond.",
       rewardHyperLink: "https://app.swellnetwork.io/voyage",
       customColumnHeader: "View Pearls",
       customColumnHeaderToolTip:
@@ -113,10 +118,12 @@ export const turboSWETH: CellarData = {
       showSommRewards: true,
       customIconToolTipMsg: "Double PEARLS ends in ",
       stakingDurationOverride: new Date(
-        Date.UTC(2023, 8, 24, 13, 0, 0, 0)
+        Date.UTC(2023, 11, 5, 0, 0, 0, 0)
       ),
     },
     baseAsset: tokenConfigMap.WETH,
+    feePromotion: "Promotional 0 fee period sponsored by Swell",
+    customStrategyHighlight: "Emergent Asset",
   },
   faq: [
     {

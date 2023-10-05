@@ -109,7 +109,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
     const analyticsData = {
       duration: bondingPeriodOptions(cellarConfig)[bondPeriod],
     }
-    analytics.track("bond.started", analyticsData)
+    // analytics.track("bond.started", analyticsData)
 
     try {
       await doApprove(data.depositAmount, {

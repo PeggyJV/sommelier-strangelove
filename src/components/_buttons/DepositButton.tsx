@@ -19,7 +19,7 @@ export const DepositButton: VFC<ButtonProps> = (props) => {
           depositModal.onOpen()
 
           if (!depositModal.isOpen) {
-            analytics.track("deposit.modal-opened")
+            // analytics.track("deposit.modal-opened")
           }
         }}
         {...props}

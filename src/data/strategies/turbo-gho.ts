@@ -48,6 +48,9 @@ export const turboGHO: CellarData = {
     
     Note that Turbo GHO and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
+    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+   
+    - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events. `,
   },
   overrideApy: {
     title: "Backtested APY",
@@ -84,6 +87,7 @@ export const turboGHO: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0821,
     },
     baseAsset: tokenConfigMap.USDC,
+    customStrategyHighlight: "Emergent Asset",
   },
   faq: [
     {

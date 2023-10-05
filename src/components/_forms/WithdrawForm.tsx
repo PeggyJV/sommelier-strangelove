@@ -87,10 +87,10 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     )
     setValue("withdrawAmount", amount)
 
-    analytics.track("withdraw.max-selected", {
-      account: address,
-      amount,
-    })
+    // analytics.track("withdraw.max-selected", {
+    //   account: address,
+    //   amount,
+    // })
   }
 
   useEffect(() => {
@@ -126,7 +126,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       amount: withdrawAmount,
     }
 
-    analytics.track("withdraw.started", analyticsData)
+    // analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(
       `${withdrawAmount}`,

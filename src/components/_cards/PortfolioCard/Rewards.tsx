@@ -76,7 +76,7 @@ export const Rewards = ({
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
-    analytics.track("rewards.claim-started")
+    // analytics.track("rewards.claim-started")
     const tx = await stakerSigner?.claimAll()
     await doHandleTransaction({
       ...tx,

@@ -19,6 +19,7 @@ import { CellarType } from "data/types"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
 import { InfoBanner } from "components/_banners/InfoBanner"
+import { analytics } from "utils/analytics"
 
 export const PageHome = () => {
   const {
@@ -116,7 +117,7 @@ export const PageHome = () => {
       {
         <InfoBanner
           text={
-            "An incentive proposal for Turbo swETH is progressing through governance. If it passes incentives will commence on October 5th."
+            "An incentive proposal for Real Yield BTC is progressing through governance. If it passes additional incentives will commence on October 7th."
           }
         />
       }
@@ -141,6 +142,13 @@ export const PageHome = () => {
                 }
                 borderWidth={isSelected ? 1 : 0}
                 onClick={() => {
+                  // Adding tracking code for each button
+                  analytics.track(
+                    `strategy.${strategy.toLowerCase()}.selected`,
+                    {
+                      selectedType: strategy,
+                    }
+                  )
                   setType(strategy)
                 }}
               >

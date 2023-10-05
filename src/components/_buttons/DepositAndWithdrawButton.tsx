@@ -105,7 +105,7 @@ export function DepositAndWithdrawButton({
         variant="solid"
         onClick={(e) => {
           e.stopPropagation()
-          analytics.track("home.deposit.modal-opened")
+          // analytics.track("home.deposit.modal-opened")
 
           if (row.original.deprecated) {
             onDepositModalOpen({

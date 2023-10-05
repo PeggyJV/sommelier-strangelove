@@ -84,7 +84,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.add(id)
         return newState
       })
-      analytics.track("unstake.started")
+      // analytics.track("unstake.started")
       const tx = await stakerSigner?.unstake(id)
 
       await doHandleTransaction({
@@ -117,7 +117,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.add(id)
         return newState
       })
-      analytics.track("unbond.started")
+      // analytics.track("unbond.started")
       const tx = await stakerSigner?.unbond(id, {
         // gas used around 63000
         gasLimit: 100000,
