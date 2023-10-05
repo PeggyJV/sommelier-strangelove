@@ -1,4 +1,5 @@
 import {
+  // ... (other imports)
   Box,
   BoxProps,
   Tab,
@@ -7,6 +8,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react"
 import { VFC } from "react"
 import { InnerCard } from "../InnerCard"
@@ -28,6 +30,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
   cellarDataMap,
 }) => {
   const { strategyBreakdown, faq } = cellarDataMap[cellarId]
+  const [isMobile] = useMediaQuery("(max-width: 768px)")
 
   return (
     <InnerCard
@@ -40,8 +43,10 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
         <TabList
           borderBottomWidth={1}
           borderColor="purple.dark"
-          overflowX="auto"
-          overflowY="hidden"
+          overflowX={isMobile ? "auto" : "hidden"}
+          overflowY={isMobile ? "hidden" : "visible"}
+          display="flex"
+          flexDirection={isMobile ? "column" : "row"}
         >
           {Object.keys(strategyBreakdown).map((key) => {
             return (
@@ -52,6 +57,8 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
                   const eventName = `cellar.details-selected-${key}`
                   analytics.safeTrack(eventName.toLowerCase())
                 }}
+                width={isMobile ? "100%" : "auto"}
+                flex={isMobile ? "none" : "0 0 auto"}
               >
                 {key}
               </Tab>
@@ -65,6 +72,8 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
                 const eventName = `cellar.details-selected-faq}`
                 analytics.safeTrack(eventName.toLowerCase())
               }}
+              width={isMobile ? "100%" : "auto"}
+              flex={isMobile ? "none" : "0 0 auto"}
             >
               FAQs
             </Tab>
