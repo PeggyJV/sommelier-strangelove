@@ -124,6 +124,8 @@ export const turboSWETH: CellarData = {
     baseAsset: tokenConfigMap.WETH,
     feePromotion: "Promotional 0 fee period sponsored by Swell",
     customStrategyHighlight: "Emergent Asset",
+    customStrategyHighlightColor: "purple.base",
+    show7DayAPYTooltip: true,
   },
   faq: [
     {

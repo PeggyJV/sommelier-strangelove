@@ -54,6 +54,6 @@ export const getApyInception = ({
   if (!cellarApy) return
   return {
     formatted: cellarApy.toFixed(2) + "%",
-    value: Number(cellarApy.toFixed(1)),
+    value: Number(cellarApy.toFixed(2)),
   }
 }

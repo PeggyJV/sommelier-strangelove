@@ -12,8 +12,9 @@ import {
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
 import { CellarType } from "data/types"
-import React from "react"
+import {useEffect, useState} from "react"
 import { StrategyDate } from "./StrategyDate"
+import React from "react"
 
 interface StrategySectionProps extends StackProps {
   icon: string
@@ -26,12 +27,13 @@ interface StrategySectionProps extends StackProps {
   rewards?: string
   isDeprecated?: boolean
   customStrategyHighlight?: string
+  customStrategyHighlightColor?: string
 }
 
-export const formatText = (text: string) => {
-  if (text.length > 25) {
+export const formatText = (text: string, isMobile: boolean) => {
+  if (isMobile) {
     return (
-      <Text color="neutral.400">
+      <Text color="neutral.400" width="10em">
         {text.substring(0, 25)}
         <chakra.span letterSpacing="-4px" ml={-0.5}>
           ...
@@ -39,7 +41,21 @@ export const formatText = (text: string) => {
       </Text>
     )
   }
-  return <Text color="neutral.400">{text}</Text>
+  if (text.length > 40) {
+    return (
+      <Text color="neutral.400" width="10em">
+        {text.substring(0, 40)}
+        <chakra.span letterSpacing="-4px" ml={-0.5}>
+          ...
+        </chakra.span>
+      </Text>
+    )
+  }
+  return (
+    <Text color="neutral.400" width="9em">
+      {text}
+    </Text>
+  )
 }
 
 export const StrategySection: React.FC<StrategySectionProps> = ({
@@ -53,8 +69,24 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   rewards,
   isDeprecated,
   customStrategyHighlight,
+  customStrategyHighlightColor,
   ...props
 }) => {
+  const [isMobile, setIsMobile] = useState(
+    window.innerWidth <= 767
+  )
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 767)
+    }
+
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
   const strategyType =
     type === CellarType.yieldStrategies ? "Yield" : "Portfolio"
   return (
@@ -77,27 +109,49 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
           alt="strategy icon"
         />
         <Box>
-          <Heading fontSize="1rem">{title}</Heading>
           <Flex
             gap={1}
             alignItems="center"
             fontSize="0.75rem"
             fontWeight={600}
           >
+            <Heading fontSize="1rem">{title}</Heading>{" "}
+          </Flex>
+          <Flex
+            gap={1}
+            alignItems="center"
+            fontSize="0.75rem"
+            fontWeight={600}
+            paddingTop={".2em"}
+          >
+            <StrategyDate date={date} deprecated={isDeprecated} />
             {customStrategyHighlight !== undefined ? (
               <Text
-                bg="purple.base"
+                bg={
+                  (customStrategyHighlightColor !== undefined)
+                    ? customStrategyHighlightColor
+                    : "purple.base"
+                }
                 rounded="4"
                 paddingLeft={".5em"}
                 paddingRight={".5em"}
+                fontSize="0.75rem"
+                fontWeight={600}
+                width="fit-content"
               >
                 {customStrategyHighlight}
               </Text>
             ) : null}
-            <StrategyDate date={date} deprecated={isDeprecated} />
+          </Flex>
+          <Flex
+            gap={1}
+            alignItems="center"
+            fontSize="0.75rem"
+            fontWeight={600}
+          >
             {provider &&
               strategyType &&
-              formatText(`${provider} · ${strategyType}`)}
+              formatText(`${provider} · ${strategyType}`, isMobile)}
             {netValue && (
               <Text
                 color="neutral.400"

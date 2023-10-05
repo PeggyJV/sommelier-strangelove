@@ -55,6 +55,9 @@ export const StrategyTabColumn = ({
           customStrategyHighlight={
             row.original.config.customStrategyHighlight
           }
+          customStrategyHighlightColor={
+            row.original.config.customStrategyHighlightColor
+          }
           w={56}
         />
       ),
