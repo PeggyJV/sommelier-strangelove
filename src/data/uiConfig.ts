@@ -439,7 +439,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
     ) {
       return "Estimated APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
-      return "7 Day Moving Average APY"
+      return "7 Day MA APY (includes swETH incentives)"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
       return "Estimated APY"
     }
@@ -458,7 +458,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   ) {
     return "Estimated APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
-    return "7 Day Moving Average APY"
+    return "7 Day MA APY (includes swETH incentives)"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
     return "Estimated APY"
   }
