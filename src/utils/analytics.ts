@@ -31,7 +31,12 @@ const plugins = []
 
 const mixpanelToken = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN
 if (isBrowser && mixpanelToken && mixpanelToken.length > 0) {
-  plugins.push(mixpanel({ token: mixpanelToken }))
+  plugins.push(
+    mixpanel({
+      token: mixpanelToken,
+      api_host: process.env.NEXT_PUBLIC_MIXPANEL_PROXY_HOST ?? "",
+    })
+  )
 }
 
 export const invalidEventCharRex = /[^(\w|.|\-)]*/g
