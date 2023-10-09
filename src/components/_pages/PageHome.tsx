@@ -114,13 +114,11 @@ export const PageHome = () => {
 
   return (
     <LayoutWithSidebar>
-      {
-        <InfoBanner
+      {/* <InfoBanner
           text={
             "An incentive proposal for Real Yield BTC is progressing through governance. If it passes additional incentives will commence on October 7th."
           }
-        />
-      }
+        />*/}
       <HStack mb="1.6rem">
         <HStack spacing="8px">
           {strategyType.map((strategy: string, i: number) => {
