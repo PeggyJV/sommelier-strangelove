@@ -268,6 +268,15 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "liquity-usd",
     decimals: 18,
   },
+
+  {
+    src: "/assets/icons/wsteth-logo.png",
+    alt: "wstETH logo",
+    symbol: "wstETH",
+    address: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+    coinGeckoId: "wrapped-steth",
+    decimals: 18,
+  },
 ]
 
 // Creatae a map from each token symbol to its config

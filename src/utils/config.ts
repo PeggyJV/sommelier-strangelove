@@ -164,6 +164,11 @@ export const config = {
       SLUG: "Turbo-GHO",
       ABI: cellarV0821,
     },
+    TURBO_STETH: {
+      ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",
+      SLUG: "Turbo-STETH",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -228,13 +233,17 @@ export const config = {
       ADDRESS: "0x69374d81fDc42adD0Fe1Dc655705e40b51B6681b",
       ABI: cellarStakingV0821,
     },
-    //! need to add correct contract address
     ETH_TREND_GROWTH_STAKER: {
       ADDRESS: "0xb1D3948F4DCd7Aa5e89449080F3D88870aD0137A",
       ABI: cellarStakingV0821,
     },
     TURBO_GHO_STAKER: {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
+      ABI: cellarStakingV0821,
+    },
+    //! need to add correct contract address
+    TURBO_STETH_STAKER: {
+      ADDRESS: "0xb1D3948F4DCd7Aa5e89449080F3D88870aD0137A",
       ABI: cellarStakingV0821,
     },
   },
