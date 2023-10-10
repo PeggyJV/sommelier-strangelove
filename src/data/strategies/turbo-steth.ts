@@ -12,17 +12,17 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 export const turboSTETH: CellarData = {
   name: "Turbo stETH",
   slug: config.CONTRACT.TURBO_STETH.SLUG,
-  tradedAssets: ["WETH", "STETH", "wstETH"],
+  tradedAssets: ["WETH", "stETH", "wstETH"],
   launchDate: new Date(Date.UTC(2023, 9, 9, 9, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "0.00%",
+  managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
   protocols: ["AAVE", "Morpho", "Uniswap V3"],
-  strategyAssets: ["WETH", "swETH", "wstETH"],
+  strategyAssets: ["WETH", "stETH", "wstETH"],
   performanceSplit: {
     depositors: 80,
     "strategy provider": 15,
