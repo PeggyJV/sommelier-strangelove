@@ -38,6 +38,7 @@ export enum CellarNameKey {
   TURBO_SWETH = "TURBO_SWETH",
   ETH_TREND_GROWTH = "ETH_TREND_GROWTH",
   TURBO_GHO = "TURBO_GHO",
+  TURBO_STETH = "TURBO_STETH",
 }
 
 export interface ConfigProps {
