@@ -553,6 +553,20 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         </Link>
       </>
     ),
+    "ETH Trend Growth": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault is denominated in USDC but exposes you to
+          volatile crypto assets, which carry a risk of potential
+          loss.
+        </Text>
+      </>
+    ),
   }
 
   return (
