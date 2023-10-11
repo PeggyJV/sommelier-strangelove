@@ -1,4 +1,12 @@
-import { Button, Center, Heading, HStack } from "@chakra-ui/react"
+import {
+  Button,
+  Center,
+  Heading,
+  HStack,
+  VStack,
+  Text,
+  Link,
+} from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -20,6 +28,7 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
 import { InfoBanner } from "components/_banners/InfoBanner"
 import { analytics } from "utils/analytics"
+import { ExternalLinkIcon } from "components/_icons"
 
 export const PageHome = () => {
   const {
@@ -114,11 +123,42 @@ export const PageHome = () => {
 
   return (
     <LayoutWithSidebar>
-      {/* <InfoBanner
+      {/*
+        <InfoBanner
           text={
-            "An incentive proposal for Real Yield BTC is progressing through governance. If it passes additional incentives will commence on October 7th."
+            "An incentive proposal for Turbo GHO co-incentives is progressing through Aave governance and could be funded as early as this week. Learn more here"
           }
-        />*/}
+        />
+        */}
+      <HStack
+        p={4}
+        mb={12}
+        spacing={4}
+        align="center"
+        justify="center"
+        backgroundColor="turquoise.extraDark"
+        border="2px solid"
+        borderRadius={16}
+        borderColor="turquoise.dark"
+      >
+        <VStack align="center" justify="center">
+          <Text textAlign="center">
+            An incentive proposal for Turbo GHO co-incentives is
+            progressing through Aave governance and could be funded as
+            early as this week. Learn more{" "}
+            <Link
+              href="https://governance.aave.com/t/arfc-treasury-management-gho-liquidity-strategy-update/14801/13"
+              isExternal
+              display="inline-flex"
+              alignItems="center"
+              fontWeight={600}
+            >
+              <Text as="span">here</Text>
+              <ExternalLinkIcon ml={2} alignSelf="center" />
+            </Link>
+          </Text>
+        </VStack>
+      </HStack>
       <HStack mb="1.6rem">
         <HStack spacing="8px">
           {strategyType.map((strategy: string, i: number) => {
