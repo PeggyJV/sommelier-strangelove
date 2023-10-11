@@ -83,11 +83,11 @@ export const turboSTETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 6,
     },
-    staker: {
-      address: config.CONTRACT.TURBO_STETH_STAKER.ADDRESS,
-      abi: config.CONTRACT.TURBO_STETH_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0821,
-    },
+    // staker: {
+    //   address: config.CONTRACT.TURBO_STETH_STAKER.ADDRESS,
+    //   abi: config.CONTRACT.TURBO_STETH_STAKER.ABI,
+    //   key: StakerKey.CELLAR_STAKING_V0821,
+    // },
     baseAsset: tokenConfigMap.WETH,
     // customStrategyHighlight: "Emergent Asset",
     // customStrategyHighlightColor: "purple.base",

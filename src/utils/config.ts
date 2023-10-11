@@ -241,11 +241,11 @@ export const config = {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
       ABI: cellarStakingV0821,
     },
-    //! need to add correct contract address
-    TURBO_STETH_STAKER: {
-      ADDRESS: "0xb1D3948F4DCd7Aa5e89449080F3D88870aD0137A",
-      ABI: cellarStakingV0821,
-    },
+    // //! need to add correct contract address
+    // TURBO_STETH_STAKER: {
+    //   ADDRESS: "0xb1D3948F4DCd7Aa5e89449080F3D88870aD0137A",
+    //   ABI: cellarStakingV0821,
+    // },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
