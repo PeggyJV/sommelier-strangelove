@@ -521,6 +521,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           </Text>
           <Icon as={FaExternalLinkAlt} color="purple.base" />
         </Link>
+        <br />
+        <br />
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault uses leverage which presents a risk for
+          the vault to be liquidated. Although there are safeguards in
+          place to help mitigate this, the liquidation risk is not
+          eliminated.
+        </Text>
       </>
     ),
     "Real Yield USD": () => (
@@ -536,6 +549,18 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           </Text>
           <Icon as={FaExternalLinkAlt} color="purple.base" />
         </Link>
+        <br />
+        <br />
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault is mainly comprised of decentralized and
+          centralized stablecoins, both of which can experience depeg
+          events.
+        </Text>
       </>
     ),
     "Real Yield BTC": () => (
@@ -551,6 +576,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           </Text>
           <Icon as={FaExternalLinkAlt} color="purple.base" />
         </Link>
+        <br />
+        <br />
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault uses leverage which presents a risk for
+          the vault to be liquidated. Although there are safeguards in
+          place to help mitigate this, the liquidation risk is not
+          eliminated.
+        </Text>
       </>
     ),
     "ETH Trend Growth": () => (
@@ -567,8 +605,171 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         </Text>
       </>
     ),
+    "Turbo GHO": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault is mainly comprised of decentralized and
+          centralized stablecoins, both of which can experience depeg
+          events.
+        </Text>
+      </>
+    ),
+    "Turbo SWETH": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />
+          - This vault has exposure to swETH, an LST that is not
+          redeemable until Q1 2024, which makes this LST more
+          susceptible to depegs than its redeemable counterparts.
+          <br />
+          <br />- Because withdrawals can only be facilitated based on
+          the available ETH-swETH liquidity in the market, it is
+          possible to receive swETH upon withdrawal even if you
+          deposited ETH.
+        </Text>
+      </>
+    ),
+    Fraximal: () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault is mainly comprised of decentralized
+          stablecoins, which can experience depeg events.
+        </Text>
+      </>
+    ),
+    "Real Yield LINK": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault uses leverage which presents a risk for
+          the vault to be liquidated. Although there are safeguards in
+          place to help mitigate this, the liquidation risk is not
+          eliminated.
+        </Text>
+      </>
+    ),
+    "ETH BTC Trend": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault is denominated in USDC but exposes you to
+          volatile crypto assets, which carry a risk of potential
+          loss.
+        </Text>
+      </>
+    ),
+    "ETH BTC Momentum": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault is denominated in USDC but exposes you to
+          volatile crypto assets, which carry a risk of potential
+          loss.
+        </Text>
+      </>
+    ),
+    "DeFi Stars": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault is denominated in USDC but exposes you to
+          volatile crypto assets, which carry a risk of potential
+          loss.
+        </Text>
+      </>
+    ),
+    "Real Yield ENS": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault uses leverage which presents a risk for
+          the vault to be liquidated. Although there are safeguards in
+          place to help mitigate this, the liquidation risk is not
+          eliminated.
+        </Text>
+      </>
+    ),
+    "Real Yield UNI": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault uses leverage which presents a risk for
+          the vault to be liquidated. Although there are safeguards in
+          place to help mitigate this, the liquidation risk is not
+          eliminated.
+        </Text>
+      </>
+    ),
+    "Real Yield SNX": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault uses leverage which presents a risk for
+          the vault to be liquidated. Although there are safeguards in
+          place to help mitigate this, the liquidation risk is not
+          eliminated.
+        </Text>
+      </>
+    ),
+    "Real Yield 1Inch": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault uses leverage which presents a risk for
+          the vault to be liquidated. Although there are safeguards in
+          place to help mitigate this, the liquidation risk is not
+          eliminated.
+        </Text>
+      </>
+    ),
   }
-
   return (
     <>
       <VStack pb={10} spacing={6} align="stretch">
