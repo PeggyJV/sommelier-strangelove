@@ -382,11 +382,11 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
           </FormErrorMessage>
         </Stack>
       </FormControl>
-      <Stack>
-        <Text fontSize="sm" fontWeight="semibold" color="neutral.400">
+      {/* <Stack>
+        {/* <Text fontSize="sm" fontWeight="semibold" color="neutral.400">
           Transaction Details
-        </Text>
-        <Stack>
+        </Text> */}
+        <Stack> */}
           <TransactionDetailItem
             title="Vault"
             value={<Text>{cellarDataMap[id].name}</Text>}
