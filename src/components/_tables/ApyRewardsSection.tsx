@@ -152,7 +152,11 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               <Tooltip
                 label={`${
                   cellarConfig.customReward?.customIconToolTipMsg ??
-                  "Rewards ends in"
+                  `${
+                    cellarConfig.customReward?.showAPY
+                      ? `${cellarConfig.customReward.tokenDisplayName} `
+                      : ""
+                  }Rewards ends in`
                 } ${formatDistanceToNowStrict(
                   cellarConfig.customReward
                     ?.stakingDurationOverride ??

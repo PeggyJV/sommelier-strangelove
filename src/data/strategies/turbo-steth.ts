@@ -14,7 +14,7 @@ export const turboSTETH: CellarData = {
   name: "Turbo stETH",
   slug: config.CONTRACT.TURBO_STETH.SLUG,
   tradedAssets: ["WETH", "stETH", "wstETH"],
-  launchDate: new Date(Date.UTC(2023, 9, 16, 18, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 9, 16, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
   strategyType: "Yield",
@@ -101,14 +101,14 @@ export const turboSTETH: CellarData = {
       //customClaimMsg?: string
       //customRewardAPYTooltip: string
       logo: WstethIcon,
-      logoSize: "15px",
+      logoSize: "17px",
       //customRewardLongMessage?: string
       //rewardHyperLink?: string
       //customColumnHeader?: string
       //customColumnHeaderToolTip?: string
       //customColumnValue?: string
       stakingDurationOverride: new Date(
-        Date.UTC(2023, 10, 6, 18, 0, 0, 0)
+        Date.UTC(2023, 10, 15, 14, 0, 0, 0)
       ),
       showSommRewards: false,
       //customIconToolTipMsg?: string
