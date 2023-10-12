@@ -395,26 +395,6 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-  if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
-
   return []
 }
 
@@ -432,15 +412,15 @@ export const apyLabel = (config: ConfigProps) => {
   if (
     (config.cellar.key !== CellarKey.CELLAR_V0815 &&
       config.cellar.key !== CellarKey.CELLAR_V0816) ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_STETH
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH 
   ) {
     if (
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_GHO
+      config.cellarNameKey === CellarNameKey.TURBO_GHO ||
+      config.cellarNameKey === CellarNameKey.TURBO_STETH
     ) {
       return "Estimated APY"
     }

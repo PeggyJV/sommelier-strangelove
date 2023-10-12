@@ -13,7 +13,7 @@ export const turboSTETH: CellarData = {
   name: "Turbo stETH",
   slug: config.CONTRACT.TURBO_STETH.SLUG,
   tradedAssets: ["WETH", "stETH", "wstETH"],
-  launchDate: new Date(Date.UTC(2023, 9, 13, 14, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 9, 16, 18, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
   strategyType: "Yield",
@@ -81,16 +81,11 @@ export const turboSTETH: CellarData = {
       address: config.CONTRACT.TURBO_STETH.ADDRESS,
       abi: config.CONTRACT.TURBO_STETH.ABI,
       key: CellarKey.CELLAR_V2PT5,
-      decimals: 6,
+      decimals: 18,
     },
-    // staker: {
-    //   address: config.CONTRACT.TURBO_STETH_STAKER.ADDRESS,
-    //   abi: config.CONTRACT.TURBO_STETH_STAKER.ABI,
-    //   key: StakerKey.CELLAR_STAKING_V0821,
-    // },
     baseAsset: tokenConfigMap.WETH,
-    // customStrategyHighlight: "Emergent Asset",
-    // customStrategyHighlightColor: "purple.base",
+    customStrategyHighlight: "wstETH Incentives",
+    customStrategyHighlightColor: "#00C04B",
   },
   faq: [
     {

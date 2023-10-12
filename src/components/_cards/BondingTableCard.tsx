@@ -228,7 +228,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               <Text fontSize="xs">
                 {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
                   ? `Rewards program ends in ${formatDistanceToNowStrict(
-                      cellarConfig.customRewardWithoutAPY
+                      cellarConfig.customReward
                         ?.stakingDurationOverride ??
                         stakingEnd?.endDate,
                       {
@@ -311,8 +311,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 hasArrow
                 arrowShadowColor="purple.base"
                 label={`Amount of ${
-                  cellarConfig?.customRewardWithoutAPY?.tokenSymbol ??
-                  "SOMM"
+                  cellarConfig?.customReward?.tokenSymbol ?? "SOMM"
                 } rewards earned and available to be claimed`}
                 placement="top"
                 bg="surface.bg"
@@ -325,8 +324,8 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 >
                   <HStack spacing={1} align="center">
                     <Text>
-                      {cellarConfig?.customRewardWithoutAPY
-                        ?.tokenSymbol ?? "SOMM"}{" "}
+                      {cellarConfig?.customReward?.tokenSymbol ??
+                        "SOMM"}{" "}
                       Rewards
                     </Text>
                     <InformationIcon
@@ -336,8 +335,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   </HStack>
                 </Th>
               </Tooltip>
-              {cellarConfig.customRewardWithoutAPY
-                ?.showSommRewards === true ? (
+              {cellarConfig.customReward?.showSommRewards === true ? (
                 <>
                   <Tooltip
                     hasArrow
@@ -415,15 +413,14 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     </Td>
                     <Td>
                       {/*!!!!!!!! TODO: this needs to be rewritten */}
-                      {cellarConfig.customRewardWithoutAPY
-                        ?.showRewards === true ||
-                      cellarConfig.customRewardWithoutAPY ===
-                        undefined ? (
+                      {cellarConfig.customReward?.showRewards ===
+                        true ||
+                      cellarConfig.customReward === undefined ? (
                         <>
                           <HStack spacing={2}>
                             <Image
                               src={
-                                cellarConfig?.customRewardWithoutAPY
+                                cellarConfig?.customReward
                                   ?.imagePath ??
                                 config.CONTRACT.SOMMELLIER.IMAGE_PATH
                               }
@@ -450,7 +447,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                         <>
                           <HStack
                             as={Link}
-                            href={`${cellarConfig?.customRewardWithoutAPY.customColumnValue}`}
+                            href={`${cellarConfig?.customReward.customColumnValue}`}
                             target="_blank"
                             rel="noreferrer"
                           >
@@ -460,7 +457,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                               fontSize={16}
                             >
                               {
-                                cellarConfig?.customRewardWithoutAPY
+                                cellarConfig?.customReward
                                   .customColumnValue
                               }
                             </Text>
@@ -474,8 +471,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     </Td>
                     <Td>
                       {/*!!!!!!!! TODO: this needs to be rewritten */}
-                      {cellarConfig.customRewardWithoutAPY
-                        ?.showSommRewards ? (
+                      {cellarConfig.customReward?.showSommRewards ? (
                         <>
                           <HStack spacing={2}>
                             <Image

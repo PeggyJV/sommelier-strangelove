@@ -68,7 +68,7 @@ export interface ConfigProps {
     key: StakerKey
   }
   rewardTokenAddress?: string
-  customRewardWithoutAPY?: CustomRewardWithoutAPY
+  customReward?: CustomReward
   customStrategyHighlight?: string
   customStrategyHighlightColor?: string
   baseAsset: Token
@@ -92,7 +92,8 @@ type Exchange =
       logo: string
     }
 
-export interface CustomRewardWithoutAPY {
+export interface CustomReward {
+  showAPY: boolean
   tokenSymbol: string
   tokenDisplayName: string
   tokenAddress: string
