@@ -61,7 +61,7 @@ export const Rewards = ({
 
   // Custom processing for if reward is not SOMM
   // -- Check if cellar config has customReward field
-  if (cellarConfig.customReward) {
+  if (cellarConfig.customReward && cellarConfig.customReward.showAPY === false) {
     rewardTokenAddress = cellarConfig.customReward.tokenAddress
     rewardTokenImageUrl = cellarConfig.customReward.imagePath
     rewardTokenName = cellarConfig.customReward.tokenSymbol

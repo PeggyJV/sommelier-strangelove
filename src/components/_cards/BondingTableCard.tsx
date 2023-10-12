@@ -311,7 +311,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                 hasArrow
                 arrowShadowColor="purple.base"
                 label={`Amount of ${
-                  cellarConfig?.customReward?.tokenSymbol ?? "SOMM"
+                  (cellarConfig?.customReward?.tokenSymbol) ?? "SOMM"
                 } rewards earned and available to be claimed`}
                 placement="top"
                 bg="surface.bg"

@@ -110,7 +110,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                         cellarConfig.customReward?.showAPY
                           ? `${cellarConfig.customReward.tokenDisplayName} `
                           : ""
-                      }Rewards APY ${rewardsApy ?? "0.00%"}`}
+                      }Rewards APY ${rewardsApy?.formatted ?? "0.00%"}`}
                   </Text>
                 </>
               }

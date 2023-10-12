@@ -19,6 +19,7 @@ import { getTokenPrice } from "./getTokenPrice"
 import { getApyInception } from "./getApyInception"
 import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 
 export const getStrategyData = async ({
   address,
@@ -97,15 +98,24 @@ export const getStrategyData = async ({
         // Custom reward APY overrides
         // TODO: Eventually we just need to make this a type of list with the specific token reward and the APY
         if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
+          // Get wstETH price
+          const wstethPrice = Number(await fetchCoingeckoPrice(
+            "wrapped-steth",
+            "usd"
+          ))
 
-          // TODO: Need real vals
+          // Get TVL
+          let usdTvl = Number(strategyData?.tvlTotal) 
+          
+          // 20 wsteth per month * 12 months * 100 for human readable %
+          let apy = (20 * wstethPrice / usdTvl) * 12 * 100
+
           return {
-            formatted: "1.00%",
-            value: 1,
+            formatted: apy.toFixed(2).toString() + "%",
+            value: apy,
           }
         }
 
-        
         if (!isStakingOngoing) return
 
         let assetPrice = "1"

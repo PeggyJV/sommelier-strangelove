@@ -192,7 +192,11 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                       <Text>
                         {cellarConfig.customReward
                           ?.customRewardAPYTooltip ??
-                          `Rewards APY ${
+                          `${
+                            cellarConfig.customReward?.showAPY
+                              ? `${cellarConfig.customReward.tokenDisplayName} `
+                              : ""
+                          }Rewards APY ${
                             rewardsApy?.formatted ?? "0.00%"
                           }`}
                       </Text>
