@@ -132,7 +132,26 @@ export const PageHome = () => {
         */}
       <HStack
         p={4}
-        mb={12}
+        mb={6}
+        spacing={4}
+        align="center"
+        justify="center"
+        backgroundColor="turquoise.extraDark"
+        border="2px solid"
+        borderRadius={16}
+        borderColor="turquoise.dark"
+      >
+        <VStack align="center" justify="center">
+          <Text textAlign="center">
+            Enhancements for Real Yield ETH should be completed by
+            early next week, including the ability to increase stETH
+            leverage and earn farm rewards.
+          </Text>
+        </VStack>
+      </HStack>
+      <HStack
+        p={4}
+        mb={6}
         spacing={4}
         align="center"
         justify="center"
