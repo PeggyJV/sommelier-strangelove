@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { WstethIcon } from "components/_icons"
 
 export const turboSTETH: CellarData = {
   name: "Turbo stETH",
@@ -86,6 +87,32 @@ export const turboSTETH: CellarData = {
     baseAsset: tokenConfigMap.WETH,
     customStrategyHighlight: "wstETH Incentives",
     customStrategyHighlightColor: "#00C04B",
+    customReward: {
+      showAPY: true,
+      tokenSymbol: "wstETH",
+      tokenDisplayName: "wstETH",
+      tokenAddress: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      imagePath: "/assets/icons/wsteth-logo.jpeg",
+      //customRewardMessageTooltip?: string
+      //customRewardMessage?: string
+      //customRewardHeader?: string
+      showRewards: true,
+      showClaim: false,
+      //customClaimMsg?: string
+      //customRewardAPYTooltip: string
+      logo: WstethIcon,
+      logoSize: "15px",
+      //customRewardLongMessage?: string
+      //rewardHyperLink?: string
+      //customColumnHeader?: string
+      //customColumnHeaderToolTip?: string
+      //customColumnValue?: string
+      stakingDurationOverride: new Date(
+        Date.UTC(2023, 10, 6, 18, 0, 0, 0)
+      ),
+      showSommRewards: false,
+      //customIconToolTipMsg?: string
+    },
   },
   faq: [
     {

@@ -41,10 +41,12 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const cellarConfig = cellarDataMap[cellarId].config
   const cellarType = cellarDataMap[cellarId].cellarType
   const LogoComponent = cellarConfig.customReward?.logo ?? LogoIcon
+
+  const nowDate = new Date(Date.now()).getTime()
   const isStakingOverrideOngoing = cellarConfig.customReward
     ?.stakingDurationOverride
     ? cellarConfig.customReward.stakingDurationOverride.getTime() >
-      endDate
+      nowDate
     : undefined
 
   if (!baseApy && !rewardsApy) {
@@ -122,7 +124,11 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                 <Text>
                   {cellarConfig.customReward
                     ?.customRewardAPYTooltip ??
-                    `Rewards APY ${rewardsApy ?? "0.00%"}`}
+                    `${
+                      cellarConfig.customReward?.showAPY
+                        ? `${cellarConfig.customReward.tokenDisplayName} `
+                        : ""
+                    }Rewards APY ${rewardsApy ?? "0.00%"}`}
                 </Text>
               </>
             }
