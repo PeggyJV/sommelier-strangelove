@@ -190,9 +190,13 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
                         {baseApy?.formatted ?? "0.00%"}
                       </Text>
                       <Text>
-                        {cellarConfig.customRewardWithoutAPY
+                        {cellarConfig.customReward
                           ?.customRewardAPYTooltip ??
-                          `Rewards APY ${
+                          `${
+                            cellarConfig.customReward?.showAPY
+                              ? `${cellarConfig.customReward.tokenDisplayName} `
+                              : ""
+                          }Rewards APY ${
                             rewardsApy?.formatted ?? "0.00%"
                           }`}
                       </Text>
@@ -314,8 +318,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               </Box>
               <Flex wrap="wrap" gap={2}>
                 <Text>
-                  {cellarConfig.customRewardWithoutAPY
-                    ?.customRewardMessage ??
+                  {cellarConfig.customReward?.customRewardMessage ??
                     `Rewards APY ${potentialStakingApy}`}
                 </Text>
                 <Text

@@ -38,6 +38,7 @@ export enum CellarNameKey {
   TURBO_SWETH = "TURBO_SWETH",
   ETH_TREND_GROWTH = "ETH_TREND_GROWTH",
   TURBO_GHO = "TURBO_GHO",
+  TURBO_STETH = "TURBO_STETH",
 }
 
 export interface ConfigProps {
@@ -67,7 +68,7 @@ export interface ConfigProps {
     key: StakerKey
   }
   rewardTokenAddress?: string
-  customRewardWithoutAPY?: CustomRewardWithoutAPY
+  customReward?: CustomReward
   customStrategyHighlight?: string
   customStrategyHighlightColor?: string
   baseAsset: Token
@@ -91,7 +92,8 @@ type Exchange =
       logo: string
     }
 
-export interface CustomRewardWithoutAPY {
+export interface CustomReward {
+  showAPY: boolean
   tokenSymbol: string
   tokenDisplayName: string
   tokenAddress: string

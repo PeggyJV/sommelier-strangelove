@@ -338,19 +338,16 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       }}
                       gap={{ base: 0, md: 4 }}
                     >
-                      {cellarConfig.customRewardWithoutAPY ? (
+                      {cellarConfig.customReward ? (
                         <>
                           <Image
-                            src={
-                              cellarConfig.customRewardWithoutAPY
-                                ?.imagePath
-                            }
-                            alt={`${cellarConfig.customRewardWithoutAPY?.tokenSymbol} logo`}
+                            src={cellarConfig.customReward?.imagePath}
+                            alt={`${cellarConfig.customReward?.tokenSymbol} logo`}
                             boxSize={6}
                           />
                           <Heading size="16px">
                             {
-                              cellarConfig.customRewardWithoutAPY
+                              cellarConfig.customReward
                                 ?.customRewardLongMessage
                             }
                           </Heading>
@@ -385,7 +382,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                           {stakingEnd?.endDate &&
                           isFuture(stakingEnd.endDate)
                             ? `Rewards program ends in ${formatDistanceToNowStrict(
-                                cellarConfig.customRewardWithoutAPY
+                                cellarConfig.customReward
                                   ?.stakingDurationOverride ??
                                   stakingEnd.endDate,
                                 {
@@ -397,8 +394,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       </LighterSkeleton>
                     </Stack>
                   </InnerCard>
-                  {cellarConfig.customRewardWithoutAPY
-                    ?.showSommRewards ? (
+                  {cellarConfig.customReward?.showSommRewards ? (
                     <InnerCard
                       backgroundColor="surface.tertiary"
                       mt={8}

@@ -18,6 +18,8 @@ import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { getApyInception } from "./getApyInception"
 import BigNumber from "bignumber.js"
+import { config as utilConfig } from "src/utils/config"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 
 export const getStrategyData = async ({
   address,
@@ -92,6 +94,28 @@ export const getStrategyData = async ({
 
       const rewardsApy = await (async () => {
         if (hideValue) return
+
+        // Custom reward APY overrides
+        // TODO: Eventually we just need to make this a type of list with the specific token reward and the APY
+        if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
+          // Get wstETH price
+          const wstethPrice = Number(await fetchCoingeckoPrice(
+            "wrapped-steth",
+            "usd"
+          ))
+
+          // Get TVL
+          let usdTvl = Number(strategyData?.tvlTotal) 
+          
+          // 20 wsteth per month * 12 months * 100 for human readable %
+          let apy = (20 * wstethPrice / usdTvl) * 12 * 100
+
+          return {
+            formatted: apy.toFixed(2).toString() + "%",
+            value: apy,
+          }
+        }
+
         if (!isStakingOngoing) return
 
         let assetPrice = "1"
@@ -108,7 +132,7 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      const baseApy = (() => {    
+      const baseApy = (() => {
         if (config.show7DayAPYTooltip === true) {
           if (dayDatas === undefined || dayDatas.length < 8) {
             return {
@@ -122,7 +146,9 @@ export const getStrategyData = async ({
           for (let i = 0; i < 7; i++) {
             // Get annualized apy for each shareValue
             let nowValue = new BigNumber(dayDatas![i].shareValue)
-            let startValue = new BigNumber(dayDatas![i+1].shareValue)
+            let startValue = new BigNumber(
+              dayDatas![i + 1].shareValue
+            )
 
             let yieldGain = nowValue.minus(startValue).div(startValue)
 
@@ -137,7 +163,7 @@ export const getStrategyData = async ({
             formatted: movingAvg7D.toFixed(2) + "%",
             value: Number(movingAvg7D.toFixed(2)),
           }
-        }   
+        }
 
         if (hideValue) return
         if (!isAPYEnabled(config)) return
@@ -177,7 +203,7 @@ export const getStrategyData = async ({
         if (!strategyData) return
         return getTokenPrice(
           strategyData.shareValue,
-          config.cellar.decimals 
+          config.cellar.decimals
         )
       })()
 
