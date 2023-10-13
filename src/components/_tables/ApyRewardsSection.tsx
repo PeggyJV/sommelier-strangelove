@@ -40,12 +40,13 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const percentage = (current / range) * 100
   const cellarConfig = cellarDataMap[cellarId].config
   const cellarType = cellarDataMap[cellarId].cellarType
-  const LogoComponent =
-    cellarConfig.customRewardWithoutAPY?.logo ?? LogoIcon
-  const isStakingOverrideOngoing = cellarConfig.customRewardWithoutAPY
+  const LogoComponent = cellarConfig.customReward?.logo ?? LogoIcon
+
+  const nowDate = new Date(Date.now()).getTime()
+  const isStakingOverrideOngoing = cellarConfig.customReward
     ?.stakingDurationOverride
-    ? cellarConfig.customRewardWithoutAPY.stakingDurationOverride.getTime() >
-      endDate
+    ? cellarConfig.customReward.stakingDurationOverride.getTime() >
+      nowDate
     : undefined
 
   if (!baseApy && !rewardsApy) {
@@ -63,8 +64,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         {rewardsApy && (
           <Tooltip
             label={`Rewards ends in ${formatDistanceToNowStrict(
-              cellarConfig.customRewardWithoutAPY
-                ?.stakingDurationOverride ?? new Date(stackingEndDate)
+              cellarConfig.customReward?.stakingDurationOverride ??
+                new Date(stackingEndDate)
             )}`}
             color="neutral.100"
             border="0"
@@ -116,15 +117,18 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                   {baseApy ?? "0.00%"}
                 </Text>
                 <Text>
-                  {cellarConfig.customRewardWithoutAPY
-                    ?.showSommRewards
+                  {cellarConfig.customReward?.showSommRewards
                     ? `SOMM Rewards APY ${rewardsApy ?? "0.00%"}`
                     : null}
                 </Text>
                 <Text>
-                  {cellarConfig.customRewardWithoutAPY
+                  {cellarConfig.customReward
                     ?.customRewardAPYTooltip ??
-                    `Rewards APY ${rewardsApy ?? "0.00%"}`}
+                    `${
+                      cellarConfig.customReward?.showAPY
+                        ? `${cellarConfig.customReward.tokenDisplayName} `
+                        : ""
+                    }Rewards APY ${rewardsApy ?? "0.00%"}`}
                 </Text>
               </>
             }
@@ -143,14 +147,18 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             </Text>
           </Tooltip>
           {rewardsApy &&
-            (isStakingOverrideOngoing !== undefined &&
-              isStakingOverrideOngoing === true) && (
+            isStakingOverrideOngoing !== undefined &&
+            isStakingOverrideOngoing === true && (
               <Tooltip
                 label={`${
-                  cellarConfig.customRewardWithoutAPY
-                    ?.customIconToolTipMsg ?? "Rewards ends in"
+                  cellarConfig.customReward?.customIconToolTipMsg ??
+                  `${
+                    cellarConfig.customReward?.showAPY
+                      ? `${cellarConfig.customReward.tokenDisplayName} `
+                      : ""
+                  }Rewards ends in`
                 } ${formatDistanceToNowStrict(
-                  cellarConfig.customRewardWithoutAPY
+                  cellarConfig.customReward
                     ?.stakingDurationOverride ??
                     new Date(stackingEndDate)
                 )}`}
@@ -180,8 +188,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                         color="red.normal"
                         p={0}
                         boxSize={
-                          cellarConfig.customRewardWithoutAPY
-                            ?.logoSize ?? "9px"
+                          cellarConfig.customReward?.logoSize ?? "9px"
                         }
                       />
                     </CircularProgressLabel>
@@ -190,17 +197,16 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               </Tooltip>
             )}
           {rewardsApy &&
-            (cellarConfig.customRewardWithoutAPY?.showSommRewards ===
+            (cellarConfig.customReward?.showSommRewards ===
               undefined ||
-              cellarConfig.customRewardWithoutAPY
-                ?.showSommRewards) && (
+              cellarConfig.customReward?.showSommRewards) && (
               <Tooltip
                 label={`${
-                  cellarConfig.customRewardWithoutAPY?.showSommRewards
+                  cellarConfig.customReward?.showSommRewards
                     ? "SOMM Rewards ends in"
                     : "Rewards ends in"
                 } ${formatDistanceToNowStrict(
-                    new Date(stackingEndDate)
+                  new Date(stackingEndDate)
                 )}`}
                 color="neutral.100"
                 border="0"

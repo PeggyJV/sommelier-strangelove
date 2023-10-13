@@ -92,7 +92,8 @@ export const turboSWETH: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0821,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    customRewardWithoutAPY: {
+    customReward: {
+      showAPY: false,
       tokenSymbol: "PEARL",
       tokenDisplayName: "Pearl",
       tokenAddress: "0x677365ac7ca3e9efe12a29a001737a3db265e8af",

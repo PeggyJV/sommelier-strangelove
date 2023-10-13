@@ -50,7 +50,10 @@ export const turboGHO: CellarData = {
     `,
     risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
-    - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events. `,
+    - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events. 
+    
+    - Because withdrawals can only be facilitated based on the available GHO-USDC liquidity in the market, it is possible to receive GHO upon withdrawal even if you deposited USDC.
+    `,
   },
   overrideApy: {
     title: "Backtested APY",
@@ -88,7 +91,7 @@ export const turboGHO: CellarData = {
     },
     baseAsset: tokenConfigMap.USDC,
     customStrategyHighlight: "Emergent Asset",
-    customStrategyHighlightColor: "purple.base"
+    customStrategyHighlightColor: "purple.base",
   },
   faq: [
     {
