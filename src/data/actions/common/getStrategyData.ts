@@ -108,7 +108,8 @@ export const getStrategyData = async ({
           let usdTvl = Number(strategyData?.tvlTotal) 
           
           // 20 wsteth per month * 12 months * 100 for human readable %
-          let apy = (20 * wstethPrice / usdTvl) * 12 * 100
+          //let apy = (20 * wstethPrice / usdTvl) * 12 * 100
+          let apy = 0
 
           return {
             formatted: apy.toFixed(2).toString() + "%",
