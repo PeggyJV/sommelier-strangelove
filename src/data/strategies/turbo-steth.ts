@@ -85,8 +85,8 @@ export const turboSTETH: CellarData = {
       decimals: 18,
     },
     baseAsset: tokenConfigMap.WETH,
-    //----------> customStrategyHighlight: "wstETH Incentives",
-    //----------> customStrategyHighlightColor: "#00C04B",
+    customStrategyHighlight: "wstETH Incentives",
+    customStrategyHighlightColor: "#00C04B",
     customReward: {
       showAPY: true,
       tokenSymbol: "wstETH",
@@ -107,8 +107,9 @@ export const turboSTETH: CellarData = {
       //customColumnHeader?: string
       //customColumnHeaderToolTip?: string
       //customColumnValue?: string
-      stakingDurationOverride: new Date(Date.UTC(2023, 9, 15, 14, 0, 0, 0)),
-      //----------> Date.UTC(2023, 10, 15, 14, 0, 0, 0)
+      stakingDurationOverride: new Date(
+        Date.UTC(2023, 10, 15, 14, 0, 0, 0)
+      ),
       showSommRewards: false,
       //customIconToolTipMsg?: string
     },
