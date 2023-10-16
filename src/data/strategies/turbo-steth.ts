@@ -85,9 +85,8 @@ export const turboSTETH: CellarData = {
       decimals: 18,
     },
     baseAsset: tokenConfigMap.WETH,
-    /*
-    customStrategyHighlight: "wstETH Incentives",
-    customStrategyHighlightColor: "#00C04B",
+    //----------> customStrategyHighlight: "wstETH Incentives",
+    //----------> customStrategyHighlightColor: "#00C04B",
     customReward: {
       showAPY: true,
       tokenSymbol: "wstETH",
@@ -108,18 +107,10 @@ export const turboSTETH: CellarData = {
       //customColumnHeader?: string
       //customColumnHeaderToolTip?: string
       //customColumnValue?: string
-      stakingDurationOverride: new Date(
-        Date.UTC(2023, 10, 15, 14, 0, 0, 0)
-      ),
+      stakingDurationOverride: new Date(Date.UTC(2023, 9, 15, 14, 0, 0, 0)),
+      //----------> Date.UTC(2023, 10, 15, 14, 0, 0, 0)
       showSommRewards: false,
       //customIconToolTipMsg?: string
-    },
-    */
-   // Reuse defunct staking contract just to fill placeholder values -- this contract doesnt have its own staking contract yet
-    staker: {
-      address: config.CONTRACT.AAVE_STAKER.ADDRESS,
-      abi: config.CONTRACT.AAVE_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0815,
     },
   },
   faq: [
