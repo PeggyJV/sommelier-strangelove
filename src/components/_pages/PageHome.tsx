@@ -166,7 +166,7 @@ export const PageHome = () => {
             governance and could be funded shortly after Oct 22nd.
             Learn more{" "}
             <Link
-              href="https://governance.aave.com/t/arfc-treasury-management-gho-liquidity-strategy-update/14801/13"
+              href="https://app.aave.com/governance/proposal/?proposalId=347"
               isExternal
               display="inline-flex"
               alignItems="center"
