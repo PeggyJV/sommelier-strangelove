@@ -137,14 +137,6 @@ export const useBridgeEthToSommTx = () => {
   const doEthToSomm = async (props: BridgeFormValues) => {
     try {
       setIsLoading(true)
-      addToast({
-        heading: "Loading",
-        status: "default",
-        body: <Text>Approval in progress</Text>,
-        isLoading: true,
-        duration: null,
-        closeHandler: closeAll,
-      })
       const convertedAmount = ethers.utils.parseUnits(
         String(props.amount),
         CONTRACT.SOMMELLIER.DECIMALS
@@ -155,51 +147,73 @@ export const useBridgeEthToSommTx = () => {
       //   sender: address,
       //   receiver: props.address,
       // })
-      // ERC20 Approval
-      const { hash: erc20Hash } = await erc20Contract.approve(
-        getAddress(CONTRACT.BRIDGE.ADDRESS),
-        convertedAmount
+
+      // Check if approval needed
+      const allowance = await erc20Contract.allowance(
+        address!,
+        getAddress(CONTRACT.BRIDGE.ADDRESS)
       )
-      const waitForApproval = wait({
-        hash: erc20Hash,
-      })
-      const resultApproval = await waitForApproval
-      if (resultApproval.data?.status !== 1) {
-        // analytics.track("bridge.approval-failed", {
-        //   value: props.amount,
-        // })
-        setIsLoading(false)
-        return update({
-          heading: "ERC20 Approval",
-          body: (
-            <TxHashToastBody
-              title="Contract failed"
-              hash={erc20Hash}
-            />
-          ),
-          status: "error",
+      const needsApproval = allowance.lt(convertedAmount)
+
+      if (needsApproval) {
+        addToast({
+          heading: "Loading",
+          status: "default",
+          body: <Text>Approval in progress</Text>,
+          isLoading: true,
           duration: null,
           closeHandler: closeAll,
         })
-      }
-      if (
-        resultApproval?.data?.transactionHash &&
-        resultApproval.data?.status === 1
-      ) {
-        // analytics.track("bridge.approval-succeeded", {
-        //   value: props.amount,
-        //   path: "ethToSomm",
-        //   sender: address,
-        //   receiver: props.address,
-        // })
-        update({
-          heading: "ERC20 Approval",
-          body: <TxHashToastBody title="Approved" hash={erc20Hash} />,
-          status: "primary",
-          duration: null,
-          closeHandler: closeAll,
+        
+        // ERC20 Approval
+        const { hash: erc20Hash } = await erc20Contract.approve(
+          getAddress(CONTRACT.BRIDGE.ADDRESS),
+          ethers.constants.MaxUint256
+        )
+        const waitForApproval = wait({
+          hash: erc20Hash,
         })
+        const resultApproval = await waitForApproval
+        if (resultApproval.data?.status !== 1) {
+          // analytics.track("bridge.approval-failed", {
+          //   value: props.amount,
+          // })
+          setIsLoading(false)
+          return update({
+            heading: "ERC20 Approval",
+            body: (
+              <TxHashToastBody
+                title="Contract failed"
+                hash={erc20Hash}
+              />
+            ),
+            status: "error",
+            duration: null,
+            closeHandler: closeAll,
+          })
+        }
+        if (
+          resultApproval?.data?.transactionHash &&
+          resultApproval.data?.status === 1
+        ) {
+          // analytics.track("bridge.approval-succeeded", {
+          //   value: props.amount,
+          //   path: "ethToSomm",
+          //   sender: address,
+          //   receiver: props.address,
+          // })
+          update({
+            heading: "ERC20 Approval",
+            body: (
+              <TxHashToastBody title="Approved" hash={erc20Hash} />
+            ),
+            status: "primary",
+            duration: null,
+            closeHandler: closeAll,
+          })
+        }
       }
+
       // analytics.track("bridge.contract-started", {
       //   value: props.amount,
       //   path: "ethToSomm",
