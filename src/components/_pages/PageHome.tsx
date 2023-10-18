@@ -143,8 +143,8 @@ export const PageHome = () => {
       >
         <VStack align="center" justify="center">
           <Text textAlign="center">
-            Enhancements for Real Yield ETH should be completed by
-            early next week, including the ability to increase stETH
+            An enhancement has recently been made to Real Yield ETH
+            and Real Yield BTC allowing them to increase their stETH
             leverage and earn farm rewards.
           </Text>
         </VStack>
@@ -162,9 +162,9 @@ export const PageHome = () => {
       >
         <VStack align="center" justify="center">
           <Text textAlign="center">
-            An incentive proposal for Turbo GHO co-incentives is
-            progressing through Aave governance and could be funded as
-            early as this week. Learn more{" "}
+            Turbo GHO co-incentives are progressing through Aave
+            governance and could be funded shortly after Oct 22nd.
+            Learn more{" "}
             <Link
               href="https://governance.aave.com/t/arfc-treasury-management-gho-liquidity-strategy-update/14801/13"
               isExternal

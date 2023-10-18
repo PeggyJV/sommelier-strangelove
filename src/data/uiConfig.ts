@@ -536,8 +536,8 @@ export const estimatedApyValue = (config: ConfigProps) => {
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
     return {
-      value: 5.0,
-      formatted: "5.0%",
+      value: 4.0,
+      formatted: "4.0%",
     }
   }
 }
