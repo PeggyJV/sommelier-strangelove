@@ -59,7 +59,7 @@ export const turboSTETH: CellarData = {
     title: "Backtested APY",
     tooltip:
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-    value: "5.00%",
+    value: "4.00%",
   },
   dashboard:
     "https://debank.com/profile/0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",
