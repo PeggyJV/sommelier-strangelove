@@ -21,6 +21,7 @@ import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { GHOIcon } from "components/_icons"
+import { Contract } from "ethers"
 
 export const getStrategyData = async ({
   address,
@@ -46,7 +47,7 @@ export const getStrategyData = async ({
       const decimals = config.baseAsset.decimals
       const symbol = config.baseAsset.symbol
 
-      const { stakerContract } = contracts
+      const { stakerContract, cellarContract } = contracts
       const strategyData = stratData
       const dayDatas = strategyData?.dayDatas
       const deprecated = strategy.deprecated
@@ -130,9 +131,9 @@ export const getStrategyData = async ({
           sommPrice,
           assetPrice,
           stakerContract: stakerContract as CellarStakingV0815,
+          cellarContract: cellarContract as Contract,
           cellarConfig: config,
         })
-        console.log(strategy.slug, apyRes)
         return apyRes
       })()
 
