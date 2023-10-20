@@ -132,6 +132,7 @@ export const getStrategyData = async ({
           stakerContract: stakerContract as CellarStakingV0815,
           cellarConfig: config,
         })
+        console.log(strategy.slug, apyRes)
         return apyRes
       })()
 

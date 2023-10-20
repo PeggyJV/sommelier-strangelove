@@ -101,7 +101,7 @@ export interface CustomReward {
   customRewardMessageTooltip?: string
   customRewardMessage?: string
   customRewardHeader?: string
-  showRewards?: boolean
+  showBondingRewards?: boolean
   showClaim?: boolean
   customClaimMsg?: string
   customRewardAPYTooltip?: string

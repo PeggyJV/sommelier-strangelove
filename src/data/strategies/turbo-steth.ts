@@ -96,7 +96,7 @@ export const turboSTETH: CellarData = {
       //customRewardMessageTooltip?: string
       //customRewardMessage?: string
       //customRewardHeader?: string
-      showRewards: true,
+      showBondingRewards: false,
       showClaim: false,
       //customClaimMsg?: string
       //customRewardAPYTooltip: string

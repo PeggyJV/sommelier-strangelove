@@ -86,7 +86,7 @@ export const turboGHO: CellarData = {
       decimals: 6,
     },
     staker: {
-      address: config.CONTRACT.REAL_YIELD_ETH_STAKER.ADDRESS,
+      address: config.CONTRACT.ETH_TREND_GROWTH_STAKER.ADDRESS, // TODO"!!!! REMOVE THIS __ JUST FOR TESTING 
       abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
@@ -102,7 +102,7 @@ export const turboGHO: CellarData = {
       //customRewardMessageTooltip?: string
       //customRewardMessage?: string
       //customRewardHeader?: string
-      showRewards: true,
+      showBondingRewards: false, // Relevant only for bonding card
       showClaim: true, // True as long as somm incentives live
       //customClaimMsg?: string
       //customRewardAPYTooltip: string
