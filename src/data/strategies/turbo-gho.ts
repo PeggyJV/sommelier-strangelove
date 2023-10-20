@@ -86,7 +86,7 @@ export const turboGHO: CellarData = {
       decimals: 6,
     },
     staker: {
-      address: config.CONTRACT.ETH_TREND_GROWTH_STAKER.ADDRESS, // TODO"!!!! REMOVE THIS __ JUST FOR TESTING 
+      address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS, 
       abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },

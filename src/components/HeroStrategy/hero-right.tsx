@@ -164,88 +164,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               View Details
             </SecondaryButton>
           </Link>
-          {isYieldStrategies && (
-            <HStack
-              pt={4}
-              justifyContent="space-around"
-              alignItems="start"
-              divider={<StackDivider borderColor="purple.dark" />}
-            >
-              <VStack flex={1}>
-                <Heading size="md">{tvm?.formatted || "--"}</Heading>
-                <CellarStatsLabel
-                  tooltip="Total value locked"
-                  title="TVL"
-                />
-              </VStack>
-              <VStack flex={1} textAlign="center">
-                <Heading size="md">
-                  {baseApySumRewards?.formatted || "--"}
-                </Heading>
-                <CellarStatsLabel
-                  tooltip={
-                    <>
-                      <Text>
-                        {apyHoverLabel(cellarConfig)}{" "}
-                        {baseApy?.formatted ?? "0.00%"}
-                      </Text>
-                      <Text>
-                        {cellarConfig.customReward
-                          ?.customRewardAPYTooltip ??
-                          `${
-                            cellarConfig.customReward?.showAPY
-                              ? `${cellarConfig.customReward.tokenDisplayName} `
-                              : ""
-                          }Rewards APY ${
-                            rewardsApy?.formatted ?? "0.00%"
-                          }`}
-                      </Text>
-                    </>
-                  }
-                  title={apyLabel(cellarConfig)}
-                />
-              </VStack>
-              {showTokenPriceInsteadOfApy(cellarConfig) && (
-                <VStack flex={1}>
-                  <>
-                    <Heading size="md">{tokenPrice || "--"}</Heading>
-                    <CellarStatsLabel
-                      tooltip={tokenPriceTooltipContent(cellarConfig)}
-                      title="Token Price"
-                    />
-                  </>
-                </VStack>
-              )}
-            </HStack>
-          )}
-          {isAutomatedPortfolio && (
-            <HStack
-              pt={4}
-              justifyContent="space-around"
-              alignItems="start"
-              divider={<StackDivider borderColor="purple.dark" />}
-            >
-              <VStack flex={1}>
-                <Heading size="md">{tokenPrice || "--"}</Heading>
-                <CellarStatsLabel
-                  tooltip={tokenPriceTooltipContent(cellarConfig)}
-                  title="Token Price"
-                />
-              </VStack>
-              {isDailyChangeEnabled(cellarConfig) && (
-                <VStack flex={1}>
-                  <PercentageText
-                    data={dailyChange}
-                    headingSize="md"
-                  />
-                  <CellarStatsLabel
-                    tooltip="% change of current token price vs. token price yesterday"
-                    title="1D Change"
-                  />
-                </VStack>
-              )}
-            </HStack>
-          )}
         </>
       )}
 
@@ -295,50 +213,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           </Box>
           <Text>{content.alternativeTo}</Text>
         </HStack>
-        {!countdown && (
-          <HStack>
-            <Box>
-              <Text w="150px" fontWeight="semibold">
-                Total assets
-              </Text>
-            </Box>
-            <Text>
-              {isLoading ? <Spinner /> : tvm?.formatted || "--"}
-            </Text>
-          </HStack>
-        )}
-        {!countdown &&
-          stakingEnd?.endDate &&
-          isFuture(stakingEnd?.endDate) && (
-            <HStack>
-              <Box>
-                <Text w="150px" fontWeight="semibold">
-                  Rewards
-                </Text>
-              </Box>
-              <Flex wrap="wrap" gap={2}>
-                <Text>
-                  {cellarConfig.customReward?.customRewardMessage ??
-                    `Rewards APY ${potentialStakingApy}`}
-                </Text>
-                <Text
-                  py={1}
-                  px={2}
-                  borderRadius={28}
-                  bgColor="purple.base"
-                  fontSize="xs"
-                  fontFamily={"monospace"}
-                >
-                  {stakingEnd?.endDate
-                    ? isFuture(stakingEnd?.endDate) &&
-                      `${formatDistanceToNowStrict(
-                        stakingEnd.endDate
-                      )} left`
-                    : "Program Ended"}
-                </Text>
-              </Flex>
-            </HStack>
-          )}
       </Stack>
     </Stack>
   )
