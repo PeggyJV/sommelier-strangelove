@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { GHOIcon } from "components/_icons"
 
 export const turboGHO: CellarData = {
   name: "Turbo GHO",
@@ -85,13 +86,39 @@ export const turboGHO: CellarData = {
       decimals: 6,
     },
     staker: {
-      address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS,
+      address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS, 
       abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
     baseAsset: tokenConfigMap.USDC,
     customStrategyHighlight: "Emergent Asset",
     customStrategyHighlightColor: "purple.base",
+    customReward: {
+      showAPY: true,
+      tokenSymbol: "GHO",
+      tokenDisplayName: "GHO",
+      tokenAddress: "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
+      imagePath: "/assets/icons/gho.png",
+      //customRewardMessageTooltip?: string
+      //customRewardMessage?: string
+      //customRewardHeader?: string
+      showBondingRewards: false, // Relevant only for bonding card
+      showClaim: true, // True as long as somm incentives live
+      //customClaimMsg?: string
+      //customRewardAPYTooltip: string
+      logo: GHOIcon,
+      logoSize: "17px",
+      //customRewardLongMessage?: string
+      //rewardHyperLink?: string
+      //customColumnHeader?: string
+      //customColumnHeaderToolTip?: string
+      //customColumnValue?: string
+      stakingDurationOverride: new Date(
+        Date.UTC(2023, 9, 30, 14, 0, 0, 0)
+      ),
+      showSommRewards: true,
+      //customIconToolTipMsg?: string
+    },
   },
   faq: [
     {

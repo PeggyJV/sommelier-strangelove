@@ -124,6 +124,7 @@ export const StrategyTabColumn = ({
             baseApySumRewards={
               row.original.baseApySumRewards?.formatted
             }
+            extraRewardsApy={row.original.extraRewardsApy?.formatted}
           />
         )
       },

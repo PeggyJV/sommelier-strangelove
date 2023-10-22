@@ -1,14 +1,18 @@
 import BigNumber from "bignumber.js"
 import { CellarStakingV0815 } from "src/abi/types"
 import { ConfigProps } from "data/types"
+import { getContract, getProvider, fetchSigner } from "@wagmi/core"
+import { Contract } from "ethers"
 
 export const getRewardsApy = async ({
   stakerContract,
+  cellarContract,
   sommPrice,
   assetPrice,
   cellarConfig,
 }: {
   stakerContract: CellarStakingV0815
+  cellarContract: Contract
   sommPrice: string
   assetPrice: string
   cellarConfig: ConfigProps
@@ -23,6 +27,20 @@ export const getRewardsApy = async ({
       const rewardRate = new BigNumber(
         rewardRateRes.toString()
       ).dividedBy(new BigNumber(10).pow(6))
+
+      let oneShare = new BigNumber(10).pow(
+        cellarConfig.cellar.decimals
+      )
+      let shareValueBaseAsset = new BigNumber(
+        (await cellarContract
+          .previewRedeem(oneShare.toString()))
+          .toString()
+      )
+
+      // Standardize decimals
+      shareValueBaseAsset = shareValueBaseAsset.dividedBy(
+        new BigNumber(10).pow(cellarConfig.cellar.decimals)
+      )
 
       const totalDepositWithBoostRes =
         await stakerContract.totalDepositsWithBoost()
