@@ -115,6 +115,7 @@ export interface CustomReward {
   stakingDurationOverride?: Date
   showSommRewards?: boolean
   customIconToolTipMsg?: string
+  customRewardEndMessage?: string
 }
 
 export interface CellarData {

@@ -154,19 +154,23 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             isStakingOverrideOngoing !== undefined &&
             isStakingOverrideOngoing === true && (
               <Tooltip
-                label={`${
-                  cellarConfig.customReward?.customIconToolTipMsg ??
-                  `${
-                    cellarConfig.customReward?.showAPY
-                      ? `${cellarConfig.customReward.tokenDisplayName} `
-                      : ""
-                  }Rewards updated weekly`
-                  // } ${formatDistanceToNowStrict(
-                  //   cellarConfig.customReward
-                  //     ?.stakingDurationOverride ??
-                  //     new Date(stackingEndDate)
-                  // )
-                }`}
+                label={
+                  cellarConfig.customReward?.customRewardEndMessage
+                    ? `${cellarConfig.customReward.tokenDisplayName} ${cellarConfig.customReward?.customRewardEndMessage}`
+                    : `${
+                        cellarConfig.customReward
+                          ?.customIconToolTipMsg ??
+                        `${
+                          cellarConfig.customReward?.showAPY
+                            ? `${cellarConfig.customReward.tokenDisplayName} `
+                            : ""
+                        }Rewards ends in`
+                      } ${formatDistanceToNowStrict(
+                        cellarConfig.customReward
+                          ?.stakingDurationOverride ??
+                          new Date(stackingEndDate)
+                      )}`
+                }
                 color="neutral.100"
                 border="0"
                 fontSize="12px"
