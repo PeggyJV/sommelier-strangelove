@@ -149,7 +149,8 @@ export const PageHome = () => {
           </Text>
         </VStack>
       </HStack>
-      <HStack
+
+      {/* <HStack
         p={4}
         mb={6}
         spacing={4}
@@ -177,7 +178,7 @@ export const PageHome = () => {
             </Link>
           </Text>
         </VStack>
-      </HStack>
+      </HStack> */}
       <HStack mb="1.6rem">
         <HStack spacing="8px">
           {strategyType.map((strategy: string, i: number) => {
