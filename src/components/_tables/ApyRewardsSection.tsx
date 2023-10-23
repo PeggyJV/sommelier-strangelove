@@ -160,12 +160,13 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                     cellarConfig.customReward?.showAPY
                       ? `${cellarConfig.customReward.tokenDisplayName} `
                       : ""
-                  }Rewards ends in`
-                } ${formatDistanceToNowStrict(
-                  cellarConfig.customReward
-                    ?.stakingDurationOverride ??
-                    new Date(stackingEndDate)
-                )}`}
+                  }Rewards updated weekly`
+                  // } ${formatDistanceToNowStrict(
+                  //   cellarConfig.customReward
+                  //     ?.stakingDurationOverride ??
+                  //     new Date(stackingEndDate)
+                  // )
+                }`}
                 color="neutral.100"
                 border="0"
                 fontSize="12px"
