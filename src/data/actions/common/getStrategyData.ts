@@ -20,6 +20,8 @@ import { getApyInception } from "./getApyInception"
 import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
+import { GHOIcon } from "components/_icons"
+import { Contract } from "ethers"
 
 export const getStrategyData = async ({
   address,
@@ -45,7 +47,7 @@ export const getStrategyData = async ({
       const decimals = config.baseAsset.decimals
       const symbol = config.baseAsset.symbol
 
-      const { stakerContract } = contracts
+      const { stakerContract, cellarContract } = contracts
       const strategyData = stratData
       const dayDatas = strategyData?.dayDatas
       const deprecated = strategy.deprecated
@@ -92,6 +94,8 @@ export const getStrategyData = async ({
       const isStakingOngoing =
         stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
 
+      // ! Rewards APY override only goes here if rewards are happening instead of somm rewards
+      // TODO: This is tech debt, we need to migrate to lists of APYs for each rewards token
       const rewardsApy = await (async () => {
         if (hideValue) return
 
@@ -127,10 +131,34 @@ export const getStrategyData = async ({
           sommPrice,
           assetPrice,
           stakerContract: stakerContract as CellarStakingV0815,
+          cellarContract: cellarContract as Contract,
           cellarConfig: config,
         })
         return apyRes
       })()
+
+      let extraRewardsApy = undefined
+      // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
+      if (strategy.slug === utilConfig.CONTRACT.TURBO_GHO.SLUG) {
+        // Get GHO price
+        const ghoPrice = Number(
+          await fetchCoingeckoPrice("gho", "usd")
+        )
+
+        // Get TVL
+        let usdTvl = Number(strategyData?.tvlTotal)
+
+        // 5400 GHO per week * 52 weeks * 100 for human readable %
+        // TODO: Update this  + expiration date in config weekly as long as GHO incentives live
+        let apy = ((5400 * ghoPrice) / usdTvl) * 52 * 100
+
+        extraRewardsApy = {
+          formatted: apy.toFixed(2).toString() + "%",
+          value: apy,
+          tokenSymbol: "GHO",
+          tokenIcon: GHOIcon,
+        }
+      }
 
       const baseApy = (() => {
         if (config.show7DayAPYTooltip === true) {
@@ -211,12 +239,18 @@ export const getStrategyData = async ({
         ? estimatedApyValue(config)
         : baseApy
 
+      // TODO: Rewards APY should be a list of APYs for each rewards token, this is incurred tech debt
       const baseApySumRewards = {
         formatted:
           (
-            (baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0)
+            (baseApyValue?.value ?? 0) +
+            (rewardsApy?.value ?? 0) +
+            (extraRewardsApy?.value ?? 0)
           ).toFixed(2) + "%",
-        value: (baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0),
+        value:
+          (baseApyValue?.value ?? 0) +
+          (rewardsApy?.value ?? 0) +
+          (extraRewardsApy?.value ?? 0),
       }
 
       return {
@@ -245,6 +279,7 @@ export const getStrategyData = async ({
         deprecated,
         token,
         config,
+        extraRewardsApy,
       }
     } catch (e) {
       console.error(address, e)

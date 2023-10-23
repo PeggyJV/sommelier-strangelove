@@ -20,6 +20,7 @@ type ApyRewardsSectionProps = {
   date?: Date
   cellarId: string
   baseApySumRewards?: string
+  extraRewardsApy?: string
 }
 
 export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
@@ -31,6 +32,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     stackingEndDate,
     cellarId,
     baseApySumRewards,
+    extraRewardsApy,
   } = props
   const endDate = new Date(stackingEndDate).getTime()
   const startDate = subDays(endDate, 30).getTime()
@@ -49,7 +51,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
       nowDate
     : undefined
 
-  if (!baseApy && !rewardsApy) {
+  if (!baseApy && !rewardsApy && !extraRewardsApy) {
     return (
       <Text textAlign="right" fontWeight={550} fontSize="16px">
         --
@@ -128,7 +130,9 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                       cellarConfig.customReward?.showAPY
                         ? `${cellarConfig.customReward.tokenDisplayName} `
                         : ""
-                    }Rewards APY ${rewardsApy ?? "0.00%"}`}
+                    }Rewards APY ${
+                      extraRewardsApy ?? rewardsApy ?? "0.00%"
+                    }`}
                 </Text>
               </>
             }

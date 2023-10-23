@@ -104,7 +104,7 @@ export const turboSWETH: CellarData = {
       customRewardHeader: "Daily Pearl Reward Rate",
       customRewardAPYTooltip:
         "Daily PEARL Rewards Rate: Up to 12 PEARL per swETH",
-      showRewards: false,
+      showBondingRewards: true,
       showClaim: true,
       customClaimMsg: "Claim All SOMM",
       logo: PearlIcon,

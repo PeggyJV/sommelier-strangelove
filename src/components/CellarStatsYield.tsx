@@ -41,6 +41,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
     stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
   const baseApy = strategyData?.baseApy
   const rewardsApy = strategyData?.rewardsApy
+  const extraRewardsApy = strategyData?.extraRewardsApy
   const baseApySumRewards = strategyData?.baseApySumRewards
 
   return (
@@ -98,9 +99,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                   </Text>
                   <Text>
                     {cellarConfig.customReward?.showSommRewards
-                      ? `SOMM Rewards APY ${
-                          rewardsApy?.formatted ?? "0.00%"
-                        }`
+                      ? `SOMM Rewards APY ${rewardsApy?.formatted ?? "0.00%"}`
                       : null}
                   </Text>
                   <Text>
@@ -110,7 +109,11 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                         cellarConfig.customReward?.showAPY
                           ? `${cellarConfig.customReward.tokenDisplayName} `
                           : ""
-                      }Rewards APY ${rewardsApy?.formatted ?? "0.00%"}`}
+                      }Rewards APY ${
+                        extraRewardsApy?.formatted ??
+                        rewardsApy?.formatted ??
+                        "0.00%"
+                      }`}
                   </Text>
                 </>
               }
