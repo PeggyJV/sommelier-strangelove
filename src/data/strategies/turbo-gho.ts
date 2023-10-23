@@ -86,7 +86,7 @@ export const turboGHO: CellarData = {
       decimals: 6,
     },
     staker: {
-      address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS, 
+      address: config.CONTRACT.TURBO_GHO_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
@@ -118,6 +118,7 @@ export const turboGHO: CellarData = {
       ),
       showSommRewards: true,
       //customIconToolTipMsg?: string
+      customRewardEndMessage: "Rewards updated weekly",
     },
   },
   faq: [
