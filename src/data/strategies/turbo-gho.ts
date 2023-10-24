@@ -119,6 +119,7 @@ export const turboGHO: CellarData = {
       showSommRewards: true,
       //customIconToolTipMsg?: string
       customRewardEndMessage: "Rewards updated weekly",
+      customSommRewardsEndMessage: "SOMM Rewards updated weekly",
     },
   },
   faq: [
