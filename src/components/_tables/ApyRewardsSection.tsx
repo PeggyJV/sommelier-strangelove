@@ -61,6 +61,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     )
   }
 
+  // TODO: EXTRACT THIS CODE TO COMPONENTS
+  // TODO: Why the conditional logic?
   if (cellarType === CellarType.automatedPortfolio) {
     return (
       <Stack alignItems="flex-end" spacing={0}>
