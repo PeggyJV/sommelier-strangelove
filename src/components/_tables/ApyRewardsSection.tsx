@@ -34,12 +34,14 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     baseApySumRewards,
     extraRewardsApy,
   } = props
+
   const endDate = new Date(stackingEndDate).getTime()
   const startDate = subDays(endDate, 30).getTime()
   const now = new Date(Date.now()).getTime()
   const range = endDate - startDate
   const current = now - startDate
   const percentage = (current / range) * 100
+
   const cellarConfig = cellarDataMap[cellarId].config
   const cellarType = cellarDataMap[cellarId].cellarType
   const LogoComponent = cellarConfig.customReward?.logo ?? LogoIcon
@@ -58,9 +60,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
       </Text>
     )
   }
-  // TODO: EXTRACT THIS CODE TO COMPONENTS
-  // TODO: Why the conditional logic?
-  if (cellarType === CellarType.automatedPortfolio)
+
+  if (cellarType === CellarType.automatedPortfolio) {
     return (
       <Stack alignItems="flex-end" spacing={0}>
         {rewardsApy && (
@@ -83,7 +84,6 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               <Text fontWeight={550} fontSize="16px">
                 {rewardsApy}
               </Text>
-
               <CircularProgress
                 value={percentage}
                 color="white"
@@ -107,7 +107,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         )}
       </Stack>
     )
-  else
+  } else {
     return (
       <Stack alignItems="flex-end">
         <HStack spacing={0} alignContent="center" gap={1}>
@@ -210,13 +210,19 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               undefined ||
               cellarConfig.customReward?.showSommRewards) && (
               <Tooltip
-                label={`${
-                  cellarConfig.customReward?.showSommRewards
-                    ? "SOMM Rewards ends in"
-                    : "Rewards ends in"
-                } ${formatDistanceToNowStrict(
-                  new Date(stackingEndDate)
-                )}`}
+                label={
+                  cellarConfig.customReward
+                    ?.customSommRewardsEndMessage
+                    ? cellarConfig.customReward
+                        .customSommRewardsEndMessage
+                    : `${
+                        cellarConfig.customReward?.showSommRewards
+                          ? "SOMM Rewards ends in"
+                          : "Rewards ends in"
+                      } ${formatDistanceToNowStrict(
+                        new Date(stackingEndDate)
+                      )}`
+                }
                 color="neutral.100"
                 border="0"
                 fontSize="12px"
@@ -242,7 +248,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                         mx="auto"
                         color="red.normal"
                         p={0}
-                        boxSize={"9px"}
+                        boxSize="9px"
                       />
                     </CircularProgressLabel>
                   </CircularProgress>
@@ -252,4 +258,5 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
         </HStack>
       </Stack>
     )
+  }
 }
