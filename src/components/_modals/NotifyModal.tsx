@@ -41,37 +41,42 @@ export const NotifyModal = (
     email,
   }) => {
     try {
-      const response = await axios
-        .post(
-          `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuId}`,
-          {
-            portalId,
-            formGuId,
-            fields: [
-              {
-                name: "email",
-                value: email,
-              },
-              {
-                name: "website",
-                value: window.location.href,
-              },
-            ],
-          },
-          config
-        )
-        .then(() => {
-          analytics.track(`${currentStrategies}-notify.modal-submit`)
-          addToast({
-            heading: "Signed up successfully",
-            status: "primary",
-            body: "",
-            duration: 4000,
-            closeHandler: closeAll,
-          })
-          rest.onClose()
-          reset()
-        })
+      const pageUrl = window.location.href // Get the current page URL
+
+      const response = await axios.post(
+        `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuId}`,
+        {
+          portalId,
+          formGuId,
+          fields: [
+            {
+              name: "email",
+              value: email,
+            },
+            {
+              name: "website",
+              value: pageUrl, // Include the page URL in the form data
+            },
+          ],
+        },
+        config
+      )
+
+      // Track the submission with email and page URL
+      analytics.track(`${currentStrategies}-notify.modal-submit`, {
+        email,
+        pageUrl,
+      })
+
+      addToast({
+        heading: "Signed up successfully",
+        status: "primary",
+        body: "",
+        duration: 4000,
+        closeHandler: closeAll,
+      })
+      rest.onClose()
+      reset()
 
       return response
     } catch (error) {

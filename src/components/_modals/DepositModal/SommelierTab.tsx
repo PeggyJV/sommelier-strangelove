@@ -356,9 +356,12 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         })
         analytics.track("deposit.succeeded", {
           ...baseAnalytics,
-          stable: tokenSymbol,
+          asset: tokenSymbol,
           value: depositAmount,
           transaction_hash: depositResult.data.transactionHash,
+          cellarName,
+          cellarAddress,
+          pageLink: currentPageLink,
         })
 
         update({
@@ -412,8 +415,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       if (depositResult?.error) {
         analytics.track("deposit.failed", {
           ...baseAnalytics,
-          stable: tokenSymbol,
+          asset: tokenSymbol,
           value: depositAmount,
+          cellarName,
+          cellarAddress,
+          pageLink: currentPageLink,
         })
 
         update({
@@ -428,9 +434,12 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       if (error.message === "GAS_LIMIT_ERROR") {
         analytics.track("deposit.failed", {
           ...baseAnalytics,
-          stable: tokenSymbol,
+          asset: tokenSymbol,
           value: depositAmount,
           message: "GAS_LIMIT_ERROR",
+          cellarName,
+          cellarAddress,
+          pageLink: currentPageLink,
         })
         addToast({
           heading: "Transaction not submitted",
@@ -447,8 +456,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       } else {
         analytics.track("deposit.rejected", {
           ...baseAnalytics,
-          stable: tokenSymbol,
+          asset: tokenSymbol,
           value: depositAmount,
+          cellarName,
+          cellarAddress,
+          pageLink: currentPageLink,
         })
 
         addToast({

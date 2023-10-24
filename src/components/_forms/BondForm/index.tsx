@@ -96,7 +96,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
 
   const onSubmit = async (data: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
-      return
+      return;
     }
     if (!stakerSigner) {
       return addToast({
@@ -104,54 +104,64 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         body: <Text>Please connect your wallet</Text>,
         status: "error",
         closeHandler: closeAll,
-      })
+      });
     }
+  
     const analyticsData = {
+      depositAmount: data.depositAmount,
+      bondingPeriod: data.bondingPeriod,
       duration: bondingPeriodOptions(cellarConfig)[bondPeriod],
-    }
-    // analytics.track("bond.started", analyticsData)
-
+      lpTokenSymbol: lpTokenInfo.data?.symbol,
+      cellarName,
+      cellarAddress,
+      pageLink: currentPageLink,
+    };
+  
+    analytics.track("bond.started", analyticsData);
+  
     try {
       await doApprove(data.depositAmount, {
-        onSuccess: () => analytics.track("bond.approval-succeeded"),
+        onSuccess: () => analytics.track("bond.approval-succeeded", analyticsData),
         onError: (error) => {
-          analytics.track("bond.approval-failed")
-          throw error
+          analytics.track("bond.approval-failed", analyticsData);
+          throw error;
         },
-      })
-
-      const amtInBigNumber = new BigNumber(data.depositAmount)
+      });
+  
+      const amtInBigNumber = new BigNumber(data.depositAmount);
       const depositAmtInWei = ethers.utils.parseUnits(
         amtInBigNumber.toFixed(),
         cellarConfig.cellar.decimals
-      )
+      );
+  
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         stakerSigner.estimateGas.stake,
         stakerSigner.callStatic.stake,
         [depositAmtInWei, bondPeriod],
         250000,
         500000
-      )
-
+      );
+  
       const { hash: bondConf } = await stakerSigner.stake(
         depositAmtInWei,
         bondPeriod,
         { gasLimit: gasLimitEstimated }
-      )
-
+      );
+  
       await doHandleTransaction({
         hash: bondConf,
         onSuccess: () => {
-          analytics.track("bond.succeeded", analyticsData)
-          refetch()
-          onClose()
+          analytics.track("bond.succeeded", analyticsData);
+          refetch();
+          onClose();
         },
         onError: () => analytics.track("bond.failed", analyticsData),
-      })
-      refetch()
+      });
+      refetch();
     } catch (e) {
-      console.warn(e)
-      const error = e as Error
+      console.warn(e);
+      const error = e as Error;
+      analytics.track("bond.error", { ...analyticsData, errorMessage: error.message });
       if (error.message === "GAS_LIMIT_ERROR") {
         addToast({
           heading: "Transaction not submitted",
@@ -164,180 +174,15 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
           ),
           status: "info",
           closeHandler: closeAll,
-        })
+        });
       } else {
         addToast({
           heading: "Staking LP Tokens",
           body: <Text>Tx Cancelled</Text>,
           status: "info",
           closeHandler: closeAll,
-        })
+        });
       }
     }
-  }
-
-  const onError = (errors: any, e: any) => {
-    addToast({
-      heading: "Bonding LP Token",
-      body: <Text>Bonding Failed</Text>,
-      status: "error",
-      closeHandler: closeAll,
-    })
-  }
-
-  return (
-    <FormProvider {...methods}>
-      <VStack
-        as="form"
-        spacing={8}
-        align="stretch"
-        onSubmit={handleSubmit(onSubmit, onError)}
-      >
-        <FormControl isInvalid={isError as boolean | undefined}>
-          <HStack
-            p={4}
-            justifyContent="space-between"
-            w="100%"
-            bg="surface.secondary"
-            border="none"
-            borderRadius={16}
-            appearance="none"
-            textAlign="start"
-            _first={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <HStack>
-              {cellarConfig.lpToken.imagePath && (
-                <Image
-                  src={cellarConfig.lpToken.imagePath}
-                  alt="lp token image"
-                  height="22px"
-                />
-              )}
-
-              <Heading size="sm">{lpTokenInfo.data?.symbol}</Heading>
-            </HStack>
-            <VStack spacing={0} align="flex-end">
-              <FormControl isInvalid={isError as boolean | undefined}>
-                <Input
-                  variant="unstyled"
-                  pr="2"
-                  type="number"
-                  step="any"
-                  defaultValue="0.00"
-                  placeholder="0.00"
-                  fontSize="lg"
-                  fontWeight={700}
-                  textAlign="right"
-                  {...register("depositAmount", {
-                    required: "Enter amount",
-                    valueAsNumber: true,
-                    validate: {
-                      positive: (v) =>
-                        v > 0 || "You must submit a positive amount.",
-                      balance: (v) =>
-                        v <=
-                          parseFloat(
-                            toEther(
-                              lpTokenData?.formatted,
-                              lpTokenData?.decimals,
-                              false,
-                              6
-                            )
-                          ) || "Insufficient balance",
-                    },
-                  })}
-                />
-              </FormControl>
-              <HStack spacing={0} fontSize="10px">
-                <Text as="span">
-                  Available:{" "}
-                  {(lpTokenData &&
-                    toEther(
-                      lpTokenData.value,
-                      lpTokenData.decimals,
-                      false,
-                      6
-                    )) ||
-                    "--"}
-                </Text>
-                <Button
-                  variant="unstyled"
-                  p={0}
-                  w="max-content"
-                  h="max-content"
-                  textTransform="uppercase"
-                  onClick={setMax}
-                  fontSize="inherit"
-                  fontWeight={600}
-                >
-                  max
-                </Button>
-              </HStack>
-            </VStack>
-          </HStack>
-          <FormErrorMessage color="energyYellow">
-            <Icon
-              p={0.5}
-              mr={1}
-              color="surface.bg"
-              bg="red.base"
-              borderRadius="50%"
-              as={AiOutlineInfo}
-            />{" "}
-            {errors.depositAmount?.message}
-          </FormErrorMessage>
-        </FormControl>
-        <VStack align="stretch">
-          <CardHeading>
-            <Tooltip
-              hasArrow
-              arrowShadowColor="purple.base"
-              label="This is the period you must wait before your tokens are transferable/withdrawable"
-              placement="top"
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <Th
-                fontSize={10}
-                fontWeight="normal"
-                textTransform="capitalize"
-              >
-                <HStack spacing={1} align="center">
-                  <Text>Unbonding period</Text>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Th>
-            </Tooltip>
-          </CardHeading>
-
-          <BondingPeriodOptions cellarConfig={cellarConfig} />
-        </VStack>
-        {/* <Text fontSize="xs">
-          After triggering 'Unbond,' you will need to wait through the
-          unbonding period you selected, after which your LP tokens
-          can be unstaked and withdrawn.
-        </Text> */}
-        <BaseButton
-          type="submit"
-          isDisabled={isDisabled}
-          isLoading={isSubmitting}
-          fontSize={21}
-          py={6}
-          px={12}
-        >
-          Bond
-        </BaseButton>
-        {cellarConfig?.cellarNameKey !== CellarNameKey.TURBO_SWETH &&
-          cellarConfig?.cellarNameKey !== CellarNameKey.TURBO_GHO && (
-            <Text textAlign="center">
-              Please wait 10 min after the deposit to Bond
-            </Text>
-          )}
-      </VStack>
-    </FormProvider>
-  )
-}
+  };
+  

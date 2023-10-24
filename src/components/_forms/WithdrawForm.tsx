@@ -152,15 +152,27 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       )
 
       const onSuccess = () => {
-        analytics.track("withdraw.succeeded", analyticsData)
+        analytics.track("withdraw.succeeded", {
+          ...baseAnalytics,
+          asset: tokenSymbol,
+          account: address,
+          amount: watchWithdrawAmount,
+          cellarName,
+          cellarAddress,
+          pageLink: currentPageLink,
+        })
         onClose() // Close modal after successful withdraw.
       }
 
       const onError = (error: Error) => {
         analytics.track("withdraw.failed", {
-          ...analyticsData,
-          error: error.name,
-          message: error.message,
+          ...baseAnalytics,
+          asset: tokenSymbol,
+          account: address,
+          amount: watchWithdrawAmount,
+          cellarName,
+          cellarAddress,
+          pageLink: currentPageLink,
         })
       }
 

@@ -47,7 +47,11 @@ export const MobileConnectedPopover = () => {
 
   function onDisconnect() {
     analytics.track("wallet.disconnected", {
-      account: address,
+      account,
+      wallet: args.connector.name,
+      walletSoftware,
+      //walletVersion,
+      pageLink: currentPageLink,
     })
 
     disconnect()
