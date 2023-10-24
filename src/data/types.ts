@@ -116,6 +116,7 @@ export interface CustomReward {
   showSommRewards?: boolean
   customIconToolTipMsg?: string
   customRewardEndMessage?: string
+  customSommRewardsEndMessage?: string
 }
 
 export interface CellarData {
