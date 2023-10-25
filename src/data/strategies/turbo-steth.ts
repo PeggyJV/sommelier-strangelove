@@ -85,8 +85,12 @@ export const turboSTETH: CellarData = {
       decimals: 18,
     },
     baseAsset: tokenConfigMap.WETH,
-    customStrategyHighlight: "wstETH Incentives",
-    customStrategyHighlightColor: "#00C04B",
+    badges: [
+      {
+        customStrategyHighlight: "wstETH Incentives",
+        customStrategyHighlightColor: "#00C04B",
+      },
+    ],
     customReward: {
       showAPY: true,
       tokenSymbol: "wstETH",

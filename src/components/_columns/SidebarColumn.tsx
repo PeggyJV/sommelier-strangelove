@@ -31,12 +31,7 @@ export const SidebarColumn = ({ timeline }: SidebarColumnProps) => {
                     .claimableSommReward?.formatted
                 : "--"
             }
-            customStrategyHighlight={
-              row.original.config.customStrategyHighlight
-            }
-            customStrategyHighlightColor={
-              row.original.config.customStrategyHighlightColor
-            }
+            badges={row.original.config.badges}
           />
         )
       },

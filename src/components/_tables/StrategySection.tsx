@@ -11,7 +11,7 @@ import {
   chakra,
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
-import { CellarType } from "data/types"
+import { CellarType, Badge } from "data/types"
 import {useEffect, useState} from "react"
 import { StrategyDate } from "./StrategyDate"
 import React from "react"
@@ -26,8 +26,7 @@ interface StrategySectionProps extends StackProps {
   netValue?: string
   rewards?: string
   isDeprecated?: boolean
-  customStrategyHighlight?: string
-  customStrategyHighlightColor?: string
+  badges?: Badge[]
 }
 
 export const formatText = (text: string, isMobile: boolean) => {
@@ -68,8 +67,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   netValue,
   rewards,
   isDeprecated,
-  customStrategyHighlight,
-  customStrategyHighlightColor,
+  badges,
   ...props
 }) => {
   const [isMobile, setIsMobile] = useState(
@@ -125,23 +123,28 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             paddingTop={".2em"}
           >
             <StrategyDate date={date} deprecated={isDeprecated} />
-            {customStrategyHighlight !== undefined ? (
-              <Text
-                bg={
-                  (customStrategyHighlightColor !== undefined)
-                    ? customStrategyHighlightColor
-                    : "purple.base"
-                }
-                rounded="4"
-                paddingLeft={".5em"}
-                paddingRight={".5em"}
-                fontSize="0.75rem"
-                fontWeight={600}
-                width="fit-content"
-              >
-                {customStrategyHighlight}
-              </Text>
-            ) : null}
+            {badges && badges.length > 0
+              ? badges.map((badge, index) => (
+                  <Text
+                    key={index}
+                    bg={
+                      badge.customStrategyHighlightColor !== undefined
+                        ? badge.customStrategyHighlightColor
+                        : "purple.base"
+                    }
+                    rounded="4"
+                    paddingLeft=".5em"
+                    paddingRight=".5em"
+                    fontSize="0.75rem"
+                    fontWeight={600}
+                    width="fit-content"
+                    display="inline-block"
+                    
+                  >
+                    {badge.customStrategyHighlight}
+                  </Text>
+                ))
+              : null}
           </Flex>
           <Flex
             gap={1}
