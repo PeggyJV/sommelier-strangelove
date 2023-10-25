@@ -13,7 +13,7 @@ import { GHOIcon } from "components/_icons"
 export const turboGHO: CellarData = {
   name: "Turbo GHO",
   slug: config.CONTRACT.TURBO_GHO.SLUG,
-  tradedAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
+  tradedAssets: ["GHO", "USDC", "USDT", "LUSD"],
   launchDate: new Date(Date.UTC(2023, 8, 14, 18, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your GHO across an evolving set of LP strategies.`,
@@ -23,7 +23,7 @@ export const turboGHO: CellarData = {
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Uniswap V3", "AAVE"],
-  strategyAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
+  strategyAssets: ["GHO", "USDC", "USDT", "LUSD"],
   performanceSplit: {
     depositors: 80,
     "strategy provider": 15,
