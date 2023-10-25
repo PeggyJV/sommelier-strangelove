@@ -113,8 +113,8 @@ export const StrategyDesktopColumn = ({
       ),
       accessor: "tradedAssets",
       Cell: ({ cell: { value } }: CellValue) => {
-        const getFirst3Value = value.slice(0, 3)
-        const getRemainingValue = value.length - getFirst3Value.length
+        const getFirst6Value = value.slice(0, 6)
+        const getRemainingValue = value.length - getFirst6Value.length
         const [isHover, setIsHover] = useState(false)
         const handleMouseOver = () => {
           setIsHover(true)
@@ -136,7 +136,7 @@ export const StrategyDesktopColumn = ({
           >
             <HStack>
               <AvatarGroup size="sm">
-                {getFirst3Value?.map((asset: Token) => {
+                {getFirst6Value?.map((asset: Token) => {
                   return (
                     <Avatar
                       name={asset?.symbol}
@@ -146,7 +146,7 @@ export const StrategyDesktopColumn = ({
                   )
                 })}
               </AvatarGroup>
-              {value.length > 3 && (
+              {value.length > 6 && (
                 <Text fontWeight={600}>+{getRemainingValue}</Text>
               )}
             </HStack>
