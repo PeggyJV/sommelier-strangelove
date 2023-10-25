@@ -76,12 +76,7 @@ export const StrategyDesktopColumn = ({
             description={row.original.description}
             isDeprecated={row.original.deprecated}
             w={56}
-            customStrategyHighlight={
-              row.original.config.customStrategyHighlight
-            }
-            customStrategyHighlightColor={
-              row.original.config.customStrategyHighlightColor
-            }
+            badges={row.original.config.badges}
           />
         )
       },

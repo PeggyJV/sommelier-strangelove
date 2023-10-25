@@ -41,6 +41,11 @@ export enum CellarNameKey {
   TURBO_STETH = "TURBO_STETH",
 }
 
+export interface Badge {
+  customStrategyHighlight: string
+  customStrategyHighlightColor?: string
+}
+
 export interface ConfigProps {
   id: string
   baseApy?: number
@@ -69,8 +74,7 @@ export interface ConfigProps {
   }
   rewardTokenAddress?: string
   customReward?: CustomReward
-  customStrategyHighlight?: string
-  customStrategyHighlightColor?: string
+  badges?: Badge[]
   baseAsset: Token
   feePromotion?: string
   show7DayAPYTooltip?: boolean
