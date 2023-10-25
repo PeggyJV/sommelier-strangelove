@@ -91,8 +91,16 @@ export const turboGHO: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0821,
     },
     baseAsset: tokenConfigMap.USDC,
-    customStrategyHighlight: "Emergent Asset",
-    customStrategyHighlightColor: "purple.base",
+    badges: [
+      {
+        customStrategyHighlight: "Emergent Asset",
+        customStrategyHighlightColor: "purple.base",
+      },
+      {
+        customStrategyHighlight: "GHO Incentives",
+        customStrategyHighlightColor: "#00C04B",
+      },
+    ],
     customReward: {
       showAPY: true,
       tokenSymbol: "GHO",

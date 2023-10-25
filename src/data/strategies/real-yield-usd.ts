@@ -91,8 +91,12 @@ export const realYieldUsd: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    customStrategyHighlight: "Now using DSR",
-    customStrategyHighlightColor: "orange.base",
+    badges: [
+      {
+        customStrategyHighlight: "Now using DSR",
+        customStrategyHighlightColor: "orange.base",
+      },
+    ],
     baseAsset: tokenConfigMap.USDC,
   },
   faq: [

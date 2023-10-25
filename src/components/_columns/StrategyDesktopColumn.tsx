@@ -76,12 +76,7 @@ export const StrategyDesktopColumn = ({
             description={row.original.description}
             isDeprecated={row.original.deprecated}
             w={56}
-            customStrategyHighlight={
-              row.original.config.customStrategyHighlight
-            }
-            customStrategyHighlightColor={
-              row.original.config.customStrategyHighlightColor
-            }
+            badges={row.original.config.badges}
           />
         )
       },
@@ -100,66 +95,6 @@ export const StrategyDesktopColumn = ({
 
         return 0
       },
-    },
-    {
-      Header: () => (
-        <Tooltip
-          arrowShadowColor="purple.base"
-          label="Protocols in which Vault operates"
-          placement="top"
-          color="neutral.300"
-          bg="surface.bg"
-        >
-          <HStack spacing={1}>
-            <Text>Protocols</Text>
-            <InformationIcon color="neutral.400" boxSize={3} />
-          </HStack>
-        </Tooltip>
-      ),
-      accessor: "protocols",
-      Cell: ({ cell: { value } }: CellValue) => {
-        const protocols = typeof value === "string" ? [value] : value
-        const getFirst3Value = protocols.slice(0, 3)
-        const getRemainingValue =
-          protocols.length - getFirst3Value.length
-        const [isHover, setIsHover] = useState(false)
-        const handleMouseOver = () => {
-          setIsHover(true)
-        }
-        const handleMouseLeave = () => {
-          setIsHover(false)
-        }
-        return (
-          <Box
-            onMouseLeave={handleMouseLeave}
-            onMouseOver={handleMouseOver}
-            w={20}
-          >
-            <HStack>
-              <AvatarGroup size="sm" max={3}>
-                {getFirst3Value.map((protocol: string) => {
-                  const data = getProtocols(protocol)
-                  return (
-                    <Avatar
-                      name={data.title}
-                      src={data.icon}
-                      key={data.title}
-                      bgColor="white"
-                    />
-                  )
-                })}
-              </AvatarGroup>
-              {protocols.length > 3 && (
-                <Text fontWeight={600}>+{getRemainingValue}</Text>
-              )}
-            </HStack>
-            <Flex alignItems="center" direction="column">
-              {isHover && <AvatarTooltip protocols={protocols} />}
-            </Flex>
-          </Box>
-        )
-      },
-      disableSortBy: true,
     },
     {
       Header: () => (

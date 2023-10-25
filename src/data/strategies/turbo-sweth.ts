@@ -124,8 +124,16 @@ export const turboSWETH: CellarData = {
     },
     baseAsset: tokenConfigMap.WETH,
     feePromotion: "Promotional 0 fee period sponsored by Swell",
-    customStrategyHighlight: "Emergent Asset",
-    customStrategyHighlightColor: "purple.base",
+    badges: [
+      {
+        customStrategyHighlight: "Emergent Asset",
+        customStrategyHighlightColor: "purple.base",
+      },
+      {
+        customStrategyHighlight: "swETH Incentives",
+        customStrategyHighlightColor: "#00C04B",
+      },
+    ],
     show7DayAPYTooltip: true,
   },
   faq: [

@@ -52,12 +52,7 @@ export const StrategyTabColumn = ({
           date={row.original.launchDate}
           description={row.original.description}
           isDeprecated={row.original.deprecated}
-          customStrategyHighlight={
-            row.original.config.customStrategyHighlight
-          }
-          customStrategyHighlightColor={
-            row.original.config.customStrategyHighlightColor
-          }
+          badges={row.original.config.badges}
           w={56}
         />
       ),
