@@ -99,7 +99,14 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
       boxShadow="xl"
       shouldWrapChildren
     >
-      <Stack direction="row" alignItems="center" {...props}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        {...props}
+        //border="1px solid red"
+        width="100%"
+        //overflow="hidden"
+      >
         <Image
           boxSize="40px"
           src={icon}
@@ -139,7 +146,6 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
                     fontWeight={600}
                     width="fit-content"
                     display="inline-block"
-                    
                   >
                     {badge.customStrategyHighlight}
                   </Text>
