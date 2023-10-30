@@ -39,7 +39,7 @@ type RowData = {
   original: {
     baseApySumRewards?: {
       formatted?: string
-    },
+    }
     activeAsset: {
       symbol: string
     }
