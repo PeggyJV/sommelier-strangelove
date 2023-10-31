@@ -11,7 +11,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const superSOMM: CellarData = {
   name: "Super SOMM",
-  slug: config.CONTRACT.TURBO_GHO.SLUG,
+  slug: config.CONTRACT.SUPER_SOMM.SLUG,
   tradedAssets: ["SOMM", "WETH"],
   launchDate: new Date(Date.UTC(2023, 10, 1, 16, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,

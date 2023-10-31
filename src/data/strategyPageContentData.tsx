@@ -1044,5 +1044,6 @@ export const strategyPageContentData = {
       ],
       description: `Sommelier is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Super SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading`,
     },
+    howItWorks: ``,
   },
 }
