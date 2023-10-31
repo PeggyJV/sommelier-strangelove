@@ -122,7 +122,7 @@ export const turboGHO: CellarData = {
       //customColumnHeaderToolTip?: string
       //customColumnValue?: string
       stakingDurationOverride: new Date(
-        Date.UTC(2023, 9, 30, 14, 0, 0, 0)
+        Date.UTC(2023, 10, 7, 14, 0, 0, 0)
       ),
       showSommRewards: true,
       //customIconToolTipMsg?: string

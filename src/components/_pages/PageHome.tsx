@@ -123,13 +123,13 @@ export const PageHome = () => {
 
   return (
     <LayoutWithSidebar>
-      {
+      {/*
         <InfoBanner
           text={
             "Turbo GHO incentive rates are updated weekly. This week's SOMM and GHO incentives will begin flowing shortly."
           }
         />
-      }
+        */}
       {/* <HStack
         p={4}
         mb={6}
