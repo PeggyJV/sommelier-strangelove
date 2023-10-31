@@ -39,6 +39,7 @@ export enum CellarNameKey {
   ETH_TREND_GROWTH = "ETH_TREND_GROWTH",
   TURBO_GHO = "TURBO_GHO",
   TURBO_STETH = "TURBO_STETH",
+  TURBO_STETH = "SUPER_SOMM",
 }
 
 export interface Badge {

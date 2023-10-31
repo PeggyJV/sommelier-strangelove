@@ -35,6 +35,7 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   )
 }
@@ -98,6 +99,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.FRAXIMAL ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
+    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   )
 }
@@ -123,6 +125,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
+    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   )
 }
@@ -395,6 +398,25 @@ export const bondingPeriodOptions = (
       },
     ]
   }
+  if (config.cellarNameKey === CellarNameKey.SUPER_SOMM) {
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
   return []
 }
 
@@ -412,7 +434,7 @@ export const apyLabel = (config: ConfigProps) => {
   if (
     (config.cellar.key !== CellarKey.CELLAR_V0815 &&
       config.cellar.key !== CellarKey.CELLAR_V0816) ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH 
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH
   ) {
     if (
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
@@ -420,6 +442,7 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.TURBO_GHO ||
+      config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
       config.cellarNameKey === CellarNameKey.TURBO_STETH
     ) {
       return "Estimated APY"
@@ -440,6 +463,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+      config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
       config.cellarNameKey === CellarNameKey.TURBO_STETH
     ) {
       return "Estimated APY"
@@ -460,6 +484,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   ) {
     return "Estimated APY"
@@ -479,6 +504,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
+    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   ) {
     return true
@@ -495,6 +521,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
+    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   ) {
     return "Estimated APY"
@@ -535,6 +562,12 @@ export const estimatedApyValue = (config: ConfigProps) => {
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
+    return {
+      value: 4.0,
+      formatted: "4.0%",
+    }
+  }
+  if (config.cellarNameKey === CellarNameKey.SUPER_SOMM) {
     return {
       value: 4.0,
       formatted: "4.0%",

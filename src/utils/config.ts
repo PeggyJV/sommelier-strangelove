@@ -164,6 +164,12 @@ export const config = {
       SLUG: "Turbo-GHO",
       ABI: cellarV0821,
     },
+    //need to update when real contract
+    SUPER_SOMM: {
+      ADDRESS: "0x0C190DEd9Be5f512Bd72827bdaD4003e9Cc7975C",
+      SLUG: "Super-SOMM",
+      ABI: cellarV0821,
+    },
     TURBO_STETH: {
       ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",
       SLUG: "Turbo-STETH",
@@ -238,6 +244,11 @@ export const config = {
       ABI: cellarStakingV0821,
     },
     TURBO_GHO_STAKER: {
+      ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
+      ABI: cellarStakingV0821,
+    },
+    //need to update when real contract
+    SUPER_SOMM_STAKER: {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
       ABI: cellarStakingV0821,
     },

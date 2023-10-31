@@ -23,12 +23,14 @@ import {
   ethTrendGrowth,
   turboGHO,
   turboSTETH,
+  superSOMM,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
     // ! NOTE THIS DETERMINES INITIAL ORDERING
+    [config.CONTRACT.SUPER_SOMM.SLUG]: superSOMM,
     [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
     [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: ethTrendGrowth,
     [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,
@@ -60,6 +62,7 @@ if (config.cleargate.enabled) {
 // Create another map of String to CellarData
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
+  [config.CONTRACT.SUPER_SOMM.ADDRESS.toLowerCase()]: superSOMM,
   [config.CONTRACT.TURBO_STETH.ADDRESS.toLowerCase()]: turboSTETH,
   [config.CONTRACT.ETH_TREND_GROWTH.ADDRESS.toLowerCase()]:
     ethTrendGrowth,
