@@ -9,18 +9,18 @@ import {
   HStack,
   Box,
   Image,
-  Select,
   useTheme,
 } from "@chakra-ui/react"
-import { ChevronDownIcon, CheckIcon} from "components/_icons"
+import { ChevronDownIcon, CheckIcon } from "components/_icons"
 import { VFC } from "react"
+import { useSwitchNetwork, useNetwork } from "wagmi"
 
 import {
   chainConfigMap,
   supportedChains,
-  chainConfig,
   Chain,
 } from "src/data/chainConfig"
+import { useBrandedToast } from "hooks/chakra"
 
 export interface ChainButtonProps {
   chain: Chain
@@ -31,15 +31,48 @@ const ChainButton: VFC<ChainButtonProps> = ({
   chain,
   onChainChange,
 }) => {
-  const handleNetworkChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    onChainChange && onChainChange(event.target.value)
-  }
+  const {
+    chains,
+    error,
+    isLoading,
+    pendingChainId,
+    switchNetworkAsync,
+  } = useSwitchNetwork()
+  const { addToast, close } = useBrandedToast()
+
   const chainKeys = Object.keys(chainConfigMap)
   const filteredChainKeys = chainKeys.filter((key) =>
     supportedChains.includes(key)
   )
+
+  const handleNetworkChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    let chainId = event.target.value
+
+    // Attempt to switch the network
+    try {
+      await switchNetworkAsync?.(chainConfigMap[chainId].wagmiId)
+
+      // If the above line doesn't throw an error, it means network switch was successful
+      onChainChange && onChainChange(chainId)
+
+      // Refresh the page to reflect the new network
+      window.location.reload()
+    } catch (e) {
+      const error = e as Error
+
+      console.error("Failed to switch the network: ", error?.message)
+
+      addToast({
+        heading: "Error switching network",
+        status: "error",
+        body: <Text>{error?.message}</Text>,
+        closeHandler: close,
+        duration: null,
+      })
+    }
+  }
 
   const theme = useTheme()
 

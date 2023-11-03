@@ -1,5 +1,12 @@
+import {
+  mainnet,
+} from "wagmi"
+import { arbitrum } from "wagmi/chains"
+
 export interface Chain {
   id: string
+  wagmiId: number
+  blockExplorerUrl: string
   displayName: string
   logoPath: string
   alt: string
@@ -12,12 +19,16 @@ export interface Chain {
 export const chainConfig: Chain[] = [
   {
     id: "ethereum",
+    wagmiId: mainnet.id,
+    blockExplorerUrl: mainnet.blockExplorers.default.url,
     displayName: "Ethereum",
     logoPath: "/assets/icons/eth.png",
     alt: "Ethereum logo",
   },
   {
     id: "arbitrum",
+    wagmiId: arbitrum.id,
+    blockExplorerUrl: arbitrum.blockExplorers.default.url,
     displayName: "Arbitrum",
     logoPath: "/assets/icons/arbitrum.png",
     alt: "Arbitrum logo",
@@ -30,7 +41,4 @@ export const chainConfigMap = chainConfig.reduce((map, chain) => {
   return map
 }, {} as { [id: string]: Chain })
 
-export const supportedChains = [
-  "ethereum",
-  "arbitrum",
-]
+export const supportedChains = ["ethereum", "arbitrum"]

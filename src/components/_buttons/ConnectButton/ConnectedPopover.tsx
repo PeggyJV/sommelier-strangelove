@@ -16,6 +16,7 @@ import {
   useDisconnect,
   useEnsAvatar,
   useEnsName,
+  useNetwork
 } from "wagmi"
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
