@@ -88,7 +88,7 @@ export const createApyChangeDatum = ({
 
     //! For 30D MA -- Apply rolling average twice over the smoothDuration to smooth out the APY curve
     if (daysRendered === 30) {
-      apyValues = rollingAverage(apyValues, 7)
+      apyValues = rollingAverage(apyValues, 3)
       apyValues = rollingAverage(apyValues, smoothDuration)
     } else {
       // Pure MA
