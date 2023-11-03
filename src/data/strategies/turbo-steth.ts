@@ -13,6 +13,7 @@ import { WstethIcon } from "components/_icons"
 export const turboSTETH: CellarData = {
   name: "Turbo stETH",
   slug: config.CONTRACT.TURBO_STETH.SLUG,
+  startingShareValue: "998206828469480700",
   tradedAssets: ["WETH", "stETH", "wstETH"],
   launchDate: new Date(Date.UTC(2023, 9, 16, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
