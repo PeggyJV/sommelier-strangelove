@@ -89,9 +89,10 @@ export const createApyChangeDatum = ({
     // Apply rolling average twice over the smoothDuration to smooth out the APY curve
     apyValues = rollingAverage(apyValues, smoothDuration)
 
-    //! Commented out smoothing
-    // last smoothing is always over 7 days
-    //apyValues = rollingAverage(apyValues, 7)
+    //! Only smooth 30D chart over 7 days
+    if (daysRendered === 30) {
+      apyValues = rollingAverage(apyValues, 7)
+    }
 
   } else {
     // Calculate overall (non daily) APY values without smoothing
