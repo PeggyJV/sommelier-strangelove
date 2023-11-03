@@ -138,6 +138,7 @@ export const Nav: VFC<FlexProps> = (props) => {
         )}
 
         <Flex flex={1} justifyContent="flex-end">
+          <div>yo</div>
           <ConnectButton />
         </Flex>
 
