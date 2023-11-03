@@ -275,8 +275,8 @@ export const ApyChartProvider: FC<{
       launchEpoch,
       decimals: 18, // Cellar decimals
       smooth: true,
-      daysSmoothed: 14,
-      daysRendered: 30,
+      daysSmoothed: 7,
+      daysRendered: 7,
     })
 
     const series = [
