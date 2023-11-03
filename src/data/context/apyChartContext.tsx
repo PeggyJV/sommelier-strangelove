@@ -27,6 +27,8 @@ import {
   getPreviousWeek,
 } from "utils/calculateTime"
 import { createApyChangeDatum } from "utils/chartHelper"
+import { CellaAddressDataMap } from "src/data/cellarDataMap"
+import { CellarData } from "data/types"
 
 export interface DataProps {
   series?: Serie[]
@@ -159,6 +161,7 @@ const prevMonth = getPreviousMonth()
 export const ApyChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
+  const cellarConfig: CellarData = CellaAddressDataMap[address.toLowerCase()]
   const [showLine, setShowLine] = useState<ShowLine>({
     apy: true,
   })
@@ -273,7 +276,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: 18, // Cellar decimals
+      decimals: cellarConfig.config.cellar.decimals, // Cellar decimals
       smooth: true,
       daysSmoothed: 7,
       daysRendered: 7,
@@ -332,7 +335,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: 18, // Cellar decimals
+      decimals: cellarConfig.config.cellar.decimals, // Cellar decimals
       smooth: true,
       daysSmoothed: 30,
       daysRendered: 30,
@@ -385,7 +388,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: 18, // Cellar decimals
+      decimals: cellarConfig.config.cellar.decimals, // Cellar decimals
       smooth: false,
       daysSmoothed: 0,
       daysRendered: 0,
@@ -473,7 +476,7 @@ export const ApyChartProvider: FC<{
           }
         }),
         launchEpoch,
-        decimals: 18, // Cellar decimals
+        decimals: cellarConfig.config.cellar.decimals, // Cellar decimals
         smooth: true,
         daysSmoothed: 30,
         daysRendered: 30,
