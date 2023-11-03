@@ -86,12 +86,14 @@ export const createApyChangeDatum = ({
       }
     })
 
-    // Apply rolling average twice over the smoothDuration to smooth out the APY curve
-    apyValues = rollingAverage(apyValues, smoothDuration)
-
-    // last smoothing is always over 7 days
-    apyValues = rollingAverage(apyValues, 7)
-
+    //! For 30D MA -- Apply rolling average twice over the smoothDuration to smooth out the APY curve
+    if (daysRendered === 30) {
+      apyValues = rollingAverage(apyValues, 3)
+      apyValues = rollingAverage(apyValues, smoothDuration)
+    } else {
+      // Pure MA
+      apyValues = rollingAverage(apyValues, smoothDuration)
+    }
   } else {
     // Calculate overall (non daily) APY values without smoothing
     apyValues = data.map((item) => {

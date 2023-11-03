@@ -27,6 +27,9 @@ import {
   getPreviousWeek,
 } from "utils/calculateTime"
 import { createApyChangeDatum } from "utils/chartHelper"
+import { CellaAddressDataMap } from "src/data/cellarDataMap"
+import { CellarData } from "data/types"
+import { config as utilConfig } from "src/utils/config"
 
 export interface DataProps {
   series?: Serie[]
@@ -159,10 +162,12 @@ const prevMonth = getPreviousMonth()
 export const ApyChartProvider: FC<{
   address: string
 }> = ({ children, address }) => {
+  const cellarConfig: CellarData =
+    CellaAddressDataMap[address.toLowerCase()]
   const [showLine, setShowLine] = useState<ShowLine>({
     apy: true,
   })
-  const [timeline, setTimeline] = useState<Timeline>("30D")
+  const [timeline, setTimeline] = useState<Timeline>("7D")
   const cellarData = Object.values(cellarDataMap).find(
     (item) => item.config.cellar.address === address
   )
@@ -273,10 +278,10 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: 18, // Cellar decimals
+      decimals: cellarConfig.config.cellar.decimals, // Cellar decimals
       smooth: true,
-      daysSmoothed: 14,
-      daysRendered: 30,
+      daysSmoothed: 7,
+      daysRendered: 7,
     })
 
     const series = [
@@ -332,7 +337,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: 18, // Cellar decimals
+      decimals: cellarConfig.config.cellar.decimals, // Cellar decimals
       smooth: true,
       daysSmoothed: 30,
       daysRendered: 30,
@@ -385,7 +390,7 @@ export const ApyChartProvider: FC<{
         }
       }),
       launchEpoch,
-      decimals: 18, // Cellar decimals
+      decimals: cellarConfig.config.cellar.decimals, // Cellar decimals
       smooth: false,
       daysSmoothed: 0,
       daysRendered: 0,
@@ -449,7 +454,7 @@ export const ApyChartProvider: FC<{
 
   const isError = !!weeklyError || !!monthlyError || !!allTimeError
 
-  const timeArray = [
+  let timeArray = [
     {
       title: "7D",
       onClick: setDataWeekly,
@@ -460,7 +465,21 @@ export const ApyChartProvider: FC<{
     },
   ]
 
-  // Set monthly data by default
+  // Override time array for Turbo swETH & Turbo stETH
+  // TODO: Remove this when there is enough data
+  if (
+    cellarConfig.slug === utilConfig.CONTRACT.TURBO_SWETH.SLUG ||
+    cellarConfig.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG
+  ) {
+    timeArray = [
+      {
+        title: "7D",
+        onClick: setDataWeekly,
+      },
+    ]
+  }
+
+  // Set weekly data by default
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
@@ -473,10 +492,10 @@ export const ApyChartProvider: FC<{
           }
         }),
         launchEpoch,
-        decimals: 18, // Cellar decimals
+        decimals: cellarConfig.config.cellar.decimals, // Cellar decimals
         smooth: true,
-        daysSmoothed: 30,
-        daysRendered: 30,
+        daysSmoothed: 7,
+        daysRendered: 7,
       })
 
       const series = [
@@ -484,7 +503,7 @@ export const ApyChartProvider: FC<{
           id: "apy",
           data: apyDatum || [],
           color: colors.neutral[100],
-          label: "30D",
+          label: "7D",
         },
       ]
 

@@ -252,7 +252,7 @@ export const isTokenPriceChartEnabled = (config: ConfigProps) => {
 }
 
 export const isApyChartEnabled = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.CELLAR_V2
+  return (config.cellar.key === CellarKey.CELLAR_V2 || config.cellarNameKey === CellarNameKey.TURBO_STETH || config.cellarNameKey === CellarNameKey.TURBO_SWETH)
 }
 
 export const bondingPeriodOptions = (
@@ -497,7 +497,6 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   ) {
     return "Estimated APY"
