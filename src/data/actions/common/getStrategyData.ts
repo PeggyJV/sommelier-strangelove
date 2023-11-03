@@ -103,16 +103,15 @@ export const getStrategyData = async ({
         // TODO: Eventually we just need to make this a type of list with the specific token reward and the APY
         if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
           // Get wstETH price
-          const wstethPrice = Number(await fetchCoingeckoPrice(
-            "wrapped-steth",
-            "usd"
-          ))
+          const wstethPrice = Number(
+            await fetchCoingeckoPrice("wrapped-steth", "usd")
+          )
 
           // Get TVL
-          let usdTvl = Number(strategyData?.tvlTotal) 
-          
+          let usdTvl = Number(strategyData?.tvlTotal)
+
           // 20 wsteth per month * 12 months * 100 for human readable %
-          let apy = (20 * wstethPrice / usdTvl) * 12 * 100
+          let apy = ((20 * wstethPrice) / usdTvl) * 12 * 100
 
           return {
             formatted: apy.toFixed(2).toString() + "%",
@@ -191,6 +190,25 @@ export const getStrategyData = async ({
             formatted: movingAvg7D.toFixed(2) + "%",
             value: Number(movingAvg7D.toFixed(2)),
           }
+        }
+
+        if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
+          const launchDay = launchDate ?? subDays(new Date(), 8)
+          const launchEpoch = Math.floor(launchDay.getTime() / 1000)
+
+          let baseAPY = getApyInception({
+            launchEpoch: launchEpoch,
+            baseApy: config.baseApy,
+            shareData: dayDatas ? dayDatas[0] : undefined,
+            decimals: decimals,
+            startingShareValue: strategy.startingShareValue,
+          })
+
+          // Remove wstETH rewards bc they are already accounted for in the base APY
+          baseAPY!.value = baseAPY!.value! - rewardsApy?.value!
+          baseAPY!.formatted = baseAPY!.value!.toFixed(2) + "%"
+
+          return baseAPY
         }
 
         if (hideValue) return

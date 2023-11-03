@@ -120,7 +120,6 @@ export const PageHome = () => {
   }, [data, type])
 
   const loading = isFetching || isRefetching || isLoading
-
   return (
     <LayoutWithSidebar>
       {/*
