@@ -1,5 +1,5 @@
 export interface Chain {
-  key: string
+  id: string
   displayName: string
   logoPath: string
   alt: string
@@ -11,24 +11,24 @@ export interface Chain {
  */
 export const chainConfig: Chain[] = [
   {
-    key: "ethereum",
+    id: "ethereum",
     displayName: "Ethereum",
     logoPath: "/assets/icons/eth.png",
     alt: "Ethereum logo",
   },
   {
-    key: "arbitrum" ,
+    id: "arbitrum",
     displayName: "Arbitrum",
     logoPath: "/assets/icons/arbitrum.png",
     alt: "Arbitrum logo",
-  }
+  },
 ]
 
 // Create a map from each chain name to its config
 export const chainConfigMap = chainConfig.reduce((map, chain) => {
-  map[chain.key] = chain
+  map[chain.id] = chain
   return map
-}, {} as { [key: string]: Chain })
+}, {} as { [id: string]: Chain })
 
 export const supportedChains = [
   "ethereum",
