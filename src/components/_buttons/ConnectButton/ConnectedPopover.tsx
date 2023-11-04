@@ -69,6 +69,8 @@ export const ConnectedPopover = () => {
     })
 
     disconnect()
+    // Refresh window
+    window.location.reload()
   }
 
   const walletAddressIcon = () => {
