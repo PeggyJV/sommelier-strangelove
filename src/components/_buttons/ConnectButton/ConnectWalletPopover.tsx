@@ -20,12 +20,16 @@ import Image from "next/image"
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
 
+type ConnectWalletPopoverProps = ConnectButtonProps & {
+  wagmiChainId?: number
+}
+
 export const ConnectWalletPopover = ({
   unstyled,
   children,
   wagmiChainId,
   ...rest
-}: ConnectButtonProps) => {
+}: ConnectWalletPopoverProps) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
   const { addToast } = useBrandedToast()
   const {

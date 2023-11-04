@@ -12,7 +12,6 @@ import { chainConfigMap } from "src/data/chainConfig"
 export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
   children?: React.ReactNode
-  wagmiChainId: number
 }
 
 const ConnectButton = (props: ConnectButtonProps) => {
