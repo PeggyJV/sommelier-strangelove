@@ -9,10 +9,10 @@ import { MobileConnectedPopover } from "./MobileConnectedPopover"
 import ChainButton from "../ChainButton"
 import { chainConfigMap } from "src/data/chainConfig"
 
-export interface ConnectButtonProps
-  extends Omit<ButtonProps, "children"> {
+export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
   children?: React.ReactNode
+  wagmiChainId: number
 }
 
 const ConnectButton = (props: ConnectButtonProps) => {
@@ -25,7 +25,6 @@ const ConnectButton = (props: ConnectButtonProps) => {
 
   const handleNetworkChange = (chainId: string) => {
     setSelectedNetwork(chainId)
-
   }
 
   return (
@@ -43,7 +42,10 @@ const ConnectButton = (props: ConnectButtonProps) => {
             <MobileConnectedPopover />
           )
         ) : (
-          <ConnectWalletPopover {...props} />
+          <ConnectWalletPopover
+            wagmiChainId={chainConfigMap[selectedNetwork].wagmiId}
+            {...props}
+          />
         )}
       </HStack>
     </ClientOnly>

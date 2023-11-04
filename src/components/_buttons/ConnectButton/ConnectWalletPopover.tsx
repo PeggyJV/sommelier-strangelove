@@ -23,6 +23,7 @@ import { insertEvent } from "utils/supabase"
 export const ConnectWalletPopover = ({
   unstyled,
   children,
+  wagmiChainId,
   ...rest
 }: ConnectButtonProps) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
@@ -59,6 +60,7 @@ export const ConnectWalletPopover = ({
   }
 
   const { connect, connectors, pendingConnector } = useConnect({
+    chainId: wagmiChainId,
     onError: (error, args) => {
       const currentPageLink =
         typeof window !== "undefined" ? window.location.href : "N/A"
@@ -103,6 +105,9 @@ export const ConnectWalletPopover = ({
           //walletVersion,
           pageLink: currentPageLink,
         })
+
+        // Refresh the page upon successful connection
+        window.location.reload()
       }
     },
   })
@@ -151,35 +156,37 @@ export const ConnectWalletPopover = ({
       >
         <PopoverBody p={0} zIndex={999}>
           <Stack>
-            {displayedConnectors.map((x) => (
-              <Stack
-                key={x.id}
-                as="button"
-                py={2}
-                px={4}
-                fontSize="sm"
-                onClick={() => connect({ connector: x })}
-                _hover={{
-                  cursor: "pointer",
-                  bg: "purple.dark",
-                  borderColor: "surface.tertiary",
-                }}
-              >
-                <HStack>
-                  {isConnecting && x.id === pendingConnector?.id ? (
-                    <Spinner />
-                  ) : (
-                    <Image
-                      src={`/assets/icons/${x?.name?.toLowerCase()}.svg`}
-                      alt="wallet logo"
-                      width={24}
-                      height={24}
-                    />
-                  )}
-                  <Text fontWeight="semibold">{x.name}</Text>
-                </HStack>
-              </Stack>
-            ))}
+            {displayedConnectors.map((x) => {
+              return (
+                <Stack
+                  key={x.id}
+                  as="button"
+                  py={2}
+                  px={4}
+                  fontSize="sm"
+                  onClick={() => connect({ connector: x })}
+                  _hover={{
+                    cursor: "pointer",
+                    bg: "purple.dark",
+                    borderColor: "surface.tertiary",
+                  }}
+                >
+                  <HStack>
+                    {isConnecting && x.id === pendingConnector?.id ? (
+                      <Spinner />
+                    ) : (
+                      <Image
+                        src={`/assets/icons/${x?.name?.toLowerCase()}.svg`}
+                        alt="wallet logo"
+                        width={24}
+                        height={24}
+                      />
+                    )}
+                    <Text fontWeight="semibold">{x.name}</Text>
+                  </HStack>
+                </Stack>
+              )
+            })}
           </Stack>
         </PopoverBody>
       </PopoverContent>

@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react"
 import { ChevronDownIcon, CheckIcon } from "components/_icons"
 import { VFC } from "react"
-import { useSwitchNetwork, useNetwork } from "wagmi"
+import { useSwitchNetwork, useNetwork, useAccount } from "wagmi"
 
 import {
   chainConfigMap,
@@ -38,6 +38,7 @@ const ChainButton: VFC<ChainButtonProps> = ({
     pendingChainId,
     switchNetworkAsync,
   } = useSwitchNetwork()
+  const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
 
   const chainKeys = Object.keys(chainConfigMap)
@@ -57,8 +58,10 @@ const ChainButton: VFC<ChainButtonProps> = ({
       // If the above line doesn't throw an error, it means network switch was successful
       onChainChange && onChainChange(chainId)
 
-      // Refresh the page to reflect the new network
-      window.location.reload()
+      // If user is connected, refresh the page to reflect the new network
+      if (isConnected) {
+        window.location.reload()
+      } // Else, don't refresh. The user will see the new network, but will need to connect their wallet.
     } catch (e) {
       const error = e as Error
 
