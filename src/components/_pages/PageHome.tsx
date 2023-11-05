@@ -120,36 +120,15 @@ export const PageHome = () => {
   }, [data, type])
 
   const loading = isFetching || isRefetching || isLoading
-
   return (
     <LayoutWithSidebar>
-      {/*
+      {/* {
         <InfoBanner
           text={
-            "An incentive proposal for Turbo GHO co-incentives is progressing through Aave governance and could be funded as early as this week. Learn more here"
+            "Turbo swETH SOMM & swETH incentives have been renewed and will begin flowing in the next few days."
           }
         />
-        */}
-      <HStack
-        p={4}
-        mb={6}
-        spacing={4}
-        align="center"
-        justify="center"
-        backgroundColor="turquoise.extraDark"
-        border="2px solid"
-        borderRadius={16}
-        borderColor="turquoise.dark"
-      >
-        <VStack align="center" justify="center">
-          <Text textAlign="center">
-            An enhancement has recently been made to Real Yield ETH
-            and Real Yield BTC allowing them to increase their stETH
-            leverage and earn farm rewards.
-          </Text>
-        </VStack>
-      </HStack>
-
+        } */}
       {/* <HStack
         p={4}
         mb={6}

@@ -45,7 +45,7 @@ export const turboGHO: CellarData = {
       - Fully automated with built-in auto-compounding.`,
 
     description: `
-    Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, DAI, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies on Aave.
+    Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies on Aave.
     
     Note that Turbo GHO and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
@@ -122,7 +122,7 @@ export const turboGHO: CellarData = {
       //customColumnHeaderToolTip?: string
       //customColumnValue?: string
       stakingDurationOverride: new Date(
-        Date.UTC(2023, 9, 30, 14, 0, 0, 0)
+        Date.UTC(2023, 10, 7, 14, 0, 0, 0)
       ),
       showSommRewards: true,
       //customIconToolTipMsg?: string

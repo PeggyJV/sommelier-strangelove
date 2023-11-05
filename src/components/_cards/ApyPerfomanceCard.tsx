@@ -34,7 +34,8 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
     cellarConfig.cellar.address
   )
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
-  const [timeline, setTimeline] = useState<string>("30D")
+  // Default timeline
+  const [timeline, setTimeline] = useState<string>("7D")
   const [pointActive, setPointActive] = useState<Point>()
 
   const MobileTooltip = () => {
@@ -142,7 +143,12 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
                 >
                   Moving Average
                 </Text>
-                <HStack spacing={2}>
+                <HStack
+                  spacing={2}
+                  justifyContent="center"
+                  alignItems="center"
+                  width="100%"
+                >
                   {timeArray.map((button, i) => {
                     const { title, onClick } = button
                     const isSelected = title === timeline
