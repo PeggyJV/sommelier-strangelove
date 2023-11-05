@@ -51,7 +51,7 @@ export const turboSOMM: CellarData = {
   },
   //todo
   dashboard:
-    "https://debank.com/profile/0x0C190DEd9Be5f512Bd72827bdaD4003e9Cc7975C",
+    "https://debank.com/profile/0x5195222f69c5821f8095ec565E71e18aB6A2298f",
   depositTokens: {
     list: ["SOMM"],
   },
