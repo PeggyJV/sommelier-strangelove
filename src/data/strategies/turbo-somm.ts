@@ -13,7 +13,7 @@ export const turboSOMM: CellarData = {
   name: "Turbo SOMM",
   slug: config.CONTRACT.TURBO_SOMM.SLUG,
   tradedAssets: ["SOMM", "WETH"],
-  launchDate: new Date(Date.UTC(2023, 10, 1, 16, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 10, 8, 16, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Retain some exposure to SOMM while also earning swap fees generated on this trading pair.`,
   strategyType: "Yield",
@@ -21,7 +21,7 @@ export const turboSOMM: CellarData = {
   managementFee: "0.50%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Uniswap V3", "AAVE"],
+  protocols: ["Uniswap V3"],
   strategyAssets: ["SOMM", "WETH"],
   performanceSplit: {
     depositors: 80,
@@ -41,7 +41,10 @@ export const turboSOMM: CellarData = {
     highlights: `
       - Dynamically adjusts liquidity ranges to changing market conditions.`,
 
-    description: `Sommelier is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Turbo SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading.`,
+    description: `Sommelier is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Turbo SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading pair.
+    
+    Note that Turbo SOMM and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    `,
   },
   overrideApy: {
     title: "Backtested APY",
@@ -49,7 +52,6 @@ export const turboSOMM: CellarData = {
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
     value: "5.00%",
   },
-  //todo
   dashboard:
     "https://debank.com/profile/0x5195222f69c5821f8095ec565E71e18aB6A2298f",
   depositTokens: {
@@ -73,28 +75,13 @@ export const turboSOMM: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 6,
     },
-    // staker: {
-    //   address: config.CONTRACT.TURBO_SOMM_STAKER.ADDRESS,
-    //   abi: config.CONTRACT.TURBO_SOMM_STAKER.ABI,
-    //   key: StakerKey.CELLAR_STAKING_V0821,
-    // },
     baseAsset: tokenConfigMap.SOMM,
-    // badges: [
-    //   {
-    //     customStrategyHighlight: "Emergent Asset",
-    //     customStrategyHighlightColor: "purple.base",
-    //   },
-    //   {
-    //     customStrategyHighlight: "GHO Incentives",
-    //     customStrategyHighlightColor: "#00C04B",
-    //   },
-    // ],
   },
-  // faq: [
-  //   {
-  //     question: "Are the smart contracts audited?",
-  //     answer:
-  //       "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
-  //   },
-  // ],
+  faq: [
+    {
+      question: "Are the smart contracts audited?",
+      answer:
+        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+    },
+  ],
 }
