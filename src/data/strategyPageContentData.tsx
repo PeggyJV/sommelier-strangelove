@@ -1014,8 +1014,8 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
-  [config.CONTRACT.SUPER_SOMM.SLUG]: {
-    name: "Super SOMM",
+  [config.CONTRACT.TURBO_SOMM.SLUG]: {
+    name: "Turbo SOMM",
     provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Retain some exposure to SOMM while also earning swap fees generated on this trading pair.`,
@@ -1023,11 +1023,11 @@ export const strategyPageContentData = {
       <>
         {}
         <Image
-          alt="Super SOMM"
-          src="/assets/icons/super-somm.png"
+          alt="Turbo SOMM"
+          src="/assets/icons/turbo-somm.png"
           boxSize={8}
         />
-        <Text>SuperSOMM</Text>
+        <Text>TurboSOMM</Text>
       </>
     ),
     tradedAssets: ["SOMM", "WETH"],
@@ -1042,7 +1042,7 @@ export const strategyPageContentData = {
       card: [
         `Dynamically adjusts liquidity ranges to changing market conditions.`,
       ],
-      description: `Sommelier is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Super SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading`,
+      description: `Sommelier is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Turbo SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading`,
     },
     howItWorks: ``,
   },

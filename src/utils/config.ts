@@ -165,9 +165,9 @@ export const config = {
       ABI: cellarV0821,
     },
     //need to update when real contract
-    SUPER_SOMM: {
-      ADDRESS: "0x0C190DEd9Be5f512Bd72827bdaD4003e9Cc7975C",
-      SLUG: "Super-SOMM",
+    TURBO_SOMM: {
+      ADDRESS: "0x5195222f69c5821f8095ec565E71e18aB6A2298f",
+      SLUG: "Turbo-SOMM",
       ABI: cellarV0821,
     },
     TURBO_STETH: {
@@ -247,11 +247,11 @@ export const config = {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
       ABI: cellarStakingV0821,
     },
-    //need to update when real contract
-    SUPER_SOMM_STAKER: {
-      ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
-      ABI: cellarStakingV0821,
-    },
+    // //need to update when real contract
+    // TURBO_SOMM_STAKER: {
+    //   ADDRESS: "",
+    //   ABI: cellarStakingV0821,
+    // },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",

@@ -9,9 +9,9 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 
-export const superSOMM: CellarData = {
-  name: "Super SOMM",
-  slug: config.CONTRACT.SUPER_SOMM.SLUG,
+export const turboSOMM: CellarData = {
+  name: "Turbo SOMM",
+  slug: config.CONTRACT.TURBO_SOMM.SLUG,
   tradedAssets: ["SOMM", "WETH"],
   launchDate: new Date(Date.UTC(2023, 10, 1, 16, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
@@ -41,7 +41,7 @@ export const superSOMM: CellarData = {
     highlights: `
       - Dynamically adjusts liquidity ranges to changing market conditions.`,
 
-    description: `Sommelier is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Super SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading.`,
+    description: `Sommelier is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Turbo SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading.`,
   },
   overrideApy: {
     title: "Backtested APY",
@@ -56,11 +56,11 @@ export const superSOMM: CellarData = {
     list: ["SOMM"],
   },
   config: {
-    id: config.CONTRACT.SUPER_SOMM.ADDRESS,
-    cellarNameKey: CellarNameKey.SUPER_SOMM,
+    id: config.CONTRACT.TURBO_SOMM.ADDRESS,
+    cellarNameKey: CellarNameKey.TURBO_SOMM,
     lpToken: {
-      address: config.CONTRACT.SUPER_SOMM.ADDRESS,
-      imagePath: "/assets/icons/super-somm.png",
+      address: config.CONTRACT.TURBO_SOMM.ADDRESS,
+      imagePath: "/assets/icons/turbo-somm.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
@@ -68,16 +68,16 @@ export const superSOMM: CellarData = {
       key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
-      address: config.CONTRACT.SUPER_SOMM.ADDRESS,
-      abi: config.CONTRACT.SUPER_SOMM.ABI,
+      address: config.CONTRACT.TURBO_SOMM.ADDRESS,
+      abi: config.CONTRACT.TURBO_SOMM.ABI,
       key: CellarKey.CELLAR_V2PT5,
       decimals: 6,
     },
-    staker: {
-      address: config.CONTRACT.SUPER_SOMM_STAKER.ADDRESS,
-      abi: config.CONTRACT.SUPER_SOMM_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0821,
-    },
+    // staker: {
+    //   address: config.CONTRACT.TURBO_SOMM_STAKER.ADDRESS,
+    //   abi: config.CONTRACT.TURBO_SOMM_STAKER.ABI,
+    //   key: StakerKey.CELLAR_STAKING_V0821,
+    // },
     baseAsset: tokenConfigMap.SOMM,
     // badges: [
     //   {

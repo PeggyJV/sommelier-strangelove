@@ -35,7 +35,7 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
-    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   )
 }
@@ -99,7 +99,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.FRAXIMAL ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
-    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   )
 }
@@ -125,7 +125,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
-    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   )
 }
@@ -398,7 +398,7 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-  if (config.cellarNameKey === CellarNameKey.SUPER_SOMM) {
+  if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return [
       {
         title: "7 Day Unbonding",
@@ -442,7 +442,7 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.TURBO_GHO ||
-      config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
+      config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
       config.cellarNameKey === CellarNameKey.TURBO_STETH
     ) {
       return "Estimated APY"
@@ -463,7 +463,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
+      config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
       config.cellarNameKey === CellarNameKey.TURBO_STETH
     ) {
       return "Estimated APY"
@@ -484,7 +484,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   ) {
     return "Estimated APY"
@@ -504,7 +504,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
-    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   ) {
     return true
@@ -521,7 +521,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
-    config.cellarNameKey === CellarNameKey.SUPER_SOMM ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   ) {
     return "Estimated APY"
@@ -567,7 +567,7 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "4.0%",
     }
   }
-  if (config.cellarNameKey === CellarNameKey.SUPER_SOMM) {
+  if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return {
       value: 4.0,
       formatted: "4.0%",
