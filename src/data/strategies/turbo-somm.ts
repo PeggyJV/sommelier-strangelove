@@ -76,6 +76,18 @@ export const turboSOMM: CellarData = {
       decimals: 6,
     },
     baseAsset: tokenConfigMap.SOMM,
+    customReward: {
+      showOnlyBaseApy: true,
+      showAPY: false,
+      showSommRewards: false,
+      tokenSymbol: "SOMM",
+      tokenAddress: "0xa670d7237398238de01267472c6f13e5b8010fd1",
+      tokenDisplayName: "SOMM",
+      imagePath: "/assets/icons/somm.png",
+      stakingDurationOverride: new Date(
+        Date.UTC(2023, 11, 8, 16, 0, 0, 0)
+      ),
+    },
   },
   faq: [
     {

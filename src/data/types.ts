@@ -98,6 +98,7 @@ type Exchange =
     }
 
 export interface CustomReward {
+  showOnlyBaseApy?: boolean
   showAPY: boolean
   tokenSymbol: string
   tokenDisplayName: string

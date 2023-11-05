@@ -281,9 +281,9 @@ export const tokenConfig: Token[] = [
     src: "/assets/icons/somm.png",
     alt: "SOMM logo",
     symbol: "SOMM",
-    address: "0xa670d7237398238DE01267472C6f13e5B8010FD1",
+    address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
     coinGeckoId: "sommelier",
-    decimals: 18,
+    decimals: 6,
   },
 ]
 

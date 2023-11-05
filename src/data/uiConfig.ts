@@ -465,15 +465,16 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_SOMM 
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
       return "7 Day MA APY (includes swETH incentives)"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
       return "Estimated APY"
-    }
+    } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+      return "Estimated APY (includes SOMM incentives)"
+    } 
     return "APY since inception"
   }
   return "APY since inception"
@@ -489,15 +490,16 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM 
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     return "7 Day MA APY (includes swETH incentives)"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
     return "Estimated APY"
-  }
+  } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+    return "Estimated APY (includes SOMM incentives)"
+  } 
   return "APY since inception"
 }
 
