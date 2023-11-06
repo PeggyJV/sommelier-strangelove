@@ -13,7 +13,7 @@ export const turboSOMM: CellarData = {
   name: "Turbo SOMM",
   slug: config.CONTRACT.TURBO_SOMM.SLUG,
   tradedAssets: ["SOMM", "WETH"],
-  launchDate: new Date(Date.UTC(2023, 10, 8, 16, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 10, 9, 16, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Retain some exposure to SOMM while also earning swap fees generated on this trading pair.`,
   strategyType: "Yield",
@@ -50,7 +50,7 @@ export const turboSOMM: CellarData = {
     title: "Backtested APY",
     tooltip:
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-    value: "5.00%",
+    value: "60%",
   },
   dashboard:
     "https://debank.com/profile/0x5195222f69c5821f8095ec565E71e18aB6A2298f",

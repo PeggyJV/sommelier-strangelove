@@ -97,24 +97,35 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                     {apyHoverLabel(cellarConfig)}{" "}
                     {baseApy?.formatted ?? "0.00%"}
                   </Text>
-                  <Text>
-                    {cellarConfig.customReward?.showSommRewards
-                      ? `SOMM Rewards APY ${rewardsApy?.formatted ?? "0.00%"}`
-                      : null}
-                  </Text>
-                  <Text>
-                    {cellarConfig.customReward
-                      ?.customRewardAPYTooltip ??
-                      `${
-                        cellarConfig.customReward?.showAPY
-                          ? `${cellarConfig.customReward.tokenDisplayName} `
-                          : ""
-                      }Rewards APY ${
-                        extraRewardsApy?.formatted ??
-                        rewardsApy?.formatted ??
-                        "0.00%"
-                      }`}
-                  </Text>
+                  {cellarConfig.customReward?.showOnlyBaseApy !==
+                    undefined &&
+                  cellarConfig.customReward?.showOnlyBaseApy ===
+                    true ? (
+                    <></>
+                  ) : (
+                    <>
+                      <Text>
+                        {cellarConfig.customReward?.showSommRewards
+                          ? `SOMM Rewards APY ${
+                              rewardsApy?.formatted ?? "0.00%"
+                            }`
+                          : null}
+                      </Text>
+                      <Text>
+                        {cellarConfig.customReward
+                          ?.customRewardAPYTooltip ??
+                          `${
+                            cellarConfig.customReward?.showAPY
+                              ? `${cellarConfig.customReward.tokenDisplayName} `
+                              : ""
+                          }Rewards APY ${
+                            extraRewardsApy?.formatted ??
+                            rewardsApy?.formatted ??
+                            "0.00%"
+                          }`}
+                      </Text>
+                    </>
+                  )}
                 </>
               }
               bg="surface.bg"

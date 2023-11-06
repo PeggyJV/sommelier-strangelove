@@ -473,7 +473,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
     } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
       return "Estimated APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
-      return "Estimated APY (includes SOMM incentives)"
+      return "Estimated Reward APY (excluding impermanent loss)"
     } 
     return "APY since inception"
   }
@@ -498,7 +498,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
     return "Estimated APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
-    return "Estimated APY (includes SOMM incentives)"
+    return "Estimated Reward APY (excluding impermanent loss)"
   } 
   return "APY since inception"
 }
@@ -567,8 +567,8 @@ export const estimatedApyValue = (config: ConfigProps) => {
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return {
-      value: 4.0,
-      formatted: "4.0%",
+      value: 60.0,
+      formatted: "60.0%",
     }
   }
 }
