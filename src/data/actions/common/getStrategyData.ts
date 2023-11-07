@@ -149,7 +149,7 @@ export const getStrategyData = async ({
 
         // 5400 GHO per week * 52 weeks * 100 for human readable %
         // TODO: Update this  + expiration date in config weekly as long as GHO incentives live
-        let apy = ((7750 * ghoPrice) / usdTvl) * 52 * 100
+        let apy = ((4150 * ghoPrice) / usdTvl) * 52 * 100
 
         extraRewardsApy = {
           formatted: apy.toFixed(2).toString() + "%",
