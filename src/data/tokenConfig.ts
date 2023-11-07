@@ -277,6 +277,14 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "wrapped-steth",
     decimals: 18,
   },
+  {
+    src: "/assets/icons/somm.png",
+    alt: "SOMM logo",
+    symbol: "SOMM",
+    address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
+    coinGeckoId: "sommelier",
+    decimals: 6,
+  },
 ]
 
 // Creatae a map from each token symbol to its config
@@ -297,6 +305,7 @@ export const depositAssetTokenList = [
   "sUSD",
   "TUSD",
   "USDT",
+  "SOMM",
 ]
 
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(

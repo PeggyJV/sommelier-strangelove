@@ -1014,4 +1014,38 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
+  [config.CONTRACT.TURBO_SOMM.SLUG]: {
+    name: "Turbo SOMM",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Retain some exposure to SOMM while also earning swap fees generated on this trading pair.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo SOMM"
+          src="/assets/icons/turbo-somm.png"
+          boxSize={8}
+        />
+        <Text>TurboSOMM</Text>
+      </>
+    ),
+    tradedAssets: ["SOMM", "WETH"],
+    alternativeTo: "Manually LPing",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Dynamically adjusts liquidity ranges to changing market conditions.`,
+      ],
+      description: `Sommelier is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Turbo SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading pair.      
+      <br/><br/>
+      Note that Turbo SOMM and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
 }
