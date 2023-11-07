@@ -39,6 +39,7 @@ export enum CellarNameKey {
   ETH_TREND_GROWTH = "ETH_TREND_GROWTH",
   TURBO_GHO = "TURBO_GHO",
   TURBO_STETH = "TURBO_STETH",
+  TURBO_SOMM = "TURBO_SOMM",
 }
 
 export interface Badge {
@@ -97,6 +98,7 @@ type Exchange =
     }
 
 export interface CustomReward {
+  showOnlyBaseApy?: boolean
   showAPY: boolean
   tokenSymbol: string
   tokenDisplayName: string
