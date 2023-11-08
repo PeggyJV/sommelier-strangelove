@@ -22,7 +22,7 @@ export const chainConfig: Chain[] = [
     wagmiId: mainnet.id,
     blockExplorerUrl: mainnet.blockExplorers.default.url,
     displayName: "Ethereum",
-    logoPath: "/assets/icons/eth.png",
+    logoPath: "/assets/icons/ethereum-alt.png",
     alt: "Ethereum logo",
   },
   {
