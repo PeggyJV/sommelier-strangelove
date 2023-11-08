@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const fraximal: CellarData = {
   name: "Fraximal",
@@ -84,6 +85,7 @@ export const fraximal: CellarData = {
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     baseAsset: tokenConfigMap.FRAX,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

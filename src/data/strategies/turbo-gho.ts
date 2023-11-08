@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { GHOIcon } from "components/_icons"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboGHO: CellarData = {
   name: "Turbo GHO",
@@ -129,6 +130,7 @@ export const turboGHO: CellarData = {
       customRewardEndMessage: "Rewards updated weekly",
       customSommRewardsEndMessage: "SOMM Rewards updated weekly",
     },
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

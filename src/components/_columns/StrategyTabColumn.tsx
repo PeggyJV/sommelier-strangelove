@@ -1,4 +1,11 @@
-import { Text, Tooltip, VStack, HStack } from "@chakra-ui/react"
+import {
+  Text,
+  Tooltip,
+  VStack,
+  HStack,
+  Box,
+  Flex,
+} from "@chakra-ui/react"
 import { PercentageText } from "components/PercentageText"
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
@@ -8,6 +15,10 @@ import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { isTokenPriceEnabledApp } from "data/uiConfig"
 import { cellarDataMap } from "data/cellarDataMap"
 import { InformationIcon } from "components/_icons"
+import { Avatar, AvatarGroup } from "@chakra-ui/react"
+import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
+import { useState } from "react"
+import { CellValue } from "react-table"
 
 type StrategyTabColumnProps = {
   timeline: Timeline
@@ -27,6 +38,11 @@ type RowData = {
     }
     activeAsset: {
       symbol: string
+    }
+    config: {
+      chain: {
+        displayName: string
+      }
     }
   }
 }
@@ -63,6 +79,79 @@ export const StrategyTabColumn = ({
           rowA.original.activeAsset?.symbol.toLowerCase() || ""
         const valB =
           rowB.original.activeAsset?.symbol.toLowerCase() || ""
+
+        // Normal Sorting
+        if (valA > valB) return 1
+
+        if (valB > valA) return -1
+
+        return 0
+      },
+    },
+    {
+      Header: () => (
+        <Tooltip
+          arrowShadowColor="purple.base"
+          label="The chain the vault is deployed on"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack >
+            <Text>Chain</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
+      ),
+      accessor: "chain",
+      Cell: ({ cell: { row } }: CellValue) => {
+        const [isHover, setIsHover] = useState(false)
+        const handleMouseOver = () => {
+          setIsHover(true)
+        }
+        const handleMouseLeave = () => {
+          setIsHover(false)
+        }
+        if (!row)
+          return (
+            <Text fontWeight={600} fontSize="12px">
+              --
+            </Text>
+          )
+        return (
+          <Box
+            onMouseLeave={handleMouseLeave}
+            onMouseOver={handleMouseOver}
+            w={"100%"}
+          >
+            <HStack justifyContent={"center"}>
+              <AvatarGroup>
+                <Avatar
+                  name={row.original.config.chain.displayName}
+                  src={row.original.config.chain.logoPath}
+                  key={row.original.config.chain.id}
+                  sx={{
+                    width: "2em", // custom width
+                    height: "2em", // custom height
+                  }}
+                />
+              </AvatarGroup>
+            </HStack>
+            <Flex alignItems="center" direction="column">
+              {isHover && (
+                <AvatarTooltip chains={[row.original.config.chain]} />
+              )}
+            </Flex>
+          </Box>
+        )
+      },
+      disableSortBy: false,
+      sortType: (rowA: RowData, rowB: RowData) => {
+        // Sort by active asset asset
+        const valA =
+          rowA.original.config.chain.displayName.toLowerCase() || ""
+        const valB =
+          rowB.original.config.chain.displayName.toLowerCase() || ""
 
         // Normal Sorting
         if (valA > valB) return 1

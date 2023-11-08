@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { PearlIcon } from "components/_icons"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboSWETH: CellarData = {
   name: "Turbo swETH",
@@ -135,6 +136,7 @@ export const turboSWETH: CellarData = {
       },
     ],
     show7DayAPYTooltip: true,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

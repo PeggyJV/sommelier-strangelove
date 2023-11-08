@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const ethBtcMomentum: CellarData = {
   name: "ETH-BTC Momentum",
@@ -115,6 +116,7 @@ export const ethBtcMomentum: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     baseAsset: tokenConfigMap.USDC,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

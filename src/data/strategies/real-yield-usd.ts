@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const realYieldUsd: CellarData = {
   name: "Real Yield USD",
@@ -98,6 +99,7 @@ export const realYieldUsd: CellarData = {
       },
     ],
     baseAsset: tokenConfigMap.USDC,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

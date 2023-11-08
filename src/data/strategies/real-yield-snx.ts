@@ -7,6 +7,7 @@ import {
   CellarType,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const realYieldSNX: CellarData = {
   name: "Real Yield SNX",
@@ -72,6 +73,7 @@ The purpose of this vault is to provide token holders with a passive yield oppor
       decimals: 18,
     },
     baseAsset: tokenConfigMap.SNX,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const steadyBtc: CellarData = {
   deprecated: true,
@@ -113,6 +114,7 @@ export const steadyBtc: CellarData = {
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     baseAsset: tokenConfigMap.USDC,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

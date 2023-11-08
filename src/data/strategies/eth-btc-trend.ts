@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const ethBtcTrend: CellarData = {
   name: "ETH-BTC Trend",
@@ -117,6 +118,7 @@ export const ethBtcTrend: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     baseAsset: tokenConfigMap.USDC,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

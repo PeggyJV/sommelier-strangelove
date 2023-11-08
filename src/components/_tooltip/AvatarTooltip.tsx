@@ -3,10 +3,12 @@ import { Token } from "data/tokenConfig"
 import { Variants, motion } from "framer-motion"
 import { FC } from "react"
 import { getProtocols } from "utils/getProtocols"
+import { Chain } from "data/chainConfig"
 
 type AvatarTooltipProps = {
   protocols?: string[]
   tradedAssets?: Token[]
+  chains?: Chain[]
 }
 
 export const scale: Variants = {
@@ -31,6 +33,7 @@ export const scale: Variants = {
 export const AvatarTooltip: FC<AvatarTooltipProps> = ({
   protocols,
   tradedAssets,
+  chains,
 }) => {
   const MotionDiv = chakra(motion.div)
   return (
@@ -51,6 +54,23 @@ export const AvatarTooltip: FC<AvatarTooltipProps> = ({
       rounded="lg"
       mt={4}
     >
+      {chains &&
+        chains.map((chain: Chain) => {
+          return (
+            <HStack key={chain.id}>
+              <Avatar
+                name={chain.displayName}
+                src={chain.logoPath}
+                key={chain.id}
+                bgColor="white"
+                size="sm"
+              />
+              <Text fontSize="12px" fontWeight={600}>
+                {chain.displayName}
+              </Text>
+            </HStack>
+          )
+        })}
       {protocols &&
         protocols.map((protocol: string) => {
           const data = getProtocols(protocol)

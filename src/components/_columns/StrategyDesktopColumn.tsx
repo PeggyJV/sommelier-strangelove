@@ -43,6 +43,11 @@ type RowData = {
     activeAsset: {
       symbol: string
     }
+    config: {
+      chain: {
+        displayName: string
+      }
+    }
   }
 }
 
@@ -100,12 +105,91 @@ export const StrategyDesktopColumn = ({
       Header: () => (
         <Tooltip
           arrowShadowColor="purple.base"
+          label="The chain the vault is deployed on"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack
+            style={{ textAlign: "right", width: "100%" }}
+            justifyContent={"right"}
+          >
+            <Text>Chain</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
+      ),
+      accessor: "chain",
+      Cell: ({ cell: { row } }: CellValue) => {
+        const [isHover, setIsHover] = useState(false)
+        const handleMouseOver = () => {
+          setIsHover(true)
+        }
+        const handleMouseLeave = () => {
+          setIsHover(false)
+        }
+        if (!row)
+          return (
+            <Text fontWeight={600} fontSize="12px">
+              --
+            </Text>
+          )
+        return (
+          <Box
+            onMouseLeave={handleMouseLeave}
+            onMouseOver={handleMouseOver}
+            w={"80%"}
+          >
+            <HStack justifyContent={"right"}>
+              <AvatarGroup>
+                <Avatar
+                  name={row.original.config.chain.displayName}
+                  src={row.original.config.chain.logoPath}
+                  key={row.original.config.chain.id}
+                  sx={{
+                    width: "2em", // custom width
+                    height: "2em", // custom height
+                  }}
+                />
+              </AvatarGroup>
+            </HStack>
+            <Flex alignItems="center" direction="column">
+              {isHover && (
+                <AvatarTooltip chains={[row.original.config.chain]} />
+              )}
+            </Flex>
+          </Box>
+        )
+      },
+      disableSortBy: false,
+      sortType: (rowA: RowData, rowB: RowData) => {
+        // Sort by active asset asset
+        const valA =
+          rowA.original.config.chain.displayName.toLowerCase() || ""
+        const valB =
+          rowB.original.config.chain.displayName.toLowerCase() || ""
+
+        // Normal Sorting
+        if (valA > valB) return 1
+
+        if (valB > valA) return -1
+
+        return 0
+      },
+    },
+    {
+      Header: () => (
+        <Tooltip
+          arrowShadowColor="purple.base"
           label="Vault will have exposure to 1 or more of these assets at any given time"
           placement="top"
           color="neutral.300"
           bg="surface.bg"
         >
-          <HStack spacing={1}>
+          <HStack
+            style={{ textAlign: "center", width: "100%" }}
+            justifyContent={"center"}
+          >
             <Text>Assets</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
@@ -113,8 +197,8 @@ export const StrategyDesktopColumn = ({
       ),
       accessor: "tradedAssets",
       Cell: ({ cell: { value } }: CellValue) => {
-        const getFirst6Value = value.slice(0, 6)
-        const getRemainingValue = value.length - getFirst6Value.length
+        const getFirst4Value = value.slice(0, 4)
+        const getRemainingValue = value.length - getFirst4Value.length
         const [isHover, setIsHover] = useState(false)
         const handleMouseOver = () => {
           setIsHover(true)
@@ -132,11 +216,11 @@ export const StrategyDesktopColumn = ({
           <Box
             onMouseLeave={handleMouseLeave}
             onMouseOver={handleMouseOver}
-            w={20}
+            w={"100%"}
           >
-            <HStack>
+            <HStack justifyContent={"center"}>
               <AvatarGroup size="sm">
-                {getFirst6Value?.map((asset: Token) => {
+                {getFirst4Value?.map((asset: Token) => {
                   return (
                     <Avatar
                       name={asset?.symbol}
@@ -232,7 +316,6 @@ export const StrategyDesktopColumn = ({
         return valB - valA
       },
     },
-
     {
       Header: () => (
         <Text>

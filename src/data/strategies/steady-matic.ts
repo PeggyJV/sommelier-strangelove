@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const steadyMatic: CellarData = {
   deprecated: true,
@@ -174,6 +175,7 @@ Presented results are based on historical back tests. Past performance is not in
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     baseAsset: tokenConfigMap.USDC,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

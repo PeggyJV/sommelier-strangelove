@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { WstethIcon } from "components/_icons"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboSTETH: CellarData = {
   name: "Turbo stETH",
@@ -118,6 +119,7 @@ export const turboSTETH: CellarData = {
       showSommRewards: false,
       //customIconToolTipMsg?: string
     },
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {
