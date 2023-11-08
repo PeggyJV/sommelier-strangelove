@@ -60,6 +60,8 @@ export const ConnectedPopover = () => {
     },
   })
 
+  const { chain } = useNetwork()
+
   const id = useRouter().query.id as string | undefined
   const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
 
@@ -148,7 +150,7 @@ export const ConnectedPopover = () => {
         <PopoverBody p={0}>
           <Stack>
             <Link
-              href={`https://etherscan.io/address/${address}`}
+              href={`${chain?.blockExplorers?.default.url}/address/${address}`}
               isExternal
               py={2}
               px={4}
@@ -159,7 +161,7 @@ export const ConnectedPopover = () => {
               }}
             >
               <LogoutCircleIcon mr={2} />
-              View on Etherscan
+              {`View on ${chain?.blockExplorers?.default.name}`}
             </Link>
             {selectedStrategy && (
               <>

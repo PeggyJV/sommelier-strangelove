@@ -27,6 +27,8 @@ import { FaExternalLinkAlt } from "react-icons/fa"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { TransparentCard } from "./TransparentCard"
+import { useNetwork } from "wagmi"
+
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -83,6 +85,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     cellarConfig.cellar.address
   )
   const activeAsset = strategyData?.activeAsset
+  const { chain } = useNetwork()
 
   const isManyProtocols = isArray(protocols)
   const protocolData = isManyProtocols
@@ -197,10 +200,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 </CardStat>
               </HStack>
               {cellarConfig.feePromotion && (
-                <Text
-                  fontSize="sm"
-                  fontWeight="bold"
-                >
+                <Text fontSize="sm" fontWeight="bold">
                   {cellarConfig.feePromotion}
                 </Text>
               )}
@@ -220,7 +220,9 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           </CardStat>
           <CardStat label="Link to contract" flex={0}>
             <Link
-              href={`https://etherscan.io/address/${id.toLowerCase()}`}
+              href={`${
+                chain?.blockExplorers?.default.url
+              }/address/${id.toLowerCase()}`}
               target="_blank"
             >
               {`${name} `}

@@ -31,6 +31,7 @@ import { getAddress } from "ethers/lib/utils.js"
 
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
+import { useNetwork } from "wagmi"
 
 interface FormValues {
   depositAmount: number
@@ -74,7 +75,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarAddress = cellarConfig.id
   const depositTokens = cellarData.depositTokens.list
   const { addToast, update, close, closeAll } = useBrandedToast()
-
+  const { chain } = useNetwork()
+  
   const currentStrategies =
     window.location.pathname?.split("/")[2]?.replace(/-/g, " ") ||
     id.replace(/-/g, " ") ||
@@ -369,11 +371,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               <Link
                 display="flex"
                 alignItems="center"
-                href={`https://etherscan.io/tx/${depositResult?.data?.transactionHash}`}
+                href={`${chain?.blockExplorers?.default.url}/tx/${depositResult?.data?.transactionHash}`}
                 isExternal
                 textDecor="underline"
               >
-                <Text as="span">View on Etherscan</Text>
+                <Text as="span">{`View on ${chain?.blockExplorers?.default.name}`}</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
               <Text

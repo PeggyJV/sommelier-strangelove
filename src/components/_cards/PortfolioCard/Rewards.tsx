@@ -15,6 +15,7 @@ import { useImportToken } from "hooks/web3/useImportToken"
 import { analytics } from "utils/analytics"
 import { config } from "utils/config"
 import { useAccount } from "wagmi"
+import { useNetwork } from "wagmi"
 
 export const Rewards = ({
   cellarConfig,
@@ -49,6 +50,8 @@ export const Rewards = ({
       })
     },
   })
+  const { chain } = useNetwork()
+
   const userRewards =
     userStakes?.totalClaimAllRewards?.value.toString()
 
@@ -95,10 +98,10 @@ export const Rewards = ({
               <Link
                 display="flex"
                 alignItems="center"
-                href={`https://etherscan.io/tx/${result?.data?.transactionHash}`}
+                href={`${chain?.blockExplorers?.default.url}/tx/${result?.data?.transactionHash}`}
                 isExternal
               >
-                <Text as="span">View on Etherscan</Text>
+                <Text as="span">{`View on ${chain?.blockExplorers?.default.name}`}</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
               <Text

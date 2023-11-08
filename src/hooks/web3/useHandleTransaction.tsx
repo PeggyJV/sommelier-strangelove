@@ -4,6 +4,7 @@ import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { TransactionReceipt } from "@ethersproject/providers"
+import { useNetwork } from "wagmi"
 
 type Result =
   | {
@@ -54,6 +55,7 @@ export const useHandleTransaction = (): {
     })
     const waitForApproval = wait({ confirmations: 1, hash })
     const result = await waitForApproval
+    const { chain } = useNetwork()
 
     if (result?.data?.transactionHash) {
       const successBody = toastBody?.success || (
@@ -62,10 +64,10 @@ export const useHandleTransaction = (): {
           <Link
             display="flex"
             alignItems="center"
-            href={`https://etherscan.io/tx/${result?.data?.transactionHash}`}
+            href={`${chain?.blockExplorers?.default.url}/tx/${result?.data?.transactionHash}`}
             isExternal
           >
-            <Text as="span">View on Etherscan</Text>
+            <Text as="span">{`View on ${chain?.blockExplorers?.default.name}`}</Text>
             <ExternalLinkIcon ml={2} />
           </Link>
         </>

@@ -27,6 +27,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
 import { useRouter } from "next/router"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { useNetwork } from "wagmi"
 
 export const MobileConnectedPopover = () => {
   const isLarger480 = useBetterMediaQuery("(min-width: 480px)")
@@ -44,6 +45,7 @@ export const MobileConnectedPopover = () => {
 
   const id = useRouter().query.id as string | undefined
   const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
+  const { chain } = useNetwork()
 
   function onDisconnect() {
     analytics.track("wallet.disconnected", {
@@ -134,7 +136,7 @@ export const MobileConnectedPopover = () => {
         <PopoverBody p={0}>
           <Stack>
             <Link
-              href={`https://etherscan.io/address/${address}`}
+              href={`${chain?.blockExplorers?.default.url}/address/${address}`}
               isExternal
               py={2}
               px={4}
@@ -145,7 +147,7 @@ export const MobileConnectedPopover = () => {
               }}
             >
               <LogoutCircleIcon mr={2} />
-              View on Etherscan
+              {`View on ${chain?.blockExplorers?.default.name}`}
             </Link>
             <HStack
               as="button"

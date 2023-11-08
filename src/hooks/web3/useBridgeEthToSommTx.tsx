@@ -14,6 +14,7 @@ import { GravityBridge } from "src/abi/types"
 import { analytics } from "utils/analytics"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { getAddress } from "ethers/lib/utils.js"
+import { useNetwork } from "wagmi"
 
 export const useBridgeEthToSommTx = () => {
   const { CONTRACT } = config
@@ -21,7 +22,7 @@ export const useBridgeEthToSommTx = () => {
   // TODO: Fix `close` and implement it here https://github.com/strangelove-ventures/sommelier/issues/431
   const { addToast, update, closeAll } = useBrandedToast()
   const [isLoading, setIsLoading] = useState(false)
-
+  const { chain } = useNetwork()
   const { data: signer } = useSigner()
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -60,12 +61,12 @@ export const useBridgeEthToSommTx = () => {
 
       <Link
         fontSize="sm"
-        href={`https://etherscan.io/tx/${hash}`}
+        href={`${chain?.blockExplorers?.default.url}/tx/${hash}`}
         target="_blank"
         textDecor="underline"
       >
         <HStack>
-          <Text>View on Etherscan</Text>
+          <Text>{`View on ${chain?.blockExplorers?.default.name}`}</Text>
           <ExternalLinkIcon boxSize={3} />
         </HStack>
       </Link>
@@ -105,12 +106,12 @@ export const useBridgeEthToSommTx = () => {
       </Stack>
       <Link
         fontSize="sm"
-        href={`https://etherscan.io/tx/${hash}`}
+        href={`${chain?.blockExplorers?.default.url}/tx/${hash}`}
         target="_blank"
         textDecor="underline"
       >
         <HStack>
-          <Text>View on Etherscan</Text>
+          <Text>{`View on ${chain?.blockExplorers?.default.name}`}</Text>
           <ExternalLinkIcon boxSize={3} />
         </HStack>
       </Link>
@@ -164,7 +165,7 @@ export const useBridgeEthToSommTx = () => {
           duration: null,
           closeHandler: closeAll,
         })
-        
+
         // ERC20 Approval
         const { hash: erc20Hash } = await erc20Contract.approve(
           getAddress(CONTRACT.BRIDGE.ADDRESS),
