@@ -122,13 +122,13 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      {/* {
+      { 
         <InfoBanner
           text={
-            "Turbo swETH SOMM & swETH incentives have been renewed and will begin flowing in the next few days."
+            "The launch of Turbo SOMM has been delayed and will be launched within a couple of days."
           }
         />
-        } */}
+        } 
       {/* <HStack
         p={4}
         mb={6}
