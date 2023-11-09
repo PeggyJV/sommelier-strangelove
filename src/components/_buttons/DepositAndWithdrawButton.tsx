@@ -46,16 +46,24 @@ const checkDisplay = (
     : "none"
 
 const checkButtonDisabled = (
+  isContractNotReady: boolean | undefined,
   isDeprecated: boolean,
   lpTokenDisabled: boolean,
   isConnected: boolean,
   isBeforeLaunch: boolean
-) =>
-  isDeprecated
+) => {
+  if (isContractNotReady !== undefined && isContractNotReady) {
+    return true
+  }
+
+  var res = isDeprecated
     ? lpTokenDisabled
       ? true
       : false
     : false || !isConnected || !isBeforeLaunch
+
+    return res
+  }
 
 const getButtonText = (
   isDeprecated: boolean,
@@ -97,6 +105,7 @@ export function DepositAndWithdrawButton({
     >
       <BaseButton
         disabled={checkButtonDisabled(
+          row.original?.isContractNotReady,
           row.original.deprecated,
           lpTokenDisabled,
           isConnected,
