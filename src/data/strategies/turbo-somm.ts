@@ -10,6 +10,7 @@ import {
 import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const turboSOMM: CellarData = {
+  isContractNotReady: true,
   name: "Turbo SOMM",
   slug: config.CONTRACT.TURBO_SOMM.SLUG,
   tradedAssets: ["SOMM", "WETH"],
@@ -96,4 +97,5 @@ export const turboSOMM: CellarData = {
         "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
   ],
+
 }
