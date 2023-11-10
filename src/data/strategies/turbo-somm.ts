@@ -10,7 +10,6 @@ import {
 import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const turboSOMM: CellarData = {
-  isContractNotReady: true,
   name: "Turbo SOMM",
   slug: config.CONTRACT.TURBO_SOMM.SLUG,
   tradedAssets: ["SOMM", "WETH"],
