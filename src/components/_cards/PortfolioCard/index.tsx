@@ -60,7 +60,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const dashboard = cellarDataMap[id].dashboard
 
   const depositTokens = cellarDataMap[id].depositTokens.list
-  const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
+  const depositTokenConfig = getTokenConfig(depositTokens, cellarConfig.chain.id) as Token[]
 
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData } = lpToken

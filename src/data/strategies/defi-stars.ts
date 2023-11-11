@@ -94,7 +94,7 @@ export const defiStars: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

@@ -98,7 +98,7 @@ export const realYieldUsd: CellarData = {
         customStrategyHighlightColor: "orange.base",
       },
     ],
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

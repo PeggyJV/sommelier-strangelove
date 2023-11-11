@@ -8,6 +8,7 @@ import BigNumber from "bignumber.js"
 import { config } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { tokenConfig } from "data/tokenConfig"
+import { cellarDataMap } from "data/cellarDataMap"
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_KEY
 const provider = new ethers.providers.AlchemyProvider(
@@ -70,7 +71,7 @@ export const useCurrentPosition = (config: ConfigProps) => {
               const tokenInfo = tokenConfig.find(
                 (item) =>
                   item.address.toLowerCase() ===
-                  position.toLowerCase()
+                  position.toLowerCase() && item.chain === config.chain.id
               )
               const usdPrice = await fetchCoingeckoPrice(
                 tokenInfo?.coinGeckoId || "",

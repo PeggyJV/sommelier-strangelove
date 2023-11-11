@@ -115,7 +115,7 @@ export const ethBtcMomentum: CellarData = {
       abi: config.CONTRACT.ETH_BTC_MOMENTUM_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

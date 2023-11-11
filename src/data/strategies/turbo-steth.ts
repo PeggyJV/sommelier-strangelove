@@ -86,7 +86,7 @@ export const turboSTETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.WETH,
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [
       {
         customStrategyHighlight: "wstETH Incentives",

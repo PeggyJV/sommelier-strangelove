@@ -70,7 +70,7 @@ export const getStrategyData = async ({
         process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
 
       const activeAsset = await (async () => {
-        const tokenInfo = getTokenByAddress(config.baseAsset.address)
+        const tokenInfo = getTokenByAddress(config.baseAsset.address, config.chain.id)
         return { ...tokenInfo, ...config.baseAsset }
       })()
 
@@ -82,7 +82,7 @@ export const getStrategyData = async ({
         const assets = strategy.tradedAssets
         if (!assets) return
         const tokens = assets.map((v) => {
-          const token = getTokenBySymbol(v)
+          const token = getTokenBySymbol(v, config.chain.id)
           return token
         })
 

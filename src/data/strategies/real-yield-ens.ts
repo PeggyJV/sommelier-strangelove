@@ -73,7 +73,7 @@ export const realYieldENS: CellarData = {
       key: CellarKey.CELLAR_V2,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.ENS,
+    baseAsset: tokenConfigMap.ENS_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

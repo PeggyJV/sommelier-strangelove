@@ -52,7 +52,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
   const { data: lpTokenData } = lpToken
 
   const baseAsset = tokenConfig.find(
-    (token) => token.symbol === symbol
+    (token) => token.symbol === symbol && cellarData.config.chain.id === token.chain
   )?.coinGeckoId
 
   const { data: coinGeckoPrice } = useCoinGeckoPrice(

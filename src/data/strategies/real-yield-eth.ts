@@ -86,7 +86,7 @@ export const realYieldEth: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    baseAsset: tokenConfigMap.WETH,
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

@@ -479,6 +479,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const currentAsset = getCurrentAsset(
     tokenConfig,
+    cellarConfig.chain.id,
     activeAsset?.address
   )
 

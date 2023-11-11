@@ -78,7 +78,7 @@ export const ethTrendGrowth: CellarData = {
       abi: config.CONTRACT.ETH_TREND_GROWTH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

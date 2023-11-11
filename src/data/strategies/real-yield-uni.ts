@@ -72,7 +72,7 @@ export const realYieldUNI: CellarData = {
       key: CellarKey.CELLAR_V2,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.UNI,
+    baseAsset: tokenConfigMap.UNI_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

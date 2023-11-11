@@ -188,7 +188,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             ) : (
               content.tradedAssets?.map((item) => {
                 const asset = tokenConfig.find(
-                  (v) => v.symbol === item
+                  (v) => v.symbol === item && v.chain === cellarConfig.chain.id
                 )
                 return (
                   <HStack key={item}>

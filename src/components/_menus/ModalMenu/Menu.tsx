@@ -55,7 +55,7 @@ export const Menu: VFC<MenuProps> = ({
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
 
-  const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
+  const depositTokenConfig = getTokenConfig(depositTokens, cellarConfig.chain.id) as Token[]
   const setMax = () => {
     // analytics.track("deposit.max-selected", {
     //   value: selectedTokenBalance?.value?.toString(),

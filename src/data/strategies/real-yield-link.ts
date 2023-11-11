@@ -72,7 +72,7 @@ export const realYieldLink: CellarData = {
       key: CellarKey.CELLAR_V2,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.LINK,
+    baseAsset: tokenConfigMap.LINK_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

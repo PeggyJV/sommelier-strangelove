@@ -84,7 +84,7 @@ export const fraximal: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0815,
     },
     rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    baseAsset: tokenConfigMap.FRAX,
+    baseAsset: tokenConfigMap.FRAX_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

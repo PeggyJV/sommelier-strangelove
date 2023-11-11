@@ -123,7 +123,7 @@ export const turboSWETH: CellarData = {
         Date.UTC(2023, 11, 5, 0, 0, 0, 0)
       ),
     },
-    baseAsset: tokenConfigMap.WETH,
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
     feePromotion: "Promotional 0 fee period sponsored by Swell",
     badges: [
       {
