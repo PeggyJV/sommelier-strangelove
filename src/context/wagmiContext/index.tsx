@@ -17,9 +17,7 @@ import { WalletConnectLegacyConnector } from "wagmi/connectors/walletConnectLega
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet"
 import { MetaMaskConnector } from "wagmi/connectors/metaMask"
 
-const ALCHEMY_URL = "https://eth-mainnet.alchemyapi.io/v2/"
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
-const alchemyRpc = `${ALCHEMY_URL}${ALCHEMY_API_KEY}`
 const WALLETCONNECT_PROJECT_ID =
   process.env.NEXT_WALLETCONNECT_PROJECT_ID
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY

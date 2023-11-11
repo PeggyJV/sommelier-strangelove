@@ -10,6 +10,8 @@ export interface Chain {
   displayName: string
   logoPath: string
   alt: string
+  infuraRpcUrl: string
+  alchemyRpcUrl: string
 }
 
 /**
@@ -24,6 +26,8 @@ export const chainConfig: Chain[] = [
     displayName: "Ethereum",
     logoPath: "/assets/icons/ethereum-alt.png",
     alt: "Ethereum logo",
+    infuraRpcUrl: mainnet.rpcUrls.infura.http[0],
+    alchemyRpcUrl: mainnet.rpcUrls.alchemy.http[0],
   },
   {
     id: "arbitrum",
@@ -32,6 +36,8 @@ export const chainConfig: Chain[] = [
     displayName: "Arbitrum",
     logoPath: "/assets/icons/arbitrum.png",
     alt: "Arbitrum logo",
+    infuraRpcUrl: arbitrum.rpcUrls.infura.http[0],
+    alchemyRpcUrl: arbitrum.rpcUrls.alchemy.http[0],
   },
 ]
 
