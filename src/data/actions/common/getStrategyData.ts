@@ -101,6 +101,7 @@ export const getStrategyData = async ({
 
         // Custom reward APY overrides
         // TODO: Eventually we just need to make this a type of list with the specific token reward and the APY
+        /** 
         if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
           // Get wstETH price
           const wstethPrice = Number(
@@ -118,6 +119,7 @@ export const getStrategyData = async ({
             value: apy,
           }
         }
+        **/
 
         if (!isStakingOngoing) return
 
@@ -192,6 +194,7 @@ export const getStrategyData = async ({
           }
         }
 
+        /** 
         if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
           const launchDay = launchDate ?? subDays(new Date(), 8)
           const launchEpoch = Math.floor(launchDay.getTime() / 1000)
@@ -210,6 +213,7 @@ export const getStrategyData = async ({
 
           return baseAPY
         }
+        **/
 
         if (hideValue) return
         if (!isAPYEnabled(config)) return
