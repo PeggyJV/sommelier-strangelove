@@ -11,6 +11,7 @@ import { depositAssetTokenList } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const ethBtcMomentum: CellarData = {
+  deprecated: true,
   name: "ETH-BTC Momentum",
   cellarType: CellarType.automatedPortfolio,
   slug: config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG,
