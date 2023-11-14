@@ -122,13 +122,13 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      { /*
+      {
         <InfoBanner
           text={
-            "The launch of Turbo SOMM has been delayed and will be launched within a couple of days."
+            "A proposal to renew Real Yield BTC incentives is making its way through governance, if it passes rewards will start flowing on Nov 16th."
           }
         />
-        */} 
+        }
       {/* <HStack
         p={4}
         mb={6}
