@@ -11,6 +11,7 @@ import { depositAssetTokenList } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
 
 export const ethBtcTrend: CellarData = {
+  deprecated: true,
   name: "ETH-BTC Trend",
   slug: config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG,
   dashboard:
