@@ -125,7 +125,7 @@ export const PageHome = () => {
       {
         <InfoBanner
           text={
-            "A proposal to renew Real Yield BTC incentives is making its way through governance, if it passes rewards will start flowing on Nov 16th."
+            "A proposal to renew Real Yield BTC incentives is making its way through governance, if it passes rewards will start flowing on Nov 17th."
           }
         />
         }
