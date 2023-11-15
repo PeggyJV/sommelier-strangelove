@@ -131,8 +131,8 @@ export const StrategyTabColumn = ({
                   src={row.original.config.chain.logoPath}
                   key={row.original.config.chain.id}
                   sx={{
-                    width: "2em", // custom width
-                    height: "2em", // custom height
+                    width: "2.2em", // custom width
+                    height: "2.2em", // custom height
                   }}
                 />
               </AvatarGroup>

@@ -105,82 +105,6 @@ export const StrategyDesktopColumn = ({
       Header: () => (
         <Tooltip
           arrowShadowColor="purple.base"
-          label="The chain the vault is deployed on"
-          placement="top"
-          color="neutral.300"
-          bg="surface.bg"
-        >
-          <HStack
-            style={{ textAlign: "right", width: "100%" }}
-            justifyContent={"right"}
-          >
-            <Text>Chain</Text>
-            <InformationIcon color="neutral.400" boxSize={3} />
-          </HStack>
-        </Tooltip>
-      ),
-      accessor: "chain",
-      Cell: ({ cell: { row } }: CellValue) => {
-        const [isHover, setIsHover] = useState(false)
-        const handleMouseOver = () => {
-          setIsHover(true)
-        }
-        const handleMouseLeave = () => {
-          setIsHover(false)
-        }
-        if (!row)
-          return (
-            <Text fontWeight={600} fontSize="12px">
-              --
-            </Text>
-          )
-        return (
-          <Box
-            onMouseLeave={handleMouseLeave}
-            onMouseOver={handleMouseOver}
-            w={"80%"}
-          >
-            <HStack justifyContent={"right"}>
-              <AvatarGroup>
-                <Avatar
-                  name={row.original.config.chain.displayName}
-                  src={row.original.config.chain.logoPath}
-                  key={row.original.config.chain.id}
-                  sx={{
-                    width: "2em", // custom width
-                    height: "2em", // custom height
-                  }}
-                />
-              </AvatarGroup>
-            </HStack>
-            <Flex alignItems="center" direction="column">
-              {isHover && (
-                <AvatarTooltip chains={[row.original.config.chain]} />
-              )}
-            </Flex>
-          </Box>
-        )
-      },
-      disableSortBy: false,
-      sortType: (rowA: RowData, rowB: RowData) => {
-        // Sort by active asset asset
-        const valA =
-          rowA.original.config.chain.displayName.toLowerCase() || ""
-        const valB =
-          rowB.original.config.chain.displayName.toLowerCase() || ""
-
-        // Normal Sorting
-        if (valA > valB) return 1
-
-        if (valB > valA) return -1
-
-        return 0
-      },
-    },
-    {
-      Header: () => (
-        <Tooltip
-          arrowShadowColor="purple.base"
           label="Vault will have exposure to 1 or more of these assets at any given time"
           placement="top"
           color="neutral.300"
@@ -241,6 +165,82 @@ export const StrategyDesktopColumn = ({
         )
       },
       disableSortBy: true,
+    },
+    {
+      Header: () => (
+        <Tooltip
+          arrowShadowColor="purple.base"
+          label="The chain the vault is deployed on"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack
+            style={{ textAlign: "right", width: "100%" }}
+            justifyContent={"right"}
+          >
+            <Text>Chain</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
+      ),
+      accessor: "chain",
+      Cell: ({ cell: { row } }: CellValue) => {
+        const [isHover, setIsHover] = useState(false)
+        const handleMouseOver = () => {
+          setIsHover(true)
+        }
+        const handleMouseLeave = () => {
+          setIsHover(false)
+        }
+        if (!row)
+          return (
+            <Text fontWeight={600} fontSize="12px">
+              --
+            </Text>
+          )
+        return (
+          <Box
+            onMouseLeave={handleMouseLeave}
+            onMouseOver={handleMouseOver}
+            w={"80%"}
+          >
+            <HStack justifyContent={"right"}>
+              <AvatarGroup>
+                <Avatar
+                  name={row.original.config.chain.displayName}
+                  src={row.original.config.chain.logoPath}
+                  key={row.original.config.chain.id}
+                  sx={{
+                    width: "2.2em", // custom width
+                    height: "2.2em", // custom height
+                  }}
+                />
+              </AvatarGroup>
+            </HStack>
+            <Flex alignItems="center" direction="column">
+              {isHover && (
+                <AvatarTooltip chains={[row.original.config.chain]} />
+              )}
+            </Flex>
+          </Box>
+        )
+      },
+      disableSortBy: false,
+      sortType: (rowA: RowData, rowB: RowData) => {
+        // Sort by active asset asset
+        const valA =
+          rowA.original.config.chain.displayName.toLowerCase() || ""
+        const valB =
+          rowB.original.config.chain.displayName.toLowerCase() || ""
+
+        // Normal Sorting
+        if (valA > valB) return 1
+
+        if (valB > valA) return -1
+
+        return 0
+      },
     },
     {
       Header: "TVL",

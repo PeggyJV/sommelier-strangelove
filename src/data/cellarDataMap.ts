@@ -58,6 +58,7 @@ if (config.cleargate.enabled) {
 }
 
 // Create another map of String to CellarData
+// ! For not ethereum cellars the key must be {cellarAddress}-{chainId}
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
   [config.CONTRACT.TURBO_STETH.ADDRESS.toLowerCase()]: turboSTETH,
