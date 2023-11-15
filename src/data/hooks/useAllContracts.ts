@@ -16,13 +16,8 @@ export const useAllContracts = () => {
     signerMap.set(chain.id, signer)
   })
 
-  const query = useQuery(
-    ["USE_ALL_STRATEGIES_CONTRACTS"],
-    () => getAllContracts(providerMap, signerMap),
-    {
-      // If you want to enable/disable this query based on the presence of provider/signer
-      enabled: !!provider && !!signer,
-    }
+  const query = useQuery(["USE_ALL_STRATEGIES_CONTRACTS"], () =>
+    getAllContracts(providerMap, signerMap)
   )
 
   return query
