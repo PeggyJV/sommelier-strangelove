@@ -30,8 +30,8 @@ let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   [config.CONTRACT.TURBO_SOMM.SLUG]: turboSOMM,
-  [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
+  [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
   [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,
   [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
   [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,

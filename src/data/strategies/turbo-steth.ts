@@ -86,6 +86,7 @@ export const turboSTETH: CellarData = {
       decimals: 18,
     },
     baseAsset: tokenConfigMap.WETH,
+    /** 
     badges: [
       {
         customStrategyHighlight: "wstETH Incentives",
@@ -118,6 +119,7 @@ export const turboSTETH: CellarData = {
       showSommRewards: false,
       //customIconToolTipMsg?: string
     },
+    **/
   },
   faq: [
     {

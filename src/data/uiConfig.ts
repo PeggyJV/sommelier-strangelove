@@ -453,10 +453,6 @@ export const apyLabel = (config: ConfigProps) => {
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const apyHoverLabel = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
-    return "Base APY since inception"
-  }
-
   if (
     config.cellar.key !== CellarKey.CELLAR_V0815 &&
     config.cellar.key !== CellarKey.CELLAR_V0816
@@ -482,10 +478,6 @@ export const apyHoverLabel = (config: ConfigProps) => {
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const baseApyHoverLabel = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
-    return "Base APY since inception"
-  }
-
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
