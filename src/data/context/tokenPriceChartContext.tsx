@@ -174,7 +174,7 @@ export const TokenPriceChartProvider: FC<{
   const [timeline, setTimeline] = useState<Timeline>("1W")
   const cellarData = Object.values(cellarDataMap).find(
     (item) => item.config.cellar.address === address
-  )
+  )!
 
   const [hourlyDataRaw, setHourlyDataRaw] = useState<
     GetHourlyShareValueQuery | undefined
