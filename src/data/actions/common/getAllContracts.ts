@@ -18,6 +18,8 @@ export const getAllContracts = async (
     const provider = providerMap.get(cellar.config.chain.id)
     const signer = signerMap.get(cellar.config.chain.id)
 
+    console.log(cellar.config.chain.id, provider, signer)
+
     // Make sure we have a provider before attempting to create a contract
     if (!provider) {
       throw new Error(
