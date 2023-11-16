@@ -1064,6 +1064,7 @@ export const strategyPageContentData = {
     backtestingText: `
         <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
       `,
+  },
   [config.CONTRACT.TURBO_SOMM.SLUG]: {
     name: "Turbo SOMM",
     provider: "Seven Seas",
