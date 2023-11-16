@@ -12,7 +12,9 @@ import { erc20ABI } from "wagmi"
 // !!!!!!!!
 // TODO: Fix all references to config.contract eth tokens for multichain
 // !!!!!!!!
-
+// TODO: Fix rewards icons for multichain
+// TODO: Fix all errors in console logs
+// TODO: Fix everythning for both connected and unconnected wallets
 
 
 // Adress should be saved as lowercase
