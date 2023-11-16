@@ -34,7 +34,6 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     baseApySumRewards,
     extraRewardsApy,
   } = props
-
   const endDate = new Date(stackingEndDate).getTime()
   const startDate = subDays(endDate, 30).getTime()
   const now = new Date(Date.now()).getTime()
@@ -155,58 +154,67 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
           {rewardsApy &&
             isStakingOverrideOngoing !== undefined &&
             isStakingOverrideOngoing === true && (
-              <Tooltip
-                label={
-                  cellarConfig.customReward?.customRewardEndMessage
-                    ? `${cellarConfig.customReward.tokenDisplayName} ${cellarConfig.customReward?.customRewardEndMessage}`
-                    : `${
-                        cellarConfig.customReward
-                          ?.customIconToolTipMsg ??
-                        `${
-                          cellarConfig.customReward?.showAPY
-                            ? `${cellarConfig.customReward.tokenDisplayName} `
-                            : ""
-                        }Rewards ends in`
-                      } ${formatDistanceToNowStrict(
-                        cellarConfig.customReward
-                          ?.stakingDurationOverride ??
-                          new Date(stackingEndDate)
-                      )}`
-                }
-                color="neutral.100"
-                border="0"
-                fontSize="12px"
-                bg="neutral.900"
-                fontWeight={600}
-                py="4"
-                px="6"
-                boxShadow="xl"
-                shouldWrapChildren
-              >
-                <HStack spacing={1}>
-                  <CircularProgress
-                    value={percentage}
-                    color="white"
-                    trackColor="none"
-                    size="25px"
-                  >
-                    <CircularProgressLabel
-                      display="flex"
-                      alignItems="center"
+              <>
+                {/*console.log(
+                  "cellarConfig",
+                  cellarConfig.cellarNameKey
+                )*/}
+
+                <Tooltip
+                  label={
+                    cellarConfig.customReward?.customRewardEndMessage
+                      ? `${cellarConfig.customReward.tokenDisplayName} ${cellarConfig.customReward?.customRewardEndMessage}`
+                      : `${
+                          cellarConfig.customReward
+                            ?.customIconToolTipMsg ??
+                          `${
+                            cellarConfig.customReward?.showAPY
+                              ? `${cellarConfig.customReward.tokenDisplayName} `
+                              : ""
+                          }Rewards ends in`
+                        } ${formatDistanceToNowStrict(
+                          cellarConfig.customReward
+                            ?.stakingDurationOverride ??
+                            new Date(stackingEndDate)
+                        )}`
+                  }
+                  color="neutral.100"
+                  border="0"
+                  fontSize="12px"
+                  bg="neutral.900"
+                  fontWeight={600}
+                  py="4"
+                  px="6"
+                  boxShadow="xl"
+                  shouldWrapChildren
+                >
+                  <HStack spacing={1}>
+                    <CircularProgress
+                      value={percentage}
+                      color="white"
+                      trackColor="none"
+                      size="25px"
                     >
-                      <LogoComponent
-                        mx="auto"
-                        color="red.normal"
-                        p={0}
-                        boxSize={
-                          cellarConfig.customReward?.logoSize ?? "9px"
-                        }
-                      />
-                    </CircularProgressLabel>
-                  </CircularProgress>
-                </HStack>
-              </Tooltip>
+                      <CircularProgressLabel
+                        display="flex"
+                        alignItems="center"
+                      >
+                        <LogoComponent
+                          mx="auto"
+                          color="red.normal"
+                          p={0}
+                          boxSize={
+                            cellarConfig.customReward?.logoSize ??
+                            "9px"
+                          }
+                        />
+                      </CircularProgressLabel>
+                    </CircularProgress>
+                  </HStack>
+                </Tooltip>
+              </>
             )}
+
           {rewardsApy &&
             (cellarConfig.customReward?.showSommRewards ===
               undefined ||
