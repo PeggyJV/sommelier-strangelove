@@ -92,6 +92,7 @@ export interface StrategyContracts {
   stakerContract?: Contract
   stakerSigner?: Contract
   cellarRouterSigner: Contract
+  chain: string
 }
 export type AllContracts = Record<string, StrategyContracts>
 
@@ -182,6 +183,7 @@ export type GetAllStrategiesDataQuery = {
       date: number
       shareValue: string
     }>
+    chain: string
   }>
 }
 

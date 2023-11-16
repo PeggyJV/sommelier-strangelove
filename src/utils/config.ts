@@ -10,7 +10,7 @@ import { erc20ABI } from "wagmi"
 
 
 // !!!!!!!!
-// TODO: Fix all references to config.contract eth tokens
+// TODO: Fix all references to config.contract eth tokens for multichain
 // !!!!!!!!
 
 

@@ -22,14 +22,24 @@ export const getAllStrategiesData = async ({
         const result = await reactQueryClient.fetchQuery(
           ["USE_STRATEGY_DATA", { provider: true, address }],
           async () => {
+            // Get the contract's chain
+            let chain = ""
+            if (contracts.chain !== "ethereum") {
+              chain = "-" + contracts.chain
+            }
+            
+            // Note: the id contaisn the address + the chain if it is not ethereum
             const cleanCellarData = cellarData.cellars.find(
-              (v) => v.id.toLowerCase() === address.toLowerCase()
+              (v) =>
+                v.id.toLowerCase() ===
+                address.toLowerCase() + chain
             )
 
             const strategy = Object.values(cellarDataMap).find(
               ({ config }) =>
                 config.cellar.address.toLowerCase() ===
-                address.toLowerCase()
+                  address.toLowerCase() &&
+                config.chain.id === contracts.chain
             )!
             const config: ConfigProps = strategy.config!
 

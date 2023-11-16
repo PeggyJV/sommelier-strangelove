@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { CellaAddressDataMap } from "data/cellarDataMap"
+import { chainSlugMap } from "data/chainConfig"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -9,6 +10,7 @@ interface CellarType {
   dayDatas: any
   shareValue: any
   tvlTotal: number
+  chain: string
 }
 
 async function fetchData(url: string) {
@@ -125,6 +127,7 @@ const sommelierAPIAllStrategiesData = async (
         dayDatas: transformedData,
         shareValue: transformedData[0].shareValue,
         tvlTotal: tvl,
+        chain: chainSlugMap.ETHEREUM.id,
       }
 
       returnObj.result.data.cellars.push(cellarObj)
@@ -174,6 +177,7 @@ const sommelierAPIAllStrategiesData = async (
           dayDatas: transformedData,
           shareValue: transformedData[0].shareValue,
           tvlTotal: tvl,
+          chain: chainSlugMap.ARBITRUM.id,
         }
 
         returnObj.result.data.cellars.push(cellarObj)

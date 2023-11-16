@@ -65,6 +65,7 @@ export const getAllContracts = async (
       stakerContract,
       stakerSigner,
       cellarRouterSigner,
+      chain: cellar.config.chain.id,
     }
 
     contracts = {
