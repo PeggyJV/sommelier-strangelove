@@ -52,7 +52,6 @@ export const Rewards = ({
       })
     },
   })
-  const { chain } = useNetwork()
 
   const userRewards =
     userStakes?.totalClaimAllRewards?.value.toString()
@@ -61,7 +60,7 @@ export const Rewards = ({
     !isConnected || !userRewards || parseInt(userRewards) <= 0
 
   // Get somm token 
-  const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)!
+  const chainObj = chainConfig.find((c) => c.id === cellarConfig.chain.id)!
 
   const sommToken = tokenConfig.find(
     (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj.id

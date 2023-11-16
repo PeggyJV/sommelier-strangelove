@@ -13,7 +13,6 @@ import { erc20ABI } from "wagmi"
 // TODO: Make sure allContracts calls factor in the chainId
 // TODO: Make sure all Object.values(cellarDataMap).find( factor in the chainId
 
-// TODO: Fix rewards icons for multichain
 // TODO: Fix all errors in console logs
 // TODO: Fix everythning for both connected and unconnected wallets
 // !!!!!!!!
