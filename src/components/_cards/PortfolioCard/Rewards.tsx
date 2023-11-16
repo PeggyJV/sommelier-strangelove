@@ -106,10 +106,10 @@ export const Rewards = ({
               <Link
                 display="flex"
                 alignItems="center"
-                href={`${chain?.blockExplorers?.default.url}/tx/${result?.data?.transactionHash}`}
+                href={`${cellarConfig.chain.blockExplorer.url}/tx/${result?.data?.transactionHash}`}
                 isExternal
               >
-                <Text as="span">{`View on ${chain?.blockExplorers?.default.name}`}</Text>
+                <Text as="span">{`View on ${cellarConfig.chain.blockExplorer.name}`}</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
               <Text
