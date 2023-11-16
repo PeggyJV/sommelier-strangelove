@@ -158,6 +158,11 @@ export const config = {
       SLUG: "Turbo-GHO",
       ABI: cellarV0821,
     },
+    TURBO_SOMM: {
+      ADDRESS: "0x5195222f69c5821f8095ec565E71e18aB6A2298f",
+      SLUG: "Turbo-SOMM",
+      ABI: cellarV0821,
+    },
     TURBO_STETH: {
       ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",
       SLUG: "Turbo-STETH",

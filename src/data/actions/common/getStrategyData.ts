@@ -104,6 +104,7 @@ export const getStrategyData = async ({
 
         // Custom reward APY overrides
         // TODO: Eventually we just need to make this a type of list with the specific token reward and the APY
+        /** 
         if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
           // Get wstETH price
           const wstethPrice = Number(
@@ -121,6 +122,7 @@ export const getStrategyData = async ({
             value: apy,
           }
         }
+        **/
 
         if (!isStakingOngoing) return
 
@@ -152,7 +154,7 @@ export const getStrategyData = async ({
 
         // 5400 GHO per week * 52 weeks * 100 for human readable %
         // TODO: Update this  + expiration date in config weekly as long as GHO incentives live
-        let apy = ((7750 * ghoPrice) / usdTvl) * 52 * 100
+        let apy = ((4150 * ghoPrice) / usdTvl) * 52 * 100
 
         extraRewardsApy = {
           formatted: apy.toFixed(2).toString() + "%",
@@ -195,6 +197,7 @@ export const getStrategyData = async ({
           }
         }
 
+        /** 
         if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
           const launchDay = launchDate ?? subDays(new Date(), 8)
           const launchEpoch = Math.floor(launchDay.getTime() / 1000)
@@ -213,6 +216,7 @@ export const getStrategyData = async ({
 
           return baseAPY
         }
+        **/
 
         if (hideValue) return
         if (!isAPYEnabled(config)) return

@@ -36,7 +36,8 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH || 
-    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM 
   )
 }
 
@@ -100,7 +101,8 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH || 
-    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD || 
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM 
   )
 }
 
@@ -126,7 +128,8 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO || 
-    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD || 
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM 
   )
 }
 
@@ -255,7 +258,7 @@ export const isTokenPriceChartEnabled = (config: ConfigProps) => {
 }
 
 export const isApyChartEnabled = (config: ConfigProps) => {
-  return config.cellar.key === CellarKey.CELLAR_V2
+  return (config.cellar.key === CellarKey.CELLAR_V2 || config.cellarNameKey === CellarNameKey.TURBO_STETH || config.cellarNameKey === CellarNameKey.TURBO_SWETH)
 }
 
 export const bondingPeriodOptions = (
@@ -398,6 +401,25 @@ export const bondingPeriodOptions = (
       },
     ]
   }
+  if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
   return []
 }
 
@@ -422,7 +444,8 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_GHO
+      config.cellarNameKey === CellarNameKey.TURBO_GHO ||
+      config.cellarNameKey === CellarNameKey.TURBO_SOMM 
     ) {
       return "Estimated APY"
     }
@@ -433,10 +456,6 @@ export const apyLabel = (config: ConfigProps) => {
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const apyHoverLabel = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
-    return "Base APY since inception"
-  }
-
   if (
     config.cellar.key !== CellarKey.CELLAR_V0815 &&
     config.cellar.key !== CellarKey.CELLAR_V0816
@@ -452,7 +471,9 @@ export const apyHoverLabel = (config: ConfigProps) => {
       return "7 Day MA APY (includes swETH incentives)"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
       return "Estimated APY"
-    }
+    } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+      return "Estimated Reward APY (excluding impermanent loss)"
+    } 
     return "APY since inception"
   }
   return "APY since inception"
@@ -460,10 +481,6 @@ export const apyHoverLabel = (config: ConfigProps) => {
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const baseApyHoverLabel = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
-    return "Base APY since inception"
-  }
-
   if (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
@@ -475,7 +492,9 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     return "7 Day MA APY (includes swETH incentives)"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
     return "Estimated APY"
-  }
+  } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+    return "Estimated Reward APY (excluding impermanent loss)"
+  } 
   return "APY since inception"
 }
 
@@ -486,7 +505,8 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_GHO
+    config.cellarNameKey === CellarNameKey.TURBO_GHO ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM 
   ) {
     return true
   }
@@ -500,8 +520,8 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_GHO
+    config.cellarNameKey === CellarNameKey.TURBO_GHO ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM 
   ) {
     return "Estimated APY"
   }
@@ -538,6 +558,12 @@ export const estimatedApyValue = (config: ConfigProps) => {
     return {
       value: 3.0,
       formatted: "3.0%",
+    }
+  }
+  if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+    return {
+      value: 60.0,
+      formatted: "60.0%",
     }
   }
 }

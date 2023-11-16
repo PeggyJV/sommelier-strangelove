@@ -198,7 +198,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                 (isConnected ? (
                   <>
                     {!strategyData?.deprecated && (
-                      <DepositButton disabled={!isConnected} />
+                      <DepositButton
+                        disabled={!isConnected || strategyData?.isContractNotReady}
+                      />
                     )}
                     <WithdrawButton
                       isDeprecated={strategyData?.deprecated}
@@ -324,7 +326,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               stakingEnd?.endDate &&
               isFuture(stakingEnd?.endDate) && (
                 <>
-                  {cellarConfig.customReward?.customRewardLongMessage ? (
+                  {cellarConfig.customReward
+                    ?.customRewardLongMessage ? (
                     <InnerCard
                       backgroundColor="surface.tertiary"
                       mt={8}

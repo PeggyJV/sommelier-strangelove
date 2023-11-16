@@ -119,22 +119,28 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                   {baseApyHoverLabel(cellarConfig)}{" "}
                   {baseApy ?? "0.00%"}
                 </Text>
-                <Text>
-                  {cellarConfig.customReward?.showSommRewards
-                    ? `SOMM Rewards APY ${rewardsApy ?? "0.00%"}`
-                    : null}
-                </Text>
-                <Text>
-                  {cellarConfig.customReward
-                    ?.customRewardAPYTooltip ??
-                    `${
-                      cellarConfig.customReward?.showAPY
-                        ? `${cellarConfig.customReward.tokenDisplayName} `
-                        : ""
-                    }Rewards APY ${
-                      extraRewardsApy ?? rewardsApy ?? "0.00%"
-                    }`}
-                </Text>
+                {!cellarConfig.customReward?.showOnlyBaseApy ? (
+                  <>
+                    <Text>
+                      {cellarConfig.customReward?.showSommRewards
+                        ? `SOMM Rewards APY ${rewardsApy ?? "0.00%"}`
+                        : null}
+                    </Text>
+                    <Text>
+                      {cellarConfig.customReward
+                        ?.customRewardAPYTooltip ??
+                        `${
+                          cellarConfig.customReward?.showAPY
+                            ? `${cellarConfig.customReward.tokenDisplayName} `
+                            : ""
+                        }Rewards APY ${
+                          extraRewardsApy ?? rewardsApy ?? "0.00%"
+                        }`}
+                    </Text>
+                  </>
+                ) : (
+                  <></>
+                )}
               </>
             }
             color="neutral.100"
@@ -151,70 +157,61 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               {baseApySumRewards ?? "-"}
             </Text>
           </Tooltip>
-          {rewardsApy &&
-            isStakingOverrideOngoing !== undefined &&
-            isStakingOverrideOngoing === true && (
-              <>
-                {/*console.log(
-                  "cellarConfig",
-                  cellarConfig.cellarNameKey
-                )*/}
-
-                <Tooltip
-                  label={
-                    cellarConfig.customReward?.customRewardEndMessage
-                      ? `${cellarConfig.customReward.tokenDisplayName} ${cellarConfig.customReward?.customRewardEndMessage}`
-                      : `${
-                          cellarConfig.customReward
-                            ?.customIconToolTipMsg ??
-                          `${
-                            cellarConfig.customReward?.showAPY
-                              ? `${cellarConfig.customReward.tokenDisplayName} `
-                              : ""
-                          }Rewards ends in`
-                        } ${formatDistanceToNowStrict(
-                          cellarConfig.customReward
-                            ?.stakingDurationOverride ??
-                            new Date(stackingEndDate)
-                        )}`
-                  }
-                  color="neutral.100"
-                  border="0"
-                  fontSize="12px"
-                  bg="neutral.900"
-                  fontWeight={600}
-                  py="4"
-                  px="6"
-                  boxShadow="xl"
-                  shouldWrapChildren
+          {(rewardsApy && isStakingOverrideOngoing === true) ||
+          (!cellarConfig.customReward?.showOnlyBaseApy === false &&
+            isStakingOverrideOngoing === true) ? (
+            <Tooltip
+              label={
+                cellarConfig.customReward?.customRewardEndMessage
+                  ? `${cellarConfig.customReward.tokenDisplayName} ${cellarConfig.customReward?.customRewardEndMessage}`
+                  : `${
+                      cellarConfig.customReward
+                        ?.customIconToolTipMsg ??
+                      `${
+                        cellarConfig.customReward?.showAPY
+                          ? `${cellarConfig.customReward.tokenDisplayName} `
+                          : ""
+                      }Rewards ends in`
+                    } ${formatDistanceToNowStrict(
+                      cellarConfig.customReward
+                        ?.stakingDurationOverride ??
+                        new Date(stackingEndDate)
+                    )}`
+              }
+              color="neutral.100"
+              border="0"
+              fontSize="12px"
+              bg="neutral.900"
+              fontWeight={600}
+              py="4"
+              px="6"
+              boxShadow="xl"
+              shouldWrapChildren
+            >
+              <HStack spacing={1}>
+                <CircularProgress
+                  value={percentage}
+                  color="white"
+                  trackColor="none"
+                  size="25px"
                 >
-                  <HStack spacing={1}>
-                    <CircularProgress
-                      value={percentage}
-                      color="white"
-                      trackColor="none"
-                      size="25px"
-                    >
-                      <CircularProgressLabel
-                        display="flex"
-                        alignItems="center"
-                      >
-                        <LogoComponent
-                          mx="auto"
-                          color="red.normal"
-                          p={0}
-                          boxSize={
-                            cellarConfig.customReward?.logoSize ??
-                            "9px"
-                          }
-                        />
-                      </CircularProgressLabel>
-                    </CircularProgress>
-                  </HStack>
-                </Tooltip>
-              </>
-            )}
-
+                  <CircularProgressLabel
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <LogoComponent
+                      mx="auto"
+                      color="red.normal"
+                      p={0}
+                      boxSize={
+                        cellarConfig.customReward?.logoSize ?? "9px"
+                      }
+                    />
+                  </CircularProgressLabel>
+                </CircularProgress>
+              </HStack>
+            </Tooltip>
+          ) : null}
           {rewardsApy &&
             (cellarConfig.customReward?.showSommRewards ===
               undefined ||

@@ -41,6 +41,7 @@ export enum CellarNameKey {
   TURBO_GHO = "TURBO_GHO",
   TURBO_STETH = "TURBO_STETH",
   TEST_ARBITRUM_REAL_YIELD_USD = "TEST_ARBITRUM_REAL_YIELD_USD",
+  TURBO_SOMM = "TURBO_SOMM",
 }
 
 export interface Badge {
@@ -100,6 +101,7 @@ type Exchange =
     }
 
 export interface CustomReward {
+  showOnlyBaseApy?: boolean
   showAPY: boolean
   tokenSymbol: string
   tokenDisplayName: string
