@@ -303,7 +303,6 @@ export const tokenConfig: Token[] = [
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
   },
-
   {
     src: "/assets/icons/wsteth-logo.jpeg",
     alt: "wstETH logo",
@@ -312,6 +311,33 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "wrapped-steth",
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
+    src: "/assets/icons/usdc.png",
+    alt: "USD Coin logo",
+    symbol: "USDC",
+    address: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+    coinGeckoId: "usd-coin",
+    decimals: 6,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
+    src: "/assets/icons/dai.png",
+    alt: "Dai logo",
+    symbol: "DAI",
+    address: "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+    coinGeckoId: "dai",
+    decimals: 18,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
+    src: "/assets/icons/usdt.png",
+    alt: "Tether logo",
+    symbol: "USDT",
+    address: "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+    coinGeckoId: "tether",
+    decimals: 6,
+    chain: chainSlugMap.ARBITRUM.id,
   },
 ]
 

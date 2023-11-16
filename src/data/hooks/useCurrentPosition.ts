@@ -5,24 +5,25 @@ import { useAccount, useQuery, useSigner } from "wagmi"
 import { useCreateContracts } from "./useCreateContracts"
 import erc20 from "src/abi/erc20.json"
 import BigNumber from "bignumber.js"
-import { config } from "src/utils/config"
+import { config as contractConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { tokenConfig } from "data/tokenConfig"
-import { cellarDataMap } from "data/cellarDataMap"
+import { useNetwork, useProvider } from "wagmi"
 
-const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_KEY
-const provider = new ethers.providers.AlchemyProvider(
-  "homestead",
-  alchemyKey
-)
-const usdcAddress = config.CONTRACT.USDC.ADDRESS
-const ERC20 = new ethers.Contract(usdcAddress, erc20, provider)
+
+// TODO: Fix all references to config.contract eth tokens
 
 function toBN(value: any) {
   return new BigNumber(value.toString())
 }
 
 export const useCurrentPosition = (config: ConfigProps) => {
+  const provider = useProvider()
+  const network = useNetwork()
+
+  const usdcAddress = contractConfig.CONTRACT.USDC.ADDRESS
+  const ERC20 = new ethers.Contract(usdcAddress, erc20, provider)
+
   const { cellarContract } = useCreateContracts(config)
   const { address } = useAccount()
   const { data: signer } = useSigner()

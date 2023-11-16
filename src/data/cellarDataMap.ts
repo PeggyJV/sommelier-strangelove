@@ -23,12 +23,15 @@ import {
   ethTrendGrowth,
   turboGHO,
   turboSTETH,
+  testArbitrumRealYieldUsd,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 if (config.cleargate.enabled) {
   cellarConfig = {
     // ! NOTE THIS DETERMINES INITIAL ORDERING
+    [config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:
+      testArbitrumRealYieldUsd,
     [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
     [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: ethTrendGrowth,
     [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,
@@ -61,6 +64,8 @@ if (config.cleargate.enabled) {
 // ! For not ethereum cellars the key must be {cellarAddress}-{chainId}
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
+  [config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS.toLowerCase() +
+  "-arbitrum"]: testArbitrumRealYieldUsd,
   [config.CONTRACT.TURBO_STETH.ADDRESS.toLowerCase()]: turboSTETH,
   [config.CONTRACT.ETH_TREND_GROWTH.ADDRESS.toLowerCase()]:
     ethTrendGrowth,

@@ -8,6 +8,13 @@ import cellarV0821 from "../abi/cellar-v0.8.21.json"
 import gravityBridge from "../abi/gravityBridge.json"
 import { erc20ABI } from "wagmi"
 
+
+// !!!!!!!!
+// TODO: Fix all references to config.contract eth tokens
+// !!!!!!!!
+
+
+
 // Adress should be saved as lowercase
 /** Ensure Checksum Address  */
 export const config = {
@@ -31,6 +38,11 @@ export const config = {
     UST: {
       ADDRESS: "0xa693B19d2931d498c5B318dF961919BB4aee87a5",
       ABI: erc20ABI,
+    },
+    TEST_ARBITRUM_REAL_YIELD_USD: {
+      ADDRESS: "0xA73B0B48E26E4B8B24CeaD149252cc275deE99A6",
+      SLUG: "Real-Yield-USD-Arbitrum",
+      ABI: cellarV0821,
     },
     DEFI_PULSE: {
       ADDRESS: "0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b",
