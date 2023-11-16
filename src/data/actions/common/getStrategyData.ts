@@ -70,7 +70,10 @@ export const getStrategyData = async ({
         process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
 
       const activeAsset = await (async () => {
-        const tokenInfo = getTokenByAddress(config.baseAsset.address, config.chain.id)
+        const tokenInfo = getTokenByAddress(
+          config.baseAsset.address,
+          config.chain.id
+        )
         return { ...tokenInfo, ...config.baseAsset }
       })()
 

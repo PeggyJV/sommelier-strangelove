@@ -44,12 +44,12 @@ export const getApyInception = ({
     // Now val must have same amt of digits as startValue
     // If the start value is less than 1, the now value needs a length of decimals
     // If the start value is greater than 1, the now value needs a length of startValue.toString().length
-    let nowValue;
+    let nowValue
     if (startValue.lt(10 ** decimals)) {
       nowValue = new BigNumber(
         new BigNumber(shareData.shareValue)
           .toString()
-          .substring(0, decimals+1)
+          .substring(0, decimals + 1)
       )
     } else {
       nowValue = new BigNumber(
@@ -64,7 +64,9 @@ export const getApyInception = ({
     // Take the gains since inception and annualize it to get APY since inception
     return yieldGain.times(365).div(daysSince).times(100).toNumber()
   })()
-  if (!cellarApy) return
+  // if cellar apy is not a number, return 
+  if (isNaN(cellarApy)) return
+
   return {
     formatted: cellarApy.toFixed(2) + "%",
     value: Number(cellarApy.toFixed(2)),

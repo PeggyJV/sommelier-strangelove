@@ -228,7 +228,7 @@ export const StrategyDesktopColumn = ({
       },
       disableSortBy: false,
       sortType: (rowA: RowData, rowB: RowData) => {
-        // Sort by active asset asset
+        // Sort by chain
         const valA =
           rowA.original.config.chain.displayName.toLowerCase() || ""
         const valB =

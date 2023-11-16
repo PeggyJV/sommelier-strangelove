@@ -35,7 +35,8 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_STETH
+    config.cellarNameKey === CellarNameKey.TURBO_STETH || 
+    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
   )
 }
 
@@ -98,7 +99,8 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.FRAXIMAL ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
-    config.cellarNameKey === CellarNameKey.TURBO_STETH
+    config.cellarNameKey === CellarNameKey.TURBO_STETH || 
+    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
   )
 }
 
@@ -123,7 +125,8 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_GHO
+    config.cellarNameKey === CellarNameKey.TURBO_GHO || 
+    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
   )
 }
 

@@ -84,11 +84,6 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
     return <ErrorCard />
   }
 
-  let baseApy = strategyData?.baseApy?.formatted ?? "0.00%"
-  let rewardsApy = strategyData?.rewardsApy?.formatted ?? "0.00%"
-  let baseApySumRewards =
-    strategyData?.baseApySumRewards.formatted ?? "0.00%"
-
   return (
     <Skeleton
       h={isFetching ? "450px" : "none"}

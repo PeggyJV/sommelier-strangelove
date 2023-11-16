@@ -18,7 +18,7 @@ export const testArbitrumRealYieldUsd: CellarData = {
   popUpDescription:
     "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
   tradedAssets: ["USDC", "USDT", "DAI"],
-  launchDate: new Date("2023-11-15T00:00:00.000Z"),
+  launchDate: new Date("2023-11-05T00:00:00.000Z"),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
   strategyType: "Stablecoin",
