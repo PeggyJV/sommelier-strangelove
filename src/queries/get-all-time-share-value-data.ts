@@ -1,4 +1,4 @@
-const getUrl = (cellarAddress: string) =>
+const getUrl = (cellarAddress: string, chain: string) =>
   `/api/sommelier-api-all-time-share-value-data?cellarAddress=${cellarAddress}&chain=${chain}`
 
 export const fetchAllTimeShareValueData = async (

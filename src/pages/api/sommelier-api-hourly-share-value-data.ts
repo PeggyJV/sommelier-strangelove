@@ -13,7 +13,6 @@ const sommelierAPIHourlyShareValueData = async (
     // Cast epoch to number
     const startEpochNumber = Number(epoch)
 
-    // TODO: Generalize for multichain
     const data = await fetch(
       `https://api.sommelier.finance/hourlyData/${chain}/${cellarAddress}/${startEpochNumber}/latest`,
       {

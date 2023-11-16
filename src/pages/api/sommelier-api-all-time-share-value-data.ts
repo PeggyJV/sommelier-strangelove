@@ -11,7 +11,6 @@ const sommelierAPIAllTimeShareValueData = async (
   try {
     let { cellarAddress, chain } = req.query
 
-    // TODO: Generalize for multichain
     const data = await fetch(
       `https://api.sommelier.finance/dailyData/${chain}/${cellarAddress}/0/latest`,
       {

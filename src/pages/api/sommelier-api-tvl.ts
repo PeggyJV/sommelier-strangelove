@@ -8,7 +8,6 @@ const sommelierAPITVL = async (
   res: NextApiResponse
 ) => {
   try {
-    // TODO: Generalize for multichain
     const data = await fetch(
       `https://api.sommelier.finance/tvl`,
       {

@@ -1,4 +1,4 @@
-const getUrl = (epoch: number, cellarAddress: string) =>
+const getUrl = (epoch: number, cellarAddress: string, chain: string) =>
   `/api/sommelier-api-hourly-share-value-data?epoch=${epoch}&cellarAddress=${cellarAddress}&chain=${chain}`
 
 export const fetchHourlyShareValueData = async (

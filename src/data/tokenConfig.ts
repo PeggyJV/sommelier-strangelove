@@ -1,7 +1,5 @@
 import { chainSlugMap } from "./chainConfig"
 
-// TODO: Multichain -- have a separate token config for each chain -- this is gonna require a lot of refactoring
-
 export interface Token {
   src: string
   alt: string
