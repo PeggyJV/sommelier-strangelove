@@ -19,8 +19,14 @@ export const useStrategyData = (address: string) => {
   >(undefined)
   const [error, setError] = useState(null)
 
+  const cellarData = Object.values(cellarDataMap).find(
+    (item) =>
+      item.config.cellar.address.toLowerCase() ===
+      address.toLowerCase()
+  )!
+
   useEffect(() => {
-    fetchIndividualCellarStrategyData(address.toLowerCase())
+    fetchIndividualCellarStrategyData(address.toLowerCase(), cellarData.config.chain.id)
       .then(({ data, error }) => {
         if (error) {
           setError(error)

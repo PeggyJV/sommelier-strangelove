@@ -187,7 +187,7 @@ export const ApyChartProvider: FC<{
 
   useEffect(() => {
     setWeeklyIsFetching(true)
-    fetchWeeklyShareValueData(prevWeek, address)
+    fetchWeeklyShareValueData(prevWeek, address, cellarData.config.chain.id)
       .then((data) => {
         setWeeklyDataRaw(data)
         setWeeklyIsFetching(false)
@@ -213,7 +213,7 @@ export const ApyChartProvider: FC<{
 
   useEffect(() => {
     setMonthlyIsFetching(true)
-    fetchMonthlyShareValueData(prevMonth, address)
+    fetchMonthlyShareValueData(prevMonth, address, cellarData.config.chain.id)
       .then((data) => {
         setMonthlyDataRaw(data)
         setMonthlyIsFetching(false)
@@ -239,7 +239,7 @@ export const ApyChartProvider: FC<{
 
   useEffect(() => {
     setAllTimeIsFetching(true)
-    fetchAllTimeShareValueData(address)
+    fetchAllTimeShareValueData(address, cellarData.config.chain.id)
       .then((data) => {
         setAllTimeDataRaw(data)
         setAllTimeIsFetching(false)

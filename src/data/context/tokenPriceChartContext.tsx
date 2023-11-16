@@ -10,6 +10,7 @@ import { fetchHourlyShareValueData } from "queries/get-hourly-share-value-data"
 import { fetchWeeklyShareValueData } from "queries/get-weekly-share-value-data"
 import { fetchMonthlyShareValueData } from "queries/get-monthly-share-value-data"
 import { fetchAllTimeShareValueData } from "queries/get-all-time-share-value-data"
+import { cellarDataMap } from "data/cellarDataMap"
 import {
   createContext,
   Dispatch,
@@ -171,6 +172,9 @@ export const TokenPriceChartProvider: FC<{
     tokenPrice: true,
   })
   const [timeline, setTimeline] = useState<Timeline>("1W")
+  const cellarData = Object.values(cellarDataMap).find(
+    (item) => item.config.cellar.address === address
+  )
 
   const [hourlyDataRaw, setHourlyDataRaw] = useState<
     GetHourlyShareValueQuery | undefined
@@ -187,7 +191,7 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setHourlyIsFetching(true)
-    fetchHourlyShareValueData(prev24Hours, address)
+    fetchHourlyShareValueData(prev24Hours, address, cellarData.config.chain.id)
       .then((data) => {
         setHourlyDataRaw(data)
         setHourlyIsFetching(false)
@@ -213,7 +217,7 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setWeeklyIsFetching(true)
-    fetchWeeklyShareValueData(prevWeek, address)
+    fetchWeeklyShareValueData(prevWeek, address, cellarData.config.chain.id)
       .then((data) => {
         setWeeklyDataRaw(data)
         setWeeklyIsFetching(false)
@@ -239,7 +243,7 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setMonthlyIsFetching(true)
-    fetchMonthlyShareValueData(prevMonth, address)
+    fetchMonthlyShareValueData(prevMonth, address, cellarData.config.chain.id)
       .then((data) => {
         setMonthlyDataRaw(data)
         setMonthlyIsFetching(false)
@@ -265,7 +269,7 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setAllTimeIsFetching(true)
-    fetchAllTimeShareValueData(address)
+    fetchAllTimeShareValueData(address, cellarData.config.chain.id)
       .then((data) => {
         setAllTimeDataRaw(data)
         setAllTimeIsFetching(false)
@@ -282,10 +286,9 @@ export const TokenPriceChartProvider: FC<{
     (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
   )
   // data inverted
-  const allTimeData = allTimeDataRaw?.cellar?.dayDatas
-    .filter(
-      (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
-    )
+  const allTimeData = allTimeDataRaw?.cellar?.dayDatas.filter(
+    (item) => new Date(item.date * 1000) > new Date(2022, 9, 29)
+  )
 
   // Functions to update data returned by hook
   const setDataHourly = () => {

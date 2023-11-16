@@ -1,11 +1,12 @@
 const getUrl = (epoch: number, cellarAddress: string) =>
-  `/api/sommelier-api-hourly-share-value-data?epoch=${epoch}&cellarAddress=${cellarAddress}`
+  `/api/sommelier-api-hourly-share-value-data?epoch=${epoch}&cellarAddress=${cellarAddress}&chain=${chain}`
 
 export const fetchHourlyShareValueData = async (
   epoch: number,
-  cellarAddress: string
+  cellarAddress: string,
+  chain: string
 ) => {
-  const url = getUrl(epoch, cellarAddress)
+  const url = getUrl(epoch, cellarAddress, chain)
 
   try {
     const data = await fetch(url)
