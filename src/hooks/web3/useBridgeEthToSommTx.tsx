@@ -2,7 +2,7 @@ import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
 import { config } from "utils/config"
-import { useAccount, useContract, useSigner } from "wagmi"
+import { erc20ABI, useAccount, useContract, useSigner } from "wagmi"
 import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
 import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
@@ -15,7 +15,9 @@ import { analytics } from "utils/analytics"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { getAddress } from "ethers/lib/utils.js"
 import { useNetwork } from "wagmi"
+import { tokenConfigMap } from "data/tokenConfig"
 
+// TODO: this needs to be adapted to multichain 
 export const useBridgeEthToSommTx = () => {
   const { CONTRACT } = config
   // Currently `close` have a bug it only closes the last toast appeared
@@ -30,8 +32,8 @@ export const useBridgeEthToSommTx = () => {
   const { address } = useAccount()
 
   const erc20Contract = useContract({
-    address: CONTRACT.SOMMELLIER.ADDRESS,
-    abi: CONTRACT.SOMMELLIER.ABI,
+    address: tokenConfigMap.SOMM_ETHEREUM.address,
+    abi: erc20ABI,
     signerOrProvider: signer,
   })!
 
@@ -140,7 +142,7 @@ export const useBridgeEthToSommTx = () => {
       setIsLoading(true)
       const convertedAmount = ethers.utils.parseUnits(
         String(props.amount),
-        CONTRACT.SOMMELLIER.DECIMALS
+        tokenConfigMap.SOMM_ETHEREUM.decimals
       )
       // analytics.track("bridge.approval-required", {
       //   value: props.amount,
@@ -232,7 +234,7 @@ export const useBridgeEthToSommTx = () => {
       })
       const bytes32 = getBytes32(props.address)
       const { hash: bridgeHash } = await bridgeContract.sendToCosmos(
-        CONTRACT.SOMMELLIER.ADDRESS,
+        tokenConfigMap.SOMM_ETHEREUM.address,
         bytes32,
         convertedAmount
       )

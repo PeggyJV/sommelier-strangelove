@@ -86,7 +86,7 @@ export const testArbitrumRealYieldUsd: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 6,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+    rewardTokenAddress: tokenConfigMap.SOMM_ETHEREUM.address,
     baseAsset: tokenConfigMap.USDC_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
   },

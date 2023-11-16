@@ -36,6 +36,7 @@ import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { differenceInDays } from "date-fns"
 import { config } from "utils/config"
 import { FaExternalLinkAlt } from "react-icons/fa"
+import { tokenConfig } from "data/tokenConfig"
 
 // TODO: This file has incurred substantial tech debt, it just needs to be rewritten from scratch at this point
 
@@ -67,6 +68,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const [unstakeLoading, setUnstakeLoading] = useState<Set<number>>(
     new Set()
   )
+
+  const sommToken = tokenConfig.find(
+    (token) =>
+      token.coinGeckoId === "sommelier" &&
+      token.chain === cellarConfig.chain.id
+  )!
 
   const stakingEnd = strategyData?.stakingEnd
   const userDatas = userData?.userStakes
@@ -430,8 +437,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                                 src={
                                   cellarConfig?.customReward
                                     ?.imagePath ??
-                                  config.CONTRACT.SOMMELLIER
-                                    .IMAGE_PATH
+                                  sommToken.src
                                 }
                                 alt="reward token image"
                                 height="20px"
@@ -481,12 +487,14 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     ) : null}
                     <Td>
                       {/*!!!!!!!! TODO: this needs to be rewritten */}
-                      {cellarConfig.customReward?.showSommRewards || cellarConfig.customReward?.showSommRewards === undefined ? (
+                      {cellarConfig.customReward?.showSommRewards ||
+                      cellarConfig.customReward?.showSommRewards ===
+                        undefined ? (
                         <>
                           <HStack spacing={2}>
                             <Image
                               src={
-                                config.CONTRACT.SOMMELLIER.IMAGE_PATH
+                                sommToken.src
                               }
                               alt="reward token image"
                               height="20px"

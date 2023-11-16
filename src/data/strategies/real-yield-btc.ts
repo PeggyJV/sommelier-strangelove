@@ -81,7 +81,7 @@ export const realYieldBTC: CellarData = {
       abi: config.CONTRACT.REAL_YIELD_BTC_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
+    rewardTokenAddress: tokenConfigMap.SOMM_ETHEREUM.address,
     baseAsset: tokenConfigMap.WBTC_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },

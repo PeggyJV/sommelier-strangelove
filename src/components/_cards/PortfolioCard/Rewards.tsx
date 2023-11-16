@@ -5,8 +5,10 @@ import { Link } from "components/Link"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { ExternalLinkIcon } from "components/_icons"
 import { useGeo } from "context/geoContext"
+import { chainConfig } from "data/chainConfig"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { tokenConfig } from "data/tokenConfig"
 import { ConfigProps } from "data/types"
 import { useBrandedToast } from "hooks/chakra"
 import { useIsMounted } from "hooks/utils/useIsMounted"
@@ -58,9 +60,16 @@ export const Rewards = ({
   const claimAllDisabled =
     !isConnected || !userRewards || parseInt(userRewards) <= 0
 
-  let rewardTokenAddress = config.CONTRACT.SOMMELLIER.ADDRESS
-  let rewardTokenImageUrl = config.CONTRACT.SOMMELLIER.IMAGE_PATH
-  let rewardTokenName = "SOMM"
+  // Get somm token 
+  const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)!
+
+  const sommToken = tokenConfig.find(
+    (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj.id
+  )!
+
+  let rewardTokenAddress = sommToken.address
+  let rewardTokenImageUrl = sommToken.src
+  let rewardTokenName = sommToken.symbol
 
   // Custom processing for if reward is not SOMM
   // -- Check if cellar config has customReward field
@@ -184,7 +193,7 @@ export const Rewards = ({
                 tooltip={`Amount of SOMM earned and available to be claimed`}
               >
                 <InlineImage
-                  src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
+                  src={sommToken.src}
                   alt={`SOMM logo`}
                   boxSize={5}
                 />

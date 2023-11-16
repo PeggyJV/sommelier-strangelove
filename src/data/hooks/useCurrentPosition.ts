@@ -5,11 +5,9 @@ import { useAccount, useQuery, useSigner } from "wagmi"
 import { useCreateContracts } from "./useCreateContracts"
 import erc20 from "src/abi/erc20.json"
 import BigNumber from "bignumber.js"
-import { config as contractConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { tokenConfig } from "data/tokenConfig"
 import { useNetwork, useProvider } from "wagmi"
-
 
 // TODO: Fix all references to config.contract eth tokens
 
@@ -21,7 +19,11 @@ export const useCurrentPosition = (config: ConfigProps) => {
   const provider = useProvider()
   const network = useNetwork()
 
-  const usdcAddress = contractConfig.CONTRACT.USDC.ADDRESS
+  const usdcAddress = tokenConfig.find(
+    (token) =>
+      token.symbol === "USDC" && token.chain === config.chain.id
+  )!.address
+
   const ERC20 = new ethers.Contract(usdcAddress, erc20, provider)
 
   const { cellarContract } = useCreateContracts(config)
@@ -72,7 +74,8 @@ export const useCurrentPosition = (config: ConfigProps) => {
               const tokenInfo = tokenConfig.find(
                 (item) =>
                   item.address.toLowerCase() ===
-                  position.toLowerCase() && item.chain === config.chain.id
+                    position.toLowerCase() &&
+                  item.chain === config.chain.id
               )
               const usdPrice = await fetchCoingeckoPrice(
                 tokenInfo?.coinGeckoId || "",

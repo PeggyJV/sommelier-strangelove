@@ -16,7 +16,7 @@ import {
   useDisconnect,
   useEnsAvatar,
   useEnsName,
-  useNetwork
+  useNetwork,
 } from "wagmi"
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
@@ -28,6 +28,8 @@ import { useBrandedToast } from "hooks/chakra"
 import { config } from "utils/config"
 import { useRouter } from "next/router"
 import { CellarNameKey } from "data/types"
+import { chainConfig } from "data/chainConfig"
+import { tokenConfig } from "data/tokenConfig"
 
 export const ConnectedPopover = () => {
   const { addToast, close } = useBrandedToast()
@@ -61,6 +63,11 @@ export const ConnectedPopover = () => {
   })
 
   const { chain } = useNetwork()
+  const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id!)
+  // Use coingecko id for sommelier token bc it can be axlSomm too
+  const sommToken = tokenConfig.find(
+    (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj?.id
+  )!
 
   const id = useRouter().query.id as string | undefined
   const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
@@ -204,9 +211,9 @@ export const ConnectedPopover = () => {
                   px={4}
                   fontSize="sm"
                   onClick={() => {
-                    const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
+                    const fullImageUrl = `${window.origin}${sommToken.src}`
                     importToken.mutate({
-                      address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                      address: sommToken.address,
                       imageUrl: fullImageUrl,
                     })
                   }}
@@ -218,7 +225,7 @@ export const ConnectedPopover = () => {
                 >
                   <HStack>
                     <Avatar
-                      src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
+                      src={sommToken.src}
                       size="2xs"
                     />
                     <Text fontWeight="semibold">

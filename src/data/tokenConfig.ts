@@ -16,6 +16,15 @@ export interface Token {
  */
 export const tokenConfig: Token[] = [
   {
+    src: "/assets/icons/somm.png",
+    alt: "Sommelier logo",
+    symbol: "SOMM",
+    address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
+    coinGeckoId: "sommelier",
+    decimals: 6,
+    chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
     src: "/assets/icons/eth.png",
     alt: "Ethereum logo",
     symbol: "WETH",
