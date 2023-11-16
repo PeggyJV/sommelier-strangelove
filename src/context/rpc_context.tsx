@@ -1,8 +1,8 @@
 import { Contract, providers } from "ethers"
 import { Chain } from "src/data/chainConfig"
 
-const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
-const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY
+export const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
+export const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY
 
 export async function getActiveProvider(chain: Chain) {
   const ALCHEMY_PROVIDER = new providers.JsonRpcProvider(
