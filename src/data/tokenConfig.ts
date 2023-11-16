@@ -324,25 +324,29 @@ export const tokenConfigMap = tokenConfig.reduce((map, token) => {
 }, {} as { [symbol: string]: Token })
 
 export const depositAssetTokenList = [
-  `USDC_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `AMPL_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `BUSD_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `DAI_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `FRAX_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `GUSD_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `USDP_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `RAI_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `sUSD_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `TUSD_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
-  `USDT_${chainSlugMap.ETHEREUM.id.toUpperCase()}`,
+  `USDC`,
+  `AMPL`,
+  `BUSD`,
+  `DAI`,
+  `FRAX`,
+  `GUSD`,
+  `USDP`,
+  `RAI`,
+  `sUSD`,
+  `TUSD`,
+  `USDT`,
 ]
 
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
-  (token) => depositAssetTokenList.includes(token.symbol) && depositAssetTokenList.includes(token.chain)
+  (token) =>
+    depositAssetTokenList.includes(token.symbol) &&
+    depositAssetTokenList.includes(token.chain)
 )
 
 export function getTokenConfig(tokenList: string[], chain: string) {
   return tokenList.map((list) =>
-    tokenConfig.find((token) => token.symbol === list && token.chain === chain)
+    tokenConfig.find(
+      (token) => token.symbol === list && token.chain === chain
+    )
   )
 }

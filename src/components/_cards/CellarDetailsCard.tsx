@@ -65,10 +65,13 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     slug,
     config: { id },
   } = cellarDataMap[cellarId]
+
   const filterTokenConfig = tokenConfig.filter(
     (obj, index) =>
       tokenConfig.findIndex(
-        (token) => token.symbol === obj.symbol && token.chain == cellarDataMap[cellarId].config.chain.id
+        (token) =>
+          token.symbol === obj.symbol &&
+          token.chain == cellarDataMap[cellarId].config.chain.id
       ) === index
   )
   const cellarStrategyAssets = filterTokenConfig.filter((token) =>
