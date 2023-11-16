@@ -32,7 +32,6 @@ export const useAllContracts = () => {
       signerMap.set(chain.id, signer)
     }
   })
-  console.log(providerMap)
 
   const query = useQuery(["USE_ALL_STRATEGIES_CONTRACTS"], () =>
     getAllContracts(providerMap, signerMap)
