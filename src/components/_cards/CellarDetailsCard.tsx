@@ -85,7 +85,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     (performanceSplit["strategy provider"] ?? 0)
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const activeAsset = strategyData?.activeAsset
   const { chain } = useNetwork()

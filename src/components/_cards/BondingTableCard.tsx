@@ -54,13 +54,13 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const {
     data: userData,
     isLoading,
     refetch,
-  } = useUserStrategyData(cellarConfig.cellar.address)
+  } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
     new Set()

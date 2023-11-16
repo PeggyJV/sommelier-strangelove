@@ -68,9 +68,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
 
   const { data: strategyData, isLoading: isStrategyLoading } =
-    useStrategyData(cellarConfig.cellar.address)
+    useStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
   const { data: userData, isLoading: isUserDataLoading } =
-    useUserStrategyData(cellarConfig.cellar.address)
+    useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
 
   const activeAsset = strategyData?.activeAsset
   const stakingEnd = strategyData?.stakingEnd

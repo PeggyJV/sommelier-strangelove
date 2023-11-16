@@ -50,7 +50,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
 
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData } = lpToken
 

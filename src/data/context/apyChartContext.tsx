@@ -168,7 +168,7 @@ export const ApyChartProvider: FC<{
   )!
   const launchDate = cellarData?.launchDate!
   const { data: strategyData, isLoading: isStrategyDataLoading } =
-    useStrategyData(cellarData!.config.cellar.address)
+    useStrategyData(cellarData!.config.cellar.address, cellarData!.config.chain.id)
   const launchDay = launchDate ?? subDays(new Date(), 8)
   const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 

@@ -47,7 +47,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken, lpTokenInfo } = useUserBalances(cellarConfig)

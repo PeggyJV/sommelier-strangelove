@@ -31,7 +31,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
   const cellarConfig = cellarDataMap[id].config
 
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const [timeline, setTimeline] = useState<string>("30D")

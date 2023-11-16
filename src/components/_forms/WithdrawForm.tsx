@@ -61,9 +61,9 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const id = (useRouter().query.id as string) || _id
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
 

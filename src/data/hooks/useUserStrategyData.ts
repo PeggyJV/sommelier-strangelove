@@ -8,11 +8,11 @@ import { useStrategyData } from "./useStrategyData"
 import { useUserBalances } from "./useUserBalances"
 import { useState } from "react"
 
-export const useUserStrategyData = (strategyAddress: string) => {
+export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const { data: signer } = useSigner()
   const { address: userAddress } = useAccount()
   const { data: allContracts } = useAllContracts()
-  const strategyData = useStrategyData(strategyAddress)
+  const strategyData = useStrategyData(strategyAddress, chain)
   const sommPrice = useCoinGeckoPrice("sommelier")
 
   const config = Object.values(cellarDataMap).find(
@@ -48,6 +48,7 @@ export const useUserStrategyData = (strategyAddress: string) => {
         userAddress: userAddress!,
         sommPrice: sommPrice.data ?? "0",
         baseAssetPrice: baseAssetPrice ?? "0",
+        chain: chain,
       })
     },
     {

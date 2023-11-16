@@ -27,7 +27,7 @@ export const Rewards = ({
   const isMounted = useIsMounted()
   const { isConnected } = useAccount()
   const { data: userData, refetch } = useUserStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const { userStakes } = userData || {}
   const { stakerSigner } = useCreateContracts(cellarConfig)

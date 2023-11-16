@@ -39,7 +39,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
   })
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
   const dailyChange = strategyData?.changes?.daily

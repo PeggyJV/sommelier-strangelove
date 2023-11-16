@@ -33,7 +33,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
   })
 
   const { data: strategyData, isLoading: isStrategyLoading } =
-    useStrategyData(cellarConfig.cellar.address)
+    useStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
 
   const tvm = strategyData?.tvm
   const stakingEnd = strategyData?.stakingEnd

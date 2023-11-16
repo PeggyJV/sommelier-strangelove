@@ -111,7 +111,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
@@ -145,7 +145,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
 
   const activeAsset = strategyData?.activeAsset

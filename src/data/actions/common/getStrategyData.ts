@@ -41,7 +41,7 @@ export const getStrategyData = async ({
       const strategy = Object.values(cellarDataMap).find(
         ({ config }) =>
           config.cellar.address.toLowerCase() ===
-          address.toLowerCase()
+          address.toLowerCase() && config.chain.id === contracts.chain
       )!
       const config: ConfigProps = strategy.config!
       const decimals = config.baseAsset.decimals

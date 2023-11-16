@@ -8,7 +8,7 @@ import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
 import { useState, useEffect } from "react"
 
-export const useStrategyData = (address: string) => {
+export const useStrategyData = (address: string, chain: string) => {
   const provider = useProvider()
 
   const { data: allContracts } = useAllContracts()
@@ -22,7 +22,7 @@ export const useStrategyData = (address: string) => {
   const cellarData = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address.toLowerCase() ===
-      address.toLowerCase()
+      address.toLowerCase() && item.config.chain.id === chain
   )!
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export const useStrategyData = (address: string) => {
   const config = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address.toLowerCase() ===
-      address.toLowerCase()
+      address.toLowerCase() && item.config.chain.id === chain
   )!.config
   const isNoDataSource = Boolean(config!.isNoDataSource)
   const baseAsset = config.baseAsset.coinGeckoId

@@ -63,7 +63,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   )
   const cellarConfig = cellarData.config
   const { data, isLoading } = useStrategyData(
-    cellarData.config.cellar.address
+    cellarData.config.cellar.address, cellarData.config.chain.id
   )
   const {
     tokenPrice,
