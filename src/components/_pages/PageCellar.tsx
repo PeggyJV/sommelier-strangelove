@@ -88,7 +88,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
           {!notLaunched &&
             isApyChartEnabled(cellarConfig) &&
             !isEstimatedApyEnable(cellarConfig) && (
-              <ApyChartProvider address={cellarAddress}>
+              <ApyChartProvider address={cellarAddress} chain={cellarConfig.chain.id}>
                 <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                   Vault Perfomance
                 </Heading>

@@ -10,10 +10,10 @@ import { erc20ABI } from "wagmi"
 
 
 // !!!!!!!!
-// TODO: Make sure all Object.values(cellarDataMap).find( factor in the chainId
-// TODO: Make sure cellaraddressmap is right and accounts for chain id
+// MULTICHAIN TODOS
 
-// TODO: Fix all errors in console logs
+// TODO: Banner for wrong chain
+// TODO: If try to deposit from wrong chain, prompt to switch chain
 // !!!!!!!!
 
 
