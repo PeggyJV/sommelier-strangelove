@@ -47,15 +47,19 @@ export const useStrategyData = (address: string, chain: string) => {
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
   )
+  // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
+  const key = address + (config.chain.id !== "ethereum" ? ("-" + chain) : "")
+
+  // Get cellar contracts for the chain  
   const query = useQuery(
     [
       "USE_STRATEGY_DATA",
-      { provider: provider?._isProvider, address },
+      { provider: provider?._isProvider, address: key },
     ],
     async () => {
       const result = await getStrategyData({
         address,
-        contracts: allContracts![address]!,
+        contracts: allContracts![key]!,
         sommPrice: sommPrice ?? "0",
         stratData: stratData?.cellar,
         baseAssetPrice: baseAssetPrice ?? "0",

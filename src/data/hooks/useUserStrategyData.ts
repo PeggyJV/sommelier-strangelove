@@ -6,7 +6,7 @@ import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
 import { useUserBalances } from "./useUserBalances"
-import { useState } from "react"
+import { useNetwork } from "wagmi"
 
 export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const { data: signer } = useSigner()
@@ -31,6 +31,12 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
   )
+
+  // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
+  const key =
+    strategyAddress +
+    (config.chain.id !== "ethereum" ? "-" + chain : "")
+  
   const query = useQuery(
     [
       "USE_USER_DATA",
@@ -42,7 +48,7 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
     ],
     async () => {
       return await getUserData({
-        contracts: allContracts![strategyAddress],
+        contracts: allContracts![key],
         address: strategyAddress,
         strategyData: strategyData.data!,
         userAddress: userAddress!,

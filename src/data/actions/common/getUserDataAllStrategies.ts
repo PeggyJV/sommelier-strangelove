@@ -21,11 +21,14 @@ export const getUserDataAllStrategies = async ({
 }) => {
   const userDataRes = await Promise.all(
     Object.entries(allContracts)?.map(
-      async ([address, contracts]) => {
+      async ([key, contracts]) => {
         // Only get data for the current chain
         if (contracts.chain !== chain) {
           return
         }
+
+        // If chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
+        const address = key.split("-")[0]
 
         const strategyData = strategiesData.find(
           (item) => item?.address === address && item.config.chain.id === contracts.chain

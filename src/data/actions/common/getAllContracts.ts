@@ -68,9 +68,14 @@ export const getAllContracts = async (
       chain: cellar.config.chain.id,
     }
 
+    let chainId = ''
+    if (cellar.config.chain.id !== 'ethereum'){
+      chainId = `-${cellar.config.chain.id}`
+    }
+
     contracts = {
       ...contracts,
-      [cellar.config.cellar.address]: contract,
+      [`${cellar.config.cellar.address}${chainId}`]: contract,
     }
   }
 
