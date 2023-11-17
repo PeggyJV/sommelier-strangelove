@@ -424,7 +424,6 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-  // NEED TO UPDATE
   if (config.cellarNameKey === CellarNameKey.TURBO_EETH) {
     return [
       {
@@ -595,8 +594,8 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "60.0%",
     }
   }
-  //NNED TO UPDATE
-  if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+  //NEED TO UPDATE
+  if (config.cellarNameKey === CellarNameKey.TURBO_EETH) {
     return {
       value: 60.0,
       formatted: "60.0%",
