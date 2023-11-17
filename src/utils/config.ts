@@ -169,9 +169,8 @@ export const config = {
       SLUG: "Turbo-SOMM",
       ABI: cellarV0821,
     },
-    //NEED TO UPDATE
     TURBO_EETH: {
-      ADDRESS: "0x5195222f69c5821f8095ec565E71e18aB6A2298f",
+      ADDRESS: "0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
       SLUG: "Turbo-eETH",
       ABI: cellarV0821,
     },

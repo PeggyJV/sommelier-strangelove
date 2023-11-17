@@ -1052,7 +1052,7 @@ export const strategyPageContentData = {
     name: "Turbo eETH",
     provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
-    description: `Retain some exposure to SOMM while also earning swap fees generated on this trading pair.`,
+    description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
     ticker: (
       <>
         {}

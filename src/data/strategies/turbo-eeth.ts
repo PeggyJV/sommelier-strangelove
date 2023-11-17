@@ -18,15 +18,15 @@ export const turboeETH: CellarData = {
   description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "0.50%",
+  managementFee: "1%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Uniswap V3", "Balancer", "Morpho", "AAVE"],
   strategyAssets: ["WETH", "eETH"],
   performanceSplit: {
     depositors: 80,
-    "strategy provider": 15,
-    protocol: 5,
+    "strategy provider": 16,
+    protocol: 4,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -52,12 +52,12 @@ export const turboeETH: CellarData = {
     title: "Backtested APY",
     tooltip:
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-    value: "60%",
+    value: "6%",
   },
 
   //need to update when contract is deployed
   dashboard:
-    "https://debank.com/profile/0x5195222f69c5821f8095ec565E71e18aB6A2298f",
+    "https://debank.com/profile/0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
   depositTokens: {
     list: ["WETH"],
   },
@@ -77,21 +77,9 @@ export const turboeETH: CellarData = {
       address: config.CONTRACT.TURBO_EETH.ADDRESS,
       abi: config.CONTRACT.TURBO_EETH.ABI,
       key: CellarKey.CELLAR_V2PT5,
-      decimals: 6,
+      decimals: 18,
     },
     baseAsset: tokenConfigMap.WETH,
-    // customReward: {
-    //   showOnlyBaseApy: true,
-    //   showAPY: false,
-    //   showSommRewards: false,
-    //   tokenSymbol: "SOMM",
-    //   tokenAddress: "0xa670d7237398238de01267472c6f13e5b8010fd1",
-    //   tokenDisplayName: "SOMM",
-    //   imagePath: "/assets/icons/somm.png",
-    //   stakingDurationOverride: new Date(
-    //     Date.UTC(2023, 11, 8, 16, 0, 0, 0)
-    //   ),
-    //},
   },
   faq: [
     {

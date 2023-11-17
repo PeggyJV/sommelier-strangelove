@@ -594,11 +594,10 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "60.0%",
     }
   }
-  //NEED TO UPDATE
   if (config.cellarNameKey === CellarNameKey.TURBO_EETH) {
     return {
-      value: 60.0,
-      formatted: "60.0%",
+      value: 6.0,
+      formatted: "6.0%",
     }
   }
 }

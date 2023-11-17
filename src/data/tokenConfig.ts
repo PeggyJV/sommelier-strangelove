@@ -286,12 +286,12 @@ export const tokenConfig: Token[] = [
     decimals: 6,
   },
   {
-    src: "/assets/icons/eeth.svg",
+    src: "/assets/icons/eeth.png",
     alt: "eETH logo",
     symbol: "eETH",
-    address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
-    coinGeckoId: "eeth", //not in coingecko
-    decimals: 6,
+    address: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
+    coinGeckoId: "weth", // TODO: Update once eETH is listed on CoinGecko
+    decimals: 18,
   },
 ]
 
