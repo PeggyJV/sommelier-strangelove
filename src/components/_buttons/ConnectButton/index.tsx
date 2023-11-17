@@ -20,6 +20,13 @@ const ConnectButton = (
 ) => {
   const { isConnected } = useAccount()
   const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
+  const { chain } = useNetwork()
+  const [selectedNetwork, setSelectedNetwork] = React.useState(
+    chain?.name.toLowerCase().split(" ")[0] || "ethereum"
+  )
+  const handleNetworkChange = (chainId: string) => {
+    setSelectedNetwork(chainId)
+  }
 
   // For connect buttons that are not on header/should allow chain selection
   if (props.overrideChainId) {
@@ -42,15 +49,6 @@ const ConnectButton = (
         </HStack>
       </ClientOnly>
     )
-  }
-
-  const { chain } = useNetwork()
-  const [selectedNetwork, setSelectedNetwork] = React.useState(
-    chain?.name.toLowerCase().split(" ")[0] || "ethereum"
-  )
-
-  const handleNetworkChange = (chainId: string) => {
-    setSelectedNetwork(chainId)
   }
 
   return (
