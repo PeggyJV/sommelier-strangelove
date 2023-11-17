@@ -208,9 +208,16 @@ export const BridgeForm: VFC = () => {
           </BaseButton>
         )}
       </Stack>
-
+        {/*
+          !!! TODO: This needs to be adjusted once it's modified for multichain
+        */}
       {isMounted && !buttonEnabled && toSomm && (
-        <ConnectButton unstyled height="69px" fontSize="21px">
+        <ConnectButton
+          overrideChainId={"ethereum"}
+          unstyled
+          height="69px"
+          fontSize="21px"
+        >
           Connect Ethereum Wallet
         </ConnectButton>
       )}

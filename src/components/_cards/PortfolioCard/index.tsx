@@ -199,7 +199,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   <>
                     {!strategyData?.deprecated && (
                       <DepositButton
-                        disabled={!isConnected || strategyData?.isContractNotReady}
+                        disabled={
+                          !isConnected ||
+                          strategyData?.isContractNotReady
+                        }
                       />
                     )}
                     <WithdrawButton
@@ -208,7 +211,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                     />
                   </>
                 ) : (
-                  <ConnectButton unstyled />
+                  <ConnectButton
+                    overrideChainId={cellarConfig.chain.id}
+                    unstyled
+                  />
                 ))}
             </Stack>
           </SimpleGrid>

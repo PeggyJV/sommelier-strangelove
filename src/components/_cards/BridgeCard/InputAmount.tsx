@@ -40,10 +40,13 @@ export const InputAmount: React.FC = () => {
   // Get chain id
   const { chain } = useNetwork()
   const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)!
-
   const sommToken = tokenConfig.find(
-    (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj.id
+    (t) => t.coinGeckoId === "sommelier" && t.chain === "ethereum"
   )!
+  // TODO: Change to below once we adjust for multichain
+  //const sommToken = tokenConfig.find(
+  //  (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj.id
+  //)!
 
   const { data, error, isLoading } = useBalance({
     address: address,
