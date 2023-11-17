@@ -183,6 +183,7 @@ export const ConnectedPopover = () => {
                       importToken.mutate({
                         address:
                           selectedStrategy.config.lpToken.address,
+                        chain: selectedStrategy.config.chain.id,
                       })
                     }}
                     _hover={{
@@ -215,6 +216,7 @@ export const ConnectedPopover = () => {
                     importToken.mutate({
                       address: sommToken.address,
                       imageUrl: fullImageUrl,
+                      chain: selectedStrategy.config.chain.id,
                     })
                   }}
                   _hover={{

@@ -169,7 +169,7 @@ export const ApyChartProvider: FC<{
   })
   const [timeline, setTimeline] = useState<Timeline>("7D")
   const cellarData = Object.values(cellarDataMap).find(
-    (item) => item.config.cellar.address === address
+    (item) => item.config.cellar.address === address && item.config.chain.id === cellarConfig.config.chain.id
   )!
   const launchDate = cellarData?.launchDate!
   const { data: strategyData, isLoading: isStrategyDataLoading } =

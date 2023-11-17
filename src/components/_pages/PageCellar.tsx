@@ -96,7 +96,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
               </ApyChartProvider>
             )}
           {isTokenPriceChartEnabled(cellarConfig) && (
-            <TokenPriceChartProvider address={cellarAddress}>
+            <TokenPriceChartProvider address={cellarAddress} chain={cellarConfig.chain.id}>
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                 Vault Perfomance
               </Heading>

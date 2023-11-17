@@ -380,7 +380,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               </Link>
               <Text
                 onClick={() => {
-                  importToken.mutate({ address: cellarAddress })
+                  importToken.mutate({ address: cellarAddress, chain: cellarConfig.chain.id })
                 }}
                 textDecor="underline"
                 as="button"

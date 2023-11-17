@@ -18,12 +18,12 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const config = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address.toLowerCase() ===
-      strategyAddress.toLowerCase()
+      strategyAddress.toLowerCase() && item.config.chain.id === chain
   )!.config
 
   const isNoDataSource = Boolean(
     Object.values(cellarDataMap).find(
-      (item) => item.config.cellar.address === strategyAddress
+      (item) => item.config.cellar.address === strategyAddress && item.config.chain.id === chain
     )?.config.isNoDataSource
   )
   const { lpToken } = useUserBalances(config)

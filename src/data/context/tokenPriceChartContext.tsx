@@ -166,14 +166,15 @@ const prevWeek = getPreviousWeek()
 const prevMonth = getPreviousMonth()
 
 export const TokenPriceChartProvider: FC<{
-  address: string
-}> = ({ children, address }) => {
+  address: string,
+  chain: string
+}> = ({ children, address, chain }) => {
   const [showLine, setShowLine] = useState<ShowLine>({
     tokenPrice: true,
   })
   const [timeline, setTimeline] = useState<Timeline>("1W")
   const cellarData = Object.values(cellarDataMap).find(
-    (item) => item.config.cellar.address === address
+    (item) => item.config.cellar.address === address && item.config.chain.id === chain
   )!
 
   const [hourlyDataRaw, setHourlyDataRaw] = useState<

@@ -117,6 +117,7 @@ export const Rewards = ({
                   importToken.mutate({
                     address: rewardTokenAddress,
                     imageUrl: fullImageUrl,
+                    chain: cellarConfig.chain.id,
                   })
                 }}
                 textDecor="underline"
