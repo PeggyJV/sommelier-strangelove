@@ -1074,9 +1074,9 @@ export const strategyPageContentData = {
     ],
     strategyHighlights: {
       card: [
-        `- Capable of simultaneously pursuing multiple eETH yield opportunities.
-        - Dynamically liquidity provision across multiple DEXs.
-        - Fully automated with built-in auto compounding.`,
+        `Capable of simultaneously pursuing multiple eETH yield opportunities.`,
+        `Dynamically liquidity provision across multiple DEXs.`,
+        `Fully automated with built-in auto compounding.`,
       ],
       description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.      
       <br/><br/>
