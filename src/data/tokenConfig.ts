@@ -285,6 +285,14 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "sommelier",
     decimals: 6,
   },
+  {
+    src: "/assets/icons/eeth.svg",
+    alt: "eETH logo",
+    symbol: "eETH",
+    address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
+    coinGeckoId: "eeth", //not in coingecko
+    decimals: 6,
+  },
 ]
 
 // Creatae a map from each token symbol to its config
