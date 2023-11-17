@@ -23,8 +23,6 @@ const ConnectButton = (
 
   // For connect buttons that are not on header/should allow chain selection
   if (props.overrideChainId) {
-    console.log("overrideChainId", props.overrideChainId)
-
     const chain = chainConfigMap[props.overrideChainId]
     return (
       <ClientOnly>

@@ -224,7 +224,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           <CardStat label="Link to contract" flex={0}>
             <Link
               href={`${
-                chain?.blockExplorers?.default.url
+                cellarConfig.chain.blockExplorer.url
               }/address/${id.toLowerCase()}`}
               target="_blank"
             >
