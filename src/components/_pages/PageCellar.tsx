@@ -52,7 +52,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
 
   return (
-    <Layout>
+    <Layout chainObj={cellarConfig.chain}>
       <Section>
         <HStack
           pb={isLarger768 ? 12 : 0}

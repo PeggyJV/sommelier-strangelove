@@ -31,7 +31,11 @@ import { useEffect, VFC } from "react"
 import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
 
-export const BridgeForm: VFC = () => {
+interface BridgeFormProps {
+  wrongNetwork?: boolean
+}
+
+export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const { addToast, closeAll } = useBrandedToast()
   const isMounted = useIsMounted()
   const { watch, handleSubmit, formState, getFieldState, setValue } =
@@ -42,6 +46,10 @@ export const BridgeForm: VFC = () => {
   const toEth = watchType === "TO_ETHEREUM"
   const watchAmount = watch("amount")
   const watchSommelierAddress = watch("address")
+
+  if (wrongNetwork === undefined) {
+    wrongNetwork = false
+  }
 
   useEffect(() => {
     setValue("address", "")
@@ -62,7 +70,7 @@ export const BridgeForm: VFC = () => {
     !!getFieldState("address").error ||
     !watchSommelierAddress ||
     isEthToSommLoading ||
-    isSommToEthLoading
+    isSommToEthLoading || wrongNetwork
 
   const { connectAsync } = useGrazConnect()
   const { isConnected: isGrazConnected } = useGrazAccount()
@@ -167,7 +175,7 @@ export const BridgeForm: VFC = () => {
               {watchType === "TO_SOMMELIER" ? <Somm /> : <Eth />}
             </Stack>
           </HStack>
-          {buttonEnabled && (
+          {buttonEnabled && !wrongNetwork && (
             <>
               <FormControl
                 isInvalid={
