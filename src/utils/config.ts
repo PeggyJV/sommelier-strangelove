@@ -13,6 +13,7 @@ import { erc20ABI } from "wagmi"
 // MULTICHAIN TODOS
 
 // TODO: If try to deposit from wrong chain, prompt to switch chain, both on main strat page and cellar detail page
+// TODO: Fix deposit/withdraw 'cancelled' toast error for non eth chains
 // TODO: Show chain type on cellar detail page and manage page
 // TODO: Check/get staking rewards ready for multichain
 // !!!!!!!!
