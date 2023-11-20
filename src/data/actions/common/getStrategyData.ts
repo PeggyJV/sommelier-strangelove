@@ -20,7 +20,7 @@ import { getApyInception } from "./getApyInception"
 import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { GHOIcon } from "components/_icons"
+import { EETHIcon, GHOIcon } from "components/_icons"
 import { Contract } from "ethers"
 
 export const getStrategyData = async ({
@@ -158,6 +158,22 @@ export const getStrategyData = async ({
           value: apy,
           tokenSymbol: "GHO",
           tokenIcon: GHOIcon,
+        }
+      }
+
+      if (strategy.slug === utilConfig.CONTRACT.TURBO_EETH.SLUG) {
+        // Get TVL
+        let usdTvl = Number(strategyData?.tvlTotal)
+
+        // $2k worth of eETH per month * 12 months * 100 for human readable %
+        // TODO: Update this  + expiration date in config weekly as long as eETH incentives live
+        let apy = ((2000) / usdTvl) * 12 * 100
+
+        extraRewardsApy = {
+          formatted: apy.toFixed(2).toString() + "%",
+          value: apy,
+          tokenSymbol: "eETH",
+          tokenIcon: EETHIcon,
         }
       }
 

@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { EETHIcon } from "components/_icons"
 
 export const turboeETH: CellarData = {
   name: "Turbo eETH",
@@ -80,6 +81,43 @@ export const turboeETH: CellarData = {
       decimals: 18,
     },
     baseAsset: tokenConfigMap.WETH,
+    badges: [
+      {
+        customStrategyHighlight: "eETH Incentives",
+        customStrategyHighlightColor: "#00C04B",
+      },
+    ],
+    customReward: {
+      showAPY: true,
+      tokenSymbol: "eETH",
+      tokenDisplayName: "eETH",
+      tokenAddress: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
+      imagePath: "/assets/icons/eeth.png",
+      //customRewardMessageTooltip?: string
+      //customRewardMessage?: string
+      //customRewardHeader?: string
+      showBondingRewards: true,
+      showClaim: true,
+      //customClaimMsg?: string
+      //customRewardAPYTooltip: string
+      logo: EETHIcon,
+      logoSize: "17px",
+      //customRewardLongMessage?: string
+      //rewardHyperLink?: string
+      //customColumnHeader?: string
+      //customColumnHeaderToolTip?: string
+      //customColumnValue?: string
+      stakingDurationOverride: new Date(
+        Date.UTC(2023, 11, 27, 14, 0, 0, 0)
+      ),
+      showSommRewards: true,
+      //customIconToolTipMsg?: string
+    },
+    staker: {
+      address: config.CONTRACT.REAL_YIELD_ETH.ADDRESS, // TODO: update with live staking address once rewards start
+      abi: config.CONTRACT.TURBO_EETH_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
+    },
   },
   faq: [
     {
