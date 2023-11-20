@@ -100,6 +100,7 @@ export const Rewards = ({
     // analytics.track("rewards.claim-started")
     const tx = await stakerSigner?.claimAll()
     await doHandleTransaction({
+      cellarConfig,
       ...tx,
       onSuccess: () => {
         refetch()

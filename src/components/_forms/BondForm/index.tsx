@@ -144,6 +144,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       )
 
       await doHandleTransaction({
+        cellarConfig,
         hash: bondConf,
         onSuccess: () => {
           analytics.track("bond.succeeded", analyticsData)

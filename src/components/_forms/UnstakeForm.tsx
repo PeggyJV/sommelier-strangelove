@@ -125,6 +125,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
     }
 
     await doHandleTransaction({
+      cellarConfig,
       ...tx,
       onSuccess,
       onError,

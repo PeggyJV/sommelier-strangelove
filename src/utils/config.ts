@@ -12,7 +12,6 @@ import { erc20ABI } from "wagmi"
 // !!!!!!!!
 // MULTICHAIN TODOS
 
-// TODO: Fix deposit/withdraw 'Cancelled' toast error for non eth chains
 // TODO: Show chain type on cellar detail page and manage page
 // TODO: Check/get staking rewards ready for multichain
 // !!!!!!!!

@@ -28,7 +28,6 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
-import { useCurrentPosition } from "data/hooks/useCurrentPosition"
 import { waitTime } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
@@ -78,8 +77,6 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const isDisabled =
     isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
   const isError = errors.withdrawAmount
-
-  const currentPosition = useCurrentPosition(cellarConfig)
 
   const setMax = () => {
     const amount = parseFloat(
@@ -165,6 +162,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       }
 
       await doHandleTransaction({
+        cellarConfig,
         ...tx,
         onSuccess,
         onError,
@@ -280,11 +278,6 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     }
     return `${Math.floor(num * fixed) / fixed}%`
   }
-
-  useEffect(() => {
-    currentPosition.refetch()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <VStack

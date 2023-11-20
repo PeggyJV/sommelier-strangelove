@@ -97,6 +97,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
       const tx = await stakerSigner?.unstake(id)
 
       await doHandleTransaction({
+        cellarConfig,
         ...tx,
         onSuccess: () => analytics.track("unstake.succeeded"),
         onError: () => analytics.track("unstake.failed"),
@@ -133,6 +134,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
       })
 
       await doHandleTransaction({
+        cellarConfig,
         ...tx,
         onSuccess: () => analytics.track("unbond.succeeded"),
         onError: () => analytics.track("unbond.failed"),
