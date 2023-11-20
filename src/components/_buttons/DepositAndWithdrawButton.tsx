@@ -1,12 +1,13 @@
-import { Tooltip } from "@chakra-ui/react"
+import { Tooltip, Text} from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { isBefore } from "date-fns"
 import { zonedTimeToUtc } from "date-fns-tz"
+import { useBrandedToast } from "hooks/chakra"
 import { analytics } from "utils/analytics"
 import { toEther } from "utils/formatCurrency"
-import { useAccount } from "wagmi"
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi"
 import { BaseButton } from "./BaseButton"
 
 type DepositAndWithdrawButtonProps = {
@@ -62,8 +63,8 @@ const checkButtonDisabled = (
       : false
     : false || !isConnected || !isBeforeLaunch
 
-    return res
-  }
+  return res
+}
 
 const getButtonText = (
   isDeprecated: boolean,
@@ -85,6 +86,7 @@ export function DepositAndWithdrawButton({
   const isBeforeLaunch = checkIsBeforeLaunch(
     row?.original?.launchDate
   )
+  const { chain } = useNetwork()
 
   return (
     <Tooltip
@@ -112,9 +114,16 @@ export function DepositAndWithdrawButton({
           isBeforeLaunch
         )}
         variant="solid"
-        onClick={(e) => {
+        onClick={async (e) => {
           e.stopPropagation()
           // analytics.track("home.deposit.modal-opened")
+
+          // Check if user is on the right chain, if not prompt them to switch
+          if (chain?.id !== cellarConfig.chain.wagmiId) {
+            // Continue to manage page where user can switch
+            window.location.href = `/strategies/${id}/manage`
+            return
+          }
 
           if (row.original.deprecated) {
             onDepositModalOpen({
