@@ -48,7 +48,10 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+  const { refetch } = useUserStrategyData(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
+  )
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken, lpTokenInfo } = useUserBalances(cellarConfig)
@@ -151,8 +154,8 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       })
       refetch()
     } catch (e) {
-      console.warn(e)
       const error = e as Error
+      console.error(error.message)
       if (error.message === "GAS_LIMIT_ERROR") {
         addToast({
           heading: "Transaction not submitted",

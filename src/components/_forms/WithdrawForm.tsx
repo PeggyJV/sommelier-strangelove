@@ -251,6 +251,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
             closeHandler: closeAll,
           })
         } else {
+          console.error(error)
           addToast({
             heading: "Withdraw",
             body: <Text>Withdraw Cancelled</Text>,

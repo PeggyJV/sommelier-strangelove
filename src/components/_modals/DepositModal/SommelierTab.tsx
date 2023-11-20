@@ -238,7 +238,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     try {
       needsApproval = allowance.lt(amtInWei)
     } catch (e) {
-      console.error("Invalid Input")
+      const error = e as Error
+      console.error("Invalid Input: ", error.message)
       return
     }
 
@@ -294,6 +295,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           })
         }
       } catch (e) {
+        const error = e as Error
+        console.error(error.message)
         // analytics.track("deposit.approval-cancelled", {
         //   ...baseAnalytics,
         //   stable: tokenSymbol,
@@ -457,6 +460,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           closeHandler: closeAll,
         })
       } else {
+        console.error(error.message)
         analytics.track("deposit.rejected", {
           ...baseAnalytics,
           stable: tokenSymbol,
