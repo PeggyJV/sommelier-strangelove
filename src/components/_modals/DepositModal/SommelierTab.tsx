@@ -413,7 +413,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       if (isPopUpEnable) {
         props.onClose()
         //@ts-ignore
-        notifyModal.onOpen()
+        notifyModal?.onOpen()
       }
 
       if (depositResult?.error) {
