@@ -27,11 +27,18 @@ export const Rewards = ({
   const isMounted = useIsMounted()
   const { isConnected } = useAccount()
   const { data: userData, refetch } = useUserStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const { userStakes } = userData || {}
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const { addToast, close } = useBrandedToast()
+
+  const { chain: wagmiChain } = useNetwork()
+  let buttonsEnabled = true
+  if (cellarConfig.chain.wagmiId !== wagmiChain?.id!) {
+    buttonsEnabled = false
+  }
 
   const importToken = useImportToken({
     onSuccess: (data) => {
@@ -57,10 +64,12 @@ export const Rewards = ({
     userStakes?.totalClaimAllRewards?.value.toString()
 
   const claimAllDisabled =
-    !isConnected || !userRewards || parseInt(userRewards) <= 0
+    !isConnected || !userRewards || parseInt(userRewards) <= 0 || !buttonsEnabled
 
-  // Get somm token 
-  const chainObj = chainConfig.find((c) => c.id === cellarConfig.chain.id)!
+  // Get somm token
+  const chainObj = chainConfig.find(
+    (c) => c.id === cellarConfig.chain.id
+  )!
 
   const sommToken = tokenConfig.find(
     (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj.id

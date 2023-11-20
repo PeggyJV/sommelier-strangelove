@@ -95,10 +95,12 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
   // Make sure the user is on the same chain as the strategy
   const { chain: wagmiChain } = useNetwork()
+  let buttonsEnabled = true
   if (strategyData?.config.chain.wagmiId !== wagmiChain?.id!) {
     // Override userdata so as to not confuse people if they're on the wrong chain
     userData = undefined
     lpTokenData = undefined
+    buttonsEnabled = false
   }
 
   const netValue = userData?.userStrategyData.userData?.netValue
@@ -219,13 +221,14 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       <DepositButton
                         disabled={
                           !isConnected ||
-                          strategyData?.isContractNotReady
+                          strategyData?.isContractNotReady ||
+                          !buttonsEnabled
                         }
                       />
                     )}
                     <WithdrawButton
                       isDeprecated={strategyData?.deprecated}
-                      disabled={lpTokenDisabled}
+                      disabled={lpTokenDisabled || !buttonsEnabled}
                     />
                   </>
                 ) : (
@@ -287,7 +290,11 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                     {isBondButtonEnabled(cellarConfig) &&
                       isStakingAllowed &&
                       isMounted && (
-                        <BondButton disabled={lpTokenDisabled} />
+                        <BondButton
+                          disabled={
+                            lpTokenDisabled || !buttonsEnabled
+                          }
+                        />
                       )}
                   </>
                 )}

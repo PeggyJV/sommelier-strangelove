@@ -63,7 +63,7 @@ export const BridgeCard: React.FC = () => {
             </HStack>
           </Heading>
           <Text fontFamily="Haffer" align="center">
-            Your connected wallet is on {wagmiChain?.name}. For
+            Your connected wallet is on the {wagmiChain?.name} network. For
             the time being, the bridge is only availible between
             Ethereum and Sommelier. Please switch to{" "}
             {ethChain.displayName} to use the bridge.
