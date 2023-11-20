@@ -13,6 +13,7 @@ import {
   VStack,
   Tooltip,
   Th,
+  Link,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
