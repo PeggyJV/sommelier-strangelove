@@ -75,7 +75,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarAddress = cellarConfig.id
   const depositTokens = cellarData.depositTokens.list
   const { addToast, update, close, closeAll } = useBrandedToast()
-  const { chain } = useNetwork()
   
   const currentStrategies =
     window.location.pathname?.split("/")[2]?.replace(/-/g, " ") ||
@@ -374,16 +373,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               <Link
                 display="flex"
                 alignItems="center"
-                href={`${chain?.blockExplorers?.default.url}/tx/${depositResult?.data?.transactionHash}`}
+                href={`${cellarConfig.chain.blockExplorer.url}/tx/${depositResult?.data?.transactionHash}`}
                 isExternal
                 textDecor="underline"
               >
-                <Text as="span">{`View on ${chain?.blockExplorers?.default.name}`}</Text>
+                <Text as="span">{`View on ${cellarConfig.chain.blockExplorer.name}`}</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
               <Text
                 onClick={() => {
-                  importToken.mutate({ address: cellarAddress, chain: cellarConfig.chain.id })
+                  importToken.mutate({
+                    address: cellarAddress,
+                    chain: cellarConfig.chain.id,
+                  })
                 }}
                 textDecor="underline"
                 as="button"

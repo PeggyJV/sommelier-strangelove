@@ -12,6 +12,7 @@ import { erc20ABI } from "wagmi"
 // !!!!!!!!
 // MULTICHAIN TODOS
 
+// TODO: Fix deposit "Deposit Cancelled" msg on main list page
 // TODO: Show chain type on cellar detail page and manage page
 // TODO: Check/get staking rewards ready for multichain
 // !!!!!!!!
