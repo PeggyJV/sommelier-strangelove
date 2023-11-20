@@ -232,9 +232,19 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
             heading: "Transaction not submitted",
             body: (
               <Text>
-                The gas fees are particularly high right now. To avoid
-                a failed transaction leading to wasted gas, please try
-                again later.
+                Your transaction has failed, if it does not work after
+                waiting some time and retrying please send a message
+                in our{" "}
+                {
+                  <Link
+                    href="https://discord.com/channels/814266181267619840/814279703622844426"
+                    isExternal
+                    textDecoration="underline"
+                  >
+                    Discord Support channel
+                  </Link>
+                }{" "}
+                tagging a member of the front end team.
               </Text>
             ),
             status: "info",
