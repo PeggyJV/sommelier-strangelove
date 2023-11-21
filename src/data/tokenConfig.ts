@@ -290,7 +290,7 @@ export const tokenConfig: Token[] = [
     alt: "eETH logo",
     symbol: "eETH",
     address: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
-    coinGeckoId: "weth", // TODO: Update once eETH is listed on CoinGecko
+    coinGeckoId: "ether-fi-staked-eth", 
     decimals: 18,
   },
 ]

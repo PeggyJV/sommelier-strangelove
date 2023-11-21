@@ -114,7 +114,7 @@ export const turboeETH: CellarData = {
       //customIconToolTipMsg?: string
     },
     staker: {
-      address: config.CONTRACT.REAL_YIELD_ETH.ADDRESS, // TODO: update with live staking address once rewards start
+      address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_EETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
