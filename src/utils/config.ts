@@ -12,7 +12,7 @@ import { erc20ABI } from "wagmi"
 // MULTICHAIN TODOS
 
 // TODO: Show chain type on cellar detail page and manage page
-// TODO: Check/get staking rewards ready for multichain
+// TODO: Check/get staking rewards ready for multichain -- need more somm on a shorter timeline on staking contract
 // !!!!!!!!
 
 // Adress should be saved as lowercase
