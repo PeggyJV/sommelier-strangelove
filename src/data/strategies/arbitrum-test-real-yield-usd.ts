@@ -89,8 +89,9 @@ export const testArbitrumRealYieldUsd: CellarData = {
     baseAsset: tokenConfigMap.USDC_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
     staker: {
-      address: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS,
-      abi: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ABI,
+      address:
+        config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD_STAKER.ADDRESS,
+      abi: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
   },
