@@ -112,7 +112,6 @@ export const steadyBtc: CellarData = {
       abi: config.CONTRACT.STEADY_BTC_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    rewardTokenAddress: tokenConfigMap.SOMM_ETHEREUM.address,
     baseAsset: tokenConfigMap.USDC_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },

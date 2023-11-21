@@ -8,14 +8,12 @@ import cellarV0821 from "../abi/cellar-v0.8.21.json"
 import gravityBridge from "../abi/gravityBridge.json"
 import { erc20ABI } from "wagmi"
 
-
 // !!!!!!!!
 // MULTICHAIN TODOS
 
 // TODO: Show chain type on cellar detail page and manage page
 // TODO: Check/get staking rewards ready for multichain
 // !!!!!!!!
-
 
 // Adress should be saved as lowercase
 /** Ensure Checksum Address  */
@@ -236,6 +234,10 @@ export const config = {
     },
     TURBO_GHO_STAKER: {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
+      ABI: cellarStakingV0821,
+    },
+    TEST_ARBITRUM_REAL_YIELD_USD_STAKER: {
+      ADDRESS: "0xD7FE9DB494B28c55920700eA6E9347c49290A510",
       ABI: cellarStakingV0821,
     },
   },

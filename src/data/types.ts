@@ -75,7 +75,6 @@ export interface ConfigProps {
     abi: readonly {}[]
     key: StakerKey
   }
-  rewardTokenAddress?: string
   customReward?: CustomReward
   badges?: Badge[]
   baseAsset: Token

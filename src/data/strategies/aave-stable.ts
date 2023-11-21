@@ -90,7 +90,6 @@ export const aaveStable: CellarData = {
       abi: config.CONTRACT.AAVE_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    rewardTokenAddress: tokenConfigMap.SOMM_ETHEREUM.address,
     baseAsset: tokenConfigMap.USDC_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },

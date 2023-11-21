@@ -86,9 +86,13 @@ export const testArbitrumRealYieldUsd: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 6,
     },
-    rewardTokenAddress: tokenConfigMap.SOMM_ETHEREUM.address,
     baseAsset: tokenConfigMap.USDC_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
+    staker: {
+      address: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS,
+      abi: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
+    },
   },
   faq: [
     {

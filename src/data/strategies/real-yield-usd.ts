@@ -91,7 +91,6 @@ export const realYieldUsd: CellarData = {
       abi: config.CONTRACT.REAL_YIELD_USD_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    rewardTokenAddress: tokenConfigMap.SOMM_ETHEREUM.address,
     badges: [
       {
         customStrategyHighlight: "Now using DSR",

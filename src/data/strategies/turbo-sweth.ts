@@ -92,7 +92,6 @@ export const turboSWETH: CellarData = {
       abi: config.CONTRACT.TURBO_SWETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
-    rewardTokenAddress: tokenConfigMap.SOMM_ETHEREUM.address,
     customReward: {
       showAPY: false,
       tokenSymbol: "PEARL",

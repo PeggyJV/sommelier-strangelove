@@ -83,7 +83,6 @@ export const fraximal: CellarData = {
       abi: config.CONTRACT.FRAXIMAL_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    rewardTokenAddress: tokenConfigMap.SOMM_ETHEREUM.address,
     baseAsset: tokenConfigMap.FRAX_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
