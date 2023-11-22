@@ -93,7 +93,7 @@ export const turboeETH: CellarData = {
       tokenSymbol: "eETH",
       tokenDisplayName: "eETH",
       tokenAddress: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
-      imagePath: "/assets/icons/eeth.png",
+      imagePath: "/assets/icons/eETH.png",
       //customRewardMessageTooltip?: string
       //customRewardMessage?: string
       //customRewardHeader?: string

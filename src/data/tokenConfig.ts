@@ -286,7 +286,7 @@ export const tokenConfig: Token[] = [
     decimals: 6,
   },
   {
-    src: "/assets/icons/eeth.png",
+    src: "/assets/icons/eETH.png",
     alt: "eETH logo",
     symbol: "eETH",
     address: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",

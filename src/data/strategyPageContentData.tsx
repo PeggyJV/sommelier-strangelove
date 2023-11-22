@@ -1058,7 +1058,7 @@ export const strategyPageContentData = {
         {}
         <Image
           alt="Turbo eETH"
-          src="/assets/icons/Turbo-eeth.png"
+          src="/assets/icons/Turbo-eETH.png"
           boxSize={8}
         />
         <Text>TurboeETH</Text>
