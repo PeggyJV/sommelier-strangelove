@@ -176,6 +176,14 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           </Box>
           {content.ticker}
         </HStack>
+        <HStack>
+          <Box>
+            <Text w="150px" fontWeight="semibold">
+              Chain
+            </Text>
+          </Box>
+          <Image src={cellarConfig.chain.logoPath} boxSize={8} /> <Text>{cellarConfig.chain.displayName}</Text>
+        </HStack>
         <HStack alignItems="start">
           <Box>
             <Text w="150px" fontWeight="semibold">

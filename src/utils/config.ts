@@ -8,12 +8,6 @@ import cellarV0821 from "../abi/cellar-v0.8.21.json"
 import gravityBridge from "../abi/gravityBridge.json"
 import { erc20ABI } from "wagmi"
 
-// !!!!!!!!
-// MULTICHAIN TODOS
-
-// TODO: Show chain type on cellar detail page and manage page
-// !!!!!!!!
-
 // Adress should be saved as lowercase
 /** Ensure Checksum Address  */
 export const config = {
