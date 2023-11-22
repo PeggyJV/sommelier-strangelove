@@ -1,42 +1,25 @@
 import {
   Box,
-  Flex,
-  Heading,
   HStack,
   Image,
   Spinner,
   Stack,
-  StackDivider,
   Text,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { BuyOrSellModal } from "components/_modals/BuyOrSellModal"
 import { cellarDataMap } from "data/cellarDataMap"
 import { VFC } from "react"
-import { PercentageText } from "components/PercentageText"
-import { CellarStatsLabel } from "components/_cards/CellarCard/CellarStats"
-import { analytics } from "utils/analytics"
-import { landingType } from "utils/landingType"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
 import {
-  apyHoverLabel,
-  apyLabel,
-  intervalGainPctTitleContent,
-  intervalGainPctTooltipContent,
   intervalGainTimeline,
-  isDailyChangeEnabled,
-  showTokenPriceInsteadOfApy,
-  tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
 import {
   addDays,
-  formatDistanceToNowStrict,
-  isFuture,
 } from "date-fns"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
@@ -182,7 +165,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               Chain
             </Text>
           </Box>
-          <Image src={cellarConfig.chain.logoPath} boxSize={8} /> <Text>{cellarConfig.chain.displayName}</Text>
+          <Image src={cellarConfig.chain.logoPath} alt={cellarConfig.chain.alt} boxSize={8} /> <Text>{cellarConfig.chain.displayName}</Text>
         </HStack>
         <HStack alignItems="start">
           <Box>

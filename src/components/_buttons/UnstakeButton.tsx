@@ -1,7 +1,6 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react"
 import { VFC } from "react"
 import { SecondaryButton } from "./SecondaryButton"
-import { analytics } from "utils/analytics"
 import { UnstakeModal } from "components/_modals/UnstakeModal"
 
 export const UnstakeButton: VFC<ButtonProps> = (props) => {

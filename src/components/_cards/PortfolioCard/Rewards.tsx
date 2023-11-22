@@ -15,7 +15,6 @@ import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useHandleTransaction } from "hooks/web3"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { analytics } from "utils/analytics"
-import { config } from "utils/config"
 import { useAccount } from "wagmi"
 import { useNetwork } from "wagmi"
 

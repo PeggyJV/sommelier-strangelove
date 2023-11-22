@@ -54,7 +54,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   useEffect(() => {
     setValue("address", "")
     setValue("amount", 0)
-  }, [watchType])
+  }, [watchType, setValue])
 
   const { isLoading: isEthToSommLoading, doEthToSomm } =
     useBridgeEthToSommTx()

@@ -3,7 +3,6 @@ import {
   HStack,
   Text,
   VStack,
-  Image,
 } from "@chakra-ui/react"
 import { ExternalLinkIcon, InformationIcon } from "components/_icons"
 import React from "react"

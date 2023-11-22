@@ -1,7 +1,6 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react"
 import { VFC } from "react"
 import { SecondaryButton } from "./SecondaryButton"
-import { analytics } from "utils/analytics"
 import { WithdrawModal } from "components/_modals/WithdrawModal"
 
 export const WithdrawButton: VFC<

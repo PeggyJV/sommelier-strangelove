@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react"
 import { ChevronDownIcon, CheckIcon } from "components/_icons"
 import { VFC } from "react"
-import { useSwitchNetwork, useNetwork, useAccount } from "wagmi"
+import { useSwitchNetwork, useAccount } from "wagmi"
 
 import {
   chainConfigMap,

@@ -21,7 +21,6 @@ import { Token } from "data/tokenConfig"
 import { isTokenPriceEnabledApp } from "data/uiConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
-import { getProtocols } from "utils/getProtocols"
 import { analytics } from "utils/analytics"
 
 type StrategyDesktopColumnProps = {

@@ -1,11 +1,7 @@
 import {
   Button,
   Center,
-  Heading,
   HStack,
-  VStack,
-  Text,
-  Link,
 } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
@@ -28,7 +24,6 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
 import { InfoBanner } from "components/_banners/InfoBanner"
 import { analytics } from "utils/analytics"
-import { ExternalLinkIcon } from "components/_icons"
 
 export const PageHome = () => {
   const {

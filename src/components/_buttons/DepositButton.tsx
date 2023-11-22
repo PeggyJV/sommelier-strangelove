@@ -3,7 +3,6 @@ import ClientOnly from "components/ClientOnly"
 import { DepositModal } from "components/_modals/DepositModal"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { VFC } from "react"
-import { analytics } from "utils/analytics"
 import { BaseButton } from "./BaseButton"
 
 export const DepositButton: VFC<ButtonProps> = (props) => {

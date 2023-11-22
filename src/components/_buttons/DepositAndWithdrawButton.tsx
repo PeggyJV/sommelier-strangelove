@@ -1,13 +1,10 @@
-import { Tooltip, Text} from "@chakra-ui/react"
+import { Tooltip} from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { isBefore } from "date-fns"
-import { zonedTimeToUtc } from "date-fns-tz"
-import { useBrandedToast } from "hooks/chakra"
-import { analytics } from "utils/analytics"
 import { toEther } from "utils/formatCurrency"
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi"
+import { useAccount, useNetwork } from "wagmi"
 import { BaseButton } from "./BaseButton"
 
 type DepositAndWithdrawButtonProps = {

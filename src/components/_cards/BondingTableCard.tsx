@@ -34,7 +34,6 @@ import { useGeo } from "context/geoContext"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { differenceInDays } from "date-fns"
-import { config } from "utils/config"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { tokenConfig } from "data/tokenConfig"
 

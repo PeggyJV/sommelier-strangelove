@@ -31,7 +31,6 @@ import { getAddress } from "ethers/lib/utils.js"
 
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
-import { useNetwork } from "wagmi"
 
 interface FormValues {
   depositAmount: number
