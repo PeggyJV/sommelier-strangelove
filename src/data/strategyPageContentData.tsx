@@ -1048,4 +1048,40 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
+  [config.CONTRACT.TURBO_EETH.SLUG]: {
+    name: "Turbo eETH",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo eETH"
+          src="/assets/icons/Turbo-eETH.png"
+          boxSize={8}
+        />
+        <Text>TurboeETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "eETH"],
+    alternativeTo: "Manually LPing",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Capable of simultaneously pursuing multiple eETH yield opportunities.`,
+        `Dynamically liquidity provision across multiple DEXs.`,
+        `Fully automated with built-in auto compounding.`,
+      ],
+      description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.      
+      <br/><br/>
+      Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
 }

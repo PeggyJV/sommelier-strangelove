@@ -169,6 +169,11 @@ export const config = {
       SLUG: "Turbo-SOMM",
       ABI: cellarV0821,
     },
+    TURBO_EETH: {
+      ADDRESS: "0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
+      SLUG: "Turbo-eETH",
+      ABI: cellarV0821,
+    },
     TURBO_STETH: {
       ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",
       SLUG: "Turbo-STETH",
@@ -244,6 +249,10 @@ export const config = {
     },
     TURBO_GHO_STAKER: {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
+      ABI: cellarStakingV0821,
+    },
+    TURBO_EETH_STAKER: {
+      ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
     },
   },
