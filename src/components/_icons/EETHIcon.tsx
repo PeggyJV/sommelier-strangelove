@@ -2,7 +2,7 @@ import { Icon, IconProps } from "@chakra-ui/react"
 import { VFC } from "react"
 
 export const EETHIcon: VFC<IconProps> = (props) => (
-  <Icon viewBox="0 0 23 21" {...props}>
+  <Icon viewBox="0 0 400 400" {...props}>
     <rect
       width="405"
       height="405"

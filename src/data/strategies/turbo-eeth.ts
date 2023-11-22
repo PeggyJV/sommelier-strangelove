@@ -81,6 +81,7 @@ export const turboeETH: CellarData = {
       decimals: 18,
     },
     baseAsset: tokenConfigMap.WETH,
+    /*
     badges: [
       {
         customStrategyHighlight: "eETH Incentives",
@@ -101,7 +102,7 @@ export const turboeETH: CellarData = {
       //customClaimMsg?: string
       //customRewardAPYTooltip: string
       logo: EETHIcon,
-      logoSize: "17px",
+      logoSize: "15px",
       //customRewardLongMessage?: string
       //rewardHyperLink?: string
       //customColumnHeader?: string
@@ -113,6 +114,7 @@ export const turboeETH: CellarData = {
       showSommRewards: true,
       //customIconToolTipMsg?: string
     },
+    */
     staker: {
       address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_EETH_STAKER.ABI,

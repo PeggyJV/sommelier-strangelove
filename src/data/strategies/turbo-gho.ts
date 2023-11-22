@@ -96,10 +96,12 @@ export const turboGHO: CellarData = {
         customStrategyHighlight: "Emergent Asset",
         customStrategyHighlightColor: "purple.base",
       },
+      /*
       {
         customStrategyHighlight: "GHO Incentives",
         customStrategyHighlightColor: "#00C04B",
       },
+      */
     ],
     customReward: {
       showAPY: true,

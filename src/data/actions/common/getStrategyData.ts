@@ -140,6 +140,7 @@ export const getStrategyData = async ({
 
       let extraRewardsApy = undefined
       // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
+      /** 
       if (strategy.slug === utilConfig.CONTRACT.TURBO_GHO.SLUG) {
         // Get GHO price
         const ghoPrice = Number(
@@ -160,7 +161,9 @@ export const getStrategyData = async ({
           tokenIcon: GHOIcon,
         }
       }
+      */
 
+      /*
       if (strategy.slug === utilConfig.CONTRACT.TURBO_EETH.SLUG) {
         // Get TVL
         let usdTvl = Number(strategyData?.tvlTotal)
@@ -176,6 +179,7 @@ export const getStrategyData = async ({
           tokenIcon: EETHIcon,
         }
       }
+      */
 
       const baseApy = (() => {
         if (config.show7DayAPYTooltip === true) {
