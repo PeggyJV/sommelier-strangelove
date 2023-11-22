@@ -138,7 +138,9 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      let extraRewardsApy = undefined
+      let extraRewardsApy = {
+        value: 0,
+      }
       // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
       /** 
       if (strategy.slug === utilConfig.CONTRACT.TURBO_GHO.SLUG) {
