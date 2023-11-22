@@ -96,7 +96,7 @@ export const turboeETH: CellarData = {
       //customRewardMessageTooltip?: string
       //customRewardMessage?: string
       //customRewardHeader?: string
-      showBondingRewards: true,
+      showBondingRewards: false,
       showClaim: true,
       //customClaimMsg?: string
       //customRewardAPYTooltip: string
