@@ -38,8 +38,7 @@ export const useBridgeSommToEthTx = () => {
       })
     },
   })
-
-  const CopyTxHashButton = ({ hash }) => (
+  const CopyTxHashButton = ({ hash }: { hash: string }) => (
     <IconButton
       onClick={() => {
         navigator.clipboard.writeText(hash)
