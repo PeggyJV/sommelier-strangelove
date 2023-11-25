@@ -769,6 +769,23 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         </Text>
       </>
     ),
+    "Turbo SOMM": () => (
+      <Text as="span">
+        If your Somm tokens are currently in your Kepler wallet, it
+        is necessary to bridge them to the Ethereum (ETH) blockchain
+        to proceed with a deposit. This can be done through our
+        bridging service. Please visit{' '}
+        <Link
+          href={"https://app.sommelier.finance/bridge"}
+          isExternal
+          textDecor="underline"
+        >
+          https://app.sommelier.finance/bridge
+        </Link>{' '}
+        to initiate the bridging process. Once your tokens are successfully bridged
+        to the ETH chain, you will be able to complete your deposit.
+      </Text>
+    ),
   }
   return (
     <>
