@@ -13,7 +13,7 @@ import { EETHIcon } from "components/_icons"
 export const turboeETH: CellarData = {
   name: "Turbo eETH",
   slug: config.CONTRACT.TURBO_EETH.SLUG,
-  tradedAssets: ["WETH", "eETH"],
+  tradedAssets: ["WETH", "eETH", "weETH"],
   launchDate: new Date(Date.UTC(2023, 10, 27, 16, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
@@ -23,7 +23,7 @@ export const turboeETH: CellarData = {
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Uniswap V3", "Balancer", "Morpho", "AAVE"],
-  strategyAssets: ["WETH", "eETH"],
+  strategyAssets: ["WETH", "eETH", "weETH"],
   performanceSplit: {
     depositors: 80,
     "strategy provider": 16,
