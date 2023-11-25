@@ -76,6 +76,13 @@ export const useBridgeSommToEthTx = () => {
         6
       )
 
+      analytics.track("bridge.contract-started", {
+        value: props.amount,
+        path: "sommToEth",
+        sender: data?.bech32Address,
+        receiver: props.address,
+      })
+
       const res = await txClient({
         signer: signerAmino || undefined,
         addr: "https://sommelier-rpc.polkachu.com/",
@@ -96,6 +103,14 @@ export const useBridgeSommToEthTx = () => {
       })
 
       if (res.transactionHash && res.code === 0) {
+        analytics.track("bridge.contract-succeeded", {
+          value: props.amount,
+          path: "sommToEth",
+          sender: data?.bech32Address,
+          receiver: props.address,
+          txHash: res.transactionHash,
+        })
+
         update({
           heading: "Bridge Initiated",
           body: (
@@ -145,9 +160,57 @@ export const useBridgeSommToEthTx = () => {
         importToken.mutate({
           address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
         })
+      } else if (res.code !== 0) {
+        analytics.track("bridge.contract-failed", {
+          value: props.amount,
+          path: "sommToEth",
+          sender: data?.bech32Address,
+          receiver: props.address,
+          txHash: res.transactionHash,
+        })
+
+        setIsLoading(false)
+        return update({
+          heading: "Bridge Initiated",
+          body: (
+            <Stack>
+              <Stack spacing={0} fontSize="xs">
+                <HStack>
+                  <Text fontWeight="bold">
+                    Tx Hash:{" "}
+                    {truncateWalletAddress(res.transactionHash)}{" "}
+                  </Text>
+                  <CopyTxHashButton hash={res.transactionHash} />
+                </HStack>
+              </Stack>
+              <Link
+                fontSize="sm"
+                href={`https://www.mintscan.io/sommelier/txs/${res.transactionHash}`}
+                target="_blank"
+                textDecor="underline"
+              >
+                <HStack>
+                  <Text>View on Mintscan</Text>
+                  <ExternalLinkIcon boxSize={3} />
+                </HStack>
+              </Link>
+            </Stack>
+          ),
+          status: "error",
+          duration: null,
+          closeHandler: closeAll,
+        })
       }
+
       setIsLoading(false)
     } catch (e) {
+      analytics.track("bridge.failed", {
+        value: props.amount,
+        path: "sommToEth",
+        sender: data?.bech32Address,
+        receiver: props.address,
+      })
+
       const error = e as Error
       setIsLoading(false)
       update({
