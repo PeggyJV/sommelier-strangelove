@@ -1,20 +1,23 @@
-import { useState } from "react";
-import { useBrandedToast } from "hooks/chakra";
-import { BridgeFormValues } from "components/_cards/BridgeCard";
-import { ethers } from "ethers";
-import { useAccount, useSigners } from "graz";
-import { txClient } from "src/vendor/ignite/gravity.v1";
-import { analytics } from "utils/analytics";
-import { TxHashToastBody, BridgeTxHashToastBody } from "./ReusableToastBodies"; // Adjust the import path as needed
-import { useImportToken } from "hooks/web3/useImportToken";
-import { Text } from "@chakra-ui/react";
+import { useState } from "react"
+import { useBrandedToast } from "hooks/chakra"
+import { BridgeFormValues } from "components/_cards/BridgeCard"
+import { ethers } from "ethers"
+import { useAccount, useSigners } from "graz"
+import { txClient } from "src/vendor/ignite/gravity.v1"
+import { analytics } from "utils/analytics"
+import {
+  TxHashToastBody,
+  BridgeTxHashToastBody,
+} from "./ReusableToastBodies"
+import { useImportToken } from "hooks/web3/useImportToken"
+import { Text } from "@chakra-ui/react"
 
 export const useBridgeSommToEthTx = () => {
-  const { addToast, update, closeAll } = useBrandedToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const { addToast, update, closeAll } = useBrandedToast()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const { data } = useAccount();
-  const { signerAmino } = useSigners();
+  const { data } = useAccount()
+  const { signerAmino } = useSigners()
 
   const importToken = useImportToken({
     onSuccess: (data) => {
@@ -23,22 +26,22 @@ export const useBridgeSommToEthTx = () => {
         status: "success",
         body: <Text>{data.symbol} added to MetaMask</Text>,
         closeHandler: closeAll,
-      });
+      })
     },
     onError: (error) => {
-      const e = error as Error;
+      const e = error as Error
       addToast({
         heading: "Import Token",
         status: "error",
         body: <Text>{e.message}</Text>,
         closeHandler: closeAll,
-      });
+      })
     },
-  });
+  })
 
   const doSommToEth = async (props: BridgeFormValues) => {
     try {
-      setIsLoading(true);
+      setIsLoading(true)
       addToast({
         heading: "Loading",
         status: "default",
@@ -46,24 +49,24 @@ export const useBridgeSommToEthTx = () => {
         isLoading: true,
         duration: null,
         closeHandler: closeAll,
-      });
+      })
 
       if (data?.bech32Address === undefined) {
-        throw new Error("No Connected Cosmos wallet");
+        throw new Error("No Connected Cosmos wallet")
       }
 
-      const amountReceived = props.amount - 50;
+      const amountReceived = props.amount - 50
       const convertedAmount = ethers.utils.parseUnits(
         String(amountReceived),
         6
-      );
+      )
 
       analytics.track("bridge.contract-started", {
         value: props.amount,
         path: "sommToEth",
         sender: data?.bech32Address,
         receiver: props.address,
-      });
+      })
 
       const res = await txClient({
         signer: signerAmino || undefined,
@@ -82,8 +85,9 @@ export const useBridgeSommToEthTx = () => {
             denom: "usomm",
           },
         },
-      });
+      })
 
+      // If the transaction failed, update with "error" status and exit early
       if (res.code !== 0) {
         analytics.track("bridge.contract-failed", {
           value: props.amount,
@@ -91,11 +95,11 @@ export const useBridgeSommToEthTx = () => {
           sender: data?.bech32Address,
           receiver: props.address,
           txHash: res.transactionHash,
-        });
+        })
 
-        setIsLoading(false);
+        setIsLoading(false)
         update({
-          heading: "Bridge Initiated",
+          heading: "Bridge Failed",
           body: (
             <TxHashToastBody
               title="Transaction Failed"
@@ -104,13 +108,14 @@ export const useBridgeSommToEthTx = () => {
               closeAll={closeAll}
             />
           ),
-          status: "error",
+          status: "error", // This is an error, as the transaction failed
           duration: null,
           closeHandler: closeAll,
-        });
-        return; // Early exit if the transaction fails
+        })
+        return
       }
 
+      // If the transaction succeeded, update with "primary" status
       if (res.transactionHash) {
         analytics.track("bridge.contract-succeeded", {
           value: props.amount,
@@ -118,10 +123,10 @@ export const useBridgeSommToEthTx = () => {
           sender: data?.bech32Address,
           receiver: props.address,
           txHash: res.transactionHash,
-        });
+        })
 
         update({
-          heading: "Bridge Initiated",
+          heading: "Bridge Succeeded",
           body: (
             <BridgeTxHashToastBody
               amount={String(props.amount)}
@@ -130,31 +135,31 @@ export const useBridgeSommToEthTx = () => {
               closeAll={closeAll}
             />
           ),
-          status: "primary",
+          status: "primary", // This is not an error, as the transaction succeeded
           duration: null,
           closeHandler: closeAll,
-        });
+        })
       }
 
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (e) {
       analytics.track("bridge.failed", {
         value: props.amount,
         path: "sommToEth",
         sender: data?.bech32Address,
         receiver: props.address,
-      });
+      })
 
-      const error = e as Error;
-      setIsLoading(false);
+      const error = e as Error
+      setIsLoading(false)
       update({
         heading: "Error",
         body: <Text>{error.message}</Text>,
         status: "error",
         closeHandler: closeAll,
-      });
+      })
     }
-  };
+  }
 
-  return { isLoading, doSommToEth };
-};
+  return { isLoading, doSommToEth }
+}
