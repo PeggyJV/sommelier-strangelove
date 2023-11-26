@@ -1064,7 +1064,7 @@ export const strategyPageContentData = {
         <Text>TurboeETH</Text>
       </>
     ),
-    tradedAssets: ["WETH", "eETH"],
+    tradedAssets: ["WETH", "eETH", "weETH"],
     alternativeTo: "Manually LPing",
     exchange: [
       {
