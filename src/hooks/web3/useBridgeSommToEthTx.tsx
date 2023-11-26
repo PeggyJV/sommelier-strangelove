@@ -10,6 +10,7 @@ import {
   BridgeTxHashToastBody,
 } from "./ReusableToastBodies" // Adjust the import path as needed
 import { useImportToken } from "hooks/web3/useImportToken"
+import { Text } from "@chakra-ui/react"
 
 export const useBridgeSommToEthTx = () => {
   const { addToast, update, closeAll } = useBrandedToast()
