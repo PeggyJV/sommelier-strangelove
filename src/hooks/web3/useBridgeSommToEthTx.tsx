@@ -1,15 +1,14 @@
-import { BridgeFormValues } from "components/_cards/BridgeCard"
-import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
-import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
-import truncateWalletAddress from "utils/truncateWalletAddress"
-import { AiFillCopy } from "react-icons/ai"
-import { Link } from "components/Link"
-import { ExternalLinkIcon } from "components/_icons"
-import { analytics } from "utils/analytics"
+import { useBrandedToast } from "hooks/chakra"
+import { BridgeFormValues } from "components/_cards/BridgeCard"
+import { ethers } from "ethers"
 import { useAccount, useSigners } from "graz"
 import { txClient } from "src/vendor/ignite/gravity.v1"
-import { ethers } from "ethers"
+import { analytics } from "utils/analytics"
+import {
+  TxHashToastBody,
+  BridgeTxHashToastBody,
+} from "./ReusableToastBodies" // Adjust the import path as needed
 import { useImportToken } from "hooks/web3/useImportToken"
 
 export const useBridgeSommToEthTx = () => {
@@ -38,22 +37,6 @@ export const useBridgeSommToEthTx = () => {
       })
     },
   })
-  const CopyTxHashButton = ({ hash }: { hash: string }) => (
-    <IconButton
-      onClick={() => {
-        navigator.clipboard.writeText(hash)
-        addToast({
-          heading: "Copied to clipboard",
-          body: null,
-          status: "success",
-          duration: null,
-          closeHandler: closeAll,
-        })
-      }}
-      aria-label="Copy to clipboard"
-      icon={<AiFillCopy />}
-    />
-  )
 
   const doSommToEth = async (props: BridgeFormValues) => {
     try {
@@ -66,6 +49,7 @@ export const useBridgeSommToEthTx = () => {
         duration: null,
         closeHandler: closeAll,
       })
+
       if (data?.bech32Address === undefined) {
         throw new Error("No Connected Cosmos wallet")
       }
@@ -114,49 +98,18 @@ export const useBridgeSommToEthTx = () => {
         update({
           heading: "Bridge Initiated",
           body: (
-            <Stack>
-              <Stack spacing={0} fontSize="xs">
-                <HStack>
-                  <Text as="span" fontWeight="bold">
-                    Amount:
-                  </Text>
-                  <Text as="span">{props.amount} SOMM</Text>
-                </HStack>
-                <HStack>
-                  <Text as="span" fontWeight="bold">
-                    Destination:
-                  </Text>
-                  <Text as="span">Sommelier to Ethereum Mainnet</Text>
-                </HStack>
-                <HStack>
-                  <Text as="span" fontWeight="bold" width="15ch">
-                    Est. time:
-                  </Text>
-                  <Text as="span">
-                    1-5 min. Transaction may take additional time to
-                    process after network validation
-                  </Text>
-                </HStack>
-              </Stack>
-              <Link
-                fontSize="sm"
-                href={`https://www.mintscan.io/sommelier/txs/${res.transactionHash}`}
-                target="_blank"
-                textDecor="underline"
-              >
-                <HStack>
-                  <Text>View on Mintscan</Text>
-                  <ExternalLinkIcon boxSize={3} />
-                </HStack>
-              </Link>
-            </Stack>
+            <BridgeTxHashToastBody
+              amount={String(props.amount)}
+              hash={res.transactionHash}
+              addToast={addToast}
+              closeAll={closeAll}
+            />
           ),
           status: "primary",
           duration: null,
           closeHandler: closeAll,
         })
 
-        // Trigger the import token functionality
         importToken.mutate({
           address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
         })
@@ -173,28 +126,12 @@ export const useBridgeSommToEthTx = () => {
         return update({
           heading: "Bridge Initiated",
           body: (
-            <Stack>
-              <Stack spacing={0} fontSize="xs">
-                <HStack>
-                  <Text fontWeight="bold">
-                    Tx Hash:{" "}
-                    {truncateWalletAddress(res.transactionHash)}{" "}
-                  </Text>
-                  <CopyTxHashButton hash={res.transactionHash} />
-                </HStack>
-              </Stack>
-              <Link
-                fontSize="sm"
-                href={`https://www.mintscan.io/sommelier/txs/${res.transactionHash}`}
-                target="_blank"
-                textDecor="underline"
-              >
-                <HStack>
-                  <Text>View on Mintscan</Text>
-                  <ExternalLinkIcon boxSize={3} />
-                </HStack>
-              </Link>
-            </Stack>
+            <TxHashToastBody
+              title="Transaction Failed"
+              hash={res.transactionHash}
+              addToast={addToast}
+              closeAll={closeAll}
+            />
           ),
           status: "error",
           duration: null,
