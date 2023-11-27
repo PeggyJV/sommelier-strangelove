@@ -30,7 +30,7 @@ import {
 let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
-  [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
+  //[config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
   [config.CONTRACT.TURBO_SOMM.SLUG]: turboSOMM,
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
   [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
