@@ -8,7 +8,7 @@ import { analytics } from "utils/analytics"
 import {
   TxHashToastBody,
   BridgeTxHashToastBody,
-} from "./ReusableToastBodies"
+} from "./ReusableToastBodies" // Adjust the import path as needed
 import { useImportToken } from "hooks/web3/useImportToken"
 import { Text } from "@chakra-ui/react"
 
@@ -87,36 +87,7 @@ export const useBridgeSommToEthTx = () => {
         },
       })
 
-      // If the transaction failed, update with "error" status and exit early
-      if (res.code !== 0) {
-        analytics.track("bridge.contract-failed", {
-          value: props.amount,
-          path: "sommToEth",
-          sender: data?.bech32Address,
-          receiver: props.address,
-          txHash: res.transactionHash,
-        })
-
-        setIsLoading(false)
-        update({
-          heading: "Bridge Failed",
-          body: (
-            <TxHashToastBody
-              title="Transaction Failed"
-              hash={res.transactionHash}
-              addToast={addToast}
-              closeAll={closeAll}
-            />
-          ),
-          status: "error", // This is an error, as the transaction failed
-          duration: null,
-          closeHandler: closeAll,
-        })
-        return
-      }
-
-      // If the transaction succeeded, update with "primary" status
-      if (res.transactionHash) {
+      if (res.transactionHash && res.code === 0) {
         analytics.track("bridge.contract-succeeded", {
           value: props.amount,
           path: "sommToEth",
@@ -126,7 +97,7 @@ export const useBridgeSommToEthTx = () => {
         })
 
         update({
-          heading: "Bridge Succeeded",
+          heading: "Bridge Initiated",
           body: (
             <BridgeTxHashToastBody
               amount={String(props.amount)}
@@ -135,7 +106,35 @@ export const useBridgeSommToEthTx = () => {
               closeAll={closeAll}
             />
           ),
-          status: "primary", // This is not an error, as the transaction succeeded
+          status: "primary",
+          duration: null,
+          closeHandler: closeAll,
+        })
+
+        importToken.mutate({
+          address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
+        })
+      } else if (res.code !== 0) {
+        analytics.track("bridge.contract-failed", {
+          value: props.amount,
+          path: "sommToEth",
+          sender: data?.bech32Address,
+          receiver: props.address,
+          txHash: res.transactionHash,
+        })
+
+        setIsLoading(false)
+        return update({
+          heading: "Bridge Initiated",
+          body: (
+            <TxHashToastBody
+              title="Transaction Failed"
+              hash={res.transactionHash}
+              addToast={addToast}
+              closeAll={closeAll}
+            />
+          ),
+          status: "error",
           duration: null,
           closeHandler: closeAll,
         })
