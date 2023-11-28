@@ -8,9 +8,9 @@ import { analytics } from "utils/analytics"
 import {
   TxHashToastBody,
   BridgeTxHashToastBody,
-} from "./ReusableToastBodies" // Adjust the import path as needed
+} from "./ReusableToastBodies"
 import { useImportToken } from "hooks/web3/useImportToken"
-import { Text } from "@chakra-ui/react"
+import { Text, Button } from "@chakra-ui/react"
 
 export const useBridgeSommToEthTx = () => {
   const { addToast, update, closeAll } = useBrandedToast()
@@ -112,10 +112,9 @@ export const useBridgeSommToEthTx = () => {
         })
 
         setIsLoading(false)
-        return // Exit early on error
+        return
       }
 
-      // Handling successful transaction
       if (res.transactionHash) {
         analytics.track("bridge.contract-succeeded", {
           value: props.amount,
@@ -140,13 +139,37 @@ export const useBridgeSommToEthTx = () => {
           closeHandler: closeAll,
         })
 
-        importToken.mutate({
-          address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
+        // Toast for token import
+        addToast({
+          heading: "Bridge Successful",
+          status: "success",
+          body: (
+            <>
+              <Text>
+                Would you like to import the SOMM token to MetaMask?
+              </Text>
+              <Button
+                colorScheme="purple"
+                mt={3}
+                onClick={() =>
+                  importToken.mutate({
+                    address:
+                      "0xa670d7237398238de01267472c6f13e5b8010fd1",
+                  })
+                }
+              >
+                Import to MetaMask
+              </Button>
+            </>
+          ),
+          duration: null,
+          closeHandler: closeAll,
         })
       }
 
       setIsLoading(false)
     } catch (e) {
+      const error = e as Error
       analytics.track("bridge.failed", {
         value: props.amount,
         path: "sommToEth",
@@ -154,7 +177,6 @@ export const useBridgeSommToEthTx = () => {
         receiver: props.address,
       })
 
-      const error = e as Error
       setIsLoading(false)
       update({
         heading: "Error",
