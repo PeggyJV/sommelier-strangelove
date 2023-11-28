@@ -1,126 +1,47 @@
-import { BridgeFormValues } from "components/_cards/BridgeCard"
-import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
-import { config } from "utils/config"
-import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
-import truncateWalletAddress from "utils/truncateWalletAddress"
-import { AiFillCopy } from "react-icons/ai"
-import { Link } from "components/Link"
-import { ExternalLinkIcon } from "components/_icons"
-import { analytics } from "utils/analytics"
+import { useBrandedToast } from "hooks/chakra"
+import { BridgeFormValues } from "components/_cards/BridgeCard"
+import { ethers } from "ethers"
 import { useAccount, useSigners } from "graz"
 import { txClient } from "src/vendor/ignite/gravity.v1"
-import { ethers } from "ethers"
+import { analytics } from "utils/analytics"
+import {
+  TxHashToastBody,
+  BridgeTxHashToastBody,
+} from "./ReusableToastBodies"
+import { useImportToken } from "hooks/web3/useImportToken"
+import { Text } from "@chakra-ui/react"
 
 export const useBridgeSommToEthTx = () => {
-  const { CONTRACT } = config
-  // Currently `close` have a bug it only closes the last toast appeared
-  // TODO: Fix `close` and implement it here https://github.com/strangelove-ventures/sommelier/issues/431
   const { addToast, update, closeAll } = useBrandedToast()
   const [isLoading, setIsLoading] = useState(false)
 
   const { data } = useAccount()
   const { signerAmino } = useSigners()
 
-  const TxHashToastBody = ({
-    title,
-    hash,
-  }: {
-    title: string
-    hash: string
-  }) => (
-    <Stack>
-      <Stack spacing={0} fontSize="xs">
-        <Text>{title}</Text>
-        <HStack>
-          <Text fontWeight="bold">
-            Tx Hash: {truncateWalletAddress(hash)}{" "}
-          </Text>
-          <CopyTxHashButton hash={hash} />
-        </HStack>
-      </Stack>
-
-      <Link
-        fontSize="sm"
-        href={`https://www.mintscan.io/sommelier/txs/${hash}`}
-        target="_blank"
-        textDecor="underline"
-      >
-        <HStack>
-          <Text>View on Mintscan</Text>
-          <ExternalLinkIcon boxSize={3} />
-        </HStack>
-      </Link>
-    </Stack>
-  )
-
-  const BridgeTxHashToastBody = ({
-    hash,
-    amount,
-  }: {
-    hash: string
-    amount: string
-  }) => (
-    <Stack>
-      <Stack spacing={0} fontSize="xs">
-        <HStack>
-          <Text as="span" fontWeight="bold">
-            Amount:
-          </Text>
-          <Text as="span">{amount} SOMM</Text>
-        </HStack>
-        <HStack>
-          <Text as="span" fontWeight="bold">
-            Destination:
-          </Text>
-          <Text as="span">Sommelier to Ethereum Mainnet</Text>
-        </HStack>
-        <HStack>
-          <Text as="span" fontWeight="bold" width="15ch">
-            Est. time:
-          </Text>
-          <Text as="span">
-            1-5 min. Transaction may take additional time to process
-            after network validation
-          </Text>
-        </HStack>
-      </Stack>
-      <Link
-        fontSize="sm"
-        href={`https://www.mintscan.io/sommelier/txs/${hash}`}
-        target="_blank"
-        textDecor="underline"
-      >
-        <HStack>
-          <Text>View on Mintscan</Text>
-          <ExternalLinkIcon boxSize={3} />
-        </HStack>
-      </Link>
-    </Stack>
-  )
-
-  const CopyTxHashButton = ({ hash }: { hash: string }) => (
-    <IconButton
-      onClick={() => {
-        navigator.clipboard.writeText(hash)
-        addToast({
-          heading: "Copied to clipboard",
-          body: null,
-          status: "success",
-          duration: null,
-          closeHandler: closeAll,
-        })
-      }}
-      aria-label="Copy to clipboard"
-      icon={<AiFillCopy />}
-    />
-  )
+  const importToken = useImportToken({
+    onSuccess: (data) => {
+      addToast({
+        heading: "Import Token",
+        status: "success",
+        body: <Text>{data.symbol} added to MetaMask</Text>,
+        closeHandler: closeAll,
+      })
+    },
+    onError: (error) => {
+      const e = error as Error
+      addToast({
+        heading: "Import Token",
+        status: "error",
+        body: <Text>{e.message}</Text>,
+        closeHandler: closeAll,
+      })
+    },
+  })
 
   const doSommToEth = async (props: BridgeFormValues) => {
     try {
       setIsLoading(true)
-
-      // Bridge transaction
       addToast({
         heading: "Loading",
         status: "default",
@@ -129,20 +50,24 @@ export const useBridgeSommToEthTx = () => {
         duration: null,
         closeHandler: closeAll,
       })
+
       if (data?.bech32Address === undefined) {
         throw new Error("No Connected Cosmos wallet")
       }
+
       const amountReceived = props.amount - 50
       const convertedAmount = ethers.utils.parseUnits(
         String(amountReceived),
         6
       )
-      // analytics.track("bridge.contract-started", {
-      //   value: props.amount,
-      //   path: "sommToEth",
-      //   sender: data?.bech32Address,
-      //   receiver: props.address,
-      // })
+
+      analytics.track("bridge.contract-started", {
+        value: props.amount,
+        path: "sommToEth",
+        sender: data?.bech32Address,
+        receiver: props.address,
+      })
+
       const res = await txClient({
         signer: signerAmino || undefined,
         addr: "https://sommelier-rpc.polkachu.com/",
@@ -161,6 +86,8 @@ export const useBridgeSommToEthTx = () => {
           },
         },
       })
+
+      // If the transaction failed, update with "error" status and exit early
       if (res.code !== 0) {
         analytics.track("bridge.contract-failed", {
           value: props.amount,
@@ -169,21 +96,27 @@ export const useBridgeSommToEthTx = () => {
           receiver: props.address,
           txHash: res.transactionHash,
         })
+
         setIsLoading(false)
-        return update({
-          heading: "Bridge Initiated",
+        update({
+          heading: "Bridge Failed",
           body: (
             <TxHashToastBody
               title="Transaction Failed"
               hash={res.transactionHash}
+              addToast={addToast}
+              closeAll={closeAll}
             />
           ),
-          status: "error",
+          status: "error", // This is an error, as the transaction failed
           duration: null,
           closeHandler: closeAll,
         })
+        return
       }
-      if (res.transactionHash && res.code === 0) {
+
+      // If the transaction succeeded, update with "primary" status
+      if (res.transactionHash) {
         analytics.track("bridge.contract-succeeded", {
           value: props.amount,
           path: "sommToEth",
@@ -191,19 +124,23 @@ export const useBridgeSommToEthTx = () => {
           receiver: props.address,
           txHash: res.transactionHash,
         })
+
         update({
-          heading: "Bridge Initiated",
+          heading: "Bridge Succeeded",
           body: (
             <BridgeTxHashToastBody
               amount={String(props.amount)}
               hash={res.transactionHash}
+              addToast={addToast}
+              closeAll={closeAll}
             />
           ),
-          status: "primary",
+          status: "primary", // This is not an error, as the transaction succeeded
           duration: null,
           closeHandler: closeAll,
         })
       }
+
       setIsLoading(false)
     } catch (e) {
       analytics.track("bridge.failed", {
@@ -212,6 +149,7 @@ export const useBridgeSommToEthTx = () => {
         sender: data?.bech32Address,
         receiver: props.address,
       })
+
       const error = e as Error
       setIsLoading(false)
       update({
