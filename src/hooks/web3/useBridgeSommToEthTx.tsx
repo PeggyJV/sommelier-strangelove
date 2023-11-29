@@ -10,7 +10,7 @@ import {
   BridgeTxHashToastBody,
 } from "./ReusableToastBodies"
 import { useImportToken } from "hooks/web3/useImportToken"
-import { Text, Button } from "@chakra-ui/react"
+import { Text } from "@chakra-ui/react"
 
 export const useBridgeSommToEthTx = () => {
   const { addToast, update, closeAll } = useBrandedToast()
@@ -19,25 +19,7 @@ export const useBridgeSommToEthTx = () => {
   const { data } = useAccount()
   const { signerAmino } = useSigners()
 
-  const importToken = useImportToken({
-    onSuccess: (data) => {
-      addToast({
-        heading: "Import Token",
-        status: "success",
-        body: <Text>{data.symbol} added to MetaMask</Text>,
-        closeHandler: closeAll,
-      })
-    },
-    onError: (error) => {
-      const e = error as Error
-      addToast({
-        heading: "Import Token",
-        status: "error",
-        body: <Text>{e.message}</Text>,
-        closeHandler: closeAll,
-      })
-    },
-  })
+  const importToken = useImportToken()
 
   const doSommToEth = async (props: BridgeFormValues) => {
     try {
@@ -97,7 +79,7 @@ export const useBridgeSommToEthTx = () => {
         })
 
         update({
-          heading: "Bridge Initiated",
+          heading: "Transaction Failed",
           body: (
             <TxHashToastBody
               title="Transaction Failed"
@@ -127,29 +109,20 @@ export const useBridgeSommToEthTx = () => {
         update({
           heading: "Bridge Initiated",
           body: (
-            <BridgeTxHashToastBody
-              amount={String(props.amount)}
-              hash={res.transactionHash}
-              addToast={addToast}
-              closeAll={closeAll}
-            />
-          ),
-          status: "primary",
-          duration: null,
-          closeHandler: closeAll,
-        })
-
-        // Toast for token import
-        addToast({
-          heading: "Bridge Successful",
-          status: "success",
-          body: (
             <>
-              <Text>
-                Would you like to import the SOMM token to MetaMask?
-              </Text>
-              <Button
-                colorScheme="purple"
+              <BridgeTxHashToastBody
+                amount={String(props.amount)}
+                hash={res.transactionHash}
+                addToast={addToast}
+                closeAll={closeAll}
+              />
+              <Text
+                as="button"
+                fontWeight="bold"
+                fontSize="sm"
+                textDecoration="underline"
+                color="white"
+                display="block"
                 mt={3}
                 onClick={() =>
                   importToken.mutate({
@@ -158,10 +131,11 @@ export const useBridgeSommToEthTx = () => {
                   })
                 }
               >
-                Import to MetaMask
-              </Button>
+                Import SOMM tokens to wallet
+              </Text>
             </>
           ),
+          status: "primary",
           duration: null,
           closeHandler: closeAll,
         })
@@ -177,13 +151,14 @@ export const useBridgeSommToEthTx = () => {
         receiver: props.address,
       })
 
-      setIsLoading(false)
       update({
         heading: "Error",
         body: <Text>{error.message}</Text>,
         status: "error",
         closeHandler: closeAll,
       })
+
+      setIsLoading(false)
     }
   }
 
