@@ -770,15 +770,15 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       </>
     ),
     "Turbo SOMM": () => (
-      <Text as="span">
-        Bridge your SOMM tokens to Ethereum via Sommelier bridge here:{" "}
+      <Text as="span" style={{ textAlign: "center" }}>
+        Bridge your SOMM tokens to Ethereum via{" "}
         <Link
-          href={"https://app.sommelier.finance/bridge"}
+          href="https://app.sommelier.finance/bridge"
           isExternal
           textDecor="underline"
         >
-          https://app.sommelier.finance/bridge
-        </Link>{" "}
+          Sommelier bridge
+        </Link>
       </Text>
     ),
   }
