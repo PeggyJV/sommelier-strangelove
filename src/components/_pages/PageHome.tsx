@@ -122,13 +122,13 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      {/*
+      {
         <InfoBanner
           text={
-            "A proposal to renew Real Yield BTC incentives is making its way through governance, if it passes rewards will start flowing on Nov 17th."
+            "A new SOMM rewards program for Real Yield ETH is progressing through governance. If it passes, rewards will begin flowing on Dec 3."
           }
         />
-        */}
+        }
       {/* <HStack
         p={4}
         mb={6}
