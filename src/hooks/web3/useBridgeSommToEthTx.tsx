@@ -11,6 +11,7 @@ import {
 } from "./ReusableToastBodies"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { Text } from "@chakra-ui/react"
+import { config } from "utils/config"
 
 export const useBridgeSommToEthTx = () => {
   const { addToast, update, closeAll } = useBrandedToast()
@@ -124,12 +125,13 @@ export const useBridgeSommToEthTx = () => {
                 color="white"
                 display="block"
                 mt={3}
-                onClick={() =>
+                onClick={() => {
+                  const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`;
                   importToken.mutate({
-                    address:
-                      "0xa670d7237398238de01267472c6f13e5b8010fd1",
-                  })
-                }
+                    address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                    imageUrl: fullImageUrl,
+                  });
+                }}
               >
                 Import SOMM tokens to wallet
               </Text>
