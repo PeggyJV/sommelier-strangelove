@@ -21,26 +21,6 @@ export const isRewardsEnabled = (config: ConfigProps) => {
   return true
 }
 
-export const isTokenAssets = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
-    config.cellarNameKey === CellarNameKey.DEFI_STARS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.FRAXIMAL ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
-    config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_STETH
-  )
-}
-
 export const intervalGainTimeline = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
@@ -261,7 +241,8 @@ export const isApyChartEnabled = (config: ConfigProps) => {
   return (
     config.cellar.key === CellarKey.CELLAR_V2 ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_SWETH
+    config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_GHO
   )
 }
 
@@ -467,7 +448,6 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_GHO ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
       config.cellarNameKey === CellarNameKey.TURBO_SOMM
     ) {
@@ -494,8 +474,6 @@ export const apyHoverLabel = (config: ConfigProps) => {
       return "Estimated APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
       return "7 Day MA APY (includes swETH incentives)"
-    } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
-      return "Estimated APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
       return "Estimated Reward APY (excluding impermanent loss)"
     }
@@ -516,8 +494,6 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     return "Estimated APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     return "7 Day MA APY (includes swETH incentives)"
-  } else if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
-    return "Estimated APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return "Estimated Reward APY (excluding impermanent loss)"
   }
@@ -531,7 +507,6 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
   ) {
@@ -547,7 +522,6 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
   ) {
@@ -580,12 +554,6 @@ export const estimatedApyValue = (config: ConfigProps) => {
     return {
       value: 1.9,
       formatted: "1.90%",
-    }
-  }
-  if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
-    return {
-      value: 3.0,
-      formatted: "3.0%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
