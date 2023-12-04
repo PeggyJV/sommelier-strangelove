@@ -63,7 +63,7 @@ export const turboSTETH2: CellarData = {
     value: "4.00%",
   },
   dashboard:
-    "https://debank.com/profile/0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971", //need to update
+    "https://debank.com/profile/0xc7372Ab5dd315606dB799246E8aA112405abAeFf",
   depositTokens: {
     list: ["stETH"],
   },

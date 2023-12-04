@@ -180,7 +180,7 @@ export const config = {
       ABI: cellarV0821,
     },
     TURBO_STETH2: {
-      ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971", //need to update
+      ADDRESS: "0xc7372Ab5dd315606dB799246E8aA112405abAeFf", //need to update
       SLUG: "Turbo-STETH2",
       ABI: cellarV0821,
     },
