@@ -37,6 +37,7 @@ export const isTokenAssets = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_STETH2 ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   )
 }
@@ -102,6 +103,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_STETH2 ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   )
 }
@@ -127,6 +129,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_STETH2 ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
@@ -170,6 +173,7 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_STETH2 ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   )
@@ -261,6 +265,7 @@ export const isApyChartEnabled = (config: ConfigProps) => {
   return (
     config.cellar.key === CellarKey.CELLAR_V2 ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_STETH2 ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH
   )
 }
@@ -620,6 +625,10 @@ export const waitTime = (config: ConfigProps) => {
     return null // No wait time
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
+    return null // No wait time
+  }
+  return "10 min"
+  if (config.cellarNameKey === CellarNameKey.TURBO_STETH2) {
     return null // No wait time
   }
   return "10 min"
