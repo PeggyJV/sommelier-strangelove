@@ -1084,8 +1084,8 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
-  [config.CONTRACT.TURBO_STETH2.SLUG]: {
-    name: "Turbo stETH 2", //need to update
+  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]: {
+    name: "Turbo stETH",
     provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
@@ -1100,7 +1100,7 @@ export const strategyPageContentData = {
         <Text>TurboSTETH</Text>
       </>
     ),
-    tradedAssets: ["WETH", "stETH", "wstETH"],
+    tradedAssets: ["stETH", "wstETH", "WETH"],
     alternativeTo: "Holding stETH/wstETH",
     exchange: [
       {

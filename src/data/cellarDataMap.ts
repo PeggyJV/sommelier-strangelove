@@ -25,14 +25,15 @@ import {
   turboSTETH,
   turboSOMM,
   turboeETH,
-  turboSTETH2,
+  turboSTETHstETHDeposit,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
-  [config.CONTRACT.TURBO_STETH2.SLUG]: turboSTETH2,
+  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]:
+    turboSTETHstETHDeposit,
   [config.CONTRACT.TURBO_SOMM.SLUG]: turboSOMM,
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
   [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
@@ -60,7 +61,8 @@ cellarConfig = {
 // Create another map of String to CellarData
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
-  [config.CONTRACT.TURBO_STETH2.ADDRESS.toLowerCase()]: turboSTETH2,
+  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS.toLowerCase()]:
+    turboSTETHstETHDeposit,
   [config.CONTRACT.TURBO_EETH.ADDRESS.toLowerCase()]: turboeETH,
   [config.CONTRACT.TURBO_SOMM.ADDRESS.toLowerCase()]: turboSOMM,
   [config.CONTRACT.TURBO_STETH.ADDRESS.toLowerCase()]: turboSTETH,

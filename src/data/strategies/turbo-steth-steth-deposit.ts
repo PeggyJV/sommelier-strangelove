@@ -5,16 +5,13 @@ import {
   CellarNameKey,
   CellarRouterKey,
   CellarType,
-  StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
-import { WstethIcon } from "components/_icons"
 
-export const turboSTETH2: CellarData = {
-  name: "Turbo stETH 2", //need to update
-  slug: config.CONTRACT.TURBO_STETH2.SLUG,
-  // startingShareValue: "998206828469480700",
-  tradedAssets: ["WETH", "stETH", "wstETH"],
+export const turboSTETHstETHDeposit: CellarData = {
+  name: "Turbo stETH",
+  slug: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG,
+  tradedAssets: ["stETH", "wstETH","WETH"],
   launchDate: new Date(Date.UTC(2023, 11, 7, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
@@ -24,7 +21,7 @@ export const turboSTETH2: CellarData = {
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
   protocols: ["AAVE", "Morpho", "Uniswap V3", "Balancer"],
-  strategyAssets: ["WETH", "stETH", "wstETH"],
+  strategyAssets: ["stETH", "wstETH","WETH"],
   performanceSplit: {
     depositors: 100,
     "strategy provider": 0,
@@ -60,7 +57,7 @@ export const turboSTETH2: CellarData = {
     title: "Backtested APY",
     tooltip:
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-    value: "4.00%",
+    value: "10.00%",
   },
   dashboard:
     "https://debank.com/profile/0xc7372Ab5dd315606dB799246E8aA112405abAeFf",
@@ -68,10 +65,10 @@ export const turboSTETH2: CellarData = {
     list: ["stETH"],
   },
   config: {
-    id: config.CONTRACT.TURBO_STETH2.ADDRESS,
-    cellarNameKey: CellarNameKey.TURBO_STETH2,
+    id: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS,
+    cellarNameKey: CellarNameKey.TURBO_STETH_STETH_DEPOSIT,
     lpToken: {
-      address: config.CONTRACT.TURBO_STETH2.ADDRESS,
+      address: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS,
       imagePath: "/assets/icons/turbo-steth2.png",
     },
     cellarRouter: {
@@ -80,46 +77,18 @@ export const turboSTETH2: CellarData = {
       key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
-      address: config.CONTRACT.TURBO_STETH2.ADDRESS,
-      abi: config.CONTRACT.TURBO_STETH2.ABI,
+      address: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS,
+      abi: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ABI,
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
     baseAsset: tokenConfigMap.stETH,
-    /** 
     badges: [
       {
-        customStrategyHighlight: "wstETH Incentives",
-        customStrategyHighlightColor: "#00C04B",
+        customStrategyHighlight: "Deposit stETH!",
+        customStrategyHighlightColor: "orange.base",
       },
     ],
-    customReward: {
-      showAPY: true,
-      tokenSymbol: "wstETH",
-      tokenDisplayName: "wstETH",
-      tokenAddress: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
-      imagePath: "/assets/icons/wsteth-logo.jpeg",
-      //customRewardMessageTooltip?: string
-      //customRewardMessage?: string
-      //customRewardHeader?: string
-      showBondingRewards: false,
-      showClaim: false,
-      //customClaimMsg?: string
-      //customRewardAPYTooltip: string
-      logo: WstethIcon,
-      logoSize: "17px",
-      //customRewardLongMessage?: string
-      //rewardHyperLink?: string
-      //customColumnHeader?: string
-      //customColumnHeaderToolTip?: string
-      //customColumnValue?: string
-      stakingDurationOverride: new Date(
-        Date.UTC(2023, 10, 15, 14, 0, 0, 0)
-      ),
-      showSommRewards: false,
-      //customIconToolTipMsg?: string
-    },
-    **/
   },
   faq: [
     {
