@@ -129,10 +129,10 @@ export const turboSWETH: CellarData = {
         customStrategyHighlight: "Emergent Asset",
         customStrategyHighlightColor: "purple.base",
       },
-      {
+      /*{
         customStrategyHighlight: "swETH Incentives",
         customStrategyHighlightColor: "#00C04B",
-      },
+      },*/
     ],
     show7DayAPYTooltip: true,
   },
