@@ -483,7 +483,7 @@ export const ApyChartProvider: FC<{
   }
   */
 
-  // Set weekly data by default
+  // Set monthly data by default
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
@@ -498,8 +498,8 @@ export const ApyChartProvider: FC<{
         launchEpoch,
         decimals: cellarConfig.config.cellar.decimals, // Cellar decimals
         smooth: true,
-        daysSmoothed: 7,
-        daysRendered: 7,
+        daysSmoothed: 30,
+        daysRendered: 30,
       })
 
       const series = [
@@ -507,7 +507,7 @@ export const ApyChartProvider: FC<{
           id: "apy",
           data: apyDatum || [],
           color: colors.neutral[100],
-          label: "7D",
+          label: "30D",
         },
       ]
 

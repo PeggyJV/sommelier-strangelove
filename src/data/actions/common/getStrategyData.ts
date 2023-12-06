@@ -16,7 +16,7 @@ import { getChanges } from "./getChanges"
 import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
-import { getApyInception } from "./getApyInception"
+import { createApyChangeDatum } from "src/utils/chartHelper"
 import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
@@ -243,13 +243,21 @@ export const getStrategyData = async ({
         const launchDay = launchDate ?? subDays(new Date(), 8)
         const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
-        return getApyInception({
-          launchEpoch: launchEpoch,
-          baseApy: config.baseApy,
-          shareData: dayDatas ? dayDatas[0] : undefined,
-          decimals: decimals,
-          startingShareValue: strategy.startingShareValue,
+        const apys = createApyChangeDatum({
+          data: dayDatas,
+          launchEpoch,
+          decimals: config.cellar.decimals, // Cellar decimals
+          smooth: true,
+          daysSmoothed: 30,
+          daysRendered: 30,
         })
+
+        return {
+          formatted: apys
+            ? String(apys[apys!.length - 1].y)
+            : config.baseApy?.toFixed(2) + "%",
+          value: apys ? apys[apys!.length - 1].value : config.baseApy,
+        }
       })()
 
       //! NOTE: This only applies to token prices
