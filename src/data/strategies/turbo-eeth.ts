@@ -56,7 +56,6 @@ export const turboeETH: CellarData = {
     value: "6%",
   },
 
-  //need to update when contract is deployed
   dashboard:
     "https://debank.com/profile/0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
   depositTokens: {

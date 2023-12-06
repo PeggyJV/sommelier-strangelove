@@ -82,6 +82,8 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+    config.cellarNameKey ===
+      CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH
   )
 }
@@ -107,6 +109,8 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.AAVE ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
+    config.cellarNameKey ===
+      CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
@@ -150,6 +154,8 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
   if (
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
+    config.cellarNameKey ===
+      CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   )
@@ -449,7 +455,8 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_SOMM
+      config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
+      config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
     ) {
       return "Estimated APY"
     }
@@ -469,7 +476,8 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+      config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
     ) {
       return "Estimated APY"
     } /*else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
@@ -489,7 +497,8 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
   ) {
     return "Estimated APY"
   } /*else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
@@ -508,7 +517,8 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
+    config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
   ) {
     return true
   }
@@ -523,7 +533,8 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
+    config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
   ) {
     return "Estimated APY"
   }
@@ -568,6 +579,14 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "6.0%",
     }
   }
+  if (
+    config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
+  ) {
+    return {
+      value: 10.0,
+      formatted: "10.0%",
+    }
+  }
 }
 
 export const showNetValueInAsset = (config: ConfigProps) => {
@@ -588,6 +607,11 @@ export const waitTime = (config: ConfigProps) => {
     return null // No wait time
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
+    return null // No wait time
+  }
+  if (
+    config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
+  ) {
     return null // No wait time
   }
   return "10 min"
