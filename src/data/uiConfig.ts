@@ -460,9 +460,9 @@ export const apyLabel = (config: ConfigProps) => {
     ) {
       return "Estimated APY"
     }
-    return "Net APY"
+    return "30D MA APY"
   }
-  return "APY since inception"
+  return "30D MA APY"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
@@ -485,9 +485,9 @@ export const apyHoverLabel = (config: ConfigProps) => {
     } */else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
       return "Estimated Reward APY (excluding impermanent loss)"
     }
-    return "APY since inception"
+    return "30D MA APY"
   }
-  return "APY since inception"
+  return "30D MA APY"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
@@ -506,7 +506,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   } */else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return "Estimated Reward APY (excluding impermanent loss)"
   }
-  return "APY since inception"
+  return " 30D MA APY"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE

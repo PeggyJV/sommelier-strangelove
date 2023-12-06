@@ -35,7 +35,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
   )
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   // Default timeline
-  const [timeline, setTimeline] = useState<string>("7D")
+  const [timeline, setTimeline] = useState<string>("30D")
   const [pointActive, setPointActive] = useState<Point>()
 
   const MobileTooltip = () => {
@@ -60,7 +60,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
               <ChartTooltipItem
                 key={item.id}
                 backgroundColor={item.color}
-                name="APY since inception"
+                name="30D MA APY"
                 percentage={`${String(
                   data.series?.find((s) => s.id === item.id)?.data[
                     Number(i)
