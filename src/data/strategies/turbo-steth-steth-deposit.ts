@@ -12,7 +12,7 @@ export const turboSTETHstETHDeposit: CellarData = {
   name: "Turbo stETH",
   slug: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG,
   tradedAssets: ["stETH", "wstETH","WETH"],
-  launchDate: new Date(Date.UTC(2023, 11, 5, 14, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 11, 7, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
   strategyType: "Yield",
