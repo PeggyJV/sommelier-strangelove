@@ -179,6 +179,11 @@ export const config = {
       SLUG: "Turbo-STETH",
       ABI: cellarV0821,
     },
+    TURBO_STETH_STETH_DEPOSIT: {
+      ADDRESS: "0xc7372Ab5dd315606dB799246E8aA112405abAeFf",
+      SLUG: "Turbo-STETH-(steth-deposit)",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
