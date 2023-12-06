@@ -100,10 +100,10 @@ export const turboSWETH: CellarData = {
       imagePath: "/assets/icons/pearl.svg",
       customRewardMessageTooltip:
         "View your Pearls at https://app.swellnetwork.io/voyage",
-      customRewardMessage: "Up to 12 PEARL per swETH",
+      customRewardMessage: "Up to 6 PEARL per swETH",
       customRewardHeader: "Daily Pearl Reward Rate",
       customRewardAPYTooltip:
-        "Daily PEARL Rewards Rate: Up to 12 PEARL per swETH",
+        "Daily PEARL Rewards Rate: Up to 6 PEARL per swETH",
       showBondingRewards: true,
       showClaim: true,
       customClaimMsg: "Claim All SOMM",
@@ -129,10 +129,10 @@ export const turboSWETH: CellarData = {
         customStrategyHighlight: "Emergent Asset",
         customStrategyHighlightColor: "purple.base",
       },
-      {
+      /*{
         customStrategyHighlight: "swETH Incentives",
         customStrategyHighlightColor: "#00C04B",
-      },
+      },*/
     ],
     show7DayAPYTooltip: true,
   },

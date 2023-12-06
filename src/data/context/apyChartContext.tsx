@@ -465,6 +465,9 @@ export const ApyChartProvider: FC<{
     },
   ]
 
+  // You can only show certain graphs as per below if desired
+
+  /*
   // Override time array for Turbo swETH & Turbo stETH
   // TODO: Remove this when there is enough data
   if (
@@ -478,6 +481,7 @@ export const ApyChartProvider: FC<{
       },
     ]
   }
+  */
 
   // Set weekly data by default
   useEffect(() => {
