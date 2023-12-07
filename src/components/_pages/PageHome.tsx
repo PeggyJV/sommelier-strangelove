@@ -125,7 +125,7 @@ export const PageHome = () => {
       {
         <InfoBanner
           text={
-            "A new SOMM rewards program for Real Yield ETH is progressing through governance. If it passes, rewards will begin flowing on Dec 6."
+            "A new SOMM rewards program for Turbo SOMM is being considered. If it passes, rewards will begin flowing on Dec 13th."
           }
         />
         }
