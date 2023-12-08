@@ -166,7 +166,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             {netValueUsd}
           </Text>
           <Text fontWeight={500} fontSize={12} color="neutral.400">
-            {(netValueInAsset * Number(tokenPrice.value)).toFixed(
+            {(netValueInAsset).toFixed(
               showNetValueInAsset(cellarData.config) ? 5 : 2
             )}
             {` ${symbol}`}
