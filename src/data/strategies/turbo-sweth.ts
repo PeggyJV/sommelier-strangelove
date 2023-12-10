@@ -134,7 +134,6 @@ export const turboSWETH: CellarData = {
         customStrategyHighlightColor: "#00C04B",
       },*/
     ],
-    show7DayAPYTooltip: true,
   },
   faq: [
     {
