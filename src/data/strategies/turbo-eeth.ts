@@ -14,7 +14,7 @@ export const turboeETH: CellarData = {
   name: "Turbo eETH",
   slug: config.CONTRACT.TURBO_EETH.SLUG,
   tradedAssets: ["WETH", "eETH", "weETH"],
-  launchDate: new Date(Date.UTC(2023, 11, 27, 16, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 11, 13, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
   strategyType: "Yield",
@@ -80,40 +80,47 @@ export const turboeETH: CellarData = {
       decimals: 18,
     },
     baseAsset: tokenConfigMap.WETH,
-    /*
     badges: [
       {
-        customStrategyHighlight: "eETH Incentives",
+        customStrategyHighlight: "Emergent Asset",
+        customStrategyHighlightColor: "purple.base",
+      },
+      {
+        customStrategyHighlight: "ether.fi Loyalty Points",
         customStrategyHighlightColor: "#00C04B",
       },
     ],
     customReward: {
-      showAPY: true,
+      showAPY: false,
       tokenSymbol: "eETH",
       tokenDisplayName: "eETH",
       tokenAddress: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
-      imagePath: "/assets/icons/eETH.png",
-      //customRewardMessageTooltip?: string
-      //customRewardMessage?: string
-      //customRewardHeader?: string
-      showBondingRewards: false,
+      imagePath: "/assets/icons/eETH.svg",
+      customRewardMessageTooltip:
+        "View your ether.fi Loyalty Points at https://app.ether.fi/portfolio",
+      customRewardMessage: "Boosted ether.fi Loyalty Points",
+      customRewardHeader: "Ether.fi Incentives",
+      showBondingRewards: true,
       showClaim: true,
-      //customClaimMsg?: string
-      //customRewardAPYTooltip: string
+      customClaimMsg: "Claim All SOMM",
+      customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
       logo: EETHIcon,
       logoSize: "15px",
-      //customRewardLongMessage?: string
-      //rewardHyperLink?: string
-      //customColumnHeader?: string
-      //customColumnHeaderToolTip?: string
-      //customColumnValue?: string
+      customRewardLongMessage:
+        "Earn boosted ether.fi Loyalty Points, streamed directly when you bond.",
+      rewardHyperLink: "https://app.ether.fi/portfolio",
+      customColumnHeader: "View ether.fi Loyalty Points",
+      customColumnHeaderToolTip:
+        "View your ether.fi Loyalty Points at https://app.ether.fi/portfolio",
+      customColumnValue: "https://app.ether.fi/portfolio",
       stakingDurationOverride: new Date(
-        Date.UTC(2023, 11, 27, 14, 0, 0, 0)
+        Date.UTC(2024, 0, 28, 14, 0, 0, 0)
       ),
       showSommRewards: true,
-      //customIconToolTipMsg?: string
+      customIconToolTipMsg:
+        "Boosted ether.fi Loyalty Points ends in ",
+      showOnlyBaseApy: true,
     },
-    */
     staker: {
       address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_EETH_STAKER.ABI,
