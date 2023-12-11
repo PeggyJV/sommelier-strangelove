@@ -14,7 +14,7 @@ export const turboeETH: CellarData = {
   name: "Turbo eETH",
   slug: config.CONTRACT.TURBO_EETH.SLUG,
   tradedAssets: ["WETH", "eETH"],
-  launchDate: new Date(Date.UTC(2023, 10, 27, 16, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2023, 11, 13, 16, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
   strategyType: "Yield",
