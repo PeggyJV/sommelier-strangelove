@@ -48,6 +48,7 @@ export const isBondedDisabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   )
 }
@@ -480,7 +481,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       return "Estimated APY"
     } /*else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
       return "7 Day MA APY (includes swETH incentives)"
-    } */else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+    } */ else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
       return "Estimated Reward APY (excluding impermanent loss)"
     }
     return "30D MA APY"
@@ -501,7 +502,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     return "Estimated APY"
   } /*else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     return "7 Day MA APY (includes swETH incentives)"
-  } */else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+  } */ else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return "Estimated Reward APY (excluding impermanent loss)"
   }
   return "30D MA APY"
