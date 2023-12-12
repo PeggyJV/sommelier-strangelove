@@ -62,7 +62,7 @@ export const estimateGasLimitWithRetry = async (
       const gasLimit = gasLimitMargin(
         gasLimitEstimated,
         PAD[count - 1]
-      ).mul(2.0) // 2x margin -- users hate gas limits
+      )
       
       const tx = await fnCallStatic(...args, {
         gasLimit,
