@@ -1,4 +1,19 @@
-import { Button, Center, HStack, Image, Text } from "@chakra-ui/react"
+import {
+  Button,
+  Center,
+  HStack,
+  Image,
+  Text,
+  Stack,
+  Box,
+  Popover,
+  PopoverTrigger,
+  PopoverBody,
+  PopoverContent,
+  AvatarGroup,
+  Avatar,
+  Checkbox,
+} from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -15,12 +30,15 @@ import {
   DepositModalType,
   useDepositModalStore,
 } from "data/hooks/useDepositModalStore"
-import { CellarType } from "data/types"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
 import { InfoBanner } from "components/_banners/InfoBanner"
-import { analytics } from "utils/analytics"
-import { chainConfig, Chain } from "src/data/chainConfig"
+import {
+  chainConfig,
+  Chain,
+  chainConfigMap,
+} from "src/data/chainConfig"
+import { ChevronDownIcon, CheckIcon } from "components/_icons"
 
 export const PageHome = () => {
   const {
@@ -97,12 +115,32 @@ export const PageHome = () => {
       })
 
   const handleChainClick = (chainId: string) => {
-    setSelectedChainIds(
-      (current) =>
-        current.includes(chainId)
-          ? current.filter((id) => id !== chainId) // Remove if already selected
-          : [...current, chainId] // Add if not selected
-    )
+    setSelectedChainIds((current) => {
+      const normalizedChainId = chainId.toLowerCase()
+
+      if (current.includes(normalizedChainId)) {
+        // If the chain is already selected, remove it from the array
+        return current.filter((id) => id !== normalizedChainId)
+      } else {
+        // If the chain is not selected, add it to the array
+        return [...current, normalizedChainId]
+      }
+    })
+  }
+
+  const [checkedStates, setCheckedStates] = useState(
+    new Map(chainConfig.map((chain) => [chain.id, true])) // Default all chains to checked
+  )
+
+  const toggleCheck = (id: string) => {
+    setCheckedStates((prev) => {
+      const newCheckedStates = new Map(prev)
+      newCheckedStates.set(
+        id.toLowerCase(),
+        !newCheckedStates.get(id.toLowerCase())
+      )
+      return newCheckedStates
+    })
   }
 
   const strategyData = useMemo(() => {
@@ -117,11 +155,13 @@ export const PageHome = () => {
   return (
     <LayoutWithSidebar>
       {
-        <InfoBanner
-          text={
-            "A proposal to renew Real Yield BTC incentives is making its way through governance, if it passes rewards will start flowing on Nov 17th."
-          }
-        />
+        <div>
+          <InfoBanner
+            text={
+              "A proposal to renew Real Yield BTC incentives is making its way through governance, if it passes rewards will start flowing on Nov 17th."
+            }
+          />
+        </div>
       }
       {/* <HStack
         p={4}
@@ -154,41 +194,126 @@ export const PageHome = () => {
       </HStack> */}
       <HStack mb="1.6rem">
         <HStack spacing="8px">
-          {chainConfig.map((chain: Chain) => {
-            const isSelected = selectedChainIds.includes(chain.id)
-            return (
+          <Popover placement="bottom">
+            <PopoverTrigger>
               <Button
-                key={chain.id}
-                variant="solid"
-                color="white"
-                fontWeight={600}
-                fontSize="1rem"
-                p={4}
-                py={1}
-                rounded="100px"
-                bg={
-                  isSelected ? "gradient.primary" : "surface.primary"
-                }
-                //backdropFilter="blur(8px)"
-                borderColor="purple.base"
+                bg="none"
                 borderWidth={2}
-                onClick={() => handleChainClick(chain.id)}
-              >
-                <HStack spacing={1}>
-                  <Image
-                    src={chain.logoPath}
-                    alt={chain.alt}
-                    boxSize="1.5rem"
-                    mr={2}
-                  />
-                  <Text>
-                    {chain.id.slice(0, 1).toUpperCase() +
-                      chain.id.slice(1)}
-                  </Text>
-                </HStack>
-              </Button>
-            )
-          })}
+                borderColor="purple.base"
+                borderRadius="full"
+                rightIcon={<ChevronDownIcon />}
+                w="auto"
+                zIndex={401}
+                fontFamily="Haffer"
+                fontSize={12}
+                _hover={{
+                  bg: "purple.dark",
+                }}
+                leftIcon={
+                  <HStack>
+                    <Text fontSize={"1.25em"}>Networks</Text>
+                    <HStack justifyContent={"center"}>
+                      <AvatarGroup size="sm" dir="reverse">
+                        {selectedChainIds
+                          .slice(0, 5)
+                          .map((chainStr: String) => {
+                            const chain =
+                              chainConfigMap[chainStr.toLowerCase()]
+                            return (
+                              <Avatar
+                                name={chain.displayName}
+                                src={chain.logoPath}
+                                key={chain.id}
+                              />
+                            )
+                          })}
+                      </AvatarGroup>
+                      {selectedChainIds.length > 5 && (
+                        <Text fontWeight={600}>
+                          +{selectedChainIds.length - 5}
+                        </Text>
+                      )}
+                    </HStack>
+                    {selectedChainIds.length > 5 && (
+                      <Text fontSize="sm">
+                        +{selectedChainIds.length - 5}
+                      </Text>
+                    )}
+                  </HStack>
+                }
+              />
+            </PopoverTrigger>
+
+            <PopoverContent
+              p={2}
+              maxW="max-content"
+              borderWidth={1}
+              borderColor="purple.dark"
+              borderRadius={2}
+              bg="surface.bg"
+              fontWeight="semibold"
+              _focus={{
+                outline: "unset",
+                outlineOffset: "unset",
+                boxShadow: "unset",
+              }}
+            >
+              <PopoverBody p={0}>
+                <Stack>
+                  {chainConfig.map((chain: Chain) => {
+                    const isSelected = selectedChainIds.includes(
+                      chain.id
+                    )
+                    return (
+                      <Box
+                        as="button"
+                        key={chain.id}
+                        py={2}
+                        px={4}
+                        fontSize="sm"
+                        borderRadius={6}
+                        onClick={() => {
+                          handleChainClick(chain.id)
+                          toggleCheck(chain.id)
+                        }}
+                        _hover={{
+                          cursor: "pointer",
+                          bg: "purple.dark",
+                          borderColor: "surface.tertiary",
+                        }}
+                      >
+                        <HStack
+                          display="flex" // Use flex display
+                          justifyContent="space-between" // Space between items
+                          alignItems="center" // Align items vertically
+                          width="100%" // Full width
+                          spacing={3}
+                        >
+                          <Image
+                            src={chain.logoPath}
+                            alt={chain.displayName}
+                            boxSize="24px"
+                          />
+                          <Text fontWeight="semibold">
+                            {chain.displayName}
+                          </Text>{" "}
+                          <Checkbox
+                            id={chain.id}
+                            defaultChecked={true}
+                            isChecked={checkedStates.get(chain.id)}
+                            onChange={(e) => {
+                              handleChainClick(chain.id)
+                              toggleCheck(chain.id)
+                            }}
+                          />
+                        </HStack>
+                      </Box>
+                    )
+                  })}
+                </Stack>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
         </HStack>
       </HStack>
       <TransparentSkeleton
