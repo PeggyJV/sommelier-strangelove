@@ -34,24 +34,28 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     baseApySumRewards,
     extraRewardsApy,
   } = props
-
-  const endDate = new Date(stackingEndDate).getTime()
-  const startDate = subDays(endDate, 30).getTime()
-  const now = new Date(Date.now()).getTime()
-  const range = endDate - startDate
-  const current = now - startDate
-  const percentage = (current / range) * 100
-
   const cellarConfig = cellarDataMap[cellarId].config
-  const cellarType = cellarDataMap[cellarId].cellarType
-  const LogoComponent = cellarConfig.customReward?.logo ?? LogoIcon
-
+  const now = new Date(Date.now()).getTime()
   const nowDate = new Date(Date.now()).getTime()
+
   const isStakingOverrideOngoing = cellarConfig.customReward
     ?.stakingDurationOverride
     ? cellarConfig.customReward.stakingDurationOverride.getTime() >
       nowDate
     : undefined
+  let endDate = new Date(stackingEndDate).getTime()
+
+  if (stackingEndDate === undefined) {
+    endDate = cellarConfig.customReward?.stakingDurationOverride?.getTime()!
+  }
+
+  const startDate = subDays(endDate, 30).getTime()
+  const range = endDate - startDate
+  const current = now - startDate
+  const percentage = (current / range) * 100
+
+  const cellarType = cellarDataMap[cellarId].cellarType
+  const LogoComponent = cellarConfig.customReward?.logo ?? LogoIcon
 
   if (!baseApy && !rewardsApy && !extraRewardsApy) {
     return (
