@@ -61,7 +61,7 @@ export const estimateGasLimitWithRetry = async (
     try {
       const gasLimit = gasLimitMargin(
         gasLimitEstimated,
-        1.15 // 15% buffer
+        1.2 // 20% buffer
       )
       
       const tx = await fnCallStatic(...args, {
