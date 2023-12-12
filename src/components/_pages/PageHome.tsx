@@ -1,8 +1,4 @@
-import {
-  Button,
-  Center,
-  HStack,
-} from "@chakra-ui/react"
+import { Button, Center, HStack, Image, Text } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -24,6 +20,7 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
 import { InfoBanner } from "components/_banners/InfoBanner"
 import { analytics } from "utils/analytics"
+import { chainConfig, Chain } from "src/data/chainConfig"
 
 export const PageHome = () => {
   const {
@@ -37,8 +34,11 @@ export const PageHome = () => {
   const isMobile = useBetterMediaQuery("(max-width: 900px)")
   const isTab = useBetterMediaQuery("(max-width: 1600px)")
   const isDesktop = !isTab && !isMobile
-  const [type, setType] = useState<string>("All")
-  const strategyType = ["All", "Trading", "Yield"]
+
+  const allChainIds = chainConfig.map((chain) => chain.id)
+  const [selectedChainIds, setSelectedChainIds] =
+    useState<string[]>(allChainIds)
+
   const {
     isOpen,
     onClose,
@@ -96,23 +96,22 @@ export const PageHome = () => {
         },
       })
 
+  const handleChainClick = (chainId: string) => {
+    setSelectedChainIds(
+      (current) =>
+        current.includes(chainId)
+          ? current.filter((id) => id !== chainId) // Remove if already selected
+          : [...current, chainId] // Add if not selected
+    )
+  }
+
   const strategyData = useMemo(() => {
-    if (type === "Yield") {
-      return (
-        data?.filter(
-          (item) => item?.type === CellarType.yieldStrategies
-        ) || []
-      )
-    }
-    if (type === "Trading") {
-      return (
-        data?.filter(
-          (item) => item?.type === CellarType.automatedPortfolio
-        ) || []
-      )
-    }
-    return data || []
-  }, [data, type])
+    return (
+      data?.filter((item) =>
+        selectedChainIds.includes(item?.config.chain.id!)
+      ) || []
+    )
+  }, [data, selectedChainIds])
 
   const loading = isFetching || isRefetching || isLoading
   return (
@@ -123,7 +122,7 @@ export const PageHome = () => {
             "A proposal to renew Real Yield BTC incentives is making its way through governance, if it passes rewards will start flowing on Nov 17th."
           }
         />
-        }
+      }
       {/* <HStack
         p={4}
         mb={6}
@@ -155,36 +154,38 @@ export const PageHome = () => {
       </HStack> */}
       <HStack mb="1.6rem">
         <HStack spacing="8px">
-          {strategyType.map((strategy: string, i: number) => {
-            const isSelected = strategy === type
+          {chainConfig.map((chain: Chain) => {
+            const isSelected = selectedChainIds.includes(chain.id)
             return (
               <Button
-                key={i}
-                variant="unstyled"
+                key={chain.id}
+                variant="solid"
                 color="white"
                 fontWeight={600}
                 fontSize="1rem"
                 p={4}
                 py={1}
                 rounded="100px"
-                bg={isSelected ? "surface.primary" : "none"}
-                backdropFilter="blur(8px)"
-                borderColor={
-                  isSelected ? "purple.dark" : "surface.tertiary"
+                bg={
+                  isSelected ? "gradient.primary" : "surface.primary"
                 }
-                borderWidth={isSelected ? 1 : 0}
-                onClick={() => {
-                  // Adding tracking code for each button
-                  analytics.track(
-                    `strategy.${strategy.toLowerCase()}.selected`,
-                    {
-                      selectedType: strategy,
-                    }
-                  )
-                  setType(strategy)
-                }}
+                //backdropFilter="blur(8px)"
+                borderColor="purple.base"
+                borderWidth={2}
+                onClick={() => handleChainClick(chain.id)}
               >
-                {strategy}
+                <HStack spacing={1}>
+                  <Image
+                    src={chain.logoPath}
+                    alt={chain.alt}
+                    boxSize="1.5rem"
+                    mr={2}
+                  />
+                  <Text>
+                    {chain.id.slice(0, 1).toUpperCase() +
+                      chain.id.slice(1)}
+                  </Text>
+                </HStack>
               </Button>
             )
           })}

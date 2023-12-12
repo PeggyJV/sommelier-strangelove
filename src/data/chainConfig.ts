@@ -34,7 +34,7 @@ export const chainConfig: Chain[] = [
     id: "arbitrum",
     wagmiId: arbitrum.id,
     displayName: "Arbitrum",
-    logoPath: "/assets/icons/arbitrum.png",
+    logoPath: "/assets/icons/arbitrum.svg",
     alt: "Arbitrum logo",
     infuraRpcUrl: arbitrum.rpcUrls.infura.http[0],
     alchemyRpcUrl: arbitrum.rpcUrls.alchemy.http[0],
