@@ -38,7 +38,7 @@ import {
   Chain,
   chainConfigMap,
 } from "src/data/chainConfig"
-import { ChevronDownIcon, CheckIcon } from "components/_icons"
+import { ChevronDownIcon } from "components/_icons"
 
 export const PageHome = () => {
   const {
@@ -198,14 +198,15 @@ export const PageHome = () => {
             <PopoverTrigger>
               <Button
                 bg="none"
-                borderWidth={2}
+                borderWidth={2.5}
                 borderColor="purple.base"
-                borderRadius="full"
+                borderRadius="1em"
                 rightIcon={<ChevronDownIcon />}
                 w="auto"
                 zIndex={401}
                 fontFamily="Haffer"
                 fontSize={12}
+                padding="1.75em 2em"
                 _hover={{
                   bg: "purple.dark",
                 }}
