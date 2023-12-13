@@ -1,4 +1,4 @@
-import { Button, Center } from "@chakra-ui/react"
+import { Button, Center, HStack } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -16,10 +16,16 @@ import {
   useDepositModalStore,
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { InfoBanner } from "components/_banners/InfoBanner"
 import { ChainFilter } from "components/_filters/ChainFilter"
 import { chainConfig } from "src/data/chainConfig"
+import {
+  DepositTokenFilter,
+  SymbolPathPair,
+} from "components/_filters/DepositTokenFilter"
+import { cellarDataMap } from "src/data/cellarDataMap"
+import { CellarData } from "src/data/types"
 
 export const PageHome = () => {
   const {
@@ -93,16 +99,49 @@ export const PageHome = () => {
 
   const allChainIds = chainConfig.map((chain) => chain.id)
 
+  //Get all deposit assets from all strategies and turn it into a set of unique values
+  const allDepositAssets: SymbolPathPair[] =
+    Object.values(cellarDataMap).map((cellarData: CellarData): SymbolPathPair[] => {
+    // Don't include deprecated strategies
+    if (cellarData.deprecated) {
+      return []
+    }
+
+    return cellarData.depositTokens.list.map((symbol) => ({
+      symbol: symbol,
+      path: `/assets/icons/${symbol.toLowerCase()}.png`,
+    }))
+  })
+  .flat()
+
+  // Create an object to ensure uniqueness
+  const uniqueAssetsMap: Record<string, SymbolPathPair> = {}
+
+  allDepositAssets.forEach((pair: SymbolPathPair) => {
+    if (!uniqueAssetsMap[pair.symbol]) {
+      uniqueAssetsMap[pair.symbol] = pair
+    }
+  })
+
+  // Copy the unique assets into a constants array
+  const constantAllUniqueAssetsArray = Object.values(uniqueAssetsMap)
+
   const [selectedChainIds, setSelectedChainIds] =
     useState<string[]>(allChainIds)
 
+  const [selectedDepositAssets, setSelectedDepositAssets] = useState<
+    Record<string, SymbolPathPair>
+  >(uniqueAssetsMap)
+
   const strategyData = useMemo(() => {
     return (
-      data?.filter((item) =>
-        selectedChainIds.includes(item?.config.chain.id!)
+      data?.filter(
+        (item) =>
+          selectedChainIds.includes(item?.config.chain.id!) &&
+          selectedDepositAssets[item!.activeAsset.symbol]
       ) || []
     )
-  }, [data, selectedChainIds])
+  }, [data, selectedChainIds, selectedDepositAssets])
 
   const loading = isFetching || isRefetching || isLoading
   return (
@@ -145,16 +184,25 @@ export const PageHome = () => {
           </Text>
         </VStack>
       </HStack> */}
-      <ChainFilter
-        {...{
-          selectedChainIds,
-          setSelectedChainIds,
-        }}
-      />
+      <HStack spacing={"2em"} alignItems="center" padding={"2em 0em"}>
+        <ChainFilter
+          {...{
+            selectedChainIds,
+            setSelectedChainIds,
+          }}
+        />
+        <DepositTokenFilter
+          {...{
+            constantAllUniqueAssetsArray,
+            selectedDepositAssets,
+            setSelectedDepositAssets,
+          }}
+        />
+      </HStack>
       <TransparentSkeleton
         height={loading ? "400px" : "auto"}
         w="full"
-        borderRadius={20}
+        borderRadius={"1em"}
         isLoaded={!loading}
       >
         {isError ? (

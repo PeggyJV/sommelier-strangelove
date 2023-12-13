@@ -9,13 +9,12 @@ export const InfoBanner: VFC<InfoBannerProps> = ({ text }) => {
   return (
     <HStack
       p={4}
-      mb={12}
       spacing={4}
       align="center"
       justify="center"
       backgroundColor="turquoise.extraDark"
       border="2px solid"
-      borderRadius={16}
+      borderRadius={"1em"}
       borderColor="turquoise.dark"
     >
       <VStack align="center" justify="center">
