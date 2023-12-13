@@ -128,12 +128,17 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           spacing={4}
           px={{ base: 6, sm: 0 }}
         >
-          <CardStat label="chain" flex={0} tooltip="The chain the vault is deployed on">
+          <CardStat
+            label="chain"
+            flex={0}
+            tooltip="The chain the vault is deployed on"
+          >
             <Image
               src={cellarConfig.chain.logoPath}
               alt={cellarConfig.chain.alt}
               boxSize={6}
               mr={2}
+              background={"transparent"}
             />
             {cellarConfig.chain.displayName}
           </CardStat>

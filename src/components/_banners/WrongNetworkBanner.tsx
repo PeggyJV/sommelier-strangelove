@@ -49,7 +49,7 @@ export const WrongNetworkBanner: VFC<WrongNetworkBannerProps> = ({
             >
               <Image
                 src={chain.logoPath}
-                background={"inherit"}
+                background={"transparent"}
                 alt={chain.displayName}
                 border={"none"}
                 boxSize="24px"

@@ -210,7 +210,7 @@ export const StrategyDesktopColumn = ({
                   name={row.original.config.chain.displayName}
                   src={row.original.config.chain.logoPath}
                   key={row.original.config.chain.id}
-                  background={"inherit"}
+                  background={"transparent"}
                   border={"none"}
                   sx={{
                     width: "2.2em", // custom width

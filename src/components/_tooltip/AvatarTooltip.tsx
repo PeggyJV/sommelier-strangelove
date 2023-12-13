@@ -62,7 +62,7 @@ export const AvatarTooltip: FC<AvatarTooltipProps> = ({
                 name={chain.displayName}
                 src={chain.logoPath}
                 key={chain.id}
-                bgColor="white"
+                background={"transparent"}
                 size="sm"
               />
               <Text fontSize="12px" fontWeight={600}>
@@ -80,7 +80,7 @@ export const AvatarTooltip: FC<AvatarTooltipProps> = ({
                 name={data.title}
                 src={data.icon}
                 key={data.title}
-                bgColor="white"
+                background={"transparent"}
                 size="sm"
               />
               <Text fontSize="12px" fontWeight={600}>

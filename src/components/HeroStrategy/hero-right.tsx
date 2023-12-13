@@ -165,7 +165,13 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
               Chain
             </Text>
           </Box>
-          <Image src={cellarConfig.chain.logoPath} alt={cellarConfig.chain.alt} boxSize={8} /> <Text>{cellarConfig.chain.displayName}</Text>
+          <Image
+            src={cellarConfig.chain.logoPath}
+            alt={cellarConfig.chain.alt}
+            background={"transparent"}
+            boxSize={8}
+          />{" "}
+          <Text>{cellarConfig.chain.displayName}</Text>
         </HStack>
         <HStack alignItems="start">
           <Box>
@@ -179,7 +185,9 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             ) : (
               content.tradedAssets?.map((item) => {
                 const asset = tokenConfig.find(
-                  (v) => v.symbol === item && v.chain === cellarConfig.chain.id
+                  (v) =>
+                    v.symbol === item &&
+                    v.chain === cellarConfig.chain.id
                 )
                 return (
                   <HStack key={item}>

@@ -105,6 +105,7 @@ const ChainButton: VFC<ChainButtonProps> = ({
                 src={chain.logoPath}
                 alt={chain.displayName}
                 boxSize="24px"
+                background={"transparent"}
               />
               <Text>{chain.displayName}</Text>
             </HStack>
@@ -153,6 +154,7 @@ const ChainButton: VFC<ChainButtonProps> = ({
                       src={supportedChain.logoPath}
                       alt={supportedChain.displayName}
                       boxSize="24px"
+                      background={"transparent"}
                     />
                     <Text fontWeight="semibold">
                       {supportedChain.displayName}
