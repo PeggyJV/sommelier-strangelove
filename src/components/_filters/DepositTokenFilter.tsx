@@ -88,11 +88,12 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
             <HStack>
               <Text fontSize={"1.25em"}>Deposit Assets</Text>
               <HStack justifyContent={"center"}>
-                <AvatarGroup size="sm" dir="reverse">
+                <AvatarGroup size="sm">
                   {Object.values(props.selectedDepositAssets)
                     .slice(0, 5)
                     .map((token: SymbolPathPair) => (
                       <Avatar
+                        
                         name={token.symbol}
                         src={token.path}
                         key={token.symbol}

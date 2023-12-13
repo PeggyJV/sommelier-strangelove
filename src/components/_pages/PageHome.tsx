@@ -100,19 +100,21 @@ export const PageHome = () => {
   const allChainIds = chainConfig.map((chain) => chain.id)
 
   //Get all deposit assets from all strategies and turn it into a set of unique values
-  const allDepositAssets: SymbolPathPair[] =
-    Object.values(cellarDataMap).map((cellarData: CellarData): SymbolPathPair[] => {
-    // Don't include deprecated strategies
-    if (cellarData.deprecated) {
-      return []
-    }
+  const allDepositAssets: SymbolPathPair[] = Object.values(
+    cellarDataMap
+  )
+    .map((cellarData: CellarData): SymbolPathPair[] => {
+      // Don't include deprecated strategies
+      if (cellarData.deprecated) {
+        return []
+      }
 
-    return cellarData.depositTokens.list.map((symbol) => ({
-      symbol: symbol,
-      path: `/assets/icons/${symbol.toLowerCase()}.png`,
-    }))
-  })
-  .flat()
+      return cellarData.depositTokens.list.map((symbol) => ({
+        symbol: symbol,
+        path: `/assets/icons/${symbol.toLowerCase()}.png`,
+      }))
+    })
+    .flat()
 
   // Create an object to ensure uniqueness
   const uniqueAssetsMap: Record<string, SymbolPathPair> = {}
@@ -126,19 +128,50 @@ export const PageHome = () => {
   // Copy the unique assets into a constants array
   const constantAllUniqueAssetsArray = Object.values(uniqueAssetsMap)
 
+  /*
+  // Always float up "WETH", "USDC", "WBTC", "SOMM", "DAI" to the top of the list in that order for the inital render
+  const constantOrderedAllUniqueAssetsArray = [
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "WETH"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "USDC"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "WBTC"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "SOMM"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "DAI"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) =>
+        pair.symbol !== "WETH" &&
+        pair.symbol !== "USDC" &&
+        pair.symbol !== "WBTC" &&
+        pair.symbol !== "SOMM" &&
+        pair.symbol !== "DAI"
+    ),
+  ]
+  */
+
   const [selectedChainIds, setSelectedChainIds] =
     useState<string[]>(allChainIds)
 
-  const [selectedDepositAssets, setSelectedDepositAssets] = useState<
-    Record<string, SymbolPathPair>
-  >(uniqueAssetsMap)
+  const [selectedDepositAssets, setSelectedDepositAssets] =
+    useState<Record<string, SymbolPathPair>>(uniqueAssetsMap)
 
   const strategyData = useMemo(() => {
     return (
       data?.filter(
         (item) =>
           selectedChainIds.includes(item?.config.chain.id!) &&
-          selectedDepositAssets[item!.activeAsset.symbol]
+          cellarDataMap[item!.slug].depositTokens.list.some(
+            (tokenSymbol) =>
+              selectedDepositAssets.hasOwnProperty(tokenSymbol)
+          )
       ) || []
     )
   }, [data, selectedChainIds, selectedDepositAssets])
