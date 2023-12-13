@@ -94,6 +94,7 @@ export const ChainFilter: VFC<ChainFilterProps> = (props) => {
                               name={chain.displayName}
                               src={chain.logoPath}
                               key={chain.id}
+                              background="transparent"
                             />
                           )
                         })}
@@ -162,6 +163,7 @@ export const ChainFilter: VFC<ChainFilterProps> = (props) => {
                         <Image
                           src={chain.logoPath}
                           alt={chain.displayName}
+                          background="transparent"
                           boxSize="24px"
                         />
                         <Text fontWeight="semibold">
