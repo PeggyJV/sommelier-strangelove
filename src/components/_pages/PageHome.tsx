@@ -27,15 +27,6 @@ import {
 import { cellarDataMap } from "src/data/cellarDataMap"
 import { CellarData } from "src/data/types"
 
-{
-  /*
-TODO: Make token list 3 wide, and if you click when all tokens are selected, it deselects all tokens but the one you clicked
-
-
-
-*/
-}
-
 export const PageHome = () => {
   const {
     data,

@@ -38,6 +38,28 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
 ) => {
   const handleTokenClick = (symbol: string) => {
     props.setSelectedDepositAssets((current) => {
+      // If all tokens are selected, remove them all from the array expcept for the one that was clicked
+      if (
+        Object.keys(current).length ===
+        props.constantAllUniqueAssetsArray.length
+      ) {
+        // Toggle all checks off, the one that was clicked will be toggled on in the click handler
+        setCheckedStates(
+          new Map(
+            Object.keys(props.selectedDepositAssets).map((key) => [
+              key,
+              false,
+            ])
+          )
+        )
+
+        return {
+          [symbol]: props.constantAllUniqueAssetsArray.find(
+            (token) => token.symbol === symbol
+          )!,
+        }
+      }
+
       const newTokens = { ...current }
       if (newTokens[symbol]) {
         delete newTokens[symbol]
