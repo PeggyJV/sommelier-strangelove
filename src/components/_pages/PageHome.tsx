@@ -1,4 +1,4 @@
-import { Button, Center, HStack } from "@chakra-ui/react"
+import { Button, Center, HStack, Spacer } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -26,6 +26,7 @@ import {
 } from "components/_filters/DepositTokenFilter"
 import { cellarDataMap } from "src/data/cellarDataMap"
 import { CellarData } from "src/data/types"
+import { MiscFilter } from "components/_filters/MiscFilter"
 
 export const PageHome = () => {
   const {
@@ -215,21 +216,35 @@ export const PageHome = () => {
           </Text>
         </VStack>
       </HStack> */}
-      <HStack spacing={"2em"} alignItems="center" padding={"2em 0em"}>
-        <ChainFilter
-          {...{
-            selectedChainIds,
-            setSelectedChainIds,
-          }}
-        />
-        <DepositTokenFilter
-          {...{
-            constantAllUniqueAssetsArray:
-              constantOrderedAllUniqueAssetsArray,
-            selectedDepositAssets,
-            setSelectedDepositAssets,
-          }}
-        />
+      <HStack width="100%" padding={"2em 0em"}>
+        <HStack
+          spacing={"2em"}
+          alignItems="center"
+          padding={"2em 0em"}
+        >
+          <ChainFilter
+            {...{
+              selectedChainIds,
+              setSelectedChainIds,
+            }}
+          />
+          <DepositTokenFilter
+            {...{
+              constantAllUniqueAssetsArray:
+                constantOrderedAllUniqueAssetsArray,
+              selectedDepositAssets,
+              setSelectedDepositAssets,
+            }}
+          />
+        </HStack>
+        <Spacer />
+        <HStack
+          spacing={"2em"}
+          alignItems="right"
+          padding={"2em 0em"}
+        >
+          <MiscFilter />
+        </HStack>
       </HStack>
       <TransparentSkeleton
         height={loading ? "400px" : "auto"}
