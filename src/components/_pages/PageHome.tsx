@@ -125,10 +125,10 @@ export const PageHome = () => {
       {
         <InfoBanner
           text={
-            "A new SOMM rewards program for Turbo SOMM is being considered. If it passes, rewards will begin flowing on Dec 15th."
+            "A proposal to renew Turbo swETH incentives is making its way through governance, if it passes rewards will start flowing on Dec 17th."
           }
         />
-        }
+      }
       {/* <HStack
         p={4}
         mb={6}
