@@ -3,7 +3,7 @@ import {
   HStack,
   Image,
   Text,
-  Stack,
+  SimpleGrid,
   Box,
   Popover,
   PopoverTrigger,
@@ -140,7 +140,7 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
         maxW="max-content"
         borderWidth={1}
         borderColor="purple.dark"
-        borderRadius={2}
+        borderRadius={"1em"}
         bg="surface.bg"
         fontWeight="semibold"
         _focus={{
@@ -149,8 +149,8 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
           boxShadow: "unset",
         }}
       >
-        <PopoverBody p={0}>
-          <Stack>
+        <PopoverBody p={0} >
+          <SimpleGrid columns={2} spacing={3}>
             {Object.values(props.constantAllUniqueAssetsArray).map(
               (token: SymbolPathPair) => (
                 <Box
@@ -197,7 +197,7 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
                 </Box>
               )
             )}
-          </Stack>
+          </SimpleGrid>
         </PopoverBody>
       </PopoverContent>
     </Popover>
