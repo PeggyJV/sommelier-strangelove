@@ -27,9 +27,8 @@ import {
 import { cellarDataMap } from "src/data/cellarDataMap"
 import { CellarData } from "src/data/types"
 
-
 {
-/*
+  /*
 TODO: Make token list 3 wide, and if you click when all tokens are selected, it deselects all tokens but the one you clicked
 
 
@@ -138,7 +137,6 @@ export const PageHome = () => {
   // Copy the unique assets into a constants array
   const constantAllUniqueAssetsArray = Object.values(uniqueAssetsMap)
 
-  /*
   // Always float up "WETH", "USDC", "WBTC", "SOMM", "DAI" to the top of the list in that order for the inital render
   const constantOrderedAllUniqueAssetsArray = [
     ...constantAllUniqueAssetsArray.filter(
@@ -165,7 +163,6 @@ export const PageHome = () => {
         pair.symbol !== "DAI"
     ),
   ]
-  */
 
   const [selectedChainIds, setSelectedChainIds] =
     useState<string[]>(allChainIds)
@@ -236,7 +233,8 @@ export const PageHome = () => {
         />
         <DepositTokenFilter
           {...{
-            constantAllUniqueAssetsArray,
+            constantAllUniqueAssetsArray:
+              constantOrderedAllUniqueAssetsArray,
             selectedDepositAssets,
             setSelectedDepositAssets,
           }}

@@ -93,6 +93,7 @@ export const ChainFilter: VFC<ChainFilterProps> = (props) => {
                           src={chain.logoPath}
                           key={chain.id}
                           background="transparent"
+                          border="none"
                         />
                       )
                     })}

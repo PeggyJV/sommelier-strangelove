@@ -89,17 +89,37 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
               <Text fontSize={"1.25em"}>Deposit Assets</Text>
               <HStack justifyContent={"center"}>
                 <AvatarGroup size="sm">
-                  {Object.values(props.selectedDepositAssets)
+                  {[
+                    ...["WETH", "USDC", "WBTC", "SOMM", "DAI"].filter(
+                      (symbol) => props.selectedDepositAssets[symbol]
+                    ),
+                    ...Object.keys(
+                      props.selectedDepositAssets
+                    ).filter(
+                      (symbol) =>
+                        ![
+                          "WETH",
+                          "USDC",
+                          "WBTC",
+                          "SOMM",
+                          "DAI",
+                        ].includes(symbol)
+                    ),
+                  ]
                     .slice(0, 5)
-                    .map((token: SymbolPathPair) => (
-                      <Avatar
-                        
-                        name={token.symbol}
-                        src={token.path}
-                        key={token.symbol}
-                        background="transparent"
-                      />
-                    ))}
+                    .map((symbol) => {
+                      const token =
+                        props.selectedDepositAssets[symbol]
+                      return (
+                        <Avatar
+                          name={token.symbol}
+                          src={token.path}
+                          key={token.symbol}
+                          background="transparent"
+                          border="none"
+                        />
+                      )
+                    })}
                 </AvatarGroup>
                 {Object.keys(props.selectedDepositAssets).length >
                   5 && (
@@ -161,6 +181,7 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
                       src={token.path}
                       alt={token.symbol}
                       background="transparent"
+                      border="none"
                       boxSize="24px"
                     />
                     <Text fontWeight="semibold">{token.symbol}</Text>
