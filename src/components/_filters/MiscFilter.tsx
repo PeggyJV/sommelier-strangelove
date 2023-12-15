@@ -16,10 +16,45 @@ import {
 import { useState, VFC } from "react"
 import { HamburgerIcon } from "components/_icons"
 
+export interface MiscFilterProp {
+  name: string
+  checked: boolean
+  stateSetFunction: (value: boolean) => void
+}
+
 export interface MiscFilterProps {
+  categories: MiscFilterProp[]
 }
 
 export const MiscFilter: VFC<MiscFilterProps> = (props) => {
+  const [checkedStates, setCheckedStates] = useState(
+    new Map(
+      props.categories.map((category) => [
+        category.name,
+        {
+          checked: category.checked,
+          stateSetFunction: category.stateSetFunction,
+        },
+      ])
+    )
+  )
+
+  const toggleCheck = (id: string) => {
+    setCheckedStates((prev) => {
+      const newChecked = !prev.get(id)!.checked
+      const newCheckedStates = new Map(prev).set(id, {
+        checked: newChecked,
+        stateSetFunction: prev.get(id)!.stateSetFunction,
+      })
+
+      // Using the nullish coalescing operator
+      ;(prev.get(id)!.stateSetFunction ?? (() => {}))(newChecked)
+
+      return newCheckedStates
+    })
+  }
+
+
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
@@ -38,7 +73,7 @@ export const MiscFilter: VFC<MiscFilterProps> = (props) => {
           }}
           leftIcon={
             <HStack>
-              <Text fontSize={"1.25em"}>Filter</Text>
+              <Text fontSize={"1.25em"}>Filters</Text>
             </HStack>
           }
           rightIcon={<HamburgerIcon boxSize={3.5} />}
@@ -50,7 +85,7 @@ export const MiscFilter: VFC<MiscFilterProps> = (props) => {
         maxW="max-content"
         borderWidth={1}
         borderColor="purple.dark"
-        borderRadius={2}
+        borderRadius={"1em"}
         bg="surface.bg"
         fontWeight="semibold"
         _focus={{
@@ -60,7 +95,45 @@ export const MiscFilter: VFC<MiscFilterProps> = (props) => {
         }}
       >
         <PopoverBody p={0}>
-          <Stack></Stack>
+          <Stack>
+            {props.categories.map((category) => (
+              <Box
+                as="button"
+                key={category.name}
+                py={2}
+                px={4}
+                fontSize="sm"
+                borderRadius={6}
+                onClick={() => {
+                  toggleCheck(category.name)
+                }}
+                _hover={{
+                  cursor: "pointer",
+                  bg: "purple.dark",
+                  borderColor: "surface.tertiary",
+                }}
+              >
+                <HStack
+                  display="flex" // Use flex display
+                  justifyContent="space-between" // Space between items
+                  alignItems="center" // Align items vertically
+                  width="100%" // Full width
+                  spacing={3}
+                >
+                  <Text fontWeight="semibold">{category.name}</Text>{" "}
+                  <Checkbox
+                    id={category.name}
+                    isChecked={
+                      checkedStates.get(category.name)!.checked
+                    }
+                    onChange={(e) => {
+                      toggleCheck(category.name)
+                    }}
+                  />
+                </HStack>
+              </Box>
+            ))}
+          </Stack>
         </PopoverBody>
       </PopoverContent>
     </Popover>

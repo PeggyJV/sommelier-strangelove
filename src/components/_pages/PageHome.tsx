@@ -26,7 +26,18 @@ import {
 } from "components/_filters/DepositTokenFilter"
 import { cellarDataMap } from "src/data/cellarDataMap"
 import { CellarData } from "src/data/types"
-import { MiscFilter } from "components/_filters/MiscFilter"
+import {
+  MiscFilter,
+  MiscFilterProp,
+} from "components/_filters/MiscFilter"
+
+{
+  /*
+TODOs: 
+- Has Incentives filter
+- Reset button
+*/
+}
 
 export const PageHome = () => {
   const {
@@ -162,18 +173,38 @@ export const PageHome = () => {
   const [selectedDepositAssets, setSelectedDepositAssets] =
     useState<Record<string, SymbolPathPair>>(uniqueAssetsMap)
 
+  const [showDeprecated, setShowDeprecated] = useState<boolean>(false)
+
+  const [selectedMiscFilters, setSelectedMiscFilters] = useState<
+    MiscFilterProp[]
+  >([
+    {
+      name: "Show Deprecated",
+      checked: showDeprecated,
+      stateSetFunction: setShowDeprecated,
+    },
+  ])
+
+  console.log(showDeprecated)
+
+
   const strategyData = useMemo(() => {
     return (
       data?.filter(
         (item) =>
+          // Chain filter
           selectedChainIds.includes(item?.config.chain.id!) &&
+          // Deposit asset filter
           cellarDataMap[item!.slug].depositTokens.list.some(
             (tokenSymbol) =>
               selectedDepositAssets.hasOwnProperty(tokenSymbol)
-          )
+          ) &&
+          // Deprecated filter, if cellarDataMap[item!.slug].deprecated is true, then the strategy is deprecated, otherwise if undefined or false, it is not deprecated
+          (!cellarDataMap[item!.slug].deprecated ||
+            (cellarDataMap[item!.slug].deprecated && showDeprecated))
       ) || []
     )
-  }, [data, selectedChainIds, selectedDepositAssets])
+  }, [data, selectedChainIds, selectedDepositAssets, showDeprecated])
 
   const loading = isFetching || isRefetching || isLoading
   return (
@@ -243,7 +274,11 @@ export const PageHome = () => {
           alignItems="right"
           padding={"2em 0em"}
         >
-          <MiscFilter />
+          <MiscFilter
+            {...{
+              categories: selectedMiscFilters,
+            }}
+          />
         </HStack>
       </HStack>
       <TransparentSkeleton

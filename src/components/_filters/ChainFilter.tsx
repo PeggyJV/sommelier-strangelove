@@ -131,9 +131,6 @@ export const ChainFilter: VFC<ChainFilterProps> = (props) => {
         <PopoverBody p={0}>
           <Stack>
             {chainConfig.map((chain: Chain) => {
-              const isSelected = props.selectedChainIds.includes(
-                chain.id
-              )
               return (
                 <Box
                   as="button"
