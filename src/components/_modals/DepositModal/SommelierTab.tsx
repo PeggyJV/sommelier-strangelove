@@ -17,7 +17,7 @@ import {
   useTheme,
 } from "@chakra-ui/react"
 
-import { useEffect, useState, VFC } from "react"
+import { useEffect, useMemo, useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
@@ -191,19 +191,31 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   // New enso route config
   // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token
-  const ensoRouteConfig: EnsoRouteConfig = {
-    fromAddress: address!,
-    tokensIn: [
-      {
-        address:
-          selectedToken?.address ||
-          strategyData!.activeAsset.address.toLowerCase(),
-        amountBaseDenom: watchDepositAmount * (10** (selectedToken?.decimals || 0)),
-      },
-    ],
-    tokenOut: cellarAddress,
-    slippage: Number(slippageValue),
-  }
+  const ensoRouteConfig: EnsoRouteConfig = useMemo(
+    () => ({
+      fromAddress: address!,
+      tokensIn: [
+        {
+          address:
+            selectedToken?.address ||
+            strategyData!.activeAsset.address.toLowerCase(),
+          amountBaseDenom:
+            watchDepositAmount * 10 ** (selectedToken?.decimals || 0),
+        },
+      ],
+      tokenOut: cellarAddress,
+      slippage: Number(slippageValue),
+    }),
+    [
+      address,
+      cellarAddress,
+      selectedToken?.address,
+      selectedToken?.decimals,
+      strategyData?.activeAsset.address,
+      watchDepositAmount,
+      slippageValue,
+    ]
+  )
 
   const { ensoResponse, ensoError, ensoLoading } =
     useEnsoRoutes(ensoRouteConfig)

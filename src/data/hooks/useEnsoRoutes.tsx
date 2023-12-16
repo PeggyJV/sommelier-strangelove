@@ -1,6 +1,4 @@
-import { ethers } from "ethers"
 import { useState, useEffect } from "react"
-import { useApproveERC20 } from "src/hooks/web3/useApproveERC20"
 
 // Enso Docs can be found at https://www.enso.finance/developers or https://docs.enso.finance/
 
@@ -43,6 +41,8 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
   const [ensoLoading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
+    let intervalId: number;
+
     const fetchRoutes = async () => {
       try {
         const actions = config.tokensIn.map((tokenIn) => {
@@ -93,8 +93,15 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
         setLoading(false)
       }
     }
-
     fetchRoutes()
+
+    // Run fetchRoutes every 10 seconds
+    intervalId = setInterval(fetchRoutes, 10000) as unknown as number
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId)
+    }
   }, [config])
 
   return { ensoResponse, ensoError, ensoLoading }
