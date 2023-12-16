@@ -50,11 +50,13 @@ export const BuyOrSellModal = ({
                 key={value.name}
                 href={`/strategies/${id}/manage`}
                 onClick={() => {
-                  analytics.track("strategy.buy-sell", {
-                    strategyCard: cellarDataMap[id].name,
-                    platformSelection: `${value.name}`,
-                    landingType: landingType(),
-                  })
+                  /*
+analytics.track("strategy.buy-sell", {
+    strategyCard: cellarDataMap[id].name,
+    platformSelection: `${value.name}`,
+    landingType: landingType(),
+});
+*/
                 }}
                 textDecoration="none"
               >
@@ -87,11 +89,11 @@ export const BuyOrSellModal = ({
               href={value.url}
               key={value.name}
               onClick={() => {
-                analytics.track("strategy.buy-sell", {
+                /* analytics.track("strategy.buy-sell", {
                   strategyCard: cellarDataMap[id].name,
                   platformSelection: value.name,
                   landingType: landingType(),
-                })
+                })*/
               }}
               target="_blank"
               textDecoration="none"

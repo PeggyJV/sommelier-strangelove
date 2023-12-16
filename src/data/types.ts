@@ -38,6 +38,15 @@ export enum CellarNameKey {
   TURBO_SWETH = "TURBO_SWETH",
   ETH_TREND_GROWTH = "ETH_TREND_GROWTH",
   TURBO_GHO = "TURBO_GHO",
+  TURBO_STETH = "TURBO_STETH",
+  TURBO_STETH_STETH_DEPOSIT = "TURBO_STETH_STETH_DEPOSIT",
+  TURBO_SOMM = "TURBO_SOMM",
+  TURBO_EETH = "TURBO_EETH",
+}
+
+export interface Badge {
+  customStrategyHighlight: string
+  customStrategyHighlightColor?: string
 }
 
 export interface ConfigProps {
@@ -67,9 +76,11 @@ export interface ConfigProps {
     key: StakerKey
   }
   rewardTokenAddress?: string
-  customRewardWithoutAPY?: CustomRewardWithoutAPY
-  customStrategyHighlight?: string
+  customReward?: CustomReward
+  badges?: Badge[]
   baseAsset: Token
+  feePromotion?: string
+  show7DayAPYTooltip?: boolean
 }
 
 export enum CellarType {
@@ -88,7 +99,9 @@ type Exchange =
       logo: string
     }
 
-export interface CustomRewardWithoutAPY {
+export interface CustomReward {
+  showOnlyBaseApy?: boolean
+  showAPY: boolean
   tokenSymbol: string
   tokenDisplayName: string
   tokenAddress: string
@@ -96,7 +109,7 @@ export interface CustomRewardWithoutAPY {
   customRewardMessageTooltip?: string
   customRewardMessage?: string
   customRewardHeader?: string
-  showRewards?: boolean
+  showBondingRewards?: boolean
   showClaim?: boolean
   customClaimMsg?: string
   customRewardAPYTooltip?: string
@@ -110,6 +123,8 @@ export interface CustomRewardWithoutAPY {
   stakingDurationOverride?: Date
   showSommRewards?: boolean
   customIconToolTipMsg?: string
+  customRewardEndMessage?: string
+  customSommRewardsEndMessage?: string
 }
 
 export interface CellarData {

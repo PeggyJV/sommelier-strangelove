@@ -14,7 +14,6 @@ import { useRouter } from "next/router"
 import { FC } from "react"
 import { formatUSD, toEther } from "utils/formatCurrency"
 import { DIRECT, landingType } from "utils/landingType"
-import { analytics } from "utils/analytics"
 import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
 import { showNetValueInAsset } from "data/uiConfig"
 import { tokenConfig } from "data/tokenConfig"
@@ -91,22 +90,22 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
         alignItems="center"
         cursor="pointer"
         onClick={() => {
-          router.push(`strategies/${slug}`)
+          router.push(`strategies/${slug}/manage`)
           const landingTyp = landingType()
-          analytics.track("strategy.selection", {
-            strategyCard: name,
-            landingType: landingType(),
-          })
+          // analytics.track("strategy.selection", {
+          //   strategyCard: name,
+          //   landingType: landingType(),
+          // })
           if (landingTyp === DIRECT) {
-            analytics.track("strategy.selection.direct", {
+            /*  analytics.track("strategy.selection.direct", {
               strategyCard: name,
               landingType: landingTyp,
-            })
+            })*/
           } else {
-            analytics.track("strategy.selection.indirect", {
+            /* analytics.track("strategy.selection.indirect", {
               strategyCard: name,
               landingType: landingTyp,
-            })
+            })*/
           }
         }}
         {...props}
@@ -114,8 +113,8 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
         <Stack direction="row">
           <Box>
             <Image
-              height={45}
-              width={45}
+              height={40}
+              width={40}
               src={icon}
               alt="strategy icon"
             />
@@ -167,7 +166,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             {netValueUsd}
           </Text>
           <Text fontWeight={500} fontSize={12} color="neutral.400">
-            {(netValueInAsset * Number(tokenPrice.value)).toFixed(
+            {(netValueInAsset).toFixed(
               showNetValueInAsset(cellarData.config) ? 5 : 2
             )}
             {` ${symbol}`}

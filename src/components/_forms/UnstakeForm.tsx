@@ -67,10 +67,10 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
     )
     setValue("withdrawAmount", amount)
 
-    analytics.track("withdraw.max-selected", {
-      account: address,
-      amount,
-    })
+    // analytics.track("withdraw.max-selected", {
+    //   account: address,
+    //   amount,
+    // })
   }
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
       amount: withdrawAmount,
     }
 
-    analytics.track("withdraw.started", analyticsData)
+    // analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
     const tx = await cellarSigner?.redeem(amtInWei, address, address)

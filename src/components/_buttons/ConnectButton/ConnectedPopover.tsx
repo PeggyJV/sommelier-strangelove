@@ -253,6 +253,35 @@ export const ConnectedPopover = () => {
               <LogoutCircleIcon />
               <Text fontWeight="semibold">Disconnect Wallet</Text>
             </HStack>
+            {/* Import SOMM token to Wallet - Always Visible */}
+            <Stack
+              as="button"
+              py={2}
+              px={4}
+              fontSize="sm"
+              onClick={() => {
+                const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
+                importToken.mutate({
+                  address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                  imageUrl: fullImageUrl,
+                })
+              }}
+              _hover={{
+                cursor: "pointer",
+                bg: "purple.dark",
+                borderColor: "surface.tertiary",
+              }}
+            >
+              <HStack>
+                <Avatar
+                  src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
+                  size="2xs"
+                />
+                <Text fontWeight="semibold">
+                  Import SOMM token to Wallet
+                </Text>
+              </HStack>
+            </Stack>
           </Stack>
         </PopoverBody>
       </PopoverContent>

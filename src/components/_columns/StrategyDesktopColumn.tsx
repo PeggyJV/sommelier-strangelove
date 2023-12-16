@@ -22,6 +22,7 @@ import { isTokenPriceEnabledApp } from "data/uiConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
 import { getProtocols } from "utils/getProtocols"
+import { analytics } from "utils/analytics"
 
 type StrategyDesktopColumnProps = {
   timeline: Timeline
@@ -39,7 +40,16 @@ type RowData = {
     baseApySumRewards?: {
       formatted?: string
     }
+    activeAsset: {
+      symbol: string
+    }
   }
+}
+
+function trackVaultInteraction(vaultName: string) {
+  analytics.track("vault.interacted", {
+    vault: vaultName,
+  })
 }
 
 export const StrategyDesktopColumn = ({
@@ -48,12 +58,17 @@ export const StrategyDesktopColumn = ({
 }: StrategyDesktopColumnProps) => {
   return [
     {
-      Header: "Vault",
+      Header: () => (
+        <span style={{ textAlign: "left", width: "100%" }}>
+          Vault
+        </span>
+      ),
       accessor: "name",
       Cell: ({ row }: any) => {
         return (
           <StrategySection
             icon={row.original.logo}
+            onClick={() => trackVaultInteraction(row.original.name)}
             title={row.original.name}
             provider={row.original.provider.title}
             type={row.original.type}
@@ -61,73 +76,25 @@ export const StrategyDesktopColumn = ({
             description={row.original.description}
             isDeprecated={row.original.deprecated}
             w={56}
-            customStrategyHighlight={
-              row.original.config.customStrategyHighlight
-            }
+            badges={row.original.config.badges}
           />
         )
       },
-      disableSortBy: true,
-    },
-    {
-      Header: () => (
-        <Tooltip
-          arrowShadowColor="purple.base"
-          label="Protocols in which Vault operates"
-          placement="top"
-          color="neutral.300"
-          bg="surface.bg"
-        >
-          <HStack spacing={1}>
-            <Text>Protocols</Text>
-            <InformationIcon color="neutral.400" boxSize={3} />
-          </HStack>
-        </Tooltip>
-      ),
-      accessor: "protocols",
-      Cell: ({ cell: { value } }: CellValue) => {
-        const protocols = typeof value === "string" ? [value] : value
-        const getFirst3Value = protocols.slice(0, 3)
-        const getRemainingValue =
-          protocols.length - getFirst3Value.length
-        const [isHover, setIsHover] = useState(false)
-        const handleMouseOver = () => {
-          setIsHover(true)
-        }
-        const handleMouseLeave = () => {
-          setIsHover(false)
-        }
-        return (
-          <Box
-            onMouseLeave={handleMouseLeave}
-            onMouseOver={handleMouseOver}
-            w={20}
-          >
-            <HStack>
-              <AvatarGroup size="sm" max={3}>
-                {getFirst3Value.map((protocol: string) => {
-                  const data = getProtocols(protocol)
-                  return (
-                    <Avatar
-                      name={data.title}
-                      src={data.icon}
-                      key={data.title}
-                      bgColor="white"
-                    />
-                  )
-                })}
-              </AvatarGroup>
-              {protocols.length > 3 && (
-                <Text fontWeight={600}>+{getRemainingValue}</Text>
-              )}
-            </HStack>
-            <Flex alignItems="center" direction="column">
-              {isHover && <AvatarTooltip protocols={protocols} />}
-            </Flex>
-          </Box>
-        )
+      disableSortBy: false,
+      sortType: (rowA: RowData, rowB: RowData) => {
+        // Sort by active asset asset
+        const valA =
+          rowA.original.activeAsset?.symbol.toLowerCase() || ""
+        const valB =
+          rowB.original.activeAsset?.symbol.toLowerCase() || ""
+
+        // Normal Sorting
+        if (valA > valB) return 1
+
+        if (valB > valA) return -1
+
+        return 0
       },
-      disableSortBy: true,
     },
     {
       Header: () => (
@@ -146,8 +113,8 @@ export const StrategyDesktopColumn = ({
       ),
       accessor: "tradedAssets",
       Cell: ({ cell: { value } }: CellValue) => {
-        const getFirst3Value = value.slice(0, 3)
-        const getRemainingValue = value.length - getFirst3Value.length
+        const getFirst6Value = value.slice(0, 6)
+        const getRemainingValue = value.length - getFirst6Value.length
         const [isHover, setIsHover] = useState(false)
         const handleMouseOver = () => {
           setIsHover(true)
@@ -169,7 +136,7 @@ export const StrategyDesktopColumn = ({
           >
             <HStack>
               <AvatarGroup size="sm">
-                {getFirst3Value?.map((asset: Token) => {
+                {getFirst6Value?.map((asset: Token) => {
                   return (
                     <Avatar
                       name={asset?.symbol}
@@ -179,7 +146,7 @@ export const StrategyDesktopColumn = ({
                   )
                 })}
               </AvatarGroup>
-              {value.length > 3 && (
+              {value.length > 6 && (
                 <Text fontWeight={600}>+{getRemainingValue}</Text>
               )}
             </HStack>
@@ -248,6 +215,7 @@ export const StrategyDesktopColumn = ({
             baseApySumRewards={
               row.original.baseApySumRewards?.formatted
             }
+            extraRewardsApy={row.original.extraRewardsApy?.formatted}
           />
         )
       },

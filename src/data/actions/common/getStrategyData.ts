@@ -16,7 +16,12 @@ import { getChanges } from "./getChanges"
 import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
-import { getApyInception } from "./getApyInception"
+import { createApyChangeDatum } from "src/utils/chartHelper"
+import BigNumber from "bignumber.js"
+import { config as utilConfig } from "src/utils/config"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
+import { EETHIcon, GHOIcon } from "components/_icons"
+import { Contract } from "ethers"
 
 export const getStrategyData = async ({
   address,
@@ -42,14 +47,14 @@ export const getStrategyData = async ({
       const decimals = config.baseAsset.decimals
       const symbol = config.baseAsset.symbol
 
-      const { stakerContract } = contracts
+      const { stakerContract, cellarContract } = contracts
       const strategyData = stratData
       const dayDatas = strategyData?.dayDatas
       const deprecated = strategy.deprecated
       const slug = strategy.slug
       const name = strategy.name
       const description = strategy.description
-      const logo = config.lpToken.imagePath
+      const logo = config.baseAsset.src
       const protocols = strategy.protocols
       const type = strategy.cellarType
       const provider = strategy.strategyProvider
@@ -89,8 +94,33 @@ export const getStrategyData = async ({
       const isStakingOngoing =
         stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
 
+      // ! Rewards APY override only goes here if rewards are happening instead of somm rewards
+      // TODO: This is tech debt, we need to migrate to lists of APYs for each rewards token
       const rewardsApy = await (async () => {
         if (hideValue) return
+
+        // Custom reward APY overrides
+        // TODO: Eventually we just need to make this a type of list with the specific token reward and the APY
+        /** 
+        if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
+          // Get wstETH price
+          const wstethPrice = Number(
+            await fetchCoingeckoPrice("wrapped-steth", "usd")
+          )
+
+          // Get TVL
+          let usdTvl = Number(strategyData?.tvlTotal)
+
+          // 20 wsteth per month * 12 months * 100 for human readable %
+          let apy = ((20 * wstethPrice) / usdTvl) * 12 * 100
+
+          return {
+            formatted: apy.toFixed(2).toString() + "%",
+            value: apy,
+          }
+        }
+        **/
+
         if (!isStakingOngoing) return
 
         let assetPrice = "1"
@@ -102,25 +132,132 @@ export const getStrategyData = async ({
           sommPrice,
           assetPrice,
           stakerContract: stakerContract as CellarStakingV0815,
+          cellarContract: cellarContract as Contract,
           cellarConfig: config,
         })
         return apyRes
       })()
 
+      let extraRewardsApy = {
+        value: 0,
+      }
+      // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
+      /** 
+      if (strategy.slug === utilConfig.CONTRACT.TURBO_GHO.SLUG) {
+        // Get GHO price
+        const ghoPrice = Number(
+          await fetchCoingeckoPrice("gho", "usd")
+        )
+
+        // Get TVL
+        let usdTvl = Number(strategyData?.tvlTotal)
+
+        // 5400 GHO per week * 52 weeks * 100 for human readable %
+        // TODO: Update this  + expiration date in config weekly as long as GHO incentives live
+        let apy = ((4150 * ghoPrice) / usdTvl) * 52 * 100
+
+        extraRewardsApy = {
+          formatted: apy.toFixed(2).toString() + "%",
+          value: apy,
+          tokenSymbol: "GHO",
+          tokenIcon: GHOIcon,
+        }
+      }
+      */
+
+      /*
+      if (strategy.slug === utilConfig.CONTRACT.TURBO_EETH.SLUG) {
+        // Get TVL
+        let usdTvl = Number(strategyData?.tvlTotal)
+
+        // $2k worth of eETH per month * 12 months * 100 for human readable %
+        // TODO: Update this  + expiration date in config weekly as long as eETH incentives live
+        let apy = ((2000) / usdTvl) * 12 * 100
+
+        extraRewardsApy = {
+          formatted: apy.toFixed(2).toString() + "%",
+          value: apy,
+          tokenSymbol: "eETH",
+          tokenIcon: EETHIcon,
+        }
+      }
+      */
+
       const baseApy = (() => {
+        if (config.show7DayAPYTooltip === true) {
+          if (dayDatas === undefined || dayDatas.length < 8) {
+            return {
+              formatted: "0.00%",
+              value: 0,
+            }
+          }
+
+          let movingAvg7D = 0
+
+          for (let i = 0; i < 7; i++) {
+            // Get annualized apy for each shareValue
+            let nowValue = new BigNumber(dayDatas![i].shareValue)
+            let startValue = new BigNumber(
+              dayDatas![i + 1].shareValue
+            )
+
+            let yieldGain = nowValue.minus(startValue).div(startValue)
+
+            // Take the gains since inception and annualize it to get APY since inception
+            let dailyApy = yieldGain.times(365).times(100).toNumber()
+
+            movingAvg7D += dailyApy
+          }
+          movingAvg7D = movingAvg7D / 7
+
+          return {
+            formatted: movingAvg7D.toFixed(2) + "%",
+            value: Number(movingAvg7D.toFixed(2)),
+          }
+        }
+
+        /** 
+        if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
+          const launchDay = launchDate ?? subDays(new Date(), 8)
+          const launchEpoch = Math.floor(launchDay.getTime() / 1000)
+
+          let baseAPY = getApyInception({
+            launchEpoch: launchEpoch,
+            baseApy: config.baseApy,
+            shareData: dayDatas ? dayDatas[0] : undefined,
+            decimals: decimals,
+            startingShareValue: strategy.startingShareValue,
+          })
+
+          // Remove wstETH rewards bc they are already accounted for in the base APY
+          baseAPY!.value = baseAPY!.value! - rewardsApy?.value!
+          baseAPY!.formatted = baseAPY!.value!.toFixed(2) + "%"
+
+          return baseAPY
+        }
+        **/
+
         if (hideValue) return
         if (!isAPYEnabled(config)) return
 
         const launchDay = launchDate ?? subDays(new Date(), 8)
         const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
-        return getApyInception({
-          launchEpoch: launchEpoch,
-          baseApy: config.baseApy,
-          shareData: dayDatas ? dayDatas[0] : undefined,
-          decimals: decimals,
-          startingShareValue: strategy.startingShareValue,
+        const apys = createApyChangeDatum({
+          data: dayDatas,
+          launchEpoch,
+          decimals: config.cellar.decimals, // Cellar decimals
+          smooth: true,
+          daysSmoothed: 30,
+          daysRendered: 30,
         })
+
+        return {
+          formatted: apys
+            ? String(apys[apys!.length - 1].y)
+            : config.baseApy?.toFixed(2) + "%",
+          value: apys ? apys[apys!.length - 1].value : config.baseApy,
+        }
       })()
 
       //! NOTE: This only applies to token prices
@@ -146,7 +283,7 @@ export const getStrategyData = async ({
         if (!strategyData) return
         return getTokenPrice(
           strategyData.shareValue,
-          config.cellar.decimals 
+          config.cellar.decimals
         )
       })()
 
@@ -154,12 +291,18 @@ export const getStrategyData = async ({
         ? estimatedApyValue(config)
         : baseApy
 
+      // TODO: Rewards APY should be a list of APYs for each rewards token, this is incurred tech debt
       const baseApySumRewards = {
         formatted:
           (
-            (baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0)
+            (baseApyValue?.value ?? 0) +
+            (rewardsApy?.value ?? 0) +
+            (extraRewardsApy?.value ?? 0)
           ).toFixed(2) + "%",
-        value: (baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0),
+        value:
+          (baseApyValue?.value ?? 0) +
+          (rewardsApy?.value ?? 0) +
+          (extraRewardsApy?.value ?? 0),
       }
 
       return {
@@ -188,6 +331,7 @@ export const getStrategyData = async ({
         deprecated,
         token,
         config,
+        extraRewardsApy,
       }
     } catch (e) {
       console.error(address, e)

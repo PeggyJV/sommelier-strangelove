@@ -8,11 +8,12 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { GHOIcon } from "components/_icons"
 
 export const turboGHO: CellarData = {
   name: "Turbo GHO",
   slug: config.CONTRACT.TURBO_GHO.SLUG,
-  tradedAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
+  tradedAssets: ["GHO", "USDC", "USDT", "LUSD"],
   launchDate: new Date(Date.UTC(2023, 8, 14, 18, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your GHO across an evolving set of LP strategies.`,
@@ -22,7 +23,7 @@ export const turboGHO: CellarData = {
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Uniswap V3", "AAVE"],
-  strategyAssets: ["GHO", "USDC", "USDT", "DAI", "LUSD"],
+  strategyAssets: ["GHO", "USDC", "USDT", "LUSD"],
   performanceSplit: {
     depositors: 80,
     "strategy provider": 15,
@@ -44,9 +45,15 @@ export const turboGHO: CellarData = {
       - Fully automated with built-in auto-compounding.`,
 
     description: `
-    Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, DAI, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies on Aave.
+    Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies on Aave.
     
     Note that Turbo GHO and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    `,
+    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+   
+    - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events. 
+    
+    - Because withdrawals can only be facilitated based on the available GHO-USDC liquidity in the market, it is possible to receive GHO upon withdrawal even if you deposited USDC.
     `,
   },
   overrideApy: {
@@ -84,6 +91,48 @@ export const turboGHO: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0821,
     },
     baseAsset: tokenConfigMap.USDC,
+    badges: [
+      {
+        customStrategyHighlight: "Emergent Asset",
+        customStrategyHighlightColor: "purple.base",
+      },
+      /*
+      {
+        customStrategyHighlight: "GHO Incentives",
+        customStrategyHighlightColor: "#00C04B",
+      },
+      */
+    ],
+    /*
+    customReward:  {
+    showAPY: true,
+    tokenSymbol: "GHO",
+    tokenDisplayName: "GHO",
+    tokenAddress: "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
+    imagePath: "/assets/icons/gho.png",
+    //customRewardMessageTooltip?: string
+    //customRewardMessage?: string
+    //customRewardHeader?: string
+    showBondingRewards: false, // Relevant only for bonding card
+    showClaim: true, // True as long as somm incentives live
+    //customClaimMsg?: string
+    //customRewardAPYTooltip: string
+    logo: GHOIcon,
+    logoSize: "17px",
+    //customRewardLongMessage?: string
+    //rewardHyperLink?: string
+    //customColumnHeader?: string
+    //customColumnHeaderToolTip?: string
+    //customColumnValue?: string
+    stakingDurationOverride: new Date(
+      Date.UTC(2023, 10, 21, 14, 0, 0, 0)
+    ),
+    showSommRewards: true,
+    customIconToolTipMsg?: string
+    customRewardEndMessage: "Rewards updated weekly",
+    customSommRewardsEndMessage: "SOMM Rewards updated weekly",
+    },
+       */
   },
   faq: [
     {

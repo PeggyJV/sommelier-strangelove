@@ -938,7 +938,7 @@ export const strategyPageContentData = {
         `Uniswap V3 tick optimization.`,
         `Fully automated with built-in auto-compounding.`,
       ],
-      description: `Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, DAI, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies on Aave. <br/><br/>
+      description: `Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies on Aave. <br/><br/>
       Note that Turbo GHO and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: `The initial phase of Turbo GHO will concentrate on optimizing ticks within Uniswap v3 GHO-stablecoin pairs due to the vault’s potential to capture sustainable real yield. The vault will have the option to allocate to GHO pools on Balancer if yields are favorable, ensuring that GHO users access the best possible yields. Lastly, the vault will have the ability to borrow against GHO as part of hedging or looping strategies.`,
@@ -975,6 +975,148 @@ export const strategyPageContentData = {
       description: `We have been optimizing our trend-following strategy with ETH over the past 2 years to identify the best indicators that best determine when we should be fully exposed to ETH to maximize exposure to upside volatility while also setting a dynamic stop loss to minimize drawdowns. Since this strategy is focused on the daily timeframe, the trading costs are minimal to execute this strategy, and the yields from Real Yield ETH will be helpful to grow the ETH position since the average trade is held for 2-3 months based on the backtested data. When the trend-following strategy flips bearish and it is confirmed via a daily market close, the long ETH position is exited to Real Yield USD so stablecoin yield is generated while the strategy is not exposed to ETH downside volatility which minimizes drawdowns.
        <br/><br/>
       Note that ETH Trend Growth and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
+  [config.CONTRACT.TURBO_STETH.SLUG]: {
+    name: "Turbo stETH",
+    provider: "Seven Seas & DeFine Logic Labs",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo stETH"
+          src="/assets/icons/turbo-steth.png"
+          boxSize={8}
+        />
+        <Text>TurboSTETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "stETH", "wstETH"],
+    alternativeTo: "Holding stETH/wstETH",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Capable of simultaneously pursuing multiple stETH/wstETH yield opportunities.`,
+        `Dynamically leverage stake, Uniswap v3 liquidity provision, arbitrage wstETH peg.`,
+        `Fully automated with built-in auto compounding.`,
+      ],
+      description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Sommelier strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
+     <br/><br/>
+    Note that Turbo stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
+  [config.CONTRACT.TURBO_SOMM.SLUG]: {
+    name: "Turbo SOMM",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Retain some exposure to SOMM while also earning swap fees generated on this trading pair.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo SOMM"
+          src="/assets/icons/turbo-somm.png"
+          boxSize={8}
+        />
+        <Text>TurboSOMM</Text>
+      </>
+    ),
+    tradedAssets: ["SOMM", "WETH"],
+    alternativeTo: "Manually LPing",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Dynamically adjusts liquidity ranges to changing market conditions.`,
+      ],
+      description: `Sommelier is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Turbo SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading pair.      
+      <br/><br/>
+      Note that Turbo SOMM and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
+  [config.CONTRACT.TURBO_EETH.SLUG]: {
+    name: "Turbo eETH",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo eETH"
+          src="/assets/icons/Turbo-eETH.png"
+          boxSize={8}
+        />
+        <Text>TurboeETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "eETH", "weETH"],
+    alternativeTo: "Manually LPing",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Capable of simultaneously pursuing multiple eETH yield opportunities.`,
+        `Dynamically liquidity provision across multiple DEXs.`,
+        `Fully automated with built-in auto compounding.`,
+      ],
+      description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.      
+      <br/><br/>
+      Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
+  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]: {
+    name: "Turbo stETH",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo stETH"
+          src="/assets/icons/turbo-steth2.png"
+          boxSize={8}
+        />
+        <Text>TurboSTETH</Text>
+      </>
+    ),
+    tradedAssets: ["stETH", "wstETH", "WETH"],
+    alternativeTo: "Holding stETH/wstETH",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Capable of simultaneously pursuing multiple stETH/wstETH yield opportunities.`,
+        `Dynamically leverage stake, Uniswap v3 liquidity provision, arbitrage wstETH peg.`,
+        `Fully automated with built-in auto compounding.`,
+      ],
+      description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Sommelier strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
+     <br/><br/>
+    Note that Turbo stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: ``,
   },

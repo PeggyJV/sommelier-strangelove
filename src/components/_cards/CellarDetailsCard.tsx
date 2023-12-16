@@ -9,7 +9,7 @@ import {
   Text,
   useTheme,
   VStack,
-  Wrap
+  Wrap,
 } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { StrategyProvider } from "components/StrategyProvider"
@@ -140,16 +140,16 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           >
             {isManyProtocols ? (
               <Wrap spacing={3}>
-                  {(protocolData as ProtocolDataType[]).map((v, i) => (
-                    <HStack key={i} spacing={2}>
-                      <Image
-                        src={v.icon}
-                        alt="Protocol Icon"
-                        boxSize={6}
-                      />
-                      <Text>{v.title}</Text>
-                    </HStack>
-                  ))}
+                {(protocolData as ProtocolDataType[]).map((v, i) => (
+                  <HStack key={i} spacing={2}>
+                    <Image
+                      src={v.icon}
+                      alt="Protocol Icon"
+                      boxSize={6}
+                    />
+                    <Text>{v.title}</Text>
+                  </HStack>
+                ))}
               </Wrap>
             ) : (
               <>
@@ -170,29 +170,41 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             spacing={4}
             justifyContent="normal"
           >
-            <CardStat
-              label="Platform Fee"
-              flex={0}
-              tooltip={
-                managementFeeTooltip || "Platform management fee"
-              }
-            >
-              {managementFee}
-            </CardStat>
-            <CardStat
-              label="Performance fee"
-              flex={0}
-              tooltip={`Strategy earned performance fee split: Protocol ${
-                performanceSplit["protocol"] ?? 0
-              }%, Strategy Provider ${
-                performanceSplit["strategy provider"] ?? 0
-              }%`}
-            >
-              {performanceFee}.00%
-            </CardStat>
-            <CardStat label="Deposit and Exit Fees" flex={0}>
-              0.00%
-            </CardStat>
+            <VStack>
+              <HStack>
+                <CardStat
+                  label="Platform Fee"
+                  flex={0}
+                  tooltip={
+                    managementFeeTooltip || "Platform management fee"
+                  }
+                >
+                  {managementFee}
+                </CardStat>
+                <CardStat
+                  label="Performance fee"
+                  flex={0}
+                  tooltip={`Strategy earned performance fee split: Protocol ${
+                    performanceSplit["protocol"] ?? 0
+                  }%, Strategy Provider ${
+                    performanceSplit["strategy provider"] ?? 0
+                  }%`}
+                >
+                  {performanceFee}.00%
+                </CardStat>
+                <CardStat label="Deposit and Exit Fees" flex={0}>
+                  0.00%
+                </CardStat>
+              </HStack>
+              {cellarConfig.feePromotion && (
+                <Text
+                  fontSize="sm"
+                  fontWeight="bold"
+                >
+                  {cellarConfig.feePromotion}
+                </Text>
+              )}
+            </VStack>
           </Stack>
           <CardStat
             label="strategy assets"

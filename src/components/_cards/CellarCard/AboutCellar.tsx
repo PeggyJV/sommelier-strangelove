@@ -86,11 +86,11 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                   {rewardsApy?.formatted !== "0.0%" && (
                     <CellarStats
                       title={
-                        cellarConfig.customRewardWithoutAPY
+                        cellarConfig.customReward
                           ?.customRewardAPYTooltip ?? "Rewards APY"
                       }
                       value={
-                        cellarConfig.customRewardWithoutAPY
+                        cellarConfig.customReward
                           ?.customRewardAPYTooltip ??
                         (rewardsApy?.formatted || "...")
                       }

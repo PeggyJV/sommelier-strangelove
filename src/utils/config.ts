@@ -164,6 +164,26 @@ export const config = {
       SLUG: "Turbo-GHO",
       ABI: cellarV0821,
     },
+    TURBO_SOMM: {
+      ADDRESS: "0x5195222f69c5821f8095ec565E71e18aB6A2298f",
+      SLUG: "Turbo-SOMM",
+      ABI: cellarV0821,
+    },
+    TURBO_EETH: {
+      ADDRESS: "0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
+      SLUG: "Turbo-eETH",
+      ABI: cellarV0821,
+    },
+    TURBO_STETH: {
+      ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",
+      SLUG: "Turbo-STETH",
+      ABI: cellarV0821,
+    },
+    TURBO_STETH_STETH_DEPOSIT: {
+      ADDRESS: "0xc7372Ab5dd315606dB799246E8aA112405abAeFf",
+      SLUG: "Turbo-STETH-(steth-deposit)",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -234,6 +254,10 @@ export const config = {
     },
     TURBO_GHO_STAKER: {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
+      ABI: cellarStakingV0821,
+    },
+    TURBO_EETH_STAKER: {
+      ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
     },
   },

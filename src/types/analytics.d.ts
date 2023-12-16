@@ -21,7 +21,8 @@ declare module "@analytics/mixpanel" {
   type AnalyticsPlugin = import("analytics").AnalyticsPlugin
 
   type MixpanelConfig = {
-    token: string
+    token: string,
+    api_host: string
   }
 
   function mixpanelPlugin(config: MixpanelConfig): AnalyticsPlugin

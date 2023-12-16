@@ -37,6 +37,8 @@ import { differenceInDays } from "date-fns"
 import { config } from "utils/config"
 import { FaExternalLinkAlt } from "react-icons/fa"
 
+// TODO: This file has incurred substantial tech debt, it just needs to be rewritten from scratch at this point
+
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
     const modifiedNumber = number.toString().padStart(2, "0")
@@ -84,7 +86,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.add(id)
         return newState
       })
-      analytics.track("unstake.started")
+      // analytics.track("unstake.started")
       const tx = await stakerSigner?.unstake(id)
 
       await doHandleTransaction({
@@ -117,7 +119,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         newState.add(id)
         return newState
       })
-      analytics.track("unbond.started")
+      // analytics.track("unbond.started")
       const tx = await stakerSigner?.unbond(id, {
         // gas used around 63000
         gasLimit: 100000,
@@ -228,7 +230,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               <Text fontSize="xs">
                 {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
                   ? `Rewards program ends in ${formatDistanceToNowStrict(
-                      cellarConfig.customRewardWithoutAPY
+                      cellarConfig.customReward
                         ?.stakingDurationOverride ??
                         stakingEnd?.endDate,
                       {
@@ -307,37 +309,40 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   </HStack>
                 </Th>
               </Tooltip>
-              <Tooltip
-                hasArrow
-                arrowShadowColor="purple.base"
-                label={`Amount of ${
-                  cellarConfig?.customRewardWithoutAPY?.tokenSymbol ??
-                  "SOMM"
-                } rewards earned and available to be claimed`}
-                placement="top"
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <Th
-                  fontSize={10}
-                  fontWeight="normal"
-                  textTransform="capitalize"
+              {cellarConfig.customReward?.showBondingRewards ===
+              true ? (
+                <Tooltip
+                  hasArrow
+                  arrowShadowColor="purple.base"
+                  label={`Amount of ${
+                    cellarConfig?.customReward?.tokenSymbol ?? "SOMM"
+                  } rewards earned and available to be claimed`}
+                  placement="top"
+                  bg="surface.bg"
+                  color="neutral.300"
                 >
-                  <HStack spacing={1} align="center">
-                    <Text>
-                      {cellarConfig?.customRewardWithoutAPY
-                        ?.tokenSymbol ?? "SOMM"}{" "}
-                      Rewards
-                    </Text>
-                    <InformationIcon
-                      color="neutral.300"
-                      boxSize={3}
-                    />
-                  </HStack>
-                </Th>
-              </Tooltip>
-              {cellarConfig.customRewardWithoutAPY
-                ?.showSommRewards === true ? (
+                  <Th
+                    fontSize={10}
+                    fontWeight="normal"
+                    textTransform="capitalize"
+                  >
+                    <HStack spacing={1} align="center">
+                      <Text>
+                        {cellarConfig?.customReward?.tokenSymbol ??
+                          "SOMM"}{" "}
+                        Rewards
+                      </Text>
+                      <InformationIcon
+                        color="neutral.300"
+                        boxSize={3}
+                      />
+                    </HStack>
+                  </Th>
+                </Tooltip>
+              ) : null}
+              {cellarConfig.customReward?.showSommRewards === true ||
+              cellarConfig.customReward?.showSommRewards ===
+                undefined ? (
                 <>
                   <Tooltip
                     hasArrow
@@ -413,69 +418,70 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                         (Object.values(lockMap).length > 0 &&
                           Object.values(lockMap).slice(-1)[0].title)}
                     </Td>
-                    <Td>
-                      {/*!!!!!!!! TODO: this needs to be rewritten */}
-                      {cellarConfig.customRewardWithoutAPY
-                        ?.showRewards === true ||
-                      cellarConfig.customRewardWithoutAPY ===
-                        undefined ? (
-                        <>
-                          <HStack spacing={2}>
-                            <Image
-                              src={
-                                cellarConfig?.customRewardWithoutAPY
-                                  ?.imagePath ??
-                                config.CONTRACT.SOMMELLIER.IMAGE_PATH
-                              }
-                              alt="reward token image"
-                              height="20px"
-                            />
-                            <Text textAlign="right">
-                              {claimAllRewards
-                                ? Number(
-                                    toEther(
-                                      claimAllRewards[
-                                        i
-                                      ]?.toString() || "0",
-                                      6,
-                                      false,
-                                      2
-                                    )
-                                  ).toLocaleString()
-                                : "0.00"}
-                            </Text>
-                          </HStack>
-                        </>
-                      ) : (
-                        <>
-                          <HStack
-                            as={Link}
-                            href={`${cellarConfig?.customRewardWithoutAPY.customColumnValue}`}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            <Text
-                              as="span"
-                              fontWeight="bold"
-                              fontSize={16}
+                    {cellarConfig.customReward?.showBondingRewards ===
+                    true ? (
+                      <Td>
+                        {/*!!!!!!!! TODO: this needs to be rewritten */}
+                        {!cellarConfig.customReward
+                          ?.customColumnValue ? (
+                          <>
+                            <HStack spacing={2}>
+                              <Image
+                                src={
+                                  cellarConfig?.customReward
+                                    ?.imagePath ??
+                                  config.CONTRACT.SOMMELLIER
+                                    .IMAGE_PATH
+                                }
+                                alt="reward token image"
+                                height="20px"
+                              />
+                              <Text textAlign="right">
+                                {claimAllRewards
+                                  ? Number(
+                                      toEther(
+                                        claimAllRewards[
+                                          i
+                                        ]?.toString() || "0",
+                                        6,
+                                        false,
+                                        2
+                                      )
+                                    ).toLocaleString()
+                                  : "0.00"}
+                              </Text>
+                            </HStack>
+                          </>
+                        ) : (
+                          <>
+                            <HStack
+                              as={Link}
+                              href={`${cellarConfig?.customReward?.customColumnValue}`}
+                              target="_blank"
+                              rel="noreferrer"
                             >
-                              {
-                                cellarConfig?.customRewardWithoutAPY
-                                  .customColumnValue
-                              }
-                            </Text>
-                            <Icon
-                              as={FaExternalLinkAlt}
-                              color="purple.base"
-                            />
-                          </HStack>
-                        </>
-                      )}
-                    </Td>
+                              <Text
+                                as="span"
+                                fontWeight="bold"
+                                fontSize={16}
+                              >
+                                {
+                                  cellarConfig?.customReward
+                                    ?.customColumnValue
+                                }
+                              </Text>
+                              <Icon
+                                as={FaExternalLinkAlt}
+                                color="purple.base"
+                              />
+                            </HStack>
+                          </>
+                        )}
+                      </Td>
+                    ) : null}
                     <Td>
                       {/*!!!!!!!! TODO: this needs to be rewritten */}
-                      {cellarConfig.customRewardWithoutAPY
-                        ?.showSommRewards ? (
+                      {cellarConfig.customReward?.showSommRewards || cellarConfig.customReward?.showSommRewards === undefined ? (
                         <>
                           <HStack spacing={2}>
                             <Image

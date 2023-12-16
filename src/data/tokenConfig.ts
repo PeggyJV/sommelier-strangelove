@@ -268,6 +268,39 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "liquity-usd",
     decimals: 18,
   },
+
+  {
+    src: "/assets/icons/wsteth-logo.jpeg",
+    alt: "wstETH logo",
+    symbol: "wstETH",
+    address: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+    coinGeckoId: "wrapped-steth",
+    decimals: 18,
+  },
+  {
+    src: "/assets/icons/somm.png",
+    alt: "SOMM logo",
+    symbol: "SOMM",
+    address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
+    coinGeckoId: "sommelier",
+    decimals: 6,
+  },
+  {
+    src: "/assets/icons/eETH.png",
+    alt: "eETH logo",
+    symbol: "eETH",
+    address: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
+    coinGeckoId: "ether-fi-staked-eth",
+    decimals: 18,
+  },
+  {
+    src: "/assets/icons/weETH.png",
+    alt: "weETH logo",
+    symbol: "weETH",
+    address: "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
+    coinGeckoId: "wrapped-eeth",
+    decimals: 18,
+  },
 ]
 
 let acceptedDepositTokens = [
@@ -329,6 +362,7 @@ export const depositAssetTokenList = [
   "sUSD",
   "TUSD",
   "USDT",
+  "SOMM",
 ]
 
 export const depositAssetTokenConfig: Token[] = tokenConfig.filter(

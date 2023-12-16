@@ -1,5 +1,6 @@
 import { differenceInDays } from "date-fns"
 import BigNumber from "bignumber.js"
+import { now } from "lodash"
 
 export const getApyInception = ({
   baseApy,
@@ -41,11 +42,23 @@ export const getApyInception = ({
     }
 
     // Now val must have same amt of digits as startValue
-    const nowValue = new BigNumber(
-      new BigNumber(shareData.shareValue)
-        .toString()
-        .substring(0, startValue.toString().length)
-    )
+    // If the start value is less than 1, the now value needs a length of decimals
+    // If the start value is greater than 1, the now value needs a length of startValue.toString().length
+    let nowValue;
+    if (startValue.lt(10 ** decimals)) {
+      nowValue = new BigNumber(
+        new BigNumber(shareData.shareValue)
+          .toString()
+          .substring(0, decimals+1)
+      )
+    } else {
+      nowValue = new BigNumber(
+        new BigNumber(shareData.shareValue)
+          .toString()
+          .substring(0, startValue.toString().length)
+      )
+    }
+
     const yieldGain = nowValue.minus(startValue).div(startValue)
 
     // Take the gains since inception and annualize it to get APY since inception
@@ -54,6 +67,6 @@ export const getApyInception = ({
   if (!cellarApy) return
   return {
     formatted: cellarApy.toFixed(2) + "%",
-    value: Number(cellarApy.toFixed(1)),
+    value: Number(cellarApy.toFixed(2)),
   }
 }

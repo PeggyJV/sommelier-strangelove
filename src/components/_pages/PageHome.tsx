@@ -1,4 +1,12 @@
-import { Button, Center, Heading, HStack } from "@chakra-ui/react"
+import {
+  Button,
+  Center,
+  Heading,
+  HStack,
+  VStack,
+  Text,
+  Link,
+} from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -19,6 +27,8 @@ import { CellarType } from "data/types"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
 import { InfoBanner } from "components/_banners/InfoBanner"
+import { analytics } from "utils/analytics"
+import { ExternalLinkIcon } from "components/_icons"
 
 export const PageHome = () => {
   const {
@@ -110,16 +120,44 @@ export const PageHome = () => {
   }, [data, type])
 
   const loading = isFetching || isRefetching || isLoading
-
   return (
     <LayoutWithSidebar>
       {
         <InfoBanner
           text={
-            "Incentive proposals for Real Yield ETH and Turbo swETH are progressing through governance. If they pass, new Real Yield ETH incentives will begin on October 2nd, and Turbo swETH incentives will commence on October 4th."
+            "A proposal to renew Turbo swETH incentives is making its way through governance, if it passes rewards will start flowing on Dec 17th."
           }
         />
       }
+      {/* <HStack
+        p={4}
+        mb={6}
+        spacing={4}
+        align="center"
+        justify="center"
+        backgroundColor="turquoise.extraDark"
+        border="2px solid"
+        borderRadius={16}
+        borderColor="turquoise.dark"
+      >
+        <VStack align="center" justify="center">
+          <Text textAlign="center">
+            Turbo GHO co-incentives are progressing through Aave
+            governance and could be funded shortly after Oct 22nd.
+            Learn more{" "}
+            <Link
+              href="https://app.aave.com/governance/proposal/?proposalId=347"
+              isExternal
+              display="inline-flex"
+              alignItems="center"
+              fontWeight={600}
+            >
+              <Text as="span">here</Text>
+              <ExternalLinkIcon ml={2} alignSelf="center" />
+            </Link>
+          </Text>
+        </VStack>
+      </HStack> */}
       <HStack mb="1.6rem">
         <HStack spacing="8px">
           {strategyType.map((strategy: string, i: number) => {
@@ -141,6 +179,13 @@ export const PageHome = () => {
                 }
                 borderWidth={isSelected ? 1 : 0}
                 onClick={() => {
+                  // Adding tracking code for each button
+                  analytics.track(
+                    `strategy.${strategy.toLowerCase()}.selected`,
+                    {
+                      selectedType: strategy,
+                    }
+                  )
                   setType(strategy)
                 }}
               >

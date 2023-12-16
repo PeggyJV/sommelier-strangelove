@@ -60,13 +60,14 @@ export const Rewards = ({
   let rewardTokenName = "SOMM"
 
   // Custom processing for if reward is not SOMM
-  // -- Check if cellar config has customRewardWithoutAPY field
-  if (cellarConfig.customRewardWithoutAPY) {
-    rewardTokenAddress =
-      cellarConfig.customRewardWithoutAPY.tokenAddress
-    rewardTokenImageUrl =
-      cellarConfig.customRewardWithoutAPY.imagePath
-    rewardTokenName = cellarConfig.customRewardWithoutAPY.tokenSymbol
+  // -- Check if cellar config has customReward field
+  if (
+    cellarConfig.customReward &&
+    cellarConfig.customReward.showAPY === false
+  ) {
+    rewardTokenAddress = cellarConfig.customReward.tokenAddress
+    rewardTokenImageUrl = cellarConfig.customReward.imagePath
+    rewardTokenName = cellarConfig.customReward.tokenSymbol
   }
 
   const { doHandleTransaction } = useHandleTransaction()
@@ -76,7 +77,7 @@ export const Rewards = ({
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
-    analytics.track("rewards.claim-started")
+    // analytics.track("rewards.claim-started")
     const tx = await stakerSigner?.claimAll()
     await doHandleTransaction({
       ...tx,
@@ -123,7 +124,7 @@ export const Rewards = ({
     <SimpleGrid
       templateColumns="max-content"
       templateRows={
-        cellarConfig.customRewardWithoutAPY?.showSommRewards
+        cellarConfig.customReward?.showSommRewards
           ? ""
           : "repeat(2, 1fr)"
       }
@@ -132,49 +133,48 @@ export const Rewards = ({
       //display={claimAllDisabled ? "none" : "grid"}
     >
       <VStack align="flex-start">
-        <HStack>
-          <a
-            href={
-              cellarConfig?.customRewardWithoutAPY?.rewardHyperLink
-            }
-            target="_blank"
-            rel="noreferrer"
-            title={
-              cellarConfig?.customRewardWithoutAPY
-                ?.customRewardMessageTooltip
-            }
-          >
-            <CardStat
-              label={
-                cellarConfig?.customRewardWithoutAPY
-                  ?.customRewardHeader ?? "rewards"
-              }
-              tooltip={
-                cellarConfig?.customRewardWithoutAPY
-                  ?.customRewardMessageTooltip ??
-                `Amount of ${rewardTokenName} earned and available to be claimed`
+        {cellarConfig.customReward?.showBondingRewards ? (
+          <HStack>
+            <a
+              href={cellarConfig?.customReward?.rewardHyperLink}
+              target="_blank"
+              rel="noreferrer"
+              title={
+                cellarConfig?.customReward?.customRewardMessageTooltip
               }
             >
-              <InlineImage
-                src={rewardTokenImageUrl}
-                alt={`${rewardTokenName} logo`}
-                boxSize={5}
-              />
-              <Text textAlign="center">
-                {isMounted &&
-                  (cellarConfig.customRewardWithoutAPY
-                    ?.customRewardMessage ??
-                    (isConnected
-                      ? userStakes?.totalClaimAllRewards.formatted ||
-                        "..."
-                      : "--"))}
-              </Text>
-            </CardStat>
-          </a>
-        </HStack>
-        {cellarConfig.customRewardWithoutAPY?.showSommRewards ? (
-          <>
+              <CardStat
+                label={
+                  cellarConfig?.customReward?.customRewardHeader ??
+                  "rewards"
+                }
+                tooltip={
+                  cellarConfig?.customReward
+                    ?.customRewardMessageTooltip ??
+                  `Amount of ${rewardTokenName} earned and available to be claimed`
+                }
+              >
+                <InlineImage
+                  src={rewardTokenImageUrl}
+                  alt={`${rewardTokenName} logo`}
+                  boxSize={5}
+                />
+                <Text textAlign="center">
+                  {isMounted &&
+                    (cellarConfig.customReward?.customRewardMessage ??
+                      (isConnected
+                        ? userStakes?.totalClaimAllRewards
+                            .formatted || "..."
+                        : "--"))}
+                </Text>
+              </CardStat>
+            </a>
             <br />
+          </HStack>
+        ) : null}
+        {cellarConfig.customReward?.showSommRewards ||
+        cellarConfig.customReward?.showSommRewards === undefined ? (
+          <>
             <HStack>
               <CardStat
                 label={"SOMM Rewards"}
@@ -197,13 +197,12 @@ export const Rewards = ({
           </>
         ) : null}
       </VStack>
-      {cellarConfig?.customRewardWithoutAPY?.showClaim !== false ? (
+      {cellarConfig?.customReward?.showClaim !== false ? (
         <BaseButton
           disabled={claimAllDisabled}
           onClick={handleClaimAll}
         >
-          {cellarConfig?.customRewardWithoutAPY?.customClaimMsg ??
-            `Claim All`}
+          {cellarConfig?.customReward?.customClaimMsg ?? `Claim All`}
         </BaseButton>
       ) : null}
     </SimpleGrid>

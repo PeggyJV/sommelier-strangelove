@@ -25,6 +25,9 @@ type RowData = {
     baseApySumRewards?: {
       formatted?: string
     }
+    activeAsset: {
+      symbol: string
+    }
   }
 }
 
@@ -34,7 +37,11 @@ export const StrategyTabColumn = ({
 }: StrategyTabColumnProps) => {
   return [
     {
-      Header: "Vault",
+      Header: () => (
+        <span style={{ textAlign: "left", width: "100%" }}>
+          Vault
+        </span>
+      ),
       accessor: "name",
       Cell: ({ row }: any) => (
         <StrategySection
@@ -45,13 +52,25 @@ export const StrategyTabColumn = ({
           date={row.original.launchDate}
           description={row.original.description}
           isDeprecated={row.original.deprecated}
-          customStrategyHighlight={
-            row.original.config.customStrategyHighlight
-          }
+          badges={row.original.config.badges}
           w={56}
         />
       ),
-      disableSortBy: true,
+      disableSortBy: false,
+      sortType: (rowA: RowData, rowB: RowData) => {
+        // Sort by active asset asset
+        const valA =
+          rowA.original.activeAsset?.symbol.toLowerCase() || ""
+        const valB =
+          rowB.original.activeAsset?.symbol.toLowerCase() || ""
+
+        // Normal Sorting
+        if (valA > valB) return 1
+
+        if (valB > valA) return -1
+
+        return 0
+      },
     },
     {
       Header: "TVL",
@@ -100,6 +119,7 @@ export const StrategyTabColumn = ({
             baseApySumRewards={
               row.original.baseApySumRewards?.formatted
             }
+            extraRewardsApy={row.original.extraRewardsApy?.formatted}
           />
         )
       },
