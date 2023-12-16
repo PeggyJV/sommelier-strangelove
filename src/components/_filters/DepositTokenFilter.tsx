@@ -13,7 +13,7 @@ import {
   Avatar,
   Checkbox,
 } from "@chakra-ui/react"
-import { useState, VFC } from "react"
+import { useState, VFC, useEffect } from "react"
 import { ChevronDownIcon } from "components/_icons"
 
 export type SymbolPathPair = {
@@ -72,15 +72,6 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
     })
   }
 
-  const [checkedStates, setCheckedStates] = useState(
-    new Map(
-      Object.keys(props.selectedDepositAssets).map((key) => [
-        key,
-        true,
-      ])
-    )
-  )
-
   const toggleCheck = (symbol: string) => {
     setCheckedStates((prev) => {
       const newCheckedStates = new Map(prev)
@@ -88,6 +79,30 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
       return newCheckedStates
     })
   }
+
+  // Initialize checkedStates based on selectedDepositAssets
+  const [checkedStates, setCheckedStates] = useState(
+    new Map(
+      Object.keys(props.selectedDepositAssets).map((key) => [
+        key,
+        !!props.selectedDepositAssets[key], // Check if the asset exists in selectedDepositAssets
+      ])
+    )
+  )
+
+  // Synchronize checkedStates with selectedDepositAssets when it changes
+  // For reset button 1 level up
+
+  useEffect(() => {
+    setCheckedStates(
+      new Map(
+        Object.keys(props.selectedDepositAssets).map((key) => [
+          key,
+          !!props.selectedDepositAssets[key], // Update based on current selectedDepositAssets
+        ])
+      )
+    )
+  }, [props.selectedDepositAssets])
 
   return (
     <Popover placement="bottom">
@@ -171,7 +186,7 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
           boxShadow: "unset",
         }}
       >
-        <PopoverBody p={0} >
+        <PopoverBody p={0}>
           <SimpleGrid columns={2} spacing={3}>
             {Object.values(props.constantAllUniqueAssetsArray).map(
               (token: SymbolPathPair) => (

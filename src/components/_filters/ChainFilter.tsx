@@ -13,7 +13,7 @@ import {
   Avatar,
   Checkbox,
 } from "@chakra-ui/react"
-import { useState, VFC } from "react"
+import { useState, VFC, useEffect } from "react"
 import {
   chainConfig,
   Chain,
@@ -59,6 +59,18 @@ export const ChainFilter: VFC<ChainFilterProps> = (props) => {
       return newCheckedStates
     })
   }
+
+  // For reset button 1 level up
+  // Syncronize the checked states with the selected chain ids
+  useEffect(() => {
+    const newCheckedStates = new Map(
+      chainConfig.map((chain) => [
+        chain.id,
+        props.selectedChainIds.includes(chain.id.toLowerCase()),
+      ])
+    )
+    setCheckedStates(newCheckedStates)
+  }, [props.selectedChainIds])
 
   return (
     <Popover placement="bottom">

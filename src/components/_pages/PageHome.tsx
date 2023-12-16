@@ -1,4 +1,4 @@
-import { Button, Center, HStack, Spacer } from "@chakra-ui/react"
+import { Button, Center, HStack, Spacer, Text } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -30,13 +30,8 @@ import {
   MiscFilter,
   MiscFilterProp,
 } from "components/_filters/MiscFilter"
-
-{
-  /*
-TODOs: 
-- Reset button
-*/
-}
+import { isEqual } from "lodash"
+import { DeleteCircleIcon } from "components/_icons"
 
 export const PageHome = () => {
   const {
@@ -191,58 +186,102 @@ export const PageHome = () => {
     },
   ])
 
-const strategyData = useMemo(() => {
-  return (
-    data?.filter((item) => {
-      // Chain filter
-      const isChainSelected = selectedChainIds.includes(
-        item?.config.chain.id!
-      )
+  // Reset Button Helpers, consider moving to a separate file
 
-      // Deposit asset filter
-      const hasSelectedDepositAsset = cellarDataMap[
-        item!.slug
-      ].depositTokens.list.some((tokenSymbol) =>
-        selectedDepositAssets.hasOwnProperty(tokenSymbol)
-      )
+  // All the params necessary for the reset button (initial filter states)
+  const initialChainIds = allChainIds
+  const initialDepositAssets = uniqueAssetsMap
+  const initialShowDeprecated = false
+  const initialShowIncentivised = false
 
-      // Deprecated filter
-      const isDeprecated = cellarDataMap[item!.slug].deprecated
-      const deprecatedCondition = showDeprecated
-        ? isDeprecated
-        : !isDeprecated
+  const hasFiltersChanged = useMemo(() => {
+    return (
+      !isEqual(selectedChainIds, initialChainIds) ||
+      !isEqual(selectedDepositAssets, initialDepositAssets) ||
+      showDeprecated !== initialShowDeprecated ||
+      showIncentivised !== initialShowIncentivised
+    )
+  }, [
+    selectedChainIds,
+    selectedDepositAssets,
+    showDeprecated,
+    showIncentivised,
+  ])
 
-      // Incentivised filter
-      //    Badge check for custom rewards
-      const hasGreenBadge = cellarDataMap[
-        item!.slug
-      ].config.badges?.some(
-        (badge) => badge.customStrategyHighlightColor === "#00C04B"
-      )
+  const resetFilters = () => {
+    setSelectedChainIds(initialChainIds)
+    setSelectedDepositAssets(initialDepositAssets)
+    setShowDeprecated(initialShowDeprecated)
+    setShowIncentivised(initialShowIncentivised)
 
-      //    Staking period check for somm/vesting rewards
-      const hasLiveStakingPeriod =
-        item?.rewardsApy?.value !== undefined && item?.rewardsApy?.value > 0
+    // Update selectedMiscFilters to reflect the reset state in MiscFilter
+    setSelectedMiscFilters([
+      {
+        name: "Incentivised",
+        checked: initialShowIncentivised,
+        stateSetFunction: setShowIncentivised,
+      },
+      {
+        name: "Deprecated",
+        checked: initialShowDeprecated,
+        stateSetFunction: setShowDeprecated,
+      },
+    ])
+  }
 
-      const incentivisedCondition = showIncentivised
-        ? hasGreenBadge || hasLiveStakingPeriod
-        : true
+  const strategyData = useMemo(() => {
+    return (
+      data?.filter((item) => {
+        // Chain filter
+        const isChainSelected = selectedChainIds.includes(
+          item?.config.chain.id!
+        )
 
-      return (
-        isChainSelected &&
-        hasSelectedDepositAsset &&
-        deprecatedCondition &&
-        incentivisedCondition
-      )
-    }) || []
-  )
-}, [
-  data,
-  selectedChainIds,
-  selectedDepositAssets,
-  showDeprecated,
-  showIncentivised,
-])
+        // Deposit asset filter
+        const hasSelectedDepositAsset = cellarDataMap[
+          item!.slug
+        ].depositTokens.list.some((tokenSymbol) =>
+          selectedDepositAssets.hasOwnProperty(tokenSymbol)
+        )
+
+        // Deprecated filter
+        const isDeprecated = cellarDataMap[item!.slug].deprecated
+        const deprecatedCondition = showDeprecated
+          ? isDeprecated
+          : !isDeprecated
+
+        // Incentivised filter
+        //    Badge check for custom rewards
+        const hasGreenBadge = cellarDataMap[
+          item!.slug
+        ].config.badges?.some(
+          (badge) => badge.customStrategyHighlightColor === "#00C04B"
+        )
+
+        //    Staking period check for somm/vesting rewards
+        const hasLiveStakingPeriod =
+          item?.rewardsApy?.value !== undefined &&
+          item?.rewardsApy?.value > 0
+
+        const incentivisedCondition = showIncentivised
+          ? hasGreenBadge || hasLiveStakingPeriod
+          : true
+
+        return (
+          isChainSelected &&
+          hasSelectedDepositAsset &&
+          deprecatedCondition &&
+          incentivisedCondition
+        )
+      }) || []
+    )
+  }, [
+    data,
+    selectedChainIds,
+    selectedDepositAssets,
+    showDeprecated,
+    showIncentivised,
+  ])
 
   const loading = isFetching || isRefetching || isLoading
   return (
@@ -317,6 +356,25 @@ const strategyData = useMemo(() => {
               categories: selectedMiscFilters,
             }}
           />
+          {hasFiltersChanged && (
+            <Button
+              bg="none"
+              borderWidth={2.5}
+              borderColor="purple.base"
+              borderRadius="1em"
+              w="auto"
+              zIndex={401}
+              fontFamily="Haffer"
+              fontSize={12}
+              padding="1.75em 2em"
+              _hover={{
+                bg: "purple.dark",
+              }}
+              onClick={resetFilters}
+              leftIcon={<Text fontSize={"1.25em"}>Reset</Text>}
+              rightIcon={<DeleteCircleIcon boxSize={4} />}
+            />
+          )}
         </HStack>
       </HStack>
       <TransparentSkeleton

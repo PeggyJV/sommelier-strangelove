@@ -13,7 +13,7 @@ import {
   Avatar,
   Checkbox,
 } from "@chakra-ui/react"
-import { useState, VFC } from "react"
+import { useState, VFC, useEffect } from "react"
 import { HamburgerIcon } from "components/_icons"
 
 export interface MiscFilterProp {
@@ -54,6 +54,22 @@ export const MiscFilter: VFC<MiscFilterProps> = (props) => {
     })
   }
 
+  // Syncronize the checked states with the selected states
+  useEffect(() => {
+    setCheckedStates(
+      new Map(
+        props.categories.map((category) => {
+          return [
+            category.name,
+            {
+              checked: category.checked,
+              stateSetFunction: category.stateSetFunction,
+            },
+          ]
+        })
+      )
+    )
+  }, [props.categories])
 
   return (
     <Popover placement="bottom">
