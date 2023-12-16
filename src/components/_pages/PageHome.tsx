@@ -34,7 +34,6 @@ import {
 {
   /*
 TODOs: 
-- Has Incentives filter
 - Reset button
 */
 }
@@ -174,10 +173,17 @@ export const PageHome = () => {
     useState<Record<string, SymbolPathPair>>(uniqueAssetsMap)
 
   const [showDeprecated, setShowDeprecated] = useState<boolean>(false)
+  const [showIncentivised, setShowIncentivised] =
+    useState<boolean>(false)
 
   const [selectedMiscFilters, setSelectedMiscFilters] = useState<
     MiscFilterProp[]
   >([
+    {
+      name: "Incentivised",
+      checked: showIncentivised,
+      stateSetFunction: setShowIncentivised,
+    },
     {
       name: "Deprecated",
       checked: showDeprecated,
@@ -185,23 +191,58 @@ export const PageHome = () => {
     },
   ])
 
-  const strategyData = useMemo(() => {
-    return (
-      data?.filter(
-        (item) =>
-          // Chain filter
-          selectedChainIds.includes(item?.config.chain.id!) &&
-          // Deposit asset filter
-          cellarDataMap[item!.slug].depositTokens.list.some(
-            (tokenSymbol) =>
-              selectedDepositAssets.hasOwnProperty(tokenSymbol)
-          ) &&
-          // Deprecated filter, if cellarDataMap[item!.slug].deprecated is true, then the strategy is deprecated, otherwise if undefined or false, it is not deprecated
-          (cellarDataMap[item!.slug].deprecated &&
-          showDeprecated) || (!cellarDataMap[item!.slug].deprecated && !showDeprecated) 
-      ) || []
-    )
-  }, [data, selectedChainIds, selectedDepositAssets, showDeprecated])
+const strategyData = useMemo(() => {
+  return (
+    data?.filter((item) => {
+      // Chain filter
+      const isChainSelected = selectedChainIds.includes(
+        item?.config.chain.id!
+      )
+
+      // Deposit asset filter
+      const hasSelectedDepositAsset = cellarDataMap[
+        item!.slug
+      ].depositTokens.list.some((tokenSymbol) =>
+        selectedDepositAssets.hasOwnProperty(tokenSymbol)
+      )
+
+      // Deprecated filter
+      const isDeprecated = cellarDataMap[item!.slug].deprecated
+      const deprecatedCondition = showDeprecated
+        ? isDeprecated
+        : !isDeprecated
+
+      // Incentivised filter
+      //    Badge check for custom rewards
+      const hasGreenBadge = cellarDataMap[
+        item!.slug
+      ].config.badges?.some(
+        (badge) => badge.customStrategyHighlightColor === "#00C04B"
+      )
+
+      //    Staking period check for somm/vesting rewards
+      const hasLiveStakingPeriod =
+        item?.rewardsApy?.value !== undefined && item?.rewardsApy?.value > 0
+
+      const incentivisedCondition = showIncentivised
+        ? hasGreenBadge || hasLiveStakingPeriod
+        : true
+
+      return (
+        isChainSelected &&
+        hasSelectedDepositAsset &&
+        deprecatedCondition &&
+        incentivisedCondition
+      )
+    }) || []
+  )
+}, [
+  data,
+  selectedChainIds,
+  selectedDepositAssets,
+  showDeprecated,
+  showIncentivised,
+])
 
   const loading = isFetching || isRefetching || isLoading
   return (
