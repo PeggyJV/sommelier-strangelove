@@ -179,14 +179,11 @@ export const PageHome = () => {
     MiscFilterProp[]
   >([
     {
-      name: "Show Deprecated",
+      name: "Deprecated",
       checked: showDeprecated,
       stateSetFunction: setShowDeprecated,
     },
   ])
-
-  console.log(showDeprecated)
-
 
   const strategyData = useMemo(() => {
     return (
@@ -200,8 +197,8 @@ export const PageHome = () => {
               selectedDepositAssets.hasOwnProperty(tokenSymbol)
           ) &&
           // Deprecated filter, if cellarDataMap[item!.slug].deprecated is true, then the strategy is deprecated, otherwise if undefined or false, it is not deprecated
-          (!cellarDataMap[item!.slug].deprecated ||
-            (cellarDataMap[item!.slug].deprecated && showDeprecated))
+          (cellarDataMap[item!.slug].deprecated &&
+          showDeprecated) || (!cellarDataMap[item!.slug].deprecated && !showDeprecated) 
       ) || []
     )
   }, [data, selectedChainIds, selectedDepositAssets, showDeprecated])
