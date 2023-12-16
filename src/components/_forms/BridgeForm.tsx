@@ -115,7 +115,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
     </HStack>
   )
   return (
-    <Stack spacing="40px">
+    <Stack spacing="40px" alignItems={"center"}>
       <Stack
         spacing="40px"
         as="form"
@@ -216,7 +216,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
           </BaseButton>
         )}
       </Stack>
-        {/*
+      {/*
           !!! TODO: This needs to be adjusted once it's modified for multichain
         */}
       {isMounted && !buttonEnabled && toSomm && (
