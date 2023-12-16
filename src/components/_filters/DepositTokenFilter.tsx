@@ -114,7 +114,6 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
           borderRadius="1em"
           rightIcon={<ChevronDownIcon />}
           w="auto"
-          zIndex={401}
           fontFamily="Haffer"
           fontSize={12}
           padding="1.75em 2em"

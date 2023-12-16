@@ -1,4 +1,4 @@
-import { Button, Center, HStack, Spacer, Text } from "@chakra-ui/react"
+import { Button, Center, HStack, Spacer, Text, VStack } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -322,38 +322,20 @@ export const PageHome = () => {
           </Text>
         </VStack>
       </HStack> */}
-      <HStack width="100%" padding={"2em 0em"}>
-        <HStack
-          spacing={"2em"}
-          alignItems="center"
-          padding={"2em 0em"}
-        >
+      {isMobile ? (
+        <VStack width="100%" padding={"2em 0em"} spacing="2em">
           <ChainFilter
-            {...{
-              selectedChainIds,
-              setSelectedChainIds,
-            }}
+            selectedChainIds={selectedChainIds}
+            setSelectedChainIds={setSelectedChainIds}
           />
           <DepositTokenFilter
-            {...{
-              constantAllUniqueAssetsArray:
-                constantOrderedAllUniqueAssetsArray,
-              selectedDepositAssets,
-              setSelectedDepositAssets,
-            }}
+            constantAllUniqueAssetsArray={
+              constantOrderedAllUniqueAssetsArray
+            }
+            selectedDepositAssets={selectedDepositAssets}
+            setSelectedDepositAssets={setSelectedDepositAssets}
           />
-        </HStack>
-        <Spacer />
-        <HStack
-          spacing={"2em"}
-          alignItems="right"
-          padding={"2em 0em"}
-        >
-          <MiscFilter
-            {...{
-              categories: selectedMiscFilters,
-            }}
-          />
+          <MiscFilter categories={selectedMiscFilters} />
           {hasFiltersChanged && (
             <Button
               bg="none"
@@ -361,20 +343,49 @@ export const PageHome = () => {
               borderColor="purple.base"
               borderRadius="1em"
               w="auto"
-              zIndex={401}
               fontFamily="Haffer"
               fontSize={12}
               padding="1.75em 2em"
-              _hover={{
-                bg: "purple.dark",
-              }}
+              _hover={{ bg: "purple.dark" }}
+              onClick={resetFilters}
+              leftIcon={<Text fontSize={"1.25em"}>Reset</Text>}
+              rightIcon={<DeleteCircleIcon boxSize={4} />}
+            />
+          )}
+        </VStack>
+      ) : (
+        <HStack width="100%" padding={"2em 0em"} spacing="2em">
+          <ChainFilter
+            selectedChainIds={selectedChainIds}
+            setSelectedChainIds={setSelectedChainIds}
+          />
+          <DepositTokenFilter
+            constantAllUniqueAssetsArray={
+              constantOrderedAllUniqueAssetsArray
+            }
+            selectedDepositAssets={selectedDepositAssets}
+            setSelectedDepositAssets={setSelectedDepositAssets}
+          />
+          <Spacer />
+          <MiscFilter categories={selectedMiscFilters} />
+          {hasFiltersChanged && (
+            <Button
+              bg="none"
+              borderWidth={2.5}
+              borderColor="purple.base"
+              borderRadius="1em"
+              w="auto"
+              fontFamily="Haffer"
+              fontSize={12}
+              padding="1.75em 2em"
+              _hover={{ bg: "purple.dark" }}
               onClick={resetFilters}
               leftIcon={<Text fontSize={"1.25em"}>Reset</Text>}
               rightIcon={<DeleteCircleIcon boxSize={4} />}
             />
           )}
         </HStack>
-      </HStack>
+      )}
       <TransparentSkeleton
         height={loading ? "400px" : "auto"}
         w="full"

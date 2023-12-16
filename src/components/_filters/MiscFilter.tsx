@@ -80,7 +80,6 @@ export const MiscFilter: VFC<MiscFilterProps> = (props) => {
           borderColor="purple.base"
           borderRadius="1em"
           w="auto"
-          zIndex={401}
           fontFamily="Haffer"
           fontSize={12}
           padding="1.75em 2em"
