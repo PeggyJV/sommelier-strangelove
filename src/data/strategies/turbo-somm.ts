@@ -19,7 +19,7 @@ export const turboSOMM: CellarData = {
   description: `Retain some exposure to SOMM while also earning swap fees generated on this trading pair.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "0.50%",
+  managementFee: "0%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["Uniswap V3"],

@@ -25,6 +25,8 @@ import {
   turboSTETH,
   turboSOMM,
   testArbitrumRealYieldUsd,
+  turboeETH,
+  turboSTETHstETHDeposit,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
@@ -32,6 +34,9 @@ cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   [config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:
     testArbitrumRealYieldUsd,
+  [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
+  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]:
+    turboSTETHstETHDeposit,
   [config.CONTRACT.TURBO_SOMM.SLUG]: turboSOMM,
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
   [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
@@ -62,6 +67,9 @@ let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
   [config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS.toLowerCase() +
   "-arbitrum"]: testArbitrumRealYieldUsd,
+  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS.toLowerCase()]:
+    turboSTETHstETHDeposit,
+  [config.CONTRACT.TURBO_EETH.ADDRESS.toLowerCase()]: turboeETH,
   [config.CONTRACT.TURBO_SOMM.ADDRESS.toLowerCase()]: turboSOMM,
   [config.CONTRACT.TURBO_STETH.ADDRESS.toLowerCase()]: turboSTETH,
   [config.CONTRACT.ETH_TREND_GROWTH.ADDRESS.toLowerCase()]:

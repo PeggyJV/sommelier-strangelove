@@ -127,7 +127,13 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
               <HStack justifyContent={"center"}>
                 <AvatarGroup size="sm">
                   {[
-                    ...["WETH", "USDC", "WBTC", "SOMM", "DAI"].filter(
+                    ...[
+                      "WETH",
+                      "USDC",
+                      "WBTC",
+                      "SOMM",
+                      "stETH",
+                    ].filter(
                       (symbol) => props.selectedDepositAssets[symbol]
                     ),
                     ...Object.keys(
@@ -139,7 +145,7 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
                           "USDC",
                           "WBTC",
                           "SOMM",
-                          "DAI",
+                          "stETH",
                         ].includes(symbol)
                     ),
                   ]

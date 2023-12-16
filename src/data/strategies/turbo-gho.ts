@@ -97,39 +97,43 @@ export const turboGHO: CellarData = {
         customStrategyHighlight: "Emergent Asset",
         customStrategyHighlightColor: "purple.base",
       },
+      /*
       {
         customStrategyHighlight: "GHO Incentives",
         customStrategyHighlightColor: "#00C04B",
       },
+      */
     ],
-    customReward: {
-      showAPY: true,
-      tokenSymbol: "GHO",
-      tokenDisplayName: "GHO",
-      tokenAddress: "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
-      imagePath: "/assets/icons/gho.png",
-      //customRewardMessageTooltip?: string
-      //customRewardMessage?: string
-      //customRewardHeader?: string
-      showBondingRewards: false, // Relevant only for bonding card
-      showClaim: true, // True as long as somm incentives live
-      //customClaimMsg?: string
-      //customRewardAPYTooltip: string
-      logo: GHOIcon,
-      logoSize: "17px",
-      //customRewardLongMessage?: string
-      //rewardHyperLink?: string
-      //customColumnHeader?: string
-      //customColumnHeaderToolTip?: string
-      //customColumnValue?: string
-      stakingDurationOverride: new Date(
-        Date.UTC(2023, 10, 21, 14, 0, 0, 0)
-      ),
-      showSommRewards: true,
-      //customIconToolTipMsg?: string
-      customRewardEndMessage: "Rewards updated weekly",
-      customSommRewardsEndMessage: "SOMM Rewards updated weekly",
+    /*
+    customReward:  {
+    showAPY: true,
+    tokenSymbol: "GHO",
+    tokenDisplayName: "GHO",
+    tokenAddress: "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
+    imagePath: "/assets/icons/gho.png",
+    //customRewardMessageTooltip?: string
+    //customRewardMessage?: string
+    //customRewardHeader?: string
+    showBondingRewards: false, // Relevant only for bonding card
+    showClaim: true, // True as long as somm incentives live
+    //customClaimMsg?: string
+    //customRewardAPYTooltip: string
+    logo: GHOIcon,
+    logoSize: "17px",
+    //customRewardLongMessage?: string
+    //rewardHyperLink?: string
+    //customColumnHeader?: string
+    //customColumnHeaderToolTip?: string
+    //customColumnValue?: string
+    stakingDurationOverride: new Date(
+      Date.UTC(2023, 10, 21, 14, 0, 0, 0)
+    ),
+    showSommRewards: true,
+    customIconToolTipMsg?: string
+    customRewardEndMessage: "Rewards updated weekly",
+    customSommRewardsEndMessage: "SOMM Rewards updated weekly",
     },
+    */
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

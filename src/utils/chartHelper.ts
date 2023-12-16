@@ -64,10 +64,15 @@ export const createApyChangeDatum = ({
   const launchDate = new Date(launchEpoch * 1000)
   let apyValues: number[] = []
 
+  // Make earliest data first if it's not already
+  if (data[0].date > data[data.length - 1].date) {
+    data.reverse()
+  }
+
   // If we're smoothing, apply rolling average twice over the smoothDuration
   // to smooth out the APY curve
   // Don't smooth if we don't have suffieicnt data, or we're showing data from
-  if (smooth && data.length > daysSmoothed * 2 && daysSmoothed > 0) {
+  if (smooth && data.length > daysSmoothed && daysSmoothed > 0) {
     const smoothDuration = daysSmoothed // Set the number of days for the rolling average
 
     // Calculate daily APY values
@@ -86,15 +91,16 @@ export const createApyChangeDatum = ({
       }
     })
 
-    //! For 30D MA -- Apply rolling average twice over the smoothDuration to smooth out the APY curve
-    if (daysRendered === 30) {
-      apyValues = rollingAverage(apyValues, 3)
-      apyValues = rollingAverage(apyValues, smoothDuration)
-    } else {
+    // For 30D MA -- Apply rolling average twice over the smoothDuration to smooth out the APY curve
+    //if (daysRendered === 30) {
+    //  apyValues = rollingAverage(apyValues, 3)
+    //  apyValues = rollingAverage(apyValues, smoothDuration)
+    //} else {
       // Pure MA
-      apyValues = rollingAverage(apyValues, smoothDuration)
-    }
+    apyValues = rollingAverage(apyValues, smoothDuration)
+    //}
   } else {
+    console.log("Not smoothing")
     // Calculate overall (non daily) APY values without smoothing
     apyValues = data.map((item) => {
       const current = new Date(item.date * 1000)

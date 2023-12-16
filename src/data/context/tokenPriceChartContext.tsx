@@ -172,11 +172,12 @@ export const TokenPriceChartProvider: FC<{
   const [showLine, setShowLine] = useState<ShowLine>({
     tokenPrice: true,
   })
-  const [timeline, setTimeline] = useState<Timeline>("1W")
+  const [timeline, setTimeline] = useState<Timeline>("1M")
   const cellarData = Object.values(cellarDataMap).find(
-    (item) => item.config.cellar.address === address && item.config.chain.id === chain
+    (item) =>
+      item.config.cellar.address === address &&
+      item.config.chain.id === chain
   )!
-
   const [hourlyDataRaw, setHourlyDataRaw] = useState<
     GetHourlyShareValueQuery | undefined
   >(undefined)
@@ -492,19 +493,19 @@ export const TokenPriceChartProvider: FC<{
     { title: "All", onClick: setDataAllTime },
   ]
 
-  // Set weekly data by default
+  // Set monthly data by default
   useEffect(() => {
     const idIsDefault: boolean =
       data?.series![0].id === defaultSerieId
-    if (weeklyData && idIsDefault) {
-      const weeklyDataMap = weeklyData?.map((item) => {
+    if (monthlyData && idIsDefault) {
+      const monthlyDataMap = monthlyData?.map((item) => {
         return {
           date: item.date,
           shareValue: item.shareValue,
         }
       })
       const tokenPriceDatum =
-        createTokenPriceChangeDatum(weeklyDataMap)
+        createTokenPriceChangeDatum(monthlyDataMap)
 
       const series = [
         {
@@ -535,7 +536,7 @@ export const TokenPriceChartProvider: FC<{
         }`,
       })
     }
-  }, [weeklyData, data])
+  }, [monthlyData, data])
 
   const dataC = {
     ...data,

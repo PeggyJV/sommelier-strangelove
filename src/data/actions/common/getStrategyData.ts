@@ -16,11 +16,11 @@ import { getChanges } from "./getChanges"
 import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
-import { getApyInception } from "./getApyInception"
+import { createApyChangeDatum } from "src/utils/chartHelper"
 import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { GHOIcon } from "components/_icons"
+import { EETHIcon, GHOIcon } from "components/_icons"
 import { Contract } from "ethers"
 
 export const getStrategyData = async ({
@@ -141,8 +141,11 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      let extraRewardsApy = undefined
+      let extraRewardsApy = {
+        value: 0,
+      }
       // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
+      /** 
       if (strategy.slug === utilConfig.CONTRACT.TURBO_GHO.SLUG) {
         // Get GHO price
         const ghoPrice = Number(
@@ -163,6 +166,25 @@ export const getStrategyData = async ({
           tokenIcon: GHOIcon,
         }
       }
+      */
+
+      /*
+      if (strategy.slug === utilConfig.CONTRACT.TURBO_EETH.SLUG) {
+        // Get TVL
+        let usdTvl = Number(strategyData?.tvlTotal)
+
+        // $2k worth of eETH per month * 12 months * 100 for human readable %
+        // TODO: Update this  + expiration date in config weekly as long as eETH incentives live
+        let apy = ((2000) / usdTvl) * 12 * 100
+
+        extraRewardsApy = {
+          formatted: apy.toFixed(2).toString() + "%",
+          value: apy,
+          tokenSymbol: "eETH",
+          tokenIcon: EETHIcon,
+        }
+      }
+      */
 
       const baseApy = (() => {
         if (config.show7DayAPYTooltip === true) {
@@ -224,13 +246,21 @@ export const getStrategyData = async ({
         const launchDay = launchDate ?? subDays(new Date(), 8)
         const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
-        return getApyInception({
-          launchEpoch: launchEpoch,
-          baseApy: config.baseApy,
-          shareData: dayDatas ? dayDatas[0] : undefined,
-          decimals: decimals,
-          startingShareValue: strategy.startingShareValue,
+        const apys = createApyChangeDatum({
+          data: dayDatas,
+          launchEpoch,
+          decimals: config.cellar.decimals, // Cellar decimals
+          smooth: true,
+          daysSmoothed: 30,
+          daysRendered: 30,
         })
+
+        return {
+          formatted: apys
+            ? String(apys[apys!.length - 1].y)
+            : config.baseApy?.toFixed(2) + "%",
+          value: apys ? apys[apys!.length - 1].value : config.baseApy,
+        }
       })()
 
       //! NOTE: This only applies to token prices

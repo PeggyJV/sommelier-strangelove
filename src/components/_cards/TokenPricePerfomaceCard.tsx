@@ -35,7 +35,7 @@ export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
   )
   const tokenPrice = strategyData?.tokenPrice
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
-  const [timeline, setTimeline] = useState<string>("1W")
+  const [timeline, setTimeline] = useState<string>("1M")
   const [pointActive, setPointActive] = useState<Point>()
 
   const MobileTooltip = () => {

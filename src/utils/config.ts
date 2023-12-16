@@ -152,9 +152,19 @@ export const config = {
       SLUG: "Turbo-SOMM",
       ABI: cellarV0821,
     },
+    TURBO_EETH: {
+      ADDRESS: "0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
+      SLUG: "Turbo-eETH",
+      ABI: cellarV0821,
+    },
     TURBO_STETH: {
       ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",
       SLUG: "Turbo-STETH",
+      ABI: cellarV0821,
+    },
+    TURBO_STETH_STETH_DEPOSIT: {
+      ADDRESS: "0xc7372Ab5dd315606dB799246E8aA112405abAeFf",
+      SLUG: "Turbo-STETH-(steth-deposit)",
       ABI: cellarV0821,
     },
     // Router
@@ -231,6 +241,10 @@ export const config = {
     },
     TEST_ARBITRUM_REAL_YIELD_USD_STAKER: {
       ADDRESS: "0xD7FE9DB494B28c55920700eA6E9347c49290A510",
+      ABI: cellarStakingV0821,
+    },
+    TURBO_EETH_STAKER: {
+      ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
     },
   },

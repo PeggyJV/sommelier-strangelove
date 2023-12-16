@@ -32,7 +32,7 @@ const sommelierAPIAllStrategiesData = async (
     const now = new Date()
     const monthAgoDate = new Date()
 
-    monthAgoDate.setDate(now.getDate() - 30)
+    monthAgoDate.setDate(now.getDate() - 31)
     monthAgoDate.setHours(0, 0, 0, 0) // Set the time to the start of the day
 
     const monthAgoEpoch = Math.floor(monthAgoDate.getTime() / 1000)

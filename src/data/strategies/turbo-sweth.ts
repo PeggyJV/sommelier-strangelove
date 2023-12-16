@@ -20,15 +20,15 @@ export const turboSWETH: CellarData = {
   description: `Turbocharge your swETH across an evolving set of LP strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "0.00%",
+  managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
   protocols: ["Uniswap V3", "Balancer", "Morpho"],
   strategyAssets: ["swETH", "WETH"],
   performanceSplit: {
-    depositors: 100, //80,
-    "strategy provider": 0, //15,
-    protocol: 0, //5,
+    depositors: 80,
+    "strategy provider": 15,
+    protocol: 5,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -100,10 +100,10 @@ export const turboSWETH: CellarData = {
       imagePath: "/assets/icons/pearl.svg",
       customRewardMessageTooltip:
         "View your Pearls at https://app.swellnetwork.io/voyage",
-      customRewardMessage: "Up to 12 PEARL per swETH",
+      customRewardMessage: "Up to 6 PEARL per swETH",
       customRewardHeader: "Daily Pearl Reward Rate",
       customRewardAPYTooltip:
-        "Daily PEARL Rewards Rate: Up to 12 PEARL per swETH",
+        "Daily PEARL Rewards Rate: Up to 6 PEARL per swETH",
       showBondingRewards: true,
       showClaim: true,
       customClaimMsg: "Claim All SOMM",
@@ -129,12 +129,11 @@ export const turboSWETH: CellarData = {
         customStrategyHighlight: "Emergent Asset",
         customStrategyHighlightColor: "purple.base",
       },
-      {
+      /*{
         customStrategyHighlight: "swETH Incentives",
         customStrategyHighlightColor: "#00C04B",
-      },
+      },*/
     ],
-    show7DayAPYTooltip: true,
     chain: chainSlugMap.ETHEREUM,
   },
   faq: [

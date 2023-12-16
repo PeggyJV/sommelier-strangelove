@@ -134,7 +134,7 @@ export const PageHome = () => {
   // Copy the unique assets into a constants array
   const constantAllUniqueAssetsArray = Object.values(uniqueAssetsMap)
 
-  // Always float up "WETH", "USDC", "WBTC", "SOMM", "DAI" to the top of the list in that order for the inital render
+  // Always float up "WETH", "USDC", "WBTC", "SOMM", "stETH" to the top of the list in that order for the inital render
   const constantOrderedAllUniqueAssetsArray = [
     ...constantAllUniqueAssetsArray.filter(
       (pair) => pair.symbol === "WETH"
@@ -149,7 +149,7 @@ export const PageHome = () => {
       (pair) => pair.symbol === "SOMM"
     ),
     ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "DAI"
+      (pair) => pair.symbol === "stETH"
     ),
     ...constantAllUniqueAssetsArray.filter(
       (pair) =>
@@ -157,7 +157,7 @@ export const PageHome = () => {
         pair.symbol !== "USDC" &&
         pair.symbol !== "WBTC" &&
         pair.symbol !== "SOMM" &&
-        pair.symbol !== "DAI"
+        pair.symbol !== "stETH"
     ),
   ]
 
@@ -287,13 +287,11 @@ export const PageHome = () => {
   return (
     <LayoutWithSidebar>
       {
-        <div>
-          <InfoBanner
-            text={
-              "A proposal to renew Real Yield BTC incentives is making its way through governance, if it passes rewards will start flowing on Nov 17th."
-            }
-          />
-        </div>
+        <InfoBanner
+          text={
+            "A proposal to renew Turbo swETH incentives is making its way through governance, if it passes rewards will start flowing on Dec 17th."
+          }
+        />
       }
       {/* <HStack
         p={4}

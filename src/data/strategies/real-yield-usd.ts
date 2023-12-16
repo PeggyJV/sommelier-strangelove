@@ -91,12 +91,13 @@ export const realYieldUsd: CellarData = {
       abi: config.CONTRACT.REAL_YIELD_USD_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    badges: [
+    /*badges: [
       {
         customStrategyHighlight: "Now using DSR",
         customStrategyHighlightColor: "orange.base",
       },
     ],
+    */
     baseAsset: tokenConfigMap.USDC_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
   },
