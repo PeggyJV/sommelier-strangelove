@@ -187,7 +187,7 @@ src: "/assets/icons/somm.png",
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
-    src: "/assets/icons/stETH.png",
+    src: "/assets/icons/steth.png",
     alt: "stETH logo",
     symbol: "stETH",
     address: "0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
