@@ -67,6 +67,7 @@ import {
   useEnsoRoutes,
   TokenMap,
   EnsoRouteConfig,
+  getEnsoRouterAddress,
 } from "data/hooks/useEnsoRoutes"
 import { acceptedDepositTokenMap } from "src/data/tokenConfig"
 
@@ -132,25 +133,27 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { address } = useAccount()
 
   // New enso route config
+  // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token
   const ensoRouteConfig: EnsoRouteConfig = {
     fromAddress: address!,
     tokensIn: [
       {
-        address: "0x4fabb145d64652a948d72533023f6e7a623c7c53",
-        amountBaseDenom: Number(1000000000000000000),
+        address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        amountBaseDenom: Number(10000000),
       },
     ],
-    tokenOut: "0x0c190ded9be5f512bd72827bdad4003e9cc7975c",
+    tokenOut: "0xb5b29320d2dde5ba5bafa1ebcd270052070483ec",
     slippage: 3,
   }
 
-  //const { response, error, loading } = useEnsoRoutes(ensoRouteConfig)
+  const { ensoResponse, ensoError, ensoLoading } =
+    useEnsoRoutes(ensoRouteConfig)
 
   // wait for response and print
-  //console.log("HERE")
-  //console.log(response)
-  //console.log(error)
-  //console.log(loading)
+  console.log("HERE")
+  console.log(ensoResponse)
+  console.log(ensoError)
+  console.log(ensoLoading)
 
   const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
 
@@ -266,8 +269,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       address,
       isActiveAsset
         ? cellarConfig.cellar.address
-        : cellarConfig.cellarRouter.address
+        : await getEnsoRouterAddress(address!)
     )
+    console.log("allowance", allowance.toString())
 
     const amtInWei = ethers.utils.parseUnits(
       depositAmount.toString(),
@@ -294,7 +298,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         const { hash } = await erc20Contract.approve(
           isActiveAsset
             ? cellarConfig.cellar.address
-            : cellarConfig.cellarRouter.address,
+            : await getEnsoRouterAddress(address!),
           ethers.constants.MaxUint256
         )
         addToast({
@@ -354,24 +358,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       // If selected token is cellar's current asset, it is cheapter to deposit into the cellar
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
+
       const response = isActiveAsset
         ? await deposit(amtInWei, address)
-        : // TODO: Below part needs to change to enso swap instead
-          await depositAndSwap.mutateAsync({
-            cellarAddress: cellarConfig.cellar.address,
-            depositAmount: depositAmount,
-            slippage,
-            activeAsset: {
-              address: activeAsset?.address!,
-              decimals: activeAsset?.decimals!,
-              symbol: activeAsset?.symbol!,
-            },
-            selectedToken: {
-              address: selectedToken.address,
-              decimals: selectedTokenBalance?.decimals!,
-              symbol: selectedToken.symbol,
-            },
-          })
+        : null // TODO: Execute enso route
 
       if (!response) throw new Error("response is undefined")
       addToast({
@@ -548,12 +538,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const strategyMessages: Record<string, () => JSX.Element> = {
     "Real Yield ETH": () => (
       <>
-        <Text textAlign="center">
-          You can use the following external services to acquire WETH:{" "}
-          <Link href="https://wrapeth.com/" textDecor="underline">
-            https://wrapeth.com/
-          </Link>
-        </Text>
         <Link
           href={"https://app.rhino.fi/invest/YIELDETH/supply"}
           isExternal

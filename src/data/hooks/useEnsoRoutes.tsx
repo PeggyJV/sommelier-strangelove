@@ -1,5 +1,7 @@
-import { ar } from "date-fns/locale"
+import { ethers } from "ethers"
 import { useState, useEffect } from "react"
+import { useApproveERC20 } from "src/hooks/web3/useApproveERC20"
+
 // Enso Docs can be found at https://www.enso.finance/developers or https://docs.enso.finance/
 
 const ensoApiKey = process.env.NEXT_PUBLIC_ENSO_API_KEY
@@ -16,19 +18,33 @@ export interface EnsoRouteConfig {
   slippage: number
 }
 
+export const getEnsoRouterAddress = async (fromAddress: string) => {
+  const response = await fetch(
+    `https://api.enso.finance/api/v1/wallet?chainId=1&fromAddress=${fromAddress}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ensoApiKey}`,
+        "Access-Control-Allow-Origin": "*",
+      },
+    }
+  )
+  const routerAddress = (await response.json()).address
+  return routerAddress
+}
+
 // TODO: Create helper function for below
 // ! Before this User must approve WETH spend on the routing contract so it can execute the swap (if not done so already),
 // ! See pt 1 on https://docs.enso.finance/examples/eoa/route-1-position
 export const useEnsoRoutes = (config: EnsoRouteConfig) => {
-  const [response, setResponse] = useState<any>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState<boolean>(true)
+  const [ensoResponse, setResponse] = useState<any>(null)
+  const [ensoError, setError] = useState<string | null>(null)
+  const [ensoLoading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const fetchRoutes = async () => {
       try {
-        // TODO: First check if the tokens to deposit are approved, if not approve them first as part of the actions list
-
         const actions = config.tokensIn.map((tokenIn) => {
           return {
             protocol: "enso",
@@ -38,34 +54,37 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
               tokenOut: config.tokenOut,
               amountIn: String(tokenIn.amountBaseDenom),
               slippage: String(config.slippage * 100),
-            }
+            },
           }
         })
 
-        // TODO, do we need to checksum addresses?
+        // For now only support a single token in, so assert len actions == 1
+        if (actions.length !== 1) {
+          throw new Error(
+            "Current routing implementation only support a single token in."
+          )
+        }
 
-        // TODO: Generalize for multichain
-        const response = await fetch(
-          `https://api.enso.finance/api/v1/shortcuts/bundle?chainId=1&fromAddress=${config.fromAddress}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${ensoApiKey}`,
-            },
-            body: JSON.stringify(actions),
-          }
-        )
+        // TODO: Generalize for multichain (check if enso actually supports multichain first)
+        const formattedRouteURL = `https://api.enso.finance/api/v1/shortcuts/route?chainId=1&fromAddress=${config.fromAddress}&receiver=${config.fromAddress}&spender=${config.fromAddress}&amountIn=${actions[0].args.amountIn}&tokenIn=${actions[0].args.tokenIn}&tokenOut=${actions[0].args.tokenOut}&slippage=${actions[0].args.slippage}&routingStrategy=router`
+        console.log(formattedRouteURL)
+
+        const response = await fetch(`${formattedRouteURL}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${ensoApiKey}`,
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
         console.log("Enso??")
-
+        console.log(response)
         if (response.status !== 200) {
           throw new Error("failed to fetch data")
         }
-
-
         const result = await response.json()
 
-        setResponse(result)
+        setResponse(result.tx.data)
         setLoading(false)
       } catch (error) {
         setError(
@@ -78,7 +97,7 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
     fetchRoutes()
   }, [config])
 
-  return { response, error, loading }
+  return { ensoResponse, ensoError, ensoLoading }
 }
 
 // Example Usage
@@ -96,7 +115,7 @@ const EnsoDepositComponent = () => {
     slippage: 1 // 1% slippage
   };
   
-  const { response, error, loading } = useEnsoRoutes(config);
+  const { ensoResponse, ensoError, ensoLoading } = useEnsoRoutes(config);
   
 
   // TODO: I think (need to verify) you'd want a helper function here to see if the user has approved the enso contract to spend their tokens before actually submitting the final tx
