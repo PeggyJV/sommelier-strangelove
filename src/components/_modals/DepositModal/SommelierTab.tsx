@@ -14,7 +14,7 @@ import {
   Input,
   InputGroup,
   InputRightAddon,
-  useTheme
+  useTheme,
 } from "@chakra-ui/react"
 
 import { useEffect, useState, VFC } from "react"
@@ -30,7 +30,7 @@ import {
 import { Link } from "components/Link"
 import { config } from "utils/config"
 import { erc20ABI, useSigner, useAccount, useBalance } from "wagmi"
-import { ethers } from "ethers"
+import { Contract, ethers } from "ethers"
 import { getAddress } from "ethers/lib/utils.js"
 
 import { useBrandedToast } from "hooks/chakra"
@@ -70,6 +70,7 @@ import {
   getEnsoRouterAddress,
 } from "data/hooks/useEnsoRoutes"
 import { acceptedDepositTokenMap } from "src/data/tokenConfig"
+import { config as contractConfig } from "src/utils/config"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -132,29 +133,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
-  // New enso route config
-  // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token
-  const ensoRouteConfig: EnsoRouteConfig = {
-    fromAddress: address!,
-    tokensIn: [
-      {
-        address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        amountBaseDenom: Number(10000000),
-      },
-    ],
-    tokenOut: "0xb5b29320d2dde5ba5bafa1ebcd270052070483ec",
-    slippage: 3,
-  }
-
-  const { ensoResponse, ensoError, ensoLoading } =
-    useEnsoRoutes(ensoRouteConfig)
-
-  // wait for response and print
-  console.log("HERE")
-  console.log(ensoResponse)
-  console.log(ensoError)
-  console.log(ensoLoading)
-
   const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
 
   const [selectedToken, setSelectedToken] =
@@ -210,6 +188,38 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const erc20Contract =
     selectedToken?.address &&
     new ethers.Contract(selectedToken?.address, erc20ABI, signer!)
+
+  // New enso route config
+  // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token
+  const ensoRouteConfig: EnsoRouteConfig = {
+    fromAddress: address!,
+    tokensIn: [
+      {
+        address:
+          selectedToken?.address ||
+          strategyData!.activeAsset.address.toLowerCase(),
+        amountBaseDenom: watchDepositAmount * (10** (selectedToken?.decimals || 0)),
+      },
+    ],
+    tokenOut: cellarAddress,
+    slippage: Number(slippageValue),
+  }
+
+  const { ensoResponse, ensoError, ensoLoading } =
+    useEnsoRoutes(ensoRouteConfig)
+
+  // wait for response and print
+  console.log("HERE")
+  console.log(ensoRouteConfig)
+  console.log(ensoResponse)
+  console.log(ensoError)
+  console.log(ensoLoading)
+
+  const ensoRouterContract = new Contract(
+    contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS,
+    contractConfig.CONTRACT.ENSO_ROUTER.ABI,
+    signer!
+  )
 
   const depositAndSwap = useDepositAndSwap(cellarConfig)
 
@@ -269,7 +279,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       address,
       isActiveAsset
         ? cellarConfig.cellar.address
-        : await getEnsoRouterAddress(address!)
+        : ensoRouterContract.address // TODO: whys isnt it this approval--> await getEnsoRouterAddress(address!)
     )
     console.log("allowance", allowance.toString())
 
@@ -298,7 +308,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         const { hash } = await erc20Contract.approve(
           isActiveAsset
             ? cellarConfig.cellar.address
-            : await getEnsoRouterAddress(address!),
+            : ensoRouterContract.address, //TODO: Why isnt it this address???? ------> await getEnsoRouterAddress(address!),
           ethers.constants.MaxUint256
         )
         addToast({
@@ -361,7 +371,12 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
       const response = isActiveAsset
         ? await deposit(amtInWei, address)
-        : null // TODO: Execute enso route
+        : await signer!.sendTransaction({
+            to: ensoRouterContract.address,
+            data: ensoResponse.data,
+          })
+
+      console.log("response", response)
 
       if (!response) throw new Error("response is undefined")
       addToast({

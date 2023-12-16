@@ -84,7 +84,7 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
         }
         const result = await response.json()
 
-        setResponse(result.tx.data)
+        setResponse(result.tx)
         setLoading(false)
       } catch (error) {
         setError(

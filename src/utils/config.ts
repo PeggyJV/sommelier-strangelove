@@ -2,6 +2,7 @@ import cellarRouterV0815 from "../abi/cellar-router-v0.8.15.json"
 import cellarRouterV0816 from "../abi/cellar-router-v0.8.16.json"
 import cellarStakingV0815 from "../abi/cellar-staking-v.0.8.15.json"
 import cellarStakingV0821 from "../abi/cellar-staking-v0.8.21.json"
+import ensoRouterABI from "../abi/enso-router.json"
 import cellarV0815 from "../abi/cellar-v0.8.15.json"
 import cellarV0816 from "../abi/cellar-v0.8.16.json"
 import cellarV0821 from "../abi/cellar-v0.8.21.json"
@@ -259,6 +260,10 @@ export const config = {
     TURBO_EETH_STAKER: {
       ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
+    },
+    ENSO_ROUTER: {
+      ADDRESS: "0x80EbA3855878739F4710233A8a19d89Bdd2ffB8E",
+      ABI: ensoRouterABI,
     },
   },
   cleargate: {
