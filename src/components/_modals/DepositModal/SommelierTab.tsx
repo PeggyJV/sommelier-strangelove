@@ -39,6 +39,7 @@ import {
   InformationIcon,
   GreenCheckCircleIcon,
 } from "components/_icons"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 
 interface FormValues {
   depositAmount: number
@@ -71,6 +72,7 @@ import {
 } from "data/hooks/useEnsoRoutes"
 import { acceptedDepositTokenMap } from "src/data/tokenConfig"
 import { config as contractConfig } from "src/utils/config"
+import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -220,13 +222,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { ensoResponse, ensoError, ensoLoading } =
     useEnsoRoutes(ensoRouteConfig)
 
-  // wait for response and print
-  console.log("HERE")
-  console.log(ensoRouteConfig)
-  console.log(ensoResponse)
-  console.log(ensoError)
-  console.log(ensoLoading)
-
   const ensoRouterContract = new Contract(
     contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS,
     contractConfig.CONTRACT.ENSO_ROUTER.ABI,
@@ -291,16 +286,14 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       address,
       isActiveAsset
         ? cellarConfig.cellar.address
-        : ensoRouterContract.address // TODO: whys isnt it this approval--> await getEnsoRouterAddress(address!)
+        : ensoRouterContract.address
     )
-    console.log("allowance", allowance.toString())
 
     const amtInWei = ethers.utils.parseUnits(
       depositAmount.toString(),
       selectedTokenBalance?.decimals
     )
 
-    // TODO: Split approvals out if enso is being used instead
     let needsApproval
     try {
       needsApproval = allowance.lt(amtInWei)
@@ -320,7 +313,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         const { hash } = await erc20Contract.approve(
           isActiveAsset
             ? cellarConfig.cellar.address
-            : ensoRouterContract.address, //TODO: Why isnt it this address???? ------> await getEnsoRouterAddress(address!),
+            : ensoRouterContract.address,
           ethers.constants.MaxUint256
         )
         addToast({
@@ -385,10 +378,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         ? await deposit(amtInWei, address)
         : await signer!.sendTransaction({
             to: ensoRouterContract.address,
-            data: ensoResponse.data,
+            data: ensoResponse.tx.data,
           })
-
-      console.log("response", response)
 
       if (!response) throw new Error("response is undefined")
       addToast({
@@ -555,6 +546,67 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       depositAssetTokenConfig.splice(indexOfActiveAsset, 1)[0]
     )
   }, [activeAsset, currentAsset])
+
+  const [ensoSharesOut, setEnsoSharesOut] = useState<number>(0)
+
+  const [cellarSharePreviewRedeem, setCellarSharePreviewRedeem] =
+    useState<number>(0)
+
+  useEffect(() => {
+    const fetchCellarSharePreviewRedeem = async () => {
+      try {
+        const previewRedeem = await fetchCellarPreviewRedeem(
+          cellarData.slug,
+          BigInt(10 ** cellarConfig.cellar.decimals)
+        )
+        setCellarSharePreviewRedeem(
+          previewRedeem / 10 ** cellarConfig.cellar.decimals
+        )
+      } catch (error) {
+        console.error(
+          "Error fetching cellar share preview redeem: ",
+          error
+        )
+      }
+    }
+
+    fetchCellarSharePreviewRedeem()
+  }, [cellarConfig.cellar.address, cellarConfig.cellar.decimals])
+
+  useEffect(() => {
+    if (
+      watchDepositAmount === undefined ||
+      watchDepositAmount <= 0 ||
+      Number.isNaN(watchDepositAmount)
+    ) {
+      setEnsoSharesOut(0)
+    } else {
+      setEnsoSharesOut(
+        Number(ensoResponse?.amountOut || 0) /
+          10 ** cellarConfig.cellar.decimals
+      )
+    }
+  }, [watchDepositAmount, ensoResponse, cellarConfig])
+
+  const [baseAssetPrice, setBaseAssetPrice] = useState<number>(0)
+
+  useEffect(() => {
+    const fetchBaseAssetPrice = async () => {
+      try {
+        const price = await fetchCoingeckoPrice(
+          cellarConfig.baseAsset.coinGeckoId,
+          "usd"
+        )
+
+        setBaseAssetPrice(Number(price || 0))
+      } catch (error) {
+        console.log(error)
+        console.error("Error fetching base asset price: ", error)
+      }
+    }
+
+    fetchBaseAssetPrice()
+  }, [cellarConfig])
 
   // Close swap settings card if user changed current asset to active asset.
   useEffect(() => {
@@ -893,6 +945,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
+          {selectedToken?.symbol !== activeAsset?.symbol ? (
+            <Tooltip
+              hasArrow
+              //label=""
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack pr={2} textAlign="center">
+                <Text fontFamily={"inherit"}>Non base asset deposits go through a router and bundle a series of swaps and subsequent vault deposit.</Text>
+              </HStack>
+            </Tooltip>
+          ) : null}
+
           <CardHeading paddingTop="2em">
             Transaction details
           </CardHeading>
@@ -963,6 +1028,13 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                           status: "warning",
                           closeHandler: closeAll,
                         })
+
+                        // Clamp the value to the 0-20 range
+                        const clampedValue = Math.min(
+                          Math.max(num, 0),
+                          20
+                        )
+                        setSlippageValue(String(clampedValue))
                       }
                     }}
                     onBlur={(e) => {
@@ -981,54 +1053,86 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             )}
           </HStack>
           {selectedToken?.symbol !== activeAsset?.symbol ? (
-            <HStack justify="space-between" align="center">
-              <HStack spacing={1} align="center">
-                <Tooltip
-                  hasArrow
-                  label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
-                  bg="surface.bg"
-                  color="neutral.300"
-                >
-                  <HStack spacing={1} align="center">
-                    <CardHeading fontSize="small">
-                      Estimated Tokens Out
-                    </CardHeading>
-                    <InformationIcon
-                      color="neutral.300"
-                      boxSize={3}
-                    />
-                  </HStack>
-                </Tooltip>
-              </HStack>
-              <VStack spacing={0} align="flex-end">
-                <Text
-                  pr="2"
-                  fontSize="lg"
-                  fontWeight={700}
-                  textAlign="right"
-                  width="100%"
-                >
-                  ≈ {Number("2000").toLocaleString()}
-                </Text>
-                <HStack
-                  spacing={0}
-                  fontSize="11px"
-                  textAlign="right"
-                  pr="2"
-                >
-                  <Text as="span">
-                    $ {Number("1999.2").toLocaleString()}
-                  </Text>
+            ensoError !== null &&
+            watchDepositAmount !== 0 &&
+            !isNaN(watchDepositAmount) ? (
+              <Text
+                pr="2"
+                fontSize="lg"
+                fontWeight={700}
+                textAlign="center"
+                width="100%"
+              >
+                {ensoError}
+              </Text>
+            ) : (
+              <HStack justify="space-between" align="center">
+                <HStack spacing={1} align="center">
+                  <Tooltip
+                    hasArrow
+                    label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
+                    bg="surface.bg"
+                    color="neutral.300"
+                  >
+                    <HStack spacing={1} align="center">
+                      <CardHeading fontSize="small">
+                        Estimated Tokens Out
+                      </CardHeading>
+                      <InformationIcon
+                        color="neutral.300"
+                        boxSize={3}
+                      />
+                    </HStack>
+                  </Tooltip>
                 </HStack>
-              </VStack>
-              {/*<Text pr={2}>TODO: Need Enso</Text>*/}
-            </HStack>
+                {ensoLoading ? (
+                  <>
+                    <Spinner size="md" paddingRight={"1em"} />
+                  </>
+                ) : (
+                  <VStack spacing={0} align="flex-end">
+                    <Text
+                      pr="2"
+                      fontSize="lg"
+                      fontWeight={700}
+                      textAlign="right"
+                      width="100%"
+                    >
+                      ≈ {ensoSharesOut.toFixed(4).toLocaleString()}
+                    </Text>
+                    <HStack
+                      spacing={0}
+                      fontSize="11px"
+                      textAlign="right"
+                      pr="2"
+                    >
+                      <Text as="span">
+                        ${" "}
+                        {(
+                          ensoSharesOut *
+                          cellarSharePreviewRedeem *
+                          baseAssetPrice
+                        )
+                          .toFixed(2)
+                          .toLocaleString()}
+                      </Text>
+                    </HStack>
+                  </VStack>
+                )}
+              </HStack>
+            )
           ) : (
             <></>
           )}
           <BaseButton
             type="submit"
-            isDisabled={isDisabled}
+            isDisabled={
+              isDisabled ||
+              (selectedToken?.symbol !== activeAsset?.symbol &&
+                (isDisabled ||
+                  ensoLoading ||
+                  (!ensoLoading && ensoError !== null)))
+            }
             isLoading={isSubmitting}
             fontSize={21}
             py={8}

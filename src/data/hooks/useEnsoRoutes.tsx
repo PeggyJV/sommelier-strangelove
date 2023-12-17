@@ -32,8 +32,7 @@ export const getEnsoRouterAddress = async (fromAddress: string) => {
   return routerAddress
 }
 
-// TODO: Create helper function for below
-// ! Before this User must approve WETH spend on the routing contract so it can execute the swap (if not done so already),
+// ! Before this User must approve spend on the routing contract so it can execute the swap (if not done so already),
 // ! See pt 1 on https://docs.enso.finance/examples/eoa/route-1-position
 export const useEnsoRoutes = (config: EnsoRouteConfig) => {
   const [ensoResponse, setResponse] = useState<any>(null)
@@ -41,9 +40,11 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
   const [ensoLoading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    let intervalId: number;
+    let intervalId: number
 
     const fetchRoutes = async () => {
+      setLoading(true)
+      setError(null)
       try {
         const actions = config.tokensIn.map((tokenIn) => {
           return {
@@ -67,7 +68,6 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
 
         // TODO: Generalize for multichain (check if enso actually supports multichain first)
         const formattedRouteURL = `https://api.enso.finance/api/v1/shortcuts/route?chainId=1&fromAddress=${config.fromAddress}&receiver=${config.fromAddress}&spender=${config.fromAddress}&amountIn=${actions[0].args.amountIn}&tokenIn=${actions[0].args.tokenIn}&tokenOut=${actions[0].args.tokenOut}&slippage=${actions[0].args.slippage}&routingStrategy=router`
-        console.log(formattedRouteURL)
 
         const response = await fetch(`${formattedRouteURL}`, {
           method: "GET",
@@ -77,16 +77,22 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        console.log("Enso??")
-        console.log(response)
+
+        if (response.status === 404) {
+          throw new Error("No routes found")
+        }
+
         if (response.status !== 200) {
-          throw new Error("failed to fetch data")
+          console.log(response.status)
+          throw new Error("Internal Router Error")
         }
         const result = await response.json()
 
-        setResponse(result.tx)
+        setResponse(result)
         setLoading(false)
+        setError(null)
       } catch (error) {
+        console.log(error)
         setError(
           (error as Error).message || "An unknown error occurred"
         )
