@@ -200,7 +200,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         {
           address:
             selectedToken?.address ||
-            strategyData!.activeAsset.address.toLowerCase(),
+            strategyData?.activeAsset.address.toLowerCase() ||
+            "",
           amountBaseDenom:
             watchDepositAmount * 10 ** (selectedToken?.decimals || 0),
         },

@@ -312,6 +312,7 @@ let acceptedDepositTokens = [
   "swETH",
   "WETH",
   "stETH",
+  "wstETH",
   "cbETH",
   "rETH",
   "WBTC",
@@ -327,6 +328,10 @@ let acceptedDepositTokens = [
   "SNX",
   "1INCH",
   "MATIC",
+  "SOMM",
+  "eETH",
+  "swETH",
+  "BUSD",
 ]
 
 let depositTokenMap = tokenConfig.reduce((map, token) => {

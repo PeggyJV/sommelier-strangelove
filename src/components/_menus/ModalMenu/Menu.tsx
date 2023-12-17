@@ -15,7 +15,7 @@ import {
   useDimensions,
   useTheme,
 } from "@chakra-ui/react"
-import { useRef, VFC, useState, useEffect } from "react"
+import { useRef, VFC, useState, useEffect, ChangeEvent } from "react"
 import { FaChevronDown } from "react-icons/fa"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
@@ -26,9 +26,7 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import {
-  ActiveAssetIcon
-} from "components/_icons"
+import { ActiveAssetIcon } from "components/_icons"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -109,6 +107,20 @@ export const Menu: VFC<MenuProps> = ({
     fetchAndUpdateBalance()
   }, [rawDepositAmount])
 
+  const [searchTerm, setSearchTerm] = useState("")
+
+  // Function to handle search input changes
+  const handleSearchChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchTerm(event.target.value.toLowerCase())
+  }
+
+  // Filter tokens based on search term
+  const filteredTokens = depositTokenConfig.filter((token) =>
+    token.symbol.toLowerCase().includes(searchTerm)
+  )
+
   return (
     <HStack
       ref={menuRef}
@@ -166,14 +178,23 @@ export const Menu: VFC<MenuProps> = ({
             overflowY="auto"
             scrollBehavior="smooth"
           >
+            <Box pt={4} pb={2} pl={10} width="90%">
+              <Input
+                placeholder="Select Deposit Asset"
+                onChange={handleSearchChange}
+                value={searchTerm}
+              />
+            </Box>
             <MenuOptionGroup
-              defaultValue={depositTokenConfig[0].symbol} // Active asset should always be first, so make it default without searching to make this feel fast
+              defaultValue={depositTokenConfig[0].symbol}
               type="radio"
             >
+              {" "}
+              {/*
               <Box pt={4} pb={2} pl={10}>
                 <Text color="neutral.400">Select deposit asset</Text>
-              </Box>
-              {depositTokenConfig.map((token) => {
+              </Box>*/}
+              {filteredTokens.map((token) => {
                 const { address, src, alt, symbol } = token
                 const isActiveAsset =
                   token.address.toUpperCase() ===
@@ -208,7 +229,10 @@ export const Menu: VFC<MenuProps> = ({
                             alignItems="flex-start"
                             p={3}
                           >
-                            <ActiveAssetIcon boxSize={5} alignSelf="center"/>
+                            <ActiveAssetIcon
+                              boxSize={5}
+                              alignSelf="center"
+                            />
                             <Text fontSize="xs" fontWeight={600}>
                               Base asset
                             </Text>
