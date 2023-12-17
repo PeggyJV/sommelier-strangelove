@@ -34,12 +34,23 @@ export const getEnsoRouterAddress = async (fromAddress: string) => {
 
 // ! Before this User must approve spend on the routing contract so it can execute the swap (if not done so already),
 // ! See pt 1 on https://docs.enso.finance/examples/eoa/route-1-position
-export const useEnsoRoutes = (config: EnsoRouteConfig) => {
+export const useEnsoRoutes = (
+  config: EnsoRouteConfig,
+  shouldFetch: boolean,
+  lastResponse: any
+) => {
   const [ensoResponse, setResponse] = useState<any>(null)
   const [ensoError, setError] = useState<string | null>(null)
   const [ensoLoading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
+    if (!shouldFetch) {
+      setLoading(false)
+      setError(null)
+      setResponse(lastResponse)
+      return
+    }
+    
     let intervalId: number
 
     const fetchRoutes = async () => {
@@ -108,7 +119,7 @@ export const useEnsoRoutes = (config: EnsoRouteConfig) => {
     return () => {
       clearInterval(intervalId)
     }
-  }, [config])
+  }, [config, shouldFetch])
 
   return { ensoResponse, ensoError, ensoLoading }
 }

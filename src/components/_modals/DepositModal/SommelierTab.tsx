@@ -220,8 +220,18 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     ]
   )
 
-  const { ensoResponse, ensoError, ensoLoading } =
-    useEnsoRoutes(ensoRouteConfig)
+  const [lastEnsoResponse, setLastEnsoResponse] = useState<any>(null)
+
+  const { ensoResponse, ensoError, ensoLoading } = useEnsoRoutes(
+    ensoRouteConfig,
+    !isSubmitting,
+    lastEnsoResponse
+  )
+  useEffect(() => {
+    if (ensoResponse) {
+      setLastEnsoResponse(ensoResponse)
+    }
+  }, [ensoResponse])
 
   const ensoRouterContract = new Contract(
     contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS,
