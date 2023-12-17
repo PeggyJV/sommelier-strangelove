@@ -942,6 +942,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               setSelectedToken={trackedSetSelectedToken}
               activeAsset={activeAsset?.address}
               selectedTokenBalance={selectedTokenBalance}
+              isDisabled={isSubmitting}
             />
             <FormErrorMessage color="energyYellow">
               <Icon
@@ -1009,6 +1010,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                     max={20}
                     placeholder="0"
                     width="4.5em"
+                    disabled={isSubmitting ?? false}
                     value={
                       slippageValue !== undefined ? slippageValue : ""
                     }

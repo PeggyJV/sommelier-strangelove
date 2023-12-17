@@ -40,6 +40,7 @@ export const Menu: VFC<MenuProps> = ({
   selectedTokenBalance,
   value,
   onChange,
+  isDisabled,
 }) => {
   const { colors } = useTheme()
   const menuRef = useRef(null)
@@ -183,6 +184,7 @@ export const Menu: VFC<MenuProps> = ({
                 placeholder="Select Deposit Asset"
                 onChange={handleSearchChange}
                 value={searchTerm}
+                isDisabled={isDisabled ?? false}
               />
             </Box>
             <MenuOptionGroup
@@ -209,6 +211,7 @@ export const Menu: VFC<MenuProps> = ({
                     value={symbol}
                     borderRadius={8}
                     _hover={{ bg: "rgba(96, 80, 155, 0.4)" }}
+                    isDisabled={isDisabled ?? false}
                     onClick={() => {
                       clearErrors()
                       onChange(token)
@@ -257,6 +260,7 @@ export const Menu: VFC<MenuProps> = ({
             onClick={setMax}
             fontSize="inherit"
             fontWeight={600}
+            isDisabled={isDisabled ?? false}
           >
             max
           </Button>
@@ -274,6 +278,7 @@ export const Menu: VFC<MenuProps> = ({
           fontWeight={700}
           textAlign="right"
           width="100%"
+          isDisabled={isDisabled ?? false}
           {...register("depositAmount", {
             onChange: (event) => {
               if (event && event.target) {
