@@ -110,7 +110,7 @@ export const turboSWETH: CellarData = {
       logo: PearlIcon,
       logoSize: "15px",
       customRewardLongMessage:
-        "Earn up to 12 PEARL per swETH of TVL deposited when you bond.",
+        "Earn up to 6 PEARL per swETH of TVL deposited when you bond.",
       rewardHyperLink: "https://app.swellnetwork.io/voyage",
       customColumnHeader: "View Pearls",
       customColumnHeaderToolTip:
@@ -129,10 +129,10 @@ export const turboSWETH: CellarData = {
         customStrategyHighlight: "Emergent Asset",
         customStrategyHighlightColor: "purple.base",
       },
-      /*{
+      {
         customStrategyHighlight: "swETH Incentives",
         customStrategyHighlightColor: "#00C04B",
-      },*/
+      },
     ],
   },
   faq: [
