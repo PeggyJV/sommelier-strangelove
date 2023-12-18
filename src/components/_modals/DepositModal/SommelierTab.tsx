@@ -784,6 +784,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   }
   return (
     <>
+      
       <VStack pb={10} spacing={6} align="stretch">
         <VStack align="stretch">
           {/* <CardHeading>Strategy details</CardHeading> */}
