@@ -19,7 +19,7 @@ export const turboSWETH: CellarData = {
   description: `Turbocharge your swETH across an evolving set of LP strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "1.00%",
+  managementFee: "0.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
   protocols: ["Uniswap V3", "Balancer", "Morpho"],
