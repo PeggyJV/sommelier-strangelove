@@ -370,7 +370,7 @@ export const bondingPeriodOptions = (
     return [
       {
         title: "14 Day Unbonding",
-        amount: "Up to 12 PEARL per swETH daily + SOMM Rewards",
+        amount: "Up to 6 PEARL per swETH daily + SOMM Rewards",
         value: 0,
       },
     ]
@@ -482,9 +482,9 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
     ) {
       return "Estimated APY"
-    } /*else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
+    } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
       return "7 Day MA APY (includes swETH incentives)"
-    } */ else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+    } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
       return "Estimated Reward APY (excluding impermanent loss)"
     }
     return "30D MA APY"
@@ -503,9 +503,9 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
   ) {
     return "Estimated APY"
-  } /*else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
+  } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     return "7 Day MA APY (includes swETH incentives)"
-  } */ else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
+  } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return "Estimated Reward APY (excluding impermanent loss)"
   }
   return "30D MA APY"
