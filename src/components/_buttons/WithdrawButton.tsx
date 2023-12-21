@@ -41,11 +41,11 @@ export const WithdrawButton: VFC<
       <>
         <SecondaryButton
           onClick={(e) => {
-            //! Turbo Somm share price oracle updating..
-            if (cellarData.slug === "Turbo-SOMM") {
-              openOracleModal()
-              return
-            }
+            //! if share price oracle updating..
+            //if (cellarData.slug === "Turbo-SOMM") {
+            //  openOracleModal()
+            //  return
+            //}
 
             onOpen()
           }}
