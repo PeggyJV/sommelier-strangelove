@@ -129,11 +129,11 @@ export function DepositAndWithdrawButton({
           e.stopPropagation()
           // analytics.track("home.deposit.modal-opened")
 
-          //! Turbo Somm share price oracle updating..
-          if (row.original.slug === "Turbo-SOMM") {
-            openOracleModal()
-            return
-          }
+          //! if share price oracle updating..
+          //if (row.original.slug === "Turbo-SOMM") {
+          //  openOracleModal()
+          //  return
+          //}
 
           if (row.original.deprecated) {
             onDepositModalOpen({
