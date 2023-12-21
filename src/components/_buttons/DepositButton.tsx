@@ -37,11 +37,11 @@ export const DepositButton: VFC<ButtonProps> = (props) => {
         variant="solid"
         onClick={(e) => {
           e.stopPropagation()
-          //! Turbo Somm share price oracle updating..
-          if (cellarData.slug === "Turbo-SOMM") {
-            openOracleModal()
-            return
-          }
+          //! if share price oracle updating..
+          //if (cellarData.slug === "Turbo-SOMM") {
+          //  openOracleModal()
+          //  return
+          //}
 
           depositModal.onOpen()
 
