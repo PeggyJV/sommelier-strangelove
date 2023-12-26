@@ -182,7 +182,7 @@ export const ChainFilter: VFC<ChainFilterProps> = (props) => {
                     <Checkbox
                       id={chain.id}
                       defaultChecked={true}
-                      isChecked={checkedStates.get(chain.id)}
+                      isChecked={checkedStates.get(chain.id) || false}
                       onChange={(e) => {
                         handleChainClick(chain.id)
                         toggleCheck(chain.id)
