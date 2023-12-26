@@ -122,13 +122,13 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      {
+      {/* {
         <InfoBanner
           text={
             "A new incentive program for Real Yield BTC is progressing through governance. If it passes, rewards will begin December 22nd."
           }
         />
-      }
+      }  */}
       {/* <HStack
         p={4}
         mb={6}
