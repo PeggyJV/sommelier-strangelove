@@ -229,7 +229,7 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
                     <Text fontWeight="semibold">{token.symbol}</Text>
                     <Checkbox
                       id={token.symbol}
-                      isChecked={checkedStates.get(token.symbol)}
+                      isChecked={checkedStates.get(token.symbol) || false}
                       onChange={(e) => {
                         handleTokenClick(token.symbol)
                         toggleCheck(token.symbol)
