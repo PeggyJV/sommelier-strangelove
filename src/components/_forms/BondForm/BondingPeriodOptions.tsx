@@ -9,7 +9,6 @@ import { ConfigProps } from "data/types"
 import { bondingPeriodOptions } from "data/uiConfig"
 import { VFC, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
-import { analytics } from "utils/analytics"
 
 interface BondingPeriodOptionsProps {
   cellarConfig: ConfigProps

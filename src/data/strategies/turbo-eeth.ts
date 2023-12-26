@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { EETHIcon } from "components/_icons"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboeETH: CellarData = {
   name: "Turbo eETH",
@@ -62,6 +63,7 @@ export const turboeETH: CellarData = {
     list: ["WETH"],
   },
   config: {
+    chain: chainSlugMap.ETHEREUM,
     id: config.CONTRACT.TURBO_EETH.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_EETH,
     lpToken: {
@@ -79,7 +81,7 @@ export const turboeETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.WETH,
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [
       {
         customStrategyHighlight: "Emergent Asset",

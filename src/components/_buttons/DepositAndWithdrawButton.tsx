@@ -12,10 +12,8 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { isBefore } from "date-fns"
-import { zonedTimeToUtc } from "date-fns-tz"
-import { analytics } from "utils/analytics"
 import { toEther } from "utils/formatCurrency"
-import { useAccount } from "wagmi"
+import { useAccount, useNetwork } from "wagmi"
 import { BaseButton } from "./BaseButton"
 import { useState } from "react"
 
@@ -95,6 +93,7 @@ export function DepositAndWithdrawButton({
   const isBeforeLaunch = checkIsBeforeLaunch(
     row?.original?.launchDate
   )
+  const { chain } = useNetwork()
   const [isOracleModalOpen, setOracleModalOpen] = useState(false)
   const openOracleModal = () => setOracleModalOpen(true)
   const closeOracleModal = () => setOracleModalOpen(false)
@@ -125,10 +124,16 @@ export function DepositAndWithdrawButton({
           isBeforeLaunch
         )}
         variant="solid"
-        onClick={(e) => {
+        onClick={async (e) => {
           e.stopPropagation()
           // analytics.track("home.deposit.modal-opened")
 
+          // Check if user is on the right chain, if not prompt them to switch
+          if (chain?.id !== cellarConfig.chain.wagmiId) {
+            // Continue to manage page where user can switch
+            window.location.href = `/strategies/${id}/manage`
+            return
+          }
           //! if share price oracle updating..
           //if (row.original.slug === "Turbo-SOMM") {
           //  openOracleModal()

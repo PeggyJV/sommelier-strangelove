@@ -24,13 +24,15 @@ export const CroppedMap: VFC<CroppedMapProps> = ({
   const [displayedAsset, setDisplayedAsset] = useState<string | null>(
     null
   )
-  const tokensCropped = tokens.slice(0, 6)
+
+  // Drop anything that's undefined
+  const tokensCropped = tokens.slice(0, 6).filter((token) => token)
 
   return (
     <HStack align="flex-start">
       <HStack role="group" pt={1} spacing={-1.5} {...rest}>
         {tokensCropped?.map((token, i) => {
-          const { src, alt, address, symbol } = token
+          const { src, alt, address, symbol, chain } = token
           return (
             <Avatar
               key={address + i}
@@ -68,7 +70,7 @@ export const CroppedMap: VFC<CroppedMapProps> = ({
           label={
             <VStack align="flex-start" minW={120}>
               {tokens.map((token, i) => {
-                const { src, alt, address, symbol } = token
+                const { src, alt, address, symbol, chain } = token
 
                 return (
                   <HStack key={address + i}>

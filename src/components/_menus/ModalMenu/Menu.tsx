@@ -21,7 +21,6 @@ import { getTokenConfig, Token } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
 import { toEther } from "utils/formatCurrency"
 import { ModalMenuProps } from "."
-import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { depositAssetDefaultValue } from "data/uiConfig"
@@ -55,7 +54,7 @@ export const Menu: VFC<MenuProps> = ({
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
 
-  const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
+  const depositTokenConfig = getTokenConfig(depositTokens, cellarConfig.chain.id) as Token[]
   const setMax = () => {
     // analytics.track("deposit.max-selected", {
     //   value: selectedTokenBalance?.value?.toString(),

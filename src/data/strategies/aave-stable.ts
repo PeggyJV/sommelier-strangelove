@@ -7,8 +7,9 @@ import {
   CellarNameKey,
   CellarData,
 } from "../types"
-import { depositAssetTokenList } from "../tokenConfig"
+import { depositAssetTokenList, tokenConfig } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const aaveStable: CellarData = {
   deprecated: true,
@@ -82,15 +83,15 @@ export const aaveStable: CellarData = {
       address: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ADDRESS,
       abi: config.CONTRACT.AAVE_V2_STABLE_CELLAR.ABI,
       key: CellarKey.CELLAR_V0815,
-      decimals: 18
+      decimals: 18,
     },
     staker: {
       address: config.CONTRACT.AAVE_STAKER.ADDRESS,
       abi: config.CONTRACT.AAVE_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

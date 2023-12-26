@@ -16,6 +16,7 @@ import {
   useDisconnect,
   useEnsAvatar,
   useEnsName,
+  useNetwork,
 } from "wagmi"
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
@@ -24,9 +25,10 @@ import { analytics } from "utils/analytics"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
-import { config } from "utils/config"
 import { useRouter } from "next/router"
 import { CellarNameKey } from "data/types"
+import { chainConfig } from "data/chainConfig"
+import { tokenConfig } from "data/tokenConfig"
 
 export const ConnectedPopover = () => {
   const { addToast, close } = useBrandedToast()
@@ -59,6 +61,13 @@ export const ConnectedPopover = () => {
     },
   })
 
+  const { chain } = useNetwork()
+  const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id!)
+  // Use coingecko id for sommelier token bc it can be axlSomm too
+  const sommToken = tokenConfig.find(
+    (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj?.id
+  )!
+
   const id = useRouter().query.id as string | undefined
   const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
 
@@ -68,6 +77,8 @@ export const ConnectedPopover = () => {
     })
 
     disconnect()
+    // Refresh window
+    window.location.reload()
   }
 
   const walletAddressIcon = () => {
@@ -145,7 +156,7 @@ export const ConnectedPopover = () => {
         <PopoverBody p={0}>
           <Stack>
             <Link
-              href={`https://etherscan.io/address/${address}`}
+              href={`${chain?.blockExplorers?.default.url}/address/${address}`}
               isExternal
               py={2}
               px={4}
@@ -156,7 +167,7 @@ export const ConnectedPopover = () => {
               }}
             >
               <LogoutCircleIcon mr={2} />
-              View on Etherscan
+              {`View on ${chain?.blockExplorers?.default.name}`}
             </Link>
             {selectedStrategy && (
               <>
@@ -171,6 +182,7 @@ export const ConnectedPopover = () => {
                       importToken.mutate({
                         address:
                           selectedStrategy.config.lpToken.address,
+                        chain: selectedStrategy.config.chain.id,
                       })
                     }}
                     _hover={{
@@ -199,10 +211,11 @@ export const ConnectedPopover = () => {
                   px={4}
                   fontSize="sm"
                   onClick={() => {
-                    const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
+                    const fullImageUrl = `${window.origin}${sommToken.src}`
                     importToken.mutate({
-                      address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                      address: sommToken.address,
                       imageUrl: fullImageUrl,
+                      chain: selectedStrategy.config.chain.id,
                     })
                   }}
                   _hover={{
@@ -213,7 +226,7 @@ export const ConnectedPopover = () => {
                 >
                   <HStack>
                     <Avatar
-                      src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
+                      src={sommToken.src}
                       size="2xs"
                     />
                     <Text fontWeight="semibold">
@@ -260,10 +273,13 @@ export const ConnectedPopover = () => {
               px={4}
               fontSize="sm"
               onClick={() => {
-                const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`
+                const fullImageUrl = `${
+                  window.origin
+                }${tokenConfig.find((t) => sommToken.src )!}`
                 importToken.mutate({
-                  address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                  address: sommToken.address,
                   imageUrl: fullImageUrl,
+                  chain: sommToken.chain,
                 })
               }}
               _hover={{
@@ -274,7 +290,7 @@ export const ConnectedPopover = () => {
             >
               <HStack>
                 <Avatar
-                  src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
+                  src={sommToken.src}
                   size="2xs"
                 />
                 <Text fontWeight="semibold">

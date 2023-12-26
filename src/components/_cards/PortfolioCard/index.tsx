@@ -49,6 +49,7 @@ import BondingTableCard from "../BondingTableCard"
 import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
+import { useNetwork } from "wagmi"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
@@ -60,17 +61,26 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const dashboard = cellarDataMap[id].dashboard
 
   const depositTokens = cellarDataMap[id].depositTokens.list
-  const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
+  const depositTokenConfig = getTokenConfig(
+    depositTokens,
+    cellarConfig.chain.id
+  ) as Token[]
 
   const { lpToken } = useUserBalances(cellarConfig)
-  const { data: lpTokenData } = lpToken
+  let { data: lpTokenData } = lpToken
   const lpTokenDisabled =
     !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
 
   const { data: strategyData, isLoading: isStrategyLoading } =
-    useStrategyData(cellarConfig.cellar.address)
-  const { data: userData, isLoading: isUserDataLoading } =
-    useUserStrategyData(cellarConfig.cellar.address)
+    useStrategyData(
+      cellarConfig.cellar.address,
+      cellarConfig.chain.id
+    )
+  let { data: userData, isLoading: isUserDataLoading } =
+    useUserStrategyData(
+      cellarConfig.cellar.address,
+      cellarConfig.chain.id
+    )
 
   const activeAsset = strategyData?.activeAsset
   const stakingEnd = strategyData?.stakingEnd
@@ -82,6 +92,16 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const isStakingAllowed = stakingEnd?.endDate
     ? isFuture(stakingEnd.endDate)
     : false
+
+  // Make sure the user is on the same chain as the strategy
+  const { chain: wagmiChain } = useNetwork()
+  let buttonsEnabled = true
+  if (strategyData?.config.chain.wagmiId !== wagmiChain?.id!) {
+    // Override userdata so as to not confuse people if they're on the wrong chain
+    userData = undefined
+    lpTokenData = undefined
+    buttonsEnabled = false
+  }
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
@@ -199,16 +219,23 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   <>
                     {!strategyData?.deprecated && (
                       <DepositButton
-                        disabled={!isConnected || strategyData?.isContractNotReady}
+                        disabled={
+                          !isConnected ||
+                          strategyData?.isContractNotReady ||
+                          !buttonsEnabled
+                        }
                       />
                     )}
                     <WithdrawButton
                       isDeprecated={strategyData?.deprecated}
-                      disabled={lpTokenDisabled}
+                      disabled={lpTokenDisabled || !buttonsEnabled}
                     />
                   </>
                 ) : (
-                  <ConnectButton unstyled />
+                  <ConnectButton
+                    overrideChainId={cellarConfig.chain.id}
+                    unstyled
+                  />
                 ))}
             </Stack>
           </SimpleGrid>
@@ -263,7 +290,11 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                     {isBondButtonEnabled(cellarConfig) &&
                       isStakingAllowed &&
                       isMounted && (
-                        <BondButton disabled={lpTokenDisabled} />
+                        <BondButton
+                          disabled={
+                            lpTokenDisabled || !buttonsEnabled
+                          }
+                        />
                       )}
                   </>
                 )}

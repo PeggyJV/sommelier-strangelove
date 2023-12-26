@@ -106,6 +106,8 @@ export const useApproveERC20 = ({
           }
         }
       } catch (e) {
+        const error = e as Error
+        console.error(error)
         addToast({
           heading: "ERC20 Approval",
           body: <Text>Approval Cancelled</Text>,

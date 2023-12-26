@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const ethTrendGrowth: CellarData = {
   name: "ETH Trend Growth",
@@ -77,7 +78,8 @@ export const ethTrendGrowth: CellarData = {
       abi: config.CONTRACT.ETH_TREND_GROWTH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

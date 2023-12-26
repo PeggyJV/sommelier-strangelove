@@ -15,9 +15,6 @@ import { isUseBigBacktestingModal } from "data/uiConfig"
 import htmr from "htmr"
 import { useRouter } from "next/router"
 import { useState, VFC } from "react"
-import { BsChevronDown, BsChevronUp } from "react-icons/bs"
-import { analytics } from "utils/analytics"
-import { landingType } from "utils/landingType"
 
 interface HighlightProps {
   id: string

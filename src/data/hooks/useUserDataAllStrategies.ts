@@ -5,6 +5,8 @@ import { useAllContracts } from "./useAllContracts"
 import { useAllStrategiesData } from "./useAllStrategiesData"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useState, useEffect } from "react"
+import { useNetwork } from "wagmi"
+import { chainConfig } from "data/chainConfig"
 
 export const useUserDataAllStrategies = () => {
   const { data: signer } = useSigner()
@@ -13,6 +15,11 @@ export const useUserDataAllStrategies = () => {
   const strategies = useAllStrategiesData()
   const sommPrice = useCoinGeckoPrice("sommelier")
   const [error, setError] = useState(null)
+
+  const { chain } = useNetwork()
+  const chainObj = chainConfig.find(
+    (item) => item.wagmiId === chain?.id
+  )!
 
   const query = useQuery(
     [
@@ -29,6 +36,7 @@ export const useUserDataAllStrategies = () => {
         strategiesData: strategies.data!,
         userAddress: address!,
         sommPrice: sommPrice.data!,
+        chain: chainObj.id,
       })
     },
     {
@@ -37,7 +45,8 @@ export const useUserDataAllStrategies = () => {
         !!signer?._isSigner &&
         !!strategies.data &&
         !!address &&
-        !!sommPrice.data,
+        !!sommPrice.data &&
+        !!chainObj.id,
     }
   )
 

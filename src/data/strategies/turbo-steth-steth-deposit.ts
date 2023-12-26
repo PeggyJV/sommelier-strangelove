@@ -7,6 +7,7 @@ import {
   CellarType,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboSTETHstETHDeposit: CellarData = {
   name: "Turbo stETH",
@@ -65,6 +66,8 @@ export const turboSTETHstETHDeposit: CellarData = {
     list: ["stETH"],
   },
   config: {
+    chain: chainSlugMap.ETHEREUM,
+    baseAsset: tokenConfigMap.stETH_ETHEREUM,
     id: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_STETH_STETH_DEPOSIT,
     lpToken: {
@@ -82,7 +85,6 @@ export const turboSTETHstETHDeposit: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.stETH,
     show7DayAPYTooltip: true,
     badges: [
       {

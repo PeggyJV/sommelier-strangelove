@@ -161,19 +161,30 @@ const prevMonth = getPreviousMonth()
 
 export const ApyChartProvider: FC<{
   address: string
-}> = ({ children, address }) => {
+  chain: string
+}> = ({ children, address, chain }) => {
+  let chainStr = ""
+  if (chain !== "ethereum") {
+    chainStr = "-" + chain
+  }
+
   const cellarConfig: CellarData =
-    CellaAddressDataMap[address.toLowerCase()]
+    CellaAddressDataMap[address.toLowerCase() + chainStr]
   const [showLine, setShowLine] = useState<ShowLine>({
     apy: true,
   })
   const [timeline, setTimeline] = useState<Timeline>("7D")
   const cellarData = Object.values(cellarDataMap).find(
-    (item) => item.config.cellar.address === address
-  )
+    (item) =>
+      item.config.cellar.address === address &&
+      item.config.chain.id === cellarConfig.config.chain.id
+  )!
   const launchDate = cellarData?.launchDate!
   const { data: strategyData, isLoading: isStrategyDataLoading } =
-    useStrategyData(cellarData!.config.cellar.address)
+    useStrategyData(
+      cellarData!.config.cellar.address,
+      cellarData!.config.chain.id
+    )
   const launchDay = launchDate ?? subDays(new Date(), 8)
   const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
@@ -192,7 +203,11 @@ export const ApyChartProvider: FC<{
 
   useEffect(() => {
     setWeeklyIsFetching(true)
-    fetchWeeklyShareValueData(prevWeek, address)
+    fetchWeeklyShareValueData(
+      prevWeek,
+      address,
+      cellarData.config.chain.id
+    )
       .then((data) => {
         setWeeklyDataRaw(data)
         setWeeklyIsFetching(false)
@@ -218,7 +233,11 @@ export const ApyChartProvider: FC<{
 
   useEffect(() => {
     setMonthlyIsFetching(true)
-    fetchMonthlyShareValueData(prevMonth, address)
+    fetchMonthlyShareValueData(
+      prevMonth,
+      address,
+      cellarData.config.chain.id
+    )
       .then((data) => {
         setMonthlyDataRaw(data)
         setMonthlyIsFetching(false)
@@ -244,7 +263,7 @@ export const ApyChartProvider: FC<{
 
   useEffect(() => {
     setAllTimeIsFetching(true)
-    fetchAllTimeShareValueData(address)
+    fetchAllTimeShareValueData(address, cellarData.config.chain.id)
       .then((data) => {
         setAllTimeDataRaw(data)
         setAllTimeIsFetching(false)

@@ -9,6 +9,8 @@ import {
   Text,
   Tooltip,
   chakra,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
 import { CellarType, Badge } from "data/types"
@@ -130,27 +132,34 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             paddingTop={".2em"}
           >
             <StrategyDate date={date} deprecated={isDeprecated} />
-            {badges && badges.length > 0
-              ? badges.map((badge, index) => (
-                  <Text
-                    key={index}
-                    bg={
-                      badge.customStrategyHighlightColor !== undefined
-                        ? badge.customStrategyHighlightColor
-                        : "purple.base"
-                    }
-                    rounded="4"
-                    paddingLeft=".5em"
-                    paddingRight=".5em"
-                    fontSize="0.75rem"
-                    fontWeight={600}
-                    width="fit-content"
-                    display="inline-block"
-                  >
-                    {badge.customStrategyHighlight}
-                  </Text>
-                ))
-              : null}
+            {badges && badges.length > 0 && (
+              <Wrap
+                spacing="2"
+                justify={isMobile ? "start" : "flex-start"}
+              >
+                {badges.map((badge, index) => (
+                  <WrapItem key={index}>
+                    <Text
+                      bg={
+                        badge.customStrategyHighlightColor !==
+                        undefined
+                          ? badge.customStrategyHighlightColor
+                          : "purple.base"
+                      }
+                      rounded="4"
+                      paddingLeft=".5em"
+                      paddingRight=".5em"
+                      fontSize="0.75rem"
+                      fontWeight={600}
+                      width="fit-content"
+                      display="inline-block"
+                    >
+                      {badge.customStrategyHighlight}
+                    </Text>
+                  </WrapItem>
+                ))}
+              </Wrap>
+            )}
           </Flex>
           <Flex
             gap={1}

@@ -7,6 +7,7 @@ import {
   CellarType,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const realYieldENS: CellarData = {
   name: "Real Yield ENS",
@@ -72,7 +73,8 @@ export const realYieldENS: CellarData = {
       key: CellarKey.CELLAR_V2,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.ENS,
+    baseAsset: tokenConfigMap.ENS_ETHEREUM,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

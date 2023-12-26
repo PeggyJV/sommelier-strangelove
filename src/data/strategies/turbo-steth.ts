@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { WstethIcon } from "components/_icons"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboSTETH: CellarData = {
   name: "Turbo stETH",
@@ -68,6 +69,7 @@ export const turboSTETH: CellarData = {
     list: ["WETH"],
   },
   config: {
+    chain: chainSlugMap.ETHEREUM,
     id: config.CONTRACT.TURBO_STETH.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_STETH,
     lpToken: {
@@ -85,13 +87,14 @@ export const turboSTETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.WETH,
-    /** 
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [
+      /*
       {
         customStrategyHighlight: "wstETH Incentives",
         customStrategyHighlightColor: "#00C04B",
       },
+      */
     ],
     customReward: {
       showAPY: true,
@@ -119,7 +122,6 @@ export const turboSTETH: CellarData = {
       showSommRewards: false,
       //customIconToolTipMsg?: string
     },
-    **/
   },
   faq: [
     {

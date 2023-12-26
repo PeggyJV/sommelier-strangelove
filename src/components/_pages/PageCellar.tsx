@@ -52,7 +52,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
 
   return (
-    <Layout>
+    <Layout chainObj={cellarConfig.chain}>
       <Section>
         <HStack
           pb={isLarger768 ? 12 : 0}
@@ -88,7 +88,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
           {!notLaunched &&
             isApyChartEnabled(cellarConfig) &&
             !isEstimatedApyEnable(cellarConfig) && (
-              <ApyChartProvider address={cellarAddress}>
+              <ApyChartProvider address={cellarAddress} chain={cellarConfig.chain.id}>
                 <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                   Vault Perfomance
                 </Heading>
@@ -96,7 +96,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
               </ApyChartProvider>
             )}
           {isTokenPriceChartEnabled(cellarConfig) && (
-            <TokenPriceChartProvider address={cellarAddress}>
+            <TokenPriceChartProvider address={cellarAddress} chain={cellarConfig.chain.id}>
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                 Vault Perfomance
               </Heading>

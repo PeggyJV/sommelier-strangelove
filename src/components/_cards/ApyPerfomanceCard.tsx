@@ -31,7 +31,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
   const cellarConfig = cellarDataMap[id].config
 
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   // Default timeline
@@ -84,11 +84,6 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
   if (isError) {
     return <ErrorCard />
   }
-
-  let baseApy = strategyData?.baseApy?.formatted ?? "0.00%"
-  let rewardsApy = strategyData?.rewardsApy?.formatted ?? "0.00%"
-  let baseApySumRewards =
-    strategyData?.baseApySumRewards.formatted ?? "0.00%"
 
   return (
     <Skeleton

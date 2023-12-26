@@ -2,7 +2,7 @@ import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
 import { config } from "utils/config"
-import { useAccount, useContract, useSigner } from "wagmi"
+import { erc20ABI, useAccount, useContract, useSigner } from "wagmi"
 import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
 import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
@@ -14,14 +14,17 @@ import { GravityBridge } from "src/abi/types"
 import { analytics } from "utils/analytics"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { getAddress } from "ethers/lib/utils.js"
+import { useNetwork } from "wagmi"
+import { tokenConfigMap } from "data/tokenConfig"
 
+// TODO: this needs to be adapted to multichain 
 export const useBridgeEthToSommTx = () => {
   const { CONTRACT } = config
   // Currently `close` have a bug it only closes the last toast appeared
   // TODO: Fix `close` and implement it here https://github.com/strangelove-ventures/sommelier/issues/431
   const { addToast, update, closeAll } = useBrandedToast()
   const [isLoading, setIsLoading] = useState(false)
-
+  const { chain } = useNetwork()
   const { data: signer } = useSigner()
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -29,8 +32,8 @@ export const useBridgeEthToSommTx = () => {
   const { address } = useAccount()
 
   const erc20Contract = useContract({
-    address: CONTRACT.SOMMELLIER.ADDRESS,
-    abi: CONTRACT.SOMMELLIER.ABI,
+    address: tokenConfigMap.SOMM_ETHEREUM.address,
+    abi: erc20ABI,
     signerOrProvider: signer,
   })!
 
@@ -60,12 +63,12 @@ export const useBridgeEthToSommTx = () => {
 
       <Link
         fontSize="sm"
-        href={`https://etherscan.io/tx/${hash}`}
+        href={`${chain?.blockExplorers?.default.url}/tx/${hash}`}
         target="_blank"
         textDecor="underline"
       >
         <HStack>
-          <Text>View on Etherscan</Text>
+          <Text>{`View on ${chain?.blockExplorers?.default.name}`}</Text>
           <ExternalLinkIcon boxSize={3} />
         </HStack>
       </Link>
@@ -105,12 +108,12 @@ export const useBridgeEthToSommTx = () => {
       </Stack>
       <Link
         fontSize="sm"
-        href={`https://etherscan.io/tx/${hash}`}
+        href={`${chain?.blockExplorers?.default.url}/tx/${hash}`}
         target="_blank"
         textDecor="underline"
       >
         <HStack>
-          <Text>View on Etherscan</Text>
+          <Text>{`View on ${chain?.blockExplorers?.default.name}`}</Text>
           <ExternalLinkIcon boxSize={3} />
         </HStack>
       </Link>
@@ -139,7 +142,7 @@ export const useBridgeEthToSommTx = () => {
       setIsLoading(true)
       const convertedAmount = ethers.utils.parseUnits(
         String(props.amount),
-        CONTRACT.SOMMELLIER.DECIMALS
+        tokenConfigMap.SOMM_ETHEREUM.decimals
       )
       // analytics.track("bridge.approval-required", {
       //   value: props.amount,
@@ -164,7 +167,7 @@ export const useBridgeEthToSommTx = () => {
           duration: null,
           closeHandler: closeAll,
         })
-        
+
         // ERC20 Approval
         const { hash: erc20Hash } = await erc20Contract.approve(
           getAddress(CONTRACT.BRIDGE.ADDRESS),
@@ -231,7 +234,7 @@ export const useBridgeEthToSommTx = () => {
       })
       const bytes32 = getBytes32(props.address)
       const { hash: bridgeHash } = await bridgeContract.sendToCosmos(
-        CONTRACT.SOMMELLIER.ADDRESS,
+        tokenConfigMap.SOMM_ETHEREUM.address,
         bytes32,
         convertedAmount
       )

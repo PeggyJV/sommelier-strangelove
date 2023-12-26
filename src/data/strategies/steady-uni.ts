@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const steadyUni: CellarData = {
   deprecated: true,
@@ -172,8 +173,8 @@ Presented results are based on historical back tests. Past performance is not in
       abi: config.CONTRACT.STEADY_UNI_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

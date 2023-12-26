@@ -1,10 +1,11 @@
-const getUrl = (cellarAddress: string) =>
-  `/api/sommelier-api-all-time-share-value-data?cellarAddress=${cellarAddress}`
+const getUrl = (cellarAddress: string, chain: string) =>
+  `/api/sommelier-api-all-time-share-value-data?cellarAddress=${cellarAddress}&chain=${chain}`
 
 export const fetchAllTimeShareValueData = async (
-  cellarAddress: string
+  cellarAddress: string,
+  chain: string
 ) => {
-  const url = getUrl(cellarAddress)
+  const url = getUrl(cellarAddress, chain)
 
   try {
     const data = await fetch(url)
