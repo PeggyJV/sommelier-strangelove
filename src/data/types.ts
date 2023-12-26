@@ -1,6 +1,7 @@
 import { IconProps } from "@chakra-ui/react"
 import { VFC } from "react"
 import { Token } from "src/data/tokenConfig"
+import  { Chain } from "data/chainConfig"
 
 export enum StakerKey {
   CELLAR_STAKING_V0815 = "CELLAR_STAKING_V0815",
@@ -39,6 +40,7 @@ export enum CellarNameKey {
   ETH_TREND_GROWTH = "ETH_TREND_GROWTH",
   TURBO_GHO = "TURBO_GHO",
   TURBO_STETH = "TURBO_STETH",
+  TEST_ARBITRUM_REAL_YIELD_USD = "TEST_ARBITRUM_REAL_YIELD_USD",
   TURBO_STETH_STETH_DEPOSIT = "TURBO_STETH_STETH_DEPOSIT",
   TURBO_SOMM = "TURBO_SOMM",
   TURBO_EETH = "TURBO_EETH",
@@ -75,12 +77,12 @@ export interface ConfigProps {
     abi: readonly {}[]
     key: StakerKey
   }
-  rewardTokenAddress?: string
   customReward?: CustomReward
   badges?: Badge[]
   baseAsset: Token
   feePromotion?: string
   show7DayAPYTooltip?: boolean
+  chain: Chain
 }
 
 export enum CellarType {

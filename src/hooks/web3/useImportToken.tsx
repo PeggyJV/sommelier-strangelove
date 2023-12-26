@@ -4,9 +4,11 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { MutationEventArgs } from "types/hooks"
 import { getAddress } from "ethers/lib/utils.js"
 import { Address } from "wagmi"
+import { chainConfigMap } from "data/chainConfig"
 type Args = {
   address: string
   imageUrl?: string
+  chain: string
 }
 
 type UseImportTokenArgs = MutationEventArgs<
@@ -21,19 +23,26 @@ type DoImportToken = (
 export const doImportToken: DoImportToken = async ({
   address,
   imageUrl,
+  chain,
 }) => {
   try {
     if (typeof window.ethereum === "undefined") {
       throw new Error("No wallet installed")
     }
+    // Get chain from chainConfigMap
+    const chainObj = chainConfigMap[chain]
+
     const tokenData = await fetchToken({
       address: getAddress(address),
+      chainId: chainObj.wagmiId,
     })
     if (!tokenData) {
       throw new Error("Token data is undefined")
     }
     const imgUrl = Object.values(cellarDataMap).find(
-      (item) => item.config.lpToken.address === address
+      (item) =>
+        item.config.lpToken.address === address &&
+        item.config.chain.id === chainObj.id
     )?.config.lpToken.imagePath
     const fullImageUrl = `${window.origin}${imgUrl}`
     const res = await window.ethereum.request({

@@ -18,8 +18,7 @@ import { useTable, useSortBy } from "react-table"
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { useRouter } from "next/router"
 import { getUserDataAllStrategies } from "data/actions/common/getUserDataAllStrategies"
-import { analytics } from "utils/analytics"
-import { DIRECT, landingType } from "utils/landingType"
+import { landingType } from "utils/landingType"
 
 interface BorderTrProps extends TableRowProps {
   slug: string

@@ -1,41 +1,61 @@
-import { getContract, getProvider, fetchSigner } from "@wagmi/core"
+import {
+  getContract,
+  getProvider,
+  fetchSigner,
+  Signer,
+  Provider,
+} from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { AllContracts } from "../types"
 
-export const getAllContracts = async () => {
-  const signer = await fetchSigner()
-  const provider = getProvider()
+export const getAllContracts = async (
+  providerMap: Map<string, Provider>,
+  signerMap: Map<string, Signer | undefined>
+) => {
   let contracts: AllContracts = {}
-  Object.values(cellarDataMap).forEach(({ config }) => {
+
+  for (const [key, cellar] of Object.entries(cellarDataMap)) {
+    const provider = providerMap.get(cellar.config.chain.id)
+    const signer = signerMap.get(cellar.config.chain.id)
+
+    // Make sure we have a provider before attempting to create a contract
+    if (!provider) {
+      throw new Error(
+        `Provider for chain ${cellar.config.chain.id} not found`
+      )
+    }
+
     const cellarContract = getContract({
-      address: config.cellar.address,
-      abi: config.cellar.abi,
+      address: cellar.config.cellar.address,
+      abi: cellar.config.cellar.abi,
       signerOrProvider: provider,
     })
+
     const cellarSigner = getContract({
-      address: config.cellar.address,
-      abi: config.cellar.abi,
+      address: cellar.config.cellar.address,
+      abi: cellar.config.cellar.abi,
       signerOrProvider: signer || undefined,
     })
 
     const stakerContract =
-      config.staker &&
+      cellar.config.staker &&
       getContract({
-        address: config.staker.address,
-        abi: config.staker.abi,
+        address: cellar.config.staker.address,
+        abi: cellar.config.staker.abi,
         signerOrProvider: provider,
       })
+
     const stakerSigner =
-      config.staker &&
+      cellar.config.staker &&
       getContract({
-        address: config.staker.address,
-        abi: config.staker.abi,
+        address: cellar.config.staker.address,
+        abi: cellar.config.staker.abi,
         signerOrProvider: signer || undefined,
       })
 
     const cellarRouterSigner = getContract({
-      address: config.cellarRouter.address,
-      abi: config.cellarRouter.abi,
+      address: cellar.config.cellarRouter.address,
+      abi: cellar.config.cellarRouter.abi,
       signerOrProvider: signer || undefined,
     })
 
@@ -45,9 +65,19 @@ export const getAllContracts = async () => {
       stakerContract,
       stakerSigner,
       cellarRouterSigner,
+      chain: cellar.config.chain.id,
     }
 
-    contracts = { ...contracts, [config.cellar.address]: contract }
-  })
+    let chainId = ''
+    if (cellar.config.chain.id !== 'ethereum'){
+      chainId = `-${cellar.config.chain.id}`
+    }
+
+    contracts = {
+      ...contracts,
+      [`${cellar.config.cellar.address}${chainId}`]: contract,
+    }
+  }
+
   return contracts
 }

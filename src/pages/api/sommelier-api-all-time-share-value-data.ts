@@ -9,11 +9,10 @@ const sommelierAPIAllTimeShareValueData = async (
   res: NextApiResponse
 ) => {
   try {
-    let { cellarAddress } = req.query
+    let { cellarAddress, chain } = req.query
 
-    // TODO: Generalize for multichain
     const data = await fetch(
-      `https://api.sommelier.finance/dailyData/ethereum/${cellarAddress}/0/latest`,
+      `https://api.sommelier.finance/dailyData/${chain}/${cellarAddress}/0/latest`,
       {
         method: "GET",
         headers: {
@@ -27,8 +26,13 @@ const sommelierAPIAllTimeShareValueData = async (
     }
 
     const fetchedData = await data.json()
+    let chainStr = ''
+    if (chain !== "ethereum") {
+      chainStr = "-" + chain
+    }
+    
     let cellarDecimals =
-      CellaAddressDataMap[cellarAddress!.toString().toLowerCase()]
+      CellaAddressDataMap[cellarAddress!.toString().toLowerCase() + chainStr]
         .config.cellar.decimals
 
     let transformedData = fetchedData.Response.map(

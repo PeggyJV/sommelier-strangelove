@@ -4,6 +4,7 @@ import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { TransactionReceipt } from "@ethersproject/providers"
+import { ConfigProps } from "data/types"
 
 type Result =
   | {
@@ -16,6 +17,7 @@ type Result =
     }
 
 type TxParams = {
+  cellarConfig: ConfigProps
   hash: string
   toastBody?: {
     info?: React.ReactNode
@@ -36,6 +38,7 @@ export const useHandleTransaction = (): {
   })
 
   const doHandleTransaction = async ({
+    cellarConfig,
     hash,
     toastBody,
     onSuccess,
@@ -62,10 +65,10 @@ export const useHandleTransaction = (): {
           <Link
             display="flex"
             alignItems="center"
-            href={`https://etherscan.io/tx/${result?.data?.transactionHash}`}
+            href={`${cellarConfig.chain.blockExplorer.url}/tx/${result?.data?.transactionHash}`}
             isExternal
           >
-            <Text as="span">View on Etherscan</Text>
+            <Text as="span">{`View on ${cellarConfig.chain.blockExplorer.name}`}</Text>
             <ExternalLinkIcon ml={2} />
           </Link>
         </>

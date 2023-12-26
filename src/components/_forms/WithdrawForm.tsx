@@ -28,7 +28,6 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
-import { useCurrentPosition } from "data/hooks/useCurrentPosition"
 import { waitTime } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
@@ -61,9 +60,9 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const id = (useRouter().query.id as string) || _id
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
 
@@ -78,8 +77,6 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const isDisabled =
     isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
   const isError = errors.withdrawAmount
-
-  const currentPosition = useCurrentPosition(cellarConfig)
 
   const setMax = () => {
     const amount = parseFloat(
@@ -165,6 +162,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       }
 
       await doHandleTransaction({
+        cellarConfig,
         ...tx,
         onSuccess,
         onError,
@@ -232,15 +230,26 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
             heading: "Transaction not submitted",
             body: (
               <Text>
-                The gas fees are particularly high right now. To avoid
-                a failed transaction leading to wasted gas, please try
-                again later.
+                Your transaction has failed, if it does not work after
+                waiting some time and retrying please send a message
+                in our{" "}
+                {
+                  <Link
+                    href="https://discord.com/channels/814266181267619840/814279703622844426"
+                    isExternal
+                    textDecoration="underline"
+                  >
+                    Discord Support channel
+                  </Link>
+                }{" "}
+                tagging a member of the front end team.
               </Text>
             ),
             status: "info",
             closeHandler: closeAll,
           })
         } else {
+          console.error(error)
           addToast({
             heading: "Withdraw",
             body: <Text>Withdraw Cancelled</Text>,
@@ -269,11 +278,6 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     }
     return `${Math.floor(num * fixed) / fixed}%`
   }
-
-  useEffect(() => {
-    currentPosition.refetch()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <VStack

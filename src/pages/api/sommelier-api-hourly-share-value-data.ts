@@ -9,13 +9,12 @@ const sommelierAPIHourlyShareValueData = async (
   res: NextApiResponse
 ) => {
   try {
-    let { epoch, cellarAddress } = req.query
+    let { epoch, cellarAddress, chain } = req.query
     // Cast epoch to number
     const startEpochNumber = Number(epoch)
 
-    // TODO: Generalize for multichain
     const data = await fetch(
-      `https://api.sommelier.finance/hourlyData/ethereum/${cellarAddress}/${startEpochNumber}/latest`,
+      `https://api.sommelier.finance/hourlyData/${chain}/${cellarAddress}/${startEpochNumber}/latest`,
       {
         method: "GET",
         headers: {
@@ -28,9 +27,14 @@ const sommelierAPIHourlyShareValueData = async (
       throw new Error("failed to fetch data")
     }
 
+    let chainStr = ""
+    if (chain !== "ethereum") {
+      chainStr = "-" + chain
+    }
+
     const fetchedData = await data.json()
     let cellarDecimals =
-      CellaAddressDataMap[cellarAddress!.toString().toLowerCase()]
+      CellaAddressDataMap[cellarAddress!.toString().toLowerCase() + chainStr]
         .config.cellar.decimals
 
     let transformedData = fetchedData.Response.map(
@@ -38,7 +42,7 @@ const sommelierAPIHourlyShareValueData = async (
         date: cellarHourData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
         shareValue: Math.floor(
-          cellarHourData.share_price * (10 ** cellarDecimals)
+          cellarHourData.share_price * 10 ** cellarDecimals
         ).toString(),
       })
     )
@@ -66,13 +70,11 @@ const sommelierAPIHourlyShareValueData = async (
     res.status(200).json(formattedResult)
   } catch (error) {
     console.error(error)
-    res
-      .status(500)
-      .send({
-        error: "failed to fetch data",
-        message:
-          (error as Error).message || "An unknown error occurred",
-      })
+    res.status(500).send({
+      error: "failed to fetch data",
+      message:
+        (error as Error).message || "An unknown error occurred",
+    })
   }
 }
 

@@ -6,24 +6,24 @@ import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
 import { useUserBalances } from "./useUserBalances"
-import { useState } from "react"
+import { useNetwork } from "wagmi"
 
-export const useUserStrategyData = (strategyAddress: string) => {
+export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const { data: signer } = useSigner()
   const { address: userAddress } = useAccount()
   const { data: allContracts } = useAllContracts()
-  const strategyData = useStrategyData(strategyAddress)
+  const strategyData = useStrategyData(strategyAddress, chain)
   const sommPrice = useCoinGeckoPrice("sommelier")
 
   const config = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address.toLowerCase() ===
-      strategyAddress.toLowerCase()
+      strategyAddress.toLowerCase() && item.config.chain.id === chain
   )!.config
 
   const isNoDataSource = Boolean(
     Object.values(cellarDataMap).find(
-      (item) => item.config.cellar.address === strategyAddress
+      (item) => item.config.cellar.address === strategyAddress && item.config.chain.id === chain
     )?.config.isNoDataSource
   )
   const { lpToken } = useUserBalances(config)
@@ -31,6 +31,12 @@ export const useUserStrategyData = (strategyAddress: string) => {
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
   )
+
+  // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
+  const key =
+    strategyAddress +
+    (config.chain.id !== "ethereum" ? "-" + chain : "")
+  
   const query = useQuery(
     [
       "USE_USER_DATA",
@@ -42,12 +48,13 @@ export const useUserStrategyData = (strategyAddress: string) => {
     ],
     async () => {
       return await getUserData({
-        contracts: allContracts![strategyAddress],
+        contracts: allContracts![key],
         address: strategyAddress,
         strategyData: strategyData.data!,
         userAddress: userAddress!,
         sommPrice: sommPrice.data ?? "0",
         baseAssetPrice: baseAssetPrice ?? "0",
+        chain: chain,
       })
     },
     {

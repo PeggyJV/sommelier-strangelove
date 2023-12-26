@@ -13,6 +13,7 @@ import {
   VStack,
   Tooltip,
   Th,
+  Link,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -47,7 +48,10 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
+  const { refetch } = useUserStrategyData(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
+  )
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
   const { lpToken, lpTokenInfo } = useUserBalances(cellarConfig)
@@ -140,6 +144,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       )
 
       await doHandleTransaction({
+        cellarConfig,
         hash: bondConf,
         onSuccess: () => {
           analytics.track("bond.succeeded", analyticsData)
@@ -150,16 +155,26 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
       })
       refetch()
     } catch (e) {
-      console.warn(e)
       const error = e as Error
+      console.error(error.message)
       if (error.message === "GAS_LIMIT_ERROR") {
         addToast({
           heading: "Transaction not submitted",
           body: (
             <Text>
-              The gas fees are particularly high right now. To avoid a
-              failed transaction leading to wasted gas, please try
-              again later.
+              Your transaction has failed, if it does not work after
+              waiting some time and retrying please send a message in
+              our{" "}
+              {
+                <Link
+                  href="https://discord.com/channels/814266181267619840/814279703622844426"
+                  isExternal
+                  textDecoration="underline"
+                >
+                  Discord Support channel
+                </Link>
+              }{" "}
+              tagging a member of the front end team.
             </Text>
           ),
           status: "info",

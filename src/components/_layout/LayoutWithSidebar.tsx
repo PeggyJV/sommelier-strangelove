@@ -5,7 +5,6 @@ import { Sidebar } from "components/_sidebar"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import { FC, useRef } from "react"
 import { useAccount } from "wagmi"
-import { TimeFrameButton } from "./TimeFrameButton"
 import { useInView } from "react-intersection-observer"
 
 export const LayoutWithSidebar: FC = ({ children }) => {

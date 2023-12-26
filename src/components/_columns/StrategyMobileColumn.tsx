@@ -1,10 +1,7 @@
 import { Text } from "@chakra-ui/react"
-import { PercentageText } from "components/PercentageText"
-import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
-import { CellValue } from "react-table"
 
 type StrategyMobileColumnProps = {
   timeline: Timeline

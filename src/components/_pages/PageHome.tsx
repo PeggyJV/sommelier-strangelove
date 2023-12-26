@@ -1,12 +1,4 @@
-import {
-  Button,
-  Center,
-  Heading,
-  HStack,
-  VStack,
-  Text,
-  Link,
-} from "@chakra-ui/react"
+import { Button, Center, HStack, Spacer, Text, VStack } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -23,12 +15,23 @@ import {
   DepositModalType,
   useDepositModalStore,
 } from "data/hooks/useDepositModalStore"
-import { CellarType } from "data/types"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { InfoBanner } from "components/_banners/InfoBanner"
-import { analytics } from "utils/analytics"
-import { ExternalLinkIcon } from "components/_icons"
+import { ChainFilter } from "components/_filters/ChainFilter"
+import { chainConfig } from "src/data/chainConfig"
+import {
+  DepositTokenFilter,
+  SymbolPathPair,
+} from "components/_filters/DepositTokenFilter"
+import { cellarDataMap } from "src/data/cellarDataMap"
+import { CellarData } from "src/data/types"
+import {
+  MiscFilter,
+  MiscFilterProp,
+} from "components/_filters/MiscFilter"
+import { isEqual } from "lodash"
+import { DeleteCircleIcon } from "components/_icons"
 
 export const PageHome = () => {
   const {
@@ -42,8 +45,7 @@ export const PageHome = () => {
   const isMobile = useBetterMediaQuery("(max-width: 900px)")
   const isTab = useBetterMediaQuery("(max-width: 1600px)")
   const isDesktop = !isTab && !isMobile
-  const [type, setType] = useState<string>("All")
-  const strategyType = ["All", "Trading", "Yield"]
+
   const {
     isOpen,
     onClose,
@@ -101,23 +103,185 @@ export const PageHome = () => {
         },
       })
 
+  const allChainIds = chainConfig.map((chain) => chain.id)
+
+  //Get all deposit assets from all strategies and turn it into a set of unique values
+  const allDepositAssets: SymbolPathPair[] = Object.values(
+    cellarDataMap
+  )
+    .map((cellarData: CellarData): SymbolPathPair[] => {
+      // Don't include deprecated strategies
+      if (cellarData.deprecated) {
+        return []
+      }
+
+      return cellarData.depositTokens.list.map((symbol) => ({
+        symbol: symbol,
+        path: `/assets/icons/${symbol.toLowerCase()}.png`,
+      }))
+    })
+    .flat()
+
+  // Create an object to ensure uniqueness
+  const uniqueAssetsMap: Record<string, SymbolPathPair> = {}
+
+  allDepositAssets.forEach((pair: SymbolPathPair) => {
+    if (!uniqueAssetsMap[pair.symbol]) {
+      uniqueAssetsMap[pair.symbol] = pair
+    }
+  })
+
+  // Copy the unique assets into a constants array
+  const constantAllUniqueAssetsArray = Object.values(uniqueAssetsMap)
+
+  // Always float up "WETH", "USDC", "WBTC", "SOMM", "stETH" to the top of the list in that order for the inital render
+  const constantOrderedAllUniqueAssetsArray = [
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "WETH"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "USDC"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "WBTC"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "SOMM"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) => pair.symbol === "stETH"
+    ),
+    ...constantAllUniqueAssetsArray.filter(
+      (pair) =>
+        pair.symbol !== "WETH" &&
+        pair.symbol !== "USDC" &&
+        pair.symbol !== "WBTC" &&
+        pair.symbol !== "SOMM" &&
+        pair.symbol !== "stETH"
+    ),
+  ]
+
+  const [selectedChainIds, setSelectedChainIds] =
+    useState<string[]>(allChainIds)
+
+  const [selectedDepositAssets, setSelectedDepositAssets] =
+    useState<Record<string, SymbolPathPair>>(uniqueAssetsMap)
+
+  const [showDeprecated, setShowDeprecated] = useState<boolean>(false)
+  const [showIncentivised, setShowIncentivised] =
+    useState<boolean>(false)
+
+  const [selectedMiscFilters, setSelectedMiscFilters] = useState<
+    MiscFilterProp[]
+  >([
+    {
+      name: "Incentivised",
+      checked: showIncentivised,
+      stateSetFunction: setShowIncentivised,
+    },
+    {
+      name: "Deprecated",
+      checked: showDeprecated,
+      stateSetFunction: setShowDeprecated,
+    },
+  ])
+
+  // Reset Button Helpers, consider moving to a separate file
+
+  // All the params necessary for the reset button (initial filter states)
+  const initialChainIds = allChainIds
+  const initialDepositAssets = uniqueAssetsMap
+  const initialShowDeprecated = false
+  const initialShowIncentivised = false
+
+  const hasFiltersChanged = useMemo(() => {
+    return (
+      !isEqual(selectedChainIds, initialChainIds) ||
+      !isEqual(selectedDepositAssets, initialDepositAssets) ||
+      showDeprecated !== initialShowDeprecated ||
+      showIncentivised !== initialShowIncentivised
+    )
+  }, [
+    selectedChainIds,
+    selectedDepositAssets,
+    showDeprecated,
+    showIncentivised,
+  ])
+
+  const resetFilters = () => {
+    setSelectedChainIds(initialChainIds)
+    setSelectedDepositAssets(initialDepositAssets)
+    setShowDeprecated(initialShowDeprecated)
+    setShowIncentivised(initialShowIncentivised)
+
+    // Update selectedMiscFilters to reflect the reset state in MiscFilter
+    setSelectedMiscFilters([
+      {
+        name: "Incentivised",
+        checked: initialShowIncentivised,
+        stateSetFunction: setShowIncentivised,
+      },
+      {
+        name: "Deprecated",
+        checked: initialShowDeprecated,
+        stateSetFunction: setShowDeprecated,
+      },
+    ])
+  }
+
   const strategyData = useMemo(() => {
-    if (type === "Yield") {
-      return (
-        data?.filter(
-          (item) => item?.type === CellarType.yieldStrategies
-        ) || []
-      )
-    }
-    if (type === "Trading") {
-      return (
-        data?.filter(
-          (item) => item?.type === CellarType.automatedPortfolio
-        ) || []
-      )
-    }
-    return data || []
-  }, [data, type])
+    return (
+      data?.filter((item) => {
+        // Chain filter
+        const isChainSelected = selectedChainIds.includes(
+          item?.config.chain.id!
+        )
+
+        // Deposit asset filter
+        const hasSelectedDepositAsset = cellarDataMap[
+          item!.slug
+        ].depositTokens.list.some((tokenSymbol) =>
+          selectedDepositAssets.hasOwnProperty(tokenSymbol)
+        )
+
+        // Deprecated filter
+        const isDeprecated = cellarDataMap[item!.slug].deprecated
+        const deprecatedCondition = showDeprecated
+          ? isDeprecated
+          : !isDeprecated
+
+        // Incentivised filter
+        //    Badge check for custom rewards
+        const hasGreenBadge = cellarDataMap[
+          item!.slug
+        ].config.badges?.some(
+          (badge) => badge.customStrategyHighlightColor === "#00C04B"
+        )
+
+        //    Staking period check for somm/vesting rewards
+        const hasLiveStakingPeriod =
+          item?.rewardsApy?.value !== undefined &&
+          item?.rewardsApy?.value > 0
+
+        const incentivisedCondition = showIncentivised
+          ? hasGreenBadge || hasLiveStakingPeriod
+          : true
+
+        return (
+          isChainSelected &&
+          hasSelectedDepositAsset &&
+          deprecatedCondition &&
+          incentivisedCondition
+        )
+      }) || []
+    )
+  }, [
+    data,
+    selectedChainIds,
+    selectedDepositAssets,
+    showDeprecated,
+    showIncentivised,
+  ])
 
   const loading = isFetching || isRefetching || isLoading
   return (
@@ -158,47 +322,74 @@ export const PageHome = () => {
           </Text>
         </VStack>
       </HStack> */}
-      <HStack mb="1.6rem">
-        <HStack spacing="8px">
-          {strategyType.map((strategy: string, i: number) => {
-            const isSelected = strategy === type
-            return (
-              <Button
-                key={i}
-                variant="unstyled"
-                color="white"
-                fontWeight={600}
-                fontSize="1rem"
-                p={4}
-                py={1}
-                rounded="100px"
-                bg={isSelected ? "surface.primary" : "none"}
-                backdropFilter="blur(8px)"
-                borderColor={
-                  isSelected ? "purple.dark" : "surface.tertiary"
-                }
-                borderWidth={isSelected ? 1 : 0}
-                onClick={() => {
-                  // Adding tracking code for each button
-                  analytics.track(
-                    `strategy.${strategy.toLowerCase()}.selected`,
-                    {
-                      selectedType: strategy,
-                    }
-                  )
-                  setType(strategy)
-                }}
-              >
-                {strategy}
-              </Button>
-            )
-          })}
+      {isMobile ? (
+        <VStack width="100%" padding={"2em 0em"} spacing="2em">
+          <ChainFilter
+            selectedChainIds={selectedChainIds}
+            setSelectedChainIds={setSelectedChainIds}
+          />
+          <DepositTokenFilter
+            constantAllUniqueAssetsArray={
+              constantOrderedAllUniqueAssetsArray
+            }
+            selectedDepositAssets={selectedDepositAssets}
+            setSelectedDepositAssets={setSelectedDepositAssets}
+          />
+          <MiscFilter categories={selectedMiscFilters} />
+          {hasFiltersChanged && (
+            <Button
+              bg="none"
+              borderWidth={2.5}
+              borderColor="purple.base"
+              borderRadius="1em"
+              w="auto"
+              fontFamily="Haffer"
+              fontSize={12}
+              padding="1.75em 2em"
+              _hover={{ bg: "purple.dark" }}
+              onClick={resetFilters}
+              leftIcon={<Text fontSize={"1.25em"}>Reset</Text>}
+              rightIcon={<DeleteCircleIcon boxSize={4} />}
+            />
+          )}
+        </VStack>
+      ) : (
+        <HStack width="100%" padding={"2em 0em"} spacing="2em">
+          <ChainFilter
+            selectedChainIds={selectedChainIds}
+            setSelectedChainIds={setSelectedChainIds}
+          />
+          <DepositTokenFilter
+            constantAllUniqueAssetsArray={
+              constantOrderedAllUniqueAssetsArray
+            }
+            selectedDepositAssets={selectedDepositAssets}
+            setSelectedDepositAssets={setSelectedDepositAssets}
+          />
+          <Spacer />
+          <MiscFilter categories={selectedMiscFilters} />
+          {hasFiltersChanged && (
+            <Button
+              bg="none"
+              borderWidth={2.5}
+              borderColor="purple.base"
+              borderRadius="1em"
+              w="auto"
+              fontFamily="Haffer"
+              fontSize={12}
+              padding="1.75em 2em"
+              _hover={{ bg: "purple.dark" }}
+              onClick={resetFilters}
+              leftIcon={<Text fontSize={"1.25em"}>Reset</Text>}
+              rightIcon={<DeleteCircleIcon boxSize={4} />}
+            />
+          )}
         </HStack>
-      </HStack>
+      )}
       <TransparentSkeleton
         height={loading ? "400px" : "auto"}
         w="full"
-        borderRadius={20}
+        borderRadius={"1em"}
         isLoaded={!loading}
       >
         {isError ? (

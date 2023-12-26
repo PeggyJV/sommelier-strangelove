@@ -1,42 +1,25 @@
 import {
   Box,
-  Flex,
-  Heading,
   HStack,
   Image,
   Spinner,
   Stack,
-  StackDivider,
   Text,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { BuyOrSellModal } from "components/_modals/BuyOrSellModal"
 import { cellarDataMap } from "data/cellarDataMap"
 import { VFC } from "react"
-import { PercentageText } from "components/PercentageText"
-import { CellarStatsLabel } from "components/_cards/CellarCard/CellarStats"
-import { analytics } from "utils/analytics"
-import { landingType } from "utils/landingType"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
 import {
-  apyHoverLabel,
-  apyLabel,
-  intervalGainPctTitleContent,
-  intervalGainPctTooltipContent,
   intervalGainTimeline,
-  isDailyChangeEnabled,
-  showTokenPriceInsteadOfApy,
-  tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CountDown } from "./count-down"
 import {
   addDays,
-  formatDistanceToNowStrict,
-  isFuture,
 } from "date-fns"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
@@ -63,7 +46,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   )
   const cellarConfig = cellarData.config
   const { data, isLoading } = useStrategyData(
-    cellarData.config.cellar.address
+    cellarData.config.cellar.address, cellarData.config.chain.id
   )
   const {
     tokenPrice,
@@ -176,6 +159,20 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
           </Box>
           {content.ticker}
         </HStack>
+        <HStack>
+          <Box>
+            <Text w="150px" fontWeight="semibold">
+              Chain
+            </Text>
+          </Box>
+          <Image
+            src={cellarConfig.chain.logoPath}
+            alt={cellarConfig.chain.alt}
+            background={"transparent"}
+            boxSize={8}
+          />{" "}
+          <Text>{cellarConfig.chain.displayName}</Text>
+        </HStack>
         <HStack alignItems="start">
           <Box>
             <Text w="150px" fontWeight="semibold">
@@ -188,7 +185,9 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             ) : (
               content.tradedAssets?.map((item) => {
                 const asset = tokenConfig.find(
-                  (v) => v.symbol === item
+                  (v) =>
+                    v.symbol === item &&
+                    v.chain === cellarConfig.chain.id
                 )
                 return (
                   <HStack key={item}>
