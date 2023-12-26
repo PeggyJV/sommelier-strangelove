@@ -12,9 +12,12 @@ import {
   AvatarGroup,
   Avatar,
   Checkbox,
+  Input,
+  InputRightElement,
+  InputGroup,
 } from "@chakra-ui/react"
-import { useState, VFC, useEffect } from "react"
-import { ChevronDownIcon } from "components/_icons"
+import { useState, VFC, useEffect, ChangeEvent } from "react"
+import { ChevronDownIcon, DeleteIcon } from "components/_icons"
 
 export type SymbolPathPair = {
   symbol: string
@@ -104,6 +107,25 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
     )
   }, [props.selectedDepositAssets])
 
+  const [searchTerm, setSearchTerm] = useState("")
+
+  // Function to handle search input changes
+  const handleSearchChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchTerm(event.target.value.toLowerCase())
+  }
+
+  // Filter tokens based on search term
+  const filteredTokens = props.constantAllUniqueAssetsArray.filter(
+    (token) => token.symbol.toLowerCase().includes(searchTerm)
+  )
+
+  // Function to clear search input
+  const clearSearch = () => {
+    setSearchTerm("")
+  }
+
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
@@ -191,9 +213,25 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
           boxShadow: "unset",
         }}
       >
+        <Box pt={4} pb={2} pl={10} width="90%">
+          <InputGroup>
+            <Input
+              placeholder="Search..."
+              onChange={handleSearchChange}
+              value={searchTerm}
+            />
+            {searchTerm && (
+              <InputRightElement
+                children={<DeleteIcon color="gray.500" boxSize={".75em"} />}
+                onClick={clearSearch}
+                cursor="pointer"
+              />
+            )}
+          </InputGroup>
+        </Box>
         <PopoverBody p={0}>
-          <SimpleGrid columns={2} spacing={3}>
-            {Object.values(props.constantAllUniqueAssetsArray).map(
+          <SimpleGrid columns={2} spacing={3} paddingTop=".5em" paddingBottom=".5em">
+            {Object.values(filteredTokens).map(
               (token: SymbolPathPair) => (
                 <Box
                   as="button"
@@ -229,7 +267,9 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
                     <Text fontWeight="semibold">{token.symbol}</Text>
                     <Checkbox
                       id={token.symbol}
-                      isChecked={checkedStates.get(token.symbol) || false}
+                      isChecked={
+                        checkedStates.get(token.symbol) || false
+                      }
                       onChange={(e) => {
                         handleTokenClick(token.symbol)
                         toggleCheck(token.symbol)
