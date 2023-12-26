@@ -113,12 +113,12 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
   const handleSearchChange = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
-    setSearchTerm(event.target.value.toLowerCase())
+    setSearchTerm(event.target.value)
   }
 
   // Filter tokens based on search term
   const filteredTokens = props.constantAllUniqueAssetsArray.filter(
-    (token) => token.symbol.toLowerCase().includes(searchTerm)
+    (token) => token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   // Function to clear search input
@@ -222,15 +222,21 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
             />
             {searchTerm && (
               <InputRightElement
-                children={<DeleteIcon color="gray.500" boxSize={".75em"} />}
                 onClick={clearSearch}
                 cursor="pointer"
-              />
+              >
+                <DeleteIcon color="gray.500" boxSize={".75em"} />
+              </InputRightElement>
             )}
           </InputGroup>
         </Box>
         <PopoverBody p={0}>
-          <SimpleGrid columns={2} spacing={3} paddingTop=".5em" paddingBottom=".5em">
+          <SimpleGrid
+            columns={2}
+            spacing={3}
+            paddingTop=".5em"
+            paddingBottom=".5em"
+          >
             {Object.values(filteredTokens).map(
               (token: SymbolPathPair) => (
                 <Box
