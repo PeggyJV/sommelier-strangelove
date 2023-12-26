@@ -88,6 +88,8 @@ export const StrategyTabColumn = ({
         return 0
       },
     },
+    // TODO: Enable for multichain
+    /*
     {
       Header: () => (
         <Tooltip
@@ -97,12 +99,13 @@ export const StrategyTabColumn = ({
           color="neutral.300"
           bg="surface.bg"
         >
-          <HStack >
+          <HStack>
             <Text>Chain</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
         </Tooltip>
       ),
+
       accessor: "chain",
       Cell: ({ cell: { row } }: CellValue) => {
         const [isHover, setIsHover] = useState(false)
@@ -163,6 +166,7 @@ export const StrategyTabColumn = ({
         return 0
       },
     },
+    */
     {
       Header: "TVL",
       accessor: "tvm.value",
