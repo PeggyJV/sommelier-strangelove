@@ -1,4 +1,13 @@
-import { Tooltip} from "@chakra-ui/react"
+import {
+  Tooltip,
+  Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { useUserBalances } from "data/hooks/useUserBalances"
@@ -6,6 +15,7 @@ import { isBefore } from "date-fns"
 import { toEther } from "utils/formatCurrency"
 import { useAccount, useNetwork } from "wagmi"
 import { BaseButton } from "./BaseButton"
+import { useState } from "react"
 
 type DepositAndWithdrawButtonProps = {
   row: any
@@ -84,6 +94,9 @@ export function DepositAndWithdrawButton({
     row?.original?.launchDate
   )
   const { chain } = useNetwork()
+  const [isOracleModalOpen, setOracleModalOpen] = useState(false)
+  const openOracleModal = () => setOracleModalOpen(true)
+  const closeOracleModal = () => setOracleModalOpen(false)
 
   return (
     <Tooltip
@@ -121,6 +134,11 @@ export function DepositAndWithdrawButton({
             window.location.href = `/strategies/${id}/manage`
             return
           }
+          //! if share price oracle updating..
+          //if (row.original.slug === "Turbo-SOMM") {
+          //  openOracleModal()
+          //  return
+          //}
 
           if (row.original.deprecated) {
             onDepositModalOpen({
@@ -137,6 +155,41 @@ export function DepositAndWithdrawButton({
       >
         {getButtonText(row.original.deprecated, lpTokenDisabled)}
       </BaseButton>
+      {isOracleModalOpen && (
+        <Modal isOpen={isOracleModalOpen} onClose={closeOracleModal} isCentered>
+          <ModalOverlay />
+          <ModalContent
+            p={2}
+            w="auto"
+            zIndex={401}
+            borderWidth={1}
+            borderColor="purple.dark"
+            borderRadius={12}
+            bg="surface.bg"
+            fontWeight="semibold"
+            _focus={{
+              outline: "unset",
+              outlineOffset: "unset",
+              boxShadow: "unset",
+            }}
+          >
+            <ModalCloseButton />
+            <ModalHeader textAlign="center">Notice!</ModalHeader>
+            <ModalBody textAlign="center">
+              <Text>
+                Deposits and withdrawals have been temporarily
+                disabled for Turbo SOMM while our oracle updates.
+                Normal operations are set to resume on Dec 21st.
+              </Text>
+              <br />
+              <Text>
+                All user funds are safe. We appreciate your
+                understanding.
+              </Text>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </Tooltip>
   )
 }

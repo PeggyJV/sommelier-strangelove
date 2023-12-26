@@ -507,7 +507,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: {
     name: "Real Yield ETH",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://7seas.capital/",
     description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
     exchange: [
@@ -608,7 +608,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.REAL_YIELD_LINK.SLUG]: {
     name: "Real Yield LINK",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
     ticker: (
@@ -646,7 +646,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.REAL_YIELD_1Inch.SLUG]: {
     name: "Real Yield 1INCH",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
     ticker: (
@@ -684,7 +684,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.REAL_YIELD_ENS.SLUG]: {
     name: "Real Yield ENS",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
     ticker: (
@@ -722,7 +722,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.REAL_YIELD_SNX.SLUG]: {
     name: "Real Yield SNX",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
     ticker: (
@@ -760,7 +760,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.REAL_YIELD_UNI.SLUG]: {
     name: "Real Yield UNI",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Finally, another use for these governance tokens. Unleash yield powered by ETH staking and DeFi.`,
     ticker: (
@@ -798,7 +798,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.FRAXIMAL.SLUG]: {
     name: "Fraximal",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `The best way to get involved in Fraxlend - automated rebalances for maximum yield.`,
     ticker: (
@@ -835,7 +835,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.REAL_YIELD_BTC.SLUG]: {
     name: "Real Yield BTC",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Maximize WBTC-denominated yields through a dynamic and evolving set of vaults.`,
     ticker: (
@@ -872,7 +872,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.TURBO_SWETH.SLUG]: {
     name: "Turbo swETH",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Turbocharge your swETH across an evolving set of LP strategies.`,
     ticker: (
@@ -910,7 +910,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.TURBO_GHO.SLUG]: {
     name: "Turbo GHO",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Turbocharge your GHO across an evolving set of LP strategies.`,
     ticker: (
@@ -980,7 +980,7 @@ export const strategyPageContentData = {
   },
   [config.CONTRACT.TURBO_STETH.SLUG]: {
     name: "Turbo stETH",
-    provider: "Seven Seas & DeFine Logic Labs",
+    provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
     ticker: (

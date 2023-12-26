@@ -286,13 +286,13 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      {
+      {/* {
         <InfoBanner
           text={
-            "A proposal to renew Turbo swETH incentives is making its way through governance, if it passes rewards will start flowing on Dec 17th."
+            "A new incentive program for Real Yield BTC is progressing through governance. If it passes, rewards will begin December 22nd."
           }
         />
-      }
+      }  */}
       {/* <HStack
         p={4}
         mb={6}
