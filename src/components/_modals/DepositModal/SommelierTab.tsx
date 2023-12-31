@@ -62,6 +62,22 @@ interface DepositModalProps
   notifyModal?: UseDisclosureProps
 }
 
+function scientificToDecimalString(num: number) {
+    // If the number is in scientific notation, split it into base and exponent
+    const sign = Math.sign(num);
+    let [base, exponent] = num.toString().split('e').map(item => parseInt(item, 10));
+
+    // Adjust for negative exponent
+    if (exponent < 0) {
+        let decimalString = Math.abs(base).toString();
+        let padding = Math.abs(exponent) - 1;
+        return (sign < 0 ? "-" : "") + "0." + "0".repeat(padding) + decimalString;
+    }
+
+    // Handle positive exponent or non-scientific numbers (which won't be split)
+    return num.toString();
+}
+
 export const SommelierTab: VFC<DepositModalProps> = ({
   notifyModal,
   ...props
@@ -228,7 +244,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     )
 
     const amtInWei = ethers.utils.parseUnits(
-      depositAmount.toString(),
+      scientificToDecimalString(depositAmount),
       selectedTokenBalance?.decimals
     )
 

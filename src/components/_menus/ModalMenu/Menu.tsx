@@ -179,6 +179,17 @@ export const Menu: VFC<MenuProps> = ({
                 //   value: event.target.value,
                 // })
               }
+              let val = event.target.value
+
+              const decimalPos = val.indexOf(".")
+
+              if (
+                decimalPos !== -1 &&
+                val.length - decimalPos - 1 > value.decimals
+              ) {
+                val = val.substring(0, decimalPos + value.decimals + 1) // Keep token decimal places as max
+                event.target.value = val
+              }
             },
             required: "Enter amount",
             valueAsNumber: true,
