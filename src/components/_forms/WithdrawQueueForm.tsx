@@ -34,16 +34,35 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
+import { getTokenConfig, Token } from "data/tokenConfig"
 
 interface FormValues {
   withdrawAmount: number
 }
 
-interface WithdrawFormProps {
+interface WithdrawQueueFormProps {
   onClose: () => void
 }
 
-export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
+function scientificToDecimalString(num: number) {
+    // If the number is in scientific notation, split it into base and exponent
+    const sign = Math.sign(num);
+    let [base, exponent] = num.toString().split('e').map(item => parseInt(item, 10));
+
+    // Adjust for negative exponent
+    if (exponent < 0) {
+        let decimalString = Math.abs(base).toString();
+        let padding = Math.abs(exponent) - 1;
+        return (sign < 0 ? "-" : "") + "0." + "0".repeat(padding) + decimalString;
+    }
+
+    // Handle positive exponent or non-scientific numbers (which won't be split)
+    return num.toString();
+}
+
+export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
+  onClose,
+}) => {
   const {
     register,
     watch,
@@ -60,9 +79,13 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const id = (useRouter().query.id as string) || _id
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+  const { refetch } = useUserStrategyData(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
+  )
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
 
@@ -83,21 +106,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       toEther(lpTokenData?.formatted, lpTokenData?.decimals, false, 6)
     )
     setValue("withdrawAmount", amount)
-
-    // analytics.track("withdraw.max-selected", {
-    //   account: address,
-    //   amount,
-    // })
   }
-
-  useEffect(() => {
-    if (watchWithdrawAmount !== null) {
-      analytics.track("withdraw.amount-selected", {
-        account: address,
-        amount: watchWithdrawAmount,
-      })
-    }
-  }, [watchWithdrawAmount, address])
 
   const geo = useGeo()
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
@@ -108,7 +117,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
     if (!address) {
       addToast({
-        heading: "Withdraw Position",
+        heading: "Withdraw Queue",
         status: "default",
         body: <Text>Connect Wallet</Text>,
         closeHandler: close,
@@ -118,96 +127,60 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       return
     }
 
-    const analyticsData = {
-      account: address,
-      amount: withdrawAmount,
-    }
-
-    // analytics.track("withdraw.started", analyticsData)
-
-    const amtInWei = ethers.utils.parseUnits(
+    const amtInBaseDenom = ethers.utils.parseUnits(
       `${withdrawAmount}`,
       cellarConfig.cellar.decimals
     )
 
     try {
+      // TODO: Send tx
+      /*
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         cellarSigner?.estimateGas.redeem,
         cellarSigner?.callStatic.redeem,
-        [amtInWei, address, address],
+        [amtInBaseDenom, address, address],
         330000,
         660000
       )
 
       const tx = await cellarSigner?.redeem(
-        amtInWei,
+        amtInBaseDenom,
         address,
         address,
         {
           gasLimit: gasLimitEstimated,
         }
       )
+      */
 
       const onSuccess = () => {
-        analytics.track("withdraw.succeeded", analyticsData)
         onClose() // Close modal after successful withdraw.
       }
 
       const onError = (error: Error) => {
-        analytics.track("withdraw.failed", {
-          ...analyticsData,
-          error: error.name,
-          message: error.message,
-        })
+        // TODO
       }
 
+      // TODO: Broadcast tx
+      /*
       await doHandleTransaction({
         cellarConfig,
         ...tx,
         onSuccess,
         onError,
       })
+      */
     } catch (e) {
       const error = e as Error
 
-      // Get Redeemable Assets
-      const redeemableAssets: number = parseInt(
-        await fetchCellarRedeemableReserves(id)
-      )
-
-      // previewRedeem on the shares the user is attempting to withdraw
-      // Only get previewRedeem on 1 share to optimize caching and do relevant math below
-      const previewRedeem: number = parseInt(
-        await fetchCellarPreviewRedeem(
-          id,
-          BigInt(10 ** cellarConfig.cellar.decimals)
-        )
-      )
-      const redeemAmt: number = Math.floor(
-        previewRedeem * watchWithdrawAmount
-      )
-      const redeemingMoreThanAvailible = redeemAmt > redeemableAssets
-
-      /*
-      console.log("---")
-      console.log("Reedemable assets: ", redeemableAssets)
-      console.log("Withdraw amount: ", watchWithdrawAmount)
-      console.log("Preview redeem: ", previewRedeem)
-      console.log("Redeeming amt: ", redeemAmt)
-      console.log("Redeeming more than availible: ", redeemingMoreThanAvailible)
-      console.log("---")
-      */
-
-      // Check if attempting to withdraw more than availible
-      if (redeemingMoreThanAvailible) {
+      if (error.message === "GAS_LIMIT_ERROR") {
         addToast({
-          heading: "Transaction not submitted.",
+          heading: "Transaction not submitted",
           body: (
             <Text>
-              You are attempting to withdraw beyond the the liquid
-              reserve. The strategist will need to initiate a
-              rebalance to service your full withdrawal. Please send a
-              message in our{" "}
+              Your transaction has failed, if it does not work after
+              waiting some time and retrying please send a message in
+              our{" "}
               {
                 <Link
                   href="https://discord.com/channels/814266181267619840/814279703622844426"
@@ -217,66 +190,25 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
                   Discord Support channel
                 </Link>
               }{" "}
-              tagging @StrategistSupport
+              tagging a member of the front end team.
             </Text>
           ),
           status: "info",
           closeHandler: closeAll,
-          duration: null, // Persist this toast until user closes it.
         })
       } else {
-        if (error.message === "GAS_LIMIT_ERROR") {
-          addToast({
-            heading: "Transaction not submitted",
-            body: (
-              <Text>
-                Your transaction has failed, if it does not work after
-                waiting some time and retrying please send a message
-                in our{" "}
-                {
-                  <Link
-                    href="https://discord.com/channels/814266181267619840/814279703622844426"
-                    isExternal
-                    textDecoration="underline"
-                  >
-                    Discord Support channel
-                  </Link>
-                }{" "}
-                tagging a member of the front end team.
-              </Text>
-            ),
-            status: "info",
-            closeHandler: closeAll,
-          })
-        } else {
-          console.error(error)
-          addToast({
-            heading: "Withdraw",
-            body: <Text>Withdraw Cancelled</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
-        }
-
-        refetch()
-        setValue("withdrawAmount", 0)
+        console.error(error)
+        addToast({
+          heading: "Withdraw Queue",
+          body: <Text>Withdraw Queue Order Cancelled</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
       }
-    }
-  }
 
-  function fixed(num: number, fixed: number) {
-    fixed = fixed || 0
-    fixed = Math.pow(10, fixed)
-    return Math.floor(num * fixed) / fixed
-  }
-
-  const formatAsset = (num: number, fixed: number) => {
-    fixed = fixed || 0
-    fixed = Math.pow(10, fixed)
-    if (num < 0.01) {
-      return ">0.01%"
+      refetch()
+      setValue("withdrawAmount", 0)
     }
-    return `${Math.floor(num * fixed) / fixed}%`
   }
 
   return (
@@ -289,7 +221,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       <FormControl isInvalid={isError as boolean | undefined}>
         <Stack spacing={2}>
           <Text fontWeight="bold" color="neutral.400" fontSize="xs">
-            Enter Amount
+            Enter Shares
           </Text>
           <HStack
             backgroundColor="surface.tertiary"
@@ -328,8 +260,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
                     if (
                       decimalPos !== -1 &&
-                      val.length - decimalPos - 1 >
-                        cellarConfig.cellar.decimals
+                      val.length - decimalPos - 1 > cellarConfig.cellar.decimals
                     ) {
                       val = val.substring(
                         0,
@@ -428,7 +359,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       {waitTime(cellarConfig) !== null && (
         <Text textAlign="center">
           Please wait {waitTime(cellarConfig)} after the deposit to
-          Withdraw
+          enter the Withdraw Queue.
         </Text>
       )}
     </VStack>
