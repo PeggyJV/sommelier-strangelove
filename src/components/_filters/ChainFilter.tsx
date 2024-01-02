@@ -73,9 +73,6 @@ export const ChainFilter: VFC<ChainFilterProps> = (props) => {
   }, [props.selectedChainIds])
 
   return (
-    <></>
-          // TODO: Enable for multichain
-      /*
     <Popover placement="bottom">
       <PopoverTrigger>
         <Button
@@ -196,6 +193,5 @@ export const ChainFilter: VFC<ChainFilterProps> = (props) => {
         </PopoverBody>
       </PopoverContent>
     </Popover>
-    */
   )
 }

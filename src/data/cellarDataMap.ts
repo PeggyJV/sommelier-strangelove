@@ -32,7 +32,7 @@ import {
 let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
-  //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
+  [config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
   [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
   [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]:
     turboSTETHstETHDeposit,
