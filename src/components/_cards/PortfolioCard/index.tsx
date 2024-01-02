@@ -20,6 +20,7 @@ import { BondButton } from "components/_buttons/BondButton"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
+import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
@@ -136,9 +137,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               base: "repeat(1, max-content)",
               md: "repeat(2, max-content)",
             }}
-            templateRows="1fr 1fr"
-            spacing={4}
-            alignItems="flex-end"
           >
             <CardStat
               label="Net Value"
@@ -217,25 +215,43 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               {isMounted &&
                 (isConnected ? (
                   <>
-                    {!strategyData?.deprecated && (
-                      <DepositButton
-                        disabled={
-                          !isConnected ||
-                          strategyData?.isContractNotReady ||
-                          !buttonsEnabled
-                        }
+                    <VStack
+                      spacing={3}
+                      width="100%"
+                      paddingTop={"1em"}
+                    >
+                      <HStack>
+                        {!strategyData?.deprecated && (
+                          <DepositButton
+                            disabled={
+                              !isConnected ||
+                              strategyData?.isContractNotReady ||
+                              !buttonsEnabled
+                            }
+                          />
+                        )}
+                        <WithdrawButton
+                          isDeprecated={strategyData?.deprecated}
+                          disabled={
+                            lpTokenDisabled || !buttonsEnabled
+                          }
+                        />
+                      </HStack>
+                      <WithdrawQueueButton
+                        chain={cellarConfig.chain}
+                        disabled={lpTokenDisabled || !buttonsEnabled}
                       />
-                    )}
-                    <WithdrawButton
-                      isDeprecated={strategyData?.deprecated}
-                      disabled={lpTokenDisabled || !buttonsEnabled}
-                    />
+                    </VStack>
                   </>
                 ) : (
-                  <ConnectButton
-                    overrideChainId={cellarConfig.chain.id}
-                    unstyled
-                  />
+                  <>
+                    <HStack paddingTop={"1em"}>
+                      <ConnectButton
+                        overrideChainId={cellarConfig.chain.id}
+                        unstyled
+                      />
+                    </HStack>
+                  </>
                 ))}
             </Stack>
           </SimpleGrid>
