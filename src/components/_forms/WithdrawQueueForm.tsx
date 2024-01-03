@@ -82,7 +82,7 @@ function scientificToDecimalString(num: number) {
 }
 
 // Define the preset values for the form
-// TODO: Change per chain
+// TODO: Consider setting presets per chain
 type PresetValueKey = "Low" | "Mid" | "High" | "Custom"
 const PRESET_VALUES: Record<PresetValueKey, { deadlineHours: number; sharePriceDiscountPercent: number }> = {
   High: { deadlineHours: 12, sharePriceDiscountPercent: 0.15 },
@@ -461,7 +461,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                 <ButtonGroup
                   isAttached
                   variant="solid"
-                  backgroundColor="purple.dark"
+                  backgroundColor="surface.tertiary"
                   borderRadius={16}
                 >
                   {(["Low", "Mid", "High"] as PresetValueKey[]).map(
@@ -554,7 +554,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                     textAlign="right"
                     backgroundColor={
                       selectedPriority === "Custom"
-                        ? "purple.dark"
+                        ? "surface.tertiary"
                         : "neutral.500"
                     }
                     padding={2}
@@ -634,7 +634,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                   textAlign="right"
                   backgroundColor={
                     selectedPriority === "Custom"
-                      ? "purple.dark"
+                      ? "surface.tertiary"
                       : "neutral.500"
                   }
                   width="25%"
