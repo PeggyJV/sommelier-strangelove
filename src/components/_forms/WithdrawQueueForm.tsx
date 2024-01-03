@@ -22,7 +22,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
-import { useAccount } from "wagmi"
+import { useAccount, useContract, useSigner } from "wagmi"
 import { toEther } from "utils/formatCurrency"
 import { ethers } from "ethers"
 import { useHandleTransaction } from "hooks/web3"
@@ -38,13 +38,14 @@ import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
-import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import { ModalOnlyTokenMenu } from "components/_menus/ModalMenu"
 import { ChevronDownIcon, InformationIcon } from "components/_icons"
 import { FAQTabs } from "components/FAQStrategy/FAQTabs"
 import { FaqItem, FaqTabWithRef } from "types/sanity"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
+import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
+import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 
 interface FormValues {
   withdrawAmount: number
@@ -84,7 +85,10 @@ function scientificToDecimalString(num: number) {
 // Define the preset values for the form
 // TODO: Consider setting presets per chain
 type PresetValueKey = "Low" | "Mid" | "High" | "Custom"
-const PRESET_VALUES: Record<PresetValueKey, { deadlineHours: number; sharePriceDiscountPercent: number }> = {
+const PRESET_VALUES: Record<
+  PresetValueKey,
+  { deadlineHours: number; sharePriceDiscountPercent: number }
+> = {
   High: { deadlineHours: 12, sharePriceDiscountPercent: 0.15 },
   Mid: { deadlineHours: 24, sharePriceDiscountPercent: 0.05 },
   Low: { deadlineHours: 72, sharePriceDiscountPercent: 0.01 },
@@ -121,7 +125,12 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
   )
   const tokenPrice = strategyData?.tokenPrice
 
-  const { cellarSigner } = useCreateContracts(cellarConfig)
+  const { data: signer } = useSigner()
+  const withdrawQueueContract = useContract({
+    address: cellarConfig.chain.withdrawQueueAddress,
+    abi: withdrawQueueV0821,
+    signerOrProvider: signer,
+  })!
 
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
@@ -202,7 +211,12 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
   }
 
   const geo = useGeo()
-  const onSubmit = async ({ withdrawAmount }: FormValues) => {
+  const onSubmit = async ({
+    withdrawAmount,
+    deadlineHours,
+    sharePriceDiscountPercent,
+    selectedToken,
+  }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
@@ -220,49 +234,73 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       return
     }
 
-    const amtInBaseDenom = ethers.utils.parseUnits(
-      `${withdrawAmount}`,
-      cellarConfig.cellar.decimals
-    )
+    // Get approval if needed
+    // TODO!!!!!
+
+
+
 
     try {
-      // TODO: Send tx
-      /*
+      const withdrawAmtInBaseDenom = ethers.utils.parseUnits(
+        `${withdrawAmount}`,
+        cellarConfig.cellar.decimals
+      )
+
+      const deadlineSeconds = Math.floor(deadlineHours * 60)
+
+      // Query share price
+      const previewRedeem: number = parseInt(
+        await fetchCellarPreviewRedeem(
+          id,
+          BigInt(10 ** cellarConfig.cellar.decimals)
+        )
+      )
+      const sharePriceStandardized =
+        previewRedeem / 10 ** cellarConfig.cellar.decimals
+      const sharePriceWithDiscount =
+        sharePriceStandardized *
+        ((100 - sharePriceDiscountPercent) / 100)
+      const sharePriceWithDiscountInBaseDenom = Math.floor(
+        sharePriceWithDiscount * 10 ** cellarConfig.cellar.decimals
+      )
+
+      // Input Touple
+      const withdrawTouple = [
+        deadlineSeconds,
+        sharePriceWithDiscountInBaseDenom,
+        withdrawAmtInBaseDenom,
+      ]
+
       const gasLimitEstimated = await estimateGasLimitWithRetry(
-        cellarSigner?.estimateGas.redeem,
-        cellarSigner?.callStatic.redeem,
-        [amtInBaseDenom, address, address],
+        withdrawQueueContract?.estimateGas.updateWithdrawRequest,
+        withdrawQueueContract?.callStatic.updateWithdrawRequest,
+        [cellarConfig.cellar.address, withdrawTouple],
         330000,
         660000
       )
 
-      const tx = await cellarSigner?.redeem(
-        amtInBaseDenom,
-        address,
-        address,
+      const tx = await withdrawQueueContract?.updateWithdrawRequest(
+        cellarConfig.cellar.address,
+        withdrawTouple,
         {
           gasLimit: gasLimitEstimated,
         }
       )
-      */
 
       const onSuccess = () => {
         onClose() // Close modal after successful withdraw.
       }
 
       const onError = (error: Error) => {
-        // TODO
+        // Can track here if we want
       }
 
-      // TODO: Broadcast tx
-      /*
       await doHandleTransaction({
         cellarConfig,
         ...tx,
         onSuccess,
         onError,
       })
-      */
     } catch (e) {
       const error = e as Error
 
@@ -300,7 +338,6 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       }
 
       refetch()
-      setValue("withdrawAmount", 0)
     }
   }
 
