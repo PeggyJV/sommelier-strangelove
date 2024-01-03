@@ -15,6 +15,8 @@ import {
   Tooltip,
   ButtonGroup,
   useTheme,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -46,8 +48,8 @@ import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordi
 
 interface FormValues {
   withdrawAmount: number
-  deadlineSeconds: number
-  sharePriceTarget: number
+  deadlineHours: number
+  sharePriceDiscountPercent: number
   selectedToken: Token
 }
 
@@ -77,6 +79,16 @@ function scientificToDecimalString(num: number) {
 
   // Handle positive exponent or non-scientific numbers (which won't be split)
   return num.toString()
+}
+
+// Define the preset values for the form
+// TODO: Change per chain
+type PresetValueKey = "Low" | "Mid" | "High" | "Custom"
+const PRESET_VALUES: Record<PresetValueKey, { deadlineHours: number; sharePriceDiscountPercent: number }> = {
+  High: { deadlineHours: 12, sharePriceDiscountPercent: 0.15 },
+  Mid: { deadlineHours: 24, sharePriceDiscountPercent: 0.05 },
+  Low: { deadlineHours: 72, sharePriceDiscountPercent: 0.01 },
+  Custom: { deadlineHours: 0, sharePriceDiscountPercent: 0 },
 }
 
 export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
@@ -134,18 +146,53 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     setSelectedToken(value)
   }
 
-  const [selected, setSelected] = useState("Mid")
+  const [selectedPriority, setSelectedPriority] =
+    useState<PresetValueKey>("Mid")
 
-  const handleSelect = (value: string) => {
-    setSelected(value)
+  // Handle the priority selection
+  const handleSelect = (value: PresetValueKey) => {
+    setSelectedPriority(value)
+    if (value !== "Custom") {
+      const preset = PRESET_VALUES[value]
+      setValue("deadlineHours", preset.deadlineHours)
+      setValue(
+        "sharePriceDiscountPercent",
+        preset.sharePriceDiscountPercent
+      )
+    }
   }
+
+  useEffect(() => {
+    // Initial setting of values based on default selection
+    const preset = PRESET_VALUES[selectedPriority]
+    setValue("deadlineHours", preset.deadlineHours)
+    setValue(
+      "sharePriceDiscountPercent",
+      preset.sharePriceDiscountPercent
+    )
+  }, [])
 
   const { doHandleTransaction } = useHandleTransaction()
 
   const watchWithdrawAmount = watch("withdrawAmount")
+  const watchDeadlineHours = watch("deadlineHours")
+  const watchSharePriceDiscountPercent = watch(
+    "sharePriceDiscountPercent"
+  )
+
   const isDisabled =
-    isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
-  const isError = errors.withdrawAmount
+    isNaN(watchWithdrawAmount) ||
+    watchWithdrawAmount <= 0 ||
+    isNaN(watchDeadlineHours) ||
+    watchDeadlineHours <= 0 ||
+    isNaN(watchSharePriceDiscountPercent) ||
+    watchSharePriceDiscountPercent < 0
+
+  const isError =
+    errors.withdrawAmount ||
+    errors.deadlineHours ||
+    errors.sharePriceDiscountPercent ||
+    errors.selectedToken
 
   const setMax = () => {
     const amount = parseFloat(
@@ -265,7 +312,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       onSubmit={handleSubmit(onSubmit)}
     >
       <FormProvider {...modalFormMethods}>
-        <FormControl isInvalid={isError as boolean | undefined}>
+        <FormControl isInvalid={!!errors.withdrawAmount}>
           <Stack spacing={5}>
             <Text fontWeight="bold" color="neutral.400" fontSize="xs">
               Enter Shares
@@ -417,18 +464,22 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                   backgroundColor="purple.dark"
                   borderRadius={16}
                 >
-                  {["Low", "Mid", "High"].map(
+                  {(["Low", "Mid", "High"] as PresetValueKey[]).map(
                     (level, index, array) => (
                       <Button
                         key={level}
                         colorScheme={
-                          selected === level ? "purple" : "none"
+                          selectedPriority === level
+                            ? "purple"
+                            : "none"
                         }
                         onClick={() => handleSelect(level)}
                         borderRadius={16}
                         size="sm"
                         textColor={
-                          selected === level ? "neutral.600" : "white"
+                          selectedPriority === level
+                            ? "neutral.600"
+                            : "white"
                         }
                       >
                         {level}
@@ -440,14 +491,12 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                   fontSize="sm"
                   cursor="pointer"
                   color={
-                    selected === "Custom"
+                    selectedPriority === "Custom"
                       ? "purple.light"
                       : "gray.500"
                   }
                   fontWeight={
-                    selected === "Custom"
-                      ? "bold"
-                      : "none"
+                    selectedPriority === "Custom" ? "bold" : "none"
                   }
                   onClick={() => handleSelect("Custom")}
                   mt={2}
@@ -471,38 +520,163 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
               title="Vault"
               value={<Text>{cellarDataMap[id].name}</Text>}
             />
-            <HStack justify="space-between">
-              <Tooltip
-                hasArrow
-                placement="top"
-                label={
-                  "The amount of underlying tokens you will recieve per share for the limit sell (withdraw) intent. A lower share price is more likely to be fulfilled."
-                }
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <HStack spacing={1} align="center">
-                  <Text as="span">Target Share Price</Text>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
-            </HStack>
-            <HStack justify="space-between">
-              <Tooltip
-                hasArrow
-                placement="top"
-                label={
-                  "How long the intent will be valid for. If the intent is not fulfilled within this time, it will be cancelled."
-                }
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <HStack spacing={1} align="center">
-                  <Text as="span">Deadline</Text>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
-            </HStack>
+            <FormControl
+              isInvalid={!!errors.sharePriceDiscountPercent}
+            >
+              <HStack justify="space-between">
+                <Tooltip
+                  hasArrow
+                  placement="top"
+                  label={
+                    "How much of a discount under the current share price you are willing to accept to fulfill the withdrawl. The higher the discount, the more likely and timely a solver is to fulfill your intent."
+                  }
+                  bg="surface.bg"
+                  color="neutral.300"
+                >
+                  <HStack spacing={1} align="center">
+                    <Text as="span">Share Price Discount</Text>
+                    <InformationIcon
+                      color="neutral.300"
+                      boxSize={3}
+                    />
+                  </HStack>
+                </Tooltip>
+                <InputGroup width="25%" alignItems="center">
+                  <Input
+                    id="sharePrice"
+                    variant="unstyled"
+                    type="number"
+                    step="any"
+                    defaultValue="0.00"
+                    placeholder="0.00"
+                    fontSize="lg"
+                    fontWeight={700}
+                    textAlign="right"
+                    backgroundColor={
+                      selectedPriority === "Custom"
+                        ? "purple.dark"
+                        : "neutral.500"
+                    }
+                    padding={2}
+                    borderRadius={16}
+                    pr={8}
+                    height="2.2em"
+                    disabled={selectedPriority !== "Custom"}
+                    {...register("sharePriceDiscountPercent", {
+                      onChange: (event) => {
+                        let val = event.target.value
+
+                        const decimalPos = val.indexOf(".")
+
+                        if (
+                          decimalPos !== -1 &&
+                          val.length - decimalPos - 1 > 2
+                        ) {
+                          val = val.substring(0, decimalPos + 3)
+                          event.target.value = val
+                        }
+                      },
+                      required: "Enter amount",
+                      valueAsNumber: true,
+                      validate: {
+                        positive: (v) =>
+                          v >= 0 ||
+                          "You must submit a positive amount.",
+                      },
+                    })}
+                  />
+                  <InputRightElement pointerEvents="none">
+                    <Text>%</Text>
+                  </InputRightElement>
+                </InputGroup>
+              </HStack>
+              <FormErrorMessage color="energyYellow">
+                <Icon
+                  p={0.5}
+                  mr={1}
+                  color="surface.bg"
+                  bg="red.base"
+                  borderRadius="50%"
+                  as={AiOutlineInfo}
+                />
+                {errors.sharePriceDiscountPercent?.message}
+              </FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={!!errors.deadlineHours}>
+              <HStack justify="space-between">
+                <Tooltip
+                  hasArrow
+                  placement="top"
+                  label={
+                    "How many hours the intent will be valid for. If the intent is not fulfilled within this duration, it will be cancelled."
+                  }
+                  bg="surface.bg"
+                  color="neutral.300"
+                >
+                  <HStack spacing={1} align="center">
+                    <Text as="span">Deadline Hours</Text>
+                    <InformationIcon
+                      color="neutral.300"
+                      boxSize={3}
+                    />
+                  </HStack>
+                </Tooltip>
+                <Input
+                  id="deadline"
+                  variant="unstyled"
+                  pr="2"
+                  type="number"
+                  step="any"
+                  defaultValue="0.00"
+                  placeholder="0.00"
+                  fontSize="lg"
+                  fontWeight={700}
+                  textAlign="right"
+                  backgroundColor={
+                    selectedPriority === "Custom"
+                      ? "purple.dark"
+                      : "neutral.500"
+                  }
+                  width="25%"
+                  padding={2}
+                  borderRadius={16}
+                  height="2.2em"
+                  disabled={selectedPriority !== "Custom"}
+                  {...register("deadlineHours", {
+                    onChange: (event) => {
+                      let val = event.target.value
+
+                      const decimalPos = val.indexOf(".")
+
+                      if (
+                        decimalPos !== -1 &&
+                        val.length - decimalPos - 1 > 2
+                      ) {
+                        val = val.substring(0, decimalPos + 3)
+                        event.target.value = val
+                      }
+                    },
+                    required: "Enter amount",
+                    valueAsNumber: true,
+                    validate: {
+                      positive: (v) =>
+                        v > 0 || "You must submit a positive amount.",
+                    },
+                  })}
+                />
+              </HStack>
+              <FormErrorMessage color="energyYellow">
+                <Icon
+                  p={0.5}
+                  mr={1}
+                  color="surface.bg"
+                  bg="red.base"
+                  borderRadius="50%"
+                  as={AiOutlineInfo}
+                />
+                {errors.deadlineHours?.message}
+              </FormErrorMessage>
+            </FormControl>
           </Stack>
         </Stack>
       </FormProvider>
