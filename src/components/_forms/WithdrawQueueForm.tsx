@@ -22,7 +22,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
-import { useAccount, useContract, useSigner } from "wagmi"
+import { useAccount, useContract, useSigner, erc20ABI } from "wagmi"
 import { toEther } from "utils/formatCurrency"
 import { ethers } from "ethers"
 import { useHandleTransaction } from "hooks/web3"
@@ -46,6 +46,8 @@ import { FaqItem, FaqTabWithRef } from "types/sanity"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
+import { getAddress } from "ethers/lib/utils.js"
+import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 
 interface FormValues {
   withdrawAmount: number
@@ -109,7 +111,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
 
   const { id: _id } = useDepositModalStore()
 
-  const { addToast, close, closeAll } = useBrandedToast()
+  const { addToast, update, close, closeAll } = useBrandedToast()
   const { address } = useAccount()
 
   const id = (useRouter().query.id as string) || _id
@@ -131,6 +133,16 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     abi: withdrawQueueV0821,
     signerOrProvider: signer,
   })!
+
+  const cellarContract = useContract({
+    address: cellarConfig.cellar.address,
+    abi: cellarConfig.cellar.abi,
+    signerOrProvider: signer,
+  })!
+
+  const [_, wait] = useWaitForTransaction({
+    skip: true,
+  })
 
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
@@ -234,19 +246,91 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       return
     }
 
+    const withdrawAmtInBaseDenom = ethers.utils.parseUnits(
+      `${withdrawAmount}`,
+      cellarConfig.cellar.decimals
+    )
+
     // Get approval if needed
-    // TODO!!!!!
+    const allowance = await cellarContract.allowance(
+      address!,
+      getAddress(cellarConfig.chain.withdrawQueueAddress)
+    )
 
+    let needsApproval
+    try {
+      needsApproval = allowance.lt(withdrawAmtInBaseDenom)
+    } catch (e) {
+      const error = e as Error
+      console.error("Invalid Input: ", error.message)
+      return
+    }
 
+    if (needsApproval) {
+      try {
+        const { hash } = await cellarContract.approve(
+          getAddress(cellarConfig.chain.withdrawQueueAddress),
+          ethers.constants.MaxUint256
+        )
+        addToast({
+          heading: "ERC20 Approval",
+          status: "default",
+          body: <Text>Approving ERC20</Text>,
+          isLoading: true,
+          closeHandler: close,
+          duration: null,
+        })
+        const waitForApproval = wait({ confirmations: 1, hash })
+        const result = await waitForApproval
+        if (result?.data?.transactionHash) {
+          // analytics.track("deposit.approval-granted", {
+          //   ...baseAnalytics,
+          //   stable: tokenSymbol,
+          //   value: depositAmount,
+          // })
 
+          update({
+            heading: "ERC20 Approval",
+            body: <Text>ERC20 Approved</Text>,
+            status: "success",
+            closeHandler: closeAll,
+          })
+        } else if (result?.error) {
+          // analytics.track("deposit.approval-failed", {
+          //   ...baseAnalytics,
+          //   stable: tokenSymbol,
+          //   value: depositAmount,
+          // })
+
+          update({
+            heading: "ERC20 Approval",
+            body: <Text>Approval Failed</Text>,
+            status: "error",
+            closeHandler: closeAll,
+          })
+        }
+      } catch (e) {
+        const error = e as Error
+        console.error(error.message)
+        // analytics.track("deposit.approval-cancelled", {
+        //   ...baseAnalytics,
+        //   stable: tokenSymbol,
+        //   value: depositAmount,
+        // })
+
+        addToast({
+          heading: "ERC20 Approval",
+          body: <Text>Approval Cancelled</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+      }
+    }
 
     try {
-      const withdrawAmtInBaseDenom = ethers.utils.parseUnits(
-        `${withdrawAmount}`,
-        cellarConfig.cellar.decimals
-      )
-
-      const deadlineSeconds = Math.floor(deadlineHours * 60)
+      const currentTime = Math.floor(Date.now() / 1000)
+      const deadlineSeconds =
+        Math.floor(deadlineHours * 60) + currentTime
 
       // Query share price
       const previewRedeem: number = parseInt(
