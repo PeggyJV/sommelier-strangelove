@@ -1,4 +1,4 @@
-import React, { useEffect, VFC } from "react"
+import React, { useEffect, useState, VFC } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -12,8 +12,11 @@ import {
   Stack,
   Text,
   Link,
+  Tooltip,
+  ButtonGroup,
+  useTheme,
 } from "@chakra-ui/react"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
@@ -35,9 +38,17 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { getTokenConfig, Token } from "data/tokenConfig"
+import { ModalOnlyTokenMenu } from "components/_menus/ModalMenu"
+import { ChevronDownIcon, InformationIcon } from "components/_icons"
+import { FAQTabs } from "components/FAQStrategy/FAQTabs"
+import { FaqItem, FaqTabWithRef } from "types/sanity"
+import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
 
 interface FormValues {
   withdrawAmount: number
+  deadlineSeconds: number
+  sharePriceTarget: number
+  selectedToken: Token
 }
 
 interface WithdrawQueueFormProps {
@@ -45,19 +56,27 @@ interface WithdrawQueueFormProps {
 }
 
 function scientificToDecimalString(num: number) {
-    // If the number is in scientific notation, split it into base and exponent
-    const sign = Math.sign(num);
-    let [base, exponent] = num.toString().split('e').map(item => parseInt(item, 10));
+  // If the number is in scientific notation, split it into base and exponent
+  const sign = Math.sign(num)
+  let [base, exponent] = num
+    .toString()
+    .split("e")
+    .map((item) => parseInt(item, 10))
 
-    // Adjust for negative exponent
-    if (exponent < 0) {
-        let decimalString = Math.abs(base).toString();
-        let padding = Math.abs(exponent) - 1;
-        return (sign < 0 ? "-" : "") + "0." + "0".repeat(padding) + decimalString;
-    }
+  // Adjust for negative exponent
+  if (exponent < 0) {
+    let decimalString = Math.abs(base).toString()
+    let padding = Math.abs(exponent) - 1
+    return (
+      (sign < 0 ? "-" : "") +
+      "0." +
+      "0".repeat(padding) +
+      decimalString
+    )
+  }
 
-    // Handle positive exponent or non-scientific numbers (which won't be split)
-    return num.toString();
+  // Handle positive exponent or non-scientific numbers (which won't be split)
+  return num.toString()
 }
 
 export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
@@ -70,6 +89,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
+  const theme = useTheme()
 
   const { id: _id } = useDepositModalStore()
 
@@ -93,6 +113,32 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
 
   const { lpToken } = useUserBalances(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
+  let strategyBaseAsset: Token = cellarConfig.baseAsset
+
+  const modalFormMethods = useForm<FormValues>({
+    defaultValues: {},
+  })
+
+  const [selectedToken, setSelectedToken] = useState<Token | null>(
+    null
+  )
+
+  function trackedSetSelectedToken(value: Token | null) {
+    if (value && value !== selectedToken) {
+      // analytics.track("deposit.stable-selected", {
+      //   ...baseAnalytics,
+      //   stable: value.symbol,
+      // })
+    }
+
+    setSelectedToken(value)
+  }
+
+  const [selected, setSelected] = useState("Mid")
+
+  const handleSelect = (value: string) => {
+    setSelected(value)
+  }
 
   const { doHandleTransaction } = useHandleTransaction()
 
@@ -218,133 +264,248 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       align="stretch"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <FormControl isInvalid={isError as boolean | undefined}>
-        <Stack spacing={2}>
-          <Text fontWeight="bold" color="neutral.400" fontSize="xs">
-            Enter Shares
-          </Text>
-          <HStack
-            backgroundColor="surface.tertiary"
-            justifyContent="space-between"
-            borderRadius={16}
-            px={4}
-            py={3}
-            height="64px"
-          >
-            <HStack>
-              <Image
-                width="16px"
-                height="16px"
-                src={cellarConfig.lpToken.imagePath}
-                alt="coinlogo"
-              />
-              <Text fontWeight="semibold">{lpTokenData?.symbol}</Text>
-            </HStack>
-            <VStack spacing={0} align="flex-end">
-              <Input
-                id="amount"
-                variant="unstyled"
-                pr="2"
-                type="number"
-                step="any"
-                defaultValue="0.00"
-                placeholder="0.00"
-                fontSize="lg"
-                fontWeight={700}
-                textAlign="right"
-                {...register("withdrawAmount", {
-                  onChange: (event) => {
-                    let val = event.target.value
+      <FormProvider {...modalFormMethods}>
+        <FormControl isInvalid={isError as boolean | undefined}>
+          <Stack spacing={5}>
+            <Text fontWeight="bold" color="neutral.400" fontSize="xs">
+              Enter Shares
+            </Text>
+            <HStack
+              backgroundColor="surface.tertiary"
+              justifyContent="space-between"
+              borderRadius={16}
+              px={4}
+              py={3}
+              height="64px"
+            >
+              <HStack>
+                <Image
+                  width="16px"
+                  height="16px"
+                  src={cellarConfig.lpToken.imagePath}
+                  alt="coinlogo"
+                />
+                <Text fontWeight="semibold">
+                  {lpTokenData?.symbol}
+                </Text>
+              </HStack>
+              <VStack spacing={0} align="flex-end">
+                <Input
+                  id="amount"
+                  variant="unstyled"
+                  pr="2"
+                  type="number"
+                  step="any"
+                  defaultValue="0.00"
+                  placeholder="0.00"
+                  fontSize="lg"
+                  fontWeight={700}
+                  textAlign="right"
+                  {...register("withdrawAmount", {
+                    onChange: (event) => {
+                      let val = event.target.value
 
-                    const decimalPos = val.indexOf(".")
+                      const decimalPos = val.indexOf(".")
 
-                    if (
-                      decimalPos !== -1 &&
-                      val.length - decimalPos - 1 > cellarConfig.cellar.decimals
-                    ) {
-                      val = val.substring(
-                        0,
-                        decimalPos + cellarConfig.cellar.decimals + 1
-                      ) // Keep token decimal places as max
-                      event.target.value = val
-                    }
-                  },
-                  required: "Enter amount",
-                  valueAsNumber: true,
-                  validate: {
-                    positive: (v) =>
-                      v > 0 || "You must submit a positive amount.",
-                    balance: (v) =>
-                      v <=
-                        parseFloat(
+                      if (
+                        decimalPos !== -1 &&
+                        val.length - decimalPos - 1 >
+                          cellarConfig.cellar.decimals
+                      ) {
+                        val = val.substring(
+                          0,
+                          decimalPos +
+                            cellarConfig.cellar.decimals +
+                            1
+                        ) // Keep token decimal places as max
+                        event.target.value = val
+                      }
+                    },
+                    required: "Enter amount",
+                    valueAsNumber: true,
+                    validate: {
+                      positive: (v) =>
+                        v > 0 || "You must submit a positive amount.",
+                      balance: (v) =>
+                        v <=
+                          parseFloat(
+                            toEther(
+                              lpTokenData?.formatted,
+                              lpTokenData?.decimals,
+                              false,
+                              6
+                            )
+                          ) || "Insufficient balance",
+                    },
+                  })}
+                />
+                <HStack spacing={0} fontSize="10px">
+                  {isBalanceLoading ? (
+                    <Spinner size="xs" mr="2" />
+                  ) : (
+                    <>
+                      <Text as="span">
+                        Available:{" "}
+                        {(lpTokenData &&
                           toEther(
-                            lpTokenData?.formatted,
-                            lpTokenData?.decimals,
+                            lpTokenData.value,
+                            lpTokenData.decimals,
                             false,
                             6
-                          )
-                        ) || "Insufficient balance",
-                  },
-                })}
-              />
-              <HStack spacing={0} fontSize="10px">
-                {isBalanceLoading ? (
-                  <Spinner size="xs" mr="2" />
-                ) : (
-                  <>
-                    <Text as="span">
-                      Available:{" "}
-                      {(lpTokenData &&
-                        toEther(
-                          lpTokenData.value,
-                          lpTokenData.decimals,
-                          false,
-                          6
-                        )) ||
-                        "--"}
-                    </Text>
-                    <Button
-                      variant="unstyled"
-                      p={0}
-                      w="max-content"
-                      h="max-content"
-                      textTransform="uppercase"
-                      fontSize="inherit"
-                      fontWeight={600}
-                      onClick={setMax}
-                    >
-                      max
-                    </Button>
-                  </>
-                )}
-              </HStack>
-            </VStack>
-          </HStack>
+                          )) ||
+                          "--"}
+                      </Text>
+                      <Button
+                        variant="unstyled"
+                        p={0}
+                        w="max-content"
+                        h="max-content"
+                        textTransform="uppercase"
+                        fontSize="inherit"
+                        fontWeight={600}
+                        onClick={setMax}
+                      >
+                        max
+                      </Button>
+                    </>
+                  )}
+                </HStack>
+              </VStack>
+            </HStack>
 
-          <FormErrorMessage color="energyYellow">
-            <Icon
-              p={0.5}
-              mr={1}
-              color="surface.bg"
-              bg="red.base"
-              borderRadius="50%"
-              as={AiOutlineInfo}
+            <FormErrorMessage color="energyYellow">
+              <Icon
+                p={0.5}
+                mr={1}
+                color="surface.bg"
+                bg="red.base"
+                borderRadius="50%"
+                as={AiOutlineInfo}
+              />
+              {errors.withdrawAmount?.message}
+            </FormErrorMessage>
+            <HStack justify="space-between">
+              <Text as="span">Asset Out</Text>
+              {
+                <ModalOnlyTokenMenu
+                  depositTokens={[strategyBaseAsset.symbol]}
+                  activeAsset={strategyBaseAsset.address}
+                  setSelectedToken={trackedSetSelectedToken}
+                  //isDisabled={isSubmitting}
+                />
+              }
+            </HStack>
+            <HStack justify="space-between" alignItems="start">
+              <Tooltip
+                hasArrow
+                placement="top-start"
+                label={
+                  "Preconfigured options that allow you to specify how aggressive you would like your withdraw intent to be."
+                }
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={1} align="center">
+                  <Text as="span">Priority</Text>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+              <VStack align="end">
+                <ButtonGroup
+                  isAttached
+                  variant="solid"
+                  backgroundColor="purple.dark"
+                  borderRadius={16}
+                >
+                  {["Low", "Mid", "High"].map(
+                    (level, index, array) => (
+                      <Button
+                        key={level}
+                        colorScheme={
+                          selected === level ? "purple" : "none"
+                        }
+                        onClick={() => handleSelect(level)}
+                        borderRadius={16}
+                        size="sm"
+                        textColor={
+                          selected === level ? "neutral.600" : "white"
+                        }
+                      >
+                        {level}
+                      </Button>
+                    )
+                  )}
+                </ButtonGroup>
+                <Text
+                  fontSize="sm"
+                  cursor="pointer"
+                  color={
+                    selected === "Custom"
+                      ? "purple.light"
+                      : "gray.500"
+                  }
+                  fontWeight={
+                    selected === "Custom"
+                      ? "bold"
+                      : "none"
+                  }
+                  onClick={() => handleSelect("Custom")}
+                  mt={2}
+                >
+                  Custom
+                </Text>
+              </VStack>
+            </HStack>
+          </Stack>
+        </FormControl>
+        <Stack spacing={5}>
+          <Text
+            fontSize="xs"
+            fontWeight="semibold"
+            color="neutral.400"
+          >
+            Transaction Details
+          </Text>
+          <Stack spacing={2.5}>
+            <TransactionDetailItem
+              title="Vault"
+              value={<Text>{cellarDataMap[id].name}</Text>}
             />
-            {errors.withdrawAmount?.message}
-          </FormErrorMessage>
+            <HStack justify="space-between">
+              <Tooltip
+                hasArrow
+                placement="top"
+                label={
+                  "The amount of underlying tokens you will recieve per share for the limit sell (withdraw) intent. A lower share price is more likely to be fulfilled."
+                }
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={1} align="center">
+                  <Text as="span">Target Share Price</Text>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+            </HStack>
+            <HStack justify="space-between">
+              <Tooltip
+                hasArrow
+                placement="top"
+                label={
+                  "How long the intent will be valid for. If the intent is not fulfilled within this time, it will be cancelled."
+                }
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={1} align="center">
+                  <Text as="span">Deadline</Text>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+            </HStack>
+          </Stack>
         </Stack>
-      </FormControl>
-      <Stack>
-        <Text fontSize="sm" fontWeight="semibold" color="neutral.400">
-          Transaction Details
-        </Text>
-        <Stack>
-          <TransactionDetailItem
-            title="Vault"
-            value={<Text>{cellarDataMap[id].name}</Text>}
-          />
-        </Stack>
-      </Stack>
+      </FormProvider>
 
       <BaseButton
         type="submit"
@@ -356,12 +517,20 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       >
         Submit
       </BaseButton>
-      {waitTime(cellarConfig) !== null && (
+      {/*waitTime(cellarConfig) !== null && (
         <Text textAlign="center">
           Please wait {waitTime(cellarConfig)} after the deposit to
           enter the Withdraw Queue.
         </Text>
-      )}
+      )*/}
+      <FAQAccordion
+        data={[
+          {
+            question: "What is the Withdraw Queue?",
+            answer: `The Withdraw Queue is a way for users to withdraw their funds from a strategy in a more efficient and gas effective way by submitting a withdraw intent. Instead of withdrawing your funds immediately, you can enter the Withdraw Queue and wait for your withdrawal to be fulfilled. This allows you to save on gas fees by having your withdraw intent fulfilled by independent solvers.`,
+          },
+        ]}
+      />
     </VStack>
   )
 }
