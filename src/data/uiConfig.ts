@@ -485,7 +485,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       // } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
       //   return "7 Day MA APY (includes swETH incentives)"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
-      return "Estimated Reward APY (excluding impermanent loss)"
+      return "Estimated Reward APY"
     }
     return "30D MA APY"
   }
@@ -506,7 +506,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     // } else if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     //   return "7 Day MA APY (includes swETH incentives)"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
-    return "Estimated Reward APY (excluding impermanent loss)"
+    return "Estimated Reward APY"
   }
   return "30D MA APY"
 }
