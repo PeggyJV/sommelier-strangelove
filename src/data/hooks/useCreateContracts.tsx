@@ -1,10 +1,12 @@
+import { StrategyContracts } from "data/actions/types"
 import { ConfigProps } from "data/types"
-import { ContractInterface, ethers } from "ethers"
+import { Contract, ContractInterface, ethers } from "ethers"
 import { useSigner, useProvider, useContract } from "wagmi"
 
 export const useCreateContracts = (config: ConfigProps) => {
   const { data: signer } = useSigner()
   const provider = useProvider()
+  const chain = config.chain.id
 
   const stakerSigner = (() => {
     if (!config.staker || !signer) return
@@ -14,11 +16,11 @@ export const useCreateContracts = (config: ConfigProps) => {
       signer
     )
   })()
-  const cellarSigner = useContract({
+  const cellarSigner: Contract = useContract({
     address: config.cellar.address,
     abi: config.cellar.abi,
     signerOrProvider: signer,
-  })
+  })!
   const stakerContract = (() => {
     if (!config.staker || !provider) return
     return new ethers.Contract(
@@ -27,23 +29,24 @@ export const useCreateContracts = (config: ConfigProps) => {
       provider
     )
   })()
-  const cellarContract = useContract({
+  const cellarContract: Contract = useContract({
     address: config.cellar.address,
     abi: config.cellar.abi,
     signerOrProvider: provider,
-  })
-  const cellarRouterSigner = useContract({
+  })!
+  const cellarRouterSigner: Contract = useContract({
     address: config.cellarRouter.address,
     abi: config.cellarRouter.abi,
     signerOrProvider: signer,
-  })
+  })!
 
-  const contracts = {
+  const contracts: StrategyContracts = {
     stakerSigner,
     cellarSigner,
     stakerContract,
     cellarContract,
     cellarRouterSigner,
+    chain,
   }
 
   return contracts

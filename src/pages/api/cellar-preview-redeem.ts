@@ -24,7 +24,8 @@ const cellarPreviewRedeem = async (
 
     const cellar = await queryContract(
       cellarDataMap[cellarId]?.config.id,
-      cellarDataMap[cellarId]?.config.cellar.abi
+      cellarDataMap[cellarId]?.config.cellar.abi,
+      cellarDataMap[cellarId]?.config.chain
     )
 
     let shareValue: number = 0

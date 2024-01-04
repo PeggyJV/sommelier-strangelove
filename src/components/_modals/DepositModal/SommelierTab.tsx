@@ -62,6 +62,22 @@ interface DepositModalProps
   notifyModal?: UseDisclosureProps
 }
 
+function scientificToDecimalString(num: number) {
+    // If the number is in scientific notation, split it into base and exponent
+    const sign = Math.sign(num);
+    let [base, exponent] = num.toString().split('e').map(item => parseInt(item, 10));
+
+    // Adjust for negative exponent
+    if (exponent < 0) {
+        let decimalString = Math.abs(base).toString();
+        let padding = Math.abs(exponent) - 1;
+        return (sign < 0 ? "-" : "") + "0." + "0".repeat(padding) + decimalString;
+    }
+
+    // Handle positive exponent or non-scientific numbers (which won't be split)
+    return num.toString();
+}
+
 export const SommelierTab: VFC<DepositModalProps> = ({
   notifyModal,
   ...props
@@ -74,7 +90,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarAddress = cellarConfig.id
   const depositTokens = cellarData.depositTokens.list
   const { addToast, update, close, closeAll } = useBrandedToast()
-
+  
   const currentStrategies =
     window.location.pathname?.split("/")[2]?.replace(/-/g, " ") ||
     id.replace(/-/g, " ") ||
@@ -109,7 +125,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address)
+  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
@@ -143,7 +159,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
 
   const activeAsset = strategyData?.activeAsset
@@ -228,7 +244,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     )
 
     const amtInWei = ethers.utils.parseUnits(
-      depositAmount.toString(),
+      scientificToDecimalString(depositAmount),
       selectedTokenBalance?.decimals
     )
 
@@ -236,7 +252,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     try {
       needsApproval = allowance.lt(amtInWei)
     } catch (e) {
-      console.error("Invalid Input")
+      const error = e as Error
+      console.error("Invalid Input: ", error.message)
       return
     }
 
@@ -292,6 +309,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           })
         }
       } catch (e) {
+        const error = e as Error
+        console.error(error.message)
         // analytics.track("deposit.approval-cancelled", {
         //   ...baseAnalytics,
         //   stable: tokenSymbol,
@@ -369,16 +388,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               <Link
                 display="flex"
                 alignItems="center"
-                href={`https://etherscan.io/tx/${depositResult?.data?.transactionHash}`}
+                href={`${cellarConfig.chain.blockExplorer.url}/tx/${depositResult?.data?.transactionHash}`}
                 isExternal
                 textDecor="underline"
               >
-                <Text as="span">View on Etherscan</Text>
+                <Text as="span">{`View on ${cellarConfig.chain.blockExplorer.name}`}</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
               <Text
                 onClick={() => {
-                  importToken.mutate({ address: cellarAddress })
+                  importToken.mutate({
+                    address: cellarAddress,
+                    chain: cellarConfig.chain.id,
+                  })
                 }}
                 textDecor="underline"
                 as="button"
@@ -406,7 +428,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       if (isPopUpEnable) {
         props.onClose()
         //@ts-ignore
-        notifyModal.onOpen()
+        notifyModal?.onOpen()
       }
 
       if (depositResult?.error) {
@@ -436,15 +458,26 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           heading: "Transaction not submitted",
           body: (
             <Text>
-              The gas fees are particularly high right now. To avoid a
-              failed transaction leading to wasted gas, please try
-              again later.
+              Your transaction has failed, if it does not work after
+              waiting some time and retrying please
+              send a message in our{" "}
+              {
+                <Link
+                  href="https://discord.com/channels/814266181267619840/814279703622844426"
+                  isExternal
+                  textDecoration="underline"
+                >
+                  Discord Support channel
+                </Link>
+              }{" "}
+              tagging a member of the front end team.
             </Text>
           ),
           status: "info",
           closeHandler: closeAll,
         })
       } else {
+        console.error(error.message)
         analytics.track("deposit.rejected", {
           ...baseAnalytics,
           stable: tokenSymbol,
@@ -477,6 +510,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const currentAsset = getCurrentAsset(
     tokenConfig,
+    cellarConfig.chain.id,
     activeAsset?.address
   )
 

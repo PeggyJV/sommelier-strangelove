@@ -8,7 +8,7 @@ import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
 import { useState, useEffect } from "react"
 
-export const useStrategyData = (address: string) => {
+export const useStrategyData = (address: string, chain: string) => {
   const provider = useProvider()
 
   const { data: allContracts } = useAllContracts()
@@ -19,8 +19,14 @@ export const useStrategyData = (address: string) => {
   >(undefined)
   const [error, setError] = useState(null)
 
+  const cellarData = Object.values(cellarDataMap).find(
+    (item) =>
+      item.config.cellar.address.toLowerCase() ===
+      address.toLowerCase() && item.config.chain.id === chain
+  )!
+
   useEffect(() => {
-    fetchIndividualCellarStrategyData(address.toLowerCase())
+    fetchIndividualCellarStrategyData(address.toLowerCase(), cellarData.config.chain.id)
       .then(({ data, error }) => {
         if (error) {
           setError(error)
@@ -34,22 +40,26 @@ export const useStrategyData = (address: string) => {
   const config = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address.toLowerCase() ===
-      address.toLowerCase()
+      address.toLowerCase() && item.config.chain.id === chain
   )!.config
   const isNoDataSource = Boolean(config!.isNoDataSource)
   const baseAsset = config.baseAsset.coinGeckoId
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset ?? "usd-coin"
   )
+  // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
+  const key = address + (config.chain.id !== "ethereum" ? ("-" + chain) : "")
+
+  // Get cellar contracts for the chain  
   const query = useQuery(
     [
       "USE_STRATEGY_DATA",
-      { provider: provider?._isProvider, address },
+      { provider: provider?._isProvider, address: key },
     ],
     async () => {
       const result = await getStrategyData({
         address,
-        contracts: allContracts![address]!,
+        contracts: allContracts![key]!,
         sommPrice: sommPrice ?? "0",
         stratData: stratData?.cellar,
         baseAssetPrice: baseAssetPrice ?? "0",

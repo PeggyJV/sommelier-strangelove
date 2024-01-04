@@ -13,7 +13,7 @@ import { UserStats } from "./UserStats"
 import { CellarStats, CellarStatsLabel } from "./CellarStats"
 import { PercentageText } from "components/PercentageText"
 import { isComingSoon } from "utils/isComingSoon"
-import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
+import { format, utcToZonedTime } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
 import { TransparentSkeleton } from "components/_skeleton"
 import { isFuture } from "date-fns"
@@ -27,7 +27,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
 
   const launchDate = strategyData?.launchDate

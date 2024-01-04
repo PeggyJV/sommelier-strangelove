@@ -31,7 +31,11 @@ import { useEffect, VFC } from "react"
 import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
 
-export const BridgeForm: VFC = () => {
+interface BridgeFormProps {
+  wrongNetwork?: boolean
+}
+
+export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const { addToast, closeAll } = useBrandedToast()
   const isMounted = useIsMounted()
   const { watch, handleSubmit, formState, getFieldState, setValue } =
@@ -43,10 +47,14 @@ export const BridgeForm: VFC = () => {
   const watchAmount = watch("amount")
   const watchSommelierAddress = watch("address")
 
+  if (wrongNetwork === undefined) {
+    wrongNetwork = false
+  }
+
   useEffect(() => {
     setValue("address", "")
     setValue("amount", 0)
-  }, [watchType])
+  }, [watchType, setValue])
 
   const { isLoading: isEthToSommLoading, doEthToSomm } =
     useBridgeEthToSommTx()
@@ -62,7 +70,7 @@ export const BridgeForm: VFC = () => {
     !!getFieldState("address").error ||
     !watchSommelierAddress ||
     isEthToSommLoading ||
-    isSommToEthLoading
+    isSommToEthLoading || wrongNetwork
 
   const { connectAsync } = useGrazConnect()
   const { isConnected: isGrazConnected } = useGrazAccount()
@@ -107,7 +115,7 @@ export const BridgeForm: VFC = () => {
     </HStack>
   )
   return (
-    <Stack spacing="40px">
+    <Stack spacing="40px" alignItems={"center"}>
       <Stack
         spacing="40px"
         as="form"
@@ -167,7 +175,7 @@ export const BridgeForm: VFC = () => {
               {watchType === "TO_SOMMELIER" ? <Somm /> : <Eth />}
             </Stack>
           </HStack>
-          {buttonEnabled && (
+          {buttonEnabled && !wrongNetwork && (
             <>
               <FormControl
                 isInvalid={
@@ -208,9 +216,16 @@ export const BridgeForm: VFC = () => {
           </BaseButton>
         )}
       </Stack>
-
+      {/*
+          !!! TODO: This needs to be adjusted once it's modified for multichain
+        */}
       {isMounted && !buttonEnabled && toSomm && (
-        <ConnectButton unstyled height="69px" fontSize="21px">
+        <ConnectButton
+          overrideChainId={"ethereum"}
+          unstyled
+          height="69px"
+          fontSize="21px"
+        >
           Connect Ethereum Wallet
         </ConnectButton>
       )}

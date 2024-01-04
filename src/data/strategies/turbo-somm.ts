@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboSOMM: CellarData = {
   name: "Turbo SOMM",
@@ -58,6 +59,7 @@ export const turboSOMM: CellarData = {
     list: ["SOMM"],
   },
   config: {
+    chain: chainSlugMap.ETHEREUM,
     id: config.CONTRACT.TURBO_SOMM.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_SOMM,
     lpToken: {
@@ -75,7 +77,7 @@ export const turboSOMM: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 6,
     },
-    baseAsset: tokenConfigMap.SOMM,
+    baseAsset: tokenConfigMap.SOMM_ETHEREUM,
     customReward: {
       showOnlyBaseApy: true,
       showAPY: false,

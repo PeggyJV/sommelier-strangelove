@@ -22,6 +22,7 @@ export const getUserData = async ({
   userAddress,
   sommPrice,
   baseAssetPrice,
+  chain
 }: {
   address: string
   contracts: StrategyContracts
@@ -29,10 +30,11 @@ export const getUserData = async ({
   userAddress: string
   sommPrice: string
   baseAssetPrice: string
+  chain: string
 }) => {
   const userDataRes = await (async () => {
     const strategy = Object.values(cellarDataMap).find(
-      ({ config }) => config.cellar.address === address
+      ({ config }) => config.cellar.address === address && config.chain.id === chain
     )!
     const config: ConfigProps = strategy.config!
     const decimals = config.baseAsset.decimals

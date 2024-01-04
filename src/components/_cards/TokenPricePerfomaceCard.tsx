@@ -31,7 +31,7 @@ export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")

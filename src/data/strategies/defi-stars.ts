@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const defiStars: CellarData = {
   name: "DeFi Stars",
@@ -92,8 +93,8 @@ export const defiStars: CellarData = {
       abi: config.CONTRACT.DEFI_STARS_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

@@ -19,20 +19,25 @@ const sommelierAPIIndividualStratData = async (
   res: NextApiResponse
 ) => {
   try {
-    let { cellarAddress } = req.query
+    let { cellarAddress, chain } = req.query
 
     const unix_timestamp_24_hours_ago =
       Math.floor(Date.now() / 1000) - 24 * 60 * 60
 
-    const dailyDataUrl = `https://api.sommelier.finance/dailyData/ethereum/${cellarAddress}/0/latest`
-    const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/ethereum/${cellarAddress}/${unix_timestamp_24_hours_ago}/latest`
+    const dailyDataUrl = `https://api.sommelier.finance/dailyData/${chain}/${cellarAddress}/0/latest`
+    const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cellarAddress}/${unix_timestamp_24_hours_ago}/latest`
 
     const [dailyData, hourlyData] = await Promise.all([
       fetchData(dailyDataUrl),
       fetchData(hourlyDataUrl),
     ])
+    
+    let chainStr = ""
+    if (chain !== "ethereum") {
+      chainStr = "-" + chain
+    }
 
-    let cellarDecimals = CellaAddressDataMap[cellarAddress!.toString().toLowerCase()].config.cellar.decimals
+    let cellarDecimals = CellaAddressDataMap[cellarAddress!.toString().toLowerCase() + chainStr].config.cellar.decimals
 
     let transformedDailyData = dailyData.Response.map(
       (dayData: any) => ({

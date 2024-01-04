@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { PearlIcon } from "components/_icons"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboSWETH: CellarData = {
   name: "Turbo swETH",
@@ -91,7 +92,6 @@ export const turboSWETH: CellarData = {
       abi: config.CONTRACT.TURBO_SWETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     customReward: {
       showAPY: false,
       tokenSymbol: "PEARL",
@@ -122,7 +122,7 @@ export const turboSWETH: CellarData = {
         Date.UTC(2023, 11, 5, 0, 0, 0, 0)
       ),
     },
-    baseAsset: tokenConfigMap.WETH,
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
     feePromotion: "Promotional 0 fee period sponsored by Swell",
     badges: [
       {
@@ -134,6 +134,7 @@ export const turboSWETH: CellarData = {
         customStrategyHighlightColor: "#00C04B",
       },
     ],
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

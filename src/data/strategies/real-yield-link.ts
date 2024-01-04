@@ -7,6 +7,7 @@ import {
   CellarType,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const realYieldLink: CellarData = {
   name: "Real Yield LINK",
@@ -71,7 +72,8 @@ export const realYieldLink: CellarData = {
       key: CellarKey.CELLAR_V2,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.LINK,
+    baseAsset: tokenConfigMap.LINK_ETHEREUM,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

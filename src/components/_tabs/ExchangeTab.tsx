@@ -3,7 +3,6 @@ import { Text, Link, HStack, Image, Stack } from "@chakra-ui/react"
 import { ExternalLinkIcon } from "components/_icons"
 import React from "react"
 import { useRouter } from "next/router"
-import { analytics } from "utils/analytics"
 import { cellarDataMap } from "data/cellarDataMap"
 
 export const ExchangeTab = ({ title }: { title: string }) => {

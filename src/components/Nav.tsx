@@ -73,7 +73,7 @@ export const Nav: VFC<FlexProps> = (props) => {
     >
       <Container
         display="flex"
-        maxW="1452px"
+        maxW="100%"
         justifyContent="space-between"
         alignItems="center"
         flexDir="row"

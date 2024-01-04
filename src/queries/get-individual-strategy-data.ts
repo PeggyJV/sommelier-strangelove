@@ -1,8 +1,11 @@
-const getUrl = (cellarAddress: string) =>
-  `/api/sommelier-api-individual-strat-data?cellarAddress=${cellarAddress}`
+const getUrl = (cellarAddress: string, chain: string) =>
+  `/api/sommelier-api-individual-strat-data?cellarAddress=${cellarAddress}&chain=${chain}`
 
-export const fetchIndividualCellarStrategyData = async (cellarAddress: string) => {
-  const url = getUrl(cellarAddress)
+export const fetchIndividualCellarStrategyData = async (
+  cellarAddress: string,
+  chain: string
+) => {
+  const url = getUrl(cellarAddress, chain)
 
   try {
     const data = await fetch(url)
