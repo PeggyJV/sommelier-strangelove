@@ -51,7 +51,7 @@ export const turboSOMM: CellarData = {
     title: "Backtested APY",
     tooltip:
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-    value: "60%",
+    value: "20%",
   },
   dashboard:
     "https://debank.com/profile/0x5195222f69c5821f8095ec565E71e18aB6A2298f",
