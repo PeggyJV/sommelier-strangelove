@@ -371,7 +371,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
         if (onSuccessfulWithdraw) {
           onSuccessfulWithdraw()
         }
-        
+
         onClose() // Close modal after successful withdraw.
       }
 
@@ -425,6 +425,39 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     }
   }
 
+
+  const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
+    useState(false)
+
+  // Check if a user has an active withdraw request
+  const checkWithdrawRequest = async () => {
+    try {
+      if (withdrawQueueContract && address && cellarConfig) {
+        const withdrawRequest =
+          await withdrawQueueContract?.getUserWithdrawRequest(
+            address,
+            cellarConfig.cellar.address
+          )
+
+        // Check if it's valid
+        const isWithdrawRequestValid =
+          await withdrawQueueContract?.isWithdrawRequestValid(
+            cellarConfig.cellar.address,
+            address,
+            withdrawRequest
+          )
+        setIsActiveWithdrawRequest(isWithdrawRequestValid)
+
+      } else {
+        setIsActiveWithdrawRequest(false)
+      }
+    } catch (error) {
+      console.log(error)
+      setIsActiveWithdrawRequest(false)
+    }
+  }
+  checkWithdrawRequest()
+
   return (
     <VStack
       as="form"
@@ -434,6 +467,16 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     >
       <FormProvider {...modalFormMethods}>
         <FormControl isInvalid={!!errors.withdrawAmount}>
+          {isActiveWithdrawRequest && (
+            <>
+              <Text color="white" fontSize="s" textAlign={"center"} fontWeight={"bold"}>
+                You currently have a withdraw pending in the queue,
+                submitting a new withdraw intent will replace your
+                current one.
+              </Text>
+              <br />
+            </>
+          )}
           <Stack spacing={5}>
             <Text fontWeight="bold" color="neutral.400" fontSize="xs">
               Enter Shares
