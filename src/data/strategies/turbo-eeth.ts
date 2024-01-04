@@ -116,12 +116,12 @@ export const turboeETH: CellarData = {
         "View your ether.fi Loyalty Points at https://app.ether.fi/portfolio",
       customColumnValue: "https://app.ether.fi/portfolio",
       stakingDurationOverride: new Date(
-        Date.UTC(2024, 0, 28, 14, 0, 0, 0)
+        Date.UTC(2024, 1, 3, 14, 0, 0, 0)
       ),
       showSommRewards: true,
       customIconToolTipMsg:
         "Boosted ether.fi Loyalty Points ends in ",
-      showOnlyBaseApy: true,
+      showOnlyBaseApy: false,
     },
     staker: {
       address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,
