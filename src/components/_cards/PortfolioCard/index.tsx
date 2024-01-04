@@ -40,22 +40,25 @@ import {
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
-import { VFC } from "react"
+import { useEffect, useState, VFC } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { formatDecimals } from "utils/bigNumber"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
-import { useAccount } from "wagmi"
+import { useAccount, useContract, useSigner } from "wagmi"
 import BondingTableCard from "../BondingTableCard"
 import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import { useNetwork } from "wagmi"
+import WithdrawQueueCard from "../WithdrawQueueCard"
+import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
+import { add } from "lodash"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
-  const { isConnected } = useAccount()
+  const { address, isConnected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const slug = cellarDataMap[id].slug
@@ -116,17 +119,47 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     value: totalShares?.toString(),
   })
 
-  // TODO: Query withdraw queue status, disable queue button if there is active withdraw pending to prevent confusion
+  // Query withdraw queue status, disable queue button if there is active withdraw pending to prevent confusion
+  const { data: signer } = useSigner()
+  const withdrawQueueContract = useContract({
+    address: cellarConfig.chain.withdrawQueueAddress,
+    abi: withdrawQueueV0821,
+    signerOrProvider: signer,
+  })!
 
+  const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
+    useState(false)
 
+  // Check if a user has an active withdraw request
+  const checkWithdrawRequest = async () => {
+    try {
+      if (withdrawQueueContract && address && cellarConfig) {
+        const withdrawRequest =
+          await withdrawQueueContract?.getUserWithdrawRequest(
+            address,
+            cellarConfig.cellar.address
+          )
 
+        // Check if it's valid
+        const isWithdrawRequestValid =
+          await withdrawQueueContract?.isWithdrawRequestValid(
+            cellarConfig.cellar.address,
+            address,
+            withdrawRequest
+          )
+        setIsActiveWithdrawRequest(isWithdrawRequestValid)
+      } else {
+        setIsActiveWithdrawRequest(false)
+      }
+    } catch (error) {
+      console.log(error)
+      setIsActiveWithdrawRequest(false)
+    }
+  }
 
-
-
-
-
-
-
+  useEffect(() => {
+    checkWithdrawRequest()
+  }, [withdrawQueueContract, address, cellarConfig])
 
   return (
     <TransparentCard
@@ -251,7 +284,12 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       </HStack>
                       <WithdrawQueueButton
                         chain={cellarConfig.chain}
-                        disabled={lpTokenDisabled || !buttonsEnabled}
+                        buttonLabel="Enter Withdraw Queue"
+                        disabled={
+                          lpTokenDisabled ||
+                          !buttonsEnabled ||
+                          isActiveWithdrawRequest
+                        }
                       />
                     </VStack>
                   </>
@@ -502,6 +540,15 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   Boolean(userStakes?.userStakes.length) && (
                     <BondingTableCard />
                   )}
+              </LighterSkeleton>
+            )}
+            {isConnected && isActiveWithdrawRequest && (
+              <LighterSkeleton
+                h={!isUserDataLoading ? "none" : "100px"}
+                borderRadius={24}
+                isLoaded={!isUserDataLoading}
+              >
+                {isConnected && <WithdrawQueueCard />}
               </LighterSkeleton>
             )}
           </>

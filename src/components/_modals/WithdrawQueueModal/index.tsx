@@ -1,23 +1,29 @@
 import { ModalProps } from "@chakra-ui/react"
 import { VFC } from "react"
-import { Token as TokenType } from "data/tokenConfig"
-
-interface FormValues {
-  depositAmount: number
-  slippage: number
-  selectedToken: TokenType
-}
 import React from "react"
 import { SommelierTab } from "./SommelierTab"
 import { ModalWithExchangeTab } from "../ModalWithExchangeTab"
 
-type WithdrawQueueModalProps = Pick<ModalProps, "isOpen" | "onClose">
+type WithdrawQueueModalProps = Pick<
+  ModalProps,
+  "isOpen" | "onClose"
+> & {
+  onSuccessfulWithdraw?: () => void
+}
 
-export const WithdrawQueueModal: VFC<WithdrawQueueModalProps> = (props) => {
+export const WithdrawQueueModal: VFC<WithdrawQueueModalProps> = ({
+  onSuccessfulWithdraw,
+  ...props
+}) => {
   return (
     <ModalWithExchangeTab
       heading="Withdraw Queue"
-      sommelierTab={<SommelierTab {...props} />}
+      sommelierTab={
+        <SommelierTab
+          onSuccessfulWithdraw={onSuccessfulWithdraw}
+          {...props}
+        />
+      }
       {...props}
     />
   )

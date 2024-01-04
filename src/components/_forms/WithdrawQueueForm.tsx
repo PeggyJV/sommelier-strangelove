@@ -22,27 +22,21 @@ import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
-import { useAccount, useContract, useSigner, erc20ABI } from "wagmi"
+import { useAccount, useContract, useSigner } from "wagmi"
 import { toEther } from "utils/formatCurrency"
 import { ethers } from "ethers"
 import { useHandleTransaction } from "hooks/web3"
-import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
-import { waitTime } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
-import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
-import { getTokenConfig, Token } from "data/tokenConfig"
+import { Token } from "data/tokenConfig"
 import { ModalOnlyTokenMenu } from "components/_menus/ModalMenu"
-import { ChevronDownIcon, InformationIcon } from "components/_icons"
-import { FAQTabs } from "components/FAQStrategy/FAQTabs"
-import { FaqItem, FaqTabWithRef } from "types/sanity"
+import { InformationIcon } from "components/_icons"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
@@ -58,6 +52,7 @@ interface FormValues {
 
 interface WithdrawQueueFormProps {
   onClose: () => void
+  onSuccessfulWithdraw?: () => void
 }
 
 function scientificToDecimalString(num: number) {
@@ -99,6 +94,7 @@ const PRESET_VALUES: Record<
 
 export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
   onClose,
+  onSuccessfulWithdraw,
 }) => {
   const {
     register,
@@ -372,6 +368,10 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       )
 
       const onSuccess = () => {
+        if (onSuccessfulWithdraw) {
+          onSuccessfulWithdraw()
+        }
+        
         onClose() // Close modal after successful withdraw.
       }
 

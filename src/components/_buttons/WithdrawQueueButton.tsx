@@ -7,8 +7,10 @@ import { WithdrawQueueModal } from "components/_modals/WithdrawQueueModal"
 export const WithdrawQueueButton: VFC<
   ButtonProps & {
     chain: Chain
+    buttonLabel: string
+    onSuccessfulWithdraw?: () => void
   }
-> = (props) => {
+> = ({ buttonLabel, onSuccessfulWithdraw, ...props }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function closeModal() {
@@ -23,9 +25,13 @@ export const WithdrawQueueButton: VFC<
         }}
         {...props}
       >
-        {"Enter Withdraw Queue"}
+        {buttonLabel}
       </SecondaryButton>
-      <WithdrawQueueModal isOpen={isOpen} onClose={closeModal} />
+      <WithdrawQueueModal
+        isOpen={isOpen}
+        onClose={closeModal}
+        onSuccessfulWithdraw={onSuccessfulWithdraw}
+      />
     </>
   )
 }
