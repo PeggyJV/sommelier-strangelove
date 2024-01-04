@@ -330,7 +330,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     try {
       const currentTime = Math.floor(Date.now() / 1000)
       const deadlineSeconds =
-        Math.floor(deadlineHours * 60) + currentTime
+        Math.floor(deadlineHours * 60 * 60) + currentTime
 
       // Query share price
       const previewRedeem: number = parseInt(

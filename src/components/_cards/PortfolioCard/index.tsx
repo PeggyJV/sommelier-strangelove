@@ -116,6 +116,18 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     value: totalShares?.toString(),
   })
 
+  // TODO: Query withdraw queue status, disable queue button if there is active withdraw pending to prevent confusion
+
+
+
+
+
+
+
+
+
+
+
   return (
     <TransparentCard
       {...props}
