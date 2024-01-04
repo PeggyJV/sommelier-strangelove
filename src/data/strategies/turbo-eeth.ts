@@ -98,12 +98,14 @@ export const turboeETH: CellarData = {
       imagePath: "/assets/icons/eETH.svg",
       customRewardMessageTooltip:
         "View your ether.fi Loyalty Points at https://app.ether.fi/portfolio",
-      customRewardMessage: "Boosted ether.fi Loyalty Points",
+      customRewardMessage:
+        "Boosted ether.fi Loyalty Points (1.2 weETH over 30 days)",
       customRewardHeader: "Ether.fi Incentives",
       showBondingRewards: true,
       showClaim: true,
       customClaimMsg: "Claim All SOMM",
-      customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
+      customRewardAPYTooltip:
+        "Boosted ether.fi Loyalty Points (1.2 weETH over 30 days)",
       logo: EETHIcon,
       logoSize: "15px",
       customRewardLongMessage:
