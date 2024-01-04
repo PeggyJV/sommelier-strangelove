@@ -50,7 +50,7 @@ export const turboSOMM: CellarData = {
     title: "Backtested APY",
     tooltip:
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-    value: "60%",
+    value: "20%",
   },
   dashboard:
     "https://debank.com/profile/0x5195222f69c5821f8095ec565E71e18aB6A2298f",
@@ -96,5 +96,4 @@ export const turboSOMM: CellarData = {
         "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
   ],
-
 }
