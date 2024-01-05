@@ -1,4 +1,11 @@
-import { Button, Center, HStack, Spacer, Text, VStack } from "@chakra-ui/react"
+import {
+  Button,
+  Center,
+  HStack,
+  Spacer,
+  Text,
+  VStack,
+} from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -286,13 +293,13 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      {/* {
+      {
         <InfoBanner
           text={
-            "A new incentive program for Real Yield BTC is progressing through governance. If it passes, rewards will begin December 22nd."
+            "A new incentive program for Real Yield ETH is progressing through governance. If it passes, rewards will begin Jan 10."
           }
         />
-      }  */}
+      }
       {/* <HStack
         p={4}
         mb={6}
