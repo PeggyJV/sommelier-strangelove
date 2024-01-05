@@ -346,9 +346,10 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
 
       // Input Touple
       const withdrawTouple = [
-        deadlineSeconds,
-        sharePriceWithDiscountInBaseDenom,
+        BigInt(deadlineSeconds),
+        BigInt(sharePriceWithDiscountInBaseDenom),
         withdrawAmtInBaseDenom,
+        false
       ]
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
@@ -387,6 +388,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       })
     } catch (e) {
       const error = e as Error
+      console.error(error)
 
       if (error.message === "GAS_LIMIT_ERROR") {
         addToast({
