@@ -31,7 +31,7 @@ export const chainConfig: Chain[] = [
     alchemyRpcUrl: mainnet.rpcUrls.alchemy.http[0],
     blockExplorer: mainnet.blockExplorers.default,
     withdrawQueueAddress:
-      "", // TODO! get once crispy deploys 
+      "0x5751d75b642975E4E7fdE39f35F9a6c11b867169",
   },
   {
     id: "arbitrum",
