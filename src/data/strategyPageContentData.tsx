@@ -1171,4 +1171,55 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
+  [config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG]: {
+    name: "Real Yield ETH",
+    provider: "Seven Seas",
+    providerUrl: "https://7seas.capital/",
+    description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+      {
+        name: "Rhino ( L2 deposit option )",
+        logo: "/assets/icons/rhino-fi.svg",
+        url: "https://app.rhino.fi/invest/YIELDETH/supply",
+      },
+    ],
+    ticker: (
+      <>
+        <Image
+          alt="real yield eth icon"
+          src="/assets/icons/real-yield-eth.png"
+          boxSize={8}
+        />
+        <Text>YieldETH</Text>
+      </>
+    ),
+    tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
+    alternativeTo: "Lending or LPing ETH LSTs",
+
+    strategyHighlights: {
+      card: [
+        `Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.`,
+        `Dynamically allocates capital across key protocols for best-in-class yield.`,
+        `Optimizes Uniswap V3 tick ranges.`,
+      ],
+      description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
+      <br/><br/>
+      Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      `,
+    },
+    howItWorks: `The vault will initially generate yield using two primary techniques, but has the ability to integrate with other protocols for new capabilities in the future. The techniques initially used in the vault:
+    <br/><br/>
+    1. Leveraged Staking: This method involves a continuous cycle of exchanging ETH for an ETH denominated LST, utilizing the LST as collateral on Aave or Compound, borrowing more ETH, and repeating the cycle. This process is commonly referred to as “looping.”
+    <br/><br/>
+    2. Liquidity Provisioning: This approach involves providing liquidity to ETH/ ETH denominated LST trading pairs on Uniswap V3. As a liquidity provider (LP), the vault deposits both ETH and an LST into a liquidity pool, earning fees from traders who swap between the two tokens.
+    <br/><br/>
+    Sommelier’s novel architecture gives the vault advanced capabilities when it comes to both leveraged staking and liquidity provision vaults. More specifically, for leveraged staking, the vault uses a sophisticated solution to accumulate leverage that is highly capital efficient and significantly reduces gas and flash loan fees frequently associated with typical leverage practices. While the vault is leveraged, its smart contract enforces a minimum 1.05 health factor during each rebalance as a safety precaution and the vault closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.
+    <br/><br/>
+    For the liquidity provision vaults, the vault’s ability to run off-chain computation combined with Seven Seas’ deep Uniswap V3 experience, positions the vault to be a top performing LP in the pools that it utilizes. The vault will be able to dynamically adapt to changing price movements to quote the optimal tick range(s) that collect the most fees while minimizing impermanent loss.
+    `,
+  },
 }

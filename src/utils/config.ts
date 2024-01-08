@@ -167,6 +167,12 @@ export const config = {
       SLUG: "Turbo-STETH-(steth-deposit)",
       ABI: cellarV0821,
     },
+    //need to update
+    REAL_YIELD_ETH_ARB: {
+      ADDRESS: "0xA73B0B48E26E4B8B24CeaD149252cc275deE99A6",
+      SLUG: "real-yield-eth-arb",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -247,6 +253,12 @@ export const config = {
       ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
     },
+    // //need to update
+    // REAL_YIELD_ETH_ARB_STAKER: {
+    //   ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
+    //   SLUG: "real-yield-eth-arb",
+    //   ABI: cellarV0821,
+    // },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
