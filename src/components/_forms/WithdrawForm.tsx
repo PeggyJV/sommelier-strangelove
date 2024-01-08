@@ -150,6 +150,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     )
 
     try {
+      throw new Error("aaa")
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         cellarSigner?.estimateGas.redeem,
         cellarSigner?.callStatic.redeem,
@@ -218,7 +219,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       */
 
       // Check if attempting to withdraw more than availible
-      if (redeemingMoreThanAvailible) {
+      if (true) {
         // Open a modal with information about the withdraw queue
         openWithdrawQueueModal()
       } else {
@@ -304,14 +305,12 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
             <VStack spacing={8}>
               <Text textAlign={"center"}>
                 You are attempting to withdraw beyond the liquid
-                reserve. You may wait until the strategist rebalances
-                to make more liquid reserves available, or you may
-                submit a withdraw intent via the withdraw queue.
+                reserve. Please submit a withdraw request via the withdraw queue.
               </Text>
               <WithdrawQueueButton
                 size="md"
                 chain={cellarConfig.chain}
-                buttonLabel="Submit Withdraw Intent"
+                buttonLabel="Submit Withdraw Request"
               />
             </VStack>
           </ModalBody>

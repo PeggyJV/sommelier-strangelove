@@ -60,7 +60,7 @@ function formatTimeRemaining(deadline: number): string {
   if (days > 0) timeString += `${days}d `
   if (hours > 0) timeString += `${hours}h `
   if (minutes > 0) timeString += `${minutes}m `
-  if (seconds > 0) timeString += `${seconds}s`
+  //if (seconds > 0) timeString += `${seconds}s`
 
   return timeString.trim()
 }
@@ -202,7 +202,7 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
       } else {
         console.error(error)
         addToast({
-          heading: "Error cancelling withdraw intent",
+          heading: "Error cancelling withdraw request",
           body: <Text>Withdraw Queue Cancellation Aborted</Text>,
           status: "error",
           closeHandler: closeAll,
@@ -224,10 +224,11 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
           <Tooltip
             hasArrow
             arrowShadowColor="purple.base"
-            label="Your active withdraw intents for this vault. Only 1 may be open at a time, per vault."
+            label="Your active withdraw requests for this vault. Only 1 may be open at a time, per vault."
             placement="top"
             bg="surface.bg"
             color="neutral.300"
+            textAlign={"center"}
           >
             <HStack spacing={2} align="center">
               <Heading fontSize="lg">
@@ -262,10 +263,11 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
-                label="The target share price for this withdraw based on your previously selected share price discount at the time of your withdraw intent submission."
+                label="The target share price for this withdraw based on your previously selected share price discount at the time of your withdraw request submission."
                 placement="top"
                 bg="surface.bg"
                 color="neutral.300"
+                textAlign={"center"}
               >
                 <Th
                   fontSize={10}
@@ -284,10 +286,11 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
-                label="The amount of time remaining for a solver to fulfill your withdraw intent. If this time expires with your intent unfulfilled, your withdraw intent will be cancelled."
+                label="The amount of time remaining for your withdraw request to be fulfilled. If this time expires with your request unfulfilled, your withdraw request will be cancelled."
                 placement="top"
                 bg="surface.bg"
                 color="neutral.300"
+                textAlign={"center"}
               >
                 <Th
                   fontSize={10}
@@ -364,7 +367,7 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
                     <WithdrawQueueButton
                       size="sm"
                       chain={cellarConfig.chain}
-                      buttonLabel="Replace Withdraw Intent"
+                      buttonLabel="Replace Withdraw Request"
                       onSuccessfulWithdraw={checkWithdrawRequest}
                     />
                     <SecondaryButton
@@ -377,7 +380,7 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
                         checkWithdrawRequest()
                       }}
                     >
-                      Cancel
+                      Cancel Request
                     </SecondaryButton>
                   </HStack>
                 </Flex>

@@ -343,7 +343,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       const sharePriceWithDiscountInBaseDenom = Math.floor(
         sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
       )
-      
+
       // Input Touple
       const withdrawTouple = [
         BigInt(deadlineSeconds),
@@ -471,11 +471,27 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
         <FormControl isInvalid={!!errors.withdrawAmount}>
           {isActiveWithdrawRequest && (
             <>
-              <Text color="white" fontSize="s" textAlign={"center"} fontWeight={"bold"}>
-                You currently have a withdraw pending in the queue,
-                submitting a new withdraw intent will replace your
-                current one.
-              </Text>
+              <HStack
+                p={4}
+                mb={12}
+                spacing={4}
+                align="flex-start"
+                backgroundColor="purple.dark"
+                border="2px solid"
+                borderRadius={16}
+                borderColor="purple.base"
+              >
+                <Text
+                  color="white"
+                  fontSize="s"
+                  textAlign={"center"}
+                  fontWeight={"bold"}
+                >
+                  You currently have a withdraw request pending in the
+                  queue, submitting a new withdraw request will
+                  replace your current one.
+                </Text>
+              </HStack>
               <br />
             </>
           )}
@@ -613,7 +629,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                 hasArrow
                 placement="top-start"
                 label={
-                  "Preconfigured options that allow you to specify how aggressive you would like your withdraw intent to be."
+                  "Preconfigured options that allow you to specify how aggressive you would like your withdraw request to be."
                 }
                 bg="surface.bg"
                 color="neutral.300"
@@ -653,6 +669,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                     )
                   )}
                 </ButtonGroup>
+                {/*
                 <Text
                   fontSize="sm"
                   cursor="pointer"
@@ -669,6 +686,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                 >
                   Custom
                 </Text>
+                */}
               </VStack>
             </HStack>
           </Stack>
@@ -694,7 +712,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                   hasArrow
                   placement="top"
                   label={
-                    "How much of a discount under the current share price you are willing to accept to fulfill the withdrawl. The higher the discount, the more likely and timely a solver is to fulfill your intent."
+                    "How much of a discount under the current share price you are willing to accept to fulfill the withdrawal. The higher the discount, the more likely your request will be fulfilled."
                   }
                   bg="surface.bg"
                   color="neutral.300"
@@ -721,7 +739,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                     backgroundColor={
                       selectedPriority === "Custom"
                         ? "surface.tertiary"
-                        : "neutral.500"
+                        : "none" //"neutral.500"
                     }
                     padding={2}
                     borderRadius={16}
@@ -774,7 +792,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                   hasArrow
                   placement="top"
                   label={
-                    "How many hours the intent will be valid for. If the intent is not fulfilled within this duration, it will be cancelled."
+                    "How many hours the request will be valid for. If the request is not fulfilled within this duration, it will be cancelled."
                   }
                   bg="surface.bg"
                   color="neutral.300"
@@ -801,7 +819,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                   backgroundColor={
                     selectedPriority === "Custom"
                       ? "surface.tertiary"
-                      : "neutral.500"
+                      : "none" //"neutral.500"
                   }
                   width="25%"
                   padding={2}
@@ -867,7 +885,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
         data={[
           {
             question: "What is the Withdraw Queue?",
-            answer: `The Withdraw Queue is a way for users to withdraw their funds from a strategy in a more efficient and gas effective way by submitting a withdraw intent. Instead of withdrawing your funds immediately, you can enter the Withdraw Queue and wait for your withdrawal to be fulfilled. This allows you to save on gas fees by having your withdraw intent fulfilled by independent solvers.`,
+            answer: `The Withdraw Queue is a way for users to submit a withdraw request if they are trying to withdraw more than the liquid reserve from a strategy. Once the request is submitted, it will be eventually fulfilled on behalf of the user and the withdrawn funds will appear automatically in the user's wallet (assuming the requets is fulfilled within the time constraint specified by the user). A withdraw request through the queue also has a much lower gas cost for users compared to instant withdrawals.`,
           },
         ]}
       />
