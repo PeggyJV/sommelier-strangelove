@@ -1,4 +1,4 @@
-import React, { useEffect, VFC } from "react"
+import React, { useEffect, useState, VFC } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -12,6 +12,13 @@ import {
   Stack,
   Text,
   Link,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -34,6 +41,7 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
+import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 
 interface FormValues {
   withdrawAmount: number
@@ -57,12 +65,23 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   const { addToast, close, closeAll } = useBrandedToast()
   const { address } = useAccount()
 
+  const [isWithdrawQueueModalOpen, setIsWithdrawQueueModalOpen] =
+    useState(false)
+  const openWithdrawQueueModal = () =>
+    setIsWithdrawQueueModalOpen(true)
+  const closeWithdrawQueueModal = () =>
+    setIsWithdrawQueueModalOpen(false)
+
   const id = (useRouter().query.id as string) || _id
   const cellarConfig = cellarDataMap[id].config
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+  const { refetch } = useUserStrategyData(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
+  )
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
 
@@ -131,6 +150,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     )
 
     try {
+      throw new Error("aaa")
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         cellarSigner?.estimateGas.redeem,
         cellarSigner?.callStatic.redeem,
@@ -199,31 +219,9 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       */
 
       // Check if attempting to withdraw more than availible
-      if (redeemingMoreThanAvailible) {
-        addToast({
-          heading: "Transaction not submitted.",
-          body: (
-            <Text>
-              You are attempting to withdraw beyond the the liquid
-              reserve. The strategist will need to initiate a
-              rebalance to service your full withdrawal. Please send a
-              message in our{" "}
-              {
-                <Link
-                  href="https://discord.com/channels/814266181267619840/814279703622844426"
-                  isExternal
-                  textDecoration="underline"
-                >
-                  Discord Support channel
-                </Link>
-              }{" "}
-              tagging @StrategistSupport
-            </Text>
-          ),
-          status: "info",
-          closeHandler: closeAll,
-          duration: null, // Persist this toast until user closes it.
-        })
+      if (true) {
+        // Open a modal with information about the withdraw queue
+        openWithdrawQueueModal()
       } else {
         if (error.message === "GAS_LIMIT_ERROR") {
           addToast({
@@ -280,141 +278,206 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
   }
 
   return (
-    <VStack
-      as="form"
-      spacing={8}
-      align="stretch"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <FormControl isInvalid={isError as boolean | undefined}>
-        <Stack spacing={2}>
-          <Text fontWeight="bold" color="neutral.400" fontSize="xs">
-            Enter Amount
-          </Text>
-          <HStack
-            backgroundColor="surface.tertiary"
-            justifyContent="space-between"
-            borderRadius={16}
-            px={4}
-            py={3}
-            height="64px"
-          >
-            <HStack>
-              <Image
-                width="16px"
-                height="16px"
-                src={cellarConfig.lpToken.imagePath}
-                alt="coinlogo"
+    <>
+      <Modal
+        isOpen={isWithdrawQueueModalOpen}
+        onClose={closeWithdrawQueueModal}
+      >
+        <ModalOverlay />
+        <ModalContent
+          p={2}
+          w="auto"
+          zIndex={401}
+          borderWidth={1}
+          borderColor="purple.dark"
+          borderRadius={12}
+          bg="surface.bg"
+          fontWeight="semibold"
+          _focus={{
+            outline: "unset",
+            outlineOffset: "unset",
+            boxShadow: "unset",
+          }}
+        >
+          <ModalHeader>Transaction not submitted</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing={8}>
+              <Text textAlign={"center"}>
+                You are attempting to withdraw beyond the liquid
+                reserve. Please submit a withdraw request via the withdraw queue.
+              </Text>
+              <WithdrawQueueButton
+                size="md"
+                chain={cellarConfig.chain}
+                buttonLabel="Submit Withdraw Request"
               />
-              <Text fontWeight="semibold">{lpTokenData?.symbol}</Text>
-            </HStack>
-            <VStack spacing={0} align="flex-end">
-              <Input
-                id="amount"
-                variant="unstyled"
-                pr="2"
-                type="number"
-                step="any"
-                defaultValue="0.00"
-                placeholder="0.00"
-                fontSize="lg"
-                fontWeight={700}
-                textAlign="right"
-                {...register("withdrawAmount", {
-                  required: "Enter amount",
-                  valueAsNumber: true,
-                  validate: {
-                    positive: (v) =>
-                      v > 0 || "You must submit a positive amount.",
-                    balance: (v) =>
-                      v <=
-                        parseFloat(
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <VStack
+        as="form"
+        spacing={8}
+        align="stretch"
+        onSubmit={handleSubmit(onSubmit)}
+        hidden={isWithdrawQueueModalOpen}
+      >
+        <FormControl isInvalid={isError as boolean | undefined}>
+          <Stack spacing={2}>
+            <Text fontWeight="bold" color="neutral.400" fontSize="xs">
+              Enter Amount
+            </Text>
+            <HStack
+              backgroundColor="surface.tertiary"
+              justifyContent="space-between"
+              borderRadius={16}
+              px={4}
+              py={3}
+              height="64px"
+            >
+              <HStack>
+                <Image
+                  width="16px"
+                  height="16px"
+                  src={cellarConfig.lpToken.imagePath}
+                  alt="coinlogo"
+                />
+                <Text fontWeight="semibold">
+                  {lpTokenData?.symbol}
+                </Text>
+              </HStack>
+              <VStack spacing={0} align="flex-end">
+                <Input
+                  id="amount"
+                  variant="unstyled"
+                  pr="2"
+                  type="number"
+                  step="any"
+                  defaultValue="0.00"
+                  placeholder="0.00"
+                  fontSize="lg"
+                  fontWeight={700}
+                  textAlign="right"
+                  {...register("withdrawAmount", {
+                    onChange: (event) => {
+                      let val = event.target.value
+
+                      const decimalPos = val.indexOf(".")
+
+                      if (
+                        decimalPos !== -1 &&
+                        val.length - decimalPos - 1 >
+                          cellarConfig.cellar.decimals
+                      ) {
+                        val = val.substring(
+                          0,
+                          decimalPos +
+                            cellarConfig.cellar.decimals +
+                            1
+                        ) // Keep token decimal places as max
+                        event.target.value = val
+                      }
+                    },
+                    required: "Enter amount",
+                    valueAsNumber: true,
+                    validate: {
+                      positive: (v) =>
+                        v > 0 || "You must submit a positive amount.",
+                      balance: (v) =>
+                        v <=
+                          parseFloat(
+                            toEther(
+                              lpTokenData?.formatted,
+                              lpTokenData?.decimals,
+                              false,
+                              6
+                            )
+                          ) || "Insufficient balance",
+                    },
+                  })}
+                />
+                <HStack spacing={0} fontSize="10px">
+                  {isBalanceLoading ? (
+                    <Spinner size="xs" mr="2" />
+                  ) : (
+                    <>
+                      <Text as="span">
+                        Available:{" "}
+                        {(lpTokenData &&
                           toEther(
-                            lpTokenData?.formatted,
-                            lpTokenData?.decimals,
+                            lpTokenData.value,
+                            lpTokenData.decimals,
                             false,
                             6
-                          )
-                        ) || "Insufficient balance",
-                  },
-                })}
+                          )) ||
+                          "--"}
+                      </Text>
+                      <Button
+                        variant="unstyled"
+                        p={0}
+                        w="max-content"
+                        h="max-content"
+                        textTransform="uppercase"
+                        fontSize="inherit"
+                        fontWeight={600}
+                        onClick={setMax}
+                      >
+                        max
+                      </Button>
+                    </>
+                  )}
+                </HStack>
+              </VStack>
+            </HStack>
+
+            <FormErrorMessage color="energyYellow">
+              <Icon
+                p={0.5}
+                mr={1}
+                color="surface.bg"
+                bg="red.base"
+                borderRadius="50%"
+                as={AiOutlineInfo}
               />
-              <HStack spacing={0} fontSize="10px">
-                {isBalanceLoading ? (
-                  <Spinner size="xs" mr="2" />
-                ) : (
-                  <>
-                    <Text as="span">
-                      Available:{" "}
-                      {(lpTokenData &&
-                        toEther(
-                          lpTokenData.value,
-                          lpTokenData.decimals,
-                          false,
-                          6
-                        )) ||
-                        "--"}
-                    </Text>
-                    <Button
-                      variant="unstyled"
-                      p={0}
-                      w="max-content"
-                      h="max-content"
-                      textTransform="uppercase"
-                      fontSize="inherit"
-                      fontWeight={600}
-                      onClick={setMax}
-                    >
-                      max
-                    </Button>
-                  </>
-                )}
-              </HStack>
-            </VStack>
-          </HStack>
-
-          <FormErrorMessage color="energyYellow">
-            <Icon
-              p={0.5}
-              mr={1}
-              color="surface.bg"
-              bg="red.base"
-              borderRadius="50%"
-              as={AiOutlineInfo}
-            />
-            {errors.withdrawAmount?.message}
-          </FormErrorMessage>
-        </Stack>
-      </FormControl>
-      <Stack>
-        <Text fontSize="sm" fontWeight="semibold" color="neutral.400">
-          Transaction Details
-        </Text>
+              {errors.withdrawAmount?.message}
+            </FormErrorMessage>
+          </Stack>
+        </FormControl>
         <Stack>
-          <TransactionDetailItem
-            title="Vault"
-            value={<Text>{cellarDataMap[id].name}</Text>}
-          />
+          <Text
+            fontSize="sm"
+            fontWeight="semibold"
+            color="neutral.400"
+          >
+            Transaction Details
+          </Text>
+          <Stack>
+            <TransactionDetailItem
+              title="Vault"
+              value={<Text>{cellarDataMap[id].name}</Text>}
+            />
+          </Stack>
         </Stack>
-      </Stack>
 
-      <BaseButton
-        type="submit"
-        isDisabled={isDisabled}
-        isLoading={isSubmitting}
-        fontSize={21}
-        py={6}
-        px={12}
-      >
-        Submit
-      </BaseButton>
-      {waitTime(cellarConfig) !== null && (
-        <Text textAlign="center">
-          Please wait {waitTime(cellarConfig)} after the deposit to
-          Withdraw
-        </Text>
-      )}
-    </VStack>
+        <BaseButton
+          type="submit"
+          isDisabled={isDisabled}
+          isLoading={isSubmitting}
+          fontSize={21}
+          py={6}
+          px={12}
+        >
+          Submit
+        </BaseButton>
+        {waitTime(cellarConfig) !== null && (
+          <Text textAlign="center">
+            Please wait {waitTime(cellarConfig)} after the deposit to
+            Withdraw
+          </Text>
+        )}
+      </VStack>
+    </>
   )
 }
 
