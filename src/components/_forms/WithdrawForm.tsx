@@ -150,7 +150,6 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     )
 
     try {
-      throw new Error("aaa")
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         cellarSigner?.estimateGas.redeem,
         cellarSigner?.callStatic.redeem,
@@ -219,7 +218,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
       */
 
       // Check if attempting to withdraw more than availible
-      if (true) {
+      if (redeemingMoreThanAvailible) {
         // Open a modal with information about the withdraw queue
         openWithdrawQueueModal()
       } else {
