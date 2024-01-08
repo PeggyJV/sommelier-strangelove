@@ -336,14 +336,14 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
         )
       )
       const sharePriceStandardized =
-        previewRedeem / 10 ** cellarConfig.cellar.decimals
+        previewRedeem / 10 ** cellarConfig.baseAsset.decimals
       const sharePriceWithDiscount =
         sharePriceStandardized *
         ((100 - sharePriceDiscountPercent) / 100)
       const sharePriceWithDiscountInBaseDenom = Math.floor(
-        sharePriceWithDiscount * 10 ** cellarConfig.cellar.decimals
+        sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
       )
-
+      
       // Input Touple
       const withdrawTouple = [
         BigInt(deadlineSeconds),

@@ -344,7 +344,7 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
                   <Text textAlign="right">
                     {(
                       pendingWithdrawSharePrice /
-                      10 ** cellarConfig.cellar.decimals
+                      10 ** cellarConfig.baseAsset.decimals
                     )
                       .toFixed(4)
                       .toLocaleString()}
