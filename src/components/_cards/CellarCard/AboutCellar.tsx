@@ -9,25 +9,26 @@ import {
 } from "data/uiConfig"
 import { CellarCardData } from "./CellarCardDisplay"
 
-import { UserStats } from "./UserStats"
+import UserStats from "./UserStats" // Assuming UserStats is a default export
 import { CellarStats, CellarStatsLabel } from "./CellarStats"
-import { PercentageText } from "components/PercentageText"
-import { isComingSoon } from "utils/isComingSoon"
+import PercentageText from "components/PercentageText" // Assuming PercentageText is a default export
+import isComingSoon from "utils/isComingSoon" // Assuming isComingSoon is a default export
 import { format, utcToZonedTime } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
-import { TransparentSkeleton } from "components/_skeleton"
+import TransparentSkeleton from "components/_skeleton" // Assuming TransparentSkeleton is a default export
 import { isFuture } from "date-fns"
-import { useStrategyData } from "data/hooks/useStrategyData"
+import useStrategyData from "data/hooks/useStrategyData" // Assuming useStrategyData is a default export
 
 interface Props {
   data: CellarCardData
 }
 
-export const AboutCellar: React.FC<Props> = ({ data }) => {
+const AboutCellar: React.FC<Props> = ({ data }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
 
   const launchDate = strategyData?.launchDate
@@ -52,56 +53,11 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
 
   const tokenPrice = strategyData?.tokenPrice
   const dailyChange = strategyData?.changes?.daily
+
   return (
     <>
       {!countdown && (
         <Stack mx={2} spacing={1}>
-          <Stack spacing={1}>
-            {isAPYEnabled(cellarConfig) &&
-              (isLoading ? (
-                <>
-                  <TransparentSkeleton
-                    h="14px"
-                    w="80px"
-                    startColor="purple.dark"
-                    endColor="surface.secondary"
-                  />
-                  <TransparentSkeleton
-                    h="14px"
-                    w="100px"
-                    startColor="purple.dark"
-                    endColor="surface.secondary"
-                  />
-                </>
-              ) : (
-                <>
-                  {baseApy?.formatted !== "0.0%" && (
-                    <CellarStats
-                      tooltip={apyTooltip}
-                      title={apyLabel(cellarConfig)}
-                      value={baseApy?.formatted || "..."}
-                      isLoading={isLoading}
-                    />
-                  )}
-                  {rewardsApy?.formatted !== "0.0%" && (
-                    <CellarStats
-                      title={
-                        cellarConfig.customReward
-                          ?.customRewardAPYTooltip ?? "Rewards APY"
-                      }
-                      value={
-                        cellarConfig.customReward
-                          ?.customRewardAPYTooltip ??
-                        (rewardsApy?.formatted || "...")
-                      }
-                      isLoading={isLoading}
-                      colorValue="lime.base"
-                    />
-                  )}
-                </>
-              ))}
-          </Stack>
-
           {isTokenPriceEnabled(cellarConfig) && (
             <CellarStats
               tooltip={tokenPriceTooltipContent(cellarConfig)}
@@ -122,9 +78,76 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
           )}
         </Stack>
       )}
+
       <Text my={4} mx={2}>
         {data.description}
       </Text>
+
+      <Stack mx={2} spacing={1}>
+        <Stack spacing={1}>
+          {isAPYEnabled(cellarConfig) &&
+            (isLoading ? (
+              <>
+                <TransparentSkeleton
+                  h="14px"
+                  w="80px"
+                  startColor="purple.dark"
+                  endColor="surface.secondary"
+                />
+                <TransparentSkeleton
+                  h="14px"
+                  w="100px"
+                  startColor="purple.dark"
+                  endColor="surface.secondary"
+                />
+              </>
+            ) : (
+              <>
+                {baseApy?.formatted !== "0.0%" && (
+                  <CellarStats
+                    tooltip={apyTooltip}
+                    title={apyLabel(cellarConfig)}
+                    value={baseApy?.formatted || "..."}
+                    isLoading={isLoading}
+                  />
+                )}
+                {rewardsApy?.formatted !== "0.0%" && (
+                  <CellarStats
+                    title={
+                      cellarConfig.customReward
+                        ?.customRewardAPYTooltip ??
+                      "Rewards APY ABOUT"
+                    }
+                    value={
+                      cellarConfig.customReward
+                        ?.customRewardAPYTooltip ??
+                      (rewardsApy?.formatted || "...")
+                    }
+                    isLoading={isLoading}
+                    colorValue="lime.base"
+                  />
+                )}
+                {rewardsApy?.formatted !== "0.0%" &&
+                  cellarConfig.customReward2 && (
+                    <CellarStats
+                      title={
+                        cellarConfig.customReward2
+                          ?.customRewardAPYTooltip2 ??
+                        "Rewards TEST APY"
+                      }
+                      value={
+                        cellarConfig.customReward2
+                          ?.customRewardAPYTooltip2 ??
+                        (rewardsApy?.formatted || "...")
+                      }
+                      isLoading={isLoading}
+                      colorValue="lime.base"
+                    />
+                  )}
+              </>
+            ))}
+        </Stack>
+      </Stack>
 
       {!countdown ? (
         <UserStats
@@ -155,3 +178,5 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
     </>
   )
 }
+
+export default AboutCellar

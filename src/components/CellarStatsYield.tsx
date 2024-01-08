@@ -33,7 +33,10 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
   })
 
   const { data: strategyData, isLoading: isStrategyLoading } =
-    useStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+    useStrategyData(
+      cellarConfig.cellar.address,
+      cellarConfig.chain.id
+    )
 
   const tvm = strategyData?.tvm
   const stakingEnd = strategyData?.stakingEnd
@@ -50,97 +53,77 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
       rowGap={4}
       w={{ base: "full", md: "auto" }}
       justifyContent={{ base: "space-between", md: "unset" }}
-      divider={
-        <CardDivider
-          _last={{
-            borderColor,
-          }}
-        />
-      }
+      divider={<CardDivider _last={{ borderColor }} />}
       {...rest}
     >
       <VStack spacing={1} align="center">
-        <Text as="span" fontSize="21px" fontWeight="bold">
-          {tvm ? `${tvm?.formatted}` : <Spinner />}
-        </Text>
+        <Apy apy={baseApySumRewards?.formatted ?? ""} />
         <Tooltip
           hasArrow
           placement="top"
-          label="Total value locked"
+          label={
+            <>
+              <Text>
+                {apyHoverLabel(cellarConfig)}{" "}
+                {baseApy?.formatted ?? "0.00%"}
+              </Text>
+              {cellarConfig.customReward?.showOnlyBaseApy !==
+                undefined &&
+              cellarConfig.customReward?.showOnlyBaseApy ===
+                true ? null : (
+                <>
+                  <Text>
+                    {cellarConfig.customReward?.showSommRewards
+                      ? `SOMM Rewards APY Cellar stats ${
+                          rewardsApy?.formatted ?? "0.00%"
+                        }`
+                      : null}
+                  </Text>
+                  <Text>
+                    {cellarConfig.customReward
+                      ?.customRewardAPYTooltip ??
+                      `${
+                        cellarConfig.customReward?.showAPY
+                          ? `${cellarConfig.customReward.tokenDisplayName} `
+                          : ""
+                      }Rewards APY cellar stats ${
+                        rewardsApy?.formatted ?? "0.00%"
+                      }`}
+                  </Text>
+                  {/* Add the content from cellarRewards2 here */}
+                  <Text>
+                    {cellarConfig.customReward2?.showSommRewards
+                      ? `SOMM Rewards TEST APY cellar stats ${
+                          rewardsApy?.formatted ?? "0.00%"
+                        }`
+                      : null}
+                  </Text>
+                  <Text>
+                    {cellarConfig.customReward2
+                      ?.customRewardAPYTooltip ??
+                      `${
+                        cellarConfig.customReward2?.showAPY
+                          ? `${cellarConfig.customReward2.tokenDisplayName} `
+                          : ""
+                      }Rewards TEST APY cellar stats ${
+                        rewardsApy?.formatted ?? "0.00%"
+                      }`}
+                  </Text>
+                </>
+              )}
+            </>
+          }
           bg="surface.bg"
           color="neutral.300"
         >
           <HStack spacing={1} align="center">
-            <CardHeading>TVL</CardHeading>
-            <InformationIcon color="neutral.300" boxSize={3} />
+            <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
+            {!!apyLabel(cellarConfig) && (
+              <InformationIcon color="neutral.300" boxSize={3} />
+            )}
           </HStack>
         </Tooltip>
       </VStack>
-      {baseApySumRewards && (
-        <VStack spacing={1} align="center">
-          <Apy
-            apy={
-              isStrategyLoading ? (
-                <Spinner />
-              ) : (
-                baseApySumRewards?.formatted
-              )
-            }
-          />
-          <Box>
-            <Tooltip
-              hasArrow
-              placement="top"
-              label={
-                <>
-                  <Text>
-                    {apyHoverLabel(cellarConfig)}{" "}
-                    {baseApy?.formatted ?? "0.00%"}
-                  </Text>
-                  {cellarConfig.customReward?.showOnlyBaseApy !==
-                    undefined &&
-                  cellarConfig.customReward?.showOnlyBaseApy ===
-                    true ? (
-                    <></>
-                  ) : (
-                    <>
-                      <Text>
-                        {cellarConfig.customReward?.showSommRewards
-                          ? `SOMM Rewards APY ${
-                              rewardsApy?.formatted ?? "0.00%"
-                            }`
-                          : null}
-                      </Text>
-                      <Text>
-                        {cellarConfig.customReward
-                          ?.customRewardAPYTooltip ??
-                          `${
-                            cellarConfig.customReward?.showAPY
-                              ? `${cellarConfig.customReward.tokenDisplayName} `
-                              : ""
-                          }Rewards APY ${
-                            //TODO reenable: extraRewardsApy?.formatted ??
-                            rewardsApy?.formatted ??
-                            "0.00%"
-                          }`}
-                      </Text>
-                    </>
-                  )}
-                </>
-              }
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={1} align="center">
-                <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
-                {!!apyLabel(cellarConfig) && (
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                )}
-              </HStack>
-            </Tooltip>
-          </Box>
-        </VStack>
-      )}
     </HStack>
   )
 }

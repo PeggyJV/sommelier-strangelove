@@ -10,6 +10,7 @@ import {
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { EETHIcon } from "components/_icons"
 import { chainSlugMap } from "data/chainConfig"
+import { WstethIcon } from "components/_icons"
 
 export const turboeETH: CellarData = {
   name: "Turbo eETH",
@@ -123,6 +124,35 @@ export const turboeETH: CellarData = {
         "Boosted ether.fi Loyalty Points ends in ",
       showOnlyBaseApy: false,
     },
+
+    customReward2: {
+      showAPY2: false,
+      tokenSymbol2: "TEST",
+      tokenDisplayName2: "TEST",
+      tokenAddress2: "0x35fa164735182de5",
+      imagePath2: "/assets/icons/weETH.png",
+      customRewardMessageTooltip2: "TEST",
+      customRewardMessage2: "TEST",
+      customRewardHeader2: "TEST",
+      showBondingRewards2: true,
+      showClaim2: true,
+      customClaimMsg2: "TEST",
+      customRewardAPYTooltip2: "TEST",
+      logo2: EETHIcon,
+      logoSize2: "15px",
+      customRewardLongMessage2: "TEST",
+      rewardHyperLink2: "TEST",
+      customColumnHeader2: "TEST",
+      customColumnHeaderToolTip2: "TEST",
+      customColumnValue2: "TEST",
+      stakingDurationOverride2: new Date(
+        Date.UTC(2024, 1, 10, 14, 0, 0, 0)
+      ),
+      showSommRewards2: true,
+      customIconToolTipMsg2: "TEST",
+      showOnlyBaseApy2: false,
+    },
+
     staker: {
       address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_EETH_STAKER.ABI,

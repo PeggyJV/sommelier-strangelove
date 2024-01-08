@@ -46,8 +46,22 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   let endDate = new Date(stackingEndDate).getTime()
 
   if (stackingEndDate === undefined) {
-    endDate = cellarConfig.customReward?.stakingDurationOverride?.getTime()!
+    endDate =
+      cellarConfig.customReward?.stakingDurationOverride?.getTime()!
   }
+
+  // CustomRewards2 logic starts here
+  const isStakingOverrideOngoing2 = cellarConfig.customReward2
+    ?.stakingDurationOverride
+    ? cellarConfig.customReward2.stakingDurationOverride.getTime() >
+      nowDate
+    : undefined
+
+  if (stackingEndDate === undefined) {
+    endDate =
+      cellarConfig.customReward2?.stakingDurationOverride?.getTime()!
+  }
+  // CustomRewards2 logic ends here
 
   const startDate = subDays(endDate, 30).getTime()
   const range = endDate - startDate
@@ -56,6 +70,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
 
   const cellarType = cellarDataMap[cellarId].cellarType
   const LogoComponent = cellarConfig.customReward?.logo ?? LogoIcon
+  const LogoComponent2 = cellarConfig.customReward2?.logo ?? LogoIcon // CustomRewards2 LogoComponent
 
   if (!baseApy && !rewardsApy && !extraRewardsApy) {
     return (
@@ -167,18 +182,18 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             isStakingOverrideOngoing === true) ? (
             <Tooltip
               label={
-                cellarConfig.customReward?.customRewardEndMessage
-                  ? `${cellarConfig.customReward.tokenDisplayName} ${cellarConfig.customReward?.customRewardEndMessage}`
+                cellarConfig.customReward2?.customRewardEndMessage
+                  ? `${cellarConfig.customReward2.tokenDisplayName} ${cellarConfig.customReward2?.customRewardEndMessage}`
                   : `${
-                      cellarConfig.customReward
+                      cellarConfig.customReward2
                         ?.customIconToolTipMsg ??
                       `${
-                        cellarConfig.customReward?.showAPY
-                          ? `${cellarConfig.customReward.tokenDisplayName} `
+                        cellarConfig.customReward2?.showAPY
+                          ? `${cellarConfig.customReward2.tokenDisplayName} `
                           : ""
                       }Rewards ends in`
                     } ${formatDistanceToNowStrict(
-                      cellarConfig.customReward
+                      cellarConfig.customReward2
                         ?.stakingDurationOverride ??
                         new Date(stackingEndDate)
                     )}`
@@ -209,7 +224,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                       color="red.normal"
                       p={0}
                       boxSize={
-                        cellarConfig.customReward?.logoSize ?? "9px"
+                        cellarConfig.customReward2?.logoSize ?? "9px"
                       }
                     />
                   </CircularProgressLabel>
@@ -218,17 +233,17 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             </Tooltip>
           ) : null}
           {rewardsApy &&
-            (cellarConfig.customReward?.showSommRewards ===
+            (cellarConfig.customReward2?.showSommRewards ===
               undefined ||
-              cellarConfig.customReward?.showSommRewards) && (
+              cellarConfig.customReward2?.showSommRewards) && (
               <Tooltip
                 label={
-                  cellarConfig.customReward
+                  cellarConfig.customReward2
                     ?.customSommRewardsEndMessage
-                    ? cellarConfig.customReward
+                    ? cellarConfig.customReward2
                         .customSommRewardsEndMessage
                     : `${
-                        cellarConfig.customReward?.showSommRewards
+                        cellarConfig.customReward2?.showSommRewards
                           ? "SOMM Rewards ends in"
                           : "Rewards ends in"
                       } ${formatDistanceToNowStrict(

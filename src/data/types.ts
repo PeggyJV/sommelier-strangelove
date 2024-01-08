@@ -1,7 +1,7 @@
 import { IconProps } from "@chakra-ui/react"
 import { VFC } from "react"
 import { Token } from "src/data/tokenConfig"
-import  { Chain } from "data/chainConfig"
+import { Chain } from "data/chainConfig"
 
 export enum StakerKey {
   CELLAR_STAKING_V0815 = "CELLAR_STAKING_V0815",
@@ -78,6 +78,7 @@ export interface ConfigProps {
     key: StakerKey
   }
   customReward?: CustomReward
+  customReward2?: CustomReward2
   badges?: Badge[]
   baseAsset: Token
   feePromotion?: string
@@ -127,6 +128,34 @@ export interface CustomReward {
   customIconToolTipMsg?: string
   customRewardEndMessage?: string
   customSommRewardsEndMessage?: string
+}
+
+export interface CustomReward2 {
+  showOnlyBaseApy2?: boolean
+  showAPY2: boolean
+  tokenSymbol2: string
+  tokenDisplayName2: string
+  tokenAddress2: string
+  imagePath2: string
+  customRewardMessageTooltip2?: string
+  customRewardMessag2?: string
+  customRewardHeader2?: string
+  showBondingRewards2?: boolean
+  showClaim2?: boolean
+  customClaimMsg2?: string
+  customRewardAPYTooltip2?: string
+  logo2?: VFC<IconProps>
+  logoSize2?: string
+  customRewardLongMessage2?: string
+  rewardHyperLink2?: string
+  customColumnHeader2?: string
+  customColumnHeaderToolTip2?: string
+  customColumnValue2?: string
+  stakingDurationOverride2?: Date
+  showSommReward2?: boolean
+  customIconToolTipMsg2?: string
+  customRewardEndMessage2?: string
+  customSommRewardsEndMessage2?: string
 }
 
 export interface CellarData {

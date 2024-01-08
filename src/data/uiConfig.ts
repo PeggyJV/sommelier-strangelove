@@ -120,7 +120,8 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
-    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD 
+    config.cellarNameKey ===
+      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
   )
 }
 
@@ -382,6 +383,7 @@ export const bondingPeriodOptions = (
       },
     ]
   }
+
   if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
     return [
       {
@@ -439,28 +441,28 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-    if (
-      config.cellarNameKey ===
-      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
-    ) {
-      return [
-        {
-          title: "7 Day Unbonding",
-          amount: "1.1x SOMM",
-          value: 0,
-        },
-        {
-          title: "14 Day Unbonding",
-          amount: "1.3x SOMM",
-          value: 1,
-        },
-        {
-          title: "21 Day Unbonding",
-          amount: "1.5x SOMM",
-          value: 2,
-        },
-      ]
-    }
+  if (
+    config.cellarNameKey ===
+    CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+  ) {
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
   return []
 }
 

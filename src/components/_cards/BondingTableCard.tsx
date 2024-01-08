@@ -53,13 +53,17 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const {
     data: userData,
     isLoading,
     refetch,
-  } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+  } = useUserStrategyData(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
+  )
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
     new Set()
@@ -238,12 +242,8 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               <Text fontSize="xs">
                 {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
                   ? `Rewards program ends in ${formatDistanceToNowStrict(
-                      cellarConfig.customReward
-                        ?.stakingDurationOverride ??
-                        stakingEnd?.endDate,
-                      {
-                        locale: { formatDistance },
-                      }
+                      stakingEnd?.endDate,
+                      { locale: { formatDistance } }
                     )}`
                   : "Program Ended"}
               </Text>
@@ -273,137 +273,56 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               >
                 Tranche
               </Th>
-              <Tooltip
-                hasArrow
-                arrowShadowColor="purple.base"
-                label="Bonded LP tokens earn yield from the vault and liquidity mining rewards"
-                placement="top"
-                bg="surface.bg"
-                color="neutral.300"
+              <Th
+                fontSize={10}
+                fontWeight="normal"
+                textTransform="capitalize"
               >
-                <Th
-                  fontSize={10}
-                  fontWeight="normal"
-                  textTransform="capitalize"
-                >
-                  <HStack spacing={1} align="center">
-                    <Text>Bonded LP Tokens</Text>
-                    <InformationIcon
-                      color="neutral.300"
-                      boxSize={3}
-                    />
-                  </HStack>
-                </Th>
-              </Tooltip>
-              <Tooltip
-                hasArrow
-                arrowShadowColor="purple.base"
-                label="This is the period you must wait before your tokens are transferable/withdrawable"
-                placement="top"
-                bg="surface.bg"
-                color="neutral.300"
+                Bonded LP Tokens
+              </Th>
+              <Th
+                fontSize={10}
+                fontWeight="normal"
+                textTransform="capitalize"
               >
-                <Th
-                  fontSize={10}
-                  fontWeight="normal"
-                  textTransform="capitalize"
-                >
-                  <HStack spacing={1} align="center">
-                    <Text>Selected Unbonding Period</Text>
-                    <InformationIcon
-                      color="neutral.300"
-                      boxSize={3}
-                    />
-                  </HStack>
-                </Th>
-              </Tooltip>
+                Selected Unbonding Period
+              </Th>
               {cellarConfig.customReward?.showBondingRewards ===
-              true ? (
-                <Tooltip
-                  hasArrow
-                  arrowShadowColor="purple.base"
-                  label={`Amount of ${
-                    cellarConfig?.customReward?.tokenSymbol ?? "SOMM"
-                  } rewards earned and available to be claimed`}
-                  placement="top"
-                  bg="surface.bg"
-                  color="neutral.300"
+                true && (
+                <Th
+                  fontSize={10}
+                  fontWeight="normal"
+                  textTransform="capitalize"
                 >
-                  <Th
-                    fontSize={10}
-                    fontWeight="normal"
-                    textTransform="capitalize"
-                  >
-                    <HStack spacing={1} align="center">
-                      <Text>
-                        {cellarConfig?.customReward?.tokenSymbol ??
-                          "SOMM"}{" "}
-                        Rewards
-                      </Text>
-                      <InformationIcon
-                        color="neutral.300"
-                        boxSize={3}
-                      />
-                    </HStack>
-                  </Th>
-                </Tooltip>
-              ) : null}
-              {cellarConfig.customReward?.showSommRewards === true ||
-              cellarConfig.customReward?.showSommRewards ===
-                undefined ? (
-                <>
-                  <Tooltip
-                    hasArrow
-                    arrowShadowColor="purple.base"
-                    label={`Amount of SOMM rewards earned and available to be claimed`}
-                    placement="top"
-                    bg="surface.bg"
-                    color="neutral.300"
-                  >
-                    <Th
-                      fontSize={10}
-                      fontWeight="normal"
-                      textTransform="capitalize"
-                    >
-                      <HStack spacing={1} align="center">
-                        <Text>SOMM Rewards</Text>
-                        <InformationIcon
-                          color="neutral.300"
-                          boxSize={3}
-                        />
-                      </HStack>
-                    </Th>
-                  </Tooltip>
-                </>
-              ) : null}
+                  {cellarConfig?.customReward?.tokenSymbol ?? "SOMM"}{" "}
+                  Rewards
+                </Th>
+              )}
+              {cellarConfig.customReward2?.showBondingRewards2 ===
+                true && (
+                <Th
+                  fontSize={10}
+                  fontWeight="normal"
+                  textTransform="capitalize"
+                >
+                  {cellarConfig?.customReward2?.tokenSymbol2 ??
+                    "TEST"}{" "}
+                  Rewards
+                </Th>
+              )}
               <Th />
             </Tr>
           </Thead>
           <Tbody fontWeight="bold">
-            {userStakes?.length &&
+            {userStakes &&
+              userStakes.length > 0 &&
               userStakes.map((data, i) => {
                 const { amount, lock, rewards, unbondTimestamp } =
                   data
                 const lockMap = bondingPeriodOptions(cellarConfig)
                 if (amount?.toString() === "0") return null
                 return (
-                  <Tr
-                    key={i}
-                    _hover={{
-                      bg: "surface.secondary",
-                      "td:first-of-type": {
-                        borderRadius: "32px 0 0 32px",
-                        overflow: "hidden",
-                      },
-                      "td:last-of-type": {
-                        borderRadius: "0 32px 32px 0",
-                        overflow: "hidden",
-                      },
-                    }}
-                    _last={{
-                      border: "none",
-                    }}
-                  >
+                  <Tr key={i}>
                     <Td>#{formatTrancheNumber(i + 1)}</Td>
                     <Td>
                       <HStack spacing={2}>
@@ -413,109 +332,70 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                           height="20px"
                         />
                         <Text textAlign="right">
-                          {(+(
-                            Number(amount) /
+                          {(
+                            +Number(amount) /
                             10 ** cellarConfig.cellar.decimals
-                          ).toPrecision(2)).toLocaleString()}
+                          ).toLocaleString()}
                         </Text>
                       </HStack>
                     </Td>
-                    {/* This handles edge case if users go outside of UI and us staking contract directly for a non ux lock period */}
                     <Td>
                       {(lockMap[lock] && lockMap[lock].title) ||
-                        (Object.values(lockMap).length > 0 &&
-                          Object.values(lockMap).slice(-1)[0].title)}
+                        Object.values(lockMap).slice(-1)[0].title}
                     </Td>
                     {cellarConfig.customReward?.showBondingRewards ===
-                    true ? (
+                      true && (
                       <Td>
-                        {/*!!!!!!!! TODO: this needs to be rewritten */}
-                        {!cellarConfig.customReward
-                          ?.customColumnValue ? (
-                          <>
-                            <HStack spacing={2}>
-                              <Image
-                                src={
-                                  cellarConfig?.customReward
-                                    ?.imagePath ??
-                                  sommToken.src
-                                }
-                                alt="reward token image"
-                                height="20px"
-                              />
-                              <Text textAlign="right">
-                                {claimAllRewards
-                                  ? Number(
-                                      toEther(
-                                        claimAllRewards[
-                                          i
-                                        ]?.toString() || "0",
-                                        6,
-                                        false,
-                                        2
-                                      )
-                                    ).toLocaleString()
-                                  : "0.00"}
-                              </Text>
-                            </HStack>
-                          </>
-                        ) : (
-                          <>
-                            <HStack
-                              as={Link}
-                              href={`${cellarConfig?.customReward?.customColumnValue}`}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              <Text
-                                as="span"
-                                fontWeight="bold"
-                                fontSize={16}
-                              >
-                                {
-                                  cellarConfig?.customReward
-                                    ?.customColumnValue
-                                }
-                              </Text>
-                              <Icon
-                                as={FaExternalLinkAlt}
-                                color="purple.base"
-                              />
-                            </HStack>
-                          </>
-                        )}
+                        <HStack spacing={2}>
+                          <Image
+                            src={
+                              cellarConfig?.customReward?.imagePath ??
+                              sommToken.src
+                            }
+                            alt="reward token image"
+                            height="20px"
+                          />
+                          <Text textAlign="right">
+                            {claimAllRewards
+                              ? toEther(
+                                  claimAllRewards[i]?.toString() ||
+                                    "0",
+                                  6,
+                                  false,
+                                  2
+                                )
+                              : "0.00"}
+                          </Text>
+                        </HStack>
                       </Td>
-                    ) : null}
+                    )}
+                    {cellarConfig.customReward2
+                      ?.showBondingRewards2 === true && (
+                      <Td>
+                        <HStack spacing={2}>
+                          <Image
+                            src={
+                              cellarConfig?.customReward2
+                                ?.imagePath2 ?? sommToken.src
+                            }
+                            alt="reward token image"
+                            height="20px"
+                          />
+                          <Text textAlign="right">
+                            {claimAllRewards
+                              ? toEther(
+                                  claimAllRewards[i]?.toString() ||
+                                    "0",
+                                  6,
+                                  false,
+                                  2
+                                )
+                              : "0.00"}
+                          </Text>
+                        </HStack>
+                      </Td>
+                    )}
                     <Td>
-                      {/*!!!!!!!! TODO: this needs to be rewritten */}
-                      {cellarConfig.customReward?.showSommRewards ||
-                      cellarConfig.customReward?.showSommRewards ===
-                        undefined ? (
-                        <>
-                          <HStack spacing={2}>
-                            <Image
-                              src={
-                                sommToken.src
-                              }
-                              alt="reward token image"
-                              height="20px"
-                            />
-                            <Text textAlign="right">
-                              {claimAllRewards
-                                ? toEther(
-                                    claimAllRewards[i]?.toString() ||
-                                      "0",
-                                    6,
-                                    false,
-                                    2
-                                  )
-                                : "0.00"}
-                            </Text>
-                          </HStack>
-                        </>
-                      ) : null}
-                    </Td>
-                    <Td fontWeight="normal">
                       <Flex justify="flex-end">
                         {renderBondAction(unbondTimestamp, i)}
                       </Flex>
@@ -526,12 +406,6 @@ const BondingTableCard: VFC<TableProps> = (props) => {
           </Tbody>
         </Table>
       </TableContainer>
-      {/* <Text fontSize="xs" textAlign="center" pt={4}>
-        After triggering 'Unbond,' you will need to wait through the
-        unbonding period you selected,
-        <br />
-        after which your LP tokens can be unstaked and withdrawn.
-      </Text> */}
     </InnerCard>
   )
 }

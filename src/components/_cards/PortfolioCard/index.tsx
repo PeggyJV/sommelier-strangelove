@@ -409,8 +409,65 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       </Stack>
                     </InnerCard>
                   ) : null}
+                  {cellarConfig.customReward2
+                    ?.customRewardLongMessage2 ? (
+                    <InnerCard
+                      backgroundColor="surface.tertiary"
+                      mt={8}
+                      px={7}
+                      py={7}
+                    >
+                      <Stack
+                        flexDir={{ base: "column", md: "row" }}
+                        alignItems={{
+                          base: "flex-start",
+                          md: "center",
+                        }}
+                        gap={{ base: 0, md: 4 }}
+                      >
+                        <>
+                          <Image
+                            src={
+                              cellarConfig.customReward2?.imagePath2
+                            }
+                            alt={`${cellarConfig.customReward2?.tokenSymbol2} logo`}
+                            boxSize={6}
+                          />
+                          <Heading size="16px">
+                            {
+                              cellarConfig.customReward2
+                                ?.customRewardLongMessage2
+                            }
+                          </Heading>
+                        </>
+
+                        <Spacer />
+                        <LighterSkeleton
+                          isLoaded={!isStrategyLoading}
+                          height={4}
+                        >
+                          <Text fontSize="xs">
+                            {stakingEnd?.endDate &&
+                            isFuture(stakingEnd.endDate)
+                              ? `Rewards program ends in TEST ${formatDistanceToNowStrict(
+                                  cellarConfig.customReward2
+                                    ?.stakingDurationOverride ??
+                                    stakingEnd.endDate,
+                                  {
+                                    locale: { formatDistance },
+                                  }
+                                )}`
+                              : "Program Ended TEST"}
+                          </Text>
+                        </LighterSkeleton>
+                      </Stack>
+                    </InnerCard>
+                  ) : null}
                   {cellarConfig.customReward?.showSommRewards ||
                   cellarConfig.customReward?.showSommRewards ===
+                    undefined ||
+                  cellarConfig.customreward2?.showSommRewards2 ||
+                  cellarConfig.customreward2?.showSommRewards2 ===
                     undefined ? (
                     <InnerCard
                       backgroundColor="surface.tertiary"

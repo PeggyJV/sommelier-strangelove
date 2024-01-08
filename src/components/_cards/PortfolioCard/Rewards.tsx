@@ -63,7 +63,10 @@ export const Rewards = ({
     userStakes?.totalClaimAllRewards?.value.toString()
 
   const claimAllDisabled =
-    !isConnected || !userRewards || parseInt(userRewards) <= 0 || !buttonsEnabled
+    !isConnected ||
+    !userRewards ||
+    parseInt(userRewards) <= 0 ||
+    !buttonsEnabled
 
   // Get somm token
   const chainObj = chainConfig.find(
@@ -87,6 +90,17 @@ export const Rewards = ({
     rewardTokenAddress = cellarConfig.customReward.tokenAddress
     rewardTokenImageUrl = cellarConfig.customReward.imagePath
     rewardTokenName = cellarConfig.customReward.tokenSymbol
+  }
+
+  // Custom processing for if reward is not SOMM
+  // -- Check if cellar config has customReward field
+  if (
+    cellarConfig.customReward2 &&
+    cellarConfig.customReward2.showAPY === false
+  ) {
+    rewardTokenAddress = cellarConfig.customReward2.tokenAddress2
+    rewardTokenImageUrl = cellarConfig.customReward2.imagePath2
+    rewardTokenName = cellarConfig.customReward2.tokenSymbol2
   }
 
   const { doHandleTransaction } = useHandleTransaction()
@@ -145,13 +159,13 @@ export const Rewards = ({
     <SimpleGrid
       templateColumns="max-content"
       templateRows={
-        cellarConfig.customReward?.showSommRewards
+        cellarConfig.customReward?.showSommRewards ||
+        cellarConfig.customReward2?.showSommRewards
           ? ""
           : "repeat(2, 1fr)"
       }
       spacing={4}
       alignItems="flex-end"
-      //display={claimAllDisabled ? "none" : "grid"}
     >
       <VStack align="flex-start">
         {cellarConfig.customReward?.showBondingRewards ? (
@@ -193,37 +207,85 @@ export const Rewards = ({
             <br />
           </HStack>
         ) : null}
-        {cellarConfig.customReward?.showSommRewards ||
-        cellarConfig.customReward?.showSommRewards === undefined ? (
-          <>
-            <HStack>
+
+        {cellarConfig.customReward2?.showBondingRewards2 ? (
+          <HStack>
+            <a
+              href={cellarConfig?.customReward2?.rewardHyperLink2}
+              target="_blank"
+              rel="noreferrer"
+              title={
+                cellarConfig?.customReward2
+                  ?.customRewardMessageTooltip2
+              }
+            >
               <CardStat
-                label={"SOMM Rewards"}
-                tooltip={`Amount of SOMM earned and available to be claimed`}
+                label={
+                  cellarConfig?.customReward2?.customRewardHeader2 ??
+                  "rewards"
+                }
+                tooltip={
+                  cellarConfig?.customReward2
+                    ?.customRewardMessageTooltip2 ??
+                  `Amount of ${rewardTokenName} earned and available to be claimed`
+                }
               >
                 <InlineImage
-                  src={sommToken.src}
-                  alt={`SOMM logo`}
+                  src={rewardTokenImageUrl} // Modify if the image for customReward2 is different
+                  alt={`${rewardTokenName} logo`}
                   boxSize={5}
                 />
                 <Text textAlign="center">
                   {isMounted &&
-                    (isConnected
-                      ? userStakes?.totalClaimAllRewards.formatted ||
-                        "..."
-                      : "--")}
+                    (cellarConfig.customReward2
+                      ?.customRewardMessage ??
+                      (isConnected
+                        ? userStakes?.totalClaimAllRewards
+                            .formatted || "..."
+                        : "--"))}
                 </Text>
               </CardStat>
-            </HStack>
-          </>
+            </a>
+            <br />
+          </HStack>
+        ) : null}
+
+        {cellarConfig.customReward?.showSommRewards ||
+        cellarConfig.customReward2?.showSommRewards ||
+        (cellarConfig.customReward?.showSommRewards === undefined &&
+          cellarConfig.customReward2?.showSommRewards ===
+            undefined) ? (
+          <HStack>
+            <CardStat
+              label={"SOMM Rewards"}
+              tooltip={`Amount of SOMM earned and available to be claimed`}
+            >
+              <InlineImage
+                src={sommToken.src}
+                alt={`SOMM logo`}
+                boxSize={5}
+              />
+              <Text textAlign="center">
+                {isMounted &&
+                  (isConnected
+                    ? userStakes?.totalClaimAllRewards.formatted ||
+                      "..."
+                    : "--")}
+              </Text>
+            </CardStat>
+          </HStack>
         ) : null}
       </VStack>
-      {cellarConfig?.customReward?.showClaim !== false ? (
+
+      {cellarConfig?.customReward?.showClaim !== false ||
+      cellarConfig?.customReward2?.showClaim !== false ? (
         <BaseButton
           disabled={claimAllDisabled}
           onClick={handleClaimAll}
         >
-          {cellarConfig?.customReward?.customClaimMsg ?? `Claim All`}
+          {cellarConfig?.customReward?.customClaimMsg ||
+            cellarConfig?.customReward2?.customClaimMsg ||
+            `Claim All`}
         </BaseButton>
       ) : null}
     </SimpleGrid>
