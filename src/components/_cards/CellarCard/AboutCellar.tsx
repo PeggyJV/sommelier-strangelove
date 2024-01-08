@@ -9,15 +9,15 @@ import {
 } from "data/uiConfig"
 import { CellarCardData } from "./CellarCardDisplay"
 
-import UserStats from "./UserStats" // Assuming UserStats is a default export
+import { UserStats } from "./UserStats"
 import { CellarStats, CellarStatsLabel } from "./CellarStats"
-import PercentageText from "components/PercentageText" // Assuming PercentageText is a default export
-import isComingSoon from "utils/isComingSoon" // Assuming isComingSoon is a default export
+import { PercentageText } from "components/PercentageText"
+import { isComingSoon } from "utils/isComingSoon"
 import { format, utcToZonedTime } from "date-fns-tz"
 import { COUNT_DOWN_TIMEZONE } from "utils/config"
-import TransparentSkeleton from "components/_skeleton" // Assuming TransparentSkeleton is a default export
+import { TransparentSkeleton } from "components/_skeleton"
 import { isFuture } from "date-fns"
-import useStrategyData from "data/hooks/useStrategyData" // Assuming useStrategyData is a default export
+import { useStrategyData } from "data/hooks/useStrategyData"
 
 interface Props {
   data: CellarCardData
@@ -179,4 +179,4 @@ const AboutCellar: React.FC<Props> = ({ data }) => {
   )
 }
 
-export default AboutCellar
+export { AboutCellar }

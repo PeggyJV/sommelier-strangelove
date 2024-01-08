@@ -451,7 +451,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                             isFuture(stakingEnd.endDate)
                               ? `Rewards program ends in TEST ${formatDistanceToNowStrict(
                                   cellarConfig.customReward2
-                                    ?.stakingDurationOverride ??
+                                    ?.stakingDurationOverride2 ??
                                     stakingEnd.endDate,
                                   {
                                     locale: { formatDistance },
@@ -466,8 +466,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   {cellarConfig.customReward?.showSommRewards ||
                   cellarConfig.customReward?.showSommRewards ===
                     undefined ||
-                  cellarConfig.customreward2?.showSommRewards2 ||
-                  cellarConfig.customreward2?.showSommRewards2 ===
+                  cellarConfig.customReward2?.showSommRewards2 ||
+                  cellarConfig.customReward2?.showSommRewards2 ===
                     undefined ? (
                     <InnerCard
                       backgroundColor="surface.tertiary"

@@ -138,7 +138,7 @@ export interface CustomReward2 {
   tokenAddress2: string
   imagePath2: string
   customRewardMessageTooltip2?: string
-  customRewardMessag2?: string
+  customRewardMessage2?: string
   customRewardHeader2?: string
   showBondingRewards2?: boolean
   showClaim2?: boolean
@@ -152,7 +152,7 @@ export interface CustomReward2 {
   customColumnHeaderToolTip2?: string
   customColumnValue2?: string
   stakingDurationOverride2?: Date
-  showSommReward2?: boolean
+  showSommRewards2?: boolean
   customIconToolTipMsg2?: string
   customRewardEndMessage2?: string
   customSommRewardsEndMessage2?: string

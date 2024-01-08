@@ -96,7 +96,7 @@ export const Rewards = ({
   // -- Check if cellar config has customReward field
   if (
     cellarConfig.customReward2 &&
-    cellarConfig.customReward2.showAPY === false
+    cellarConfig.customReward2.showAPY2 === false
   ) {
     rewardTokenAddress = cellarConfig.customReward2.tokenAddress2
     rewardTokenImageUrl = cellarConfig.customReward2.imagePath2
@@ -160,7 +160,7 @@ export const Rewards = ({
       templateColumns="max-content"
       templateRows={
         cellarConfig.customReward?.showSommRewards ||
-        cellarConfig.customReward2?.showSommRewards
+        cellarConfig.customReward2?.showSommRewards2
           ? ""
           : "repeat(2, 1fr)"
       }
@@ -231,14 +231,14 @@ export const Rewards = ({
                 }
               >
                 <InlineImage
-                  src={rewardTokenImageUrl} // Modify if the image for customReward2 is different
+                  src={rewardTokenImageUrl}
                   alt={`${rewardTokenName} logo`}
                   boxSize={5}
                 />
                 <Text textAlign="center">
                   {isMounted &&
                     (cellarConfig.customReward2
-                      ?.customRewardMessage ??
+                      ?.customRewardMessage2 ??
                       (isConnected
                         ? userStakes?.totalClaimAllRewards
                             .formatted || "..."
@@ -251,9 +251,9 @@ export const Rewards = ({
         ) : null}
 
         {cellarConfig.customReward?.showSommRewards ||
-        cellarConfig.customReward2?.showSommRewards ||
+        cellarConfig.customReward2?.showSommRewards2 ||
         (cellarConfig.customReward?.showSommRewards === undefined &&
-          cellarConfig.customReward2?.showSommRewards ===
+          cellarConfig.customReward2?.showSommRewards2 ===
             undefined) ? (
           <HStack>
             <CardStat
@@ -278,13 +278,13 @@ export const Rewards = ({
       </VStack>
 
       {cellarConfig?.customReward?.showClaim !== false ||
-      cellarConfig?.customReward2?.showClaim !== false ? (
+      cellarConfig?.customReward2?.showClaim2 !== false ? (
         <BaseButton
           disabled={claimAllDisabled}
           onClick={handleClaimAll}
         >
           {cellarConfig?.customReward?.customClaimMsg ||
-            cellarConfig?.customReward2?.customClaimMsg ||
+            cellarConfig?.customReward2?.customClaimMsg2 ||
             `Claim All`}
         </BaseButton>
       ) : null}
