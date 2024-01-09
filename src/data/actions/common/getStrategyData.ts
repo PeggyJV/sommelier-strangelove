@@ -141,9 +141,7 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      let extraRewardsApy = {
-        value: 0,
-      }
+      let extraRewardsApy = undefined
       // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
       /** 
       if (strategy.slug === utilConfig.CONTRACT.TURBO_GHO.SLUG) {
@@ -167,24 +165,22 @@ export const getStrategyData = async ({
         }
       }
       */
-
-      /*
+    
       if (strategy.slug === utilConfig.CONTRACT.TURBO_EETH.SLUG) {
         // Get TVL
         let usdTvl = Number(strategyData?.tvlTotal)
 
-        // $2k worth of eETH per month * 12 months * 100 for human readable %
+        // $2.7k worth of eETH per month * 12 months * 100 for human readable %
         // TODO: Update this  + expiration date in config weekly as long as eETH incentives live
-        let apy = ((2000) / usdTvl) * 12 * 100
+        let apy = ((2700) / usdTvl) * 12 * 100
 
         extraRewardsApy = {
           formatted: apy.toFixed(2).toString() + "%",
           value: apy,
-          tokenSymbol: "eETH",
+          tokenSymbol: "weETH",
           tokenIcon: EETHIcon,
         }
       }
-      */
 
       const baseApy = (() => {
         if (config.show7DayAPYTooltip === true) {
