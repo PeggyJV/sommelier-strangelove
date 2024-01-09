@@ -80,6 +80,7 @@ export const Rewards = ({
   let rewardTokenAddress = sommToken.address
   let rewardTokenImageUrl = sommToken.src
   let rewardTokenName = sommToken.symbol
+  let rewardTokenImageUrl2 = sommToken.src
 
   // Custom processing for if reward is not SOMM
   // -- Check if cellar config has customReward field
@@ -99,7 +100,7 @@ export const Rewards = ({
     cellarConfig.customReward2.showAPY2 === false
   ) {
     rewardTokenAddress = cellarConfig.customReward2.tokenAddress2
-    rewardTokenImageUrl = cellarConfig.customReward2.imagePath2
+    rewardTokenImageUrl2 = cellarConfig.customReward2.imagePath2
     rewardTokenName = cellarConfig.customReward2.tokenSymbol2
   }
 
@@ -190,7 +191,7 @@ export const Rewards = ({
                 }
               >
                 <InlineImage
-                  src={rewardTokenImageUrl}
+                  src={cellarConfig.customReward.imagePath}
                   alt={`${rewardTokenName} logo`}
                   boxSize={5}
                 />
@@ -231,7 +232,7 @@ export const Rewards = ({
                 }
               >
                 <InlineImage
-                  src={rewardTokenImageUrl}
+                  src={cellarConfig.customReward2.imagePath2}
                   alt={`${rewardTokenName} logo`}
                   boxSize={5}
                 />

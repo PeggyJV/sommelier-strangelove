@@ -84,6 +84,7 @@ export interface ConfigProps {
   feePromotion?: string
   show7DayAPYTooltip?: boolean
   chain: Chain
+  customrewardsAPY2?: number
 }
 
 export enum CellarType {

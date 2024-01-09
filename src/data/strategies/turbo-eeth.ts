@@ -8,9 +8,9 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
-import { EETHIcon } from "components/_icons"
+import { EETHIcon, WstethIcon } from "components/_icons"
 import { chainSlugMap } from "data/chainConfig"
-import { WstethIcon } from "components/_icons"
+import { WETHICon } from "components/_icons"
 
 export const turboeETH: CellarData = {
   name: "Turbo eETH",
@@ -138,7 +138,7 @@ export const turboeETH: CellarData = {
       showClaim2: true,
       customClaimMsg2: "TEST",
       customRewardAPYTooltip2: "TEST",
-      logo2: EETHIcon,
+      logo2: WETHICon,
       logoSize2: "15px",
       customRewardLongMessage2: "TEST",
       rewardHyperLink2: "TEST",
@@ -152,7 +152,7 @@ export const turboeETH: CellarData = {
       customIconToolTipMsg2: "TEST",
       showOnlyBaseApy2: false,
     },
-
+    customrewardsAPY2: 8.5,
     staker: {
       address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_EETH_STAKER.ABI,

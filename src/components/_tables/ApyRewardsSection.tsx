@@ -14,7 +14,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { CellarType } from "data/types"
 
 type ApyRewardsSectionProps = {
-  baseApy?: string
+  baseApy?: number
   rewardsApy?: string
   stackingEndDate: string
   date?: Date
@@ -71,6 +71,16 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const cellarType = cellarDataMap[cellarId].cellarType
   const LogoComponent = cellarConfig.customReward?.logo ?? LogoIcon
   const LogoComponent2 = cellarConfig.customReward2?.logo2 ?? LogoIcon // CustomRewards2 LogoComponent
+
+  const totalApyRender = (() => {
+    if (baseApySumRewards) {
+      if (cellarConfig.customrewardsAPY2) {
+        return baseApySumRewards + cellarConfig.customrewardsAPY2
+      }
+      return baseApySumRewards
+    }
+    return 0
+  })()
 
   if (!baseApy && !rewardsApy && !extraRewardsApy) {
     return (
@@ -157,6 +167,14 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                           extraRewardsApy ?? rewardsApy ?? "0.00%"
                         }`}
                     </Text>
+
+                    <Text>
+                      {
+                        cellarConfig.customReward2
+                          ?.customRewardAPYTooltip2
+                      }{" "}
+                      {cellarConfig.customrewardsAPY2}%
+                    </Text>
                   </>
                 ) : (
                   <></>
@@ -174,7 +192,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             shouldWrapChildren
           >
             <Text fontWeight={550} fontSize="16px">
-              {baseApySumRewards ?? "-"}
+              {`${parseFloat(totalApyRender || "0").toFixed(2)} %` ??
+                "-"}
             </Text>
           </Tooltip>
           {(rewardsApy && isStakingOverrideOngoing === true) ||
@@ -272,6 +291,56 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                       alignItems="center"
                     >
                       <LogoIcon
+                        mx="auto"
+                        color="red.normal"
+                        p={0}
+                        boxSize="9px"
+                      />
+                    </CircularProgressLabel>
+                  </CircularProgress>
+                </HStack>
+              </Tooltip>
+            )}
+          {rewardsApy &&
+            (cellarConfig.customReward?.showSommRewards ===
+              undefined ||
+              cellarConfig.customReward?.showSommRewards) && (
+              <Tooltip
+                label={
+                  cellarConfig.customReward
+                    ?.customSommRewardsEndMessage
+                    ? cellarConfig.customReward
+                        .customSommRewardsEndMessage
+                    : `${
+                        cellarConfig.customReward?.showSommRewards
+                          ? "SOMM Rewards ends in"
+                          : "Rewards ends in"
+                      } ${formatDistanceToNowStrict(
+                        new Date(stackingEndDate)
+                      )}`
+                }
+                color="neutral.100"
+                border="0"
+                fontSize="12px"
+                bg="neutral.900"
+                fontWeight={600}
+                py="4"
+                px="6"
+                boxShadow="xl"
+                shouldWrapChildren
+              >
+                <HStack spacing={1}>
+                  <CircularProgress
+                    value={percentage}
+                    color="white"
+                    trackColor="none"
+                    size="25px"
+                  >
+                    <CircularProgressLabel
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <LogoComponent2
                         mx="auto"
                         color="red.normal"
                         p={0}
