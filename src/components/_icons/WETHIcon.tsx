@@ -2,48 +2,19 @@ import { Icon, IconProps } from "@chakra-ui/react"
 import { VFC } from "react"
 
 export const WETHICon: VFC<IconProps> = (props) => (
-  <Icon viewBox="0 0 20 28" {...props}>
+  <Icon viewBox="0 0 2500 2485" {...props}>
+    {/* Existing elements */}
     <circle cx="9.8" cy="14" r="13" fill="#FFFFFF" />
+
+    {/* Extracted path */}
     <path
       fill="#00A3FF"
-      d="M1.7,11.7L1.5,12c-2.3,3.6-1.8,8.3,1.3,11.3C4.5,25.1,6.9,26,9.3,26C9.3,26,9.3,26,1.7,11.7z"
+      d="M1096 2485 c-252 -36 -486 -141 -659 -295 -35 -32 -54 -56 -50 -63 4 -7 8 -16 8 -22 1 -5 7 -9 14 -7 8 2 -9 -23 -36 -55 -202 -234 -297 -489 -297 -793 0 -321 107 -587 331 -821 174 -182 397 -298 670 -349 54 -10 91 -19 82 -19 -12 -1 -15 -8 -12 -25 4 -20 12 -24 56 -29 27 -4 96 -2 151 4 181 18 308 54 458 131 243 124 435 319 553 562 198 407 166 867 -88 1246 -64 96 -231 263 -327 327 -256 171 -571 248 -854 208z"
     />
-    <path
-      opacity="0.6"
-      fill="#00A3FF"
-      enableBackground="new"
-      d="M9.3,16l-7.6-4.4C9.3,26,9.3,26,9.3,26C9.3,22.9,9.3,19.3,9.3,16z"
-    />
-    <path
-      opacity="0.6"
-      fill="#00A3FF"
-      enableBackground="new"
-      d="M16.9,11.7l0.2,0.3c2.3,3.6,1.8,8.3-1.3,11.3C14,25.1,11.7,26,9.3,26C9.3,26,9.3,26,16.9,11.7z"
-    />
-    <path
-      opacity="0.2"
-      fill="#00A3FF"
-      enableBackground="new"
-      d="M9.3,16l7.6-4.4C9.3,26,9.3,26,9.3,26C9.3,22.9,9.3,19.3,9.3,16z"
-    />
-    <path
-      opacity="0.2"
-      fill="#00A3FF"
-      enableBackground="new"
-      d="M9.3,6.3v7.5l6.6-3.7L9.3,6.3z"
-    />
-    <path
-      opacity="0.6"
-      fill="#00A3FF"
-      enableBackground="new"
-      d="M9.3,6.3l-6.6,3.8l6.6,3.7V6.3z"
-    />
-    <path fill="#00A3FF" d="M9.3,0L2.7,10.1l6.6-3.8V0z" />
-    <path
-      opacity="0.6"
-      fill="#00A3FF"
-      enableBackground="new"
-      d="M9.3,6.3l6.6,3.8L9.3,0V6.3z"
-    />
+
+    {/* Other paths */}
+    {/* ... */}
   </Icon>
 )
+
+export default WETHICon

@@ -153,6 +153,7 @@ export const turboeETH: CellarData = {
       showOnlyBaseApy2: false,
     },
     customrewardsAPY2: 8.5,
+
     staker: {
       address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_EETH_STAKER.ABI,
