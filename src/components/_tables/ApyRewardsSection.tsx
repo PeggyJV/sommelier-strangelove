@@ -351,7 +351,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                       color="red.normal"
                       p={0}
                       boxSize={
-                        cellarConfig.customReward2?.logoSize2 ?? "9px"
+                        cellarConfig.customReward?.logoSize ?? "9px"
                       }
                     />
                   </CircularProgressLabel>
