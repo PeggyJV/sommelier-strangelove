@@ -346,12 +346,12 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                     display="flex"
                     alignItems="center"
                   >
-                    <LogoComponent
+                    <LogoComponent2
                       mx="auto"
                       color="red.normal"
                       p={0}
                       boxSize={
-                        cellarConfig.customReward?.logoSize ?? "9px"
+                        cellarConfig.customReward2?.logoSize2 ?? "9px"
                       }
                     />
                   </CircularProgressLabel>

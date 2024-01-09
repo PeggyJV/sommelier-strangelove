@@ -138,7 +138,7 @@ export const turboeETH: CellarData = {
       showClaim2: true,
       customClaimMsg2: "weETH rewards",
       customRewardAPYTooltip2: "weETH rewards",
-      logo2: EETHIcon,
+      logo: EETHIcon,
       logoSize2: "15px",
       customRewardLongMessage2: "weETH rewards",
       // rewardHyperLink2: "weETH rewards",
