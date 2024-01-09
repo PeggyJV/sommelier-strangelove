@@ -460,7 +460,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                           <Text fontSize="xs">
                             {stakingEnd?.endDate &&
                             isFuture(stakingEnd.endDate)
-                              ? `Rewards program ends in TEST ${formatDistanceToNowStrict(
+                              ? `Rewards program ends in ${formatDistanceToNowStrict(
                                   cellarConfig.customReward2
                                     ?.stakingDurationOverride2 ??
                                     stakingEnd.endDate,

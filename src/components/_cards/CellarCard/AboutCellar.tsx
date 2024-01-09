@@ -115,8 +115,7 @@ const AboutCellar: React.FC<Props> = ({ data }) => {
                   <CellarStats
                     title={
                       cellarConfig.customReward
-                        ?.customRewardAPYTooltip ??
-                      "Rewards APY ABOUT"
+                        ?.customRewardAPYTooltip ?? "Rewards APY"
                     }
                     value={
                       cellarConfig.customReward
@@ -132,8 +131,7 @@ const AboutCellar: React.FC<Props> = ({ data }) => {
                     <CellarStats
                       title={
                         cellarConfig.customReward2
-                          ?.customRewardAPYTooltip2 ??
-                        "Rewards TEST APY"
+                          ?.customRewardAPYTooltip2 ?? "Rewards"
                       }
                       value={
                         cellarConfig.customReward2

@@ -167,14 +167,16 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                           extraRewardsApy ?? rewardsApy ?? "0.00%"
                         }`}
                     </Text>
-
-                    <Text>
-                      {
-                        cellarConfig.customReward2
-                          ?.customRewardAPYTooltip2
-                      }{" "}
-                      {cellarConfig.customrewardsAPY2}%
-                    </Text>
+                    {cellarConfig.customReward2
+                      ?.customRewardAPYTooltip2 && (
+                      <Text>
+                        {
+                          cellarConfig.customReward2
+                            ?.customRewardAPYTooltip2
+                        }{" "}
+                        {cellarConfig.customrewardsAPY2}%
+                      </Text>
+                    )}
                   </>
                 ) : (
                   <></>
@@ -196,8 +198,114 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                 "-"}
             </Text>
           </Tooltip>
+
           {(rewardsApy && isStakingOverrideOngoing === true) ||
           (!cellarConfig.customReward?.showOnlyBaseApy === false &&
+            isStakingOverrideOngoing === true) ? (
+            <Tooltip
+              label={
+                cellarConfig.customReward?.customRewardEndMessage
+                  ? `${cellarConfig.customReward.tokenDisplayName} ${cellarConfig.customReward?.customRewardEndMessage}`
+                  : `${
+                      cellarConfig.customReward
+                        ?.customIconToolTipMsg ??
+                      `${
+                        cellarConfig.customReward?.showAPY
+                          ? `${cellarConfig.customReward.tokenDisplayName} `
+                          : ""
+                      }Rewards ends in`
+                    } ${formatDistanceToNowStrict(
+                      cellarConfig.customReward
+                        ?.stakingDurationOverride ??
+                        new Date(stackingEndDate)
+                    )}`
+              }
+              color="neutral.100"
+              border="0"
+              fontSize="12px"
+              bg="neutral.900"
+              fontWeight={600}
+              py="4"
+              px="6"
+              boxShadow="xl"
+              shouldWrapChildren
+            >
+              <HStack spacing={1}>
+                <CircularProgress
+                  value={percentage}
+                  color="white"
+                  trackColor="none"
+                  size="25px"
+                >
+                  <CircularProgressLabel
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <LogoComponent
+                      mx="auto"
+                      color="red.normal"
+                      p={0}
+                      boxSize={
+                        cellarConfig.customReward?.logoSize ?? "9px"
+                      }
+                    />
+                  </CircularProgressLabel>
+                </CircularProgress>
+              </HStack>
+            </Tooltip>
+          ) : null}
+          {rewardsApy &&
+            (cellarConfig.customReward?.showSommRewards ===
+              undefined ||
+              cellarConfig.customReward?.showSommRewards) && (
+              <Tooltip
+                label={
+                  cellarConfig.customReward
+                    ?.customSommRewardsEndMessage
+                    ? cellarConfig.customReward
+                        .customSommRewardsEndMessage
+                    : `${
+                        cellarConfig.customReward?.showSommRewards
+                          ? "SOMM Rewards ends in"
+                          : "Rewards ends in"
+                      } ${formatDistanceToNowStrict(
+                        new Date(stackingEndDate)
+                      )}`
+                }
+                color="neutral.100"
+                border="0"
+                fontSize="12px"
+                bg="neutral.900"
+                fontWeight={600}
+                py="4"
+                px="6"
+                boxShadow="xl"
+                shouldWrapChildren
+              >
+                <HStack spacing={1}>
+                  <CircularProgress
+                    value={percentage}
+                    color="white"
+                    trackColor="none"
+                    size="25px"
+                  >
+                    <CircularProgressLabel
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <LogoIcon
+                        mx="auto"
+                        color="red.normal"
+                        p={0}
+                        boxSize="9px"
+                      />
+                    </CircularProgressLabel>
+                  </CircularProgress>
+                </HStack>
+              </Tooltip>
+            )}
+          {(rewardsApy && isStakingOverrideOngoing === true) ||
+          (!cellarConfig.customReward2?.showOnlyBaseApy2 === false &&
             isStakingOverrideOngoing === true) ? (
             <Tooltip
               label={
@@ -243,7 +351,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                       color="red.normal"
                       p={0}
                       boxSize={
-                        cellarConfig.customReward2?.logoSize2 ?? "9px"
+                        cellarConfig.customReward?.logoSize ?? "9px"
                       }
                     />
                   </CircularProgressLabel>
@@ -251,106 +359,6 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               </HStack>
             </Tooltip>
           ) : null}
-          {rewardsApy &&
-            (cellarConfig.customReward2?.showSommRewards2 ===
-              undefined ||
-              cellarConfig.customReward2?.showSommRewards2) && (
-              <Tooltip
-                label={
-                  cellarConfig.customReward2
-                    ?.customSommRewardsEndMessage2
-                    ? cellarConfig.customReward2
-                        .customSommRewardsEndMessage2
-                    : `${
-                        cellarConfig.customReward2?.showSommRewards2
-                          ? "SOMM Rewards ends in"
-                          : "Rewards ends in"
-                      } ${formatDistanceToNowStrict(
-                        new Date(stackingEndDate)
-                      )}`
-                }
-                color="neutral.100"
-                border="0"
-                fontSize="12px"
-                bg="neutral.900"
-                fontWeight={600}
-                py="4"
-                px="6"
-                boxShadow="xl"
-                shouldWrapChildren
-              >
-                <HStack spacing={1}>
-                  <CircularProgress
-                    value={percentage}
-                    color="white"
-                    trackColor="none"
-                    size="25px"
-                  >
-                    <CircularProgressLabel
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <LogoIcon
-                        mx="auto"
-                        color="red.normal"
-                        p={0}
-                        boxSize="9px"
-                      />
-                    </CircularProgressLabel>
-                  </CircularProgress>
-                </HStack>
-              </Tooltip>
-            )}
-          {rewardsApy &&
-            (cellarConfig.customReward?.showSommRewards ===
-              undefined ||
-              cellarConfig.customReward?.showSommRewards) && (
-              <Tooltip
-                label={
-                  cellarConfig.customReward
-                    ?.customSommRewardsEndMessage
-                    ? cellarConfig.customReward
-                        .customSommRewardsEndMessage
-                    : `${
-                        cellarConfig.customReward?.showSommRewards
-                          ? "SOMM Rewards ends in"
-                          : "Rewards ends in"
-                      } ${formatDistanceToNowStrict(
-                        new Date(stackingEndDate)
-                      )}`
-                }
-                color="neutral.100"
-                border="0"
-                fontSize="12px"
-                bg="neutral.900"
-                fontWeight={600}
-                py="4"
-                px="6"
-                boxShadow="xl"
-                shouldWrapChildren
-              >
-                <HStack spacing={1}>
-                  <CircularProgress
-                    value={percentage}
-                    color="white"
-                    trackColor="none"
-                    size="25px"
-                  >
-                    <CircularProgressLabel
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <LogoComponent2
-                        mx="auto"
-                        color="red.normal"
-                        p={0}
-                        boxSize="9px"
-                      />
-                    </CircularProgressLabel>
-                  </CircularProgress>
-                </HStack>
-              </Tooltip>
-            )}
         </HStack>
       </Stack>
     )

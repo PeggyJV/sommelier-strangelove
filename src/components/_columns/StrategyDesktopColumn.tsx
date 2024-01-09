@@ -289,7 +289,7 @@ export const StrategyDesktopColumn = ({
         if (launchDate && launchDate > Date.now()) {
           return (
             <Text fontWeight={550} fontSize="16px" textAlign="right">
-              
+              --
             </Text>
           )
         }
@@ -300,9 +300,7 @@ export const StrategyDesktopColumn = ({
             rewardsApy={row.original.rewardsApy?.formatted}
             stackingEndDate={row.original.stakingEnd?.endDate}
             date={row.original.launchDate}
-            baseApySumRewards={
-              row.original.baseApySumRewards?.formatted
-            }
+            baseApySumRewards={row.original.baseApySumRewards?.value}
             extraRewardsApy={row.original.extraRewardsApy?.formatted}
           />
         )

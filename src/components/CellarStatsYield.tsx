@@ -57,7 +57,14 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
       {...rest}
     >
       <VStack spacing={1} align="center">
-        <Apy apy={baseApySumRewards?.formatted ?? ""} />
+        <Apy
+          apy={
+            `${parseFloat(
+              baseApySumRewards?.value +
+                (cellarConfig?.customrewardsAPY2 || 0)
+            ).toFixed(2)} %` ?? ""
+          }
+        />
         <Tooltip
           hasArrow
           placement="top"
@@ -74,7 +81,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                 <>
                   <Text>
                     {cellarConfig.customReward?.showSommRewards
-                      ? `SOMM Rewards APY Cellar stats ${
+                      ? `SOMM Rewards APY Cellar${
                           rewardsApy?.formatted ?? "0.00%"
                         }`
                       : null}
@@ -86,29 +93,21 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                         cellarConfig.customReward?.showAPY
                           ? `${cellarConfig.customReward.tokenDisplayName} `
                           : ""
-                      }Rewards APY cellar stats ${
+                      }Rewards APY cellar${
                         rewardsApy?.formatted ?? "0.00%"
                       }`}
                   </Text>
                   {/* Add the content from cellarRewards2 here */}
-                  <Text>
-                    {cellarConfig.customReward2?.showSommRewards2
-                      ? `SOMM Rewards TEST APY cellar stats ${
-                          rewardsApy?.formatted ?? "0.00%"
-                        }`
-                      : null}
-                  </Text>
-                  <Text>
-                    {cellarConfig.customReward2
-                      ?.customRewardAPYTooltip2 ??
-                      `${
-                        cellarConfig.customReward2?.showAPY2
-                          ? `${cellarConfig.customReward2.tokenDisplayName2} `
-                          : ""
-                      }Rewards TEST APY cellar stats ${
-                        rewardsApy?.formatted ?? "0.00%"
-                      }`}
-                  </Text>
+                  {cellarConfig.customReward2
+                    ?.customRewardAPYTooltip2 && (
+                    <Text>
+                      {
+                        cellarConfig.customReward2
+                          ?.customRewardAPYTooltip2
+                      }{" "}
+                      {cellarConfig.customrewardsAPY2}%
+                    </Text>
+                  )}
                 </>
               )}
             </>
