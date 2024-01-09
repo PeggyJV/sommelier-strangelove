@@ -104,15 +104,15 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
       cellarConfig.cellar.address,
       cellarConfig.chain.id
     )
+  const netValue = userData?.userStrategyData.userData?.netValue
+  const userStakes = userData?.userStakes
 
+  const staticCelarConfig = cellarConfig
   // Declare state for previewRedeemParams at the top
   const [previewRedeemParams, setPreviewRedeemParams] = useState({
     cellarConfig: cellarConfig || {},
     value: "0",
   })
-
-  // Extract userStakes from userData after it's defined
-  const userStakes = userData?.userStakes
 
   useEffect(() => {
     const totalShares =
