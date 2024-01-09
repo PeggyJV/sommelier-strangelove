@@ -50,16 +50,23 @@ import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import { useNetwork } from "wagmi"
+import { useEffect, useState } from "react"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
   const { isConnected } = useAccount()
-  const id = useRouter().query.id as string
-  const cellarConfig = cellarDataMap[id].config
+  const router = useRouter()
+  const id = router.query.id as string
+  const cellarConfig = cellarDataMap[id]?.config // Ensure cellarConfig is safely accessed
+
+  if (!cellarConfig) {
+    // Handle the scenario where cellarConfig is not available
+    return <div>Loading...</div>
+  }
+
   const slug = cellarDataMap[id].slug
   const dashboard = cellarDataMap[id].dashboard
-
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(
     depositTokens,
@@ -76,45 +83,49 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
       cellarConfig.cellar.address,
       cellarConfig.chain.id
     )
-  let { data: userData, isLoading: isUserDataLoading } =
-    useUserStrategyData(
-      cellarConfig.cellar.address,
-      cellarConfig.chain.id
-    )
-
   const activeAsset = strategyData?.activeAsset
   const stakingEnd = strategyData?.stakingEnd
   const bondingPeriods = bondingPeriodOptions(cellarConfig)
   const maxMultiplier = bondingPeriods[
     bondingPeriods.length - 1
   ]?.amount.replace("SOMM", "")
-
   const isStakingAllowed = stakingEnd?.endDate
     ? isFuture(stakingEnd.endDate)
     : false
 
-  // Make sure the user is on the same chain as the strategy
   const { chain: wagmiChain } = useNetwork()
   let buttonsEnabled = true
-  if (strategyData?.config.chain.wagmiId !== wagmiChain?.id!) {
-    // Override userdata so as to not confuse people if they're on the wrong chain
-    userData = undefined
-    lpTokenData = undefined
+  if (strategyData?.config.chain.wagmiId !== wagmiChain?.id) {
     buttonsEnabled = false
   }
 
-  const netValue = userData?.userStrategyData.userData?.netValue
-  const userStakes = userData?.userStakes
+  let { data: userData, isLoading: isUserDataLoading } =
+    useUserStrategyData(
+      cellarConfig.cellar.address,
+      cellarConfig.chain.id
+    )
 
-  const staticCelarConfig = cellarConfig
-
-  const totalShares =
-    userData?.userStrategyData.userData?.totalShares.value
-  const { data, isLoading } = useGetPreviewRedeem({
-    cellarConfig: staticCelarConfig,
-    value: totalShares?.toString(),
+  // Declare state for previewRedeemParams at the top
+  const [previewRedeemParams, setPreviewRedeemParams] = useState({
+    cellarConfig: cellarConfig || {},
+    value: "0",
   })
 
+  // Extract userStakes from userData after it's defined
+  const userStakes = userData?.userStakes
+
+  useEffect(() => {
+    const totalShares =
+      userData?.userStrategyData.userData?.totalShares.value
+    if (totalShares && cellarConfig) {
+      setPreviewRedeemParams({
+        cellarConfig: cellarConfig,
+        value: totalShares.toString(),
+      })
+    }
+  }, [userData, cellarConfig])
+
+  const { data, isLoading } = useGetPreviewRedeem(previewRedeemParams)
   return (
     <TransparentCard
       {...props}
