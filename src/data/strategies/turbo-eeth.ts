@@ -93,9 +93,9 @@ export const turboeETH: CellarData = {
       },
     ],
     customReward: {
-      showAPY: false,
-      tokenSymbol: "eETH",
-      tokenDisplayName: "eETH",
+      showAPY: true,
+      tokenSymbol: "weETH",
+      tokenDisplayName: "weETH",
       tokenAddress: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
       imagePath: "/assets/icons/eETH.svg",
       customRewardMessageTooltip:
@@ -105,7 +105,7 @@ export const turboeETH: CellarData = {
       showBondingRewards: true,
       showClaim: true,
       customClaimMsg: "Claim All SOMM",
-      customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
+      //customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
       logo: EETHIcon,
       logoSize: "15px",
       customRewardLongMessage:
