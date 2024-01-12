@@ -63,7 +63,7 @@ export const WithdrawButton: VFC<
           >
             {props.isDeprecated
               ? "Withdraw Only"
-              : "Instant Withdraw"}
+              : "Withdraw"}
           </SecondaryButton>
         </Tooltip>
         <WithdrawModal isOpen={isOpen} onClose={closeModal} />
