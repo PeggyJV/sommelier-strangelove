@@ -283,6 +283,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                           }
                         />
                       </HStack>
+                      {/*
                       <>
                         <WithdrawQueueButton
                           chain={cellarConfig.chain}
@@ -295,6 +296,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                           showTooltip={true}
                         />
                       </>
+                        */}
                     </VStack>
                   </>
                 ) : (
