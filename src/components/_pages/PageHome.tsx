@@ -293,13 +293,13 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      {
+      {/* {
         <InfoBanner
           text={
             "A new incentive program for Real Yield ETH is progressing through governance. If it passes, rewards will begin Jan 10."
           }
         />
-      }
+      } */}
       {/* <HStack
         p={4}
         mb={6}
