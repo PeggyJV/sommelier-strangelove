@@ -58,6 +58,8 @@ export const Menu: VFC<MenuProps> = ({
 
   const rawDepositAmount = watch("depositAmount")
   const depositTokenConfig = getTokenConfig(depositTokens, cellarConfig.chain.id) as Token[]
+  console.log("depositTokenConfig", depositTokenConfig)
+  console.log("tokens", depositTokens)
   const [selectedToken, setSelectedToken] = useState<
     Token | undefined
   >(depositTokenConfig[0]) // First one is always active asset

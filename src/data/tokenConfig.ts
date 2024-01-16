@@ -376,8 +376,8 @@ src: "/assets/icons/somm.png",
     chain: chainSlugMap.ETHEREUM.id,
   },
 ]
-
-let acceptedDepositTokens = [
+// --- ETH ACCEPTED TOKENS ---
+let acceptedETHDepositTokens = [
   "USDC",
   "GHO",
   "USDT",
@@ -408,18 +408,42 @@ let acceptedDepositTokens = [
   "BUSD",
 ]
 
-let depositTokenMap = tokenConfig.reduce((map, token) => {
-  if (acceptedDepositTokens.includes(token.symbol)) {
+let depositTokenMapETH = tokenConfig.reduce((map, token) => {
+  if (acceptedETHDepositTokens.includes(token.symbol)) {
     map[token.symbol] = token
   }
   return map
 }, {} as { [symbol: string]: Token })
 
 // sort map by symbol
-export const acceptedDepositTokenMap = Object.keys(depositTokenMap)
+export const acceptedETHDepositTokenMap = Object.keys(depositTokenMapETH)
   .sort()
   .reduce((obj, key) => {
-    obj[key] = depositTokenMap[key]
+    obj[key] = depositTokenMapETH[key]
+    return obj
+  }, {} as { [symbol: string]: Token })
+
+// --- ARB ACCEPTED TOKENS ---
+let acceptedARBDepositTokens = [
+  "USDC",
+  "USDT",
+  "DAI",
+]
+
+let depositTokenMapARB = tokenConfig.reduce((map, token) => {
+  if (acceptedARBDepositTokens.includes(token.symbol)) {
+    map[token.symbol] = token
+  }
+  return map
+}, {} as { [symbol: string]: Token })
+
+// sort map by symbol
+export const acceptedARBDepositTokenMap = Object.keys(
+  depositTokenMapARB
+)
+  .sort()
+  .reduce((obj, key) => {
+    obj[key] = depositTokenMapARB[key]
     return obj
   }, {} as { [symbol: string]: Token })
 

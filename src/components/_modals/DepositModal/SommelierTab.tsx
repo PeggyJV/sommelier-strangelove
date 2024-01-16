@@ -70,9 +70,13 @@ import {
   EnsoRouteConfig,
   getEnsoRouterAddress,
 } from "data/hooks/useEnsoRoutes"
-import { acceptedDepositTokenMap } from "src/data/tokenConfig"
+import {
+  acceptedETHDepositTokenMap,
+  acceptedARBDepositTokenMap,
+} from "src/data/tokenConfig"
 import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
+import { chainConfig, chainSlugMap } from "data/chainConfig"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -80,19 +84,27 @@ interface DepositModalProps
 }
 
 function scientificToDecimalString(num: number) {
-    // If the number is in scientific notation, split it into base and exponent
-    const sign = Math.sign(num);
-    let [base, exponent] = num.toString().split('e').map(item => parseInt(item, 10));
+  // If the number is in scientific notation, split it into base and exponent
+  const sign = Math.sign(num)
+  let [base, exponent] = num
+    .toString()
+    .split("e")
+    .map((item) => parseInt(item, 10))
 
-    // Adjust for negative exponent
-    if (exponent < 0) {
-        let decimalString = Math.abs(base).toString();
-        let padding = Math.abs(exponent) - 1;
-        return (sign < 0 ? "-" : "") + "0." + "0".repeat(padding) + decimalString;
-    }
+  // Adjust for negative exponent
+  if (exponent < 0) {
+    let decimalString = Math.abs(base).toString()
+    let padding = Math.abs(exponent) - 1
+    return (
+      (sign < 0 ? "-" : "") +
+      "0." +
+      "0".repeat(padding) +
+      decimalString
+    )
+  }
 
-    // Handle positive exponent or non-scientific numbers (which won't be split)
-    return num.toString();
+  // Handle positive exponent or non-scientific numbers (which won't be split)
+  return num.toString()
 }
 
 //! This handles all deposits, not just the tab
@@ -109,14 +121,26 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const [slippageValue, setSlippageValue] = useState("3")
   const theme = useTheme()
 
+  let acceptedDepositTokenMap = {}
+
   // Drop active asset from deposit tokens to put active asset at the top of the token list
+  if (cellarConfig.chain.id === chainSlugMap.ETHEREUM.id) {
+    acceptedDepositTokenMap = acceptedETHDepositTokenMap
+  } else if (cellarConfig.chain.id === chainSlugMap.ARBITRUM.id) {
+    acceptedDepositTokenMap = acceptedARBDepositTokenMap
+  } else {
+    throw new Error(
+      `Need to create new accepted token map for chain: ${cellarConfig.chain.id}`
+    )
+  }
+
   let depositTokens = Object.keys(acceptedDepositTokenMap).filter(
     (token) => token !== cellarConfig.baseAsset.symbol
   )
   depositTokens.unshift(cellarConfig.baseAsset.symbol)
 
   const { addToast, update, close, closeAll } = useBrandedToast()
-  
+
   const currentStrategies =
     window.location.pathname?.split("/")[2]?.replace(/-/g, " ") ||
     id.replace(/-/g, " ") ||
@@ -151,7 +175,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+  const { refetch } = useUserStrategyData(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
+  )
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
@@ -184,7 +211,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
 
   const activeAsset = strategyData?.activeAsset
@@ -522,8 +550,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           body: (
             <Text>
               Your transaction has failed, if it does not work after
-              waiting some time and retrying please
-              send a message in our{" "}
+              waiting some time and retrying please send a message in
+              our{" "}
               {
                 <Link
                   href="https://discord.com/channels/814266181267619840/814279703622844426"
@@ -936,7 +964,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   }
   return (
     <>
-      
       <VStack pb={10} spacing={6} align="stretch">
         <VStack align="stretch">
           {/* <CardHeading>Strategy details</CardHeading> */}
@@ -1000,7 +1027,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               color="neutral.300"
             >
               <HStack pr={2} textAlign="center">
-                <Text fontFamily={"inherit"}>Non base asset deposits go through a router and bundle a series of swaps and subsequent vault deposit.</Text>
+                <Text fontFamily={"inherit"}>
+                  Non base asset deposits go through a router and
+                  bundle a series of swaps and subsequent vault
+                  deposit.
+                </Text>
               </HStack>
             </Tooltip>
           ) : null}
