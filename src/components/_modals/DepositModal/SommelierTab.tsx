@@ -346,7 +346,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     // check if approval exists
     const allowance = await erc20Contract.allowance(
       address,
-      isActiveAsset
+      isActiveAsset || cellarData.depositTokens.list.includes(tokenSymbol)
         ? cellarConfig.cellar.address
         : ensoRouterContract.address
     )
@@ -374,7 +374,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
       try {
         const { hash } = await erc20Contract.approve(
-          isActiveAsset
+          isActiveAsset || cellarData.depositTokens.list.includes(tokenSymbol)
             ? cellarConfig.cellar.address
             : ensoRouterContract.address,
           ethers.constants.MaxUint256
@@ -439,7 +439,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
 
-      const response = isActiveAsset
+      const response = isActiveAsset 
         ? await deposit(amtInWei, address)
         : await signer!.sendTransaction({
             to: ensoRouterContract.address,

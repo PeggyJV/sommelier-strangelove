@@ -16,7 +16,7 @@ export interface Token {
  */
 export const tokenConfig: Token[] = [
   {
-src: "/assets/icons/somm.png",
+    src: "/assets/icons/somm.png",
     alt: "Sommelier logo",
     symbol: "axlSOMM",
     address: "0x4e914bbdcde0f455a8ac9d59d3bf739c46287ed2",
@@ -333,8 +333,17 @@ src: "/assets/icons/somm.png",
   {
     src: "/assets/icons/usdc.png",
     alt: "USD Coin logo",
-    symbol: "USDC",
+    symbol: "USDC_e",
     address: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+    coinGeckoId: "usd-coin",
+    decimals: 6,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
+    src: "/assets/icons/usdc.png",
+    alt: "USD Coin logo",
+    symbol: "USDC",
+    address: "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
     coinGeckoId: "usd-coin",
     decimals: 6,
     chain: chainSlugMap.ARBITRUM.id,
