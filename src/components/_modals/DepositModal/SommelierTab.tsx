@@ -298,65 +298,73 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const geo = useGeo()
 
-const queryDepositFeePercent = async (assetAddress: String) => {
-  const response = await cellarSigner?.alternativeAssetData(
-    assetAddress
-  )
+  const queryDepositFeePercent = async (assetAddress: String) => {
+    const response = await cellarSigner?.alternativeAssetData(
+      assetAddress
+    )
 
-  // 4 decimal place precision
-  return Number(response.depositFee) / 10 ** 4
-}
-
-const [depositFee, setDepositFee] = useState<number>(0) // Use lowercase 'number'
-const [isDepositFeeLoading, setIsDepositFeeLoading] =
-  useState<boolean>(false)
-
-useEffect(() => {
-  // Define an async function inside the useEffect
-  const fetchDepositFee = async () => {
-    setIsDepositFeeLoading(true)
-
-    if (selectedToken?.address) {
-      try {
-        const depositFee = await queryDepositFeePercent(
-          selectedToken.address
-        )
-        setDepositFee(depositFee)
-      } catch (error) {
-        console.error("Error fetching deposit fee:", error)
-        setDepositFee(0) // Or handle the error as you see fit
-      }
-    }
-
-    setIsDepositFeeLoading(false)
+    // 4 decimal place precision
+    return Number(response.depositFee) / 10 ** 4
   }
 
-  // Call the async function
-  fetchDepositFee()
-}, [selectedToken])
+  const [depositFee, setDepositFee] = useState<number>(0) // Use lowercase 'number'
+  const [isDepositFeeLoading, setIsDepositFeeLoading] =
+    useState<boolean>(false)
 
+  useEffect(() => {
+    // Define an async function inside the useEffect
+    const fetchDepositFee = async () => {
+      setIsDepositFeeLoading(true)
+
+      if (selectedToken?.address) {
+        try {
+          const depositFee = await queryDepositFeePercent(
+            selectedToken.address
+          )
+          setDepositFee(depositFee)
+        } catch (error) {
+          console.error("Error fetching deposit fee:", error)
+          setDepositFee(0) // Or handle the error as you see fit
+        }
+      }
+
+      setIsDepositFeeLoading(false)
+    }
+
+    // Call the async function
+    fetchDepositFee()
+  }, [selectedToken])
 
   const deposit = async (
     amtInWei: ethers.BigNumber,
-    address?: string
+    address?: string,
+    assetAddress?: string
   ) => {
     if (
-      cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-      cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+      assetAddress !== undefined &&
+      assetAddress.toLowerCase() !==
+        cellarConfig.baseAsset.address.toLowerCase()
     ) {
-      const gasLimitEstimated = await estimateGasLimitWithRetry(
-        cellarSigner?.estimateGas.deposit,
-        cellarSigner?.callStatic.deposit,
-        [amtInWei, address],
-        1000000,
-        2000000
-      )
-      return cellarSigner?.deposit(amtInWei, address, {
-        gasLimit: gasLimitEstimated,
-      })
-    }
+      throw new Error("todo: new deposit function!!!!")
+    } else {
+      if (
+        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+      ) {
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          cellarSigner?.estimateGas.deposit,
+          cellarSigner?.callStatic.deposit,
+          [amtInWei, address],
+          1000000,
+          2000000
+        )
+        return cellarSigner?.deposit(amtInWei, address, {
+          gasLimit: gasLimitEstimated,
+        })
+      }
 
-    return cellarSigner?.deposit(amtInWei, address)
+      return cellarSigner?.deposit(amtInWei, address)
+    }
   }
 
   const onSubmit = async (data: any, e: any) => {
@@ -384,7 +392,8 @@ useEffect(() => {
     // check if approval exists
     const allowance = await erc20Contract.allowance(
       address,
-      isActiveAsset || cellarData.depositTokens.list.includes(tokenSymbol)
+      isActiveAsset ||
+        cellarData.depositTokens.list.includes(tokenSymbol)
         ? cellarConfig.cellar.address
         : ensoRouterContract.address
     )
@@ -412,7 +421,8 @@ useEffect(() => {
 
       try {
         const { hash } = await erc20Contract.approve(
-          isActiveAsset || cellarData.depositTokens.list.includes(tokenSymbol)
+          isActiveAsset ||
+            cellarData.depositTokens.list.includes(tokenSymbol)
             ? cellarConfig.cellar.address
             : ensoRouterContract.address,
           ethers.constants.MaxUint256
@@ -477,8 +487,8 @@ useEffect(() => {
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
 
-      const response = isActiveAsset 
-        ? await deposit(amtInWei, address)
+      const response = (isActiveAsset || cellarData.depositTokens.list.includes(tokenSymbol))
+        ? await deposit(amtInWei, address, data?.selectedToken?.address)
         : await signer!.sendTransaction({
             to: ensoRouterContract.address,
             data: ensoResponse.tx.data,
@@ -1226,9 +1236,7 @@ useEffect(() => {
                   <Tooltip
                     hasArrow
                     label={
-                      depositFee === 0
-                        ? "No deposit fee."
-                        : null
+                      depositFee === 0 ? "No deposit fee." : null
                     }
                     bg="surface.bg"
                     color="neutral.300"
@@ -1326,9 +1334,10 @@ useEffect(() => {
             type="submit"
             isDisabled={
               isDisabled ||
-              ((selectedToken?.symbol !== activeAsset?.symbol && !cellarData.depositTokens.list.includes(
+              (selectedToken?.symbol !== activeAsset?.symbol &&
+                !cellarData.depositTokens.list.includes(
                   selectedToken?.symbol || ""
-                )) &&
+                ) &&
                 (isDisabled ||
                   ensoLoading ||
                   (!ensoLoading && ensoError !== null)))
