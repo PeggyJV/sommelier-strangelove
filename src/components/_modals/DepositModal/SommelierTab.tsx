@@ -1326,7 +1326,9 @@ useEffect(() => {
             type="submit"
             isDisabled={
               isDisabled ||
-              (selectedToken?.symbol !== activeAsset?.symbol &&
+              ((selectedToken?.symbol !== activeAsset?.symbol && !cellarData.depositTokens.list.includes(
+                  selectedToken?.symbol || ""
+                )) &&
                 (isDisabled ||
                   ensoLoading ||
                   (!ensoLoading && ensoError !== null)))
