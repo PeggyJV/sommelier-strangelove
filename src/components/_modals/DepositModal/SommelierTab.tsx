@@ -298,6 +298,44 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const geo = useGeo()
 
+const queryDepositFeePercent = async (assetAddress: String) => {
+  const response = await cellarSigner?.alternativeAssetData(
+    assetAddress
+  )
+
+  // 4 decimal place precision
+  return Number(response.depositFee) / 10 ** 4
+}
+
+const [depositFee, setDepositFee] = useState<number>(0) // Use lowercase 'number'
+const [isDepositFeeLoading, setIsDepositFeeLoading] =
+  useState<boolean>(false)
+
+useEffect(() => {
+  // Define an async function inside the useEffect
+  const fetchDepositFee = async () => {
+    setIsDepositFeeLoading(true)
+
+    if (selectedToken?.address) {
+      try {
+        const depositFee = await queryDepositFeePercent(
+          selectedToken.address
+        )
+        setDepositFee(depositFee)
+      } catch (error) {
+        console.error("Error fetching deposit fee:", error)
+        setDepositFee(0) // Or handle the error as you see fit
+      }
+    }
+
+    setIsDepositFeeLoading(false)
+  }
+
+  // Call the async function
+  fetchDepositFee()
+}, [selectedToken])
+
+
   const deposit = async (
     amtInWei: ethers.BigNumber,
     address?: string
@@ -1160,6 +1198,54 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 </InputGroup>
               </Box>
             )}
+          </HStack>
+          <HStack justify="space-between">
+            <HStack spacing={1} align="center">
+              <Tooltip
+                hasArrow
+                label="The percentage fee you will pay to deposit into the vault."
+                bg="surface.bg"
+                color="neutral.300"
+                textAlign="center"
+              >
+                <HStack spacing={1} align="center">
+                  <CardHeading fontSize="small">
+                    Deposit Fee
+                  </CardHeading>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+            </HStack>
+            {cellarData.depositTokens.list.includes(
+              selectedToken?.symbol || ""
+            ) ? (
+              <>
+                {isDepositFeeLoading ? (
+                  <Spinner size="md" paddingRight={"1em"} />
+                ) : (
+                  <Tooltip
+                    hasArrow
+                    label={
+                      depositFee === 0
+                        ? "No deposit fee."
+                        : null
+                    }
+                    bg="surface.bg"
+                    color="neutral.300"
+                    textAlign="center"
+                  >
+                    <HStack pr={2}>
+                      {depositFee === 0 ? (
+                        <GreenCheckCircleIcon />
+                      ) : null}
+                      <Text fontFamily={"inherit"}>
+                        {depositFee === 0 ? "None" : `${depositFee}%`}
+                      </Text>
+                    </HStack>
+                  </Tooltip>
+                )}
+              </>
+            ) : null}
           </HStack>
           {!cellarData.depositTokens.list.includes(
             selectedToken?.symbol || ""
