@@ -12,6 +12,7 @@ import {
 import { useImportToken } from "hooks/web3/useImportToken"
 import { Text } from "@chakra-ui/react"
 import { config } from "utils/config"
+import { tokenConfigMap } from "data/tokenConfig"
 
 export const useBridgeSommToEthTx = () => {
   const { addToast, update, closeAll } = useBrandedToast()
@@ -126,14 +127,15 @@ export const useBridgeSommToEthTx = () => {
                 display="block"
                 mt={3}
                 onClick={() => {
-                  const fullImageUrl = `${window.origin}${config.CONTRACT.SOMMELLIER.IMAGE_PATH}`;
+                  const fullImageUrl = `${window.origin}${tokenConfigMap.SOMM_ETHEREUM.src}`; // TODO: Change once bridge supports other chains
                   importToken.mutate({
-                    address: config.CONTRACT.SOMMELLIER.ADDRESS,
+                    address: tokenConfigMap.SOMM_ETHEREUM.address,
                     imageUrl: fullImageUrl,
-                  });
+                    chain: tokenConfigMap.SOMM_ETHEREUM.chain,
+                  })
                 }}
               >
-                Import SOMM tokens to wallet
+                Import SOMM token to wallet
               </Text>
             </>
           ),

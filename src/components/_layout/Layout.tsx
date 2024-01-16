@@ -2,13 +2,17 @@ import { VFC } from "react"
 import { Box, Container, Flex, FlexProps } from "@chakra-ui/react"
 import { Nav } from "../Nav"
 import Footer from "../Footer"
-import { useAccount, useNetwork } from "wagmi"
+import { useAccount } from "wagmi"
 import { WrongNetworkBanner } from "../_banners/WrongNetworkBanner"
 import { useIsMounted } from "hooks/utils/useIsMounted"
+import { Chain } from "src/data/chainConfig"
 
-export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
+interface LayoutProps extends FlexProps {
+  chainObj?: Chain
+}
+
+export const Layout: VFC<LayoutProps> = ({ chainObj, children, ...rest }) => {
   const { isConnected } = useAccount()
-  const { chain } = useNetwork()
   const isMounted = useIsMounted()
 
   return (
@@ -23,8 +27,8 @@ export const Layout: VFC<FlexProps> = ({ children, ...rest }) => {
             maxW="1300px"
             px={{ base: 0, sm: 4 }}
           >
-            {isMounted && isConnected && chain?.id !== 1 && (
-              <WrongNetworkBanner />
+            {isMounted && isConnected && (
+              <WrongNetworkBanner chain={chainObj} />
             )}
 
             {children}

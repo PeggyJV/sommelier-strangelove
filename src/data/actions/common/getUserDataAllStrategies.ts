@@ -11,17 +11,27 @@ export const getUserDataAllStrategies = async ({
   strategiesData,
   userAddress,
   sommPrice,
+  chain,
 }: {
   allContracts: AllContracts
   strategiesData: AllStrategiesData
   userAddress: string
   sommPrice: string
+  chain: string
 }) => {
   const userDataRes = await Promise.all(
     Object.entries(allContracts)?.map(
-      async ([address, contracts]) => {
+      async ([key, contracts]) => {
+        // Only get data for the current chain
+        if (contracts.chain !== chain) {
+          return
+        }
+
+        // If chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
+        const address = key.split("-")[0]
+
         const strategyData = strategiesData.find(
-          (item) => item?.address === address
+          (item) => item?.address === address && item.config.chain.id === contracts.chain
         )
 
         const result = await reactQueryClient.fetchQuery(
@@ -33,8 +43,9 @@ export const getUserDataAllStrategies = async ({
             const strategy = Object.values(cellarDataMap).find(
               ({ config }) =>
                 config.cellar.address.toLowerCase() ===
-                address.toLowerCase()
+                address.toLowerCase() && config.chain.id === contracts.chain
             )!
+
             const config: ConfigProps = strategy.config!
 
             const baseAsset = config.baseAsset
@@ -51,6 +62,7 @@ export const getUserDataAllStrategies = async ({
                 strategyData: strategyData,
                 userAddress,
                 baseAssetPrice: baseAssetPrice!,
+                chain: contracts.chain,
               })
             } catch (error) {
               console.log("error", error)

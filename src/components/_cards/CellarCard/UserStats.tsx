@@ -20,7 +20,7 @@ export const UserStats: React.FC<Props> = ({
 
   const cellarConfig = cellarDataMap[data.cellarId].config
   const { data: userData } = useUserStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const netValue = userData?.userStrategyData.userData.netValue
   const userStakes = userData?.userStakes

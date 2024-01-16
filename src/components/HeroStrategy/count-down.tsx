@@ -6,7 +6,6 @@ import {
   Link,
   Icon,
 } from "@chakra-ui/react"
-import { analytics } from "utils/analytics"
 import { format, utcToZonedTime } from "date-fns-tz"
 import { FC } from "react"
 import Countdown from "react-countdown"

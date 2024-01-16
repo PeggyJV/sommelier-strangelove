@@ -10,6 +10,7 @@ import {
   Spacer,
   Stack,
   Text,
+  Tooltip,
   useTheme,
   VStack,
 } from "@chakra-ui/react"
@@ -20,6 +21,7 @@ import { BondButton } from "components/_buttons/BondButton"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
+import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
@@ -39,38 +41,51 @@ import {
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
-import { VFC } from "react"
+import { useEffect, useState, VFC } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { formatDecimals } from "utils/bigNumber"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
-import { useAccount } from "wagmi"
+import { useAccount, useContract, useSigner } from "wagmi"
 import BondingTableCard from "../BondingTableCard"
 import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
+import { useNetwork } from "wagmi"
+import WithdrawQueueCard from "../WithdrawQueueCard"
+import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
+import { add } from "lodash"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
-  const { isConnected } = useAccount()
+  const { address, isConnected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const slug = cellarDataMap[id].slug
   const dashboard = cellarDataMap[id].dashboard
 
   const depositTokens = cellarDataMap[id].depositTokens.list
-  const depositTokenConfig = getTokenConfig(depositTokens) as Token[]
+  const depositTokenConfig = getTokenConfig(
+    depositTokens,
+    cellarConfig.chain.id
+  ) as Token[]
 
   const { lpToken } = useUserBalances(cellarConfig)
-  const { data: lpTokenData } = lpToken
+  let { data: lpTokenData } = lpToken
   const lpTokenDisabled =
     !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
 
   const { data: strategyData, isLoading: isStrategyLoading } =
-    useStrategyData(cellarConfig.cellar.address)
-  const { data: userData, isLoading: isUserDataLoading } =
-    useUserStrategyData(cellarConfig.cellar.address)
+    useStrategyData(
+      cellarConfig.cellar.address,
+      cellarConfig.chain.id
+    )
+  let { data: userData, isLoading: isUserDataLoading } =
+    useUserStrategyData(
+      cellarConfig.cellar.address,
+      cellarConfig.chain.id
+    )
 
   const activeAsset = strategyData?.activeAsset
   const stakingEnd = strategyData?.stakingEnd
@@ -83,6 +98,16 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     ? isFuture(stakingEnd.endDate)
     : false
 
+  // Make sure the user is on the same chain as the strategy
+  const { chain: wagmiChain } = useNetwork()
+  let buttonsEnabled = true
+  if (strategyData?.config.chain.wagmiId !== wagmiChain?.id!) {
+    // Override userdata so as to not confuse people if they're on the wrong chain
+    userData = undefined
+    lpTokenData = undefined
+    buttonsEnabled = false
+  }
+
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
 
@@ -94,6 +119,48 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     cellarConfig: staticCelarConfig,
     value: totalShares?.toString(),
   })
+
+  // Query withdraw queue status, disable queue button if there is active withdraw pending to prevent confusion
+  const { data: signer } = useSigner()
+  const withdrawQueueContract = useContract({
+    address: cellarConfig.chain.withdrawQueueAddress,
+    abi: withdrawQueueV0821,
+    signerOrProvider: signer,
+  })!
+
+  const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
+    useState(false)
+
+  // Check if a user has an active withdraw request
+  const checkWithdrawRequest = async () => {
+    try {
+      if (withdrawQueueContract && address && cellarConfig) {
+        const withdrawRequest =
+          await withdrawQueueContract?.getUserWithdrawRequest(
+            address,
+            cellarConfig.cellar.address
+          )
+
+        // Check if it's valid
+        const isWithdrawRequestValid =
+          await withdrawQueueContract?.isWithdrawRequestValid(
+            cellarConfig.cellar.address,
+            address,
+            withdrawRequest
+          )
+        setIsActiveWithdrawRequest(isWithdrawRequestValid)
+      } else {
+        setIsActiveWithdrawRequest(false)
+      }
+    } catch (error) {
+      console.log(error)
+      setIsActiveWithdrawRequest(false)
+    }
+  }
+
+  useEffect(() => {
+    checkWithdrawRequest()
+  }, [withdrawQueueContract, address, cellarConfig])
 
   return (
     <TransparentCard
@@ -116,9 +183,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               base: "repeat(1, max-content)",
               md: "repeat(2, max-content)",
             }}
-            templateRows="1fr 1fr"
-            spacing={4}
-            alignItems="flex-end"
           >
             <CardStat
               label="Net Value"
@@ -197,18 +261,53 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               {isMounted &&
                 (isConnected ? (
                   <>
-                    {!strategyData?.deprecated && (
-                      <DepositButton
-                        disabled={!isConnected || strategyData?.isContractNotReady}
-                      />
-                    )}
-                    <WithdrawButton
-                      isDeprecated={strategyData?.deprecated}
-                      disabled={lpTokenDisabled}
-                    />
+                    <VStack
+                      spacing={3}
+                      width="100%"
+                      paddingTop={"1em"}
+                    >
+                      <HStack>
+                        {!strategyData?.deprecated && (
+                          <DepositButton
+                            disabled={
+                              !isConnected ||
+                              strategyData?.isContractNotReady ||
+                              !buttonsEnabled
+                            }
+                          />
+                        )}
+                        <WithdrawButton
+                          isDeprecated={strategyData?.deprecated}
+                          disabled={
+                            lpTokenDisabled || !buttonsEnabled
+                          }
+                        />
+                      </HStack>
+                      {/*
+                      <>
+                        <WithdrawQueueButton
+                          chain={cellarConfig.chain}
+                          buttonLabel="Enter Withdraw Queue"
+                          disabled={
+                            lpTokenDisabled ||
+                            !buttonsEnabled ||
+                            isActiveWithdrawRequest
+                          }
+                          showTooltip={true}
+                        />
+                      </>
+                        */}
+                    </VStack>
                   </>
                 ) : (
-                  <ConnectButton unstyled />
+                  <>
+                    <HStack paddingTop={"1em"}>
+                      <ConnectButton
+                        overrideChainId={cellarConfig.chain.id}
+                        unstyled
+                      />
+                    </HStack>
+                  </>
                 ))}
             </Stack>
           </SimpleGrid>
@@ -263,7 +362,11 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                     {isBondButtonEnabled(cellarConfig) &&
                       isStakingAllowed &&
                       isMounted && (
-                        <BondButton disabled={lpTokenDisabled} />
+                        <BondButton
+                          disabled={
+                            lpTokenDisabled || !buttonsEnabled
+                          }
+                        />
                       )}
                   </>
                 )}
@@ -443,6 +546,15 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   Boolean(userStakes?.userStakes.length) && (
                     <BondingTableCard />
                   )}
+              </LighterSkeleton>
+            )}
+            {isConnected && isActiveWithdrawRequest && (
+              <LighterSkeleton
+                h={!isUserDataLoading ? "none" : "100px"}
+                borderRadius={24}
+                isLoaded={!isUserDataLoading}
+              >
+                {isConnected && <WithdrawQueueCard />}
               </LighterSkeleton>
             )}
           </>

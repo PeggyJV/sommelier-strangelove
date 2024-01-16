@@ -22,11 +22,13 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { isArray } from "lodash"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import { VFC } from "react"
+import { VFC, useState, useEffect } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { TransparentCard } from "./TransparentCard"
+import { useNetwork } from "wagmi"
+
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
@@ -63,10 +65,13 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     slug,
     config: { id },
   } = cellarDataMap[cellarId]
+
   const filterTokenConfig = tokenConfig.filter(
     (obj, index) =>
       tokenConfig.findIndex(
-        (token) => token.symbol === obj.symbol
+        (token) =>
+          token.symbol === obj.symbol &&
+          token.chain == cellarDataMap[cellarId].config.chain.id
       ) === index
   )
   const cellarStrategyAssets = filterTokenConfig.filter((token) =>
@@ -80,11 +85,28 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     (performanceSplit["strategy provider"] ?? 0)
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const activeAsset = strategyData?.activeAsset
+  const { chain } = useNetwork()
 
   const isManyProtocols = isArray(protocols)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    window.addEventListener("resize", handleResize)
+
+    // Call handler right away so state gets updated with initial window size
+    handleResize()
+
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   const protocolData = isManyProtocols
     ? protocols.map((v) => {
         return {
@@ -122,6 +144,20 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           spacing={4}
           px={{ base: 6, sm: 0 }}
         >
+          <CardStat
+            label="chain"
+            flex={0}
+            tooltip="The chain the vault is deployed on"
+          >
+            <Image
+              src={cellarConfig.chain.logoPath}
+              alt={cellarConfig.chain.alt}
+              boxSize={6}
+              mr={2}
+              background={"transparent"}
+            />
+            {cellarConfig.chain.displayName}
+          </CardStat>
           <CardStat
             label="vault type"
             flex={0}
@@ -171,7 +207,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             justifyContent="normal"
           >
             <VStack>
-              <HStack>
+              <HStack width="100%">
                 <CardStat
                   label="Platform Fee"
                   flex={0}
@@ -197,15 +233,13 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 </CardStat>
               </HStack>
               {cellarConfig.feePromotion && (
-                <Text
-                  fontSize="sm"
-                  fontWeight="bold"
-                >
+                <Text fontSize="sm" fontWeight="bold">
                   {cellarConfig.feePromotion}
                 </Text>
               )}
             </VStack>
           </Stack>
+          {isMobile ? <br /> : <></>}
           <CardStat
             label="strategy assets"
             tooltip="Strategy will have exposure to 1 or more of these assets at any given time"
@@ -220,7 +254,9 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           </CardStat>
           <CardStat label="Link to contract" flex={0}>
             <Link
-              href={`https://etherscan.io/address/${id.toLowerCase()}`}
+              href={`${
+                cellarConfig.chain.blockExplorer.url
+              }/address/${id.toLowerCase()}`}
               target="_blank"
             >
               {`${name} `}

@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { PearlIcon } from "components/_icons"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboSWETH: CellarData = {
   name: "Turbo swETH",
@@ -19,19 +20,19 @@ export const turboSWETH: CellarData = {
   description: `Turbocharge your swETH across an evolving set of LP strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "1.00%",
+  managementFee: "0.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
   protocols: ["Uniswap V3", "Balancer", "Morpho"],
   strategyAssets: ["swETH", "WETH"],
   performanceSplit: {
-    depositors: 80,
-    "strategy provider": 15,
-    protocol: 5,
+    depositors: 100, //80,
+    "strategy provider": 0, //15,
+    protocol: 0, //5,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
-    title: "Seven Seas & DeFine Logic Labs",
+    title: "Seven Seas",
     href: "https://sevenseas.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
@@ -91,7 +92,6 @@ export const turboSWETH: CellarData = {
       abi: config.CONTRACT.TURBO_SWETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
     customReward: {
       showAPY: false,
       tokenSymbol: "PEARL",
@@ -110,7 +110,7 @@ export const turboSWETH: CellarData = {
       logo: PearlIcon,
       logoSize: "15px",
       customRewardLongMessage:
-        "Earn up to 12 PEARL per swETH of TVL deposited when you bond.",
+        "Earn up to 6 PEARL per swETH of TVL deposited when you bond.",
       rewardHyperLink: "https://app.swellnetwork.io/voyage",
       customColumnHeader: "View Pearls",
       customColumnHeaderToolTip:
@@ -122,18 +122,19 @@ export const turboSWETH: CellarData = {
         Date.UTC(2023, 11, 5, 0, 0, 0, 0)
       ),
     },
-    baseAsset: tokenConfigMap.WETH,
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
     feePromotion: "Promotional 0 fee period sponsored by Swell",
     badges: [
       {
         customStrategyHighlight: "Emergent Asset",
         customStrategyHighlightColor: "purple.base",
       },
-      /*{
+      {
         customStrategyHighlight: "swETH Incentives",
         customStrategyHighlightColor: "#00C04B",
-      },*/
+      },
     ],
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

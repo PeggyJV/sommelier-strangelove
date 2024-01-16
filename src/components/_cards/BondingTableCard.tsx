@@ -34,8 +34,8 @@ import { useGeo } from "context/geoContext"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { differenceInDays } from "date-fns"
-import { config } from "utils/config"
 import { FaExternalLinkAlt } from "react-icons/fa"
+import { tokenConfig } from "data/tokenConfig"
 
 // TODO: This file has incurred substantial tech debt, it just needs to be rewritten from scratch at this point
 
@@ -53,13 +53,13 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const {
     data: userData,
     isLoading,
     refetch,
-  } = useUserStrategyData(cellarConfig.cellar.address)
+  } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
     new Set()
@@ -67,6 +67,12 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const [unstakeLoading, setUnstakeLoading] = useState<Set<number>>(
     new Set()
   )
+
+  const sommToken = tokenConfig.find(
+    (token) =>
+      token.coinGeckoId === "sommelier" &&
+      token.chain === cellarConfig.chain.id
+  )!
 
   const stakingEnd = strategyData?.stakingEnd
   const userDatas = userData?.userStakes
@@ -90,6 +96,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
       const tx = await stakerSigner?.unstake(id)
 
       await doHandleTransaction({
+        cellarConfig,
         ...tx,
         onSuccess: () => analytics.track("unstake.succeeded"),
         onError: () => analytics.track("unstake.failed"),
@@ -122,10 +129,11 @@ const BondingTableCard: VFC<TableProps> = (props) => {
       // analytics.track("unbond.started")
       const tx = await stakerSigner?.unbond(id, {
         // gas used around 63000
-        gasLimit: 100000,
+        //gasLimit: 100000,
       })
 
       await doHandleTransaction({
+        cellarConfig,
         ...tx,
         onSuccess: () => analytics.track("unbond.succeeded"),
         onError: () => analytics.track("unbond.failed"),
@@ -430,8 +438,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                                 src={
                                   cellarConfig?.customReward
                                     ?.imagePath ??
-                                  config.CONTRACT.SOMMELLIER
-                                    .IMAGE_PATH
+                                  sommToken.src
                                 }
                                 alt="reward token image"
                                 height="20px"
@@ -481,12 +488,14 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                     ) : null}
                     <Td>
                       {/*!!!!!!!! TODO: this needs to be rewritten */}
-                      {cellarConfig.customReward?.showSommRewards || cellarConfig.customReward?.showSommRewards === undefined ? (
+                      {cellarConfig.customReward?.showSommRewards ||
+                      cellarConfig.customReward?.showSommRewards ===
+                        undefined ? (
                         <>
                           <HStack spacing={2}>
                             <Image
                               src={
-                                config.CONTRACT.SOMMELLIER.IMAGE_PATH
+                                sommToken.src
                               }
                               alt="reward token image"
                               height="20px"

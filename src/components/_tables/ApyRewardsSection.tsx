@@ -46,7 +46,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   let endDate = new Date(stackingEndDate).getTime()
 
   if (stackingEndDate === undefined) {
-    endDate = cellarConfig.customReward?.stakingDurationOverride?.getTime()!
+    endDate =
+      cellarConfig.customReward?.stakingDurationOverride?.getTime()!
   }
 
   const startDate = subDays(endDate, 30).getTime()
@@ -267,6 +268,47 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                 </HStack>
               </Tooltip>
             )}
+          {extraRewardsApy && (
+            <Tooltip
+              label={` ${cellarConfig.customReward?.tokenDisplayName}
+                        Rewards ends in
+                      ${formatDistanceToNowStrict(
+                        new Date(stackingEndDate)
+                      )}`}
+              color="neutral.100"
+              border="0"
+              fontSize="12px"
+              bg="neutral.900"
+              fontWeight={600}
+              py="4"
+              px="6"
+              boxShadow="xl"
+              shouldWrapChildren
+            >
+              <HStack spacing={1}>
+                <CircularProgress
+                  value={percentage}
+                  color="white"
+                  trackColor="none"
+                  size="25px"
+                >
+                  <CircularProgressLabel
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <LogoComponent
+                      mx="auto"
+                      color="red.normal"
+                      p={0}
+                      boxSize={
+                        cellarConfig.customReward?.logoSize ?? "9px"
+                      }
+                    />
+                  </CircularProgressLabel>
+                </CircularProgress>
+              </HStack>
+            </Tooltip>
+          )}
         </HStack>
       </Stack>
     )

@@ -45,7 +45,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   const cellarConfig = cellarDataMap[data.cellarId].config
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const launchDate = strategyData?.launchDate
   const protocols = strategyData?.protocols!

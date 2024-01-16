@@ -18,7 +18,6 @@ import {
 } from "data/uiConfig"
 import { ConfigProps } from "data/types"
 import { debounce } from "lodash"
-import { analytics } from "utils/analytics"
 import { PercentageText } from "./PercentageText"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
@@ -36,7 +35,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
   })
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
   const dailyChange = strategyData?.changes?.daily

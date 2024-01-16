@@ -1,4 +1,4 @@
-import { Box, Button, Link, Text } from "@chakra-ui/react"
+import { Box, Link, Text } from "@chakra-ui/react"
 import { HeroStrategy } from "components/HeroStrategy"
 import { Highlight } from "components/Highlight"
 import { ArrowLeftIcon } from "components/_icons"

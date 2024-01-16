@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { EETHIcon } from "components/_icons"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboeETH: CellarData = {
   name: "Turbo eETH",
@@ -62,6 +63,7 @@ export const turboeETH: CellarData = {
     list: ["WETH"],
   },
   config: {
+    chain: chainSlugMap.ETHEREUM,
     id: config.CONTRACT.TURBO_EETH.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_EETH,
     lpToken: {
@@ -79,7 +81,7 @@ export const turboeETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.WETH,
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [
       {
         customStrategyHighlight: "Emergent Asset",
@@ -91,9 +93,9 @@ export const turboeETH: CellarData = {
       },
     ],
     customReward: {
-      showAPY: false,
-      tokenSymbol: "eETH",
-      tokenDisplayName: "eETH",
+      showAPY: true,
+      tokenSymbol: "weETH",
+      tokenDisplayName: "weETH",
       tokenAddress: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
       imagePath: "/assets/icons/eETH.svg",
       customRewardMessageTooltip:
@@ -103,7 +105,7 @@ export const turboeETH: CellarData = {
       showBondingRewards: true,
       showClaim: true,
       customClaimMsg: "Claim All SOMM",
-      customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
+      //customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
       logo: EETHIcon,
       logoSize: "15px",
       customRewardLongMessage:
@@ -114,12 +116,12 @@ export const turboeETH: CellarData = {
         "View your ether.fi Loyalty Points at https://app.ether.fi/portfolio",
       customColumnValue: "https://app.ether.fi/portfolio",
       stakingDurationOverride: new Date(
-        Date.UTC(2024, 0, 28, 14, 0, 0, 0)
+        Date.UTC(2024, 1, 3, 14, 0, 0, 0)
       ),
       showSommRewards: true,
       customIconToolTipMsg:
         "Boosted ether.fi Loyalty Points ends in ",
-      showOnlyBaseApy: true,
+      showOnlyBaseApy: false,
     },
     staker: {
       address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,

@@ -21,7 +21,9 @@ import { toEther } from "utils/formatCurrency"
 import { useFormContext } from "react-hook-form"
 import { BridgeFormValues } from "."
 import { InformationIcon } from "components/_icons"
-import { config } from "utils/config"
+import { useNetwork } from "wagmi"
+import { chainConfig } from "data/chainConfig"
+import { tokenConfig } from "data/tokenConfig"
 
 export const InputAmount: React.FC = () => {
   const { register, setValue, formState, getFieldState, watch } =
@@ -33,9 +35,21 @@ export const InputAmount: React.FC = () => {
   const isError = !!getFieldState("amount").error
   const [isActive, setActive] = useState(false)
   const { address, isConnecting } = useAccount()
+
+  // Get chain id
+  const { chain } = useNetwork()
+  const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)!
+  const sommToken = tokenConfig.find(
+    (t) => t.coinGeckoId === "sommelier" && t.chain === "ethereum"
+  )!
+  // TODO: Change to below once we adjust for multichain
+  //const sommToken = tokenConfig.find(
+  //  (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj.id
+  //)!
+
   const { data, error, isLoading } = useBalance({
     address: address,
-    token: getAddress(config.CONTRACT.SOMMELLIER.ADDRESS),
+    token: getAddress(sommToken.address),
     watch: true,
   })
 

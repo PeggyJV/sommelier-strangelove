@@ -7,11 +7,12 @@ import {
   CellarType,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboSTETHstETHDeposit: CellarData = {
   name: "Turbo stETH",
   slug: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG,
-  tradedAssets: ["stETH", "wstETH","WETH"],
+  tradedAssets: ["stETH", "wstETH", "WETH"],
   launchDate: new Date(Date.UTC(2023, 11, 7, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
@@ -21,7 +22,7 @@ export const turboSTETHstETHDeposit: CellarData = {
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
   protocols: ["AAVE", "Morpho", "Uniswap V3", "Balancer"],
-  strategyAssets: ["stETH", "wstETH","WETH"],
+  strategyAssets: ["stETH", "wstETH", "WETH"],
   performanceSplit: {
     depositors: 100,
     "strategy provider": 0,
@@ -65,6 +66,8 @@ export const turboSTETHstETHDeposit: CellarData = {
     list: ["stETH"],
   },
   config: {
+    chain: chainSlugMap.ETHEREUM,
+    baseAsset: tokenConfigMap.stETH_ETHEREUM,
     id: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_STETH_STETH_DEPOSIT,
     lpToken: {
@@ -82,7 +85,7 @@ export const turboSTETHstETHDeposit: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.stETH,
+    show7DayAPYTooltip: true,
     badges: [
       {
         customStrategyHighlight: "Deposit stETH!",

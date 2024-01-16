@@ -7,6 +7,7 @@ import {
   CellarType,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const realYieldSNX: CellarData = {
   name: "Real Yield SNX",
@@ -29,7 +30,7 @@ export const realYieldSNX: CellarData = {
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
-    title: "Seven Seas & DeFine Logic Labs",
+    title: "Seven Seas",
     href: "https://sevenseas.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
@@ -71,7 +72,8 @@ The purpose of this vault is to provide token holders with a passive yield oppor
       key: CellarKey.CELLAR_V2,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.SNX,
+    baseAsset: tokenConfigMap.SNX_ETHEREUM,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

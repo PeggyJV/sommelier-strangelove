@@ -5,16 +5,18 @@ import { Link } from "components/Link"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { ExternalLinkIcon } from "components/_icons"
 import { useGeo } from "context/geoContext"
+import { chainConfig } from "data/chainConfig"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { tokenConfig } from "data/tokenConfig"
 import { ConfigProps } from "data/types"
 import { useBrandedToast } from "hooks/chakra"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useHandleTransaction } from "hooks/web3"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { analytics } from "utils/analytics"
-import { config } from "utils/config"
 import { useAccount } from "wagmi"
+import { useNetwork } from "wagmi"
 
 export const Rewards = ({
   cellarConfig,
@@ -24,11 +26,18 @@ export const Rewards = ({
   const isMounted = useIsMounted()
   const { isConnected } = useAccount()
   const { data: userData, refetch } = useUserStrategyData(
-    cellarConfig.cellar.address
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const { userStakes } = userData || {}
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const { addToast, close } = useBrandedToast()
+
+  const { chain: wagmiChain } = useNetwork()
+  let buttonsEnabled = true
+  if (cellarConfig.chain.wagmiId !== wagmiChain?.id!) {
+    buttonsEnabled = false
+  }
 
   const importToken = useImportToken({
     onSuccess: (data) => {
@@ -49,15 +58,25 @@ export const Rewards = ({
       })
     },
   })
+
   const userRewards =
     userStakes?.totalClaimAllRewards?.value.toString()
 
   const claimAllDisabled =
-    !isConnected || !userRewards || parseInt(userRewards) <= 0
+    !isConnected || !userRewards || parseInt(userRewards) <= 0 || !buttonsEnabled
 
-  let rewardTokenAddress = config.CONTRACT.SOMMELLIER.ADDRESS
-  let rewardTokenImageUrl = config.CONTRACT.SOMMELLIER.IMAGE_PATH
-  let rewardTokenName = "SOMM"
+  // Get somm token
+  const chainObj = chainConfig.find(
+    (c) => c.id === cellarConfig.chain.id
+  )!
+
+  const sommToken = tokenConfig.find(
+    (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj.id
+  )!
+
+  let rewardTokenAddress = sommToken.address
+  let rewardTokenImageUrl = sommToken.src
+  let rewardTokenName = sommToken.symbol
 
   // Custom processing for if reward is not SOMM
   // -- Check if cellar config has customReward field
@@ -80,6 +99,7 @@ export const Rewards = ({
     // analytics.track("rewards.claim-started")
     const tx = await stakerSigner?.claimAll()
     await doHandleTransaction({
+      cellarConfig,
       ...tx,
       onSuccess: () => {
         refetch()
@@ -95,10 +115,10 @@ export const Rewards = ({
               <Link
                 display="flex"
                 alignItems="center"
-                href={`https://etherscan.io/tx/${result?.data?.transactionHash}`}
+                href={`${cellarConfig.chain.blockExplorer.url}/tx/${result?.data?.transactionHash}`}
                 isExternal
               >
-                <Text as="span">View on Etherscan</Text>
+                <Text as="span">{`View on ${cellarConfig.chain.blockExplorer.name}`}</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
               <Text
@@ -106,6 +126,7 @@ export const Rewards = ({
                   importToken.mutate({
                     address: rewardTokenAddress,
                     imageUrl: fullImageUrl,
+                    chain: cellarConfig.chain.id,
                   })
                 }}
                 textDecor="underline"
@@ -181,7 +202,7 @@ export const Rewards = ({
                 tooltip={`Amount of SOMM earned and available to be claimed`}
               >
                 <InlineImage
-                  src={config.CONTRACT.SOMMELLIER.IMAGE_PATH}
+                  src={sommToken.src}
                   alt={`SOMM logo`}
                   boxSize={5}
                 />

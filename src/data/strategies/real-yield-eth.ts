@@ -8,6 +8,7 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const realYieldEth: CellarData = {
   name: "Real Yield ETH",
@@ -34,7 +35,7 @@ export const realYieldEth: CellarData = {
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
-    title: "Seven Seas & DeFine Logic Labs",
+    title: "Seven Seas",
     href: "https://7seas.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
@@ -84,8 +85,8 @@ export const realYieldEth: CellarData = {
       abi: config.CONTRACT.REAL_YIELD_ETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    rewardTokenAddress: config.CONTRACT.SOMMELLIER.ADDRESS,
-    baseAsset: tokenConfigMap.WETH,
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

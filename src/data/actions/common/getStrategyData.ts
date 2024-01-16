@@ -41,7 +41,7 @@ export const getStrategyData = async ({
       const strategy = Object.values(cellarDataMap).find(
         ({ config }) =>
           config.cellar.address.toLowerCase() ===
-          address.toLowerCase()
+          address.toLowerCase() && config.chain.id === contracts.chain
       )!
       const config: ConfigProps = strategy.config!
       const decimals = config.baseAsset.decimals
@@ -70,7 +70,10 @@ export const getStrategyData = async ({
         process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
 
       const activeAsset = await (async () => {
-        const tokenInfo = getTokenByAddress(config.baseAsset.address)
+        const tokenInfo = getTokenByAddress(
+          config.baseAsset.address,
+          config.chain.id
+        )
         return { ...tokenInfo, ...config.baseAsset }
       })()
 
@@ -82,7 +85,7 @@ export const getStrategyData = async ({
         const assets = strategy.tradedAssets
         if (!assets) return
         const tokens = assets.map((v) => {
-          const token = getTokenBySymbol(v)
+          const token = getTokenBySymbol(v, config.chain.id)
           return token
         })
 
@@ -138,9 +141,7 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      let extraRewardsApy = {
-        value: 0,
-      }
+      let extraRewardsApy = undefined
       // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
       /** 
       if (strategy.slug === utilConfig.CONTRACT.TURBO_GHO.SLUG) {
@@ -164,24 +165,22 @@ export const getStrategyData = async ({
         }
       }
       */
-
-      /*
+    
       if (strategy.slug === utilConfig.CONTRACT.TURBO_EETH.SLUG) {
         // Get TVL
         let usdTvl = Number(strategyData?.tvlTotal)
 
-        // $2k worth of eETH per month * 12 months * 100 for human readable %
+        // $2.7k worth of eETH per month * 12 months * 100 for human readable %
         // TODO: Update this  + expiration date in config weekly as long as eETH incentives live
-        let apy = ((2000) / usdTvl) * 12 * 100
+        let apy = ((2700) / usdTvl) * 12 * 100
 
         extraRewardsApy = {
           formatted: apy.toFixed(2).toString() + "%",
           value: apy,
-          tokenSymbol: "eETH",
+          tokenSymbol: "weETH",
           tokenIcon: EETHIcon,
         }
       }
-      */
 
       const baseApy = (() => {
         if (config.show7DayAPYTooltip === true) {

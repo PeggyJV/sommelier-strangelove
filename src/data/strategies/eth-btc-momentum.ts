@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { depositAssetTokenList } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
+import { chainSlugMap } from "data/chainConfig"
 
 export const ethBtcMomentum: CellarData = {
   deprecated: true,
@@ -115,7 +116,8 @@ export const ethBtcMomentum: CellarData = {
       abi: config.CONTRACT.ETH_BTC_MOMENTUM_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0815,
     },
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

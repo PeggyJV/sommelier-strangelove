@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { GHOIcon } from "components/_icons"
+import { chainSlugMap } from "data/chainConfig"
 
 export const turboGHO: CellarData = {
   name: "Turbo GHO",
@@ -31,7 +32,7 @@ export const turboGHO: CellarData = {
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
-    title: "Seven Seas & DeFine Logic Labs",
+    title: "Seven Seas",
     href: "https://sevenseas.capital/",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
@@ -90,7 +91,7 @@ export const turboGHO: CellarData = {
       abi: config.CONTRACT.TURBO_GHO_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
-    baseAsset: tokenConfigMap.USDC,
+    baseAsset: tokenConfigMap.USDC_ETHEREUM,
     badges: [
       {
         customStrategyHighlight: "Emergent Asset",
@@ -132,7 +133,8 @@ export const turboGHO: CellarData = {
     customRewardEndMessage: "Rewards updated weekly",
     customSommRewardsEndMessage: "SOMM Rewards updated weekly",
     },
-       */
+    */
+    chain: chainSlugMap.ETHEREUM,
   },
   faq: [
     {

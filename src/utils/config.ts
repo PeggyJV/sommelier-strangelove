@@ -17,21 +17,10 @@ export const config = {
     SLIPPAGE: 0.5,
   },
   CONTRACT: {
-    USDC: {
-      ADDRESS: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-      ABI: erc20ABI,
-    },
-    DAI: {
-      ADDRESS: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-      ABI: erc20ABI,
-    },
-    WETH: {
-      ADDRESS: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-      ABI: erc20ABI,
-    },
-    UST: {
-      ADDRESS: "0xa693B19d2931d498c5B318dF961919BB4aee87a5",
-      ABI: erc20ABI,
+    TEST_ARBITRUM_REAL_YIELD_USD: {
+      ADDRESS: "0xA73B0B48E26E4B8B24CeaD149252cc275deE99A6",
+      SLUG: "Real-Yield-USD-Arbitrum",
+      ABI: cellarV0821,
     },
     DEFI_PULSE: {
       ADDRESS: "0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b",
@@ -40,12 +29,6 @@ export const config = {
     FEI: {
       ADDRESS: "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
       ABI: erc20ABI,
-    },
-    SOMMELLIER: {
-      ADDRESS: "0xa670d7237398238de01267472c6f13e5b8010fd1",
-      DECIMALS: 6,
-      ABI: erc20ABI,
-      IMAGE_PATH: "/assets/icons/somm.png",
     },
     BRIDGE: {
       ADDRESS: "0x69592e6f9d21989a043646fE8225da2600e5A0f7",
@@ -255,6 +238,10 @@ export const config = {
     },
     TURBO_GHO_STAKER: {
       ADDRESS: "0x6e5bb558D6C33Ca45dc9eFE0746a3C80BC3E70e1",
+      ABI: cellarStakingV0821,
+    },
+    TEST_ARBITRUM_REAL_YIELD_USD_STAKER: {
+      ADDRESS: "0xD7FE9DB494B28c55920700eA6E9347c49290A510",
       ABI: cellarStakingV0821,
     },
     TURBO_EETH_STAKER: {
