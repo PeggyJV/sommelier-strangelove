@@ -122,6 +122,7 @@ export const getUserData = async ({
       return totalAssets.multipliedBy(baseAssetPrice)
     })()
 
+
     const userStrategyData = {
       strategyData,
       userData: {

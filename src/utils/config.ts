@@ -6,6 +6,7 @@ import ensoRouterABI from "../abi/enso-router.json"
 import cellarV0815 from "../abi/cellar-v0.8.15.json"
 import cellarV0816 from "../abi/cellar-v0.8.16.json"
 import cellarV0821 from "../abi/cellar-v0.8.21.json"
+import cellarV0821MultiDeposit from "../abi/cellar-v0.8.21_multiDeposit.json"
 import gravityBridge from "../abi/gravityBridge.json"
 import { erc20ABI } from "wagmi"
 
@@ -17,6 +18,11 @@ export const config = {
     SLIPPAGE: 0.5,
   },
   CONTRACT: {
+    TEST_ARBITRUM_MULTI_ASSET_DEPOSIT: {
+      ADDRESS: "0x02b0Ad08BFc8D0cC3E0e5907D95898C4Ef464F9C",
+      SLUG: "MultiAsset-Deposit-Arbitrum",
+      ABI: cellarV0821MultiDeposit,
+    },
     TEST_ARBITRUM_REAL_YIELD_USD: {
       ADDRESS: "0xA73B0B48E26E4B8B24CeaD149252cc275deE99A6",
       SLUG: "Real-Yield-USD-Arbitrum",
@@ -241,6 +247,10 @@ export const config = {
       ABI: cellarStakingV0821,
     },
     TEST_ARBITRUM_REAL_YIELD_USD_STAKER: {
+      ADDRESS: "0xD7FE9DB494B28c55920700eA6E9347c49290A510",
+      ABI: cellarStakingV0821,
+    },
+    TEST_ARBITRUM_MULTI_ASSET_DEPOSIT_STAKER: {
       ADDRESS: "0xD7FE9DB494B28c55920700eA6E9347c49290A510",
       ABI: cellarStakingV0821,
     },

@@ -27,12 +27,14 @@ import {
   testArbitrumRealYieldUsd,
   turboeETH,
   turboSTETHstETHDeposit,
+  testArbitrumMultiAssetDeposit,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
+  [config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.SLUG]: testArbitrumMultiAssetDeposit, // Multi deposit asset test cellar
   [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
   [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]:
     turboSTETHstETHDeposit,
@@ -64,8 +66,9 @@ cellarConfig = {
 // ! For not ethereum cellars the key must be {cellarAddress}-{chainId}
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
-  [config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS.toLowerCase() +
-  "-arbitrum"]: testArbitrumRealYieldUsd,
+  [config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS.toLowerCase() +"-arbitrum"]: testArbitrumRealYieldUsd,
+  [config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.ADDRESS.toLowerCase() +
+  "-arbitrum"]: testArbitrumMultiAssetDeposit,
   [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS.toLowerCase()]:
     turboSTETHstETHDeposit,
   [config.CONTRACT.TURBO_EETH.ADDRESS.toLowerCase()]: turboeETH,
