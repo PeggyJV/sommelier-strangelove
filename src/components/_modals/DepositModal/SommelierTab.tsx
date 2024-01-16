@@ -123,6 +123,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   let acceptedDepositTokenMap = {}
 
+  // TODO: Clean and enable below for enso
+  /* 
   // Drop active asset from deposit tokens to put active asset at the top of the token list
   if (cellarConfig.chain.id === chainSlugMap.ETHEREUM.id) {
     acceptedDepositTokenMap = acceptedETHDepositTokenMap
@@ -133,10 +135,15 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       `Need to create new accepted token map for chain: ${cellarConfig.chain.id}`
     )
   }
+  */
 
-  let depositTokens = Object.keys(acceptedDepositTokenMap).filter(
+  let depositTokens: string[] = cellarData.depositTokens.list
+  // Drop base asset from deposit token list
+  depositTokens = depositTokens.filter(
     (token) => token !== cellarConfig.baseAsset.symbol
   )
+
+  // Put base asset at the top of the token list
   depositTokens.unshift(cellarConfig.baseAsset.symbol)
 
   const { addToast, update, close, closeAll } = useBrandedToast()
@@ -1019,7 +1026,26 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
-          {selectedToken?.symbol !== activeAsset?.symbol ? (
+          {cellarData.depositTokens.list.includes(
+            selectedToken?.symbol || ""
+          ) && selectedToken?.symbol !== activeAsset?.symbol ? (
+            <Tooltip
+              hasArrow
+              //label=""
+              bg="surface.bg"
+              color="neutral.300"
+              textAlign="center"
+            >
+              <HStack pr={2} textAlign="center">
+                <Text fontFamily={"inherit"}>
+                  Alternative deposit assets are still deposited
+                  directly into the vault, however incur a small fee
+                  due to how positions are managed at the smart
+                  contract level.
+                </Text>
+              </HStack>
+            </Tooltip>
+          ) : selectedToken?.symbol !== activeAsset?.symbol ? (
             <Tooltip
               hasArrow
               //label=""
@@ -1046,6 +1072,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 label="Percent of price slippage you are willing to accept for a trade. Higher slippage tolerance means your transaction is more likely to succeed, but you may get a worse price."
                 bg="surface.bg"
                 color="neutral.300"
+                textAlign="center"
               >
                 <HStack spacing={1} align="center">
                   <CardHeading fontSize="small">
@@ -1055,12 +1082,15 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 </HStack>
               </Tooltip>
             </HStack>
-            {selectedToken?.symbol === activeAsset?.symbol ? (
+            {cellarData.depositTokens.list.includes(
+              selectedToken?.symbol || ""
+            ) ? (
               <Tooltip
                 hasArrow
-                label="No slippage when depositing with a vault's base asset."
+                label="No slippage when depositing directly into a vault."
                 bg="surface.bg"
                 color="neutral.300"
+                textAlign="center"
               >
                 <HStack pr={2}>
                   <GreenCheckCircleIcon></GreenCheckCircleIcon>
@@ -1131,7 +1161,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               </Box>
             )}
           </HStack>
-          {selectedToken?.symbol !== activeAsset?.symbol ? (
+          {!cellarData.depositTokens.list.includes(
+            selectedToken?.symbol || ""
+          ) ? (
             ensoError !== null &&
             watchDepositAmount !== 0 &&
             !isNaN(watchDepositAmount) ? (
@@ -1152,6 +1184,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                     label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
                     bg="surface.bg"
                     color="neutral.300"
+                    textAlign="center"
                   >
                     <HStack spacing={1} align="center">
                       <CardHeading fontSize="small">

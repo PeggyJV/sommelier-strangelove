@@ -25,7 +25,9 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { ActiveAssetIcon } from "components/_icons"
+import { ActiveAssetIcon, CellarGradientIcon, CellarIcon, CheckIcon, ExpandIcon, LoadingIcon, MoneyWalletIcon } from "components/_icons"
+import { SuccessIcon } from "components/_icons/SuccessIcon"
+import { PlusIcon } from "components/_icons/PlusIcon"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -58,8 +60,6 @@ export const Menu: VFC<MenuProps> = ({
 
   const rawDepositAmount = watch("depositAmount")
   const depositTokenConfig = getTokenConfig(depositTokens, cellarConfig.chain.id) as Token[]
-  console.log("depositTokenConfig", depositTokenConfig)
-  console.log("tokens", depositTokens)
   const [selectedToken, setSelectedToken] = useState<
     Token | undefined
   >(depositTokenConfig[0]) // First one is always active asset
@@ -203,6 +203,10 @@ export const Menu: VFC<MenuProps> = ({
                   token.address.toUpperCase() ===
                   activeAsset?.toUpperCase()
 
+                const isCellerDepositAsset =
+                  cellarData.depositTokens.list.includes
+                  (token.symbol.toUpperCase()) && !isActiveAsset
+
                 // Set default selected token to active asset.
                 if (isActiveAsset && !value) onChange(token)
 
@@ -239,6 +243,23 @@ export const Menu: VFC<MenuProps> = ({
                             />
                             <Text fontSize="xs" fontWeight={600}>
                               Base asset
+                            </Text>
+                          </HStack>
+                        )}
+                        {isCellerDepositAsset && (
+                          <HStack
+                            justifyItems={"right"}
+                            width="100%"
+                            justifyContent="flex-end"
+                            alignItems="flex-start"
+                            p={3}
+                          >
+                            <CellarGradientIcon
+                              boxSize={3}
+                              alignSelf="center"
+                            />
+                            <Text fontSize="xs" fontWeight={600}>
+                              Alt Deposit asset
                             </Text>
                           </HStack>
                         )}

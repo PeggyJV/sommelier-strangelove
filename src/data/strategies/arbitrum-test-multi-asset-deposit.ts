@@ -64,7 +64,7 @@ export const testArbitrumMultiAssetDeposit: CellarData = {
       `,
   },
   depositTokens: {
-    list: ["USDC"],
+    list: ["USDC", "DAI", "USDT"],
   },
   config: {
     id: config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.ADDRESS,
