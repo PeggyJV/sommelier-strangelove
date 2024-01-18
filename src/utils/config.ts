@@ -40,10 +40,10 @@ export const config = {
       ADDRESS: "0x69592e6f9d21989a043646fE8225da2600e5A0f7",
       ABI: gravityBridge,
     },
-    CLEAR_GATE_TEST_CELLAR_A: {
-      ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
-      ABI: cellarV0816,
-    },
+    // CLEAR_GATE_TEST_CELLAR_A: {
+    //   ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
+    //   ABI: cellarV0816,
+    // },
     CLEAR_GATE_TEST_CELLAR_B: {
       ADDRESS: "0x8bdd3d5b889f3d0d735eb4db5d87782df2b4647d",
       ABI: cellarV0816,
@@ -174,6 +174,12 @@ export const config = {
       SLUG: "Turbo-STETH-(steth-deposit)",
       ABI: cellarV0821,
     },
+    //need to update
+    TURBO_OSETH: {
+      ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
+      SLUG: "Turbo-osETH",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -261,6 +267,11 @@ export const config = {
     ENSO_ROUTER: {
       ADDRESS: "0x80EbA3855878739F4710233A8a19d89Bdd2ffB8E",
       ABI: ensoRouterABI,
+    },
+    //need to update
+    TURBO_OSETH_STAKER: {
+      ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
+      ABI: cellarStakingV0821,
     },
   },
   cleargate: {

@@ -384,6 +384,15 @@ export const tokenConfig: Token[] = [
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
   },
+  {
+    src: "/assets/icons/osETH.png",
+    alt: "osETH logo",
+    symbol: "osETH",
+    address: "0xf1c9acdc66974dfb6decb12aa385b9cd01190e38",
+    coinGeckoId: "stakewise-v3-oseth",
+    decimals: 18,
+    chain: chainSlugMap.ETHEREUM.id,
+  },
 ]
 // --- ETH ACCEPTED TOKENS ---
 let acceptedETHDepositTokens = [
@@ -415,6 +424,8 @@ let acceptedETHDepositTokens = [
   "eETH",
   "swETH",
   "BUSD",
+  "osETH",
+  "rETH",
 ]
 
 let depositTokenMapETH = tokenConfig.reduce((map, token) => {
@@ -425,7 +436,9 @@ let depositTokenMapETH = tokenConfig.reduce((map, token) => {
 }, {} as { [symbol: string]: Token })
 
 // sort map by symbol
-export const acceptedETHDepositTokenMap = Object.keys(depositTokenMapETH)
+export const acceptedETHDepositTokenMap = Object.keys(
+  depositTokenMapETH
+)
   .sort()
   .reduce((obj, key) => {
     obj[key] = depositTokenMapETH[key]
