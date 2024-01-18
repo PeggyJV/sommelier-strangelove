@@ -6,12 +6,12 @@ import {
   IconButton,
   Image,
   Flex,
-  HStack,
+  HStack
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import { BaseButton } from "components/_buttons/BaseButton"
 import ConnectButton from "components/_buttons/ConnectButton"
-import { BridgeFormValues } from "components/_cards/BridgeCard"
+import { BridgeFormValues, Chain } from "components/_cards/BridgeCard"
 import { EthereumAddress } from "components/_cards/BridgeCard/EthereumAddress"
 import { InputAmount } from "components/_cards/BridgeCard/InputAmount"
 import { InputEthereumAddress } from "components/_cards/BridgeCard/InputEthereumAddress"
@@ -30,6 +30,8 @@ import { useBridgeSommToEthTx } from "hooks/web3/useBridgeSommToEthTx"
 import { useEffect, VFC } from "react"
 import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
+import { ChainSelector } from "components/ChainSelector";
+import { Cosmos, Eth, Optimism, Somm } from "components/_cards/BridgeCard/tempTypes";
 
 interface BridgeFormProps {
   wrongNetwork?: boolean
@@ -38,7 +40,7 @@ interface BridgeFormProps {
 export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const { addToast, closeAll } = useBrandedToast()
   const isMounted = useIsMounted()
-  const { watch, handleSubmit, formState, getFieldState, setValue } =
+  const { watch, handleSubmit, formState, getFieldState, register, setValue } =
     useFormContext<BridgeFormValues>()
 
   const watchType = watch("type")
@@ -46,6 +48,8 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const toEth = watchType === "TO_ETHEREUM"
   const watchAmount = watch("amount")
   const watchSommelierAddress = watch("address")
+
+  const chains : Chain[] =  [Eth, Somm, Cosmos, Optimism]
 
   if (wrongNetwork === undefined) {
     wrongNetwork = false
@@ -80,40 +84,6 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const buttonEnabled =
     (isConnected && toSomm) || (isGrazConnected && toEth)
 
-  const Eth = () => (
-    <HStack
-      borderRadius="16px"
-      borderWidth="1px"
-      borderColor="neutral.600"
-      p={2}
-      px={4}
-    >
-      <Image
-        src="/assets/icons/eth.png"
-        alt="eth"
-        w="16px"
-        h="16px"
-      />
-      <Text fontWeight="bold">Ethereum</Text>
-    </HStack>
-  )
-  const Somm = () => (
-    <HStack
-      borderRadius="16px"
-      borderWidth="1px"
-      borderColor="neutral.600"
-      p={2}
-      px={4}
-    >
-      <Image
-        src="/assets/images/coin.png"
-        alt="eth"
-        w="16px"
-        h="16px"
-      />
-      <Text fontWeight="bold">Sommelier</Text>
-    </HStack>
-  )
   return (
     <Stack spacing="40px" alignItems={"center"}>
       <Stack
@@ -128,14 +98,16 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
         <Stack spacing={6}>
           <HStack justifyContent="space-between">
             <Stack flex={1}>
-              <Text
-                fontWeight="bold"
-                color="neutral.400"
-                fontSize="xs"
-              >
-                From
-              </Text>
-              {watchType === "TO_SOMMELIER" ? <Eth /> : <Somm />}
+
+            <FormControl>
+              <ChainSelector
+                  chains={chains.map(chain => chain.name)}
+                  defaultValue={Eth.name}
+                  direction="From"
+                  register={register("from", { required: "Please select a chain" })}
+              />
+
+            </FormControl>
             </Stack>
 
             <Flex
@@ -154,25 +126,26 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
                   />
                 }
                 disabled={isLoading}
-                onClick={() =>
-                  setValue(
-                    "type",
-                    watchType === "TO_SOMMELIER"
-                      ? "TO_ETHEREUM"
-                      : "TO_SOMMELIER"
-                  )
+                onClick={() => {
+                  const fromValue = watch("from");
+                  const toValue = watch("to");
+
+                  setValue("to", fromValue);
+                  setValue("from", toValue);
+                }
                 }
               />
             </Flex>
             <Stack flex={1}>
-              <Text
-                fontWeight="bold"
-                color="neutral.400"
-                fontSize="xs"
-              >
-                To
-              </Text>
-              {watchType === "TO_SOMMELIER" ? <Somm /> : <Eth />}
+              <FormControl>
+                <ChainSelector
+                    chains={chains.map(chain => chain.name)}
+                    defaultValue={Somm.name}
+                    direction="To"
+                    register={register("to", { required: "Please select a chain" })}
+                />
+
+              </FormControl>
             </Stack>
           </HStack>
           {buttonEnabled && !wrongNetwork && (
