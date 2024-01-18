@@ -16,7 +16,6 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { chainSlugMap } from "data/chainConfig"
 import { useBrandedToast } from "hooks/chakra"
-import { Chain, Eth, Somm } from "./tempTypes"
 
 export interface BridgeFormValues {
   amount: number
@@ -33,8 +32,8 @@ export const BridgeCard: React.FC = () => {
   const methods = useForm<BridgeFormValues>({
     defaultValues: {
       type: "TO_SOMMELIER",
-      from: Eth.name,
-      to: Somm.name
+      from: chainSlugMap.ETHEREUM.id,
+      to: chainSlugMap.ARBITRUM.id
     },
   })
   const { switchNetworkAsync } = useSwitchNetwork()

@@ -11,7 +11,7 @@ import {
 import { Link } from "components/Link"
 import { BaseButton } from "components/_buttons/BaseButton"
 import ConnectButton from "components/_buttons/ConnectButton"
-import { BridgeFormValues, Chain } from "components/_cards/BridgeCard"
+import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { EthereumAddress } from "components/_cards/BridgeCard/EthereumAddress"
 import { InputAmount } from "components/_cards/BridgeCard/InputAmount"
 import { InputEthereumAddress } from "components/_cards/BridgeCard/InputEthereumAddress"
@@ -31,7 +31,7 @@ import { useEffect, VFC } from "react"
 import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
 import { ChainSelector } from "components/ChainSelector";
-import { Cosmos, Eth, Optimism, Somm } from "components/_cards/BridgeCard/tempTypes";
+import {chainConfigMap, chainSlugMap} from "data/chainConfig";
 
 interface BridgeFormProps {
   wrongNetwork?: boolean
@@ -48,8 +48,6 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const toEth = watchType === "TO_ETHEREUM"
   const watchAmount = watch("amount")
   const watchSommelierAddress = watch("address")
-
-  const chains : Chain[] =  [Eth, Somm, Cosmos, Optimism]
 
   if (wrongNetwork === undefined) {
     wrongNetwork = false
@@ -101,8 +99,8 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
 
             <FormControl>
               <ChainSelector
-                  chains={chains.map(chain => chain.name)}
-                  defaultValue={Eth.name}
+                  chains={Object.keys(chainConfigMap)}
+                  defaultValue={chainSlugMap.ETHEREUM.id}
                   direction="From"
                   register={register("from", { required: "Please select a chain" })}
               />
@@ -139,8 +137,8 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
             <Stack flex={1}>
               <FormControl>
                 <ChainSelector
-                    chains={chains.map(chain => chain.name)}
-                    defaultValue={Somm.name}
+                    chains={Object.keys(chainConfigMap)}
+                    defaultValue={chainSlugMap.ARBITRUM.id}
                     direction="To"
                     register={register("to", { required: "Please select a chain" })}
                 />
