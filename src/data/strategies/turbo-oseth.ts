@@ -13,7 +13,7 @@ import { chainSlugMap } from "data/chainConfig"
 
 export const turboosETH: CellarData = {
   name: "Turbo osETH",
-  slug: config.CONTRACT.TURBO_EETH.SLUG,
+  slug: config.CONTRACT.TURBO_OSETH.SLUG,
   tradedAssets: ["WETH", "osETH", "rETH"],
   launchDate: new Date(Date.UTC(2024, 1, 24, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
@@ -47,7 +47,7 @@ export const turboosETH: CellarData = {
 
     description: `Gain exposure to osETH liquidity provision opportunities through this dynamic and evolving vault.
     
-    Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Turbo osETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
     risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
 
@@ -71,7 +71,7 @@ export const turboosETH: CellarData = {
     cellarNameKey: CellarNameKey.TURBO_OSETH,
     lpToken: {
       address: config.CONTRACT.TURBO_OSETH.ADDRESS,
-      imagePath: "/assets/icons/Turbo-osETH.png",
+      imagePath: "/assets/icons/turbo-oseth.png",
     },
     //cellar router can be removed?
     cellarRouter: {
@@ -85,12 +85,12 @@ export const turboosETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    staker: {
-      address: config.CONTRACT.TURBO_OSETH_STAKER.ADDRESS,
-      abi: config.CONTRACT.TURBO_OSETH_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0821,
-    },
-    baseAsset: tokenConfigMap.OSETH_ETHEREUM,
+    // staker: {
+    //   address: config.CONTRACT.TURBO_OSETH_STAKER.ADDRESS,
+    //   abi: config.CONTRACT.TURBO_OSETH_STAKER.ABI,
+    //   key: StakerKey.CELLAR_STAKING_V0821,
+    // },
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },
   faq: [
     {

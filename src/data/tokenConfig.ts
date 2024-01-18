@@ -425,7 +425,6 @@ let acceptedETHDepositTokens = [
   "swETH",
   "BUSD",
   "osETH",
-  "rETH",
 ]
 
 let depositTokenMapETH = tokenConfig.reduce((map, token) => {

@@ -268,11 +268,11 @@ export const config = {
       ADDRESS: "0x80EbA3855878739F4710233A8a19d89Bdd2ffB8E",
       ABI: ensoRouterABI,
     },
-    //need to update
-    TURBO_OSETH_STAKER: {
-      ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
-      ABI: cellarStakingV0821,
-    },
+    // //need to update
+    // TURBO_OSETH_STAKER: {
+    //   ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
+    //   ABI: cellarStakingV0821,
+    // },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
