@@ -157,6 +157,12 @@ export const config = {
       SLUG: "Turbo-eETH",
       ABI: cellarV0821,
     },
+    //need to update
+    TURBO_ETHX: {
+      ADDRESS: "0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
+      SLUG: "Turbo-ETHx",
+      ABI: cellarV0821,
+    },
     TURBO_STETH: {
       ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",
       SLUG: "Turbo-STETH",
@@ -247,6 +253,11 @@ export const config = {
       ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
     },
+    //need to update
+    // TURBO_ETHX_STAKER: {
+    //   ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
+    //   ABI: cellarStakingV0821,
+    // },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
