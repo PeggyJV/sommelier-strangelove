@@ -90,7 +90,7 @@ export const turboosETH: CellarData = {
     //   abi: config.CONTRACT.TURBO_OSETH_STAKER.ABI,
     //   key: StakerKey.CELLAR_STAKING_V0821,
     // },
-    baseAsset: tokenConfigMap.WETH_ETHEREUM,
+    baseAsset: tokenConfigMap.osETH_ETHEREUM,
   },
   faq: [
     {
