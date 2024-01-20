@@ -167,6 +167,12 @@ export const config = {
       SLUG: "Turbo-STETH-(steth-deposit)",
       ABI: cellarV0821,
     },
+    //need to update
+    MORPHO_ETH: {
+      ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",
+      SLUG: "Morpho-ETH",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
