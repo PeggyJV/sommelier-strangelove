@@ -86,6 +86,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_OSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
@@ -119,8 +120,10 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_OSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
-    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD 
+    config.cellarNameKey ===
+      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
   )
 }
 
@@ -439,28 +442,48 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-    if (
-      config.cellarNameKey ===
-      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
-    ) {
-      return [
-        {
-          title: "7 Day Unbonding",
-          amount: "1.1x SOMM",
-          value: 0,
-        },
-        {
-          title: "14 Day Unbonding",
-          amount: "1.3x SOMM",
-          value: 1,
-        },
-        {
-          title: "21 Day Unbonding",
-          amount: "1.5x SOMM",
-          value: 2,
-        },
-      ]
-    }
+  //need to update
+  if (config.cellarNameKey === CellarNameKey.TURBO_OSETH) {
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
+  if (
+    config.cellarNameKey ===
+    CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+  ) {
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
   return []
 }
 
@@ -506,6 +529,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+      config.cellarNameKey === CellarNameKey.TURBO_OSETH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
@@ -528,6 +552,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_OSETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
@@ -564,6 +589,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_OSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
   ) {
     return "Estimated APY"
@@ -604,6 +630,13 @@ export const estimatedApyValue = (config: ConfigProps) => {
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_EETH) {
+    return {
+      value: 6.0,
+      formatted: "6.0%",
+    }
+  }
+  //need to update
+  if (config.cellarNameKey === CellarNameKey.TURBO_OSETH) {
     return {
       value: 6.0,
       formatted: "6.0%",
