@@ -64,7 +64,7 @@ export const realYieldUsd: CellarData = {
       `,
   },
   depositTokens: {
-    list: ["USDC", "USDT", "DAI"],
+    list: ["USDC"],
   },
 
   config: {
