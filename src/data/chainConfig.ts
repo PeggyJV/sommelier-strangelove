@@ -13,7 +13,14 @@ export interface Chain {
     name: string
     url: string
   }
-  withdrawQueueAddress: string
+  withdrawQueueAddress: string,
+  type: ChainType
+}
+
+export enum ChainType {
+  L2,
+  Cosmos,
+  Ethereum
 }
 
 /**
@@ -32,6 +39,7 @@ export const chainConfig: Chain[] = [
     blockExplorer: mainnet.blockExplorers.default,
     withdrawQueueAddress:
       "0x5751d75b642975E4E7fdE39f35F9a6c11b867169",
+    type: ChainType.Ethereum
   },
   {
     id: "arbitrum",
@@ -43,8 +51,34 @@ export const chainConfig: Chain[] = [
     alchemyRpcUrl: arbitrum.rpcUrls.alchemy.http[0],
     blockExplorer: arbitrum.blockExplorers.default,
     withdrawQueueAddress:
-      "0x1DF1A219562C643163aF1e5CD1d50b0fD67D21da",
+        "0x1DF1A219562C643163aF1e5CD1d50b0fD67D21da",
+    type: ChainType.L2
   },
+  {
+    id: "sommelier",
+    wagmiId: 0,
+    displayName: "Sommelier",
+    logoPath: "/assets/icons/arbitrum.svg",
+    alt: "Sommelier logo",
+    infuraRpcUrl: "TBA",
+    alchemyRpcUrl: "TBA",
+    blockExplorer: {url: "TBA", name: "TBA"},
+    withdrawQueueAddress: "TBA",
+    type: ChainType.Cosmos
+  },
+  {
+    id: "optimism",
+    wagmiId: 0,
+    displayName: "Optimism",
+    logoPath: "/assets/icons/arbitrum.svg",
+    alt: "Optimism logo",
+    infuraRpcUrl: "TBA",
+    alchemyRpcUrl: "TBA",
+    blockExplorer: {url: "TBA", name: "TBA"},
+    withdrawQueueAddress: "TBA",
+    type: ChainType.L2
+  },
+
 ]
 
 // Create a map from each chain name to its config
@@ -54,7 +88,7 @@ export const chainConfigMap = chainConfig.reduce((map, chain) => {
 }, {} as { [id: string]: Chain })
 
 export const supportedChains = [
-  "ethereum", 
+  "ethereum",
   // TODO: Enable for multichain
   /*/*"arbitrum"*/
 ]
@@ -62,4 +96,6 @@ export const supportedChains = [
 export const chainSlugMap = {
   ETHEREUM: chainConfigMap["ethereum"],
   ARBITRUM: chainConfigMap["arbitrum"],
+  SOMMELIER: chainConfigMap["sommelier"],
+  OPTIMISM: chainConfigMap["optimism"],
 }

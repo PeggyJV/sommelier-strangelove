@@ -1,5 +1,10 @@
-import { ReactElement, VFC } from "react"
-import { Box, Select, SelectProps, Text } from "@chakra-ui/react"
+import React, { ReactElement, VFC } from "react"
+import {
+    Box,
+    Select,
+    SelectProps,
+    Text
+} from "@chakra-ui/react"
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface Props extends SelectProps {
@@ -34,7 +39,10 @@ export const ChainSelector: VFC<Props> = ({
               {...rest}
           >
             {chains.map((chain, i) => (
-                <Box as="option" color="surface.bg" key={i} value={chain}>
+                <Box
+                    as="option"
+                    key={i}
+                    value={chain}>
                   {chain}
                 </Box>
             ))}

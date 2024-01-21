@@ -4,10 +4,9 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react"
-import { ExternalLinkIcon, InformationIcon } from "components/_icons"
+import { InformationIcon } from "components/_icons"
 import React from "react"
 import { TransparentCard } from "../TransparentCard"
-import { Link } from "components/Link"
 import { BridgeForm } from "components/_forms/BridgeForm"
 import { useAccount, useSwitchNetwork, useNetwork } from "wagmi"
 import { FormProvider, useForm } from "react-hook-form"
@@ -32,8 +31,8 @@ export const BridgeCard: React.FC = () => {
   const methods = useForm<BridgeFormValues>({
     defaultValues: {
       type: "TO_SOMMELIER",
-      from: chainSlugMap.ETHEREUM.id,
-      to: chainSlugMap.ARBITRUM.id
+      from: chainSlugMap.ETHEREUM.displayName,
+      to: chainSlugMap.SOMMELIER.displayName
     },
   })
   const { switchNetworkAsync } = useSwitchNetwork()
@@ -124,21 +123,6 @@ export const BridgeCard: React.FC = () => {
         <Heading as="h4" fontSize={24} mb="44px">
           Bridge
         </Heading>
-        <Text fontSize="md" mb="41px">
-          Bridge your Ethereum SOMM back home to its native Cosmos
-          representation on Sommelier or from Sommelier to Ethereum.{" "}
-          <Link
-            ml={1}
-            fontSize="xs"
-            fontWeight="semibold"
-            textDecoration="underline"
-            href="https://www.notion.so/Bridge-UI-88307640a6ab4f649b6a0b3cb6cb4d34"
-            target="_blank"
-          >
-            Read More{" "}
-            <ExternalLinkIcon boxSize={3} color="purple.base" />
-          </Link>
-        </Text>
         {isMounted && (
           <FormProvider {...methods}>
             <BridgeForm wrongNetwork={wagmiChain && wagmiChain.id !== ethChain.wagmiId}/>
