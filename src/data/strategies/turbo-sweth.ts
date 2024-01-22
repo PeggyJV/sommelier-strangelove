@@ -26,9 +26,9 @@ export const turboSWETH: CellarData = {
   protocols: ["Uniswap V3", "Balancer", "Morpho"],
   strategyAssets: ["swETH", "WETH"],
   performanceSplit: {
-    depositors: 100, //80,
-    "strategy provider": 0, //15,
-    protocol: 0, //5,
+    depositors: 80,
+    "strategy provider": 15,
+    protocol: 5,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -123,7 +123,6 @@ export const turboSWETH: CellarData = {
       ),
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
-    feePromotion: "Promotional 0 fee period sponsored by Swell",
     badges: [
       {
         customStrategyHighlight: "Emergent Asset",
