@@ -71,7 +71,7 @@ export const morphoETH: CellarData = {
     cellarNameKey: CellarNameKey.MORPHO_ETH,
     lpToken: {
       address: config.CONTRACT.MORPHO_ETH.ADDRESS,
-      imagePath: "/assets/icons/Morpho-ETH.png",
+      imagePath: "/assets/icons/morpho-eth.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
