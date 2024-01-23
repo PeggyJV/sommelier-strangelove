@@ -10,4 +10,7 @@ export const protocolsImage: { [key: string]: string } = {
   Balancer: `${baseIconPath}/balancer.png`,
   Maker: `${baseIconPath}/maker.svg`,
   "Spark Protocol": `${baseIconPath}/spark.png`,
+  Curve: `${baseIconPath}/crv.png`,
+  Aura: `${baseIconPath}/aura.webp`,
+  Convex: `${baseIconPath}/convex.webp`,
 }

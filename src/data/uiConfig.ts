@@ -86,7 +86,6 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_OSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
@@ -120,7 +119,6 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_OSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey ===
       CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
@@ -509,6 +507,7 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+      config.cellarNameKey === CellarNameKey.TURBO_OSETH ||
       config.cellarNameKey === CellarNameKey.TURBO_SOMM
     ) {
       return "Estimated APY"

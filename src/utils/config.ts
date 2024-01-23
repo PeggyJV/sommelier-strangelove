@@ -169,7 +169,7 @@ export const config = {
     },
     //need to update
     TURBO_OSETH: {
-      ADDRESS: "0xbfc413ea6cb68c05deda0d9aa7daf8e51a7dddff",
+      ADDRESS: "0xF47Cd68Fb1CB26d634f069d78A9a5cA8d7a5cd01",
       SLUG: "Turbo-osETH",
       ABI: cellarV0821,
     },

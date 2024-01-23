@@ -15,7 +15,7 @@ export const turboosETH: CellarData = {
   name: "Turbo osETH",
   slug: config.CONTRACT.TURBO_OSETH.SLUG,
   tradedAssets: ["WETH", "osETH", "rETH"],
-  launchDate: new Date(Date.UTC(2024, 1, 24, 14, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 0, 20, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your osETH exposure in this multi-strategy LP vault.`,
   strategyType: "Yield",
@@ -23,12 +23,12 @@ export const turboosETH: CellarData = {
   managementFee: "1%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Uniswap V3", "Balancer", "Morpho", "AAVE"],
+  protocols: ["Uniswap V3", "Curve", "Balancer", "Aura"],
   strategyAssets: ["WETH", "osETH", "rETH"],
   performanceSplit: {
     depositors: 80,
-    "strategy provider": 16,
-    protocol: 4,
+    "strategy provider": 17,
+    protocol: 3,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -62,6 +62,7 @@ export const turboosETH: CellarData = {
 
   dashboard:
     "https://debank.com/profile/0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e", //need to update
+  //need to update when multi asset deposit
   depositTokens: {
     list: ["WETH"],
   },
@@ -85,7 +86,7 @@ export const turboosETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    //need to update
+    //need to update if staking
     // staker: {
     //   address: config.CONTRACT.TURBO_OSETH_STAKER.ADDRESS,
     //   abi: config.CONTRACT.TURBO_OSETH_STAKER.ABI,
