@@ -63,19 +63,27 @@ interface DepositModalProps
 }
 
 function scientificToDecimalString(num: number) {
-    // If the number is in scientific notation, split it into base and exponent
-    const sign = Math.sign(num);
-    let [base, exponent] = num.toString().split('e').map(item => parseInt(item, 10));
+  // If the number is in scientific notation, split it into base and exponent
+  const sign = Math.sign(num)
+  let [base, exponent] = num
+    .toString()
+    .split("e")
+    .map((item) => parseInt(item, 10))
 
-    // Adjust for negative exponent
-    if (exponent < 0) {
-        let decimalString = Math.abs(base).toString();
-        let padding = Math.abs(exponent) - 1;
-        return (sign < 0 ? "-" : "") + "0." + "0".repeat(padding) + decimalString;
-    }
+  // Adjust for negative exponent
+  if (exponent < 0) {
+    let decimalString = Math.abs(base).toString()
+    let padding = Math.abs(exponent) - 1
+    return (
+      (sign < 0 ? "-" : "") +
+      "0." +
+      "0".repeat(padding) +
+      decimalString
+    )
+  }
 
-    // Handle positive exponent or non-scientific numbers (which won't be split)
-    return num.toString();
+  // Handle positive exponent or non-scientific numbers (which won't be split)
+  return num.toString()
 }
 
 export const SommelierTab: VFC<DepositModalProps> = ({
@@ -90,7 +98,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarAddress = cellarConfig.id
   const depositTokens = cellarData.depositTokens.list
   const { addToast, update, close, closeAll } = useBrandedToast()
-  
+
   const currentStrategies =
     window.location.pathname?.split("/")[2]?.replace(/-/g, " ") ||
     id.replace(/-/g, " ") ||
@@ -125,7 +133,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+  const { refetch } = useUserStrategyData(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
+  )
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
@@ -159,7 +170,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
 
   const activeAsset = strategyData?.activeAsset
@@ -459,8 +471,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           body: (
             <Text>
               Your transaction has failed, if it does not work after
-              waiting some time and retrying please
-              send a message in our{" "}
+              waiting some time and retrying please send a message in
+              our{" "}
               {
                 <Link
                   href="https://discord.com/channels/814266181267619840/814279703622844426"
@@ -803,6 +815,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         </Text>
       </>
     ),
+    "Morpho ETH": () => (
+      <>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault uses leverge, which means there is
+          liquidation risk.
+        </Text>
+      </>
+    ),
     "Turbo SOMM": () => (
       <Text as="span" style={{ textAlign: "center" }}>
         Bridge your SOMM tokens to Ethereum via{" "}
@@ -818,7 +843,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   }
   return (
     <>
-      
       <VStack pb={10} spacing={6} align="stretch">
         <VStack align="stretch">
           {/* <CardHeading>Strategy details</CardHeading> */}

@@ -11,10 +11,10 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const morphoETH: CellarData = {
-  name: "Morpho ETH",
+  name: "Morpho ETH Maximizer",
   slug: config.CONTRACT.MORPHO_ETH.SLUG,
-  tradedAssets: ["WETH", "eETH", "weETH"],
-  launchDate: new Date(Date.UTC(2024, 1, 24, 14, 0, 0, 0)),
+  tradedAssets: ["WETH", "stETH", "wstETH"],
+  launchDate: new Date(Date.UTC(2024, 0, 20, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Supercharge your ETH lending and leveraged staking experience on Morpho Blue.`,
   strategyType: "Yield",
@@ -22,12 +22,12 @@ export const morphoETH: CellarData = {
   managementFee: "1%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Morpho Blue"],
+  protocols: ["Morpho"],
   strategyAssets: ["WETH", "stETH", "wstETH"],
   performanceSplit: {
     depositors: 80,
-    "strategy provider": 16,
-    protocol: 4,
+    "strategy provider": 17,
+    protocol: 3,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -46,7 +46,7 @@ export const morphoETH: CellarData = {
 
     description: `Supercharge your ETH lending and leveraged staking experience on Morpho Blue.
     
-    Note that Morpho ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Morpho ETH Maximizer and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
     Risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
@@ -59,9 +59,8 @@ export const morphoETH: CellarData = {
       "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
     value: "6%",
   },
-  //need to update
   dashboard:
-    "https://debank.com/profile/0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
+    "https://debank.com/profile/0xcf4b531b4cde95bd35d71926e09b2b54c564f5b6",
   //need to update when multiasset deposit
   depositTokens: {
     list: ["WETH"],
