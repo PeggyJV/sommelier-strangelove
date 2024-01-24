@@ -13,7 +13,7 @@ import {
 import { useFormContext } from "react-hook-form"
 import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { Chain, chainConfigMap } from "data/chainConfig"
-import { FaAngleDown } from "react-icons/all"
+import { FaCaretDown } from "react-icons/fa"
 
 interface Props extends SelectProps {
   chains: Chain[],
@@ -55,7 +55,7 @@ export const ChainSelector: React.FC<Props> = ({ chains, direction }): React.Rea
               h="16px"
             />
             <Text fontWeight="bold">{selectedChain.displayName}</Text>
-            <Icon as={FaAngleDown} />
+            <Icon as={FaCaretDown} />
           </HStack>
 
         </MenuButton>

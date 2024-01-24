@@ -22,15 +22,17 @@ import { useFormContext } from "react-hook-form"
 import { BridgeFormValues } from "."
 import { InformationIcon } from "components/_icons"
 import { useNetwork } from "wagmi"
-import { chainConfig } from "data/chainConfig"
+import { chainConfig, chainConfigMap, ChainType } from "data/chainConfig"
 import { tokenConfig } from "data/tokenConfig"
 
 export const InputAmount: React.FC = () => {
   const { register, setValue, formState, getFieldState, watch } =
     useFormContext<BridgeFormValues>()
-  const watchType = watch("type")
-  const toSomm = watchType === "TO_SOMMELIER"
-  const toEth = watchType === "TO_ETHEREUM"
+
+  // This is temporary solution until this file is also modified for multichain
+  const watchFrom = chainConfigMap[watch("from")]
+  const toSomm = watchFrom.type === ChainType.Ethereum
+  const toEth = watchFrom.type === ChainType.Cosmos
 
   const isError = !!getFieldState("amount").error
   const [isActive, setActive] = useState(false)
