@@ -19,7 +19,6 @@ import { useBrandedToast } from "hooks/chakra"
 export interface BridgeFormValues {
   amount: number
   address: string
-  type: "TO_SOMMELIER" | "TO_ETHEREUM"
   from: string
   to: string
 }
@@ -30,9 +29,8 @@ export const BridgeCard: React.FC = () => {
   const { isConnected } = useAccount()
   const methods = useForm<BridgeFormValues>({
     defaultValues: {
-      type: "TO_SOMMELIER",
-      from: chainSlugMap.ETHEREUM.displayName,
-      to: chainSlugMap.SOMMELIER.displayName
+      from: chainSlugMap.ETHEREUM.id,
+      to: chainSlugMap.SOMMELIER.id
     },
   })
   const { switchNetworkAsync } = useSwitchNetwork()

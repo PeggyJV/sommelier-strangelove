@@ -1,4 +1,4 @@
-import { Center, Flex, FormControl, HStack, IconButton, Image, Stack, Text } from "@chakra-ui/react"
+import { Center, FormControl, Stack, Text } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import { BaseButton } from "components/_buttons/BaseButton"
 import ConnectButton from "components/_buttons/ConnectButton"
@@ -14,8 +14,8 @@ import { useBridgeSommToEthTx } from "hooks/web3/useBridgeSommToEthTx"
 import React, { useEffect, VFC } from "react"
 import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
-import { ChainSelector } from "components/ChainSelector"
-import { chainConfig, chainConfigMap, chainSlugMap, ChainType } from "data/chainConfig"
+import { BridgeFormHeader } from "components/_cards/BridgeCard/BridgeFormHeader"
+import { chainConfigMap, ChainType } from "data/chainConfig"
 import { Address } from "components/_cards/BridgeCard/Address"
 import { AddressInput } from "components/_cards/BridgeCard/AddressInput"
 
@@ -26,14 +26,14 @@ interface BridgeFormProps {
 export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const { addToast, closeAll } = useBrandedToast()
   const isMounted = useIsMounted()
-  const { watch, handleSubmit, formState, getFieldState, register, setValue } =
+  const { watch, handleSubmit, formState, getFieldState, setValue } =
     useFormContext<BridgeFormValues>()
 
   const watchAmount = watch("amount")
   const watchSommelierAddress = watch("address")
 
-  const watchFrom = chainConfigMap[watch("from").toLowerCase()]
-  const watchTo = chainConfigMap[watch("to").toLowerCase()]
+  const watchFrom = chainConfigMap[watch("from")]
+  const watchTo = chainConfigMap[watch("to")]
 
   if (wrongNetwork === undefined) {
     wrongNetwork = false
@@ -54,10 +54,10 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
     const toChainType = watchTo.type;
 
     if(fromChainType === ChainType.Ethereum && toChainType === ChainType.Cosmos) {
-      return useBridgeEthToSommTx;
+      return doEthToSomm;
     }
     if(fromChainType === ChainType.Cosmos && toChainType === ChainType.Ethereum) {
-      return useBridgeSommToEthTx;
+      return doSommToEth;
     }
     if(fromChainType === ChainType.L2 && toChainType === ChainType.Ethereum) {
       return () => alert("L2 to Eth")
@@ -93,27 +93,6 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const buttonEnabled =
     (isConnected && watchFrom.type === ChainType.Ethereum) || (isGrazConnected && watchFrom.type === ChainType.Cosmos)
 
-  const getTextForChosenChains = () => {
-    const fromChainType = watchFrom.type;
-    const toChainType = watchTo.type;
-
-    if(fromChainType === toChainType){
-      return "Not a valid bridge."
-    }
-    if((fromChainType === ChainType.Ethereum && toChainType === ChainType.Cosmos)
-        || (fromChainType === ChainType.Cosmos && toChainType === ChainType.Ethereum)) {
-      return "Bridge your Ethereum SOMM back home to its native Cosmos\n" +
-          "representation on Sommelier or from Sommelier to Ethereum. "
-    }
-    if((fromChainType === ChainType.L2 && toChainType === ChainType.Cosmos)
-        || (fromChainType === ChainType.Cosmos && toChainType === ChainType.L2)) {
-      return "Bridge from Ethereum <> Cosmos or from an L2 <> Cosmos"
-    }
-    if((fromChainType === ChainType.Ethereum && toChainType === ChainType.L2)
-        || (fromChainType === ChainType.L2 && toChainType === ChainType.Ethereum)) {
-      return "Bridge from Ethereum <> Cosmos, L2 <> Cosmos or from an Ethereum <> L2"
-    }
-  }
   const getTransactionTime = () => {
     switch (watchFrom.type) {
       case ChainType.Ethereum:
@@ -128,21 +107,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   };
 
   return (
-    <Stack spacing="40px" alignItems={"center"}>
-      <Text fontSize="md" mb="41px">
-        {getTextForChosenChains()}
-        <Link
-            ml={1}
-            fontSize="xs"
-            fontWeight="semibold"
-            textDecoration="underline"
-            href="https://www.notion.so/Bridge-UI-88307640a6ab4f649b6a0b3cb6cb4d34"
-            target="_blank"
-        >
-          Read More{" "}
-          <ExternalLinkIcon boxSize={3} color="purple.base" />
-        </Link>
-      </Text>
+    <Stack  alignItems={"center"}>
       <Stack
         spacing="40px"
         as="form"
@@ -151,58 +116,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
         }
       >
         <Stack spacing={6}>
-          <HStack justifyContent="space-between">
-            <Stack flex={1}>
-
-            <FormControl>
-              <ChainSelector
-                  chains={chainConfig.map(chain => chain.displayName)}
-                  defaultValue={chainSlugMap.ETHEREUM.displayName}
-                  direction="From"
-                  register={register("from", { required: "Please select a chain" })}
-              />
-
-            </FormControl>
-            </Stack>
-
-            <Flex
-              justifyContent={"center"}
-              alignSelf="flex-end"
-              pb={2}
-            >
-              <IconButton
-                aria-label="swap icon"
-                variant="unstyled"
-                size="sm"
-                icon={
-                  <Image
-                    src="/assets/images/swap.svg"
-                    alt="swap icon"
-                  />
-                }
-                disabled={isLoading}
-                onClick={() => {
-                  const fromValue = watch("from");
-                  const toValue = watch("to");
-
-                  setValue("to", fromValue);
-                  setValue("from", toValue);
-                }
-                }
-              />
-            </Flex>
-            <Stack flex={1}>
-              <FormControl>
-                <ChainSelector
-                    chains={chainConfig.map(chain => chain.displayName)}
-                    defaultValue={chainSlugMap.ARBITRUM.displayName}
-                    direction="To"
-                    register={register("to", { required: "Please select a chain" })}
-                />
-
-              </FormControl>
-            </Stack>
-          </HStack>
+          <BridgeFormHeader isLoading={isLoading} from={watchFrom} to={watchTo}/>
           {buttonEnabled && !wrongNetwork && (
             <>
               <FormControl

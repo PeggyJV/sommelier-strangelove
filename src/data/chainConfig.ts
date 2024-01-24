@@ -58,7 +58,7 @@ export const chainConfig: Chain[] = [
     id: "sommelier",
     wagmiId: 0,
     displayName: "Sommelier",
-    logoPath: "/assets/icons/arbitrum.svg",
+    logoPath: "/assets/images/coin.png",
     alt: "Sommelier logo",
     infuraRpcUrl: "TBA",
     alchemyRpcUrl: "TBA",
