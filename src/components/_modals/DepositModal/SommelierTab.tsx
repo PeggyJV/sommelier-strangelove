@@ -491,12 +491,18 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
 
-      const response = (isActiveAsset || cellarData.depositTokens.list.includes(tokenSymbol))
-        ? await deposit(amtInWei, address, data?.selectedToken?.address)
-        : await signer!.sendTransaction({
-            to: ensoRouterContract.address,
-            data: ensoResponse.tx.data,
-          })
+      const response =
+        isActiveAsset ||
+        cellarData.depositTokens.list.includes(tokenSymbol)
+          ? await deposit(
+              amtInWei,
+              address,
+              data?.selectedToken?.address
+            )
+          : await signer!.sendTransaction({
+              to: ensoRouterContract.address,
+              data: ensoResponse.tx.data,
+            })
 
       if (!response) throw new Error("response is undefined")
       addToast({
@@ -1080,7 +1086,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           </FormControl>
           {cellarData.depositTokens.list.includes(
             selectedToken?.symbol || ""
-          ) && selectedToken?.symbol !== activeAsset?.symbol ? (
+          ) && depositFee !== 0 ? (
             <Tooltip
               hasArrow
               //label=""
@@ -1090,10 +1096,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             >
               <HStack pr={2} textAlign="center">
                 <Text fontFamily={"inherit"}>
-                  Alternative deposit assets are still deposited
-                  directly into the vault, however incur a small fee
-                  due to how positions are managed at the smart
-                  contract level.
+                  This asset is deposited directly into the vault;
+                  however, it will incur a small fee due to the
+                  management of positions at the smart contract level
                 </Text>
               </HStack>
             </Tooltip>
@@ -1257,6 +1262,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                   </Tooltip>
                 )}
               </>
+            ) : null}
+          </HStack>
+          <HStack justifyContent={"center"}>
+            {selectedToken?.symbol !== activeAsset?.symbol ? (
+              <Text
+                fontFamily={"inherit"}
+                fontWeight={"extrabold"}
+                textAlign="center"
+              >
+                {
+                  "If you deposit an asset other than the base asset, there is no guarantee that you will receive the same asset upon withdrawal."
+                }
+              </Text>
             ) : null}
           </HStack>
           {!cellarData.depositTokens.list.includes(
