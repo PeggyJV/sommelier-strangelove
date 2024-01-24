@@ -4,8 +4,6 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { InputAmount } from "components/_cards/BridgeCard/InputAmount"
-import { InputEthereumAddress } from "components/_cards/BridgeCard/InputEthereumAddress"
-import { InputSommelierAddress } from "components/_cards/BridgeCard/InputSommelierAddress"
 import { SommReceivedInEth } from "components/_cards/BridgeCard/SommReceivedInEth"
 import { ExternalLinkIcon, TimerIcon } from "components/_icons"
 import { useAccount as useGrazAccount, useConnect as useGrazConnect } from "graz"
@@ -19,6 +17,7 @@ import { useAccount } from "wagmi"
 import { ChainSelector } from "components/ChainSelector"
 import { chainConfig, chainConfigMap, chainSlugMap, ChainType } from "data/chainConfig"
 import { Address } from "components/_cards/BridgeCard/Address"
+import { AddressInput } from "components/_cards/BridgeCard/AddressInput"
 
 interface BridgeFormProps {
   wrongNetwork?: boolean
@@ -30,9 +29,6 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const { watch, handleSubmit, formState, getFieldState, register, setValue } =
     useFormContext<BridgeFormValues>()
 
-  const watchType = watch("type")
-  const toSomm = watchType === "TO_SOMMELIER"
-  const toEth = watchType === "TO_ETHEREUM"
   const watchAmount = watch("amount")
   const watchSommelierAddress = watch("address")
 
@@ -222,13 +218,9 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
                   formState.errors.address as boolean | undefined
                 }
               >
-                {watchType === "TO_SOMMELIER" ? (
-                  <InputSommelierAddress />
-                ) : (
-                  <InputEthereumAddress />
-                )}
+                <AddressInput chain={watchTo}/>
               </FormControl>
-              {watchType === "TO_ETHEREUM" && <SommReceivedInEth />}
+              {watchTo.type === ChainType.Ethereum && <SommReceivedInEth />}
             </>
           )}
         </Stack>
