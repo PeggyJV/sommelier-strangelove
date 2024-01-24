@@ -303,8 +303,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       assetAddress
     )
 
-    // 4 decimal place precision
-    return Number(response.depositFee) / 10 ** 4
+    // 6 decimal place precision
+    return Number(response.depositFee) / 10 ** 6
   }
 
   const [depositFee, setDepositFee] = useState<number>(0) // Use lowercase 'number'
@@ -345,7 +345,11 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
     ) {
-      throw new Error("todo: new deposit function!!!!")
+      return cellarSigner?.multiAssetDeposit(
+        assetAddress,
+        amtInWei,
+        address
+      )
     } else {
       if (
         cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||

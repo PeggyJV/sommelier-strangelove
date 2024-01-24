@@ -19,7 +19,7 @@ export const config = {
   },
   CONTRACT: {
     TEST_ARBITRUM_MULTI_ASSET_DEPOSIT: {
-      ADDRESS: "0x02b0Ad08BFc8D0cC3E0e5907D95898C4Ef464F9C",
+      ADDRESS: "0x7C3bccC2060F097790D1751f25c73d5065683F88",
       SLUG: "MultiAsset-Deposit-Arbitrum",
       ABI: cellarV0821MultiDeposit,
     },
