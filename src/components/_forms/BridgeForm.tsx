@@ -1,25 +1,14 @@
-import {
-  Center,
-  Flex,
-  FormControl,
-  HStack,
-  IconButton,
-  Image,
-  Stack,
-  Text
-} from "@chakra-ui/react"
-import { Link} from "components/Link"
+import { Center, Flex, FormControl, HStack, IconButton, Image, Stack, Text } from "@chakra-ui/react"
+import { Link } from "components/Link"
 import { BaseButton } from "components/_buttons/BaseButton"
 import ConnectButton from "components/_buttons/ConnectButton"
-import {BridgeFormValues } from "components/_cards/BridgeCard"
-import { EthereumAddress } from "components/_cards/BridgeCard/EthereumAddress"
+import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { InputAmount } from "components/_cards/BridgeCard/InputAmount"
 import { InputEthereumAddress } from "components/_cards/BridgeCard/InputEthereumAddress"
 import { InputSommelierAddress } from "components/_cards/BridgeCard/InputSommelierAddress"
-import { SommelierAddress } from "components/_cards/BridgeCard/SommelierAddress"
 import { SommReceivedInEth } from "components/_cards/BridgeCard/SommReceivedInEth"
 import { ExternalLinkIcon, TimerIcon } from "components/_icons"
-import { useAccount as useGrazAccount, useConnect as useGrazConnect,} from "graz"
+import { useAccount as useGrazAccount, useConnect as useGrazConnect } from "graz"
 import { useBrandedToast } from "hooks/chakra"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useBridgeEthToSommTx } from "hooks/web3/useBridgeEthToSommTx"
@@ -27,13 +16,9 @@ import { useBridgeSommToEthTx } from "hooks/web3/useBridgeSommToEthTx"
 import React, { useEffect, VFC } from "react"
 import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
-import { ChainSelector } from "components/ChainSelector";
-import {
-  chainConfig,
-  chainConfigMap,
-  chainSlugMap,
-  ChainType
-} from "data/chainConfig";
+import { ChainSelector } from "components/ChainSelector"
+import { chainConfig, chainConfigMap, chainSlugMap, ChainType } from "data/chainConfig"
+import { Address } from "components/_cards/BridgeCard/Address"
 
 interface BridgeFormProps {
   wrongNetwork?: boolean
@@ -51,8 +36,8 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const watchAmount = watch("amount")
   const watchSommelierAddress = watch("address")
 
-  const from = chainConfigMap[watch("from").toLowerCase()]
-  const to = chainConfigMap[watch("to").toLowerCase()]
+  const watchFrom = chainConfigMap[watch("from").toLowerCase()]
+  const watchTo = chainConfigMap[watch("to").toLowerCase()]
 
   if (wrongNetwork === undefined) {
     wrongNetwork = false
@@ -61,12 +46,37 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   useEffect(() => {
     setValue("address", "")
     setValue("amount", 0)
-  }, [watchType, setValue])
+  }, [watchFrom, watchTo, setValue])
 
   const { isLoading: isEthToSommLoading, doEthToSomm } =
     useBridgeEthToSommTx()
   const { isLoading: isSommToEthLoading, doSommToEth } =
     useBridgeSommToEthTx()
+
+  const decideTransactionType = () => {
+    const fromChainType = watchFrom.type;
+    const toChainType = watchTo.type;
+
+    if(fromChainType === ChainType.Ethereum && toChainType === ChainType.Cosmos) {
+      return useBridgeEthToSommTx;
+    }
+    if(fromChainType === ChainType.Cosmos && toChainType === ChainType.Ethereum) {
+      return useBridgeSommToEthTx;
+    }
+    if(fromChainType === ChainType.L2 && toChainType === ChainType.Ethereum) {
+      return () => alert("L2 to Eth")
+    }
+    if(fromChainType === ChainType.Ethereum && toChainType === ChainType.L2) {
+      return () => alert("Eth to L2 ")
+    }
+    if(fromChainType === ChainType.Cosmos && toChainType === ChainType.L2) {
+      return () => alert("Cosmos to L2 ")
+    }
+    if(fromChainType === ChainType.L2 && toChainType === ChainType.Cosmos) {
+      return () => alert("L2 to Cosmos ")
+    }
+    return () => alert("Error with transaction type")
+  }
 
   const isLoading = isEthToSommLoading || isSommToEthLoading
 
@@ -85,15 +95,18 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
   const { isConnected } = useAccount()
 
   const buttonEnabled =
-    (isConnected && toSomm) || (isGrazConnected && toEth)
+    (isConnected && watchFrom.type === ChainType.Ethereum) || (isGrazConnected && watchFrom.type === ChainType.Cosmos)
 
   const getTextForChosenChains = () => {
-    const fromChainType = chainConfigMap[watch("from").toLowerCase()].type;
-    const toChainType = chainConfigMap[watch("to").toLowerCase()].type;
+    const fromChainType = watchFrom.type;
+    const toChainType = watchTo.type;
 
+    if(fromChainType === toChainType){
+      return "Not a valid bridge."
+    }
     if((fromChainType === ChainType.Ethereum && toChainType === ChainType.Cosmos)
         || (fromChainType === ChainType.Cosmos && toChainType === ChainType.Ethereum)) {
-      return " Bridge your Ethereum SOMM back home to its native Cosmos\n" +
+      return "Bridge your Ethereum SOMM back home to its native Cosmos\n" +
           "representation on Sommelier or from Sommelier to Ethereum. "
     }
     if((fromChainType === ChainType.L2 && toChainType === ChainType.Cosmos)
@@ -104,8 +117,19 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
         || (fromChainType === ChainType.L2 && toChainType === ChainType.Ethereum)) {
       return "Bridge from Ethereum <> Cosmos, L2 <> Cosmos or from an Ethereum <> L2"
     }
-
   }
+  const getTransactionTime = () => {
+    switch (watchFrom.type) {
+      case ChainType.Ethereum:
+        return "10-15";
+      case ChainType.Cosmos:
+        return "1-5";
+      case ChainType.L2:
+        return "TBA";
+      default:
+        return "10-15";
+    }
+  };
 
   return (
     <Stack spacing="40px" alignItems={"center"}>
@@ -127,9 +151,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
         spacing="40px"
         as="form"
         onSubmit={
-          watchType === "TO_SOMMELIER"
-            ? handleSubmit(doEthToSomm)
-            : handleSubmit(doSommToEth)
+          handleSubmit(decideTransactionType())
         }
       >
         <Stack spacing={6}>
@@ -194,11 +216,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
               >
                 <InputAmount />
               </FormControl>
-              {watchType === "TO_SOMMELIER" ? (
-                <EthereumAddress />
-              ) : (
-                <SommelierAddress />
-              )}
+              <Address chain={watchFrom}/>
               <FormControl
                 isInvalid={
                   formState.errors.address as boolean | undefined
@@ -231,8 +249,8 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
         */}
       {isMounted
           && !buttonEnabled
-          && (from.type === ChainType.Ethereum
-              || from.type === ChainType.L2)
+          && (watchFrom.type === ChainType.Ethereum
+              || watchFrom.type === ChainType.L2)
           && (
         <ConnectButton
           overrideChainId={"ethereum"}
@@ -245,7 +263,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
       )}
       {isMounted
           && !buttonEnabled
-          && (from.type === ChainType.Cosmos)
+          && (watchFrom.type === ChainType.Cosmos)
           && (
         <BaseButton
           height="69px"
@@ -297,7 +315,8 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
           color="orange.light"
         >
           Transaction should process within{" "}
-          {watchType === "TO_SOMMELIER" ? "10-15" : "1-5"} minutes.
+          {getTransactionTime()}{" "}
+          minutes
         </Text>
       </Center>
     </Stack>
