@@ -50,7 +50,7 @@ export const morphoETH: CellarData = {
     `,
     Risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
-    - This vault uses leverge, which means there is liquidation risk.`,
+    - This vault uses leverage, which means there is liquidation risk.`,
   },
   //need to update
   overrideApy: {
@@ -83,6 +83,11 @@ export const morphoETH: CellarData = {
       abi: config.CONTRACT.MORPHO_ETH.ABI,
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
+    },
+    staker: {
+      address: config.CONTRACT.MORPHO_ETH_STAKER.ADDRESS,
+      abi: config.CONTRACT.MORPHO_ETH_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },

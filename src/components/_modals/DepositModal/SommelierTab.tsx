@@ -823,7 +823,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           risks; however, this list is not exhaustive, and there may
           be additional risks:
           <br />
-          <br />- This vault uses leverge, which means there is
+          <br />- This vault uses leverage, which means there is
           liquidation risk.
         </Text>
       </>

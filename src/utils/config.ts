@@ -252,6 +252,10 @@ export const config = {
       ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
     },
+    MORPHO_ETH_STAKER: {
+      ADDRESS: "0xe468c1156d4b3399e4Aa1080c58fFBc6119722F9",
+      ABI: cellarStakingV0821,
+    },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
