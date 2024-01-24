@@ -1098,7 +1098,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 <Text fontFamily={"inherit"}>
                   This asset is deposited directly into the vault;
                   however, it will incur a small fee due to the
-                  management of positions at the smart contract level
+                  management of positions at the smart contract level.
                 </Text>
               </HStack>
             </Tooltip>
