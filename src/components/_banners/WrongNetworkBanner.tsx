@@ -59,7 +59,7 @@ export const WrongNetworkBanner: VFC<WrongNetworkBannerProps> = ({
           </Heading>
           <Text fontFamily="Haffer">
             Your connected wallet is on the {wagmiChain.name} network.
-            This vault is on {chain.displayName}, to use it please
+            This vault is on {chain.displayName}; to use it please
             switch networks.
           </Text>
           <HStack align="center" width="100%" justifyContent="center">
