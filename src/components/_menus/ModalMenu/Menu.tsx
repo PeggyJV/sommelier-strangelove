@@ -229,7 +229,8 @@ export const Menu: VFC<MenuProps> = ({
                       <HStack width="100%">
                         <Image boxSize={5} src={src} alt={alt} />
                         <span>{symbol}</span>
-                        {isActiveAsset && (
+                        {/*
+                        isActiveAsset && (
                           <HStack
                             justifyItems={"right"}
                             width="100%"
@@ -242,11 +243,13 @@ export const Menu: VFC<MenuProps> = ({
                               alignSelf="center"
                             />
                             <Text fontSize="xs" fontWeight={600}>
-                              Base asset
+                              Accounting asset
                             </Text>
                           </HStack>
-                        )}
-                        {isCellerDepositAsset && (
+                        )
+                        */}
+                        {/*
+                        isCellerDepositAsset && (
                           <HStack
                             justifyItems={"right"}
                             width="100%"
@@ -262,7 +265,8 @@ export const Menu: VFC<MenuProps> = ({
                               Alt Deposit asset
                             </Text>
                           </HStack>
-                        )}
+                        )
+                        */}
                       </HStack>
                     </HStack>
                   </MenuItemOption>
