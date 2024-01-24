@@ -1037,7 +1037,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             <Text as="span">{cellarName}</Text>
           </HStack>
           <HStack justify="space-between">
-            <Text as="span">Base Asset</Text>
+            <Text as="span">Accounting Asset</Text>
             {isLoading ? (
               <Spinner size="xs" />
             ) : (
@@ -1111,7 +1111,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             >
               <HStack pr={2} textAlign="center">
                 <Text fontFamily={"inherit"}>
-                  Non base asset deposits go through a router and
+                  Non accounting asset deposits go through a router and
                   bundle a series of swaps and subsequent vault
                   deposit.
                 </Text>
@@ -1272,7 +1272,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 textAlign="center"
               >
                 {
-                  "If you deposit an asset other than the base asset, there is no guarantee that you will receive the same asset upon withdrawal."
+                  "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."
                 }
               </Text>
             ) : null}
