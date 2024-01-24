@@ -23,7 +23,13 @@ export const turboosETH: CellarData = {
   managementFee: "1%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Uniswap V3", "Curve", "Balancer", "Aura"],
+  protocols: [
+    "Uniswap V3",
+    "Curve",
+    "Convex",
+    "Balancer",
+    "Morpho Blue",
+  ],
   strategyAssets: ["WETH", "osETH", "rETH"],
   performanceSplit: {
     depositors: 80,
@@ -72,7 +78,7 @@ export const turboosETH: CellarData = {
     cellarNameKey: CellarNameKey.TURBO_OSETH,
     lpToken: {
       address: config.CONTRACT.TURBO_OSETH.ADDRESS,
-      imagePath: "/assets/icons/Turbo-osETH.png",
+      imagePath: "/assets/icons/turbo-oseth.png",
     },
     //cellar router can be removed?
     cellarRouter: {
@@ -86,12 +92,11 @@ export const turboosETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    //need to update if staking
-    // staker: {
-    //   address: config.CONTRACT.TURBO_OSETH_STAKER.ADDRESS,
-    //   abi: config.CONTRACT.TURBO_OSETH_STAKER.ABI,
-    //   key: StakerKey.CELLAR_STAKING_V0821,
-    // },
+    staker: {
+      address: config.CONTRACT.TURBO_OSETH_STAKER.ADDRESS,
+      abi: config.CONTRACT.TURBO_OSETH_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
+    },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },
   faq: [
