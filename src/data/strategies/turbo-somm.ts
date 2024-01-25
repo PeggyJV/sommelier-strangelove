@@ -46,6 +46,10 @@ export const turboSOMM: CellarData = {
     
     Note that Turbo SOMM and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
+    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+   
+    - This vault does liquidity provision which can result in impermanent loss.
+    `,
   },
   overrideApy: {
     title: "Backtested APY",

@@ -778,6 +778,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           the vault to be liquidated. Although there are safeguards in
           place to help mitigate this, the liquidation risk is not
           eliminated.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -805,6 +808,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           <br />- This vault is mainly comprised of decentralized and
           centralized stablecoins, both of which can experience depeg
           events.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -833,6 +839,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           the vault to be liquidated. Although there are safeguards in
           place to help mitigate this, the liquidation risk is not
           eliminated.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -861,6 +870,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           <br />- This vault is mainly comprised of decentralized and
           centralized stablecoins, both of which can experience depeg
           events.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -881,6 +893,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           the available ETH-swETH liquidity in the market, it is
           possible to receive swETH upon withdrawal even if you
           deposited ETH.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -1015,15 +1030,59 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       </>
     ),
     "Turbo SOMM": () => (
-      <Text as="span" style={{ textAlign: "center" }}>
-        Bridge your SOMM tokens to Ethereum via{" "}
-        <Link
-          href="https://app.sommelier.finance/bridge"
-          isExternal
-          textDecor="underline"
-        >
-          Sommelier bridge
-        </Link>
+      <>
+        <Text as="span" style={{ textAlign: "center" }}>
+          Bridge your SOMM tokens to Ethereum via{" "}
+          <Link
+            href="https://app.sommelier.finance/bridge"
+            isExternal
+            textDecor="underline"
+          >
+            Sommelier bridge
+          </Link>
+        </Text>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
+        </Text>
+      </>
+    ),
+    "Turbo eETH": () => (
+      <Text as="span">
+        All Sommelier vaults contain smart contract risk and varying
+        degrees of economic risk. Please take note of the following
+        risks; however, this list is not exhaustive, and there may be
+        additional risks:
+        <br />
+        <br />- This vault does liquidity provision which can result
+        in impermanent loss.
+      </Text>
+    ),
+    "Turbo STETH": () => (
+      <Text as="span">
+        All Sommelier vaults contain smart contract risk and varying
+        degrees of economic risk. Please take note of the following
+        risks; however, this list is not exhaustive, and there may be
+        additional risks:
+        <br />
+        <br />- This vault does liquidity provision which can result
+        in impermanent loss.
+      </Text>
+    ),
+    turboSTETHstETHDeposit: () => (
+      <Text as="span">
+        All Sommelier vaults contain smart contract risk and varying
+        degrees of economic risk. Please take note of the following
+        risks; however, this list is not exhaustive, and there may be
+        additional risks:
+        <br />
+        <br />- This vault does liquidity provision which can result
+        in impermanent loss.
       </Text>
     ),
   }

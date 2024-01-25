@@ -55,6 +55,8 @@ export const turboSTETH: CellarData = {
     All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
 
     - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.    
+    
+    - This vault does liquidity provision which can result in impermanent loss.
     `,
   },
   overrideApy: {
