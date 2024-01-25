@@ -17,7 +17,7 @@ import { useAccount } from "wagmi"
 import { BridgeFormHeader } from "components/_cards/BridgeCard/BridgeFormHeader"
 import { chainConfigMap, ChainType } from "data/chainConfig"
 import { Address } from "components/_cards/BridgeCard/Address"
-import { AddressInput } from "components/_cards/BridgeCard/AddressInput"
+import { InputAddress } from "components/_cards/BridgeCard/InputAddress"
 
 interface BridgeFormProps {
   wrongNetwork?: boolean
@@ -90,8 +90,11 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
 
   const { isConnected } = useAccount()
 
+  // TODO: Check for L2 wallet connection
   const buttonEnabled =
-    (isConnected && watchFrom.type === ChainType.Ethereum) || (isGrazConnected && watchFrom.type === ChainType.Cosmos)
+    (isConnected && watchFrom.type === ChainType.Ethereum)
+    || (isGrazConnected && watchFrom.type === ChainType.Cosmos)
+    || watchFrom.type === ChainType.L2
 
   const getTransactionTime = () => {
     switch (watchFrom.type) {
@@ -132,7 +135,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
                   formState.errors.address as boolean | undefined
                 }
               >
-                <AddressInput chain={watchTo}/>
+                <InputAddress chain={watchTo}/>
               </FormControl>
               {watchTo.type === ChainType.Ethereum && <SommReceivedInEth />}
             </>

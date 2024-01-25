@@ -18,9 +18,10 @@ import { FaCaretDown } from "react-icons/fa"
 interface Props extends SelectProps {
   chains: Chain[],
   direction: "from" | "to",
+  otherChain: Chain
 }
 
-export const ChainSelector: React.FC<Props> = ({ chains, direction }): React.ReactElement => {
+export const ChainSelector: React.FC<Props> = ({ chains, direction, otherChain }): React.ReactElement => {
 
   const { watch, setValue } = useFormContext<BridgeFormValues>();
 
@@ -30,6 +31,9 @@ export const ChainSelector: React.FC<Props> = ({ chains, direction }): React.Rea
 
   const selectedChain = chainConfigMap[watch(direction)]
 
+  const isDisabled = (chain: Chain) => {
+    return chain.id === otherChain.id || chain.type === otherChain.type
+  }
   return (
     <>
       <Text fontWeight="bold" color="neutral.400" fontSize="xs">
@@ -61,9 +65,14 @@ export const ChainSelector: React.FC<Props> = ({ chains, direction }): React.Rea
         </MenuButton>
         <MenuList>
           {chains.map((chain, i) => (
-            <MenuItem key={i} value={chain.id} onClick={() => {
-              handleSelect(chain.id);
-            }}>
+            <MenuItem
+              key={i}
+              value={chain.id}
+              isDisabled={isDisabled(chain)}
+              onClick={() => {
+                handleSelect(chain.id);
+              }}
+            >
                 <Image
                   src={chain.logoPath}
                   alt={chain.id}

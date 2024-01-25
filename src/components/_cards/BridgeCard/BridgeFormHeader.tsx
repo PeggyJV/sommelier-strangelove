@@ -88,8 +88,9 @@ export const BridgeFormHeader : FC<BridgeFormHeaderProps> = ({ isLoading, from, 
           <FormControl>
             <ChainSelector
               chains={chainConfig}
-              defaultValue={watch("to")}
+              defaultValue={watch("from")}
               direction="from"
+              otherChain={to}
             />
 
           </FormControl>
@@ -103,6 +104,7 @@ export const BridgeFormHeader : FC<BridgeFormHeaderProps> = ({ isLoading, from, 
               chains={chainConfig}
               defaultValue={watch("to")}
               direction="to"
+              otherChain={from}
             />
 
           </FormControl>

@@ -14,7 +14,7 @@ import { Chain, ChainType } from "data/chainConfig"
 interface AddressInputProps extends InputProps {
   chain: Chain;
 }
-export const AddressInput : React.FC<AddressInputProps> = ({
+export const InputAddress : React.FC<AddressInputProps> = ({
   children,
   chain,
   ...rest
@@ -25,7 +25,7 @@ export const AddressInput : React.FC<AddressInputProps> = ({
   const isError = !!getFieldState("address").error
   const [_isActive, setActive] = useState(false)
 
-  const { address, isConnected } = useAccount()
+  const { address } = useAccount()
 
   const onSommAutofillClick = async (isValidateAddress?: boolean) => {
     try {
