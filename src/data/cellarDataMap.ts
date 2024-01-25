@@ -34,18 +34,18 @@ cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
   [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
-  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]:
-    turboSTETHstETHDeposit,
-  [config.CONTRACT.TURBO_SOMM.SLUG]: turboSOMM,
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
   [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
   [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,
+  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]:
+    turboSTETHstETHDeposit,
   [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
-  [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,
   [config.CONTRACT.REAL_YIELD_USD.SLUG]: realYieldUsd,
   [config.CONTRACT.FRAXIMAL.SLUG]: fraximal,
-  [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: ethTrendGrowth,
+  [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,
   [config.CONTRACT.REAL_YIELD_LINK.SLUG]: realYieldLink,
+  [config.CONTRACT.TURBO_SOMM.SLUG]: turboSOMM,
+  [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: ethTrendGrowth,
   [config.CONTRACT.DEFI_STARS.SLUG]: defiStars,
   [config.CONTRACT.REAL_YIELD_ENS.SLUG]: realYieldENS,
   [config.CONTRACT.REAL_YIELD_UNI.SLUG]: realYieldUNI,
