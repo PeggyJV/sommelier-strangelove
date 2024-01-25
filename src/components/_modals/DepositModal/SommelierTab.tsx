@@ -1084,25 +1084,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
-          {cellarData.depositTokens.list.includes(
-            selectedToken?.symbol || ""
-          ) && depositFee !== 0 ? (
-            <Tooltip
-              hasArrow
-              //label=""
-              bg="surface.bg"
-              color="neutral.300"
-              textAlign="center"
-            >
-              <HStack pr={2} textAlign="center">
-                <Text fontFamily={"inherit"}>
-                  This asset is deposited directly into the vault;
-                  however, it will incur a small fee due to the
-                  management of positions at the smart contract level.
-                </Text>
-              </HStack>
-            </Tooltip>
-          ) : selectedToken?.symbol !== activeAsset?.symbol ? (
+          {/* selectedToken?.symbol !== activeAsset?.symbol ? (
             <Tooltip
               hasArrow
               //label=""
@@ -1111,17 +1093,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             >
               <HStack pr={2} textAlign="center">
                 <Text fontFamily={"inherit"}>
-                  Non accounting asset deposits go through a router and
-                  bundle a series of swaps and subsequent vault
+                  Non accounting asset deposits go through a router
+                  and bundle a series of swaps and subsequent vault
                   deposit.
                 </Text>
               </HStack>
             </Tooltip>
-          ) : null}
-
-          <CardHeading paddingTop="2em">
-            Transaction details
-          </CardHeading>
+          ) : null*/}
+          {selectedToken?.symbol !== activeAsset?.symbol ? (
+            <>
+              <CardHeading paddingTop="2em">
+                Transaction details
+              </CardHeading>
+              {/*
           <HStack justify="space-between">
             <HStack spacing={1} align="center">
               <Tooltip
@@ -1218,65 +1202,84 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               </Box>
             )}
           </HStack>
-          <HStack justify="space-between">
-            <HStack spacing={1} align="center">
-              <Tooltip
-                hasArrow
-                label="The percentage fee you will pay to deposit into the vault."
-                bg="surface.bg"
-                color="neutral.300"
-                textAlign="center"
-              >
+                  */}
+              <HStack justify="space-between">
                 <HStack spacing={1} align="center">
-                  <CardHeading fontSize="small">
-                    Deposit Fee
-                  </CardHeading>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
-            </HStack>
-            {cellarData.depositTokens.list.includes(
-              selectedToken?.symbol || ""
-            ) ? (
-              <>
-                {isDepositFeeLoading ? (
-                  <Spinner size="md" paddingRight={"1em"} />
-                ) : (
                   <Tooltip
                     hasArrow
-                    label={
-                      depositFee === 0 ? "No deposit fee." : null
-                    }
+                    label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
+                  however, it will incur a small fee due to the
+                  management of positions at the smart contract level."
                     bg="surface.bg"
                     color="neutral.300"
                     textAlign="center"
                   >
-                    <HStack pr={2}>
-                      {depositFee === 0 ? (
-                        <GreenCheckCircleIcon />
-                      ) : null}
-                      <Text fontFamily={"inherit"}>
-                        {depositFee === 0 ? "None" : `${depositFee}%`}
-                      </Text>
+                    <HStack spacing={1} align="center">
+                      <CardHeading fontSize="small">
+                        Alternative Deposit Asset Fee
+                      </CardHeading>
+                      <InformationIcon
+                        color="neutral.300"
+                        boxSize={3}
+                      />
                     </HStack>
                   </Tooltip>
-                )}
-              </>
-            ) : null}
-          </HStack>
-          <HStack justifyContent={"center"}>
-            {selectedToken?.symbol !== activeAsset?.symbol ? (
-              <Text
-                fontFamily={"inherit"}
-                fontWeight={"extrabold"}
-                textAlign="center"
+                </HStack>
+                {cellarData.depositTokens.list.includes(
+                  selectedToken?.symbol || ""
+                ) ? (
+                  <>
+                    {isDepositFeeLoading ? (
+                      <Spinner size="md" paddingRight={"1em"} />
+                    ) : (
+                      <Tooltip
+                        hasArrow
+                        label={
+                          depositFee === 0 ? "No deposit fee." : null
+                        }
+                        bg="surface.bg"
+                        color="neutral.300"
+                        textAlign="center"
+                      >
+                        <HStack pr={2}>
+                          {depositFee === 0 ? (
+                            <GreenCheckCircleIcon />
+                          ) : null}
+                          <Text fontFamily={"inherit"}>
+                            {depositFee === 0
+                              ? "None"
+                              : `${depositFee}%`}
+                          </Text>
+                        </HStack>
+                      </Tooltip>
+                    )}
+                  </>
+                ) : null}
+              </HStack>
+              <HStack
+                justifyContent={"center"}
+                p={3}
+                spacing={4}
+                align="flex-start"
+                backgroundColor="purple.dark"
+                border="2px solid"
+                borderRadius={16}
+                borderColor="purple.base"
               >
-                {
-                  "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."
-                }
-              </Text>
-            ) : null}
-          </HStack>
+                {selectedToken?.symbol !== activeAsset?.symbol ? (
+                  <Text
+                    fontFamily={"inherit"}
+                    fontWeight={"bold"}
+                    textAlign="center"
+                  >
+                    {
+                      "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."
+                    }
+                  </Text>
+                ) : null}
+              </HStack>
+            </>
+          ) : null}
           {!cellarData.depositTokens.list.includes(
             selectedToken?.symbol || ""
           ) ? (
