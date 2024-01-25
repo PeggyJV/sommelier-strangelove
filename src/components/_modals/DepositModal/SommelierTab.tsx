@@ -830,6 +830,26 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         </Text>
       </>
     ),
+    "Turbo osETH": () => (
+      <>
+        <Text as="span">
+          Withdrawals: The vault will withdraw from its liquid
+          positions which may be different than the asset you
+          deposited.
+          <br />
+          <br />
+          Risks: All Sommelier vaults contain smart contract risk and
+          varying degrees of economic risk. Please take note of the
+          following risks; however, this list is not exhaustive, and
+          there may be additional risks:
+          <br />
+          <br />
+          -This vault has exposure to osETH, an emerging LST, which
+          means that it is more susceptible to depegs than its more
+          established counterparts.
+        </Text>
+      </>
+    ),
     "Turbo SOMM": () => (
       <>
         <Text as="span" style={{ textAlign: "center" }}>

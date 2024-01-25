@@ -16,7 +16,7 @@ export interface Token {
  */
 export const tokenConfig: Token[] = [
   {
-src: "/assets/icons/somm.png",
+    src: "/assets/icons/somm.png",
     alt: "Sommelier logo",
     symbol: "axlSOMM",
     address: "0x4e914bbdcde0f455a8ac9d59d3bf739c46287ed2",
@@ -372,6 +372,15 @@ src: "/assets/icons/somm.png",
     symbol: "weETH",
     address: "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
     coinGeckoId: "wrapped-eeth",
+    decimals: 18,
+    chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
+    src: "/assets/icons/osETH.png",
+    alt: "osETH logo",
+    symbol: "osETH",
+    address: "0xf1c9acdc66974dfb6decb12aa385b9cd01190e38",
+    coinGeckoId: "stakewise-v3-oseth",
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
   },

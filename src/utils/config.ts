@@ -167,6 +167,12 @@ export const config = {
       SLUG: "Turbo-STETH-(steth-deposit)",
       ABI: cellarV0821,
     },
+    //need to update
+    TURBO_OSETH: {
+      ADDRESS: "0xF47Cd68Fb1CB26d634f069d78A9a5cA8d7a5cd01",
+      SLUG: "Turbo-osETH",
+      ABI: cellarV0821,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -245,6 +251,10 @@ export const config = {
     },
     TURBO_EETH_STAKER: {
       ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
+      ABI: cellarStakingV0821,
+    },
+    TURBO_OSETH_STAKER: {
+      ADDRESS: "0xE48992477E0195b8130bC4ce032326266B352109",
       ABI: cellarStakingV0821,
     },
   },
