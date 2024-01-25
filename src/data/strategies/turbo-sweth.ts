@@ -56,7 +56,10 @@ export const turboSWETH: CellarData = {
    
     - This vault has exposure to swETH, an LST that is not redeemable until Q1 2024, which makes this LST more susceptible to depegs than its redeemable counterparts.
    
-    - Because withdrawals can only be facilitated based on the available ETH-swETH liquidity in the market, it is possible to receive swETH upon withdrawal even if you deposited ETH.`,
+    - Because withdrawals can only be facilitated based on the available ETH-swETH liquidity in the market, it is possible to receive swETH upon withdrawal even if you deposited ETH.
+    
+    - This vault does liquidity provision which can result in impermanent loss.
+    `,
   },
   overrideApy: {
     title: "Backtested APY",

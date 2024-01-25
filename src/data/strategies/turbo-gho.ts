@@ -55,6 +55,8 @@ export const turboGHO: CellarData = {
     - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events. 
     
     - Because withdrawals can only be facilitated based on the available GHO-USDC liquidity in the market, it is possible to receive GHO upon withdrawal even if you deposited USDC.
+
+    - This vault does liquidity provision which can result in impermanent loss.
     `,
   },
   overrideApy: {
