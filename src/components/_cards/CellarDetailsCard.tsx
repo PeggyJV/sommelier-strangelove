@@ -228,7 +228,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 >
                   {performanceFee}.00%
                 </CardStat>
-                <CardStat label="Deposit and Exit Fees" flex={0}>
+                <CardStat label="Exit Fees" flex={0}>
                   0.00%
                 </CardStat>
               </HStack>

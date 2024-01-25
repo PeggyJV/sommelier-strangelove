@@ -58,7 +58,8 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
 
         return {
           [symbol]: props.constantAllUniqueAssetsArray.find(
-            (token) => token.symbol === symbol
+            (token) =>
+              token.symbol === symbol
           )!,
         }
       }

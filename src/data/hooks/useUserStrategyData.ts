@@ -36,7 +36,6 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const key =
     strategyAddress +
     (config.chain.id !== "ethereum" ? "-" + chain : "")
-  
   const query = useQuery(
     [
       "USE_USER_DATA",

@@ -2,9 +2,11 @@ import cellarRouterV0815 from "../abi/cellar-router-v0.8.15.json"
 import cellarRouterV0816 from "../abi/cellar-router-v0.8.16.json"
 import cellarStakingV0815 from "../abi/cellar-staking-v.0.8.15.json"
 import cellarStakingV0821 from "../abi/cellar-staking-v0.8.21.json"
+import ensoRouterABI from "../abi/enso-router.json"
 import cellarV0815 from "../abi/cellar-v0.8.15.json"
 import cellarV0816 from "../abi/cellar-v0.8.16.json"
 import cellarV0821 from "../abi/cellar-v0.8.21.json"
+import cellarV0821MultiDeposit from "../abi/cellar-v0.8.21_multiDeposit.json"
 import gravityBridge from "../abi/gravityBridge.json"
 import { erc20ABI } from "wagmi"
 
@@ -16,6 +18,11 @@ export const config = {
     SLIPPAGE: 0.5,
   },
   CONTRACT: {
+    TEST_ARBITRUM_MULTI_ASSET_DEPOSIT: {
+      ADDRESS: "0x7C3bccC2060F097790D1751f25c73d5065683F88",
+      SLUG: "MultiAsset-Deposit-Arbitrum",
+      ABI: cellarV0821MultiDeposit,
+    },
     TEST_ARBITRUM_REAL_YIELD_USD: {
       ADDRESS: "0xA73B0B48E26E4B8B24CeaD149252cc275deE99A6",
       SLUG: "Real-Yield-USD-Arbitrum",
@@ -243,9 +250,17 @@ export const config = {
       ADDRESS: "0xD7FE9DB494B28c55920700eA6E9347c49290A510",
       ABI: cellarStakingV0821,
     },
+    TEST_ARBITRUM_MULTI_ASSET_DEPOSIT_STAKER: {
+      ADDRESS: "0xD7FE9DB494B28c55920700eA6E9347c49290A510",
+      ABI: cellarStakingV0821,
+    },
     TURBO_EETH_STAKER: {
       ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
+    },
+    ENSO_ROUTER: {
+      ADDRESS: "0x80EbA3855878739F4710233A8a19d89Bdd2ffB8E",
+      ABI: ensoRouterABI,
     },
   },
   cleargate: {

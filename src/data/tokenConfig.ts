@@ -16,7 +16,7 @@ export interface Token {
  */
 export const tokenConfig: Token[] = [
   {
-src: "/assets/icons/somm.png",
+    src: "/assets/icons/somm.png",
     alt: "Sommelier logo",
     symbol: "axlSOMM",
     address: "0x4e914bbdcde0f455a8ac9d59d3bf739c46287ed2",
@@ -333,8 +333,17 @@ src: "/assets/icons/somm.png",
   {
     src: "/assets/icons/usdc.png",
     alt: "USD Coin logo",
-    symbol: "USDC",
+    symbol: "USDC_e",
     address: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+    coinGeckoId: "usd-coin",
+    decimals: 6,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
+    src: "/assets/icons/usdc.png",
+    alt: "USD Coin logo",
+    symbol: "USDC",
+    address: "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
     coinGeckoId: "usd-coin",
     decimals: 6,
     chain: chainSlugMap.ARBITRUM.id,
@@ -376,6 +385,76 @@ src: "/assets/icons/somm.png",
     chain: chainSlugMap.ETHEREUM.id,
   },
 ]
+// --- ETH ACCEPTED TOKENS ---
+let acceptedETHDepositTokens = [
+  "USDC",
+  "GHO",
+  "USDT",
+  "DAI",
+  "LUSD",
+  "swETH",
+  "WETH",
+  "stETH",
+  "wstETH",
+  "cbETH",
+  "rETH",
+  "WBTC",
+  "FRAX",
+  "LINK",
+  "COMP",
+  "CRV",
+  "LDO",
+  "MKR",
+  "AAVE",
+  "ENS",
+  "UNI",
+  "SNX",
+  "1INCH",
+  "MATIC",
+  "SOMM",
+  "eETH",
+  "swETH",
+  "BUSD",
+]
+
+let depositTokenMapETH = tokenConfig.reduce((map, token) => {
+  if (acceptedETHDepositTokens.includes(token.symbol)) {
+    map[token.symbol] = token
+  }
+  return map
+}, {} as { [symbol: string]: Token })
+
+// sort map by symbol
+export const acceptedETHDepositTokenMap = Object.keys(depositTokenMapETH)
+  .sort()
+  .reduce((obj, key) => {
+    obj[key] = depositTokenMapETH[key]
+    return obj
+  }, {} as { [symbol: string]: Token })
+
+// --- ARB ACCEPTED TOKENS ---
+let acceptedARBDepositTokens = [
+  "USDC",
+  //"USDT",
+  //"DAI",
+]
+
+let depositTokenMapARB = tokenConfig.reduce((map, token) => {
+  if (acceptedARBDepositTokens.includes(token.symbol)) {
+    map[token.symbol] = token
+  }
+  return map
+}, {} as { [symbol: string]: Token })
+
+// sort map by symbol
+export const acceptedARBDepositTokenMap = Object.keys(
+  depositTokenMapARB
+)
+  .sort()
+  .reduce((obj, key) => {
+    obj[key] = depositTokenMapARB[key]
+    return obj
+  }, {} as { [symbol: string]: Token })
 
 // Creatae a map from each token symbol to its config
 export const tokenConfigMap = tokenConfig.reduce((map, token) => {

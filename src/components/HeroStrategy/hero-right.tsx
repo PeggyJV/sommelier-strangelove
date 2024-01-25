@@ -14,9 +14,6 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { VFC } from "react"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
-import {
-  intervalGainTimeline,
-} from "data/uiConfig"
 import { CountDown } from "./count-down"
 import {
   addDays,
@@ -60,11 +57,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const dailyChange = changes?.daily
   const router = useRouter()
 
-  const intervalGainPct =
-    changes?.[intervalGainTimeline(cellarConfig)]
-
   const countdown = isComingSoon(launchDate)
-  const isTwoDaysCountdown = isComingSoon(twoDaysAfterLaunch)
 
   const potentialStakingApy = isLoading
     ? "-"
@@ -95,12 +88,6 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
-      {/* {!countdown && isTwoDaysCountdown && (
-        <CountDown
-          launchDate={twoDaysAfterLaunch}
-          isTwoDaysAfterLaunch={isTwoDaysCountdown}
-        />
-      )} */}
       {countdown && launchDate ? (
         <>
           <CountDown launchDate={launchDate} />
