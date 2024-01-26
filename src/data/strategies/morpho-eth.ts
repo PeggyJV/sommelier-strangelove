@@ -81,7 +81,7 @@ export const morphoETH: CellarData = {
     cellar: {
       address: config.CONTRACT.MORPHO_ETH.ADDRESS,
       abi: config.CONTRACT.MORPHO_ETH.ABI,
-      key: CellarKey.CELLAR_V2PT5,
+      key: CellarKey.CELLAR_V2PT6,
       decimals: 18,
     },
     staker: {

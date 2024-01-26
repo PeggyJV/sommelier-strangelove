@@ -35,6 +35,7 @@ let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
+  [config.CONTRACT.MORPHO_ETH.SLUG]: morphoETH,
   [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
   [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
@@ -66,6 +67,7 @@ cellarConfig = {
 // ! For not ethereum cellars the key must be {cellarAddress}-{chainId}
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
+  [config.CONTRACT.MORPHO_ETH.ADDRESS.toLowerCase()]: morphoETH,
   [config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS.toLowerCase() +
   "-arbitrum"]: testArbitrumRealYieldUsd,
   [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS.toLowerCase()]:
