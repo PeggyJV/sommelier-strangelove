@@ -303,6 +303,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       assetAddress
     )
 
+    if (response.isSupported === false) {
+      throw new Error("Asset is not supported")
+    }
+
     // 6 decimal place precision
     return Number(response.depositFee) / 10 ** 6
   }
@@ -324,7 +328,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           setDepositFee(depositFee)
         } catch (error) {
           console.error("Error fetching deposit fee:", error)
-          setDepositFee(0) // Or handle the error as you see fit
+          throw error
         }
       }
 
