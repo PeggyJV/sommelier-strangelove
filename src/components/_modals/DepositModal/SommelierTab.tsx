@@ -8,15 +8,19 @@ import {
   Icon,
   Spinner,
   Avatar,
-  Flex,
-  IconButton,
+  Tooltip,
   UseDisclosureProps,
+  Box,
+  Input,
+  InputGroup,
+  InputRightAddon,
+  useTheme,
 } from "@chakra-ui/react"
-import { useEffect, useState, VFC } from "react"
+
+import { useEffect, useMemo, useState, VFC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
-import { FiSettings } from "react-icons/fi"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import {
   depositAssetTokenConfig,
@@ -26,11 +30,16 @@ import {
 import { Link } from "components/Link"
 import { config } from "utils/config"
 import { erc20ABI, useSigner, useAccount, useBalance } from "wagmi"
-import { ethers } from "ethers"
+import { Contract, ethers } from "ethers"
 import { getAddress } from "ethers/lib/utils.js"
 
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
+import {
+  InformationIcon,
+  GreenCheckCircleIcon,
+} from "components/_icons"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 
 interface FormValues {
   depositAmount: number
@@ -42,12 +51,11 @@ import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
-import { SwapSettingsCard } from "components/_cards/SwapSettingsCard"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
-import { isActiveTokenStrategyEnabled, waitTime } from "data/uiConfig"
+import { waitTime } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
@@ -56,6 +64,19 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
+import {
+  useEnsoRoutes,
+  TokenMap,
+  EnsoRouteConfig,
+  getEnsoRouterAddress,
+} from "data/hooks/useEnsoRoutes"
+import {
+  acceptedETHDepositTokenMap,
+  acceptedARBDepositTokenMap,
+} from "src/data/tokenConfig"
+import { config as contractConfig } from "src/utils/config"
+import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
+import { chainConfig, chainSlugMap } from "data/chainConfig"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -86,6 +107,7 @@ function scientificToDecimalString(num: number) {
   return num.toString()
 }
 
+//! This handles all deposits, not just the tab
 export const SommelierTab: VFC<DepositModalProps> = ({
   notifyModal,
   ...props
@@ -96,7 +118,34 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
-  const depositTokens = cellarData.depositTokens.list
+  const [slippageValue, setSlippageValue] = useState("3")
+  const theme = useTheme()
+
+  let acceptedDepositTokenMap = {}
+
+  // TODO: Clean and enable below for enso
+  /* 
+  // Drop active asset from deposit tokens to put active asset at the top of the token list
+  if (cellarConfig.chain.id === chainSlugMap.ETHEREUM.id) {
+    acceptedDepositTokenMap = acceptedETHDepositTokenMap
+  } else if (cellarConfig.chain.id === chainSlugMap.ARBITRUM.id) {
+    acceptedDepositTokenMap = acceptedARBDepositTokenMap
+  } else {
+    throw new Error(
+      `Need to create new accepted token map for chain: ${cellarConfig.chain.id}`
+    )
+  }
+  */
+
+  let depositTokens: string[] = cellarData.depositTokens.list
+  // Drop base asset from deposit token list
+  depositTokens = depositTokens.filter(
+    (token) => token !== cellarConfig.baseAsset.symbol
+  )
+
+  // Put base asset at the top of the token list
+  depositTokens.unshift(cellarConfig.baseAsset.symbol)
+
   const { addToast, update, close, closeAll } = useBrandedToast()
 
   const currentStrategies =
@@ -163,7 +212,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       //   stable: value.symbol,
       // })
     }
-
     setSelectedToken(value)
   }
 
@@ -194,6 +242,54 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     selectedToken?.address &&
     new ethers.Contract(selectedToken?.address, erc20ABI, signer!)
 
+  // New enso route config
+  // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token
+  const ensoRouteConfig: EnsoRouteConfig = useMemo(
+    () => ({
+      fromAddress: address!,
+      tokensIn: [
+        {
+          address:
+            selectedToken?.address ||
+            strategyData?.activeAsset.address.toLowerCase() ||
+            "",
+          amountBaseDenom:
+            watchDepositAmount * 10 ** (selectedToken?.decimals || 0),
+        },
+      ],
+      tokenOut: cellarAddress,
+      slippage: Number(slippageValue),
+    }),
+    [
+      address,
+      cellarAddress,
+      selectedToken?.address,
+      selectedToken?.decimals,
+      strategyData?.activeAsset.address,
+      watchDepositAmount,
+      slippageValue,
+    ]
+  )
+
+  const [lastEnsoResponse, setLastEnsoResponse] = useState<any>(null)
+
+  const { ensoResponse, ensoError, ensoLoading } = useEnsoRoutes(
+    ensoRouteConfig,
+    !isSubmitting,
+    lastEnsoResponse
+  )
+  useEffect(() => {
+    if (ensoResponse) {
+      setLastEnsoResponse(ensoResponse)
+    }
+  }, [ensoResponse])
+
+  const ensoRouterContract = new Contract(
+    contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS,
+    contractConfig.CONTRACT.ENSO_ROUTER.ABI,
+    signer!
+  )
+
   const depositAndSwap = useDepositAndSwap(cellarConfig)
 
   const isActiveAsset =
@@ -202,27 +298,77 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const geo = useGeo()
 
-  const deposit = async (
-    amtInWei: ethers.BigNumber,
-    address?: string
-  ) => {
-    if (
-      cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-      cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-    ) {
-      const gasLimitEstimated = await estimateGasLimitWithRetry(
-        cellarSigner?.estimateGas.deposit,
-        cellarSigner?.callStatic.deposit,
-        [amtInWei, address],
-        1000000,
-        2000000
-      )
-      return cellarSigner?.deposit(amtInWei, address, {
-        gasLimit: gasLimitEstimated,
-      })
+  const queryDepositFeePercent = async (assetAddress: String) => {
+    const response = await cellarSigner?.alternativeAssetData(
+      assetAddress
+    )
+
+    // 6 decimal place precision
+    return Number(response.depositFee) / 10 ** 6
+  }
+
+  const [depositFee, setDepositFee] = useState<number>(0) // Use lowercase 'number'
+  const [isDepositFeeLoading, setIsDepositFeeLoading] =
+    useState<boolean>(false)
+
+  useEffect(() => {
+    // Define an async function inside the useEffect
+    const fetchDepositFee = async () => {
+      setIsDepositFeeLoading(true)
+
+      if (selectedToken?.address) {
+        try {
+          const depositFee = await queryDepositFeePercent(
+            selectedToken.address
+          )
+          setDepositFee(depositFee)
+        } catch (error) {
+          console.error("Error fetching deposit fee:", error)
+          setDepositFee(0) // Or handle the error as you see fit
+        }
+      }
+
+      setIsDepositFeeLoading(false)
     }
 
-    return cellarSigner?.deposit(amtInWei, address)
+    // Call the async function
+    fetchDepositFee()
+  }, [selectedToken])
+
+  const deposit = async (
+    amtInWei: ethers.BigNumber,
+    address?: string,
+    assetAddress?: string
+  ) => {
+    if (
+      assetAddress !== undefined &&
+      assetAddress.toLowerCase() !==
+        cellarConfig.baseAsset.address.toLowerCase()
+    ) {
+      return cellarSigner?.multiAssetDeposit(
+        assetAddress,
+        amtInWei,
+        address
+      )
+    } else {
+      if (
+        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+      ) {
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          cellarSigner?.estimateGas.deposit,
+          cellarSigner?.callStatic.deposit,
+          [amtInWei, address],
+          1000000,
+          2000000
+        )
+        return cellarSigner?.deposit(amtInWei, address, {
+          gasLimit: gasLimitEstimated,
+        })
+      }
+
+      return cellarSigner?.deposit(amtInWei, address)
+    }
   }
 
   const onSubmit = async (data: any, e: any) => {
@@ -250,9 +396,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     // check if approval exists
     const allowance = await erc20Contract.allowance(
       address,
-      isActiveAsset
+      isActiveAsset ||
+        cellarData.depositTokens.list.includes(tokenSymbol)
         ? cellarConfig.cellar.address
-        : cellarConfig.cellarRouter.address
+        : ensoRouterContract.address
     )
 
     const amtInWei = ethers.utils.parseUnits(
@@ -278,9 +425,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
       try {
         const { hash } = await erc20Contract.approve(
-          isActiveAsset
+          isActiveAsset ||
+            cellarData.depositTokens.list.includes(tokenSymbol)
             ? cellarConfig.cellar.address
-            : cellarConfig.cellarRouter.address,
+            : ensoRouterContract.address,
           ethers.constants.MaxUint256
         )
         addToast({
@@ -342,23 +490,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       // If selected token is cellar's current asset, it is cheapter to deposit into the cellar
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
-      const response = isActiveAsset
-        ? await deposit(amtInWei, address)
-        : await depositAndSwap.mutateAsync({
-            cellarAddress: cellarConfig.cellar.address,
-            depositAmount: depositAmount,
-            slippage,
-            activeAsset: {
-              address: activeAsset?.address!,
-              decimals: activeAsset?.decimals!,
-              symbol: activeAsset?.symbol!,
-            },
-            selectedToken: {
-              address: selectedToken.address,
-              decimals: selectedTokenBalance?.decimals!,
-              symbol: selectedToken.symbol,
-            },
-          })
+
+      const response =
+        isActiveAsset ||
+        cellarData.depositTokens.list.includes(tokenSymbol)
+          ? await deposit(
+              amtInWei,
+              address,
+              data?.selectedToken?.address
+            )
+          : await signer!.sendTransaction({
+              to: ensoRouterContract.address,
+              data: ensoResponse.tx.data,
+            })
 
       if (!response) throw new Error("response is undefined")
       addToast({
@@ -541,6 +685,67 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     )
   }, [activeAsset, currentAsset])
 
+  const [ensoSharesOut, setEnsoSharesOut] = useState<number>(0)
+
+  const [cellarSharePreviewRedeem, setCellarSharePreviewRedeem] =
+    useState<number>(0)
+
+  useEffect(() => {
+    const fetchCellarSharePreviewRedeem = async () => {
+      try {
+        const previewRedeem = await fetchCellarPreviewRedeem(
+          cellarData.slug,
+          BigInt(10 ** cellarConfig.cellar.decimals)
+        )
+        setCellarSharePreviewRedeem(
+          previewRedeem / 10 ** cellarConfig.cellar.decimals
+        )
+      } catch (error) {
+        console.error(
+          "Error fetching cellar share preview redeem: ",
+          error
+        )
+      }
+    }
+
+    fetchCellarSharePreviewRedeem()
+  }, [cellarConfig.cellar.address, cellarConfig.cellar.decimals])
+
+  useEffect(() => {
+    if (
+      watchDepositAmount === undefined ||
+      watchDepositAmount <= 0 ||
+      Number.isNaN(watchDepositAmount)
+    ) {
+      setEnsoSharesOut(0)
+    } else {
+      setEnsoSharesOut(
+        Number(ensoResponse?.amountOut || 0) /
+          10 ** cellarConfig.cellar.decimals
+      )
+    }
+  }, [watchDepositAmount, ensoResponse, cellarConfig])
+
+  const [baseAssetPrice, setBaseAssetPrice] = useState<number>(0)
+
+  useEffect(() => {
+    const fetchBaseAssetPrice = async () => {
+      try {
+        const price = await fetchCoingeckoPrice(
+          cellarConfig.baseAsset.coinGeckoId,
+          "usd"
+        )
+
+        setBaseAssetPrice(Number(price || 0))
+      } catch (error) {
+        console.log(error)
+        console.error("Error fetching base asset price: ", error)
+      }
+    }
+
+    fetchBaseAssetPrice()
+  }, [cellarConfig])
+
   // Close swap settings card if user changed current asset to active asset.
   useEffect(() => {
     if (selectedToken?.address === currentAsset?.address)
@@ -550,12 +755,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const strategyMessages: Record<string, () => JSX.Element> = {
     "Real Yield ETH": () => (
       <>
-        <Text textAlign="center">
-          You can use the following external services to acquire WETH:{" "}
-          <Link href="https://wrapeth.com/" textDecor="underline">
-            https://wrapeth.com/
-          </Link>
-        </Text>
         <Link
           href={"https://app.rhino.fi/invest/YIELDETH/supply"}
           isExternal
@@ -579,6 +778,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           the vault to be liquidated. Although there are safeguards in
           place to help mitigate this, the liquidation risk is not
           eliminated.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -606,6 +808,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           <br />- This vault is mainly comprised of decentralized and
           centralized stablecoins, both of which can experience depeg
           events.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -634,6 +839,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           the vault to be liquidated. Although there are safeguards in
           place to help mitigate this, the liquidation risk is not
           eliminated.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -662,6 +870,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           <br />- This vault is mainly comprised of decentralized and
           centralized stablecoins, both of which can experience depeg
           events.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -682,6 +893,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           the available ETH-swETH liquidity in the market, it is
           possible to receive swETH upon withdrawal even if you
           deposited ETH.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
         </Text>
       </>
     ),
@@ -834,15 +1048,59 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       </>
     ),
     "Turbo SOMM": () => (
-      <Text as="span" style={{ textAlign: "center" }}>
-        Bridge your SOMM tokens to Ethereum via{" "}
-        <Link
-          href="https://app.sommelier.finance/bridge"
-          isExternal
-          textDecor="underline"
-        >
-          Sommelier bridge
-        </Link>
+      <>
+        <Text as="span" style={{ textAlign: "center" }}>
+          Bridge your SOMM tokens to Ethereum via{" "}
+          <Link
+            href="https://app.sommelier.finance/bridge"
+            isExternal
+            textDecor="underline"
+          >
+            Sommelier bridge
+          </Link>
+        </Text>
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
+        </Text>
+      </>
+    ),
+    "Turbo eETH": () => (
+      <Text as="span">
+        All Sommelier vaults contain smart contract risk and varying
+        degrees of economic risk. Please take note of the following
+        risks; however, this list is not exhaustive, and there may be
+        additional risks:
+        <br />
+        <br />- This vault does liquidity provision which can result
+        in impermanent loss.
+      </Text>
+    ),
+    "Turbo STETH": () => (
+      <Text as="span">
+        All Sommelier vaults contain smart contract risk and varying
+        degrees of economic risk. Please take note of the following
+        risks; however, this list is not exhaustive, and there may be
+        additional risks:
+        <br />
+        <br />- This vault does liquidity provision which can result
+        in impermanent loss.
+      </Text>
+    ),
+    turboSTETHstETHDeposit: () => (
+      <Text as="span">
+        All Sommelier vaults contain smart contract risk and varying
+        degrees of economic risk. Please take note of the following
+        risks; however, this list is not exhaustive, and there may be
+        additional risks:
+        <br />
+        <br />- This vault does liquidity provision which can result
+        in impermanent loss.
       </Text>
     ),
   }
@@ -855,64 +1113,40 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             <Text as="span">Vault</Text>
             <Text as="span">{cellarName}</Text>
           </HStack>
-          {isActiveTokenStrategyEnabled(cellarConfig) && (
-            <HStack justify="space-between">
-              <Text as="span">Active token strategy</Text>
-              {isLoading ? (
-                <Spinner size="xs" />
-              ) : (
-                <HStack spacing={1}>
-                  <Avatar
-                    boxSize={6}
-                    src={currentAsset?.src}
-                    name={currentAsset?.alt}
-                    borderWidth={2}
-                    borderColor="surface.bg"
-                    bg="surface.bg"
-                  />
-                  <Text as="span">{currentAsset?.symbol}</Text>
-                </HStack>
-              )}
-            </HStack>
-          )}
+          <HStack justify="space-between">
+            <Text as="span">Accounting Asset</Text>
+            {isLoading ? (
+              <Spinner size="xs" />
+            ) : (
+              <HStack spacing={1}>
+                <Avatar
+                  boxSize={6}
+                  src={currentAsset?.src}
+                  name={currentAsset?.alt}
+                  borderWidth={2}
+                  borderColor="surface.bg"
+                  bg="surface.bg"
+                />
+                <Text as="span">{currentAsset?.symbol}</Text>
+              </HStack>
+            )}
+          </HStack>
         </VStack>
       </VStack>
       <FormProvider {...methods}>
         <VStack
           as="form"
-          spacing={8}
+          spacing={5}
           align="stretch"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <FormControl isInvalid={isError as boolean | undefined}>
-            <Flex
-              alignItems="center"
-              justifyContent="space-between"
-              position="relative" // anchors the swap settings card, which is positioned as absolute
-            >
-              <CardHeading pb={2}>enter amount</CardHeading>
-              {!isActiveAsset && depositTokens.length > 1 && (
-                <>
-                  <IconButton
-                    aria-label="swap settings"
-                    colorScheme="transparent"
-                    disabled={isActiveAsset}
-                    color="neutral.300"
-                    icon={<FiSettings />}
-                    onClick={() => {
-                      setShowSwapSettings(!showSwapSettings)
-                    }}
-                  />
-                  {showSwapSettings && <SwapSettingsCard />}
-                </>
-              )}
-            </Flex>
-
             <ModalMenu
               depositTokens={depositTokens}
               setSelectedToken={trackedSetSelectedToken}
               activeAsset={activeAsset?.address}
               selectedTokenBalance={selectedTokenBalance}
+              isDisabled={isSubmitting}
             />
             <FormErrorMessage color="energyYellow">
               <Icon
@@ -927,9 +1161,289 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
+          {/* selectedToken?.symbol !== activeAsset?.symbol ? (
+            <Tooltip
+              hasArrow
+              //label=""
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack pr={2} textAlign="center">
+                <Text fontFamily={"inherit"}>
+                  Non accounting asset deposits go through a router
+                  and bundle a series of swaps and subsequent vault
+                  deposit.
+                </Text>
+              </HStack>
+            </Tooltip>
+          ) : null*/}
+          {selectedToken?.symbol !== activeAsset?.symbol ? (
+            <>
+              <CardHeading paddingTop="2em">
+                Transaction details
+              </CardHeading>
+              {/*
+          <HStack justify="space-between">
+            <HStack spacing={1} align="center">
+              <Tooltip
+                hasArrow
+                label="Percent of price slippage you are willing to accept for a trade. Higher slippage tolerance means your transaction is more likely to succeed, but you may get a worse price."
+                bg="surface.bg"
+                color="neutral.300"
+                textAlign="center"
+              >
+                <HStack spacing={1} align="center">
+                  <CardHeading fontSize="small">
+                    Slippage Tolerance
+                  </CardHeading>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+            </HStack>
+            {cellarData.depositTokens.list.includes(
+              selectedToken?.symbol || ""
+            ) ? (
+              <Tooltip
+                hasArrow
+                label="No slippage when depositing directly into a vault."
+                bg="surface.bg"
+                color="neutral.300"
+                textAlign="center"
+              >
+                <HStack pr={2}>
+                  <GreenCheckCircleIcon></GreenCheckCircleIcon>
+                  <Text fontFamily={"inherit"}>None</Text>
+                </HStack>
+              </Tooltip>
+            ) : (
+              <Box maxW="200px">
+                <InputGroup>
+                  <Input
+                    type="number"
+                    min={0}
+                    max={20}
+                    placeholder="0"
+                    width="4.5em"
+                    disabled={isSubmitting ?? false}
+                    value={
+                      slippageValue !== undefined ? slippageValue : ""
+                    }
+                    onChange={(e) => {
+                      const inputValue = e.target.value
+
+                      // If input is empty, set state to an empty string and return
+                      if (inputValue === "") {
+                        setSlippageValue("")
+                        return
+                      }
+
+                      // Parse the input value to a float with 2 decimal places
+                      const num = parseFloat(inputValue)
+
+                      // If number is between 0 and 20, update the state
+                      if (!isNaN(num) && num >= 0 && num <= 20) {
+                        setSlippageValue(String(num))
+                      } else {
+                        addToast({
+                          heading: "Invalid Slippage Tolerance",
+                          body: (
+                            <Text>
+                              Slippage tolerance must be between 0 and
+                              20%
+                            </Text>
+                          ),
+                          status: "warning",
+                          closeHandler: closeAll,
+                        })
+
+                        // Clamp the value to the 0-20 range
+                        const clampedValue = Math.min(
+                          Math.max(num, 0),
+                          20
+                        )
+                        setSlippageValue(String(clampedValue))
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const inputValue = e.target.value
+                      if (
+                        !inputValue ||
+                        isNaN(parseFloat(inputValue))
+                      ) {
+                        setSlippageValue("0")
+                      }
+                    }}
+                  />
+                  <InputRightAddon>%</InputRightAddon>
+                </InputGroup>
+              </Box>
+            )}
+          </HStack>
+                  */}
+              <HStack justify="space-between">
+                <HStack spacing={1} align="center">
+                  <Tooltip
+                    hasArrow
+                    label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
+                  however, it will incur a small fee due to the
+                  management of positions at the smart contract level."
+                    bg="surface.bg"
+                    color="neutral.300"
+                    textAlign="center"
+                  >
+                    <HStack spacing={1} align="center">
+                      <CardHeading fontSize="small">
+                        Alternative Deposit Asset Fee
+                      </CardHeading>
+                      <InformationIcon
+                        color="neutral.300"
+                        boxSize={3}
+                      />
+                    </HStack>
+                  </Tooltip>
+                </HStack>
+                {cellarData.depositTokens.list.includes(
+                  selectedToken?.symbol || ""
+                ) ? (
+                  <>
+                    {isDepositFeeLoading ? (
+                      <Spinner size="md" paddingRight={"1em"} />
+                    ) : (
+                      <Tooltip
+                        hasArrow
+                        label={
+                          depositFee === 0 ? "No deposit fee." : null
+                        }
+                        bg="surface.bg"
+                        color="neutral.300"
+                        textAlign="center"
+                      >
+                        <HStack pr={2}>
+                          {depositFee === 0 ? (
+                            <GreenCheckCircleIcon />
+                          ) : null}
+                          <Text fontFamily={"inherit"}>
+                            {depositFee === 0
+                              ? "None"
+                              : `${depositFee}%`}
+                          </Text>
+                        </HStack>
+                      </Tooltip>
+                    )}
+                  </>
+                ) : null}
+              </HStack>
+              <HStack
+                justifyContent={"center"}
+                p={3}
+                spacing={4}
+                align="flex-start"
+                backgroundColor="purple.dark"
+                border="2px solid"
+                borderRadius={16}
+                borderColor="purple.base"
+              >
+                {selectedToken?.symbol !== activeAsset?.symbol ? (
+                  <Text
+                    fontFamily={"inherit"}
+                    fontWeight={"bold"}
+                    textAlign="center"
+                  >
+                    {
+                      "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."
+                    }
+                  </Text>
+                ) : null}
+              </HStack>
+            </>
+          ) : null}
+          {!cellarData.depositTokens.list.includes(
+            selectedToken?.symbol || ""
+          ) ? (
+            ensoError !== null &&
+            watchDepositAmount !== 0 &&
+            !isNaN(watchDepositAmount) ? (
+              <Text
+                pr="2"
+                fontSize="lg"
+                fontWeight={700}
+                textAlign="center"
+                width="100%"
+              >
+                {ensoError}
+              </Text>
+            ) : (
+              <HStack justify="space-between" align="center">
+                <HStack spacing={1} align="center">
+                  <Tooltip
+                    hasArrow
+                    label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
+                    bg="surface.bg"
+                    color="neutral.300"
+                    textAlign="center"
+                  >
+                    <HStack spacing={1} align="center">
+                      <CardHeading fontSize="small">
+                        Estimated Tokens Out
+                      </CardHeading>
+                      <InformationIcon
+                        color="neutral.300"
+                        boxSize={3}
+                      />
+                    </HStack>
+                  </Tooltip>
+                </HStack>
+                {ensoLoading ? (
+                  <>
+                    <Spinner size="md" paddingRight={"1em"} />
+                  </>
+                ) : (
+                  <VStack spacing={0} align="flex-end">
+                    <Text
+                      pr="2"
+                      fontSize="lg"
+                      fontWeight={700}
+                      textAlign="right"
+                      width="100%"
+                    >
+                      ≈ {ensoSharesOut.toFixed(4).toLocaleString()}
+                    </Text>
+                    <HStack
+                      spacing={0}
+                      fontSize="11px"
+                      textAlign="right"
+                      pr="2"
+                    >
+                      <Text as="span">
+                        ${" "}
+                        {(
+                          ensoSharesOut *
+                          cellarSharePreviewRedeem *
+                          baseAssetPrice
+                        )
+                          .toFixed(2)
+                          .toLocaleString()}
+                      </Text>
+                    </HStack>
+                  </VStack>
+                )}
+              </HStack>
+            )
+          ) : (
+            <></>
+          )}
           <BaseButton
             type="submit"
-            isDisabled={isDisabled}
+            isDisabled={
+              isDisabled ||
+              (selectedToken?.symbol !== activeAsset?.symbol &&
+                !cellarData.depositTokens.list.includes(
+                  selectedToken?.symbol || ""
+                ) &&
+                (isDisabled ||
+                  ensoLoading ||
+                  (!ensoLoading && ensoError !== null)))
+            }
             isLoading={isSubmitting}
             fontSize={21}
             py={8}
@@ -950,7 +1464,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             />
             {activeAsset?.symbol}) will save gas fees
           </Text> */}
-          {depositTokens.length > 1 && (
+          {/*depositTokens.length > 1 && (
             <Text textAlign="center">
               <Text textAlign="center">
                 Current Base asset is (
@@ -972,7 +1486,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                 assets. Please swap outside our app for better rates.
               </Text>
             </Text>
-          )}
+                )*/}
           {strategyMessages[currentStrategies] ? (
             strategyMessages[currentStrategies]()
           ) : (

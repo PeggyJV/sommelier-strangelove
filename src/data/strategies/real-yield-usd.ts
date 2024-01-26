@@ -58,13 +58,16 @@ export const realYieldUsd: CellarData = {
 `,
     risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
     
-    - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events.`,
+    - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events.
+    
+    - This vault does liquidity provision which can result in impermanent loss.
+    `,
     backtesting: `
         <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
       `,
   },
   depositTokens: {
-    list: ["USDC", "USDT", "DAI"],
+    list: ["USDC"],
   },
 
   config: {

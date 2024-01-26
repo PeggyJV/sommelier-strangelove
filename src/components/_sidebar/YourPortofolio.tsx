@@ -83,7 +83,7 @@ export const YourPortofolio = () => {
           >
             <Box w="100%">
               {!isError && data ? (
-                data.strategies.map((strategy) => (
+                data.strategies.map((strategy) => (                  
                   <PortofolioItem
                     symbol={
                       strategy.userStrategyData.userData.symbol || ""

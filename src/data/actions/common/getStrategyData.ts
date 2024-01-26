@@ -41,8 +41,7 @@ export const getStrategyData = async ({
       const strategy = Object.values(cellarDataMap).find(
         ({ config }) =>
           config.cellar.address.toLowerCase() ===
-          address.toLowerCase() && config.chain.id === contracts.chain
-      )!
+          address.toLowerCase() && config.chain.id === contracts.chain)!      
       const config: ConfigProps = strategy.config!
       const decimals = config.baseAsset.decimals
       const symbol = config.baseAsset.symbol
@@ -333,6 +332,7 @@ export const getStrategyData = async ({
         extraRewardsApy,
       }
     } catch (e) {
+      console.error("Error fetching strategy data")
       console.error(address, e)
     }
   })()

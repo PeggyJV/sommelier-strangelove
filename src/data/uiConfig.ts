@@ -65,13 +65,6 @@ export const isCurrentDepositsEnabled = (config: ConfigProps) => {
   )
 }
 
-export const isActiveTokenStrategyEnabled = (config: ConfigProps) => {
-  return (
-    config.cellarNameKey === CellarNameKey.AAVE ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  )
-}
-
 export const isAPYEnabled = (config: ConfigProps) => {
   return (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
@@ -124,7 +117,10 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey ===
-      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+     
+      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD||
+    config.cellarNameKey ===
+      CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
   )
 }
 
@@ -174,49 +170,6 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
     return "Unbonded LP tokens earn yield from the vault but do not earn liquidity mining rewards"
   else
     return "The LP tokens represent a user's share of the pool and can always be redeemed for the original tokens"
-}
-
-export const intervalGainPctTitleContent = (config: ConfigProps) => {
-  if (
-    config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-    config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-    config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-    config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-  )
-    return "1W Change vs USDC"
-  if (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  )
-    return "1M Change vs USDC"
-  return ""
-}
-
-export const intervalGainPctTooltipContent = (
-  config: ConfigProps
-) => {
-  return ""
-  // if (
-  //   config.cellarNameKey === CellarNameKey.STEADY_BTC ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_ETH ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_UNI ||
-  //   config.cellarNameKey === CellarNameKey.STEADY_MATIC ||
-  //   config.cellarNameKey === CellarNameKey.REAL_YIELD_USD
-  // )
-  //   return `% change of token price compared to a benchmark portfolio of USDC`
-  // if (
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-  //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  // )
-  //   return `% change of token price compared to a benchmark portfolio of USDC`
-  // // if (
-  // //   config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-  // //   config.cellarNameKey === CellarNameKey.ETH_BTC_TREND
-  // // )
-  // //   return `% change of token price compared to a benchmark portfolio of 50% ETH and 50% BTC`
-  // return ""
 }
 
 export const tokenPriceTooltipContent = (config: ConfigProps) => {
@@ -444,28 +397,28 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-  if (
-    config.cellarNameKey ===
-    CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
-  ) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
+    if (
+      config.cellarNameKey ===
+      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+    ) {
+      return [
+        {
+          title: "7 Day Unbonding",
+          amount: "1.1x SOMM",
+          value: 0,
+        },
+        {
+          title: "14 Day Unbonding",
+          amount: "1.3x SOMM",
+          value: 1,
+        },
+        {
+          title: "21 Day Unbonding",
+          amount: "1.5x SOMM",
+          value: 2,
+        },
+      ]
+    }
   return []
 }
 
@@ -491,7 +444,9 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_SOMM
+      config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
+      config.cellarNameKey ===
+        CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
     ) {
       return "Estimated APY"
     }
@@ -511,7 +466,6 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-      config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
@@ -534,7 +488,6 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
@@ -556,7 +509,6 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
   ) {
     return true
@@ -572,7 +524,8 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM || 
+    config.cellarNameKey === CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
   ) {
     return "Estimated APY"
   }
@@ -612,12 +565,6 @@ export const estimatedApyValue = (config: ConfigProps) => {
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_EETH) {
-    return {
-      value: 6.0,
-      formatted: "6.0%",
-    }
-  }
-  if (config.cellarNameKey === CellarNameKey.MORPHO_ETH) {
     return {
       value: 6.0,
       formatted: "6.0%",
