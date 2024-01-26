@@ -1120,7 +1120,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             ) : (
               <HStack spacing={1}>
                 <Avatar
-                  boxSize={6}
+                  boxSize={7}
                   src={currentAsset?.src}
                   name={currentAsset?.alt}
                   borderWidth={2}

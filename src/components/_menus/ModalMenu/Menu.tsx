@@ -164,11 +164,12 @@ export const Menu: VFC<MenuProps> = ({
           >
             <HStack>
               {value ? (
-                <HStack spacing={1}>
+                <HStack spacing={2}>
                   <Image
-                    boxSize={5}
+                    boxSize={6}
                     src={value.src}
                     alt={value.alt}
+                    style={{ borderRadius: "50%" }}
                   />
                   <span>{value.symbol}</span>
                 </HStack>
@@ -215,9 +216,13 @@ export const Menu: VFC<MenuProps> = ({
                   activeAsset?.toUpperCase()
 
                 const isCellerDepositAsset =
-                  cellarData.depositTokens.list.includes(
+                  (cellarData.depositTokens.list.includes(
                     token.symbol.toUpperCase()
-                  ) && !isActiveAsset
+                  ) ||
+                    cellarData.depositTokens.list.includes(
+                      token.symbol
+                    )) &&
+                  !isActiveAsset
 
                 // Set default selected token to active asset.
                 if (isActiveAsset && !value) onChange(token)
@@ -239,7 +244,12 @@ export const Menu: VFC<MenuProps> = ({
                   >
                     <HStack justify="space-between">
                       <HStack width="100%">
-                        <Image boxSize={5} src={src} alt={alt} />
+                        <Image
+                          boxSize={6}
+                          src={src}
+                          alt={alt}
+                          style={{ borderRadius: "50%" }}
+                        />
                         <span>{symbol}</span>
                         {isActiveAsset && (
                           <HStack
