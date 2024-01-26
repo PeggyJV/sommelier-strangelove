@@ -14,7 +14,7 @@ export const morphoETH: CellarData = {
   name: "Morpho ETH Maximizer",
   slug: config.CONTRACT.MORPHO_ETH.SLUG,
   tradedAssets: ["WETH", "stETH", "wstETH"],
-  launchDate: new Date(Date.UTC(2024, 0, 20, 14, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 0, 29, 16, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Supercharge your ETH lending and leveraged staking experience on Morpho Blue.`,
   strategyType: "Yield",
@@ -22,7 +22,7 @@ export const morphoETH: CellarData = {
   managementFee: "1%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Morpho"],
+  protocols: ["Morpho Blue"],
   strategyAssets: ["WETH", "stETH", "wstETH"],
   performanceSplit: {
     depositors: 80,
@@ -63,7 +63,7 @@ export const morphoETH: CellarData = {
     "https://debank.com/profile/0xcf4b531b4cde95bd35d71926e09b2b54c564f5b6",
   //need to update when multiasset deposit
   depositTokens: {
-    list: ["WETH"],
+    list: ["WETH", "wstETH"],
   },
   config: {
     chain: chainSlugMap.ETHEREUM,
