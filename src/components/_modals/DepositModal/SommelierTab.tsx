@@ -299,6 +299,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const geo = useGeo()
 
   const queryDepositFeePercent = async (assetAddress: String) => {
+    if (assetAddress === cellarConfig.baseAsset.address) {
+      return 0
+    }
+
     const response = await cellarSigner?.alternativeAssetData(
       assetAddress
     )
@@ -1289,7 +1293,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                   <Tooltip
                     hasArrow
                     label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
-                  however, it will incur a small fee due to the
+                  however, it may incur a small fee due to the
                   management of positions at the smart contract level."
                     bg="surface.bg"
                     color="neutral.300"
