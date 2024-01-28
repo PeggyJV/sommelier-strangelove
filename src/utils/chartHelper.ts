@@ -59,6 +59,8 @@ export const createApyChangeDatum = ({
   daysRendered: number
 }): Datum[] | undefined => {
   if (!data) return
+  if (data.length == 0) return
+
   const datum: Datum[] = []
   // Inception date (configured)
   const launchDate = new Date(launchEpoch * 1000)

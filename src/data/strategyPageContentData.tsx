@@ -1222,4 +1222,40 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
+  [config.CONTRACT.MORPHO_ETH.SLUG]: {
+    name: "Morpho ETH Maximizer",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Supercharge your ETH lending and leveraged staking experience on Morpho Blue.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Morpho ETH Maximizer"
+          src="/assets/icons/morpho-eth.png"
+          boxSize={8}
+        />
+        <Text>MaxMorphoETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "stETH", "wstETH"],
+    alternativeTo: "Holding WETH or stETH/wstETH",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Dynamically rebalance between lending and leveraged staking opportunities.`,
+        `Leverage monitoring.`,
+        `Fully automated with built-in auto-compounding.`,
+      ],
+      description: `Supercharge your ETH lending and leveraged staking experience on Morpho Blue.
+     <br/><br/>
+    Note that Morpho ETH Maximizer and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
 }

@@ -299,9 +299,17 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const geo = useGeo()
 
   const queryDepositFeePercent = async (assetAddress: String) => {
+    if (assetAddress === cellarConfig.baseAsset.address) {
+      return 0
+    }
+
     const response = await cellarSigner?.alternativeAssetData(
       assetAddress
     )
+
+    if (response.isSupported === false) {
+      throw new Error("Asset is not supported")
+    }
 
     // 6 decimal place precision
     return Number(response.depositFee) / 10 ** 6
@@ -324,7 +332,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           setDepositFee(depositFee)
         } catch (error) {
           console.error("Error fetching deposit fee:", error)
-          setDepositFee(0) // Or handle the error as you see fit
+          throw error
         }
       }
 
@@ -1029,6 +1037,24 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         </Text>
       </>
     ),
+    "Morpho ETH": () => (
+      <>
+        <Text as="span">
+          Withdrawals: The vault will withdraw from its liquid
+          positions which may be different than the asset you
+          deposited.
+          <br />
+          <br />
+          Risks: All Sommelier vaults contain smart contract risk and
+          varying degrees of economic risk. Please take note of the
+          following risks; however, this list is not exhaustive, and
+          there may be additional risks:
+          <br />
+          <br />- This vault uses leverage, which means there is
+          liquidation risk.
+        </Text>
+      </>
+    ),
     "Turbo SOMM": () => (
       <>
         <Text as="span" style={{ textAlign: "center" }}>
@@ -1102,7 +1128,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             ) : (
               <HStack spacing={1}>
                 <Avatar
-                  boxSize={6}
+                  boxSize={7}
                   src={currentAsset?.src}
                   name={currentAsset?.alt}
                   borderWidth={2}
@@ -1267,7 +1293,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                   <Tooltip
                     hasArrow
                     label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
-                  however, it will incur a small fee due to the
+                  however, it may incur a small fee due to the
                   management of positions at the smart contract level."
                     bg="surface.bg"
                     color="neutral.300"

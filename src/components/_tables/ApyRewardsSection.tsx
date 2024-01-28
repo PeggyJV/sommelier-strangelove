@@ -60,7 +60,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
 
   if (!baseApy && !rewardsApy && !extraRewardsApy) {
     return (
-      <Text textAlign="right" fontWeight={550} fontSize="16px">
+      <Text>
         --
       </Text>
     )

@@ -174,6 +174,11 @@ export const config = {
       SLUG: "Turbo-STETH-(steth-deposit)",
       ABI: cellarV0821,
     },
+    MORPHO_ETH: {
+      ADDRESS: "0xcf4B531b4Cde95BD35d71926e09B2b54c564F5b6",
+      SLUG: "Morpho-ETH",
+      ABI: cellarV0821MultiDeposit,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -261,6 +266,10 @@ export const config = {
     ENSO_ROUTER: {
       ADDRESS: "0x80EbA3855878739F4710233A8a19d89Bdd2ffB8E",
       ABI: ensoRouterABI,
+    },
+    MORPHO_ETH_STAKER: {
+      ADDRESS: "0xe468c1156d4b3399e4Aa1080c58fFBc6119722F9",
+      ABI: cellarStakingV0821,
     },
   },
   cleargate: {

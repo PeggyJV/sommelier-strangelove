@@ -89,7 +89,6 @@ export const testArbitrumMultiAssetDeposit: CellarData = {
     },
     baseAsset: tokenConfigMap.USDC_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
-    
   },
   faq: [
     {
