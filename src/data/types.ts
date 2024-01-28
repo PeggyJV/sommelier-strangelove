@@ -1,7 +1,7 @@
 import { IconProps } from "@chakra-ui/react"
 import { VFC } from "react"
 import { Token } from "src/data/tokenConfig"
-import  { Chain } from "data/chainConfig"
+import { Chain } from "data/chainConfig"
 
 export enum StakerKey {
   CELLAR_STAKING_V0815 = "CELLAR_STAKING_V0815",
@@ -12,6 +12,7 @@ export enum CellarKey {
   CELLAR_V0816 = "CELLAR_V0816",
   CELLAR_V2 = "CELLAR_V2",
   CELLAR_V2PT5 = "CELLAR_V2PT5",
+  CELLAR_V2PT6 = "CELLAR_V2PT6",
 }
 export enum CellarRouterKey {
   CELLAR_ROUTER_V0815 = "CELLAR_ROUTER_V0815",
@@ -41,9 +42,11 @@ export enum CellarNameKey {
   TURBO_GHO = "TURBO_GHO",
   TURBO_STETH = "TURBO_STETH",
   TEST_ARBITRUM_REAL_YIELD_USD = "TEST_ARBITRUM_REAL_YIELD_USD",
+  TEST_ARBITRUM_MULTI_ASSET_DEPOSIT = "TEST_ARBITRUM_MULTI_ASSET_DEPOSIT",
   TURBO_STETH_STETH_DEPOSIT = "TURBO_STETH_STETH_DEPOSIT",
   TURBO_SOMM = "TURBO_SOMM",
   TURBO_EETH = "TURBO_EETH",
+  MORPHO_ETH = "MORPHO_ETH",
 }
 
 export interface Badge {

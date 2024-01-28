@@ -14,6 +14,7 @@ export interface ModalMenuProps {
     symbol: string
     value: BigNumber
   }
+  isDisabled?: boolean
 }
 
 export const ModalMenu: VFC<ModalMenuProps> = ({
@@ -21,6 +22,7 @@ export const ModalMenu: VFC<ModalMenuProps> = ({
   activeAsset,
   selectedTokenBalance,
   setSelectedToken,
+  isDisabled,
 }) => {
   const { control } = useFormContext()
 
@@ -40,6 +42,7 @@ export const ModalMenu: VFC<ModalMenuProps> = ({
               setSelectedToken(data)
               onChange(data)
             }}
+            isDisabled={isDisabled}
           />
         )
       }}

@@ -10,15 +10,15 @@ import {
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
-export const testArbitrumRealYieldUsd: CellarData = {
-  name: "Real Yield USD",
-  slug: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG,
+export const testArbitrumMultiAssetDeposit: CellarData = {
+  name: "MultiAsset Deposit",
+  slug: config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.SLUG,
   dashboard: "https://ryusd.sevenseas.capital/",
   popUpTitle: "Get Exclusive Real Yield Updates",
   popUpDescription:
     "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
   tradedAssets: ["USDC", "USDT", "DAI"],
-  launchDate: new Date("2023-11-05T00:00:00.000Z"),
+  launchDate: new Date("2024-01-15T23:00:00.000Z"),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
   strategyType: "Stablecoin",
@@ -64,15 +64,15 @@ export const testArbitrumRealYieldUsd: CellarData = {
       `,
   },
   depositTokens: {
-    list: ["USDC_e"],
+    list: ["USDC", "DAI", "USDT"],
   },
-
   config: {
-    id: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS,
-    baseApy: 4.4,
-    cellarNameKey: CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD,
+    id: config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.ADDRESS,
+    baseApy: 6.9,
+    cellarNameKey: CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT,
     lpToken: {
-      address: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS,
+      address:
+        config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.ADDRESS,
       imagePath: "/assets/icons/real-yield-usd.png",
     },
     cellarRouter: {
@@ -81,19 +81,14 @@ export const testArbitrumRealYieldUsd: CellarData = {
       key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
-      address: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS,
-      abi: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ABI,
-      key: CellarKey.CELLAR_V2PT5,
+      address:
+        config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.ADDRESS,
+      abi: config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.ABI,
+      key: CellarKey.CELLAR_V2PT6,
       decimals: 6,
     },
-    baseAsset: tokenConfigMap.USDC_E_ARBITRUM,
+    baseAsset: tokenConfigMap.USDC_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
-    staker: {
-      address:
-        config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD_STAKER.ADDRESS,
-      abi: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0821,
-    },
   },
   faq: [
     {
