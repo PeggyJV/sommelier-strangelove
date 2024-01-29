@@ -1040,12 +1040,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     "Morpho ETH": () => (
       <>
         <Text as="span">
-          Withdrawals: The vault will withdraw from its liquid
-          positions which may be different than the asset you
-          deposited.
-          <br />
-          <br />
-          Risks: All Sommelier vaults contain smart contract risk and
+          All Sommelier vaults contain smart contract risk and
           varying degrees of economic risk. Please take note of the
           following risks; however, this list is not exhaustive, and
           there may be additional risks:
