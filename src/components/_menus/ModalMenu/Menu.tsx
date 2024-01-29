@@ -264,7 +264,7 @@ export const Menu: VFC<MenuProps> = ({
                               alignSelf="center"
                             />
                             <Text fontSize="xs" fontWeight={600}>
-                              Accounting asset
+                              Accounting Asset
                             </Text>
                           </HStack>
                         )}
@@ -281,7 +281,7 @@ export const Menu: VFC<MenuProps> = ({
                               alignSelf="center"
                             />
                             <Text fontSize="xs" fontWeight={600}>
-                              Alt Deposit asset
+                              Alt Deposit Asset
                             </Text>
                           </HStack>
                         )}
