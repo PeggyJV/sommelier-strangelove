@@ -59,7 +59,7 @@ export const createApyChangeDatum = ({
   daysRendered: number
 }): Datum[] | undefined => {
   if (!data) return
-  if (data.length == 0) return
+  if (data.length < 2) return
 
   const datum: Datum[] = []
   // Inception date (configured)
