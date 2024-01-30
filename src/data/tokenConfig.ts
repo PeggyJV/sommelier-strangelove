@@ -384,6 +384,15 @@ export const tokenConfig: Token[] = [
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
   },
+  {
+    src: "/assets/icons/rETH.png",
+    alt: "rETH logo",
+    symbol: "BrETHSTABLE",
+    address: "0x1E19CF2D73a72Ef1332C882F20534B6519Be0276",
+    coinGeckoId: "B-rETH-STABLE",
+    decimals: 18,
+    chain: chainSlugMap.ETHEREUM.id,
+  },
 ]
 // --- ETH ACCEPTED TOKENS ---
 let acceptedETHDepositTokens = [
@@ -425,7 +434,9 @@ let depositTokenMapETH = tokenConfig.reduce((map, token) => {
 }, {} as { [symbol: string]: Token })
 
 // sort map by symbol
-export const acceptedETHDepositTokenMap = Object.keys(depositTokenMapETH)
+export const acceptedETHDepositTokenMap = Object.keys(
+  depositTokenMapETH
+)
   .sort()
   .reduce((obj, key) => {
     obj[key] = depositTokenMapETH[key]
