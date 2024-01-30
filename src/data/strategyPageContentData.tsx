@@ -1274,8 +1274,8 @@ export const strategyPageContentData = {
         <Text>TurboDIVETH</Text>
       </>
     ),
-    tradedAssets: ["WETH", "stETH", "wstETH"],
-    alternativeTo: "Holding WETH or stETH/wstETH",
+    tradedAssets: ["WETH", "rETH"],
+    alternativeTo: "Holding WETH or rETH",
     exchange: [
       {
         name: "Sommelier",
@@ -1284,13 +1284,30 @@ export const strategyPageContentData = {
     ],
     strategyHighlights: {
       card: [
-        `Dynamically rebalance between lending and leveraged staking opportunities.`,
-        `Leverage monitoring.`,
-        `Fully automated with built-in auto-compounding.`,
+        `Designed for the Rocket Pool Community to access the Diva ecosystem.`,
+        <span>
+          Deposit{" "}
+          <a
+            href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity"
+            target="_blank"
+            style={{ textDecoration: "underline", color: "blue" }}
+          >
+            Balancer rETH-ETH LP tokens
+          </a>
+          .
+        </span>,
+        `Deposit early to get a higher DIVA token allocation.`,
+        `Enjoy 0 fees until divETH strategies go live.`,
+        `Fully automated with built-in auto compounding.`,
       ],
-      description: `Supercharge your ETH lending and leveraged staking experience on Morpho Blue.
+      description: `Pre-divETH Launch Phase 
+      While the Diva Staking protocol and divETH won't officially launch until later (current ETA: end of Q1/Q2), the Turbo divETH vault allows users to signal their interest in divETH by depositing into the vault to secure their spot in the queue for a DIVA token allocation. Users who deposit earlier into the vault are eligible for a token allocation at a higher rate than those who deposit later, as shown in the table in the FAQ.
+      
+      Post-divETH Launch Phase
+      Once divETH launches and receives oracle support, the vault can officially integrate the asset into its operations. More specifically, the assets in the BPT can be used in a potential Balancer rETH-divETH pool, essentially converting the committed ETH into divETH and adding liquidity for rETH-divETH on a major decentralized exchange. As divETH proliferates, the vault can run additional liquidity provision and lending strategies on the following protocols: Uniswap v3, Balancer/Aura, Aave, Compound, Morpho, Morpho Blue, and Fraxlend. As Sommelier supports additional DeFi protocols, those capabilities can be added to Turbo divETH through Sommelier governance.
      <br/><br/>
-    Note that Morpho ETH Maximizer and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+
+    Note that Turbo-divETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: ``,
   },

@@ -11,10 +11,11 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const turbodivETH: CellarData = {
-  name: "Morpho ETH Maximizer",
+  name: "Turbo divETH",
   slug: config.CONTRACT.TURBO_DIVETH.SLUG,
-  tradedAssets: ["WETH", "RETH"],
-  launchDate: new Date(Date.UTC(2024, 1, 2, 16, 30, 0, 0)),
+  tradedAssets: ["WETH", "rETH"],
+  //need to update after testing
+  launchDate: new Date(Date.UTC(2024, 0, 29, 15, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbo divETH provides a single entry point into the Diva DeFi ecosystem.`,
   strategyType: "Yield",
@@ -22,12 +23,12 @@ export const turbodivETH: CellarData = {
   managementFee: "0%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Morpho Blue"],
-  strategyAssets: ["WETH", "RETH"],
+  protocols: ["Aura", "Balancer"],
+  strategyAssets: ["WETH", "rETH"],
   performanceSplit: {
-    depositors: 80,
-    "strategy provider": 17,
-    protocol: 3,
+    depositors: 100,
+    "strategy provider": 0,
+    protocol: 0,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -39,10 +40,12 @@ export const turbodivETH: CellarData = {
   strategyBreakdown: {
     goals: `Turbo divETH provides a single entry point into the Diva DeFi ecosystem.`,
 
-    // highlights: `
-    // - Dynamically rebalance between lending and leveraged staking opportunities.
-    // - Leverage monitoring.
-    // - Fully automated with built-in auto-compounding.`,
+    highlights: `
+    - Designed for the Rocket Pool Community to access the Diva ecosystem 
+    - Deposit Balancer rETH-ETH LP tokens
+    - Deposit early to get a higher DIVA token allocation 
+    - Enjoy 0 fees until divETH strategies go live 
+    - Fully automated with built-in auto compounding`,
 
     description: `Pre-divETH Launch Phase 
     While the Diva Staking protocol and divETH won't officially launch until later (current ETA: end of Q1/Q2), the Turbo divETH vault allows users to signal their interest in divETH by depositing into the vault to secure their spot in the queue for a DIVA token allocation. Users who deposit earlier into the vault are eligible for a token allocation at a higher rate than those who deposit later, as shown in the table in the FAQ.
@@ -66,9 +69,8 @@ export const turbodivETH: CellarData = {
   },
   dashboard:
     "https://debank.com/profile/0x6c1edce139291Af5b84fB1e496c9747F83E876c9",
-  //need to update when multiasset deposit
   depositTokens: {
-    list: ["Balancer-rETH"],
+    list: ["BrETHSTABLE"],
   },
   config: {
     chain: chainSlugMap.ETHEREUM,

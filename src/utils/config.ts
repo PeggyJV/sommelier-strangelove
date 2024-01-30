@@ -181,7 +181,7 @@ export const config = {
     },
     TURBO_DIVETH: {
       ADDRESS: "0x6c1edce139291Af5b84fB1e496c9747F83E876c9",
-      SLUG: "Morpho-ETH",
+      SLUG: "Turbo-divETH",
       ABI: cellarV0821,
     },
     // Router

@@ -29,7 +29,7 @@ import {
   turboSTETHstETHDeposit,
   testArbitrumMultiAssetDeposit,
   morphoETH,
-  turbodivETH
+  turbodivETH,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
