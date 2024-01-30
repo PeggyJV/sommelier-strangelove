@@ -1040,10 +1040,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     "Morpho ETH": () => (
       <>
         <Text as="span">
-          All Sommelier vaults contain smart contract risk and
-          varying degrees of economic risk. Please take note of the
-          following risks; however, this list is not exhaustive, and
-          there may be additional risks:
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
           <br />
           <br />- This vault uses leverage, which means there is
           liquidation risk.
@@ -1104,6 +1104,17 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         <br />
         <br />- This vault does liquidity provision which can result
         in impermanent loss.
+      </Text>
+    ),
+    "Turbo divETH": () => (
+      <Text as="span">
+        All Sommelier vaults contain smart contract risk and varying
+        degrees of economic risk. Please take note of the following
+        risks; however, this list is not exhaustive, and there may be
+        additional risks:
+        <br />
+        <br />- This vault uses leverge, which means there is
+        liquidation risk.
       </Text>
     ),
   }
