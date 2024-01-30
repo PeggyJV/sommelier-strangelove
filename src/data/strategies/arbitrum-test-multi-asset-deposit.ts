@@ -14,9 +14,6 @@ export const testArbitrumMultiAssetDeposit: CellarData = {
   name: "MultiAsset Deposit",
   slug: config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.SLUG,
   dashboard: "https://ryusd.sevenseas.capital/",
-  popUpTitle: "Get Exclusive Real Yield Updates",
-  popUpDescription:
-    "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
   tradedAssets: ["USDC", "USDT", "DAI"],
   launchDate: new Date("2024-01-15T23:00:00.000Z"),
   cellarType: CellarType.yieldStrategies,

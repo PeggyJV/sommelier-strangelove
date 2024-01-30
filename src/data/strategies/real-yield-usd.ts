@@ -14,10 +14,7 @@ export const realYieldUsd: CellarData = {
   name: "Real Yield USD",
   slug: config.CONTRACT.REAL_YIELD_USD.SLUG,
   dashboard: "https://ryusd.sevenseas.capital/",
-  popUpTitle: "Get Exclusive Real Yield Updates",
-  popUpDescription:
-    "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
-  tradedAssets: ["USDC", "USDT", "DAI"],
+tradedAssets: ["USDC", "USDT", "DAI"],
   launchDate: new Date("2023-01-25T00:00:00.000Z"),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,

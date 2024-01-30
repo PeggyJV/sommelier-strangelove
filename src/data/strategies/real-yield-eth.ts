@@ -14,10 +14,7 @@ export const realYieldEth: CellarData = {
   name: "Real Yield ETH",
   slug: config.CONTRACT.REAL_YIELD_ETH.SLUG,
   dashboard: "https://ryeth.sevenseas.capital/",
-  popUpTitle: "Get Exclusive Real Yield Updates",
-  popUpDescription:
-    "Thank you for your trust. As a user of the Real Yield vault, you are eligible to receive exclusive strategy updates directly from the strategist - 7 Seas as well as updates on upcoming product launches. Rest assured that we will only use your email for this purpose.    ",
-  tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
+tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
   launchDate: new Date(2023, 3, 12, 11, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
