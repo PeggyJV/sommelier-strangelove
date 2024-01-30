@@ -107,8 +107,70 @@ export const turbodivETH: CellarData = {
     {
       question:
         "How does the queue for the DIVA token allocation work?",
-      answer:
-        "Users will be assigned a ranking based on a first-come, first-served principle. This ranking will be used to determine future token distribution, with those depositing earlier enjoying higher distribution rates. [include table to right]",
+      answer: `
+        Users will be assigned a ranking based on a first-come, first-served principle. This ranking will be used to determine future token distribution, with those depositing earlier enjoying higher distribution rates.
+        <table style="width:100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="padding: 8px; border: 1px solid #ddd;">Tranche</th>
+              <th style="padding: 8px; border: 1px solid #ddd;">TVL Range (ETH)</th>
+              <th style="padding: 8px; border: 1px solid #ddd;">DIVA/ETH/Day</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #ddd;">1</td>
+              <td style="padding: 8px; border: 1px solid #ddd;">0 - 2,000</td>
+              <td style="padding: 8px; border: 1px solid #ddd;">2.50</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #ddd;">2</td>
+              <td style="padding: 8px; border: 1px solid #ddd;">2,000 - 4,000</td>
+              <td style="padding: 8px; border: 1px solid #ddd;">2.25</td>
+            </tr>
+            <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;">3</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">4,000 - 6,000</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">2.00</td>
+          </tr>
+          <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;">4</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">6,000 - 8,000</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">1.90</td>
+        </tr>
+        <tr>
+        <td style="padding: 8px; border: 1px solid #ddd;">5</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">8,000 - 10,000</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">1.75</td>
+      </tr>
+      <tr>
+      <td style="padding: 8px; border: 1px solid #ddd;">6</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">10,000 - 12,000</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">1.60</td>
+    </tr>
+    <tr>
+    <td style="padding: 8px; border: 1px solid #ddd;">7</td>
+    <td style="padding: 8px; border: 1px solid #ddd;">12,000 - 14,000</td>
+    <td style="padding: 8px; border: 1px solid #ddd;">1.55</td>
+  </tr>
+  <tr>
+  <td style="padding: 8px; border: 1px solid #ddd;">8</td>
+  <td style="padding: 8px; border: 1px solid #ddd;">14,000 - 16,000</td>
+  <td style="padding: 8px; border: 1px solid #ddd;">1.50</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #ddd;">9</td>
+<td style="padding: 8px; border: 1px solid #ddd;">16,000 - 18,000</td>
+<td style="padding: 8px; border: 1px solid #ddd;">1.40</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #ddd;">10</td>
+<td style="padding: 8px; border: 1px solid #ddd;">18,000 - 20,000</td>
+<td style="padding: 8px; border: 1px solid #ddd;">1.30</td>
+</tr>
+          </tbody>
+        </table>
+      `,
     },
     {
       question:
