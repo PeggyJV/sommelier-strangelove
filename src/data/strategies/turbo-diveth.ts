@@ -60,17 +60,10 @@ export const turbodivETH: CellarData = {
     - This vault will take exposure to divETH, an emerging LST, which means that it is more susceptible to depegs than its more established counterparts.
     - This vault does liquidity provision which can result in impermanent loss.`,
   },
-  //need to update
-  overrideApy: {
-    title: "Backtested APY",
-    tooltip:
-      "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-    value: "6%",
-  },
   dashboard:
     "https://debank.com/profile/0x6c1edce139291Af5b84fB1e496c9747F83E876c9",
   depositTokens: {
-    list: ["BrETHSTABLE"],
+    list: ["rETH-wETH BPT"],
   },
   config: {
     chain: chainSlugMap.ETHEREUM,
@@ -91,7 +84,7 @@ export const turbodivETH: CellarData = {
       key: CellarKey.CELLAR_V2PT6,
       decimals: 18,
     },
-    baseAsset: tokenConfigMap.BrETHSTABLE_ETHEREUM,
+    baseAsset: tokenConfigMap["rETH-wETH BPT_ETHEREUM"],
   },
   faq: [
     {
