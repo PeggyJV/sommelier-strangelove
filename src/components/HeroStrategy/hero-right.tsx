@@ -191,14 +191,14 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             )}
           </Stack>
         </HStack>
-        <HStack>
+        {/* <HStack>
           <Box>
             <Text w="150px" fontWeight="semibold">
               Alternative to
             </Text>
           </Box>
           <Text>{content.alternativeTo}</Text>
-        </HStack>
+        </HStack> */}
       </Stack>
     </Stack>
   )

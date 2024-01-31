@@ -1113,8 +1113,12 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         risks; however, this list is not exhaustive, and there may be
         additional risks:
         <br />
-        <br />- This vault uses leverge, which means there is
-        liquidation risk.
+        <br />- This vault will take exposure to divETH, an emerging
+        LST, which means that it may be more susceptible to depeg risk
+        than some of its more established counterparts.
+        <br />
+        <br />- This vault does liquidity provision which can result
+        in impermanent loss.
       </Text>
     ),
   }
