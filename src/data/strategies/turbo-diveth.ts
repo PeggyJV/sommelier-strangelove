@@ -42,13 +42,14 @@ export const turbodivETH: CellarData = {
 
     highlights: `
     - Designed for the Rocket Pool community to access the Diva ecosystem 
-    - Deposit <a href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity" target="_blank" style="color: blue; text-decoration: underline;">Balancer rETH-ETH LP tokens</a>
+    - Deposit <a href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity" target="_blank" style="color: white; text-decoration: underline;">Balancer rETH-ETH LP tokens</a>
     - Deposit early to get a higher DIVA token allocation 
     - Enjoy 0 fees until divETH strategies go live `,
 
     description: `
     This vault is a cornerstone in Diva’s ecosystem, designed for enhanced ETH liquidity strategies and a DIVA token distribution to its community. 
-    Participants need to deposit <a href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity" style="color: blue; text-decoration: underline;" target="_blank">Balancer rETH-ETH LP tokens</a>, obtainable through depositing rETH, ETH, or both on Balancer. 
+    
+    Participants need to deposit <a href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity" style="color: white; text-decoration: underline;" target="_blank">Balancer rETH-ETH LP tokens</a>, obtainable through depositing rETH, ETH, or both on Balancer. 
     
     <strong>Pre-divETH Launch Phase</strong>
     Before the official launch of Diva Staking protocol and divETH (estimated end of Q1/Q2), the Turbo divETH vault enables users to express their interest in divETH and secure their position for a DIVA token allocation. Earlier deposits qualify for a higher token allocation rate, detailed in the T&Cs.
@@ -115,13 +116,11 @@ export const turbodivETH: CellarData = {
     </tbody>
   </table>
 
-
-
     <strong>Post-divETH Launch Phase</strong>
     Upon divETH launch and oracle integration, the vault will fully integrate this asset. 
     More specifically, the assets in the BPT can be used in a potential Balancer rETH-divETH pool, essentially converting the committed ETH into divETH and enhancing rETH-divETH liquidity on a major decentralized exchange. The vault is also set to expand its strategies on platforms like Uniswap v3, Balancer/Aura, Aave, Compound, Morpho, and Fraxlend, with future protocol integrations. As Sommelier supports additional DeFi protocols, those capabilities can be added to Turbo divETH through Sommelier governance.
     
-    Link to the official T&Cs: <a href="https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307" style="color: blue; text-decoration: underline;" target="_blank">https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307</a>
+    Link to the official T&Cs: <a href="https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307" style="color: white; text-decoration: underline;" target="_blank">https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307</a>
     
     Note that Turbo divETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
@@ -178,7 +177,7 @@ export const turbodivETH: CellarData = {
       question:
         "How does the queue for the DIVA token allocation work?",
       answer:
-        "Participants are ranked based on the order of their deposits (first-come, first-served). This ranking influences the future DIVA token distribution, with earlier deposits receiving a higher allocation rate. Details are provided in the table in the <a href='https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307?chart=bubble' style='color: blue; text-decoration: underline;' target='_blank'>T&Cs</a>.",
+        "Participants are ranked based on the order of their deposits (first-come, first-served). This ranking influences the future DIVA token distribution, with earlier deposits receiving a higher allocation rate. Details are provided in the table in the <a href='https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307?chart=bubble' style='color: white; text-decoration: underline;' target='_blank'>T&Cs</a>.",
     },
     {
       question:
@@ -189,11 +188,11 @@ export const turbodivETH: CellarData = {
     {
       question: "What are the key dates?",
       answer:
-        "Vault Launch: Marks the start of the “Queuing Stage”<br>" +
-        "30 Days Pre-Mainnet: DIVA allocations begin to accrue for vault depositors<br>" +
-        "Mainnet Launch: DIVA allocations accrue for the next 335 days<br>" +
-        "30 Days Post-Mainnet: Participants can claim DIVA tokens for the first time<br>" +
-        "Oracle live for divETH: Start of SOMM incentives (60 days, subject to governance approval) & the vault shifts to active DeFi LPs involving divETH (e.g., Balancer, Uniswap, etc.)",
+        "<b>Vault Launch:</b> Marks the start of the “Queuing Stage”<br><br>" +
+        "<b>30 Days Pre-Mainnet:</b> DIVA allocations begin to accrue for vault depositors<br><br>" +
+        "<b>Mainnet Launch:</b> DIVA allocations accrue for the next 335 days<br><br>" +
+        "<b>30 Days Post-Mainnet:</b> Participants can claim DIVA tokens for the first time<br><br>" +
+        "<b>Oracle live for divETH:</b> Start of SOMM incentives (60 days, subject to governance approval) & the vault shifts to active DeFi LPs involving divETH (e.g., Balancer, Uniswap, etc.)",
     },
     {
       question: "What is the deposit cap for this initiative?",
@@ -207,12 +206,12 @@ export const turbodivETH: CellarData = {
     {
       question: "When can I begin to claim my token allocation?",
       answer:
-        "The claiming of DIVA tokens happens progressively during the 12 months initiative. Token claims start 30 days after the divETH mainnet launch, when 50% of accrued DIVA tokens become claimable. All phases are detailed in the <a href='https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307?chart=bubble' style='color: blue; text-decoration: underline;' target='_blank'>T&Cs</a>.",
+        "The claiming of DIVA tokens happens progressively during the 12 months initiative. Token claims start 30 days after the divETH mainnet launch, when 50% of accrued DIVA tokens become claimable. All phases are detailed in the <a href='https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307?chart=bubble' style='color: white; text-decoration: underline;' target='_blank'>T&Cs</a>.",
     },
     {
       question: "Where can I find the official Terms and Conditions?",
       answer:
-        "The official T&Cs are available at this link: <a href='https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307?chart=bubble' style='color: blue; text-decoration: underline;' target='_blank'>https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307?chart=bubble</a>",
+        "The official T&Cs are available at this link: <a href='https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307?chart=bubble' style='color: white; text-decoration: underline;' target='_blank'>https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307?chart=bubble</a>",
     },
   ],
 }
