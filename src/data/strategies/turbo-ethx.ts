@@ -5,6 +5,7 @@ import {
   CellarNameKey,
   CellarRouterKey,
   CellarType,
+  StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
@@ -13,7 +14,7 @@ export const turboETHx: CellarData = {
   name: "Turbo ETHx",
   slug: config.CONTRACT.TURBO_ETHX.SLUG,
   tradedAssets: ["ETHx", "WETH", "wstETH"],
-  launchDate: new Date(Date.UTC(2024, 1, 24, 14, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 0, 24, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your ETHX exposure in this multi-strategy DeFi vault.`,
   strategyType: "Yield",
@@ -21,12 +22,18 @@ export const turboETHx: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
-  protocols: ["Uniswap V3", "Curve", "Convex"],
+  protocols: [
+    "Uniswap V3",
+    "Curve",
+    "Convex",
+    "Balancer",
+    "Morpho Blue",
+  ],
   strategyAssets: ["ETHx", "WETH", "wstETH"],
   performanceSplit: {
-    depositors: 100,
-    "strategy provider": 0,
-    protocol: 0,
+    depositors: 80,
+    "strategy provider": 17,
+    protocol: 3,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -59,8 +66,7 @@ export const turboETHx: CellarData = {
     value: "10.00%",
   },
   dashboard:
-    //need to update
-    "https://debank.com/profile/0xc7372Ab5dd315606dB799246E8aA112405abAeFf",
+    "https://debank.com/profile/0x19B8D8FC682fC56FbB42653F68c7d48Dd3fe597E",
   depositTokens: {
     list: ["WETH"], //need to update
 
@@ -117,14 +123,12 @@ export const turboETHx: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    //Need to update
-    // staker: {
-    //   address: config.CONTRACT.TURBO_ETHX_STAKER.ADDRESS,
-    //   abi: config.CONTRACT.TURBO_ETHX_STAKER.ABI,
-    //   key: StakerKey.CELLAR_STAKING_V0821,
-    // },
 
-    //need to add rewards extra ETHx rewards
+    staker: {
+      address: config.CONTRACT.TURBO_ETHX_STAKER.ADDRESS,
+      abi: config.CONTRACT.TURBO_ETHX_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
+    },
   },
   faq: [
     {

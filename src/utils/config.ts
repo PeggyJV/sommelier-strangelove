@@ -159,7 +159,7 @@ export const config = {
     },
     //need to update
     TURBO_ETHX: {
-      ADDRESS: "0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
+      ADDRESS: "0x19B8D8FC682fC56FbB42653F68c7d48Dd3fe597E",
       SLUG: "Turbo-ETHx",
       ABI: cellarV0821,
     },
@@ -253,11 +253,10 @@ export const config = {
       ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
     },
-    //need to update
-    // TURBO_ETHX_STAKER: {
-    //   ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
-    //   ABI: cellarStakingV0821,
-    // },
+    TURBO_ETHX_STAKER: {
+      ADDRESS: "0x88EDf544b5d4Ba6A11D40375e4bAEf3f1Ec5aF11",
+      ABI: cellarStakingV0821,
+    },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
