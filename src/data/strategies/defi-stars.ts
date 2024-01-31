@@ -15,10 +15,7 @@ export const defiStars: CellarData = {
   slug: config.CONTRACT.DEFI_STARS.SLUG,
   dashboard:
     "https://debank.com/profile/0x03df2a53cbed19b824347d6a45d09016c2d1676a",
-  popUpTitle: "Get Exclusive DeFi Stars Updates",
-  popUpDescription:
-    "Thank you for your trust. As a DeFi Stars vault user, you’re eligible for exclusive strategy updates directly from the strategist AlgoLab. Delivered to your inbox every week. We’ll only use your email for this purpose.",
-  tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
+    tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   launchDate: new Date(2023, 4, 10, 10, 0, 0, 0), // May 10, 2023. 3 pm UTC
   cellarType: CellarType.automatedPortfolio,
   description: `A long-only approach with established DeFi assets and derivatives tokens during the uptrend market periods. React quickly to market changes by managing downtrends.`,
