@@ -15,7 +15,7 @@ export const turbodivETH: CellarData = {
   slug: config.CONTRACT.TURBO_DIVETH.SLUG,
   tradedAssets: ["WETH", "rETH"],
   //need to update after testing
-  launchDate: new Date(Date.UTC(2024, 0, 29, 15, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 1, 1, 16, 30, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Unlock early access to the Diva Staking ecosystem with dynamic ETH strategies and a special DIVA token allocation, exclusively for Balancer rETH-ETH LP depositors.`,
   strategyType: "Yield",
