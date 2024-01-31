@@ -1,6 +1,6 @@
 import { queryContract } from "context/rpc_context"
 import { chainConfigMap } from "data/chainConfig"
-import someContractAbi from "src/abi/pricerouterAbi.json"
+import pricerouterAbi from "src/abi/pricerouterAbi.json"
 import { Contract } from "ethers"
 
 const getUrl = (baseId: string, quoteId: string) =>
@@ -29,11 +29,11 @@ export const getPriceFromEtherScan = async (base: string) => {
   const contractAddress = "0xA1A0bc3D59e4ee5840c9530e49Bdc2d1f88AaF92"
   const contract = (await queryContract(
     contractAddress,
-    someContractAbi,
+    pricerouterAbi,
     chainConfigMap["ethereum"]
   )) as unknown as SomeContract
   const priceInUSD = await contract.getPriceInUSD(base)
-  return priceInUSD / 1e8
+  return (priceInUSD / 1e8).toString()
 }
 interface SomeContract extends Contract {
   getPriceInUSD(base: string): Promise<number>
