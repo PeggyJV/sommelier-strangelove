@@ -1,40 +1,54 @@
 import { queryContract } from "context/rpc_context"
-import { chainConfigMap } from "data/chainConfig"
 import pricerouterAbi from "src/abi/pricerouterAbi.json"
-import { Contract } from "ethers"
+import { Token } from "src/data/tokenConfig"
+import { chainConfigMap } from "data/chainConfig"
 
 const getUrl = (baseId: string, quoteId: string) =>
   `/api/coingecko-simple-price?base=${baseId}&quote=${quoteId}`
 
 export const fetchCoingeckoPrice = async (
-  base: string,
+  token: Token,
   quote: string
 ) => {
-  const baseId = base.toLowerCase()
+  const baseId = token.coinGeckoId.toLowerCase()
   const quoteId = quote.toLowerCase()
   const url = getUrl(baseId, quoteId)
 
   try {
     const data = await fetch(url)
     const result = await data.json()
+    
+    if (!result.price) {
+      console.error("No price found: ", result, "\n\ntrying price router...")
+      throw new Error("No price found")
+    }
 
-    return result.price ? result.price + "" : undefined
+    return result.price + ""
   } catch (error) {
-    console.log("Error fetching Coingecko Price", error)
-    return getPriceFromEtherScan(base)
-  }
-}
+    console.log("Error fetching Coingecko Price for token: ", token, "\n\ntrying price router...")
 
-export const getPriceFromEtherScan = async (base: string) => {
-  const contractAddress = "0xA1A0bc3D59e4ee5840c9530e49Bdc2d1f88AaF92"
-  const contract = (await queryContract(
-    contractAddress,
-    pricerouterAbi,
-    chainConfigMap["ethereum"]
-  )) as unknown as SomeContract
-  const priceInUSD = await contract.getPriceInUSD(base)
-  return (priceInUSD / 1e8).toString()
-}
-interface SomeContract extends Contract {
-  getPriceInUSD(base: string): Promise<number>
+    const chain = chainConfigMap[token.chain]
+
+    let priceRouterContract = await queryContract(
+      chain.priceRouterAddress,
+      pricerouterAbi,
+      chain
+    )
+
+    if (!priceRouterContract) {
+      console.error("No price router contract found on chain: " + token.chain)
+      throw new Error("No price router contract found on chain: " + token.chain)
+    }
+      
+
+    const price = await priceRouterContract.getPriceInUSD(
+      token.address
+    )
+
+    if (price) {
+      return (price / 10 ** 8).toString()
+    }
+
+    throw new Error("Price router could not price: " + token)
+  }
 }

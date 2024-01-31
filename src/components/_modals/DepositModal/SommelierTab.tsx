@@ -740,7 +740,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     const fetchBaseAssetPrice = async () => {
       try {
         const price = await fetchCoingeckoPrice(
-          cellarConfig.baseAsset.coinGeckoId,
+          cellarConfig.baseAsset,
           "usd"
         )
 

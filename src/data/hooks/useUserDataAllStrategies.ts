@@ -7,13 +7,14 @@ import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useState, useEffect } from "react"
 import { useNetwork } from "wagmi"
 import { chainConfig } from "data/chainConfig"
+import { tokenConfigMap } from "data/tokenConfig"
 
 export const useUserDataAllStrategies = () => {
   const { data: signer } = useSigner()
   const { address } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategies = useAllStrategiesData()
-  const sommPrice = useCoinGeckoPrice("sommelier")
+  const sommPrice = useCoinGeckoPrice(tokenConfigMap.SOMM_ETHEREUM)
   const [error, setError] = useState(null)
 
   const { chain } = useNetwork()

@@ -7,12 +7,15 @@ import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
 import { useState, useEffect } from "react"
+import { tokenConfigMap } from "data/tokenConfig"
 
 export const useStrategyData = (address: string, chain: string) => {
   const provider = useProvider()
 
   const { data: allContracts } = useAllContracts()
-  const { data: sommPrice } = useCoinGeckoPrice("sommelier")
+  const { data: sommPrice } = useCoinGeckoPrice(
+    tokenConfigMap.SOMM_ETHEREUM
+  )
 
   const [stratData, setStratData] = useState<
     GetStrategyDataQuery | undefined
@@ -46,9 +49,9 @@ export const useStrategyData = (address: string, chain: string) => {
         address.toLowerCase() && item.config.chain.id === chain
   )!.config
   const isNoDataSource = Boolean(config!.isNoDataSource)
-  const baseAsset = config.baseAsset.coinGeckoId
+  const baseAsset = config.baseAsset
   const { data: baseAssetPrice } = useCoinGeckoPrice(
-    baseAsset ?? "usd-coin"
+    baseAsset
   )
 
   // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'

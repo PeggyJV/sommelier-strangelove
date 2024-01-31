@@ -6,11 +6,12 @@ import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
 import { GetAllStrategiesDataQuery } from "data/actions/types"
+import { tokenConfigMap } from "data/tokenConfig"
 
 export const useAllStrategiesData = () => {
   const provider = useProvider()
   const { data: allContracts } = useAllContracts()
-  const { data: sommPrice } = useCoinGeckoPrice("sommelier")
+  const { data: sommPrice } = useCoinGeckoPrice(tokenConfigMap.SOMM_ETHEREUM)
 
   const [cellarData, setcellarData] = useState<
     GetAllStrategiesDataQuery | undefined
