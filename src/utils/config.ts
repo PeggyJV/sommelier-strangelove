@@ -161,7 +161,7 @@ export const config = {
     TURBO_ETHX: {
       ADDRESS: "0x19B8D8FC682fC56FbB42653F68c7d48Dd3fe597E",
       SLUG: "Turbo-ETHx",
-      ABI: cellarV0821,
+      ABI: cellarV0821MultiDeposit,
     },
     TURBO_STETH: {
       ADDRESS: "0xfd6db5011b171b05e1ea3b92f9eacaeeb055e971",

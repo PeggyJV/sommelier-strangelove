@@ -59,16 +59,10 @@ export const turboETHx: CellarData = {
     - This vault has exposure to ETHx, an emerging LST, which means that it is more susceptible to depegs than its more established counterparts.
     - This vault may use leverge in the future, which means there is liquidation risk.`,
   },
-  overrideApy: {
-    title: "Backtested APY",
-    tooltip:
-      "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-    value: "10.00%",
-  },
   dashboard:
     "https://debank.com/profile/0x19B8D8FC682fC56FbB42653F68c7d48Dd3fe597E",
   depositTokens: {
-    list: ["WETH"], //need to update
+    list: ["ETHx", "WETH"],
 
     //need to update
     // customReward: {
@@ -105,7 +99,6 @@ export const turboETHx: CellarData = {
   },
   config: {
     chain: chainSlugMap.ETHEREUM,
-    baseAsset: tokenConfigMap.WETH_ETHEREUM, //need to update
     id: config.CONTRACT.TURBO_ETHX.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_ETHX,
     lpToken: {
@@ -118,8 +111,8 @@ export const turboETHx: CellarData = {
       key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
-      address: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS,
-      abi: config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ABI,
+      address: config.CONTRACT.TURBO_ETHX.ADDRESS,
+      abi: config.CONTRACT.TURBO_ETHX.ABI,
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
@@ -129,6 +122,7 @@ export const turboETHx: CellarData = {
       abi: config.CONTRACT.TURBO_ETHX_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },
   faq: [
     {
