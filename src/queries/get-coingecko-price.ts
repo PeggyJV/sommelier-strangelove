@@ -1,5 +1,5 @@
 import { queryContract } from "context/rpc_context"
-import pricerouterAbi from "src/abi/pricerouterAbi.json"
+import pricerouterAbi from "src/abi/price-router.json"
 import { Token } from "src/data/tokenConfig"
 import { chainConfigMap } from "data/chainConfig"
 
@@ -17,15 +17,23 @@ export const fetchCoingeckoPrice = async (
   try {
     const data = await fetch(url)
     const result = await data.json()
-    
+
     if (!result.price) {
-      console.error("No price found: ", result, "\n\ntrying price router...")
+      console.error(
+        "No price found: ",
+        result,
+        "\n\ntrying price router..."
+      )
       throw new Error("No price found")
     }
 
     return result.price + ""
   } catch (error) {
-    console.log("Error fetching Coingecko Price for token: ", token, "\n\ntrying price router...")
+    console.log(
+      "Error fetching Coingecko Price for token: ",
+      token,
+      "\n\ntrying price router..."
+    )
 
     const chain = chainConfigMap[token.chain]
 
@@ -36,10 +44,13 @@ export const fetchCoingeckoPrice = async (
     )
 
     if (!priceRouterContract) {
-      console.error("No price router contract found on chain: " + token.chain)
-      throw new Error("No price router contract found on chain: " + token.chain)
+      console.error(
+        "No price router contract found on chain: " + token.chain
+      )
+      throw new Error(
+        "No price router contract found on chain: " + token.chain
+      )
     }
-      
 
     const price = await priceRouterContract.getPriceInUSD(
       token.address
