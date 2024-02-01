@@ -7,14 +7,19 @@ import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
 import { useUserBalances } from "./useUserBalances"
 import { useNetwork } from "wagmi"
-import { tokenConfigMap } from "data/tokenConfig"
+import { tokenConfig } from "data/tokenConfig"
 
 export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const { data: signer } = useSigner()
   const { address: userAddress } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategyData = useStrategyData(strategyAddress, chain)
-  const sommPrice = useCoinGeckoPrice(tokenConfigMap.SOMM_ETHEREUM)
+  const sommToken = tokenConfig.find(
+    (token) =>
+      token.coinGeckoId === "sommelier" && token.chain === chain
+  )!
+
+  const sommPrice = useCoinGeckoPrice(sommToken)
 
   const config = Object.values(cellarDataMap).find(
     (item) =>

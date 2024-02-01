@@ -7,15 +7,19 @@ import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
 import { useState, useEffect } from "react"
-import { tokenConfigMap } from "data/tokenConfig"
+import { tokenConfig } from "data/tokenConfig"
 
 export const useStrategyData = (address: string, chain: string) => {
   const provider = useProvider()
 
   const { data: allContracts } = useAllContracts()
-  const { data: sommPrice } = useCoinGeckoPrice(
-    tokenConfigMap.SOMM_ETHEREUM
-  )
+  const sommToken = tokenConfig.find(
+    (token) =>
+      token.coinGeckoId === "sommelier" &&
+      token.chain === chain
+  )!
+
+  const { data: sommPrice } = useCoinGeckoPrice(sommToken)
 
   const [stratData, setStratData] = useState<
     GetStrategyDataQuery | undefined
