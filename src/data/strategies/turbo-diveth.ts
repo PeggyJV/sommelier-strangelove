@@ -159,6 +159,10 @@ export const turbodivETH: CellarData = {
         customStrategyHighlight: "Deposit rETH-ETH Balancer Token",
         customStrategyHighlightColor: "orange.base",
       },
+      {
+        customStrategyHighlight: "DIVA Allocation",
+        customStrategyHighlightColor: "#00C04B",
+      },
     ],
     baseAsset: tokenConfigMap["rETH BPT_ETHEREUM"],
   },
