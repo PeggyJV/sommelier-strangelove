@@ -101,7 +101,7 @@ export const Menu: VFC<MenuProps> = ({
 
         try {
           const price = await fetchCoingeckoPrice(
-            selectedToken!.coinGeckoId,
+            selectedToken!,
             "usd"
           )
           console.log("price", price)

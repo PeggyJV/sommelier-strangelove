@@ -49,7 +49,7 @@ export const getAllStrategiesData = async ({
 
           const baseAsset = config.baseAsset
           const baseAssetPrice = await fetchCoingeckoPrice(
-            baseAsset?.coinGeckoId ?? "usd-coin",
+            baseAsset,
             "usd"
           )
 
