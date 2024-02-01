@@ -1,16 +1,26 @@
 import { useQuery } from "@tanstack/react-query"
 import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
-import { useProvider } from "wagmi"
+import { useNetwork, useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
 import { GetAllStrategiesDataQuery } from "data/actions/types"
+import { tokenConfig } from "data/tokenConfig"
 
 export const useAllStrategiesData = () => {
   const provider = useProvider()
+  const { chain } = useNetwork()
   const { data: allContracts } = useAllContracts()
-  const { data: sommPrice } = useCoinGeckoPrice("sommelier")
+
+  const sommToken = tokenConfig.find(
+    (token) =>
+      token.coinGeckoId === "sommelier" &&
+      token.chain ===
+        (chain?.name.toLowerCase().split(" ")[0] || "ethereum")
+  )!
+
+  const { data: sommPrice } = useCoinGeckoPrice(sommToken)
 
   const [cellarData, setcellarData] = useState<
     GetAllStrategiesDataQuery | undefined

@@ -15,9 +15,7 @@ import { VFC } from "react"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
 import { CountDown } from "./count-down"
-import {
-  addDays,
-} from "date-fns"
+import { addDays } from "date-fns"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
@@ -43,7 +41,8 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   )
   const cellarConfig = cellarData.config
   const { data, isLoading } = useStrategyData(
-    cellarData.config.cellar.address, cellarData.config.chain.id
+    cellarData.config.cellar.address,
+    cellarData.config.chain.id
   )
   const {
     tokenPrice,
@@ -91,23 +90,23 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
       {countdown && launchDate ? (
         <>
           <CountDown launchDate={launchDate} />
-          <BaseButton
-            w="full"
-            h="60px"
-            onClick={() => {
-              // analytics.track("strategy.notify-me", {
-              //   strategyCard: cellarData.name,
-              //   landingType: landingType(),
-              // })
-              notifyModal.onOpen()
-            }}
-          >
-            Notify me
-          </BaseButton>
-          <NotifyModal
-            isOpen={notifyModal.isOpen}
-            onClose={notifyModal.onClose}
-          />
+          {/* <BaseButton
+        w="full"
+        h="60px"
+        onClick={() => {
+          // analytics.track("strategy.notify-me", {
+          //   strategyCard: cellarData.name,
+          //   landingType: landingType(),
+          // })
+          notifyModal.onOpen()
+        }}
+      >
+        Notify me
+      </BaseButton>
+      <NotifyModal
+        isOpen={notifyModal.isOpen}
+        onClose={notifyModal.onClose}
+      /> */}
         </>
       ) : (
         <>
@@ -191,14 +190,14 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             )}
           </Stack>
         </HStack>
-        <HStack>
+        {/* <HStack>
           <Box>
             <Text w="150px" fontWeight="semibold">
               Alternative to
             </Text>
           </Box>
           <Text>{content.alternativeTo}</Text>
-        </HStack>
+        </HStack> */}
       </Stack>
     </Stack>
   )

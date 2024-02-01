@@ -6,10 +6,10 @@ import {
   Stack,
   Box,
   Tooltip,
+  Img,
 } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useUserBalances } from "data/hooks/useUserBalances"
-import Image from "next/image"
 import { useRouter } from "next/router"
 import { FC } from "react"
 import { formatUSD, toEther } from "utils/formatCurrency"
@@ -53,10 +53,10 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
 
   const baseAsset = tokenConfig.find(
     (token) => token.symbol === symbol && cellarData.config.chain.id === token.chain
-  )?.coinGeckoId
+  )!
 
-  const { data: coinGeckoPrice } = useCoinGeckoPrice(
-    baseAsset || "usdc-coin"
+  const { data: coinGeckoPrice, error } = useCoinGeckoPrice(
+    baseAsset
   )
 
   const router = useRouter()
@@ -112,11 +112,12 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
       >
         <Stack direction="row">
           <Box>
-            <Image
-              height={40}
-              width={40}
+            <Img
+              height={"2.5em"}
+              width={"2.5em"}
               src={icon}
               alt="strategy icon"
+              borderRadius="50%"
             />
           </Box>
           <VStack

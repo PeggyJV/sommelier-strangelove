@@ -184,6 +184,12 @@ export const config = {
       SLUG: "Turbo-ETHx",
       ABI: cellarV0821MultiDeposit,
     },
+    TURBO_DIVETH: {
+      ADDRESS: "0x6c1edce139291Af5b84fB1e496c9747F83E876c9",
+      SLUG: "Turbo-divETH",
+      ABI: cellarV0821,
+
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",

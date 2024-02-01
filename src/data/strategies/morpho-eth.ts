@@ -52,7 +52,7 @@ export const morphoETH: CellarData = {
    
     - This vault uses leverage, which means there is liquidation risk.`,
   },
-  //need to update
+
   overrideApy: {
     title: "Backtested APY",
     tooltip:
@@ -61,7 +61,7 @@ export const morphoETH: CellarData = {
   },
   dashboard:
     "https://debank.com/profile/0xcf4b531b4cde95bd35d71926e09b2b54c564f5b6",
-  //need to update when multiasset deposit
+
   depositTokens: {
     list: ["WETH", "stETH", "wstETH"],
   },

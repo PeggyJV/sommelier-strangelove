@@ -1263,6 +1263,11 @@ export const strategyPageContentData = {
     provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
     description: `Turbocharge your ETHX exposure in this multi-strategy DeFi vault.`,
+  [config.CONTRACT.TURBO_DIVETH.SLUG]: {
+    name: "Turbo divETH",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Unlock early access to the Diva Staking ecosystem with dynamic ETH strategies and a special DIVA token allocation, exclusively for Balancer rETH-ETH LP depositors.`,
     ticker: (
       <>
         {}
@@ -1276,6 +1281,15 @@ export const strategyPageContentData = {
     ),
     tradedAssets: ["ETHx", "WETH", "wstETH"],
     alternativeTo: "Holding ETHx",
+          alt="Turbo divETH"
+          src="/assets/icons/turbo-diveth.png"
+          boxSize={8}
+        />
+        <Text>TurboDIVETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "rETH"],
+    alternativeTo: ``,
     exchange: [
       {
         name: "Sommelier",
@@ -1291,6 +1305,39 @@ export const strategyPageContentData = {
       description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Sommelier strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
      <br/><br/>
     Note that Turbo stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+        `Designed for the Rocket Pool Community to access the Diva ecosystem.`,
+        <span>
+          Deposit{" "}
+          <a
+            href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity"
+            target="_blank"
+            style={{ textDecoration: "underline", color: "white" }}
+          >
+            Balancer rETH-ETH LP tokens
+          </a>
+          .
+        </span>,
+        `Deposit early to get a higher DIVA token allocation.`,
+        `Enjoy 0 fees until divETH strategies go live.`,
+      ],
+      description: `
+      This vault is a cornerstone in Diva’s ecosystem, designed for enhanced ETH liquidity strategies and a DIVA token distribution to its community. 
+      <br/><br/>
+      Participants need to deposit <a href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity" style="color: white; text-decoration: underline;" target="_blank">Balancer rETH-ETH LP tokens</a>, obtainable through depositing rETH, ETH, or both on Balancer. 
+      <br/><br/>
+      <strong>Pre-divETH Launch Phase</strong>
+      <br/><br/>
+      Before the official launch of Diva Staking protocol and divETH (estimated end of Q1/Q2), the Turbo divETH vault enables users to express their interest in divETH and secure their position for a DIVA token allocation. Earlier deposits qualify for a higher token allocation rate, detailed in the T&Cs.
+      <br/><br/>
+      <strong>Post-divETH Launch Phase</strong>
+      <br/><br/>
+      Upon divETH launch and oracle integration, the vault will fully integrate this asset. 
+      More specifically, the assets in the BPT can be used in a potential Balancer rETH-divETH pool, essentially converting the committed ETH into divETH and enhancing rETH-divETH liquidity on a major decentralized exchange. The vault is also set to expand its strategies on platforms like Uniswap v3, Balancer/Aura, Aave, Compound, Morpho, and Fraxlend, with future protocol integrations. As Sommelier supports additional DeFi protocols, those capabilities can be added to Turbo divETH through Sommelier governance.
+      <br/><br/>
+      Link to the official T&Cs: <a href="https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307" style="color: white; text-decoration: underline;" target="_blank">https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307</a>
+      <br/><br/>
+      Note that Turbo divETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      `,
     },
     howItWorks: ``,
   },

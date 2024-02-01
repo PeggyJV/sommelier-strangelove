@@ -385,11 +385,19 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
+
     src: "/assets/icons/ETHx.png",
     alt: "ETHx logo",
     symbol: "ETHx",
     address: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
     coinGeckoId: "stader-ethx",
+
+    src: "/assets/icons/rETH-BPT.jpg",
+    alt: "rETH BPT logo",
+    symbol: "rETH BPT",
+    address: "0x1E19CF2D73a72Ef1332C882F20534B6519Be0276",
+    coinGeckoId: "B-rETH-STABLE",
+
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
   },
@@ -424,6 +432,7 @@ let acceptedETHDepositTokens = [
   "eETH",
   "swETH",
   "BUSD",
+  "rETH BPT",
 ]
 
 let depositTokenMapETH = tokenConfig.reduce((map, token) => {
