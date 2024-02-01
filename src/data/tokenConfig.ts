@@ -384,6 +384,15 @@ export const tokenConfig: Token[] = [
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
   },
+  {
+    src: "/assets/icons/ETHx.png",
+    alt: "ETHx logo",
+    symbol: "ETHx",
+    address: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
+    coinGeckoId: "stader-ethx",
+    decimals: 18,
+    chain: chainSlugMap.ETHEREUM.id,
+  },
 ]
 // --- ETH ACCEPTED TOKENS ---
 let acceptedETHDepositTokens = [
@@ -425,7 +434,9 @@ let depositTokenMapETH = tokenConfig.reduce((map, token) => {
 }, {} as { [symbol: string]: Token })
 
 // sort map by symbol
-export const acceptedETHDepositTokenMap = Object.keys(depositTokenMapETH)
+export const acceptedETHDepositTokenMap = Object.keys(
+  depositTokenMapETH
+)
   .sort()
   .reduce((obj, key) => {
     obj[key] = depositTokenMapETH[key]
