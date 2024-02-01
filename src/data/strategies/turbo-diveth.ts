@@ -127,7 +127,7 @@ export const turbodivETH: CellarData = {
 
     Risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
-    - This vault will take exposure to divETH, an emerging LST, which means that it is more susceptible to depegs than its more established counterparts.
+    - This vault will take exposure to divETH, an emerging LST, which means that it may be more susceptible to depeg risk than some of its more established counterparts.
     - This vault does liquidity provision which can result in impermanent loss.`,
   },
   dashboard:
@@ -166,7 +166,7 @@ export const turbodivETH: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. You can find the link to the audit reports at <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>. The divETH smart contracts will also receive professional audits before the vault starts taking position with it.",
     },
     {
       question: "Who is eligible to participate?",
