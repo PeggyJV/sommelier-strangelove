@@ -47,6 +47,7 @@ export enum CellarNameKey {
   TURBO_SOMM = "TURBO_SOMM",
   TURBO_EETH = "TURBO_EETH",
   MORPHO_ETH = "MORPHO_ETH",
+  TURBO_DIVETH = "TURBO_DIVETH",
 }
 
 export interface Badge {

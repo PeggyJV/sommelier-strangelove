@@ -55,9 +55,10 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
     (token) => token.symbol === symbol && cellarData.config.chain.id === token.chain
   )?.coinGeckoId
 
-  const { data: coinGeckoPrice } = useCoinGeckoPrice(
+  const { data: coinGeckoPrice,error } = useCoinGeckoPrice(
     baseAsset || "usdc-coin"
   )
+  console.log("error",error);
 
   const router = useRouter()
   return (
