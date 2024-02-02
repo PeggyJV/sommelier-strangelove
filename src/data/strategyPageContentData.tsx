@@ -1336,8 +1336,7 @@ export const strategyPageContentData = {
         <Text>TurboETHx</Text>
       </>
     ),
-    tradedAssets: ["ETHx", "WETH", "wstETH"],
-    alternativeTo: "Holding ETHx",
+    tradedAssets: ["ETHx", "WETH"],
     exchange: [
       {
         name: "Sommelier",
@@ -1346,13 +1345,13 @@ export const strategyPageContentData = {
     ],
     strategyHighlights: {
       card: [
-        `Capable of simultaneously pursuing multiple stETH/wstETH yield opportunities.`,
-        `Dynamically leverage stake, Uniswap v3 liquidity provision, arbitrage wstETH peg.`,
-        `Fully automated with built-in auto compounding.`,
+        `Dynamically rebalance between ETHx LP opportunities and ETHx leverage staking (when available).`,
+        `Leverage monitoring. `,
+        `Fully automated with built-in auto-compounding.`,
       ],
-      description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Sommelier strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
+      description: `Gain exposure to ETHx DeFi opportunities through this dynamic and evolving vault.
      <br/><br/>
-    Note that Turbo stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    Note that Turbo ETHx and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: ``,
   },

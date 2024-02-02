@@ -15,7 +15,7 @@ import { ETHXIcon } from "components/_icons/ETHXIcon"
 export const turboETHx: CellarData = {
   name: "Turbo ETHx",
   slug: config.CONTRACT.TURBO_ETHX.SLUG,
-  tradedAssets: ["ETHx", "WETH", "wstETH"],
+  tradedAssets: ["ETHx", "WETH"],
   launchDate: new Date(Date.UTC(2024, 1, 2, 18, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your ETHX exposure in this multi-strategy DeFi vault.`,
@@ -31,7 +31,7 @@ export const turboETHx: CellarData = {
     "Balancer",
     "Morpho Blue",
   ],
-  strategyAssets: ["ETHx", "WETH", "wstETH"],
+  strategyAssets: ["ETHx", "WETH"],
   performanceSplit: {
     depositors: 80,
     "strategy provider": 17,
