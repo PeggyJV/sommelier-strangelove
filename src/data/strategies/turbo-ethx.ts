@@ -103,6 +103,8 @@ export const turboETHx: CellarData = {
       tokenDisplayName: "ETHx",
       logo: EETHIcon,
       showSommRewards: true,
+      tokenAddress: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
+      imagePath: "/assets/icons/ETHx.png",
     },
   },
   faq: [
