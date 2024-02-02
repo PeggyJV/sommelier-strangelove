@@ -20,8 +20,9 @@ import { createApyChangeDatum } from "src/utils/chartHelper"
 import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { EETHIcon, GHOIcon } from "components/_icons"
+import { EETHIcon } from "components/_icons"
 import { Contract } from "ethers"
+import { ETHXIcon } from "components/_icons/ETHXIcon"
 
 export const getStrategyData = async ({
   address,
@@ -195,8 +196,8 @@ export const getStrategyData = async ({
           formatted: apy.toFixed(2).toString() + "%",
           value: apy,
           tokenSymbol: "ETHx",
-          tokenIcon: EETHIcon,
-          //tokenIcon: ETHXIcon,
+          // tokenIcon: EETHIcon,
+          tokenIcon: ETHXIcon,
         }
       }
 
