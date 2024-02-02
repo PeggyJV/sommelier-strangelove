@@ -43,7 +43,7 @@ export const turboETHx: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Turbocharge your ETHX exposure in this multi-strategy DeFi vault.`,
+    goals: `Turbocharge your ETHx exposure in this multi-strategy DeFi vault.`,
 
     highlights: `
     - Dynamically rebalance between ETHx LP opportunities and ETHx leverage staking (when available).
@@ -52,7 +52,7 @@ export const turboETHx: CellarData = {
 
     description: `Gain exposure to ETHx DeFi opportunities through this dynamic and evolving vault.
     
-    Note that Turbo stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    Note that Turbo ETHx and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     Risks: `
     All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
 
