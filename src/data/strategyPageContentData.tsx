@@ -1320,4 +1320,39 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
+  [config.CONTRACT.TURBO_ETHX.SLUG]: {
+    name: "Turbo ETHx",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Turbocharge your ETHX exposure in this multi-strategy DeFi vault.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo ETHx"
+          src="/assets/icons/turbo-ethx.png"
+          boxSize={8}
+        />
+        <Text>TurboETHx</Text>
+      </>
+    ),
+    tradedAssets: ["ETHx", "WETH"],
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Dynamically rebalance between ETHx LP opportunities and ETHx leverage staking (when available).`,
+        `Leverage monitoring. `,
+        `Fully automated with built-in auto-compounding.`,
+      ],
+      description: `Gain exposure to ETHx DeFi opportunities through this dynamic and evolving vault.
+     <br/><br/>
+    Note that Turbo ETHx and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
 }

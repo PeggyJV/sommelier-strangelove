@@ -184,6 +184,11 @@ export const config = {
       SLUG: "Turbo-divETH",
       ABI: cellarV0821,
     },
+    TURBO_ETHX: {
+      ADDRESS: "0x19B8D8FC682fC56FbB42653F68c7d48Dd3fe597E",
+      SLUG: "Turbo-ETHx",
+      ABI: cellarV0821MultiDeposit,
+    },
     // Router
     CELLAR_ROUTER_V0815: {
       // ADDRESS: "0xe30574344eB64c7c9012DE52D95b0b4f89f2C6d1",
@@ -274,6 +279,10 @@ export const config = {
     },
     MORPHO_ETH_STAKER: {
       ADDRESS: "0xe468c1156d4b3399e4Aa1080c58fFBc6119722F9",
+      ABI: cellarStakingV0821,
+    },
+    TURBO_ETHX_STAKER: {
+      ADDRESS: "0x88EDf544b5d4Ba6A11D40375e4bAEf3f1Ec5aF11",
       ABI: cellarStakingV0821,
     },
   },
