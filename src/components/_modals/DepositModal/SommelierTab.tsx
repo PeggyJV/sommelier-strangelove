@@ -1122,6 +1122,22 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         in impermanent loss.
       </Text>
     ),
+    "Turbo ETHx": () => (
+      <Text as="span">
+        All Sommelier vaults contain smart contract risk and varying
+        degrees of economic risk. Please take note of the following
+        risks; however, this list is not exhaustive, and there may be
+        additional risks:
+        <br />
+        <br />
+        - This vault has exposure to ETHx, an emerging LST, which
+        means that it is more susceptible to depegs than its more
+        established counterparts.
+        <br />
+        <br />- This vault may use leverge in the future, which means
+        there is liquidation risk.
+      </Text>
+    ),
   }
   return (
     <>
