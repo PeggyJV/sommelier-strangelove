@@ -9,7 +9,7 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
-import { ETHXIcon, EETHIcon } from "components/_icons"
+import { EETHIcon } from "components/_icons"
 
 export const turboETHx: CellarData = {
   name: "Turbo ETHx",
@@ -101,10 +101,13 @@ export const turboETHx: CellarData = {
       showAPY: true,
       tokenSymbol: "ETHx",
       tokenDisplayName: "ETHx",
-      logo: EETHIcon,
       showSommRewards: true,
-      tokenAddress: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
-      imagePath: "/assets/icons/ETHx.png",
+      logo: EETHIcon,
+      tokenAddress: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
+      imagePath: "/assets/icons/eETH.svg",
+      // logo: ETHXIcon,
+      // tokenAddress: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
+      // imagePath: "/assets/icons/ETHx.svg",
     },
   },
   faq: [

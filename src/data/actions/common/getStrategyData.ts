@@ -20,7 +20,7 @@ import { createApyChangeDatum } from "src/utils/chartHelper"
 import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { EETHIcon, ETHXIcon, GHOIcon } from "components/_icons"
+import { EETHIcon, GHOIcon } from "components/_icons"
 import { Contract } from "ethers"
 
 export const getStrategyData = async ({
@@ -187,15 +187,16 @@ export const getStrategyData = async ({
         // Get TVL
         let usdTvl = Number(strategyData?.tvlTotal)
 
-        // $3.5k worth of eETH per month * 12 months * 100 for human readable %
-        // TODO: Update this  + expiration date in config weekly as long as eETH incentives live
+        // $3.5k worth of ETHx per month * 12 months * 100 for human readable %
+        // TODO: Update this  + expiration date in config weekly as long as ETHx incentives live
         let apy = (3500 / usdTvl) * 12 * 100
 
         extraRewardsApy = {
           formatted: apy.toFixed(2).toString() + "%",
           value: apy,
           tokenSymbol: "ETHx",
-          tokenIcon: ETHXIcon,
+          tokenIcon: EETHIcon,
+          //tokenIcon: ETHXIcon,
         }
       }
 
