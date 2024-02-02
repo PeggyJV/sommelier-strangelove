@@ -1324,7 +1324,7 @@ export const strategyPageContentData = {
     name: "Turbo ETHx",
     provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
-    description: `Turbocharge your ETHX exposure in this multi-strategy DeFi vault.`,
+    description: `Turbocharge your ETHx exposure in this multi-strategy DeFi vault.`,
     ticker: (
       <>
         {}
