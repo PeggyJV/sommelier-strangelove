@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
+import { ETHXIcon, EETHIcon } from "components/_icons"
 
 export const turboETHx: CellarData = {
   name: "Turbo ETHx",
@@ -69,43 +70,10 @@ export const turboETHx: CellarData = {
     "https://debank.com/profile/0x19B8D8FC682fC56FbB42653F68c7d48Dd3fe597E",
   depositTokens: {
     list: ["ETHx", "WETH"],
-
-    //need to update
-    // customReward: {
-    //   showAPY: true,
-    //   tokenSymbol: "weETH",
-    //   tokenDisplayName: "weETH",
-    //   tokenAddress: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
-    //   imagePath: "/assets/icons/eETH.svg",
-    //   customRewardMessageTooltip:
-    //     "View your ether.fi Loyalty Points at https://app.ether.fi/portfolio",
-    //   customRewardMessage: "Boosted ether.fi Loyalty Points",
-    //   customRewardHeader: "Ether.fi Incentives",
-    //   showBondingRewards: true,
-    //   showClaim: true,
-    //   customClaimMsg: "Claim All SOMM",
-    //   //customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
-    //   // logo: EETHIcon, need to add ETHx logo?
-    //   logoSize: "15px",
-    //   customRewardLongMessage:
-    //     "Earn boosted ether.fi Loyalty Points, streamed directly when you bond.",
-    //   rewardHyperLink: "https://app.ether.fi/portfolio",
-    //   customColumnHeader: "View ether.fi Loyalty Points",
-    //   customColumnHeaderToolTip:
-    //     "View your ether.fi Loyalty Points at https://app.ether.fi/portfolio",
-    //   customColumnValue: "https://app.ether.fi/portfolio",
-    //   stakingDurationOverride: new Date(
-    //     Date.UTC(2024, 1, 3, 14, 0, 0, 0)
-    //   ),
-    //   showSommRewards: true,
-    //   customIconToolTipMsg:
-    //     "Boosted ether.fi Loyalty Points ends in ",
-    //   showOnlyBaseApy: false,
-    // },
   },
   config: {
     chain: chainSlugMap.ETHEREUM,
-    baseAsset: tokenConfigMap.WETH_ETHEREUM, //need to update
+    baseAsset: tokenConfigMap.WETH_ETHEREUM,
     id: config.CONTRACT.TURBO_ETHX.ADDRESS,
     cellarNameKey: CellarNameKey.TURBO_ETHX,
     lpToken: {
@@ -128,6 +96,13 @@ export const turboETHx: CellarData = {
       address: config.CONTRACT.TURBO_ETHX_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_ETHX_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
+    },
+    customReward: {
+      showAPY: true,
+      tokenSymbol: "ETHx",
+      tokenDisplayName: "ETHx",
+      logo: EETHIcon,
+      showSommRewards: true,
     },
   },
   faq: [

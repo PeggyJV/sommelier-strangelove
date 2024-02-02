@@ -20,7 +20,7 @@ import { createApyChangeDatum } from "src/utils/chartHelper"
 import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { EETHIcon, GHOIcon } from "components/_icons"
+import { EETHIcon, ETHXIcon, GHOIcon } from "components/_icons"
 import { Contract } from "ethers"
 
 export const getStrategyData = async ({
@@ -41,7 +41,9 @@ export const getStrategyData = async ({
       const strategy = Object.values(cellarDataMap).find(
         ({ config }) =>
           config.cellar.address.toLowerCase() ===
-          address.toLowerCase() && config.chain.id === contracts.chain)!      
+            address.toLowerCase() &&
+          config.chain.id === contracts.chain
+      )!
       const config: ConfigProps = strategy.config!
       const decimals = config.baseAsset.decimals
       const symbol = config.baseAsset.symbol
@@ -164,20 +166,36 @@ export const getStrategyData = async ({
         }
       }
       */
-    
+
       if (strategy.slug === utilConfig.CONTRACT.TURBO_EETH.SLUG) {
         // Get TVL
         let usdTvl = Number(strategyData?.tvlTotal)
 
         // $2.7k worth of eETH per month * 12 months * 100 for human readable %
         // TODO: Update this  + expiration date in config weekly as long as eETH incentives live
-        let apy = ((2700) / usdTvl) * 12 * 100
+        let apy = (2700 / usdTvl) * 12 * 100
 
         extraRewardsApy = {
           formatted: apy.toFixed(2).toString() + "%",
           value: apy,
           tokenSymbol: "weETH",
           tokenIcon: EETHIcon,
+        }
+      }
+
+      if (strategy.slug === utilConfig.CONTRACT.TURBO_ETHX.SLUG) {
+        // Get TVL
+        let usdTvl = Number(strategyData?.tvlTotal)
+
+        // $3.5k worth of eETH per month * 12 months * 100 for human readable %
+        // TODO: Update this  + expiration date in config weekly as long as eETH incentives live
+        let apy = (3500 / usdTvl) * 12 * 100
+
+        extraRewardsApy = {
+          formatted: apy.toFixed(2).toString() + "%",
+          value: apy,
+          tokenSymbol: "ETHx",
+          tokenIcon: ETHXIcon,
         }
       }
 

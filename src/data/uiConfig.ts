@@ -164,6 +164,7 @@ export const lpTokenTooltipContent = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
