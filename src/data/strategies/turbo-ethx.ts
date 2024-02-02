@@ -16,7 +16,7 @@ export const turboETHx: CellarData = {
   name: "Turbo ETHx",
   slug: config.CONTRACT.TURBO_ETHX.SLUG,
   tradedAssets: ["ETHx", "WETH", "wstETH"],
-  launchDate: new Date(Date.UTC(2024, 0, 24, 14, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 1, 2, 18, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Turbocharge your ETHX exposure in this multi-strategy DeFi vault.`,
   strategyType: "Yield",
