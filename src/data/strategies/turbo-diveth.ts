@@ -38,7 +38,70 @@ export const turbodivETH: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Unlock early access to the Diva Staking ecosystem with dynamic ETH strategies and a special DIVA token allocation, exclusively for Balancer rETH-ETH LP depositors.`,
+    goals: `Unlock early access to the Diva Staking ecosystem with dynamic ETH strategies and a special DIVA token allocation, exclusively for Balancer rETH-ETH LP depositors.
+    
+        <table style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th style="padding: 8px; border: 1px solid #ddd;">Tranche</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">TVL Range (ETH)</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">DIVA/ETH/Day</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">1</td>
+        <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">0 - 2,000</td>
+        <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">2.50</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">2</td>
+        <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">2,000 - 4,000</td>
+        <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">2.25</td>
+      </tr>
+      <tr>
+      <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">3</td>
+      <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">4,000 - 6,000</td>
+      <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">2.00</td>
+    </tr>
+    <tr>
+    <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">4</td>
+    <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">6,000 - 8,000</td>
+    <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">1.90</td>
+  </tr>
+  <tr>
+  <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">5</td>
+  <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">8,000 - 10,000</td>
+  <td style="padding: 8px; border: 1px solid #ddd;text-align: center;">1.75</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">6</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">10,000 - 12,000</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">1.60</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">7</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">12,000 - 14,000</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">1.55</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">8</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">14,000 - 16,000</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">1.50</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">9</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">16,000 - 18,000</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">1.40</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">10</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">18,000 - 20,000</td>
+<td style="padding: 8px; border: 1px solid #ddd;text-align: center;">1.30</td>
+</tr>
+    </tbody>
+  </table>
+    `,
 
     highlights: `
     - Designed for the Rocket Pool community to access the Diva ecosystem 
