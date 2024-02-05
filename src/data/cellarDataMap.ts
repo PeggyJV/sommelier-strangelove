@@ -38,6 +38,7 @@ let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
+  [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
   [config.CONTRACT.TURBO_ETHX.SLUG]: turboETHx,
   [config.CONTRACT.TURBO_DIVETH.SLUG]: turbodivETH,
   [config.CONTRACT.MORPHO_ETH.SLUG]: morphoETH,
