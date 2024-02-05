@@ -64,9 +64,9 @@ export const turboeETHV2: CellarData = {
   },
   //need to update
   dashboard:
-    "https://debank.com/profile/0x9a7b4980C6F0FCaa50CD5f288Ad7038f434c692e",
+    "https://debank.com/profile/0x729421F0E1fE6c849e5841DF373Db7019CC58610",
   depositTokens: {
-    list: ["WETH"],
+    list: ["WETH", "eETH", "weETH"],
   },
   config: {
     chain: chainSlugMap.ETHEREUM,
@@ -98,44 +98,6 @@ export const turboeETHV2: CellarData = {
         customStrategyHighlightColor: "#00C04B",
       },
     ],
-    /*
-    customReward: {
-      showAPY: true,
-      tokenSymbol: "weETH",
-      tokenDisplayName: "weETH",
-      tokenAddress: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
-      imagePath: "/assets/icons/eETH.svg",
-      customRewardMessageTooltip:
-        "View your ether.fi Loyalty Points at https://app.ether.fi/portfolio",
-      customRewardMessage: "Boosted ether.fi Loyalty Points",
-      customRewardHeader: "Ether.fi Incentives",
-      showBondingRewards: true,
-      showClaim: true,
-      customClaimMsg: "Claim All SOMM",
-      //customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
-      logo: EETHIcon,
-      logoSize: "15px",
-      customRewardLongMessage:
-        "Earn boosted ether.fi Loyalty Points, streamed directly when you bond.",
-      rewardHyperLink: "https://app.ether.fi/portfolio",
-      customColumnHeader: "View ether.fi Loyalty Points",
-      customColumnHeaderToolTip:
-        "View your ether.fi Loyalty Points at https://app.ether.fi/portfolio",
-      customColumnValue: "https://app.ether.fi/portfolio",
-      stakingDurationOverride: new Date(
-        Date.UTC(2024, 1, 3, 14, 0, 0, 0)
-      ),
-      showSommRewards: true,
-      customIconToolTipMsg:
-        "Boosted ether.fi Loyalty Points ends in ",
-      showOnlyBaseApy: false,
-    },
-    */
-    staker: {
-      address: config.CONTRACT.TURBO_EETHV2_STAKER.ADDRESS,
-      abi: config.CONTRACT.TURBO_EETHV2_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0821,
-    },
   },
   faq: [
     {
