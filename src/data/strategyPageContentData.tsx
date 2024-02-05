@@ -1431,7 +1431,7 @@ export const strategyPageContentData = {
     name: "Turbo eETH V2",
     provider: "Seven Seas",
     providerUrl: "https://sevenseas.capital/",
-    description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+    description: `Your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem.`,
     ticker: (
       <>
         {}
@@ -1444,7 +1444,6 @@ export const strategyPageContentData = {
       </>
     ),
     tradedAssets: ["WETH", "eETH", "weETH"],
-    alternativeTo: "Manually LPing",
     exchange: [
       {
         name: "Sommelier",
@@ -1453,11 +1452,12 @@ export const strategyPageContentData = {
     ],
     strategyHighlights: {
       card: [
-        `Capable of simultaneously pursuing multiple eETH yield opportunities.`,
+        `Accepts eETH, weETH and WETH deposits.`,
+        `Leverage loop weETH for more EigenLayer and ether.fi points (subject to borrow capacity on Morpho Blue).`,
         `Dynamically liquidity provision across multiple DEXs.`,
         `Fully automated with built-in auto compounding.`,
       ],
-      description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.      
+      description: `Turbo eETH aims to be your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem. The vault will pursue a number of DeFi strategies, including leveraged staking weETH to maximize EigenLayer and ether.fi points as well as LPing to eETH pairs on DEXs.     
           <br/><br/>
           Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },

@@ -18,7 +18,7 @@ export const turboeETHV2: CellarData = {
   //need to update
   launchDate: new Date(Date.UTC(2023, 11, 13, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
-  description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+  description: `Your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1%",
@@ -45,14 +45,15 @@ export const turboeETHV2: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+    goals: `Your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem.`,
 
     highlights: `
-    - Capable of simultaneously pursuing multiple eETH yield opportunities.
+    - Accepts eETH, weETH and WETH deposits.
+    - Leverage loop weETH for more EigenLayer and ether.fi points (subject to borrow capacity on Morpho Blue).
     - Dynamically liquidity provision across multiple DEXs.
     - Fully automated with built-in auto compounding.`,
 
-    description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.
+    description: `Turbo eETH aims to be your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem. The vault will pursue a number of DeFi strategies, including leveraged staking weETH to maximize EigenLayer and ether.fi points as well as LPing to eETH pairs on DEXs.
     
     Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
@@ -60,9 +61,9 @@ export const turboeETHV2: CellarData = {
     risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
     - This vault does liquidity provision which can result in impermanent loss.
+    - This vault uses leverage, which means there is liquidation risk.
     `,
   },
-  //need to update
   dashboard:
     "https://debank.com/profile/0xdAdC82e26b3739750E036dFd9dEfd3eD459b877A",
   depositTokens: {
