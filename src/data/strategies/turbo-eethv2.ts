@@ -64,7 +64,7 @@ export const turboeETHV2: CellarData = {
   },
   //need to update
   dashboard:
-    "https://debank.com/profile/0x729421F0E1fE6c849e5841DF373Db7019CC58610",
+    "https://debank.com/profile/0xdAdC82e26b3739750E036dFd9dEfd3eD459b877A",
   depositTokens: {
     list: ["WETH", "eETH", "weETH"],
   },
