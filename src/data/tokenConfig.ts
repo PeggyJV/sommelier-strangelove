@@ -367,7 +367,7 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ARBITRUM.id,
   },
   {
-    src: "/assets/icons/eETH.png",
+    src: "/assets/icons/eeth.png",
     alt: "eETH logo",
     symbol: "eETH",
     address: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
@@ -376,7 +376,7 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
-    src: "/assets/icons/weETH.png",
+    src: "/assets/icons/weeth.png",
     alt: "weETH logo",
     symbol: "weETH",
     address: "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
