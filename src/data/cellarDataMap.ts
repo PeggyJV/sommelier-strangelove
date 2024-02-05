@@ -31,6 +31,7 @@ import {
   morphoETH,
   turbodivETH,
   turboETHx,
+  turboeETHV2,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
@@ -71,6 +72,7 @@ cellarConfig = {
 // ! For not ethereum cellars the key must be {cellarAddress}-{chainId}
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
+  [config.CONTRACT.TURBO_EETHV2.ADDRESS.toLowerCase()]: turboeETHV2,
   [config.CONTRACT.TURBO_ETHX.ADDRESS.toLowerCase()]: turboETHx,
   [config.CONTRACT.TURBO_DIVETH.ADDRESS.toLowerCase()]: turbodivETH,
   [config.CONTRACT.MORPHO_ETH.ADDRESS.toLowerCase()]: morphoETH,
