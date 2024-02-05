@@ -97,6 +97,11 @@ export const turboeETHV2: CellarData = {
         customStrategyHighlight: "ether.fi Loyalty Points",
         customStrategyHighlightColor: "#00C04B",
       },
+
+      {
+        customStrategyHighlight: "EigenLayer Points",
+        customStrategyHighlightColor: "#00C04B",
+      },
     ],
   },
   faq: [
