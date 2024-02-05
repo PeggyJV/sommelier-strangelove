@@ -167,7 +167,7 @@ export const getStrategyData = async ({
         }
       }
       */
-
+      /*
       if (strategy.slug === utilConfig.CONTRACT.TURBO_EETH.SLUG) {
         // Get TVL
         let usdTvl = Number(strategyData?.tvlTotal)
@@ -183,6 +183,7 @@ export const getStrategyData = async ({
           tokenIcon: EETHIcon,
         }
       }
+      */
 
       if (strategy.slug === utilConfig.CONTRACT.TURBO_ETHX.SLUG) {
         // Get TVL
