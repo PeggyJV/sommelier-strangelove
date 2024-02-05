@@ -97,6 +97,7 @@ export const turboeETH: CellarData = {
         customStrategyHighlightColor: "#00C04B",
       },
     ],
+    /*
     customReward: {
       showAPY: true,
       tokenSymbol: "weETH",
@@ -128,6 +129,7 @@ export const turboeETH: CellarData = {
         "Boosted ether.fi Loyalty Points ends in ",
       showOnlyBaseApy: false,
     },
+    */
     staker: {
       address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_EETH_STAKER.ABI,
