@@ -12,6 +12,7 @@ import { EETHIcon } from "components/_icons"
 import { chainSlugMap } from "data/chainConfig"
 
 export const turboeETH: CellarData = {
+  deprecated: true,
   name: "Turbo eETH",
   slug: config.CONTRACT.TURBO_EETH.SLUG,
   tradedAssets: ["WETH", "eETH", "weETH"],
