@@ -25,6 +25,7 @@ import { TokenPricePerfomanceCard } from "components/_cards/TokenPricePerfomaceC
 import { ApyChartProvider } from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
 import { isComingSoon } from "utils/isComingSoon"
+import { InfoBanner } from "components/_banners/InfoBanner"
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -53,6 +54,52 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
 
   return (
     <Layout chainObj={cellarConfig.chain}>
+      {cellarConfig.cellarNameKey === CellarNameKey.TURBO_EETH && (
+        <InfoBanner
+          text={
+            <>
+              Turbo eETH V1 (current vault) is migrating to{" "}
+              <a
+                href="https://app.sommelier.finance/Turbo-eETHV2/manage"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: "underline" }}
+              >
+                Turbo eETH V2
+              </a>{" "}
+              (new vault).
+              <div>
+                Your capital in V1 is already earning the native yield
+                from{" "}
+                <a
+                  href="https://app.sommelier.finance/Turbo-eETHV2/manage"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: "underline" }}
+                >
+                  Turbo eETH V2
+                </a>
+                , but new staking programs with SOMM incentives will
+                use the V2 share token.
+              </div>
+              <div>
+                To participate in any new rewards program, you must
+                withdraw your assets from Turbo eETH V1 and deposit
+                into{" "}
+                <a
+                  href="https://app.sommelier.finance/Turbo-eETHV2/manage"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: "underline" }}
+                >
+                  Turbo eETH V2
+                </a>
+                .
+              </div>
+            </>
+          }
+        />
+      )}
       <Section>
         <HStack
           pb={isLarger768 ? 12 : 0}
@@ -88,7 +135,10 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
           {!notLaunched &&
             isApyChartEnabled(cellarConfig) &&
             !isEstimatedApyEnable(cellarConfig) && (
-              <ApyChartProvider address={cellarAddress} chain={cellarConfig.chain.id}>
+              <ApyChartProvider
+                address={cellarAddress}
+                chain={cellarConfig.chain.id}
+              >
                 <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                   Vault Perfomance
                 </Heading>
@@ -96,7 +146,10 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
               </ApyChartProvider>
             )}
           {isTokenPriceChartEnabled(cellarConfig) && (
-            <TokenPriceChartProvider address={cellarAddress} chain={cellarConfig.chain.id}>
+            <TokenPriceChartProvider
+              address={cellarAddress}
+              chain={cellarConfig.chain.id}
+            >
               <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
                 Vault Perfomance
               </Heading>

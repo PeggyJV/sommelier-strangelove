@@ -31,12 +31,14 @@ import {
   morphoETH,
   turbodivETH,
   turboETHx,
+  turboeETHV2,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
+  [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
   [config.CONTRACT.TURBO_ETHX.SLUG]: turboETHx,
   [config.CONTRACT.TURBO_DIVETH.SLUG]: turbodivETH,
   [config.CONTRACT.MORPHO_ETH.SLUG]: morphoETH,
@@ -71,6 +73,7 @@ cellarConfig = {
 // ! For not ethereum cellars the key must be {cellarAddress}-{chainId}
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
+  [config.CONTRACT.TURBO_EETHV2.ADDRESS.toLowerCase()]: turboeETHV2,
   [config.CONTRACT.TURBO_ETHX.ADDRESS.toLowerCase()]: turboETHx,
   [config.CONTRACT.TURBO_DIVETH.ADDRESS.toLowerCase()]: turbodivETH,
   [config.CONTRACT.MORPHO_ETH.ADDRESS.toLowerCase()]: morphoETH,

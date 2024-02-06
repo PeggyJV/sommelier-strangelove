@@ -1138,6 +1138,21 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         there is liquidation risk.
       </Text>
     ),
+    "Turbo eETHV2": () => (
+      <Text as="span">
+        All Sommelier vaults contain smart contract risk and varying
+        degrees of economic risk. Please take note of the following
+        risks; however, this list is not exhaustive, and there may be
+        additional risks:
+        <br />
+        <br />
+        - This vault does liquidity provision which can result in
+        impermanent loss.
+        <br />
+        <br />- This vault uses leverage, which means there is
+        liquidation risk.
+      </Text>
+    ),
   }
   return (
     <>
