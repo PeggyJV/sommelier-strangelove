@@ -192,7 +192,7 @@ export const config = {
     TURBO_EETHV2: {
       ADDRESS: "0xdAdC82e26b3739750E036dFd9dEfd3eD459b877A",
       SLUG: "Turbo-eETHV2",
-      ABI: cellarV0821,
+      ABI: cellarV0821MultiDeposit,
     },
     // Router
     CELLAR_ROUTER_V0815: {
