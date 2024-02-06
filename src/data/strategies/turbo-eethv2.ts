@@ -16,7 +16,7 @@ export const turboeETHV2: CellarData = {
   slug: config.CONTRACT.TURBO_EETHV2.SLUG,
   tradedAssets: ["WETH", "eETH", "weETH"],
   //need to update
-  launchDate: new Date(Date.UTC(2023, 11, 13, 14, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 1, 6, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem.`,
   strategyType: "Yield",
