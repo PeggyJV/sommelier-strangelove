@@ -58,7 +58,8 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
 
         return {
           [symbol]: props.constantAllUniqueAssetsArray.find(
-            (token) => token.symbol === symbol
+            (token) =>
+              token.symbol === symbol
           )!,
         }
       }
@@ -268,7 +269,9 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
                       alt={token.symbol}
                       background="transparent"
                       border="none"
-                      boxSize="24px"
+                      boxSize="2em"
+                      borderRadius={"50%"}
+
                     />
                     <Text fontWeight="semibold">{token.symbol}</Text>
                     <Checkbox

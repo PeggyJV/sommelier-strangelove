@@ -7,12 +7,19 @@ import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
 import { useState, useEffect } from "react"
+import { tokenConfig } from "data/tokenConfig"
 
 export const useStrategyData = (address: string, chain: string) => {
   const provider = useProvider()
 
   const { data: allContracts } = useAllContracts()
-  const { data: sommPrice } = useCoinGeckoPrice("sommelier")
+  const sommToken = tokenConfig.find(
+    (token) =>
+      token.coinGeckoId === "sommelier" &&
+      token.chain === chain
+  )!
+
+  const { data: sommPrice } = useCoinGeckoPrice(sommToken)
 
   const [stratData, setStratData] = useState<
     GetStrategyDataQuery | undefined
@@ -22,11 +29,14 @@ export const useStrategyData = (address: string, chain: string) => {
   const cellarData = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address.toLowerCase() ===
-      address.toLowerCase() && item.config.chain.id === chain
+        address.toLowerCase() && item.config.chain.id === chain
   )!
 
   useEffect(() => {
-    fetchIndividualCellarStrategyData(address.toLowerCase(), cellarData.config.chain.id)
+    fetchIndividualCellarStrategyData(
+      address.toLowerCase(),
+      cellarData.config.chain.id
+    )
       .then(({ data, error }) => {
         if (error) {
           setError(error)
@@ -40,17 +50,19 @@ export const useStrategyData = (address: string, chain: string) => {
   const config = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address.toLowerCase() ===
-      address.toLowerCase() && item.config.chain.id === chain
+        address.toLowerCase() && item.config.chain.id === chain
   )!.config
   const isNoDataSource = Boolean(config!.isNoDataSource)
-  const baseAsset = config.baseAsset.coinGeckoId
+  const baseAsset = config.baseAsset
   const { data: baseAssetPrice } = useCoinGeckoPrice(
-    baseAsset ?? "usd-coin"
+    baseAsset
   )
-  // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
-  const key = address + (config.chain.id !== "ethereum" ? ("-" + chain) : "")
 
-  // Get cellar contracts for the chain  
+  // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
+  const key =
+    address + (config.chain.id !== "ethereum" ? "-" + chain : "")
+
+  // Get cellar contracts for the chain
   const query = useQuery(
     [
       "USE_STRATEGY_DATA",
@@ -78,6 +90,6 @@ export const useStrategyData = (address: string, chain: string) => {
 
   return {
     ...query,
-    isError: Boolean(error) || query.isError
+    isError: Boolean(error) || query.isError,
   }
 }

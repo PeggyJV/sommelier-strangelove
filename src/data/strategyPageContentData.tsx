@@ -1065,6 +1065,57 @@ export const strategyPageContentData = {
         <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
       `,
   },
+  [config.CONTRACT.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT.SLUG]: {
+    name: "Multi Asset Deposit",
+    provider: "Seven Seas",
+    providerUrl: "https://7seas.capital/",
+    description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+      {
+        name: "Rhino ( L2 deposit option )",
+        logo: "/assets/icons/rhino-fi.svg",
+        url: "https://app.rhino.fi/invest/YIELDUSD/supply",
+      },
+    ],
+    ticker: (
+      <>
+        <Image
+          alt="real yield usd icon"
+          src="/assets/icons/real-yield-usd.png"
+          boxSize={8}
+        />
+        <Text>YieldUSD</Text>
+      </>
+    ),
+    tradedAssets: ["USDC", "USDT", "DAI"],
+    alternativeTo:
+      "Holding or manually lending / LPing USDC, USDT, and DAI",
+
+    strategyHighlights: {
+      card: [
+        `The only active strategy which optimally allocates capital across key protocols for max yield.`,
+        `Combines lending and LPing activities in a single strategy to deliver real yield others can't.`,
+        `Optimizes Uniswap V3 LP tick ranges.`,
+      ],
+      description: `Real Yield USD has a real technological edge to deliver yields others can't.
+      <br/><br/>
+      By “real yield” we mean yield that results from trading or lending activity (fees) rather than resulting from incentives. The primary sources of real yield exist on lending platforms like Aave and Compound, and decentralized exchanges like Uniswap. Because of this, Real Yield USD focuses on these three protocols and simultaneously allocates capital to Aave and Compound lending pools and Uniswap V3 LP pools in order to maximize yield.
+      <br/><br/>
+      One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can actively optimize Uniswap V3 tick ranges. Many other yield vaults can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing vaults.`,
+    },
+    howItWorks: `Determining the optimal allocation of stablecoins across these three protocols for the highest yield is non-trivial and requires off-chain computation.
+    <br/><br/>
+    Sommelier's novel infrastructure enables active optimization of capital of an erc-4626 vault (guided by off-chain computation) while remaining non-custodial, transparent, and decentralized. The optimal allocation is determined by a numerical optimization procedure that accounts for swap fees and market impact due to position size, and makes use of various simple time-series forecasting methods to estimate (future) base yields.
+    <br/><br/>
+    One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it optimizes Uniswap V3 tick ranges. Picking a lending position on Aave or Compound is relatively easy (ignoring factors like market impact which are actually important) because there are no degrees of freedom - it simply boils down to the decision of whether to lend a certain token or not. Providing liquidity on Uniswap V3, on the other hand, is complex because the choice of tick range determines both fee revenue and impermanent loss. Our optimization procedure accounts for all of these factors.`,
+    backtestingText: `
+        <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
+      `,
+  },
   [config.CONTRACT.TURBO_SOMM.SLUG]: {
     name: "Turbo SOMM",
     provider: "Seven Seas",
@@ -1171,22 +1222,47 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
-  [config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG]: {
-    name: "Real Yield ETH",
+  [config.CONTRACT.MORPHO_ETH.SLUG]: {
+    name: "Morpho ETH Maximizer",
     provider: "Seven Seas",
-    providerUrl: "https://7seas.capital/",
-    description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
+    providerUrl: "https://sevenseas.capital/",
+    description: `Supercharge your ETH lending and leveraged staking experience on Morpho Blue.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Morpho ETH Maximizer"
+          src="/assets/icons/morpho-eth.png"
+          boxSize={8}
+        />
+        <Text>MaxMorphoETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "stETH", "wstETH"],
+    alternativeTo: "Holding WETH or stETH/wstETH",
     exchange: [
       {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
-      {
-        name: "Rhino ( L2 deposit option )",
-        logo: "/assets/icons/rhino-fi.svg",
-        url: "https://app.rhino.fi/invest/YIELDETH/supply",
-      },
     ],
+    strategyHighlights: {
+      card: [
+        `Dynamically rebalance between lending and leveraged staking opportunities.`,
+        `Leverage monitoring.`,
+        `Fully automated with built-in auto-compounding.`,
+      ],
+      description: `Supercharge your ETH lending and leveraged staking experience on Morpho Blue.
+     <br/><br/>
+    Note that Morpho ETH Maximizer and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
+  [config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG]: {
+    name: "Real Yield ETH",
+    provider: "Seven Seas",
+    providerUrl: "https://7seas.capital/",
+    description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
     ticker: (
       <>
         <Image
@@ -1199,7 +1275,6 @@ export const strategyPageContentData = {
     ),
     tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
     alternativeTo: "Lending or LPing ETH LSTs",
-
     strategyHighlights: {
       card: [
         `Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.`,
@@ -1211,15 +1286,210 @@ export const strategyPageContentData = {
       Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
     },
-    howItWorks: `The vault will initially generate yield using two primary techniques, but has the ability to integrate with other protocols for new capabilities in the future. The techniques initially used in the vault:
-    <br/><br/>
-    1. Leveraged Staking: This method involves a continuous cycle of exchanging ETH for an ETH denominated LST, utilizing the LST as collateral on Aave or Compound, borrowing more ETH, and repeating the cycle. This process is commonly referred to as “looping.”
-    <br/><br/>
-    2. Liquidity Provisioning: This approach involves providing liquidity to ETH/ ETH denominated LST trading pairs on Uniswap V3. As a liquidity provider (LP), the vault deposits both ETH and an LST into a liquidity pool, earning fees from traders who swap between the two tokens.
-    <br/><br/>
-    Sommelier’s novel architecture gives the vault advanced capabilities when it comes to both leveraged staking and liquidity provision vaults. More specifically, for leveraged staking, the vault uses a sophisticated solution to accumulate leverage that is highly capital efficient and significantly reduces gas and flash loan fees frequently associated with typical leverage practices. While the vault is leveraged, its smart contract enforces a minimum 1.05 health factor during each rebalance as a safety precaution and the vault closely monitors on-chain conditions to mitigate liquidation risk. If market conditions change, the vault is able to rapidly adjust leverage ratios to help avoid liquidation.
-    <br/><br/>
-    For the liquidity provision vaults, the vault’s ability to run off-chain computation combined with Seven Seas’ deep Uniswap V3 experience, positions the vault to be a top performing LP in the pools that it utilizes. The vault will be able to dynamically adapt to changing price movements to quote the optimal tick range(s) that collect the most fees while minimizing impermanent loss.
-    `,
+    howItWorks: ``,
+  [config.CONTRACT.TURBO_DIVETH.SLUG]: {
+    name: "Turbo divETH",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Unlock early access to the Diva Staking ecosystem with dynamic ETH strategies and a special DIVA token allocation, exclusively for Balancer rETH-ETH LP depositors.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo divETH"
+          src="/assets/icons/turbo-diveth.png"
+          boxSize={8}
+        />
+        <Text>TurboDIVETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "rETH"],
+    alternativeTo: ``,
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Designed for the Rocket Pool Community to access the Diva ecosystem.`,
+        <span>
+          Deposit{" "}
+          <a
+            href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity"
+            target="_blank"
+            style={{ textDecoration: "underline", color: "white" }}
+          >
+            Balancer rETH-ETH LP tokens
+          </a>
+          .
+        </span>,
+        `Deposit early to get a higher DIVA token allocation.`,
+        `Enjoy 0 fees until divETH strategies go live.`,
+      ],
+      description: `
+      This vault is a cornerstone in Diva’s ecosystem, designed for enhanced ETH liquidity strategies and a DIVA token distribution to its community. 
+      <br/><br/>
+      Participants need to deposit <a href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity" style="color: white; text-decoration: underline;" target="_blank">Balancer rETH-ETH LP tokens</a>, obtainable through depositing rETH, ETH, or both on Balancer. 
+      <br/><br/>
+      <strong>Pre-divETH Launch Phase</strong>
+      <br/><br/>
+      Before the official launch of Diva Staking protocol and divETH (estimated end of Q1/Q2), the Turbo divETH vault enables users to express their interest in divETH and secure their position for a DIVA token allocation. Earlier deposits qualify for a higher token allocation rate, detailed in the T&Cs.
+      <br/><br/>
+      <strong>Post-divETH Launch Phase</strong>
+      <br/><br/>
+      Upon divETH launch and oracle integration, the vault will fully integrate this asset. 
+      More specifically, the assets in the BPT can be used in a potential Balancer rETH-divETH pool, essentially converting the committed ETH into divETH and enhancing rETH-divETH liquidity on a major decentralized exchange. The vault is also set to expand its strategies on platforms like Uniswap v3, Balancer/Aura, Aave, Compound, Morpho, and Fraxlend, with future protocol integrations. As Sommelier supports additional DeFi protocols, those capabilities can be added to Turbo divETH through Sommelier governance.
+      <br/><br/>
+      Link to the official T&Cs: <a href="https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307" style="color: white; text-decoration: underline;" target="_blank">https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307</a>
+      <br/><br/>
+      Note that Turbo divETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      `,
+    },
+    howItWorks: ``,
+  },
+  [config.CONTRACT.TURBO_ETHX.SLUG]: {
+    name: "Turbo ETHx",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Turbocharge your ETHx exposure in this multi-strategy DeFi vault.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo ETHx"
+          src="/assets/icons/turbo-ethx.png"
+          boxSize={8}
+        />
+        <Text>TurboETHX</Text>
+      </>
+    ),
+    tradedAssets: ["ETHx", "WETH"],
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Dynamically rebalance between ETHx LP opportunities and ETHx leverage staking (when available).`,
+        `Leverage monitoring. `,
+        `Fully automated with built-in auto-compounding.`,
+      ],
+      description: `Gain exposure to ETHx DeFi opportunities through this dynamic and evolving vault.
+     <br/><br/>
+    Note that Turbo ETHx and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
+  [config.CONTRACT.TURBO_EETH.SLUG]: {
+    name: "Turbo eETH",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo eETH"
+          src="/assets/icons/Turbo-eETH.png"
+          boxSize={8}
+        />
+        <Text>TurboeETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "eETH", "weETH"],
+    alternativeTo: "Manually LPing",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Capable of simultaneously pursuing multiple eETH yield opportunities.`,
+        `Dynamically liquidity provision across multiple DEXs.`,
+        `Fully automated with built-in auto compounding.`,
+      ],
+      description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.      
+      <br/><br/>
+      Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
+  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]: {
+    name: "Turbo stETH",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo stETH"
+          src="/assets/icons/turbo-steth2.png"
+          boxSize={8}
+        />
+        <Text>TurboSTETH</Text>
+      </>
+    ),
+    tradedAssets: ["stETH", "wstETH", "WETH"],
+    alternativeTo: "Holding stETH/wstETH",
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Capable of simultaneously pursuing multiple stETH/wstETH yield opportunities.`,
+        `Dynamically leverage stake, Uniswap v3 liquidity provision, arbitrage wstETH peg.`,
+        `Fully automated with built-in auto compounding.`,
+      ],
+      description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Sommelier strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
+     <br/><br/>
+    Note that Turbo stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
+  },
+  [config.CONTRACT.TURBO_EETHV2.SLUG]: {
+    name: "Turbo eETH V2",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="Turbo eETHV2"
+          src="/assets/icons/turbo-eethv2.png"
+          boxSize={8}
+        />
+        <Text>TurboeETHV2</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "eETH", "weETH"],
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    strategyHighlights: {
+      card: [
+        `Accepts eETH, weETH and WETH deposits.`,
+        `Leverage loop weETH for more EigenLayer and ether.fi points (subject to borrow capacity on Morpho Blue).`,
+        `Dynamically liquidity provision across multiple DEXs.`,
+        `Fully automated with built-in auto compounding.`,
+      ],
+      description: `Turbo eETH aims to be your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem. The vault will pursue a number of DeFi strategies, including leveraged staking weETH to maximize EigenLayer and ether.fi points as well as LPing to eETH pairs on DEXs.     
+          <br/><br/>
+          Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    },
+    howItWorks: ``,
   },
 }

@@ -2,9 +2,11 @@ import cellarRouterV0815 from "../abi/cellar-router-v0.8.15.json"
 import cellarRouterV0816 from "../abi/cellar-router-v0.8.16.json"
 import cellarStakingV0815 from "../abi/cellar-staking-v.0.8.15.json"
 import cellarStakingV0821 from "../abi/cellar-staking-v0.8.21.json"
+import ensoRouterABI from "../abi/enso-router.json"
 import cellarV0815 from "../abi/cellar-v0.8.15.json"
 import cellarV0816 from "../abi/cellar-v0.8.16.json"
 import cellarV0821 from "../abi/cellar-v0.8.21.json"
+import cellarV0821MultiDeposit from "../abi/cellar-v0.8.21_multiDeposit.json"
 import gravityBridge from "../abi/gravityBridge.json"
 import { erc20ABI } from "wagmi"
 
@@ -16,6 +18,11 @@ export const config = {
     SLIPPAGE: 0.5,
   },
   CONTRACT: {
+    TEST_ARBITRUM_MULTI_ASSET_DEPOSIT: {
+      ADDRESS: "0x7C3bccC2060F097790D1751f25c73d5065683F88",
+      SLUG: "MultiAsset-Deposit-Arbitrum",
+      ABI: cellarV0821MultiDeposit,
+    },
     TEST_ARBITRUM_REAL_YIELD_USD: {
       ADDRESS: "0xA73B0B48E26E4B8B24CeaD149252cc275deE99A6",
       SLUG: "Real-Yield-USD-Arbitrum",
@@ -169,9 +176,29 @@ export const config = {
     },
     //need to update
     REAL_YIELD_ETH_ARB: {
-      ADDRESS: "0xA73B0B48E26E4B8B24CeaD149252cc275deE99A6",
+      ADDRESS: "0x72ebeE37653f6Dd336dC405F7efBDC79aBa3E7B9",
       SLUG: "real-yield-eth-arb",
+      ABI: cellarV0821MultiDeposit,
+    },
+    MORPHO_ETH: {
+      ADDRESS: "0xcf4B531b4Cde95BD35d71926e09B2b54c564F5b6",
+      SLUG: "Morpho-ETH",
+      ABI: cellarV0821MultiDeposit,
+    },
+    TURBO_DIVETH: {
+      ADDRESS: "0x6c1edce139291Af5b84fB1e496c9747F83E876c9",
+      SLUG: "Turbo-divETH",
       ABI: cellarV0821,
+    },
+    TURBO_ETHX: {
+      ADDRESS: "0x19B8D8FC682fC56FbB42653F68c7d48Dd3fe597E",
+      SLUG: "Turbo-ETHx",
+      ABI: cellarV0821MultiDeposit,
+    },
+    TURBO_EETHV2: {
+      ADDRESS: "0xdAdC82e26b3739750E036dFd9dEfd3eD459b877A",
+      SLUG: "Turbo-eETHV2",
+      ABI: cellarV0821MultiDeposit,
     },
     // Router
     CELLAR_ROUTER_V0815: {
@@ -249,16 +276,30 @@ export const config = {
       ADDRESS: "0xD7FE9DB494B28c55920700eA6E9347c49290A510",
       ABI: cellarStakingV0821,
     },
+    TEST_ARBITRUM_MULTI_ASSET_DEPOSIT_STAKER: {
+      ADDRESS: "0xD7FE9DB494B28c55920700eA6E9347c49290A510",
+      ABI: cellarStakingV0821,
+    },
     TURBO_EETH_STAKER: {
       ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
       ABI: cellarStakingV0821,
     },
-    // //need to update
-    // REAL_YIELD_ETH_ARB_STAKER: {
-    //   ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
-    //   SLUG: "real-yield-eth-arb",
-    //   ABI: cellarV0821,
-    // },
+    REAL_YIELD_ETH_ARB_STAKER: {
+      ADDRESS: "0xd700D39be88fB6b54311f95cCA949C3f6835e236",
+      ABI: cellarStakingV0821,
+    },
+    ENSO_ROUTER: {
+      ADDRESS: "0x80EbA3855878739F4710233A8a19d89Bdd2ffB8E",
+      ABI: ensoRouterABI,
+    },
+    MORPHO_ETH_STAKER: {
+      ADDRESS: "0xe468c1156d4b3399e4Aa1080c58fFBc6119722F9",
+      ABI: cellarStakingV0821,
+    },
+    TURBO_ETHX_STAKER: {
+      ADDRESS: "0x88EDf544b5d4Ba6A11D40375e4bAEf3f1Ec5aF11",
+      ABI: cellarStakingV0821,
+    },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",

@@ -13,6 +13,8 @@ export interface Chain {
     name: string
     url: string
   }
+  withdrawQueueAddress: string
+  priceRouterAddress: string
 }
 
 /**
@@ -29,6 +31,9 @@ export const chainConfig: Chain[] = [
     infuraRpcUrl: mainnet.rpcUrls.infura.http[0],
     alchemyRpcUrl: mainnet.rpcUrls.alchemy.http[0],
     blockExplorer: mainnet.blockExplorers.default,
+    withdrawQueueAddress:
+      "0x5751d75b642975E4E7fdE39f35F9a6c11b867169",
+    priceRouterAddress: "0xA1A0bc3D59e4ee5840c9530e49Bdc2d1f88AaF92",
   },
   {
     id: "arbitrum",
@@ -39,6 +44,9 @@ export const chainConfig: Chain[] = [
     infuraRpcUrl: arbitrum.rpcUrls.infura.http[0],
     alchemyRpcUrl: arbitrum.rpcUrls.alchemy.http[0],
     blockExplorer: arbitrum.blockExplorers.default,
+    withdrawQueueAddress:
+      "0x1DF1A219562C643163aF1e5CD1d50b0fD67D21da",
+    priceRouterAddress: "" // TODO: Add once deployed
   },
 ]
 

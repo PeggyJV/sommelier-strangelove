@@ -2,6 +2,7 @@ import { VFC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Menu } from "./Menu"
 import { BigNumber } from "ethers"
+import { ModalOnlyTokenMenuProps, OnlyTokenMenu } from "./OnlyTokenMenu"
 
 export interface ModalMenuProps {
   depositTokens: string[]
@@ -13,6 +14,7 @@ export interface ModalMenuProps {
     symbol: string
     value: BigNumber
   }
+  isDisabled?: boolean
 }
 
 export const ModalMenu: VFC<ModalMenuProps> = ({
@@ -20,6 +22,7 @@ export const ModalMenu: VFC<ModalMenuProps> = ({
   activeAsset,
   selectedTokenBalance,
   setSelectedToken,
+  isDisabled,
 }) => {
   const { control } = useFormContext()
 
@@ -34,6 +37,36 @@ export const ModalMenu: VFC<ModalMenuProps> = ({
             value={value}
             activeAsset={activeAsset}
             selectedTokenBalance={selectedTokenBalance}
+            onChange={(data) => {
+              // Todo: shouldn't need to do this hack
+              setSelectedToken(data)
+              onChange(data)
+            }}
+            isDisabled={isDisabled}
+          />
+        )
+      }}
+    />
+  )
+}
+
+export const ModalOnlyTokenMenu: VFC<ModalOnlyTokenMenuProps> = ({
+  depositTokens,
+  activeAsset,
+  setSelectedToken,
+}) => {
+  const { control } = useFormContext()
+
+  return (
+    <Controller
+      control={control}
+      name="selectedToken"
+      render={({ field: { value, onChange } }) => {
+        return (
+          <OnlyTokenMenu
+            depositTokens={depositTokens}
+            value={value}
+            activeAsset={activeAsset}
             onChange={(data) => {
               // Todo: shouldn't need to do this hack
               setSelectedToken(data)

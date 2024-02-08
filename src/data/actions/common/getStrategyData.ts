@@ -20,8 +20,9 @@ import { createApyChangeDatum } from "src/utils/chartHelper"
 import BigNumber from "bignumber.js"
 import { config as utilConfig } from "src/utils/config"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { EETHIcon, GHOIcon } from "components/_icons"
+import { EETHIcon } from "components/_icons"
 import { Contract } from "ethers"
+import { ETHXIcon } from "components/_icons/ETHXIcon"
 
 export const getStrategyData = async ({
   address,
@@ -41,7 +42,8 @@ export const getStrategyData = async ({
       const strategy = Object.values(cellarDataMap).find(
         ({ config }) =>
           config.cellar.address.toLowerCase() ===
-          address.toLowerCase() && config.chain.id === contracts.chain
+            address.toLowerCase() &&
+          config.chain.id === contracts.chain
       )!
       const config: ConfigProps = strategy.config!
       const decimals = config.baseAsset.decimals
@@ -141,9 +143,7 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      let extraRewardsApy = {
-        value: 0,
-      }
+      let extraRewardsApy = undefined
       // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
       /** 
       if (strategy.slug === utilConfig.CONTRACT.TURBO_GHO.SLUG) {
@@ -167,24 +167,40 @@ export const getStrategyData = async ({
         }
       }
       */
-
       /*
       if (strategy.slug === utilConfig.CONTRACT.TURBO_EETH.SLUG) {
         // Get TVL
         let usdTvl = Number(strategyData?.tvlTotal)
 
-        // $2k worth of eETH per month * 12 months * 100 for human readable %
+        // $2.7k worth of eETH per month * 12 months * 100 for human readable %
         // TODO: Update this  + expiration date in config weekly as long as eETH incentives live
-        let apy = ((2000) / usdTvl) * 12 * 100
+        let apy = (2700 / usdTvl) * 12 * 100
 
         extraRewardsApy = {
           formatted: apy.toFixed(2).toString() + "%",
           value: apy,
-          tokenSymbol: "eETH",
+          tokenSymbol: "weETH",
           tokenIcon: EETHIcon,
         }
       }
       */
+
+      if (strategy.slug === utilConfig.CONTRACT.TURBO_ETHX.SLUG) {
+        // Get TVL
+        let usdTvl = Number(strategyData?.tvlTotal)
+
+        // $3.5k worth of ETHx per month * 12 months * 100 for human readable %
+        // TODO: Update this  + expiration date in config weekly as long as ETHx incentives live
+        let apy = (3500 / usdTvl) * 12 * 100
+
+        extraRewardsApy = {
+          formatted: apy.toFixed(2).toString() + "%",
+          value: apy,
+          tokenSymbol: "ETHx",
+          // tokenIcon: EETHIcon,
+          tokenIcon: ETHXIcon,
+        }
+      }
 
       const baseApy = (() => {
         if (config.show7DayAPYTooltip === true) {
@@ -337,6 +353,7 @@ export const getStrategyData = async ({
         extraRewardsApy,
       }
     } catch (e) {
+      console.error("Error fetching strategy data")
       console.error(address, e)
     }
   })()

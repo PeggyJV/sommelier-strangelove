@@ -22,7 +22,7 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { isArray } from "lodash"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import { VFC } from "react"
+import { VFC, useState, useEffect } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
@@ -85,12 +85,28 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     (performanceSplit["strategy provider"] ?? 0)
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const activeAsset = strategyData?.activeAsset
   const { chain } = useNetwork()
 
   const isManyProtocols = isArray(protocols)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    window.addEventListener("resize", handleResize)
+
+    // Call handler right away so state gets updated with initial window size
+    handleResize()
+
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   const protocolData = isManyProtocols
     ? protocols.map((v) => {
         return {
@@ -191,7 +207,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             justifyContent="normal"
           >
             <VStack>
-              <HStack>
+              <HStack width="100%">
                 <CardStat
                   label="Platform Fee"
                   flex={0}
@@ -212,7 +228,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
                 >
                   {performanceFee}.00%
                 </CardStat>
-                <CardStat label="Deposit and Exit Fees" flex={0}>
+                <CardStat label="Exit Fees" flex={0}>
                   0.00%
                 </CardStat>
               </HStack>
@@ -223,6 +239,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
               )}
             </VStack>
           </Stack>
+          {isMobile ? <br /> : <></>}
           <CardStat
             label="strategy assets"
             tooltip="Strategy will have exposure to 1 or more of these assets at any given time"

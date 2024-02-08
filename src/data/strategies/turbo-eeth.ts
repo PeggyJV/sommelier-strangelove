@@ -12,6 +12,7 @@ import { EETHIcon } from "components/_icons"
 import { chainSlugMap } from "data/chainConfig"
 
 export const turboeETH: CellarData = {
+  deprecated: true,
   name: "Turbo eETH",
   slug: config.CONTRACT.TURBO_EETH.SLUG,
   tradedAssets: ["WETH", "eETH", "weETH"],
@@ -48,6 +49,11 @@ export const turboeETH: CellarData = {
     description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.
     
     Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    `,
+
+    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+   
+    - This vault does liquidity provision which can result in impermanent loss.
     `,
   },
   overrideApy: {
@@ -92,10 +98,11 @@ export const turboeETH: CellarData = {
         customStrategyHighlightColor: "#00C04B",
       },
     ],
+    /*
     customReward: {
-      showAPY: false,
-      tokenSymbol: "eETH",
-      tokenDisplayName: "eETH",
+      showAPY: true,
+      tokenSymbol: "weETH",
+      tokenDisplayName: "weETH",
       tokenAddress: "0x35fa164735182de50811e8e2e824cfb9b6118ac2",
       imagePath: "/assets/icons/eETH.svg",
       customRewardMessageTooltip:
@@ -105,7 +112,7 @@ export const turboeETH: CellarData = {
       showBondingRewards: true,
       showClaim: true,
       customClaimMsg: "Claim All SOMM",
-      customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
+      //customRewardAPYTooltip: "Boosted ether.fi Loyalty Points",
       logo: EETHIcon,
       logoSize: "15px",
       customRewardLongMessage:
@@ -123,6 +130,7 @@ export const turboeETH: CellarData = {
         "Boosted ether.fi Loyalty Points ends in ",
       showOnlyBaseApy: false,
     },
+    */
     staker: {
       address: config.CONTRACT.TURBO_EETH_STAKER.ADDRESS,
       abi: config.CONTRACT.TURBO_EETH_STAKER.ABI,

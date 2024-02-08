@@ -14,9 +14,6 @@ export const testArbitrumRealYieldUsd: CellarData = {
   name: "Real Yield USD",
   slug: config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG,
   dashboard: "https://ryusd.sevenseas.capital/",
-  popUpTitle: "Get Exclusive Real Yield Updates",
-  popUpDescription:
-    "Thank you for your trust. As a Real Yield vault user, you’re eligible for exclusive strategy updates directly from the strategist - 7 Seas. Delivered to your inbox every week. We’ll only use your email for this purpose.",
   tradedAssets: ["USDC", "USDT", "DAI"],
   launchDate: new Date("2023-11-05T00:00:00.000Z"),
   cellarType: CellarType.yieldStrategies,
@@ -64,7 +61,7 @@ export const testArbitrumRealYieldUsd: CellarData = {
       `,
   },
   depositTokens: {
-    list: ["USDC"],
+    list: ["USDC_e"],
   },
 
   config: {
@@ -86,7 +83,7 @@ export const testArbitrumRealYieldUsd: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 6,
     },
-    baseAsset: tokenConfigMap.USDC_ARBITRUM,
+    baseAsset: tokenConfigMap.USDC_E_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
     staker: {
       address:

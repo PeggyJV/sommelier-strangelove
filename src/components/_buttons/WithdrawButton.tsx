@@ -1,4 +1,4 @@
-import { ButtonProps, useDisclosure } from "@chakra-ui/react"
+import { ButtonProps, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { VFC } from "react"
 import { SecondaryButton } from "./SecondaryButton"
 import { WithdrawModal } from "components/_modals/WithdrawModal"
@@ -38,20 +38,34 @@ export const WithdrawButton: VFC<
   return (
     <>
       <>
-        <SecondaryButton
-          onClick={(e) => {
-            //! if share price oracle updating..
-            //if (cellarData.slug === "Turbo-SOMM") {
-            //  openOracleModal()
-            //  return
-            //}
-
-            onOpen()
-          }}
-          {...props}
+        <Tooltip
+          hasArrow
+          arrowShadowColor="purple.base"
+          label={
+            "Withdraw your funds from the cellar's liquid reserve."
+          }
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+          textAlign="center"
         >
-          {props.isDeprecated ? "Withdraw Only" : "Withdraw"}
-        </SecondaryButton>
+          <SecondaryButton
+            onClick={(e) => {
+              //! if share price oracle updating..
+              //if (cellarData.slug === "Turbo-SOMM") {
+              //  openOracleModal()
+              //  return
+              //}
+
+              onOpen()
+            }}
+            {...props}
+          >
+            {props.isDeprecated
+              ? "Withdraw Only"
+              : "Withdraw"}
+          </SecondaryButton>
+        </Tooltip>
         <WithdrawModal isOpen={isOpen} onClose={closeModal} />
       </>
       {isOracleModalOpen && (

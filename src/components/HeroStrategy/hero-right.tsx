@@ -14,13 +14,8 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { VFC } from "react"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
-import {
-  intervalGainTimeline,
-} from "data/uiConfig"
 import { CountDown } from "./count-down"
-import {
-  addDays,
-} from "date-fns"
+import { addDays } from "date-fns"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
@@ -46,7 +41,8 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   )
   const cellarConfig = cellarData.config
   const { data, isLoading } = useStrategyData(
-    cellarData.config.cellar.address, cellarData.config.chain.id
+    cellarData.config.cellar.address,
+    cellarData.config.chain.id
   )
   const {
     tokenPrice,
@@ -60,11 +56,7 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
   const dailyChange = changes?.daily
   const router = useRouter()
 
-  const intervalGainPct =
-    changes?.[intervalGainTimeline(cellarConfig)]
-
   const countdown = isComingSoon(launchDate)
-  const isTwoDaysCountdown = isComingSoon(twoDaysAfterLaunch)
 
   const potentialStakingApy = isLoading
     ? "-"
@@ -95,32 +87,26 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
-      {/* {!countdown && isTwoDaysCountdown && (
-        <CountDown
-          launchDate={twoDaysAfterLaunch}
-          isTwoDaysAfterLaunch={isTwoDaysCountdown}
-        />
-      )} */}
       {countdown && launchDate ? (
         <>
           <CountDown launchDate={launchDate} />
-          <BaseButton
-            w="full"
-            h="60px"
-            onClick={() => {
-              // analytics.track("strategy.notify-me", {
-              //   strategyCard: cellarData.name,
-              //   landingType: landingType(),
-              // })
-              notifyModal.onOpen()
-            }}
-          >
-            Notify me
-          </BaseButton>
-          <NotifyModal
-            isOpen={notifyModal.isOpen}
-            onClose={notifyModal.onClose}
-          />
+          {/* <BaseButton
+        w="full"
+        h="60px"
+        onClick={() => {
+          // analytics.track("strategy.notify-me", {
+          //   strategyCard: cellarData.name,
+          //   landingType: landingType(),
+          // })
+          notifyModal.onOpen()
+        }}
+      >
+        Notify me
+      </BaseButton>
+      <NotifyModal
+        isOpen={notifyModal.isOpen}
+        onClose={notifyModal.onClose}
+      /> */}
         </>
       ) : (
         <>
@@ -204,14 +190,14 @@ export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
             )}
           </Stack>
         </HStack>
-        <HStack>
+        {/* <HStack>
           <Box>
             <Text w="150px" fontWeight="semibold">
               Alternative to
             </Text>
           </Box>
           <Text>{content.alternativeTo}</Text>
-        </HStack>
+        </HStack> */}
       </Stack>
     </Stack>
   )
