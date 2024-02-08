@@ -1273,7 +1273,7 @@ export const strategyPageContentData = {
         <Text>YieldETH</Text>
       </>
     ),
-    tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
+    tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
     alternativeTo: "Lending or LPing ETH LSTs",
     strategyHighlights: {
       card: [
@@ -1493,3 +1493,4 @@ export const strategyPageContentData = {
     howItWorks: ``,
   },
 }
+};
