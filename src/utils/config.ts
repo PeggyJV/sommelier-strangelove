@@ -174,7 +174,6 @@ export const config = {
       SLUG: "Turbo-STETH-(steth-deposit)",
       ABI: cellarV0821,
     },
-    //need to update
     REAL_YIELD_ETH_ARB: {
       ADDRESS: "0x72ebeE37653f6Dd336dC405F7efBDC79aBa3E7B9",
       SLUG: "real-yield-eth-arb",

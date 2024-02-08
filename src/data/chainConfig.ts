@@ -45,8 +45,8 @@ export const chainConfig: Chain[] = [
     alchemyRpcUrl: arbitrum.rpcUrls.alchemy.http[0],
     blockExplorer: arbitrum.blockExplorers.default,
     withdrawQueueAddress:
-      "0x1DF1A219562C643163aF1e5CD1d50b0fD67D21da",
-    priceRouterAddress: "" // TODO: Add once deployed
+      "0x516AD60801b62fCABCCDA7be178e4478D4018071",
+    priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11", 
   },
 ]
 
@@ -58,8 +58,7 @@ export const chainConfigMap = chainConfig.reduce((map, chain) => {
 
 export const supportedChains = [
   "ethereum", 
-  // TODO: Enable for multichain
-  /*/*"arbitrum"*/
+  "arbitrum"
 ]
 
 export const chainSlugMap = {

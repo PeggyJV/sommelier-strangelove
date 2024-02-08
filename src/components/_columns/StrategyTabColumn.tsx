@@ -88,8 +88,6 @@ export const StrategyTabColumn = ({
         return 0
       },
     },
-    // TODO: Enable for multichain
-    /*
     {
       Header: () => (
         <Tooltip
@@ -166,7 +164,6 @@ export const StrategyTabColumn = ({
         return 0
       },
     },
-    */
     {
       Header: "TVL",
       accessor: "tvm.value",

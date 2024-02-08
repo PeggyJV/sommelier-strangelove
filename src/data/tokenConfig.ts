@@ -43,6 +43,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
+    src: "/assets/icons/eth.png",
+    alt: "Ethereum logo",
+    symbol: "WETH",
+    address: "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+    coinGeckoId: "weth",
+    decimals: 18,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
     src: "/assets/icons/wbtc.png",
     alt: "Bitcoin logo",
     symbol: "WBTC",
@@ -178,6 +187,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
+    src: "/assets/icons/cbETH.png",
+    alt: "cbETH logo",
+    symbol: "cbETH",
+    address: "0x1debd73e752beaf79865fd6446b0c970eae7732f",
+    coinGeckoId: "coinbase-wrapped-staked-eth",
+    decimals: 18,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
     src: "/assets/icons/rETH.png",
     alt: "rETH logo",
     symbol: "rETH",
@@ -185,6 +203,15 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "rocket-pool-eth",
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
+    src: "/assets/icons/rETH.png",
+    alt: "rETH logo",
+    symbol: "rETH",
+    address: "0xEC70Dcb4A1EFa46b8F2D97C310C9c4790ba5ffA8",
+    coinGeckoId: "rocket-pool-eth",
+    decimals: 18,
+    chain: chainSlugMap.ARBITRUM.id,
   },
   {
     src: "/assets/icons/steth.png",
@@ -329,6 +356,15 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "wrapped-steth",
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
+    src: "/assets/icons/wsteth-logo.jpeg",
+    alt: "wstETH logo",
+    symbol: "wstETH",
+    address: "0x5979D7b546E38E414F7E9822514be443A4800529",
+    coinGeckoId: "wrapped-steth",
+    decimals: 18,
+    chain: chainSlugMap.ARBITRUM.id,
   },
   {
     src: "/assets/icons/usdc.png",

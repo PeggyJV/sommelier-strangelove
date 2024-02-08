@@ -121,7 +121,6 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
-    config.cellarNameKey ===
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
@@ -578,7 +577,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||

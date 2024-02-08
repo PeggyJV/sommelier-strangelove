@@ -17,7 +17,7 @@ export const realYieldEthArb: CellarData = {
   popUpTitle: "Get Exclusive Real Yield Updates",
   popUpDescription:
     "Thank you for your trust. As a user of the Real Yield vault, you are eligible to receive exclusive strategy updates directly from the strategist - 7 Seas as well as updates on upcoming product launches. Rest assured that we will only use your email for this purpose.    ",
-  tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
+  tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
   launchDate: new Date(2023, 3, 12, 11, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
@@ -27,7 +27,7 @@ export const realYieldEthArb: CellarData = {
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
-  strategyAssets: ["stETH", "cbETH", "rETH", "WETH"],
+  strategyAssets: ["wstETH", "cbETH", "rETH", "WETH"],
   performanceSplit: {
     depositors: 80,
     "strategy provider": 15,
@@ -58,7 +58,7 @@ export const realYieldEthArb: CellarData = {
     - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.`,
   },
   depositTokens: {
-    list: ["WETH"],
+    list: ["WETH", "wstETH", "rETH"],
   },
 
   config: {
@@ -80,12 +80,12 @@ export const realYieldEthArb: CellarData = {
       key: CellarKey.CELLAR_V2,
       decimals: 18,
     },
-    // staker: {
-    //   address: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ADDRESS,
-    //   abi: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ABI,
-    //   key: StakerKey.CELLAR_STAKING_V0815,
-    // },
-    baseAsset: tokenConfigMap.WETH_ETHEREUM,
+    staker: {
+       address: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ADDRESS,
+       abi: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ABI,
+        key: StakerKey.CELLAR_STAKING_V0815,
+     },
+    baseAsset: tokenConfigMap.WETH_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
   },
   faq: [
