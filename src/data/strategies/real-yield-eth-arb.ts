@@ -26,7 +26,7 @@ export const realYieldEthArb: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
+  protocols: ["AAVE", "Uniswap V3"],
   strategyAssets: ["wstETH", "cbETH", "rETH", "WETH"],
   performanceSplit: {
     depositors: 80,
@@ -58,7 +58,7 @@ export const realYieldEthArb: CellarData = {
     - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.`,
   },
   depositTokens: {
-    list: ["WETH", "wstETH", "rETH"],
+    list: ["WETH", "wstETH", "rETH", "cbETH"],
   },
 
   config: {
@@ -81,10 +81,10 @@ export const realYieldEthArb: CellarData = {
       decimals: 18,
     },
     staker: {
-       address: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ADDRESS,
-       abi: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ABI,
-        key: StakerKey.CELLAR_STAKING_V0815,
-     },
+      address: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ADDRESS,
+      abi: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0815,
+    },
     baseAsset: tokenConfigMap.WETH_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
   },
