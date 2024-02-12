@@ -46,7 +46,7 @@ export const chainConfig: Chain[] = [
     blockExplorer: arbitrum.blockExplorers.default,
     withdrawQueueAddress:
       "0x1DF1A219562C643163aF1e5CD1d50b0fD67D21da",
-    priceRouterAddress: "" // TODO: Add once deployed
+    priceRouterAddress: "xxxxxxx" // TODO: Add once deployed
   },
 ]
 
