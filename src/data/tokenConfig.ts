@@ -196,7 +196,7 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ARBITRUM.id,
   },
   {
-    src: "/assets/icons/rETH.png",
+    src: "/assets/icons/reth.png",
     alt: "rETH logo",
     symbol: "rETH",
     address: "0xae78736cd615f374d3085123a210448e74fc6393",
@@ -205,7 +205,7 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
-    src: "/assets/icons/rETH.png",
+    src: "/assets/icons/reth.png",
     alt: "rETH logo",
     symbol: "rETH",
     address: "0xEC70Dcb4A1EFa46b8F2D97C310C9c4790ba5ffA8",
