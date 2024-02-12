@@ -59,7 +59,7 @@ export const chainConfigMap = chainConfig.reduce((map, chain) => {
 export const supportedChains = [
   "ethereum", 
   // TODO: Enable for multichain
-  /*/*"arbitrum"*/
+  "arbitrum"
 ]
 
 export const chainSlugMap = {
