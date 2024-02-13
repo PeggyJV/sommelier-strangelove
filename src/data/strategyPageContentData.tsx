@@ -1262,12 +1262,12 @@ export const strategyPageContentData = {
     name: "Real Yield ETH",
     provider: "Seven Seas",
     providerUrl: "https://7seas.capital/",
-    description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
+    description: `Maximize ETH yield through staking and liquidity provision of ETH liquid staking tokens.`,
     ticker: (
       <>
         <Image
           alt="real yield eth icon"
-          src="/assets/icons/real-yield-eth.png"
+          src="/assets/icons/Real-Yield-ETH-Arbitrum.png"
           boxSize={8}
         />
         <Text>YieldETH</Text>

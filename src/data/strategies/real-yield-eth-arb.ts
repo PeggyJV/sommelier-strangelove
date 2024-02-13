@@ -11,16 +11,17 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const realYieldEthArb: CellarData = {
-  name: "Real Yield ETH ARB",
+  name: "Real Yield ETH",
   slug: config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG,
-  dashboard: "https://ryeth.sevenseas.capital/",
+  dashboard:
+    "https://debank.com/profile/0xc47bb288178ea40bf520a91826a3dee9e0dbfa4c",
   popUpTitle: "Get Exclusive Real Yield Updates",
   popUpDescription:
     "Thank you for your trust. As a user of the Real Yield vault, you are eligible to receive exclusive strategy updates directly from the strategist - 7 Seas as well as updates on upcoming product launches. Rest assured that we will only use your email for this purpose.    ",
   tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
-  launchDate: new Date(2023, 3, 12, 11, 0, 0, 0),
+  launchDate: new Date(2024, 1, 14, 10, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
-  description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
+  description: `Maximize ETH yield through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
@@ -41,7 +42,7 @@ export const realYieldEthArb: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Maximize ETH yield through leveraged staking across Aave, Compound and Morpho and liquidity provision of ETH liquid staking tokens on Uniswap V3.`,
+    goals: `Maximize ETH yield through leveraged staking and liquidity provision of ETH liquid staking tokens on Uniswap V3.`,
 
     highlights: `The vault:
 
@@ -55,10 +56,13 @@ export const realYieldEthArb: CellarData = {
     Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
     
-    - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.`,
+    - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.
+    
+    - This vault does liquidity provision which can result in impermanent loss.
+    `,
   },
   depositTokens: {
-    list: ["WETH", "wstETH", "rETH", "cbETH"],
+    list: ["WETH", "wstETH", "rETH"],
   },
 
   config: {
@@ -93,10 +97,6 @@ export const realYieldEthArb: CellarData = {
       question: "Are the smart contracts audited?",
       answer:
         "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
-    },
-    {
-      question: "What are the risks?",
-      answer: `It is important to acknowledge the inherent smart contract risk in the Sommelier contracts (despite extensive auditing) and the protocols the vault interacts with. Additionally, the vault utilizes leverage to generate yield, which poses a risk of liquidation. To help reduce this risk, the vault’s smart contracts enforce a minimum 1.05 health factor during each rebalance as a safety measure, and the vault closely monitors on-chain conditions to mitigate liquidation risk. Furthermore, the vault does not manage de-peg risk beyond the initial selection of widely used ETH liquid staked tokens. Lastly, it’s worth noting that withdrawing 100% of assets from the vault may not always be possible. Specifically, Uniswap V3 LP positions held by the vault are ineligible for immediate withdrawals, meaning users can only withdraw from certain Aave, Compound, and holding positions. Nevertheless, 7Seas and Define Logic Labs will ensure a percentage of funds are consistently maintained in liquid positions for withdrawal. This is also the case for Real Yield USD and some Yearn positions.`,
     },
   ],
 }
