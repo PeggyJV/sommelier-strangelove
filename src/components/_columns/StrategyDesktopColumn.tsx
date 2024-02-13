@@ -165,8 +165,6 @@ export const StrategyDesktopColumn = ({
       },
       disableSortBy: true,
     },
-    // TODO: Enable for multichain
-    /*
     {
       Header: () => (
         <Tooltip
@@ -215,8 +213,8 @@ export const StrategyDesktopColumn = ({
                   background={"transparent"}
                   border={"none"}
                   sx={{
-                    width: "2.2em", // custom width
-                    height: "2.2em", // custom height
+                    width: "2.0em", // custom width
+                    height: "2.0em", // custom height
                   }}
                 />
               </AvatarGroup>
@@ -245,7 +243,6 @@ export const StrategyDesktopColumn = ({
         return 0
       },
     },
-    */
     {
       Header: "TVL",
       accessor: "tvm.value",
