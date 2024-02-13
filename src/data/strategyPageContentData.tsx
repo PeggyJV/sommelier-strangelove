@@ -1258,6 +1258,35 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
+  [config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG]: {
+    name: "Real Yield ETH",
+    provider: "Seven Seas",
+    providerUrl: "https://7seas.capital/",
+    description: `Maximize ETH yield through staking and liquidity provision of ETH liquid staking tokens.`,
+    ticker: (
+      <>
+        <Image
+          alt="real yield eth icon"
+          src="/assets/icons/Real-Yield-ETH-Arbitrum.png"
+          boxSize={8}
+        />
+        <Text>YieldETH</Text>
+      </>
+    ),
+    tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
+    alternativeTo: "Lending or LPing ETH LSTs",
+    strategyHighlights: {
+      card: [
+        `Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.`,
+        `Dynamically allocates capital across key protocols for best-in-class yield.`,
+        `Optimizes Uniswap V3 tick ranges.`,
+      ],
+      description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
+      <br/><br/>
+      Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      `,
+    },
+    howItWorks: ``,
   [config.CONTRACT.TURBO_DIVETH.SLUG]: {
     name: "Turbo divETH",
     provider: "Seven Seas",
@@ -1464,3 +1493,4 @@ export const strategyPageContentData = {
     howItWorks: ``,
   },
 }
+};
