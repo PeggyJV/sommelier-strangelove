@@ -15,9 +15,6 @@ export const realYieldEthArb: CellarData = {
   slug: config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG,
   dashboard:
     "https://debank.com/profile/0xc47bb288178ea40bf520a91826a3dee9e0dbfa4c",
-  popUpTitle: "Get Exclusive Real Yield Updates",
-  popUpDescription:
-    "Thank you for your trust. As a user of the Real Yield vault, you are eligible to receive exclusive strategy updates directly from the strategist - 7 Seas as well as updates on upcoming product launches. Rest assured that we will only use your email for this purpose.    ",
   tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
   launchDate: new Date(2024, 1, 14, 10, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
