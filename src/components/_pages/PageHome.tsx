@@ -296,7 +296,7 @@ export const PageHome = () => {
       {
         <InfoBanner
           text={
-            "A 250,000 SOMM (~$50,000 equivalent) liquidity mining program will begin for Arbitrum version of Real Yield ETH at approximately 3:00 PM ET"
+            "A 250,000 SOMM (~$50,000 equivalent) liquidity mining program will begin for the Arbitrum version of Real Yield ETH at approximately 3:00 PM ET"
           }
         />
       }
