@@ -1270,7 +1270,7 @@ export const strategyPageContentData = {
           src="/assets/icons/Real-Yield-ETH-Arbitrum.png"
           boxSize={8}
         />
-        <Text>YieldETH</Text>
+        <Text>RYETH</Text>
       </>
     ),
     tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
@@ -1287,48 +1287,48 @@ export const strategyPageContentData = {
       `,
     },
     howItWorks: ``,
-  [config.CONTRACT.TURBO_DIVETH.SLUG]: {
-    name: "Turbo divETH",
-    provider: "Seven Seas",
-    providerUrl: "https://sevenseas.capital/",
-    description: `Unlock early access to the Diva Staking ecosystem with dynamic ETH strategies and a special DIVA token allocation, exclusively for Balancer rETH-ETH LP depositors.`,
-    ticker: (
-      <>
-        {}
-        <Image
-          alt="Turbo divETH"
-          src="/assets/icons/turbo-diveth.png"
-          boxSize={8}
-        />
-        <Text>TurboDIVETH</Text>
-      </>
-    ),
-    tradedAssets: ["WETH", "rETH"],
-    alternativeTo: ``,
-    exchange: [
-      {
-        name: "Sommelier",
-        logo: "/assets/icons/somm.png",
-      },
-    ],
-    strategyHighlights: {
-      card: [
-        `Designed for the Rocket Pool Community to access the Diva ecosystem.`,
-        <span>
-          Deposit{" "}
-          <a
-            href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity"
-            target="_blank"
-            style={{ textDecoration: "underline", color: "white" }}
-          >
-            Balancer rETH-ETH LP tokens
-          </a>
-          .
-        </span>,
-        `Deposit early to get a higher DIVA token allocation.`,
-        `Enjoy 0 fees until divETH strategies go live.`,
+    [config.CONTRACT.TURBO_DIVETH.SLUG]: {
+      name: "Turbo divETH",
+      provider: "Seven Seas",
+      providerUrl: "https://sevenseas.capital/",
+      description: `Unlock early access to the Diva Staking ecosystem with dynamic ETH strategies and a special DIVA token allocation, exclusively for Balancer rETH-ETH LP depositors.`,
+      ticker: (
+        <>
+          {}
+          <Image
+            alt="Turbo divETH"
+            src="/assets/icons/turbo-diveth.png"
+            boxSize={8}
+          />
+          <Text>TurboDIVETH</Text>
+        </>
+      ),
+      tradedAssets: ["WETH", "rETH"],
+      alternativeTo: ``,
+      exchange: [
+        {
+          name: "Sommelier",
+          logo: "/assets/icons/somm.png",
+        },
       ],
-      description: `
+      strategyHighlights: {
+        card: [
+          `Designed for the Rocket Pool Community to access the Diva ecosystem.`,
+          <span>
+            Deposit{" "}
+            <a
+              href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity"
+              target="_blank"
+              style={{ textDecoration: "underline", color: "white" }}
+            >
+              Balancer rETH-ETH LP tokens
+            </a>
+            .
+          </span>,
+          `Deposit early to get a higher DIVA token allocation.`,
+          `Enjoy 0 fees until divETH strategies go live.`,
+        ],
+        description: `
       This vault is a cornerstone in Diva’s ecosystem, designed for enhanced ETH liquidity strategies and a DIVA token distribution to its community. 
       <br/><br/>
       Participants need to deposit <a href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity" style="color: white; text-decoration: underline;" target="_blank">Balancer rETH-ETH LP tokens</a>, obtainable through depositing rETH, ETH, or both on Balancer. 
@@ -1346,151 +1346,151 @@ export const strategyPageContentData = {
       <br/><br/>
       Note that Turbo divETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
-    },
-    howItWorks: ``,
-  },
-  [config.CONTRACT.TURBO_ETHX.SLUG]: {
-    name: "Turbo ETHx",
-    provider: "Seven Seas",
-    providerUrl: "https://sevenseas.capital/",
-    description: `Turbocharge your ETHx exposure in this multi-strategy DeFi vault.`,
-    ticker: (
-      <>
-        {}
-        <Image
-          alt="Turbo ETHx"
-          src="/assets/icons/turbo-ethx.png"
-          boxSize={8}
-        />
-        <Text>TurboETHX</Text>
-      </>
-    ),
-    tradedAssets: ["ETHx", "WETH"],
-    exchange: [
-      {
-        name: "Sommelier",
-        logo: "/assets/icons/somm.png",
       },
-    ],
-    strategyHighlights: {
-      card: [
-        `Dynamically rebalance between ETHx LP opportunities and ETHx leverage staking (when available).`,
-        `Leverage monitoring. `,
-        `Fully automated with built-in auto-compounding.`,
+      howItWorks: ``,
+    },
+    [config.CONTRACT.TURBO_ETHX.SLUG]: {
+      name: "Turbo ETHx",
+      provider: "Seven Seas",
+      providerUrl: "https://sevenseas.capital/",
+      description: `Turbocharge your ETHx exposure in this multi-strategy DeFi vault.`,
+      ticker: (
+        <>
+          {}
+          <Image
+            alt="Turbo ETHx"
+            src="/assets/icons/turbo-ethx.png"
+            boxSize={8}
+          />
+          <Text>TurboETHX</Text>
+        </>
+      ),
+      tradedAssets: ["ETHx", "WETH"],
+      exchange: [
+        {
+          name: "Sommelier",
+          logo: "/assets/icons/somm.png",
+        },
       ],
-      description: `Gain exposure to ETHx DeFi opportunities through this dynamic and evolving vault.
+      strategyHighlights: {
+        card: [
+          `Dynamically rebalance between ETHx LP opportunities and ETHx leverage staking (when available).`,
+          `Leverage monitoring. `,
+          `Fully automated with built-in auto-compounding.`,
+        ],
+        description: `Gain exposure to ETHx DeFi opportunities through this dynamic and evolving vault.
      <br/><br/>
     Note that Turbo ETHx and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
-    },
-    howItWorks: ``,
-  },
-  [config.CONTRACT.TURBO_EETH.SLUG]: {
-    name: "Turbo eETH",
-    provider: "Seven Seas",
-    providerUrl: "https://sevenseas.capital/",
-    description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
-    ticker: (
-      <>
-        {}
-        <Image
-          alt="Turbo eETH"
-          src="/assets/icons/Turbo-eETH.png"
-          boxSize={8}
-        />
-        <Text>TurboeETH</Text>
-      </>
-    ),
-    tradedAssets: ["WETH", "eETH", "weETH"],
-    alternativeTo: "Manually LPing",
-    exchange: [
-      {
-        name: "Sommelier",
-        logo: "/assets/icons/somm.png",
       },
-    ],
-    strategyHighlights: {
-      card: [
-        `Capable of simultaneously pursuing multiple eETH yield opportunities.`,
-        `Dynamically liquidity provision across multiple DEXs.`,
-        `Fully automated with built-in auto compounding.`,
+      howItWorks: ``,
+    },
+    [config.CONTRACT.TURBO_EETH.SLUG]: {
+      name: "Turbo eETH",
+      provider: "Seven Seas",
+      providerUrl: "https://sevenseas.capital/",
+      description: `Use eETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+      ticker: (
+        <>
+          {}
+          <Image
+            alt="Turbo eETH"
+            src="/assets/icons/Turbo-eETH.png"
+            boxSize={8}
+          />
+          <Text>TurboeETH</Text>
+        </>
+      ),
+      tradedAssets: ["WETH", "eETH", "weETH"],
+      alternativeTo: "Manually LPing",
+      exchange: [
+        {
+          name: "Sommelier",
+          logo: "/assets/icons/somm.png",
+        },
       ],
-      description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.      
+      strategyHighlights: {
+        card: [
+          `Capable of simultaneously pursuing multiple eETH yield opportunities.`,
+          `Dynamically liquidity provision across multiple DEXs.`,
+          `Fully automated with built-in auto compounding.`,
+        ],
+        description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.      
       <br/><br/>
       Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
-    },
-    howItWorks: ``,
-  },
-  [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]: {
-    name: "Turbo stETH",
-    provider: "Seven Seas",
-    providerUrl: "https://sevenseas.capital/",
-    description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
-    ticker: (
-      <>
-        {}
-        <Image
-          alt="Turbo stETH"
-          src="/assets/icons/turbo-steth2.png"
-          boxSize={8}
-        />
-        <Text>TurboSTETH</Text>
-      </>
-    ),
-    tradedAssets: ["stETH", "wstETH", "WETH"],
-    alternativeTo: "Holding stETH/wstETH",
-    exchange: [
-      {
-        name: "Sommelier",
-        logo: "/assets/icons/somm.png",
       },
-    ],
-    strategyHighlights: {
-      card: [
-        `Capable of simultaneously pursuing multiple stETH/wstETH yield opportunities.`,
-        `Dynamically leverage stake, Uniswap v3 liquidity provision, arbitrage wstETH peg.`,
-        `Fully automated with built-in auto compounding.`,
+      howItWorks: ``,
+    },
+    [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]: {
+      name: "Turbo stETH",
+      provider: "Seven Seas",
+      providerUrl: "https://sevenseas.capital/",
+      description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+      ticker: (
+        <>
+          {}
+          <Image
+            alt="Turbo stETH"
+            src="/assets/icons/turbo-steth2.png"
+            boxSize={8}
+          />
+          <Text>TurboSTETH</Text>
+        </>
+      ),
+      tradedAssets: ["stETH", "wstETH", "WETH"],
+      alternativeTo: "Holding stETH/wstETH",
+      exchange: [
+        {
+          name: "Sommelier",
+          logo: "/assets/icons/somm.png",
+        },
       ],
-      description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Sommelier strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
+      strategyHighlights: {
+        card: [
+          `Capable of simultaneously pursuing multiple stETH/wstETH yield opportunities.`,
+          `Dynamically leverage stake, Uniswap v3 liquidity provision, arbitrage wstETH peg.`,
+          `Fully automated with built-in auto compounding.`,
+        ],
+        description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Sommelier strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
      <br/><br/>
     Note that Turbo stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
-    },
-    howItWorks: ``,
-  },
-  [config.CONTRACT.TURBO_EETHV2.SLUG]: {
-    name: "Turbo eETH V2",
-    provider: "Seven Seas",
-    providerUrl: "https://sevenseas.capital/",
-    description: `Your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem.`,
-    ticker: (
-      <>
-        {}
-        <Image
-          alt="Turbo eETHV2"
-          src="/assets/icons/turbo-eethv2.png"
-          boxSize={8}
-        />
-        <Text>TurboeETHV2</Text>
-      </>
-    ),
-    tradedAssets: ["WETH", "eETH", "weETH"],
-    exchange: [
-      {
-        name: "Sommelier",
-        logo: "/assets/icons/somm.png",
       },
-    ],
-    strategyHighlights: {
-      card: [
-        `Accepts eETH, weETH and WETH deposits.`,
-        `Leverage loop weETH for more EigenLayer and ether.fi points (subject to borrow capacity on Morpho Blue).`,
-        `Dynamically liquidity provision across multiple DEXs.`,
-        `Fully automated with built-in auto compounding.`,
+      howItWorks: ``,
+    },
+    [config.CONTRACT.TURBO_EETHV2.SLUG]: {
+      name: "Turbo eETH V2",
+      provider: "Seven Seas",
+      providerUrl: "https://sevenseas.capital/",
+      description: `Your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem.`,
+      ticker: (
+        <>
+          {}
+          <Image
+            alt="Turbo eETHV2"
+            src="/assets/icons/turbo-eethv2.png"
+            boxSize={8}
+          />
+          <Text>TurboeETHV2</Text>
+        </>
+      ),
+      tradedAssets: ["WETH", "eETH", "weETH"],
+      exchange: [
+        {
+          name: "Sommelier",
+          logo: "/assets/icons/somm.png",
+        },
       ],
-      description: `Turbo eETH aims to be your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem. The vault will pursue a number of DeFi strategies, including leveraged staking weETH to maximize EigenLayer and ether.fi points as well as LPing to eETH pairs on DEXs.     
+      strategyHighlights: {
+        card: [
+          `Accepts eETH, weETH and WETH deposits.`,
+          `Leverage loop weETH for more EigenLayer and ether.fi points (subject to borrow capacity on Morpho Blue).`,
+          `Dynamically liquidity provision across multiple DEXs.`,
+          `Fully automated with built-in auto compounding.`,
+        ],
+        description: `Turbo eETH aims to be your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem. The vault will pursue a number of DeFi strategies, including leveraged staking weETH to maximize EigenLayer and ether.fi points as well as LPing to eETH pairs on DEXs.     
           <br/><br/>
           Note that Turbo eETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+      },
+      howItWorks: ``,
     },
-    howItWorks: ``,
   },
 }
-};

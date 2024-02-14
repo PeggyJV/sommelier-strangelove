@@ -430,7 +430,6 @@ export const bondingPeriodOptions = (
     ]
   }
 
-  
   if (
     config.cellarNameKey ===
     CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
@@ -631,8 +630,8 @@ export const estimatedApyValue = (config: ConfigProps) => {
   }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB) {
     return {
-      value: 1.6,
-      formatted: "1.60%",
+      value: 15.0,
+      formatted: "15.0%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_EETHV2) {
