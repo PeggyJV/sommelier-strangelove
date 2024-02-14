@@ -293,13 +293,13 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      {/* {
+      {
         <InfoBanner
           text={
-            "A new incentive program for Real Yield ETH is progressing through governance. If it passes, rewards will begin Jan 10."
+            "A 250,000 SOMM (~$50,000 equivalent) liquidity mining program will begin for Arbitrum version of Real Yield ETH at approximately 3:00 PM ET"
           }
         />
-      } */}
+      }
       {/* <HStack
         p={4}
         mb={6}
