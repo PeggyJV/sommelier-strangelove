@@ -16,9 +16,9 @@ export const realYieldEthArb: CellarData = {
   dashboard:
     "https://debank.com/profile/0xc47bb288178ea40bf520a91826a3dee9e0dbfa4c",
   tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
-  launchDate: new Date(2024, 1, 14, 14, 30, 0, 0),
+  launchDate: new Date(2024, 1, 13, 14, 30, 0, 0),
   cellarType: CellarType.yieldStrategies,
-  description: `Maximize ETH yield through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
+  description: `Maximize ETH yield through leveraged staking and liqušidity provision of ETH liquid staking tokens.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
