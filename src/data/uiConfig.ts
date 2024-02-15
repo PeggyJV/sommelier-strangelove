@@ -678,5 +678,8 @@ export const waitTime = (config: ConfigProps) => {
   ) {
     return null // No wait time
   }
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB) {
+    return null // No wait time
+  }
   return "10 min"
 }
