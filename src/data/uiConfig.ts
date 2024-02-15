@@ -559,7 +559,7 @@ export const apyChartLabel = (config: ConfigProps) => {
   ) {
     return "Estimated APY"
   }
-  return "Moving Average APY"
+  return "Moving Average APY "
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE

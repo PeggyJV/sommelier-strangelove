@@ -217,7 +217,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
                   fill: "rgb(237, 235, 245)",
                 }}
               >
-                {tick.value} % 
+                {tick.value} %
               </text>
             </g>
           )
