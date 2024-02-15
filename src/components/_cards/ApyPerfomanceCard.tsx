@@ -31,11 +31,14 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
   const cellarConfig = cellarDataMap[id].config
 
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   // Default timeline
-  const [timeline, setTimeline] = useState<string>("30D")
+  const [timeline, setTimeline] = useState<string>(
+    timeArray[timeArray.length - 1].title
+  )
   const [pointActive, setPointActive] = useState<Point>()
 
   const MobileTooltip = () => {
