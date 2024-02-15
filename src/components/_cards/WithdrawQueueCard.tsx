@@ -36,7 +36,7 @@ import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { differenceInDays } from "date-fns"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { tokenConfig } from "data/tokenConfig"
-import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
+import withdrawQueueV0821 from "src/abi/atomic-queue-v0.8.21.json"
 import { useSigner, useContract, useAccount } from "wagmi"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
@@ -100,7 +100,7 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.isWithdrawRequestValid(
+          await withdrawQueueContract?.isAtomicRequestValid(
             cellarConfig.cellar.address,
             address,
             withdrawRequest

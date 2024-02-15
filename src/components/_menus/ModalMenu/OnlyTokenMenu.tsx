@@ -30,6 +30,7 @@ export interface ModalOnlyTokenMenuProps {
   depositTokens: string[]
   setSelectedToken: (value: any) => void
   activeAsset?: string
+  isDisabled?: boolean
 }
 
 export interface MenuOnlyTokenProps
@@ -88,7 +89,7 @@ export const OnlyTokenMenu: VFC<MenuOnlyTokenProps> = ({
           <HStack>
             {value ? (
               <HStack spacing={1}>
-                <Image boxSize={5} src={value.src} alt={value.alt} />
+                <Image boxSize={5} src={value.src} alt={value.alt} borderRadius="50%"/>
                 <span>{value.symbol}</span>
               </HStack>
             ) : (
@@ -135,7 +136,7 @@ export const OnlyTokenMenu: VFC<MenuOnlyTokenProps> = ({
                 >
                   <HStack justify="space-between">
                     <HStack>
-                      <Image boxSize={5} src={src} alt={alt} />
+                      <Image boxSize={5} src={src} alt={alt} borderRadius="50%"/>
                       <span>{symbol}</span>
                     </HStack>
                   </HStack>

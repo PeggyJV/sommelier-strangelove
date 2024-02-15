@@ -54,6 +54,7 @@ export const ModalOnlyTokenMenu: VFC<ModalOnlyTokenMenuProps> = ({
   depositTokens,
   activeAsset,
   setSelectedToken,
+  isDisabled,
 }) => {
   const { control } = useFormContext()
 
@@ -72,6 +73,7 @@ export const ModalOnlyTokenMenu: VFC<ModalOnlyTokenMenuProps> = ({
               setSelectedToken(data)
               onChange(data)
             }}
+            isDisabled={isDisabled}
           />
         )
       }}

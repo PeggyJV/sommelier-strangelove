@@ -53,7 +53,7 @@ import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import { useNetwork } from "wagmi"
 import WithdrawQueueCard from "../WithdrawQueueCard"
-import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
+import withdrawQueueV0821 from "src/abi/atomic-queue-v0.8.21.json"
 import { add } from "lodash"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
@@ -136,14 +136,14 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     try {
       if (withdrawQueueContract && address && cellarConfig) {
         const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
+          await withdrawQueueContract?.getUserAtomicRequest(
             address,
             cellarConfig.cellar.address
           )
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.isWithdrawRequestValid(
+          await withdrawQueueContract?.isAtomicRequestValid(
             cellarConfig.cellar.address,
             address,
             withdrawRequest

@@ -24,7 +24,7 @@ export const WithdrawQueueButton: VFC<
         hasArrow
         arrowShadowColor="purple.base"
         label={
-          "Save gas by initiating a withdrawal request which will be automatically fulfilled at a later time"
+          "Request a specific asset and save gas by initiating a withdrawal request which will be automatically fulfilled at a later time"
         }
         color="neutral.300"
         placement="bottom"
