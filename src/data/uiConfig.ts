@@ -83,6 +83,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
+    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
@@ -220,6 +221,7 @@ export const isApyChartEnabled = (config: ConfigProps) => {
   return (
     config.cellar.key === CellarKey.CELLAR_V2 ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
+    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
@@ -480,7 +482,6 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
       config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
       config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
-      config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
       config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
       config.cellarNameKey ===
@@ -506,13 +507,13 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
       config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-      config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
       config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
     } else if (
+      config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
       config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
     ) {
       return "7 Day MA APY"
@@ -532,7 +533,6 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
@@ -540,6 +540,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   ) {
     return "Estimated APY"
   } else if (
+    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
   ) {
     return "7 Day MA APY"
@@ -559,7 +560,6 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
@@ -579,7 +579,6 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
@@ -588,7 +587,7 @@ export const apyChartLabel = (config: ConfigProps) => {
   ) {
     return "Estimated APY"
   }
-  return "Moving Average APY"
+  return "Moving Average APY "
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
@@ -639,12 +638,6 @@ export const estimatedApyValue = (config: ConfigProps) => {
     return {
       value: 6.0,
       formatted: "6.0%",
-    }
-  }
-  if (config.cellarNameKey === CellarNameKey.MORPHO_ETH) {
-    return {
-      value: 8.0,
-      formatted: "8.0%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_DIVETH) {
