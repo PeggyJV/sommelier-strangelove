@@ -283,20 +283,20 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                           }
                         />
                       </HStack>
-                      {/*
-                      <>
-                        <WithdrawQueueButton
-                          chain={cellarConfig.chain}
-                          buttonLabel="Enter Withdraw Queue"
-                          disabled={
-                            lpTokenDisabled ||
-                            !buttonsEnabled ||
-                            isActiveWithdrawRequest
-                          }
-                          showTooltip={true}
-                        />
-                      </>
-                        */}
+                      {
+                        <>
+                          <WithdrawQueueButton
+                            chain={cellarConfig.chain}
+                            buttonLabel="Enter Withdraw Queue"
+                            disabled={
+                              lpTokenDisabled ||
+                              !buttonsEnabled ||
+                              isActiveWithdrawRequest
+                            }
+                            showTooltip={true}
+                          />
+                        </>
+                      }
                     </VStack>
                   </>
                 ) : (

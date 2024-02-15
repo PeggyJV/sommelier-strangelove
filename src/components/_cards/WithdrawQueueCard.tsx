@@ -92,9 +92,10 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
     try {
       if (withdrawQueueContract && address && cellarConfig) {
         const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
+          await withdrawQueueContract?.getUserAtomicRequest(
             address,
-            cellarConfig.cellar.address
+            cellarConfig.cellar.address,
+            // todo: want asset
           )
 
         // Check if it's valid

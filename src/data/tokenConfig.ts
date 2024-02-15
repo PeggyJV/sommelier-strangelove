@@ -332,7 +332,7 @@ export const tokenConfig: Token[] = [
   },
   {
     src: "/assets/icons/usdc.png",
-    alt: "USD Coin logo",
+    alt: "USDe Coin logo",
     symbol: "USDC_e",
     address: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
     coinGeckoId: "usd-coin",
