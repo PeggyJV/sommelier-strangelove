@@ -219,7 +219,6 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     deadlineHours,
     sharePriceDiscountPercent,
   }: FormValues) => {
-    console.log("selectedToken", selectedToken)
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
@@ -338,8 +337,6 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
         ((100 - sharePriceDiscountPercent) / 100)
       let assetRatio = 1
 
-      console.log("selectedToken", selectedToken)
-
       if (
         selectedToken !== null &&
         selectedToken.address !== cellarConfig.baseAsset.address
@@ -394,13 +391,72 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
           10 ** selectedToken!.decimals
       )
 
-      // Input Touple
+      // Finalize Input Touple
       const withdrawTouple = [
         BigInt(deadlineSeconds),
         BigInt(sharePriceWithDiscountInSelectedBaseDenom),
         withdrawAmtInBaseDenom,
         false,
       ]
+
+      //!
+      console.log("activeWithdrawRequestDenom", activeWithdrawRequestDenom)
+      console.log("Selected Token", selectedToken)
+      // If user has different asset atomic request open cancel it first!!!! -----
+      if (activeWithdrawRequestDenom && activeWithdrawRequestDenom.address !== selectedToken!.address) {
+        // Cancel this request first 
+        const previousTouple = [
+          BigInt(0),
+          BigInt(0),
+          0,
+          false,
+        ]
+
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          withdrawQueueContract?.estimateGas.updateAtomicRequest,
+          withdrawQueueContract?.callStatic.updateAtomicRequest,
+          [
+            cellarConfig.cellar.address,
+            activeWithdrawRequestDenom.address,
+            previousTouple,
+          ],
+          330000,
+          660000
+        )
+
+        const tx = await withdrawQueueContract?.updateAtomicRequest(
+          cellarConfig.cellar.address, // Offer/cellar address
+          activeWithdrawRequestDenom.address, // want/token out desired
+          previousTouple,
+          {
+            gasLimit: gasLimitEstimated,
+          }
+        )
+
+        if (tx) {
+          const onSuccess = () => {
+            if (onSuccessfulWithdraw) {
+              onSuccessfulWithdraw()
+            }
+            onClose() // Close modal after successful withdraw.
+          }
+
+          const onError = (error: Error) => {
+            // Can track here if we want
+            throw new Error("Failed to cancel existing withdraw request before submitting new withdraw request")
+          }
+
+          await doHandleTransaction({
+            cellarConfig,
+            ...tx,
+            onSuccess,
+            onError,
+          })
+        } else {
+          throw new Error("Tx not returned to cancel existing withdraw request before submitting new withdraw request")
+        }
+
+      }
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         withdrawQueueContract?.estimateGas.updateAtomicRequest,
@@ -413,10 +469,6 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
         330000,
         660000
       )
-
-      //!
-      // TODO: If user has different asset atomic request open cancel it first!!!!
-
 
       const tx = await withdrawQueueContract?.updateAtomicRequest(
         cellarConfig.cellar.address, // Offer/cellar address
@@ -519,7 +571,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
 
           if (isWithdrawRequestValid) {
             setIsActiveWithdrawRequest(true)
-            setActiveWithdrawRequestDenom(selectedToken)
+            setActiveWithdrawRequestDenom(potentialToken)
             return
           }
         }
