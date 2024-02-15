@@ -44,9 +44,8 @@ export const chainConfig: Chain[] = [
     infuraRpcUrl: arbitrum.rpcUrls.infura.http[0],
     alchemyRpcUrl: arbitrum.rpcUrls.alchemy.http[0],
     blockExplorer: arbitrum.blockExplorers.default,
-    withdrawQueueAddress:
-      "0x1Cee7dfb56DE1eae6125E39336E94f297B94959e", // Atmoic qq
-    priceRouterAddress: "", // TODO: Add once deployed
+    withdrawQueueAddress: "0x1Cee7dfb56DE1eae6125E39336E94f297B94959e", // Atmoic qq
+    priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11", 
   },
 ]
 
@@ -58,8 +57,7 @@ export const chainConfigMap = chainConfig.reduce((map, chain) => {
 
 export const supportedChains = [
   "ethereum", 
-  // TODO: Enable for multichain
-  /*/*"arbitrum"*/
+  "arbitrum"
 ]
 
 export const chainSlugMap = {

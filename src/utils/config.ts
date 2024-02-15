@@ -174,6 +174,11 @@ export const config = {
       SLUG: "Turbo-STETH-(steth-deposit)",
       ABI: cellarV0821,
     },
+    REAL_YIELD_ETH_ARB: {
+      ADDRESS: "0xC47bB288178Ea40bF520a91826a3DEE9e0DbFA4C",
+      SLUG: "real-yield-eth-arb",
+      ABI: cellarV0821MultiDeposit,
+    },
     MORPHO_ETH: {
       ADDRESS: "0xcf4B531b4Cde95BD35d71926e09B2b54c564F5b6",
       SLUG: "Morpho-ETH",
@@ -276,6 +281,10 @@ export const config = {
     },
     TURBO_EETH_STAKER: {
       ADDRESS: "0x596C3f05bA9c6c356527E47989b3Ed26E2B3449d",
+      ABI: cellarStakingV0821,
+    },
+    REAL_YIELD_ETH_ARB_STAKER: {
+      ADDRESS: "0xd700D39be88fB6b54311f95cCA949C3f6835e236",
       ABI: cellarStakingV0821,
     },
     ENSO_ROUTER: {
