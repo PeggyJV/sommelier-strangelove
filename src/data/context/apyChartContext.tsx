@@ -486,13 +486,9 @@ export const ApyChartProvider: FC<{
 
   // You can only show certain graphs as per below if desired
 
-  /*
-  // Override time array for Turbo swETH & Turbo stETH
+  // Override time array for Morpho ETH
   // TODO: Remove this when there is enough data
-  if (
-    cellarConfig.slug === utilConfig.CONTRACT.TURBO_SWETH.SLUG ||
-    cellarConfig.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG
-  ) {
+  if (cellarConfig.slug === utilConfig.CONTRACT.MORPHO_ETH.SLUG) {
     timeArray = [
       {
         title: "7D",
@@ -500,7 +496,6 @@ export const ApyChartProvider: FC<{
       },
     ]
   }
-  */
 
   // Set monthly data by default
   useEffect(() => {
