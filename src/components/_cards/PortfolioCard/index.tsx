@@ -28,7 +28,7 @@ import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { getTokenConfig, Token } from "data/tokenConfig"
+import { getTokenConfig, Token, tokenConfig } from "data/tokenConfig"
 import {
   bondingPeriodOptions,
   isBondButtonEnabled,
@@ -135,20 +135,36 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const checkWithdrawRequest = async () => {
     try {
       if (withdrawQueueContract && address && cellarConfig) {
-        const withdrawRequest =
-          await withdrawQueueContract?.getUserAtomicRequest(
-            address,
-            cellarConfig.cellar.address
-          )
+        let validRequestFound = false
 
-        // Check if it's valid
-        const isWithdrawRequestValid =
-          await withdrawQueueContract?.isAtomicRequestValid(
-            cellarConfig.cellar.address,
-            address,
-            withdrawRequest
-          )
-        setIsActiveWithdrawRequest(isWithdrawRequestValid)
+        for (const token of cellarDataMap[id].depositTokens.list) {
+          const potentialToken = tokenConfig.find(
+            (t) =>
+              t.symbol === token && t.chain === cellarConfig.chain.id
+          )!
+
+          const withdrawRequest =
+            await withdrawQueueContract?.getUserAtomicRequest(
+              address, // User
+              cellarConfig.cellar.address, // Offer token
+              potentialToken.address // Want token
+            )
+
+          // Check if it's valid
+          const isWithdrawRequestValid =
+            await withdrawQueueContract?.isAtomicRequestValid(
+              cellarConfig.cellar.address, // Vault
+              address, // User
+              withdrawRequest // Request
+            )
+
+          if (isWithdrawRequestValid) {
+            validRequestFound = true
+            break
+          }
+        }
+
+        setIsActiveWithdrawRequest(validRequestFound)
       } else {
         setIsActiveWithdrawRequest(false)
       }

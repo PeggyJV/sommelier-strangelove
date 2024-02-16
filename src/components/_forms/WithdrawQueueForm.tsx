@@ -372,12 +372,12 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
 
         // Get alternative asset price in usd from priceRouter
         const altAssetPrice = await priceRouterContract.getPriceInUSD(
-          cellarConfig.baseAsset.address
+          selectedToken.address
         )
 
         if (!altAssetPrice) {
           throw new Error(
-            "Price router could not price: " + cellarConfig.baseAsset
+            "Price router could not price: " + selectedToken.address
           )
         }
         const formattedAltAssetPrice = altAssetPrice / 10 ** 8

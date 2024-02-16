@@ -35,12 +35,14 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { differenceInDays } from "date-fns"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { tokenConfig } from "data/tokenConfig"
+import { Token, tokenConfig } from "data/tokenConfig"
 import withdrawQueueV0821 from "src/abi/atomic-queue-v0.8.21.json"
 import { useSigner, useContract, useAccount } from "wagmi"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useBrandedToast } from "hooks/chakra"
+import { queryContract } from "context/rpc_context"
+import pricerouterAbi from "src/abi/price-router.json"
 
 function formatTimeRemaining(deadline: number): string {
   const deadlineInMs = deadline * 1000
@@ -86,32 +88,49 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
     useState(0)
   const [pendingWithdrawDeadline, setPendingWithdrawDeadline] =
     useState(0)
+  const [pendingWithdrawToken, setPendingWithdrawToken] =
+    useState<Token | null>(null)
 
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
       if (withdrawQueueContract && address && cellarConfig) {
-        const withdrawRequest =
-          await withdrawQueueContract?.getUserAtomicRequest(
-            address,
-            cellarConfig.cellar.address,
-            // todo: want asset
-          )
+        // ! Important, this only shows the first withdraw request, if there are multiple, it will only render the first found
 
-        // Check if it's valid
-        const isWithdrawRequestValid =
-          await withdrawQueueContract?.isAtomicRequestValid(
-            cellarConfig.cellar.address,
-            address,
-            withdrawRequest
-          )
-        setIsActiveWithdrawRequest(isWithdrawRequestValid)
+        let latestDeadline = 0
 
-        setPendingWithdrawShares(withdrawRequest.sharesToWithdraw)
-        setPendingWithdrawSharePrice(
-          withdrawRequest.executionSharePrice
-        )
-        setPendingWithdrawDeadline(withdrawRequest.deadline)
+        for (const token of cellarDataMap[id].depositTokens.list) {
+          const potentialToken = tokenConfig.find(
+            (t) =>
+              t.symbol === token && t.chain === cellarConfig.chain.id
+          )!
+
+          const withdrawRequest =
+            await withdrawQueueContract?.getUserAtomicRequest(
+              address, // User
+              cellarConfig.cellar.address, // Offer token
+              potentialToken.address // Want token
+            )
+
+          // Check if it's valid
+          const isWithdrawRequestValid =
+            await withdrawQueueContract?.isAtomicRequestValid(
+              cellarConfig.cellar.address, // Vault
+              address, // User
+              withdrawRequest // Request
+            )
+
+          if (withdrawRequest.deadline > latestDeadline) {
+            setIsActiveWithdrawRequest(isWithdrawRequestValid)
+            setPendingWithdrawShares(withdrawRequest.offerAmount)
+            setPendingWithdrawSharePrice(
+              withdrawRequest.atomicPrice /
+                10 ** potentialToken.decimals
+            )
+            setPendingWithdrawDeadline(withdrawRequest.deadline)
+            setPendingWithdrawToken(potentialToken)
+          }
+        }
       } else {
         setIsActiveWithdrawRequest(false)
         setPendingWithdrawShares(0)
@@ -161,7 +180,7 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
       )
 
       const onSuccess = () => {
-         // Can track here if we want
+        // Can track here if we want
       }
 
       const onError = (error: Error) => {
@@ -264,7 +283,30 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
               <Tooltip
                 hasArrow
                 arrowShadowColor="purple.base"
-                label="The target share price for this withdraw based on your previously selected share price discount at the time of your withdraw request submission."
+                label="The token out for this request based on your previous withdraw request submission."
+                placement="top"
+                bg="surface.bg"
+                color="neutral.300"
+                textAlign={"center"}
+              >
+                <Th
+                  fontSize={10}
+                  fontWeight="normal"
+                  textTransform="capitalize"
+                >
+                  <HStack spacing={1} align="center">
+                    <Text>Token Out</Text>
+                    <InformationIcon
+                      color="neutral.300"
+                      boxSize={3}
+                    />
+                  </HStack>
+                </Th>
+              </Tooltip>
+              <Tooltip
+                hasArrow
+                arrowShadowColor="purple.base"
+                label="The target share price for this withdraw in terms of your selected withdraw asset based on your previously selected share price discount at the time of your withdraw request submission."
                 placement="top"
                 bg="surface.bg"
                 color="neutral.300"
@@ -345,11 +387,21 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
               </Td>
               <Td>
                 <HStack spacing={2}>
+                  <Image
+                    src={pendingWithdrawToken?.src}
+                    alt="lp token image"
+                    height="20px"
+                    borderRadius={"50%"}
+                  />
                   <Text textAlign="right">
-                    {(
-                      pendingWithdrawSharePrice /
-                      10 ** cellarConfig.baseAsset.decimals
-                    )
+                    {pendingWithdrawToken?.symbol}
+                  </Text>
+                </HStack>
+              </Td>
+              <Td>
+                <HStack spacing={2}>
+                  <Text textAlign="right">
+                    {(pendingWithdrawSharePrice)
                       .toFixed(4)
                       .toLocaleString()}
                   </Text>

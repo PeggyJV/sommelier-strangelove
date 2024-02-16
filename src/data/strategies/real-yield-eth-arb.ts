@@ -59,7 +59,7 @@ export const realYieldEthArb: CellarData = {
     `,
   },
   depositTokens: {
-    list: ["WETH", "wstETH", "rETH"],
+    list: ["WETH", "wstETH", "rETH", "USDC"],
   },
 
   config: {
