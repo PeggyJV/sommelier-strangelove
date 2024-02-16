@@ -25,6 +25,7 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { depositAssetDefaultValue } from "data/uiConfig"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { valueFromAST } from "graphql"
 
 export interface ModalOnlyTokenMenuProps {
   depositTokens: string[]
@@ -107,7 +108,7 @@ export const OnlyTokenMenu: VFC<MenuOnlyTokenProps> = ({
         >
           <MenuOptionGroup
             defaultValue={
-              activeAsset && depositAssetDefaultValue(cellarConfig)
+              cellarConfig.baseAsset.symbol
             }
             type="radio"
           >
