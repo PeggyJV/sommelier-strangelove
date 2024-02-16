@@ -164,15 +164,16 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
       const withdrawTouple = [0, 0, 0]
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
-        withdrawQueueContract?.estimateGas.updateWithdrawRequest,
-        withdrawQueueContract?.callStatic.updateWithdrawRequest,
-        [cellarConfig.cellar.address, withdrawTouple],
+        withdrawQueueContract?.estimateGas.updateAtomicRequest,
+        withdrawQueueContract?.callStatic.updateAtomicRequest,
+        [cellarConfig.cellar.address, pendingWithdrawToken!.address, withdrawTouple],
         330000,
         660000
       )
 
-      const tx = await withdrawQueueContract?.updateWithdrawRequest(
+      const tx = await withdrawQueueContract?.updateAtomicRequest(
         cellarConfig.cellar.address,
+        pendingWithdrawToken!.address,
         withdrawTouple,
         {
           gasLimit: gasLimitEstimated,

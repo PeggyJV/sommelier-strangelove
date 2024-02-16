@@ -44,6 +44,7 @@ import { getAddress } from "ethers/lib/utils.js"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { queryContract } from "context/rpc_context"
 import pricerouterAbi from "src/abi/price-router.json"
+import { set } from "lodash"
 
 interface FormValues {
   withdrawAmount: number
@@ -173,6 +174,58 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       )
     }
   }
+
+  const shareUnitValueUSD = async () => {
+    const previewRedeem: number = parseInt(
+      await fetchCellarPreviewRedeem(
+        id,
+        BigInt(10 ** cellarConfig.cellar.decimals)
+      )
+    )
+
+    // Get asset value from priceRouter
+    let priceRouterContract = await queryContract(
+      cellarConfig.chain.priceRouterAddress,
+      pricerouterAbi,
+      cellarConfig.chain
+    )
+
+    if (!priceRouterContract) {
+      console.error(
+        "No price router contract found on chain: " +
+          cellarConfig.chain.id
+      )
+      throw new Error(
+        "No price router contract found on chain: " +
+          cellarConfig.chain.id
+      )
+    }
+
+    const price = await priceRouterContract.getPriceInUSD(
+      cellarConfig.baseAsset.address
+    )
+
+    if (!price) {
+      throw new Error(
+        "Price router could not price: " + cellarConfig.baseAsset
+      )
+    }
+
+    const formattedPrice = price / 10 ** 8
+
+    return previewRedeem * formattedPrice
+  }
+
+  const [perShareUnitValue, setPerShareUnitValue] =
+    useState<number>(1)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const valueUSD = await shareUnitValueUSD()
+      setPerShareUnitValue(valueUSD)
+    }
+    fetchData()
+  }, [])
 
   useEffect(() => {
     // Initial setting of values based on default selection
@@ -400,17 +453,13 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       ]
 
       //!
-      console.log("activeWithdrawRequestDenom", activeWithdrawRequestDenom)
-      console.log("Selected Token", selectedToken)
       // If user has different asset atomic request open cancel it first!!!! -----
-      if (activeWithdrawRequestDenom && activeWithdrawRequestDenom.address !== selectedToken!.address) {
-        // Cancel this request first 
-        const previousTouple = [
-          BigInt(0),
-          BigInt(0),
-          0,
-          false,
-        ]
+      if (
+        activeWithdrawRequestDenom &&
+        activeWithdrawRequestDenom.address !== selectedToken!.address
+      ) {
+        // Cancel this request first
+        const previousTouple = [BigInt(0), BigInt(0), 0, false]
 
         const gasLimitEstimated = await estimateGasLimitWithRetry(
           withdrawQueueContract?.estimateGas.updateAtomicRequest,
@@ -443,7 +492,9 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
 
           const onError = (error: Error) => {
             // Can track here if we want
-            throw new Error("Failed to cancel existing withdraw request before submitting new withdraw request")
+            throw new Error(
+              "Failed to cancel existing withdraw request before submitting new withdraw request"
+            )
           }
 
           await doHandleTransaction({
@@ -453,9 +504,10 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
             onError,
           })
         } else {
-          throw new Error("Tx not returned to cancel existing withdraw request before submitting new withdraw request")
+          throw new Error(
+            "Tx not returned to cancel existing withdraw request before submitting new withdraw request"
+          )
         }
-
       }
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
@@ -974,6 +1026,32 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                   })}
                 />
               </HStack>
+              {perShareUnitValue * (watchWithdrawAmount / 10 ** cellarConfig.baseAsset.decimals) < 50000 && (
+                <>
+                  <HStack
+                    p={4}
+                    mt={6}
+                    spacing={4}
+                    align="flex-start"
+                    backgroundColor="red.dark"
+                    border="2px solid"
+                    borderRadius={16}
+                    borderColor="red.base"
+                  >
+                    <Text
+                      color="white"
+                      fontSize="s"
+                      textAlign={"center"}
+                      fontWeight={"bold"}
+                    >
+                      Entering the withdraw queue with a small
+                      withdraw request (less than $50k), will have a
+                      much lower chance of being fulfilled.
+                    </Text>
+                  </HStack>
+                  <br />
+                </>
+              )}
               <FormErrorMessage color="energyYellow">
                 <Icon
                   p={0.5}

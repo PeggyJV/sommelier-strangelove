@@ -1409,7 +1409,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
                     textAlign="center"
                   >
                     {
-                      "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."
+                      "At withdraw time, if you want to recieve a specific asset out, you will have to submit a withdraw queue request."
                     }
                   </Text>
                 ) : null}
