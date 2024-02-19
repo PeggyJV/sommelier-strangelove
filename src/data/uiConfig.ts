@@ -663,20 +663,20 @@ export const showNetValueInAsset = (config: ConfigProps) => {
 export const waitTime = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD) {
     return "24 hours"
-  }
-  if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
-    return null // No wait time
-  }
-  if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
-    return null // No wait time
-  }
-  if (config.cellarNameKey === CellarNameKey.TURBO_STETH) {
-    return null // No wait time
-  }
-  if (
-    config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
+  } else if (
+    // non depracated and with out share price oracle vaults
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC ||
+    config.cellarNameKey === CellarNameKey.FRAXIMAL ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
+    config.cellarNameKey === CellarNameKey.DEFI_STARS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH
   ) {
-    return null // No wait time
+    return "10 min"
   }
-  return "10 min"
+  return null // No wait time, all vaults what have share price oracle or are depracated
 }
