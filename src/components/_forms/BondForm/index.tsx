@@ -36,6 +36,7 @@ import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { CellarNameKey } from "data/types"
 import { InformationIcon } from "components/_icons"
+import { waitTime } from "data/uiConfig"
 
 interface FormValues {
   depositAmount: number
@@ -346,12 +347,12 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         >
           Bond
         </BaseButton>
-        {cellarConfig?.cellarNameKey !== CellarNameKey.TURBO_SWETH &&
-          cellarConfig?.cellarNameKey !== CellarNameKey.TURBO_GHO && (
-            <Text textAlign="center">
-              Please wait 10 min after the deposit to Bond
-            </Text>
-          )}
+        {waitTime(cellarConfig) !== null && (
+          <Text textAlign="center">
+            Please wait {waitTime(cellarConfig)} after the deposit to
+            Bond
+          </Text>
+        )}
       </VStack>
     </FormProvider>
   )
