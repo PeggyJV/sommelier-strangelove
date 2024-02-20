@@ -1502,17 +1502,12 @@ export const strategyPageContentData = {
           name: "Sommelier",
           logo: "/assets/icons/somm.png",
         },
-        {
-          name: "Rhino ( L2 deposit option )",
-          logo: "/assets/icons/rhino-fi.svg",
-          url: "https://app.rhino.fi/invest/YIELDUSD/supply",
-        },
       ],
       ticker: (
         <>
           <Image
             alt="real yield usd icon"
-            src="/assets/icons/real-yield-usd.png"
+            src="/assets/icons/real-yield-usd-arb.png"
             boxSize={8}
           />
           <Text>YieldUSD</Text>

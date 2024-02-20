@@ -71,7 +71,7 @@ export const realYieldUsdArb: CellarData = {
     cellarNameKey: CellarNameKey.REAL_YIELD_USD_ARB,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_USD_ARB.ADDRESS,
-      imagePath: "/assets/icons/real-yield-usd.png",
+      imagePath: "/assets/icons/real-yield-usd-arb.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
