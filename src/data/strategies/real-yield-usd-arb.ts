@@ -16,7 +16,7 @@ export const realYieldUsdArb: CellarData = {
   dashboard:
     "https://debank.com/profile/0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
   tradedAssets: ["USDC", "USDT", "DAI"],
-  launchDate: new Date(Date.UTC(2025, 0, 29, 15, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 1, 22, 15, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
   strategyType: "Stablecoin",
@@ -67,7 +67,6 @@ export const realYieldUsdArb: CellarData = {
 
   config: {
     id: config.CONTRACT.REAL_YIELD_USD_ARB.ADDRESS,
-    baseApy: 4.4,
     cellarNameKey: CellarNameKey.REAL_YIELD_USD_ARB,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_USD_ARB.ADDRESS,
@@ -97,10 +96,6 @@ export const realYieldUsdArb: CellarData = {
       question: "Are the smart contracts audited?",
       answer:
         "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
-    },
-    {
-      question: "What are the risks?",
-      answer: `Risks include the typical risks associated with using stablecoins in DeFi. This includes smart contract risk and stablecoin depeg risk. Additionally, in the Cellars V2 architecture, Uniswap V3 liquidity positions are non-withdrawable. Because of this, withdrawing those assets from the strategy may not be possible at all times. However, the strategy provider, SevenSeas, will ensure that some percentage of funds are always kept in liquid positions to be withdrawn.This type of technical limitation is also present in other stablecoin yield opportunities like Origin USD (a Convex position may inhibit withdrawals) and Yearn positions.`,
     },
     {
       question:
