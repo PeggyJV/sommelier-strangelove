@@ -62,7 +62,7 @@ export const realYieldUsdArb: CellarData = {
     `,
   },
   depositTokens: {
-    list: ["USDC"],
+    list: ["USDC_e"],
   },
 
   config: {
@@ -71,7 +71,7 @@ export const realYieldUsdArb: CellarData = {
     cellarNameKey: CellarNameKey.REAL_YIELD_USD_ARB,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_USD_ARB.ADDRESS,
-      imagePath: "/assets/icons/real-yield-usd-arb.png",
+      imagePath: "/assets/icons/real-yield-usd.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
@@ -81,23 +81,16 @@ export const realYieldUsdArb: CellarData = {
     cellar: {
       address: config.CONTRACT.REAL_YIELD_USD_ARB.ADDRESS,
       abi: config.CONTRACT.REAL_YIELD_USD_ARB.ABI,
-      key: CellarKey.CELLAR_V2,
-      decimals: 18,
+      key: CellarKey.CELLAR_V2PT5,
+      decimals: 6,
     },
+    baseAsset: tokenConfigMap.USDC_E_ARBITRUM,
+    chain: chainSlugMap.ARBITRUM,
     staker: {
       address: config.CONTRACT.REAL_YIELD_USD_ARB_STAKER.ADDRESS,
       abi: config.CONTRACT.REAL_YIELD_USD_ARB_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0815,
+      key: StakerKey.CELLAR_STAKING_V0821,
     },
-    /*badges: [
-      {
-        customStrategyHighlight: "Now using DSR",
-        customStrategyHighlightColor: "orange.base",
-      },
-    ],
-    */
-    baseAsset: tokenConfigMap.USDC_ARBITRUM,
-    chain: chainSlugMap.ARBITRUM,
   },
   faq: [
     {
