@@ -1529,14 +1529,6 @@ export const strategyPageContentData = {
         <br/><br/>
         One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can actively optimize Uniswap V3 tick ranges. Many other yield vaults can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing vaults.`,
       },
-      howItWorks: `Determining the optimal allocation of stablecoins across these three protocols for the highest yield is non-trivial and requires off-chain computation.
-      <br/><br/>
-      Sommelier's novel infrastructure enables active optimization of capital of an erc-4626 vault (guided by off-chain computation) while remaining non-custodial, transparent, and decentralized. The optimal allocation is determined by a numerical optimization procedure that accounts for swap fees and market impact due to position size, and makes use of various simple time-series forecasting methods to estimate (future) base yields.
-      <br/><br/>
-      One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it optimizes Uniswap V3 tick ranges. Picking a lending position on Aave or Compound is relatively easy (ignoring factors like market impact which are actually important) because there are no degrees of freedom - it simply boils down to the decision of whether to lend a certain token or not. Providing liquidity on Uniswap V3, on the other hand, is complex because the choice of tick range determines both fee revenue and impermanent loss. Our optimization procedure accounts for all of these factors.`,
-      backtestingText: `
-          <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
-        `,
     },
   },
 }

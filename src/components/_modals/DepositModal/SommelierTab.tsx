@@ -763,8 +763,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const strategyMessages: Record<string, () => JSX.Element> = {
     "Real Yield ETH": () => (
       <>
-        <br />
-        <br />
         <Text as="span">
           All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
@@ -783,8 +781,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     ),
     "real yield eth arb": () => (
       <>
-        <br />
-        <br />
         <Text as="span">
           All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
@@ -803,19 +799,23 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     ),
     "Real Yield USD": () => (
       <>
-        <Link
-          href={"https://app.rhino.fi/invest/YIELDUSD/supply"}
-          isExternal
-          role="group"
-          textAlign="center"
-        >
-          <Text as="span">
-            Buy and sell gassless on rhino.fi &nbsp;
-          </Text>
-          <Icon as={FaExternalLinkAlt} color="purple.base" />
-        </Link>
-        <br />
-        <br />
+        <Text as="span">
+          All Sommelier vaults contain smart contract risk and varying
+          degrees of economic risk. Please take note of the following
+          risks; however, this list is not exhaustive, and there may
+          be additional risks:
+          <br />
+          <br />- This vault is mainly comprised of decentralized and
+          centralized stablecoins, both of which can experience depeg
+          events.
+          <br />
+          <br />- This vault does liquidity provision which can result
+          in impermanent loss.
+        </Text>
+      </>
+    ),
+    "real yield usd arb": () => (
+      <>
         <Text as="span">
           All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
