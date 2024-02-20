@@ -85,6 +85,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey ===
@@ -121,6 +122,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
@@ -411,8 +413,27 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-  //need to update
+
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB) {
+    return [
+      {
+        title: "7 Day Unbonding",
+        amount: "1.1x SOMM",
+        value: 0,
+      },
+      {
+        title: "14 Day Unbonding",
+        amount: "1.3x SOMM",
+        value: 1,
+      },
+      {
+        title: "21 Day Unbonding",
+        amount: "1.5x SOMM",
+        value: 2,
+      },
+    ]
+  }
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) {
     return [
       {
         title: "7 Day Unbonding",
@@ -480,6 +501,7 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
       config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
       config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
       config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
@@ -506,6 +528,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
       config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
       config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
@@ -536,6 +559,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
@@ -559,6 +583,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
@@ -578,6 +603,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
@@ -629,6 +655,13 @@ export const estimatedApyValue = (config: ConfigProps) => {
     }
   }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB) {
+    return {
+      value: 15.0,
+      formatted: "15.0%",
+    }
+  }
+  //NEED TO UPDATE
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) {
     return {
       value: 15.0,
       formatted: "15.0%",

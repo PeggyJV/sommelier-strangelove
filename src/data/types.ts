@@ -51,6 +51,7 @@ export enum CellarNameKey {
   TURBO_DIVETH = "TURBO_DIVETH",
   TURBO_ETHX = "TURBO_ETHX",
   TURBO_EETHV2 = "TURBO_EETHV2",
+  REAL_YIELD_USD_ARB = "REAL_YIELD_USD_ARB",
 }
 
 export interface Badge {

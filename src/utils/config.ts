@@ -179,6 +179,11 @@ export const config = {
       SLUG: "real-yield-eth-arb",
       ABI: cellarV0821MultiDeposit,
     },
+    REAL_YIELD_USD_ARB: {
+      ADDRESS: "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+      SLUG: "real-yield-usd-arb",
+      ABI: cellarV0821MultiDeposit,
+    },
     MORPHO_ETH: {
       ADDRESS: "0xcf4B531b4Cde95BD35d71926e09B2b54c564F5b6",
       SLUG: "Morpho-ETH",
@@ -285,6 +290,10 @@ export const config = {
     },
     REAL_YIELD_ETH_ARB_STAKER: {
       ADDRESS: "0xd700D39be88fB6b54311f95cCA949C3f6835e236",
+      ABI: cellarStakingV0821,
+    },
+    REAL_YIELD_USD_ARB_STAKER: {
+      ADDRESS: "0x623987D3CC0d504782bc99BBAc7965fe54917D7D",
       ABI: cellarStakingV0821,
     },
     ENSO_ROUTER: {
