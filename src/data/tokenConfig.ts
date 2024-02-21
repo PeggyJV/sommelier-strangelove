@@ -385,6 +385,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ARBITRUM.id,
   },
   {
+    src: "/assets/icons/usdc.png",
+    alt: "USD.e Coin logo",
+    symbol: "USDC.e",
+    address: "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+    coinGeckoId: "usd-coin-ethereum-bridged",
+    decimals: 6,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
     src: "/assets/icons/dai.png",
     alt: "Dai logo",
     symbol: "DAI",
