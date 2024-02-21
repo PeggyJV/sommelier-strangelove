@@ -33,9 +33,14 @@ import { LighterSkeleton } from "components/_skeleton"
 import { useGeo } from "context/geoContext"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { differenceInDays } from "date-fns"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { tokenConfig } from "data/tokenConfig"
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  format,
+} from "date-fns"
 
 // TODO: This file has incurred substantial tech debt, it just needs to be rewritten from scratch at this point
 
@@ -53,13 +58,17 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const {
     data: userData,
     isLoading,
     refetch,
-  } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+  } = useUserStrategyData(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
+  )
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
     new Set()
@@ -154,9 +163,23 @@ const BondingTableCard: VFC<TableProps> = (props) => {
   }
 
   const renderBondAction = (unbondTimestamp: number, i: number) => {
+    const now = new Date()
     const unbondTime = new Date(unbondTimestamp * 1000)
 
-    const differenceDays = differenceInDays(unbondTime, new Date())
+    // Calculate the difference in days, hours, and minutes
+    const differenceDays = differenceInDays(unbondTime, now)
+    const differenceHours = differenceInHours(unbondTime, now) % 24
+    const differenceMinutes =
+      differenceInMinutes(unbondTime, now) % 60
+
+    // Always format the string to display days, hours, and minutes
+    const timeRemaining = `${differenceDays} day${
+      differenceDays !== 1 ? "s" : ""
+    }, ${differenceHours} hour${
+      differenceHours !== 1 ? "s" : ""
+    }, and ${differenceMinutes} minute${
+      differenceMinutes !== 1 ? "s" : ""
+    }`
 
     const canUnstake =
       unbondTimestamp * 1000 < Date.now() &&
@@ -208,20 +231,16 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         <Tooltip
           hasArrow
           arrowShadowColor="purple.base"
-          label="Days remaining until your tokens are available for withdrawal"
+          label="Time remaining until your tokens are available for withdrawal"
           placement="top"
           bg="surface.bg"
           color="neutral.300"
         >
-          <Text>
-            LP Tokens Unlock in {differenceDays} day
-            {differenceDays > 1 ? "s" : ""}
-          </Text>
+          <Text>LP Tokens Unlock in {timeRemaining}</Text>
         </Tooltip>
       )
     }
   }
-
   return (
     <InnerCard
       bg="surface.tertiary"
@@ -437,8 +456,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                               <Image
                                 src={
                                   cellarConfig?.customReward
-                                    ?.imagePath ??
-                                  sommToken.src
+                                    ?.imagePath ?? sommToken.src
                                 }
                                 alt="reward token image"
                                 height="20px"
@@ -494,9 +512,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                         <>
                           <HStack spacing={2}>
                             <Image
-                              src={
-                                sommToken.src
-                              }
+                              src={sommToken.src}
                               alt="reward token image"
                               height="20px"
                             />
