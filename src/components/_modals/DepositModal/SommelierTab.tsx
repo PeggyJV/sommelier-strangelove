@@ -822,10 +822,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           risks; however, this list is not exhaustive, and there may
           be additional risks:
           <br />
-          <br />- This vault is mainly comprised of decentralized and
-          centralized stablecoins, both of which can experience depeg
-          events.
-          <br />
           <br />- This vault does liquidity provision which can result
           in impermanent loss.
         </Text>
