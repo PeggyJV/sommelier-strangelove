@@ -15,21 +15,21 @@ export const realYieldUsdArb: CellarData = {
   slug: config.CONTRACT.REAL_YIELD_USD_ARB.SLUG,
   dashboard:
     "https://debank.com/profile/0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
-  tradedAssets: ["USDC", "USDT", "DAI"],
-  launchDate: new Date(Date.UTC(2024, 1, 22, 15, 0, 0, 0)),
+  tradedAssets: ["USDC", "USDC.e", "USDT", "DAI"],
+  launchDate: new Date(Date.UTC(2024, 1, 22, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
-  description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
+  description: `Maximize stablecoin yield through dynamic lending optimization and liquidity provision.`,
   strategyType: "Stablecoin",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
-  managementFee: "0.00%",
+  managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho", "Maker"],
-  strategyAssets: ["USDC", "USDT", "DAI"],
+  protocols: ["AAVE", "Compound", "Uniswap V3"],
+  strategyAssets: ["USDC", "USDC.e", "USDT", "DAI"],
   performanceSplit: {
     depositors: 80,
-    "strategy provider": 15,
-    protocol: 5,
+    "strategy provider": 17,
+    protocol: 3,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -39,30 +39,22 @@ export const realYieldUsdArb: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
+    goals: `Maximize stablecoin yield through dynamic lending optimization and liquidity provision.`,
 
     highlights: `The vault:
 
-      - The only active strategy which optimally allocates capital across key protocols for max yield.
+      - Dynamically rebalances between assets and lending protocols.
 
-      - Combines lending and LPing activities in a single strategy to deliver real yield others can't.
+      - Optimizes Uniswap V3 tick ranges.
 
-      - Optimizes Uniswap V3 LP tick ranges.`,
-    description: `Real Yield USD has a real technological edge to deliver yields others can't.
-
-    By “real yield” we mean yield that results from trading or lending activity (fees) rather than resulting from incentives. The primary sources of real yield exist on lending platforms like Aave and Compound, and decentralized exchanges like Uniswap. Because of this, Real Yield USD focuses on these three protocols and simultaneously allocates capital to Aave and Compound lending pools and Uniswap V3 LP pools in order to maximize yield.
-
-    One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can manage the complexity of optimizing Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies.
-`,
+      - Fully automated with built-in auto-compounding.`,
+    description: `Maximize stablecoin yield through dynamic lending optimization and liquidity provision.`,
     risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
     
-    - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events.
-    
-    - This vault does liquidity provision which can result in impermanent loss.
-    `,
+    - This vault does liquidity provision which can result in impermanent loss.`,
   },
   depositTokens: {
-    list: ["USDC"],
+    list: ["USDC", "USDC.e", "USDT", "DAI"],
   },
 
   config: {
@@ -96,12 +88,6 @@ export const realYieldUsdArb: CellarData = {
       question: "Are the smart contracts audited?",
       answer:
         "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
-    },
-    {
-      question:
-        "What actions vault takes in extreme market situations/volatility cases?",
-      answer:
-        "In extreme market conditions, the vault will seek to take a conservative capital preservation stance.",
     },
   ],
 }
