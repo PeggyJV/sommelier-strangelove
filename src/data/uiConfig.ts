@@ -663,8 +663,8 @@ export const estimatedApyValue = (config: ConfigProps) => {
   //NEED TO UPDATE
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) {
     return {
-      value: 15.0,
-      formatted: "15.0%",
+      value: 12.0,
+      formatted: "12.0%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_EETHV2) {
