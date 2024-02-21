@@ -16,7 +16,7 @@ export const realYieldUsdArb: CellarData = {
   dashboard:
     "https://debank.com/profile/0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
   tradedAssets: ["USDC", "USDC.e", "USDT", "DAI"],
-  launchDate: new Date(Date.UTC(2024, 1, 20, 14, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 1, 22, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize stablecoin yield through dynamic lending optimization and liquidity provision.`,
   strategyType: "Stablecoin",
