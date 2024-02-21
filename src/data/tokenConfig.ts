@@ -501,8 +501,9 @@ export const acceptedETHDepositTokenMap = Object.keys(
 // --- ARB ACCEPTED TOKENS ---
 let acceptedARBDepositTokens = [
   "USDC",
-  //"USDT",
-  //"DAI",
+  "USDT",
+  "DAI",
+  "USDC.e",
 ]
 
 let depositTokenMapARB = tokenConfig.reduce((map, token) => {
