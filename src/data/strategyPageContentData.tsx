@@ -464,11 +464,6 @@ export const strategyPageContentData = {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
-      {
-        name: "Rhino ( L2 deposit option )",
-        logo: "/assets/icons/rhino-fi.svg",
-        url: "https://app.rhino.fi/invest/YIELDUSD/supply",
-      },
     ],
     ticker: (
       <>
@@ -505,6 +500,39 @@ export const strategyPageContentData = {
         <img src="/assets/images/real-yield-usd-backtesting-image.jpg"/>
       `,
   },
+  [config.CONTRACT.REAL_YIELD_USD_ARB.SLUG]: {
+    name: "Real Yield USD",
+    provider: "Seven Seas",
+    providerUrl: "https://7seas.capital/",
+    description: `Maximize stablecoin yield through dynamic lending optimization and liquidity provision.`,
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    ticker: (
+      <>
+        <Image
+          alt="real yield usd arb icon"
+          src="/assets/icons/real-yield-usd-arb.png"
+          boxSize={8}
+        />
+        <Text>RYUSD</Text>
+      </>
+    ),
+    tradedAssets: ["USDC", "USDC.e", "USDT", "DAI"],
+
+    strategyHighlights: {
+      card: [
+        `Dynamically rebalances between assets and lending protocols.`,
+        `Optimizes Uniswap V3 tick ranges.`,
+        `Fully automated with built-in auto-compounding.`,
+      ],
+      description: `Maximize stablecoin yield through dynamic lending optimization and liquidity provision.`,
+    },
+    howItWorks: ``,
+  },
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: {
     name: "Real Yield ETH",
     provider: "Seven Seas",
@@ -514,11 +542,6 @@ export const strategyPageContentData = {
       {
         name: "Sommelier",
         logo: "/assets/icons/somm.png",
-      },
-      {
-        name: "Rhino ( L2 deposit option )",
-        logo: "/assets/icons/rhino-fi.svg",
-        url: "https://app.rhino.fi/invest/YIELDETH/supply",
       },
     ],
     ticker: (
