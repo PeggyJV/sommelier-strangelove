@@ -32,7 +32,7 @@ export const chainConfig: Chain[] = [
     alchemyRpcUrl: mainnet.rpcUrls.alchemy.http[0],
     blockExplorer: mainnet.blockExplorers.default,
     withdrawQueueAddress:
-      "0x5751d75b642975E4E7fdE39f35F9a6c11b867169",
+      "0x5751d75b642975E4E7fdE39f35F9a6c11b867169", // TODO: Need to make an atomic qq on eth
     priceRouterAddress: "0xA1A0bc3D59e4ee5840c9530e49Bdc2d1f88AaF92",
   },
   {
@@ -44,8 +44,7 @@ export const chainConfig: Chain[] = [
     infuraRpcUrl: arbitrum.rpcUrls.infura.http[0],
     alchemyRpcUrl: arbitrum.rpcUrls.alchemy.http[0],
     blockExplorer: arbitrum.blockExplorers.default,
-    withdrawQueueAddress:
-      "0x516AD60801b62fCABCCDA7be178e4478D4018071",
+    withdrawQueueAddress: "0x1Cee7dfb56DE1eae6125E39336E94f297B94959e", // Atmoic qq
     priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11", 
   },
 ]

@@ -25,11 +25,13 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { depositAssetDefaultValue } from "data/uiConfig"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { valueFromAST } from "graphql"
 
 export interface ModalOnlyTokenMenuProps {
   depositTokens: string[]
   setSelectedToken: (value: any) => void
   activeAsset?: string
+  isDisabled?: boolean
 }
 
 export interface MenuOnlyTokenProps
@@ -88,7 +90,7 @@ export const OnlyTokenMenu: VFC<MenuOnlyTokenProps> = ({
           <HStack>
             {value ? (
               <HStack spacing={1}>
-                <Image boxSize={5} src={value.src} alt={value.alt} />
+                <Image boxSize={5} src={value.src} alt={value.alt} borderRadius="50%"/>
                 <span>{value.symbol}</span>
               </HStack>
             ) : (
@@ -106,7 +108,7 @@ export const OnlyTokenMenu: VFC<MenuOnlyTokenProps> = ({
         >
           <MenuOptionGroup
             defaultValue={
-              activeAsset && depositAssetDefaultValue(cellarConfig)
+              cellarConfig.baseAsset.symbol
             }
             type="radio"
           >
@@ -135,7 +137,7 @@ export const OnlyTokenMenu: VFC<MenuOnlyTokenProps> = ({
                 >
                   <HStack justify="space-between">
                     <HStack>
-                      <Image boxSize={5} src={src} alt={alt} />
+                      <Image boxSize={5} src={src} alt={alt} borderRadius="50%"/>
                       <span>{symbol}</span>
                     </HStack>
                   </HStack>

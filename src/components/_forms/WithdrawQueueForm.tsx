@@ -34,14 +34,17 @@ import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
-import { Token } from "data/tokenConfig"
+import { Token, tokenConfig } from "data/tokenConfig"
 import { ModalOnlyTokenMenu } from "components/_menus/ModalMenu"
 import { InformationIcon } from "components/_icons"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
-import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
+import withdrawQueueV0821 from "src/abi/atomic-queue-v0.8.21.json"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { getAddress } from "ethers/lib/utils.js"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { queryContract } from "context/rpc_context"
+import pricerouterAbi from "src/abi/price-router.json"
+import { set } from "lodash"
 
 interface FormValues {
   withdrawAmount: number
@@ -153,13 +156,6 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
   )
 
   function trackedSetSelectedToken(value: Token | null) {
-    if (value && value !== selectedToken) {
-      // analytics.track("deposit.stable-selected", {
-      //   ...baseAnalytics,
-      //   stable: value.symbol,
-      // })
-    }
-
     setSelectedToken(value)
   }
 
@@ -178,6 +174,58 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       )
     }
   }
+
+  const shareUnitValueUSD = async () => {
+    const previewRedeem: number = parseInt(
+      await fetchCellarPreviewRedeem(
+        id,
+        BigInt(10 ** cellarConfig.cellar.decimals)
+      )
+    )
+
+    // Get asset value from priceRouter
+    let priceRouterContract = await queryContract(
+      cellarConfig.chain.priceRouterAddress,
+      pricerouterAbi,
+      cellarConfig.chain
+    )
+
+    if (!priceRouterContract) {
+      console.error(
+        "No price router contract found on chain: " +
+          cellarConfig.chain.id
+      )
+      throw new Error(
+        "No price router contract found on chain: " +
+          cellarConfig.chain.id
+      )
+    }
+
+    const price = await priceRouterContract.getPriceInUSD(
+      cellarConfig.baseAsset.address
+    )
+
+    if (!price) {
+      throw new Error(
+        "Price router could not price: " + cellarConfig.baseAsset
+      )
+    }
+
+    const formattedPrice = price / 10 ** 8
+
+    return previewRedeem * formattedPrice
+  }
+
+  const [perShareUnitValue, setPerShareUnitValue] =
+    useState<number>(1)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const valueUSD = await shareUnitValueUSD()
+      setPerShareUnitValue(valueUSD)
+    }
+    fetchData()
+  }, [])
 
   useEffect(() => {
     // Initial setting of values based on default selection
@@ -223,7 +271,6 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     withdrawAmount,
     deadlineHours,
     sharePriceDiscountPercent,
-    selectedToken,
   }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -335,33 +382,149 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
           BigInt(10 ** cellarConfig.cellar.decimals)
         )
       )
+
       const sharePriceStandardized =
         previewRedeem / 10 ** cellarConfig.baseAsset.decimals
       const sharePriceWithDiscount =
         sharePriceStandardized *
         ((100 - sharePriceDiscountPercent) / 100)
-      const sharePriceWithDiscountInBaseDenom = Math.floor(
-        sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
+      let assetRatio = 1
+
+      if (
+        selectedToken !== null &&
+        selectedToken.address !== cellarConfig.baseAsset.address
+      ) {
+        // Get asset pice in usd from priceRouter
+        let priceRouterContract = await queryContract(
+          cellarConfig.chain.priceRouterAddress,
+          pricerouterAbi,
+          cellarConfig.chain
+        )
+
+        if (!priceRouterContract) {
+          console.error(
+            "No price router contract found on chain: " +
+              cellarConfig.chain.id
+          )
+          throw new Error(
+            "No price router contract found on chain: " +
+              cellarConfig.chain.id
+          )
+        }
+
+        const basePrice = await priceRouterContract.getPriceInUSD(
+          cellarConfig.baseAsset.address
+        )
+
+        if (!basePrice) {
+          throw new Error(
+            "Price router could not price: " + cellarConfig.baseAsset
+          )
+        }
+        const formattedBaseAssetPrice = basePrice / 10 ** 8
+
+        // Get alternative asset price in usd from priceRouter
+        const altAssetPrice = await priceRouterContract.getPriceInUSD(
+          selectedToken.address
+        )
+
+        if (!altAssetPrice) {
+          throw new Error(
+            "Price router could not price: " + selectedToken.address
+          )
+        }
+        const formattedAltAssetPrice = altAssetPrice / 10 ** 8
+
+        assetRatio = formattedBaseAssetPrice / formattedAltAssetPrice
+      }
+
+      const sharePriceWithDiscountInSelectedBaseDenom = Math.floor(
+        sharePriceWithDiscount *
+          assetRatio *
+          10 ** selectedToken!.decimals
       )
 
-      // Input Touple
+      // Finalize Input Touple
       const withdrawTouple = [
         BigInt(deadlineSeconds),
-        BigInt(sharePriceWithDiscountInBaseDenom),
+        BigInt(sharePriceWithDiscountInSelectedBaseDenom),
         withdrawAmtInBaseDenom,
-        false
+        false,
       ]
 
+      //!
+      // If user has different asset atomic request open cancel it first!!!! -----
+      if (
+        activeWithdrawRequestDenom &&
+        activeWithdrawRequestDenom.address !== selectedToken!.address
+      ) {
+        // Cancel this request first
+        const previousTouple = [BigInt(0), BigInt(0), 0, false]
+
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          withdrawQueueContract?.estimateGas.updateAtomicRequest,
+          withdrawQueueContract?.callStatic.updateAtomicRequest,
+          [
+            cellarConfig.cellar.address,
+            activeWithdrawRequestDenom.address,
+            previousTouple,
+          ],
+          330000,
+          660000
+        )
+
+        const tx = await withdrawQueueContract?.updateAtomicRequest(
+          cellarConfig.cellar.address, // Offer/cellar address
+          activeWithdrawRequestDenom.address, // want/token out desired
+          previousTouple,
+          {
+            gasLimit: gasLimitEstimated,
+          }
+        )
+
+        if (tx) {
+          const onSuccess = () => {
+            if (onSuccessfulWithdraw) {
+              onSuccessfulWithdraw()
+            }
+            onClose() // Close modal after successful withdraw.
+          }
+
+          const onError = (error: Error) => {
+            // Can track here if we want
+            throw new Error(
+              "Failed to cancel existing withdraw request before submitting new withdraw request"
+            )
+          }
+
+          await doHandleTransaction({
+            cellarConfig,
+            ...tx,
+            onSuccess,
+            onError,
+          })
+        } else {
+          throw new Error(
+            "Tx not returned to cancel existing withdraw request before submitting new withdraw request"
+          )
+        }
+      }
+
       const gasLimitEstimated = await estimateGasLimitWithRetry(
-        withdrawQueueContract?.estimateGas.updateWithdrawRequest,
-        withdrawQueueContract?.callStatic.updateWithdrawRequest,
-        [cellarConfig.cellar.address, withdrawTouple],
+        withdrawQueueContract?.estimateGas.updateAtomicRequest,
+        withdrawQueueContract?.callStatic.updateAtomicRequest,
+        [
+          cellarConfig.cellar.address,
+          selectedToken!.address,
+          withdrawTouple,
+        ],
         330000,
         660000
       )
 
-      const tx = await withdrawQueueContract?.updateWithdrawRequest(
-        cellarConfig.cellar.address,
+      const tx = await withdrawQueueContract?.updateAtomicRequest(
+        cellarConfig.cellar.address, // Offer/cellar address
+        selectedToken!.address, // want/token out desired
         withdrawTouple,
         {
           gasLimit: gasLimitEstimated,
@@ -427,29 +590,43 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     }
   }
 
-
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
+  const [activeWithdrawRequestDenom, setActiveWithdrawRequestDenom] =
+    useState<Token | null>(null)
 
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
       if (withdrawQueueContract && address && cellarConfig) {
-        const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
-            address,
-            cellarConfig.cellar.address
-          )
+        // Loop through all vault deposit assets and check if the user has an active withdraw request for any of them
+        for (const token of cellarDataMap[id].depositTokens.list) {
+          const potentialToken = tokenConfig.find(
+            (t) =>
+              t.symbol === token && t.chain === cellarConfig.chain.id
+          )!
 
-        // Check if it's valid
-        const isWithdrawRequestValid =
-          await withdrawQueueContract?.isWithdrawRequestValid(
-            cellarConfig.cellar.address,
-            address,
-            withdrawRequest
-          )
-        setIsActiveWithdrawRequest(isWithdrawRequestValid)
+          const withdrawRequest =
+            await withdrawQueueContract?.getUserAtomicRequest(
+              address, // User
+              cellarConfig.cellar.address, // Offer token
+              potentialToken.address // Want token
+            )
 
+          // Check if it's valid
+          const isWithdrawRequestValid =
+            await withdrawQueueContract?.isAtomicRequestValid(
+              cellarConfig.cellar.address, // Vault
+              address, // User
+              withdrawRequest // Request
+            )
+
+          if (isWithdrawRequestValid) {
+            setIsActiveWithdrawRequest(true)
+            setActiveWithdrawRequestDenom(potentialToken)
+            return
+          }
+        }
       } else {
         setIsActiveWithdrawRequest(false)
       }
@@ -617,10 +794,10 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
               <Text as="span">Asset Out</Text>
               {
                 <ModalOnlyTokenMenu
-                  depositTokens={[strategyBaseAsset.symbol]}
+                  depositTokens={cellarDataMap[id].depositTokens.list}
                   activeAsset={strategyBaseAsset.address}
                   setSelectedToken={trackedSetSelectedToken}
-                  //isDisabled={isSubmitting}
+                  isDisabled={isSubmitting}
                 />
               }
             </HStack>
@@ -849,6 +1026,32 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
                   })}
                 />
               </HStack>
+              {perShareUnitValue * (watchWithdrawAmount / 10 ** cellarConfig.baseAsset.decimals) < 50000 && (
+                <>
+                  <HStack
+                    p={4}
+                    mt={6}
+                    spacing={4}
+                    align="flex-start"
+                    backgroundColor="red.dark"
+                    border="2px solid"
+                    borderRadius={16}
+                    borderColor="red.base"
+                  >
+                    <Text
+                      color="white"
+                      fontSize="s"
+                      textAlign={"center"}
+                      fontWeight={"bold"}
+                    >
+                      Entering the withdraw queue with a small
+                      withdraw request (less than $50k), will have a
+                      much lower chance of being fulfilled.
+                    </Text>
+                  </HStack>
+                  <br />
+                </>
+              )}
               <FormErrorMessage color="energyYellow">
                 <Icon
                   p={0.5}
@@ -885,7 +1088,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
         data={[
           {
             question: "What is the Withdraw Queue?",
-            answer: `The Withdraw Queue is a way for users to submit a withdraw request if they are trying to withdraw more than the liquid reserve from a strategy. Once the request is submitted, it will be eventually fulfilled on behalf of the user and the withdrawn funds will appear automatically in the user's wallet (assuming the requests is fulfilled within the time constraint specified by the user). A withdraw request through the queue also has a much lower gas cost for users compared to instant withdrawals.`,
+            answer: `The Withdraw Queue is a way for users to submit a withdraw request if they are trying to withdraw more than the liquid reserve from a strategy, or if they want to recieve a specific asset out. Once the request is submitted, it will be eventually fulfilled on behalf of the user and the withdrawn funds will appear automatically in the user's wallet (assuming the requests is fulfilled within the time constraint specified by the user). A withdraw request through the queue also has a much lower gas cost for users compared to instant withdrawals.`,
           },
         ]}
       />

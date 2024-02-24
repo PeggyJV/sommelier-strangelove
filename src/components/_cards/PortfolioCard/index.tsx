@@ -28,7 +28,7 @@ import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { getTokenConfig, Token } from "data/tokenConfig"
+import { getTokenConfig, Token, tokenConfig } from "data/tokenConfig"
 import {
   bondingPeriodOptions,
   isBondButtonEnabled,
@@ -53,7 +53,7 @@ import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import { useNetwork } from "wagmi"
 import WithdrawQueueCard from "../WithdrawQueueCard"
-import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
+import withdrawQueueV0821 from "src/abi/atomic-queue-v0.8.21.json"
 import { add } from "lodash"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
@@ -135,20 +135,36 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const checkWithdrawRequest = async () => {
     try {
       if (withdrawQueueContract && address && cellarConfig) {
-        const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
-            address,
-            cellarConfig.cellar.address
-          )
+        let validRequestFound = false
 
-        // Check if it's valid
-        const isWithdrawRequestValid =
-          await withdrawQueueContract?.isWithdrawRequestValid(
-            cellarConfig.cellar.address,
-            address,
-            withdrawRequest
-          )
-        setIsActiveWithdrawRequest(isWithdrawRequestValid)
+        for (const token of cellarDataMap[id].depositTokens.list) {
+          const potentialToken = tokenConfig.find(
+            (t) =>
+              t.symbol === token && t.chain === cellarConfig.chain.id
+          )!
+
+          const withdrawRequest =
+            await withdrawQueueContract?.getUserAtomicRequest(
+              address, // User
+              cellarConfig.cellar.address, // Offer token
+              potentialToken.address // Want token
+            )
+
+          // Check if it's valid
+          const isWithdrawRequestValid =
+            await withdrawQueueContract?.isAtomicRequestValid(
+              cellarConfig.cellar.address, // Vault
+              address, // User
+              withdrawRequest // Request
+            )
+
+          if (isWithdrawRequestValid) {
+            validRequestFound = true
+            break
+          }
+        }
+
+        setIsActiveWithdrawRequest(validRequestFound)
       } else {
         setIsActiveWithdrawRequest(false)
       }
@@ -283,20 +299,20 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                           }
                         />
                       </HStack>
-                      {/*
-                      <>
-                        <WithdrawQueueButton
-                          chain={cellarConfig.chain}
-                          buttonLabel="Enter Withdraw Queue"
-                          disabled={
-                            lpTokenDisabled ||
-                            !buttonsEnabled ||
-                            isActiveWithdrawRequest
-                          }
-                          showTooltip={true}
-                        />
-                      </>
-                        */}
+                      {
+                        <>
+                          <WithdrawQueueButton
+                            chain={cellarConfig.chain}
+                            buttonLabel="Enter Withdraw Queue"
+                            disabled={
+                              lpTokenDisabled ||
+                              !buttonsEnabled ||
+                              isActiveWithdrawRequest
+                            }
+                            showTooltip={true}
+                          />
+                        </>
+                      }
                     </VStack>
                   </>
                 ) : (

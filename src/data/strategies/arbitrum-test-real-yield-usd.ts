@@ -83,7 +83,7 @@ export const testArbitrumRealYieldUsd: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 6,
     },
-    baseAsset: tokenConfigMap.USDC_E_ARBITRUM,
+    baseAsset: tokenConfigMap.USDC_e_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
     staker: {
       address:
