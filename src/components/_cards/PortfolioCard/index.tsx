@@ -55,6 +55,7 @@ import { useNetwork } from "wagmi"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { add } from "lodash"
+import { CellarNameKey } from "data/types"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
@@ -276,12 +277,15 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                             }
                           />
                         )}
-                        <WithdrawButton
-                          isDeprecated={strategyData?.deprecated}
-                          disabled={
-                            lpTokenDisabled || !buttonsEnabled
-                          }
-                        />
+                        {cellarConfig.cellarNameKey !==
+                          CellarNameKey.REAL_YIELD_LINK && (
+                          <WithdrawButton
+                            isDeprecated={strategyData?.deprecated}
+                            disabled={
+                              lpTokenDisabled || !buttonsEnabled
+                            }
+                          />
+                        )}
                       </HStack>
                       {/*
                       <>
@@ -297,6 +301,14 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                         />
                       </>
                         */}
+                      {cellarConfig.cellarNameKey ===
+                        CellarNameKey.REAL_YIELD_LINK && (
+                        <WithdrawQueueButton
+                          chain={cellarConfig.chain}
+                          buttonLabel="Enter Withdraw Queue"
+                          showTooltip={true}
+                        />
+                      )}
                     </VStack>
                   </>
                 ) : (
