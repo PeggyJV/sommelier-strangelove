@@ -10,7 +10,7 @@ export const useUserBalances = (config: ConfigProps) => {
     token: getAddress(config.lpToken.address),
     chainId: config.chain.wagmiId,
     formatUnits: "wei",
-    watch: true,
+    watch: false,
   })
 
   const lpTokenInfo = useToken({

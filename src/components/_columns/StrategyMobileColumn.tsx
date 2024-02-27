@@ -1,5 +1,4 @@
 import { Text } from "@chakra-ui/react"
-import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
