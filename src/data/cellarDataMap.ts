@@ -35,7 +35,6 @@ import {
   turboeETHV2,
   realYieldUsdArb,
   turboezETH,
-  turborsETH,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
