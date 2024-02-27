@@ -82,6 +82,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
+    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
@@ -125,6 +126,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
+    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey ===
@@ -503,6 +505,7 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
       config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
+      config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
       config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
       config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
@@ -530,6 +533,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
       config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
+      config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
       config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
@@ -556,6 +560,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
+    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
@@ -585,6 +590,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
+    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
@@ -605,6 +611,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
+    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
@@ -660,7 +667,6 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "15.0%",
     }
   }
-  //NEED TO UPDATE
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) {
     return {
       value: 12.0,
@@ -668,6 +674,13 @@ export const estimatedApyValue = (config: ConfigProps) => {
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_EETHV2) {
+    return {
+      value: 6.0,
+      formatted: "6.0%",
+    }
+  }
+  //NEED TO UPDATE
+  if (config.cellarNameKey === CellarNameKey.TURBO_EZETH) {
     return {
       value: 6.0,
       formatted: "6.0%",

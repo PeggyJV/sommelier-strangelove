@@ -579,6 +579,42 @@ export const strategyPageContentData = {
     For the liquidity provision vaults, the vault’s ability to run off-chain computation combined with Seven Seas’ deep Uniswap V3 experience, positions the vault to be a top performing LP in the pools that it utilizes. The vault will be able to dynamically adapt to changing price movements to quote the optimal tick range(s) that collect the most fees while minimizing impermanent loss.
     `,
   },
+  [config.CONTRACT.TURBO_EZETH.SLUG]: {
+    name: "Turbo ezETH",
+    provider: "Seven Seas",
+    providerUrl: "https://7seas.capital/",
+    description: `Your gateway to EigenLayer liquid restaking and Renzo's DeFi ecosystem.`,
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    ticker: (
+      <>
+        <Image
+          alt="turbo ezeth icon"
+          src="/assets/icons/turbo-ezeth.png"
+          boxSize={8}
+        />
+        <Text>TurboEZETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "ezETH"],
+    strategyHighlights: {
+      card: [
+        `Accepts WETH and ezETH deposits.`,
+        `Leverage loop ezETH for more EigenLayer and Renzo points (subject to borrow capacity on Morpho Blue).`,
+        `Dynamically liquidity provision across multiple DEXs.`,
+        `Fully automated with built-in auto compounding.`,
+      ],
+      description: `Your gateway to EigenLayer liquid restaking and Renzo's DeFi ecosystem.
+      <br/><br/>
+      Note that Turbo ezETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      `,
+    },
+    howItWorks: ``,
+  },
   [config.CONTRACT.DEFI_STARS.SLUG]: {
     name: "DeFi Stars",
     provider: "AlgoLab",
