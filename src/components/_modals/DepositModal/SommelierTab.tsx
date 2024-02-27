@@ -235,7 +235,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
     ), //WETH Address
     formatUnits: "wei",
-    watch: true,
+    watch: false,
   })
 
   const erc20Contract =

@@ -50,7 +50,7 @@ export const InputAmount: React.FC = () => {
   const { data, error, isLoading } = useBalance({
     address: address,
     token: getAddress(sommToken.address),
-    watch: true,
+    watch: false,
   })
 
   const { isConnecting: isGrazConnecting } = useGrazAccount()
