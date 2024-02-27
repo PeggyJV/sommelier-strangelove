@@ -67,7 +67,7 @@ export const turborsETH: CellarData = {
     cellarNameKey: CellarNameKey.TURBO_RSETH,
     lpToken: {
       address: config.CONTRACT.TURBO_RSETH.ADDRESS,
-      imagePath: "/assets/icons/turbo-rs.png",
+      imagePath: "/assets/icons/turbo-rseth.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
