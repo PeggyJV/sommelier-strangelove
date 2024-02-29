@@ -14,7 +14,7 @@ export const turborsETH: CellarData = {
   name: "Turbo rsETH",
   slug: config.CONTRACT.TURBO_RSETH.SLUG,
   tradedAssets: ["WETH", "rsETH"],
-  launchDate: new Date(Date.UTC(2024, 2, 29, 13, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 1, 29, 15, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Your gateway to EigenLayer liquid restaking and Kelp's DeFi ecosystem.`,
   strategyType: "Yield",
@@ -57,7 +57,7 @@ export const turborsETH: CellarData = {
     `,
   },
   dashboard:
-    "https://debank.com/profile/0xdAdC82e26b3739750E036dFd9dEfd3eD459b877A",
+    "https://debank.com/profile/0x1dffb366b5c5a37a12af2c127f31e8e0ed86bdbe",
   depositTokens: {
     list: ["WETH", "rsETH"],
   },
@@ -79,6 +79,11 @@ export const turborsETH: CellarData = {
       abi: config.CONTRACT.TURBO_RSETH.ABI,
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
+    },
+    staker: {
+      address: config.CONTRACT.TURBO_RSETH_STAKER.ADDRESS,
+      abi: config.CONTRACT.TURBO_RSETH_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },
