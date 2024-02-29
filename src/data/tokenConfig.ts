@@ -223,6 +223,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
+    src: "/assets/icons/rseth.png",
+    alt: "rsETH logo",
+    symbol: "rsETH",
+    address: "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7",
+    coinGeckoId: "kelp-dao-restaked-eth",
+    decimals: 18,
+    chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
     src: "/assets/icons/comp.png",
     alt: "COMP logo",
     symbol: "COMP",
@@ -499,12 +508,7 @@ export const acceptedETHDepositTokenMap = Object.keys(
   }, {} as { [symbol: string]: Token })
 
 // --- ARB ACCEPTED TOKENS ---
-let acceptedARBDepositTokens = [
-  "USDC",
-  "USDT",
-  "DAI",
-  "USDC.e",
-]
+let acceptedARBDepositTokens = ["USDC", "USDT", "DAI", "USDC.e"]
 
 let depositTokenMapARB = tokenConfig.reduce((map, token) => {
   if (acceptedARBDepositTokens.includes(token.symbol)) {
