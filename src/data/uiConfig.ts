@@ -52,6 +52,7 @@ export const isBondedDisabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
@@ -87,6 +88,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey ===
@@ -125,6 +127,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
@@ -506,6 +509,7 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
       config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
       config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
       config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
@@ -537,6 +541,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
       config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
@@ -565,6 +570,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
@@ -592,6 +598,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
   ) {
     return true
@@ -609,6 +616,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
@@ -685,6 +693,12 @@ export const estimatedApyValue = (config: ConfigProps) => {
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_ETHX) {
+    return {
+      value: 6.0,
+      formatted: "6.0%",
+    }
+  }
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) {
     return {
       value: 6.0,
       formatted: "6.0%",
