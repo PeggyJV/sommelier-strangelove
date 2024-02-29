@@ -16,7 +16,7 @@ export const realYieldEthOpt: CellarData = {
   dashboard:
     "https://debank.com/profile/0xc47bb288178ea40bf520a91826a3dee9e0dbfa4c?chain=op",
   tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
-  launchDate: new Date(2024, 1, 29, 15, 0, 0, 0),
+  launchDate: new Date(2024, 1, 30, 15, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize ETH yield through leveraged staking and liqušidity provision of ETH liquid staking tokens.`,
   strategyType: "Yield",
@@ -64,7 +64,6 @@ export const realYieldEthOpt: CellarData = {
 
   config: {
     id: config.CONTRACT.REAL_YIELD_ETH_OPT.ADDRESS,
-    baseApy: 10,
     cellarNameKey: CellarNameKey.REAL_YIELD_ETH_OPT,
     lpToken: {
       address: config.CONTRACT.REAL_YIELD_ETH_OPT.ADDRESS,
