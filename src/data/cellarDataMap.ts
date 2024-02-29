@@ -34,7 +34,6 @@ import {
   turboETHx,
   turboeETHV2,
   realYieldUsdArb,
-  turboezETH,
   turborsETH,
   turboezETH,
 } from "./strategies"
@@ -45,7 +44,6 @@ cellarConfig = {
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
   [config.CONTRACT.TURBO_EZETH.SLUG]: turboezETH,
   [config.CONTRACT.TURBO_RSETH.SLUG]: turborsETH,
-  [config.CONTRACT.TURBO_EZETH.SLUG]: turboezETH,
   [config.CONTRACT.REAL_YIELD_USD_ARB.SLUG]: realYieldUsdArb,
   [config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG]: realYieldEthArb,
   [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
