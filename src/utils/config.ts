@@ -313,6 +313,10 @@ export const config = {
       ADDRESS: "0x88EDf544b5d4Ba6A11D40375e4bAEf3f1Ec5aF11",
       ABI: cellarStakingV0821,
     },
+    TURBO_RSETH_STAKER: {
+      ADDRESS: "0xC6b423E3D25e6B36ab60Fa2c91FF344877F8Ead2",
+      ABI: cellarStakingV0821,
+    },
   },
   cleargate: {
     enabled: process.env.NEXT_PUBLIC_CLEARGATE_ENABLED === "true",
