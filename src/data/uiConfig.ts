@@ -690,6 +690,12 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "6.0%",
     }
   }
+  if (config.cellarNameKey === CellarNameKey.TURBO_RSETH) {
+    return {
+      value: 8.0,
+      formatted: "8.0%",
+    }
+  }
 }
 export const showNetValueInAsset = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
