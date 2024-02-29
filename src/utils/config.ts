@@ -207,6 +207,10 @@ export const config = {
     TURBO_EZETH: {
       ADDRESS: "0x27500De405a3212D57177A789E30bb88b0AdbeC5",
       SLUG: "Turbo-ezETH",
+},
+    TURBO_RSETH: {
+      ADDRESS: "0x1dffb366b5c5A37A12af2C127F31e8e0ED86BDbe",
+      SLUG: "Turbo-rsETH",
       ABI: cellarV0821MultiDeposit,
     },
     // Router
@@ -315,6 +319,9 @@ export const config = {
     },
     TURBO_EZETH_STAKER: {
       ADDRESS: "0x4705F50b9c6CdffC6528ba6B3754106eE820997E",
+         },
+    TURBO_RSETH_STAKER: {
+      ADDRESS: "0xC6b423E3D25e6B36ab60Fa2c91FF344877F8Ead2",
       ABI: cellarStakingV0821,
     },
   },
