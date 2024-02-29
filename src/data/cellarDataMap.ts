@@ -34,12 +34,14 @@ import {
   turboETHx,
   turboeETHV2,
   realYieldUsdArb,
+  turborsETH,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
+  [config.CONTRACT.TURBO_RSETH.SLUG]: turborsETH,
   [config.CONTRACT.REAL_YIELD_USD_ARB.SLUG]: realYieldUsdArb,
   [config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG]: realYieldEthArb,
   [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
@@ -77,6 +79,7 @@ cellarConfig = {
 // ! For not ethereum cellars the key must be {cellarAddress}-{chainId}
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
+  [config.CONTRACT.TURBO_RSETH.ADDRESS.toLowerCase()]: turborsETH,
   [config.CONTRACT.REAL_YIELD_USD_ARB.ADDRESS.toLowerCase() +
   "-arbitrum"]: realYieldUsdArb,
   [config.CONTRACT.REAL_YIELD_ETH_ARB.ADDRESS.toLowerCase() +
