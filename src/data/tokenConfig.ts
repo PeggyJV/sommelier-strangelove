@@ -19,6 +19,15 @@ export const tokenConfig: Token[] = [
     src: "/assets/icons/somm.png",
     alt: "Sommelier logo",
     symbol: "axlSOMM",
+    address: "0x4e914bbdcde0f455a8ac9d59d3bf739c46287ed2", //NEED TO UPDATE
+    coinGeckoId: "sommelier",
+    decimals: 6,
+    chain: chainSlugMap.OPTIMISM.id,
+  },
+  {
+    src: "/assets/icons/somm.png",
+    alt: "Sommelier logo",
+    symbol: "axlSOMM",
     address: "0x4e914bbdcde0f455a8ac9d59d3bf739c46287ed2",
     coinGeckoId: "sommelier",
     decimals: 6,

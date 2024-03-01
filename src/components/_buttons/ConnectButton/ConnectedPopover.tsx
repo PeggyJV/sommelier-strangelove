@@ -205,7 +205,7 @@ export const ConnectedPopover = () => {
                   </Stack>
                 )}
 
-                <Stack
+                {/* <Stack
                   as="button"
                   py={2}
                   px={4}
@@ -225,15 +225,12 @@ export const ConnectedPopover = () => {
                   }}
                 >
                   <HStack>
-                    <Avatar
-                      src={sommToken.src}
-                      size="2xs"
-                    />
+                    <Avatar src={sommToken.src} size="2xs" />
                     <Text fontWeight="semibold">
                       Import Reward token to Wallet
                     </Text>
                   </HStack>
-                </Stack>
+                </Stack> */}
               </>
             )}
             <HStack
@@ -275,7 +272,7 @@ export const ConnectedPopover = () => {
               onClick={() => {
                 const fullImageUrl = `${
                   window.origin
-                }${tokenConfig.find((t) => sommToken.src )!}`
+                }${tokenConfig.find(() => sommToken.src)!}`
                 importToken.mutate({
                   address: sommToken.address,
                   imageUrl: fullImageUrl,
@@ -289,13 +286,8 @@ export const ConnectedPopover = () => {
               }}
             >
               <HStack>
-                <Avatar
-                  src={sommToken.src}
-                  size="2xs"
-                />
-                <Text fontWeight="semibold">
-                  Import SOMM token to Wallet
-                </Text>
+                <Avatar src={sommToken.src} size="2xs" />
+                <Text fontWeight="semibold">Import SOMM token</Text>
               </HStack>
             </Stack>
           </Stack>
