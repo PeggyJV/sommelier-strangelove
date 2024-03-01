@@ -85,6 +85,12 @@ export const turborsETH: CellarData = {
       abi: config.CONTRACT.TURBO_RSETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
+    badges: [
+      {
+        customStrategyHighlight: "Kelp Miles",
+        customStrategyHighlightColor: "#00C04B",
+      },
+    ],
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },
 }
