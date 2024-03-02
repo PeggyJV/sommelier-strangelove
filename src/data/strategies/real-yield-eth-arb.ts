@@ -25,11 +25,11 @@ export const realYieldEthArb: CellarData = {
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
   protocols: ["AAVE", "Uniswap V3"],
-  strategyAssets: ["wstETH", "cbETH", "rETH", "WETH"],
+  strategyAssets: ["WETH", "wstETH", "rETH"],
   performanceSplit: {
     depositors: 80,
-    "strategy provider": 15,
-    protocol: 5,
+    "strategy provider": 17,
+    protocol: 3,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -39,23 +39,21 @@ export const realYieldEthArb: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Maximize ETH yield through leveraged staking and liquidity provision of ETH liquid staking tokens on Uniswap V3.`,
+    goals: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
 
     highlights: `The vault:
 
-      - Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.
+      - Dynamically rebalance between ETH LST opportunities and leverage staking.
 
-      - Active strategy which optimally allocates capital across key protocols for best-in-class yields.
+      - Leverage monitoring.
 
-      - Optimizes Uniswap  V3 tick ranges.`,
-    description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
+      - Fully automated with built-in auto-compounding.`,
+    description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.
 
     Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
     
-    - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.
-    
-    - This vault does liquidity provision which can result in impermanent loss.
+    - This vault uses leverge, which means there is liquidation risk.
     `,
   },
   depositTokens: {

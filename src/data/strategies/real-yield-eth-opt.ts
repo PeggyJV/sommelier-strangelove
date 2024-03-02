@@ -15,21 +15,21 @@ export const realYieldEthOpt: CellarData = {
   slug: config.CONTRACT.REAL_YIELD_ETH_OPT.SLUG,
   dashboard:
     "https://debank.com/profile/0xc47bb288178ea40bf520a91826a3dee9e0dbfa4c?chain=op",
-  tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
+  tradedAssets: ["WETH", "wstETH", "rETH"],
   launchDate: new Date(2024, 1, 30, 15, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
-  description: `Maximize ETH yield through leveraged staking and liqušidity provision of ETH liquid staking tokens.`,
+  description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["AAVE", "Uniswap V3"],
-  strategyAssets: ["wstETH", "cbETH", "rETH", "WETH"],
+  protocols: ["Uniswap V3"],
+  strategyAssets: ["WETH", "wstETH", "rETH"],
   performanceSplit: {
     depositors: 80,
-    "strategy provider": 15,
-    protocol: 5,
+    "strategy provider": 17,
+    protocol: 3,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -39,7 +39,7 @@ export const realYieldEthOpt: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Maximize ETH yield through leveraged staking and liquidity provision of ETH liquid staking tokens on Uniswap V3.`,
+    goals: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
 
     highlights: `The vault:
 
@@ -48,14 +48,12 @@ export const realYieldEthOpt: CellarData = {
       - Active strategy which optimally allocates capital across key protocols for best-in-class yields.
 
       - Optimizes Uniswap  V3 tick ranges.`,
-    description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
+    description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.
 
     Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
     
-    - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.
-    
-    - This vault does liquidity provision which can result in impermanent loss.
+    - This vault uses leverge, which means there is liquidation risk.
     `,
   },
   depositTokens: {
@@ -80,11 +78,11 @@ export const realYieldEthOpt: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    // staker: {
-    //   address: config.CONTRACT.REAL_YIELD_ETH_OPT_STAKER.ADDRESS,
-    //   abi: config.CONTRACT.REAL_YIELD_ETH_OPT_STAKER.ABI,
-    //   key: StakerKey.CELLAR_STAKING_V0821,
-    // },
+    staker: {
+      address: config.CONTRACT.REAL_YIELD_ETH_OPT_STAKER.ADDRESS,
+      abi: config.CONTRACT.REAL_YIELD_ETH_OPT_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
+    },
     baseAsset: tokenConfigMap.WETH_OPTIMISM,
     chain: chainSlugMap.OPTIMISM,
   },
