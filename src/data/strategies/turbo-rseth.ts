@@ -41,7 +41,7 @@ export const turborsETH: CellarData = {
 
     highlights: `
     - Accepts WETH and rsETH deposits.
-    - Leverage loop rsETH for more EigenLayer and Renzo points (subject to borrow capacity on Morpho Blue).
+    - Leverage loop rsETH for more EigenLayer and Kelp Miles (subject to borrow capacity on Morpho Blue).
     - Dynamically liquidity provision across multiple DEXs.
     - Fully automated with built-in auto compounding.`,
 
@@ -85,6 +85,12 @@ export const turborsETH: CellarData = {
       abi: config.CONTRACT.TURBO_RSETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
+    badges: [
+      {
+        customStrategyHighlight: "Kelp Miles",
+        customStrategyHighlightColor: "#00C04B",
+      },
+    ],
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },
 }
