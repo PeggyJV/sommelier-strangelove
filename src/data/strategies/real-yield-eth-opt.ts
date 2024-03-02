@@ -43,11 +43,11 @@ export const realYieldEthOpt: CellarData = {
 
     highlights: `The vault:
 
-      - Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.
+      - Dynamically rebalance between ETH LST opportunities and leverage staking.
 
-      - Active strategy which optimally allocates capital across key protocols for best-in-class yields.
+      - Leverage monitoring.
 
-      - Optimizes Uniswap  V3 tick ranges.`,
+      - Fully automated with built-in auto-compounding.`,
     description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.
 
     Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
