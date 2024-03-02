@@ -52,7 +52,6 @@ export const isBondedDisabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
@@ -245,6 +244,17 @@ export const bondingPeriodOptions = (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
+    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
+    config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_GHO ||
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
+    config.cellarNameKey === CellarNameKey.TURBO_EETH ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey ===
+      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   ) {
     return [
@@ -285,52 +295,6 @@ export const bondingPeriodOptions = (
     ]
   }
   if (
-    config.cellarNameKey === CellarNameKey.ETH_BTC_MOM ||
-    config.cellarNameKey === CellarNameKey.ETH_BTC_TREND ||
-    config.cellarNameKey === CellarNameKey.DEFI_STARS
-  ) {
-    return [
-      {
-        title: "10 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.2x SOMM",
-        value: 1,
-      },
-      {
-        title: "20 Day Unbonding",
-        amount: "1.25x SOMM",
-        value: 2,
-      },
-    ]
-  }
-  if (
-    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
-    config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
-    config.cellarNameKey === CellarNameKey.MORPHO_ETH
-  ) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
-  if (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
@@ -363,125 +327,7 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-  if (config.cellarNameKey === CellarNameKey.TURBO_GHO) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
-  if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
-  if (config.cellarNameKey === CellarNameKey.TURBO_EETH) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
 
-  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
-  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
-
-  if (
-    config.cellarNameKey ===
-    CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
-  ) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
   return []
 }
 
@@ -705,15 +551,14 @@ export const estimatedApyValue = (config: ConfigProps) => {
 
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) {
     return {
-      value: 6.0,
-      formatted: "6.0%",
+      value: 15.0,
+      formatted: "15.0%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.TURBO_RSETH) {
     return {
       value: 8.0,
       formatted: "8.0%",
-
     }
   }
 }
