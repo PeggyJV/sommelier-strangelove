@@ -90,6 +90,10 @@ export const turborsETH: CellarData = {
         customStrategyHighlight: "Kelp Miles",
         customStrategyHighlightColor: "#00C04B",
       },
+      {
+        customStrategyHighlight: "EigenLayer Points",
+        customStrategyHighlightColor: "#00C04B",
+      },
     ],
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },
