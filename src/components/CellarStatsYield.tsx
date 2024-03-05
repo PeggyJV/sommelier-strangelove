@@ -18,6 +18,11 @@ import { isFuture } from "date-fns"
 import { apyHoverLabel, apyLabel } from "data/uiConfig"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
+// Define an interface for APY data which includes the optional 'formatted' property
+interface ApyData {
+  formatted?: string
+}
+
 interface CellarStatsYieldProps extends StackProps {
   cellarId: string
 }
@@ -33,15 +38,25 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
   })
 
   const { data: strategyData, isLoading: isStrategyLoading } =
-    useStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+    useStrategyData(
+      cellarConfig.cellar.address,
+      cellarConfig.chain.id
+    )
 
   const tvm = strategyData?.tvm
   const stakingEnd = strategyData?.stakingEnd
   const isStakingStillRunning =
     stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
-  const baseApy = strategyData?.baseApy
-  const rewardsApy = strategyData?.rewardsApy
-  const extraRewardsApy = strategyData?.extraRewardsApy
+  const baseApy: ApyData = strategyData?.baseApy
+    ? (strategyData.baseApy as ApyData)
+    : { formatted: undefined }
+  const rewardsApy: ApyData = strategyData?.rewardsApy
+    ? (strategyData.rewardsApy as ApyData)
+    : { formatted: undefined }
+  const extraRewardsApy: ApyData = strategyData?.extraRewardsApy
+    ? (strategyData.extraRewardsApy as ApyData)
+    : { formatted: undefined }
+
   const baseApySumRewards = strategyData?.baseApySumRewards
 
   return (
