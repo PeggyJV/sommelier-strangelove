@@ -87,7 +87,7 @@ export const turborsETH: CellarData = {
     },
     badges: [
       {
-        customStrategyHighlight: "Kelp Miles",
+        customStrategyHighlight: "3x Kelp Miles",
         customStrategyHighlightColor: "#00C04B",
       },
       {
