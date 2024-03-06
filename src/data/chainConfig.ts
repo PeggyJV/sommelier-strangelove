@@ -20,7 +20,7 @@ export interface Chain {
 export const placeholderChain: Chain = {
   id: "unknown",
   wagmiId: 0,
-  displayName: "Chain (Unsupported)",
+  displayName: "Switch Chain (Unsupported)",
   logoPath: "/assets/icons/unknownchain.svg",
   alt: "Placeholder logo",
   infuraRpcUrl: "",
@@ -74,9 +74,10 @@ export const chainConfigMap: Record<string, Chain> =
     },
     { unknown: placeholderChain }
   )
-export const supportedChains = ["ethereum", "arbitrum"]
+export const supportedChains = ["ethereum", "arbitrum", "unknown"]
 
 export const chainSlugMap = {
   ETHEREUM: chainConfigMap["ethereum"],
   ARBITRUM: chainConfigMap["arbitrum"],
+  UNKNOWN: chainConfigMap["unknown"],
 }
