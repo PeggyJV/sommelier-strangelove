@@ -98,16 +98,16 @@ export const turboETHx: CellarData = {
       abi: config.CONTRACT.TURBO_ETHX_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
-    customReward: {
-      showAPY: true,
-      tokenSymbol: "ETHx",
-      tokenDisplayName: "ETHx",
-      showSommRewards: true,
-      logo: ETHXIcon,
-      logoSize: "15px",
-      tokenAddress: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
-      imagePath: "/assets/icons/ETHx.svg",
-    },
+    // customReward: {
+    //   showAPY: true,
+    //   tokenSymbol: "ETHx",
+    //   tokenDisplayName: "ETHx",
+    //   showSommRewards: true,
+    //   logo: ETHXIcon,
+    //   logoSize: "15px",
+    //   tokenAddress: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
+    //   imagePath: "/assets/icons/ETHx.svg",
+    // },
   },
   faq: [
     {
