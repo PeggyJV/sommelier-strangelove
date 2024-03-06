@@ -18,7 +18,7 @@ import { useSwitchNetwork, useAccount } from "wagmi"
 import {
   chainConfigMap,
   supportedChains,
-  Chain,
+  placeholderChain, // Imported placeholder chain
 } from "src/data/chainConfig"
 import { useBrandedToast } from "hooks/chakra"
 
@@ -27,31 +27,10 @@ export interface ChainButtonProps {
   onChainChange?: (chainId: string) => void
 }
 
-// Define a placeholder chain configuration
-const placeholderChain: Chain = {
-  id: "unknown",
-  wagmiId: 0,
-  displayName: "Not supported chain, please switch",
-  logoPath: "/assets/icons/unknownchain.svg",
-  alt: "Placeholder logo",
-  infuraRpcUrl: "",
-  alchemyRpcUrl: "",
-  blockExplorer: {
-    name: "Unknown",
-    url: "#",
-  },
-  withdrawQueueAddress: "",
-  priceRouterAddress: "",
-}
-
 const ChainButton: VFC<ChainButtonProps> = ({
   chain,
   onChainChange,
 }) => {
-  const effectiveChain = chain
-    ? chainConfigMap[chain.id] || placeholderChain
-    : placeholderChain
-
   const {
     chains,
     error,
@@ -61,6 +40,11 @@ const ChainButton: VFC<ChainButtonProps> = ({
   } = useSwitchNetwork()
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
+
+  // Use the chain from props if it exists in chainConfigMap, otherwise use the placeholder
+  const effectiveChain = chain
+    ? chainConfigMap[chain.id] || placeholderChain
+    : placeholderChain
 
   const chainKeys = Object.keys(chainConfigMap)
   const filteredChainKeys = chainKeys.filter((key) =>
@@ -173,7 +157,6 @@ const ChainButton: VFC<ChainButtonProps> = ({
                     <Text fontWeight="semibold">
                       {supportedChain.displayName}
                     </Text>
-                    {/* Corrected comparison to use effectiveChain.id */}
                     {supportedChain.id === effectiveChain.id && (
                       <CheckIcon color={"#00C04B"} />
                     )}
