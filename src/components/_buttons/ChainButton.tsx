@@ -18,7 +18,8 @@ import { useSwitchNetwork, useAccount } from "wagmi"
 import {
   chainConfigMap,
   supportedChains,
-  placeholderChain, // Imported placeholder chain
+  placeholderChain,
+  Chain,
 } from "src/data/chainConfig"
 import { useBrandedToast } from "hooks/chakra"
 

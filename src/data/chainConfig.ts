@@ -66,15 +66,14 @@ export const chainConfig: Chain[] = [
 ]
 
 // Create a map from each chain name to its config, including the placeholder
-export const chainConfigMap: { [id: string]: Chain } =
-  chainConfig.reduce(
+export const chainConfigMap: Record<string, Chain> =
+  chainConfig.reduce<Record<string, Chain>>(
     (map, chain) => {
       map[chain.id] = chain
       return map
     },
     { unknown: placeholderChain }
   )
-
 export const supportedChains = ["ethereum", "arbitrum"]
 
 export const chainSlugMap = {
