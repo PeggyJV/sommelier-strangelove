@@ -31,7 +31,7 @@ export interface ChainButtonProps {
 const placeholderChain: Chain = {
   id: "unknown",
   wagmiId: 0,
-  displayName: "Unknown Chain",
+  displayName: "Not supported chain, please switch",
   logoPath: "/assets/icons/unknownchain.svg",
   alt: "Placeholder logo",
   infuraRpcUrl: "",
