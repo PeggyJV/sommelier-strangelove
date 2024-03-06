@@ -1,4 +1,3 @@
-import React from "react"
 import {
   Popover,
   PopoverTrigger,
@@ -19,6 +18,7 @@ import { useSwitchNetwork, useAccount } from "wagmi"
 import {
   chainConfigMap,
   supportedChains,
+  placeholderChain,
   Chain,
 } from "src/data/chainConfig"
 import { useBrandedToast } from "hooks/chakra"
@@ -32,17 +32,26 @@ const ChainButton: VFC<ChainButtonProps> = ({
   chain,
   onChainChange,
 }) => {
+  const {
+    chains,
+    error,
+    isLoading,
+    pendingChainId,
+    switchNetworkAsync,
+  } = useSwitchNetwork()
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
-  const { switchNetworkAsync } = useSwitchNetwork()
 
-  const effectiveChain =
-    chainConfigMap[chain?.id] || chainConfigMap["unknown"]
+  // Use the chain from props if it exists in chainConfigMap, otherwise use the placeholder
+  const effectiveChain = chain
+    ? chainConfigMap[chain.id] || placeholderChain
+    : placeholderChain
 
-  // Only show "unknown" chain if it is the currently selected chain
-  const filteredChainKeys = Object.keys(chainConfigMap).filter(
-    (key) => key !== "unknown" || effectiveChain.id === "unknown"
+  const chainKeys = Object.keys(chainConfigMap)
+  const filteredChainKeys = chainKeys.filter((key) =>
+    supportedChains.includes(key)
   )
+
   const handleNetworkChange = async (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
