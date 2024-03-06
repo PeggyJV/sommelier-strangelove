@@ -86,6 +86,16 @@ export const turboezETH: CellarData = {
       abi: config.CONTRACT.TURBO_EZETH_STAKER.ABI,
       key: StakerKey.CELLAR_STAKING_V0821,
     },
+    badges: [
+      {
+        customStrategyHighlight: "3x Kelp Miles",
+        customStrategyHighlightColor: "#00C04B",
+      },
+      {
+        customStrategyHighlight: "EigenLayer Points",
+        customStrategyHighlightColor: "#00C04B",
+      },
+    ],
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },
 }
