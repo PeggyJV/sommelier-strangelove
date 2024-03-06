@@ -81,6 +81,11 @@ export const turboezETH: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
+    staker: {
+      address: config.CONTRACT.TURBO_EZETH_STAKER.ADDRESS,
+      abi: config.CONTRACT.TURBO_EZETH_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
+    },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
   },
 }
