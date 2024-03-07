@@ -74,10 +74,9 @@ export const chainConfigMap: Record<string, Chain> =
     },
     { unknown: placeholderChain }
   )
-export const supportedChains = ["ethereum", "arbitrum", "unknown"]
+export const supportedChains = ["ethereum", "arbitrum"]
 
 export const chainSlugMap = {
   ETHEREUM: chainConfigMap["ethereum"],
   ARBITRUM: chainConfigMap["arbitrum"],
-  UNKNOWN: chainConfigMap["unknown"],
 }
