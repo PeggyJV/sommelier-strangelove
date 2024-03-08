@@ -86,7 +86,7 @@ export interface ConfigProps {
     abi: readonly {}[]
     key: StakerKey
   }
-  customReward?: CustomReward
+  customReward?: CustomReward[] //custom rewards type as list
   badges?: Badge[]
   baseAsset: Token
   feePromotion?: string
