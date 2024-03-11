@@ -114,7 +114,9 @@ export interface CustomReward {
   showOnlyBaseApy?: boolean
   showAPY: boolean
   tokenSymbol: string
-  tokenDisplayName: string
+  apyTooltip: string
+  formattedAPY?: string
+  tokenDisplayName?: string
   tokenAddress: string
   imagePath: string
   customRewardMessageTooltip?: string

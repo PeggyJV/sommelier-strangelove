@@ -91,6 +91,10 @@ const BondingTableCard: VFC<TableProps> = (props) => {
 
   const geo = useGeo()
 
+  const stakingDurationOverride = cellarConfig.customReward?.find(
+    (reward) => reward.stakingDurationOverride
+  )?.stakingDurationOverride
+
   const handleUnstake = async (id: number) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -257,9 +261,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
               <Text fontSize="xs">
                 {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
                   ? `Rewards program ends in ${formatDistanceToNowStrict(
-                      cellarConfig.customReward
-                        ?.stakingDurationOverride ??
-                        stakingEnd?.endDate,
+                      stakingDurationOverride || stakingEnd?.endDate, // Use found stakingDurationOverride here
                       {
                         locale: { formatDistance },
                       }
@@ -336,45 +338,16 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                   </HStack>
                 </Th>
               </Tooltip>
-              {cellarConfig.customReward?.showBondingRewards ===
-              true ? (
-                <Tooltip
-                  hasArrow
-                  arrowShadowColor="purple.base"
-                  label={`Amount of ${
-                    cellarConfig?.customReward?.tokenSymbol ?? "SOMM"
-                  } rewards earned and available to be claimed`}
-                  placement="top"
-                  bg="surface.bg"
-                  color="neutral.300"
-                >
-                  <Th
-                    fontSize={10}
-                    fontWeight="normal"
-                    textTransform="capitalize"
-                  >
-                    <HStack spacing={1} align="center">
-                      <Text>
-                        {cellarConfig?.customReward?.tokenSymbol ??
-                          "SOMM"}{" "}
-                        Rewards
-                      </Text>
-                      <InformationIcon
-                        color="neutral.300"
-                        boxSize={3}
-                      />
-                    </HStack>
-                  </Th>
-                </Tooltip>
-              ) : null}
-              {cellarConfig.customReward?.showSommRewards === true ||
-              cellarConfig.customReward?.showSommRewards ===
-                undefined ? (
-                <>
+              {cellarConfig.customReward
+                ?.filter((reward) => reward.showBondingRewards)
+                .map((reward, index) => (
                   <Tooltip
+                    key={index}
                     hasArrow
                     arrowShadowColor="purple.base"
-                    label={`Amount of SOMM rewards earned and available to be claimed`}
+                    label={`Amount of ${
+                      reward.tokenSymbol ?? "SOMM"
+                    } rewards earned and available to be claimed`}
                     placement="top"
                     bg="surface.bg"
                     color="neutral.300"
@@ -385,7 +358,9 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                       textTransform="capitalize"
                     >
                       <HStack spacing={1} align="center">
-                        <Text>SOMM Rewards</Text>
+                        <Text>
+                          {reward.tokenSymbol ?? "SOMM"} Rewards
+                        </Text>
                         <InformationIcon
                           color="neutral.300"
                           boxSize={3}
@@ -393,6 +368,50 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                       </HStack>
                     </Th>
                   </Tooltip>
+                ))}
+              {cellarConfig.customReward?.some(
+                (reward) =>
+                  reward.showSommRewards ||
+                  reward.showSommRewards === undefined
+              ) ? (
+                <>
+                  {cellarConfig.customReward?.map((reward, index) => {
+                    if (
+                      reward.showSommRewards ||
+                      reward.showSommRewards === undefined
+                    ) {
+                      return (
+                        <Tooltip
+                          key={index}
+                          hasArrow
+                          arrowShadowColor="purple.base"
+                          label={`Amount of ${
+                            reward.tokenSymbol ?? "SOMM"
+                          } rewards earned and available to be claimed`}
+                          placement="top"
+                          bg="surface.bg"
+                          color="neutral.300"
+                        >
+                          <Th
+                            fontSize={10}
+                            fontWeight="normal"
+                            textTransform="capitalize"
+                          >
+                            <HStack spacing={1} align="center">
+                              <Text>
+                                {reward.tokenSymbol ?? "SOMM"} Rewards
+                              </Text>
+                              <InformationIcon
+                                color="neutral.300"
+                                boxSize={3}
+                              />
+                            </HStack>
+                          </Th>
+                        </Tooltip>
+                      )
+                    }
+                    return null
+                  })}
                 </>
               ) : null}
               <Th />
@@ -445,91 +464,94 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                         (Object.values(lockMap).length > 0 &&
                           Object.values(lockMap).slice(-1)[0].title)}
                     </Td>
-                    {cellarConfig.customReward?.showBondingRewards ===
-                    true ? (
-                      <Td>
-                        {/*!!!!!!!! TODO: this needs to be rewritten */}
-                        {!cellarConfig.customReward
-                          ?.customColumnValue ? (
-                          <>
-                            <HStack spacing={2}>
+                    {cellarConfig.customReward
+                      ?.filter((reward) => reward.showBondingRewards)
+                      .map((reward, index) => (
+                        <Td key={index}>
+                          {reward.customColumnValue ? (
+                            <>
+                              <HStack spacing={2}>
+                                <Image
+                                  src={
+                                    reward.imagePath ?? sommToken.src
+                                  }
+                                  alt="reward token image"
+                                  height="20px"
+                                />
+                                <Text textAlign="right">
+                                  {claimAllRewards
+                                    ? Number(
+                                        toEther(
+                                          claimAllRewards[
+                                            i
+                                          ]?.toString() || "0",
+                                          6,
+                                          false,
+                                          2
+                                        )
+                                      ).toLocaleString()
+                                    : "0.00"}
+                                </Text>
+                              </HStack>
+                            </>
+                          ) : (
+                            <>
+                              <HStack
+                                as={Link}
+                                href={reward.customColumnValue}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                <Text
+                                  as="span"
+                                  fontWeight="bold"
+                                  fontSize={16}
+                                >
+                                  {reward.customColumnValue}
+                                </Text>
+                                <Icon
+                                  as={FaExternalLinkAlt}
+                                  color="purple.base"
+                                />
+                              </HStack>
+                            </>
+                          )}
+                        </Td>
+                      ))}
+                    <Td>
+                      {/*!!!!!!!! TODO: this needs to be rewritten */}
+                      <>
+                        {cellarConfig.customReward
+                          ?.filter(
+                            (reward) =>
+                              reward.showSommRewards !== false
+                          )
+                          .map((reward, index) => (
+                            <HStack key={index} spacing={2}>
                               <Image
                                 src={
-                                  cellarConfig?.customReward
-                                    ?.imagePath ?? sommToken.src
-                                }
-                                alt="reward token image"
+                                  reward.imagePath || sommToken.src
+                                } // Assuming each reward might have a unique imagePath
+                                alt={`${
+                                  reward.tokenSymbol || "SOMM"
+                                } reward token image`}
                                 height="20px"
                               />
                               <Text textAlign="right">
                                 {claimAllRewards
-                                  ? Number(
-                                      toEther(
-                                        claimAllRewards[
-                                          i
-                                        ]?.toString() || "0",
-                                        6,
-                                        false,
-                                        2
-                                      )
-                                    ).toLocaleString()
+                                  ? toEther(
+                                      claimAllRewards[
+                                        i
+                                      ]?.toString() || "0", // Ensure 'i' correctly references the intended reward if applicable
+                                      6,
+                                      false,
+                                      2
+                                    )
                                   : "0.00"}
                               </Text>
                             </HStack>
-                          </>
-                        ) : (
-                          <>
-                            <HStack
-                              as={Link}
-                              href={`${cellarConfig?.customReward?.customColumnValue}`}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              <Text
-                                as="span"
-                                fontWeight="bold"
-                                fontSize={16}
-                              >
-                                {
-                                  cellarConfig?.customReward
-                                    ?.customColumnValue
-                                }
-                              </Text>
-                              <Icon
-                                as={FaExternalLinkAlt}
-                                color="purple.base"
-                              />
-                            </HStack>
-                          </>
-                        )}
-                      </Td>
-                    ) : null}
-                    <Td>
-                      {/*!!!!!!!! TODO: this needs to be rewritten */}
-                      {cellarConfig.customReward?.showSommRewards ||
-                      cellarConfig.customReward?.showSommRewards ===
-                        undefined ? (
-                        <>
-                          <HStack spacing={2}>
-                            <Image
-                              src={sommToken.src}
-                              alt="reward token image"
-                              height="20px"
-                            />
-                            <Text textAlign="right">
-                              {claimAllRewards
-                                ? toEther(
-                                    claimAllRewards[i]?.toString() ||
-                                      "0",
-                                    6,
-                                    false,
-                                    2
-                                  )
-                                : "0.00"}
-                            </Text>
-                          </HStack>
-                        </>
-                      ) : null}
+                          ))}
+                      </>
                     </Td>
                     <Td fontWeight="normal">
                       <Flex justify="flex-end">

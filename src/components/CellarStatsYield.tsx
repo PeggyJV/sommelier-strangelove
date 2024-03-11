@@ -50,13 +50,6 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
   const baseApy: ApyData = strategyData?.baseApy
     ? (strategyData.baseApy as ApyData)
     : { formatted: undefined }
-  const rewardsApy: ApyData = strategyData?.rewardsApy
-    ? (strategyData.rewardsApy as ApyData)
-    : { formatted: undefined }
-  const extraRewardsApy: ApyData = strategyData?.extraRewardsApy
-    ? (strategyData.extraRewardsApy as ApyData)
-    : { formatted: undefined }
-
   const baseApySumRewards = strategyData?.baseApySumRewards
 
   return (
@@ -65,13 +58,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
       rowGap={4}
       w={{ base: "full", md: "auto" }}
       justifyContent={{ base: "space-between", md: "unset" }}
-      divider={
-        <CardDivider
-          _last={{
-            borderColor,
-          }}
-        />
-      }
+      divider={<CardDivider _last={{ borderColor }} />}
       {...rest}
     >
       <VStack spacing={1} align="center">
@@ -112,35 +99,20 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                     {apyHoverLabel(cellarConfig)}{" "}
                     {baseApy?.formatted ?? "0.00%"}
                   </Text>
-                  {cellarConfig.customReward?.showOnlyBaseApy !==
-                    undefined &&
-                  cellarConfig.customReward?.showOnlyBaseApy ===
-                    true ? (
-                    <></>
-                  ) : (
-                    <>
-                      <Text>
-                        {cellarConfig.customReward?.showSommRewards
-                          ? `SOMM Rewards APY ${
-                              rewardsApy?.formatted ?? "0.00%"
-                            }`
-                          : null}
-                      </Text>
-                      <Text>
-                        {cellarConfig.customReward
-                          ?.customRewardAPYTooltip ??
-                          `${
-                            cellarConfig.customReward?.showAPY
-                              ? `${cellarConfig.customReward.tokenDisplayName} `
-                              : ""
-                          }Rewards APY ${
-                            extraRewardsApy?.formatted ??
-                            rewardsApy?.formatted ??
-                            "0.00%"
-                          }`}
-                      </Text>
-                    </>
-                  )}
+                  {cellarConfig.customReward &&
+                    cellarConfig.customReward.map((reward, index) => (
+                      <React.Fragment key={index}>
+                        {reward.showSommRewards && (
+                          <Text>
+                            {reward.tokenDisplayName} Rewards APY{" "}
+                            {reward.formatted ?? "0.00%"}
+                          </Text>
+                        )}
+                        <Text>
+                          Rewards APY: {reward.formatted ?? "0.00%"}
+                        </Text>
+                      </React.Fragment>
+                    ))}
                 </>
               }
               bg="surface.bg"

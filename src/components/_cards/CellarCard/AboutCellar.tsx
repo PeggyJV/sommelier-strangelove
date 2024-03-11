@@ -1,4 +1,5 @@
-import { Flex, Stack, Text } from "@chakra-ui/react"
+import React from "react"
+import { Flex, Stack, Text, VStack, Box } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import {
   apyLabel,
@@ -8,7 +9,6 @@ import {
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { CellarCardData } from "./CellarCardDisplay"
-
 import { UserStats } from "./UserStats"
 import { CellarStats, CellarStatsLabel } from "./CellarStats"
 import { PercentageText } from "components/PercentageText"
@@ -25,101 +25,70 @@ interface Props {
 
 export const AboutCellar: React.FC<Props> = ({ data }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
-
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
 
   const launchDate = strategyData?.launchDate
   const baseApy = strategyData?.baseApy
-  const rewardsApy = strategyData?.rewardsApy
+  const rewardsApy = strategyData?.rewardsApy // This might not be directly used if each reward includes its own APY
   const stakingEnd = strategyData?.stakingEnd
   const countdown = isComingSoon(launchDate)
 
-  const isStakingStillRunning =
-    stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
-  const apyTooltip = apyLabel(cellarConfig)
-
   const launchingDate = (() => {
     if (!launchDate) return "Coming soon"
-    const dateTz = new Date(launchDate)
-    const et = utcToZonedTime(dateTz, COUNT_DOWN_TIMEZONE)
+    const dateTz = utcToZonedTime(
+      new Date(launchDate),
+      COUNT_DOWN_TIMEZONE
+    )
     return `${format(
-      et,
+      dateTz,
       "iii MMM d, h:mmaaa"
     )} ${COUNT_DOWN_TIMEZONE}`
   })()
 
   const tokenPrice = strategyData?.tokenPrice
   const dailyChange = strategyData?.changes?.daily
+
   return (
     <>
       {!countdown && (
-        <Stack mx={2} spacing={1}>
-          <Stack spacing={1}>
+        <Stack mx={2} spacing={4}>
+          <Stack spacing={4}>
             {isAPYEnabled(cellarConfig) &&
-              (isLoading ? (
-                <>
-                  <TransparentSkeleton
-                    h="14px"
-                    w="80px"
-                    startColor="purple.dark"
-                    endColor="surface.secondary"
+              cellarConfig.customReward?.map((reward, index) => (
+                <VStack key={index} align="stretch" spacing={4}>
+                  <CellarStats
+                    tooltip={
+                      reward.apyTooltip || apyLabel(cellarConfig)
+                    }
+                    title={`${reward.tokenSymbol} APY`}
+                    value={reward.formattedAPY || "..."}
+                    isLoading={isLoading}
                   />
-                  <TransparentSkeleton
-                    h="14px"
-                    w="100px"
-                    startColor="purple.dark"
-                    endColor="surface.secondary"
-                  />
-                </>
-              ) : (
-                <>
-                  {baseApy?.formatted !== "0.0%" && (
-                    <CellarStats
-                      tooltip={apyTooltip}
-                      title={apyLabel(cellarConfig)}
-                      value={baseApy?.formatted || "..."}
-                      isLoading={isLoading}
-                    />
-                  )}
-                  {rewardsApy?.formatted !== "0.0%" && (
-                    <CellarStats
-                      title={
-                        cellarConfig.customReward
-                          ?.customRewardAPYTooltip ?? "Rewards APY"
-                      }
-                      value={
-                        cellarConfig.customReward
-                          ?.customRewardAPYTooltip ??
-                        (rewardsApy?.formatted || "...")
-                      }
-                      isLoading={isLoading}
-                      colorValue="lime.base"
-                    />
-                  )}
-                </>
+                </VStack>
               ))}
-          </Stack>
 
-          {isTokenPriceEnabled(cellarConfig) && (
-            <CellarStats
-              tooltip={tokenPriceTooltipContent(cellarConfig)}
-              title="Token price"
-              value={tokenPrice || "--"}
-              isLoading={isLoading}
-              size="md"
-            />
-          )}
-          {isDailyChangeEnabled(cellarConfig) && (
-            <Flex alignItems="center">
-              <PercentageText data={dailyChange} arrow />
-              <CellarStatsLabel
-                title="1D Change"
-                tooltip="% change of current token price vs. token price yesterday"
+            {isTokenPriceEnabled(cellarConfig) && (
+              <CellarStats
+                tooltip={tokenPriceTooltipContent(cellarConfig)}
+                title="Token price"
+                value={tokenPrice || "--"}
+                isLoading={isLoading}
+                size="md"
               />
-            </Flex>
-          )}
+            )}
+            {isDailyChangeEnabled(cellarConfig) && (
+              <Flex alignItems="center">
+                <PercentageText data={dailyChange} arrow />
+                <CellarStatsLabel
+                  title="1D Change"
+                  tooltip="% change of current token price vs. token price yesterday"
+                />
+              </Flex>
+            )}
+          </Stack>
         </Stack>
       )}
       <Text my={4} mx={2}>

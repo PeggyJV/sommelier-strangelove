@@ -82,6 +82,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
       cellarConfig.cellar.address,
       cellarConfig.chain.id
     )
+
+
+    
   let { data: userData, isLoading: isUserDataLoading } =
     useUserStrategyData(
       cellarConfig.cellar.address,
