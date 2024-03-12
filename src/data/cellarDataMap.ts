@@ -44,18 +44,18 @@ cellarConfig = {
   [config.CONTRACT.TURBO_RSETH.SLUG]: turborsETH,
   [config.CONTRACT.REAL_YIELD_USD_ARB.SLUG]: realYieldUsdArb,
   [config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG]: realYieldEthArb,
-  [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
-  [config.CONTRACT.TURBO_ETHX.SLUG]: turboETHx,
-  [config.CONTRACT.TURBO_DIVETH.SLUG]: turbodivETH,
-  [config.CONTRACT.MORPHO_ETH.SLUG]: morphoETH,
-  [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
-  [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
   [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,
+  [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
   [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]:
     turboSTETHstETHDeposit,
-  [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
+  [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
   [config.CONTRACT.REAL_YIELD_USD.SLUG]: realYieldUsd,
+  [config.CONTRACT.TURBO_ETHX.SLUG]: turboETHx,
+  [config.CONTRACT.MORPHO_ETH.SLUG]: morphoETH,
+  [config.CONTRACT.TURBO_DIVETH.SLUG]: turbodivETH,
+  [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
+  [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
   [config.CONTRACT.FRAXIMAL.SLUG]: fraximal,
   [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,
   [config.CONTRACT.REAL_YIELD_LINK.SLUG]: realYieldLink,
@@ -85,9 +85,8 @@ cellarAddressConfig = {
   [config.CONTRACT.REAL_YIELD_ETH_ARB.ADDRESS.toLowerCase() +
   "-arbitrum"]: realYieldEthArb,
   [config.CONTRACT.TURBO_EETHV2.ADDRESS.toLowerCase()]: turboeETHV2,
-  [config.CONTRACT.TURBO_ETHX.ADDRESS.toLowerCase()]: turboETHx,
-  [config.CONTRACT.TURBO_DIVETH.ADDRESS.toLowerCase()]: turbodivETH,
   [config.CONTRACT.MORPHO_ETH.ADDRESS.toLowerCase()]: morphoETH,
+  [config.CONTRACT.TURBO_DIVETH.ADDRESS.toLowerCase()]: turbodivETH,
   [config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.ADDRESS.toLowerCase() +
   "-arbitrum"]: testArbitrumRealYieldUsd,
   [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.ADDRESS.toLowerCase()]:
@@ -97,6 +96,7 @@ cellarAddressConfig = {
   [config.CONTRACT.TURBO_STETH.ADDRESS.toLowerCase()]: turboSTETH,
   [config.CONTRACT.ETH_TREND_GROWTH.ADDRESS.toLowerCase()]:
     ethTrendGrowth,
+  [config.CONTRACT.TURBO_ETHX.ADDRESS.toLowerCase()]: turboETHx,
   [config.CONTRACT.TURBO_GHO.ADDRESS.toLowerCase()]: turboGHO,
   [config.CONTRACT.TURBO_SWETH.ADDRESS.toLowerCase()]: turboSWETH,
   [config.CONTRACT.REAL_YIELD_ETH.ADDRESS.toLowerCase()]:
