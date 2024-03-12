@@ -87,7 +87,7 @@ export const turboezETH: CellarData = {
     },
     badges: [
       {
-        customStrategyHighlight: "3x Kelp Miles",
+        customStrategyHighlight: "ezPoints",
         customStrategyHighlightColor: "#00C04B",
       },
       {
