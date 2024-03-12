@@ -14,7 +14,7 @@ export const turboezETH: CellarData = {
   name: "Turbo ezETH",
   slug: config.CONTRACT.TURBO_EZETH.SLUG,
   tradedAssets: ["WETH", "ezETH"],
-  launchDate: new Date(Date.UTC(2024, 2, 12, 15, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2024, 2, 11, 15, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Your gateway to EigenLayer liquid restaking and Renzo's DeFi ecosystem.`,
   strategyType: "Yield",
