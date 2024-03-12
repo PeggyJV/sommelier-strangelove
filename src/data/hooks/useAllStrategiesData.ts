@@ -13,12 +13,15 @@ export const useAllStrategiesData = () => {
   const { chain } = useNetwork()
   const { data: allContracts } = useAllContracts()
 
-  const sommToken = tokenConfig.find(
-    (token) =>
+  const sommToken = tokenConfig.find((token) => {
+    const compareChain = chain?.unsupported
+      ? "ethereum"
+      : chain?.name.toLowerCase().split(" ")[0]
+    return (
       token.coinGeckoId === "sommelier" &&
-      token.chain ===
-        (chain?.name.toLowerCase().split(" ")[0] || "ethereum")
-  )!
+      token.chain === (compareChain || "ethereum")
+    )
+  })!
 
   const { data: sommPrice } = useCoinGeckoPrice(sommToken)
 

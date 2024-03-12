@@ -18,6 +18,7 @@ import { useSwitchNetwork, useAccount } from "wagmi"
 import {
   chainConfigMap,
   supportedChains,
+  placeholderChain,
   Chain,
 } from "src/data/chainConfig"
 import { useBrandedToast } from "hooks/chakra"
@@ -41,6 +42,11 @@ const ChainButton: VFC<ChainButtonProps> = ({
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
 
+  // Use the chain from props if it exists in chainConfigMap, otherwise use the placeholder
+  const effectiveChain = chain
+    ? chainConfigMap[chain.id] || placeholderChain
+    : placeholderChain
+
   const chainKeys = Object.keys(chainConfigMap)
   const filteredChainKeys = chainKeys.filter((key) =>
     supportedChains.includes(key)
@@ -51,22 +57,15 @@ const ChainButton: VFC<ChainButtonProps> = ({
   ) => {
     let chainId = event.target.value
 
-    // Attempt to switch the network
     try {
       await switchNetworkAsync?.(chainConfigMap[chainId].wagmiId)
-
-      // If the above line doesn't throw an error, it means network switch was successful
       onChainChange && onChainChange(chainId)
-
-      // If user is connected, refresh the page to reflect the new network
       if (isConnected) {
         window.location.reload()
-      } // Else, don't refresh. The user will see the new network, but will need to connect their wallet.
+      }
     } catch (e) {
       const error = e as Error
-
       console.error("Failed to switch the network: ", error?.message)
-
       addToast({
         heading: "Error switching network",
         status: "error",
@@ -102,12 +101,12 @@ const ChainButton: VFC<ChainButtonProps> = ({
           leftIcon={
             <HStack>
               <Image
-                src={chain.logoPath}
-                alt={chain.displayName}
+                src={effectiveChain.logoPath}
+                alt={effectiveChain.displayName}
                 boxSize="24px"
                 background={"transparent"}
               />
-              <Text>{chain.displayName}</Text>
+              <Text>{effectiveChain.displayName}</Text>
             </HStack>
           }
         />
@@ -159,7 +158,7 @@ const ChainButton: VFC<ChainButtonProps> = ({
                     <Text fontWeight="semibold">
                       {supportedChain.displayName}
                     </Text>
-                    {supportedChain.id === chain.id && (
+                    {supportedChain.id === effectiveChain.id && (
                       <CheckIcon color={"#00C04B"} />
                     )}
                   </HStack>
