@@ -417,9 +417,12 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             </VStack>
           )}
           {/* Insert PointsDisplay here */}
-          {isConnected && address && (
-            <PointsDisplay userAddress={address} />
-          )}
+          {isConnected &&
+            address &&
+            cellarConfig.cellarNameKey ===
+              CellarNameKey.TURBO_EETHV2 && (
+              <PointsDisplay userAddress={address} />
+            )}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
               <HStack
