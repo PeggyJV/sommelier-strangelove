@@ -65,8 +65,8 @@ export interface ConfigProps {
   id: string
   baseApy?: number
   cellarNameKey: CellarNameKey
-  hasEigenlayerPoints?: boolean
   hasEtherfiPoints?: boolean
+  hasEigenlayerPoints?: boolean
   isNoDataSource?: boolean
   lpToken: {
     address: string

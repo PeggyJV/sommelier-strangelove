@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { CardStat } from "components/CardStat" // Ensure this path is correct
+import { CardStat } from "components/CardStat" // Adjust the import path as necessary
 import { fetchEtherfiData } from "utils/fetchEtherfiData" // Adjust the import path as necessary
 
 // Assuming fetchEtherfiData fetches the necessary data
@@ -13,7 +13,7 @@ interface PointsDisplayProps {
   showEtherfiPoints: boolean // New prop
 }
 
-const PointsDisplay: React.FC<PointsDisplayProps> = ({
+export const PointsDisplay: React.FC<PointsDisplayProps> = ({
   userAddress,
   showEigenlayerPoints,
   showEtherfiPoints,
@@ -51,24 +51,26 @@ const PointsDisplay: React.FC<PointsDisplayProps> = ({
 
   return (
     <>
-      <CardStat
-        label="Etherfi Points"
-        tooltip="The number of Etherfi points accumulated"
-        alignSelf="flex-start"
-        spacing={0}
-      >
-        {etherfiPoints ?? "Loading..."}
-      </CardStat>
-      <CardStat
-        label="Eigenlayer Points"
-        tooltip="The number of Eigenlayer points accumulated"
-        alignSelf="flex-start"
-        spacing={0}
-      >
-        {eigenlayerPoints ?? "Loading..."}
-      </CardStat>
+      {showEtherfiPoints && (
+        <CardStat
+          label="Etherfi Points"
+          tooltip="The number of Etherfi points accumulated"
+          alignSelf="flex-start"
+          spacing={0}
+        >
+          {etherfiPoints ?? "Loading..."}
+        </CardStat>
+      )}
+      {showEigenlayerPoints && (
+        <CardStat
+          label="Eigenlayer Points"
+          tooltip="The number of Eigenlayer points accumulated"
+          alignSelf="flex-start"
+          spacing={0}
+        >
+          {eigenlayerPoints ?? "Loading..."}
+        </CardStat>
+      )}
     </>
   )
 }
-
-export default PointsDisplay
