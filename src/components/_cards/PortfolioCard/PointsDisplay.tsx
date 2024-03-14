@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { Box, Text, VStack } from "@chakra-ui/react"
+import { CardStat } from "components/CardStat" // Ensure this path is correct
 import { fetchEtherfiData } from "utils/fetchEtherfiData" // Adjust the import path as necessary
 
-// Placeholder function for fetching Eigenlayer data, you might already have a real implementation
+// Assuming fetchEtherfiData fetches the necessary data
 async function fetchEigenlayerData(userAddress: string) {
-  // Since your example API response structure includes eigenlayerPoints, you might want to use the same API call here
-  // Assuming fetchEtherfiData function is supposed to fetch this data, consider renaming or adjusting functionality as needed
-  // This placeholder is here for demonstration purposes
-  return fetchEtherfiData(userAddress) // This is a placeholder, adjust according to your actual data fetching logic
+  return fetchEtherfiData(userAddress)
 }
 
 interface PointsDisplayProps {
@@ -27,12 +24,18 @@ const PointsDisplay: React.FC<PointsDisplayProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Assuming fetchEtherfiData is meant to fetch both etherfi and eigenlayer points
         const response = await fetchEtherfiData(userAddress)
         if (response.Response) {
-          // Adjust these lines based on the actual keys and data structure
-          setEtherfiPoints(response.Response.loyaltyPoints)
-          setEigenlayerPoints(response.Response.eigenlayerPoints)
+          // Format points with two decimal places
+          const formattedEtherfiPoints = Number(
+            response.Response.loyaltyPoints
+          ).toFixed(2)
+          const formattedEigenlayerPoints = Number(
+            response.Response.eigenlayerPoints
+          ).toFixed(2)
+
+          setEtherfiPoints(formattedEtherfiPoints)
+          setEigenlayerPoints(formattedEigenlayerPoints)
         }
       } catch (error) {
         console.error("Failed to fetch points data:", error)
@@ -43,16 +46,24 @@ const PointsDisplay: React.FC<PointsDisplayProps> = ({
   }, [userAddress])
 
   return (
-    <VStack>
-      <Box>
-        <Text>Etherfi Points: {etherfiPoints ?? "Loading..."}</Text>
-      </Box>
-      <Box>
-        <Text>
-          Eigenlayer Points: {eigenlayerPoints ?? "Loading..."}
-        </Text>
-      </Box>
-    </VStack>
+    <>
+      <CardStat
+        label="Etherfi Points"
+        tooltip="The number of Etherfi points accumulated"
+        alignSelf="flex-start"
+        spacing={0}
+      >
+        {etherfiPoints ?? "Loading..."}
+      </CardStat>
+      <CardStat
+        label="Eigenlayer Points"
+        tooltip="The number of Eigenlayer points accumulated"
+        alignSelf="flex-start"
+        spacing={0}
+      >
+        {eigenlayerPoints ?? "Loading..."}
+      </CardStat>
+    </>
   )
 }
 
