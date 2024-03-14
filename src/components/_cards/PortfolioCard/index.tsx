@@ -419,10 +419,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           {/* Insert PointsDisplay here */}
           {isConnected &&
             address &&
-            (cellarConfig.cellarNameKey ===
-              CellarNameKey.TURBO_EETHV2 ||
-              cellarConfig.cellarNameKey ===
-                CellarNameKey.TURBO_EETH) && (
+            cellarConfig.cellarNameKey ===
+              CellarNameKey.TURBO_EETHV2 && (
               <PointsDisplay userAddress={address} />
             )}
           <CardStat label="Strategy Dashboard">
