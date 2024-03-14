@@ -324,6 +324,9 @@ export const config = {
     },
     TURBO_EZETH_STAKER: {
       ADDRESS: "0x4705F50b9c6CdffC6528ba6B3754106eE820997E",
+    },
+    TURBO_EETHV2_STAKER: {
+      ADDRESS: "0x4A0c0BA71647Be8AF0D98F565EcdB6B8ddE07B47",
       ABI: cellarStakingV0821,
     },
   },
