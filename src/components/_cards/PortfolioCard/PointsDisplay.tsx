@@ -43,16 +43,16 @@ export const PointsDisplay: React.FC<PointsDisplayProps> = ({
   return (
     <>
       <CardStat
-        label="Etherfi Points"
-        tooltip="The number of Etherfi points accumulated"
+        label="ether.fi Points"
+        tooltip="The number of ether.fi points accumulated"
         alignSelf="flex-start"
         spacing={0}
       >
         {etherfiPoints ?? "Loading..."}
       </CardStat>
       <CardStat
-        label="Eigenlayer Points"
-        tooltip="The number of Eigenlayer points accumulated"
+        label="EigenLayer Points"
+        tooltip="The number of EigenLayer points accumulated"
         alignSelf="flex-start"
         spacing={0}
       >
