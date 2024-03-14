@@ -14,8 +14,6 @@ import { chainSlugMap } from "data/chainConfig"
 export const turboeETHV2: CellarData = {
   name: "Turbo eETH V2",
   slug: config.CONTRACT.TURBO_EETHV2.SLUG,
-  hasEtherfiPoints: true,
-  hasEigenlayerPoints: true,
   tradedAssets: ["WETH", "eETH", "weETH"],
 
   launchDate: new Date(Date.UTC(2024, 1, 6, 14, 0, 0, 0)),
