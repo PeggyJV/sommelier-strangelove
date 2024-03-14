@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { CardStat } from "components/CardStat" // Adjust the import path as necessary
-import { fetchEtherfiData } from "utils/fetchEtherfiData" // Adjust the import path as necessary
+import { CardStat } from "components/CardStat" 
+import { fetchEtherfiData } from "utils/fetchEtherfiData" 
 
 interface PointsDisplayProps {
   userAddress: string
@@ -21,7 +21,7 @@ export const PointsDisplay: React.FC<PointsDisplayProps> = ({
       try {
         const response = await fetchEtherfiData(userAddress)
         if (response.Response) {
-          // Assuming response.Response contains the necessary data
+        
           const formattedEtherfiPoints = Number(
             response.Response.loyaltyPoints
           ).toFixed(2)
