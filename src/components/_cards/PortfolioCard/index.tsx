@@ -56,6 +56,7 @@ import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { add } from "lodash"
 import { CellarNameKey } from "data/types"
+import PointsDisplay from "./PointsDisplay"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
@@ -415,7 +416,10 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               </CardStat>
             </VStack>
           )}
-
+          {/* Insert PointsDisplay here */}
+          {isConnected && address && (
+            <PointsDisplay userAddress={address} />
+          )}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
               <HStack

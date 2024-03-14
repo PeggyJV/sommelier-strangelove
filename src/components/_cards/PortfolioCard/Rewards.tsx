@@ -15,9 +15,8 @@ import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useHandleTransaction } from "hooks/web3"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { analytics } from "utils/analytics"
-import { useAccount, useNetwork } from "wagmi"
-import { fetchEtherfiData } from "utils/fetchEtherfiData" // Update the path according to your project structure
-import React, { useEffect, useState } from "react"
+import { useAccount } from "wagmi"
+import { useNetwork } from "wagmi"
 
 export const Rewards = ({
   cellarConfig,
@@ -25,26 +24,7 @@ export const Rewards = ({
   cellarConfig: ConfigProps
 }) => {
   const isMounted = useIsMounted()
-  const { address, isConnected } = useAccount()
-  const [etherfiData, setEtherfiData] = useState<{
-    eigenlayerPoints: number
-    etherfiPoints: number
-  } | null>(null)
-
-  useEffect(() => {
-    if (address) {
-      fetchEtherfiData(address)
-        .then((data) => {
-          setEtherfiData({
-            eigenlayerPoints: data.eigenlayerPoints, // Adjust according to actual API response
-            etherfiPoints: data.etherfiPoints, // Adjust according to actual API response
-          })
-        })
-        .catch((error) =>
-          console.error("Error fetching Etherfi data:", error)
-        )
-    }
-  }, [address])
+  const { isConnected } = useAccount()
   const { data: userData, refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
     cellarConfig.chain.id
@@ -83,10 +63,7 @@ export const Rewards = ({
     userStakes?.totalClaimAllRewards?.value.toString()
 
   const claimAllDisabled =
-    !isConnected ||
-    !userRewards ||
-    parseInt(userRewards) <= 0 ||
-    !buttonsEnabled
+    !isConnected || !userRewards || parseInt(userRewards) <= 0 || !buttonsEnabled
 
   // Get somm token
   const chainObj = chainConfig.find(
@@ -218,50 +195,37 @@ export const Rewards = ({
         ) : null}
         {cellarConfig.customReward?.showSommRewards ||
         cellarConfig.customReward?.showSommRewards === undefined ? (
-          <HStack>
-            <CardStat
-              label={"SOMM Rewards"}
-              tooltip={`Amount of SOMM earned and available to be claimed`}
-            >
-              <InlineImage
-                src={sommToken.src}
-                alt={`SOMM logo`}
-                boxSize={5}
-              />
-              <Text textAlign="center">
-                {isMounted &&
-                  (isConnected
-                    ? userStakes?.totalClaimAllRewards.formatted ||
-                      "..."
-                    : "--")}
-              </Text>
-            </CardStat>
-          </HStack>
-        ) : null}
-
-        {/* Etherfi and Eigenlayer Points Display Section */}
-        {etherfiData && (
           <>
-            <Text fontSize="lg" fontWeight="bold" mt="4">
-              Etherfi Rewards
-            </Text>
-            <HStack spacing={4}>
-              <Text>
-                Eigenlayer Points: {etherfiData.eigenlayerPoints}
-              </Text>
-              <Text>Etherfi Points: {etherfiData.etherfiPoints}</Text>
+            <HStack>
+              <CardStat
+                label={"SOMM Rewards"}
+                tooltip={`Amount of SOMM earned and available to be claimed`}
+              >
+                <InlineImage
+                  src={sommToken.src}
+                  alt={`SOMM logo`}
+                  boxSize={5}
+                />
+                <Text textAlign="center">
+                  {isMounted &&
+                    (isConnected
+                      ? userStakes?.totalClaimAllRewards.formatted ||
+                        "..."
+                      : "--")}
+                </Text>
+              </CardStat>
             </HStack>
           </>
-        )}
+        ) : null}
       </VStack>
-      {cellarConfig?.customReward?.showClaim !== false && (
+      {cellarConfig?.customReward?.showClaim !== false ? (
         <BaseButton
           disabled={claimAllDisabled}
           onClick={handleClaimAll}
         >
           {cellarConfig?.customReward?.customClaimMsg ?? `Claim All`}
         </BaseButton>
-      )}
+      ) : null}
     </SimpleGrid>
   )
 }
