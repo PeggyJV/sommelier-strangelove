@@ -17,6 +17,8 @@ export const turboeETHV2: CellarData = {
   tradedAssets: ["WETH", "eETH", "weETH"],
   //need to update
   launchDate: new Date(Date.UTC(2024, 1, 6, 14, 0, 0, 0)),
+  hasEigenlayerPoints: true, // New property to indicate this strategy has Eigenlayer points
+  hasEtherfiPoints: true, // New property to indicate this strategy has Etherfi points
   cellarType: CellarType.yieldStrategies,
   description: `Your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem.`,
   strategyType: "Yield",

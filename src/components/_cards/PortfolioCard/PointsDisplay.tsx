@@ -9,10 +9,14 @@ async function fetchEigenlayerData(userAddress: string) {
 
 interface PointsDisplayProps {
   userAddress: string
+  showEigenlayerPoints: boolean // New prop
+  showEtherfiPoints: boolean // New prop
 }
 
 const PointsDisplay: React.FC<PointsDisplayProps> = ({
   userAddress,
+  showEigenlayerPoints,
+  showEtherfiPoints,
 }) => {
   const [etherfiPoints, setEtherfiPoints] = useState<string | null>(
     null

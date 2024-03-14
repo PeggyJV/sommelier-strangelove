@@ -418,7 +418,15 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           )}
           {/* Insert PointsDisplay here */}
           {isConnected && address && (
-            <PointsDisplay userAddress={address} />
+            <PointsDisplay
+              userAddress={address}
+              showEigenlayerPoints={
+                cellarConfig.hasEigenlayerPoints || false
+              }
+              showEtherfiPoints={
+                cellarConfig.hasEtherfiPoints || false
+              }
+            />
           )}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
