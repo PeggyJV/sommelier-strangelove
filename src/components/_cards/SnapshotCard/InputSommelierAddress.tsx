@@ -23,8 +23,8 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
 }) => {
   const { addToast, closeAll } = useBrandedToast()
   const { register, setValue, getValues, getFieldState } =
-    useFormContext<BridgeFormValues>()
-  const isError = !!getFieldState("address").error
+    useFormContext<SnapshotFormValues>()
+  const isError = !!getFieldState("somm_address").error
   const [isActive, setActive] = useState(false)
   const { isConnected } = useAccount()
 
@@ -34,7 +34,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
       const key = await keplr.getKey(mainnetChains.sommelier.chainId)
       if (!key.bech32Address) throw new Error("Address not defined")
       setValue(
-        "address",
+        "somm_address",
         isValidateAddress ? getValues().address : key.bech32Address,
         {
           shouldValidate: true,
@@ -115,7 +115,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
             fontSize: "lg",
           }}
           type="text"
-          {...register("address", {
+          {...register("somm_address", {
             required: "Enter Sommelier address",
             validate: {
               validAddress: (v) =>
