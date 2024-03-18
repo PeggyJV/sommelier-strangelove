@@ -15,7 +15,7 @@ export const turboeETHV2: CellarData = {
   name: "Turbo eETH V2",
   slug: config.CONTRACT.TURBO_EETHV2.SLUG,
   tradedAssets: ["WETH", "eETH", "weETH"],
-  //need to update
+
   launchDate: new Date(Date.UTC(2024, 1, 6, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem.`,
@@ -87,6 +87,11 @@ export const turboeETHV2: CellarData = {
       abi: config.CONTRACT.TURBO_EETHV2.ABI,
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
+    },
+    staker: {
+      address: config.CONTRACT.TURBO_EETHV2_STAKER.ADDRESS,
+      abi: config.CONTRACT.TURBO_EETHV2_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [
