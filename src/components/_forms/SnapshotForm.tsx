@@ -32,7 +32,7 @@ interface SnapshotFormProps {
   somm_address: string
 }
 
-export const BridgeForm: VFC<SnapshotFormProps> = ({}) => {
+export const SnapshotForm: VFC<SnapshotFormProps> = ({}) => {
   const { addToast, closeAll } = useBrandedToast()
   const isMounted = useIsMounted()
   const { watch, handleSubmit, formState, getFieldState, setValue } =

@@ -18,7 +18,6 @@ import { validateSommelierAddress } from "utils/validateSommelierAddress"
 import { SnapshotFormValues } from "."
 
 export const InputSommelierAddress: React.FC<InputProps> = ({
-  children,
   ...rest
 }) => {
   const { addToast, closeAll } = useBrandedToast()
@@ -28,13 +27,14 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
   const [isActive, setActive] = useState(false)
   const { isConnected } = useAccount()
 
-  const onAutofillClick = async (isValidateAddress?: boolean) => {
+  const onAutofillClick = async () => {
     try {
-      const keplr = getKeplr()
+      const keplr = await getKeplr()
+      if (!keplr) throw new Error("Keplr extension not found")
       const key = await keplr.getKey(mainnetChains.sommelier.chainId)
       if (!key.bech32Address) throw new Error("Address not defined")
       setValue(
-        "somm_address",
+        "address",
         isValidateAddress ? getValues().address : key.bech32Address,
         {
           shouldValidate: true,
@@ -42,27 +42,6 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
       )
     } catch (e) {
       const error = e as Error
-      if (error.message === "Keplr is not defined") {
-        return addToast({
-          heading: "Import from Keplr",
-          body: (
-            <>
-              <Text>Keplr not found</Text>
-              <Link
-                display="flex"
-                alignItems="center"
-                href="https://www.keplr.app/download"
-                isExternal
-              >
-                <Text as="span">Install Keplr</Text>
-                <ExternalLinkIcon ml={2} />
-              </Link>
-            </>
-          ),
-          status: "error",
-          closeHandler: closeAll,
-        })
-      }
       addToast({
         heading: "Import from Keplr",
         body: <Text>{error.message}</Text>,
@@ -82,7 +61,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           as="button"
           type="button"
           spacing={1}
-          onClick={() => onAutofillClick()}
+          onClick={onAutofillClick}
         >
           <Text fontWeight="bold" color="white" fontSize="xs">
             Import from Keplr
@@ -90,7 +69,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           <Image
             src="/assets/images/keplr.png"
             alt="Keplr logo"
-            width={4}
+            boxSize="4"
           />
         </HStack>
       </HStack>
@@ -101,21 +80,17 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         borderRadius="16px"
       >
         <Input
-          id="sommelierAddress"
+          id="somm_address"
           placeholder="Enter Sommelier address"
-          fontSize="xs"
-          fontWeight={700}
-          backgroundColor="surface.tertiary"
-          variant="unstyled"
-          borderRadius="16px"
-          px={4}
-          py={6}
-          maxH="64px"
-          _placeholder={{
-            fontSize: "lg",
-          }}
-          type="text"
           {...register("somm_address", {
+            required: "Sommelier address is required",
+            validate: (value) =>
+              validateSommelierAddress(value) ||
+              "This is not a valid Sommelier address",
+          })}
+          {...rest}
+          type="text"
+          {...register("address", {
             required: "Enter Sommelier address",
             validate: {
               validAddress: (v) =>
@@ -124,18 +99,23 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           })}
           autoComplete="off"
           autoCorrect="off"
-          {...rest}
         />
       </Box>
-      <FormErrorMessage>
-        <HStack spacing="6px">
-          <InformationIcon color="red.base" boxSize="12px" />
-          <Text fontSize="xs" fontWeight="semibold" color="red.light">
-            Address is not valid—make sure Sommelier address is from a
-            Cosmos wallet
-          </Text>
-        </HStack>
-      </FormErrorMessage>
+      {isError && (
+        <FormErrorMessage>
+          <HStack spacing="6px">
+            <InformationIcon color="red.base" boxSize="12px" />
+            <Text
+              fontSize="xs"
+              fontWeight="semibold"
+              color="red.light"
+            >
+              Sommelier address is not valid—make sure it's from a
+              Cosmos wallet.
+            </Text>
+          </HStack>
+        </FormErrorMessage>
+      )}
     </Stack>
   )
 }

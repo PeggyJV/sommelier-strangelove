@@ -16,26 +16,21 @@ import { useAccount } from "wagmi"
 import { SnapshotFormValues } from "."
 
 export const InputEthereumAddress: React.FC<InputProps> = ({
-  children,
   ...rest
 }) => {
   const { addToast, closeAll } = useBrandedToast()
   const { register, setValue, getValues, getFieldState } =
-    useFormContext<BridgeFormValues>()
-  const isError = !!getFieldState("address").error
+    useFormContext<SnapshotFormValues>()
+  const isError = !!getFieldState("eth_address").error
   const [isActive, setActive] = useState(false)
   const { address, isConnected } = useAccount()
 
-  const onAutofillClick = async (isValidateAddress?: boolean) => {
+  const onAutofillClick = async () => {
     try {
       if (!address) throw new Error("No wallet connected")
-      setValue(
-        "address",
-        isValidateAddress ? getValues().address : address,
-        {
-          shouldValidate: true,
-        }
-      )
+      setValue("eth_address", address, {
+        shouldValidate: true,
+      })
     } catch (e) {
       const error = e as Error
       addToast({
@@ -53,12 +48,11 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
           Ethereum Address
         </Text>
-
         <HStack
           as="button"
           type="button"
           spacing={1}
-          onClick={() => onAutofillClick()}
+          onClick={onAutofillClick}
         >
           <Text fontWeight="bold" color="white" fontSize="xs">
             Import ETH address
@@ -73,7 +67,7 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
         borderRadius="16px"
       >
         <Input
-          id="address"
+          id="eth_address"
           placeholder="Enter Ethereum address"
           fontSize="xs"
           fontWeight={700}
@@ -83,30 +77,32 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
           px={4}
           py={6}
           maxH="64px"
-          _placeholder={{
-            fontSize: "lg",
-          }}
           type="text"
-          {...register("address", {
-            required: "Enter Ethereum address",
-            validate: {
-              validAddress: (v) =>
-                isAddress(v) || "Address is not valid",
-            },
+          {...register("eth_address", {
+            required: "Ethereum address is required",
+            validate: (value) =>
+              isAddress(value) ||
+              "This is not a valid Ethereum address",
           })}
           autoComplete="off"
           autoCorrect="off"
           {...rest}
         />
       </Box>
-      <FormErrorMessage>
-        <HStack spacing="6px">
-          <InformationIcon color="red.base" boxSize="12px" />
-          <Text fontSize="xs" fontWeight="semibold" color="red.light">
-            Address is not valid—make sure your Ethereum address
-          </Text>
-        </HStack>
-      </FormErrorMessage>
+      {isError && (
+        <FormErrorMessage>
+          <HStack spacing="6px">
+            <InformationIcon color="red.base" boxSize="12px" />
+            <Text
+              fontSize="xs"
+              fontWeight="semibold"
+              color="red.light"
+            >
+              Ethereum address is not valid—make sure it is correct.
+            </Text>
+          </HStack>
+        </FormErrorMessage>
+      )}
     </Stack>
   )
 }
