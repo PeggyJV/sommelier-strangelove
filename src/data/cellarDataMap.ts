@@ -47,11 +47,11 @@ cellarConfig = {
   [config.CONTRACT.REAL_YIELD_USD_ARB.SLUG]: realYieldUsdArb,
   [config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG]: realYieldEthArb,
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
-  [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,
+  [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
   [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
+  [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,
   [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]:
     turboSTETHstETHDeposit,
-  [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
   [config.CONTRACT.REAL_YIELD_USD.SLUG]: realYieldUsd,
   [config.CONTRACT.MORPHO_ETH.SLUG]: morphoETH,
   [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
