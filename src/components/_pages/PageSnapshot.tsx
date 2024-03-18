@@ -2,13 +2,13 @@ import { NextPage } from "next"
 import { Layout } from "components/_layout/Layout"
 import { Center } from "@chakra-ui/react"
 
-import { BridgeCard } from "components/_cards/BridgeCard"
+import { SnapshotCard } from "components/_cards/SnapshotCard"
 
-export const PageBridge: NextPage = () => {
+export const ShapshotBridge: NextPage = () => {
   return (
     <Layout>
       <Center>
-        <BridgeCard />
+        <SnapshotCard />
       </Center>
     </Layout>
   )
