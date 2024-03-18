@@ -13,7 +13,7 @@ import { useBrandedToast } from "hooks/chakra"
 import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
-import { BridgeFormValues } from "."
+import { SnapshotFormValues } from "."
 
 export const InputEthereumAddress: React.FC<InputProps> = ({
   children,

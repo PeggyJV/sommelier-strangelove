@@ -17,7 +17,7 @@ export interface SnapshotFormValues {
   somm_address: string
 }
 
-export const BridgeCard: React.FC = () => {
+export const SnapshotCard: React.FC = () => {
   const isMounted = useIsMounted()
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const { isConnected } = useAccount()
