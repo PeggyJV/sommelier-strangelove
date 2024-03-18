@@ -92,6 +92,8 @@ export const Nav: VFC<FlexProps> = (props) => {
                 (item.link === "https://www.sommelier.finance/" ||
                 item.link ===
                   "https://www.sommelier.finance/audits" ||
+                item.link ===
+                  "https://www.sommelier.finance/ecosystem" ||
                 item.link === "https://www.sommelier.finance/staking"
                   ? false
                   : path === "strategies"
