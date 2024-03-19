@@ -4,7 +4,7 @@ import { Center } from "@chakra-ui/react"
 
 import { SnapshotCard } from "components/_cards/SnapshotCard"
 
-export const ShapshotBridge: NextPage = () => {
+export const PageShapshot: NextPage = () => {
   return (
     <Layout>
       <Center>

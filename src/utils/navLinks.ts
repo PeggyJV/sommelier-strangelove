@@ -11,8 +11,8 @@ export const NAV_LINKS = (() => {
       title: "Bridge",
     },
     {
-      link: "/snapshots",
-      title: "Snapshots",
+      link: "/snapshot",
+      title: "Snapshot",
     },
     {
       link: "https://www.sommelier.finance/",
