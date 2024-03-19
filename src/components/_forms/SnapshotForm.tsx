@@ -52,8 +52,14 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       return
     }
     try {
-      const signature = await signWithKeplr(data.somm_address)
+      // Use the ethAddress and sommAddress directly from the form's watched values
+      const { signature, message } = await signWithKeplr(
+        data.somm_address,
+        ethAddress,
+        sommAddress
+      )
       console.log("Signature obtained:", signature)
+      console.log("Signed message:", message)
       // Handle the submission of form data and the signature to your backend here
     } catch (error) {
       console.error("Error in form submission: ", error)
