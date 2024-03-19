@@ -75,7 +75,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
           <InputEthereumAddress disabled />
           <InputSommelierAddress disabled />
           <BaseButton
-            type="submit"
             height="69px"
             fontSize="21px"
             type="submit"
