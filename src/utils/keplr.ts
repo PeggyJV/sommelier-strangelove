@@ -1,9 +1,17 @@
-export const signWithKeplr = async (sommelierAddress) => {
+// Assuming an extension of the Window interface for TypeScript awareness of the Keplr and getOfflineSigner properties
+interface CustomWindow extends Window {
+  keplr: any // Consider specifying a more detailed type based on Keplr's API
+  getOfflineSigner: (chainId: string) => any // Adjust the return type based on actual usage
+}
+
+declare let window: CustomWindow
+
+export const signWithKeplr = async (sommelierAddress: string) => {
   if (!window.getOfflineSigner || !window.keplr) {
     throw new Error("Please install Keplr extension")
   }
 
-  const chainId = "YOUR_CHAIN_ID" // Replace with your chain ID
+  const chainId = "YOUR_CHAIN_ID" // Replace with your actual chain ID
   await window.keplr.enable(chainId)
   const signer = window.getOfflineSigner(chainId)
   const accounts = await signer.getAccounts()
@@ -15,7 +23,7 @@ export const signWithKeplr = async (sommelierAddress) => {
     )
   }
 
-  // Replace with your actual message
+  // Specify your actual message
   const message = "Sign this message to link your addresses"
   const signBytes = new TextEncoder().encode(message)
 

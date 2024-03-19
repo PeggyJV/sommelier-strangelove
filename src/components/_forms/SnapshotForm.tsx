@@ -1,10 +1,7 @@
-import React from "react"
-import { Button, Stack } from "@chakra-ui/react"
+// SnapshotForm.tsx
+import React, { useEffect } from "react"
+import { Button, Stack, useToast } from "@chakra-ui/react"
 import { useForm, FormProvider } from "react-hook-form"
-import {
-  InputEthereumAddress,
-  InputSommelierAddress,
-} from "components/_cards/SnapshotCard" // Adjust import paths as necessary
 import {
   useAccount as useEthereumAccount,
   useConnect as useEthereumConnect,
@@ -12,26 +9,68 @@ import {
 import {
   useAccount as useKeplrAccount,
   useConnect as useKeplrConnect,
-} from "graz" // Assuming 'graz' provides these hooks or equivalent
-import { signWithKeplr } from "utils/keplr" // Utility function for signing with Keplr
+} from "graz" // Adjust if you use a different package for Keplr
+import { signWithKeplr } from "utils/keplr" // Ensure you have this function for signing
+import { InputEthereumAddress } from "components/_cards/SnapshotCard/InputEthereumAddress"
+import { InputSommelierAddress } from "components/_cards/SnapshotCard/InputSommelierAddress"
 
-export const SnapshotForm = () => {
+interface SnapshotFormProps {
+  wrongNetwork: boolean
+}
+
+interface SnapshotFormValues {
+  eth_address: string
+  somm_address: string
+}
+
+const SnapshotForm: React.FC<SnapshotFormProps> = ({
+  wrongNetwork,
+}) => {
   const methods = useForm<SnapshotFormValues>()
   const { connect: connectEthereum } = useEthereumConnect()
-  const { connect: connectKeplr } = useKeplrConnect() // Update according to actual Keplr connection method
+  const { connect: connectKeplr } = useKeplrConnect()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
-  const { isConnected: isKeplrConnected } = useKeplrAccount() // Update based on actual hook results
+  const { isConnected: isKeplrConnected } = useKeplrAccount()
+  const toast = useToast()
+
+  useEffect(() => {
+    if (wrongNetwork) {
+      toast({
+        title: "Network Error",
+        description: "You're connected to the wrong network.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      })
+    }
+  }, [wrongNetwork, toast])
 
   const onSubmit = async (data: SnapshotFormValues) => {
+    if (!isEthereumConnected || !isKeplrConnected || wrongNetwork) {
+      toast({
+        title: "Submission Error",
+        description:
+          "Please check your wallet connection and network.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      })
+      return
+    }
     try {
-      if (!isKeplrConnected) {
-        throw new Error("Keplr wallet is not connected")
-      }
-      // Signature generation and submission logic here...
       const signature = await signWithKeplr(data.somm_address)
-      // Submit `data.eth_address`, `data.somm_address`, and `signature` to your backend
+      console.log("Signature obtained:", signature)
+      // Handle the submission of form data and the signature to your backend here
     } catch (error) {
       console.error("Error in form submission: ", error)
+      toast({
+        title: "Error",
+        description:
+          "There was an error submitting your form. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
     }
   }
 
@@ -62,7 +101,11 @@ export const SnapshotForm = () => {
           <Button
             type="submit"
             colorScheme="purple"
-            isDisabled={!isEthereumConnected || !isKeplrConnected}
+            isDisabled={
+              !isEthereumConnected ||
+              !isKeplrConnected ||
+              wrongNetwork
+            }
           >
             Link Addresses
           </Button>
@@ -71,3 +114,5 @@ export const SnapshotForm = () => {
     </FormProvider>
   )
 }
+
+export default SnapshotForm

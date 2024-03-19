@@ -1,22 +1,11 @@
 import React from "react"
-import {
-  VStack,
-  Heading,
-  Text,
-  HStack,
-  Link,
-  useDisclosure,
-} from "@chakra-ui/react"
-import { ExternalLinkIcon, InformationIcon } from "components/_icons"
+import { VStack, Heading, Text, Link } from "@chakra-ui/react"
+import { ExternalLinkIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
-import { SnapshotForm } from "components/_forms/SnapshotForm" // Ensure this import path is correct
-import { useAccount, useSwitchNetwork, useNetwork } from "wagmi"
+import { useAccount, useNetwork } from "wagmi"
 import { FormProvider, useForm } from "react-hook-form"
 import { useIsMounted } from "hooks/utils/useIsMounted"
-import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { chainSlugMap } from "data/chainConfig"
-import { useBrandedToast } from "hooks/chakra"
+import SnapshotForm from "components/_forms/SnapshotForm" // Ensure correct import path
 
 export interface SnapshotFormValues {
   eth_address: string
@@ -25,19 +14,15 @@ export interface SnapshotFormValues {
 
 export const SnapshotCard: React.FC = () => {
   const isMounted = useIsMounted()
-  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const { isConnected } = useAccount()
   const methods = useForm<SnapshotFormValues>({
     defaultValues: {
-      eth_address: "0xfoobar",
-      somm_address: "somme1foobar",
+      eth_address: "",
+      somm_address: "",
     },
   })
-  const { switchNetworkAsync } = useSwitchNetwork()
-  const { addToast, close } = useBrandedToast()
-
-  const { chain: wagmiChain } = useNetwork()
-  const ethChain = chainSlugMap.ETHEREUM
+  const { chain } = useNetwork()
+  const ethChainId = 1 // Example: Ethereum Mainnet. Replace with the correct Chain ID if different.
 
   return (
     <VStack spacing={4}>
@@ -57,12 +42,9 @@ export const SnapshotCard: React.FC = () => {
         <Text fontSize="md" mb="41px">
           Snapshot text placeholder.{" "}
           <Link
-            ml={1}
-            fontSize="xs"
-            fontWeight="semibold"
-            textDecoration="underline"
             href="https://www.notion.so/Bridge-UI-88307640a6ab4f649b6a0b3cb6cb4d34"
-            target="_blank"
+            isExternal
+            textDecoration="underline"
           >
             Read More{" "}
             <ExternalLinkIcon boxSize={3} color="purple.base" />
@@ -71,9 +53,7 @@ export const SnapshotCard: React.FC = () => {
         {isMounted && (
           <FormProvider {...methods}>
             <SnapshotForm
-              wrongNetwork={
-                !!wagmiChain && wagmiChain.id !== ethChain.wagmiId
-              }
+              wrongNetwork={!!chain && chain.id !== ethChainId}
             />
           </FormProvider>
         )}

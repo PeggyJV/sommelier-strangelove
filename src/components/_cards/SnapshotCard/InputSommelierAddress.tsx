@@ -33,13 +33,9 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
       if (!keplr) throw new Error("Keplr extension not found")
       const key = await keplr.getKey(mainnetChains.sommelier.chainId)
       if (!key.bech32Address) throw new Error("Address not defined")
-      setValue(
-        "address",
-        isValidateAddress ? getValues().address : key.bech32Address,
-        {
-          shouldValidate: true,
-        }
-      )
+      setValue("somm_address", key.bech32Address, {
+        shouldValidate: true,
+      })
     } catch (e) {
       const error = e as Error
       addToast({
@@ -90,7 +86,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           })}
           {...rest}
           type="text"
-          {...register("address", {
+          {...register("somm_address", {
             required: "Enter Sommelier address",
             validate: {
               validAddress: (v) =>
