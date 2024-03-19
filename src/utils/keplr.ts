@@ -3,32 +3,38 @@ export const signWithKeplr = async (
   ethAddress: string,
   sommAddress: string
 ) => {
-  if (!window.getOfflineSigner || !window.keplr) {
+  // Check if Keplr extension is installed
+  if (!window.keplr) {
     throw new Error("Please install Keplr extension")
   }
 
+  // Chain ID for the blockchain you're interacting with
   const chainId = "sommelier-3"
+  // Request user to enable access to their Keplr wallet for the specified chain
   await window.keplr.enable(chainId)
+
+  // Getting the offline signer for the chain
   const signer = window.getOfflineSigner(chainId)
+  // Fetching the accounts associated with the offline signer
   const accounts = await signer.getAccounts()
 
+  // Verify the first account's address matches the provided Sommelier address
   if (accounts[0].address !== sommelierAddress) {
     throw new Error(
       "Keplr account does not match the provided Sommelier address"
     )
   }
 
+  // Construct the message to be signed
   const message = `Sign this message to link your Ethereum address: ${ethAddress} with your Sommelier address: ${sommAddress}`
-  const signBytes = new TextEncoder().encode(message)
 
-  const { signature } = await signer.signAmino(accounts[0].address, {
-    chain_id: chainId,
-    account_number: "0",
-    fee: { amount: [{ denom: "usomm", amount: "0" }], gas: "0" },
-    msgs: [{ type: "sign/MsgSignText", value: { text: message } }],
-    memo: "Linking ETH and SOMM addresses",
-    sequence: "",
-  })
+  // Use signArbitrary for signing the message
+  const { signature } = await window.keplr.signArbitrary(
+    chainId,
+    accounts[0].address,
+    message
+  )
 
+  // Return the signature and the original message
   return { signature, message }
 }
