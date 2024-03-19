@@ -13,6 +13,13 @@ export const signWithKeplr = async (
   // Request user to enable access to their Keplr wallet for the specified chain
   await window.keplr.enable(chainId)
 
+  // Ensure getOfflineSigner exists before attempting to use it
+  if (typeof window.getOfflineSigner !== "function") {
+    throw new Error(
+      "Keplr extension is not installed or not available in this context."
+    )
+  }
+
   // Getting the offline signer for the chain
   const signer = window.getOfflineSigner(chainId)
   // Fetching the accounts associated with the offline signer
