@@ -60,7 +60,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           onClick={onAutofillClick}
         >
           <Text fontWeight="bold" color="white" fontSize="xs">
-            Import from Keplr
+            Import SOMM address
           </Text>
           <Image
             src="/assets/images/keplr.png"
@@ -77,7 +77,16 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
       >
         <Input
           id="somm_address"
-          placeholder="Enter Sommelier address"
+          placeholder="Sommelier address"
+          fontSize="xs"
+          fontWeight={700}
+          backgroundColor="surface.tertiary"
+          variant="unstyled"
+          borderRadius="16px"
+          px={4}
+          py={6}
+          maxH="64px"
+          type="text"
           {...register("somm_address", {
             required: "Sommelier address is required",
             validate: (value) =>

@@ -5,6 +5,7 @@ import {
   useConnect as useEthereumConnect,
 } from "wagmi"
 import { Button, Stack, useToast } from "@chakra-ui/react"
+import { BaseButton } from "components/_buttons/BaseButton"
 import { signWithKeplr } from "utils/keplr"
 import { InputEthereumAddress } from "components/_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "components/_cards/SnapshotCard/InputSommelierAddress"
@@ -51,7 +52,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       return
     }
     try {
-      // Assuming signWithKeplr can be called directly without needing a Keplr-specific hook
       const signature = await signWithKeplr(data.somm_address)
       console.log("Signature obtained:", signature)
       // Handle the submission of form data and the signature to your backend here
@@ -72,25 +72,15 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <InputEthereumAddress />
-          <InputSommelierAddress />
-          <Button
-            colorScheme="blue"
-            onClick={() => connectEthereum()}
-            isDisabled={isEthereumConnected}
-          >
-            {isEthereumConnected
-              ? "Connected to Metamask"
-              : "Connect Metamask"}
-          </Button>
-          {/* Removed Keplr connect button as its functionality needs to be adjusted without useKeplrConnect */}
-          <Button
+          <InputEthereumAddress readOnly={true} />
+          <InputSommelierAddress readOnly={true} />
+          <BaseButton
             type="submit"
             colorScheme="purple"
             isDisabled={!isEthereumConnected || wrongNetwork}
           >
-            Link Addresses
-          </Button>
+            Sign
+          </BaseButton>
         </Stack>
       </form>
     </FormProvider>

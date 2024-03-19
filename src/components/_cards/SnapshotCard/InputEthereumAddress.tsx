@@ -68,7 +68,7 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
       >
         <Input
           id="eth_address"
-          placeholder="Enter Ethereum address"
+          placeholder="Ethereum address"
           fontSize="xs"
           fontWeight={700}
           backgroundColor="surface.tertiary"
