@@ -1,16 +1,10 @@
-import { Page404 } from "components/_pages/Page404"
-import { PageSnapshot } from "components/_pages/Snapshot"
-import {
-  configureGraz,
-  GrazChain,
-  GrazProvider,
-  mainnetChains,
-} from "graz"
+import { PageSnapshot } from "components/_pages/PageSnapshot"
+import { configureGraz, GrazChain, mainnetChains } from "graz"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import { useRouter } from "next/router"
-import { BRIDGE_PAGE_ENABLED } from "utils/constants"
 import { origin } from "utils/origin"
+
 const chain: GrazChain = {
   ...mainnetChains.sommelier,
   rpc: "https://sommelier-rpc.polkachu.com/",
@@ -29,7 +23,7 @@ const Snapshot: NextPage = () => {
     <>
       <NextSeo
         title="Bridge | Sommelier Finance"
-        description="Access to risk-managed, multi chain vaults powered by off-chain computation"
+        description="Access to risk-managed, multi-chain vaults powered by off-chain computation"
         openGraph={{
           type: "website",
           url: URL,
@@ -49,10 +43,7 @@ const Snapshot: NextPage = () => {
           cardType: "summary_large_image",
         }}
       />
-
-      <GrazProvider>
-        {BRIDGE_PAGE_ENABLED ? <PageSnapshot /> : <Page404 />}
-      </GrazProvider>
+      <PageSnapshot />
     </>
   )
 }
