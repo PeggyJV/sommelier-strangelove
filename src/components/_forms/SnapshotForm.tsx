@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
+import { BaseButton } from "components/_buttons/BaseButton"
 import { Button, Stack, useToast } from "@chakra-ui/react"
 import { signWithKeplr } from "utils/keplr"
 import { InputEthereumAddress } from "components/_cards/SnapshotCard/InputEthereumAddress"
@@ -69,13 +70,13 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         <Stack spacing={4}>
           <InputEthereumAddress />
           <InputSommelierAddress />
-          <Button
+          <BaseButton
             type="submit"
             colorScheme="purple"
             isDisabled={!isEthereumConnected || wrongNetwork}
           >
             Sign
-          </Button>
+          </BaseButton>
         </Stack>
       </form>
     </FormProvider>
