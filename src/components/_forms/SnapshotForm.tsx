@@ -72,6 +72,9 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
           <InputSommelierAddress />
           <BaseButton
             type="submit"
+            height="69px"
+            fontSize="21px"
+            type="submit"
             colorScheme="purple"
             isDisabled={!isEthereumConnected || wrongNetwork}
           >
