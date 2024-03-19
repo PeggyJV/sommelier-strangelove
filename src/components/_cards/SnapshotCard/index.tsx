@@ -41,15 +41,7 @@ export const SnapshotCard: React.FC = () => {
         <Text fontSize="md" mb="41px">
           Connect your Sommelier vaults wallet and your SOMM staking
           wallet (Keplr) to participate in airdrops and/or earn other
-          rewards.{" "}
-          <Link
-            href="https://www.notion.so/Bridge-UI-88307640a6ab4f649b6a0b3cb6cb4d34"
-            isExternal
-            textDecoration="underline"
-          >
-            Read More{" "}
-            <ExternalLinkIcon boxSize={3} color="purple.base" />
-          </Link>
+          rewards.
         </Text>
         {isMounted && (
           <FormProvider {...methods}>
