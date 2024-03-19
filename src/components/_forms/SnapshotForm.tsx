@@ -67,8 +67,8 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          {/* <InputEthereumAddress readOnly={true} />
-          <InputSommelierAddress readOnly={true} /> */}
+          <InputEthereumAddress />
+          <InputSommelierAddress />
           <Button
             type="submit"
             colorScheme="purple"
