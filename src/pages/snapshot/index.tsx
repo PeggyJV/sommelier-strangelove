@@ -22,7 +22,7 @@ const Snapshot: NextPage = () => {
   return (
     <>
       <NextSeo
-        title="Bridge | Sommelier Finance"
+        title="Snapshot | Sommelier Finance"
         description="Access to risk-managed, multi-chain vaults powered by off-chain computation"
         openGraph={{
           type: "website",
