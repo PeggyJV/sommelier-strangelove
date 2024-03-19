@@ -1,16 +1,11 @@
-// SnapshotForm.tsx
 import React, { useEffect } from "react"
-import { Button, Stack, useToast } from "@chakra-ui/react"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   useAccount as useEthereumAccount,
   useConnect as useEthereumConnect,
 } from "wagmi"
-import {
-  useAccount as useKeplrAccount,
-  useConnect as useKeplrConnect,
-} from "graz" // Adjust if you use a different package for Keplr
-import { signWithKeplr } from "utils/keplr" // Ensure you have this function for signing
+import { Button, Stack, useToast } from "@chakra-ui/react"
+import { signWithKeplr } from "utils/keplr"
 import { InputEthereumAddress } from "components/_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "components/_cards/SnapshotCard/InputSommelierAddress"
 
@@ -28,9 +23,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 }) => {
   const methods = useForm<SnapshotFormValues>()
   const { connect: connectEthereum } = useEthereumConnect()
-  const { connect: connectKeplr } = useKeplrConnect()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
-  const { isConnected: isKeplrConnected } = useKeplrAccount()
   const toast = useToast()
 
   useEffect(() => {
@@ -43,10 +36,10 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         isClosable: true,
       })
     }
-  }, [wrongNetwork, toast])
+  }, [wrongNetwork])
 
   const onSubmit = async (data: SnapshotFormValues) => {
-    if (!isEthereumConnected || !isKeplrConnected || wrongNetwork) {
+    if (!isEthereumConnected || wrongNetwork) {
       toast({
         title: "Submission Error",
         description:
@@ -58,6 +51,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       return
     }
     try {
+      // Assuming signWithKeplr can be called directly without needing a Keplr-specific hook
       const signature = await signWithKeplr(data.somm_address)
       console.log("Signature obtained:", signature)
       // Handle the submission of form data and the signature to your backend here
@@ -89,23 +83,11 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
               ? "Connected to Metamask"
               : "Connect Metamask"}
           </Button>
-          <Button
-            colorScheme="orange"
-            onClick={() => connectKeplr()}
-            isDisabled={isKeplrConnected}
-          >
-            {isKeplrConnected
-              ? "Connected to Keplr"
-              : "Connect Keplr"}
-          </Button>
+          {/* Removed Keplr connect button as its functionality needs to be adjusted without useKeplrConnect */}
           <Button
             type="submit"
             colorScheme="purple"
-            isDisabled={
-              !isEthereumConnected ||
-              !isKeplrConnected ||
-              wrongNetwork
-            }
+            isDisabled={!isEthereumConnected || wrongNetwork}
           >
             Link Addresses
           </Button>
