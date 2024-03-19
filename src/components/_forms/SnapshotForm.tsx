@@ -1,11 +1,7 @@
 import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
-import {
-  useAccount as useEthereumAccount,
-  useConnect as useEthereumConnect,
-} from "wagmi"
+import { useAccount as useEthereumAccount } from "wagmi"
 import { Button, Stack, useToast } from "@chakra-ui/react"
-import { BaseButton } from "components/_buttons/BaseButton"
 import { signWithKeplr } from "utils/keplr"
 import { InputEthereumAddress } from "components/_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "components/_cards/SnapshotCard/InputSommelierAddress"
@@ -23,7 +19,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
   wrongNetwork,
 }) => {
   const methods = useForm<SnapshotFormValues>()
-  const { connect: connectEthereum } = useEthereumConnect()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
   const toast = useToast()
 
@@ -37,7 +32,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         isClosable: true,
       })
     }
-  }, [wrongNetwork])
+  }, [wrongNetwork, toast])
 
   const onSubmit = async (data: SnapshotFormValues) => {
     if (!isEthereumConnected || wrongNetwork) {
@@ -72,15 +67,15 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <InputEthereumAddress readOnly={true} />
-          <InputSommelierAddress readOnly={true} />
-          <BaseButton
+          {/* <InputEthereumAddress readOnly={true} />
+          <InputSommelierAddress readOnly={true} /> */}
+          <Button
             type="submit"
             colorScheme="purple"
             isDisabled={!isEthereumConnected || wrongNetwork}
           >
             Sign
-          </BaseButton>
+          </Button>
         </Stack>
       </form>
     </FormProvider>

@@ -86,7 +86,6 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           px={4}
           py={6}
           maxH="64px"
-          type="text"
           {...register("somm_address", {
             required: "Sommelier address is required",
             validate: (value) =>
@@ -94,14 +93,6 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
               "This is not a valid Sommelier address",
           })}
           {...rest}
-          type="text"
-          {...register("somm_address", {
-            required: "Enter Sommelier address",
-            validate: {
-              validAddress: (v) =>
-                validateSommelierAddress(v) || "Address is not valid",
-            },
-          })}
           autoComplete="off"
           autoCorrect="off"
         />
