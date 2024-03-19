@@ -22,6 +22,10 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
   const methods = useForm<SnapshotFormValues>()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
   const toast = useToast()
+  const { watch } = methods
+  const ethAddress = watch("eth_address")
+  const sommAddress = watch("somm_address")
+  const isFormFilled = ethAddress && sommAddress
 
   useEffect(() => {
     if (wrongNetwork) {
@@ -68,15 +72,17 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <InputEthereumAddress />
-          <InputSommelierAddress />
+          <InputEthereumAddress disabled />
+          <InputSommelierAddress disabled />
           <BaseButton
             type="submit"
             height="69px"
             fontSize="21px"
             type="submit"
             colorScheme="purple"
-            isDisabled={!isEthereumConnected || wrongNetwork}
+            isDisabled={
+              !isEthereumConnected || wrongNetwork || !isFormFilled
+            }
           >
             Sign
           </BaseButton>

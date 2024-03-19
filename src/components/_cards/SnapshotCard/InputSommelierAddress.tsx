@@ -17,9 +17,9 @@ import { useFormContext } from "react-hook-form"
 import { validateSommelierAddress } from "utils/validateSommelierAddress"
 import { SnapshotFormValues } from "."
 
-export const InputSommelierAddress: React.FC<InputProps> = ({
-  ...rest
-}) => {
+export const InputSommelierAddress: React.FC<
+  InputProps & { disabled?: boolean }
+> = ({ disabled, ...rest }) => {
   const { addToast, closeAll } = useBrandedToast()
   const { register, setValue, getValues, getFieldState } =
     useFormContext<SnapshotFormValues>()
@@ -86,15 +86,16 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           px={4}
           py={6}
           maxH="64px"
+          isDisabled={disabled} 
           {...register("somm_address", {
             required: "Sommelier address is required",
             validate: (value) =>
               validateSommelierAddress(value) ||
               "This is not a valid Sommelier address",
           })}
-          {...rest}
           autoComplete="off"
           autoCorrect="off"
+          {...rest}
         />
       </Box>
       {isError && (

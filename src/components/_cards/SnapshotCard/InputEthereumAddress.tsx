@@ -15,9 +15,9 @@ import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
 import { SnapshotFormValues } from "."
 
-export const InputEthereumAddress: React.FC<InputProps> = ({
-  ...rest
-}) => {
+export const InputEthereumAddress: React.FC<
+  InputProps & { disabled?: boolean }
+> = ({ disabled, ...rest }) => {
   const { addToast, closeAll } = useBrandedToast()
   const { register, setValue, getValues, getFieldState } =
     useFormContext<SnapshotFormValues>()
@@ -78,6 +78,7 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
           py={6}
           maxH="64px"
           type="text"
+          isDisabled={disabled} 
           {...register("eth_address", {
             required: "Ethereum address is required",
             validate: (value) =>
