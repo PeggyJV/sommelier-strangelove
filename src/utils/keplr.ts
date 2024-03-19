@@ -11,7 +11,7 @@ export const signWithKeplr = async (sommelierAddress: string) => {
     throw new Error("Please install Keplr extension")
   }
 
-  const chainId = "YOUR_CHAIN_ID" // Replace with your actual chain ID
+  const chainId = "sommelier-3" // Replace with your actual chain ID
   await window.keplr.enable(chainId)
   const signer = window.getOfflineSigner(chainId)
   const accounts = await signer.getAccounts()
