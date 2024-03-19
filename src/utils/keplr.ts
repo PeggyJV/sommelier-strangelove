@@ -28,7 +28,7 @@ export const signWithKeplr = async (
     chain_id: chainId,
     account_number: "0", // These values might need to be fetched or set correctly for your use case
     sequence: "0",
-    fee: { amount: [{ denom: "usomm", amount: "0" }], gas: "1" },
+    fee: { amount: [{ denom: "usomm", amount: "0" }], gas: "0" },
     msgs: [{ type: "sign/MsgSignText", value: { text: message } }],
     memo: "Linking ETH and SOMM addresses",
   })

@@ -5,8 +5,7 @@ import { TransparentCard } from "../TransparentCard"
 import { useAccount, useNetwork } from "wagmi"
 import { FormProvider, useForm } from "react-hook-form"
 import { useIsMounted } from "hooks/utils/useIsMounted"
-import SnapshotForm from "components/_forms/SnapshotForm" // Ensure correct import path
-
+import SnapshotForm from "components/_forms/SnapshotForm"
 export interface SnapshotFormValues {
   eth_address: string
   somm_address: string
@@ -22,7 +21,7 @@ export const SnapshotCard: React.FC = () => {
     },
   })
   const { chain } = useNetwork()
-  const ethChainId = 1 // Example: Ethereum Mainnet. Replace with the correct Chain ID if different.
+  const ethChainId = 1
 
   return (
     <VStack spacing={4}>
@@ -40,7 +39,9 @@ export const SnapshotCard: React.FC = () => {
           Snapshot
         </Heading>
         <Text fontSize="md" mb="41px">
-          Snapshot text placeholder.{" "}
+          Connect your Sommelier vaults wallet and your SOMM staking
+          wallet (Keplr) to participate in airdrops and/or earn other
+          rewards.{" "}
           <Link
             href="https://www.notion.so/Bridge-UI-88307640a6ab4f649b6a0b3cb6cb4d34"
             isExternal
