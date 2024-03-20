@@ -1,4 +1,3 @@
-//src/components/_forms/SnapshotForm.tsx
 import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
@@ -23,7 +22,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
   const methods = useForm<SnapshotFormValues>()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
   const toast = useToast()
-  // Correct use of watch
   const ethAddress = methods.watch("eth_address")
   const sommAddress = methods.watch("somm_address")
   const isFormFilled = ethAddress && sommAddress
@@ -54,10 +52,15 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     }
 
     try {
-      const { signature, pubKey, message } = await signWithKeplr(
+      // Ensure the message format here matches the server's expectation
+      const message = JSON.stringify({
+        ethAddress: data.eth_address,
+        sommAddress: data.somm_address,
+      })
+
+      const { signature, pubKey } = await signWithKeplr(
         data.somm_address,
-        data.eth_address,
-        data.somm_address
+        message
       )
 
       const response = await fetch("/api/saveSignedMessage", {
@@ -68,7 +71,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
           ethAddress: data.eth_address,
           signature: signature,
           pubKey: pubKey,
-          data: message,
+          data: message, // Now sending the correctly structured message
         }),
       })
 
