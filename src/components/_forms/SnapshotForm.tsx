@@ -1,12 +1,13 @@
+//src/components/_forms/SnapshotForm.tsx
 import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
 import { BaseButton } from "../_buttons/BaseButton"
-import { Stack } from "@chakra-ui/react"
+import { Stack, useToast } from "@chakra-ui/react"
 import { signWithKeplr } from "../../utils/keplr"
 import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
-import { useBrandedToast } from "hooks/chakra"
+
 interface SnapshotFormProps {
   wrongNetwork: boolean
 }
@@ -21,41 +22,42 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 }) => {
   const methods = useForm<SnapshotFormValues>()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
-  const { addToast } = useBrandedToast()
+  const toast = useToast()
+  // Correct use of watch
   const ethAddress = methods.watch("eth_address")
   const sommAddress = methods.watch("somm_address")
   const isFormFilled = ethAddress && sommAddress
 
   useEffect(() => {
     if (wrongNetwork) {
-      addToast({
-        heading: "Network Error",
+      toast({
+        title: "Network Error",
+        description: "You're connected to the wrong network.",
         status: "error",
-        body: "You're connected to the wrong network.",
+        duration: 9000,
+        isClosable: true,
       })
     }
-  }, [wrongNetwork, addToast])
+  }, [wrongNetwork, toast])
 
   const onSubmit = async (data: SnapshotFormValues) => {
     if (!isEthereumConnected || wrongNetwork) {
-      addToast({
-        heading: "Submission Error",
+      toast({
+        title: "Submission Error",
+        description:
+          "Please check your wallet connection and network.",
         status: "error",
-        body: "Please check your wallet connection and network.",
+        duration: 9000,
+        isClosable: true,
       })
       return
     }
 
     try {
-      const message = JSON.stringify({
-        ethAddress: data.eth_address,
-        sommAddress: data.somm_address,
-      })
-
-      const { signature, pubKey } = await signWithKeplr(
+      const { signature, pubKey, message } = await signWithKeplr(
         data.somm_address,
         data.eth_address,
-        message
+        data.somm_address
       )
 
       const response = await fetch("/api/saveSignedMessage", {
@@ -71,7 +73,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       })
 
       if (!response.ok) {
-        const text = await response.text()
+        const text = await response.text() // Attempt to read the response body as text
         throw new Error(
           `HTTP error! status: ${response.status}. Body: ${text}`
         )
@@ -79,17 +81,22 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
       const responseData = await response.json()
       console.log("Response from server:", responseData)
-      addToast({
-        heading: "Success",
+      toast({
+        title: "Success",
+        description: "Your message has been successfully saved.",
         status: "success",
-        body: "Your message has been successfully saved.",
+        duration: 5000,
+        isClosable: true,
       })
     } catch (error) {
       console.error("Error in form submission: ", error)
-      addToast({
-        heading: "Error",
+      toast({
+        title: "Error",
+        description:
+          "There was an error submitting your form. Please try again.",
         status: "error",
-        body: "There was an error submitting your form. Please try again.",
+        duration: 5000,
+        isClosable: true,
       })
     }
   }
