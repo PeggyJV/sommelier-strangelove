@@ -17,12 +17,22 @@ export default async function handler(
     // Retrieve the test value
     const value = await kv.get(testKey)
 
+    // If value is null, it means the key was not found or not set properly
+    if (value === null) {
+      throw new Error(
+        "Failed to retrieve the value from Vercel KV. Key may not exist or be set correctly."
+      )
+    }
+
     // Send the retrieved value as the response
     res.status(200).json({ testValue: JSON.parse(value) })
   } catch (error) {
-    console.error(error)
+    console.error("KV interaction error:", error)
     res
       .status(500)
-      .json({ error: "Failed to interact with Vercel KV." })
+      .json({
+        error: "Failed to interact with Vercel KV.",
+        details: error.message,
+      })
   }
 }
