@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
-import { BaseButton } from "components/_buttons/BaseButton"
+import { BaseButton } from "../_buttons/BaseButton" // Adjust the import path as necessary
 import { Stack, useToast } from "@chakra-ui/react"
-import { signWithKeplr } from "utils/keplr"
-import { InputEthereumAddress } from "components/_cards/SnapshotCard/InputEthereumAddress"
-import { InputSommelierAddress } from "components/_cards/SnapshotCard/InputSommelierAddress"
+import { signWithKeplr } from "../../utils/keplr" // Adjust the import path as necessary
+import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress" // Adjust the import path as necessary
+import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress" // Adjust the import path as necessary
 
 interface SnapshotFormProps {
   wrongNetwork: boolean
@@ -52,10 +52,10 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       return
     }
     try {
-      const { signature, message } = await signWithKeplr(
+      const { signature } = await signWithKeplr(
         data.somm_address,
-        ethAddress,
-        sommAddress
+        data.eth_address,
+        data.somm_address
       )
 
       const response = await fetch("/api/saveSignedMessage", {
@@ -65,33 +65,27 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         },
         body: JSON.stringify({
           sommAddress: data.somm_address,
-          ethAddress: ethAddress,
+          ethAddress: data.eth_address,
           signature: signature,
+          // Ensure these values are correctly populated
+          pubKey: "your_pubKey_here", // You need to adjust how you get the pubKey
+          data: "your_data_here", // And the data to be signed
         }),
       })
 
-      const responseData = await response.json()
-      if (response.ok) {
-        console.log("Response from server:", responseData)
-        // Show success message to user
-        toast({
-          title: "Success",
-          description: "Your message has been successfully saved.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        })
-      } else {
-        // Handle errors or show an error message to the user
-        toast({
-          title: "Error",
-          description:
-            "There was an error saving your message. Please try again.",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        })
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
       }
+
+      const responseData = await response.json()
+      console.log("Response from server:", responseData)
+      toast({
+        title: "Success",
+        description: "Your message has been successfully saved.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      })
     } catch (error) {
       console.error("Error in form submission: ", error)
       toast({
