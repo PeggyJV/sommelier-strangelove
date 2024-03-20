@@ -12,38 +12,45 @@ export default async function handler(
   }
 
   try {
-    const { sommAddress, ethAddress, signature, pubKey, data } =
-      req.body
+    const { sommAddress, ethAddress, signature, pubKey } = req.body
 
-    if (
-      !sommAddress ||
-      !ethAddress ||
-      !signature ||
-      !pubKey ||
-      !data
-    ) {
+    // Ensure all required fields are present
+    if (!sommAddress || !ethAddress || !signature || !pubKey) {
       return res
         .status(400)
         .json({ message: "Missing required fields." })
     }
 
+    // Step 2: Reconstruct the message using known valid fields
+    // Adjust this message reconstruction as necessary to match your client-side logic
+    const reconstructedMessage = JSON.stringify({
+      ethAddress,
+      sommAddress,
+    })
+
+    // Decode the public key and signature from Base64
     const decodedPubKey = Buffer.from(pubKey, "base64")
     const decodedSignature = Buffer.from(signature, "base64")
 
+    // Verify the signature against the reconstructed message
     const isValidSignature = await verifyADR36Amino(
-      "somm",
+      "somm", // Your chain's Bech32 prefix
       sommAddress,
-      data,
+      reconstructedMessage, // Use the reconstructed message for verification
       decodedPubKey,
       decodedSignature,
-      "secp256k1"
+      "secp256k1" // The signing algorithm used, adjust if necessary
     )
 
     if (!isValidSignature) {
       return res.status(401).json({ message: "Invalid signature." })
     }
 
-    await kv.set(`somm:${sommAddress}`, ethAddress)
+    // Save data after successful validation
+    await kv.set(
+      `somm:${sommAddress}`,
+      JSON.stringify({ ethAddress, signature })
+    )
     await kv.set(`eth:${ethAddress}`, sommAddress)
 
     return res
