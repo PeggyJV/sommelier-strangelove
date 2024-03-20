@@ -12,17 +12,24 @@ export default async function handler(
   }
 
   try {
-    const { sommAddress, ethAddress, signature, pubKey } = req.body
+    const { sommAddress, ethAddress, signature, pubKey, data } =
+      req.body
 
-    // Ensure all required fields are present
-    if (!sommAddress || !ethAddress || !signature || !pubKey) {
+    // Ensure all required fields are present, including the 'data' field now
+    if (
+      !sommAddress ||
+      !ethAddress ||
+      !signature ||
+      !pubKey ||
+      !data
+    ) {
       return res
         .status(400)
         .json({ message: "Missing required fields." })
     }
 
-    // Step 2: Reconstruct the message using known valid fields
-    // Adjust this message reconstruction as necessary to match your client-side logic
+    // Reconstruct the message using known valid fields
+    // This may need adjustments based on your client-side logic
     const reconstructedMessage = JSON.stringify({
       ethAddress,
       sommAddress,
@@ -46,10 +53,10 @@ export default async function handler(
       return res.status(401).json({ message: "Invalid signature." })
     }
 
-    // Save data after successful validation
+    // Save data after successful validation, including the 'data' field
     await kv.set(
       `somm:${sommAddress}`,
-      JSON.stringify({ ethAddress, signature })
+      JSON.stringify({ ethAddress, signature, data }) // 'data' is included here
     )
     await kv.set(`eth:${ethAddress}`, sommAddress)
 

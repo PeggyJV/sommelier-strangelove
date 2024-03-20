@@ -1,4 +1,3 @@
-//src/components/_forms/SnapshotForm.tsx
 import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
@@ -23,7 +22,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
   const methods = useForm<SnapshotFormValues>()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
   const toast = useToast()
-  // Correct use of watch
   const ethAddress = methods.watch("eth_address")
   const sommAddress = methods.watch("somm_address")
   const isFormFilled = ethAddress && sommAddress
@@ -54,7 +52,12 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     }
 
     try {
-      const { signature, pubKey, message } = await signWithKeplr(
+      const {
+        signature,
+        pubKey,
+        messageContent,
+        data: encodedData,
+      } = await signWithKeplr(
         data.somm_address,
         data.eth_address,
         data.somm_address
@@ -66,14 +69,15 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         body: JSON.stringify({
           sommAddress: data.somm_address,
           ethAddress: data.eth_address,
-          signature: signature,
-          pubKey: pubKey,
-          data: message,
+          signature,
+          pubKey,
+          // Update this line to include the encoded data string
+          data: encodedData,
         }),
       })
 
       if (!response.ok) {
-        const text = await response.text() // Attempt to read the response body as text
+        const text = await response.text()
         throw new Error(
           `HTTP error! status: ${response.status}. Body: ${text}`
         )
