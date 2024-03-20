@@ -1,6 +1,6 @@
 //src/pages/api/saveSignedMessage.ts
 import { NextApiRequest, NextApiResponse } from "next"
-import { kv } from "@vercel/kv" /
+import { kv } from "@vercel/kv" 
 import { verifyADR36Amino } from "@keplr-wallet/cosmos/build/adr-36/amino"
 
 export default async function handler(
