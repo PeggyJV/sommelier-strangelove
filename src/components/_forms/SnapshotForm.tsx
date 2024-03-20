@@ -2,11 +2,11 @@ import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
 import { BaseButton } from "../_buttons/BaseButton"
-import { Stack, useToast } from "@chakra-ui/react"
+import { Stack } from "@chakra-ui/react"
 import { signWithKeplr } from "../../utils/keplr"
 import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
-
+import { useBrandedToast } from "hooks/chakra"
 interface SnapshotFormProps {
   wrongNetwork: boolean
 }
@@ -21,38 +21,32 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 }) => {
   const methods = useForm<SnapshotFormValues>()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
-  const toast = useToast()
+  const { addToast } = useBrandedToast()
   const ethAddress = methods.watch("eth_address")
   const sommAddress = methods.watch("somm_address")
   const isFormFilled = ethAddress && sommAddress
 
   useEffect(() => {
     if (wrongNetwork) {
-      toast({
-        title: "Network Error",
-        description: "You're connected to the wrong network.",
+      addToast({
+        heading: "Network Error",
         status: "error",
-        duration: 9000,
-        isClosable: true,
+        body: "You're connected to the wrong network.",
       })
     }
-  }, [wrongNetwork, toast])
+  }, [wrongNetwork, addToast])
 
   const onSubmit = async (data: SnapshotFormValues) => {
     if (!isEthereumConnected || wrongNetwork) {
-      toast({
-        title: "Submission Error",
-        description:
-          "Please check your wallet connection and network.",
+      addToast({
+        heading: "Submission Error",
         status: "error",
-        duration: 9000,
-        isClosable: true,
+        body: "Please check your wallet connection and network.",
       })
       return
     }
 
     try {
-      // Ensure the message format here matches the server's expectation
       const message = JSON.stringify({
         ethAddress: data.eth_address,
         sommAddress: data.somm_address,
@@ -60,6 +54,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
       const { signature, pubKey } = await signWithKeplr(
         data.somm_address,
+        data.eth_address,
         message
       )
 
@@ -71,12 +66,12 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
           ethAddress: data.eth_address,
           signature: signature,
           pubKey: pubKey,
-          data: message, // Now sending the correctly structured message
+          data: message,
         }),
       })
 
       if (!response.ok) {
-        const text = await response.text() // Attempt to read the response body as text
+        const text = await response.text()
         throw new Error(
           `HTTP error! status: ${response.status}. Body: ${text}`
         )
@@ -84,22 +79,17 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
       const responseData = await response.json()
       console.log("Response from server:", responseData)
-      toast({
-        title: "Success",
-        description: "Your message has been successfully saved.",
+      addToast({
+        heading: "Success",
         status: "success",
-        duration: 5000,
-        isClosable: true,
+        body: "Your message has been successfully saved.",
       })
     } catch (error) {
       console.error("Error in form submission: ", error)
-      toast({
-        title: "Error",
-        description:
-          "There was an error submitting your form. Please try again.",
+      addToast({
+        heading: "Error",
         status: "error",
-        duration: 5000,
-        isClosable: true,
+        body: "There was an error submitting your form. Please try again.",
       })
     }
   }
