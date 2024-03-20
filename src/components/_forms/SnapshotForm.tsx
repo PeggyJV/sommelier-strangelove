@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
 import { BaseButton } from "components/_buttons/BaseButton"
-import { Button, Stack, useToast } from "@chakra-ui/react"
+import { Stack, useToast } from "@chakra-ui/react"
 import { signWithKeplr } from "utils/keplr"
 import { InputEthereumAddress } from "components/_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "components/_cards/SnapshotCard/InputSommelierAddress"
@@ -52,15 +52,46 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       return
     }
     try {
-      // Use the ethAddress and sommAddress directly from the form's watched values
       const { signature, message } = await signWithKeplr(
         data.somm_address,
         ethAddress,
         sommAddress
       )
-      console.log("Signature obtained:", signature)
-      console.log("Signed message:", message)
-      // Handle the submission of form data and the signature to your backend here
+
+      const response = await fetch("/api/saveSignedMessage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sommAddress: data.somm_address,
+          ethAddress: ethAddress,
+          signature: signature,
+        }),
+      })
+
+      const responseData = await response.json()
+      if (response.ok) {
+        console.log("Response from server:", responseData)
+        // Show success message to user
+        toast({
+          title: "Success",
+          description: "Your message has been successfully saved.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        })
+      } else {
+        // Handle errors or show an error message to the user
+        toast({
+          title: "Error",
+          description:
+            "There was an error saving your message. Please try again.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        })
+      }
     } catch (error) {
       console.error("Error in form submission: ", error)
       toast({
@@ -78,8 +109,8 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <InputEthereumAddress disabled />
-          <InputSommelierAddress disabled />
+          <InputEthereumAddress disabled={true} />
+          <InputSommelierAddress disabled={true} />
           <BaseButton
             height="69px"
             fontSize="21px"
