@@ -1,3 +1,4 @@
+//src/utils/keplr.ts
 export const signWithKeplr = async (
   sommelierAddress: string,
   ethAddress: string,
@@ -42,6 +43,10 @@ export const signWithKeplr = async (
     message
   )
 
-  // Return the signature and the original message
-  return { signature, message }
+  // Assuming the public key is available in the account information
+  // You might need to convert the public key to the desired format, e.g., base64
+  const pubKey = Buffer.from(accounts[0].pubkey).toString("base64")
+
+  // Return the signature, original message, and public key
+  return { signature, message, pubKey }
 }
