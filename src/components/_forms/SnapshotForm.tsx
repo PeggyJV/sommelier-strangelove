@@ -2,11 +2,11 @@
 import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
-import { BaseButton } from "../_buttons/BaseButton" 
+import { BaseButton } from "../_buttons/BaseButton"
 import { Stack, useToast } from "@chakra-ui/react"
-import { signWithKeplr } from "../../utils/keplr" 
-import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress" 
-import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress" 
+import { signWithKeplr } from "../../utils/keplr"
+import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
+import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
 
 interface SnapshotFormProps {
   wrongNetwork: boolean
@@ -54,11 +54,12 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     }
 
     try {
-      const { signature, pubKey } = await signWithKeplr(
+      const { signature, pubKey, message } = await signWithKeplr(
         data.somm_address,
         data.eth_address,
         data.somm_address
       )
+
       const response = await fetch("/api/saveSignedMessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -66,8 +67,8 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
           sommAddress: data.somm_address,
           ethAddress: data.eth_address,
           signature: signature,
-          pubKey: pubKey, 
-          data: "your_data_here", // Adjust accordingly
+          pubKey: pubKey,
+          data: message,
         }),
       })
 
