@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
-import { BaseButton } from "../_buttons/BaseButton" // Adjust the import path as necessary
+import { BaseButton } from "../_buttons/BaseButton" // Adjust the path as necessary
 import { Stack, useToast } from "@chakra-ui/react"
-import { signWithKeplr } from "../../utils/keplr" // Adjust the import path as necessary
-import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress" // Adjust the import path as necessary
-import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress" // Adjust the import path as necessary
+import { signWithKeplr } from "../../utils/keplr" // Adjust the path as necessary
+import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress" // Adjust the path as necessary
+import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress" // Adjust the path as necessary
 
 interface SnapshotFormProps {
   wrongNetwork: boolean
@@ -22,9 +22,9 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
   const methods = useForm<SnapshotFormValues>()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
   const toast = useToast()
-  const { watch } = methods
-  const ethAddress = watch("eth_address")
-  const sommAddress = watch("somm_address")
+  // Correct use of watch
+  const ethAddress = methods.watch("eth_address")
+  const sommAddress = methods.watch("somm_address")
   const isFormFilled = ethAddress && sommAddress
 
   useEffect(() => {
@@ -51,6 +51,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       })
       return
     }
+
     try {
       const { signature } = await signWithKeplr(
         data.somm_address,
@@ -60,21 +61,21 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
       const response = await fetch("/api/saveSignedMessage", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sommAddress: data.somm_address,
           ethAddress: data.eth_address,
           signature: signature,
-          // Ensure these values are correctly populated
-          pubKey: "your_pubKey_here", // You need to adjust how you get the pubKey
-          data: "your_data_here", // And the data to be signed
+          pubKey: "your_pubKey_here", // Adjust accordingly
+          data: "your_data_here", // Adjust accordingly
         }),
       })
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        const text = await response.text() // Attempt to read the response body as text
+        throw new Error(
+          `HTTP error! status: ${response.status}. Body: ${text}`
+        )
       }
 
       const responseData = await response.json()

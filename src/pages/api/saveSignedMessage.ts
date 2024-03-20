@@ -1,8 +1,6 @@
-// In saveSignedMessage.ts
 import { NextApiRequest, NextApiResponse } from "next"
-import { kv } from "@vercel/kv"
+import { kv } from "@vercel/kv" // Make sure you have configured "@vercel/kv" properly
 import { verifyADR36Amino } from "@keplr-wallet/cosmos/build/adr-36/amino"
-// Ensure the relative path is correct based on your project structure
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,7 +9,7 @@ export default async function handler(
   if (req.method !== "POST") {
     // If not POST, inform the client which methods are allowed
     res.setHeader("Allow", ["POST"])
-    return res.status(405).end("Method Not Allowed")
+    return res.status(405).json({ message: "Method Not Allowed" })
   }
 
   try {
@@ -35,14 +33,14 @@ export default async function handler(
     const decodedPubKey = Buffer.from(pubKey, "base64")
     const decodedSignature = Buffer.from(signature, "base64")
 
-    // Assuming verifyADR36Amino is async; adjust accordingly if it's not
+    // Verify the signature
     const isValidSignature = await verifyADR36Amino(
-      "somm", // Bech32 prefix for your chain
+      "somm", // Adjust the Bech32 prefix for your chain accordingly
       sommAddress, // Signer address
       data, // The data that was signed
       decodedPubKey, // Public key of the signer
       decodedSignature, // Signature
-      "secp256k1" // Algorithm
+      "secp256k1" // Algorithm, adjust if necessary
     )
 
     if (!isValidSignature) {
@@ -57,13 +55,11 @@ export default async function handler(
       .status(200)
       .json({ message: "Data saved successfully." })
   } catch (error: unknown) {
-    // Specify that error is of type unknown
-    // Check if error is an instance of Error and has a message property
     const errorMessage =
       error instanceof Error
         ? error.message
         : "An unknown error occurred"
-
+    console.error("Error handling saveSignedMessage:", errorMessage)
     return res.status(500).json({
       message: "Internal server error",
       error: errorMessage,
