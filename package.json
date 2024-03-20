@@ -32,6 +32,7 @@
     "@emotion/react": "11.8.1",
     "@emotion/styled": "11.8.1",
     "@gnosis.pm/safe-apps-wagmi": "^2.1.0",
+    "@keplr-wallet/cosmos": "^0.12.74",
     "@keplr-wallet/types": "^0.11.3",
     "@next/bundle-analyzer": "^12.1.0",
     "@nivo/bar": "^0.79.1",
