@@ -1,12 +1,18 @@
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount, useNetwork } from "wagmi"
 import { BaseButton } from "../_buttons/BaseButton"
-import { HStack, Heading, Stack, VStack } from "@chakra-ui/react"
+import {
+  HStack,
+  Heading,
+  Stack,
+  VStack,
+  textDecoration,
+  Text,
+} from "@chakra-ui/react"
 import { signWithKeplr } from "../../utils/keplr"
 import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
 import { useBrandedToast } from "hooks/chakra"
-import { chainSlugMap } from "data/chainConfig"
 
 interface SnapshotFormProps {
   wrongNetwork: boolean
@@ -32,7 +38,11 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       addToast({
         heading: "Submission Error",
         status: "error",
-        body: "Please check your wallet connection and network.",
+        body: (
+          <Text>
+            Please check your wallet connection and network.
+          </Text>
+        ),
         closeHandler: close,
         duration: null,
       })
@@ -76,7 +86,9 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       addToast({
         heading: "Success",
         status: "success",
-        body: "Your message has been successfully saved.",
+        body: (
+          <Text> "Your addresses has been successfully signed."</Text>
+        ),
         closeHandler: close,
         duration: null,
       })
@@ -85,7 +97,12 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       addToast({
         heading: "Error",
         status: "error",
-        body: "There was an error submitting your form. Please try again.",
+        body: (
+          <Text>
+            There was an error submitting your form. Please try
+            again.
+          </Text>
+        ),
         closeHandler: close,
         duration: null,
       })
