@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, FC } from "react";
 import {
   Stack,
   Input,
@@ -7,6 +7,7 @@ import {
   FormErrorMessage,
   Image,
   Box,
+  InputProps,
 } from "@chakra-ui/react"
 import { useFormContext } from "react-hook-form"
 import { Link } from "components/Link"
@@ -14,8 +15,11 @@ import { ExternalLinkIcon, InformationIcon } from "components/_icons"
 import { getKeplr, mainnetChains, useAccount } from "graz"
 import { validateSommelierAddress } from "utils/validateSommelierAddress"
 import { useBrandedToast } from "hooks/chakra"
+interface InputSommelierAddressProps extends InputProps {
+  disabled?: boolean; // Make 'disabled' an optional boolean prop
+}
 
-export const InputSommelierAddress = ({ disabled, ...rest }) => {
+export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled, ...rest }) => {
   const { addToast, closeAll } = useBrandedToast()
   const { register, setValue, getFieldState } = useFormContext()
   const isError = !!getFieldState("somm_address").error
