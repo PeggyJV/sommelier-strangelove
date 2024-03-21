@@ -42,7 +42,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       return
     }
 
-    // Check if the addresses are already registered
     try {
       const checkResponse = await fetch("/api/checkRegistration", {
         method: "POST",
@@ -55,29 +54,28 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
       const checkData = await checkResponse.json()
 
-      // Notify user about existing registration but allow to continue
       if (checkResponse.status === 409) {
         addToast({
           heading: "Already Registered",
           status: "warning",
           body: (
-            <Text>
+            <Text wordBreak="break-word">
               {checkData.message}. You can still proceed to sign and
               update your registration.
             </Text>
           ),
           closeHandler: close,
           duration: null,
+          containerStyle: {
+            maxWidth: "400px",
+          },
         })
-        // Do not return; allow the process to continue
       } else if (!checkResponse.ok) {
-        // Handle other server errors
         throw new Error(
           checkData.message || "Failed to check registration"
         )
       }
 
-      // Continue with the signing process
       const {
         signature,
         pubKey,
