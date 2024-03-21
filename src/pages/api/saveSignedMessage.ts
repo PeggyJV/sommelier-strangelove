@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { kv } from "@vercel/kv" 
+import { kv } from "@vercel/kv"
 import { verifyADR36Amino } from "@keplr-wallet/cosmos"
 
 export default async function handler(
@@ -15,7 +15,19 @@ export default async function handler(
     const { sommAddress, ethAddress, signature, pubKey, data } =
       req.body
 
-    // Ensure all required fields are present, including the 'data' field now
+    // Check if the user is already registered
+    const existingSommRegistration = await kv.get(
+      `somm:${sommAddress}`
+    )
+    const existingEthRegistration = await kv.get(`eth:${ethAddress}`)
+
+    if (existingSommRegistration || existingEthRegistration) {
+      return res
+        .status(409)
+        .json({ message: "Address already registered." })
+    }
+
+    // Ensure all required fields are present
     if (
       !sommAddress ||
       !ethAddress ||
@@ -52,10 +64,10 @@ export default async function handler(
       return res.status(401).json({ message: "Invalid signature." })
     }
 
-    // Save data after successful validation, including the 'data' field
+    // Save data after successful validation
     await kv.set(
       `somm:${sommAddress}`,
-      JSON.stringify({ ethAddress, signature, data }) // 'data' is included here
+      JSON.stringify({ ethAddress, signature, data })
     )
     await kv.set(`eth:${ethAddress}`, sommAddress)
 

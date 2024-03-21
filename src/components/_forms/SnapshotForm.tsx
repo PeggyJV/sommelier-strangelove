@@ -1,14 +1,8 @@
+import React from "react"
 import { useForm, FormProvider } from "react-hook-form"
-import { useAccount as useEthereumAccount, useNetwork } from "wagmi"
+import { useAccount as useEthereumAccount } from "wagmi"
 import { BaseButton } from "../_buttons/BaseButton"
-import {
-  HStack,
-  Heading,
-  Stack,
-  VStack,
-  textDecoration,
-  Text,
-} from "@chakra-ui/react"
+import { HStack, Heading, Stack, Text } from "@chakra-ui/react"
 import { signWithKeplr } from "../../utils/keplr"
 import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
@@ -40,7 +34,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         status: "error",
         body: (
           <Text>
-            {" "}
             Please check your wallet connection and network.
           </Text>
         ),
@@ -54,7 +47,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       const {
         signature,
         pubKey,
-        messageContent,
         data: encodedData,
       } = await signWithKeplr(
         data.somm_address,
@@ -76,6 +68,9 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
       if (!response.ok) {
         const text = await response.text()
+        if (response.status === 409) {
+          throw new Error("Address already registered.")
+        }
         throw new Error(
           `HTTP error! status: ${response.status}. Body: ${text}`
         )
@@ -93,15 +88,14 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         duration: null,
       })
     } catch (error) {
-      console.error("Error in form submission: ", error)
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "There was an error submitting your form. Please try again."
       addToast({
         heading: "Error",
         status: "error",
-        body: (
-          <Text>
-            There was an error submitting your form. Please try again.
-          </Text>
-        ),
+        body: <Text>{errorMessage}</Text>,
         closeHandler: close,
         duration: null,
       })
