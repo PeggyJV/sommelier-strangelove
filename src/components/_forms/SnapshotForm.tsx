@@ -1,14 +1,7 @@
 import { useForm, FormProvider } from "react-hook-form"
-import { useAccount as useEthereumAccount, useNetwork } from "wagmi"
+import { useAccount as useEthereumAccount } from "wagmi"
 import { BaseButton } from "../_buttons/BaseButton"
-import {
-  HStack,
-  Heading,
-  Stack,
-  VStack,
-  textDecoration,
-  Text,
-} from "@chakra-ui/react"
+import { Stack, Text } from "@chakra-ui/react"
 import { signWithKeplr } from "../../utils/keplr"
 import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
@@ -40,7 +33,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         status: "error",
         body: (
           <Text>
-            {" "}
             Please check your wallet connection and network.
           </Text>
         ),
@@ -50,11 +42,45 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       return
     }
 
+    // Check if the addresses are already registered
     try {
+      const checkResponse = await fetch("/api/checkRegistration", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ethAddress: data.eth_address,
+          sommAddress: data.somm_address,
+        }),
+      })
+
+      const checkData = await checkResponse.json()
+
+      // Notify user about existing registration but allow to continue
+      if (checkResponse.status === 409) {
+        addToast({
+          heading: "Already Registered",
+          status: "warning",
+          body: (
+            <Text>
+              {checkData.message}. You can still proceed to sign and
+              update your registration.
+            </Text>
+          ),
+          closeHandler: close,
+          duration: null,
+        })
+        // Do not return; allow the process to continue
+      } else if (!checkResponse.ok) {
+        // Handle other server errors
+        throw new Error(
+          checkData.message || "Failed to check registration"
+        )
+      }
+
+      // Continue with the signing process
       const {
         signature,
         pubKey,
-        messageContent,
         data: encodedData,
       } = await signWithKeplr(
         data.somm_address,
@@ -87,7 +113,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         heading: "Success",
         status: "success",
         body: (
-          <Text>Your addresses has been successfully signed.</Text>
+          <Text>Your addresses have been successfully signed.</Text>
         ),
         closeHandler: close,
         duration: null,
@@ -95,11 +121,12 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     } catch (error) {
       console.error("Error in form submission: ", error)
       addToast({
-        heading: "Error",
+        heading: "Submission Error",
         status: "error",
         body: (
           <Text>
-            There was an error submitting your form. Please try again.
+            There was an error during the submission process. Please
+            try again.
           </Text>
         ),
         closeHandler: close,
