@@ -20,7 +20,7 @@ export const SnapshotCard: React.FC = () => {
   const { isConnected } = useAccount()
   const { chain: wagmiChain } = useNetwork()
   const { switchNetworkAsync } = useSwitchNetwork()
-  const { addToast, close } = useBrandedToast()
+  const { addToast, update, close, closeAll } = useBrandedToast()
   const methods = useForm<SnapshotFormValues>({
     defaultValues: {
       eth_address: "",
@@ -88,7 +88,7 @@ export const SnapshotCard: React.FC = () => {
                       addToast({
                         heading: "Change network error",
                         status: "error",
-                        body: <Text>{error?.message}</Text>,
+                        body: <Text>{ error?.message}</Text>,
                         closeHandler: close,
                         duration: null,
                       })

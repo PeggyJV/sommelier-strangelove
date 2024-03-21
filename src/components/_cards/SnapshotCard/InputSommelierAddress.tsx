@@ -7,21 +7,20 @@ import {
   FormErrorMessage,
   Image,
   Box,
-  useToast, // Make sure to import useToast
 } from "@chakra-ui/react"
 import { useFormContext } from "react-hook-form"
-import { Link } from "components/Link" // Assuming this is a correct path
-import { ExternalLinkIcon, InformationIcon } from "components/_icons" // Assuming these are correct paths
-import { getKeplr, mainnetChains, useAccount } from "graz" // Assuming these are correct paths
-import { validateSommelierAddress } from "utils/validateSommelierAddress" // Assuming this is a correct path
+import { Link } from "components/Link"
+import { ExternalLinkIcon, InformationIcon } from "components/_icons"
+import { getKeplr, mainnetChains, useAccount } from "graz"
+import { validateSommelierAddress } from "utils/validateSommelierAddress"
 import { useBrandedToast } from "hooks/chakra"
 
 export const InputSommelierAddress = ({ disabled, ...rest }) => {
   const { addToast, closeAll } = useBrandedToast()
-  const { register, setValue, getFieldState } = useFormContext() // Assuming you have a form context
+  const { register, setValue, getFieldState } = useFormContext()
   const isError = !!getFieldState("somm_address").error
   const [isActive, setActive] = useState(false)
-  const { isConnected } = useAccount() // Assuming useAccount provides a boolean isConnected
+  const { isConnected } = useAccount()
 
   const onAutofillClick = async () => {
     try {
@@ -41,14 +40,13 @@ export const InputSommelierAddress = ({ disabled, ...rest }) => {
           <Text>
             {" "}
             <>
-              <Text>Please install Keplr extension</Text>
               <Link
                 display="flex"
                 alignItems="center"
                 href="https://www.keplr.app/download"
                 isExternal
               >
-                <Text as="span">Install Keplr</Text>
+                <Text as="span">Please install Keplr extension</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
             </>

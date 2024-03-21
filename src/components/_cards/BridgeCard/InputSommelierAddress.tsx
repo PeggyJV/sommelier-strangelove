@@ -42,30 +42,25 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
       )
     } catch (e) {
       const error = e as Error
-      if (error.message === "Keplr is not defined") {
-        return addToast({
-          heading: "Import from Keplr",
-          body: (
+
+      return addToast({
+        heading: "Keplr not found",
+        body: (
+          <Text>
+            {" "}
             <>
-              <Text>Keplr not found</Text>
               <Link
                 display="flex"
                 alignItems="center"
                 href="https://www.keplr.app/download"
                 isExternal
               >
-                <Text as="span">Install Keplr</Text>
+                <Text as="span">Please install Keplr extension</Text>
                 <ExternalLinkIcon ml={2} />
               </Link>
             </>
-          ),
-          status: "error",
-          closeHandler: closeAll,
-        })
-      }
-      addToast({
-        heading: "Import from Keplr",
-        body: <Text>{error.message}</Text>,
+          </Text>
+        ),
         status: "error",
         closeHandler: closeAll,
       })
