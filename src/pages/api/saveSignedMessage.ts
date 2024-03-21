@@ -15,19 +15,7 @@ export default async function handler(
     const { sommAddress, ethAddress, signature, pubKey, data } =
       req.body
 
-    // Check if the user is already registered
-    const existingSommRegistration = await kv.get(
-      `somm:${sommAddress}`
-    )
-    const existingEthRegistration = await kv.get(`eth:${ethAddress}`)
-
-    if (existingSommRegistration || existingEthRegistration) {
-      return res
-        .status(409)
-        .json({ message: "Address already registered." })
-    }
-
-    // Ensure all required fields are present
+    // Ensure all required fields are present, including the 'data' field now
     if (
       !sommAddress ||
       !ethAddress ||
@@ -64,10 +52,10 @@ export default async function handler(
       return res.status(401).json({ message: "Invalid signature." })
     }
 
-    // Save data after successful validation
+    // Save data after successful validation, including the 'data' field
     await kv.set(
       `somm:${sommAddress}`,
-      JSON.stringify({ ethAddress, signature, data })
+      JSON.stringify({ ethAddress, signature, data }) // 'data' is included here
     )
     await kv.set(`eth:${ethAddress}`, sommAddress)
 
