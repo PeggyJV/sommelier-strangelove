@@ -1,31 +1,27 @@
+import React, { useState } from "react"
 import {
   Stack,
   Input,
   Text,
   HStack,
-  InputProps,
   FormErrorMessage,
   Image,
   Box,
+  useToast, // Make sure to import useToast
 } from "@chakra-ui/react"
-import { Link } from "components/Link"
-import { ExternalLinkIcon, InformationIcon } from "components/_icons"
-import { getKeplr, mainnetChains, useAccount } from "graz"
-import { useBrandedToast } from "hooks/chakra"
-import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { validateSommelierAddress } from "utils/validateSommelierAddress"
-import { SnapshotFormValues } from "."
+import { Link } from "components/Link" // Assuming this is a correct path
+import { ExternalLinkIcon, InformationIcon } from "components/_icons" // Assuming these are correct paths
+import { getKeplr, mainnetChains, useAccount } from "graz" // Assuming these are correct paths
+import { validateSommelierAddress } from "utils/validateSommelierAddress" // Assuming this is a correct path
+import { useBrandedToast } from "hooks/chakra"
 
-export const InputSommelierAddress: React.FC<
-  InputProps & { disabled?: boolean }
-> = ({ disabled, ...rest }) => {
+export const InputSommelierAddress = ({ disabled, ...rest }) => {
   const { addToast, closeAll } = useBrandedToast()
-  const { register, setValue, getValues, getFieldState } =
-    useFormContext<SnapshotFormValues>()
+  const { register, setValue, getFieldState } = useFormContext() // Assuming you have a form context
   const isError = !!getFieldState("somm_address").error
   const [isActive, setActive] = useState(false)
-  const { isConnected } = useAccount()
+  const { isConnected } = useAccount() // Assuming useAccount provides a boolean isConnected
 
   const onAutofillClick = async () => {
     try {
@@ -39,10 +35,27 @@ export const InputSommelierAddress: React.FC<
     } catch (e) {
       const error = e as Error
       addToast({
-        heading: "Import from Keplr",
-        body: <Text>{error.message}</Text>,
+        heading: "Keplr not found",
         status: "error",
-        closeHandler: closeAll,
+        body: (
+          <Text>
+            {" "}
+            <>
+              <Text>Please install Keplr extension</Text>
+              <Link
+                display="flex"
+                alignItems="center"
+                href="https://www.keplr.app/download"
+                isExternal
+              >
+                <Text as="span">Install Keplr</Text>
+                <ExternalLinkIcon ml={2} />
+              </Link>
+            </>
+          </Text>
+        ),
+        closeHandler: close,
+        duration: null,
       })
     }
   }
@@ -86,12 +99,10 @@ export const InputSommelierAddress: React.FC<
           px={4}
           py={6}
           maxH="64px"
-          isDisabled={disabled} 
+          isDisabled={disabled}
           {...register("somm_address", {
             required: "Sommelier address is required",
-            validate: (value) =>
-              validateSommelierAddress(value) ||
-              "This is not a valid Sommelier address",
+            validate: validateSommelierAddress,
           })}
           autoComplete="off"
           autoCorrect="off"
