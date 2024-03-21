@@ -1,4 +1,5 @@
-//Users/henriots/Desktop/sommelier-strangelove/src/pages/api/checkRegistration.tsimport { NextApiRequest, NextApiResponse } from "next"
+// Correct import statement for NextApiRequest and NextApiResponse
+import { NextApiRequest, NextApiResponse } from "next"
 import { kv } from "@vercel/kv"
 
 export default async function handler(
