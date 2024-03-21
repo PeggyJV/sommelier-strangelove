@@ -1,7 +1,7 @@
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
 import { BaseButton } from "../_buttons/BaseButton"
-import { Stack, Text } from "@chakra-ui/react"
+import { Stack, Text, Box } from "@chakra-ui/react" // Notice the Box import here
 import { signWithKeplr } from "../../utils/keplr"
 import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
@@ -59,16 +59,15 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
           heading: "Already Registered",
           status: "warning",
           body: (
-            <Text wordBreak="break-word">
-              {checkData.message}. You can still proceed to sign and
-              update your registration.
-            </Text>
+            <Box maxWidth="90vw" padding="2">
+              <Text wordBreak="break-word">
+                {checkData.message}. You can still proceed to sign and
+                update your registration.
+              </Text>
+            </Box>
           ),
           closeHandler: close,
           duration: null,
-          containerStyle: {
-            maxWidth: "400px",
-          },
         })
       } else if (!checkResponse.ok) {
         throw new Error(
