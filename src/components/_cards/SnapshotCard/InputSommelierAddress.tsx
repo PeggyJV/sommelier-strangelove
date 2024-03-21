@@ -16,7 +16,7 @@ import { getKeplr, mainnetChains, useAccount } from "graz"
 import { validateSommelierAddress } from "utils/validateSommelierAddress"
 import { useBrandedToast } from "hooks/chakra"
 interface InputSommelierAddressProps extends InputProps {
-  disabled?: boolean; // Make 'disabled' an optional boolean prop
+  disabled?: boolean; 
 }
 
 export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled, ...rest }) => {

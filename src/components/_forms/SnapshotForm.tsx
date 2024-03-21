@@ -70,7 +70,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
           ethAddress: data.eth_address,
           signature,
           pubKey,
-          // Update this line to include the encoded data string
           data: encodedData,
         }),
       })
