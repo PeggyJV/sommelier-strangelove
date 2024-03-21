@@ -40,6 +40,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         status: "error",
         body: (
           <Text>
+            {" "}
             Please check your wallet connection and network.
           </Text>
         ),
@@ -87,7 +88,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         heading: "Success",
         status: "success",
         body: (
-          <Text> "Your addresses has been successfully signed."</Text>
+          <Text>Your addresses has been successfully signed.</Text>
         ),
         closeHandler: close,
         duration: null,
@@ -99,8 +100,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
         status: "error",
         body: (
           <Text>
-            There was an error submitting your form. Please try
-            again.
+            There was an error submitting your form. Please try again.
           </Text>
         ),
         closeHandler: close,
