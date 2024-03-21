@@ -1,4 +1,3 @@
-//src/utils/keplr.ts
 export const signWithKeplr = async (
   sommelierAddress: string,
   ethAddress: string,

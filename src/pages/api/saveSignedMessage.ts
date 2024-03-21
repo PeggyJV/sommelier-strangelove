@@ -1,6 +1,5 @@
-//rc/pages/api/saveSignedMessage.ts
 import { NextApiRequest, NextApiResponse } from "next"
-import { kv } from "@vercel/kv" // Ensure @vercel/kv is configured correctly
+import { kv } from "@vercel/kv" 
 import { verifyADR36Amino } from "@keplr-wallet/cosmos"
 
 export default async function handler(
@@ -30,7 +29,6 @@ export default async function handler(
     }
 
     // Reconstruct the message using known valid fields
-    // This may need adjustments based on your client-side logic
     const reconstructedMessage = JSON.stringify({
       ethAddress,
       sommAddress,

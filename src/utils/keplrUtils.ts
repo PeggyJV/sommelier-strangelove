@@ -1,4 +1,3 @@
-//src/utils/keplrUtils.ts
 export const sommelierChainConfig = {
   chainId: "sommelier-3",
   chainName: "Sommelier",
