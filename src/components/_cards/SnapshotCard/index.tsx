@@ -1,11 +1,15 @@
 import React from "react"
-import { VStack, Heading, Text, Link } from "@chakra-ui/react"
-import { ExternalLinkIcon } from "components/_icons"
+import { Heading, HStack, Text, VStack } from "@chakra-ui/react"
+import { InformationIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
-import { useAccount, useNetwork } from "wagmi"
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi"
 import { FormProvider, useForm } from "react-hook-form"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import SnapshotForm from "components/_forms/SnapshotForm"
+import { SecondaryButton } from "components/_buttons/SecondaryButton"
+import { useBrandedToast } from "hooks/chakra"
+import { chainSlugMap } from "data/chainConfig"
+
 export interface SnapshotFormValues {
   eth_address: string
   somm_address: string
@@ -14,17 +18,90 @@ export interface SnapshotFormValues {
 export const SnapshotCard: React.FC = () => {
   const isMounted = useIsMounted()
   const { isConnected } = useAccount()
+  const { chain: wagmiChain } = useNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
+  const { addToast, close } = useBrandedToast()
   const methods = useForm<SnapshotFormValues>({
     defaultValues: {
       eth_address: "",
       somm_address: "",
     },
   })
-  const { chain } = useNetwork()
-  const ethChainId = 1
+
+  const ethChainId = 1 // Ethereum Mainnet ID
+  const isWrongNetwork = !!wagmiChain && wagmiChain.id !== ethChainId
+  const ethChain = chainSlugMap.ETHEREUM
 
   return (
     <VStack spacing={4}>
+      {isMounted && isConnected && isWrongNetwork && (
+        <HStack
+          p={4}
+          mb={12}
+          spacing={4}
+          align="flex-start"
+          backgroundColor="purple.dark"
+          border="2px solid"
+          borderRadius={16}
+          borderColor="purple.base"
+          width="full"
+        >
+          <InformationIcon color="yellow" boxSize={6} />
+          <HStack
+            justifyContent="center"
+            align="flex-start"
+            width="100%"
+          >
+            <VStack align="flex-start" spacing={4}>
+              <Heading size="md" width="100%">
+                <HStack
+                  align="center"
+                  width="100%"
+                  justifyContent="center"
+                >
+                  <Text>Wrong Network</Text>
+                </HStack>
+              </Heading>
+              <Text fontFamily="Haffer" align="center">
+                Your connected wallet is on the {wagmiChain?.name}{" "}
+                network. Please switch to Ethereum Mainnet to use this
+                feature.
+              </Text>
+              <HStack
+                align="center"
+                width="100%"
+                justifyContent="center"
+              >
+                <SecondaryButton
+                  variant="solid"
+                  color="white"
+                  bg="gradient.primary"
+                  borderWidth={2}
+                  borderColor="purple.base"
+                  onClick={async () => {
+                    try {
+                      await switchNetworkAsync?.(ethChain.wagmiId)
+                      // Reload the page to ensure everything is in sync
+                      window.location.reload()
+                    } catch (e) {
+                      const error = e as Error
+                      addToast({
+                        heading: "Change network error",
+                        status: "error",
+                        body: <Text>{error?.message}</Text>,
+                        closeHandler: close,
+                        duration: null,
+                      })
+                    }
+                  }}
+                >
+                  Switch to {ethChain.displayName}
+                </SecondaryButton>
+              </HStack>
+            </VStack>
+          </HStack>
+        </HStack>
+      )}
       <TransparentCard
         maxW="432px"
         w="full"
@@ -43,13 +120,9 @@ export const SnapshotCard: React.FC = () => {
           wallet (Keplr) to participate in airdrops and/or earn other
           rewards.
         </Text>
-        {isMounted && (
-          <FormProvider {...methods}>
-            <SnapshotForm
-              wrongNetwork={!!chain && chain.id !== ethChainId}
-            />
-          </FormProvider>
-        )}
+        <FormProvider {...methods}>
+          <SnapshotForm wrongNetwork={isWrongNetwork} />
+        </FormProvider>
       </TransparentCard>
     </VStack>
   )

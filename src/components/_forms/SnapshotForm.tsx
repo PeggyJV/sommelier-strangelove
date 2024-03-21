@@ -1,12 +1,12 @@
-//src/components/_forms/SnapshotForm.tsx
-import React, { useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
-import { useAccount as useEthereumAccount } from "wagmi"
+import { useAccount as useEthereumAccount, useNetwork } from "wagmi"
 import { BaseButton } from "../_buttons/BaseButton"
-import { Stack, useToast } from "@chakra-ui/react"
+import { HStack, Heading, Stack, VStack } from "@chakra-ui/react"
 import { signWithKeplr } from "../../utils/keplr"
 import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
 import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
+import { useBrandedToast } from "hooks/chakra"
+import { chainSlugMap } from "data/chainConfig"
 
 interface SnapshotFormProps {
   wrongNetwork: boolean
@@ -22,32 +22,19 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 }) => {
   const methods = useForm<SnapshotFormValues>()
   const { isConnected: isEthereumConnected } = useEthereumAccount()
-  const toast = useToast()
   const ethAddress = methods.watch("eth_address")
   const sommAddress = methods.watch("somm_address")
   const isFormFilled = ethAddress && sommAddress
-
-  useEffect(() => {
-    if (wrongNetwork) {
-      toast({
-        title: "Network Error",
-        description: "You're connected to the wrong network.",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      })
-    }
-  }, [wrongNetwork, toast])
+  const { addToast, close } = useBrandedToast()
 
   const onSubmit = async (data: SnapshotFormValues) => {
     if (!isEthereumConnected || wrongNetwork) {
-      toast({
-        title: "Submission Error",
-        description:
-          "Please check your wallet connection and network.",
+      addToast({
+        heading: "Submission Error",
         status: "error",
-        duration: 9000,
-        isClosable: true,
+        body: "Please check your wallet connection and network.",
+        closeHandler: close,
+        duration: null,
       })
       return
     }
@@ -86,22 +73,21 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
       const responseData = await response.json()
       console.log("Response from server:", responseData)
-      toast({
-        title: "Success",
-        description: "Your message has been successfully saved.",
+      addToast({
+        heading: "Success",
         status: "success",
-        duration: 5000,
-        isClosable: true,
+        body: "Your message has been successfully saved.",
+        closeHandler: close,
+        duration: null,
       })
     } catch (error) {
       console.error("Error in form submission: ", error)
-      toast({
-        title: "Error",
-        description:
-          "There was an error submitting your form. Please try again.",
+      addToast({
+        heading: "Error",
         status: "error",
-        duration: 5000,
-        isClosable: true,
+        body: "There was an error submitting your form. Please try again.",
+        closeHandler: close,
+        duration: null,
       })
     }
   }
