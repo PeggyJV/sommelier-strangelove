@@ -23,8 +23,7 @@ import {
   useDepositModalStore,
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useMemo, useState, useEffect } from "react"
-import { InfoBanner } from "components/_banners/InfoBanner"
+import { useMemo, useState } from "react"
 import { ChainFilter } from "components/_filters/ChainFilter"
 import { chainConfig } from "src/data/chainConfig"
 import {
@@ -39,6 +38,7 @@ import {
 } from "components/_filters/MiscFilter"
 import { isEqual } from "lodash"
 import { DeleteCircleIcon } from "components/_icons"
+import { add, isBefore } from "date-fns"
 
 export const PageHome = () => {
   const {
@@ -237,51 +237,64 @@ export const PageHome = () => {
   }
 
   const strategyData = useMemo(() => {
-    return (
-      data?.filter((item) => {
-        // Chain filter
-        const isChainSelected = selectedChainIds.includes(
-          item?.config.chain.id!
-        )
+    const filteredData = data?.filter((item) => {
+      // Chain filter
+      const isChainSelected = selectedChainIds.includes(
+        item?.config.chain.id!
+      )
 
-        // Deposit asset filter
-        const hasSelectedDepositAsset = cellarDataMap[
-          item!.slug
+      // Deposit asset filter
+      const hasSelectedDepositAsset = cellarDataMap[
+        item!.slug
         ].depositTokens.list.some((tokenSymbol) =>
-          selectedDepositAssets.hasOwnProperty(tokenSymbol)
-        )
+        selectedDepositAssets.hasOwnProperty(tokenSymbol)
+      )
 
-        // Deprecated filter
-        const isDeprecated = cellarDataMap[item!.slug].deprecated
-        const deprecatedCondition = showDeprecated
-          ? isDeprecated
-          : !isDeprecated
+      // Deprecated filter
+      const isDeprecated = cellarDataMap[item!.slug].deprecated
+      const deprecatedCondition = showDeprecated
+        ? isDeprecated
+        : !isDeprecated
 
-        // Incentivised filter
-        //    Badge check for custom rewards
-        const hasGreenBadge = cellarDataMap[
-          item!.slug
+      // Incentivised filter
+      //    Badge check for custom rewards
+      const hasGreenBadge = cellarDataMap[
+        item!.slug
         ].config.badges?.some(
-          (badge) => badge.customStrategyHighlightColor === "#00C04B"
-        )
+        (badge) => badge.customStrategyHighlightColor === "#00C04B"
+      )
 
-        //    Staking period check for somm/vesting rewards
-        const hasLiveStakingPeriod =
-          item?.rewardsApy?.value !== undefined &&
-          item?.rewardsApy?.value > 0
+      //    Staking period check for somm/vesting rewards
+      const hasLiveStakingPeriod =
+        item?.rewardsApy?.value !== undefined &&
+        item?.rewardsApy?.value > 0
 
-        const incentivisedCondition = showIncentivised
-          ? hasGreenBadge || hasLiveStakingPeriod
-          : true
+      const incentivisedCondition = showIncentivised
+        ? hasGreenBadge || hasLiveStakingPeriod
+        : true
 
-        return (
-          isChainSelected &&
-          hasSelectedDepositAsset &&
-          deprecatedCondition &&
-          incentivisedCondition
-        )
-      }) || []
-    )
+      return (
+        isChainSelected &&
+        hasSelectedDepositAsset &&
+        deprecatedCondition &&
+        incentivisedCondition
+      )
+    }) || []
+
+    return filteredData.sort((a, b) => {
+      const isANew = isBefore(new Date(), add(new Date(a?.launchDate ?? ''), { weeks: 4 }));
+      const isBNew = isBefore(new Date(), add(new Date(b?.launchDate ?? ''), { weeks: 4 }));
+      if (isANew && isBNew) {
+        return new Date(b?.launchDate ?? '').getTime() - new Date(a?.launchDate ?? '').getTime();
+      } else if (isANew || isBNew) {
+        return isANew ? -1 : 1;
+      }
+
+      if ((a?.rewardsApy || b?.rewardsApy) && !(a?.rewardsApy && b?.rewardsApy)) {
+        return a?.rewardsApy ? -1 : 1;
+      }
+      return parseFloat(b?.tvm?.value ?? '') - parseFloat(a?.tvm?.value ?? '');
+    })
   }, [
     data,
     selectedChainIds,
