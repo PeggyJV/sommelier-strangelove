@@ -24,7 +24,7 @@ export const realYieldEthOpt: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["Uniswap V3"],
+  protocols: ["Uniswap V3", "Aave"],
   strategyAssets: ["WETH", "wstETH", "rETH"],
   performanceSplit: {
     depositors: 80,
