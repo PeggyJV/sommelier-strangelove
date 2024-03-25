@@ -39,6 +39,9 @@ import {
 import { isEqual } from "lodash"
 import { DeleteCircleIcon } from "components/_icons"
 import { add, isBefore } from "date-fns"
+import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
+import { useAccount } from "wagmi"
+import { StrategyData } from "data/actions/types"
 
 export const PageHome = () => {
   const {
@@ -62,6 +65,9 @@ export const PageHome = () => {
   } = useDepositModalStore()
 
   const { timeline } = useHome()
+  let { data: userData } = useUserDataAllStrategies();
+  const { isConnected } = useAccount();
+
   const columns = isDesktop
     ? StrategyDesktopColumn({
         timeline,
@@ -282,25 +288,48 @@ export const PageHome = () => {
     }) || []
 
     return filteredData.sort((a, b) => {
-      const isANew = isBefore(new Date(), add(new Date(a?.launchDate ?? ''), { weeks: 4 }));
-      const isBNew = isBefore(new Date(), add(new Date(b?.launchDate ?? ''), { weeks: 4 }));
+
+      // 1. Priority - strategies that user holds
+      if (isConnected) {
+        const doesUserHoldStrategy = (strategy: StrategyData) => userData?.strategies
+          .some(s => s?.userStrategyData?.strategyData?.slug === strategy?.slug);
+
+        const userHoldsA = doesUserHoldStrategy(a);
+        const userHoldsB = doesUserHoldStrategy(b);
+
+        if ((userHoldsA || userHoldsB) && !(userHoldsA && userHoldsB)) {
+          return userHoldsA ? -1 : 1;
+        }
+        if (userHoldsA && userHoldsB){
+          return 0;
+        }
+      }
+      // 2. Priority - new strategies
+      const isNewStrategy = (strategy: StrategyData) => isBefore(new Date(), add(new Date(strategy?.launchDate ?? ''), { weeks: 4 }));
+      const isANew = isNewStrategy(a);
+      const isBNew = isNewStrategy(b);
       if (isANew && isBNew) {
         return new Date(b?.launchDate ?? '').getTime() - new Date(a?.launchDate ?? '').getTime();
       } else if (isANew || isBNew) {
         return isANew ? -1 : 1;
       }
 
+      // 3. Priority - Somm rewards
       if ((a?.rewardsApy || b?.rewardsApy) && !(a?.rewardsApy && b?.rewardsApy)) {
         return a?.rewardsApy ? -1 : 1;
       }
+
+      // 4. Priority - TVL
       return parseFloat(b?.tvm?.value ?? '') - parseFloat(a?.tvm?.value ?? '');
-    })
+    });
   }, [
     data,
     selectedChainIds,
     selectedDepositAssets,
     showDeprecated,
     showIncentivised,
+    userData,
+    isConnected
   ])
 
   const loading = isFetching || isRefetching || isLoading
