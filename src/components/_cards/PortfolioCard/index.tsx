@@ -54,14 +54,13 @@ import { Rewards } from "./Rewards"
 import { useNetwork } from "wagmi"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { add } from "lodash"
 import { CellarNameKey } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
-  const { address, isConnected } = useAccount()
+  const { address, isConnected: connected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const slug = cellarDataMap[id].slug
@@ -72,6 +71,12 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     depositTokens,
     cellarConfig.chain.id
   ) as Token[]
+
+  // using local state to avoid Next.js errors
+  const [isConnected, setConnected] = useState(false);
+  useEffect(() => {
+    setConnected(connected)
+  }, [connected])
 
   const { lpToken } = useUserBalances(cellarConfig)
   let { data: lpTokenData } = lpToken

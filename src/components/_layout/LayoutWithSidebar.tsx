@@ -2,20 +2,24 @@ import { Box, Container, Flex } from "@chakra-ui/react"
 import Footer from "components/Footer"
 import { Nav } from "components/Nav"
 import { Sidebar } from "components/_sidebar"
-import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
-import { FC, useRef } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
 import { useInView } from "react-intersection-observer"
 
 export const LayoutWithSidebar: FC = ({ children }) => {
-  const { isConnected } = useAccount()
-
-  const { isLoading } = useAllStrategiesData()
+  const { isConnected: connected } = useAccount()
 
   const containerRef = useRef<HTMLDivElement>(null)
   const { ref, inView } = useInView({
     threshold: 0,
   })
+
+  // using local state to avoid Next.js errors
+  const [isConnected, setConnected] = useState(false);
+  useEffect(() => {
+    setConnected(connected)
+  }, [connected])
+
   return (
     <Box display="block">
       <Flex bg="#1A1A23" flexDir="column" position="relative">
