@@ -4,7 +4,6 @@ import { useAccount, useSigner } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useAllStrategiesData } from "./useAllStrategiesData"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
-import { useState, useEffect } from "react"
 import { useNetwork } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { tokenConfig } from "data/tokenConfig"
@@ -14,7 +13,6 @@ export const useUserDataAllStrategies = () => {
   const { address } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategies = useAllStrategiesData()
-  const [error, setError] = useState(null)
 
   const { chain } = useNetwork()
 
@@ -62,6 +60,6 @@ export const useUserDataAllStrategies = () => {
 
   return {
     ...query,
-    isError: Boolean(error) || query.isError,
+    isError: query.isError,
   }
 }

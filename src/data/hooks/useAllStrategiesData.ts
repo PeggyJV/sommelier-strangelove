@@ -40,6 +40,9 @@ export const useAllStrategiesData = () => {
         }
       })
       .catch((error) => setError(error))
+    return () => {
+      setError(null);
+    };
   }, [])
 
   const query = useQuery(
