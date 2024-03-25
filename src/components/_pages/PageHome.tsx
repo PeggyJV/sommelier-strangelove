@@ -24,6 +24,7 @@ import {
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
+import { InfoBanner } from "components/_banners/InfoBanner"
 import { ChainFilter } from "components/_filters/ChainFilter"
 import { chainConfig } from "src/data/chainConfig"
 import {
