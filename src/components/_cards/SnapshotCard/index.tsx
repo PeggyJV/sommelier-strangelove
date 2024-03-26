@@ -115,10 +115,24 @@ export const SnapshotCard: React.FC = () => {
         <Heading as="h4" fontSize={24} mb="44px">
           Snapshot
         </Heading>
-        <Text fontSize="md" mb="41px">
-          Connect your Sommelier vaults wallet and your SOMM staking
-          wallet (Keplr) to participate in airdrops and/or earn other
-          rewards.
+        <Text fontSize="md" mb="4">
+          To qualify for airdrops and rewards, please:
+        </Text>
+        <Text fontSize="md" mb="4">
+          1.{" "}
+          <Text as="span" fontWeight="bold">
+            Link Wallets:
+          </Text>{" "}
+          Connect your Ethereum address and any wallets (e.g., Keplr)
+          holding SOMM staking tokens.
+        </Text>
+        <Text fontSize="md" mb="4">
+          2.{" "}
+          <Text as="span" fontWeight="bold">
+            Meet Criteria:
+          </Text>{" "}
+          Ensure your wallet actively stakes SOMM tokens and your
+          Ethereum address has investments in Sommelier strategies.
         </Text>
         <FormProvider {...methods}>
           <SnapshotForm wrongNetwork={isWrongNetwork} />

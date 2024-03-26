@@ -1,64 +1,84 @@
-import React from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import { useAccount as useEthereumAccount } from "wagmi";
-import { BaseButton } from "../_buttons/BaseButton";
-import ConnectButton from "../_buttons/ConnectButton"; 
-import { Stack, Text, Box } from "@chakra-ui/react"; 
-import { signWithKeplr } from "../../utils/keplr";
-import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress";
-import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress";
-import { useBrandedToast } from "../../hooks/chakra"; // Adjust the import path as necessary
-import {
-  useConnect as useGrazConnect,
-  useAccount as useGrazAccount,
-} from "graz";
+import React, { useState, useEffect } from "react"
+import { useForm, FormProvider } from "react-hook-form"
+import { useAccount as useEthereumAccount } from "wagmi"
+import { BaseButton } from "../_buttons/BaseButton"
+import ConnectButton from "components/_buttons/ConnectButton"
+import { Stack, Text, Box } from "@chakra-ui/react"
+import { signWithKeplr } from "../../utils/keplr"
+import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
+import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
+import { useBrandedToast } from "hooks/chakra"
 
 interface SnapshotFormProps {
-  wrongNetwork: boolean;
+  wrongNetwork: boolean
 }
 
 interface SnapshotFormValues {
-  eth_address: string;
-  somm_address: string;
+  eth_address: string
+  somm_address: string
 }
 
-const SnapshotForm: React.FC<SnapshotFormProps> = ({ wrongNetwork }) => {
-  const methods = useForm<SnapshotFormValues>();
-  const { isConnected: isEthereumConnected } = useEthereumAccount();
-  const ethAddress = methods.watch("eth_address");
-  const sommAddress = methods.watch("somm_address");
-  const isFormFilled = ethAddress && sommAddress;
-  const { addToast, close } = useBrandedToast();
-  const { connectAsync } = useGrazConnect();
-  const { isConnected: isGrazConnected } = useGrazAccount();
+const SnapshotForm: React.FC<SnapshotFormProps> = ({
+  wrongNetwork,
+}) => {
+  const methods = useForm<SnapshotFormValues>()
+  const { isConnected: isEthereumConnected } = useEthereumAccount()
+  const ethAddress = methods.watch("eth_address")
+  const sommAddress = methods.watch("somm_address")
+  const isFormFilled = ethAddress && sommAddress
+  const { addToast, close } = useBrandedToast()
 
-  const handleConnectKeplr = async () => {
-    try {
-      await connectAsync();
-    } catch (e) {
-      const error = e as Error;
-      if (error.message === "Keplr is not defined") {
-        addToast({
-          heading: "Connect Keplr Wallet",
-          body: (
-            <>
-              <Text>Keplr not found.</Text>
-              <Text as="span">Please install the Keplr extension.</Text>
-            </>
-          ),
-          status: "error",
-          closeHandler: close,
-        });
-      } else {
-        addToast({
-          heading: "Connect Keplr Wallet",
-          body: <Text>{error.message}</Text>,
-          status: "error",
-          closeHandler: close,
-        });
+  const [registrationMessage, setRegistrationMessage] = useState("")
+  const [stakedSommTokens, setStakedSommTokens] = useState<
+    number | null
+  >(null)
+
+  useEffect(() => {
+    const checkRegistration = async () => {
+      if (!isEthereumConnected || wrongNetwork) return
+
+      try {
+        const checkResponse = await fetch("/api/checkRegistration", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ethAddress: ethAddress,
+            sommAddress: sommAddress,
+          }),
+        })
+
+        const checkData = await checkResponse.json()
+
+        if (checkResponse.status === 409) {
+          setRegistrationMessage(checkData.message)
+        } else if (!checkResponse.ok) {
+          throw new Error(
+            checkData.message || "Failed to check registration"
+          )
+        }
+      } catch (error) {
+        console.error("Error checking registration: ", error)
       }
     }
-  };
+
+    checkRegistration()
+
+    // Fetch staked SOMM tokens
+    const fetchStakedSommTokens = async () => {
+      try {
+        // Assuming there's a function in utils/keplr to fetch staked tokens
+        const stakedTokens = await fetchStakedTokensFromKeplr()
+
+        setStakedSommTokens(stakedTokens)
+      } catch (error) {
+        console.error("Error fetching staked SOMM tokens: ", error)
+      }
+    }
+
+    if (isEthereumConnected && !wrongNetwork) {
+      fetchStakedSommTokens()
+    }
+  }, [isEthereumConnected, wrongNetwork, ethAddress, sommAddress])
 
   if (!isEthereumConnected || wrongNetwork) {
     return (
@@ -72,24 +92,8 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({ wrongNetwork }) => {
           Connect Ethereum Wallet
         </ConnectButton>
       </Stack>
-    );
+    )
   }
-
-  // Additional check for Keplr wallet connection
-  if (!isGrazConnected || wrongNetwork) {
-    return (
-      <Stack spacing={4} align="center">
-        <BaseButton
-          height="69px"
-          fontSize="21px"
-          onClick={handleConnectKeplr}
-        >
-          Connect Keplr Wallet
-        </BaseButton>
-      </Stack>
-    );
-  }
-
 
   const onSubmit = async (data: SnapshotFormValues) => {
     if (!isEthereumConnected || wrongNetwork) {
@@ -200,8 +204,15 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({ wrongNetwork }) => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Stack spacing={4}>
+          {registrationMessage && (
+            <Text color="white">{registrationMessage}</Text>
+          )}
           <InputEthereumAddress disabled={true} />
           <InputSommelierAddress disabled={true} />
+          <Text color="white">
+            {stakedSommTokens !== null &&
+              `Staked SOMM tokens: ${stakedSommTokens}`}
+          </Text>
           <BaseButton
             height="69px"
             fontSize="21px"
@@ -213,6 +224,9 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({ wrongNetwork }) => {
           >
             Sign
           </BaseButton>
+          <Text color="white">
+            Re-link your wallets with new wallets if you like.
+          </Text>
         </Stack>
       </form>
     </FormProvider>
