@@ -19,10 +19,7 @@ export const getAllStrategiesData = async ({
   const data = await Promise.all(
     Object.entries(allContracts)?.map(async ([key, contracts]) => {
       const result = await reactQueryClient.fetchQuery(
-        [
-          "USE_STRATEGY_DATA",
-          { provider: true, address: key.split("-")[0] },
-        ],
+        ["USE_STRATEGY_DATA", { provider: true, address: key }],
         async () => {
           // Get the contract's chain
           let chain = ""
