@@ -1,6 +1,7 @@
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
 import { BaseButton } from "../_buttons/BaseButton"
+import ConnectButton from "components/_buttons/ConnectButton"
 import { Stack, Text, Box } from "@chakra-ui/react" // Notice the Box import here
 import { signWithKeplr } from "../../utils/keplr"
 import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
@@ -26,6 +27,23 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
   const isFormFilled = ethAddress && sommAddress
   const { addToast, close } = useBrandedToast()
 
+  // // Correctly placed conditional rendering logic
+  if (!isEthereumConnected || wrongNetwork) {
+    return (
+      <Stack spacing={4} align="center">
+    <ConnectButton
+      overrideChainId={"ethereum"}
+      unstyled
+      height="69px"
+      fontSize="21px"
+    >
+      Connect Ethereum Wallet
+    </ConnectButton>
+      </Stack>
+    )
+  }
+
+
   const onSubmit = async (data: SnapshotFormValues) => {
     if (!isEthereumConnected || wrongNetwork) {
       addToast({
@@ -41,7 +59,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
       })
       return
     }
-
     try {
       const checkResponse = await fetch("/api/checkRegistration", {
         method: "POST",
