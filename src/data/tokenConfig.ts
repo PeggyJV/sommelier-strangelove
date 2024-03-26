@@ -268,6 +268,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
+    src: "/assets/icons/ezeth.png",
+    alt: "ezETH logo",
+    symbol: "ezETH",
+    address: "0xbf5495efe5db9ce00f80364c8b423567e58d2110",
+    coinGeckoId: "renzo-restaked-eth",
+    decimals: 18,
+    chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
     src: "/assets/icons/comp.png",
     alt: "COMP logo",
     symbol: "COMP",

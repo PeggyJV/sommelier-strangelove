@@ -885,6 +885,37 @@ export const strategyPageContentData = {
     },
     howItWorks: ``,
   },
+  [config.CONTRACT.TURBO_EZETH.SLUG]: {
+    name: "Turbo ezETH",
+    provider: "Seven Seas",
+    providerUrl: "https://sevenseas.capital/",
+    description: `Your gateway to EigenLayer liquid restaking and Renzo's DeFi ecosystem.`,
+    ticker: (
+      <>
+        {}
+        <Image
+          alt="turbo ezeth icon"
+          src="/assets/icons/turbo-ezeth.png"
+          boxSize={8}
+        />
+        <Text>TurboEZETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "ezETH"],
+    strategyHighlights: {
+      card: [
+        `Accepts WETH and ezETH deposits`,
+        `Leverage loop ezETH for more EigenLayer and Renzo points (subject to borrow capacity on Morpho Blue).`,
+        `Dynamically liquidity provision across multiple DEXs.`,
+        `Fully automated with built-in auto compounding.`,
+      ],
+      description: `Your gateway to EigenLayer liquid restaking and Renzo's DeFi ecosystem.
+      <br/><br/>
+      Note that Turbo ezETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+`,
+    },
+    howItWorks: ``,
+  },
   [config.CONTRACT.FRAXIMAL.SLUG]: {
     name: "Fraximal",
     provider: "Seven Seas",

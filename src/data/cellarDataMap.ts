@@ -36,42 +36,44 @@ import {
   realYieldUsdArb,
   turborsETH,
   realYieldEthOpt,
+  turboezETH,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
 cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
+  [config.CONTRACT.TURBO_EZETH.SLUG]: turboezETH,
   [config.CONTRACT.TURBO_RSETH.SLUG]: turborsETH,
   [config.CONTRACT.REAL_YIELD_ETH_OPT.SLUG]: realYieldEthOpt,
   [config.CONTRACT.REAL_YIELD_USD_ARB.SLUG]: realYieldUsdArb,
   [config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG]: realYieldEthArb,
-  [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
-  [config.CONTRACT.TURBO_ETHX.SLUG]: turboETHx,
-  [config.CONTRACT.TURBO_DIVETH.SLUG]: turbodivETH,
-  [config.CONTRACT.MORPHO_ETH.SLUG]: morphoETH,
-  [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
   [config.CONTRACT.REAL_YIELD_ETH.SLUG]: realYieldEth,
+  [config.CONTRACT.TURBO_EETHV2.SLUG]: turboeETHV2,
   [config.CONTRACT.TURBO_STETH.SLUG]: turboSTETH,
   [config.CONTRACT.REAL_YIELD_BTC.SLUG]: realYieldBTC,
   [config.CONTRACT.TURBO_STETH_STETH_DEPOSIT.SLUG]:
     turboSTETHstETHDeposit,
-  [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
   [config.CONTRACT.REAL_YIELD_USD.SLUG]: realYieldUsd,
+  [config.CONTRACT.MORPHO_ETH.SLUG]: morphoETH,
+  [config.CONTRACT.TURBO_SWETH.SLUG]: turboSWETH,
   [config.CONTRACT.FRAXIMAL.SLUG]: fraximal,
+  [config.CONTRACT.TURBO_DIVETH.SLUG]: turbodivETH,
+  [config.CONTRACT.TURBO_EETH.SLUG]: turboeETH,
   [config.CONTRACT.TURBO_GHO.SLUG]: turboGHO,
-  [config.CONTRACT.REAL_YIELD_LINK.SLUG]: realYieldLink,
   [config.CONTRACT.TURBO_SOMM.SLUG]: turboSOMM,
+  [config.CONTRACT.REAL_YIELD_LINK.SLUG]: realYieldLink,
   [config.CONTRACT.ETH_TREND_GROWTH.SLUG]: ethTrendGrowth,
+  [config.CONTRACT.TURBO_ETHX.SLUG]: turboETHx,
+  [config.CONTRACT.STEADY_UNI.SLUG]: steadyUni,
+  [config.CONTRACT.REAL_YIELD_UNI.SLUG]: realYieldUNI,
   [config.CONTRACT.DEFI_STARS.SLUG]: defiStars,
   [config.CONTRACT.REAL_YIELD_ENS.SLUG]: realYieldENS,
-  [config.CONTRACT.REAL_YIELD_UNI.SLUG]: realYieldUNI,
   [config.CONTRACT.REAL_YIELD_SNX.SLUG]: realYieldSNX,
   [config.CONTRACT.REAL_YIELD_1Inch.SLUG]: realYield1Inch,
   [config.CONTRACT.ETH_BTC_TREND_CELLAR.SLUG]: ethBtcTrend,
   [config.CONTRACT.ETH_BTC_MOMENTUM_CELLAR.SLUG]: ethBtcMomentum,
   [config.CONTRACT.AAVE_V2_STABLE_CELLAR.SLUG]: aaveStable,
-  [config.CONTRACT.STEADY_UNI.SLUG]: steadyUni,
   [config.CONTRACT.STEADY_MATIC.SLUG]: steadyMatic,
   [config.CONTRACT.STEADY_ETH.SLUG]: steadyEth,
   [config.CONTRACT.STEADY_BTC.SLUG]: steadyBtc,
@@ -83,6 +85,7 @@ let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
   [config.CONTRACT.REAL_YIELD_ETH_OPT.ADDRESS.toLowerCase() +
   "-optimism"]: realYieldEthOpt,
+  [config.CONTRACT.TURBO_EZETH.ADDRESS.toLowerCase()]: turboezETH,
   [config.CONTRACT.TURBO_RSETH.ADDRESS.toLowerCase()]: turborsETH,
   [config.CONTRACT.REAL_YIELD_USD_ARB.ADDRESS.toLowerCase() +
   "-arbitrum"]: realYieldUsdArb,

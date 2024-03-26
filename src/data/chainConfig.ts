@@ -17,6 +17,21 @@ export interface Chain {
   priceRouterAddress: string
 }
 
+export const placeholderChain: Chain = {
+  id: "unknown",
+  wagmiId: 0,
+  displayName: "Switch Chain (Unsupported)",
+  logoPath: "/assets/icons/unknownchain.svg",
+  alt: "Placeholder logo",
+  infuraRpcUrl: "",
+  alchemyRpcUrl: "",
+  blockExplorer: {
+    name: "Unknown",
+    url: "#",
+  },
+  withdrawQueueAddress: "",
+  priceRouterAddress: "",
+}
 /**
  *
  *  chainConfig is for storing the all chain data that used in the app
@@ -47,6 +62,7 @@ export const chainConfig: Chain[] = [
     withdrawQueueAddress:
       "0x516AD60801b62fCABCCDA7be178e4478D4018071",
     priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11",
+
   },
   {
     id: "optimism",
@@ -65,13 +81,19 @@ export const chainConfig: Chain[] = [
   },
 ]
 
-// Create a map from each chain name to its config
-export const chainConfigMap = chainConfig.reduce((map, chain) => {
-  map[chain.id] = chain
-  return map
-}, {} as { [id: string]: Chain })
 
+
+// Create a map from each chain name to its config, including the placeholder
+export const chainConfigMap: Record<string, Chain> =
+  chainConfig.reduce<Record<string, Chain>>(
+    (map, chain) => {
+      map[chain.id] = chain
+      return map
+    },
+    { unknown: placeholderChain }
+  )
 export const supportedChains = ["ethereum", "arbitrum", "optimism"]
+
 
 export const chainSlugMap = {
   ETHEREUM: chainConfigMap["ethereum"],
