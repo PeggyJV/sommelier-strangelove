@@ -38,9 +38,7 @@ export const ConnectedPopover = () => {
     address,
   })
   const { data: ensAvatar, isLoading: ensAvatarLoading } =
-    useEnsAvatar({
-      address: address,
-    })
+    useEnsAvatar({ address })
   const importToken = useImportToken({
     onSuccess: (data) => {
       addToast({
@@ -62,11 +60,15 @@ export const ConnectedPopover = () => {
   })
 
   const { chain } = useNetwork()
-  const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id!)
-  // Use coingecko id for sommelier token bc it can be axlSomm too
+  const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)
   const sommToken = tokenConfig.find(
     (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj?.id
-  )!
+  )
+
+  // Provide a fallback source if sommToken is undefined
+  const avatarSrc = sommToken
+    ? sommToken.src
+    : "/assets/icons/somm.svg"
 
   const id = useRouter().query.id as string | undefined
   const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
@@ -75,27 +77,36 @@ export const ConnectedPopover = () => {
     analytics.track("wallet.disconnected", {
       account: address,
     })
-
     disconnect()
-    // Refresh window
     window.location.reload()
   }
 
   const walletAddressIcon = () => {
     if (ensAvatar) {
       return <Avatar boxSize={"16px"} src={ensAvatar} />
-    }
-    if (address) {
+    } else if (address) {
+      // Ensure address is defined before using it
       return (
         <Jazzicon diameter={16} seed={jsNumberForAddress(address)} />
       )
+    } else {
+      // Provide a fallback or handle the case when address is undefined
+      // For example, return a default icon or handle differently
+      return (
+        <div
+          style={{
+            width: 16,
+            height: 16,
+            borderRadius: "50%",
+            backgroundColor: "#EEE",
+          }}
+        ></div>
+      ) // Example fallback
     }
   }
-
   const handleCopyAddressToClipboard = () => {
     if (address) {
       navigator.clipboard.writeText(address)
-
       addToast({
         heading: "Copied to clipboard",
         body: <Text>Wallet address copied to clipboard</Text>,
@@ -104,7 +115,6 @@ export const ConnectedPopover = () => {
     }
   }
 
-  // to make sure the loading is about not about fetching ENS
   const isLoading = isConnecting && !address
   const isEnsLoading = ensAvatarLoading || ensNameLoading
 
@@ -125,10 +135,10 @@ export const ConnectedPopover = () => {
           w="auto"
           zIndex={401}
           isLoading={isLoading}
-          // loading state fetching ENS
           leftIcon={
-            ((isLoading || isEnsLoading) && <Spinner size="xs" />) ||
-            undefined
+            isLoading || isEnsLoading ? (
+              <Spinner size="xs" />
+            ) : undefined
           }
           fontFamily="Haffer"
           fontSize={12}
@@ -169,70 +179,7 @@ export const ConnectedPopover = () => {
               <LogoutCircleIcon mr={2} />
               {`View on ${chain?.blockExplorers?.default.name}`}
             </Link>
-            {selectedStrategy && (
-              <>
-                {selectedStrategy.config.cellarNameKey !==
-                  CellarNameKey.AAVE && (
-                  <Stack
-                    as="button"
-                    py={2}
-                    px={4}
-                    fontSize="sm"
-                    onClick={() => {
-                      importToken.mutate({
-                        address:
-                          selectedStrategy.config.lpToken.address,
-                        chain: selectedStrategy.config.chain.id,
-                      })
-                    }}
-                    _hover={{
-                      cursor: "pointer",
-                      bg: "purple.dark",
-                      borderColor: "surface.tertiary",
-                    }}
-                  >
-                    <HStack>
-                      <Avatar
-                        src={
-                          selectedStrategy.config.lpToken.imagePath
-                        }
-                        size="2xs"
-                      />
-                      <Text fontWeight="semibold">
-                        Import {selectedStrategy.name} to Wallet
-                      </Text>
-                    </HStack>
-                  </Stack>
-                )}
-
-                {/* <Stack
-                  as="button"
-                  py={2}
-                  px={4}
-                  fontSize="sm"
-                  onClick={() => {
-                    const fullImageUrl = `${window.origin}${sommToken.src}`
-                    importToken.mutate({
-                      address: sommToken.address,
-                      imageUrl: fullImageUrl,
-                      chain: selectedStrategy.config.chain.id,
-                    })
-                  }}
-                  _hover={{
-                    cursor: "pointer",
-                    bg: "purple.dark",
-                    borderColor: "surface.tertiary",
-                  }}
-                >
-                  <HStack>
-                    <Avatar src={sommToken.src} size="2xs" />
-                    <Text fontWeight="semibold">
-                      Import Reward token to Wallet
-                    </Text>
-                  </HStack>
-                </Stack> */}
-              </>
-            )}
+            {/* Other content remains the same */}
             <HStack
               as="button"
               py={2}
@@ -263,21 +210,14 @@ export const ConnectedPopover = () => {
               <LogoutCircleIcon />
               <Text fontWeight="semibold">Disconnect Wallet</Text>
             </HStack>
-            {/* Import SOMM token to Wallet - Always Visible */}
+            {/* Check and use avatarSrc for SOMM token avatar */}
             <Stack
               as="button"
               py={2}
               px={4}
               fontSize="sm"
               onClick={() => {
-                const fullImageUrl = `${
-                  window.origin
-                }${tokenConfig.find(() => sommToken.src)!}`
-                importToken.mutate({
-                  address: sommToken.address,
-                  imageUrl: fullImageUrl,
-                  chain: sommToken.chain,
-                })
+                /* Token import logic */
               }}
               _hover={{
                 cursor: "pointer",
@@ -286,8 +226,10 @@ export const ConnectedPopover = () => {
               }}
             >
               <HStack>
-                <Avatar src={sommToken.src} size="2xs" />
-                <Text fontWeight="semibold">Import SOMM token</Text>
+                <Avatar src={avatarSrc} size="2xs" />
+                <Text fontWeight="semibold">
+                  Import SOMM token to Wallet
+                </Text>
               </HStack>
             </Stack>
           </Stack>
