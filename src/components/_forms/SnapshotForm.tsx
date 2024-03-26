@@ -63,21 +63,21 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
     checkRegistration()
 
-    // Fetch staked SOMM tokens
-    const fetchStakedSommTokens = async () => {
-      try {
-        // Assuming there's a function in utils/keplr to fetch staked tokens
-        const stakedTokens = await fetchStakedTokensFromKeplr()
+    // // Fetch staked SOMM tokens
+    // const fetchStakedSommTokens = async () => {
+    //   try {
+    //     // Assuming there's a function in utils/keplr to fetch staked tokens
+    //     const stakedTokens = await fetchStakedTokensFromKeplr()
 
-        setStakedSommTokens(stakedTokens)
-      } catch (error) {
-        console.error("Error fetching staked SOMM tokens: ", error)
-      }
-    }
+    //     setStakedSommTokens(stakedTokens)
+    //   } catch (error) {
+    //     console.error("Error fetching staked SOMM tokens: ", error)
+    //   }
+    // }
 
-    if (isEthereumConnected && !wrongNetwork) {
-      fetchStakedSommTokens()
-    }
+    // if (isEthereumConnected && !wrongNetwork) {
+    //   fetchStakedSommTokens()
+    // }
   }, [isEthereumConnected, wrongNetwork, ethAddress, sommAddress])
 
   if (!isEthereumConnected || wrongNetwork) {
