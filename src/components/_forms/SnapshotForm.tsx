@@ -1,46 +1,93 @@
-import { useForm, FormProvider } from "react-hook-form"
-import { useAccount as useEthereumAccount } from "wagmi"
-import { BaseButton } from "../_buttons/BaseButton"
-import ConnectButton from "components/_buttons/ConnectButton"
-import { Stack, Text, Box } from "@chakra-ui/react" // Notice the Box import here
-import { signWithKeplr } from "../../utils/keplr"
-import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"
-import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress"
-import { useBrandedToast } from "hooks/chakra"
+import React from "react";
+import { useForm, FormProvider } from "react-hook-form";
+import { useAccount as useEthereumAccount } from "wagmi";
+import { BaseButton } from "../_buttons/BaseButton";
+import ConnectButton from "../_buttons/ConnectButton"; 
+import { Stack, Text, Box } from "@chakra-ui/react"; 
+import { signWithKeplr } from "../../utils/keplr";
+import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress";
+import { InputSommelierAddress } from "../_cards/SnapshotCard/InputSommelierAddress";
+import { useBrandedToast } from "../../hooks/chakra"; // Adjust the import path as necessary
+import {
+  useConnect as useGrazConnect,
+  useAccount as useGrazAccount,
+} from "graz";
 
 interface SnapshotFormProps {
-  wrongNetwork: boolean
+  wrongNetwork: boolean;
 }
 
 interface SnapshotFormValues {
-  eth_address: string
-  somm_address: string
+  eth_address: string;
+  somm_address: string;
 }
 
-const SnapshotForm: React.FC<SnapshotFormProps> = ({
-  wrongNetwork,
-}) => {
-  const methods = useForm<SnapshotFormValues>()
-  const { isConnected: isEthereumConnected } = useEthereumAccount()
-  const ethAddress = methods.watch("eth_address")
-  const sommAddress = methods.watch("somm_address")
-  const isFormFilled = ethAddress && sommAddress
-  const { addToast, close } = useBrandedToast()
+const SnapshotForm: React.FC<SnapshotFormProps> = ({ wrongNetwork }) => {
+  const methods = useForm<SnapshotFormValues>();
+  const { isConnected: isEthereumConnected } = useEthereumAccount();
+  const ethAddress = methods.watch("eth_address");
+  const sommAddress = methods.watch("somm_address");
+  const isFormFilled = ethAddress && sommAddress;
+  const { addToast, close } = useBrandedToast();
+  const { connectAsync } = useGrazConnect();
+  const { isConnected: isGrazConnected } = useGrazAccount();
 
-  // // Correctly placed conditional rendering logic
+  const handleConnectKeplr = async () => {
+    try {
+      await connectAsync();
+    } catch (e) {
+      const error = e as Error;
+      if (error.message === "Keplr is not defined") {
+        addToast({
+          heading: "Connect Keplr Wallet",
+          body: (
+            <>
+              <Text>Keplr not found.</Text>
+              <Text as="span">Please install the Keplr extension.</Text>
+            </>
+          ),
+          status: "error",
+          closeHandler: close,
+        });
+      } else {
+        addToast({
+          heading: "Connect Keplr Wallet",
+          body: <Text>{error.message}</Text>,
+          status: "error",
+          closeHandler: close,
+        });
+      }
+    }
+  };
+
   if (!isEthereumConnected || wrongNetwork) {
     return (
       <Stack spacing={4} align="center">
-    <ConnectButton
-      overrideChainId={"ethereum"}
-      unstyled
-      height="69px"
-      fontSize="21px"
-    >
-      Connect Ethereum Wallet
-    </ConnectButton>
+        <ConnectButton
+          overrideChainId={"ethereum"}
+          unstyled
+          height="69px"
+          fontSize="21px"
+        >
+          Connect Ethereum Wallet
+        </ConnectButton>
       </Stack>
-    )
+    );
+  }
+
+  // Additional check for Keplr wallet connection
+  if (!isGrazConnected || wrongNetwork) {
+    return (
+      <Stack spacing={4} align="center">
+        <BaseButton
+          height="69px"
+          fontSize="21px"
+          onClick={handleConnectKeplr}
+        >
+          Connect Keplr Wallet
+        </BaseButton>
+      </Stack>
+    );
   }
 
 
