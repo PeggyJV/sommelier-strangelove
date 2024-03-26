@@ -1,5 +1,5 @@
 import React from "react"
-import { Heading, HStack, Text, VStack } from "@chakra-ui/react"
+import { Heading, HStack, Text, VStack, Link } from "@chakra-ui/react"
 import { InformationIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi"
@@ -88,7 +88,7 @@ export const SnapshotCard: React.FC = () => {
                       addToast({
                         heading: "Change network error",
                         status: "error",
-                        body: <Text>{ error?.message}</Text>,
+                        body: <Text>{error?.message}</Text>,
                         closeHandler: close,
                         duration: null,
                       })
@@ -123,17 +123,39 @@ export const SnapshotCard: React.FC = () => {
           <Text as="span" fontWeight="bold">
             Link Wallets:
           </Text>{" "}
-          Connect your Ethereum address and any wallets (e.g., Keplr)
-          holding SOMM staking tokens.
+          Connect your Ethereum address SOMM address.
         </Text>
         <Text fontSize="md" mb="4">
           2.{" "}
           <Text as="span" fontWeight="bold">
-            Meet Criteria:
+            Stake SOMM Tokens:
           </Text>{" "}
-          Ensure your wallet actively stakes SOMM tokens and your
-          Ethereum address has investments in Sommelier strategies.
+          Ensure your SOMM wallet actively{" "}
+          <Link
+            href="https://www.sommelier.finance/staking"
+            isExternal
+            color="blue.500"
+          >
+            stakes SOMM tokens
+          </Link>
+          .
         </Text>
+        <Text fontSize="md" mb="4">
+          3.{" "}
+          <Text as="span" fontWeight="bold">
+            Invest in Strategies:
+          </Text>{" "}
+          Make sure your Ethereum address has investments in{" "}
+          <Link
+            href="https://app.sommelier.finance/"
+            isExternal
+            color="blue.500"
+          >
+            Sommelier strategies
+          </Link>
+          .
+        </Text>
+
         <FormProvider {...methods}>
           <SnapshotForm wrongNetwork={isWrongNetwork} />
         </FormProvider>
