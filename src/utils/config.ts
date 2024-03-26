@@ -329,7 +329,8 @@ export const config = {
     },
     REAL_YIELD_ETH_OPT_STAKER: {
       ADDRESS: "0xd700D39be88fB6b54311f95cCA949C3f6835e236",
-          },
+      ABI: cellarStakingV0821,
+    },
     TURBO_EZETH_STAKER: {
       ADDRESS: "0x4705F50b9c6CdffC6528ba6B3754106eE820997E",
       ABI: cellarStakingV0821,

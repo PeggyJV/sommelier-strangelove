@@ -250,6 +250,7 @@ export const bondingPeriodOptions = (
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
+    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
@@ -322,30 +323,6 @@ export const bondingPeriodOptions = (
     ]
   }
   if (
-    config.cellarNameKey === CellarNameKey.ETH_TREND_GROWTH ||
-    config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-    config.cellarNameKey === CellarNameKey.MORPHO_ETH
-  ) {
-    return [
-      {
-        title: "7 Day Unbonding",
-        amount: "1.1x SOMM",
-        value: 0,
-      },
-      {
-        title: "14 Day Unbonding",
-        amount: "1.3x SOMM",
-        value: 1,
-      },
-      {
-        title: "21 Day Unbonding",
-        amount: "1.5x SOMM",
-        value: 2,
-      },
-    ]
-  }
-  if (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
     config.cellarNameKey === CellarNameKey.STEADY_UNI ||
@@ -378,7 +355,6 @@ export const bondingPeriodOptions = (
       },
     ]
   }
-
 
   return []
 }
@@ -469,8 +445,6 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
