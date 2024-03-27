@@ -8,9 +8,10 @@ import {
   Td,
   TableContainer,
   Link,
-  Image, // Import the Image component
-  HStack, // To stack image and text horizontally
-  Text, // Import Text component for explicit text rendering
+  Image,
+  HStack,
+  Text,
+  useBreakpointValue,
 } from "@chakra-ui/react"
 
 interface Campaign {
@@ -36,76 +37,82 @@ const campaigns: Campaign[] = [
 ]
 
 const CampaignTable: React.FC = () => {
+  // Dynamically adjust column visibility and table sizing
+  const isVaultUsageVisible = useBreakpointValue({
+    base: false,
+    md: true,
+  })
+  const tableSize = useBreakpointValue({ base: "sm", md: "md" })
+  const fontSize = useBreakpointValue({ base: "xs", md: "sm" })
+
   return (
     <TableContainer>
-      <Table variant="simple">
+      <Table variant="simple" size={tableSize}>
         <Thead>
           <Tr>
-            <Th>Campaign</Th>
-            <Th>SOMM Staking</Th>
-            <Th>Vault Usage</Th>
-            <Th>Status</Th>
+            <Th fontSize={fontSize}>Campaign</Th>
+            <Th fontSize={fontSize}>SOMM Staking</Th>
+            {isVaultUsageVisible && (
+              <Th fontSize={fontSize}>Vault Usage</Th>
+            )}
+            <Th fontSize={fontSize}>Status</Th>
           </Tr>
         </Thead>
         <Tbody>
           {campaigns.map((campaign, index) => (
             <Tr key={index}>
-              <Td>
+              <Td fontSize={fontSize}>
                 <HStack spacing="10px">
-                  {campaign.name === "Redstone Points" && (
-                    <Image
-                      src="/assets/icons/redstone.png"
-                      boxSize="20px"
-                      alt="Redstone Logo"
-                    />
-                  )}
-                  {campaign.name === "Ethos" && (
-                    <Image
-                      src="/assets/icons/ethos.png" // Make sure the path is correct
-                      boxSize="20px"
-                      alt="Ethos Logo"
-                    />
-                  )}
+                  <Image
+                    src={
+                      campaign.name === "Redstone Points"
+                        ? "/assets/icons/redstone.png"
+                        : "/assets/icons/ethos.png"
+                    }
+                    boxSize="16px" // Smaller icons for compact view
+                    alt={`${campaign.name} Logo`}
+                  />
                   <Text>{campaign.name}</Text>
                 </HStack>
               </Td>
-              <Td>
-                {campaign.sommStaking.includes("1000 SOMM") ||
-                campaign.sommStaking.includes("500 SOMM") ? (
-                  <Link
-                    href="https://www.sommelier.finance/staking"
-                    isExternal
-                    color="white"
-                    textDecoration="underline"
-                  >
-                    {campaign.sommStaking}
-                  </Link>
-                ) : (
-                  campaign.sommStaking
-                )}
+              <Td fontSize={fontSize}>
+                <Link
+                  href="https://www.sommelier.finance/staking"
+                  isExternal
+                  color="white.500"
+                  textDecoration="underline"
+                >
+                  {campaign.sommStaking}
+                </Link>
               </Td>
-              <Td>
-                {campaign.vaultUsage === "RYE on Arbitrum" ? (
-                  <Link
-                    href="https://app.sommelier.finance/strategies/real-yield-eth-arb/manage"
-                    isExternal
-                    color="white"
-                    textDecoration="underline"
-                  >
-                    {campaign.vaultUsage}
-                  </Link>
-                ) : (
-                  <Link
-                    href="https://www.sommelier.finance/"
-                    isExternal
-                    color="white"
-                    textDecoration="underline"
-                  >
-                    {campaign.vaultUsage}
-                  </Link>
-                )}
-              </Td>
-              <Td>{campaign.status}</Td>
+              {isVaultUsageVisible && (
+                <Td fontSize={fontSize}>
+                  {campaign.vaultUsage === "N/A" ? (
+                    <Link
+                      href="https://app.sommelier.finance/"
+                      isExternal
+                      color="white.500"
+                      textDecoration="underline"
+                    >
+                      {campaign.vaultUsage}
+                    </Link>
+                  ) : (
+                    <Link
+                      href={
+                        campaign.vaultUsage === "RYE on Arbitrum"
+                          ? "https://app.sommelier.finance/strategies/real-yield-eth-arb/manage"
+                          : "https://www.sommelier.finance/"
+                      }
+                      isExternal
+                      color="white.500"
+                      textDecoration="underline"
+                    >
+                      {campaign.vaultUsage}
+                    </Link>
+                  )}
+                </Td>
+              )}
+              <Td fontSize={fontSize}>{campaign.status}</Td>
             </Tr>
           ))}
         </Tbody>
