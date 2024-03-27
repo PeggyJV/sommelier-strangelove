@@ -65,20 +65,20 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
   }, [isEthereumConnected, wrongNetwork, ethAddress, sommAddress])
 
-  if (!isEthereumConnected || wrongNetwork) {
-    return (
-      <Stack spacing={4} align="center">
-        <ConnectButton
-          overrideChainId={"ethereum"}
-          unstyled
-          height="69px"
-          fontSize="21px"
-        >
-          Connect Ethereum Wallet
-        </ConnectButton>
-      </Stack>
-    )
-  }
+  // if (!isEthereumConnected || wrongNetwork) {
+  //   return (
+  //     <Stack spacing={4} align="center">
+  //       <ConnectButton
+  //         overrideChainId={"ethereum"}
+  //         unstyled
+  //         height="69px"
+  //         fontSize="21px"
+  //       >
+  //         Connect Ethereum Wallet
+  //       </ConnectButton>
+  //     </Stack>
+  //   )
+  // }
 
   const onSubmit = async (data: SnapshotFormValues) => {
     if (!isEthereumConnected || wrongNetwork) {
