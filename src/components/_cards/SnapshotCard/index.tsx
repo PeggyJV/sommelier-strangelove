@@ -6,7 +6,6 @@ import {
   Box,
   Stack,
   useBreakpointValue,
-  stackAlignment,
 } from "@chakra-ui/react"
 import { InformationIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
@@ -39,6 +38,11 @@ export const SnapshotCard: React.FC = () => {
 
   const ethChainId = 1 // Ethereum Mainnet ID
   const isWrongNetwork = !!wagmiChain && wagmiChain.id !== ethChainId
+
+  const stackAlignment = useBreakpointValue({
+    base: "center",
+    md: "flex-start",
+  })
 
   return (
     <Stack
