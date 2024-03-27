@@ -179,6 +179,11 @@ export const config = {
       SLUG: "real-yield-eth-arb",
       ABI: cellarV0821MultiDeposit,
     },
+    REAL_YIELD_ETH_OPT: {
+      ADDRESS: "0xC47bB288178Ea40bF520a91826a3DEE9e0DbFA4C",
+      SLUG: "real-yield-eth-opt",
+      ABI: cellarV0821MultiDeposit,
+    },
     REAL_YIELD_USD_ARB: {
       ADDRESS: "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
       SLUG: "real-yield-usd-arb",
@@ -320,6 +325,10 @@ export const config = {
     },
     TURBO_RSETH_STAKER: {
       ADDRESS: "0xC6b423E3D25e6B36ab60Fa2c91FF344877F8Ead2",
+      ABI: cellarStakingV0821,
+    },
+    REAL_YIELD_ETH_OPT_STAKER: {
+      ADDRESS: "0xd700D39be88fB6b54311f95cCA949C3f6835e236",
       ABI: cellarStakingV0821,
     },
     TURBO_EZETH_STAKER: {

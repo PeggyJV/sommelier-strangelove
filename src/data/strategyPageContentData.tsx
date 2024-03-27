@@ -579,6 +579,41 @@ export const strategyPageContentData = {
     For the liquidity provision vaults, the vault’s ability to run off-chain computation combined with Seven Seas’ deep Uniswap V3 experience, positions the vault to be a top performing LP in the pools that it utilizes. The vault will be able to dynamically adapt to changing price movements to quote the optimal tick range(s) that collect the most fees while minimizing impermanent loss.
     `,
   },
+  [config.CONTRACT.REAL_YIELD_ETH_OPT.SLUG]: {
+    name: "Real Yield ETH OPT",
+    provider: "Seven Seas",
+    providerUrl: "https://7seas.capital/",
+    description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
+    exchange: [
+      {
+        name: "Sommelier",
+        logo: "/assets/icons/somm.png",
+      },
+    ],
+    ticker: (
+      <>
+        <Image
+          alt="real yield eth opt icon"
+          src="/assets/icons/rye-optimism.png"
+          boxSize={8}
+        />
+        <Text>RYETH</Text>
+      </>
+    ),
+    tradedAssets: ["WETH", "wstETH", "rETH"],
+    strategyHighlights: {
+      card: [
+        `Dynamically rebalance between ETH LST opportunities and leverage staking.`,
+        `Leverage monitoring.`,
+        `Fully automated with built-in auto-compounding.`,
+      ],
+      description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.
+      <br/><br/>
+      Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      `,
+    },
+    howItWorks: ``,
+  },
   [config.CONTRACT.DEFI_STARS.SLUG]: {
     name: "DeFi Stars",
     provider: "AlgoLab",
@@ -1358,15 +1393,14 @@ export const strategyPageContentData = {
         <Text>RYETH</Text>
       </>
     ),
-    tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
-    alternativeTo: "Lending or LPing ETH LSTs",
+    tradedAssets: ["WETH", "wstETH", "rETH"],
     strategyHighlights: {
       card: [
-        `Accumulates leverage using a method that is highly capital efficient and significantly reduces gas and flash loan fees.`,
-        `Dynamically allocates capital across key protocols for best-in-class yield.`,
-        `Optimizes Uniswap V3 tick ranges.`,
+        `Dynamically rebalance between ETH LST opportunities and leverage staking.`,
+        `Leverage monitoring.`,
+        `Fully automated with built-in auto-compounding.`,
       ],
-      description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
+      description: `Maximize ETH yield through staking and liquidity provision of ETH liquid staking tokens.
       <br/><br/>
       Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
