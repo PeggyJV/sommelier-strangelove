@@ -1,8 +1,11 @@
+// Badge.tsx
+
 import { Badge as CBadge, BadgeProps, Text } from "@chakra-ui/react"
 
 export enum BadgeStatus {
   Active = "active",
   ComingSoon = "comingSoon",
+  New = "new", // Add new status
 }
 
 interface Props extends BadgeProps {
@@ -12,11 +15,13 @@ interface Props extends BadgeProps {
 const color = {
   [BadgeStatus.Active]: "lime.base",
   [BadgeStatus.ComingSoon]: "orange.base",
+  [BadgeStatus.New]: "white", // Color for text of the New badge
 }
 
 const bg = {
   [BadgeStatus.Active]: "lime.dark",
   [BadgeStatus.ComingSoon]: "orange.dark",
+  [BadgeStatus.New]: "violet.base", // Background color for the New badge
 }
 
 export const Badge: React.FC<Props> = ({ status, ...rest }) => {
