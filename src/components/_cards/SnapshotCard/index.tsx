@@ -6,6 +6,7 @@ import {
   VStack,
   Link,
   Box,
+  useBreakpointValue,
 } from "@chakra-ui/react"
 import { InformationIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
@@ -39,6 +40,12 @@ export const SnapshotCard: React.FC = () => {
   const ethChainId = 1 // Ethereum Mainnet ID
   const isWrongNetwork = !!wagmiChain && wagmiChain.id !== ethChainId
   const ethChain = chainSlugMap.ETHEREUM
+
+  // Adjust the stack direction based on the breakpoint
+  const stackDirection = useBreakpointValue({
+    base: "column",
+    md: "row",
+  })
 
   return (
     <HStack spacing={10} align="flex-start">
@@ -106,8 +113,7 @@ export const SnapshotCard: React.FC = () => {
             Snapshot
           </Heading>
           <Text fontSize="md" mb="4">
-            Link your wallets for Bonus SOMM rewards or/and
-            airdrops.
+            Link your wallets for Bonus SOMM rewards or/and airdrops.
           </Text>
           <FormProvider {...methods}>
             <SnapshotForm wrongNetwork={isWrongNetwork} />
