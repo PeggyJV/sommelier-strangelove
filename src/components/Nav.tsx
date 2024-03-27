@@ -90,21 +90,35 @@ export const Nav: VFC<FlexProps> = (props) => {
               <LogoTextIcon w="9rem" h="2rem" />
             </Link>
             {NAV_LINKS.map((item) => {
-              const isActive = routes.pathname.includes(
-                item.link.split("/")[1]
-              )
+              // Exclude external links from being marked as active.
+              const isExternalLink = item.link.startsWith("http")
+              let isActive = false
+
+              if (!isExternalLink) {
+                if (item.link === "/") {
+                  // For the home link, check if the pathname is exactly "/"
+                  isActive = routes.pathname === "/"
+                } else {
+                  // For internal links, check if the pathname starts with the link path
+                  isActive = routes.pathname.startsWith(item.link)
+                }
+              }
 
               return (
                 <Flex key={item.link} align="center">
                   <Link
                     href={item.link}
-                    color={isActive ? "white" : "neutral.400"}
+                    color={
+                      isActive && !isExternalLink
+                        ? "white"
+                        : "neutral.400"
+                    }
                     fontWeight="semibold"
                   >
                     {item.title}
                   </Link>
                   {item.isNew && (
-                    <Badge status={BadgeStatus.New} ml={2} /> // Utilizing Badge for "New" status
+                    <Badge status={BadgeStatus.New} ml={2} />
                   )}
                 </Flex>
               )
@@ -152,22 +166,34 @@ export const Nav: VFC<FlexProps> = (props) => {
             <DrawerBody p={0}>
               <Stack alignItems="flex-end" py="160px" px="24px">
                 {NAV_LINKS.map((item) => {
-                  const isActive = routes.pathname.includes(
-                    item.link.split("/")[1]
-                  )
+                  // Exclude external links from being marked as active.
+                  const isExternalLink = item.link.startsWith("http")
+                  let isActive = false
+
+                  if (!isExternalLink) {
+                    if (item.link === "/") {
+                      // For the home link, check if the pathname is exactly "/"
+                      isActive = routes.pathname === "/"
+                    } else {
+                      // For internal links, check if the pathname starts with the link path
+                      isActive = routes.pathname.startsWith(item.link)
+                    }
+                  }
 
                   return (
                     <Flex key={item.link} align="center">
                       <Link
                         href={item.link}
-                        color={isActive ? "white" : "neutral.400"}
+                        color={
+                          isActive && !isExternalLink
+                            ? "white"
+                            : "neutral.400"
+                        }
                         fontWeight="semibold"
-                        fontSize="21px"
                       >
                         {item.title}
                       </Link>
                       {item.isNew && (
-                        // Utilize the Badge component instead of the Text component for the "New" tag
                         <Badge status={BadgeStatus.New} ml={2} />
                       )}
                     </Flex>

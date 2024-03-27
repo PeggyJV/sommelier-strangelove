@@ -31,7 +31,7 @@ export const Badge: React.FC<Props> = ({ status, ...rest }) => {
   return (
     <CBadge borderRadius={4} backgroundColor={bg[status]} {...rest}>
       <Text
-        fontWeight="normal"
+        fontWeight="bold"
         textTransform="none"
         color={color[status]}
       >
