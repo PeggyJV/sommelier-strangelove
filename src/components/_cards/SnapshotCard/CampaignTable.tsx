@@ -8,6 +8,9 @@ import {
   Td,
   TableContainer,
   Link,
+  Image, // Import the Image component
+  HStack, // To stack image and text horizontally
+  Text, // Import Text component for explicit text rendering
 } from "@chakra-ui/react"
 
 interface Campaign {
@@ -20,7 +23,7 @@ interface Campaign {
 const campaigns: Campaign[] = [
   {
     name: "Redstone Points",
-    sommStaking: "Points Multiplier; Minimum 1000 SOMM", // This will now also be a link
+    sommStaking: "Points Multiplier; Minimum 1000 SOMM",
     vaultUsage: "RYE on Arbitrum",
     status: "Active",
   },
@@ -47,7 +50,25 @@ const CampaignTable: React.FC = () => {
         <Tbody>
           {campaigns.map((campaign, index) => (
             <Tr key={index}>
-              <Td>{campaign.name}</Td>
+              <Td>
+                <HStack spacing="10px">
+                  {campaign.name === "Redstone Points" && (
+                    <Image
+                      src="/assets/icons/redstone.png"
+                      boxSize="20px"
+                      alt="Redstone Logo"
+                    />
+                  )}
+                  {campaign.name === "Ethos" && (
+                    <Image
+                      src="/assets/icons/ethos.png" // Make sure the path is correct
+                      boxSize="20px"
+                      alt="Ethos Logo"
+                    />
+                  )}
+                  <Text>{campaign.name}</Text>
+                </HStack>
+              </Td>
               <Td>
                 {campaign.sommStaking.includes("1000 SOMM") ||
                 campaign.sommStaking.includes("500 SOMM") ? (
