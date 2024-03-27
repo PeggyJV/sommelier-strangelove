@@ -6,6 +6,7 @@ import {
   Box,
   Stack,
   useBreakpointValue,
+  StackDirection, // Import the type
 } from "@chakra-ui/react"
 import { InformationIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
@@ -39,11 +40,11 @@ export const SnapshotCard: React.FC = () => {
   const ethChainId = 1 // Ethereum Mainnet ID
   const isWrongNetwork = !!wagmiChain && wagmiChain.id !== ethChainId
 
-  // Adjust the stack layout based on the breakpoint
+  // Adjust the stack layout based on the breakpoint with type assertion
   const stackDirection = useBreakpointValue({
     base: "column",
     md: "row",
-  })
+  }) as StackDirection | undefined
 
   return (
     <Stack
@@ -80,21 +81,24 @@ export const SnapshotCard: React.FC = () => {
               borderColor="purple.base"
               onClick={async () => {
                 try {
-                  await switchNetworkAsync?.(ethChain.wagmiId)
-                  window.location.reload()
+                  const ethChainConfig = chainSlugMap["ETHEREUM"]
+                  if (switchNetworkAsync && ethChainConfig) {
+                    await switchNetworkAsync(ethChainConfig.wagmiId)
+                    window.location.reload()
+                  }
                 } catch (e) {
                   const error = e as Error
                   addToast({
                     heading: "Change network error",
                     status: "error",
-                    body: <Text>{error?.message}</Text>,
+                    body: <Text>{error.message}</Text>,
                     closeHandler: close,
                     duration: null,
                   })
                 }
               }}
             >
-              Switch to {ethChain.displayName}
+              Switch to Ethereum Mainnet
             </SecondaryButton>
           </VStack>
         </Box>

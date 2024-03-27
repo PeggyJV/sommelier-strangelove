@@ -23,8 +23,13 @@ export const SnapshotNotifyModal = ({
         active campaigns like Redstone Points, and more on our
         Snapshots page.
       </Text>
-      <Link href="/snapshots" color="teal.500" isExternal>
-        Discover Rewards
+      <Link
+        href="/snapshots"
+        color="white.500"
+        textDecoration="underline"
+        isExternal
+      >
+        Discover Campaigns
       </Link>
     </BaseModal>
   )
