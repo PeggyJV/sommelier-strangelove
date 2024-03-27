@@ -16,20 +16,16 @@ export const SnapshotNotifyModal = ({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      heading="New Snapshot Page"
+      heading="Connect Wallet on Snapshot"
     >
-      <Text color="neutral.300" fontSize="sm" mb="4">
-        Don't miss out on bonus SOMM rewards! Link your wallets, join
-        active campaigns like Redstone Points, and more on our
-        Snapshots page.
-      </Text>
       <Link
-        href="/snapshots"
+        href="/snapshot"
         color="white.500"
         textDecoration="underline"
         isExternal
       >
-        Discover Campaigns
+        Complete campaigns to earn bonus SOMM rewards and/or airdrop
+        points.
       </Link>
     </BaseModal>
   )
