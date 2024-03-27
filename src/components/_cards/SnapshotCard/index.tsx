@@ -6,7 +6,7 @@ import {
   Box,
   Stack,
   useBreakpointValue,
-  StackDirection, // Import the type
+  stackAlignment,
 } from "@chakra-ui/react"
 import { InformationIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
@@ -40,17 +40,11 @@ export const SnapshotCard: React.FC = () => {
   const ethChainId = 1 // Ethereum Mainnet ID
   const isWrongNetwork = !!wagmiChain && wagmiChain.id !== ethChainId
 
-  // Adjust the stack layout based on the breakpoint with type assertion
-  const stackDirection = useBreakpointValue({
-    base: "column",
-    md: "row",
-  }) as StackDirection | undefined
-
   return (
     <Stack
-      direction={stackDirection}
+      direction={{ base: "column", md: "row" }}
       spacing={10}
-      align="flex-start"
+      align={stackAlignment} // Dynamic alignment based on screen size
       width="full"
     >
       {isMounted && isConnected && isWrongNetwork && (
