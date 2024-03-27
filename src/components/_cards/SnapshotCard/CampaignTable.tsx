@@ -39,7 +39,7 @@ const campaigns: Campaign[] = [
 const CampaignTable: React.FC = () => {
   // Dynamically adjust column visibility and table sizing
   const isVaultUsageVisible = useBreakpointValue({
-    base: false,
+    base: true,
     md: true,
   })
   const tableSize = useBreakpointValue({ base: "sm", md: "md" })
