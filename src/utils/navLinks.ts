@@ -7,24 +7,20 @@ export const NAV_LINKS = (() => {
       title: "Vaults",
     },
     {
-      link: "/bridge",
-      title: "Bridge",
-    },
-    {
-      link: "https://www.sommelier.finance/",
-      title: "About",
-    },
-    {
-      link: "https://www.sommelier.finance/audits",
-      title: "Audits",
-    },
-    {
       link: "https://www.sommelier.finance/staking",
       title: "Staking",
     },
     {
-      link: "https://www.sommelier.finance/ecosystem",
-      title: "Ecosystem",
+      link: "https://www.sommelier.finance/defi",
+      title: "DeFi",
+    },
+    {
+      link: "/bridge",
+      title: "Bridge",
+    },
+    {
+      link: "https://www.sommelier.finance/audits",
+      title: "Audits",
     },
   ]
   if (!BRIDGE_PAGE_ENABLED) {
