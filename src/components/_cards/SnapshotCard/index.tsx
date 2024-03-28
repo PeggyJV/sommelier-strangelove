@@ -115,7 +115,7 @@ export const SnapshotCard: React.FC = () => {
           Snapshot
         </Heading>
         <Text mb={4}>
-          Link your wallets for Bonus SOMM rewards or/and airdrops.
+          Link your wallets for bonus SOMM rewards and/or airdrops.
         </Text>
         <FormProvider {...methods}>
           <SnapshotForm wrongNetwork={isWrongNetwork} />
