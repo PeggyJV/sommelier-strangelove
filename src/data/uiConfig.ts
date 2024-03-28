@@ -566,8 +566,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
     } else if (
       config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
-      config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
     ) {
       return "7 Day MA APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
@@ -596,8 +595,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
   } else if (
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
-    config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
   ) {
     return "7 Day MA APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
