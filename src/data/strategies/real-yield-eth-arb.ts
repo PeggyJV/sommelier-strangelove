@@ -88,7 +88,6 @@ export const realYieldEthArb: CellarData = {
     },
     baseAsset: tokenConfigMap.WETH_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
-    show7DayAPYTooltip: true,
   },
 
   faq: [
