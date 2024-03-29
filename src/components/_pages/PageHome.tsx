@@ -290,17 +290,20 @@ export const PageHome = () => {
     return filteredData.sort((a, b) => {
 
       // 1. Priority - does user own same assets as in strategy
-      if (isConnected) {
-        const doesUserHaveStrategyAssets = (strategy: StrategyData) => strategy?.tradedAssets?.some(
-          asset => userData?.depositAssetBalances.some(
-            balance => asset.symbol === balance.symbol)
-        )
+      if (isConnected && userData?.depositAssetBalances) {
+        for (const balance of userData?.depositAssetBalances) {
+          const doesStrategyHaveAsset = (strategy: StrategyData) => strategy?.tradedAssets?.some(
+            asset => asset.symbol === balance.symbol
+          )
+          const strategyAHasAsset = doesStrategyHaveAsset(a);
+          const strategyBHasAsset = doesStrategyHaveAsset(b);
 
-        const userHasAAssets = doesUserHaveStrategyAssets(a);
-        const userHasBAssets = doesUserHaveStrategyAssets(b);
-
-        if ((userHasAAssets || userHasBAssets) && !(userHasAAssets && userHasBAssets)) {
-          return userHasAAssets ? -1 : 1;
+          if (strategyAHasAsset && strategyBHasAsset) {
+            break;
+          }
+          if ((strategyAHasAsset || strategyBHasAsset) && !(strategyAHasAsset && strategyBHasAsset)) {
+            return strategyAHasAsset ? -1 : 1;
+          }
         }
       }
       // 2. Priority - new strategies
