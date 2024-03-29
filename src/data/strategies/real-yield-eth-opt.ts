@@ -10,21 +10,21 @@ import {
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
-export const realYieldEthArb: CellarData = {
+export const realYieldEthOpt: CellarData = {
   name: "Real Yield ETH",
-  slug: config.CONTRACT.REAL_YIELD_ETH_ARB.SLUG,
+  slug: config.CONTRACT.REAL_YIELD_ETH_OPT.SLUG,
   dashboard:
-    "https://debank.com/profile/0xc47bb288178ea40bf520a91826a3dee9e0dbfa4c",
-  tradedAssets: ["wstETH", "cbETH", "rETH", "WETH"],
-  launchDate: new Date(2024, 1, 13, 14, 30, 0, 0),
+    "https://debank.com/profile/0xc47bb288178ea40bf520a91826a3dee9e0dbfa4c?chain=op",
+  tradedAssets: ["WETH", "wstETH", "rETH"],
+  launchDate: new Date(2024, 1, 30, 15, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
-  description: `Maximize ETH yield through leveraged staking and liqušidity provision of ETH liquid staking tokens.`,
+  description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["AAVE", "Uniswap V3"],
+  protocols: ["Uniswap V3", "AAVE"],
   strategyAssets: ["WETH", "wstETH", "rETH"],
   performanceSplit: {
     depositors: 80,
@@ -61,12 +61,11 @@ export const realYieldEthArb: CellarData = {
   },
 
   config: {
-    id: config.CONTRACT.REAL_YIELD_ETH_ARB.ADDRESS,
-    baseApy: 10,
-    cellarNameKey: CellarNameKey.REAL_YIELD_ETH_ARB,
+    id: config.CONTRACT.REAL_YIELD_ETH_OPT.ADDRESS,
+    cellarNameKey: CellarNameKey.REAL_YIELD_ETH_OPT,
     lpToken: {
-      address: config.CONTRACT.REAL_YIELD_ETH_ARB.ADDRESS,
-      imagePath: "/assets/icons/Real-Yield-ETH-Arbitrum.png",
+      address: config.CONTRACT.REAL_YIELD_ETH_OPT.ADDRESS,
+      imagePath: "/assets/icons/rye-optimism.png",
     },
     cellarRouter: {
       address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
@@ -74,20 +73,19 @@ export const realYieldEthArb: CellarData = {
       key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
-      address: config.CONTRACT.REAL_YIELD_ETH_ARB.ADDRESS,
-      abi: config.CONTRACT.REAL_YIELD_ETH_ARB.ABI,
-      key: CellarKey.CELLAR_V2,
+      address: config.CONTRACT.REAL_YIELD_ETH_OPT.ADDRESS,
+      abi: config.CONTRACT.REAL_YIELD_ETH_OPT.ABI,
+      key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
     staker: {
-      address: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ADDRESS,
-      abi: config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0815,
+      address: config.CONTRACT.REAL_YIELD_ETH_OPT_STAKER.ADDRESS,
+      abi: config.CONTRACT.REAL_YIELD_ETH_OPT_STAKER.ABI,
+      key: StakerKey.CELLAR_STAKING_V0821,
     },
-    baseAsset: tokenConfigMap.WETH_ARBITRUM,
-    chain: chainSlugMap.ARBITRUM,
+    baseAsset: tokenConfigMap.WETH_OPTIMISM,
+    chain: chainSlugMap.OPTIMISM,
   },
-
   faq: [
     {
       question: "Are the smart contracts audited?",
