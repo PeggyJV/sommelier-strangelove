@@ -24,7 +24,6 @@ import {
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState } from "react"
-import { InfoBanner } from "components/_banners/InfoBanner"
 import { ChainFilter } from "components/_filters/ChainFilter"
 import { chainConfig } from "src/data/chainConfig"
 import {
@@ -43,7 +42,6 @@ import { add, isBefore } from "date-fns"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
-import BigNumber from "bignumber.js"
 
 export const PageHome = () => {
   const {
@@ -291,26 +289,18 @@ export const PageHome = () => {
 
     return filteredData.sort((a, b) => {
 
-      // 1. Priority - strategies that user holds
+      // 1. Priority - does user own same assets as in strategy
       if (isConnected) {
-        const doesUserHoldStrategy = (strategy: StrategyData) => userData?.strategies
-          .some(s => s?.userStrategyData?.strategyData?.slug === strategy?.slug);
+        const doesUserHaveStrategyAssets = (strategy: StrategyData) => strategy?.tradedAssets?.some(
+          asset => userData?.depositAssetBalances.some(
+            balance => asset.symbol === balance.symbol)
+        )
 
-        const userHoldsA = doesUserHoldStrategy(a);
-        const userHoldsB = doesUserHoldStrategy(b);
+        const userHasAAssets = doesUserHaveStrategyAssets(a);
+        const userHasBAssets = doesUserHaveStrategyAssets(b);
 
-        if ((userHoldsA || userHoldsB) && !(userHoldsA && userHoldsB)) {
-          return userHoldsA ? -1 : 1;
-        }
-
-        // if user holds both, prioritize by net value on asset
-        if (userHoldsA && userHoldsB){
-          const getUserValueOnStrategy = (strategy: StrategyData) => userData?.strategies
-            .find(s => s?.userStrategyData?.strategyData?.slug === strategy?.slug)?.netValue
-            ?? new BigNumber(0);
-          const aValue = getUserValueOnStrategy(a);
-          const bValue = getUserValueOnStrategy(b);
-          return bValue.minus(aValue).toNumber();
+        if ((userHasAAssets || userHasBAssets) && !(userHasAAssets && userHasBAssets)) {
+          return userHasAAssets ? -1 : 1;
         }
       }
       // 2. Priority - new strategies
