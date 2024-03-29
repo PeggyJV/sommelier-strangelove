@@ -5,6 +5,10 @@ import { getUserData } from "./getUserData"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps } from "data/types"
+import { fetchBalance } from "@wagmi/core"
+import { getAddress } from "ethers/lib/utils"
+import { getAcceptedDepositAssetsByChain } from "data/tokenConfig"
+import { ResolvedConfig } from "abitype"
 
 export const getUserDataAllStrategies = async ({
   allContracts,
@@ -74,6 +78,23 @@ export const getUserDataAllStrategies = async ({
     )
   )
 
+  const tokenList = getAcceptedDepositAssetsByChain(chain);
+  const depositAssetBalances : {
+    decimals: ResolvedConfig['IntType'];
+    formatted: string;
+    symbol: string;
+    value: ResolvedConfig['BigIntType'];
+  }[] = [];
+  for (const token of tokenList) {
+    const balance = await fetchBalance({
+      token: getAddress(token!.address),
+      address: getAddress(userAddress)
+    });
+    if (!balance.value.isZero()) {
+      depositAssetBalances.push(balance);
+    }
+  }
+
   const userData = userDataRes.filter((item) => !!item)
 
   const totalNetValue = (() => {
@@ -116,6 +137,7 @@ export const getUserDataAllStrategies = async ({
       value: totalNetValue,
       formatted: formatUSD(String(totalNetValue)),
     },
+    depositAssetBalances,
     totalSommRewards: {
       value: totalSommRewards,
       formatted: Number(
