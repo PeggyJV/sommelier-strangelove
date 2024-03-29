@@ -86,13 +86,15 @@ export const getUserDataAllStrategies = async ({
     value: ResolvedConfig['BigIntType'];
   }[] = [];
   for (const token of tokenList) {
-    const balance = await fetchBalance({
+    await fetchBalance({
       token: getAddress(token!.address),
       address: getAddress(userAddress)
-    });
-    if (!balance.value.isZero()) {
-      depositAssetBalances.push(balance);
-    }
+    }).then((balance) => {
+        if (!balance.value.isZero()) {
+          depositAssetBalances.push(balance);
+        }
+      })
+      .catch((error) => console.log("error", error))
   }
 
   const userData = userDataRes.filter((item) => !!item)
