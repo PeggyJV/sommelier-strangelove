@@ -39,6 +39,10 @@ export const useUserBalances = () => {
           });
 
           if (!balance.value.isZero()) {
+            // fix because token comes with different naming
+            if (balance.symbol === 'B-rETH-STABLE'){
+              balance.symbol = 'rETH BPT'
+            }
             const price = await fetchCoingeckoPrice(
               token!,
               "usd"
