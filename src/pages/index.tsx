@@ -15,10 +15,6 @@ const Home: NextPage = () => {
   return (
     <>
       <PageHome />
-      <SnapshotNotifyModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </>
   )
 }
