@@ -7,6 +7,11 @@ export const NAV_LINKS = (() => {
       title: "Vaults",
     },
     {
+      link: "/snapshot",
+      title: "Snapshot",
+      isNew: true, // Directly set the isNew flag for Snapshot to true
+    },
+    {
       link: "https://www.sommelier.finance/staking",
       title: "Staking",
     },
