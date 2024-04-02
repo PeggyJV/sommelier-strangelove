@@ -1,14 +1,7 @@
-// /Users/henriots/Desktop/sommelier-strangelove/src/utils/navLinks.ts
 import { BRIDGE_PAGE_ENABLED } from "./constants"
 
-interface NavLink {
-  link: string
-  title: string
-  isNew?: boolean // Optional property to indicate new links
-}
-
-export const NAV_LINKS: NavLink[] = (() => {
-  const links: NavLink[] = [
+export const NAV_LINKS = (() => {
+  const links = [
     {
       link: "/",
       title: "Vaults",
@@ -18,6 +11,7 @@ export const NAV_LINKS: NavLink[] = (() => {
       title: "Snapshot",
       isNew: true, // Directly set the isNew flag for Snapshot to true
     },
+    {
       link: "https://www.sommelier.finance/staking",
       title: "Staking",
     },

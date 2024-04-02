@@ -92,34 +92,33 @@ export const Nav: VFC<FlexProps> = (props) => {
             {NAV_LINKS.map((item) => {
               // Exclude external links from being marked as active.
               const isExternalLink = item.link.startsWith("http")
-              let isActive = false
+              let isActive = false // Declare isActive once before using it
 
-let isActive = false; // Default state
-
-// Assuming isExternalLink determines if the link is an external URL
-if (!isExternalLink) {
-  // Logic from snapshot-branch for internal links
-  if (item.link === "/") {
-    // For the home link, check if the pathname is exactly "/"
-    isActive = routes.pathname === "/";
-  } else {
-    // For internal links, check if the pathname starts with the link path
-    isActive = routes.pathname.startsWith(item.link);
-  }
-} else {
-  // Logic from staging for external links
-  // Assuming `path` is a variable holding the current path segment you are interested in. 
-  // This might need to be extracted from routes.pathname similar to how item.link is being split and compared.
-  const pathSegment = routes.pathname.split('/')[1]; // Extract the first path segment from pathname
-  isActive = (item.link === "https://www.sommelier.finance/" ||
-              item.link === "https://www.sommelier.finance/audits" ||
-              item.link === "https://www.sommelier.finance/defi" ||
-              item.link === "https://www.sommelier.finance/staking"
-                ? false // These specific external links always set isActive to false
-                : path === "strategies"
-                ? "" // If the current path is "strategies", it seems to imply isActive should not be true/false but an empty string (though this might require further clarification as it contradicts the boolean nature of isActive)
-                : pathSegment) === item.link.split("/")[1];
-}
+              // Assuming isExternalLink determines if the link is an external URL
+              if (!isExternalLink) {
+                // Logic from snapshot-branch for internal links
+                if (item.link === "/") {
+                  // For the home link, check if the pathname is exactly "/"
+                  isActive = routes.pathname === "/"
+                } else {
+                  // For internal links, check if the pathname starts with the link path
+                  isActive = routes.pathname.startsWith(item.link)
+                }
+              } else {
+                const pathSegment = routes.pathname.split("/")[1] // Extract the first path segment from pathname
+                isActive =
+                  (item.link === "https://www.sommelier.finance/" ||
+                  item.link ===
+                    "https://www.sommelier.finance/audits" ||
+                  item.link ===
+                    "https://www.sommelier.finance/defi" ||
+                  item.link ===
+                    "https://www.sommelier.finance/staking"
+                    ? false // These specific external links always set isActive to false
+                    : pathSegment === "strategies"
+                    ? "" // If the current pathSegment is "strategies", it seems to imply isActive should not be true/false but an empty string (though this might require further clarification as it contradicts the boolean nature of isActive)
+                    : pathSegment) === item.link.split("/")[1]
+              }
               return (
                 <Flex key={item.link} align="center">
                   <Link
