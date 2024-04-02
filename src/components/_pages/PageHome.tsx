@@ -39,9 +39,9 @@ import {
 import { isEqual } from "lodash"
 import { DeleteCircleIcon } from "components/_icons"
 import { add, isBefore } from "date-fns"
-import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
-import { useAccount } from "wagmi"
+import { useAccount, useNetwork } from "wagmi"
 import { StrategyData } from "data/actions/types"
+import { useUserBalances } from "data/hooks/useUserBalances"
 
 export const PageHome = () => {
   const {
@@ -64,9 +64,10 @@ export const PageHome = () => {
     id,
   } = useDepositModalStore()
 
-  const { timeline } = useHome()
-  let { data: userData } = useUserDataAllStrategies();
+  const { timeline } = useHome();
   const { isConnected } = useAccount();
+  const { chain: currentChain } = useNetwork();
+  const { userBalances } = useUserBalances();
 
   const columns = isDesktop
     ? StrategyDesktopColumn({
@@ -290,17 +291,14 @@ export const PageHome = () => {
     return filteredData.sort((a, b) => {
 
       // 1. Priority - does user own same assets as in strategy
-      if (isConnected && userData?.depositAssetBalances) {
-        for (const balance of userData?.depositAssetBalances) {
+      if (isConnected && userBalances) {
+        for (const balance of userBalances) {
           const doesStrategyHaveAsset = (strategy: StrategyData) => strategy?.tradedAssets?.some(
-            asset => asset.symbol === balance.symbol
+            asset =>  (strategy.config.chain.wagmiId === currentChain?.id) && (asset.symbol?.toUpperCase() === balance.symbol.toUpperCase())
           )
           const strategyAHasAsset = doesStrategyHaveAsset(a);
           const strategyBHasAsset = doesStrategyHaveAsset(b);
 
-          if (strategyAHasAsset && strategyBHasAsset) {
-            break;
-          }
           if ((strategyAHasAsset || strategyBHasAsset) && !(strategyAHasAsset && strategyBHasAsset)) {
             return strategyAHasAsset ? -1 : 1;
           }
@@ -330,7 +328,7 @@ export const PageHome = () => {
     selectedDepositAssets,
     showDeprecated,
     showIncentivised,
-    userData,
+    userBalances,
     isConnected
   ])
 

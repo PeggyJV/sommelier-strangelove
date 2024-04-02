@@ -26,7 +26,7 @@ import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
 import { useStrategyData } from "data/hooks/useStrategyData"
-import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserBalance } from "data/hooks/useUserBalance"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import {
@@ -78,7 +78,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     setConnected(connected)
   }, [connected])
 
-  const { lpToken } = useUserBalances(cellarConfig)
+  const { lpToken } = useUserBalance(cellarConfig)
   let { data: lpTokenData } = lpToken
   const lpTokenDisabled =
     !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0

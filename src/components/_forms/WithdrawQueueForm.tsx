@@ -28,7 +28,7 @@ import { ethers } from "ethers"
 import { useHandleTransaction } from "hooks/web3"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserBalance } from "data/hooks/useUserBalance"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
@@ -140,7 +140,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     skip: true,
   })
 
-  const { lpToken } = useUserBalances(cellarConfig)
+  const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
   let strategyBaseAsset: Token = cellarConfig.baseAsset
 

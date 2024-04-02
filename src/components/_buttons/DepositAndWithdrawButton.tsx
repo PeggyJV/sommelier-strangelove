@@ -10,9 +10,8 @@ import {
 } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
-import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserBalance } from "data/hooks/useUserBalance"
 import { isBefore } from "date-fns"
-import { analytics } from "utils/analytics"
 import { toEther } from "utils/formatCurrency"
 import { useAccount, useNetwork } from "wagmi"
 import { BaseButton } from "./BaseButton"
@@ -86,7 +85,7 @@ export function DepositAndWithdrawButton({
 }: DepositAndWithdrawButtonProps) {
   const id = row.original.slug
   const cellarConfig = cellarDataMap[id].config
-  const { lpToken } = useUserBalances(cellarConfig)
+  const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData } = lpToken
 
   const lpTokenDisabled = checkLPtokenDisabled(lpTokenData)

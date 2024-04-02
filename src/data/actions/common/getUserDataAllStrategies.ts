@@ -79,29 +79,6 @@ export const getUserDataAllStrategies = async ({
     )
   )
 
-  const tokenList = getAcceptedDepositAssetsByChain(chain);
-  const depositAssetBalances : {
-    decimals: ResolvedConfig['IntType'];
-    formatted: string;
-    symbol: string;
-    value: ResolvedConfig['BigIntType'];
-  }[] = [];
-
-  for (const token of tokenList) {
-    await fetchBalance({
-      token: getAddress(token!.address),
-      address: getAddress(userAddress)
-    }).then((balance) => {
-        if (!balance.value.isZero()) {
-          depositAssetBalances.push(balance);
-        }
-      })
-      .catch((error) => console.log("error", error))
-  }
-
-  depositAssetBalances.sort(
-    (x, y) => new BigNumber(y.value._hex).minus(new BigNumber(x.value._hex)).toNumber()
-  )
 
   const userData = userDataRes.filter((item) => !!item)
 
@@ -145,7 +122,6 @@ export const getUserDataAllStrategies = async ({
       value: totalNetValue,
       formatted: formatUSD(String(totalNetValue)),
     },
-    depositAssetBalances,
     totalSommRewards: {
       value: totalSommRewards,
       formatted: Number(

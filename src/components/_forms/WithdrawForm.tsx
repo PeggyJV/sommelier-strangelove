@@ -32,7 +32,7 @@ import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserBalance } from "data/hooks/useUserBalance"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { waitTime } from "data/uiConfig"
@@ -87,7 +87,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
-  const { lpToken } = useUserBalances(cellarConfig)
+  const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
 
   const { doHandleTransaction } = useHandleTransaction()
