@@ -422,7 +422,6 @@ export const apyHoverLabel = (config: ConfigProps) => {
       return "Estimated APY"
     } else if (
       config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
       config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
     ) {
@@ -453,7 +452,6 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     return "Estimated APY"
   } else if (
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.TURBO_STETH_STETH_DEPOSIT
   ) {

@@ -510,8 +510,6 @@ export const ApyChartProvider: FC<{
   // Override time array for Morpho ETH
   if (
     cellarConfig.slug === utilConfig.CONTRACT.MORPHO_ETH.SLUG ||
-    cellarConfig.slug ===
-      utilConfig.CONTRACT.REAL_YIELD_ETH_ARB.SLUG ||
     cellarConfig.slug === utilConfig.CONTRACT.REAL_YIELD_USD_ARB.SLUG
   ) {
     timeArray = [
@@ -527,8 +525,6 @@ export const ApyChartProvider: FC<{
     if (allTimeData && idIsDefault && strategyData) {
       if (
         cellarConfig.slug === utilConfig.CONTRACT.MORPHO_ETH.SLUG ||
-        cellarConfig.slug ===
-          utilConfig.CONTRACT.REAL_YIELD_ETH_ARB.SLUG ||
         cellarConfig.slug ===
           utilConfig.CONTRACT.REAL_YIELD_USD_ARB.SLUG
       ) {

@@ -14,29 +14,24 @@ export const NAV_LINKS: NavLink[] = (() => {
       title: "Vaults",
     },
     {
-      link: "/bridge",
-      title: "Bridge",
-    },
-    {
       link: "/snapshot",
       title: "Snapshot",
       isNew: true, // Directly set the isNew flag for Snapshot to true
     },
-    {
-      link: "https://www.sommelier.finance/",
-      title: "About",
-    },
-    {
-      link: "https://www.sommelier.finance/audits",
-      title: "Audits",
-    },
-    {
       link: "https://www.sommelier.finance/staking",
       title: "Staking",
     },
     {
-      link: "https://www.sommelier.finance/ecosystem",
-      title: "Ecosystem",
+      link: "https://www.sommelier.finance/defi",
+      title: "DeFi",
+    },
+    {
+      link: "/bridge",
+      title: "Bridge",
+    },
+    {
+      link: "https://www.sommelier.finance/audits",
+      title: "Audits",
     },
   ]
   if (!BRIDGE_PAGE_ENABLED) {
