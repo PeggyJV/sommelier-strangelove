@@ -291,10 +291,10 @@ export const PageHome = () => {
     return filteredData.sort((a, b) => {
 
       // 1. Priority - does user own same assets as in strategy
-      if (isConnected && userBalances) {
-        for (const balance of userBalances) {
-          const doesStrategyHaveAsset = (strategy: StrategyData) => strategy?.tradedAssets?.some(
-            asset =>  (strategy.config.chain.wagmiId === currentChain?.id) && (asset.symbol?.toUpperCase() === balance.symbol.toUpperCase())
+      if (isConnected && userBalances.data) {
+        for (const balance of userBalances.data) {
+          const doesStrategyHaveAsset = (strategy: StrategyData) => strategy?.depositTokens.some(
+            asset =>  (strategy.config.chain.wagmiId === currentChain?.id) && (asset.toUpperCase() === balance.symbol.toUpperCase())
           )
           const strategyAHasAsset = doesStrategyHaveAsset(a);
           const strategyBHasAsset = doesStrategyHaveAsset(b);
@@ -328,7 +328,7 @@ export const PageHome = () => {
     selectedDepositAssets,
     showDeprecated,
     showIncentivised,
-    userBalances,
+    userBalances.data,
     isConnected
   ])
 
