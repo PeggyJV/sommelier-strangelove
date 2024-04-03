@@ -93,6 +93,7 @@ export const getStrategyData = async ({
 
         return tokens
       })()
+      const depositTokens = strategy.depositTokens.list;
       const stakingEnd = await getStakingEnd(
         stakerContract as CellarStakingV0815
       )
@@ -106,7 +107,7 @@ export const getStrategyData = async ({
 
         // Custom reward APY overrides
         // TODO: Eventually we just need to make this a type of list with the specific token reward and the APY
-        /** 
+        /**
         if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
           // Get wstETH price
           const wstethPrice = Number(
@@ -145,7 +146,7 @@ export const getStrategyData = async ({
 
       let extraRewardsApy = undefined
       // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
-      /** 
+      /**
       if (strategy.slug === utilConfig.CONTRACT.TURBO_GHO.SLUG) {
         // Get GHO price
         const ghoPrice = Number(
@@ -235,7 +236,7 @@ export const getStrategyData = async ({
           }
         }
 
-        /** 
+        /**
         if (strategy.slug === utilConfig.CONTRACT.TURBO_STETH.SLUG) {
           const launchDay = launchDate ?? subDays(new Date(), 8)
           const launchEpoch = Math.floor(launchDay.getTime() / 1000)
@@ -326,6 +327,7 @@ export const getStrategyData = async ({
         baseApy: baseApyValue,
         baseApySumRewards,
         changes,
+        depositTokens,
         description,
         isNew,
         isStakingOngoing,
