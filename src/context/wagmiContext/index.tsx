@@ -1,3 +1,4 @@
+//Users/henriots/Desktop/sommelier-strangelove-1/src/context/wagmiContext/index.tsx
 import { ReactNode } from "react"
 import {
   mainnet,
@@ -8,12 +9,10 @@ import {
 import { arbitrum, optimism } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
 import { infuraProvider } from "wagmi/providers/infura"
-
 import { alchemyProvider } from "wagmi/providers/alchemy"
 import { InjectedConnector } from "wagmi/connectors/injected"
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
 import { WalletConnectLegacyConnector } from "wagmi/connectors/walletConnectLegacy"
-
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet"
 import { MetaMaskConnector } from "wagmi/connectors/metaMask"
 
@@ -25,10 +24,8 @@ const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY
 const { chains, provider, webSocketProvider } = configureChains(
   [mainnet, arbitrum, optimism],
   [
-    alchemyProvider({ apiKey: ALCHEMY_API_KEY! }),
-    infuraProvider({
-      apiKey: INFURA_API_KEY!,
-    }),
+    alchemyProvider({ apiKey: ALCHEMY_API_KEY }),
+    infuraProvider({ apiKey: INFURA_API_KEY }),
     publicProvider(),
   ],
   { targetQuorum: 1 }
@@ -50,6 +47,9 @@ const connector = () => {
     new MetaMaskConnector({
       chains,
     }),
+    // The InjectedConnector is used for connecting to browser-injected Ethereum wallets
+    // This includes MetaMask, Trust Wallet's browser extension, and others
+    // There's no specific change needed here for Trust Wallet; it will be detected automatically
     new InjectedConnector({
       chains,
       options: { shimDisconnect: true },
@@ -67,7 +67,6 @@ const connector = () => {
 const client = createClient({
   autoConnect: true,
   provider,
-  // @ts-ignore
   connectors: connector,
   webSocketProvider,
 })
