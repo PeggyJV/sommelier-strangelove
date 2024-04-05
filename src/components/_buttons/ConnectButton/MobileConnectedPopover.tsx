@@ -1,3 +1,4 @@
+///Users/henriots/Desktop/sommelier-strangelove-1/src/components/_buttons/ConnectButton/MobileConnectedPopover.tsx
 import {
   Avatar,
   HStack,
@@ -18,60 +19,38 @@ import {
   useDisconnect,
   useEnsAvatar,
   useEnsName,
+  useNetwork,
 } from "wagmi"
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
 import { ChevronDownIcon, LogoutCircleIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
-import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
 import { useRouter } from "next/router"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useNetwork } from "wagmi"
 
 export const MobileConnectedPopover = () => {
   const isLarger480 = useBetterMediaQuery("(min-width: 480px)")
 
-  const { addToast, close } = useBrandedToast()
+  const { addToast } = useBrandedToast()
   const { disconnect } = useDisconnect()
   const { address, isConnecting } = useAccount()
   const { data: ensName, isLoading: ensNameLoading } = useEnsName({
     address,
   })
   const { data: ensAvatar, isLoading: ensAvatarLoading } =
-    useEnsAvatar({
-      address: address,
-    })
-
-  const id = useRouter().query.id as string | undefined
-  const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
+    useEnsAvatar({ address })
   const { chain } = useNetwork()
 
-  function onDisconnect() {
-    analytics.track("wallet.disconnected", {
-      account: address,
-    })
-
+  const handleDisconnect = () => {
+    analytics.track("wallet.disconnected", { account: address })
     disconnect()
-    // Refresh window
     window.location.reload()
-  }
-
-  const walletAddressIcon = () => {
-    if (ensAvatar) {
-      return <Avatar boxSize={"16px"} src={ensAvatar} />
-    }
-    if (address) {
-      return (
-        <Jazzicon diameter={16} seed={jsNumberForAddress(address)} />
-      )
-    }
   }
 
   const handleCopyAddressToClipboard = () => {
     if (address) {
       navigator.clipboard.writeText(address)
-
       addToast({
         heading: "Copied to clipboard",
         body: <Text>Wallet address copied to clipboard</Text>,
@@ -80,7 +59,17 @@ export const MobileConnectedPopover = () => {
     }
   }
 
-  // to make sure the loading is about not about fetching ENS
+  const walletAddressIcon = () => {
+    return ensAvatar ? (
+      <Avatar boxSize={"16px"} src={ensAvatar} />
+    ) : (
+      <Jazzicon
+        diameter={16}
+        seed={jsNumberForAddress(address ?? "")}
+      />
+    )
+  }
+
   const isLoading = isConnecting && !address
   const isEnsLoading = ensAvatarLoading || ensNameLoading
 
@@ -100,16 +89,14 @@ export const MobileConnectedPopover = () => {
           }
           minW="max-content"
           isLoading={isLoading}
-          // loading state fetching ENS
           leftIcon={
-            ((isLoading || isEnsLoading) && <Spinner size="xs" />) ||
-            undefined
+            isLoading || isEnsLoading ? (
+              <Spinner size="xs" />
+            ) : undefined
           }
           fontFamily="Haffer"
           fontSize={12}
-          _hover={{
-            bg: "purple.dark",
-          }}
+          _hover={{ bg: "purple.dark" }}
         >
           {ensName
             ? isLarger480
@@ -169,7 +156,7 @@ export const MobileConnectedPopover = () => {
               py={2}
               px={4}
               fontSize="sm"
-              onClick={onDisconnect}
+              onClick={handleDisconnect}
               _hover={{
                 cursor: "pointer",
                 bg: "purple.dark",
