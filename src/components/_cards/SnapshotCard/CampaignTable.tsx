@@ -102,7 +102,7 @@ const CampaignTable: React.FC = () => {
                 {isVaultUsageVisible && (
                   <Td fontSize={fontSize}>
                     <Tooltip
-                      label="Real Yield ETH on Arbitrum for new deposits offers enhanced yields for contributions made to the Arbitrum platform."
+                      label="Real Yield ETH on Arbitrum for new deposits"
                       hasArrow
                       placement="top"
                       arrowShadowColor="purple.base"
@@ -134,10 +134,14 @@ const CampaignTable: React.FC = () => {
                     arrowShadowColor="purple.base"
                     color="neutral.300"
                     bg="surface.bg"
-                    
                   >
-                    <Text>Active</Text>
-                    
+                    <HStack>
+                      <Text>Active</Text>
+                      <InformationIcon
+                        color="neutral.300"
+                        boxSize="12px"
+                      />
+                    </HStack>
                   </Tooltip>
                 </Td>
               </Tr>
