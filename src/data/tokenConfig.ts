@@ -510,6 +510,24 @@ export const tokenConfig: Token[] = [
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
   },
+  {
+    src: "",
+    alt: "",
+    symbol: "ETH",
+    address: "",
+    coinGeckoId: "ethereum",
+    decimals: 18,
+    chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
+    src: "",
+    alt: "",
+    symbol: "ETH",
+    address: "",
+    coinGeckoId: "ethereum",
+    decimals: 18,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
 ]
 // --- ETH ACCEPTED TOKENS ---
 let acceptedETHDepositTokens = [
@@ -542,6 +560,7 @@ let acceptedETHDepositTokens = [
   "swETH",
   "BUSD",
   "rETH BPT",
+  "ETH"
 ]
 
 let depositTokenMapETH = tokenConfig.reduce((map, token) => {
@@ -562,7 +581,7 @@ export const acceptedETHDepositTokenMap = Object.keys(
   }, {} as { [symbol: string]: Token })
 
 // --- ARB ACCEPTED TOKENS ---
-let acceptedARBDepositTokens = ["USDC", "USDT", "DAI", "USDC.e", 'WETH', 'wstETH', 'rETH'];
+let acceptedARBDepositTokens = ["USDC", "USDT", "DAI", "USDC.e", 'WETH', 'wstETH', 'rETH', 'ETH'];
 
 let depositTokenMapARB = tokenConfig.reduce((map, token) => {
   if (acceptedARBDepositTokens.includes(token.symbol)) {
@@ -582,7 +601,7 @@ export const acceptedARBDepositTokenMap = Object.keys(
   }, {} as { [symbol: string]: Token })
 
 // --- OPTIMISM ACCEPTED TOKENS ---
-let acceptedOPTDepositTokens = ['WETH', 'wstETH', 'rETH'];
+let acceptedOPTDepositTokens = ['WETH', 'wstETH', 'rETH', 'ETH'];
 
 
 const acceptedDepositTokensByChain: { [key: string]: any } = {

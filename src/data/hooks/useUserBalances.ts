@@ -31,7 +31,7 @@ export const useUserBalances = () => {
     await Promise.all(tokenList.map(async (token) => {
       try {
         const balance = await fetchBalance({
-          token: getAddress(token!.address),
+          token: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
           address: getAddress(address!)
         });
 

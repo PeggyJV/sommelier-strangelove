@@ -290,8 +290,16 @@ export const PageHome = () => {
 
     return filteredData.sort((a, b) => {
 
-      // 1. Priority - does user own same assets as in strategy
+      // 1. Priority - strategies deposit assets that user holds
       if (isConnected && userBalances.data) {
+        // if user has ETH consider it as they had WETH
+        const considerETHasWETH = (strategy: StrategyData) => {
+          if (strategy?.depositTokens.some(asset => asset === "WETH")) {
+            strategy?.depositTokens.push("ETH");
+          }
+        };
+        considerETHasWETH(a);
+        considerETHasWETH(b);
         for (const balance of userBalances.data) {
           const doesStrategyHaveAsset = (strategy: StrategyData) => strategy?.depositTokens.some(
             asset =>  (strategy.config.chain.wagmiId === currentChain?.id) && (asset.toUpperCase() === balance.symbol.toUpperCase())
