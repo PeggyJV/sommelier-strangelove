@@ -12,9 +12,10 @@ import {
   HStack,
   Text,
   useBreakpointValue,
-  VStack, // Importing VStack for vertical stacking
+  VStack,
+  Tooltip,
 } from "@chakra-ui/react"
-// Import InfoBanner
+import { InformationIcon } from "components/_icons"
 import { InfoBanner } from "components/_banners/InfoBanner"
 
 interface Campaign {
@@ -27,15 +28,9 @@ interface Campaign {
 const campaigns: Campaign[] = [
   {
     name: "Redstone Points",
-    sommStaking: "Points Multiplier; Minimum 1000 SOMM",
-    vaultUsage: "RYE on Arbitrum",
-    status: "Active",
-  },
-  {
-    name: "Ethos",
-    sommStaking: "Minimum 500 SOMM",
-    vaultUsage: "N/A",
-    status: "Active",
+    sommStaking: "Yes, Bonus Multiplier (min 750 SOMM)",
+    vaultUsage: "Real Yield ETH on Arbitrum (new deposits)", // Original data placeholder
+    status: "Active", // Now using "Active" instead of specific dates
   },
 ]
 
@@ -63,8 +58,7 @@ const CampaignTable: React.FC = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {/* Commenting out the campaigns mapping as details are not confirmed yet */}
-            {/* {campaigns.map((campaign, index) => (
+            {campaigns.map((campaign, index) => (
               <Tr key={index}>
                 <Td fontSize={fontSize}>
                   <HStack spacing="10px">
@@ -72,7 +66,7 @@ const CampaignTable: React.FC = () => {
                       src={
                         campaign.name === "Redstone Points"
                           ? "/assets/icons/redstone.png"
-                          : "/assets/icons/ethos.png"
+                          : "/assets/icons/default.png" // Adjust as needed
                       }
                       boxSize="16px"
                       alt={`${campaign.name} Logo`}
@@ -81,45 +75,73 @@ const CampaignTable: React.FC = () => {
                   </HStack>
                 </Td>
                 <Td fontSize={fontSize}>
-                  <Link
-                    href="https://www.sommelier.finance/staking"
-                    isExternal
-                    color="white.500"
-                    textDecoration="underline"
+                  <Tooltip
+                    hasArrow
+                    label="Bonus Multiplier (min 750 SOMM)"
+                    placement="top"
+                    arrowShadowColor="purple.base"
+                    color="neutral.300"
+                    bg="surface.bg"
                   >
-                    {campaign.sommStaking}
-                  </Link>
+                    <HStack>
+                      <Link
+                        href="https://www.sommelier.finance/staking"
+                        isExternal
+                        color="white.500"
+                        textDecoration="underline"
+                      >
+                        Yes
+                      </Link>
+                      <InformationIcon
+                        color="neutral.300"
+                        boxSize={3}
+                      />
+                    </HStack>
+                  </Tooltip>
                 </Td>
                 {isVaultUsageVisible && (
                   <Td fontSize={fontSize}>
-                    {campaign.vaultUsage === "N/A" ? (
-                      <Link
-                        href="https://app.sommelier.finance/"
-                        isExternal
-                        color="white.500"
-                        textDecoration="underline"
-                      >
-                        {campaign.vaultUsage}
-                      </Link>
-                    ) : (
-                      <Link
-                        href={
-                          campaign.vaultUsage === "RYE on Arbitrum"
-                            ? "https://app.sommelier.finance/strategies/real-yield-eth-arb/manage"
-                            : "https://www.sommelier.finance/"
-                        }
-                        isExternal
-                        color="white.500"
-                        textDecoration="underline"
-                      >
-                        {campaign.vaultUsage}
-                      </Link>
-                    )}
+                    <Tooltip
+                      label="Real Yield ETH on Arbitrum for new deposits offers enhanced yields for contributions made to the Arbitrum platform."
+                      hasArrow
+                      placement="top"
+                      arrowShadowColor="purple.base"
+                      color="neutral.300"
+                      bg="surface.bg"
+                    >
+                      <HStack>
+                        <Link
+                          href="https://app.sommelier.finance/strategies/real-yield-eth-arb/manage"
+                          isExternal
+                          color="white.500"
+                          textDecoration="underline"
+                        >
+                          RYE Arbitrum
+                        </Link>
+                        <InformationIcon
+                          color="neutral.300"
+                          boxSize={3}
+                        />
+                      </HStack>
+                    </Tooltip>
                   </Td>
                 )}
-                <Td fontSize={fontSize}>{campaign.status}</Td>
+                <Td fontSize={fontSize}>
+                  <Tooltip
+                    label="From April 10th to April 21st, 2024"
+                    hasArrow
+                    placement="top"
+                    arrowShadowColor="purple.base"
+                    color="neutral.300"
+                    bg="surface.bg"
+                    
+                  >
+                    <Text>Active</Text>
+                    
+                  </Tooltip>
+                </Td>
               </Tr>
-            ))} */}
+            ))}
           </Tbody>
         </Table>
       </TableContainer>
