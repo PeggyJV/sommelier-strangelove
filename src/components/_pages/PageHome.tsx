@@ -39,7 +39,7 @@ import {
 import { isEqual } from "lodash"
 import { DeleteCircleIcon } from "components/_icons"
 import { add, isBefore } from "date-fns"
-import { useAccount, useNetwork } from "wagmi"
+import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 
@@ -66,7 +66,6 @@ export const PageHome = () => {
 
   const { timeline } = useHome();
   const { isConnected } = useAccount();
-  const { chain: currentChain } = useNetwork();
   const { userBalances } = useUserBalances();
 
   const columns = isDesktop
@@ -302,7 +301,7 @@ export const PageHome = () => {
         considerETHasWETH(b);
         for (const balance of userBalances.data) {
           const doesStrategyHaveAsset = (strategy: StrategyData) => strategy?.depositTokens.some(
-            asset =>  (strategy.config.chain.wagmiId === currentChain?.id) && (asset.toUpperCase() === balance.symbol.toUpperCase())
+            asset => (asset.toUpperCase() === balance.symbol.toUpperCase())
           )
           const strategyAHasAsset = doesStrategyHaveAsset(a);
           const strategyBHasAsset = doesStrategyHaveAsset(b);
