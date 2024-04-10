@@ -87,7 +87,7 @@ export const turboSTETHstETHDeposit: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    show7DayAPYTooltip: true,
+
     badges: [
       {
         customStrategyHighlight: "Deposit stETH!",
