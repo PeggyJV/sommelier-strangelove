@@ -528,6 +528,15 @@ export const tokenConfig: Token[] = [
     decimals: 18,
     chain: chainSlugMap.ARBITRUM.id,
   },
+  {
+    src: "",
+    alt: "",
+    symbol: "ETH",
+    address: "",
+    coinGeckoId: "ethereum",
+    decimals: 18,
+    chain: chainSlugMap.OPTIMISM.id,
+  },
 ]
 // --- ETH ACCEPTED TOKENS ---
 let acceptedETHDepositTokens = [
