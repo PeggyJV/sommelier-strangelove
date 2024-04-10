@@ -293,13 +293,17 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      {/*
-        <InfoBanner
-          text={
-            "New incentive programs for Real Yield ETH (on Ethereum) Real Yield BTC and Real Yield USD (on Arbitrum) are progressing through governance. If they pass, rewards will begin flowing on March 24"
-          }
-        />
-      */}
+      <InfoBanner
+        text={
+          <a
+            href="/snapshot"
+            style={{ textDecoration: "underline", color: "inherit" }}
+          >
+            Unlock RedStone RSG Points: Act Now Before They're Gone!
+          </a>
+        }
+      />
+
       {/* <HStack
         p={4}
         mb={6}
