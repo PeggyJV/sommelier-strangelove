@@ -39,6 +39,7 @@ import {
 } from "components/_filters/MiscFilter"
 import { isEqual } from "lodash"
 import { DeleteCircleIcon } from "components/_icons"
+import Link from "next/link"
 
 export const PageHome = () => {
   const {
@@ -295,12 +296,17 @@ export const PageHome = () => {
     <LayoutWithSidebar>
       <InfoBanner
         text={
-          <a
-            href="/snapshot"
-            style={{ textDecoration: "underline", color: "inherit" }}
-          >
-            Unlock RedStone RSG Points: Act Now Before They're Gone!
-          </a>
+          <Link href="/snapshot" passHref>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a
+              style={{
+                textDecoration: "underline",
+                color: "inherit",
+              }}
+            >
+              Unlock RedStone RSG Points: Act Now Before They're Gone!
+            </a>
+          </Link>
         }
       />
 
