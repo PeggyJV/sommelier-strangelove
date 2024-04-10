@@ -63,7 +63,6 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
     }
 
     checkRegistration()
-
   }, [isEthereumConnected, wrongNetwork, ethAddress, sommAddress])
 
   // if (!isEthereumConnected || wrongNetwork) {
@@ -211,7 +210,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
             Sign
           </BaseButton>
           <Text color="white">
-            Re-link your wallets with new wallets if you like.
+            Re-link to update with a new wallet at any time.
           </Text>
         </Stack>
       </form>

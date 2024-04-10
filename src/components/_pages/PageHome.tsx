@@ -39,6 +39,7 @@ import {
 } from "components/_filters/MiscFilter"
 import { isEqual } from "lodash"
 import { DeleteCircleIcon } from "components/_icons"
+import Link from "next/link"
 
 export const PageHome = () => {
   const {
@@ -293,13 +294,22 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      {/*
-        <InfoBanner
-          text={
-            "New incentive programs for Real Yield ETH (on Ethereum) Real Yield BTC and Real Yield USD (on Arbitrum) are progressing through governance. If they pass, rewards will begin flowing on March 24"
-          }
-        />
-      */}
+      <InfoBanner
+        text={
+          <Link href="/snapshot" passHref>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a
+              style={{
+                textDecoration: "underline",
+                color: "inherit",
+              }}
+            >
+              Unlock RedStone RSG Points: Act Now Before They're Gone!
+            </a>
+          </Link>
+        }
+      />
+
       {/* <HStack
         p={4}
         mb={6}
