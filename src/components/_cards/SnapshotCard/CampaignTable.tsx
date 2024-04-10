@@ -27,7 +27,7 @@ interface Campaign {
 
 const campaigns: Campaign[] = [
   {
-    name: "Redstone Points",
+    name: "RedStone RSG Points",
     sommStaking: "Yes, Bonus Multiplier (min 750 SOMM)",
     vaultUsage: "Real Yield ETH on Arbitrum (new deposits)", // Original data placeholder
     status: "Active", // Now using "Active" instead of specific dates
@@ -64,7 +64,7 @@ const CampaignTable: React.FC = () => {
                   <HStack spacing="10px">
                     <Image
                       src={
-                        campaign.name === "Redstone Points"
+                        campaign.name === "RedStone RSG Points"
                           ? "/assets/icons/redstone.png"
                           : "/assets/icons/default.png" // Adjust as needed
                       }
@@ -77,7 +77,7 @@ const CampaignTable: React.FC = () => {
                 <Td fontSize={fontSize}>
                   <Tooltip
                     hasArrow
-                    label="Bonus Multiplier (min 750 SOMM)"
+                    label="Minimum of 750 SOMM"
                     placement="top"
                     arrowShadowColor="purple.base"
                     color="neutral.300"
@@ -90,7 +90,7 @@ const CampaignTable: React.FC = () => {
                         color="white.500"
                         textDecoration="underline"
                       >
-                        Yes
+                        Optional; Bonus Multiplier
                       </Link>
                       <InformationIcon
                         color="neutral.300"
@@ -102,7 +102,7 @@ const CampaignTable: React.FC = () => {
                 {isVaultUsageVisible && (
                   <Td fontSize={fontSize}>
                     <Tooltip
-                      label="Real Yield ETH on Arbitrum for new deposits"
+                      label="New deposits during campaign only"
                       hasArrow
                       placement="top"
                       arrowShadowColor="purple.base"
@@ -116,7 +116,7 @@ const CampaignTable: React.FC = () => {
                           color="white.500"
                           textDecoration="underline"
                         >
-                          RYE Arbitrum
+                          Mandatory; Arbitrum Real Yield ETH
                         </Link>
                         <InformationIcon
                           color="neutral.300"
@@ -127,22 +127,11 @@ const CampaignTable: React.FC = () => {
                   </Td>
                 )}
                 <Td fontSize={fontSize}>
-                  <Tooltip
-                    label="From April 10th to April 21st, 2024"
-                    hasArrow
-                    placement="top"
-                    arrowShadowColor="purple.base"
-                    color="neutral.300"
-                    bg="surface.bg"
-                  >
+      
                     <HStack>
                       <Text>Active</Text>
-                      <InformationIcon
-                        color="neutral.300"
-                        boxSize="12px"
-                      />
                     </HStack>
-                  </Tooltip>
+   
                 </Td>
               </Tr>
             ))}

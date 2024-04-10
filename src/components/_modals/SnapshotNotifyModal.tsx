@@ -1,32 +1,60 @@
 // src/components/_modals/SnapshotNotifyModal.tsx
+import React, { useEffect, useState } from "react"
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  useColorModeValue,
+  Link,
+  Box,
+  Text,
+} from "@chakra-ui/react"
 
-import { ModalProps, Text, Link } from "@chakra-ui/react"
-import { BaseModal } from "./BaseModal"
-import { useEffect } from "react"
+const SnapshotNotifyModal = ({ onClose }) => {
+  const [isOpen, setIsOpen] = useState(false)
 
-export const SnapshotNotifyModal = ({
-  isOpen,
-  onClose,
-}: Pick<ModalProps, "isOpen" | "onClose">) => {
   useEffect(() => {
-    // Logic here if needed, e.g., analytics
-  }, [isOpen])
+    // Check sessionStorage to decide if the modal should be opened
+    const shouldShowModal = sessionStorage.getItem("showModalOnLoad")
 
-  return (
-    <BaseModal
-      isOpen={isOpen}
-      onClose={onClose}
-      heading="Connect Wallet on Snapshot"
-    >
+    if (shouldShowModal !== "false") {
+      setIsOpen(true)
+      // Set the flag to false after showing the modal once
+      sessionStorage.setItem("showModalOnLoad", "false")
+    }
+  }, [])
+
+  const bgColor = useColorModeValue("blue.50", "blue.900")
+
+  const headingElement = (
+    <Box p={4}>
       <Link
         href="/snapshot"
-        color="white.500"
-        textDecoration="underline"
         isExternal
+        style={{ textDecoration: "underline", display: "block" }}
       >
-        Complete campaigns to earn bonus SOMM rewards and/or airdrop
-        points.
+        <Text fontSize="lg" textAlign="center">
+          Unlock RedStone RSG Points: Act Now Before They're Gone!
+        </Text>
       </Link>
-    </BaseModal>
+    </Box>
+  )
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <ModalOverlay />
+      <ModalContent bg={bgColor}>
+        <ModalHeader>{headingElement}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          {/* Modal body content can be placed here */}
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   )
 }
+
+export default SnapshotNotifyModal
