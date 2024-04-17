@@ -1,5 +1,5 @@
 import { mainnet } from "wagmi"
-import { arbitrum, optimism } from "wagmi/chains"
+import { arbitrum, optimism, scroll } from "wagmi/chains"
 
 export interface Chain {
   id: string
@@ -73,10 +73,21 @@ export const chainConfig: Chain[] = [
     infuraRpcUrl: optimism.rpcUrls.infura.http[0],
     alchemyRpcUrl: optimism.rpcUrls.alchemy.http[0],
     blockExplorer: optimism.blockExplorers.default,
-    //NEED TO UPDATE
     withdrawQueueAddress:
       "0x516AD60801b62fCABCCDA7be178e4478D4018071",
-    //NEED TO UPDATE
+    priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11",
+  },
+  {
+    id: "scroll",
+    wagmiId: scroll.id,
+    displayName: "Scroll",
+    logoPath: "/assets/icons/scroll.svg",
+    alt: "Scroll logo",
+    infuraRpcUrl: scroll.rpcUrls.infura.http[0],
+    alchemyRpcUrl: scroll.rpcUrls.alchemy.http[0],
+    blockExplorer: scroll.blockExplorers.default,
+    withdrawQueueAddress:
+      "0x1cee7dfb56de1eae6125e39336e94f297b94959e",
     priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11",
   },
 ]
@@ -92,11 +103,12 @@ export const chainConfigMap: Record<string, Chain> =
     },
     { unknown: placeholderChain }
   )
-export const supportedChains = ["ethereum", "arbitrum", "optimism"]
+export const supportedChains = ["ethereum", "arbitrum", "optimism", "scroll"]
 
 
 export const chainSlugMap = {
   ETHEREUM: chainConfigMap["ethereum"],
   ARBITRUM: chainConfigMap["arbitrum"],
   OPTIMISM: chainConfigMap["optimism"],
+  SCROLL: chainConfigMap["scroll"],
 }
