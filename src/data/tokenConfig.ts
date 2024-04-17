@@ -70,6 +70,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.OPTIMISM.id,
   },
   {
+    src: "/assets/icons/eth.png",
+    alt: "Ethereum logo",
+    symbol: "WETH",
+    address: "0x5300000000000000000000000000000000000004",
+    coinGeckoId: "weth",
+    decimals: 18,
+    chain: chainSlugMap.SCROLL.id,
+  },
+  {
     src: "/assets/icons/wbtc.png",
     alt: "Bitcoin logo",
     symbol: "WBTC",
@@ -250,6 +259,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.OPTIMISM.id,
   },
   {
+    src: "/assets/icons/reth.png",
+    alt: "rETH logo",
+    symbol: "rETH",
+    address: "0x53878B874283351D26d206FA512aEcE1Bef6C0dD",
+    coinGeckoId: "rocket-pool-eth",
+    decimals: 18,
+    chain: chainSlugMap.SCROLL.id,
+  },
+  {
     src: "/assets/icons/steth.png",
     alt: "stETH logo",
     symbol: "stETH",
@@ -428,6 +446,15 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "wrapped-steth",
     decimals: 18,
     chain: chainSlugMap.OPTIMISM.id,
+  },
+  {
+    src: "/assets/icons/wsteth-logo.jpeg",
+    alt: "wstETH logo",
+    symbol: "wstETH",
+    address: "0xf610A9dfB7C89644979b4A0f27063E9e7d7Cda32",
+    coinGeckoId: "wrapped-steth",
+    decimals: 18,
+    chain: chainSlugMap.SCROLL.id,
   },
   {
     src: "/assets/icons/usdc.png",
