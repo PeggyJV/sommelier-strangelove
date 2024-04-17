@@ -88,6 +88,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey ===
@@ -128,6 +129,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
@@ -252,6 +254,7 @@ export const bondingPeriodOptions = (
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
@@ -384,6 +387,7 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
       config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
       config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
       config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
@@ -417,6 +421,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
@@ -444,6 +449,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
@@ -472,6 +478,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
@@ -492,6 +499,7 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
@@ -564,6 +572,13 @@ export const estimatedApyValue = (config: ConfigProps) => {
   }
 
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) {
+    return {
+      value: 15.0,
+      formatted: "15.0%",
+    }
+  }
+
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL) {
     return {
       value: 15.0,
       formatted: "15.0%",
