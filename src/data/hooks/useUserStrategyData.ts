@@ -5,8 +5,7 @@ import { useAccount, useSigner } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
-import { useUserBalances } from "./useUserBalances"
-import { useNetwork } from "wagmi"
+import { useUserBalance } from "./useUserBalance"
 import { tokenConfig } from "data/tokenConfig"
 
 export const useUserStrategyData = (strategyAddress: string, chain: string) => {
@@ -32,7 +31,7 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
       (item) => item.config.cellar.address === strategyAddress && item.config.chain.id === chain
     )?.config.isNoDataSource
   )
-  const { lpToken } = useUserBalances(config)
+  const { lpToken } = useUserBalance(config)
   const baseAsset = config.baseAsset
   const { data: baseAssetPrice } = useCoinGeckoPrice(
     baseAsset

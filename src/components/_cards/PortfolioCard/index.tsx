@@ -26,7 +26,7 @@ import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
 import { useStrategyData } from "data/hooks/useStrategyData"
-import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserBalance } from "data/hooks/useUserBalance"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import {
@@ -54,14 +54,13 @@ import { Rewards } from "./Rewards"
 import { useNetwork } from "wagmi"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { add } from "lodash"
 import { CellarNameKey } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
-  const { address, isConnected } = useAccount()
+  const { address, isConnected: connected } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const slug = cellarDataMap[id].slug
@@ -73,7 +72,13 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     cellarConfig.chain.id
   ) as Token[]
 
-  const { lpToken } = useUserBalances(cellarConfig)
+  // using local state to avoid Next.js errors
+  const [isConnected, setConnected] = useState(false);
+  useEffect(() => {
+    setConnected(connected)
+  }, [connected])
+
+  const { lpToken } = useUserBalance(cellarConfig)
   let { data: lpTokenData } = lpToken
   const lpTokenDisabled =
     !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0

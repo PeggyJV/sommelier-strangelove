@@ -115,9 +115,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
               <HStack spacing={8}>
                 <VStack spacing={0} align="flex-start">
                   <CardHeading>
-                    <Text>
                       {timeline} {apyChartLabel(cellarConfig)}
-                    </Text>
                   </CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
