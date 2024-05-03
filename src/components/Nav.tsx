@@ -1,3 +1,4 @@
+///Users/henriots/Desktop/sommelier-strangelove/src/components/Nav.tsx
 import { useEffect, useState, VFC } from "react"
 import {
   Container,
@@ -13,6 +14,7 @@ import {
   Image,
   Stack,
   useDisclosure,
+  Text,
 } from "@chakra-ui/react"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { Link } from "components/Link"
@@ -22,6 +24,7 @@ import { LogoTextIcon } from "./_icons"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useScrollDirection } from "hooks/utils/useScrollDirection"
 import { HamburgerIcon } from "./_icons/HamburgerIcon"
+import { Badge, BadgeStatus } from "./Strategy/Carousel/Badge"
 
 export const Nav: VFC<FlexProps> = (props) => {
   const [scrolled, setScrolled] = useState<boolean>(false)
@@ -79,35 +82,59 @@ export const Nav: VFC<FlexProps> = (props) => {
         gap={{ base: 4, lg: 0 }}
         px={{ base: "16px", md: "30px", lg: "40px" }}
       >
+        {/* Desktop Navigation */}
         {isLarger992 && (
           <HStack spacing={10}>
             <Link href="/">
               <LogoTextIcon w="9rem" h="2rem" />
             </Link>
             {NAV_LINKS.map((item) => {
-              const path = routes.pathname.split("/")[1]
+              // Exclude external links from being marked as active.
+              const isExternalLink = item.link.startsWith("http")
+              let isActive = false // Declare isActive once before using it
 
-              const isActive =
-                (item.link === "https://www.sommelier.finance/" ||
-                item.link ===
-                  "https://www.sommelier.finance/audits" ||
-                item.link ===
-                  "https://www.sommelier.finance/defi" ||
-                item.link === "https://www.sommelier.finance/staking"
-                  ? false
-                  : path === "strategies"
-                  ? ""
-                  : path) === item.link.split("/")[1]
-
+              // Assuming isExternalLink determines if the link is an external URL
+              if (!isExternalLink) {
+                // Logic from snapshot-branch for internal links
+                if (item.link === "/") {
+                  // For the home link, check if the pathname is exactly "/"
+                  isActive = routes.pathname === "/"
+                } else {
+                  // For internal links, check if the pathname starts with the link path
+                  isActive = routes.pathname.startsWith(item.link)
+                }
+              } else {
+                const pathSegment = routes.pathname.split("/")[1] // Extract the first path segment from pathname
+                isActive =
+                  (item.link === "https://www.sommelier.finance/" ||
+                  item.link ===
+                    "https://www.sommelier.finance/audits" ||
+                  item.link ===
+                    "https://www.sommelier.finance/defi" ||
+                  item.link ===
+                    "https://www.sommelier.finance/staking"
+                    ? false // These specific external links always set isActive to false
+                    : pathSegment === "strategies"
+                    ? "" // If the current pathSegment is "strategies", it seems to imply isActive should not be true/false but an empty string (though this might require further clarification as it contradicts the boolean nature of isActive)
+                    : pathSegment) === item.link.split("/")[1]
+              }
               return (
-                <Link
-                  key={item.link}
-                  href={item.link}
-                  color={isActive ? "white" : "neutral.400"}
-                  fontWeight="semibold"
-                >
-                  {item.title}
-                </Link>
+                <Flex key={item.link} align="center">
+                  <Link
+                    href={item.link}
+                    color={
+                      isActive && !isExternalLink
+                        ? "white"
+                        : "neutral.400"
+                    }
+                    fontWeight="semibold"
+                  >
+                    {item.title}
+                  </Link>
+                  {item.isNew && (
+                    <Badge status={BadgeStatus.New} ml={2} />
+                  )}
+                </Flex>
               )
             })}
           </HStack>
@@ -153,28 +180,37 @@ export const Nav: VFC<FlexProps> = (props) => {
             <DrawerBody p={0}>
               <Stack alignItems="flex-end" py="160px" px="24px">
                 {NAV_LINKS.map((item) => {
-                  const path = routes.pathname.split("/")[1]
+                  // Exclude external links from being marked as active.
+                  const isExternalLink = item.link.startsWith("http")
+                  let isActive = false
 
-                  const isActive =
-                    (item.link === "https://www.sommelier.finance/" ||
-                    item.link ===
-                      "https://www.sommelier.finance/audits" ||
-                    item.link ===
-                      "https://www.sommelier.finance/staking"
-                      ? false
-                      : path === "strategies"
-                      ? ""
-                      : path) === item.link.split("/")[1]
+                  if (!isExternalLink) {
+                    if (item.link === "/") {
+                      // For the home link, check if the pathname is exactly "/"
+                      isActive = routes.pathname === "/"
+                    } else {
+                      // For internal links, check if the pathname starts with the link path
+                      isActive = routes.pathname.startsWith(item.link)
+                    }
+                  }
+
                   return (
-                    <Link
-                      key={item.link}
-                      href={item.link}
-                      color={isActive ? "white" : "neutral.400"}
-                      fontWeight="semibold"
-                      fontSize="21px"
-                    >
-                      {item.title}
-                    </Link>
+                    <Flex key={item.link} align="center">
+                      <Link
+                        href={item.link}
+                        color={
+                          isActive && !isExternalLink
+                            ? "white"
+                            : "neutral.400"
+                        }
+                        fontWeight="semibold"
+                      >
+                        {item.title}
+                      </Link>
+                      {item.isNew && (
+                        <Badge status={BadgeStatus.New} ml={2} />
+                      )}
+                    </Flex>
                   )
                 })}
               </Stack>
