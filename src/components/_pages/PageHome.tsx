@@ -23,8 +23,7 @@ import {
   useDepositModalStore,
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useMemo, useState, useEffect } from "react"
-import { InfoBanner } from "components/_banners/InfoBanner"
+import { useMemo, useState } from "react"
 import { ChainFilter } from "components/_filters/ChainFilter"
 import { chainConfig } from "src/data/chainConfig"
 import {
@@ -39,7 +38,12 @@ import {
 } from "components/_filters/MiscFilter"
 import { isEqual } from "lodash"
 import { DeleteCircleIcon } from "components/_icons"
+import { add, isBefore } from "date-fns"
+import { useAccount } from "wagmi"
+import { StrategyData } from "data/actions/types"
+import { useUserBalances } from "data/hooks/useUserBalances"
 import Link from "next/link"
+
 
 export const PageHome = () => {
   const {
@@ -62,7 +66,10 @@ export const PageHome = () => {
     id,
   } = useDepositModalStore()
 
-  const { timeline } = useHome()
+  const { timeline } = useHome();
+  const { isConnected } = useAccount();
+  const { userBalances } = useUserBalances();
+
   const columns = isDesktop
     ? StrategyDesktopColumn({
         timeline,
@@ -238,57 +245,98 @@ export const PageHome = () => {
   }
 
   const strategyData = useMemo(() => {
-    return (
-      data?.filter((item) => {
-        // Chain filter
-        const isChainSelected = selectedChainIds.includes(
-          item?.config.chain.id!
-        )
+    const filteredData = data?.filter((item) => {
+      // Chain filter
+      const isChainSelected = selectedChainIds.includes(
+        item?.config.chain.id!
+      )
 
-        // Deposit asset filter
-        const hasSelectedDepositAsset = cellarDataMap[
-          item!.slug
+      // Deposit asset filter
+      const hasSelectedDepositAsset = cellarDataMap[
+        item!.slug
         ].depositTokens.list.some((tokenSymbol) =>
-          selectedDepositAssets.hasOwnProperty(tokenSymbol)
-        )
+        selectedDepositAssets.hasOwnProperty(tokenSymbol)
+      )
 
-        // Deprecated filter
-        const isDeprecated = cellarDataMap[item!.slug].deprecated
-        const deprecatedCondition = showDeprecated
-          ? isDeprecated
-          : !isDeprecated
+      // Deprecated filter
+      const isDeprecated = cellarDataMap[item!.slug].deprecated
+      const deprecatedCondition = showDeprecated
+        ? isDeprecated
+        : !isDeprecated
 
-        // Incentivised filter
-        //    Badge check for custom rewards
-        const hasGreenBadge = cellarDataMap[
-          item!.slug
+      // Incentivised filter
+      //    Badge check for custom rewards
+      const hasGreenBadge = cellarDataMap[
+        item!.slug
         ].config.badges?.some(
-          (badge) => badge.customStrategyHighlightColor === "#00C04B"
-        )
+        (badge) => badge.customStrategyHighlightColor === "#00C04B"
+      )
 
-        //    Staking period check for somm/vesting rewards
-        const hasLiveStakingPeriod =
-          item?.rewardsApy?.value !== undefined &&
-          item?.rewardsApy?.value > 0
+      //    Staking period check for somm/vesting rewards
+      const hasLiveStakingPeriod =
+        item?.rewardsApy?.value !== undefined &&
+        item?.rewardsApy?.value > 0
 
-        const incentivisedCondition = showIncentivised
-          ? hasGreenBadge || hasLiveStakingPeriod
-          : true
+      const incentivisedCondition = showIncentivised
+        ? hasGreenBadge || hasLiveStakingPeriod
+        : true
 
-        return (
-          isChainSelected &&
-          hasSelectedDepositAsset &&
-          deprecatedCondition &&
-          incentivisedCondition
-        )
-      }) || []
-    )
+      return (
+        isChainSelected &&
+        hasSelectedDepositAsset &&
+        deprecatedCondition &&
+        incentivisedCondition
+      )
+    }) || []
+
+    return filteredData.sort((a, b) => {
+
+      // 1. Priority - strategies deposit assets that user holds
+      if (isConnected && userBalances.data) {
+        for (const balance of userBalances.data) {
+          const doesStrategyHaveAsset = (strategy: StrategyData) => strategy?.depositTokens?.some(
+            asset => {
+              // if user has ETH consider it as they had WETH
+              if (balance.symbol.toUpperCase() === "ETH" && asset.toUpperCase() === "WETH") {
+                return true;
+              }
+               return asset.toUpperCase() === balance.symbol.toUpperCase()
+            }
+          )
+          const strategyAHasAsset = doesStrategyHaveAsset(a);
+          const strategyBHasAsset = doesStrategyHaveAsset(b);
+
+          if ((strategyAHasAsset || strategyBHasAsset) && !(strategyAHasAsset && strategyBHasAsset)) {
+            return strategyAHasAsset ? -1 : 1;
+          }
+        }
+      }
+      // 2. Priority - new strategies
+      const isNewStrategy = (strategy: StrategyData) => isBefore(new Date(), add(new Date(strategy?.launchDate ?? ''), { weeks: 4 }));
+      const isANew = isNewStrategy(a);
+      const isBNew = isNewStrategy(b);
+      if (isANew && isBNew) {
+        return new Date(b?.launchDate ?? '').getTime() - new Date(a?.launchDate ?? '').getTime();
+      } else if (isANew || isBNew) {
+        return isANew ? -1 : 1;
+      }
+
+      // 3. Priority - Somm rewards
+      if ((a?.rewardsApy || b?.rewardsApy) && !(a?.rewardsApy && b?.rewardsApy)) {
+        return a?.rewardsApy ? -1 : 1;
+      }
+
+      // 4. Priority - TVL
+      return parseFloat(b?.tvm?.value ?? '') - parseFloat(a?.tvm?.value ?? '');
+    });
   }, [
     data,
     selectedChainIds,
     selectedDepositAssets,
     showDeprecated,
     showIncentivised,
+    userBalances.data,
+    isConnected
   ])
 
   const loading = isFetching || isRefetching || isLoading

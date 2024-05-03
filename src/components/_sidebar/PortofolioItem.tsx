@@ -9,7 +9,7 @@ import {
   Img,
 } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserBalance } from "data/hooks/useUserBalance"
 import { useRouter } from "next/router"
 import { FC } from "react"
 import { formatUSD, toEther } from "utils/formatCurrency"
@@ -48,7 +48,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
 }) => {
   const cellarData = cellarDataMap[slug]
 
-  const { lpToken } = useUserBalances(cellarData.config)
+  const { lpToken } = useUserBalance(cellarData.config)
   const { data: lpTokenData } = lpToken
 
   const baseAsset = tokenConfig.find(

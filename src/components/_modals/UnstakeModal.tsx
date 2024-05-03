@@ -6,7 +6,7 @@ import { toEther } from "utils/formatCurrency"
 import { UnstakeForm } from "components/_forms/UnstakeForm"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserBalance } from "data/hooks/useUserBalance"
 
 type UnstakeModalProps = Pick<ModalProps, "isOpen" | "onClose"> & {
   onCloseProp: () => void
@@ -19,7 +19,7 @@ export const UnstakeModal: VFC<UnstakeModalProps> = ({
 }) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
-  const { lpToken } = useUserBalances(cellarConfig)
+  const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData } = lpToken
 
   return (

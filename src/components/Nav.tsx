@@ -20,7 +20,6 @@ import ConnectButton from "components/_buttons/ConnectButton"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
 import { NAV_LINKS } from "utils/navLinks"
-import { useIsMounted } from "hooks/utils/useIsMounted"
 import { LogoTextIcon } from "./_icons"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useScrollDirection } from "hooks/utils/useScrollDirection"
@@ -28,7 +27,6 @@ import { HamburgerIcon } from "./_icons/HamburgerIcon"
 import { Badge, BadgeStatus } from "./Strategy/Carousel/Badge"
 
 export const Nav: VFC<FlexProps> = (props) => {
-  const isMounted = useIsMounted()
   const [scrolled, setScrolled] = useState<boolean>(false)
   const scrollDirection = useScrollDirection()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -46,7 +44,8 @@ export const Nav: VFC<FlexProps> = (props) => {
       }
     })
     return () => {
-      window.removeEventListener("scroll", () => {})
+      window.removeEventListener("scroll", () => {});
+      setScrolled(false);
     }
   }, [])
 
