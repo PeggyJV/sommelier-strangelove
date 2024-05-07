@@ -29,7 +29,7 @@ import { analytics } from "utils/analytics"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserBalance } from "data/hooks/useUserBalance"
 import { bondingPeriodOptions } from "data/uiConfig"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
@@ -55,7 +55,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   )
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
-  const { lpToken, lpTokenInfo } = useUserBalances(cellarConfig)
+  const { lpToken, lpTokenInfo } = useUserBalance(cellarConfig)
   const { data: lpTokenData } = lpToken
 
   const methods = useForm<FormValues>({

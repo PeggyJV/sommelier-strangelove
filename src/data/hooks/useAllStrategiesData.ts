@@ -40,6 +40,10 @@ export const useAllStrategiesData = () => {
         }
       })
       .catch((error) => setError(error))
+    return () => {
+      setError(null);
+      setcellarData(undefined);
+    };
   }, [])
 
   const query = useQuery(

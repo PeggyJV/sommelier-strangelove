@@ -20,7 +20,7 @@ export const WithdrawButton: VFC<
   ButtonProps & {
     isDeprecated?: boolean
   }
-> = (props) => {
+> = ({ isDeprecated, ...buttonProps }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function closeModal() {
@@ -59,9 +59,9 @@ export const WithdrawButton: VFC<
 
               onOpen()
             }}
-            {...props}
+            {...buttonProps}
           >
-            {props.isDeprecated
+            {isDeprecated
               ? "Withdraw Only"
               : "Withdraw"}
           </SecondaryButton>

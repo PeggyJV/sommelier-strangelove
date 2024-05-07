@@ -2,7 +2,7 @@ import { ConfigProps } from "data/types"
 import { useAccount, useBalance, useToken } from "wagmi"
 import { getAddress } from "ethers/lib/utils.js"
 
-export const useUserBalances = (config: ConfigProps) => {
+export const useUserBalance = (config: ConfigProps) => {
   const { address } = useAccount()
 
   const lpToken = useBalance({

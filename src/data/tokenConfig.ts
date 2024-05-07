@@ -537,6 +537,33 @@ export const tokenConfig: Token[] = [
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
   },
+  {
+    src: "",
+    alt: "",
+    symbol: "ETH",
+    address: "",
+    coinGeckoId: "ethereum",
+    decimals: 18,
+    chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
+    src: "",
+    alt: "",
+    symbol: "ETH",
+    address: "",
+    coinGeckoId: "ethereum",
+    decimals: 18,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
+    src: "",
+    alt: "",
+    symbol: "ETH",
+    address: "",
+    coinGeckoId: "ethereum",
+    decimals: 18,
+    chain: chainSlugMap.OPTIMISM.id,
+  },
 ]
 // --- ETH ACCEPTED TOKENS ---
 let acceptedETHDepositTokens = [
@@ -569,6 +596,7 @@ let acceptedETHDepositTokens = [
   "swETH",
   "BUSD",
   "rETH BPT",
+  "ETH"
 ]
 
 let depositTokenMapETH = tokenConfig.reduce((map, token) => {
@@ -589,7 +617,7 @@ export const acceptedETHDepositTokenMap = Object.keys(
   }, {} as { [symbol: string]: Token })
 
 // --- ARB ACCEPTED TOKENS ---
-let acceptedARBDepositTokens = ["USDC", "USDT", "DAI", "USDC.e"]
+let acceptedARBDepositTokens = ["USDC", "USDT", "DAI", "USDC.e", 'WETH', 'wstETH', 'rETH', 'ETH'];
 
 let depositTokenMapARB = tokenConfig.reduce((map, token) => {
   if (acceptedARBDepositTokens.includes(token.symbol)) {
@@ -607,6 +635,16 @@ export const acceptedARBDepositTokenMap = Object.keys(
     obj[key] = depositTokenMapARB[key]
     return obj
   }, {} as { [symbol: string]: Token })
+
+// --- OPTIMISM ACCEPTED TOKENS ---
+let acceptedOPTDepositTokens = ['WETH', 'wstETH', 'rETH', 'ETH'];
+
+
+const acceptedDepositTokensByChain: { [key: string]: any } = {
+  ethereum: acceptedETHDepositTokens,
+  arbitrum: acceptedARBDepositTokens,
+  optimism: acceptedOPTDepositTokens,
+};
 
 // Creatae a map from each token symbol to its config
 export const tokenConfigMap = tokenConfig.reduce((map, token) => {
@@ -633,6 +671,12 @@ export const depositAssetTokenConfig: Token[] = tokenConfig.filter(
     depositAssetTokenList.includes(token.symbol) &&
     depositAssetTokenList.includes(token.chain)
 )
+
+export const getAcceptedDepositAssetsByChain = (chainId: string) => {
+  return acceptedDepositTokensByChain[chainId]
+    ? getTokenConfig(acceptedDepositTokensByChain[chainId], chainId)
+    : []
+}
 
 export function getTokenConfig(tokenList: string[], chain: string) {
   return tokenList.map((list) =>
