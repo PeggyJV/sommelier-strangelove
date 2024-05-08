@@ -16,7 +16,7 @@ export const realYieldEthScroll: CellarData = {
   dashboard:
     "https://debank.com/profile/0xd3bb04423b0c98abc9d62f201212f44dc2611200",
   tradedAssets: ["WETH", "wstETH", "rETH"],
-  launchDate: new Date(2024, 4, 16, 15, 0, 0, 0),
+  launchDate: new Date(2024, 4, 6, 15, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
   strategyType: "Yield",
