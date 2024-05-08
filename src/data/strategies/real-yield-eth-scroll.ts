@@ -78,11 +78,11 @@ export const realYieldEthScroll: CellarData = {
       key: CellarKey.CELLAR_V2PT5,
       decimals: 18,
     },
-    staker: {
-      address: config.CONTRACT.REAL_YIELD_ETH_SCROLL_STAKER.ADDRESS,
-      abi: config.CONTRACT.REAL_YIELD_ETH_SCROLL_STAKER.ABI,
-      key: StakerKey.CELLAR_STAKING_V0821,
-    },
+    // staker: {
+    //   address: config.CONTRACT.REAL_YIELD_ETH_SCROLL_STAKER.ADDRESS,
+    //   abi: config.CONTRACT.REAL_YIELD_ETH_SCROLL_STAKER.ABI,
+    //   key: StakerKey.CELLAR_STAKING_V0821,
+    // },
     baseAsset: tokenConfigMap.WETH_SCROLL,
     chain: chainSlugMap.SCROLL,
   },

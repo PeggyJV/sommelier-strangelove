@@ -184,6 +184,11 @@ export const config = {
       SLUG: "real-yield-eth-opt",
       ABI: cellarV0821MultiDeposit,
     },
+    REAL_YIELD_ETH_SCROLL: {
+      ADDRESS: "0xd3bb04423b0c98abc9d62f201212f44dc2611200",
+      SLUG: "real-yield-eth-scroll",
+      ABI: cellarV0821MultiDeposit,
+    },
     REAL_YIELD_USD_ARB: {
       ADDRESS: "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
       SLUG: "real-yield-usd-arb",
