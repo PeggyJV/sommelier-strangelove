@@ -1,3 +1,4 @@
+// src/data/chainConfig.ts
 import { mainnet } from "wagmi"
 import { arbitrum, optimism, scroll } from "wagmi/chains"
 
@@ -9,6 +10,7 @@ export interface Chain {
   alt: string
   infuraRpcUrl: string
   alchemyRpcUrl: string
+  quicknodeRpcUrl: string
   blockExplorer: {
     name: string
     url: string
@@ -31,6 +33,7 @@ export const placeholderChain: Chain = {
   },
   withdrawQueueAddress: "",
   priceRouterAddress: "",
+  quicknodeRpcUrl: ""
 }
 /**
  *
@@ -46,9 +49,9 @@ export const chainConfig: Chain[] = [
     infuraRpcUrl: mainnet.rpcUrls.infura.http[0],
     alchemyRpcUrl: mainnet.rpcUrls.alchemy.http[0],
     blockExplorer: mainnet.blockExplorers.default,
-    withdrawQueueAddress:
-      "0x5751d75b642975E4E7fdE39f35F9a6c11b867169",
+    withdrawQueueAddress: "0x5751d75b642975E4E7fdE39f35F9a6c11b867169",
     priceRouterAddress: "0xA1A0bc3D59e4ee5840c9530e49Bdc2d1f88AaF92",
+    quicknodeRpcUrl: ""
   },
   {
     id: "arbitrum",
@@ -59,10 +62,9 @@ export const chainConfig: Chain[] = [
     infuraRpcUrl: arbitrum.rpcUrls.infura.http[0],
     alchemyRpcUrl: arbitrum.rpcUrls.alchemy.http[0],
     blockExplorer: arbitrum.blockExplorers.default,
-    withdrawQueueAddress:
-      "0x516AD60801b62fCABCCDA7be178e4478D4018071",
+    withdrawQueueAddress: "0x516AD60801b62fCABCCDA7be178e4478D4018071",
     priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11",
-
+    quicknodeRpcUrl: ""
   },
   {
     id: "optimism",
@@ -73,9 +75,9 @@ export const chainConfig: Chain[] = [
     infuraRpcUrl: optimism.rpcUrls.infura.http[0],
     alchemyRpcUrl: optimism.rpcUrls.alchemy.http[0],
     blockExplorer: optimism.blockExplorers.default,
-    withdrawQueueAddress:
-      "0x516AD60801b62fCABCCDA7be178e4478D4018071",
+    withdrawQueueAddress: "0x516AD60801b62fCABCCDA7be178e4478D4018071",
     priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11",
+    quicknodeRpcUrl: ""
   },
   {
     id: "scroll",
@@ -83,12 +85,12 @@ export const chainConfig: Chain[] = [
     displayName: "Scroll",
     logoPath: "/assets/icons/scroll.svg",
     alt: "Scroll logo",
-    infuraRpcUrl: scroll.rpcUrls.infura.http[0],
-    alchemyRpcUrl: scroll.rpcUrls.alchemy.http[0],
+    quicknodeRpcUrl: "https://damp-cool-model.scroll-mainnet.quiknode.pro",
     blockExplorer: scroll.blockExplorers.default,
-    withdrawQueueAddress:
-      "0x1cee7dfb56de1eae6125e39336e94f297b94959e",
+    withdrawQueueAddress: "0x1cee7dfb56de1eae6125e39336e94f297b94959e",
     priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11",
+    infuraRpcUrl: "",
+    alchemyRpcUrl: ""
   },
 ]
 

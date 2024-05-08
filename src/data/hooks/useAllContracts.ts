@@ -1,3 +1,4 @@
+// sommelier-strangelove/src/data/hooks/useAllContracts.ts
 import { useQuery } from "@tanstack/react-query"
 import { getAllContracts } from "data/actions/common/getAllContracts"
 import { useSigner, useProvider } from "wagmi"

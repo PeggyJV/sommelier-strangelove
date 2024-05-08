@@ -1,3 +1,4 @@
+// src/context/wagmiContext/index.tsx
 import { ReactNode } from "react"
 import {
   mainnet,
@@ -5,7 +6,7 @@ import {
   createClient,
   WagmiConfig,
 } from "wagmi"
-import { arbitrum, optimism, scroll } from "wagmi/chains"
+import { arbitrum, optimism } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
 import { infuraProvider } from "wagmi/providers/infura"
 
@@ -23,7 +24,7 @@ const WALLETCONNECT_PROJECT_ID =
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, arbitrum, optimism, scroll],
+  [mainnet, arbitrum, optimism],
   [
     alchemyProvider({ apiKey: ALCHEMY_API_KEY! }),
     infuraProvider({
