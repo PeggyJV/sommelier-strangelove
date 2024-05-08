@@ -661,7 +661,7 @@ export const strategyPageContentData = {
     howItWorks: ``,
   },
   [config.CONTRACT.REAL_YIELD_ETH_SCROLL.SLUG]: {
-    name: "Real Yield ETH OPT",
+    name: "Real Yield ETH SCROLL",
     provider: "Seven Seas",
     providerUrl: "https://7seas.capital/",
     description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
@@ -674,7 +674,7 @@ export const strategyPageContentData = {
     ticker: (
       <>
         <Image
-          alt="real yield eth opt icon"
+          alt="real yield eth scroll icon"
           src="/assets/icons/rye-scroll.png"
           boxSize={8}
         />
