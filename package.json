@@ -41,7 +41,7 @@
     "@portabletext/react": "^1.0.6",
     "@sentry/nextjs": "6.18.2",
     "@supabase/supabase-js": "^2.8.0",
-    "@tanstack/react-query": "^4.29.19",
+    "@tanstack/react-query": "^5.35.1",
     "@tanstack/react-query-devtools": "^4.29.19",
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/smart-order-router": "^2.5.30",
@@ -79,7 +79,8 @@
     "slick-carousel": "^1.8.1",
     "slugify": "^1.6.5",
     "urql": "^2.2.0",
-    "wagmi": "0.12.18",
+    "viem": "2.x",
+    "wagmi": "^2.8.3",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
