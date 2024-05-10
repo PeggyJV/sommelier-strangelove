@@ -1,6 +1,5 @@
 // src/data/chainConfig.ts
-import { mainnet } from "wagmi"
-import { arbitrum, optimism, scrollTestnet } from "wagmi/chains"
+import { mainnet, arbitrum, optimism, scrollTestnet } from "wagmi/chains"
 
 export interface Chain {
   id: string
@@ -18,6 +17,9 @@ export interface Chain {
   withdrawQueueAddress: string
   priceRouterAddress: string
 }
+
+// Debugging to check the structure of imported chains
+console.log(mainnet, arbitrum, optimism)
 
 export const placeholderChain: Chain = {
   id: "unknown",
