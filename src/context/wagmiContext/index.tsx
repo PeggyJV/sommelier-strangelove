@@ -5,7 +5,8 @@ import {
   walletConnect,
   coinbaseWallet,
 } from "wagmi/connectors"
-import { createClient, WagmiProvider as WagmiConfig } from "wagmi"
+import { createClient } from 'viem'
+import { WagmiProvider as WagmiConfig } from "wagmi"
 import { http } from "viem"
 
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
