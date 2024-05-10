@@ -7,10 +7,9 @@ import {
   WagmiConfig,
 } from "wagmi"
 import { arbitrum, optimism } from "wagmi/chains"
-import { publicProvider } from "wagmi/providers/public"
 import { infuraProvider } from "wagmi/providers/infura"
-
 import { alchemyProvider } from "wagmi/providers/alchemy"
+
 import { InjectedConnector } from "wagmi/connectors/injected"
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
 import { WalletConnectLegacyConnector } from "wagmi/connectors/walletConnectLegacy"
@@ -27,13 +26,10 @@ const { chains, provider, webSocketProvider } = configureChains(
   [mainnet, arbitrum, optimism],
   [
     alchemyProvider({ apiKey: ALCHEMY_API_KEY! }),
-    infuraProvider({
-      apiKey: INFURA_API_KEY!,
-    }),
-    publicProvider(),
+    infuraProvider({ apiKey: INFURA_API_KEY! }),
   ],
   { targetQuorum: 1 }
-)
+);
 
 const connector = () => {
   console.log("WALLETCONNECT_PROJECT_ID", WALLETCONNECT_PROJECT_ID)

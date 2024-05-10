@@ -1,3 +1,4 @@
+// src/pages/_app.tsx
 import { ChakraProvider, DarkMode } from "@chakra-ui/react"
 import { DialogProvider } from "context/dialogContext"
 import type { AppProps } from "next/app"
