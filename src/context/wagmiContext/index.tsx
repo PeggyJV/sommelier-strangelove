@@ -1,8 +1,6 @@
-// src/context/wagmiContext/index.tsx
 import { ReactNode } from "react";
 import { mainnet, configureChains, createClient, WagmiConfig } from "wagmi";
 import { arbitrum, optimism } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
 import { infuraProvider } from "wagmi/providers/infura";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { injected, walletConnect, coinbaseWallet, metaMask } from 'wagmi/connectors';
@@ -19,7 +17,6 @@ const { chains, provider, webSocketProvider } = configureChains(
   [
     alchemyProvider({ apiKey: ALCHEMY_API_KEY }),
     infuraProvider({ apiKey: INFURA_API_KEY }),
-    publicProvider(),
   ],
   { targetQuorum: 1 }
 );
