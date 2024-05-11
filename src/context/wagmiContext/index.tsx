@@ -5,11 +5,7 @@ import { arbitrum, optimism } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { infuraProvider } from "wagmi/providers/infura";
 import { alchemyProvider } from "wagmi/providers/alchemy";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { WalletConnectLegacyConnector } from "wagmi/connectors/walletConnectLegacy";
-import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { injected, walletConnect, coinbaseWallet, metaMask } from 'wagmi/connectors';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY;
@@ -21,31 +17,28 @@ const queryClient = new QueryClient();
 const { chains, provider, webSocketProvider } = configureChains(
   [mainnet, arbitrum, optimism],
   [
-    alchemyProvider({ apiKey: ALCHEMY_API_KEY! }),
-    infuraProvider({
-      apiKey: INFURA_API_KEY!,
-    }),
+    alchemyProvider({ apiKey: ALCHEMY_API_KEY }),
+    infuraProvider({ apiKey: INFURA_API_KEY }),
     publicProvider(),
   ],
   { targetQuorum: 1 }
 );
 
 const connectors = () => {
-  console.log("WALLETCONNECT_PROJECT_ID", WALLETCONNECT_PROJECT_ID);
   return [
-    new WalletConnectConnector({
+    walletConnect({
       chains,
       options: {
         projectId: WALLETCONNECT_PROJECT_ID || "c11d8ffaefb8ba4361ae510ed7690cb8",
-        showQrModal: true,
+        qrcode: true,
       },
     }),
-    new MetaMaskConnector({ chains }),
-    new InjectedConnector({
+    metaMask({ chains }),
+    injected({
       chains,
       options: { shimDisconnect: true },
     }),
-    new CoinbaseWalletConnector({
+    coinbaseWallet({
       chains,
       options: {
         appName: "Sommelier",
