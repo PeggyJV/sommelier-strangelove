@@ -1,8 +1,7 @@
 import { ReactNode } from "react";
-import { mainnet, configureChains, createClient, WagmiConfig } from "wagmi";
+import { mainnet, configureChains, createClient, WagmiConfig, chain } from "wagmi";
 import { arbitrum, optimism } from "wagmi/chains";
-import { infuraProvider } from "wagmi/providers/infura";
-import { alchemyProvider } from "wagmi/providers/alchemy";
+import { http } from 'viem';  // Import http transport from Viem
 import { injected, walletConnect, coinbaseWallet, metaMask } from 'wagmi/connectors';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -12,12 +11,12 @@ const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 const queryClient = new QueryClient();
 
+const alchemyTransport = http(`https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`);
+const infuraTransport = http(`https://mainnet.infura.io/v3/${INFURA_API_KEY}`);
+
 const { chains, provider, webSocketProvider } = configureChains(
   [mainnet, arbitrum, optimism],
-  [
-    alchemyProvider({ apiKey: ALCHEMY_API_KEY }),
-    infuraProvider({ apiKey: INFURA_API_KEY }),
-  ],
+  [alchemyTransport, infuraTransport],
   { targetQuorum: 1 }
 );
 
