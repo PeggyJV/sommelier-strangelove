@@ -51,7 +51,6 @@ import BondingTableCard from "../BondingTableCard"
 import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
-import { useNetwork } from "wagmi"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey } from "data/types"
@@ -60,7 +59,7 @@ import { PointsDisplay } from "./PointsDisplay"
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
-  const { address, isConnected: connected } = useAccount()
+  const { address, isConnected: connected, chain: wagmiChain } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const slug = cellarDataMap[id].slug
@@ -106,7 +105,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     : false
 
   // Make sure the user is on the same chain as the strategy
-  const { chain: wagmiChain } = useNetwork()
   let buttonsEnabled = true
   if (strategyData?.config.chain.wagmiId !== wagmiChain?.id!) {
     // Override userdata so as to not confuse people if they're on the wrong chain

@@ -4,17 +4,14 @@ import { useAccount, useSigner } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useAllStrategiesData } from "./useAllStrategiesData"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
-import { useNetwork } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { tokenConfig } from "data/tokenConfig"
 
 export const useUserDataAllStrategies = () => {
   const { data: signer } = useSigner()
-  const { address } = useAccount()
+  const { address, chain } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategies = useAllStrategiesData()
-
-  const { chain } = useNetwork()
 
   const sommToken = tokenConfig.find(
     (token) =>

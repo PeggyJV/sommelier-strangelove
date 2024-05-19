@@ -27,7 +27,7 @@ import { FaExternalLinkAlt } from "react-icons/fa"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { TransparentCard } from "./TransparentCard"
-import { useNetwork } from "wagmi"
+import { useAccount } from "wagmi"
 
 const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
@@ -89,7 +89,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
     cellarConfig.chain.id
   )
   const activeAsset = strategyData?.activeAsset
-  const { chain } = useNetwork()
+  const { chain } = useAccount()
 
   const isManyProtocols = isArray(protocols)
   const [isMobile, setIsMobile] = useState(false)

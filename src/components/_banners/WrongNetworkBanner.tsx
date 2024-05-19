@@ -9,7 +9,7 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { InformationIcon } from "components/_icons"
 import { useBrandedToast } from "hooks/chakra"
 import React, { VFC } from "react"
-import { useSwitchNetwork, useNetwork } from "wagmi"
+import { useSwitchNetwork, useAccount } from "wagmi"
 import { Chain } from "src/data/chainConfig"
 
 interface WrongNetworkBannerProps {
@@ -21,7 +21,7 @@ export const WrongNetworkBanner: VFC<WrongNetworkBannerProps> = ({
 }) => {
   const { switchNetworkAsync } = useSwitchNetwork()
   const { addToast, close } = useBrandedToast()
-  const { chain: wagmiChain } = useNetwork()
+  const { chain: wagmiChain } = useAccount()
 
   // Some pages dont require chain so it can be undefined, continue as normal if so
   if (!chain || !wagmiChain || wagmiChain.id === chain.wagmiId)

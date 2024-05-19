@@ -2,7 +2,7 @@ import { getAcceptedDepositAssetsByChain } from "data/tokenConfig"
 import { ResolvedConfig } from "abitype"
 import { fetchBalance } from "@wagmi/core"
 import { getAddress } from "ethers/lib/utils"
-import { useAccount, useNetwork } from "wagmi"
+import { useAccount } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { useQuery } from "@tanstack/react-query"
@@ -17,8 +17,7 @@ type Balance = {
 
 export const useUserBalances = () => {
 
-  const { address } = useAccount();
-  const { chain } = useNetwork();
+  const { address, chain } = useAccount();
 
   const fetchBalances = async () => {
     const depositAssetBalances : Balance[] = [];

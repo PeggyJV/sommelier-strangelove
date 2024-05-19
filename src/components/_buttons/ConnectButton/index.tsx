@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ButtonProps, HStack } from "@chakra-ui/react"
-import { useAccount, useNetwork } from "wagmi"
+import { useAccount } from "wagmi"
 import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
 import { ConnectWalletPopover } from "./ConnectWalletPopover"
@@ -18,9 +18,8 @@ export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
 const ConnectButton = (
   props: ConnectButtonProps
 ) => {
-  const { isConnected } = useAccount()
+  const { isConnected, chain } = useAccount()
   const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
-  const { chain } = useNetwork()
   const [selectedNetwork, setSelectedNetwork] = React.useState(
     chain?.name.toLowerCase().split(" ")[0] || "ethereum"
   )

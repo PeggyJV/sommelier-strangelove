@@ -1,20 +1,23 @@
 import { useQuery } from "@tanstack/react-query"
 import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
-import { useNetwork, useProvider } from "wagmi"
+import { useAccount, useProvider } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
 import { GetAllStrategiesDataQuery } from "data/actions/types"
 import { tokenConfig } from "data/tokenConfig"
+import {
+  supportedChains,
+} from "src/data/chainConfig"
 
 export const useAllStrategiesData = () => {
   const provider = useProvider()
-  const { chain } = useNetwork()
+  const { chain } = useAccount()
   const { data: allContracts } = useAllContracts()
 
   const sommToken = tokenConfig.find((token) => {
-    const compareChain = chain?.unsupported
+    const compareChain = supportedChains.includes(chain ? chain.name : "")
       ? "ethereum"
       : chain?.name.toLowerCase().split(" ")[0]
     return (

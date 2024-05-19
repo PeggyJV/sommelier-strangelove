@@ -21,7 +21,6 @@ import { toEther } from "utils/formatCurrency"
 import { useFormContext } from "react-hook-form"
 import { BridgeFormValues } from "."
 import { InformationIcon } from "components/_icons"
-import { useNetwork } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { tokenConfig } from "data/tokenConfig"
 
@@ -37,7 +36,7 @@ export const InputAmount: React.FC = () => {
   const { address, isConnecting } = useAccount()
 
   // Get chain id
-  const { chain } = useNetwork()
+  const { chain } = useAccount()
   const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)!
   const sommToken = tokenConfig.find(
     (t) => t.coinGeckoId === "sommelier" && t.chain === "ethereum"

@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react"
 import { InformationIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi"
+import { useAccount, useSwitchNetwork } from "wagmi"
 import { FormProvider, useForm } from "react-hook-form"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import SnapshotForm from "components/_forms/SnapshotForm"
@@ -25,8 +25,7 @@ export interface SnapshotFormValues {
 
 export const SnapshotCard: React.FC = () => {
   const isMounted = useIsMounted()
-  const { isConnected } = useAccount()
-  const { chain: wagmiChain } = useNetwork()
+  const { isConnected, chain: wagmiChain } = useAccount()
   const { switchNetworkAsync } = useSwitchNetwork()
   const { addToast, close } = useBrandedToast()
   const methods = useForm<SnapshotFormValues>({

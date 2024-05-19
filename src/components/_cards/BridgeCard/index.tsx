@@ -9,7 +9,7 @@ import React from "react"
 import { TransparentCard } from "../TransparentCard"
 import { Link } from "components/Link"
 import { BridgeForm } from "components/_forms/BridgeForm"
-import { useAccount, useSwitchNetwork, useNetwork } from "wagmi"
+import { useAccount, useSwitchNetwork } from "wagmi"
 import { FormProvider, useForm } from "react-hook-form"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
@@ -26,7 +26,7 @@ export interface BridgeFormValues {
 export const BridgeCard: React.FC = () => {
   const isMounted = useIsMounted()
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
-  const { isConnected } = useAccount()
+  const { isConnected, chain: wagmiChain } = useAccount()
   const methods = useForm<BridgeFormValues>({
     defaultValues: {
       type: "TO_SOMMELIER",
@@ -35,7 +35,6 @@ export const BridgeCard: React.FC = () => {
   const { switchNetworkAsync } = useSwitchNetwork()
   const { addToast, close } = useBrandedToast()
 
-  const { chain: wagmiChain } = useNetwork()
   const ethChain = chainSlugMap.ETHEREUM
 
   const WrongNetwork = (

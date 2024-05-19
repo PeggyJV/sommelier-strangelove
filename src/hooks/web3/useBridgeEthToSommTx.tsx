@@ -14,17 +14,16 @@ import { GravityBridge } from "src/abi/types"
 import { analytics } from "utils/analytics"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { getAddress } from "ethers/lib/utils.js"
-import { useNetwork } from "wagmi"
 import { tokenConfigMap } from "data/tokenConfig"
 
-// TODO: this needs to be adapted to multichain 
+// TODO: this needs to be adapted to multichain
 export const useBridgeEthToSommTx = () => {
   const { CONTRACT } = config
   // Currently `close` have a bug it only closes the last toast appeared
   // TODO: Fix `close` and implement it here https://github.com/strangelove-ventures/sommelier/issues/431
   const { addToast, update, closeAll } = useBrandedToast()
   const [isLoading, setIsLoading] = useState(false)
-  const { chain } = useNetwork()
+  const { chain } = useAccount()
   const { data: signer } = useSigner()
   const [_, wait] = useWaitForTransaction({
     skip: true,

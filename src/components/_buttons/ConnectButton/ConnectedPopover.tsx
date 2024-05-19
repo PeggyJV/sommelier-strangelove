@@ -16,7 +16,6 @@ import {
   useDisconnect,
   useEnsAvatar,
   useEnsName,
-  useNetwork,
 } from "wagmi"
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
@@ -33,7 +32,7 @@ import { tokenConfig } from "data/tokenConfig"
 export const ConnectedPopover = () => {
   const { addToast, close } = useBrandedToast()
   const { disconnect } = useDisconnect()
-  const { address, isConnecting } = useAccount()
+  const { address, isConnecting, chain } = useAccount()
   const { data: ensName, isLoading: ensNameLoading } = useEnsName({
     address,
   })
@@ -59,7 +58,6 @@ export const ConnectedPopover = () => {
     },
   })
 
-  const { chain } = useNetwork()
   const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)
   const sommToken = tokenConfig.find(
     (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj?.id
