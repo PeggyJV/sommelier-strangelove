@@ -63,12 +63,12 @@ export const useStrategyData = (address: string, chain: string) => {
     address + (config.chain.id !== "ethereum" ? "-" + chain : "")
 
   // Get cellar contracts for the chain
-  const query = useQuery(
-    [
+  const query = useQuery({
+    queryKey: [
       "USE_STRATEGY_DATA",
       { provider: provider?._isProvider, address: key },
     ],
-    async () => {
+    queryFn: async () => {
       const result = await getStrategyData({
         address,
         contracts: allContracts![key]!,
@@ -79,12 +79,11 @@ export const useStrategyData = (address: string, chain: string) => {
 
       return result
     },
-    {
-      enabled:
-        !!allContracts &&
-        !!sommPrice &&
-        (isNoDataSource || !!stratData) &&
-        !!baseAssetPrice,
+    enabled:
+      !!allContracts &&
+      !!sommPrice &&
+      (isNoDataSource || !!stratData) &&
+      !!baseAssetPrice,
     }
   )
 

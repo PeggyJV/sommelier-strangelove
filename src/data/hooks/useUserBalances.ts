@@ -58,11 +58,12 @@ export const useUserBalances = () => {
     return depositAssetBalances;
   }
 
-  const query = useQuery(
-    ["USE_USER_BALANCES"],
-    async () => {
+  const query = useQuery({
+    queryKey: ["USE_USER_BALANCES"],
+    queryFn: async () => {
       return await fetchBalances()
     }
+  }
   )
 
   return {

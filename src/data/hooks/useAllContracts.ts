@@ -34,12 +34,13 @@ export const useAllContracts = () => {
     }
   })
 
-  const query = useQuery(
-    [
+  const query = useQuery({
+    queryKey: [
       "USE_ALL_STRATEGIES_CONTRACTS",
       { signer: signer?._isSigner, provider: provider?._isProvider },
     ],
-    () => getAllContracts(providerMap, signerMap)
+    queryFn:() => getAllContracts(providerMap, signerMap)
+  }
   )
 
   return query

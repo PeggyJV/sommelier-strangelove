@@ -12,15 +12,14 @@ export const useMarketChart = ({
   interval?: "hourly" | "daily"
   enabled?: boolean
 }) => {
-  const query = useQuery(
-    ["USE_MARKET_CHART", asset, day, interval],
-    async () => {
+  const query = useQuery({
+    queryKey: ["USE_MARKET_CHART", asset, day, interval],
+    queryFn: async () => {
       if (!interval) throw new Error("interval is undefined")
       return await fetchMarketChart(asset, day, interval)
     },
-    {
-      enabled: !!asset && !!day && !!interval && enabled,
-    }
+    enabled: !!asset && !!day && !!interval && enabled,
+  }
   )
 
   return query

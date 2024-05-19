@@ -46,18 +46,17 @@ export const useAllStrategiesData = () => {
     };
   }, [])
 
-  const query = useQuery(
-    ["USE_ALL_STRATEGIES_DATA", { provider: provider?._isProvider }],
-    async () => {
+  const query = useQuery({
+    queryKey: ["USE_ALL_STRATEGIES_DATA", provider!.uid ],
+    queryFn: async () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,
         sommPrice: sommPrice!,
         cellarData: cellarData,
       })
     },
-    {
-      enabled: !!allContracts && !!sommPrice && !!cellarData,
-    }
+    enabled: !!allContracts && !!sommPrice && !!cellarData,
+  }
   )
 
   return {

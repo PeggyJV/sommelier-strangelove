@@ -41,8 +41,8 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const key =
     strategyAddress +
     (config.chain.id !== "ethereum" ? "-" + chain : "")
-  const query = useQuery(
-    [
+  const query = useQuery({
+    queryKey: [
       "USE_USER_DATA",
       {
         signer: true,
@@ -50,7 +50,7 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
         userAddress,
       },
     ],
-    async () => {
+    queryFn: async () => {
       return await getUserData({
         contracts: allContracts![key],
         address: strategyAddress,
@@ -61,15 +61,14 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
         chain: chain,
       })
     },
-    {
-      enabled:
-        !!allContracts &&
-        !!signer?._isSigner &&
-        !!sommPrice.data &&
-        !!lpToken &&
-        !!baseAssetPrice &&
-        !!strategyData.data &&
-        isNoDataSource === false,
+    enabled:
+      !!allContracts &&
+      !!signer?._isSigner &&
+      !!sommPrice.data &&
+      !!lpToken &&
+      !!baseAssetPrice &&
+      !!strategyData.data &&
+      isNoDataSource === false,
     }
   )
   return query

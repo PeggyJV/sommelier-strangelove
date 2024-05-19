@@ -29,8 +29,8 @@ export const useUserDataAllStrategies = () => {
     (item) => item.wagmiId === chain?.id
   )!
 
-  const query = useQuery(
-    [
+  const query = useQuery({
+    queryKey: [
       "USE_USER_DATA_ALL_STRATEGIES",
       {
         allContracts: !!allContracts,
@@ -38,7 +38,7 @@ export const useUserDataAllStrategies = () => {
         userAddress: address,
       },
     ],
-    async () => {
+    queryFn: async () => {
       return await getUserDataAllStrategies({
         allContracts: allContracts!,
         strategiesData: strategies.data!,
@@ -47,14 +47,13 @@ export const useUserDataAllStrategies = () => {
         chain: chainObj.id,
       })
     },
-    {
-      enabled:
-        !!allContracts &&
-        !!signer?._isSigner &&
-        !!strategies.data &&
-        !!address &&
-        !!sommPrice.data &&
-        !!chainObj.id,
+    enabled:
+      !!allContracts &&
+      !!signer?._isSigner &&
+      !!strategies.data &&
+      !!address &&
+      !!sommPrice.data &&
+      !!chainObj.id,
     }
   )
 
