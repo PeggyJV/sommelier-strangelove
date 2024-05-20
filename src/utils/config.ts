@@ -8,7 +8,7 @@ import cellarV0816 from "../abi/cellar-v0.8.16.json"
 import cellarV0821 from "../abi/cellar-v0.8.21.json"
 import cellarV0821MultiDeposit from "../abi/cellar-v0.8.21_multiDeposit.json"
 import gravityBridge from "../abi/gravityBridge.json"
-import { erc20ABI } from "wagmi"
+import { erc20Abi } from "viem"
 
 // Adress should be saved as lowercase
 /** Ensure Checksum Address  */
@@ -30,11 +30,11 @@ export const config = {
     },
     DEFI_PULSE: {
       ADDRESS: "0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b",
-      ABI: erc20ABI,
+      ABI: erc20Abi,
     },
     FEI: {
       ADDRESS: "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
-      ABI: erc20ABI,
+      ABI: erc20Abi,
     },
     BRIDGE: {
       ADDRESS: "0x69592e6f9d21989a043646fE8225da2600e5A0f7",
