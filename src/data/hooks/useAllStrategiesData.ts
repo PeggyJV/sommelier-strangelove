@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
-import { useAccount, useProvider } from "wagmi"
+import { useAccount, usePublicClient } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
@@ -12,7 +12,7 @@ import {
 } from "src/data/chainConfig"
 
 export const useAllStrategiesData = () => {
-  const provider = useProvider()
+  const client = usePublicClient()
   const { chain } = useAccount()
   const { data: allContracts } = useAllContracts()
 
@@ -50,7 +50,7 @@ export const useAllStrategiesData = () => {
   }, [])
 
   const query = useQuery({
-    queryKey: ["USE_ALL_STRATEGIES_DATA", provider!.uid ],
+    queryKey: ["USE_ALL_STRATEGIES_DATA", client?.uid ],
     queryFn: async () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,
