@@ -3,7 +3,7 @@ import { fetchToken } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { MutationEventArgs } from "types/hooks"
 import { getAddress } from "ethers/lib/utils.js"
-import { Address } from "wagmi"
+import { Address } from "viem"
 import { chainConfigMap } from "data/chainConfig"
 type Args = {
   address: string

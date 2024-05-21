@@ -2,8 +2,8 @@ import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
 import { config } from "utils/config"
-import { useAccount, useContract, useSigner } from "wagmi"
-import { erc20Abi } from 'viem'
+import { useAccount, useWalletClient } from "wagmi"
+import { erc20Abi, getContract } from "viem"
 import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
 import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
@@ -25,22 +25,26 @@ export const useBridgeEthToSommTx = () => {
   const { addToast, update, closeAll } = useBrandedToast()
   const [isLoading, setIsLoading] = useState(false)
   const { chain } = useAccount()
-  const { data: signer } = useSigner()
+  const { data: walletClient } = useWalletClient()
   const [_, wait] = useWaitForTransaction({
     skip: true,
   })
   const { address } = useAccount()
 
-  const erc20Contract = useContract({
+  const erc20Contract = getContract({
     address: tokenConfigMap.SOMM_ETHEREUM.address,
     abi: erc20Abi,
-    signerOrProvider: signer,
+    client: {
+      wallet: walletClient
+    }
   })!
 
-  const bridgeContract = useContract({
+  const bridgeContract = getContract({
     address: CONTRACT.BRIDGE.ADDRESS,
     abi: CONTRACT.BRIDGE.ABI,
-    signerOrProvider: signer,
+    client: {
+      wallet: walletClient
+    }
   })!
 
   const TxHashToastBody = ({

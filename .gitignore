@@ -16,3 +16,5 @@ studio/node_modules
 .vscode/
 !.env.example
 .env*.local
+idea/
+.idea

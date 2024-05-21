@@ -46,7 +46,8 @@ import { FaExternalLinkAlt } from "react-icons/fa"
 import { formatDecimals } from "utils/bigNumber"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
-import { useAccount, useContract, useSigner } from "wagmi"
+import { useAccount, useWalletClient } from "wagmi"
+import { getContract } from 'viem'
 import BondingTableCard from "../BondingTableCard"
 import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
@@ -126,11 +127,14 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   })
 
   // Query withdraw queue status, disable queue button if there is active withdraw pending to prevent confusion
-  const { data: signer } = useSigner()
-  const withdrawQueueContract = useContract({
+  const { data: walletClient } = useWalletClient()
+
+  const withdrawQueueContract = getContract({
     address: cellarConfig.chain.withdrawQueueAddress,
     abi: withdrawQueueV0821,
-    signerOrProvider: signer,
+    client: {
+      wallet: walletClient
+    }
   })!
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =

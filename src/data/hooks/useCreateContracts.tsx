@@ -1,43 +1,61 @@
 import { StrategyContracts } from "data/actions/types"
 import { ConfigProps } from "data/types"
-import { Contract, ContractInterface, ethers } from "ethers"
-import { useSigner, useProvider, useContract } from "wagmi"
+import { useWalletClient, usePublicClient } from "wagmi"
+import { getContract } from "viem"
 
 export const useCreateContracts = (config: ConfigProps) => {
-  const { data: signer } = useSigner()
-  const provider = useProvider()
+  const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
   const chain = config.chain.id
 
+
   const stakerSigner = (() => {
-    if (!config.staker || !signer) return
-    return new ethers.Contract(
-      config.staker.address,
-      config.staker.abi as ContractInterface,
-      signer
+    if (!config.staker || !publicClient) return
+    // @ts-ignore
+    return getContract({
+      address: config.staker.address,
+      abi: config.staker.abi,
+      client: {
+        wallet: walletClient
+      }
+      }
     )
   })()
-  const cellarSigner: Contract = useContract({
+  // @ts-ignore
+  const cellarSigner = getContract({
     address: config.cellar.address,
     abi: config.cellar.abi,
-    signerOrProvider: signer,
+    client: {
+      wallet: walletClient
+    }
   })!
   const stakerContract = (() => {
-    if (!config.staker || !provider) return
-    return new ethers.Contract(
-      config.staker.address,
-      config.staker.abi,
-      provider
+    if (!config.staker || !publicClient) return
+    // @ts-ignore
+    return getContract( {
+      address: config.staker.address,
+      abi: config.staker.abi,
+      client: {
+        public: publicClient
+      }
+      }
     )
   })()
-  const cellarContract: Contract = useContract({
+  // @ts-ignore
+  const cellarContract = getContract({
     address: config.cellar.address,
     abi: config.cellar.abi,
-    signerOrProvider: provider,
+    client: {
+      public: publicClient
+    }
   })!
-  const cellarRouterSigner: Contract = useContract({
+  // @ts-ignore
+  const cellarRouterSigner = getContract({
     address: config.cellarRouter.address,
     abi: config.cellarRouter.abi,
-    signerOrProvider: signer,
+    client: {
+      wallet: walletClient
+    }
   })!
 
   const contracts: StrategyContracts = {

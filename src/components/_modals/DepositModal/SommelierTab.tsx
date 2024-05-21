@@ -29,8 +29,8 @@ import {
 } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
-import { useSigner, useAccount, useBalance } from "wagmi"
-import { erc20Abi } from 'viem'
+import { useAccount, useBalance, useWalletClient } from "wagmi"
+import { erc20Abi, getContract } from "viem"
 import { Contract, ethers } from "ethers"
 import { getAddress } from "ethers/lib/utils.js"
 
@@ -180,7 +180,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     cellarAddress,
   }
 
-  const { data: signer } = useSigner()
+  const { data: walletClient } = useWalletClient()
   const { address } = useAccount()
 
   const { refetch } = useUserStrategyData(
@@ -241,7 +241,13 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const erc20Contract =
     selectedToken?.address &&
-    new ethers.Contract(selectedToken?.address, erc20Abi, signer!)
+    getContract({
+      address: selectedToken?.address,
+      abi: erc20Abi,
+      client: {
+        wallet: walletClient
+      }
+    })
 
   // New enso route config
   // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token

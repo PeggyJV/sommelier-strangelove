@@ -22,7 +22,8 @@ import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
-import { useAccount, useContract, useSigner } from "wagmi"
+import { useAccount, useWalletClient } from "wagmi"
+import { getContract } from 'viem'
 import { toEther } from "utils/formatCurrency"
 import { ethers } from "ethers"
 import { useHandleTransaction } from "hooks/web3"
@@ -123,18 +124,24 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
   )
   const tokenPrice = strategyData?.tokenPrice
 
-  const { data: signer } = useSigner()
-  const withdrawQueueContract = useContract({
+  const { data: walletClient } = useWalletClient()
+
+  const withdrawQueueContract = getContract({
     address: cellarConfig.chain.withdrawQueueAddress,
     abi: withdrawQueueV0821,
-    signerOrProvider: signer,
-  })!
+    client: {
+      wallet: walletClient
+    }
+  })
 
-  const cellarContract = useContract({
+
+  const cellarContract = getContract({
     address: cellarConfig.cellar.address,
     abi: cellarConfig.cellar.abi,
-    signerOrProvider: signer,
-  })!
+    client: {
+      wallet: walletClient
+    }
+  })
 
   const [_, wait] = useWaitForTransaction({
     skip: true,

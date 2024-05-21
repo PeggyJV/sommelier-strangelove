@@ -1,16 +1,10 @@
-import {
-  useSigner,
-  useContract,
-  useAccount,
-  Address,
-} from "wagmi"
-import { erc20Abi } from 'viem'
+import { useAccount, useWalletClient } from "wagmi"
+import { Address, erc20Abi, getContract } from "viem"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
 import { ethers } from "ethers"
 import { BigNumber } from "bignumber.js"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
-import { getAddress } from "ethers/lib/utils.js"
 
 export const useApproveERC20 = ({
   tokenAddress,
@@ -20,13 +14,17 @@ export const useApproveERC20 = ({
   spender: string
 }) => {
   const { addToast, update, close, closeAll } = useBrandedToast()
-  const { data: signer } = useSigner()
+
   const { address } = useAccount()
 
-  const erc20Contract = useContract({
+  const { data: walletClient } = useWalletClient()
+
+  const erc20Contract = getContract({
     address: tokenAddress,
     abi: erc20Abi,
-    signerOrProvider: signer,
+    client: {
+      wallet: walletClient
+    },
   })!
 
   const [_, wait] = useWaitForTransaction({

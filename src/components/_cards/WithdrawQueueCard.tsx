@@ -37,7 +37,8 @@ import { differenceInDays } from "date-fns"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { tokenConfig } from "data/tokenConfig"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { useSigner, useContract, useAccount } from "wagmi"
+import { useAccount, useWalletClient } from "wagmi"
+import { getContract } from 'viem'
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useBrandedToast } from "hooks/chakra"
@@ -71,11 +72,14 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
   const cellarConfig = cellarDataMap[id].config
   const { address } = useAccount()
 
-  const { data: signer } = useSigner()
-  const withdrawQueueContract = useContract({
+  const { data: walletClient } = useWalletClient()
+
+  const withdrawQueueContract = getContract({
     address: cellarConfig.chain.withdrawQueueAddress,
     abi: withdrawQueueV0821,
-    signerOrProvider: signer,
+    client: {
+      wallet: walletClient
+    },
   })!
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =

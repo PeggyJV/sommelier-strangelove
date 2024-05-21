@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUserDataAllStrategies } from "data/actions/common/getUserDataAllStrategies"
-import { useAccount, useSigner } from "wagmi"
+import { useAccount, useWalletClient } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useAllStrategiesData } from "./useAllStrategiesData"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
@@ -8,7 +8,7 @@ import { chainConfig } from "data/chainConfig"
 import { tokenConfig } from "data/tokenConfig"
 
 export const useUserDataAllStrategies = () => {
-  const { data: signer } = useSigner()
+  const { data: walletClient } = useWalletClient()
   const { address, chain } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategies = useAllStrategiesData()
@@ -31,7 +31,7 @@ export const useUserDataAllStrategies = () => {
       "USE_USER_DATA_ALL_STRATEGIES",
       {
         allContracts: !!allContracts,
-        signer: signer?._isSigner,
+        signer: walletClient,
         userAddress: address,
       },
     ],
@@ -46,7 +46,7 @@ export const useUserDataAllStrategies = () => {
     },
     enabled:
       !!allContracts &&
-      !!signer?._isSigner &&
+      !!walletClient &&
       !!strategies.data &&
       !!address &&
       !!sommPrice.data &&
