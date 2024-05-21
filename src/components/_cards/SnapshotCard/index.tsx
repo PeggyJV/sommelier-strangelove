@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react"
 import { InformationIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
-import { useAccount, useSwitchNetwork } from "wagmi"
+import { useAccount, useSwitchChain } from "wagmi"
 import { FormProvider, useForm } from "react-hook-form"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import SnapshotForm from "components/_forms/SnapshotForm"
@@ -26,7 +26,7 @@ export interface SnapshotFormValues {
 export const SnapshotCard: React.FC = () => {
   const isMounted = useIsMounted()
   const { isConnected, chain: wagmiChain } = useAccount()
-  const { switchNetworkAsync } = useSwitchNetwork()
+  const { switchChainAsync } = useSwitchChain()
   const { addToast, close } = useBrandedToast()
   const methods = useForm<SnapshotFormValues>({
     defaultValues: {
@@ -79,8 +79,8 @@ export const SnapshotCard: React.FC = () => {
               onClick={async () => {
                 try {
                   const ethChainConfig = chainSlugMap["ETHEREUM"]
-                  if (switchNetworkAsync && ethChainConfig) {
-                    await switchNetworkAsync(ethChainConfig.wagmiId)
+                  if (switchChainAsync && ethChainConfig) {
+                    await switchChainAsync({chainId: ethChainConfig.wagmiId})
                     window.location.reload()
                   }
                 } catch (e) {

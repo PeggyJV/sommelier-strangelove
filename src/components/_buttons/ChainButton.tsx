@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react"
 import { ChevronDownIcon, CheckIcon } from "components/_icons"
 import { VFC } from "react"
-import { useSwitchNetwork, useAccount } from "wagmi"
+import { useSwitchChain, useAccount } from "wagmi"
 
 import {
   chainConfigMap,
@@ -32,13 +32,7 @@ const ChainButton: VFC<ChainButtonProps> = ({
   chain,
   onChainChange,
 }) => {
-  const {
-    chains,
-    error,
-    isLoading,
-    pendingChainId,
-    switchNetworkAsync,
-  } = useSwitchNetwork()
+  const { switchChainAsync, } = useSwitchChain()
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
 
@@ -58,7 +52,7 @@ const ChainButton: VFC<ChainButtonProps> = ({
     let chainId = event.target.value
 
     try {
-      await switchNetworkAsync?.(chainConfigMap[chainId].wagmiId)
+      await switchChainAsync?.({chainId: chainConfigMap[chainId].wagmiId})
       onChainChange && onChainChange(chainId)
       if (isConnected) {
         window.location.reload()
