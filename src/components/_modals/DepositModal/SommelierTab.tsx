@@ -29,7 +29,8 @@ import {
 } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
-import { erc20ABI, useSigner, useAccount, useBalance } from "wagmi"
+import { useSigner, useAccount, useBalance } from "wagmi"
+import { erc20Abi } from 'viem'
 import { Contract, ethers } from "ethers"
 import { getAddress } from "ethers/lib/utils.js"
 
@@ -124,7 +125,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   let acceptedDepositTokenMap = {}
 
   // TODO: Clean and enable below for enso
-  /* 
+  /*
   // Drop active asset from deposit tokens to put active asset at the top of the token list
   if (cellarConfig.chain.id === chainSlugMap.ETHEREUM.id) {
     acceptedDepositTokenMap = acceptedETHDepositTokenMap
@@ -240,7 +241,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const erc20Contract =
     selectedToken?.address &&
-    new ethers.Contract(selectedToken?.address, erc20ABI, signer!)
+    new ethers.Contract(selectedToken?.address, erc20Abi, signer!)
 
   // New enso route config
   // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token

@@ -2,7 +2,8 @@ import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
 import { config } from "utils/config"
-import { erc20ABI, useAccount, useContract, useSigner } from "wagmi"
+import { useAccount, useContract, useSigner } from "wagmi"
+import { erc20Abi } from 'viem'
 import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
 import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
@@ -32,7 +33,7 @@ export const useBridgeEthToSommTx = () => {
 
   const erc20Contract = useContract({
     address: tokenConfigMap.SOMM_ETHEREUM.address,
-    abi: erc20ABI,
+    abi: erc20Abi,
     signerOrProvider: signer,
   })!
 

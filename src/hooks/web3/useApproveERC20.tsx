@@ -1,10 +1,10 @@
 import {
   useSigner,
   useContract,
-  erc20ABI,
   useAccount,
   Address,
 } from "wagmi"
+import { erc20Abi } from 'viem'
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
 import { ethers } from "ethers"
@@ -25,7 +25,7 @@ export const useApproveERC20 = ({
 
   const erc20Contract = useContract({
     address: tokenAddress,
-    abi: erc20ABI,
+    abi: erc20Abi,
     signerOrProvider: signer,
   })!
 
