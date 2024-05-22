@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import { getAllContracts } from "data/actions/common/getAllContracts"
-import { usePublicClient, useWalletClient } from "wagmi"
+import { http, usePublicClient, useWalletClient } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { ethers } from "ethers"
 import { INFURA_API_KEY } from "src/context/rpc_context"
+import { createPublicClient } from "viem"
 
 export const useAllContracts = () => {
   const { data: walletClient } = useWalletClient()
@@ -22,9 +23,10 @@ export const useAllContracts = () => {
       // Create a new provider for the non-current chain
       providerMap.set(
         chain.id,
-        new ethers.providers.JsonRpcProvider(
-          `${chain.infuraRpcUrl}/${INFURA_API_KEY}`
-        )
+        createPublicClient({
+          chain: chain.viemChain,
+          transport: http(chain.infuraRpcUrl)
+        })
       )
     } else {
       // Only set signer for the current chain

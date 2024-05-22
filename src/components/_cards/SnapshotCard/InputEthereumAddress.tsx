@@ -8,7 +8,7 @@ import {
   Box,
 } from "@chakra-ui/react"
 import { InformationIcon, MoneyWalletIcon } from "components/_icons"
-import { isAddress } from "ethers/lib/utils"
+import { isAddress } from 'viem'
 import { useBrandedToast } from "hooks/chakra"
 import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
@@ -78,7 +78,7 @@ export const InputEthereumAddress: React.FC<
           py={6}
           maxH="64px"
           type="text"
-          isDisabled={disabled} 
+          isDisabled={disabled}
           {...register("eth_address", {
             required: "Ethereum address is required",
             validate: (value) =>

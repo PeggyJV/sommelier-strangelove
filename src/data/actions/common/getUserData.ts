@@ -12,7 +12,7 @@ import {
 import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
-import { getAddress } from "ethers/lib/utils.js"
+import { getAddress } from "viem"
 import { config as cellarConfig } from "utils/config"
 
 export const getUserData = async ({

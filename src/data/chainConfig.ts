@@ -1,13 +1,14 @@
-// src/data/chainConfig.ts
 import {
   mainnet,
   arbitrum,
   optimism,
   scroll,
 } from "wagmi/chains"
+import { Chain as ViemChain } from "viem";
 
 export interface Chain {
   id: string
+  viemChain: ViemChain
   wagmiId: number
   displayName: string
   logoPath: string
@@ -22,13 +23,10 @@ export interface Chain {
   withdrawQueueAddress: string
   priceRouterAddress: string
 }
-// Log the structures for debugging
-console.log("Mainnet RPC URLs:", mainnet.rpcUrls)
-console.log("Arbitrum RPC URLs:", arbitrum.rpcUrls)
-console.log("Optimism RPC URLs:", optimism.rpcUrls)
 
 export const placeholderChain: Chain = {
   id: "unknown",
+  viemChain: mainnet,
   wagmiId: 0,
   displayName: "Switch Chain (Unsupported)",
   logoPath: "/assets/icons/unknownchain.svg",
@@ -47,6 +45,7 @@ export const placeholderChain: Chain = {
 export const chainConfig: Chain[] = [
   {
     id: "ethereum",
+    viemChain: mainnet,
     wagmiId: mainnet.id,
     displayName: "Ethereum",
     logoPath: "/assets/icons/ethereum-alt.png",
@@ -66,16 +65,17 @@ export const chainConfig: Chain[] = [
   },
   {
     id: "arbitrum",
+    viemChain: arbitrum,
     wagmiId: arbitrum.id,
     displayName: "Arbitrum",
     logoPath: "/assets/icons/arbitrum.svg",
     alt: "Arbitrum logo",
     // Safely access the Arbitrum RPC URLs
     infuraRpcUrl:
-      arbitrum.rpcUrls.infura?.http?.[0] ||
+      arbitrum.rpcUrls.default.http?.[0] ||
       "https://default-arbitrum-rpc.com",
     alchemyRpcUrl:
-      arbitrum.rpcUrls.alchemy?.http?.[0] ||
+      arbitrum.rpcUrls.default.http?.[0] ||
       "https://default-arbitrum-rpc.com",
     blockExplorer: arbitrum.blockExplorers.default,
     withdrawQueueAddress:
@@ -85,16 +85,17 @@ export const chainConfig: Chain[] = [
   },
   {
     id: "optimism",
+    viemChain: optimism,
     wagmiId: optimism.id,
     displayName: "Optimism",
     logoPath: "/assets/icons/optimism.svg",
     alt: "Optimism logo",
     // Safely access the Optimism RPC URLs with checks
     infuraRpcUrl:
-      optimism.rpcUrls?.infura?.http?.[0] ||
+      optimism.rpcUrls?.default.http?.[0] ||
       "https://default-optimism-rpc.com",
     alchemyRpcUrl:
-      optimism.rpcUrls?.alchemy?.http?.[0] ||
+      optimism.rpcUrls?.default.http?.[0] ||
       "https://default-optimism-rpc.com",
     blockExplorer: optimism.blockExplorers?.default || {
       name: "Unknown",
@@ -107,6 +108,7 @@ export const chainConfig: Chain[] = [
   },
   {
     id: "scroll",
+    viemChain: scroll,
     wagmiId: scroll.id,
     displayName: "Scroll",
     logoPath: "/assets/icons/scroll.svg",

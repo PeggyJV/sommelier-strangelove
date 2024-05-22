@@ -1,6 +1,6 @@
 import { ConfigProps } from "data/types"
 import { useAccount, useBalance, useToken } from "wagmi"
-import { getAddress } from "ethers/lib/utils.js"
+import { getAddress } from "viem"
 
 export const useUserBalance = (config: ConfigProps) => {
   const { address } = useAccount()

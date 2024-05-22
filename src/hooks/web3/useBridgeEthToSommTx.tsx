@@ -14,7 +14,7 @@ import { getBytes32 } from "utils/getBytes32"
 import { GravityBridge } from "src/abi/types"
 import { analytics } from "utils/analytics"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
-import { getAddress } from "ethers/lib/utils.js"
+import { getAddress } from "viem"
 import { tokenConfigMap } from "data/tokenConfig"
 
 // TODO: this needs to be adapted to multichain

@@ -41,7 +41,7 @@ import { InformationIcon } from "components/_icons"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
-import { getAddress } from "ethers/lib/utils.js"
+import { getAddress } from "viem"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 
 interface FormValues {

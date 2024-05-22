@@ -32,7 +32,7 @@ import { config } from "utils/config"
 import { useAccount, useBalance, useWalletClient } from "wagmi"
 import { erc20Abi, getContract } from "viem"
 import { Contract, ethers } from "ethers"
-import { getAddress } from "ethers/lib/utils.js"
+import { getAddress } from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"

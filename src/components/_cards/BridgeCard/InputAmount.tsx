@@ -11,7 +11,7 @@ import React, { useState } from "react"
 
 import Image from "next/image"
 import { useAccount, useBalance } from "wagmi"
-import { getAddress } from "ethers/lib/utils.js"
+import { getAddress } from "viem"
 import {
   useBalances as useGrazBalances,
   useAccount as useGrazAccount,
