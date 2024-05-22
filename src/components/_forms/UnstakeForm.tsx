@@ -16,7 +16,7 @@ import { ModalInput } from "components/_inputs/ModalInput"
 import { useBrandedToast } from "hooks/chakra"
 import { useAccount } from "wagmi"
 import { toEther } from "utils/formatCurrency"
-import { ethers } from "ethers"
+import { parseUnits } from 'viem'
 import { useHandleTransaction } from "hooks/web3"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
@@ -108,7 +108,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
 
     // analytics.track("withdraw.started", analyticsData)
 
-    const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
+    const amtInWei = parseUnits(`${withdrawAmount}`, 18)
     const tx = await cellarSigner?.redeem(amtInWei, address, address)
 
     function onSuccess() {

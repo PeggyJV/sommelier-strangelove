@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query"
 import { getAllContracts } from "data/actions/common/getAllContracts"
 import { http, usePublicClient, useWalletClient } from "wagmi"
 import { chainConfig } from "data/chainConfig"
-import { ethers } from "ethers"
 import { INFURA_API_KEY } from "src/context/rpc_context"
 import { createPublicClient } from "viem"
 
