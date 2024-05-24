@@ -76,7 +76,7 @@ export const useWaitForTransaction = ({
         else if (config_.hash)
           promise = publicClient!.waitForTransactionReceipt({
               confirmations: config_.confirmations,
-              hash: config_.hash,
+              hash: config_.hash as `0x${string}`,
               timeout: config_.timeout
             }
           )

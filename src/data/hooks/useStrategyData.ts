@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getStrategyData } from "data/actions/common/getStrategyData"
 import { cellarDataMap } from "data/cellarDataMap"
 import { GetStrategyDataQuery } from "src/data/actions/types"
-import { useProvider } from "wagmi"
+import { usePublicClient } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
@@ -10,7 +10,7 @@ import { useState, useEffect } from "react"
 import { tokenConfig } from "data/tokenConfig"
 
 export const useStrategyData = (address: string, chain: string) => {
-  const provider = useProvider()
+  const publicClient = usePublicClient()
 
   const { data: allContracts } = useAllContracts()
   const sommToken = tokenConfig.find(
@@ -66,7 +66,7 @@ export const useStrategyData = (address: string, chain: string) => {
   const query = useQuery({
     queryKey: [
       "USE_STRATEGY_DATA",
-      { provider: provider?._isProvider, address: key },
+      { provider: publicClient?.uid, address: key },
     ],
     queryFn: async () => {
       const result = await getStrategyData({

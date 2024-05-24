@@ -16,12 +16,12 @@ export const useGetPreviewRedeem = ({
   const signer01 = cellarContract as CellarV0816
 
   const user = useAccount()
-  return useQuery(
-    [
+  return useQuery({
+    queryKey: [
       "USE_GET_PREVIEW_SHARES",
       { config: cellarConfig.id, value, userAddress: user.address },
     ],
-    async () => {
+    queryFn: async () => {
       if (!cellarContract) throw new Error("Missing data")
       const data = await getPreviewRedeem({
         cellarContract: signer01,
@@ -33,8 +33,7 @@ export const useGetPreviewRedeem = ({
         }
       return data?.value
     },
-    {
-      enabled: !!cellarContract && !!value,
-    }
+    enabled: !!cellarContract && !!value,
+}
   )
 }

@@ -24,7 +24,7 @@ export const useAllContracts = () => {
         chain.id,
         createPublicClient({
           chain: chain.viemChain,
-          transport: http(chain.infuraRpcUrl)
+          transport: http(`${chain.infuraRpcUrl}/${INFURA_API_KEY}`)
         })
       )
     } else {
