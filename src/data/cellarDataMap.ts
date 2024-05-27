@@ -86,7 +86,7 @@ cellarConfig = {
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
   [config.CONTRACT.REAL_YIELD_ETH_SCROLL.ADDRESS.toLowerCase() +
-    "-optimism"]: realYieldEthScroll,
+    "-scroll"]: realYieldEthScroll,
   [config.CONTRACT.REAL_YIELD_ETH_OPT.ADDRESS.toLowerCase() +
   "-optimism"]: realYieldEthOpt,
   [config.CONTRACT.TURBO_EZETH.ADDRESS.toLowerCase()]: turboezETH,
