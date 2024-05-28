@@ -3229,7 +3229,7 @@
     util "^0.12.4"
     uuid "^8.3.2"
 
-"@metamask/sdk@0.20.3":
+"@metamask/sdk@0.20.3", "@metamask/sdk@^0.20.3":
   version "0.20.3"
   resolved "https://registry.yarnpkg.com/@metamask/sdk/-/sdk-0.20.3.tgz#73851d68ffe5d45c1872c024182922530b187b7a"
   integrity sha512-HZ9NwA+LxiXzuy0YWbWsuD4xejQtp85bhcCAf8UgpA/0dOyF3RS4dKDdBBXSyRgk3RWPjeJgHxioaH4CmBmiRA==
