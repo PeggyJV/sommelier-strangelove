@@ -81,6 +81,7 @@
     "sanity-codegen": "^0.9.8",
     "slick-carousel": "^1.8.1",
     "slugify": "^1.6.5",
+    "tslib": "^2.6.2",
     "urql": "^2.2.0",
     "viem": "^2.11.1",
     "wagmi": "^2.8.3",
