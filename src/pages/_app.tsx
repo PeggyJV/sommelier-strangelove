@@ -1,11 +1,10 @@
-// src/pages/_app.tsx
 import { ChakraProvider, DarkMode } from "@chakra-ui/react"
 import { DialogProvider } from "context/dialogContext"
 import type { AppProps } from "next/app"
 import PlausibleProvider from "next-plausible"
 import theme from "theme/index"
 
-import { WagmiProvider } from "context/wagmiContext"
+import { QueryProvider } from "context/wagmiContext"
 import { AlertDialog } from "components/AlertDialog"
 import "utils/analytics"
 import { GlobalFonts } from "theme/GlobalFonts"
@@ -26,7 +25,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           <GeoProvider>
             <GlobalFonts />
             <DialogProvider>
-              <WagmiProvider>
+              <QueryProvider>
                 <HomeProvider>
                   <DefaultSeo
                     title="Sommelier Finance"
@@ -38,7 +37,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                   </DarkMode>
                   <AlertDialog />
                 </HomeProvider>
-              </WagmiProvider>
+              </QueryProvider>
             </DialogProvider>
           </GeoProvider>
         </ChakraProvider>

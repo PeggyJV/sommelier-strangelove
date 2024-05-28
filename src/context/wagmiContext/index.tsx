@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { WagmiConfig, createConfig, http } from "wagmi"
+import { WagmiProvider, createConfig, http } from "wagmi"
 import {
   QueryClient,
   QueryClientProvider,
@@ -61,14 +61,14 @@ export const wagmiConfig = createConfig({
   },
 })
 
-export const WagmiProvider = ({
+export const QueryProvider = ({
   children,
 }: {
   children: ReactNode
 }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>
+      <WagmiProvider config={wagmiConfig}>{children}</WagmiProvider>
     </QueryClientProvider>
   )
 }

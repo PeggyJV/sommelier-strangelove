@@ -1,6 +1,5 @@
 import { BigNumber, constants } from "ethers"
-import { BigNumber as BigNumJS} from "bignumber.js"
-import { fetchBalance } from "@wagmi/core"
+import { getBalance  } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
@@ -13,7 +12,7 @@ import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
 import { getAddress } from "viem"
-import { config as cellarConfig } from "utils/config"
+import { wagmiConfig } from "context/wagmiContext"
 
 export const getUserData = async ({
   address,
@@ -40,7 +39,7 @@ export const getUserData = async ({
     const decimals = config.baseAsset.decimals
     const symbol = config.baseAsset.symbol
 
-    const shares = await fetchBalance({
+    const shares = await getBalance(wagmiConfig, {
       token: getAddress(config.cellar.address),
       address: getAddress(userAddress),
     })
@@ -74,7 +73,7 @@ export const getUserData = async ({
           ? userStakes?.totalBondedAmount?.value.toFixed()
           : "0"
       ) ?? constants.Zero
-    const totalShares = shares.value.add(bonded)
+    const totalShares = shares.value + BigInt(bonded.toString());
 
     const totalAssets = await(async () => {
       if (!contracts.cellarContract) {
