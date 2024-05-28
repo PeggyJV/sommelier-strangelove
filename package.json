@@ -49,6 +49,7 @@
     "@vercel/kv": "^1.0.1",
     "@wagmi/connectors": "4.3.8",
     "@wagmi/core": "2.9.6",
+    "@walletconnect/environment": "^1.0.1",
     "@walletconnect/modal": "^2.6.2",
     "analytics": "^0.8.1",
     "axios": "^1.2.2",
