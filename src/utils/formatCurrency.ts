@@ -1,4 +1,4 @@
-import { ethers } from "ethers"
+import { formatUnits } from 'viem'
 import BigNumber from "bignumber.js"
 
 export const formatCurrency = (value?: string) => {
@@ -28,14 +28,14 @@ export const formatUSD = (value?: string, maximumDigit?: number) => {
 }
 
 export const toEther = (
-  val: ethers.BigNumberish | undefined,
+  val: any | undefined,
   decimals = 18,
   format?: boolean | number,
   precision = 2
 ) => {
   if (!val || val === "--") return "--"
   try {
-    const fmt = ethers.utils.formatUnits(val, decimals)
+    const fmt = formatUnits(val, decimals)
     const result = new BigNumber(fmt)
     if (format)
       return result.toFormat(typeof format === "boolean" ? 2 : format)
