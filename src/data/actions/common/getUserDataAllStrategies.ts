@@ -5,11 +5,6 @@ import { getUserData } from "./getUserData"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps } from "data/types"
-import { fetchBalance } from "@wagmi/core"
-import { getAddress } from "viem"
-import { getAcceptedDepositAssetsByChain } from "data/tokenConfig"
-import { ResolvedConfig } from "abitype"
-import BigNumber from "bignumber.js"
 
 export const getUserDataAllStrategies = async ({
   allContracts,
@@ -39,12 +34,12 @@ export const getUserDataAllStrategies = async ({
           (item) => item?.address === address && item.config.chain.id === contracts.chain
         )
 
-        const result = await reactQueryClient.fetchQuery(
-          [
+        const result = await reactQueryClient.fetchQuery({
+          queryKey: [
             "USE_USER_DATA",
             { signer: true, contractAddress: address, userAddress },
           ],
-          async () => {
+          queryFn: async () => {
             const strategy = Object.values(cellarDataMap).find(
               ({ config }) =>
                 config.cellar.address.toLowerCase() ===
@@ -73,9 +68,11 @@ export const getUserDataAllStrategies = async ({
               console.log("error", error)
             }
           }
+        }
         )
         return result
       }
+
     )
   )
 

@@ -1,17 +1,18 @@
 import { getAcceptedDepositAssetsByChain } from "data/tokenConfig"
-import { ResolvedConfig } from "abitype"
-import { fetchBalance } from "@wagmi/core"
+import { ResolvedRegister } from "abitype"
+import { getBalance } from "@wagmi/core"
 import { getAddress } from "viem"
 import { useAccount } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { useQuery } from "@tanstack/react-query"
+import { wagmiConfig } from "context/wagmiContext"
 
 type Balance = {
-  decimals: ResolvedConfig['IntType'];
+  decimals: ResolvedRegister['IntType'];
   formatted: string;
   symbol: string;
-  value: ResolvedConfig['BigIntType'];
+  value: ResolvedRegister['BigIntType'];
   valueInUSD: number;
 }
 
@@ -29,12 +30,12 @@ export const useUserBalances = () => {
 
     await Promise.all(tokenList.map(async (token) => {
       try {
-        const balance = await fetchBalance({
+        const balance = await getBalance(wagmiConfig, {
           token: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
           address: getAddress(address!)
         });
 
-        if (!balance.value.isZero()) {
+        if (balance.value !== 0n) {
           // fix because token comes with different naming
           if (balance.symbol === 'B-rETH-STABLE'){
             balance.symbol = 'rETH BPT'
