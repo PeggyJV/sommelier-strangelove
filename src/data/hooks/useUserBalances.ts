@@ -1,7 +1,7 @@
 import { getAcceptedDepositAssetsByChain } from "data/tokenConfig"
 import { ResolvedRegister } from "abitype"
-import { getBalance } from "@wagmi/core"
-import { getAddress } from "viem"
+import { readContracts } from "@wagmi/core"
+import { erc20Abi, formatUnits, getAddress } from "viem"
 import { useAccount } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
@@ -30,10 +30,35 @@ export const useUserBalances = () => {
 
     await Promise.all(tokenList.map(async (token) => {
       try {
-        const balance = await getBalance(wagmiConfig, {
-          token: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
-          address: getAddress(address!)
-        });
+        const result = await readContracts(wagmiConfig, {
+          allowFailure: false,
+          contracts: [
+            {
+              address: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
+              abi: erc20Abi,
+              functionName: 'balanceOf',
+              args: [getAddress(address!)]
+            },
+            {
+              address: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
+              abi: erc20Abi,
+              functionName: 'decimals'
+            },
+            {
+              address: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
+              abi: erc20Abi,
+              functionName: 'symbol'
+            },
+          ]
+        })
+        const balance: Balance = {
+          value: result[0] as bigint,
+          decimals: result[1] as number,
+          symbol: result[2] as string,
+          formatted: formatUnits(result[0], result[1]),
+          valueInUSD: 0
+        }
+        console.log(balance);
 
         if (balance.value !== 0n) {
           // fix because token comes with different naming
