@@ -3,7 +3,6 @@ import { getBalance  } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
-import { CellarV0815, CellarStakingV0815 } from "src/abi/types"
 import {
   convertDecimals,
   ZERO,
@@ -56,8 +55,8 @@ export const getUserData = async ({
 
       return await getUserStakes(
         userAddress,
-        contracts.stakerContract as CellarStakingV0815,
-        contracts.stakerSigner as CellarStakingV0815,
+        contracts.stakerContract,
+        contracts.stakerSigner,
         sommPrice,
         config
       )
@@ -80,8 +79,9 @@ export const getUserData = async ({
         return ZERO
       }
 
-      const cellarContract = contracts.cellarContract as CellarV0815
-      let assets = await cellarContract.convertToAssets(totalShares)
+      const cellarContract = contracts.cellarContract
+
+      let assets = await cellarContract.read.convertToAssets([totalShares])
 
       if (typeof assets === "undefined") {
         assets = constants.Zero

@@ -1,25 +1,27 @@
 import BigNumber from "bignumber.js"
-import { ethers } from "ethers"
 import { CellarStakingV0815 } from "src/abi/types"
 import { toEther } from "utils/formatCurrency"
 import { StakerUserData, UserStake } from "../types"
 import { ConfigProps } from "data/types"
+import { GetContractReturnType, parseUnits  } from "viem"
 
 export const getUserStakes = async (
   address: string,
-  stakerContract: CellarStakingV0815,
+  stakerContract: GetContractReturnType,
   stakerSigner: CellarStakingV0815,
   sommelierPrice: string,
   strategyConfig: ConfigProps
 ) => {
   try {
-    if (!stakerSigner.provider || !stakerSigner.signer) {
-      throw new Error("provider or signer is undefined")
-    }
 
-    const userStakes = await stakerContract.getUserStakes(address)
+    // if (!stakerSigner.provider || !stakerSigner.signer) {
+    //   throw new Error("provider or signer is undefined")
+    // }
 
-    const claimAllRewards = await stakerSigner.callStatic.claimAll()
+    const userStakes = await stakerContract.read.getUserStakes([address])
+
+    const claimAllRewards = await stakerSigner.simulate.claimAll()
+
     let totalClaimAllRewards = new BigNumber(0)
     claimAllRewards.length &&
       claimAllRewards.forEach((reward) => {
@@ -33,14 +35,14 @@ export const getUserStakes = async (
     let totalBondedAmount = new BigNumber(0)
 
     userStakes.forEach((item) => {
-      const [
+      const {
         amount,
         amountWithBoost,
         unbondTimestamp,
         rewardPerTokenPaid,
         rewards,
         lock,
-      ] = item
+      } = item
 
       totalRewards = totalRewards.plus(
         new BigNumber(rewards.toString())
@@ -65,7 +67,7 @@ export const getUserStakes = async (
       .div(new BigNumber(10).pow(6)) // convert from 6 decimals
       .multipliedBy(new BigNumber(sommelierPrice))
 
-    const convertedClaimAllRewards = claimAllRewards.map(
+    const convertedClaimAllRewards = claimAllRewards.result.map(
       (item) => new BigNumber(item.toString())
     )
 
@@ -77,7 +79,7 @@ export const getUserStakes = async (
         value: totalBondedAmount,
         formatted: Number(
           toEther(
-            ethers.utils.parseUnits(totalBondedAmount?.toFixed(), 0),
+            parseUnits(totalBondedAmount?.toFixed(), 0),
             strategyConfig.cellar.decimals, // Must be cellar decimals
             false,
             2

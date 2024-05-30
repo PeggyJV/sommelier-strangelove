@@ -1,10 +1,10 @@
-import { getContract } from "viem"
+import { Client, getContract } from "viem"
 import { cellarDataMap } from "data/cellarDataMap"
 import { AllContracts } from "../types"
 
 export const getAllContracts = async (
-  providerMap: Map<string, Object>,
-  signerMap: Map<string, Object | undefined>
+  providerMap: Map<string, Client>,
+  signerMap: Map<string, Client | undefined>
 ) => {
   let contracts: AllContracts = {}
 
@@ -20,37 +20,50 @@ export const getAllContracts = async (
     }
 
     const cellarContract = getContract({
-      address: cellar.config.cellar.address,
+      address: cellar.config.cellar.address as `0x${string}`,
       abi: cellar.config.cellar.abi,
-      client: provider,
+      client: {
+        public: provider
+      },
     })
 
     const cellarSigner = getContract({
-      address: cellar.config.cellar.address,
+      address: cellar.config.cellar.address as `0x${string}`,
       abi: cellar.config.cellar.abi,
-      client: signer || undefined,
+      client: {
+        public: provider,
+        wallet: signer || undefined
+      }
     })
 
     const stakerContract =
       cellar.config.staker &&
       getContract({
-        address: cellar.config.staker.address,
+        address: cellar.config.staker.address as `0x${string}`,
         abi: cellar.config.staker.abi,
-        client: provider,
+        client: {
+          public: provider
+        }
       })
 
     const stakerSigner =
       cellar.config.staker &&
       getContract({
-        address: cellar.config.staker.address,
+        address: cellar.config.staker.address as `0x${string}`,
         abi: cellar.config.staker.abi,
-        client: signer || undefined,
+        client: {
+          public: provider,
+          wallet: signer || undefined
+        }
       })
 
     const cellarRouterSigner = getContract({
-      address: cellar.config.cellarRouter.address,
+      address: cellar.config.cellarRouter.address as `0x${string}`,
       abi: cellar.config.cellarRouter.abi,
-      client: signer || undefined,
+      client: {
+        public: provider,
+        wallet: signer || undefined
+      }
     })
 
     const contract = {
