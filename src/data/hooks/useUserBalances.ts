@@ -1,7 +1,7 @@
 import { getAcceptedDepositAssetsByChain } from "data/tokenConfig"
 import { ResolvedRegister } from "abitype"
-import { readContracts } from "@wagmi/core"
-import { erc20Abi, formatUnits, getAddress } from "viem"
+import { getBalance, readContracts } from "@wagmi/core"
+import { erc20Abi, formatUnits } from "viem"
 import { useAccount } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
@@ -29,36 +29,37 @@ export const useUserBalances = () => {
     const tokenList = getAcceptedDepositAssetsByChain(chainObj.id);
 
     await Promise.all(tokenList.map(async (token) => {
+      if (!token || !address) {
+        return depositAssetBalances;
+      }
       try {
-        const result = await readContracts(wagmiConfig, {
-          allowFailure: false,
-          contracts: [
-            {
-              address: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
-              abi: erc20Abi,
-              functionName: 'balanceOf',
-              args: [getAddress(address!)]
-            },
-            {
-              address: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
-              abi: erc20Abi,
-              functionName: 'decimals'
-            },
-            {
-              address: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
-              abi: erc20Abi,
-              functionName: 'symbol'
-            },
-          ]
-        })
-        const balance: Balance = {
-          value: result[0] as bigint,
-          decimals: result[1] as number,
-          symbol: result[2] as string,
-          formatted: formatUnits(result[0], result[1]),
-          valueInUSD: 0
+        let balance;
+        if (token?.symbol === 'ETH') {
+          balance = await getBalance(wagmiConfig, {
+            address: address,
+          })
         }
-        console.log(balance);
+        else {
+          const result = await readContracts(wagmiConfig, {
+            allowFailure: false,
+            contracts: [
+              {
+                address: token.address as `0x${string}`,
+                abi: erc20Abi,
+                functionName: 'balanceOf',
+                args: [address]
+              }
+            ]
+          })
+
+          balance = {
+            value: result[0] as bigint,
+            decimals: token.decimals,
+            symbol: token.symbol,
+            formatted: formatUnits(result[0], token.decimals),
+            valueInUSD: 0
+          }
+        }
 
         if (balance.value !== 0n) {
           // fix because token comes with different naming
