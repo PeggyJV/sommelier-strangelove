@@ -1,50 +1,49 @@
 import { Provider } from "@wagmi/core"
-import BigNumber from "bignumber.js"
 import { Contract } from "ethers"
 import { getAllStrategiesData } from "./common/getAllStrategiesData"
 import { getStrategyData } from "./common/getStrategyData"
 
 export interface UserStake {
-  amount: BigNumber
-  amountWithBoost: BigNumber
-  rewardPerTokenPaid: BigNumber
-  rewards: BigNumber
+  amount: BigInt
+  amountWithBoost: BigInt
+  rewardPerTokenPaid: BigInt
+  rewards: BigInt
   unbondTimestamp: number
   lock: number
 }
 export interface StakerUserData {
-  claimAllRewards: BigNumber[]
-  claimAllRewardsUSD: BigNumber
+  claimAllRewards: BigInt[]
+  claimAllRewardsUSD: BigInt
   totalBondedAmount: {
-    value: BigNumber
+    value: BigInt
     formatted: string
   }
   totalClaimAllRewards: {
-    value: BigNumber
+    value: BigInt
     formatted: string
   }
-  totalRewards: BigNumber
+  totalRewards: BigInt
   userStakes: UserStake[]
 }
 
 export interface StakerData {
-  rewardRate: BigNumber
-  potentialStakingApy: BigNumber
+  rewardRate: BigInt
+  potentialStakingApy: BigInt
 }
 
 export interface CellarData {
   activeAsset: string
   name: string
-  maxLocked: BigNumber
-  accrualPeriod: BigNumber
-  totalAssets: BigNumber
-  apy: BigNumber
+  maxLocked: BigInt
+  accrualPeriod: BigInt
+  totalAssets: BigInt
+  apy: BigInt
 }
 
 export interface CellarUserData {
-  maxDeposit: BigNumber
-  maxWithdraw: BigNumber
-  netValue: BigNumber
+  maxDeposit: BigInt
+  maxWithdraw: BigInt
+  netValue: BigInt
 }
 
 export interface DepositAndSwapPayload {

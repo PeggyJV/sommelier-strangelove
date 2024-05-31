@@ -1,5 +1,6 @@
-import { formatDecimals } from "utils/bigNumber"
+
 import { formatCurrency } from "utils/formatCurrency"
+import { formatDecimals } from "utils/bigIntHelpers"
 
 export const getTokenPrice = (
   shareValue?: string,

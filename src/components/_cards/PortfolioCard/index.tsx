@@ -43,7 +43,6 @@ import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
 import { useEffect, useState, VFC } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { formatDecimals } from "utils/bigNumber"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
 import { useAccount, useWalletClient } from "wagmi"
@@ -121,6 +120,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
   const totalShares =
     userData?.userStrategyData.userData?.totalShares.value
+
+  const baseAssetValue = userData?.userStrategyData.userData?.netValueInAsset.formatted
   const { data, isLoading } = useGetPreviewRedeem({
     cellarConfig: staticCelarConfig,
     value: totalShares?.toString(),
@@ -220,10 +221,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               >
                 {isMounted &&
                   (isConnected && !isLoading
-                    ? `${formatDecimals(
-                        data?.toString() || "0",
-                        lpTokenData?.decimals
-                      )} ${activeAsset?.symbol}`
+                    ? baseAssetValue
                     : "--")}
               </CardStat>
             )}

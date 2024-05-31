@@ -3,15 +3,12 @@ import { getBalance  } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
-import {
-  convertDecimals,
-  ZERO,
-} from "utils/bigNumber"
 import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
-import { getAddress } from "viem"
+import { formatUnits, getAddress } from "viem"
 import { wagmiConfig } from "context/wagmiContext"
+import { ZERO } from "utils/bigIntHelpers"
 
 export const getUserData = async ({
   address,
@@ -86,10 +83,10 @@ export const getUserData = async ({
       if (typeof assets === "undefined") {
         assets = constants.Zero
       }
-      return convertDecimals(assets.toString(), decimals)
+      return formatUnits(assets, decimals)
     })()
 
-    const numTotalAssets = Number(totalAssets.toNumber().toFixed(5))
+    const numTotalAssets = Number(totalAssets).toFixed(5)
 
     let sommRewardsUSD = userStakes
       ? userStakes.claimAllRewardsUSD.toNumber()
@@ -106,19 +103,17 @@ export const getUserData = async ({
     })()
 
     const netValueWithoutRewardsInAsset = (() => {
-      return numTotalAssets
+      return Number(totalAssets)
     })()
 
     // Denoted in USD
     const netValue = (() => {
-      return totalAssets
-        .multipliedBy(baseAssetPrice)
-        .plus(sommRewardsUSD)
+      return Number(totalAssets) * baseAssetPrice + sommRewardsUSD
     })()
 
     // Denoted in USD
     const netValueWithoutRewards = (() => {
-      return totalAssets.multipliedBy(baseAssetPrice)
+      return Number(totalAssets) * baseAssetPrice
     })()
 
 
@@ -132,8 +127,8 @@ export const getUserData = async ({
         netValueInAsset: {
           value: netValueInAsset,
           formatted: netValueInAsset
-            ? `${netValueInAsset.toFixed(
-                showNetValueInAsset(config) ? 5 : 2
+            ? `${Number(netValueInAsset).toFixed(
+                showNetValueInAsset(config) ? 6 : 2
               )} ${config.baseAsset.symbol}`
             : "--",
         },
@@ -141,7 +136,7 @@ export const getUserData = async ({
           value: netValueWithoutRewardsInAsset,
           formatted: netValueWithoutRewardsInAsset
             ? `${netValueWithoutRewardsInAsset.toFixed(
-                showNetValueInAsset(config) ? 5 : 2
+                showNetValueInAsset(config) ? 6 : 2
               )} ${config.baseAsset.symbol}`
             : "--",
         },
