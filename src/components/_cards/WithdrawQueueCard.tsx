@@ -77,9 +77,7 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
   const withdrawQueueContract = getContract({
     address: cellarConfig.chain.withdrawQueueAddress,
     abi: withdrawQueueV0821,
-    client: {
-      wallet: walletClient
-    },
+    client: walletClient
   })!
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
@@ -94,7 +92,7 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
-      if (withdrawQueueContract && address && cellarConfig) {
+      if (walletClient && withdrawQueueContract && address && cellarConfig) {
         const withdrawRequest =
           await withdrawQueueContract?.getUserWithdrawRequest(
             address,

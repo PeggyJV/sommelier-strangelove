@@ -129,18 +129,16 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
   const withdrawQueueContract = getContract({
     address: cellarConfig.chain.withdrawQueueAddress,
     abi: withdrawQueueV0821,
-    client: {
-      wallet: walletClient
-    }
+    client: walletClient
+
   })
 
 
   const cellarContract = getContract({
     address: cellarConfig.cellar.address,
     abi: cellarConfig.cellar.abi,
-    client: {
-      wallet: walletClient
-    }
+    client: walletClient
+
   })
 
   const [_, wait] = useWaitForTransaction({
@@ -443,10 +441,10 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     try {
       if (withdrawQueueContract && address && cellarConfig) {
         const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
+          await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
             cellarConfig.cellar.address
-          )
+          ])
 
         // Check if it's valid
         const isWithdrawRequestValid =

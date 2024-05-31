@@ -57,9 +57,7 @@ export async function queryContract(
   const contract = getContract({
     abi,
     address: contractAddress as `0x${string}`,
-    client: {
-      public: publicClient
-    }
+    client: publicClient
   })
   return contract // Now you can run any queries on this contract instance
 }

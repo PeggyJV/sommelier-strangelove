@@ -132,10 +132,8 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const withdrawQueueContract = getContract({
     address: cellarConfig.chain.withdrawQueueAddress,
     abi: withdrawQueueV0821,
-    client: {
-      wallet: walletClient
-    }
-  })!
+    client:  walletClient
+  })
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
@@ -143,20 +141,20 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
-      if (withdrawQueueContract && address && cellarConfig) {
+      if (walletClient && withdrawQueueContract && address && cellarConfig) {
         const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
+          await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
             cellarConfig.cellar.address
-          )
+          ])
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.isWithdrawRequestValid(
+          await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
             withdrawRequest
-          )
+          ])
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
       } else {
         setIsActiveWithdrawRequest(false)
