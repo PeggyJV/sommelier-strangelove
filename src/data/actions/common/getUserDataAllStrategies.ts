@@ -92,7 +92,7 @@ export const getUserDataAllStrategies = async ({
       total +
       (item
         ? item.userStakes
-          ? item.userStakes.totalClaimAllRewards.value.toNumber()
+          ? Number(item.userStakes.totalClaimAllRewards.value)
           : 0
         : 0)
     )
@@ -103,7 +103,7 @@ export const getUserDataAllStrategies = async ({
       total +
       (item
         ? item.userStakes
-          ? item.userStakes.claimAllRewardsUSD.toNumber()
+          ? Number(item.userStakes.claimAllRewardsUSD)
           : 0
         : 0)
     )

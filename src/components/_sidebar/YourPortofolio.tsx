@@ -83,7 +83,7 @@ export const YourPortofolio = () => {
           >
             <Box w="100%">
               {!isError && data ? (
-                data.strategies.map((strategy) => (                  
+                data.strategies.map((strategy) => (
                   <PortofolioItem
                     symbol={
                       strategy.userStrategyData.userData.symbol || ""
@@ -189,7 +189,7 @@ export const YourPortofolio = () => {
                 <Text as="h6" fontSize={16} fontWeight={700}>
                   $
                   {Number(
-                    data?.totalSommRewardsInUsd.toFixed(2)
+                    data?.totalSommRewardsInUsd
                   ).toLocaleString()}
                 </Text>
                 <Text
