@@ -1,4 +1,3 @@
-import { BigNumber, constants } from "ethers"
 import { getBalance  } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
@@ -8,7 +7,7 @@ import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
 import { formatUnits, getAddress } from "viem"
 import { wagmiConfig } from "context/wagmiContext"
-import { ZERO } from "utils/bigIntHelpers"
+import { bigIntToFixed, ZERO } from "utils/bigIntHelpers"
 
 export const getUserData = async ({
   address,
@@ -64,11 +63,11 @@ export const getUserData = async ({
 
     const bonded =
       // Coerce from bignumber.js to ethers BN
-      BigNumber.from(
+      BigInt(
         userStakes?.totalBondedAmount?.value
-          ? userStakes?.totalBondedAmount?.value.toFixed()
+          ? bigIntToFixed(userStakes?.totalBondedAmount?.value)
           : "0"
-      ) ?? constants.Zero
+      ) ?? BigInt(0)
     const totalShares = shares.value + BigInt(bonded.toString());
 
     const totalAssets = await(async () => {
@@ -81,7 +80,7 @@ export const getUserData = async ({
       let assets = await cellarContract.read.convertToAssets([totalShares])
 
       if (typeof assets === "undefined") {
-        assets = constants.Zero
+        assets = BigInt(0)
       }
       return formatUnits(assets, decimals)
     })()
@@ -89,17 +88,17 @@ export const getUserData = async ({
     const numTotalAssets = Number(totalAssets).toFixed(5)
 
     let sommRewardsUSD = userStakes
-      ? userStakes.claimAllRewardsUSD.toNumber()
+      ? Number(userStakes.claimAllRewardsUSD)
       : 0
     let sommRewardsRaw = userStakes
       ? symbol !== "USDC"
-        ? userStakes.claimAllRewardsUSD.toNumber() /
+        ? Number(userStakes.claimAllRewardsUSD) /
           parseFloat(baseAssetPrice)
-        : userStakes.claimAllRewardsUSD.toNumber()
+        : Number(userStakes.claimAllRewardsUSD)
       : 0
 
     const netValueInAsset = (() => {
-      return numTotalAssets + Number(sommRewardsRaw)
+      return Number(numTotalAssets) + Number(sommRewardsRaw)
     })()
 
     const netValueWithoutRewardsInAsset = (() => {

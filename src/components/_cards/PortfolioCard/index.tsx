@@ -352,7 +352,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       (isConnected
                         ? (lpTokenData &&
                             toEther(
-                              lpTokenData.formatted,
+                              lpTokenData.value,
                               lpTokenData.decimals,
                               true,
                               2
