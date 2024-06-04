@@ -1,11 +1,12 @@
-import { BigNumber, BigNumberish } from "ethers"
+import { BigNumber, BigNumberish } from "ethers";
 
+// Increase default margin to 30%
 export const gasLimitMargin = (
   gasEstimated: BigNumber,
   margin?: number
 ) =>
   gasEstimated
-    .mul(Number((margin ? margin : 1.1) * 100).toFixed()) // default increase 10%
+    .mul(Number((margin ? margin : 1.3) * 100).toFixed()) // default increase 30%
     .div(100)
 
 export const estimateGasLimit = async (
@@ -22,7 +23,8 @@ export const estimateGasLimit = async (
   }
 }
 
-const PAD = [1.15, 1.3, 1.45, 1.6, 1.75]
+// Increase PAD values to provide larger buffer on retries
+const PAD = [1.25, 1.4, 1.55, 1.7, 1.85]
 
 /**
  *
