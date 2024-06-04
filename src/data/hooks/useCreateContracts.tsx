@@ -16,7 +16,8 @@ export const useCreateContracts = (config: ConfigProps) => {
       address: config.staker.address,
       abi: config.staker.abi,
       client: {
-        wallet: walletClient
+        wallet: walletClient,
+        public: publicClient
       }
       }
     )

@@ -274,7 +274,7 @@ export const getStrategyData = async ({
 
         return {
           formatted: apys
-            ? String(apys[apys!.length - 1].y)
+            ? apys[apys!.length - 1].y
             : config.baseApy?.toFixed(2) + "%",
           value: apys ? apys[apys!.length - 1].value : config.baseApy,
         }

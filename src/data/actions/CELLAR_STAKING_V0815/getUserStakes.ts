@@ -2,21 +2,21 @@ import { CellarStakingV0815 } from "src/abi/types"
 import { toEther } from "utils/formatCurrency"
 import { StakerUserData, UserStake } from "../types"
 import { ConfigProps } from "data/types"
-import { formatUnits, GetContractReturnType } from "viem"
+import { formatUnits } from "viem"
 import { bigIntToFixed } from "utils/bigIntHelpers"
 
 export const getUserStakes = async (
   address: string,
-  stakerContract: GetContractReturnType,
-  stakerSigner: CellarStakingV0815,
+  stakerContract,
+  stakerSigner,
   sommelierPrice: string,
   strategyConfig: ConfigProps
 ) => {
   try {
 
-    // if (!stakerSigner.provider || !stakerSigner.signer) {
-    //   throw new Error("provider or signer is undefined")
-    // }
+    if (!stakerContract || !stakerSigner) {
+      throw new Error("provider or signer is undefined")
+    }
 
     const userStakes = await stakerContract.read.getUserStakes([address])
 
