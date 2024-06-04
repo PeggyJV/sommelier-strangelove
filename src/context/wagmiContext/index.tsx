@@ -13,20 +13,15 @@ import {
 } from "@wagmi/connectors"
 
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
-const WALLETCONNECT_PROJECT_ID = process.env.NEXT_WALLETCONNECT_PROJECT_ID || "c11d8ffaefb8ba4361ae510ed7690cb8"
+const WALLETCONNECT_PROJECT_ID =
+  process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ||
+  "c11d8ffaefb8ba4361ae510ed7690cb8"
 
 const queryClient = new QueryClient()
 
 // Ensure transports are set up correctly
 const alchemyTransport = http(
-  `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
-  {
-    fetchOptions: {
-      headers: {
-        Authorization: `Bearer ${ALCHEMY_API_KEY}`,
-      },
-    },
-  }
+  `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`
 )
 const arbitrumTransport = http(`https://arb1.arbitrum.io/rpc`)
 const optimismTransport = http(`https://mainnet.optimism.io`)
@@ -38,17 +33,27 @@ export const wagmiConfig = createConfig({
     walletConnect({
       projectId: WALLETCONNECT_PROJECT_ID,
       qrModalOptions: {
-        enableExplorer: true
-      }
+        enableExplorer: true,
+      },
     }),
     metaMask({
       dappMetadata: {
         name: "Sommelier",
-        url: "http://https://www.sommelier.finance/",
+        url: "https://www.sommelier.finance/",
       },
-
     }),
-    injected(),
+    injected({
+      name: (detectedProvider) => {
+        if (detectedProvider?.isMetaMask) {
+          return "MetaMask"
+        }
+        if (detectedProvider?.isCoinbaseWallet) {
+          return "Coinbase Wallet"
+        }
+        return "Injected"
+      },
+      shimDisconnect: true,
+    }),
     coinbaseWallet({
       appName: "Sommelier",
     }),
@@ -57,7 +62,7 @@ export const wagmiConfig = createConfig({
     [mainnet.id]: alchemyTransport,
     [arbitrum.id]: arbitrumTransport,
     [optimism.id]: optimismTransport,
-    [scroll.id]: scrollTransport
+    [scroll.id]: scrollTransport,
   },
 })
 
