@@ -137,11 +137,20 @@ const sommelierAPIAllStrategiesData = async (
         tvl = 0
       }
 
+      let shareValue = 0
+      if (transformedData.length === 0) {
+        console.warn(
+          `No data found for ${cellarAddress} on Ethereum`
+        )
+      } else {
+        shareValue = transformedData[0].shareValue
+      }
+
       // Create a new response object with the transformed data
       let cellarObj = {
         id: cellarAddress.toLowerCase(),
         dayDatas: transformedData,
-        shareValue: transformedData[0].shareValue,
+        shareValue: shareValue,
         tvlTotal: tvl,
         chain: chainSlugMap.ETHEREUM.id,
       }
@@ -187,11 +196,18 @@ const sommelierAPIAllStrategiesData = async (
           tvl = 0
         }
 
+        let shareValue = 0
+        if (transformedData.length === 0) {
+          console.warn(`No data found for ${cellarAddress} on Arbitrum`)
+        } else {
+          shareValue = transformedData[0].shareValue
+        }
+
         // Create a new response object with the transformed data
         let cellarObj = {
           id: cellarAddress.toLowerCase() + "-arbitrum",
           dayDatas: transformedData,
-          shareValue: transformedData[0].shareValue,
+          shareValue: shareValue,
           tvlTotal: tvl,
           chain: chainSlugMap.ARBITRUM.id,
         }
@@ -238,11 +254,18 @@ const sommelierAPIAllStrategiesData = async (
           tvl = 0
         }
 
+        let shareValue = 0
+        if (transformedData.length === 0) {
+          console.warn(`No data found for ${cellarAddress} on Optimism`)
+        } else {
+          shareValue = transformedData[0].shareValue
+        }
+
         // Create a new response object with the transformed data
         let cellarObj = {
           id: cellarAddress.toLowerCase() + "-optimism",
           dayDatas: transformedData,
-          shareValue: transformedData[0].shareValue,
+          shareValue: shareValue,
           tvlTotal: tvl,
           chain: chainSlugMap.OPTIMISM.id,
         }
