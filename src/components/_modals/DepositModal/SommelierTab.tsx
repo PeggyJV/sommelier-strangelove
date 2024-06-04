@@ -10,10 +10,6 @@ import {
   Avatar,
   Tooltip,
   UseDisclosureProps,
-  Box,
-  Input,
-  InputGroup,
-  InputRightAddon,
   useTheme,
 } from "@chakra-ui/react"
 
@@ -29,9 +25,9 @@ import {
 } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
-import { useAccount, useBalance, useWalletClient } from "wagmi"
-import { erc20Abi, getContract } from "viem"
-import { Contract, ethers } from "ethers"
+import { useAccount, useBalance, usePublicClient, useWalletClient } from "wagmi"
+import { erc20Abi, getContract, parseUnits } from "viem"
+import { ethers } from "ethers"
 import { getAddress } from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
@@ -67,17 +63,10 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import {
   useEnsoRoutes,
-  TokenMap,
   EnsoRouteConfig,
-  getEnsoRouterAddress,
 } from "data/hooks/useEnsoRoutes"
-import {
-  acceptedETHDepositTokenMap,
-  acceptedARBDepositTokenMap,
-} from "src/data/tokenConfig"
 import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
-import { chainConfig, chainSlugMap } from "data/chainConfig"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -181,6 +170,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   }
 
   const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
   const { address } = useAccount()
 
   const { refetch } = useUserStrategyData(
@@ -235,7 +225,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       selectedToken?.address ||
         "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
     ), //WETH Address
-    formatUnits: "wei",
+    unit: "wei",
     watch: false,
   })
 
@@ -291,11 +281,14 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     }
   }, [ensoResponse])
 
-  const ensoRouterContract = new Contract(
-    contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS,
-    contractConfig.CONTRACT.ENSO_ROUTER.ABI,
-    signer!
-  )
+
+  const ensoRouterContract = getContract({
+      address: contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS as `0x${string}`,
+      abi: contractConfig.CONTRACT.ENSO_ROUTER.ABI,
+      client: {
+        wallet: walletClient
+      }
+    })
 
   const depositAndSwap = useDepositAndSwap(cellarConfig)
 
@@ -310,8 +303,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       return 0
     }
 
-    const response = await cellarSigner?.alternativeAssetData(
+    const response = await cellarSigner?.read.alternativeAssetData([
       assetAddress
+      ]
     )
 
     if (response.isSupported === false) {
@@ -351,7 +345,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   }, [selectedToken])
 
   const deposit = async (
-    amtInWei: ethers.BigNumber,
+    amtInWei: bigint,
     address?: string,
     assetAddress?: string
   ) => {
@@ -360,26 +354,34 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
     ) {
-      return cellarSigner?.multiAssetDeposit(
+      return cellarSigner?.write.multiAssetDeposit([
         assetAddress,
         amtInWei,
         address
+        ]
       )
     } else {
       if (
         cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
         cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
       ) {
-        const gasLimitEstimated = await estimateGasLimitWithRetry(
-          cellarSigner?.estimateGas.deposit,
-          cellarSigner?.callStatic.deposit,
-          [amtInWei, address],
-          1000000,
-          2000000
-        )
-        return cellarSigner?.deposit(amtInWei, address, {
-          gasLimit: gasLimitEstimated,
+        // const gasLimitEstimated = await estimateGasLimitWithRetry(
+        //   cellarSigner?.estimateGas.deposit,
+        //   cellarSigner?.callStatic.deposit,
+        //   [amtInWei, address],
+        //   1000000,
+        //   2000000
+        // )
+        // Need to update the estimateGasLimitWithRetry to use BigInt and viem
+        const gasLimitEstimated = await publicClient.estimateGas({
+          account: address,
+          to: assetAddress,
+          value: amtInWei,
+          maxFeePerGas: 2000000,
         })
+        return cellarSigner?.write.deposit([amtInWei, address, {
+          gasLimit: gasLimitEstimated,
+        }])
       }
 
       return cellarSigner?.deposit(amtInWei, address)
@@ -409,22 +411,23 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     // })
 
     // check if approval exists
-    const allowance = await erc20Contract.allowance(
+    const allowance = await erc20Contract.read.allowance([
       address,
       isActiveAsset ||
         cellarData.depositTokens.list.includes(tokenSymbol)
         ? cellarConfig.cellar.address
         : ensoRouterContract.address
+      ]
     )
 
-    const amtInWei = ethers.utils.parseUnits(
+    const amtInWei = parseUnits(
       scientificToDecimalString(depositAmount),
       selectedTokenBalance?.decimals
     )
 
     let needsApproval
     try {
-      needsApproval = allowance.lt(amtInWei)
+      needsApproval = allowance < amtInWei
     } catch (e) {
       const error = e as Error
       console.error("Invalid Input: ", error.message)
@@ -439,12 +442,13 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       })*/
 
       try {
-        const { hash } = await erc20Contract.approve(
+        const { hash } = await erc20Contract.write.approve([
           isActiveAsset ||
             cellarData.depositTokens.list.includes(tokenSymbol)
             ? cellarConfig.cellar.address
             : ensoRouterContract.address,
           ethers.constants.MaxUint256
+          ]
         )
         addToast({
           heading: "ERC20 Approval",
@@ -502,7 +506,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     }
 
     try {
-      // If selected token is cellar's current asset, it is cheapter to deposit into the cellar
+      // If selected token is cellar's current asset, it is cheaper to deposit into the cellar
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
 
@@ -514,9 +518,10 @@ export const SommelierTab: VFC<DepositModalProps> = ({
               address,
               data?.selectedToken?.address
             )
-          : await signer!.sendTransaction({
+          : await walletClient!.sendTransaction({
+              account: address,
               to: ensoRouterContract.address,
-              data: ensoResponse.tx.data,
+              value: ensoResponse.tx.data,
             })
 
       if (!response) throw new Error("response is undefined")

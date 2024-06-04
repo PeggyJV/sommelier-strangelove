@@ -31,7 +31,7 @@ const cellarPreviewRedeem = async (
     let shareValue: number = 0
 
     if (cellar) {
-      shareValue = await cellar.previewRedeem(sharesNum)
+      shareValue = await cellar.read.previewRedeem([sharesNum])
     } else {
       throw new Error("failed to load contract")
     }
