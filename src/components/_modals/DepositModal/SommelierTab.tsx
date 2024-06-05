@@ -25,7 +25,7 @@ import {
 } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
-import { useAccount, useBalance, usePublicClient, useWalletClient } from "wagmi"
+import { useAccount, useBalance, useBlockNumber, usePublicClient, useWalletClient } from "wagmi"
 import { erc20Abi, getContract, parseUnits } from "viem"
 import { ethers } from "ethers"
 import { getAddress } from "viem"
@@ -67,6 +67,7 @@ import {
 } from "data/hooks/useEnsoRoutes"
 import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -172,6 +173,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
   const { address } = useAccount()
+  const queryClient = useQueryClient()
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
@@ -219,15 +221,21 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     skip: true,
   })
 
-  const { data: selectedTokenBalance } = useBalance({
+
+  const { data: blockNumber } = useBlockNumber({ watch: true })
+
+  const { data: selectedTokenBalance, queryKey } = useBalance({
     address: address,
     token: getAddress(
       selectedToken?.address ||
         "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
     ), //WETH Address
-    unit: "wei",
-    watch: false,
+    unit: "wei"
   })
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey })
+  }, [blockNumber, queryClient])
 
   const erc20Contract =
     selectedToken?.address &&
