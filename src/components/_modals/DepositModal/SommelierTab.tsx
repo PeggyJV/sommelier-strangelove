@@ -373,26 +373,21 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
         cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
       ) {
-        // const gasLimitEstimated = await estimateGasLimitWithRetry(
-        //   cellarSigner?.estimateGas.deposit,
-        //   cellarSigner?.callStatic.deposit,
-        //   [amtInWei, address],
-        //   1000000,
-        //   2000000
-        // )
-        // Need to update the estimateGasLimitWithRetry to use BigInt and viem
-        const gasLimitEstimated = await publicClient.estimateGas({
-          account: address,
-          to: assetAddress,
-          value: amtInWei,
-          maxFeePerGas: 2000000,
-        })
+
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          cellarSigner?.estimateGas.deposit,
+          cellarSigner?.simulate.deposit,
+          [amtInWei, address],
+          1000000,
+          2000000
+        )
+
         return cellarSigner?.write.deposit([amtInWei, address, {
-          gasLimit: gasLimitEstimated,
+          gas: gasLimitEstimated,
         }])
       }
 
-      return cellarSigner?.deposit(amtInWei, address)
+      return cellarSigner?.write.deposit(amtInWei, address)
     }
   }
 

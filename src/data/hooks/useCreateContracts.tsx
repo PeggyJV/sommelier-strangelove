@@ -27,7 +27,8 @@ export const useCreateContracts = (config: ConfigProps) => {
     address: config.cellar.address,
     abi: config.cellar.abi,
     client: {
-      wallet: walletClient
+      wallet: walletClient,
+      public: publicClient
     }
   })!
   const stakerContract = (() => {
@@ -59,7 +60,7 @@ export const useCreateContracts = (config: ConfigProps) => {
     }
   })!
 
-  const contracts: StrategyContracts = {
+  const contracts = {
     stakerSigner,
     cellarSigner,
     stakerContract,

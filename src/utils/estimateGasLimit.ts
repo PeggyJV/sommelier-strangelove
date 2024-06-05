@@ -1,17 +1,16 @@
-import { BigNumber, BigNumberish } from "ethers";
-
-// Increase default margin to 30%
 export const gasLimitMargin = (
-  gasEstimated: BigNumber,
+  gasEstimated: bigint,
   margin?: number
-) =>
-  gasEstimated
-    .mul(Number((margin ? margin : 1.3) * 100).toFixed()) // default increase 30%
-    .div(100)
+) => {
+  const factor = BigInt(
+    ((margin ? margin : 1.3) * 100).toFixed()
+  ) / BigInt(100)
+  return gasEstimated * factor
+}
 
 export const estimateGasLimit = async (
-  fn: Promise<BigNumber>,
-  knownGasLimit: BigNumberish,
+  fn: Promise<bigint>,
+  knownGasLimit: number,
   margin?: number
 ) => {
   try {
@@ -31,7 +30,7 @@ const PAD = [1.25, 1.4, 1.55, 1.7, 1.85]
  * @example
  * const gasLimitEstimated = await estimateGasLimitWithRetry(
  *     cellarRouterSigner.estimateGas.depositAndSwap,
- *     cellarRouterSigner.callStatic.depositAndSwap,
+ *     cellarRouterSigner.simulate.depositAndSwap,
  *     [
  *       payload.cellarAddress,
  *       1,
@@ -47,15 +46,15 @@ export const estimateGasLimitWithRetry = async (
   fnEstimateGas: any,
   fnCallStatic: any,
   args: any[],
-  knownGasLimit: BigNumberish,
-  maxGasLimit?: BigNumberish
+  knownGasLimit: number,
+  maxGasLimit?: number
 ) => {
   const gasEstimatedRes = await estimateGasLimit(
-    fnEstimateGas(...args),
+    fnEstimateGas(args),
     knownGasLimit,
     1
   )
-  let gasLimitEstimated = BigNumber.from(gasEstimatedRes)
+  let gasLimitEstimated = BigInt(gasEstimatedRes)
 
   let count = 1
   const maxTries = 5
@@ -65,9 +64,9 @@ export const estimateGasLimitWithRetry = async (
         gasLimitEstimated,
         PAD[count - 1]
       )
-      
-      const tx = await fnCallStatic(...args, {
-        gasLimit,
+
+      const tx = await fnCallStatic(args, {
+        gas: gasLimit,
       })
       if (tx) {
         gasLimitEstimated = gasLimit
@@ -75,12 +74,10 @@ export const estimateGasLimitWithRetry = async (
       }
     } catch (e) {
       if (count === maxTries) {
-        const lastTryGasLimit = BigNumber.from(1).mul(
-          BigNumber.from(10).pow(30)
-        ) // Last try limit is very high -- users hate the gas limits
+        const lastTryGasLimit = BigInt(1) * (BigInt(10) ** BigInt(30)) // Last try limit is very high -- users hate the gas limits
         try {
-          const tx = await fnCallStatic(...args, {
-            gasLimit: lastTryGasLimit,
+          const tx = await fnCallStatic(args, {
+            gas: lastTryGasLimit,
           })
           if (tx) {
             gasLimitEstimated = lastTryGasLimit
