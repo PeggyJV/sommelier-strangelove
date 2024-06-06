@@ -1,5 +1,4 @@
 import { formatUnits } from 'viem'
-import BigNumber from "bignumber.js"
 
 export const formatCurrency = (value?: string) => {
   const v =
@@ -33,13 +32,15 @@ export const toEther = (
   format?: boolean | number,
   precision = 2
 ) => {
-  if (!val || val === "--") return "--"
+  if (val != 0n && (!val || val === "--")) return "--"
   try {
     const fmt = formatUnits(val, decimals)
-    const result = new BigNumber(fmt)
-    if (format)
-      return result.toFormat(typeof format === "boolean" ? 2 : format)
-    return result.toFixed(precision, 1)
+    const result = parseFloat(fmt)
+    if (format) {
+      format = typeof format === "boolean" ? 2 : format
+      return result.toLocaleString("en-US", { minimumFractionDigits: format, maximumFractionDigits: format });
+    }
+    return result.toFixed(precision)
   } catch (e) {
     console.log(e)
     return "--"
