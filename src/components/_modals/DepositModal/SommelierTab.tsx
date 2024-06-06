@@ -243,7 +243,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       address: selectedToken?.address,
       abi: erc20Abi,
       client: {
-        wallet: walletClient
+        wallet: walletClient,
+        public: publicClient
       }
     })
 
@@ -387,7 +388,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         }])
       }
 
-      return cellarSigner?.write.deposit(amtInWei, address)
+      return cellarSigner?.write.deposit([amtInWei, address])
     }
   }
 
