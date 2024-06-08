@@ -38,14 +38,10 @@ const ChainButton: VFC<ChainButtonProps> = ({
 
   const effectiveChain = chainConfigMap[chain.id] || placeholderChain
 
-  console.log("Effective Chain:", effectiveChain)
-
   const chainKeys = Object.keys(chainConfigMap)
   const filteredChainKeys = chainKeys.filter((key) =>
     supportedChains.includes(key)
   )
-
-  console.log("Filtered Chain Keys:", filteredChainKeys)
 
   const handleNetworkChange = async (chainId: string) => {
     try {

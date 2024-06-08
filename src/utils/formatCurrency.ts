@@ -34,8 +34,8 @@ export const toEther = (
 ) => {
   if (val != 0n && (!val || val === "--")) return "--"
   try {
-    const fmt = formatUnits(val, decimals)
-    const result = parseFloat(fmt)
+    if (typeof val === 'bigint') val = formatUnits(val, decimals)
+    const result = parseFloat(val)
     if (format) {
       format = typeof format === "boolean" ? 2 : format
       return result.toLocaleString("en-US", { minimumFractionDigits: format, maximumFractionDigits: format });

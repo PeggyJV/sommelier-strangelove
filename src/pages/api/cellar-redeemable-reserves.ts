@@ -28,10 +28,10 @@ const cellarRedeemableAssets = async (
       cellarDataMap[cellarId]?.config.chain
     )
 
-    let totalAssets: string = ""; 
+    let totalAssets: string = "";
 
     if (cellar) {
-      totalAssets = await cellar.totalAssetsWithdrawable()
+      totalAssets = await cellar.read.totalAssetsWithdrawable()
     } else {
       throw new Error("failed to load contract")
     }

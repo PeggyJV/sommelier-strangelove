@@ -383,9 +383,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           2000000
         )
 
-        return cellarSigner?.write.deposit([amtInWei, address, {
+        return cellarSigner?.write.deposit([amtInWei, address], {
           gas: gasLimitEstimated,
-        }])
+        })
       }
 
       return cellarSigner?.write.deposit([amtInWei, address])

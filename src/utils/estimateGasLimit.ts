@@ -2,18 +2,16 @@ import { pow } from "utils/bigIntHelpers"
 
 export const gasLimitMargin = (
   gasEstimated: bigint,
-  margin?: number
+  margin?: bigint
 ) => {
-  const factor = BigInt(
-    ((margin ? margin : 1.3) * 100).toFixed()
-  ) / BigInt(100)
-  return gasEstimated * factor
+  const factor = margin ? margin : 130n
+  return (gasEstimated * factor) / 100n;
 }
 
 export const estimateGasLimit = async (
   fn: Promise<bigint>,
   knownGasLimit: number,
-  margin?: number
+  margin?: bigint
 ) => {
   try {
     const gas = await fn
@@ -25,7 +23,7 @@ export const estimateGasLimit = async (
 }
 
 // Increase PAD values to provide larger buffer on retries
-const PAD = [1.25, 1.4, 1.55, 1.7, 1.85]
+const PAD = [125n, 140n, 155n, 170n, 185n]
 
 /**
  *
@@ -54,7 +52,7 @@ export const estimateGasLimitWithRetry = async (
   const gasEstimatedRes = await estimateGasLimit(
     fnEstimateGas(args),
     knownGasLimit,
-    1
+    100n
   )
   let gasLimitEstimated = BigInt(gasEstimatedRes)
 
@@ -76,7 +74,7 @@ export const estimateGasLimitWithRetry = async (
       }
     } catch (e) {
       if (count === maxTries) {
-        const lastTryGasLimit = pow(10, 30) // Last try limit is very high -- users hate the gas limits
+        const lastTryGasLimit = pow(BigInt(10), BigInt(10)) // Last try limit is very high -- users hate the gas limits
         try {
           const tx = await fnCallStatic(args, {
             gas: lastTryGasLimit,

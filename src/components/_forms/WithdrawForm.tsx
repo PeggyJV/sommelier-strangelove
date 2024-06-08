@@ -1,4 +1,4 @@
-import React, { useEffect, useState, VFC } from "react"
+import React, { useEffect, useState } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -17,8 +17,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody,
-  ModalFooter,
+  ModalBody
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -26,7 +25,6 @@ import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
 import { useAccount } from "wagmi"
 import { toEther } from "utils/formatCurrency"
-import { ethers } from "ethers"
 import { useHandleTransaction } from "hooks/web3"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
@@ -42,6 +40,7 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
+import { parseUnits } from "viem"
 
 interface FormValues {
   withdrawAmount: number
@@ -51,7 +50,7 @@ interface WithdrawFormProps {
   onClose: () => void
 }
 
-export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
+export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
   const {
     register,
     watch,
@@ -144,7 +143,7 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
 
     // analytics.track("withdraw.started", analyticsData)
 
-    const amtInWei = ethers.utils.parseUnits(
+    const amtInWei = parseUnits(
       `${withdrawAmount}`,
       cellarConfig.cellar.decimals
     )
@@ -152,18 +151,20 @@ export const WithdrawForm: VFC<WithdrawFormProps> = ({ onClose }) => {
     try {
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         cellarSigner?.estimateGas.redeem,
-        cellarSigner?.callStatic.redeem,
+        cellarSigner?.simulate.redeem,
         [amtInWei, address, address],
         330000,
         660000
       )
+      console.log(gasLimitEstimated)
 
-      const tx = await cellarSigner?.redeem(
-        amtInWei,
-        address,
-        address,
+      const tx = await cellarSigner?.write.redeem([
+          amtInWei,
+          address,
+          address
+        ],
         {
-          gasLimit: gasLimitEstimated,
+          gas: gasLimitEstimated,
         }
       )
 
