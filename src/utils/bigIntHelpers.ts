@@ -44,3 +44,11 @@ export const bigIntToFixed = (value: bigint, dp: number = 0, rm: number = 4): st
 
   return result;
 }
+
+export const pow = (base: bigint, exponent: bigint): bigint => {
+  let result = 1n;
+  for (let i = 0n; i < exponent; i++) {
+    result *= base;
+  }
+  return result;
+}

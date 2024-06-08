@@ -1,3 +1,5 @@
+import { pow } from "utils/bigIntHelpers"
+
 export const gasLimitMargin = (
   gasEstimated: bigint,
   margin?: number
@@ -74,7 +76,7 @@ export const estimateGasLimitWithRetry = async (
       }
     } catch (e) {
       if (count === maxTries) {
-        const lastTryGasLimit = BigInt(1) * (BigInt(10) ** BigInt(30)) // Last try limit is very high -- users hate the gas limits
+        const lastTryGasLimit = pow(10, 30) // Last try limit is very high -- users hate the gas limits
         try {
           const tx = await fnCallStatic(args, {
             gas: lastTryGasLimit,
