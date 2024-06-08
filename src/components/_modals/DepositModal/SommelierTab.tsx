@@ -27,7 +27,6 @@ import { Link } from "components/Link"
 import { config } from "utils/config"
 import { useAccount, useBalance, useBlockNumber, usePublicClient, useWalletClient } from "wagmi"
 import { erc20Abi, getContract, parseUnits } from "viem"
-import { ethers } from "ethers"
 import { getAddress } from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
@@ -68,6 +67,7 @@ import {
 import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { useQueryClient } from "@tanstack/react-query"
+import { MaxUint256 } from "utils/bigIntHelpers"
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -451,7 +451,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             cellarData.depositTokens.list.includes(tokenSymbol)
             ? cellarConfig.cellar.address
             : ensoRouterContract.address,
-          ethers.constants.MaxUint256
+          MaxUint256
           ]
         )
         addToast({
