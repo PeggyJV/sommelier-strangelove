@@ -4,46 +4,46 @@ import { getAllStrategiesData } from "./common/getAllStrategiesData"
 import { getStrategyData } from "./common/getStrategyData"
 
 export interface UserStake {
-  amount: BigInt
-  amountWithBoost: BigInt
-  rewardPerTokenPaid: BigInt
-  rewards: BigInt
+  amount: bigint
+  amountWithBoost: bigint
+  rewardPerTokenPaid: bigint
+  rewards: bigint
   unbondTimestamp: number
   lock: number
 }
 export interface StakerUserData {
-  claimAllRewards: BigInt[]
-  claimAllRewardsUSD: BigInt
+  claimAllRewards: bigint[]
+  claimAllRewardsUSD: number
   totalBondedAmount: {
-    value: BigInt
+    value: bigint
     formatted: string
   }
   totalClaimAllRewards: {
-    value: BigInt
+    value: bigint
     formatted: string
   }
-  totalRewards: BigInt
+  totalRewards: bigint
   userStakes: UserStake[]
 }
 
 export interface StakerData {
-  rewardRate: BigInt
-  potentialStakingApy: BigInt
+  rewardRate: bigint
+  potentialStakingApy: bigint
 }
 
 export interface CellarData {
   activeAsset: string
   name: string
-  maxLocked: BigInt
-  accrualPeriod: BigInt
-  totalAssets: BigInt
-  apy: BigInt
+  maxLocked: bigint
+  accrualPeriod: bigint
+  totalAssets: bigint
+  apy: bigint
 }
 
 export interface CellarUserData {
-  maxDeposit: BigInt
-  maxWithdraw: BigInt
-  netValue: BigInt
+  maxDeposit: bigint
+  maxWithdraw: bigint
+  netValue: bigint
 }
 
 export interface DepositAndSwapPayload {

@@ -42,7 +42,6 @@ export const getUserData = async ({
     const userStakes = await(async () => {
       if (
         !contracts.stakerContract ||
-        !contracts.stakerSigner ||
         (config.staker?.key !== StakerKey.CELLAR_STAKING_V0815 &&
           config.staker?.key !== StakerKey.CELLAR_STAKING_V0821)
       ) {
@@ -52,7 +51,6 @@ export const getUserData = async ({
       return await getUserStakes(
         userAddress,
         contracts.stakerContract,
-        contracts.stakerSigner,
         sommPrice,
         config
       )

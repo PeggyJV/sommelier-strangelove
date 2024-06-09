@@ -467,7 +467,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                                       toEther(
                                         claimAllRewards[
                                           i
-                                        ]?.toString() || "0",
+                                        ] || "0",
                                         6,
                                         false,
                                         2
@@ -519,7 +519,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
                             <Text textAlign="right">
                               {claimAllRewards
                                 ? toEther(
-                                    claimAllRewards[i]?.toString() ||
+                                    claimAllRewards[i] ||
                                       "0",
                                     6,
                                     false,

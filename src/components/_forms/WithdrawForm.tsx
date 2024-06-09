@@ -156,7 +156,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
         330000,
         660000
       )
-      console.log(gasLimitEstimated)
+
 
       const tx = await cellarSigner?.write.redeem([
           amtInWei,
