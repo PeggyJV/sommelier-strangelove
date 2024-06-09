@@ -168,7 +168,6 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
           account: address
         }
       )
-      console.log(tx)
 
       const onSuccess = () => {
         analytics.track("withdraw.succeeded", analyticsData)
