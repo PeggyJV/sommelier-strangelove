@@ -92,11 +92,11 @@ export const getUserDataAllStrategies = async ({
       total +
       (item
         ? item.userStakes
-          ? Number(item.userStakes.totalClaimAllRewards.value)
-          : 0
-        : 0)
+          ? item.userStakes.totalClaimAllRewards.value
+          : 0n
+        : 0n)
     )
-  }, 0)
+  }, 0n)
 
   const totalSommRewardsInUsd = userData.reduce((total, item) => {
     return (

@@ -189,9 +189,7 @@ export const YourPortofolio = () => {
               >
                 <Text as="h6" fontSize={16} fontWeight={700}>
                   $
-                  {Number(
-                    data?.totalSommRewardsInUsd
-                  ).toLocaleString()}
+                  {data?.totalSommRewardsInUsd.toLocaleString()}
                 </Text>
                 <Text
                   fontWeight={500}

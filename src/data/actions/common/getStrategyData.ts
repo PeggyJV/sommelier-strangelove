@@ -18,11 +18,7 @@ import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
 import BigNumber from "bignumber.js"
-import { config as utilConfig } from "src/utils/config"
-import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { EETHIcon } from "components/_icons"
 import { Contract } from "ethers"
-import { ETHXIcon } from "components/_icons/ETHXIcon"
 
 export const getStrategyData = async ({
   address,

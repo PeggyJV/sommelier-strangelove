@@ -132,19 +132,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             <Text fontWeight={500} fontSize={12} color="neutral.400">
               {lpTokenData &&
                 `${toEther(
-                  new BigNumber(
-                    new BigNumber(
-                      lpTokenData?.value.toString()
-                    ).toFixed()
-                  )
-                    .plus(
-                      new BigNumber(
-                        new BigNumber(
-                          bondedToken.toString()
-                        ).toFixed()
-                      )
-                    )
-                    .toFixed(),
+                  lpTokenData?.value + BigInt(bondedToken),
                   lpTokenData?.decimals,
                   true,
                   2
