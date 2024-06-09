@@ -47,7 +47,7 @@ export const estimateGasLimitWithRetry = async (
   fnCallStatic: any,
   args: any[],
   knownGasLimit: number,
-  maxGasLimit?: number
+  account?: string
 ) => {
   const gasEstimatedRes = await estimateGasLimit(
     fnEstimateGas(args),
@@ -67,6 +67,7 @@ export const estimateGasLimitWithRetry = async (
 
       const tx = await fnCallStatic(args, {
         gas: gasLimit,
+        account: account
       })
       if (tx) {
         gasLimitEstimated = gasLimit
@@ -78,6 +79,7 @@ export const estimateGasLimitWithRetry = async (
         try {
           const tx = await fnCallStatic(args, {
             gas: lastTryGasLimit,
+            account: account
           })
           if (tx) {
             gasLimitEstimated = lastTryGasLimit

@@ -154,7 +154,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
         cellarSigner?.simulate.redeem,
         [amtInWei, address, address],
         330000,
-        660000
+        address
       )
 
 
@@ -165,8 +165,10 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
         ],
         {
           gas: gasLimitEstimated,
+          account: address
         }
       )
+      console.log(tx)
 
       const onSuccess = () => {
         analytics.track("withdraw.succeeded", analyticsData)
