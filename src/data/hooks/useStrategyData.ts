@@ -7,6 +7,7 @@ import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
 import { useState, useEffect } from "react"
+import _ from 'lodash';
 import { tokenConfig } from "data/tokenConfig"
 
 export const useStrategyData = (address: string, chain: string) => {
@@ -73,7 +74,7 @@ export const useStrategyData = (address: string, chain: string) => {
         address,
         contracts: allContracts![key]!,
         sommPrice: sommPrice ?? "0",
-        stratData: stratData?.cellar,
+        stratData: _.cloneDeep(stratData?.cellar),
         baseAssetPrice: baseAssetPrice ?? "0",
       })
 
