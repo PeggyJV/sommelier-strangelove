@@ -7,7 +7,7 @@ import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
 import { formatUnits, getAddress } from "viem"
 import { wagmiConfig } from "context/wagmiContext"
-import { bigIntToFixed, ZERO } from "utils/bigIntHelpers"
+import { ZERO } from "utils/bigIntHelpers"
 
 export const getUserData = async ({
   address,
@@ -59,13 +59,8 @@ export const getUserData = async ({
     // !!! TODO: We need to rewrite this file and most of the incentive code, pushing this unitl the new staking contracts come out
     // Can do a manual override per strategy if needed here
 
-    const bonded =
-      // Coerce from bignumber.js to ethers BN
-      BigInt(
-        userStakes?.totalBondedAmount?.value
-          ? bigIntToFixed(userStakes?.totalBondedAmount?.value)
-          : "0"
-      ) ?? BigInt(0)
+    const bonded = userStakes?.totalBondedAmount?.value ?? "0"
+
     const totalShares = shares.value + BigInt(bonded.toString());
 
     const totalAssets = await(async () => {
@@ -105,12 +100,12 @@ export const getUserData = async ({
 
     // Denoted in USD
     const netValue = (() => {
-      return Number(totalAssets) * baseAssetPrice + sommRewardsUSD
+      return Number(totalAssets) * Number(baseAssetPrice) + sommRewardsUSD
     })()
 
     // Denoted in USD
     const netValueWithoutRewards = (() => {
-      return Number(totalAssets) * baseAssetPrice
+      return Number(totalAssets) * Number(baseAssetPrice)
     })()
 
 

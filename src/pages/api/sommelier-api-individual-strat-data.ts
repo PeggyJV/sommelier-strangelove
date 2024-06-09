@@ -31,7 +31,7 @@ const sommelierAPIIndividualStratData = async (
       fetchData(dailyDataUrl),
       fetchData(hourlyDataUrl),
     ])
-    
+
     let chainStr = ""
     if (chain !== "ethereum") {
       chainStr = "-" + chain
@@ -47,7 +47,7 @@ const sommelierAPIIndividualStratData = async (
           dayData.share_price * (10 ** cellarDecimals)
         ).toString(),
       })
-    )    
+    )
 
     // Order by descending date
     transformedDailyData.sort((a: any, b: any) => b.date - a.date)
@@ -69,9 +69,8 @@ const sommelierAPIIndividualStratData = async (
     transformedHourlyData.sort((a: any, b: any) => b.date - a.date)
 
     // Most recent hourly
-    const baseAssetTvl = BigInt(
-      Math.floor(Number(transformedHourlyData[0].tvl)) // !! Note this TVL may be up to 1 hour stale bc it doesnt use the tvl api endpoint, not a huge deal but might be weird at launches 
-    )
+    const baseAssetTvl = Number(transformedHourlyData[0].tvl) // !! Note this TVL may be up to 1 hour stale bc it doesnt use the tvl api endpoint, not a huge deal but might be weird at launches
+
 
     // TODO: Get shareValue and TvlTotal from latest hourly data async
     const formattedResult = {
