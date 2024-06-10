@@ -27,6 +27,7 @@ export const wagmiConfig = createConfig({
       },
     }),
     injected({ target: 'metaMask' }),
+    injected(),
     coinbaseWallet({
       appName: "Sommelier",
     }),
