@@ -1,10 +1,9 @@
-import { useAccount, useWalletClient } from "wagmi"
-import { Address, erc20Abi, getContract } from "viem"
+import { useAccount, usePublicClient, useWalletClient } from "wagmi"
+import { Address, erc20Abi, getContract, parseUnits } from "viem"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
-import { ethers } from "ethers"
-import { BigNumber } from "bignumber.js"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { MaxUint256 } from "utils/bigIntHelpers"
 
 export const useApproveERC20 = ({
   tokenAddress,
@@ -18,12 +17,14 @@ export const useApproveERC20 = ({
   const { address } = useAccount()
 
   const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
 
   const erc20Contract = getContract({
     address: tokenAddress,
     abi: erc20Abi,
     client: {
-      wallet: walletClient
+      wallet: walletClient,
+      public: publicClient
     },
   })!
 
@@ -38,27 +39,30 @@ export const useApproveERC20 = ({
       onError?: (error: Error) => void
     }
   ) => {
-    const allowance = await erc20Contract.allowance(
+    const allowance = await erc20Contract.read.allowance([
       address as Address,
       spender as Address
+      ]
     )
-    const amtInBigNumber = new BigNumber(amount)
-    const amtInWei = ethers.utils.parseUnits(
-      amtInBigNumber.toFixed(),
+    const amtInBigInt = BigInt(amount)
+    const amtInWei = parseUnits(
+      amtInBigInt.toFixed(),
       18
     )
 
     let needsApproval
     try {
-      needsApproval = allowance.lt(amtInWei)
+      needsApproval = allowance < amtInWei
     } catch (e) {
       return
     }
     if (needsApproval) {
       try {
-        const { hash } = await erc20Contract.approve(
+        const { hash } = await erc20Contract.write.approve([
           spender as Address,
-          ethers.constants.MaxUint256
+          MaxUint256
+          ],
+          { account: address}
         )
 
         addToast({

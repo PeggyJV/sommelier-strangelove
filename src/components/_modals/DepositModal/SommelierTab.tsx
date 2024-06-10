@@ -380,15 +380,19 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           cellarSigner?.simulate.deposit,
           [amtInWei, address],
           1000000,
-          2000000
+          address
         )
 
-        return cellarSigner?.write.deposit([amtInWei, address], {
-          gas: gasLimitEstimated,
-        })
+        return cellarSigner?.write.deposit(
+          [amtInWei, address],
+          { gas: gasLimitEstimated, account: address }
+        )
       }
 
-      return cellarSigner?.write.deposit([amtInWei, address])
+      return cellarSigner?.write.deposit(
+        [amtInWei, address],
+        { account: address }
+      )
     }
   }
 
@@ -452,7 +456,8 @@ export const SommelierTab: VFC<DepositModalProps> = ({
             ? cellarConfig.cellar.address
             : ensoRouterContract.address,
           MaxUint256
-          ]
+          ],
+          { account: address}
         )
         addToast({
           heading: "ERC20 Approval",

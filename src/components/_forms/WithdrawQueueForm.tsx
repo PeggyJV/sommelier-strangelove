@@ -279,7 +279,8 @@ export const WithdrawQueueForm = ({
         const { hash } = await cellarContract.write.approve([
           getAddress(cellarConfig.chain.withdrawQueueAddress),
           MaxUint256
-          ]
+          ],
+          { account: address }
         )
         addToast({
           heading: "ERC20 Approval",
@@ -370,7 +371,7 @@ export const WithdrawQueueForm = ({
         withdrawQueueContract?.simulate.updateWithdrawRequest,
         [cellarConfig.cellar.address, withdrawTouple],
         330000,
-        660000
+        address
       )
 
       const tx = await withdrawQueueContract?.write.updateWithdrawRequest([
@@ -379,6 +380,7 @@ export const WithdrawQueueForm = ({
         ],
         {
           gasLimit: gasLimitEstimated,
+          account: address
         }
       )
 

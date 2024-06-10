@@ -12,6 +12,7 @@ import { LogoIcon } from "components/_icons"
 import { LighterSkeleton } from "components/_skeleton"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 import { PortofolioItem } from "./PortofolioItem"
+import { formatUSD } from "utils/formatCurrency"
 
 export const YourPortofolio = () => {
   const { data, isLoading, isError, refetch } =
@@ -188,8 +189,7 @@ export const YourPortofolio = () => {
                 textAlign="right"
               >
                 <Text as="h6" fontSize={16} fontWeight={700}>
-                  $
-                  {data?.totalSommRewardsInUsd.toLocaleString()}
+                  {formatUSD(data?.totalSommRewardsInUsd.toString())}
                 </Text>
                 <Text
                   fontWeight={500}
