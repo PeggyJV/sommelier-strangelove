@@ -379,7 +379,7 @@ export const WithdrawQueueForm = ({
         withdrawTouple
         ],
         {
-          gasLimit: gasLimitEstimated,
+          gas: gasLimitEstimated,
           account: address
         }
       )

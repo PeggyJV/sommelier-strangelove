@@ -14,30 +14,17 @@ import {
   Text,
   Heading,
   Image,
-  Icon,
   Link,
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { toEther } from "utils/formatCurrency"
 import { useHandleTransaction } from "hooks/web3"
 import { InformationIcon } from "components/_icons"
 import { InnerCard } from "./InnerCard"
-import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { bondingPeriodOptions } from "data/uiConfig"
-import { formatDistanceToNowStrict, isFuture } from "date-fns"
-import { formatDistance } from "utils/formatDistance"
-import { LighterSkeleton } from "components/_skeleton"
 import { useGeo } from "context/geoContext"
-import { useStrategyData } from "data/hooks/useStrategyData"
-import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { differenceInDays } from "date-fns"
-import { FaExternalLinkAlt } from "react-icons/fa"
-import { tokenConfig } from "data/tokenConfig"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { useAccount, useWalletClient } from "wagmi"
+import { useAccount, usePublicClient, useWalletClient } from "wagmi"
 import { getContract } from 'viem'
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
@@ -73,11 +60,15 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
   const { address } = useAccount()
 
   const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
 
   const withdrawQueueContract = getContract({
     address: cellarConfig.chain.withdrawQueueAddress,
     abi: withdrawQueueV0821,
-    client: walletClient
+    client: {
+      wallet: walletClient,
+      public: publicClient
+    }
   })!
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
@@ -94,17 +85,19 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
     try {
       if (walletClient && withdrawQueueContract && address && cellarConfig) {
         const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
+          await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
             cellarConfig.cellar.address
+            ]
           )
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.isWithdrawRequestValid(
+          await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
             withdrawRequest
+            ]
           )
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
 
@@ -147,17 +140,19 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         withdrawQueueContract?.estimateGas.updateWithdrawRequest,
-        withdrawQueueContract?.callStatic.updateWithdrawRequest,
+        withdrawQueueContract?.simulate.updateWithdrawRequest,
         [cellarConfig.cellar.address, withdrawTouple],
         330000,
-        660000
+        address
       )
 
-      const tx = await withdrawQueueContract?.updateWithdrawRequest(
+      const tx = await withdrawQueueContract?.write.updateWithdrawRequest([
         cellarConfig.cellar.address,
-        withdrawTouple,
+        withdrawTouple
+        ],
         {
-          gasLimit: gasLimitEstimated,
+          gas: gasLimitEstimated,
+          account: address
         }
       )
 
