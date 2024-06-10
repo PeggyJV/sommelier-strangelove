@@ -8,7 +8,6 @@ import { mainnet, arbitrum, optimism, scroll } from "wagmi/chains"
 import {
   coinbaseWallet,
   injected,
-  metaMask,
   walletConnect,
 } from "@wagmi/connectors"
 
@@ -18,15 +17,6 @@ const WALLETCONNECT_PROJECT_ID =
   "c11d8ffaefb8ba4361ae510ed7690cb8"
 
 const queryClient = new QueryClient()
-
-// Ensure transports are set up correctly
-const alchemyTransport = http(
-  `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`
-)
-const arbitrumTransport = http(`https://arb1.arbitrum.io/rpc`)
-const optimismTransport = http(`https://mainnet.optimism.io`)
-const scrollTransport = http(scroll.rpcUrls.default.http[0])
-
 export const wagmiConfig = createConfig({
   chains: [mainnet, arbitrum, optimism, scroll],
   connectors: [
@@ -36,33 +26,16 @@ export const wagmiConfig = createConfig({
         enableExplorer: true,
       },
     }),
-    metaMask({
-      dappMetadata: {
-        name: "Sommelier",
-        url: "https://www.sommelier.finance/",
-      },
-    }),
-    injected({
-      name: (detectedProvider) => {
-        if (detectedProvider?.isMetaMask) {
-          return "MetaMask"
-        }
-        if (detectedProvider?.isCoinbaseWallet) {
-          return "Coinbase Wallet"
-        }
-        return "Injected"
-      },
-      shimDisconnect: true,
-    }),
+    injected({ target: 'metaMask' }),
     coinbaseWallet({
       appName: "Sommelier",
     }),
   ],
   transports: {
-    [mainnet.id]: alchemyTransport,
-    [arbitrum.id]: arbitrumTransport,
-    [optimism.id]: optimismTransport,
-    [scroll.id]: scrollTransport,
+    [mainnet.id]: http(`https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`),
+    [arbitrum.id]: http(arbitrum.rpcUrls.default.http[0]),
+    [optimism.id]: http(optimism.rpcUrls.default.http[0]),
+    [scroll.id]: http(scroll.rpcUrls.default.http[0])
   },
 })
 

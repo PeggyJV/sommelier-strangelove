@@ -164,7 +164,6 @@ export const ConnectWalletPopover = ({
         <PopoverBody p={0} zIndex={999}>
           <Stack>
             {displayedConnectors.map((x) => {
-              // @ts-ignore
               return (
                 <Stack
                   key={x.id}
