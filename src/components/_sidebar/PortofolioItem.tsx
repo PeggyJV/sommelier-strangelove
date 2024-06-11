@@ -71,7 +71,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
       px="6"
       top={-4}
       boxShadow="xl"
-      shouldWrapChildren
+      shouldWrapChildren={false}
     >
       <HStack
         px={8}
