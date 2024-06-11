@@ -316,13 +316,15 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       assetAddress
       ]
     )
+    const isSupported = response[0];
+    const depositFee = response[2]
 
-    if (response.isSupported === false) {
+    if (isSupported === false) {
       throw new Error("Asset is not supported")
     }
 
     // 6 decimal place precision
-    return Number(response.depositFee) / 10 ** 6
+    return depositFee / 10 ** 6
   }
 
   const [depositFee, setDepositFee] = useState<number>(0) // Use lowercase 'number'
