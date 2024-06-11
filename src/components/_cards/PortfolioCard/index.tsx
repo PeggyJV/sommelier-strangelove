@@ -56,6 +56,7 @@ import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
+import { MerklePoints } from "./MerklePoints"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {
   const theme = useTheme()
@@ -73,7 +74,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   ) as Token[]
 
   // using local state to avoid Next.js errors
-  const [isConnected, setConnected] = useState(false);
+  const [isConnected, setConnected] = useState(false)
   useEffect(() => {
     setConnected(connected)
   }, [connected])
@@ -427,6 +428,14 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             cellarConfig.cellarNameKey ===
               CellarNameKey.TURBO_EETHV2 && (
               <PointsDisplay userAddress={address} />
+            )}
+          {isConnected &&
+            address &&
+            (cellarConfig.cellarNameKey ===
+              CellarNameKey.REAL_YIELD_ETH_ARB ||
+              cellarConfig.cellarNameKey ===
+                CellarNameKey.REAL_YIELD_USD_ARB) && (
+              <MerklePoints userAddress={address} />
             )}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
