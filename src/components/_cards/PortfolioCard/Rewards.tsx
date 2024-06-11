@@ -95,7 +95,8 @@ export const Rewards = ({
       return
     }
     // analytics.track("rewards.claim-started")
-    const tx = await stakerSigner?.claimAll()
+
+    const tx = await stakerSigner?.write.claimAll()
     await doHandleTransaction({
       cellarConfig,
       ...tx,
