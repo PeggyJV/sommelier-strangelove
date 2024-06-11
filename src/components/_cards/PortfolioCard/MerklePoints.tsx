@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { CardStat } from "components/CardStat"
 import { fetchMerkleData } from "utils/fetchMerkleData"
+import { BaseButton } from "components/_buttons/BaseButton"
 
 interface MerklePointsProps {
   userAddress: string
@@ -31,6 +32,11 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
     fetchData()
   }, [userAddress])
 
+  const handleClaimMerklePoints = () => {
+    // Implement the functionality to claim Merkle points here
+    // This function should handle the claim action for Merkle points
+  }
+
   return (
     <>
       <CardStat
@@ -41,6 +47,9 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
       >
         {merklePoints ?? "Loading..."}
       </CardStat>
+      <BaseButton onClick={handleClaimMerklePoints}>
+        Claim Merkle Points
+      </BaseButton>
     </>
   )
 }
