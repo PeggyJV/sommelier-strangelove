@@ -25,7 +25,6 @@ import { useImportToken } from "hooks/web3/useImportToken"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
 import { useRouter } from "next/router"
-import { CellarNameKey } from "data/types"
 import { chainConfig } from "data/chainConfig"
 import { tokenConfig } from "data/tokenConfig"
 
@@ -37,7 +36,7 @@ export const ConnectedPopover = () => {
     address,
   })
   const { data: ensAvatar, isLoading: ensAvatarLoading } =
-    useEnsAvatar({ address })
+    useEnsAvatar({ name: address })
   const importToken = useImportToken({
     onSuccess: (data) => {
       addToast({
