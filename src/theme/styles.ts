@@ -8,6 +8,7 @@ export const styles: Styles = {
     "html, body": {
       bgColor: "surface.bg",
       color: "neutral.100",
+      "color-scheme": "dark !important",
     },
     ":root": {
       colorScheme: "dark",
