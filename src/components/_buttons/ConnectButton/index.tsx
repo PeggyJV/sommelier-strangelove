@@ -20,8 +20,17 @@ const ConnectButton = (
 ) => {
   const { isConnected, chain } = useAccount()
   const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
+
+  const getChainName = () => {
+    let res = chain?.name.toLowerCase().split(" ")[0] || "ethereum"
+    if (res === "op") {
+      res = "optimism"
+    }
+    return res;
+  }
+
   const [selectedNetwork, setSelectedNetwork] = React.useState(
-    chain?.name.toLowerCase().split(" ")[0] || "ethereum"
+    getChainName()
   )
   const handleNetworkChange = (chainId: string) => {
     setSelectedNetwork(chainId)

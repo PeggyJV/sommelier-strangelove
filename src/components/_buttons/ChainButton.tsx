@@ -12,7 +12,6 @@ import {
   useTheme,
 } from "@chakra-ui/react"
 import { ChevronDownIcon, CheckIcon } from "components/_icons"
-import { VFC } from "react"
 import { useSwitchChain, useAccount } from "wagmi"
 
 import {
@@ -28,10 +27,10 @@ export interface ChainButtonProps {
   onChainChange?: (chainId: string) => void
 }
 
-const ChainButton: VFC<ChainButtonProps> = ({
+const ChainButton = ({
   chain = placeholderChain, // Provide default value
   onChainChange,
-}) => {
+}: ChainButtonProps) => {
   const { switchChainAsync } = useSwitchChain()
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
