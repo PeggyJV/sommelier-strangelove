@@ -56,7 +56,7 @@ import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
-import { MerklePoints } from "./MerklePoints"
+import { MerklePoints } from "./MerklePoints/MerklePoints"
 import { BaseButton } from "components/_buttons/BaseButton"
 
 export const PortfolioCard: VFC<BoxProps> = (props) => {

@@ -4,11 +4,57 @@ import { fetchMerkleData } from "utils/fetchMerkleData"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { ethers } from "ethers" // Import ethers library
 import { ExternalProvider } from "@ethersproject/providers"
-import merkleABI from "../../../abi/merkle.json" // Import Merkle contract ABI
+import merkleABI from "../../../../abi/merkle.json" // Import Merkle contract ABI
 import { useBrandedToast } from "hooks/chakra"
-import { Text } from "@chakra-ui/react" // Import Text from Chakra UI
+import { Text, Box, Spinner } from "@chakra-ui/react" // Import Text from Chakra UI
+import axios from "axios"
+import { config } from "utils/config"
 
 const contractAddress = "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445" // Merkle Rewards contract address
+
+const ARB_TOKENS_IN_PERIOD = 30000 // 30,000 ARB tokens
+const PERIOD_DAYS = 7 // 7 days
+
+const COINGECKO_API_URL =
+  "https://api.coingecko.com/api/v3/simple/price"
+const ARB_ID = "arbitrum"
+const ETH_ID = "ethereum"
+
+const fetchPrice = async (tokenId: string) => {
+  try {
+    const response = await axios.get(COINGECKO_API_URL, {
+      params: {
+        ids: tokenId,
+        vs_currencies: "usd",
+      },
+    })
+    return response.data[tokenId]?.usd || 0
+  } catch (error) {
+    console.error(
+      `Failed to fetch ${tokenId} price from CoinGecko:`,
+      error
+    )
+    return 0
+  }
+}
+
+const fetchTotalValueStaked = async (
+  provider: ethers.providers.Web3Provider,
+  stakingContract: any
+) => {
+  try {
+    const contract = new ethers.Contract(
+      stakingContract.ADDRESS,
+      stakingContract.ABI,
+      provider
+    )
+    const totalDeposits = await contract.totalDeposits()
+    return totalDeposits
+  } catch (error) {
+    console.error("Failed to fetch total value staked:", error)
+    return ethers.BigNumber.from(0)
+  }
+}
 
 interface MerklePointsProps {
   userAddress: string
@@ -21,6 +67,8 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
     null
   )
   const [merkleData, setMerkleData] = useState<any>(null)
+  const [apy, setApy] = useState<number | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
   const { addToast, close } = useBrandedToast()
 
   useEffect(() => {
@@ -40,7 +88,8 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
           status: "error",
           body: (
             <Text>
-              Failed to fetch Merkle points data: {error.message}
+              Failed to fetch Merkle points data:{" "}
+              {(error as Error).message}
             </Text>
           ),
           closeHandler: close,
@@ -51,7 +100,56 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
     }
 
     fetchData()
-  }, [userAddress])
+  }, [userAddress, addToast, close])
+
+  useEffect(() => {
+    const calculateAPY = async () => {
+      try {
+        setLoading(true)
+        const provider = new ethers.providers.Web3Provider(
+          window.ethereum as ExternalProvider
+        )
+
+        const [arbPrice, ethPrice, totalValueStaked] =
+          await Promise.all([
+            fetchPrice(ARB_ID),
+            fetchPrice(ETH_ID),
+            fetchTotalValueStaked(
+              provider,
+              config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER
+            ),
+          ])
+
+        const totalValueStakedInUsd =
+          parseFloat(ethers.utils.formatEther(totalValueStaked)) *
+          ethPrice
+        const apy =
+          ((ARB_TOKENS_IN_PERIOD * arbPrice) /
+            totalValueStakedInUsd) *
+          (365 / PERIOD_DAYS) *
+          100
+
+        setApy(apy)
+      } catch (error) {
+        console.error("Failed to calculate APY:", error)
+        addToast({
+          heading: "Error",
+          status: "error",
+          body: (
+            <Text>
+              Failed to calculate APY: {(error as Error).message}
+            </Text>
+          ),
+          closeHandler: close,
+          duration: null,
+        })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    calculateAPY()
+  }, [addToast, close])
 
   const isHexString = (value: string) =>
     /^0x[0-9a-fA-F]+$/.test(value)
@@ -166,7 +264,9 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
             addToast({
               heading: "Claim Failed",
               status: "error",
-              body: <Text>Claim failed: {error.message}</Text>,
+              body: (
+                <Text>Claim failed: {(error as Error).message}</Text>
+              ),
               closeHandler: close,
               duration: null,
             })
@@ -177,7 +277,9 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
             heading: "Unknown Error",
             status: "error",
             body: (
-              <Text>An unknown error occurred: {error.message}</Text>
+              <Text>
+                An unknown error occurred: {(error as Error).message}
+              </Text>
             ),
             closeHandler: close,
             duration: null,
@@ -209,6 +311,15 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
       <BaseButton onClick={handleClaimMerklePoints}>
         Claim Merkle Rewards
       </BaseButton>
+      <Box>
+        {loading ? (
+          <Spinner size="lg" />
+        ) : (
+          <Text fontSize="xl" fontWeight="bold">
+            Merkle Points APY: {apy ? `${apy.toFixed(2)}%` : "N/A"}
+          </Text>
+        )}
+      </Box>
     </>
   )
 }
