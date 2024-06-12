@@ -5,6 +5,8 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { ethers } from "ethers" // Import ethers library
 import { ExternalProvider } from "@ethersproject/providers"
 import merkleABI from "../../../abi/merkle.json" // Import Merkle contract ABI
+import { useBrandedToast } from "hooks/chakra"
+import { Text } from "@chakra-ui/react" // Import Text from Chakra UI
 
 const contractAddress = "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445" // Merkle Rewards contract address
 
@@ -19,6 +21,7 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
     null
   )
   const [merkleData, setMerkleData] = useState<any>(null)
+  const { addToast, close } = useBrandedToast()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +35,17 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
         }
       } catch (error) {
         console.error("Failed to fetch Merkle points data:", error)
+        addToast({
+          heading: "Error fetching data",
+          status: "error",
+          body: (
+            <Text>
+              Failed to fetch Merkle points data: {error.message}
+            </Text>
+          ),
+          closeHandler: close,
+          duration: null,
+        })
         setMerklePoints("0")
       }
     }
@@ -72,6 +86,13 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
         )
         if (hasClaimed) {
           console.log("Claim has already been made")
+          addToast({
+            heading: "Claim Info",
+            status: "info",
+            body: <Text>Claim has already been made</Text>,
+            closeHandler: close,
+            duration: null,
+          })
           return
         }
 
@@ -111,6 +132,13 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
 
         await tx.wait()
         console.log("Claim successful")
+        addToast({
+          heading: "Success",
+          status: "success",
+          body: <Text>Claim successful</Text>,
+          closeHandler: close,
+          duration: null,
+        })
       } catch (error) {
         if (error instanceof Error && "code" in error) {
           if (
@@ -121,15 +149,50 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
               "Claim failed: It has already been claimed or another error occurred",
               error
             )
+            addToast({
+              heading: "Claim Failed",
+              status: "error",
+              body: (
+                <Text>
+                  Claim failed: It has already been claimed or another
+                  error occurred
+                </Text>
+              ),
+              closeHandler: close,
+              duration: null,
+            })
           } else {
             console.error("Claim failed:", error)
+            addToast({
+              heading: "Claim Failed",
+              status: "error",
+              body: <Text>Claim failed: {error.message}</Text>,
+              closeHandler: close,
+              duration: null,
+            })
           }
         } else {
           console.error("An unknown error occurred:", error)
+          addToast({
+            heading: "Unknown Error",
+            status: "error",
+            body: (
+              <Text>An unknown error occurred: {error.message}</Text>
+            ),
+            closeHandler: close,
+            duration: null,
+          })
         }
       }
     } else {
       console.error("Web3 provider not found or no merkle data")
+      addToast({
+        heading: "Error",
+        status: "error",
+        body: <Text>Web3 provider not found or no merkle data</Text>,
+        closeHandler: close,
+        duration: null,
+      })
     }
   }
 
