@@ -431,7 +431,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     )
 
     const amtInWei = parseUnits(
-      scientificToDecimalString(depositAmount),
+      depositAmount.toString(),
       selectedTokenBalance?.decimals
     )
 
@@ -444,6 +444,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       return
     }
 
+    let approval = !needsApproval;
     if (needsApproval) {
       /* analytics.track("deposit.approval-required", {
         ...baseAnalytics,
@@ -452,14 +453,17 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       })*/
 
       try {
-        const { hash } = await erc20Contract.write.approve([
-          isActiveAsset ||
+        const hash = await erc20Contract.write.approve([
+            isActiveAsset ||
             cellarData.depositTokens.list.includes(tokenSymbol)
             ? cellarConfig.cellar.address
             : ensoRouterContract.address,
           MaxUint256
+              ? cellarConfig.cellar.address
+              : ensoRouterContract.address,
+            MaxUint256
           ],
-          { account: address}
+          { account: address }
         )
         addToast({
           heading: "ERC20 Approval",
@@ -477,6 +481,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           //   stable: tokenSymbol,
           //   value: depositAmount,
           // })
+          approval = true;
 
           update({
             heading: "ERC20 Approval",
@@ -515,7 +520,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
         })
       }
     }
-
+    if (approval) {
     try {
       // If selected token is cellar's current asset, it is cheaper to deposit into the cellar
       // directly rather than through the router. Should only use router when swapping into the
@@ -683,6 +688,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
       console.warn("failed to deposit", e)
     }
+  }
   }
 
   const onError = async (errors: any, e: any) => {
