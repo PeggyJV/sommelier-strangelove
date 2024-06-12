@@ -1514,11 +1514,12 @@ export const strategyPageContentData = {
       strategyHighlights: {
         card: [
           `Designed for the Rocket Pool Community to access the Diva ecosystem.`,
-          <span>
+          <span key="span">
             Deposit{" "}
             <a
               href="https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity"
               target="_blank"
+              rel="noreferrer"
               style={{ textDecoration: "underline", color: "white" }}
             >
               Balancer rETH-ETH LP tokens

@@ -17,7 +17,6 @@ import { DIRECT, landingType } from "utils/landingType"
 import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
 import { showNetValueInAsset } from "data/uiConfig"
 import { tokenConfig } from "data/tokenConfig"
-import BigNumber from "bignumber.js"
 
 interface PortofolioItemProps extends StackProps {
   icon: string

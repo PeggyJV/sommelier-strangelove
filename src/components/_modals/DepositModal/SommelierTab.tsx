@@ -145,7 +145,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     ""
 
   const importToken = useImportToken({
-    onSuccess: (data) => {
+    onSuccess: (data: { symbol: string }) => {
       addToast({
         heading: "Import Token",
         status: "success",

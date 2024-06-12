@@ -21,7 +21,6 @@ import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
 import { ChevronDownIcon, LogoutCircleIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
-import { useImportToken } from "hooks/web3/useImportToken"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
 import { useRouter } from "next/router"
@@ -37,25 +36,6 @@ export const ConnectedPopover = () => {
   })
   const { data: ensAvatar, isLoading: ensAvatarLoading } =
     useEnsAvatar({ name: address })
-  const importToken = useImportToken({
-    onSuccess: (data) => {
-      addToast({
-        heading: "Import Token",
-        status: "success",
-        body: <Text>{data.symbol} added to metamask</Text>,
-        closeHandler: close,
-      })
-    },
-    onError: (error) => {
-      const e = error as Error
-      addToast({
-        heading: "Import Token",
-        status: "error",
-        body: <Text>{e.message}</Text>,
-        closeHandler: close,
-      })
-    },
-  })
 
   const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)
   const sommToken = tokenConfig.find(
