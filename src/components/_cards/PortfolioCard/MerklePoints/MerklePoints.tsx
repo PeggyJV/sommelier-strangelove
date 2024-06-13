@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react"
 import { CardStat } from "components/CardStat"
 import { fetchMerkleData } from "utils/fetchMerkleData"
 import { BaseButton } from "components/_buttons/BaseButton"
-import { ethers } from "ethers" // Import ethers library
+import { ethers } from "ethers"
 import { ExternalProvider } from "@ethersproject/providers"
-import merkleABI from "../../../../abi/merkle.json" // Import Merkle contract ABI
+import merkleABI from "../../../../abi/merkle.json"
 import { useBrandedToast } from "hooks/chakra"
-import { Text, Box, Spinner } from "@chakra-ui/react" // Import Text from Chakra UI
+import { Text, Box, Spinner } from "@chakra-ui/react"
 import axios from "axios"
-import { config } from "utils/config"
+import { ConfigProps } from "data/types"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
 
-const contractAddress = "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445" // Merkle Rewards contract address
+const MERKLE_CONTRACT_ADDRESS = "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
 
 const ARB_TOKENS_IN_PERIOD = 30000 // 30,000 ARB tokens
 const PERIOD_DAYS = 7 // 7 days
@@ -39,16 +40,10 @@ const fetchPrice = async (tokenId: string) => {
 }
 
 const fetchTotalValueStaked = async (
-  provider: ethers.providers.Web3Provider,
   stakingContract: any
 ) => {
   try {
-    const contract = new ethers.Contract(
-      stakingContract.ADDRESS,
-      stakingContract.ABI,
-      provider
-    )
-    const totalDeposits = await contract.totalDeposits()
+    const totalDeposits = await stakingContract.totalDeposits()
     return totalDeposits
   } catch (error) {
     console.error("Failed to fetch total value staked:", error)
@@ -57,12 +52,13 @@ const fetchTotalValueStaked = async (
 }
 
 interface MerklePointsProps {
-  userAddress: string
+  userAddress: string,
+  cellarConfig: ConfigProps
 }
 
-export const MerklePoints: React.FC<MerklePointsProps> = ({
-  userAddress,
-}) => {
+export const MerklePoints = ({
+  userAddress, cellarConfig
+}: MerklePointsProps) => {
   const [merklePoints, setMerklePoints] = useState<string | null>(
     null
   )
@@ -70,6 +66,7 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
   const [apy, setApy] = useState<number | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const { addToast, close } = useBrandedToast()
+  const { stakerSigner } = useCreateContracts(cellarConfig);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,7 +97,7 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
     }
 
     fetchData()
-  }, [userAddress, addToast, close])
+  }, [])
 
   useEffect(() => {
     const calculateAPY = async () => {
@@ -115,14 +112,14 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
             fetchPrice(ARB_ID),
             fetchPrice(ETH_ID),
             fetchTotalValueStaked(
-              provider,
-              config.CONTRACT.REAL_YIELD_ETH_ARB_STAKER
+              stakerSigner
             ),
           ])
 
         const totalValueStakedInUsd =
           parseFloat(ethers.utils.formatEther(totalValueStaked)) *
           ethPrice
+
         const apy =
           ((ARB_TOKENS_IN_PERIOD * arbPrice) /
             totalValueStakedInUsd) *
@@ -149,7 +146,7 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
     }
 
     calculateAPY()
-  }, [addToast, close])
+  }, [])
 
   const isHexString = (value: string) =>
     /^0x[0-9a-fA-F]+$/.test(value)
@@ -168,7 +165,7 @@ export const MerklePoints: React.FC<MerklePointsProps> = ({
         )
         const signer = provider.getSigner()
         const contract = new ethers.Contract(
-          contractAddress,
+          MERKLE_CONTRACT_ADDRESS,
           merkleABI,
           signer
         )

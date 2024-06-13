@@ -188,7 +188,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           wrap="wrap"
         >
 
-          
+
           <SimpleGrid
             templateColumns={{
               base: "repeat(1, max-content)",
@@ -438,7 +438,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               CellarNameKey.REAL_YIELD_ETH_ARB ||
               cellarConfig.cellarNameKey ===
                 CellarNameKey.REAL_YIELD_USD_ARB) && (
-              <MerklePoints userAddress={address} />
+              <MerklePoints userAddress={address} cellarConfig={cellarConfig} />
             )}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
