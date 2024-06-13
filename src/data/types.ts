@@ -2,6 +2,7 @@ import { IconProps } from "@chakra-ui/react"
 import { VFC } from "react"
 import { Token } from "src/data/tokenConfig"
 import { Chain } from "data/chainConfig"
+import { Abi } from "viem"
 
 export enum StakerKey {
   CELLAR_STAKING_V0815 = "CELLAR_STAKING_V0815",
@@ -75,19 +76,19 @@ export interface ConfigProps {
   }
   cellarRouter: {
     address: string
-    abi: readonly {}[]
+    abi: Abi
     key: CellarRouterKey
   }
   cellar: {
     address: string
-    abi: readonly {}[]
+    abi: Abi
     key: CellarKey
     decimals: number
   }
   // staker optional because there will be a cellar without staker contract
   staker?: {
     address: string
-    abi: readonly {}[]
+    abi: Abi
     key: StakerKey
   }
   customReward?: CustomReward

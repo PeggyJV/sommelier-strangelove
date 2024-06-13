@@ -1,7 +1,6 @@
 import { ConfigProps } from "data/types"
 import { useWalletClient, usePublicClient } from "wagmi"
 import { getContract } from "viem"
-import { StrategyContracts } from "data/actions/types"
 
 export const useCreateContracts = (config: ConfigProps) => {
   const { data: walletClient } = useWalletClient()
