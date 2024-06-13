@@ -1,5 +1,5 @@
 import { Provider } from "@wagmi/core"
-import { Contract } from "ethers"
+import { getContract } from "viem"
 import { getAllStrategiesData } from "./common/getAllStrategiesData"
 import { getStrategyData } from "./common/getStrategyData"
 
@@ -86,11 +86,11 @@ export type GetAssetGainChartDataProps = {
 }
 
 export interface StrategyContracts {
-  cellarContract: Contract
-  cellarSigner: Contract
-  stakerContract?: Contract
-  stakerSigner?: Contract
-  cellarRouterSigner: Contract
+  cellarContract: ReturnType<typeof getContract>
+  cellarSigner: ReturnType<typeof getContract>
+  stakerContract?: ReturnType<typeof getContract>
+  stakerSigner?: ReturnType<typeof getContract>
+  cellarRouterSigner: ReturnType<typeof getContract>
   chain: string
 }
 export type AllContracts = Record<string, StrategyContracts>

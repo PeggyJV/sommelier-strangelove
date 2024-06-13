@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react"
+import { useEffect, useState } from "react"
 import {
   Table,
   Thead,
@@ -23,9 +23,8 @@ import { InnerCard } from "./InnerCard"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useGeo } from "context/geoContext"
-import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { getContract } from 'viem'
+import { formatUnits, getContract } from "viem"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useBrandedToast } from "hooks/chakra"
@@ -53,7 +52,7 @@ function formatTimeRemaining(deadline: number): string {
   return timeString.trim()
 }
 
-const WithdrawQueueCard: VFC<TableProps> = (props) => {
+const WithdrawQueueCard = (props: TableProps) => {
   const { addToast, update, close, closeAll } = useBrandedToast()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
@@ -62,14 +61,17 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
-  const withdrawQueueContract = getContract({
-    address: cellarConfig.chain.withdrawQueueAddress,
-    abi: withdrawQueueV0821,
-    client: {
-      wallet: walletClient,
-      public: publicClient
-    }
-  })!
+  const withdrawQueueContract = (() => {
+    if (!publicClient) return
+    return getContract( {
+        address: cellarConfig.chain.withdrawQueueAddress as `0x${string}`,
+        abi: WithdrawQueue,
+        client: {
+          wallet: walletClient,
+          public: publicClient
+        }
+      }
+    )})()
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
@@ -87,25 +89,27 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
-            cellarConfig.cellar.address
+            cellarConfig.cellar.address as `0x${string}`
             ]
           )
 
         // Check if it's valid
         const isWithdrawRequestValid =
           await withdrawQueueContract?.read.isWithdrawRequestValid([
-            cellarConfig.cellar.address,
+            cellarConfig.cellar.address as `0x${string}`,
             address,
             withdrawRequest
             ]
           )
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
 
-        setPendingWithdrawShares(withdrawRequest.sharesToWithdraw)
+        setPendingWithdrawShares(Number(withdrawRequest.sharesToWithdraw))
         setPendingWithdrawSharePrice(
-          withdrawRequest.executionSharePrice
+          Number(
+            formatUnits(withdrawRequest.executionSharePrice, cellarConfig.baseAsset.decimals)
+          )
         )
-        setPendingWithdrawDeadline(withdrawRequest.deadline)
+        setPendingWithdrawDeadline(Number(withdrawRequest.deadline))
       } else {
         setIsActiveWithdrawRequest(false)
         setPendingWithdrawShares(0)
@@ -343,10 +347,8 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
                 <HStack spacing={2}>
                   <Text textAlign="right">
                     {(
-                      pendingWithdrawSharePrice /
-                      10 ** cellarConfig.baseAsset.decimals
+                      pendingWithdrawSharePrice
                     )
-                      .toFixed(4)
                       .toLocaleString()}
                   </Text>
                 </HStack>
