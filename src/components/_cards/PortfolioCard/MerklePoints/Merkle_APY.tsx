@@ -9,22 +9,16 @@ import { tokenConfig, Token } from "src/data/tokenConfig"
 const ARB_TOKENS_IN_PERIOD = 30000 // 30,000 ARB tokens
 const PERIOD_DAYS = 7 // 7 days
 
+const arbToken: Token | undefined = tokenConfig.find(
+  (token) => token.symbol === "ARB" && token.chain === "arbitrum"
+)
+
 const arbWethToken: Token | undefined = tokenConfig.find(
   (token) => token.symbol === "WETH" && token.chain === "arbitrum"
 )
 
-if (!arbWethToken) {
-  throw new Error("ARB WETH token configuration not found")
-}
-
-const arbToken: Token = {
-  chain: "arbitrum",
-  coinGeckoId: "arbitrum",
-  symbol: "ARB",
-  address: "0x...ARB_ADDRESS", // Replace with actual ARB address
-  decimals: 18,
-  src: "", // Add appropriate src
-  alt: "ARB Token",
+if (!arbToken || !arbWethToken) {
+  throw new Error("ARB or WETH token configuration not found")
 }
 
 const fetchTotalValueStaked = async (
@@ -52,9 +46,8 @@ const MerkleAPY: React.FC = () => {
 
   const { data: arbPrice, error: arbPriceError } =
     useCoinGeckoPrice(arbToken)
-  const { data: ethPrice, error: ethPriceError } = useCoinGeckoPrice(
-    arbWethToken!
-  )
+  const { data: ethPrice, error: ethPriceError } =
+    useCoinGeckoPrice(arbWethToken)
 
   useEffect(() => {
     const calculateAPY = async () => {
