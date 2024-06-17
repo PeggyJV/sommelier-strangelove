@@ -438,7 +438,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               CellarNameKey.REAL_YIELD_ETH_ARB ||
               cellarConfig.cellarNameKey ===
                 CellarNameKey.REAL_YIELD_USD_ARB) && (
-              <MerklePoints userAddress={address} cellarConfig={cellarConfig} />
+              <MerklePoints userAddress={address} merkleRewardsApy={strategyData?.merkleRewardsApy} />
             )}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (

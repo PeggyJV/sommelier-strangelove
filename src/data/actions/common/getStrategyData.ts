@@ -18,11 +18,9 @@ import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
 import BigNumber from "bignumber.js"
-import { config as utilConfig } from "src/utils/config"
-import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-import { EETHIcon } from "components/_icons"
 import { Contract } from "ethers"
-import { ETHXIcon } from "components/_icons/ETHXIcon"
+import { getMerkleRewardsApy } from "data/actions/common/getMerkleRewardsApy"
+import { config as utilConfig } from "utils/config"
 
 export const getStrategyData = async ({
   address,
@@ -143,6 +141,13 @@ export const getStrategyData = async ({
         })
         return apyRes
       })()
+
+      let merkleRewardsApy;
+
+      if (strategy.slug === utilConfig.CONTRACT.REAL_YIELD_ETH_ARB.SLUG
+        || strategy.slug === utilConfig.CONTRACT.REAL_YIELD_USD_ARB.SLUG) {
+        merkleRewardsApy = await getMerkleRewardsApy(stakerContract, config);
+      }
 
       let extraRewardsApy = undefined
       // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards
@@ -349,6 +354,7 @@ export const getStrategyData = async ({
         token,
         config,
         extraRewardsApy,
+        merkleRewardsApy
       }
     } catch (e) {
       console.error("Error fetching strategy data")
