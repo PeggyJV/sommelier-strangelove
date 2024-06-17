@@ -1,4 +1,4 @@
-const CellarV0821MultiDeposit = [
+export const CellarV0821MultiDeposit = [
   {
     inputs: [
       {

@@ -1,4 +1,12 @@
 import { erc20Abi } from "viem"
+import { CellarV0821MultiDeposit } from "../abi/types/CellarV0821MultiDeposit"
+import { CellarV0821 } from "../abi/types/CellarV0821"
+import { CellarV0816 } from "../abi/types/CellarV0816"
+import { CellarV0815 } from "../abi/types/CellarV0815"
+import { GravityBridge } from "../abi/types/GravityBridge"
+import { CellarStakingV0821 } from "../abi/types/CellarStakingV0821"
+import { EnsoRouter } from "../abi/types/EnsoRouter"
+import { CellarStakingV0815 } from "../abi/types/CellarStakingV0815"
 
 // Adress should be saved as lowercase
 /** Ensure Checksum Address  */
@@ -45,7 +53,7 @@ export const config = {
       // ADDRESS: "0x4E9FbDa4Dc1a207Db97e2BD66Fd1e8837c4DdD36",
       // ADDRESS: "0xF9f875BD4B1BC19693fe3Fe3C719f9deb11a2637",
       // ADDRESS: "0xd15135141f1217b8863cb1431ad71309ef22ceda",
-      ADDRESS: "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+      ADDRESS: "0x07bad5df5e11151dc5ee1a648800057c5c934c0d5",
       ABI: CellarV0815,
       SLUG: "AAVE",
     },

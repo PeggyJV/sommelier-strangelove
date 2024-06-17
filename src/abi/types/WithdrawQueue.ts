@@ -1,4 +1,4 @@
-const WithdrawQueue = [
+export const WithdrawQueue = [
   {
     inputs: [],
     stateMutability: "nonpayable",

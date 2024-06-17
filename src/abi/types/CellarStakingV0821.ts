@@ -1,4 +1,4 @@
-const CellarStakingV0821 = [
+export const CellarStakingV0821 = [
   {
     inputs: [
       {

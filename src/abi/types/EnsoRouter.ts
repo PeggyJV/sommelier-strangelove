@@ -1,4 +1,4 @@
-const EnsoRouter = [
+export const EnsoRouter = [
   {
     inputs: [
       {

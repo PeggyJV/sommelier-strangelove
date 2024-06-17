@@ -1,4 +1,4 @@
-const GravityBridge = [
+export const GravityBridge = [
   {
     inputs: [
       {

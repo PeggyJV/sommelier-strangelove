@@ -1,4 +1,4 @@
-const CellarV0821 = [
+export const CellarV0821 = [
   {
     inputs: [
       {

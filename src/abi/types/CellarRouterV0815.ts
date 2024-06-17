@@ -1,4 +1,4 @@
-const CellarRouterV0815 = [
+export const CellarRouterV0815 = [
   {
     inputs: [
       {
