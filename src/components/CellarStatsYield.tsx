@@ -56,6 +56,10 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
   const extraRewardsApy: ApyData = strategyData?.extraRewardsApy
     ? (strategyData.extraRewardsApy as ApyData)
     : { formatted: undefined }
+  const merkleRewardsApy: number | undefined = strategyData?.merkleRewardsApy
+    ? (strategyData.merkleRewardsApy)
+    : undefined
+
 
   const baseApySumRewards = strategyData?.baseApySumRewards
 
@@ -138,6 +142,12 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                             rewardsApy?.formatted ??
                             "0.00%"
                           }`}
+                      </Text>
+                      <Text>
+                        {merkleRewardsApy
+                          ? `Merkle Rewards APY ${merkleRewardsApy.toFixed(2)}%`
+                          : ''
+                          }
                       </Text>
                     </>
                   )}

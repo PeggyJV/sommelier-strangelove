@@ -102,6 +102,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         return newState
       })
       // analytics.track("unstake.started")
+      // @ts-ignore
       const tx = await stakerSigner?.write.unstake([id])
 
       await doHandleTransaction({

@@ -70,6 +70,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ARBITRUM.id,
   },
   {
+    src: "/assets/icons/arb.png",
+    alt: "Arbitrum logo",
+    symbol: "ARB",
+    address: "0x912CE59144191C1204E64559FE8253a0e49E6548",
+    coinGeckoId: "arbitrum",
+    decimals: 18,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
     src: "/assets/icons/eth.png",
     alt: "Ethereum logo",
     symbol: "WETH",

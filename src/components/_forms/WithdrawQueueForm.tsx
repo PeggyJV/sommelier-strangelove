@@ -127,25 +127,31 @@ export const WithdrawQueueForm = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
-  const withdrawQueueContract = getContract({
-    address: cellarConfig.chain.withdrawQueueAddress,
-    abi: withdrawQueueV0821,
-    client: {
-      public: publicClient,
-      wallet: walletClient
+  const withdrawQueueContract = (() => {
+    if (!publicClient) return
+    return getContract( {
+        address: cellarConfig.chain.withdrawQueueAddress as `0x${string}`,
+        abi: withdrawQueueV0821,
+        client: {
+          public: publicClient,
+          wallet: walletClient
+        }
+      }
+    )
+  })()
+
+  const cellarContract = (() => {
+    if (!publicClient) return
+    return getContract( {
+      address: cellarConfig.cellar.address as `0x${string}`,
+      abi: cellarConfig.cellar.abi,
+      client: {
+        public: publicClient,
+        wallet: walletClient
+      }
     }
-
-  })
-
-
-  const cellarContract = getContract({
-    address: cellarConfig.cellar.address,
-    abi: cellarConfig.cellar.abi,
-    client: {
-      public: publicClient,
-      wallet: walletClient
-    }
-  })
+    )
+  })()
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -259,11 +265,11 @@ export const WithdrawQueueForm = ({
     )
 
     // Get approval if needed
-    const allowance = await cellarContract.read.allowance([
+    const allowance = await cellarContract?.read.allowance([
       address!,
       getAddress(cellarConfig.chain.withdrawQueueAddress)
       ]
-    )
+    ) as bigint
 
     let needsApproval
     try {
@@ -276,7 +282,8 @@ export const WithdrawQueueForm = ({
 
     if (needsApproval) {
       try {
-        const { hash } = await cellarContract.write.approve([
+        // @ts-ignore
+        const { hash } = await cellarContract?.write.approve([
           getAddress(cellarConfig.chain.withdrawQueueAddress),
           MaxUint256
           ],
@@ -373,7 +380,7 @@ export const WithdrawQueueForm = ({
         330000,
         address
       )
-
+      // @ts-ignore
       const tx = await withdrawQueueContract?.write.updateWithdrawRequest([
         cellarConfig.cellar.address,
         withdrawTouple
@@ -464,7 +471,7 @@ export const WithdrawQueueForm = ({
             address,
             withdrawRequest
             ]
-          )
+          ) as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
 
       } else {

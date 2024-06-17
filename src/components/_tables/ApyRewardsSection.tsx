@@ -21,6 +21,7 @@ type ApyRewardsSectionProps = {
   cellarId: string
   baseApySumRewards?: string
   extraRewardsApy?: string
+  merkleRewardsApy?: number
 }
 
 export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
@@ -33,6 +34,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     cellarId,
     baseApySumRewards,
     extraRewardsApy,
+    merkleRewardsApy
   } = props
   const cellarConfig = cellarDataMap[cellarId].config
   const now = new Date(Date.now()).getTime()
@@ -142,6 +144,12 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                         }Rewards APY ${
                           extraRewardsApy ?? rewardsApy ?? "0.00%"
                         }`}
+                    </Text>
+                    <Text>
+                      {merkleRewardsApy
+                        ? `Merkle Rewards APY ${merkleRewardsApy.toFixed(2)}%`
+                        : ''
+                      }
                     </Text>
                   </>
                 ) : (
