@@ -117,7 +117,7 @@ export const MerklePoints = ({
           ])
 
         const totalValueStakedInUsd =
-          parseFloat(ethers.utils.formatEther(totalValueStaked)) *
+          parseFloat(ethers.utils.formatUnits(totalValueStaked, cellarConfig.cellar.decimals)) *
           ethPrice
 
         const apy =
