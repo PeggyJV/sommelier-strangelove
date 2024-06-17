@@ -8,14 +8,30 @@ import merkleABI from "../../../../abi/merkle.json"
 import { useBrandedToast } from "hooks/chakra"
 import { Text, Box } from "@chakra-ui/react"
 
-const MERKLE_CONTRACT_ADDRESS = "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
+const MERKLE_CONTRACT_ADDRESS =
+  "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
+
 interface MerklePointsProps {
-  userAddress: string,
+  userAddress: string
   merkleRewardsApy?: number
 }
 
+const formatPoints = (points: string): string => {
+  const number = parseFloat(points)
+  if (number >= 1e9) {
+    return `${(number / 1e9).toFixed(2)}B`
+  } else if (number >= 1e6) {
+    return `${(number / 1e6).toFixed(2)}M`
+  } else if (number >= 1e3) {
+    return `${(number / 1e3).toFixed(2)}K`
+  } else {
+    return number.toFixed(2)
+  }
+}
+
 export const MerklePoints = ({
-  userAddress, merkleRewardsApy
+  userAddress,
+  merkleRewardsApy,
 }: MerklePointsProps) => {
   const [merklePoints, setMerklePoints] = useState<string | null>(
     null
@@ -28,7 +44,11 @@ export const MerklePoints = ({
       try {
         const response = await fetchMerkleData(userAddress)
         if (response.Response && response.Response.total_balance) {
-          setMerklePoints(response.Response.total_balance)
+          const formatted = ethers.utils.formatUnits(
+            response.Response.total_balance,
+            0
+          )
+          setMerklePoints(formatted)
           setMerkleData(response.Response.tx_data)
         } else {
           setMerklePoints("0")
@@ -76,7 +96,6 @@ export const MerklePoints = ({
           signer
         )
 
-        // Check if the claim has already been made
         const hasClaimed = await contract.claimed(
           ethers.utils.keccak256(
             ethers.utils.arrayify(
@@ -97,7 +116,6 @@ export const MerklePoints = ({
           return
         }
 
-        // Log merkleData for debugging
         console.log("Merkle Data:", merkleData)
 
         const rootHashes = merkleData.rootHashes.map(
@@ -209,16 +227,11 @@ export const MerklePoints = ({
         alignSelf="flex-start"
         spacing={0}
       >
-        {merklePoints ?? "Loading..."}
+        {merklePoints ? formatPoints(merklePoints) : "Loading..."}
       </CardStat>
       <BaseButton onClick={handleClaimMerklePoints}>
         Claim Merkle Rewards
       </BaseButton>
-      <Box>
-        <Text fontSize="xl" fontWeight="bold">
-          Merkle Points APY: {merkleRewardsApy ? `${merkleRewardsApy.toFixed(2)}%` : "N/A"}
-        </Text>
-      </Box>
     </>
   )
 }
