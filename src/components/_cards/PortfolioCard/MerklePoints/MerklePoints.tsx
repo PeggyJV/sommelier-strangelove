@@ -6,7 +6,7 @@ import { ethers } from "ethers"
 import { ExternalProvider } from "@ethersproject/providers"
 import merkleABI from "../../../../abi/merkle.json"
 import { useBrandedToast } from "hooks/chakra"
-import { Text, Box } from "@chakra-ui/react"
+import { Text, Box, Flex, HStack, VStack } from "@chakra-ui/react"
 
 const MERKLE_CONTRACT_ADDRESS =
   "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
@@ -218,9 +218,8 @@ export const MerklePoints = ({
       })
     }
   }
-
   return (
-    <>
+    <VStack spacing={4} alignItems="flex-start">
       <CardStat
         label="Merkle Points"
         tooltip="The number of Merkle points accumulated. Please note that you will only receive ARB rewards if you also stake your shares in the SOMM staking contract."
@@ -232,6 +231,6 @@ export const MerklePoints = ({
       <BaseButton onClick={handleClaimMerklePoints}>
         Claim Merkle Rewards
       </BaseButton>
-    </>
+    </VStack>
   )
 }
