@@ -45,12 +45,7 @@ export const SnapshotCard: React.FC = () => {
   })
 
   return (
-    <Stack
-      direction={{ base: "column", md: "row" }}
-      spacing={10}
-      align={stackAlignment} // Dynamic alignment based on screen size
-      width="full"
-    >
+    <>
       {isMounted && isConnected && isWrongNetwork && (
         <Box
           p={4}
@@ -101,29 +96,36 @@ export const SnapshotCard: React.FC = () => {
           </VStack>
         </Box>
       )}
-      <TransparentCard
-        maxW="432px"
-        w="full"
-        boxShadow="purpleOutline1"
-        px={{ base: 5, md: 12 }}
-        pt="52px"
-        pb="48px"
-        borderRadius={{ base: "32px", md: "40px" }}
-        mx={4}
+      <Stack
+        direction={{ base: "column", md: "row" }}
+        spacing={10}
+        align={stackAlignment} // Dynamic alignment based on screen size
+        width="full"
       >
-        <Heading as="h4" size="lg" mb={4}>
-          Snapshot
-        </Heading>
-        <Text mb={4}>
-          Link your wallets for bonus SOMM rewards and/or participate
-          in partner campaigns.
-        </Text>
-        <FormProvider {...methods}>
-          <SnapshotForm wrongNetwork={isWrongNetwork} />
-        </FormProvider>
-      </TransparentCard>
-      <CampaignTable />
-    </Stack>
+        <TransparentCard
+          maxW="432px"
+          w="full"
+          boxShadow="purpleOutline1"
+          px={{ base: 5, md: 12 }}
+          pt="52px"
+          pb="48px"
+          borderRadius={{ base: "32px", md: "40px" }}
+          mx={4}
+        >
+          <Heading as="h4" size="lg" mb={4}>
+            Snapshot
+          </Heading>
+          <Text mb={4}>
+            Link your wallets for bonus SOMM rewards and/or
+            participate in partner campaigns.
+          </Text>
+          <FormProvider {...methods}>
+            <SnapshotForm wrongNetwork={isWrongNetwork} />
+          </FormProvider>
+        </TransparentCard>
+        <CampaignTable />
+      </Stack>
+    </>
   )
 }
 
