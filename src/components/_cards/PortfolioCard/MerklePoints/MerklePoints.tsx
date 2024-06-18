@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react"
 import { CardStat } from "components/CardStat"
 import { fetchMerkleData } from "utils/fetchMerkleData"
 import { BaseButton } from "components/_buttons/BaseButton"
-import { ethers } from "ethers"
 import { useBrandedToast } from "hooks/chakra"
 import { Text, Box } from "@chakra-ui/react"
 import { MerkleRewards } from "../../../../abi/types/MerkleRewards"
 import { usePublicClient, useWalletClient } from "wagmi"
-import { getContract } from "viem"
+import { getContract, isHex, keccak256, toBytes } from "viem"
 
 const MERKLE_CONTRACT_ADDRESS = "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
 interface MerklePointsProps {
@@ -58,9 +57,6 @@ export const MerklePoints = ({
     fetchData()
   }, [])
 
-  const isHexString = (value: string) =>
-    /^0x[0-9a-fA-F]+$/.test(value)
-
   const ensureHexPrefix = (value: string) =>
     value.startsWith("0x") ? value : `0x${value}`
 
@@ -78,8 +74,8 @@ export const MerklePoints = ({
 
         // Check if the claim has already been made
         const hasClaimed = await merkleRewardsContract.read.claimed([
-            ethers.utils.keccak256(
-              ethers.utils.arrayify(
+            keccak256(
+              toBytes(
                 ensureHexPrefix(merkleData.rootHashes[0])
               )
             ) as `0x${string}`,
@@ -87,7 +83,6 @@ export const MerklePoints = ({
           ]
         )
         if (hasClaimed) {
-          console.log("Claim has already been made")
           addToast({
             heading: "Claim Info",
             status: "info",
@@ -98,16 +93,13 @@ export const MerklePoints = ({
           return
         }
 
-        // Log merkleData for debugging
-        console.log("Merkle Data:", merkleData)
-
         const rootHashes = merkleData.rootHashes.map(
           (hash: string) => {
             const prefixedHash = ensureHexPrefix(hash)
-            if (!isHexString(prefixedHash)) {
+            if (!isHex(prefixedHash)) {
               throw new Error(`Invalid hex string: ${prefixedHash}`)
             }
-            return ethers.utils.arrayify(prefixedHash)
+            return toBytes(prefixedHash)
           }
         )
 
@@ -115,12 +107,12 @@ export const MerklePoints = ({
           (proofArray: string[]) =>
             proofArray.map((proof: string) => {
               const prefixedProof = ensureHexPrefix(proof)
-              if (!isHexString(prefixedProof)) {
+              if (!isHex(prefixedProof)) {
                 throw new Error(
                   `Invalid hex string: ${prefixedProof}`
                 )
               }
-              return ethers.utils.arrayify(prefixedProof)
+              return toBytes(prefixedProof)
             })
         )
 
@@ -135,7 +127,6 @@ export const MerklePoints = ({
         )
 
         await tx.wait()
-        console.log("Claim successful")
         addToast({
           heading: "Success",
           status: "success",
@@ -146,8 +137,7 @@ export const MerklePoints = ({
       } catch (error) {
         if (error instanceof Error && "code" in error) {
           if (
-            (error as any).code ===
-            ethers.errors.UNPREDICTABLE_GAS_LIMIT
+            (error as any).code === 'UNPREDICTABLE_GAS_LIMIT'
           ) {
             console.error(
               "Claim failed: It has already been claimed or another error occurred",
