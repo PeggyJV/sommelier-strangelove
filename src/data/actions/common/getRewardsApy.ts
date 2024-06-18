@@ -1,68 +1,51 @@
-import BigNumber from "bignumber.js"
-import { CellarStakingV0815 } from "src/abi/types"
 import { ConfigProps } from "data/types"
-import { getContract, getProvider, fetchSigner } from "@wagmi/core"
-import { Contract } from "ethers"
+import { formatUnits } from "viem"
 
 export const getRewardsApy = async ({
   stakerContract,
-  cellarContract,
   sommPrice,
   assetPrice,
   cellarConfig,
 }: {
-  stakerContract: CellarStakingV0815
-  cellarContract: Contract
+  stakerContract: any
   sommPrice: string
   assetPrice: string
   cellarConfig: ConfigProps
 }) => {
   try {
-    const stakingEnd = await stakerContract.endTimestamp()
+    console.log(assetPrice)
+    const stakingEnd = await stakerContract.read.endTimestamp()
     const isStakingOngoing = Date.now() < stakingEnd.toNumber() * 1000
 
-    let potentialStakingApy = new BigNumber(0)
+    let potentialStakingApy = BigInt(0)
     if (isStakingOngoing) {
-      const rewardRateRes = await stakerContract.rewardRate()
-      const rewardRate = new BigNumber(
-        rewardRateRes.toString()
-      ).dividedBy(new BigNumber(10).pow(6))
+      const rewardRateRes = await stakerContract.read.rewardRate()
+      const rewardRate = formatUnits(rewardRateRes, 6)
 
-      let oneShare = new BigNumber(10).pow(
-        cellarConfig.cellar.decimals
-      )
-      let shareValueBaseAsset = new BigNumber(
-        (await cellarContract
-          .previewRedeem(oneShare.toString()))
-          .toString()
-      )
-
-      // Standardize decimals
-      shareValueBaseAsset = shareValueBaseAsset.dividedBy(
-        new BigNumber(10).pow(cellarConfig.cellar.decimals)
-      )
 
       const totalDepositWithBoostRes =
         await stakerContract.totalDepositsWithBoost()
-      const totalDepositWithBoost = new BigNumber(
-        totalDepositWithBoostRes.toString()
-      ).dividedBy(new BigNumber(10).pow(cellarConfig.cellar.decimals))
+      const totalDepositWithBoost =
+        formatUnits(totalDepositWithBoostRes.toString(), cellarConfig.cellar.decimals)
 
       // Assuming a user deposits 10k worth of the asset
-      const userDeposit = new BigNumber(10000).div(assetPrice)
-      const withUserDeposit = totalDepositWithBoost
-        .plus(userDeposit)
-        .times(assetPrice)
+      const userDeposit = BigInt(10000 / Number(assetPrice))
+      const withUserDeposit = BigInt(totalDepositWithBoost + userDeposit * BigInt(assetPrice))
+      potentialStakingApy = BigInt(rewardRate)
+        * BigInt(sommPrice)
+        / withUserDeposit
+        * BigInt(365 * 24 * 60 * 60 * 100)
 
-      potentialStakingApy = rewardRate
-        .multipliedBy(sommPrice)
-        .dividedBy(withUserDeposit)
-        .multipliedBy(365 * 24 * 60 * 60)
-        .multipliedBy(100)
     }
+
+
+    console.log({
+      formatted: potentialStakingApy.toString() + "%",
+      value: Number(potentialStakingApy).toFixed(1),
+    })
     return {
-      formatted: potentialStakingApy.toFixed(2).toString() + "%",
-      value: Number(potentialStakingApy.toFixed(1)),
+      formatted: potentialStakingApy.toString() + "%",
+      value: Number(potentialStakingApy).toFixed(1),
     }
   } catch (error) {
     console.warn(error)

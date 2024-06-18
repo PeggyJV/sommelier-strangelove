@@ -18,7 +18,6 @@ import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
 import BigNumber from "bignumber.js"
-import { Contract } from "ethers"
 import { getMerkleRewardsApy } from "data/actions/common/getMerkleRewardsApy"
 import { config as utilConfig } from "utils/config"
 
@@ -135,8 +134,7 @@ export const getStrategyData = async ({
         const apyRes = await getRewardsApy({
           sommPrice,
           assetPrice,
-          stakerContract: stakerContract as CellarStakingV0815,
-          cellarContract: cellarContract as Contract,
+          stakerContract: stakerContract,
           cellarConfig: config,
         })
         return apyRes
