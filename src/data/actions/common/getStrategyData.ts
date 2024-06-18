@@ -222,10 +222,10 @@ export const getStrategyData = async ({
               dayDatas![i + 1].shareValue
             )
 
-            let yieldGain = (nowValue - startValue) / startValue
+            let yieldGain = Number(nowValue - startValue) / Number(startValue)
 
             // Take the gains since inception and annualize it to get APY since inception
-            let dailyApy = Number(yieldGain * BigInt(365 * 100))
+            let dailyApy = yieldGain * 365 * 100
 
             movingAvg7D += dailyApy
           }
