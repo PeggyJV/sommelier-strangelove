@@ -5,7 +5,7 @@ import { formatUnits } from "viem"
 
 export const getUserStakes = async (
   address: string,
-  stakerContract,
+  stakerContract: any,
   sommelierPrice: string,
   strategyConfig: ConfigProps
 ) => {

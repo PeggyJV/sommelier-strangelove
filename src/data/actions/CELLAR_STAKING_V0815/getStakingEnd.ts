@@ -1,8 +1,7 @@
 import { zonedTimeToUtc } from "date-fns-tz"
-import { CellarStakingV0815 } from "src/abi/types"
 
 export const getStakingEnd = async (
-  stakerContract: CellarStakingV0815
+  stakerContract: any
 ) => {
   try {
     const ended = await stakerContract.read.ended()

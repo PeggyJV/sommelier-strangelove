@@ -1,7 +1,7 @@
-import { ethers } from "ethers"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { ConfigProps } from "data/types"
 import { tokenConfigMap } from "data/tokenConfig"
+import { formatUnits } from "viem"
 
 const ARB_TOKENS_IN_PERIOD = 30000
 const PERIOD_DAYS = 7
@@ -14,7 +14,7 @@ export const getMerkleRewardsApy = async (
   const totalValueStaked = await fetchTotalValueStaked(stakingContract);
 
   const totalValueStakedInUsd =
-    parseFloat(ethers.utils.formatUnits(totalValueStaked, cellarConfig.cellar.decimals)) * Number(baseAssetPrice)
+    parseFloat(formatUnits(totalValueStaked, cellarConfig.cellar.decimals)) * Number(baseAssetPrice)
 
   return ((ARB_TOKENS_IN_PERIOD * Number(arbPrice)) /
       totalValueStakedInUsd) *
@@ -29,6 +29,6 @@ const fetchTotalValueStaked = async (
     return totalDeposits
   } catch (error) {
     console.error("Failed to fetch total value staked:", error)
-    return ethers.BigNumber.from(0)
+    return BigInt(0)
   }
 }
