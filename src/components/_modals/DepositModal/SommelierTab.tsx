@@ -240,7 +240,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const erc20Contract =
     selectedToken?.address &&
     getContract({
-      address: selectedToken?.address,
+      address: getAddress(selectedToken?.address),
       abi: erc20Abi,
       client: {
         wallet: walletClient,

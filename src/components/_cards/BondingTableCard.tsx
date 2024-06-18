@@ -1,21 +1,21 @@
-import { useState, VFC } from "react"
+import { useState } from "react"
 import {
+  Flex,
+  Heading,
+  HStack,
+  Icon,
+  Image,
+  Link,
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   TableContainer,
   TableProps,
-  Flex,
-  Tooltip,
-  HStack,
+  Tbody,
+  Td,
   Text,
-  Heading,
-  Image,
-  Icon,
-  Link,
+  Th,
+  Thead,
+  Tooltip,
+  Tr
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { toEther } from "utils/formatCurrency"
@@ -27,7 +27,7 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { bondingPeriodOptions } from "data/uiConfig"
-import { formatDistanceToNowStrict, isFuture } from "date-fns"
+import { differenceInDays, differenceInHours, differenceInMinutes, formatDistanceToNowStrict, isFuture } from "date-fns"
 import { formatDistance } from "utils/formatDistance"
 import { LighterSkeleton } from "components/_skeleton"
 import { useGeo } from "context/geoContext"
@@ -35,26 +35,19 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { tokenConfig } from "data/tokenConfig"
-import {
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-  format,
-} from "date-fns"
+import { useAccount } from "wagmi"
 
 // TODO: This file has incurred substantial tech debt, it just needs to be rewritten from scratch at this point
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
-    const modifiedNumber = number.toString().padStart(2, "0")
-
-    return modifiedNumber
+    return number.toString().padStart(2, "0")
   }
 
   return number.toString()
 }
 
-const BondingTableCard: VFC<TableProps> = (props) => {
+const BondingTableCard = (props: TableProps) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { data: strategyData } = useStrategyData(
@@ -69,6 +62,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
+  const { address } = useAccount()
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const [unbondLoading, setUnbondLoading] = useState<Set<number>>(
     new Set()
@@ -137,7 +131,9 @@ const BondingTableCard: VFC<TableProps> = (props) => {
         return newState
       })
       // analytics.track("unbond.started")
+      // @ts-ignore
       const tx = await stakerSigner?.write.unbond([id], {
+        account: address
         // gas used around 63000
         //gasLimit: 100000,
       })
@@ -402,7 +398,7 @@ const BondingTableCard: VFC<TableProps> = (props) => {
           <Tbody fontWeight="bold">
             {userStakes?.length &&
               userStakes.map((data, i) => {
-                const { amount, lock, rewards, unbondTimestamp } =
+                const { amount, lock, unbondTimestamp } =
                   data
                 const lockMap = bondingPeriodOptions(cellarConfig)
                 if (amount?.toString() === "0") return null

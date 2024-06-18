@@ -1,5 +1,5 @@
 import { Chain } from "src/data/chainConfig"
-import { createPublicClient, getContract, PublicClient } from "viem"
+import { createPublicClient, getAddress, getContract, PublicClient } from "viem"
 import { http } from "wagmi"
 
 export const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
@@ -56,8 +56,8 @@ export async function queryContract(
 
   const contract = getContract({
     abi,
-    address: contractAddress as `0x${string}`,
+    address: getAddress(contractAddress),
     client: publicClient
   })
-  return contract // Now you can run any queries on this contract instance
+  return contract
 }

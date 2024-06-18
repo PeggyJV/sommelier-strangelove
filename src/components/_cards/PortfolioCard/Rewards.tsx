@@ -99,6 +99,7 @@ export const Rewards = ({
     }
     // analytics.track("rewards.claim-started")
 
+    // @ts-ignore
     const tx = await stakerSigner?.write.claimAll()
     await doHandleTransaction({
       cellarConfig,

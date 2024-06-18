@@ -3,7 +3,6 @@ import {
   ToastId,
   useToast,
   ToastOptions,
-  Status,
   BoxProps,
   StackProps,
   HeadingProps,
@@ -18,7 +17,7 @@ interface BaseToast extends Partial<Omit<ToastOptions, "status">> {
   closeHandler?: () => void
   isLoading?: boolean
   heading?: string
-  status?: Status | "primary"
+  status?: string | "primary"
 }
 
 export const useBrandedToast = () => {

@@ -1,5 +1,5 @@
 import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { Address, erc20Abi, getContract, parseUnits } from "viem"
+import { Address, erc20Abi, getAddress, getContract, parseUnits } from "viem"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
@@ -19,8 +19,8 @@ export const useApproveERC20 = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
-  const erc20Contract = getContract({
-    address: tokenAddress,
+  const erc20Contract = publicClient && getContract({
+    address: getAddress(tokenAddress),
     abi: erc20Abi,
     client: {
       wallet: walletClient,

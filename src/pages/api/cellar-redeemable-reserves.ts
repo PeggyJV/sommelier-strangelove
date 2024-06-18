@@ -31,6 +31,7 @@ const cellarRedeemableAssets = async (
     let totalAssets: string = "";
 
     if (cellar) {
+      // @ts-ignore
       totalAssets = await cellar.read.totalAssetsWithdrawable()
     } else {
       throw new Error("failed to load contract")

@@ -7,10 +7,10 @@ import {
   Text,
   Spinner,
 } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import Image from "next/image"
-import { useAccount, useBalance } from "wagmi"
+import { useAccount, useBalance, useBlockNumber } from "wagmi"
 import { getAddress } from "viem"
 import {
   useBalances as useGrazBalances,
@@ -23,6 +23,7 @@ import { BridgeFormValues } from "."
 import { InformationIcon } from "components/_icons"
 import { chainConfig } from "data/chainConfig"
 import { tokenConfig } from "data/tokenConfig"
+import { useQueryClient } from "@tanstack/react-query/build/modern"
 
 export const InputAmount: React.FC = () => {
   const { register, setValue, formState, getFieldState, watch } =
@@ -46,11 +47,17 @@ export const InputAmount: React.FC = () => {
   //  (t) => t.coinGeckoId === "sommelier" && t.chain === chainObj.id
   //)!
 
-  const { data, error, isLoading } = useBalance({
+  const queryClient = useQueryClient()
+  const { data: blockNumber } = useBlockNumber({ watch: true })
+
+  const { data, error, isLoading, queryKey } = useBalance({
     address: address,
-    token: getAddress(sommToken.address),
-    watch: false,
+    token: getAddress(sommToken.address)
   })
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey })
+  }, [blockNumber, queryClient])
 
   const { isConnecting: isGrazConnecting } = useGrazAccount()
   const {
