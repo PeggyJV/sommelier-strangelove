@@ -10,10 +10,9 @@ import {
   Avatar,
   Tooltip,
   UseDisclosureProps,
-  useTheme,
 } from "@chakra-ui/react"
 
-import { useEffect, useMemo, useState, VFC } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
@@ -36,12 +35,6 @@ import {
   GreenCheckCircleIcon,
 } from "components/_icons"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
-
-interface FormValues {
-  depositAmount: number
-  slippage: number
-  selectedToken: TokenType
-}
 import { CardHeading } from "components/_typography/CardHeading"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
@@ -50,7 +43,6 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { useDepositAndSwap } from "data/hooks/useDepositAndSwap"
 import { waitTime } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
@@ -68,6 +60,12 @@ import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { useQueryClient } from "@tanstack/react-query"
 import { MaxUint256 } from "utils/bigIntHelpers"
+
+interface FormValues {
+  depositAmount: number
+  slippage: number
+  selectedToken: TokenType
+}
 
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -99,10 +97,10 @@ function scientificToDecimalString(num: number) {
 }
 
 //! This handles all deposits, not just the tab
-export const SommelierTab: VFC<DepositModalProps> = ({
+export const SommelierTab = ({
   notifyModal,
   ...props
-}) => {
+}: DepositModalProps) => {
   const { id: _id } = useDepositModalStore()
   const id = (useRouter().query.id as string) || _id
   const cellarData = cellarDataMap[id]
@@ -110,9 +108,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
   const [slippageValue, setSlippageValue] = useState("3")
-  const theme = useTheme()
-
-  let acceptedDepositTokenMap = {}
 
   // TODO: Clean and enable below for enso
   /*
@@ -145,7 +140,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     ""
 
   const importToken = useImportToken({
-    onSuccess: (data: { symbol: string }) => {
+    onSuccess: (data) => {
       addToast({
         heading: "Import Token",
         status: "success",
@@ -182,7 +177,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
-  const [showSwapSettings, setShowSwapSettings] = useState(false)
   const methods = useForm<FormValues>({
     defaultValues: { slippage: config.SWAP.SLIPPAGE },
   })
@@ -238,7 +232,7 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   }, [blockNumber, queryClient])
 
   const erc20Contract =
-    selectedToken?.address &&
+    selectedToken?.address && publicClient &&
     getContract({
       address: getAddress(selectedToken?.address),
       abi: erc20Abi,
@@ -291,15 +285,14 @@ export const SommelierTab: VFC<DepositModalProps> = ({
   }, [ensoResponse])
 
 
-  const ensoRouterContract = getContract({
-      address: contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS as `0x${string}`,
+  const ensoRouterContract = publicClient && getContract({
+      address: getAddress(contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS),
       abi: contractConfig.CONTRACT.ENSO_ROUTER.ABI,
       client: {
-        wallet: walletClient
+        wallet: walletClient,
+        public: publicClient
       }
     })
-
-  const depositAndSwap = useDepositAndSwap(cellarConfig)
 
   const isActiveAsset =
     selectedToken?.address?.toLowerCase() ===
@@ -307,12 +300,12 @@ export const SommelierTab: VFC<DepositModalProps> = ({
 
   const geo = useGeo()
 
-  const queryDepositFeePercent = async (assetAddress: String) => {
+  const queryDepositFeePercent = async (assetAddress: string) => {
     if (assetAddress === cellarConfig.baseAsset.address) {
       return 0
     }
 
-    const response = await cellarSigner?.read.alternativeAssetData([
+    const response: [isSupported: boolean, holdingPosition: number, depositFee: number] = await cellarSigner?.read.alternativeAssetData([
       assetAddress
       ]
     )
@@ -365,11 +358,13 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
     ) {
+      // @ts-ignore
       return cellarSigner?.write.multiAssetDeposit([
         assetAddress,
         amtInWei,
         address
-        ]
+        ],
+        {account: address}
       )
     } else {
       if (
@@ -384,13 +379,13 @@ export const SommelierTab: VFC<DepositModalProps> = ({
           1000000,
           address
         )
-
+        // @ts-ignore
         return cellarSigner?.write.deposit(
           [amtInWei, address],
           { gas: gasLimitEstimated, account: address }
         )
       }
-
+      // @ts-ignore
       return cellarSigner?.write.deposit(
         [amtInWei, address],
         { account: address }
@@ -421,18 +416,17 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     // })
 
     // check if approval exists
+    // @ts-ignore
     const allowance = await erc20Contract.read.allowance([
-      address,
-      isActiveAsset ||
-        cellarData.depositTokens.list.includes(tokenSymbol)
-        ? cellarConfig.cellar.address
-        : ensoRouterContract.address
-      ]
+      getAddress(address),
+      cellarConfig.cellar.address
+      ],
+      { account: address }
     )
 
     const amtInWei = parseUnits(
       depositAmount.toString(),
-      selectedTokenBalance?.decimals
+      selectedTokenBalance?.decimals ?? 0
     )
 
     let needsApproval
@@ -453,14 +447,9 @@ export const SommelierTab: VFC<DepositModalProps> = ({
       })*/
 
       try {
+        // @ts-ignore
         const hash = await erc20Contract.write.approve([
-            isActiveAsset ||
-            cellarData.depositTokens.list.includes(tokenSymbol)
-            ? cellarConfig.cellar.address
-            : ensoRouterContract.address,
-          MaxUint256
-              ? cellarConfig.cellar.address
-              : ensoRouterContract.address,
+            cellarConfig.cellar.address,
             MaxUint256
           ],
           { account: address }
@@ -785,11 +774,6 @@ export const SommelierTab: VFC<DepositModalProps> = ({
     fetchBaseAssetPrice()
   }, [cellarConfig])
 
-  // Close swap settings card if user changed current asset to active asset.
-  useEffect(() => {
-    if (selectedToken?.address === currentAsset?.address)
-      setShowSwapSettings(false)
-  }, [currentAsset?.address, selectedToken?.address])
 
   const strategyMessages: Record<string, () => JSX.Element> = {
     "Real Yield ETH": () => (
