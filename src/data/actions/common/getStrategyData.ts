@@ -7,7 +7,6 @@ import {
 } from "data/uiConfig"
 import { add, isBefore, isFuture, subDays } from "date-fns"
 import { GetStrategyDataQuery } from "data/actions/types"
-import { CellarStakingV0815 } from "src/abi/types"
 import { isComingSoon } from "utils/isComingSoon"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
@@ -17,7 +16,6 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
-import BigNumber from "bignumber.js"
 import { getMerkleRewardsApy } from "data/actions/common/getMerkleRewardsApy"
 import { config as utilConfig } from "utils/config"
 
@@ -92,7 +90,7 @@ export const getStrategyData = async ({
       })()
       const depositTokens = strategy.depositTokens.list;
       const stakingEnd = await getStakingEnd(
-        stakerContract as CellarStakingV0815
+        stakerContract
       )
       const isStakingOngoing =
         stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
@@ -219,15 +217,15 @@ export const getStrategyData = async ({
 
           for (let i = 0; i < 7; i++) {
             // Get annualized apy for each shareValue
-            let nowValue = new BigNumber(dayDatas![i].shareValue)
-            let startValue = new BigNumber(
+            let nowValue = BigInt(dayDatas![i].shareValue)
+            let startValue = BigInt(
               dayDatas![i + 1].shareValue
             )
 
-            let yieldGain = nowValue.minus(startValue).div(startValue)
+            let yieldGain = (nowValue - startValue) / startValue
 
             // Take the gains since inception and annualize it to get APY since inception
-            let dailyApy = yieldGain.times(365).times(100).toNumber()
+            let dailyApy = Number(yieldGain * BigInt(365 * 100))
 
             movingAvg7D += dailyApy
           }
@@ -235,7 +233,7 @@ export const getStrategyData = async ({
 
           return {
             formatted: movingAvg7D.toFixed(2) + "%",
-            value: Number(movingAvg7D.toFixed(2)),
+            value: Number(movingAvg7D).toFixed(2),
           }
         }
 

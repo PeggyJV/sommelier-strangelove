@@ -1,4 +1,3 @@
-import { Provider } from "@wagmi/core"
 import { getContract } from "viem"
 import { getAllStrategiesData } from "./common/getAllStrategiesData"
 import { getStrategyData } from "./common/getStrategyData"
@@ -63,7 +62,7 @@ export interface DepositAndSwapPayload {
 }
 
 export interface DepositAndSwapParams {
-  provider: Provider
+  provider: any
   senderAddress: string
   payload: DepositAndSwapPayload
 }
