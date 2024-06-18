@@ -6,7 +6,7 @@ import { ethers } from "ethers"
 import { ExternalProvider } from "@ethersproject/providers"
 import merkleABI from "../../../../abi/merkle.json"
 import { useBrandedToast } from "hooks/chakra"
-import { Text, Box, Flex, HStack, VStack } from "@chakra-ui/react"
+import { Text, VStack } from "@chakra-ui/react"
 
 const MERKLE_CONTRACT_ADDRESS =
   "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
@@ -105,7 +105,6 @@ export const MerklePoints = ({
           userAddress
         )
         if (hasClaimed) {
-          console.log("Claim has already been made")
           addToast({
             heading: "Claim Info",
             status: "info",
@@ -115,8 +114,6 @@ export const MerklePoints = ({
           })
           return
         }
-
-        console.log("Merkle Data:", merkleData)
 
         const rootHashes = merkleData.rootHashes.map(
           (hash: string) => {
@@ -150,7 +147,6 @@ export const MerklePoints = ({
         )
 
         await tx.wait()
-        console.log("Claim successful")
         addToast({
           heading: "Success",
           status: "success",
@@ -164,10 +160,6 @@ export const MerklePoints = ({
             (error as any).code ===
             ethers.errors.UNPREDICTABLE_GAS_LIMIT
           ) {
-            console.error(
-              "Claim failed: It has already been claimed or another error occurred",
-              error
-            )
             addToast({
               heading: "Claim Failed",
               status: "error",
@@ -181,7 +173,6 @@ export const MerklePoints = ({
               duration: null,
             })
           } else {
-            console.error("Claim failed:", error)
             addToast({
               heading: "Claim Failed",
               status: "error",
@@ -193,7 +184,6 @@ export const MerklePoints = ({
             })
           }
         } else {
-          console.error("An unknown error occurred:", error)
           addToast({
             heading: "Unknown Error",
             status: "error",
@@ -208,7 +198,6 @@ export const MerklePoints = ({
         }
       }
     } else {
-      console.error("Web3 provider not found or no merkle data")
       addToast({
         heading: "Error",
         status: "error",
@@ -218,6 +207,7 @@ export const MerklePoints = ({
       })
     }
   }
+
   return (
     <VStack spacing={4} alignItems="flex-start">
       <CardStat
