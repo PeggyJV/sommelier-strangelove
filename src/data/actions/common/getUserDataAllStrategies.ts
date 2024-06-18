@@ -37,7 +37,7 @@ export const getUserDataAllStrategies = async ({
         const result = await reactQueryClient.fetchQuery({
           queryKey: [
             "USE_USER_DATA",
-            { signer: true, contractAddress: address, userAddress },
+            { contractAddress: address, userAddress },
           ],
           queryFn: async () => {
             const strategy = Object.values(cellarDataMap).find(
