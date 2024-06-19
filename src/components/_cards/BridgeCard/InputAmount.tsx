@@ -23,7 +23,7 @@ import { BridgeFormValues } from "."
 import { InformationIcon } from "components/_icons"
 import { chainConfig } from "data/chainConfig"
 import { tokenConfig } from "data/tokenConfig"
-import { useQueryClient } from "@tanstack/react-query/build/modern"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const InputAmount: React.FC = () => {
   const { register, setValue, formState, getFieldState, watch } =

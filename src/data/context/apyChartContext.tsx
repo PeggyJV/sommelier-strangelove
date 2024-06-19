@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  ReactNode
 } from "react"
 import { LineProps, Serie } from "@nivo/line"
 import { format, subDays } from "date-fns"
@@ -167,6 +168,7 @@ const prevMonth = getPreviousMonth()
 export const ApyChartProvider: FC<{
   address: string
   chain: string
+  children: ReactNode
 }> = ({ children, address, chain }) => {
   let chainStr = ""
   if (chain !== "ethereum") {

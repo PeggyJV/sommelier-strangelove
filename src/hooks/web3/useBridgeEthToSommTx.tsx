@@ -189,7 +189,7 @@ export const useBridgeEthToSommTx = () => {
         })
         const resultApproval = await waitForApproval
 
-        if (Number(resultApproval.data?.status) != 1) {
+        if (resultApproval.data?.status !== "success") {
           // analytics.track("bridge.approval-failed", {
           //   value: props.amount,
           // })
@@ -209,7 +209,7 @@ export const useBridgeEthToSommTx = () => {
         }
         if (
           resultApproval?.data?.transactionHash &&
-          resultApproval.data?.status == 1
+          resultApproval.data?.status === "success"
         ) {
           // analytics.track("bridge.approval-succeeded", {
           //   value: props.amount,
@@ -282,7 +282,7 @@ export const useBridgeEthToSommTx = () => {
       }
       if (
         resultBridge?.data?.transactionHash &&
-        resultBridge.data?.status == 1
+        resultBridge.data?.status === "success"
       ) {
         analytics.track("bridge.contract-succeeded", {
           value: props.amount,

@@ -41,12 +41,12 @@ import {
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
-import { useEffect, useState, VFC } from "react"
+import { useEffect, useState } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
-import { useAccount, useWalletClient } from "wagmi"
-import { getContract } from 'viem'
+import { useAccount, usePublicClient, useWalletClient } from "wagmi"
+import { getAddress, getContract } from "viem"
 import BondingTableCard from "../BondingTableCard"
 import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
@@ -57,7 +57,7 @@ import { CellarNameKey } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 
-export const PortfolioCard: VFC<BoxProps> = (props) => {
+export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
   const { address, isConnected: connected, chain: wagmiChain } = useAccount()
@@ -130,11 +130,15 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
   // Query withdraw queue status, disable queue button if there is active withdraw pending to prevent confusion
   const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient();
 
-  const withdrawQueueContract = getContract({
-    address: cellarConfig.chain.withdrawQueueAddress,
+  const withdrawQueueContract = publicClient && getContract({
+    address: getAddress(cellarConfig.chain.withdrawQueueAddress),
     abi: withdrawQueueV0821,
-    client:  walletClient
+    client: {
+      wallet: walletClient,
+      public: publicClient
+    }
   })
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
@@ -144,6 +148,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   const checkWithdrawRequest = async () => {
     try {
       if (walletClient && withdrawQueueContract && address && cellarConfig) {
+        // @ts-ignore
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
@@ -151,12 +156,13 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           ])
 
         // Check if it's valid
+        // @ts-ignore
         const isWithdrawRequestValid =
           await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
             withdrawRequest
-          ])
+          ]) as unknown as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
       } else {
         setIsActiveWithdrawRequest(false)

@@ -1,4 +1,4 @@
-import { createContext, FC, useContext, useState } from 'react'
+import { createContext, FC, ReactNode, useContext, useState } from "react"
 
 export interface DialogContext {
   title?: string
@@ -17,7 +17,7 @@ const defaultContext: DialogContext = {
 
 export const dialogContext = createContext<DialogContext>(defaultContext)
 
-export const DialogProvider: FC = ({ children }) => {
+export const DialogProvider: FC<{ children: ReactNode; }> = ({ children }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [title, setTitle] = useState<string>()
   const [body, setBody] = useState<string>()

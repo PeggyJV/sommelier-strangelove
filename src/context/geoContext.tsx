@@ -24,7 +24,7 @@ interface CheckIPContext extends CheckIPState {
 
 const geoContext = createContext<CheckIPContext | null>(null)
 
-export const GeoProvider: FC<ReactNode> = ({ children }) => {
+export const GeoProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [ctx, setCtx] = useState<CheckIPState>({
     country: null,
     region: null,

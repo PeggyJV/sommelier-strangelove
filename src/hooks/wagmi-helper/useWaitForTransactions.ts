@@ -70,7 +70,9 @@ export const useWaitForTransaction = ({
 
         let promise: Promise<TransactionReceipt>
         if (config_.wait)
-          promise = config_.wait(config_.confirmations)
+          { // @ts-ignore
+            promise = config_.wait(config_.confirmations)
+          }
         else if (config_.hash)
           promise = publicClient!.waitForTransactionReceipt({
               confirmations: config_.confirmations,

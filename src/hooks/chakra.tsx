@@ -2,17 +2,17 @@ import { BaseToast } from "components/_toasts/BaseToast"
 import {
   ToastId,
   useToast,
-  ToastOptions,
   BoxProps,
   StackProps,
   HeadingProps,
   IconProps,
+  UseToastOptions
 } from "@chakra-ui/react"
 import { ReactNode, useRef } from "react"
 import { InformationIcon, WarningIcon } from "components/_icons"
 import { SuccessIcon } from "components/_icons/SuccessIcon"
 
-interface BaseToast extends Partial<Omit<ToastOptions, "status">> {
+interface BaseToast extends Partial<Omit<UseToastOptions, "status">> {
   body: ReactNode
   closeHandler?: () => void
   isLoading?: boolean

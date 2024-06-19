@@ -125,9 +125,8 @@ export const BondForm = ({ onClose }: BondFormProps) => {
         },
       })
 
-      const amtInBigInt = BigInt(data.depositAmount)
       const depositAmtInWei = parseUnits(
-        amtInBigInt,
+        data.depositAmount.toString(),
         cellarConfig.cellar.decimals
       )
       const gasLimitEstimated = await estimateGasLimitWithRetry(
@@ -137,7 +136,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
         250000,
         address
       )
-
+      // @ts-ignore
       const { hash: bondConf } = await stakerSigner.write.stake([
         depositAmtInWei,
         bondPeriod
