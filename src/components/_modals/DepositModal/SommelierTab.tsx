@@ -59,7 +59,6 @@ import {
 import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { useQueryClient } from "@tanstack/react-query"
-import { MaxUint256 } from "utils/bigIntHelpers"
 
 interface FormValues {
   depositAmount: number
@@ -141,10 +140,11 @@ export const SommelierTab = ({
 
   const importToken = useImportToken({
     onSuccess: (data) => {
+      const tokenData = data as unknown as { symbol: string};
       addToast({
         heading: "Import Token",
         status: "success",
-        body: <Text>{data.symbol} added to metamask</Text>,
+        body: <Text>{tokenData.symbol} added to metamask</Text>,
         closeHandler: close,
       })
     },
@@ -305,14 +305,12 @@ export const SommelierTab = ({
       return 0
     }
 
-    const response: [isSupported: boolean, holdingPosition: number, depositFee: number] = await cellarSigner?.read.alternativeAssetData([
+    const [isSupported, holdingPosition, depositFee] = await cellarSigner?.read.alternativeAssetData([
       assetAddress
       ]
-    )
-    const isSupported = response[0];
-    const depositFee = response[2]
+    ) as [boolean, number, number]
 
-    if (isSupported === false) {
+    if (!isSupported) {
       throw new Error("Asset is not supported")
     }
 
@@ -364,7 +362,7 @@ export const SommelierTab = ({
         amtInWei,
         address
         ],
-        {account: address}
+        { account: address }
       )
     } else {
       if (
@@ -418,8 +416,8 @@ export const SommelierTab = ({
     // check if approval exists
     // @ts-ignore
     const allowance = await erc20Contract.read.allowance([
-      getAddress(address),
-      cellarConfig.cellar.address
+      getAddress(address ?? ''),
+      getAddress(cellarConfig.cellar.address)
       ],
       { account: address }
     )
@@ -450,7 +448,7 @@ export const SommelierTab = ({
         // @ts-ignore
         const hash = await erc20Contract.write.approve([
             cellarConfig.cellar.address,
-            MaxUint256
+            amtInWei
           ],
           { account: address }
         )
@@ -515,7 +513,7 @@ export const SommelierTab = ({
       // directly rather than through the router. Should only use router when swapping into the
       // cellar's current asset.
 
-      const response =
+      const hash =
         isActiveAsset ||
         cellarData.depositTokens.list.includes(tokenSymbol)
           ? await deposit(
@@ -525,11 +523,11 @@ export const SommelierTab = ({
             )
           : await walletClient!.sendTransaction({
               account: address,
-              to: ensoRouterContract.address,
+              to: ensoRouterContract?.address,
               value: ensoResponse.tx.data,
             })
 
-      if (!response) throw new Error("response is undefined")
+      if (!hash) throw new Error("response is undefined")
       addToast({
         heading: cellarName + " Cellar Deposit",
         status: "default",
@@ -540,7 +538,7 @@ export const SommelierTab = ({
       })
       const waitForDeposit = wait({
         confirmations: 1,
-        hash: response.hash,
+        hash: hash,
       })
 
       const depositResult = await waitForDeposit

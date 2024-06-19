@@ -45,8 +45,6 @@ export const useWaitForTransaction = ({
   const publicClient = usePublicClient()
   const [state, setState] = React.useState<State>(initialState)
 
-  // const wagmiConfig = useContext(WagmiContext);
-
   const cancelQuery = useCancel()
   const wait = React.useCallback(
     async (config?: {
