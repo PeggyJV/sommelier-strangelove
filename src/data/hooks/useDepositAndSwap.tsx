@@ -5,14 +5,12 @@ import { DepositAndSwapPayload } from "data/actions/types"
 import { CellarRouterKey, ConfigProps } from "data/types"
 import { useAccount, usePublicClient } from "wagmi"
 import { useCreateContracts } from "./useCreateContracts"
-import { CellarRouterV0815, CellarRouterV0816 } from "src/abi/types"
 
 export const useDepositAndSwap = (config: ConfigProps) => {
   const { cellarRouterSigner } = useCreateContracts(config)
   const { address } = useAccount()
   const publicClient = usePublicClient()
-  const signer01 = cellarRouterSigner as CellarRouterV0815
-  const signer02 = cellarRouterSigner as CellarRouterV0816
+  const signer = cellarRouterSigner
 
   const query = useMutation({
     mutationFn: async (props: DepositAndSwapPayload) => {
@@ -24,8 +22,8 @@ export const useDepositAndSwap = (config: ConfigProps) => {
       ) {
         return await depositAndSwap_V0815({
           senderAddress: address,
-          cellarRouterSigner: signer01,
-          provider,
+          cellarRouterSigner: signer,
+          provider: publicClient,
           payload: props,
         })
       }
@@ -35,8 +33,8 @@ export const useDepositAndSwap = (config: ConfigProps) => {
       ) {
         return await depositAndSwap_V0816({
           senderAddress: address,
-          cellarRouterSigner: signer02,
-          provider,
+          cellarRouterSigner: signer,
+          provider: publicClient,
           payload: props,
         })
       }

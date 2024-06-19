@@ -9,8 +9,7 @@ export const useUserBalance = (config: ConfigProps) => {
     address: address,
     token: getAddress(config.lpToken.address),
     chainId: config.chain.wagmiId,
-    unit: "wei",
-    watch: false,
+    unit: "wei"
   })
   return {
     lpToken

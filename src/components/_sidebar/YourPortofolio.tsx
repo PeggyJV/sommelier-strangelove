@@ -197,7 +197,7 @@ export const YourPortofolio = () => {
                   color="neutral.400"
                 >
                   {`${
-                    data?.totalSommRewards.value === 0
+                    data?.totalSommRewards.value === BigInt(0)
                       ? "0.00"
                       : data?.totalSommRewards.formatted
                   } SOMM`}

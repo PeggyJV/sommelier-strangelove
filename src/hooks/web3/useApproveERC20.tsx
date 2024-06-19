@@ -3,7 +3,6 @@ import { Address, erc20Abi, getAddress, getContract, parseUnits } from "viem"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
-import { MaxUint256 } from "utils/bigIntHelpers"
 
 export const useApproveERC20 = ({
   tokenAddress,
@@ -39,14 +38,13 @@ export const useApproveERC20 = ({
       onError?: (error: Error) => void
     }
   ) => {
-    const allowance = await erc20Contract.read.allowance([
+    const allowance = await erc20Contract?.read.allowance([
       address as Address,
       spender as Address
       ]
-    )
-    const amtInBigInt = BigInt(amount)
+    ) ?? BigInt(0)
     const amtInWei = parseUnits(
-      amtInBigInt.toFixed(),
+      amount.toString(),
       18
     )
 
@@ -58,9 +56,10 @@ export const useApproveERC20 = ({
     }
     if (needsApproval) {
       try {
-        const { hash } = await erc20Contract.write.approve([
-          spender as Address,
-          MaxUint256
+        // @ts-ignore
+        const hash = await erc20Contract?.write.approve([
+          spender,
+          amtInWei
           ],
           { account: address}
         )

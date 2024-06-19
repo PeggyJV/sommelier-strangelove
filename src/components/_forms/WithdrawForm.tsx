@@ -157,7 +157,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
         address
       )
 
-
+      // @ts-ignore
       const tx = await cellarSigner?.write.redeem([
           amtInWei,
           address,

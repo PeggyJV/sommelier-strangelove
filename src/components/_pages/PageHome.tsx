@@ -275,7 +275,7 @@ export const PageHome = () => {
       //    Staking period check for somm/vesting rewards
       const hasLiveStakingPeriod =
         item?.rewardsApy?.value !== undefined &&
-        item?.rewardsApy?.value > 0
+        Number(item?.rewardsApy?.value) > 0
 
       const incentivisedCondition = showIncentivised
         ? hasGreenBadge || hasLiveStakingPeriod

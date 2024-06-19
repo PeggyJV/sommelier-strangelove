@@ -30,7 +30,7 @@ export const useBridgeEthToSommTx = () => {
   })
   const { address } = useAccount()
 
-  const erc20Contract = getContract({
+  const erc20Contract = publicClient && getContract({
     address: tokenConfigMap.SOMM_ETHEREUM.address as `0x${string}`,
     abi: erc20Abi,
     client: {
@@ -39,11 +39,12 @@ export const useBridgeEthToSommTx = () => {
     }
   })!
 
-  const bridgeContract = getContract({
+  const bridgeContract = publicClient && getContract({
     address: CONTRACT.BRIDGE.ADDRESS as `0x${string}`,
     abi: CONTRACT.BRIDGE.ABI,
     client: {
-      wallet: walletClient
+      wallet: walletClient,
+      public: publicClient
     }
   })!
 
@@ -156,6 +157,7 @@ export const useBridgeEthToSommTx = () => {
       // })
 
       // Check if approval needed
+      // @ts-ignore
       const allowance = await erc20Contract.read.allowance([
         address!,
         getAddress(CONTRACT.BRIDGE.ADDRESS)
@@ -175,6 +177,7 @@ export const useBridgeEthToSommTx = () => {
         })
 
         // ERC20 Approval
+        // @ts-ignore
         const { hash: erc20Hash } = await erc20Contract.write.approve([
           getAddress(CONTRACT.BRIDGE.ADDRESS),
           MaxUint256
@@ -206,7 +209,7 @@ export const useBridgeEthToSommTx = () => {
         }
         if (
           resultApproval?.data?.transactionHash &&
-          resultApproval.data?.status === 1
+          resultApproval.data?.status == 1
         ) {
           // analytics.track("bridge.approval-succeeded", {
           //   value: props.amount,
@@ -242,6 +245,7 @@ export const useBridgeEthToSommTx = () => {
         closeHandler: closeAll,
       })
       const bytes32 = getBytes32(props.address)
+      // @ts-ignore
       const { hash: bridgeHash } = await bridgeContract.write.sendToCosmos([
         tokenConfigMap.SOMM_ETHEREUM.address,
         bytes32,
@@ -278,7 +282,7 @@ export const useBridgeEthToSommTx = () => {
       }
       if (
         resultBridge?.data?.transactionHash &&
-        resultBridge.data?.status === 1
+        resultBridge.data?.status == 1
       ) {
         analytics.track("bridge.contract-succeeded", {
           value: props.amount,

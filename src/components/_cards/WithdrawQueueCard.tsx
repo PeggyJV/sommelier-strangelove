@@ -24,10 +24,11 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useGeo } from "context/geoContext"
 import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { formatUnits, getContract } from "viem"
+import { formatUnits, getAddress, getContract } from "viem"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useBrandedToast } from "hooks/chakra"
+import { WithdrawQueue } from "../../abi/types/WithdrawQueue"
 
 function formatTimeRemaining(deadline: number): string {
   const deadlineInMs = deadline * 1000
@@ -64,7 +65,7 @@ const WithdrawQueueCard = (props: TableProps) => {
   const withdrawQueueContract = (() => {
     if (!publicClient) return
     return getContract( {
-        address: cellarConfig.chain.withdrawQueueAddress as `0x${string}`,
+        address: getAddress(cellarConfig.chain.withdrawQueueAddress),
         abi: WithdrawQueue,
         client: {
           wallet: walletClient,
@@ -150,6 +151,7 @@ const WithdrawQueueCard = (props: TableProps) => {
         address
       )
 
+      // @ts-ignore
       const tx = await withdrawQueueContract?.write.updateWithdrawRequest([
         cellarConfig.cellar.address,
         withdrawTouple

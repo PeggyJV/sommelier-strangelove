@@ -70,6 +70,7 @@ export const getUserData = async ({
 
       const cellarContract = contracts.cellarContract
 
+      // @ts-ignore
       let assets = await cellarContract.read.convertToAssets([totalShares])
 
       if (typeof assets === "undefined") {

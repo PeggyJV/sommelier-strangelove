@@ -86,7 +86,7 @@ export const useBrandedToast = () => {
   return { close, closeAll, update, addToast }
 }
 
-export const useToastStyles = (status?: Status | "primary") => {
+export const useToastStyles = (status?: string | "primary") => {
   const dynamicBoxStyles: BoxProps =
     status === "info"
       ? {

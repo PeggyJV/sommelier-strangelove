@@ -39,10 +39,11 @@ export const Rewards = ({
 
   const importToken = useImportToken({
     onSuccess: (data) => {
+      const tokenData = data as unknown as { symbol: string }
       addToast({
         heading: "Import Token",
         status: "success",
-        body: <Text>{data.symbol} added to metamask</Text>,
+        body: <Text>{tokenData.symbol} added to metamask</Text>,
         closeHandler: close,
       })
     },

@@ -1,4 +1,4 @@
-import { useEffect, VFC } from "react"
+import { useEffect } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -33,7 +33,7 @@ interface UnstakeFormProps {
   onClose: () => void
 }
 
-export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
+export const UnstakeForm = ({ onClose }: UnstakeFormProps) => {
   const {
     register,
     watch,
@@ -109,6 +109,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
     // analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = parseUnits(`${withdrawAmount}`, 18)
+    // @ts-ignore
     const tx = await cellarSigner?.write.redeem(
       [amtInWei, address, address],
       { account: address }

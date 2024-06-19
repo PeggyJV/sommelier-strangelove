@@ -8,20 +8,18 @@ import {
   Icon,
   Spinner,
   StackProps,
-  Status,
   VStack,
 } from "@chakra-ui/react"
 import { useToastStyles } from "hooks/chakra"
-import { VFC } from "react"
 
 interface BaseToastProps extends StackProps {
   closeHandler: () => void
-  status?: Status | "primary"
+  status?: string | "primary"
   isLoading?: boolean
   heading?: string
 }
 
-export const BaseToast: VFC<BaseToastProps> = forwardRef<
+export const BaseToast = forwardRef<
   BaseToastProps,
   "div"
 >(({ children, heading, status, closeHandler, isLoading }, ref) => {
