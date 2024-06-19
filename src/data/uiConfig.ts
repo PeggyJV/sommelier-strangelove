@@ -326,8 +326,8 @@ export const bondingPeriodOptions = (
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB) {
     return [
       {
-        title: "14 Day Unbonding",
-        amount: "Up to 6 PEARL per swETH daily + SOMM Rewards",
+        title: "Merkle Points bonding",
+        amount: "Lock your vault tokens for Merkle Points",
         value: 0,
       },
     ]
