@@ -237,17 +237,6 @@ export const isApyChartEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
-    config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-    config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_GHO
   )
 }
