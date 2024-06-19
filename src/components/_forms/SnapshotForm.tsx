@@ -1,9 +1,7 @@
-//Users/henriots/Desktop/sommelier-strangelove/src/components/_forms/SnapshotForm.tsx
 import React, { useState, useEffect } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { useAccount as useEthereumAccount } from "wagmi"
 import { BaseButton } from "../_buttons/BaseButton"
-import ConnectButton from "components/_buttons/ConnectButton"
 import { Stack, Text, Box } from "@chakra-ui/react"
 import { signWithKeplr } from "../../utils/keplr"
 import { InputEthereumAddress } from "../_cards/SnapshotCard/InputEthereumAddress"

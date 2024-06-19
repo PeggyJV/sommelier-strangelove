@@ -10,7 +10,6 @@ import {
   Spacer,
   Stack,
   Text,
-  Tooltip,
   useTheme,
   VStack,
 } from "@chakra-ui/react"

@@ -28,7 +28,6 @@ import {
   turboeETH,
   turboSTETHstETHDeposit,
   realYieldEthArb,
-  testArbitrumMultiAssetDeposit,
   morphoETH,
   turbodivETH,
   turboETHx,

@@ -10,7 +10,6 @@ import {
 } from "./ReusableToastBodies"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { Text } from "@chakra-ui/react"
-import { config } from "utils/config"
 import { tokenConfigMap } from "data/tokenConfig"
 import { parseUnits } from "viem"
 

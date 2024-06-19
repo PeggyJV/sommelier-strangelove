@@ -42,8 +42,6 @@ import { add, isBefore } from "date-fns"
 import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
-import Link from "next/link"
-
 
 export const PageHome = () => {
   const {
