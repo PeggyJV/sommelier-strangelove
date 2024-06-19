@@ -63,7 +63,10 @@ export const Rewards = ({
     userStakes?.totalClaimAllRewards?.value.toString()
 
   const claimAllDisabled =
-    !isConnected || !userRewards || parseInt(userRewards) <= 0 || !buttonsEnabled
+    !isConnected ||
+    !userRewards ||
+    parseInt(userRewards) <= 0 ||
+    !buttonsEnabled
 
   // Get somm token
   const chainObj = chainConfig.find(

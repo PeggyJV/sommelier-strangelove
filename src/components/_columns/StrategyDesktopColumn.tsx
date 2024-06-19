@@ -301,6 +301,7 @@ export const StrategyDesktopColumn = ({
               row.original.baseApySumRewards?.formatted
             }
             extraRewardsApy={row.original.extraRewardsApy?.formatted}
+            merkleRewardsApy={row.original.merkleRewardsApy}
           />
         )
       },
