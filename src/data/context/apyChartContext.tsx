@@ -507,11 +507,8 @@ export const ApyChartProvider: FC<{
     },
   ]
 
-  // Override time array for Morpho ETH
-  if (
-    cellarConfig.slug === utilConfig.CONTRACT.MORPHO_ETH.SLUG ||
-    cellarConfig.slug === utilConfig.CONTRACT.REAL_YIELD_USD_ARB.SLUG
-  ) {
+  // Override time array 
+  if (false) {
     timeArray = [
       {
         title: "7D",
@@ -519,15 +516,11 @@ export const ApyChartProvider: FC<{
       },
     ]
   }
+  
   useEffect(() => {
-    const idIsDefault: boolean =
-      data?.series![0].id === defaultSerieId
+    const idIsDefault: boolean = data?.series![0].id === defaultSerieId
     if (allTimeData && idIsDefault && strategyData) {
-      if (
-        cellarConfig.slug === utilConfig.CONTRACT.MORPHO_ETH.SLUG ||
-        cellarConfig.slug ===
-          utilConfig.CONTRACT.REAL_YIELD_USD_ARB.SLUG
-      ) {
+      if (false) {
         setDataWeekly()
       } else {
         setDataMonthly()

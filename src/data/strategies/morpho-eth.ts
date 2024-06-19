@@ -90,7 +90,6 @@ export const morphoETH: CellarData = {
       key: StakerKey.CELLAR_STAKING_V0821,
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
-    show7DayAPYTooltip: true,
   },
   faq: [
     {
