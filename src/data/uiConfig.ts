@@ -417,11 +417,10 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
-    } else if (
-      config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
-    ) {
-      return "7 Day MA APY"
+    // } else if (
+
+    // ) {
+    //   return "7 Day MA APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
       return "Estimated Reward APY"
     }
@@ -445,11 +444,10 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
-  } else if (
-    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
-  ) {
-    return "7 Day MA APY"
+  // } else if (
+
+  // ) {
+  //   return "7 Day MA APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return "Estimated Reward APY"
   }
