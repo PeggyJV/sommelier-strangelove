@@ -171,7 +171,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     checkWithdrawRequest()
   }, [withdrawQueueContract, address, cellarConfig])
 
-  const isMerkleRewardsException = (config: ConfigProps) => {
+  const isArbCellar = (config: ConfigProps) => {
     return config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB
       ||config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
   }
@@ -387,7 +387,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       </CardStat>
                     </VStack>
                     {isMounted
-                      && (isMerkleRewardsException(cellarConfig) || isStakingAllowed)
+                      && (isArbCellar(cellarConfig) || isStakingAllowed)
                       && (
                         <BondButton
                           disabled={
@@ -430,19 +430,16 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               </CardStat>
             </VStack>
           )}
-          {/* Insert PointsDisplay here */}
           {isConnected &&
             address &&
             cellarConfig.cellarNameKey ===
               CellarNameKey.TURBO_EETHV2 && (
               <PointsDisplay userAddress={address} />
             )}
-          {isConnected &&
-            address &&
-            (cellarConfig.cellarNameKey ===
-              CellarNameKey.REAL_YIELD_ETH_ARB ||
-              cellarConfig.cellarNameKey ===
-                CellarNameKey.REAL_YIELD_USD_ARB) && (
+          {isConnected
+            && address
+            && isArbCellar(cellarConfig)
+            && (
               <MerklePoints userAddress={address} merkleRewardsApy={strategyData?.merkleRewardsApy} />
             )}
           <CardStat label="Strategy Dashboard">
