@@ -328,7 +328,7 @@ export const bondingPeriodOptions = (
       {
         title: "Merkle Points bonding",
         amount: "Lock your vault tokens for Merkle Points",
-        value: 0,
+        value: 1,
       },
     ]
   }
