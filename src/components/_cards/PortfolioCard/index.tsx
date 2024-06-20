@@ -432,14 +432,14 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               CellarNameKey.TURBO_EETHV2 && (
               <PointsDisplay userAddress={address} />
             )}
-          {isConnected &&
+          {/* {isConnected &&
             address &&
             (cellarConfig.cellarNameKey ===
               CellarNameKey.REAL_YIELD_ETH_ARB ||
               cellarConfig.cellarNameKey ===
                 CellarNameKey.REAL_YIELD_USD_ARB) && (
               <MerklePoints userAddress={address} merkleRewardsApy={strategyData?.merkleRewardsApy} />
-            )}
+            )} */}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
               <HStack
