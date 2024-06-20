@@ -221,7 +221,7 @@ export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
         */}
       {isMounted && !buttonEnabled && toSomm && (
         <ConnectButton
-          overrideChainId={"ethereum"}
+          overridechainid={"ethereum"}
           unstyled
           height="69px"
           fontSize="21px"

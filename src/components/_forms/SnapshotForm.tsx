@@ -67,7 +67,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
   //   return (
   //     <Stack spacing={4} align="center">
   //       <ConnectButton
-  //         overrideChainId={"ethereum"}
+  //         overridechainid={"ethereum"}
   //         unstyled
   //         height="69px"
   //         fontSize="21px"

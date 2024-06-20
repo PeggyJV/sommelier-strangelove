@@ -325,7 +325,7 @@ export const PortfolioCard = (props: BoxProps) => {
                   <>
                     <HStack paddingTop={"1em"}>
                       <ConnectButton
-                        overrideChainId={cellarConfig.chain.id}
+                        overridechainid={cellarConfig.chain.id}
                         unstyled
                       />
                     </HStack>

@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ReactNode, useState } from "react"
 import { WagmiProvider, createConfig, http } from "wagmi"
 import {
   QueryClient,
@@ -15,8 +15,6 @@ const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
 const WALLETCONNECT_PROJECT_ID =
   process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ||
   "c11d8ffaefb8ba4361ae510ed7690cb8"
-
-const queryClient = new QueryClient()
 export const wagmiConfig = createConfig({
   chains: [mainnet, arbitrum, optimism, scroll],
   connectors: [
@@ -45,6 +43,11 @@ export const QueryProvider = ({
 }: {
   children: ReactNode
 }) => {
+
+  const [queryClient] = useState(
+    () =>
+      new QueryClient(),
+  )
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={wagmiConfig}>{children}</WagmiProvider>

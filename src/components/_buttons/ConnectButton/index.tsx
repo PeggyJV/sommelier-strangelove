@@ -12,7 +12,7 @@ import { chainConfigMap } from "src/data/chainConfig"
 export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
   children?: React.ReactNode
-  overrideChainId?: string
+  overridechainid?: string
 }
 
 const ConnectButton = (
@@ -37,8 +37,8 @@ const ConnectButton = (
   }
 
   // For connect buttons that are not on header/should allow chain selection
-  if (props.overrideChainId) {
-    const chain = chainConfigMap[props.overrideChainId]
+  if (props.overridechainid) {
+    const chain = chainConfigMap[props.overridechainid]
     return (
       <ClientOnly>
         <HStack>
