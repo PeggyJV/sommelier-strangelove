@@ -60,6 +60,19 @@ export const MerklePoints = ({
   const ensureHexPrefix = (value: string) =>
     value.startsWith("0x") ? value : `0x${value}`
 
+  const formatPoints = (points: string): string => {
+    const number = parseFloat(points)
+    if (number >= 1e9) {
+      return `${(number / 1e9).toFixed(2)}B`
+    } else if (number >= 1e6) {
+      return `${(number / 1e6).toFixed(2)}M`
+    } else if (number >= 1e3) {
+      return `${(number / 1e3).toFixed(2)}K`
+    } else {
+      return number.toFixed(2)
+    }
+  }
+
   const handleClaimMerklePoints = async () => {
     if (merkleData && publicClient) {
       try {
@@ -202,7 +215,7 @@ export const MerklePoints = ({
         alignSelf="flex-start"
         spacing={0}
       >
-        {merklePoints ?? "Loading..."}
+        {merklePoints ? formatPoints(merklePoints) : "Loading..."}
       </CardStat>
       <BaseButton onClick={handleClaimMerklePoints}>
         Claim Merkle Rewards
