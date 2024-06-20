@@ -7,11 +7,10 @@ export const styles: Styles = {
     "::selection": { background: "purple.base" },
     "html, body": {
       bgColor: "surface.bg",
-      color: "neutral.100",
-      "color-scheme": "dark !important",
+      color: "neutral.100"
     },
     ":root": {
-      colorScheme: "dark",
+      colorScheme: "dark !important",
     },
     body: {
       zIndex: "hide",
