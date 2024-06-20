@@ -54,7 +54,7 @@ import { Rewards } from "./Rewards"
 import { useNetwork } from "wagmi"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { CellarNameKey } from "data/types"
+import { CellarNameKey, ConfigProps } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -170,6 +170,11 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   useEffect(() => {
     checkWithdrawRequest()
   }, [withdrawQueueContract, address, cellarConfig])
+
+  const isArbCellar = (config: ConfigProps) => {
+    return config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB
+      ||config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
+  }
 
   return (
     <TransparentCard
@@ -381,9 +386,9 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                             : "--")}
                       </CardStat>
                     </VStack>
-                    {isBondButtonEnabled(cellarConfig) &&
-                      isStakingAllowed &&
-                      isMounted && (
+                    {isMounted
+                      && (isArbCellar(cellarConfig) || isStakingAllowed)
+                      && (
                         <BondButton
                           disabled={
                             lpTokenDisabled || !buttonsEnabled
@@ -425,19 +430,16 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               </CardStat>
             </VStack>
           )}
-          {/* Insert PointsDisplay here */}
           {isConnected &&
             address &&
             cellarConfig.cellarNameKey ===
               CellarNameKey.TURBO_EETHV2 && (
               <PointsDisplay userAddress={address} />
             )}
-          {isConnected &&
-            address &&
-            (cellarConfig.cellarNameKey ===
-              CellarNameKey.REAL_YIELD_ETH_ARB ||
-              cellarConfig.cellarNameKey ===
-                CellarNameKey.REAL_YIELD_USD_ARB) && (
+          {isConnected
+            && address
+            && isArbCellar(cellarConfig)
+            && (
               <MerklePoints userAddress={address} merkleRewardsApy={strategyData?.merkleRewardsApy} />
             )}
           <CardStat label="Strategy Dashboard">
