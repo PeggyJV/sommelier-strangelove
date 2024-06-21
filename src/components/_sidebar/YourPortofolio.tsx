@@ -15,7 +15,7 @@ import { PortofolioItem } from "./PortofolioItem"
 import { formatUSD } from "utils/formatCurrency"
 
 export const YourPortofolio = () => {
-  const { data, isLoading, isError, refetch } =
+  const { data, isLoading, isError, refetch, isPending } =
     useUserDataAllStrategies()
   const valueAndFormatted = ({
     value,
@@ -131,7 +131,7 @@ export const YourPortofolio = () => {
                 ))
               ) : data?.strategies.length === 0 ? (
                 <h1>start </h1>
-              ) : (
+              ) : !isPending && (
                 <ErrorCard message="" py="100px">
                   <Center>
                     <Button
