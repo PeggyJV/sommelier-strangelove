@@ -4,27 +4,22 @@ import { useAccount, useWalletClient } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useAllStrategiesData } from "./useAllStrategiesData"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
-import { chainConfig } from "data/chainConfig"
+import { getChainByViemId } from "data/chainConfig"
 import { tokenConfig } from "data/tokenConfig"
 
 export const useUserDataAllStrategies = () => {
   const { data: walletClient } = useWalletClient()
-  const { address, chain } = useAccount()
+  const { address, chain: viemChain } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategies = useAllStrategiesData()
-
+  const chain = getChainByViemId(viemChain?.name)
   const sommToken = tokenConfig.find(
     (token) =>
       token.coinGeckoId === "sommelier" &&
       token.chain ===
-        (chain?.name.toLowerCase().split(" ")[0] || "ethereum")
+        (chain.id || "ethereum")
   )!
   const sommPrice = useCoinGeckoPrice(sommToken)
-
-
-  const chainObj = chainConfig.find(
-    (item) => item.wagmiId === chain?.id
-  )!
 
   const query = useQuery({
     queryKey: [
@@ -41,7 +36,7 @@ export const useUserDataAllStrategies = () => {
         strategiesData: strategies.data!,
         userAddress: address!,
         sommPrice: sommPrice.data!,
-        chain: chainObj.id,
+        chain: chain.id,
       })
     },
     enabled:
@@ -50,7 +45,7 @@ export const useUserDataAllStrategies = () => {
       !!strategies.data &&
       !!address &&
       !!sommPrice.data &&
-      !!chainObj.id,
+      !!chain.id,
     }
   )
 

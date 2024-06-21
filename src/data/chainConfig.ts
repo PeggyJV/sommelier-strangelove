@@ -28,6 +28,7 @@ export interface Chain {
 export const placeholderChain: Chain = {
   id: "unknown",
   viemChain: mainnet,
+  viemId: "",
   wagmiId: 0,
   displayName: "Switch Chain (Unsupported)",
   logoPath: "/assets/icons/unknownchain.svg",
@@ -144,13 +145,9 @@ export const supportedChains = [
   "optimism",
   "scroll",
 ]
-export const supportedChainsViem = [
-  "Ethereum",
-  "Arbitrum One",
-  "OP Mainnet",
-  "Scroll",
-]
 
+export const getChainByViemId = (viemId: string) =>
+  chainConfig.find(c => c.viemId === viemId)
 export const chainSlugMap = {
   ETHEREUM: chainConfigMap["ethereum"],
   ARBITRUM: chainConfigMap["arbitrum"],
