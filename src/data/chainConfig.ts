@@ -146,8 +146,8 @@ export const supportedChains = [
   "scroll",
 ]
 
-export const getChainByViemId = (viemId: string) =>
-  chainConfig.find(c => c.viemId === viemId)
+export const getChainByViemId = (viemId: string | undefined) =>
+  chainConfig.find(c => c.viemId === viemId) ?? chainSlugMap.ETHEREUM
 export const chainSlugMap = {
   ETHEREUM: chainConfigMap["ethereum"],
   ARBITRUM: chainConfigMap["arbitrum"],
