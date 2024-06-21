@@ -7,7 +7,7 @@ import { ConnectWalletPopover } from "./ConnectWalletPopover"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { MobileConnectedPopover } from "./MobileConnectedPopover"
 import ChainButton from "../ChainButton"
-import { chainConfig, chainConfigMap } from "src/data/chainConfig"
+import { chainConfig, chainConfigMap, getChainByViemId } from "src/data/chainConfig"
 
 export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
@@ -18,15 +18,12 @@ export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
 const ConnectButton = (
   props: ConnectButtonProps
 ) => {
-  const { isConnected, chain } = useAccount()
+  const { isConnected, chain: viemChain } = useAccount()
   const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
-
-  const getChainName = () => {
-    return chainConfig.find(c => c.viemChain.name === chain?.name)?.id || "ethereum"
-  }
+  const chain = getChainByViemId(viemChain?.name)
 
   const [selectedNetwork, setSelectedNetwork] = React.useState(
-    getChainName()
+    chain.id
   )
   const handleNetworkChange = (chainId: string) => {
     setSelectedNetwork(chainId)
