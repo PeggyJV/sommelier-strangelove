@@ -1,7 +1,6 @@
 import { VFC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Menu } from "./Menu"
-import { BigNumber } from "ethers"
 import { ModalOnlyTokenMenuProps, OnlyTokenMenu } from "./OnlyTokenMenu"
 
 export interface ModalMenuProps {
@@ -12,7 +11,7 @@ export interface ModalMenuProps {
     decimals: number
     formatted: string
     symbol: string
-    value: BigNumber
+    value: BigInt
   }
   isDisabled?: boolean
 }

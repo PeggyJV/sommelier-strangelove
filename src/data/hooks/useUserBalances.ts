@@ -1,24 +1,24 @@
 import { getAcceptedDepositAssetsByChain } from "data/tokenConfig"
-import { ResolvedConfig } from "abitype"
-import { fetchBalance } from "@wagmi/core"
-import { getAddress } from "ethers/lib/utils"
-import { useAccount, useNetwork } from "wagmi"
+import { ResolvedRegister } from "abitype"
+import { getBalance, readContracts } from "@wagmi/core"
+import { erc20Abi, formatUnits } from "viem"
+import { useAccount } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { useQuery } from "@tanstack/react-query"
+import { wagmiConfig } from "context/wagmiContext"
 
 type Balance = {
-  decimals: ResolvedConfig['IntType'];
+  decimals: ResolvedRegister['IntType'];
   formatted: string;
   symbol: string;
-  value: ResolvedConfig['BigIntType'];
+  value: ResolvedRegister['BigIntType'];
   valueInUSD: number;
 }
 
 export const useUserBalances = () => {
 
-  const { address } = useAccount();
-  const { chain } = useNetwork();
+  const { address, chain } = useAccount();
 
   const fetchBalances = async () => {
     const depositAssetBalances : Balance[] = [];
@@ -29,13 +29,39 @@ export const useUserBalances = () => {
     const tokenList = getAcceptedDepositAssetsByChain(chainObj.id);
 
     await Promise.all(tokenList.map(async (token) => {
+      if (!token || !address) {
+        return depositAssetBalances;
+      }
       try {
-        const balance = await fetchBalance({
-          token: token?.symbol !== 'ETH' ? getAddress(token!.address) : undefined,
-          address: getAddress(address!)
-        });
+        let balance;
+        if (token?.symbol === 'ETH') {
+          balance = await getBalance(wagmiConfig, {
+            address: address,
+          })
+        }
+        else {
+          const result = await readContracts(wagmiConfig, {
+            allowFailure: false,
+            contracts: [
+              {
+                address: token.address as `0x${string}`,
+                abi: erc20Abi,
+                functionName: 'balanceOf',
+                args: [address]
+              }
+            ]
+          })
 
-        if (!balance.value.isZero()) {
+          balance = {
+            value: result[0] as bigint,
+            decimals: token.decimals,
+            symbol: token.symbol,
+            formatted: formatUnits(result[0], token.decimals),
+            valueInUSD: 0
+          }
+        }
+
+        if (balance.value !== 0n) {
           // fix because token comes with different naming
           if (balance.symbol === 'B-rETH-STABLE'){
             balance.symbol = 'rETH BPT'
@@ -58,11 +84,12 @@ export const useUserBalances = () => {
     return depositAssetBalances;
   }
 
-  const query = useQuery(
-    ["USE_USER_BALANCES"],
-    async () => {
+  const query = useQuery({
+    queryKey: ["USE_USER_BALANCES"],
+    queryFn: async () => {
       return await fetchBalances()
     }
+  }
   )
 
   return {

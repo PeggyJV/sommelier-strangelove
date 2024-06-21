@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useBrandedToast } from "hooks/chakra"
 import { BridgeFormValues } from "components/_cards/BridgeCard"
-import { ethers } from "ethers"
 import { useAccount, useSigners } from "graz"
 import { txClient } from "src/vendor/ignite/gravity.v1"
 import { analytics } from "utils/analytics"
@@ -11,8 +10,8 @@ import {
 } from "./ReusableToastBodies"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { Text } from "@chakra-ui/react"
-import { config } from "utils/config"
 import { tokenConfigMap } from "data/tokenConfig"
+import { parseUnits } from "viem"
 
 export const useBridgeSommToEthTx = () => {
   const { addToast, update, closeAll } = useBrandedToast()
@@ -40,7 +39,7 @@ export const useBridgeSommToEthTx = () => {
       }
 
       const amountReceived = props.amount - 50
-      const convertedAmount = ethers.utils.parseUnits(
+      const convertedAmount = parseUnits(
         String(amountReceived),
         6
       )

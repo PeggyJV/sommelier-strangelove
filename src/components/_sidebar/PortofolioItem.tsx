@@ -17,7 +17,6 @@ import { DIRECT, landingType } from "utils/landingType"
 import { useCoinGeckoPrice } from "data/hooks/useCoinGeckoPrice"
 import { showNetValueInAsset } from "data/uiConfig"
 import { tokenConfig } from "data/tokenConfig"
-import BigNumber from "bignumber.js"
 
 interface PortofolioItemProps extends StackProps {
   icon: string
@@ -71,7 +70,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
       px="6"
       top={-4}
       boxShadow="xl"
-      shouldWrapChildren
+      shouldWrapChildren={false}
     >
       <HStack
         px={8}
@@ -132,19 +131,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             <Text fontWeight={500} fontSize={12} color="neutral.400">
               {lpTokenData &&
                 `${toEther(
-                  new BigNumber(
-                    new BigNumber(
-                      lpTokenData?.value.toString()
-                    ).toFixed()
-                  )
-                    .plus(
-                      new BigNumber(
-                        new BigNumber(
-                          bondedToken.toString()
-                        ).toFixed()
-                      )
-                    )
-                    .toFixed(),
+                  lpTokenData?.value + BigInt(bondedToken),
                   lpTokenData?.decimals,
                   true,
                   2

@@ -2,36 +2,20 @@ import React, { useEffect, useState } from "react"
 import { CardStat } from "components/CardStat"
 import { fetchMerkleData } from "utils/fetchMerkleData"
 import { BaseButton } from "components/_buttons/BaseButton"
-import { ethers } from "ethers"
-import { ExternalProvider } from "@ethersproject/providers"
-import merkleABI from "../../../../abi/merkle.json"
 import { useBrandedToast } from "hooks/chakra"
-import { Text, VStack } from "@chakra-ui/react"
+import { Text, Box } from "@chakra-ui/react"
+import { MerkleRewards } from "../../../../abi/types/MerkleRewards"
+import { usePublicClient, useWalletClient } from "wagmi"
+import { getContract, isHex, keccak256, toBytes } from "viem"
 
-const MERKLE_CONTRACT_ADDRESS =
-  "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
-
+const MERKLE_CONTRACT_ADDRESS = "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
 interface MerklePointsProps {
-  userAddress: string
+  userAddress: string,
   merkleRewardsApy?: number
 }
 
-const formatPoints = (points: string): string => {
-  const number = parseFloat(points)
-  if (number >= 1e9) {
-    return `${(number / 1e9).toFixed(2)}B`
-  } else if (number >= 1e6) {
-    return `${(number / 1e6).toFixed(2)}M`
-  } else if (number >= 1e3) {
-    return `${(number / 1e3).toFixed(2)}K`
-  } else {
-    return number.toFixed(2)
-  }
-}
-
 export const MerklePoints = ({
-  userAddress,
-  merkleRewardsApy,
+  userAddress, merkleRewardsApy
 }: MerklePointsProps) => {
   const [merklePoints, setMerklePoints] = useState<string | null>(
     null
@@ -39,16 +23,15 @@ export const MerklePoints = ({
   const [merkleData, setMerkleData] = useState<any>(null)
   const { addToast, close } = useBrandedToast()
 
+  const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchMerkleData(userAddress)
         if (response.Response && response.Response.total_balance) {
-          const formatted = ethers.utils.formatUnits(
-            response.Response.total_balance,
-            0
-          )
-          setMerklePoints(formatted)
+          setMerklePoints(response.Response.total_balance)
           setMerkleData(response.Response.tx_data)
         } else {
           setMerklePoints("0")
@@ -74,35 +57,43 @@ export const MerklePoints = ({
     fetchData()
   }, [])
 
-  const isHexString = (value: string) =>
-    /^0x[0-9a-fA-F]+$/.test(value)
-
   const ensureHexPrefix = (value: string) =>
     value.startsWith("0x") ? value : `0x${value}`
 
-  const handleClaimMerklePoints = async () => {
-    if (window.ethereum && merkleData) {
-      try {
-        await window.ethereum.request({
-          method: "eth_requestAccounts",
-        })
-        const provider = new ethers.providers.Web3Provider(
-          window.ethereum as ExternalProvider
-        )
-        const signer = provider.getSigner()
-        const contract = new ethers.Contract(
-          MERKLE_CONTRACT_ADDRESS,
-          merkleABI,
-          signer
-        )
+  const formatPoints = (points: string): string => {
+    const number = parseFloat(points)
+    if (number >= 1e9) {
+      return `${(number / 1e9).toFixed(2)}B`
+    } else if (number >= 1e6) {
+      return `${(number / 1e6).toFixed(2)}M`
+    } else if (number >= 1e3) {
+      return `${(number / 1e3).toFixed(2)}K`
+    } else {
+      return number.toFixed(2)
+    }
+  }
 
-        const hasClaimed = await contract.claimed(
-          ethers.utils.keccak256(
-            ethers.utils.arrayify(
-              ensureHexPrefix(merkleData.rootHashes[0])
-            )
-          ),
-          userAddress
+  const handleClaimMerklePoints = async () => {
+    if (merkleData && publicClient) {
+      try {
+        const merkleRewardsContract = getContract({
+          address: MERKLE_CONTRACT_ADDRESS,
+          abi: MerkleRewards,
+          client:  {
+            wallet: walletClient,
+            public: publicClient
+          }
+        })
+
+        // Check if the claim has already been made
+        const hasClaimed = await merkleRewardsContract.read.claimed([
+            keccak256(
+              toBytes(
+                ensureHexPrefix(merkleData.rootHashes[0])
+              )
+            ) as `0x${string}`,
+            userAddress as `0x${string}`
+          ]
         )
         if (hasClaimed) {
           addToast({
@@ -118,10 +109,10 @@ export const MerklePoints = ({
         const rootHashes = merkleData.rootHashes.map(
           (hash: string) => {
             const prefixedHash = ensureHexPrefix(hash)
-            if (!isHexString(prefixedHash)) {
+            if (!isHex(prefixedHash)) {
               throw new Error(`Invalid hex string: ${prefixedHash}`)
             }
-            return ethers.utils.arrayify(prefixedHash)
+            return toBytes(prefixedHash)
           }
         )
 
@@ -129,21 +120,23 @@ export const MerklePoints = ({
           (proofArray: string[]) =>
             proofArray.map((proof: string) => {
               const prefixedProof = ensureHexPrefix(proof)
-              if (!isHexString(prefixedProof)) {
+              if (!isHex(prefixedProof)) {
                 throw new Error(
                   `Invalid hex string: ${prefixedProof}`
                 )
               }
-              return ethers.utils.arrayify(prefixedProof)
+              return toBytes(prefixedProof)
             })
         )
 
-        const tx = await contract.claim(
-          userAddress, // _to
-          rootHashes, // _rootHashes
-          merkleData.tokens, // _tokens
-          merkleData.balances, // _balances
-          merkleProofs // _merkleProofs
+        // @ts-ignore
+        const tx = await merkleRewardsContract.write.claim([
+          userAddress,
+          rootHashes,
+          merkleData.tokens,
+          merkleData.balances,
+          merkleProofs
+          ]
         )
 
         await tx.wait()
@@ -157,9 +150,12 @@ export const MerklePoints = ({
       } catch (error) {
         if (error instanceof Error && "code" in error) {
           if (
-            (error as any).code ===
-            ethers.errors.UNPREDICTABLE_GAS_LIMIT
+            (error as any).code === 'UNPREDICTABLE_GAS_LIMIT'
           ) {
+            console.error(
+              "Claim failed: It has already been claimed or another error occurred",
+              error
+            )
             addToast({
               heading: "Claim Failed",
               status: "error",
@@ -173,6 +169,7 @@ export const MerklePoints = ({
               duration: null,
             })
           } else {
+            console.error("Claim failed:", error)
             addToast({
               heading: "Claim Failed",
               status: "error",
@@ -184,6 +181,7 @@ export const MerklePoints = ({
             })
           }
         } else {
+          console.error("An unknown error occurred:", error)
           addToast({
             heading: "Unknown Error",
             status: "error",
@@ -198,6 +196,7 @@ export const MerklePoints = ({
         }
       }
     } else {
+      console.error("Web3 provider not found or no merkle data")
       addToast({
         heading: "Error",
         status: "error",
@@ -209,7 +208,7 @@ export const MerklePoints = ({
   }
 
   return (
-    <VStack spacing={4} alignItems="flex-start">
+    <>
       <CardStat
         label="Merkle Points"
         tooltip="The number of Merkle points accumulated. Please note that you will only receive ARB rewards if you also stake your shares in the SOMM staking contract."
@@ -221,6 +220,11 @@ export const MerklePoints = ({
       <BaseButton onClick={handleClaimMerklePoints}>
         Claim Merkle Rewards
       </BaseButton>
-    </VStack>
+      <Box>
+        <Text fontSize="xl" fontWeight="bold">
+          Merkle Points APY: {merkleRewardsApy ? `${merkleRewardsApy.toFixed(2)}%` : "N/A"}
+        </Text>
+      </Box>
+    </>
   )
 }

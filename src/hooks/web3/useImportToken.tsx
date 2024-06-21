@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query"
-import { fetchToken } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { MutationEventArgs } from "types/hooks"
-import { getAddress } from "ethers/lib/utils.js"
-import { Address } from "wagmi"
+import { readContracts } from "@wagmi/core"
+import { Address, erc20Abi, getAddress } from "viem"
 import { chainConfigMap } from "data/chainConfig"
+import { wagmiConfig } from "context/wagmiContext"
+
 type Args = {
   address: string
   imageUrl?: string
@@ -13,12 +14,12 @@ type Args = {
 
 type UseImportTokenArgs = MutationEventArgs<
   Args,
-  Awaited<ReturnType<typeof fetchToken>>
+  Awaited<ReturnType<typeof readContracts>>
 >
 
 type DoImportToken = (
   args: Args
-) => Promise<Awaited<ReturnType<typeof fetchToken>>>
+) => Promise<Awaited<ReturnType<typeof readContracts>>>
 
 export const doImportToken: DoImportToken = async ({
   address,
@@ -32,9 +33,32 @@ export const doImportToken: DoImportToken = async ({
     // Get chain from chainConfigMap
     const chainObj = chainConfigMap[chain]
 
-    const tokenData = await fetchToken({
-      address: getAddress(address),
-      chainId: chainObj.wagmiId,
+
+
+    const tokenData = await readContracts(wagmiConfig, {
+      allowFailure: false,
+      contracts: [
+        {
+          address: getAddress(address),
+          abi: erc20Abi,
+          functionName: 'decimals',
+        },
+        {
+          address: getAddress(address),
+          abi: erc20Abi,
+          functionName: 'name',
+        },
+        {
+          address: getAddress(address),
+          abi: erc20Abi,
+          functionName: 'symbol',
+        },
+        {
+          address: getAddress(address),
+          abi: erc20Abi,
+          functionName: 'totalSupply',
+        },
+      ]
     })
     if (!tokenData) {
       throw new Error("Token data is undefined")
@@ -51,8 +75,8 @@ export const doImportToken: DoImportToken = async ({
         type: "ERC20",
         options: {
           address: address as Address,
-          symbol: tokenData.symbol,
-          decimals: tokenData.decimals,
+          symbol: tokenData[2],
+          decimals: tokenData[0],
           image: imageUrl || fullImageUrl,
         },
       },
@@ -71,10 +95,11 @@ export const useImportToken = ({
   onError,
   onMutate,
 }: UseImportTokenArgs = {}) => {
-  const query = useMutation(["USE_IMPORT_TOKEN"], doImportToken, {
+  return useMutation({
+    mutationKey: ["USE_IMPORT_TOKEN"],
+    mutationFn: doImportToken,
     onSuccess,
     onError,
     onMutate,
   })
-  return query
 }

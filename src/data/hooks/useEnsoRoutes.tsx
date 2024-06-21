@@ -39,6 +39,8 @@ export const useEnsoRoutes = (
   shouldFetch: boolean,
   lastResponse: any
 ) => {
+  // Enso routes aren't in use for now and to avoid failing requests, returning early
+  return { ensoResponse: '1', ensoError: null, ensoLoading: false };
   const [ensoResponse, setResponse] = useState<any>(null)
   const [ensoError, setError] = useState<string | null>(null)
   const [ensoLoading, setLoading] = useState<boolean>(true)
@@ -50,7 +52,7 @@ export const useEnsoRoutes = (
       setResponse(lastResponse)
       return
     }
-    
+
     let intervalId: number
 
     const fetchRoutes = async () => {
@@ -125,7 +127,7 @@ export const useEnsoRoutes = (
 }
 
 // Example Usage
-/** 
+/**
 import { useEnsoRoutes } from '....';
 
 const EnsoDepositComponent = () => {
@@ -138,9 +140,9 @@ const EnsoDepositComponent = () => {
     tokenOut: 'final_token',
     slippage: 1 // 1% slippage
   };
-  
+
   const { ensoResponse, ensoError, ensoLoading } = useEnsoRoutes(config);
-  
+
 
   // TODO: I think (need to verify) you'd want a helper function here to see if the user has approved the enso contract to spend their tokens before actually submitting the final tx
 

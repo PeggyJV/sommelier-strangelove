@@ -12,9 +12,10 @@ import { LogoIcon } from "components/_icons"
 import { LighterSkeleton } from "components/_skeleton"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 import { PortofolioItem } from "./PortofolioItem"
+import { formatUSD } from "utils/formatCurrency"
 
 export const YourPortofolio = () => {
-  const { data, isLoading, isError, refetch } =
+  const { data, isLoading, isError, refetch, isPending } =
     useUserDataAllStrategies()
   const valueAndFormatted = ({
     value,
@@ -83,7 +84,8 @@ export const YourPortofolio = () => {
           >
             <Box w="100%">
               {!isError && data ? (
-                data.strategies.map((strategy) => (                  
+                data.strategies.map((strategy) => (
+                  strategy.userStrategyData.strategyData?.slug &&
                   <PortofolioItem
                     symbol={
                       strategy.userStrategyData.userData.symbol || ""
@@ -129,7 +131,7 @@ export const YourPortofolio = () => {
                 ))
               ) : data?.strategies.length === 0 ? (
                 <h1>start </h1>
-              ) : (
+              ) : !isPending && (
                 <ErrorCard message="" py="100px">
                   <Center>
                     <Button
@@ -187,10 +189,7 @@ export const YourPortofolio = () => {
                 textAlign="right"
               >
                 <Text as="h6" fontSize={16} fontWeight={700}>
-                  $
-                  {Number(
-                    data?.totalSommRewardsInUsd.toFixed(2)
-                  ).toLocaleString()}
+                  {formatUSD(data?.totalSommRewardsInUsd.toString())}
                 </Text>
                 <Text
                   fontWeight={500}
@@ -198,7 +197,7 @@ export const YourPortofolio = () => {
                   color="neutral.400"
                 >
                   {`${
-                    data?.totalSommRewards.value === 0
+                    data?.totalSommRewards.value === BigInt(0)
                       ? "0.00"
                       : data?.totalSommRewards.formatted
                   } SOMM`}

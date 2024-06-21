@@ -1,4 +1,3 @@
-import { VFC } from "react"
 import {
   Button,
   FormControl,
@@ -22,9 +21,7 @@ import { CardHeading } from "components/_typography/CardHeading"
 import { BondingPeriodOptions } from "./BondingPeriodOptions"
 import { toEther } from "utils/formatCurrency"
 import { useBrandedToast } from "hooks/chakra"
-import { BigNumber } from "bignumber.js"
 import { useApproveERC20, useHandleTransaction } from "hooks/web3"
-import { ethers } from "ethers"
 import { analytics } from "utils/analytics"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
@@ -34,9 +31,10 @@ import { bondingPeriodOptions } from "data/uiConfig"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { CellarNameKey } from "data/types"
 import { InformationIcon } from "components/_icons"
 import { waitTime } from "data/uiConfig"
+import { useAccount } from "wagmi"
+import { parseUnits } from "viem"
 
 interface FormValues {
   depositAmount: number
@@ -45,7 +43,7 @@ interface FormValues {
 
 type BondFormProps = Pick<ModalProps, "onClose">
 
-export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
+export const BondForm = ({ onClose }: BondFormProps) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
@@ -55,7 +53,9 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
   )
   const { stakerSigner } = useCreateContracts(cellarConfig)
 
-  const { lpToken, lpTokenInfo } = useUserBalance(cellarConfig)
+  const { address } = useAccount()
+
+  const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData } = lpToken
 
   const methods = useForm<FormValues>({
@@ -125,28 +125,28 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
         },
       })
 
-      const amtInBigNumber = new BigNumber(data.depositAmount)
-      const depositAmtInWei = ethers.utils.parseUnits(
-        amtInBigNumber.toFixed(),
+      const depositAmtInWei = parseUnits(
+        data.depositAmount.toString(),
         cellarConfig.cellar.decimals
       )
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         stakerSigner.estimateGas.stake,
-        stakerSigner.callStatic.stake,
+        stakerSigner.simulate.stake,
         [depositAmtInWei, bondPeriod],
         250000,
-        500000
+        address
       )
-
-      const { hash: bondConf } = await stakerSigner.stake(
+      // @ts-ignore
+      const hash = await stakerSigner.write.stake([
         depositAmtInWei,
-        bondPeriod,
-        { gasLimit: gasLimitEstimated }
+        bondPeriod
+        ],
+        { gas: gasLimitEstimated, account: address }
       )
 
       await doHandleTransaction({
         cellarConfig,
-        hash: bondConf,
+        hash,
         onSuccess: () => {
           analytics.track("bond.succeeded", analyticsData)
           refetch()
@@ -234,7 +234,7 @@ export const BondForm: VFC<BondFormProps> = ({ onClose }) => {
                 />
               )}
 
-              <Heading size="sm">{lpTokenInfo.data?.symbol}</Heading>
+              <Heading size="sm">{cellarConfig.lpToken.imagePath}</Heading>
             </HStack>
             <VStack spacing={0} align="flex-end">
               <FormControl isInvalid={isError as boolean | undefined}>

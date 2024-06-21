@@ -42,8 +42,6 @@ import { add, isBefore } from "date-fns"
 import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
-import Link from "next/link"
-
 
 export const PageHome = () => {
   const {
@@ -275,7 +273,7 @@ export const PageHome = () => {
       //    Staking period check for somm/vesting rewards
       const hasLiveStakingPeriod =
         item?.rewardsApy?.value !== undefined &&
-        item?.rewardsApy?.value > 0
+        Number(item?.rewardsApy?.value) > 0
 
       const incentivisedCondition = showIncentivised
         ? hasGreenBadge || hasLiveStakingPeriod

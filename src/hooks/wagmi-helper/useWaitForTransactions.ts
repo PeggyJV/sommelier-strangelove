@@ -2,13 +2,9 @@
 // This helper hook is created because wagmi migration from 0.2.x to >=0.3.x have breaking change, it removes `wait` function https://wagmi.sh/docs/migration-guide#usewaitfortransaction
 // We need `wait` because our transaction pattern is using async functions, in >=0.3.x versions is using hook pattern
 import * as React from "react"
-import {
-  TransactionReceipt,
-  TransactionResponse,
-} from "@ethersproject/providers"
-
-import { useProvider } from "wagmi"
 import { useCancel } from "hooks/utils/useCancel"
+import { usePublicClient } from "wagmi"
+import { TransactionReceipt } from "viem/_types/types/transaction"
 
 export type Config = {
   /**
@@ -26,7 +22,7 @@ export type Config = {
    */
   timeout?: number
   /** Function resolving to transaction receipt */
-  wait?: TransactionResponse["wait"]
+  wait?: Object
 }
 
 type State = {
@@ -46,7 +42,7 @@ export const useWaitForTransaction = ({
   timeout,
   wait: wait_,
 }: Config = {}) => {
-  const provider = useProvider()
+  const publicClient = usePublicClient()
   const [state, setState] = React.useState<State>(initialState)
 
   const cancelQuery = useCancel()
@@ -74,12 +70,15 @@ export const useWaitForTransaction = ({
 
         let promise: Promise<TransactionReceipt>
         if (config_.wait)
-          promise = config_.wait(config_.confirmations)
+          { // @ts-ignore
+            promise = config_.wait(config_.confirmations)
+          }
         else if (config_.hash)
-          promise = provider.waitForTransaction(
-            config_.hash,
-            config_.confirmations,
-            config_.timeout
+          promise = publicClient!.waitForTransactionReceipt({
+              confirmations: config_.confirmations,
+              hash: config_.hash as `0x${string}`,
+              timeout: config_.timeout
+            }
           )
         else throw new Error("hash or wait is required")
 
@@ -97,7 +96,7 @@ export const useWaitForTransaction = ({
         return { data: undefined, error }
       }
     },
-    [cancelQuery, confirmations, hash, provider, timeout, wait_]
+    [cancelQuery, confirmations, hash, publicClient, timeout, wait_]
   )
 
   // Fetch balance when deps or chain changes

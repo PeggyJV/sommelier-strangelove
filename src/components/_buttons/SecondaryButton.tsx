@@ -1,7 +1,6 @@
-import { VFC } from "react"
 import { Button, ButtonProps, forwardRef } from "@chakra-ui/react"
 
-export const SecondaryButton: VFC<ButtonProps> = forwardRef<
+export const SecondaryButton = forwardRef<
   ButtonProps,
   "button"
 >((props, ref) => {
@@ -12,6 +11,7 @@ export const SecondaryButton: VFC<ButtonProps> = forwardRef<
       color="white"
       borderWidth={2}
       borderColor="purple.base"
+      isDisabled={props.disabled}
       _hover={{ bg: "purple.dark" }}
       _disabled={{
         color: "neutral.400",

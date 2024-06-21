@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react"
+import { useEffect, useState } from "react"
 import {
   Table,
   Thead,
@@ -14,33 +14,21 @@ import {
   Text,
   Heading,
   Image,
-  Icon,
   Link,
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import { toEther } from "utils/formatCurrency"
 import { useHandleTransaction } from "hooks/web3"
 import { InformationIcon } from "components/_icons"
 import { InnerCard } from "./InnerCard"
-import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { bondingPeriodOptions } from "data/uiConfig"
-import { formatDistanceToNowStrict, isFuture } from "date-fns"
-import { formatDistance } from "utils/formatDistance"
-import { LighterSkeleton } from "components/_skeleton"
 import { useGeo } from "context/geoContext"
-import { useStrategyData } from "data/hooks/useStrategyData"
-import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { differenceInDays } from "date-fns"
-import { FaExternalLinkAlt } from "react-icons/fa"
-import { tokenConfig } from "data/tokenConfig"
-import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { useSigner, useContract, useAccount } from "wagmi"
+import { useAccount, usePublicClient, useWalletClient } from "wagmi"
+import { formatUnits, getAddress, getContract } from "viem"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useBrandedToast } from "hooks/chakra"
+import { WithdrawQueue } from "../../abi/types/WithdrawQueue"
 
 function formatTimeRemaining(deadline: number): string {
   const deadlineInMs = deadline * 1000
@@ -65,18 +53,26 @@ function formatTimeRemaining(deadline: number): string {
   return timeString.trim()
 }
 
-const WithdrawQueueCard: VFC<TableProps> = (props) => {
+const WithdrawQueueCard = (props: TableProps) => {
   const { addToast, update, close, closeAll } = useBrandedToast()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { address } = useAccount()
 
-  const { data: signer } = useSigner()
-  const withdrawQueueContract = useContract({
-    address: cellarConfig.chain.withdrawQueueAddress,
-    abi: withdrawQueueV0821,
-    signerOrProvider: signer,
-  })!
+  const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
+
+  const withdrawQueueContract = (() => {
+    if (!publicClient) return
+    return getContract( {
+        address: getAddress(cellarConfig.chain.withdrawQueueAddress),
+        abi: WithdrawQueue,
+        client: {
+          wallet: walletClient,
+          public: publicClient
+        }
+      }
+    )})()
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
@@ -90,27 +86,31 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
-      if (withdrawQueueContract && address && cellarConfig) {
+      if (walletClient && withdrawQueueContract && address && cellarConfig) {
         const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
+          await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
-            cellarConfig.cellar.address
+            cellarConfig.cellar.address as `0x${string}`
+            ]
           )
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.isWithdrawRequestValid(
-            cellarConfig.cellar.address,
+          await withdrawQueueContract?.read.isWithdrawRequestValid([
+            cellarConfig.cellar.address as `0x${string}`,
             address,
             withdrawRequest
+            ]
           )
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
 
-        setPendingWithdrawShares(withdrawRequest.sharesToWithdraw)
+        setPendingWithdrawShares(Number(withdrawRequest.sharesToWithdraw))
         setPendingWithdrawSharePrice(
-          withdrawRequest.executionSharePrice
+          Number(
+            formatUnits(withdrawRequest.executionSharePrice, cellarConfig.baseAsset.decimals)
+          )
         )
-        setPendingWithdrawDeadline(withdrawRequest.deadline)
+        setPendingWithdrawDeadline(Number(withdrawRequest.deadline))
       } else {
         setIsActiveWithdrawRequest(false)
         setPendingWithdrawShares(0)
@@ -145,17 +145,20 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         withdrawQueueContract?.estimateGas.updateWithdrawRequest,
-        withdrawQueueContract?.callStatic.updateWithdrawRequest,
+        withdrawQueueContract?.simulate.updateWithdrawRequest,
         [cellarConfig.cellar.address, withdrawTouple],
         330000,
-        660000
+        address
       )
 
-      const tx = await withdrawQueueContract?.updateWithdrawRequest(
+      // @ts-ignore
+      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
         cellarConfig.cellar.address,
-        withdrawTouple,
+        withdrawTouple
+        ],
         {
-          gasLimit: gasLimitEstimated,
+          gas: gasLimitEstimated,
+          account: address
         }
       )
 
@@ -169,7 +172,7 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
 
       await doHandleTransaction({
         cellarConfig,
-        ...tx,
+        hash,
         onSuccess,
         onError,
       })
@@ -346,10 +349,8 @@ const WithdrawQueueCard: VFC<TableProps> = (props) => {
                 <HStack spacing={2}>
                   <Text textAlign="right">
                     {(
-                      pendingWithdrawSharePrice /
-                      10 ** cellarConfig.baseAsset.decimals
+                      pendingWithdrawSharePrice
                     )
-                      .toFixed(4)
                       .toLocaleString()}
                   </Text>
                 </HStack>

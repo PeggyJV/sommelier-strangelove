@@ -1,26 +1,20 @@
 import {
   Box,
-  Button,
   HStack,
   Icon,
   Image,
-  Input,
   Menu as ChMenu,
   MenuButton,
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
   Text,
-  useDimensions,
-  useTheme,
-  VStack,
+  useTheme
 } from "@chakra-ui/react"
-import { useRef, VFC } from "react"
+import { useRef } from "react"
 import { FaChevronDown } from "react-icons/fa"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
-import { toEther } from "utils/formatCurrency"
-import { ModalMenuProps } from "."
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { depositAssetDefaultValue } from "data/uiConfig"
@@ -38,12 +32,12 @@ export interface MenuOnlyTokenProps
   onChange: (...events: any[]) => void
 }
 
-export const OnlyTokenMenu: VFC<MenuOnlyTokenProps> = ({
+export const OnlyTokenMenu = ({
   depositTokens,
   activeAsset,
   value,
   onChange,
-}) => {
+}: MenuOnlyTokenProps) => {
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const { register, setValue, clearErrors } = useFormContext()

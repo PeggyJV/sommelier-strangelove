@@ -7,7 +7,6 @@ import {
 } from "data/uiConfig"
 import { add, isBefore, isFuture, subDays } from "date-fns"
 import { GetStrategyDataQuery } from "data/actions/types"
-import { CellarStakingV0815 } from "src/abi/types"
 import { isComingSoon } from "utils/isComingSoon"
 import { getStakingEnd } from "../CELLAR_STAKING_V0815/getStakingEnd"
 import { getRewardsApy } from "./getRewardsApy"
@@ -17,8 +16,6 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
-import BigNumber from "bignumber.js"
-import { Contract } from "ethers"
 import { getMerkleRewardsApy } from "data/actions/common/getMerkleRewardsApy"
 import { config as utilConfig } from "utils/config"
 
@@ -93,7 +90,7 @@ export const getStrategyData = async ({
       })()
       const depositTokens = strategy.depositTokens.list;
       const stakingEnd = await getStakingEnd(
-        stakerContract as CellarStakingV0815
+        stakerContract
       )
       const isStakingOngoing =
         stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
@@ -135,8 +132,7 @@ export const getStrategyData = async ({
         const apyRes = await getRewardsApy({
           sommPrice,
           assetPrice,
-          stakerContract: stakerContract as CellarStakingV0815,
-          cellarContract: cellarContract as Contract,
+          stakerContract: stakerContract,
           cellarConfig: config,
         })
         return apyRes
@@ -221,15 +217,15 @@ export const getStrategyData = async ({
 
           for (let i = 0; i < 7; i++) {
             // Get annualized apy for each shareValue
-            let nowValue = new BigNumber(dayDatas![i].shareValue)
-            let startValue = new BigNumber(
+            let nowValue = BigInt(dayDatas![i].shareValue)
+            let startValue = BigInt(
               dayDatas![i + 1].shareValue
             )
 
-            let yieldGain = nowValue.minus(startValue).div(startValue)
+            let yieldGain = Number(nowValue - startValue) / Number(startValue)
 
             // Take the gains since inception and annualize it to get APY since inception
-            let dailyApy = yieldGain.times(365).times(100).toNumber()
+            let dailyApy = yieldGain * 365 * 100
 
             movingAvg7D += dailyApy
           }
@@ -237,7 +233,7 @@ export const getStrategyData = async ({
 
           return {
             formatted: movingAvg7D.toFixed(2) + "%",
-            value: Number(movingAvg7D.toFixed(2)),
+            value: Number(movingAvg7D).toFixed(2),
           }
         }
 
@@ -279,7 +275,7 @@ export const getStrategyData = async ({
 
         return {
           formatted: apys
-            ? String(apys[apys!.length - 1].y)
+            ? apys[apys!.length - 1].y
             : config.baseApy?.toFixed(2) + "%",
           value: apys ? apys[apys!.length - 1].value : config.baseApy,
         }
@@ -319,7 +315,7 @@ export const getStrategyData = async ({
       // TODO: Rewards APY should be a list of APYs for each rewards token, this is incurred tech debt
       const baseApySumRewards = {
         formatted:
-          ((baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0))
+          (Number(baseApyValue?.value ?? 0) + Number(rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0))
             .toFixed(2) + "%",
         value: (baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0)
       }

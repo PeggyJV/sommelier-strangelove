@@ -5,14 +5,13 @@ import {
   Icon,
   IconProps,
 } from "@chakra-ui/react"
-import { VFC } from "react"
 
 export interface BaseButtonProps extends Omit<ButtonProps, "icon"> {
   icon?: any
   iconProps?: IconProps
 }
 
-export const BaseButton: VFC<BaseButtonProps> = forwardRef<
+export const BaseButton = forwardRef<
   BaseButtonProps,
   "button"
 >(({ icon, variant, iconProps, ...rest }, ref) => {
@@ -44,6 +43,7 @@ export const BaseButton: VFC<BaseButtonProps> = forwardRef<
           />
         )
       }
+      isDisabled={rest.disabled}
       _hover={{
         color: "white",
         bg: "purple.dark",

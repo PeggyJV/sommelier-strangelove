@@ -1,15 +1,18 @@
-import { formatDecimals } from "utils/bigNumber"
 import { formatCurrency } from "utils/formatCurrency"
+import { formatUnits } from "viem"
 
 export const getTokenPrice = (
-  shareValue?: string,
-  decimals?: number
+  shareValue: string,
+  decimals: number
 ) => {
-  const calculatedshareValue =
-    shareValue && formatDecimals(shareValue, decimals, 4)
+  const calculatedshareValue = Number(
+      formatUnits(
+        BigInt(shareValue),
+        decimals)
+    )
+      .toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 });
   const shareValueFormatted =
-    shareValue &&
-    formatCurrency(formatDecimals(shareValue, decimals, 2))
+    formatCurrency(formatUnits(BigInt(shareValue), decimals))
 
   return {
     value: calculatedshareValue,

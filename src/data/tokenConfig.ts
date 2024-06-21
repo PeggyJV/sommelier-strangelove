@@ -36,6 +36,15 @@ export const tokenConfig: Token[] = [
   {
     src: "/assets/icons/somm.png",
     alt: "Sommelier logo",
+    symbol: "axlSOMM",
+    address: "0x4e914bbdcde0f455a8ac9d59d3bf739c46287ed2", //NEED TO UPDATE
+    coinGeckoId: "sommelier",
+    decimals: 6,
+    chain: chainSlugMap.SCROLL.id,
+  },
+  {
+    src: "/assets/icons/somm.png",
+    alt: "Sommelier logo",
     symbol: "SOMM",
     address: "0xa670d7237398238de01267472c6f13e5b8010fd1",
     coinGeckoId: "sommelier",
@@ -77,6 +86,15 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "weth",
     decimals: 18,
     chain: chainSlugMap.OPTIMISM.id,
+  },
+  {
+    src: "/assets/icons/eth.png",
+    alt: "Ethereum logo",
+    symbol: "WETH",
+    address: "0x5300000000000000000000000000000000000004",
+    coinGeckoId: "weth",
+    decimals: 18,
+    chain: chainSlugMap.SCROLL.id,
   },
   {
     src: "/assets/icons/wbtc.png",
@@ -259,6 +277,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.OPTIMISM.id,
   },
   {
+    src: "/assets/icons/reth.png",
+    alt: "rETH logo",
+    symbol: "rETH",
+    address: "0x53878B874283351D26d206FA512aEcE1Bef6C0dD",
+    coinGeckoId: "rocket-pool-eth",
+    decimals: 18,
+    chain: chainSlugMap.SCROLL.id,
+  },
+  {
     src: "/assets/icons/steth.png",
     alt: "stETH logo",
     symbol: "stETH",
@@ -437,6 +464,15 @@ export const tokenConfig: Token[] = [
     coinGeckoId: "wrapped-steth",
     decimals: 18,
     chain: chainSlugMap.OPTIMISM.id,
+  },
+  {
+    src: "/assets/icons/wsteth-logo.jpeg",
+    alt: "wstETH logo",
+    symbol: "wstETH",
+    address: "0xf610A9dfB7C89644979b4A0f27063E9e7d7Cda32",
+    coinGeckoId: "wrapped-steth",
+    decimals: 18,
+    chain: chainSlugMap.SCROLL.id,
   },
   {
     src: "/assets/icons/usdc.png",

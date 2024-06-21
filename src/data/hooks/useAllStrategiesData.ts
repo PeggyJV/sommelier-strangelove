@@ -1,22 +1,25 @@
 import { useQuery } from "@tanstack/react-query"
 import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
-import { useNetwork, useProvider } from "wagmi"
+import { useAccount, usePublicClient } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
 import { GetAllStrategiesDataQuery } from "data/actions/types"
 import { tokenConfig } from "data/tokenConfig"
+import { getChainByViemId, supportedChains } from "src/data/chainConfig"
 
 export const useAllStrategiesData = () => {
-  const provider = useProvider()
-  const { chain } = useNetwork()
+  const client = usePublicClient()
+  const { chain: viemChain } = useAccount()
   const { data: allContracts } = useAllContracts()
 
+  const chain = getChainByViemId(viemChain?.name)
+
   const sommToken = tokenConfig.find((token) => {
-    const compareChain = chain?.unsupported
+    const compareChain = supportedChains.includes(chain ? chain.id : "")
       ? "ethereum"
-      : chain?.name.toLowerCase().split(" ")[0]
+      : chain?.id
     return (
       token.coinGeckoId === "sommelier" &&
       token.chain === (compareChain || "ethereum")
@@ -46,18 +49,17 @@ export const useAllStrategiesData = () => {
     };
   }, [])
 
-  const query = useQuery(
-    ["USE_ALL_STRATEGIES_DATA", { provider: provider?._isProvider }],
-    async () => {
+  const query = useQuery({
+    queryKey: ["USE_ALL_STRATEGIES_DATA", client?.uid ],
+    queryFn: async () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,
         sommPrice: sommPrice!,
         cellarData: cellarData,
       })
     },
-    {
-      enabled: !!allContracts && !!sommPrice && !!cellarData,
-    }
+    enabled: !!allContracts && !!sommPrice && !!cellarData,
+  }
   )
 
   return {

@@ -2,23 +2,22 @@ import { BaseToast } from "components/_toasts/BaseToast"
 import {
   ToastId,
   useToast,
-  ToastOptions,
-  Status,
   BoxProps,
   StackProps,
   HeadingProps,
   IconProps,
+  UseToastOptions
 } from "@chakra-ui/react"
 import { ReactNode, useRef } from "react"
 import { InformationIcon, WarningIcon } from "components/_icons"
 import { SuccessIcon } from "components/_icons/SuccessIcon"
 
-interface BaseToast extends Partial<Omit<ToastOptions, "status">> {
+interface BaseToast extends Partial<Omit<UseToastOptions, "status">> {
   body: ReactNode
   closeHandler?: () => void
   isLoading?: boolean
   heading?: string
-  status?: Status | "primary"
+  status?: string | "primary"
 }
 
 export const useBrandedToast = () => {
@@ -87,7 +86,7 @@ export const useBrandedToast = () => {
   return { close, closeAll, update, addToast }
 }
 
-export const useToastStyles = (status?: Status | "primary") => {
+export const useToastStyles = (status?: string | "primary") => {
   const dynamicBoxStyles: BoxProps =
     status === "info"
       ? {

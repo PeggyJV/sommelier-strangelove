@@ -2,15 +2,16 @@ import { useQuery } from "@tanstack/react-query"
 import { getStrategyData } from "data/actions/common/getStrategyData"
 import { cellarDataMap } from "data/cellarDataMap"
 import { GetStrategyDataQuery } from "src/data/actions/types"
-import { useProvider } from "wagmi"
+import { usePublicClient } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
 import { useState, useEffect } from "react"
+import _ from 'lodash';
 import { tokenConfig } from "data/tokenConfig"
 
 export const useStrategyData = (address: string, chain: string) => {
-  const provider = useProvider()
+  const publicClient = usePublicClient()
 
   const { data: allContracts } = useAllContracts()
   const sommToken = tokenConfig.find(
@@ -63,28 +64,27 @@ export const useStrategyData = (address: string, chain: string) => {
     address + (config.chain.id !== "ethereum" ? "-" + chain : "")
 
   // Get cellar contracts for the chain
-  const query = useQuery(
-    [
+  const query = useQuery({
+    queryKey: [
       "USE_STRATEGY_DATA",
-      { provider: provider?._isProvider, address: key },
+      { provider: publicClient?.uid, address: key },
     ],
-    async () => {
+    queryFn: async () => {
       const result = await getStrategyData({
         address,
         contracts: allContracts![key]!,
         sommPrice: sommPrice ?? "0",
-        stratData: stratData?.cellar,
+        stratData: _.cloneDeep(stratData?.cellar),
         baseAssetPrice: baseAssetPrice ?? "0",
       })
 
       return result
     },
-    {
-      enabled:
-        !!allContracts &&
-        !!sommPrice &&
-        (isNoDataSource || !!stratData) &&
-        !!baseAssetPrice,
+    enabled:
+      !!allContracts &&
+      !!sommPrice &&
+      (isNoDataSource || !!stratData) &&
+      !!baseAssetPrice,
     }
   )
 

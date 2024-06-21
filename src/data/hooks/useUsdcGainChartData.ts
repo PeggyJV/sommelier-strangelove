@@ -25,9 +25,9 @@ export const useUsdcGainChartData = ({
     interval,
     enabled,
   })
-  const query = useQuery(
-    ["USE_USDC_GAIN_CHART_DATA", usdcMarketChart.data, day, interval],
-    async () => {
+  const query = useQuery({
+    queryKey: ["USE_USDC_GAIN_CHART_DATA", usdcMarketChart.data, day, interval],
+    queryFn: async () => {
       if (!day) throw new Error("day is undefined")
       if (!usdcMarketChart.data) {
         throw new Error("market chart data is undefined")
@@ -39,10 +39,8 @@ export const useUsdcGainChartData = ({
         usdcData: usdcMarketChart.data,
       })
     },
-    {
-      enabled: Boolean(day) && !!usdcMarketChart.data && enabled,
-      onSuccess: onSuccess,
-    }
+    enabled: Boolean(day) && !!usdcMarketChart.data && enabled,
+}
   )
   useEffect(() => {
     if (enabled && query.data) {

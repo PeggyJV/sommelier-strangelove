@@ -63,57 +63,60 @@ export const ConnectWalletPopover = ({
     },
   }
 
-  const { connect, connectors, pendingConnector } = useConnect({
-    chainId: wagmiChainId,
-    onError: (error, args) => {
-      const currentPageLink =
-        typeof window !== "undefined" ? window.location.href : "N/A"
+  const { connect, connectors, isPending } = useConnect({
+    mutation: {
+      onError: (error, args) => {
+        const currentPageLink =
+          typeof window !== "undefined" ? window.location.href : "N/A"
 
-      addToast({
-        heading: "Connection failed!",
-        body: <Text>{error.message}</Text>,
-        status: "error",
-      })
-
-      analytics.track("wallet.connect-failed", {
-        error: error.name,
-        message: error.message,
-        wallet: args.connector.name,
-        pageLink: currentPageLink, // Added
-        // Add other data like walletSoftware and walletVersion if available
-      })
-    },
-    onSuccess: (data, args) => {
-      const { account } = data
-      const walletSoftware = args.connector.name
-      //const walletVersion = args.connector.version // Placeholder. Adjust based on where you get this info.
-      const currentPageLink =
-        typeof window !== "undefined" ? window.location.href : "N/A"
-
-      addToast({
-        heading: "Connected",
-        body: <Text>Your wallet is connected</Text>,
-        status: "success",
-      })
-
-      if (account && account.length) {
-        insertEvent({
-          event: "wallet.connect-succeeded",
-          address: account,
+        addToast({
+          heading: "Connection failed!",
+          body: <Text>{error.message}</Text>,
+          status: "error",
         })
 
-        analytics.track("wallet.connect-succeeded", {
-          account,
+        analytics.track("wallet.connect-failed", {
+          error: error.name,
+          message: error.message,
           wallet: args.connector.name,
-          walletSoftware,
-          //walletVersion,
-          pageLink: currentPageLink,
+          pageLink: currentPageLink, // Added
+          // Add other data like walletSoftware and walletVersion if available
+        })
+      },
+      onSuccess: (data, args) => {
+        const { accounts } = data
+        const  account = accounts[0]
+        console.log(accounts);
+        const walletSoftware = args.connector.name
+        //const walletVersion = args.connector.version // Placeholder. Adjust based on where you get this info.
+        const currentPageLink =
+          typeof window !== "undefined" ? window.location.href : "N/A"
+
+        addToast({
+          heading: "Connected",
+          body: <Text>Your wallet is connected</Text>,
+          status: "success",
         })
 
-        // Refresh the page upon successful connection
-        window.location.reload()
-      }
-    },
+        if (account && account.length) {
+          insertEvent({
+            event: "wallet.connect-succeeded",
+            address: accounts[0],
+          })
+
+          analytics.track("wallet.connect-succeeded", {
+            account,
+            wallet: args.connector.name,
+            walletSoftware,
+            //walletVersion,
+            pageLink: currentPageLink,
+          })
+
+          // Refresh the page upon successful connection
+          window.location.reload()
+        }
+      },
+    }
   })
 
   const openWalletSelection = () => {
@@ -121,7 +124,7 @@ export const ConnectWalletPopover = ({
   }
 
   const filterActiveConnectors = connectors.filter(
-    (x) => x.ready && x.id !== activeConnector?.id
+    (x) => x.id !== activeConnector?.id
   )
   const displayedConnectors = filterActiveConnectors.filter(
     (obj, index) =>
@@ -176,7 +179,7 @@ export const ConnectWalletPopover = ({
                   }}
                 >
                   <HStack>
-                    {isConnecting && x.id === pendingConnector?.id ? (
+                    {isConnecting && isPending ? (
                       <Spinner />
                     ) : (
                       <Image

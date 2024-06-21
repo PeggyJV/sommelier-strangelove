@@ -1,6 +1,6 @@
 import { ConfigProps } from "data/types"
-import { useAccount, useBalance, useToken } from "wagmi"
-import { getAddress } from "ethers/lib/utils.js"
+import { useAccount, useBalance } from "wagmi"
+import { getAddress } from "viem"
 
 export const useUserBalance = (config: ConfigProps) => {
   const { address } = useAccount()
@@ -9,17 +9,9 @@ export const useUserBalance = (config: ConfigProps) => {
     address: address,
     token: getAddress(config.lpToken.address),
     chainId: config.chain.wagmiId,
-    formatUnits: "wei",
-    watch: false,
+    unit: "wei"
   })
-
-  const lpTokenInfo = useToken({
-    address: getAddress(config.lpToken.address),
-    chainId: config.chain.wagmiId,
-  })
-
   return {
-    lpToken,
-    lpTokenInfo,
+    lpToken
   }
 }

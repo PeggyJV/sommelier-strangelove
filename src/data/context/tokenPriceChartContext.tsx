@@ -20,6 +20,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  ReactNode
 } from "react"
 import { colors } from "theme/colors"
 import { OperationContext } from "urql"
@@ -167,7 +168,8 @@ const prevMonth = getPreviousMonth()
 
 export const TokenPriceChartProvider: FC<{
   address: string,
-  chain: string
+  chain: string,
+  children: ReactNode
 }> = ({ children, address, chain }) => {
   const [showLine, setShowLine] = useState<ShowLine>({
     tokenPrice: true,

@@ -79,7 +79,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
                     <CellarStats
                       tooltip={apyTooltip}
                       title={apyLabel(cellarConfig)}
-                      value={baseApy?.formatted || "..."}
+                      value={baseApy?.formatted?.toString() || "..."}
                       isLoading={isLoading}
                     />
                   )}
