@@ -235,6 +235,7 @@ export const isApyChartEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
@@ -384,9 +385,6 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
       config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
       config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
       config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
@@ -420,16 +418,13 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
       config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
-    } else if (
-      config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
-    ) {
-      return "7 Day MA APY"
+    // } else if (
+
+    // ) {
+    //   return "7 Day MA APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
       return "Estimated Reward APY"
     }
@@ -448,18 +443,15 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
-  } else if (
-    config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
-  ) {
-    return "7 Day MA APY"
+  // } else if (
+
+  // ) {
+  //   return "7 Day MA APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return "Estimated Reward APY"
   }
@@ -477,8 +469,6 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
@@ -496,9 +486,6 @@ export const apyChartLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
@@ -570,7 +557,6 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "6.0%",
     }
   }
-
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) {
     return {
       value: 15.0,
@@ -584,6 +570,14 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "15.0%",
     }
   }
+
+  // if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) {
+  //   return {
+  //     value: 15.0,
+  //     formatted: "15.0%",
+  //   }
+  // }
+
   if (config.cellarNameKey === CellarNameKey.TURBO_RSETH) {
     return {
       value: 8.0,

@@ -51,7 +51,7 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
   const protocols = strategyData?.protocols!
   const isManyProtocols = typeof protocols === "object"
   const protocolData = isManyProtocols
-    ? protocols.map((v) => {
+    ? protocols.map((v: string) => {
         return {
           title: v,
           icon: protocolsImage[v],

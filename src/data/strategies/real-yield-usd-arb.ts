@@ -77,7 +77,6 @@ export const realYieldUsdArb: CellarData = {
     },
     baseAsset: tokenConfigMap.USDC_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
-    show7DayAPYTooltip: true,
     staker: {
       address: config.CONTRACT.REAL_YIELD_USD_ARB_STAKER.ADDRESS,
       abi: config.CONTRACT.REAL_YIELD_USD_ARB_STAKER.ABI,

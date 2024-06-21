@@ -27,16 +27,16 @@ import { useBrandedToast } from "hooks/chakra"
 import { useRouter } from "next/router"
 import { chainConfig } from "data/chainConfig"
 import { tokenConfig, tokenConfigMap } from "data/tokenConfig"
-import { useImportToken } from "hooks/web3/useImportToken" // Import the useImportToken hook
+import { useImportToken } from "hooks/web3/useImportToken"
 
 export const ConnectedPopover = () => {
   const { addToast, close } = useBrandedToast()
   const { disconnect } = useDisconnect()
   const { address, isConnecting, chain } = useAccount()
-  const { data: ensName, isLoading: ensNameLoading } = useEnsName({
+  const { data: ensName } = useEnsName({
     address,
   })
-  const { data: ensAvatar, isLoading: ensAvatarLoading } =
+  const { data: ensAvatar } =
     useEnsAvatar({ name: address })
 
   const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)
@@ -108,7 +108,6 @@ export const ConnectedPopover = () => {
   }
 
   const isLoading = isConnecting && !address
-  const isEnsLoading = ensAvatarLoading || ensNameLoading
 
   return (
     <Popover placement="bottom">
@@ -128,7 +127,7 @@ export const ConnectedPopover = () => {
           zIndex={401}
           isLoading={isLoading}
           leftIcon={
-            isLoading || isEnsLoading ? (
+            isLoading ? (
               <Spinner size="xs" />
             ) : undefined
           }
