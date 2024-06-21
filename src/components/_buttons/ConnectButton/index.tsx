@@ -7,7 +7,7 @@ import { ConnectWalletPopover } from "./ConnectWalletPopover"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { MobileConnectedPopover } from "./MobileConnectedPopover"
 import ChainButton from "../ChainButton"
-import { chainConfigMap } from "src/data/chainConfig"
+import { chainConfig, chainConfigMap } from "src/data/chainConfig"
 
 export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
@@ -22,11 +22,7 @@ const ConnectButton = (
   const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
 
   const getChainName = () => {
-    let res = chain?.name.toLowerCase().split(" ")[0] || "ethereum"
-    if (res === "op") {
-      res = "optimism"
-    }
-    return res;
+    return chainConfig.find(c => c.viemChain.name === chain?.name)?.id || "ethereum"
   }
 
   const [selectedNetwork, setSelectedNetwork] = React.useState(

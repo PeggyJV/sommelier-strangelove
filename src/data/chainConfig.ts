@@ -8,6 +8,7 @@ import { Chain as ViemChain } from "viem";
 
 export interface Chain {
   id: string
+  viemId: string
   viemChain: ViemChain
   wagmiId: number
   displayName: string
@@ -45,6 +46,7 @@ export const placeholderChain: Chain = {
 export const chainConfig: Chain[] = [
   {
     id: "ethereum",
+    viemId: "Ethereum",
     viemChain: mainnet,
     wagmiId: mainnet.id,
     displayName: "Ethereum",
@@ -65,6 +67,7 @@ export const chainConfig: Chain[] = [
   },
   {
     id: "arbitrum",
+    viemId: "Arbitrum One",
     viemChain: arbitrum,
     wagmiId: arbitrum.id,
     displayName: "Arbitrum",
@@ -85,6 +88,7 @@ export const chainConfig: Chain[] = [
   },
   {
     id: "optimism",
+    viemId: "OP Mainnet",
     viemChain: optimism,
     wagmiId: optimism.id,
     displayName: "Optimism",
@@ -108,6 +112,7 @@ export const chainConfig: Chain[] = [
   },
   {
     id: "scroll",
+    viemId: "Scroll",
     viemChain: scroll,
     wagmiId: scroll.id,
     displayName: "Scroll",
@@ -124,7 +129,6 @@ export const chainConfig: Chain[] = [
   },
 ]
 
-// Create a map from each chain name to its config, including the placeholder
 export const chainConfigMap: Record<string, Chain> =
   chainConfig.reduce<Record<string, Chain>>(
     (map, chain) => {
@@ -133,11 +137,18 @@ export const chainConfigMap: Record<string, Chain> =
     },
     { unknown: placeholderChain }
   )
+
 export const supportedChains = [
   "ethereum",
   "arbitrum",
   "optimism",
   "scroll",
+]
+export const supportedChainsViem = [
+  "Ethereum",
+  "Arbitrum One",
+  "OP Mainnet",
+  "Scroll",
 ]
 
 export const chainSlugMap = {

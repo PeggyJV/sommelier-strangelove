@@ -7,9 +7,7 @@ import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
 import { GetAllStrategiesDataQuery } from "data/actions/types"
 import { tokenConfig } from "data/tokenConfig"
-import {
-  supportedChains,
-} from "src/data/chainConfig"
+import { supportedChainsViem } from "src/data/chainConfig"
 
 export const useAllStrategiesData = () => {
   const client = usePublicClient()
@@ -17,7 +15,7 @@ export const useAllStrategiesData = () => {
   const { data: allContracts } = useAllContracts()
 
   const sommToken = tokenConfig.find((token) => {
-    const compareChain = supportedChains.includes(chain ? chain.name : "")
+    const compareChain = supportedChainsViem.includes(chain ? chain.name : "")
       ? "ethereum"
       : chain?.name.toLowerCase().split(" ")[0]
     return (

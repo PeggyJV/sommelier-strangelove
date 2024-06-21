@@ -9,7 +9,6 @@ import {
   HStack,
   Box,
   Image,
-  useTheme,
 } from "@chakra-ui/react"
 import { ChevronDownIcon, CheckIcon } from "components/_icons"
 import { useSwitchChain, useAccount } from "wagmi"
@@ -28,7 +27,7 @@ export interface ChainButtonProps {
 }
 
 const ChainButton = ({
-  chain = placeholderChain, // Provide default value
+  chain = placeholderChain,
   onChainChange,
 }: ChainButtonProps) => {
   const { switchChainAsync } = useSwitchChain()
@@ -66,8 +65,6 @@ const ChainButton = ({
       })
     }
   }
-
-  const theme = useTheme()
 
   return (
     <Popover placement="bottom">
