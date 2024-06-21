@@ -426,6 +426,7 @@ export const PortfolioCard = (props: BoxProps) => {
             </VStack>
           )}
           {/* Insert PointsDisplay here */}
+{/* 
           {isConnected &&
             address &&
             cellarConfig.cellarNameKey ===
@@ -440,6 +441,7 @@ export const PortfolioCard = (props: BoxProps) => {
                 CellarNameKey.REAL_YIELD_USD_ARB) && (
               <MerklePoints userAddress={address} merkleRewardsApy={strategyData?.merkleRewardsApy} />
             )}
+             */}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
               <HStack
