@@ -137,7 +137,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
         address
       )
       // @ts-ignore
-      const { hash: bondConf } = await stakerSigner.write.stake([
+      const hash = await stakerSigner.write.stake([
         depositAmtInWei,
         bondPeriod
         ],
@@ -146,7 +146,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
 
       await doHandleTransaction({
         cellarConfig,
-        hash: bondConf,
+        hash,
         onSuccess: () => {
           analytics.track("bond.succeeded", analyticsData)
           refetch()

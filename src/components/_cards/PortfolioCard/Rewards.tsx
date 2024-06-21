@@ -31,6 +31,7 @@ export const Rewards = ({
   const { userStakes } = userData || {}
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const { addToast, close } = useBrandedToast()
+  const { address } = useAccount()
 
   let buttonsEnabled = true
   if (cellarConfig.chain.wagmiId !== wagmiChain?.id!) {
@@ -101,10 +102,10 @@ export const Rewards = ({
     // analytics.track("rewards.claim-started")
 
     // @ts-ignore
-    const tx = await stakerSigner?.write.claimAll()
+    const hash = await stakerSigner?.write.claimAll([], { account: address })
     await doHandleTransaction({
       cellarConfig,
-      ...tx,
+      hash,
       onSuccess: () => {
         refetch()
         analytics.track("rewards.claim-succeeded")

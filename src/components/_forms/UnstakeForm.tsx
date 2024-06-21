@@ -110,7 +110,7 @@ export const UnstakeForm = ({ onClose }: UnstakeFormProps) => {
 
     const amtInWei = parseUnits(`${withdrawAmount}`, 18)
     // @ts-ignore
-    const tx = await cellarSigner?.write.redeem(
+    const hash = await cellarSigner?.write.redeem(
       [amtInWei, address, address],
       { account: address }
     )
@@ -130,7 +130,7 @@ export const UnstakeForm = ({ onClose }: UnstakeFormProps) => {
 
     await doHandleTransaction({
       cellarConfig,
-      ...tx,
+      hash,
       onSuccess,
       onError,
     })

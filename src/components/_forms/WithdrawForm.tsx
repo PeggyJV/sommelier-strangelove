@@ -158,7 +158,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       )
 
       // @ts-ignore
-      const tx = await cellarSigner?.write.redeem([
+      const hash = await cellarSigner?.write.redeem([
           amtInWei,
           address,
           address
@@ -184,7 +184,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
 
       await doHandleTransaction({
         cellarConfig,
-        ...tx,
+        hash,
         onSuccess,
         onError,
       })

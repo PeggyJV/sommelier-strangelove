@@ -97,11 +97,11 @@ const BondingTableCard = (props: TableProps) => {
       })
       // analytics.track("unstake.started")
       // @ts-ignore
-      const tx = await stakerSigner?.write.unstake([id])
+      const hash = await stakerSigner?.write.unstake([id])
 
       await doHandleTransaction({
         cellarConfig,
-        ...tx,
+        hash,
         onSuccess: () => analytics.track("unstake.succeeded"),
         onError: () => analytics.track("unstake.failed"),
       })
@@ -132,7 +132,7 @@ const BondingTableCard = (props: TableProps) => {
       })
       // analytics.track("unbond.started")
       // @ts-ignore
-      const tx = await stakerSigner?.write.unbond([id], {
+      const hash = await stakerSigner?.write.unbond([id], {
         account: address
         // gas used around 63000
         //gasLimit: 100000,
@@ -140,7 +140,7 @@ const BondingTableCard = (props: TableProps) => {
 
       await doHandleTransaction({
         cellarConfig,
-        ...tx,
+        hash,
         onSuccess: () => analytics.track("unbond.succeeded"),
         onError: () => analytics.track("unbond.failed"),
       })

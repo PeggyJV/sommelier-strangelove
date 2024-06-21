@@ -152,7 +152,7 @@ const WithdrawQueueCard = (props: TableProps) => {
       )
 
       // @ts-ignore
-      const tx = await withdrawQueueContract?.write.updateWithdrawRequest([
+      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
         cellarConfig.cellar.address,
         withdrawTouple
         ],
@@ -172,7 +172,7 @@ const WithdrawQueueCard = (props: TableProps) => {
 
       await doHandleTransaction({
         cellarConfig,
-        ...tx,
+        hash,
         onSuccess,
         onError,
       })

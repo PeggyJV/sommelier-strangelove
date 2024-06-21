@@ -381,7 +381,7 @@ export const WithdrawQueueForm = ({
         address
       )
       // @ts-ignore
-      const tx = await withdrawQueueContract?.write.updateWithdrawRequest([
+      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
         cellarConfig.cellar.address,
         withdrawTouple
         ],
@@ -405,7 +405,7 @@ export const WithdrawQueueForm = ({
 
       await doHandleTransaction({
         cellarConfig,
-        ...tx,
+        hash,
         onSuccess,
         onError,
       })
