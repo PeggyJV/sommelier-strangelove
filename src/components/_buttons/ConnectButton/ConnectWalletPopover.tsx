@@ -86,7 +86,6 @@ export const ConnectWalletPopover = ({
       onSuccess: (data, args) => {
         const { accounts } = data
         const  account = accounts[0]
-        console.log(accounts);
         const walletSoftware = args.connector.name
         //const walletVersion = args.connector.version // Placeholder. Adjust based on where you get this info.
         const currentPageLink =

@@ -9,6 +9,7 @@ import {
   coinbaseWallet,
   injected,
   walletConnect,
+  metaMask
 } from "@wagmi/connectors"
 
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
@@ -24,7 +25,7 @@ export const wagmiConfig = createConfig({
         enableExplorer: true,
       },
     }),
-    injected({ target: 'metaMask' }),
+    metaMask(),
     injected(),
     coinbaseWallet({
       appName: "Sommelier",
