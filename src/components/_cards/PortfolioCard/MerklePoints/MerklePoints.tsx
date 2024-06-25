@@ -14,6 +14,7 @@ const MERKLE_CONTRACT_ADDRESS =
 interface MerklePointsProps {
   userAddress: string
   merkleRewardsApy?: number
+  isWalletConnected: boolean
 }
 
 const formatPoints = (points: string): string => {
@@ -32,6 +33,7 @@ const formatPoints = (points: string): string => {
 export const MerklePoints = ({
   userAddress,
   merkleRewardsApy,
+  isWalletConnected,
 }: MerklePointsProps) => {
   const [merklePoints, setMerklePoints] = useState<string | null>(
     null
@@ -40,6 +42,11 @@ export const MerklePoints = ({
   const { addToast, close } = useBrandedToast()
 
   useEffect(() => {
+    if (!isWalletConnected) {
+      setMerklePoints("--")
+      return
+    }
+
     const fetchData = async () => {
       try {
         const response = await fetchMerkleData(userAddress)
@@ -72,7 +79,7 @@ export const MerklePoints = ({
     }
 
     fetchData()
-  }, [])
+  }, [userAddress, isWalletConnected])
 
   const isHexString = (value: string) =>
     /^0x[0-9a-fA-F]+$/.test(value)
@@ -216,9 +223,14 @@ export const MerklePoints = ({
         alignSelf="flex-start"
         spacing={0}
       >
-        {merklePoints ? formatPoints(merklePoints) : "Loading..."}
+        {merklePoints === "--" || merklePoints === null
+          ? "--"
+          : formatPoints(merklePoints)}
       </CardStat>
-      <BaseButton onClick={handleClaimMerklePoints}>
+      <BaseButton
+        onClick={handleClaimMerklePoints}
+        disabled={!isWalletConnected}
+      >
         Claim Merkle Rewards
       </BaseButton>
     </VStack>

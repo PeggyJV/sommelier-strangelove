@@ -187,8 +187,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           direction={{ base: "column", md: "row" }}
           wrap="wrap"
         >
-
-
           <SimpleGrid
             templateColumns={{
               base: "repeat(1, max-content)",
@@ -432,14 +430,18 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               CellarNameKey.TURBO_EETHV2 && (
               <PointsDisplay userAddress={address} />
             )}
-          {isConnected &&
-            address &&
-            (cellarConfig.cellarNameKey ===
-              CellarNameKey.REAL_YIELD_ETH_ARB ||
-              cellarConfig.cellarNameKey ===
-                CellarNameKey.REAL_YIELD_USD_ARB) && (
-              <MerklePoints userAddress={address} merkleRewardsApy={strategyData?.merkleRewardsApy} />
-            )}
+          {(isConnected ||
+            (!isConnected &&
+              (cellarConfig.cellarNameKey ===
+                CellarNameKey.REAL_YIELD_ETH_ARB ||
+                cellarConfig.cellarNameKey ===
+                  CellarNameKey.REAL_YIELD_USD_ARB))) && (
+            <MerklePoints
+              userAddress={address}
+              merkleRewardsApy={strategyData?.merkleRewardsApy}
+              isWalletConnected={isConnected}
+            />
+          )}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
               <HStack
