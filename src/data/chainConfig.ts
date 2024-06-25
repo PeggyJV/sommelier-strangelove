@@ -5,6 +5,7 @@ import {
   scroll,
 } from "wagmi/chains"
 import { Chain as ViemChain } from "viem";
+import { ALCHEMY_API_URL, INFURA_API_URL, QUICKNODE_API_URL } from "context/rpc_context"
 
 export interface Chain {
   id: string
@@ -14,9 +15,9 @@ export interface Chain {
   displayName: string
   logoPath: string
   alt: string
-  infuraRpcUrl: string
-  alchemyRpcUrl: string
-  quicknodeRpcUrl: string
+  infuraRpcUrl?: string
+  alchemyRpcUrl?: string
+  quicknodeRpcUrl?: string
   blockExplorer: {
     name: string
     url: string
@@ -53,13 +54,8 @@ export const chainConfig: Chain[] = [
     displayName: "Ethereum",
     logoPath: "/assets/icons/ethereum-alt.png",
     alt: "Ethereum logo",
-    // Safely access the RPC URLs with a fallback
-    infuraRpcUrl:
-      mainnet.rpcUrls.default?.http?.[0] ||
-      "https://default-ethereum-rpc.com",
-    alchemyRpcUrl:
-      mainnet.rpcUrls.default?.http?.[0] ||
-      "https://default-ethereum-rpc.com",
+    infuraRpcUrl: INFURA_API_URL.ethereum,
+    alchemyRpcUrl: ALCHEMY_API_URL.ethereum,
     blockExplorer: mainnet.blockExplorers.default,
     withdrawQueueAddress:
       "0x5751d75b642975E4E7fdE39f35F9a6c11b867169",
@@ -74,18 +70,12 @@ export const chainConfig: Chain[] = [
     displayName: "Arbitrum",
     logoPath: "/assets/icons/arbitrum.svg",
     alt: "Arbitrum logo",
-    // Safely access the Arbitrum RPC URLs
-    infuraRpcUrl:
-      arbitrum.rpcUrls.default.http?.[0] ||
-      "https://default-arbitrum-rpc.com",
-    alchemyRpcUrl:
-      arbitrum.rpcUrls.default.http?.[0] ||
-      "https://default-arbitrum-rpc.com",
+    infuraRpcUrl: INFURA_API_URL.arbitrum,
+    alchemyRpcUrl: ALCHEMY_API_URL.arbitrum,
     blockExplorer: arbitrum.blockExplorers.default,
     withdrawQueueAddress:
       "0x516AD60801b62fCABCCDA7be178e4478D4018071",
-    priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11",
-    quicknodeRpcUrl: "",
+    priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11"
   },
   {
     id: "optimism",
@@ -95,21 +85,12 @@ export const chainConfig: Chain[] = [
     displayName: "Optimism",
     logoPath: "/assets/icons/optimism.svg",
     alt: "Optimism logo",
-    // Safely access the Optimism RPC URLs with checks
-    infuraRpcUrl:
-      optimism.rpcUrls?.default.http?.[0] ||
-      "https://default-optimism-rpc.com",
-    alchemyRpcUrl:
-      optimism.rpcUrls?.default.http?.[0] ||
-      "https://default-optimism-rpc.com",
-    blockExplorer: optimism.blockExplorers?.default || {
-      name: "Unknown",
-      url: "#",
-    },
+    infuraRpcUrl: INFURA_API_URL.optimism,
+    alchemyRpcUrl:ALCHEMY_API_URL.optimism,
+    blockExplorer: optimism.blockExplorers.default,
     withdrawQueueAddress:
       "0x516AD60801b62fCABCCDA7be178e4478D4018071",
-    priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11",
-    quicknodeRpcUrl: "",
+    priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11"
   },
   {
     id: "scroll",
@@ -119,14 +100,11 @@ export const chainConfig: Chain[] = [
     displayName: "Scroll",
     logoPath: "/assets/icons/scroll.svg",
     alt: "Scroll logo",
-    quicknodeRpcUrl:
-      "https://damp-cool-model.scroll-mainnet.quiknode.pro",
+    quicknodeRpcUrl: QUICKNODE_API_URL.scroll,
     blockExplorer: scroll.blockExplorers.default,
     withdrawQueueAddress:
       "0x1cee7dfb56de1eae6125e39336e94f297b94959e",
-    priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11",
-    infuraRpcUrl: "",
-    alchemyRpcUrl: "",
+    priceRouterAddress: "0xBB35643AE2Af63C616a7ed6eB8Df15ca1d86fe11"
   },
 ]
 

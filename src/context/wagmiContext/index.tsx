@@ -11,8 +11,13 @@ import {
   walletConnect,
   metaMask
 } from "@wagmi/connectors"
+import {
+  ALCHEMY_API_KEY,
+  ALCHEMY_API_URL,
+  QUICKNODE_API_KEY,
+  QUICKNODE_API_URL
+} from "context/rpc_context"
 
-const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
 const WALLETCONNECT_PROJECT_ID =
   process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ||
   "c11d8ffaefb8ba4361ae510ed7690cb8"
@@ -38,10 +43,10 @@ export const wagmiConfig = createConfig({
     }),
   ],
   transports: {
-    [mainnet.id]: http(`https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`),
-    [arbitrum.id]: http(arbitrum.rpcUrls.default.http[0]),
-    [optimism.id]: http(optimism.rpcUrls.default.http[0]),
-    [scroll.id]: http(scroll.rpcUrls.default.http[0])
+    [mainnet.id]: http(`${ALCHEMY_API_URL.ethereum}/${ALCHEMY_API_KEY}`),
+    [arbitrum.id]: http(`${ALCHEMY_API_URL.arbitrum}/${ALCHEMY_API_KEY}`),
+    [optimism.id]:  http(`${ALCHEMY_API_URL.optimism}/${ALCHEMY_API_KEY}`),
+    [scroll.id]: http(`${QUICKNODE_API_URL.scroll}/${QUICKNODE_API_KEY}`)
   },
 })
 
