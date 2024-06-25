@@ -33,8 +33,6 @@ export const doImportToken: DoImportToken = async ({
     // Get chain from chainConfigMap
     const chainObj = chainConfigMap[chain]
 
-
-
     const tokenData = await readContracts(wagmiConfig, {
       allowFailure: false,
       contracts: [

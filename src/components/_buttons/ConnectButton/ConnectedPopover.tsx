@@ -51,7 +51,26 @@ export const ConnectedPopover = () => {
   const id = useRouter().query.id as string | undefined
   const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
 
-  const importToken = useImportToken() // Use the import token hook
+  const importToken = useImportToken({
+    onSuccess: (data) => {
+      const tokenData = data as unknown as { symbol: string }
+      addToast({
+        heading: "Import Token",
+        status: "success",
+        body: <Text>{tokenData.symbol} added to metamask</Text>,
+        closeHandler: close,
+      })
+    },
+    onError: (error) => {
+      const e = error as Error
+      addToast({
+        heading: "Import Token",
+        status: "error",
+        body: <Text>{e.message}</Text>,
+        closeHandler: close,
+      })
+    },
+  })
 
   const handleImportToken = () => {
     const fullImageUrl = `${window.origin}${tokenConfigMap.SOMM_ETHEREUM.src}`
