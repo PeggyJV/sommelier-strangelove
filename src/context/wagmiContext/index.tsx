@@ -23,12 +23,18 @@ export const wagmiConfig = createConfig({
       projectId: WALLETCONNECT_PROJECT_ID,
       qrModalOptions: {
         enableExplorer: true,
-      },
+        themeMode: 'dark'
+      }
     }),
-    metaMask(),
+    metaMask({
+      dappMetadata: {
+        name: "Sommelier Finance",
+        url: "https://www.sommelier.finance/",
+      }
+    }),
     injected(),
     coinbaseWallet({
-      appName: "Sommelier",
+      appName: "Sommelier Finance"
     }),
   ],
   transports: {
