@@ -78,7 +78,7 @@
     "slugify": "^1.6.5",
     "urql": "^2.2.0",
     "viem": "^2.11.1",
-    "wagmi": "^2.8.3",
+    "wagmi": "^2.10.6",
     "zustand": "^4.3.8"
   },
   "devDependencies": {

@@ -8,8 +8,7 @@ import { mainnet, arbitrum, optimism, scroll } from "wagmi/chains"
 import {
   coinbaseWallet,
   injected,
-  walletConnect,
-  metaMask
+  walletConnect
 } from "@wagmi/connectors"
 import {
   ALCHEMY_API_KEY,
@@ -31,12 +30,15 @@ export const wagmiConfig = createConfig({
         themeMode: 'dark'
       }
     }),
-    metaMask({
-      dappMetadata: {
-        name: "Sommelier Finance",
-        url: "https://www.sommelier.finance/",
-      }
-    }),
+    // MetaMask connector produces type error in production.
+    // "Injected" creates metamask option in case user has MetaMask has installed.
+    // Need to find a solution to display the option when MetaMask isn't installed.
+    // metaMask({
+    //   dappMetadata: {
+    //     name: "Sommelier Finance",
+    //     url: "https://www.sommelier.finance/",
+    //   }
+    // }),
     injected(),
     coinbaseWallet({
       appName: "Sommelier Finance"
