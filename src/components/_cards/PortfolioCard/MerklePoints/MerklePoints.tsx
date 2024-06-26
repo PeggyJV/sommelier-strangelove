@@ -34,7 +34,6 @@ export const MerklePoints = ({
     const fetchData = async () => {
       try {
         const response = await fetchMerkleData()
-        console.log("Merkle data response:", response)
 
         if (response.Response && response.Response.total_balance) {
           setMerklePoints(response.Response.total_balance)
@@ -42,11 +41,6 @@ export const MerklePoints = ({
         } else {
           setMerklePoints("0")
         }
-        console.log("Merkle points:", response.Response.total_balance)
-        console.log(
-          "Merkle transaction data:",
-          response.Response.tx_data
-        )
       } catch (error) {
         console.error("Failed to fetch Merkle points data:", error)
         addToast({
@@ -66,7 +60,7 @@ export const MerklePoints = ({
     }
 
     fetchData()
-  }, [fetchMerkleData])
+  }, [])
 
   const ensureHexPrefix = (value: string) =>
     value.startsWith("0x") ? value : `0x${value}`
@@ -120,7 +114,7 @@ export const MerklePoints = ({
             if (!isHex(prefixedHash)) {
               throw new Error(`Invalid hex string: ${prefixedHash}`)
             }
-            return toBytes(prefixedHash)
+            return prefixedHash
           }
         )
 
@@ -133,7 +127,7 @@ export const MerklePoints = ({
                   `Invalid hex string: ${prefixedProof}`
                 )
               }
-              return toBytes(prefixedProof)
+              return prefixedProof
             })
         )
 
