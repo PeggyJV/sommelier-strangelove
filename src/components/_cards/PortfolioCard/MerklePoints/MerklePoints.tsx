@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { CardStat } from "components/CardStat"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useBrandedToast } from "hooks/chakra"
-import { Text, Box } from "@chakra-ui/react"
+import { Text, Box, VStack } from "@chakra-ui/react"
 import { MerkleRewards } from "../../../../abi/types/MerkleRewards"
 import { usePublicClient, useWalletClient } from "wagmi"
 import { getContract, isHex, keccak256, toBytes } from "viem"
@@ -207,7 +207,7 @@ export const MerklePoints = ({
   }
 
   return (
-    <>
+    <VStack spacing={4} alignItems="flex-start">
       <CardStat
         label="Merkle Points"
         tooltip="The number of Merkle points accumulated. Please note that you will only receive ARB rewards if you also stake your shares in the SOMM staking contract."
@@ -219,14 +219,6 @@ export const MerklePoints = ({
       <BaseButton onClick={handleClaimMerklePoints}>
         Claim Merkle Rewards
       </BaseButton>
-      <Box>
-        <Text fontSize="xl" fontWeight="bold">
-          Merkle Points APY:{" "}
-          {merkleRewardsApy
-            ? `${merkleRewardsApy.toFixed(2)}%`
-            : "N/A"}
-        </Text>
-      </Box>
-    </>
+    </VStack>
   )
 }
