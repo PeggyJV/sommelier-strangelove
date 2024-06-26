@@ -55,6 +55,9 @@ import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
+import { fetchMerkleData } from "utils/fetchMerkleData"
+
+
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
@@ -427,19 +430,23 @@ export const PortfolioCard = (props: BoxProps) => {
           )}
           {/* Insert PointsDisplay here */}
           {isConnected &&
-            address &&
-            cellarConfig.cellarNameKey ===
-              CellarNameKey.TURBO_EETHV2 && (
-              <PointsDisplay userAddress={address} />
-            )}
-          {isConnected &&
-            address &&
-            (cellarConfig.cellarNameKey ===
-              CellarNameKey.REAL_YIELD_ETH_ARB ||
-              cellarConfig.cellarNameKey ===
-                CellarNameKey.REAL_YIELD_USD_ARB) && (
-              <MerklePoints userAddress={address} merkleRewardsApy={strategyData?.merkleRewardsApy} />
-            )}
+  address &&
+  cellarConfig.cellarNameKey === CellarNameKey.TURBO_EETHV2 && (
+    <PointsDisplay userAddress={address} />
+)}
+
+{isConnected &&
+  address &&
+  (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) && (
+    <MerklePoints
+      userAddress={address}
+      merkleRewardsApy={strategyData?.merkleRewardsApy}
+      fetchMerkleData={() => fetchMerkleData(cellarConfig.cellar.address, address)}
+    />
+)}
+
+
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
               <HStack
