@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react"
 
 import Image from "next/image"
 import { useAccount, useBalance, useBlockNumber } from "wagmi"
-import { getAddress } from "viem"
+import { formatUnits, getAddress } from "viem"
 import {
   useBalances as useGrazBalances,
   useAccount as useGrazAccount,
@@ -82,7 +82,7 @@ export const InputAmount: React.FC = () => {
       setValue("amount", amount, { shouldValidate: true })
     } else if (toEth && sommBalance) {
       const amount = parseFloat(
-        toEther(sommBalance.amount, sommDecimal, false)
+        formatUnits(BigInt(sommBalance.amount), sommDecimal)
       )
       setValue("amount", amount, { shouldValidate: true })
     }
@@ -175,7 +175,7 @@ export const InputAmount: React.FC = () => {
                     ? (data && toEther(data.value, data.decimals)) ||
                       "--"
                     : (sommBalance &&
-                        toEther(sommBalance.amount, sommDecimal)) ||
+                        formatUnits(BigInt(sommBalance.amount), sommDecimal)) ||
                       "--"}
                 </Text>
                 <Button
