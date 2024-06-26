@@ -2,11 +2,11 @@ import { Box, Container, Flex } from "@chakra-ui/react"
 import Footer from "components/Footer"
 import { Nav } from "components/Nav"
 import { Sidebar } from "components/_sidebar"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, ReactNode, useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
 import { useInView } from "react-intersection-observer"
 
-export const LayoutWithSidebar: FC = ({ children }) => {
+export const LayoutWithSidebar: FC<{ children: ReactNode }> = ({ children }) => {
   const { isConnected: connected } = useAccount()
 
   const containerRef = useRef<HTMLDivElement>(null)

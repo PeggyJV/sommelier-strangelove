@@ -1,4 +1,3 @@
-//BridgeForm.tsx.
 import {
   Stack,
   Center,
@@ -28,7 +27,7 @@ import { useBrandedToast } from "hooks/chakra"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useBridgeEthToSommTx } from "hooks/web3/useBridgeEthToSommTx"
 import { useBridgeSommToEthTx } from "hooks/web3/useBridgeSommToEthTx"
-import { useEffect, VFC } from "react"
+import { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { useAccount } from "wagmi"
 
@@ -36,7 +35,7 @@ interface BridgeFormProps {
   wrongNetwork?: boolean
 }
 
-export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
+export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
   const { addToast, closeAll } = useBrandedToast()
   const isMounted = useIsMounted()
   const { watch, handleSubmit, formState, getFieldState, setValue } =
@@ -222,7 +221,7 @@ export const BridgeForm: VFC<BridgeFormProps> = ({wrongNetwork}) => {
         */}
       {isMounted && !buttonEnabled && toSomm && (
         <ConnectButton
-          overrideChainId={"ethereum"}
+          overridechainid={"ethereum"}
           unstyled
           height="69px"
           fontSize="21px"

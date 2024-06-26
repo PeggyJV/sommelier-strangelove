@@ -1,50 +1,48 @@
-import { Provider } from "@wagmi/core"
-import BigNumber from "bignumber.js"
-import { Contract } from "ethers"
+import { getContract } from "viem"
 import { getAllStrategiesData } from "./common/getAllStrategiesData"
 import { getStrategyData } from "./common/getStrategyData"
 
 export interface UserStake {
-  amount: BigNumber
-  amountWithBoost: BigNumber
-  rewardPerTokenPaid: BigNumber
-  rewards: BigNumber
+  amount: bigint
+  amountWithBoost: bigint
+  rewardPerTokenPaid: bigint
+  rewards: bigint
   unbondTimestamp: number
   lock: number
 }
 export interface StakerUserData {
-  claimAllRewards: BigNumber[]
-  claimAllRewardsUSD: BigNumber
+  claimAllRewards: bigint[]
+  claimAllRewardsUSD: number
   totalBondedAmount: {
-    value: BigNumber
+    value: bigint
     formatted: string
   }
   totalClaimAllRewards: {
-    value: BigNumber
+    value: bigint
     formatted: string
   }
-  totalRewards: BigNumber
+  totalRewards: bigint
   userStakes: UserStake[]
 }
 
 export interface StakerData {
-  rewardRate: BigNumber
-  potentialStakingApy: BigNumber
+  rewardRate: bigint
+  potentialStakingApy: bigint
 }
 
 export interface CellarData {
   activeAsset: string
   name: string
-  maxLocked: BigNumber
-  accrualPeriod: BigNumber
-  totalAssets: BigNumber
-  apy: BigNumber
+  maxLocked: bigint
+  accrualPeriod: bigint
+  totalAssets: bigint
+  apy: bigint
 }
 
 export interface CellarUserData {
-  maxDeposit: BigNumber
-  maxWithdraw: BigNumber
-  netValue: BigNumber
+  maxDeposit: bigint
+  maxWithdraw: bigint
+  netValue: bigint
 }
 
 export interface DepositAndSwapPayload {
@@ -64,7 +62,7 @@ export interface DepositAndSwapPayload {
 }
 
 export interface DepositAndSwapParams {
-  provider: Provider
+  provider: any
   senderAddress: string
   payload: DepositAndSwapPayload
 }
@@ -87,11 +85,11 @@ export type GetAssetGainChartDataProps = {
 }
 
 export interface StrategyContracts {
-  cellarContract: Contract
-  cellarSigner: Contract
-  stakerContract?: Contract
-  stakerSigner?: Contract
-  cellarRouterSigner: Contract
+  cellarContract: ReturnType<typeof getContract>
+  cellarSigner: ReturnType<typeof getContract>
+  stakerContract?: ReturnType<typeof getContract>
+  stakerSigner?: ReturnType<typeof getContract>
+  cellarRouterSigner: ReturnType<typeof getContract>
   chain: string
 }
 export type AllContracts = Record<string, StrategyContracts>

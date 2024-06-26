@@ -1,5 +1,4 @@
-///Users/henriots/Desktop/sommelier-strangelove/src/components/Nav.tsx
-import { useEffect, useState, VFC } from "react"
+import { useEffect, useState } from "react"
 import {
   Container,
   Drawer,
@@ -13,8 +12,7 @@ import {
   IconButton,
   Image,
   Stack,
-  useDisclosure,
-  Text,
+  useDisclosure
 } from "@chakra-ui/react"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { Link } from "components/Link"
@@ -26,7 +24,7 @@ import { useScrollDirection } from "hooks/utils/useScrollDirection"
 import { HamburgerIcon } from "./_icons/HamburgerIcon"
 import { Badge, BadgeStatus } from "./Strategy/Carousel/Badge"
 
-export const Nav: VFC<FlexProps> = (props) => {
+export const Nav = (props: FlexProps) => {
   const [scrolled, setScrolled] = useState<boolean>(false)
   const scrollDirection = useScrollDirection()
   const { isOpen, onOpen, onClose } = useDisclosure()

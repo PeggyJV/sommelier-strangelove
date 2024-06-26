@@ -7,7 +7,7 @@ import {
   CellarNameKey,
   CellarData,
 } from "../types"
-import { depositAssetTokenList, tokenConfig } from "../tokenConfig"
+import { depositAssetTokenList } from "../tokenConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 

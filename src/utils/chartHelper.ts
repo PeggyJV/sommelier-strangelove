@@ -1,7 +1,7 @@
-import { Datum, Serie } from "@nivo/line"
+import { Datum } from "@nivo/line"
 import { differenceInDays } from "date-fns"
 import { toInteger } from "lodash"
-import { formatDecimals } from "./bigNumber"
+import { formatDecimals } from "utils/bigIntHelpers"
 
 export const createTokenPriceChangeDatum = (
   data?: { date: number; shareValue: string }[]
@@ -122,7 +122,7 @@ export const createApyChangeDatum = ({
     })
   }
 
-  // Drop the first value if it's 0 
+  // Drop the first value if it's 0
   if (apyValues[0] === 0) {
     apyValues.shift()
     data.shift()

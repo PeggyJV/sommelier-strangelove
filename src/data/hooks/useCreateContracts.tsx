@@ -1,46 +1,76 @@
-import { StrategyContracts } from "data/actions/types"
 import { ConfigProps } from "data/types"
-import { Contract, ContractInterface, ethers } from "ethers"
-import { useSigner, useProvider, useContract } from "wagmi"
+import { useWalletClient, usePublicClient } from "wagmi"
+import { getContract } from "viem"
 
 export const useCreateContracts = (config: ConfigProps) => {
-  const { data: signer } = useSigner()
-  const provider = useProvider()
+  const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
   const chain = config.chain.id
 
-  const stakerSigner = (() => {
-    if (!config.staker || !signer) return
-    return new ethers.Contract(
-      config.staker.address,
-      config.staker.abi as ContractInterface,
-      signer
-    )
-  })()
-  const cellarSigner: Contract = useContract({
-    address: config.cellar.address,
-    abi: config.cellar.abi,
-    signerOrProvider: signer,
-  })!
-  const stakerContract = (() => {
-    if (!config.staker || !provider) return
-    return new ethers.Contract(
-      config.staker.address,
-      config.staker.abi,
-      provider
-    )
-  })()
-  const cellarContract: Contract = useContract({
-    address: config.cellar.address,
-    abi: config.cellar.abi,
-    signerOrProvider: provider,
-  })!
-  const cellarRouterSigner: Contract = useContract({
-    address: config.cellarRouter.address,
-    abi: config.cellarRouter.abi,
-    signerOrProvider: signer,
-  })!
 
-  const contracts: StrategyContracts = {
+  const stakerSigner = (() => {
+    if (!config.staker || !publicClient) return
+    return getContract({
+      address: config.staker.address as `0x${string}`,
+      abi: config.staker.abi,
+      client: {
+        wallet: walletClient,
+        public: publicClient
+      }
+      }
+    )
+  })()
+
+  const cellarSigner = (() => {
+    if (!publicClient) return
+    return getContract( {
+        address: config.cellar.address as `0x${string}`,
+        abi: config.cellar.abi,
+        client: {
+          wallet: walletClient,
+          public: publicClient
+        }
+      }
+    )
+  })()
+  const stakerContract = (() => {
+    if (!config.staker || !publicClient) return
+    return getContract( {
+      address: config.staker.address as `0x${string}`,
+      abi: config.staker.abi,
+      client: {
+        public: publicClient
+      }
+      }
+    )
+  })()
+
+  const cellarContract = (() => {
+    if (!publicClient) return
+    return getContract( {
+        address: config.cellar.address as `0x${string}`,
+        abi: config.cellar.abi,
+        client: {
+          public: publicClient
+        }
+      }
+    )
+  })()
+
+  const cellarRouterSigner = (() => {
+    if (!publicClient) return
+    return getContract( {
+        address: config.cellarRouter.address as `0x${string}`,
+        abi: config.cellarRouter.abi,
+        client: {
+          public: publicClient,
+          wallet: walletClient
+        }
+      }
+    )
+  })()
+
+  const contracts = {
     stakerSigner,
     cellarSigner,
     stakerContract,

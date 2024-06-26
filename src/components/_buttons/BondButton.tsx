@@ -1,9 +1,8 @@
 import { ButtonProps, useDisclosure, Tooltip } from "@chakra-ui/react"
 import { BondModal } from "components/_modals/BondModal"
-import { VFC } from "react"
 import { BaseButton } from "./BaseButton"
 
-export const BondButton: VFC<ButtonProps> = (props) => {
+export const BondButton = (props: ButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (

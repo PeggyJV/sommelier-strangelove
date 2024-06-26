@@ -1,5 +1,4 @@
 import { ButtonProps, Tooltip, useDisclosure } from "@chakra-ui/react"
-import { VFC } from "react"
 import { SecondaryButton } from "./SecondaryButton"
 import { WithdrawModal } from "components/_modals/WithdrawModal"
 import {
@@ -16,11 +15,10 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
 
-export const WithdrawButton: VFC<
-  ButtonProps & {
-    isDeprecated?: boolean
-  }
-> = ({ isDeprecated, ...buttonProps }) => {
+export const WithdrawButton = ({ isDeprecated, ...buttonProps }:
+   ButtonProps & {
+   isDeprecated?: boolean
+ }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function closeModal() {

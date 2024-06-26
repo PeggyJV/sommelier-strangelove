@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react"
 import { InformationIcon } from "components/_icons"
 import { TransparentCard } from "../TransparentCard"
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi"
+import { useAccount, useSwitchChain } from "wagmi"
 import { FormProvider, useForm } from "react-hook-form"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import SnapshotForm from "components/_forms/SnapshotForm"
@@ -25,9 +25,8 @@ export interface SnapshotFormValues {
 
 export const SnapshotCard: React.FC = () => {
   const isMounted = useIsMounted()
-  const { isConnected } = useAccount()
-  const { chain: wagmiChain } = useNetwork()
-  const { switchNetworkAsync } = useSwitchNetwork()
+  const { isConnected, chain: wagmiChain } = useAccount()
+  const { switchChainAsync } = useSwitchChain()
   const { addToast, close } = useBrandedToast()
   const methods = useForm<SnapshotFormValues>({
     defaultValues: {
@@ -45,7 +44,12 @@ export const SnapshotCard: React.FC = () => {
   })
 
   return (
-    <>
+    <Stack
+      direction={{ base: "column", md: "row" }}
+      spacing={10}
+      align={stackAlignment} // Dynamic alignment based on screen size
+      width="full"
+    >
       {isMounted && isConnected && isWrongNetwork && (
         <Box
           p={4}
@@ -75,8 +79,8 @@ export const SnapshotCard: React.FC = () => {
               onClick={async () => {
                 try {
                   const ethChainConfig = chainSlugMap["ETHEREUM"]
-                  if (switchNetworkAsync && ethChainConfig) {
-                    await switchNetworkAsync(ethChainConfig.wagmiId)
+                  if (switchChainAsync && ethChainConfig) {
+                    await switchChainAsync({chainId: ethChainConfig.wagmiId})
                     window.location.reload()
                   }
                 } catch (e) {
@@ -96,36 +100,29 @@ export const SnapshotCard: React.FC = () => {
           </VStack>
         </Box>
       )}
-      <Stack
-        direction={{ base: "column", md: "row" }}
-        spacing={10}
-        align={stackAlignment} // Dynamic alignment based on screen size
-        width="full"
+      <TransparentCard
+        maxW="432px"
+        w="full"
+        boxShadow="purpleOutline1"
+        px={{ base: 5, md: 12 }}
+        pt="52px"
+        pb="48px"
+        borderRadius={{ base: "32px", md: "40px" }}
+        mx={4}
       >
-        <TransparentCard
-          maxW="432px"
-          w="full"
-          boxShadow="purpleOutline1"
-          px={{ base: 5, md: 12 }}
-          pt="52px"
-          pb="48px"
-          borderRadius={{ base: "32px", md: "40px" }}
-          mx={4}
-        >
-          <Heading as="h4" size="lg" mb={4}>
-            Snapshot
-          </Heading>
-          <Text mb={4}>
-            Link your wallets for bonus SOMM rewards and/or
-            participate in partner campaigns.
-          </Text>
-          <FormProvider {...methods}>
-            <SnapshotForm wrongNetwork={isWrongNetwork} />
-          </FormProvider>
-        </TransparentCard>
-        <CampaignTable />
-      </Stack>
-    </>
+        <Heading as="h4" size="lg" mb={4}>
+          Snapshot
+        </Heading>
+        <Text mb={4}>
+          Link your wallets for bonus SOMM rewards and/or participate
+          in partner campaigns.
+        </Text>
+        <FormProvider {...methods}>
+          <SnapshotForm wrongNetwork={isWrongNetwork} />
+        </FormProvider>
+      </TransparentCard>
+      <CampaignTable />
+    </Stack>
   )
 }
 

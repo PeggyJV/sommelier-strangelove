@@ -15,7 +15,7 @@ import {
   useDimensions,
   useTheme,
 } from "@chakra-ui/react"
-import { useRef, VFC, useState, useEffect, ChangeEvent } from "react"
+import { useRef, useState, useEffect, ChangeEvent } from "react"
 import { FaChevronDown } from "react-icons/fa"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
@@ -28,14 +28,7 @@ import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import {
   ActiveAssetIcon,
   CellarGradientIcon,
-  CellarIcon,
-  CheckIcon,
-  ExpandIcon,
-  LoadingIcon,
-  MoneyWalletIcon,
 } from "components/_icons"
-import { SuccessIcon } from "components/_icons/SuccessIcon"
-import { PlusIcon } from "components/_icons/PlusIcon"
 
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
@@ -43,14 +36,14 @@ export interface MenuProps
   onChange: (...events: any[]) => void
 }
 
-export const Menu: VFC<MenuProps> = ({
+export const Menu = ({
   depositTokens,
   activeAsset,
   selectedTokenBalance,
   value,
   onChange,
   isDisabled,
-}) => {
+} : MenuProps) => {
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const menuDims = useDimensions(menuRef, true)

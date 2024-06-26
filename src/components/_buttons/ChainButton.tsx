@@ -9,11 +9,9 @@ import {
   HStack,
   Box,
   Image,
-  useTheme,
 } from "@chakra-ui/react"
 import { ChevronDownIcon, CheckIcon } from "components/_icons"
-import { VFC } from "react"
-import { useSwitchNetwork, useAccount } from "wagmi"
+import { useSwitchChain, useAccount } from "wagmi"
 
 import {
   chainConfigMap,
@@ -24,41 +22,33 @@ import {
 import { useBrandedToast } from "hooks/chakra"
 
 export interface ChainButtonProps {
-  chain: Chain
+  chain?: Chain
   onChainChange?: (chainId: string) => void
 }
 
-const ChainButton: VFC<ChainButtonProps> = ({
-  chain,
+const ChainButton = ({
+  chain = placeholderChain,
   onChainChange,
-}) => {
-  const {
-    chains,
-    error,
-    isLoading,
-    pendingChainId,
-    switchNetworkAsync,
-  } = useSwitchNetwork()
+}: ChainButtonProps) => {
+  const { switchChainAsync } = useSwitchChain()
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
 
-  // Use the chain from props if it exists in chainConfigMap, otherwise use the placeholder
-  const effectiveChain = chain
-    ? chainConfigMap[chain.id] || placeholderChain
-    : placeholderChain
+  const effectiveChain = chainConfigMap[chain.id] || placeholderChain
 
   const chainKeys = Object.keys(chainConfigMap)
   const filteredChainKeys = chainKeys.filter((key) =>
     supportedChains.includes(key)
   )
 
-  const handleNetworkChange = async (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    let chainId = event.target.value
-
+  const handleNetworkChange = async (chainId: string) => {
     try {
-      await switchNetworkAsync?.(chainConfigMap[chainId].wagmiId)
+      const chainConfig = chainConfigMap[chainId]
+      if (!chainConfig) {
+        throw new Error("Unsupported chain")
+      }
+
+      await switchChainAsync({ chainId: chainConfig.wagmiId })
       onChainChange && onChainChange(chainId)
       if (isConnected) {
         window.location.reload()
@@ -75,8 +65,6 @@ const ChainButton: VFC<ChainButtonProps> = ({
       })
     }
   }
-
-  const theme = useTheme()
 
   return (
     <Popover placement="bottom">
@@ -138,9 +126,7 @@ const ChainButton: VFC<ChainButtonProps> = ({
                   fontSize="sm"
                   borderRadius={6}
                   onClick={() =>
-                    handleNetworkChange({
-                      target: { value: supportedChain.id },
-                    } as any)
+                    handleNetworkChange(supportedChain.id)
                   }
                   _hover={{
                     cursor: "pointer",

@@ -1,99 +1,84 @@
-import BigNumber from "bignumber.js"
-import { ethers } from "ethers"
-import { CellarStakingV0815 } from "src/abi/types"
 import { toEther } from "utils/formatCurrency"
 import { StakerUserData, UserStake } from "../types"
 import { ConfigProps } from "data/types"
+import { formatUnits } from "viem"
 
 export const getUserStakes = async (
   address: string,
-  stakerContract: CellarStakingV0815,
-  stakerSigner: CellarStakingV0815,
+  stakerContract: any,
   sommelierPrice: string,
   strategyConfig: ConfigProps
 ) => {
   try {
-    if (!stakerSigner.provider || !stakerSigner.signer) {
-      throw new Error("provider or signer is undefined")
+
+    if (!stakerContract) {
+      throw new Error("provider is undefined")
     }
 
-    const userStakes = await stakerContract.getUserStakes(address)
+    const userStakes = await stakerContract.read.getUserStakes([address])
 
-    const claimAllRewards = await stakerSigner.callStatic.claimAll()
-    let totalClaimAllRewards = new BigNumber(0)
-    claimAllRewards.length &&
-      claimAllRewards.forEach((reward) => {
-        totalClaimAllRewards = totalClaimAllRewards.plus(
-          new BigNumber(reward.toString())
-        )
+    const claimAllRewards = await stakerContract.simulate.claimAll({account: address})
+
+
+    let totalClaimAllRewards = BigInt(0)
+    claimAllRewards.result.length &&
+      claimAllRewards.result.forEach((reward: bigint) => {
+        totalClaimAllRewards = totalClaimAllRewards + reward
       })
 
     let userStakesArray: UserStake[] = []
-    let totalRewards = new BigNumber(0)
-    let totalBondedAmount = new BigNumber(0)
+    let totalRewards = BigInt(0)
+    let totalBondedAmount = BigInt(0)
 
-    userStakes.forEach((item) => {
-      const [
+
+    userStakes.forEach((item: any) => {
+      const {
         amount,
         amountWithBoost,
         unbondTimestamp,
         rewardPerTokenPaid,
         rewards,
         lock,
-      ] = item
+      } = item
 
-      totalRewards = totalRewards.plus(
-        new BigNumber(rewards.toString())
-      )
-      totalBondedAmount = totalBondedAmount.plus(
-        new BigNumber(amount.toString())
-      )
+      totalRewards = totalRewards + BigInt(rewards)
+      totalBondedAmount = totalBondedAmount + BigInt(amount)
       userStakesArray.push({
-        amount: new BigNumber(amount.toString()),
-        amountWithBoost: new BigNumber(amountWithBoost.toString()),
-        rewardPerTokenPaid: new BigNumber(
-          rewardPerTokenPaid.toString()
-        ),
-        rewards: new BigNumber(rewards.toString()),
+        amount: BigInt(amount),
+        amountWithBoost: BigInt(amountWithBoost),
+        rewardPerTokenPaid: BigInt(rewardPerTokenPaid),
+        rewards: BigInt(rewards),
         unbondTimestamp,
         lock,
       })
     })
 
     //!!!!!!!! TODO This is hardcoded for somm
-    const claimAllRewardsUSD = totalClaimAllRewards
-      .div(new BigNumber(10).pow(6)) // convert from 6 decimals
-      .multipliedBy(new BigNumber(sommelierPrice))
-
-    const convertedClaimAllRewards = claimAllRewards.map(
-      (item) => new BigNumber(item.toString())
-    )
+    const claimAllRewardsUSD = Number(formatUnits(totalClaimAllRewards, 6)) * Number(sommelierPrice)
 
     const userStakeData: StakerUserData = {
       // It's actually list of claimable rewards
-      claimAllRewards: convertedClaimAllRewards,
+      claimAllRewards: claimAllRewards.result,
       claimAllRewardsUSD,
       totalBondedAmount: {
         value: totalBondedAmount,
-        formatted: Number(
+        formatted:
           toEther(
-            ethers.utils.parseUnits(totalBondedAmount?.toFixed(), 0),
+            totalBondedAmount,
             strategyConfig.cellar.decimals, // Must be cellar decimals
             false,
             2
-          )
-        ).toLocaleString(),
+          ),
       },
       totalClaimAllRewards: {
         value: totalClaimAllRewards,
-        formatted: Number(
+        formatted:
           toEther(
-            totalClaimAllRewards?.toFixed(),
+            totalClaimAllRewards,
             6, // TODO: Post incentive refractor this must be the incentive asset decimals (Hardcoded for somm)
             false,
             2
-          )
-        ).toLocaleString(),
+          ),
       },
       totalRewards,
       userStakes: userStakesArray,

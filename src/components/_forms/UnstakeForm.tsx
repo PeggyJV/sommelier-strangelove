@@ -1,4 +1,4 @@
-import { useEffect, VFC } from "react"
+import { useEffect } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -16,7 +16,7 @@ import { ModalInput } from "components/_inputs/ModalInput"
 import { useBrandedToast } from "hooks/chakra"
 import { useAccount } from "wagmi"
 import { toEther } from "utils/formatCurrency"
-import { ethers } from "ethers"
+import { parseUnits } from 'viem'
 import { useHandleTransaction } from "hooks/web3"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
@@ -33,7 +33,7 @@ interface UnstakeFormProps {
   onClose: () => void
 }
 
-export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
+export const UnstakeForm = ({ onClose }: UnstakeFormProps) => {
   const {
     register,
     watch,
@@ -108,8 +108,12 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
 
     // analytics.track("withdraw.started", analyticsData)
 
-    const amtInWei = ethers.utils.parseUnits(`${withdrawAmount}`, 18)
-    const tx = await cellarSigner?.redeem(amtInWei, address, address)
+    const amtInWei = parseUnits(`${withdrawAmount}`, 18)
+    // @ts-ignore
+    const hash = await cellarSigner?.write.redeem(
+      [amtInWei, address, address],
+      { account: address }
+    )
 
     function onSuccess() {
       analytics.track("withdraw.succeeded", analyticsData)
@@ -126,7 +130,7 @@ export const UnstakeForm: VFC<UnstakeFormProps> = ({ onClose }) => {
 
     await doHandleTransaction({
       cellarConfig,
-      ...tx,
+      hash,
       onSuccess,
       onError,
     })

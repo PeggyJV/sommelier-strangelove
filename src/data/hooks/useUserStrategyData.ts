@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUserData } from "data/actions/common/getUserData"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useAccount, useSigner } from "wagmi"
+import { useAccount, useWalletClient } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
@@ -9,7 +9,7 @@ import { useUserBalance } from "./useUserBalance"
 import { tokenConfig } from "data/tokenConfig"
 
 export const useUserStrategyData = (strategyAddress: string, chain: string) => {
-  const { data: signer } = useSigner()
+  const { data: walletClient } = useWalletClient()
   const { address: userAddress } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategyData = useStrategyData(strategyAddress, chain)
@@ -41,8 +41,8 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const key =
     strategyAddress +
     (config.chain.id !== "ethereum" ? "-" + chain : "")
-  const query = useQuery(
-    [
+  const query = useQuery({
+    queryKey: [
       "USE_USER_DATA",
       {
         signer: true,
@@ -50,7 +50,7 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
         userAddress,
       },
     ],
-    async () => {
+    queryFn: async () => {
       return await getUserData({
         contracts: allContracts![key],
         address: strategyAddress,
@@ -61,15 +61,14 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
         chain: chain,
       })
     },
-    {
-      enabled:
-        !!allContracts &&
-        !!signer?._isSigner &&
-        !!sommPrice.data &&
-        !!lpToken &&
-        !!baseAssetPrice &&
-        !!strategyData.data &&
-        isNoDataSource === false,
+    enabled:
+      !!allContracts &&
+      !!walletClient &&
+      !!sommPrice.data &&
+      !!lpToken &&
+      !!baseAssetPrice &&
+      !!strategyData.data &&
+      isNoDataSource === false,
     }
   )
   return query

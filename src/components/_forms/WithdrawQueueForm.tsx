@@ -1,4 +1,4 @@
-import React, { useEffect, useState, VFC } from "react"
+import React, { useEffect, useState } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -22,9 +22,9 @@ import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
-import { useAccount, useContract, useSigner } from "wagmi"
+import { useAccount, usePublicClient, useWalletClient } from "wagmi"
+import { getContract, parseUnits } from "viem"
 import { toEther } from "utils/formatCurrency"
-import { ethers } from "ethers"
 import { useHandleTransaction } from "hooks/web3"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
@@ -40,8 +40,9 @@ import { InformationIcon } from "components/_icons"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
-import { getAddress } from "ethers/lib/utils.js"
+import { getAddress } from "viem"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { MaxUint256 } from "utils/bigIntHelpers"
 
 interface FormValues {
   withdrawAmount: number
@@ -92,10 +93,10 @@ const PRESET_VALUES: Record<
   Custom: { deadlineHours: 0, sharePriceDiscountPercent: 0 },
 }
 
-export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
+export const WithdrawQueueForm = ({
   onClose,
   onSuccessfulWithdraw,
-}) => {
+}: WithdrawQueueFormProps) => {
   const {
     register,
     watch,
@@ -123,18 +124,34 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
   )
   const tokenPrice = strategyData?.tokenPrice
 
-  const { data: signer } = useSigner()
-  const withdrawQueueContract = useContract({
-    address: cellarConfig.chain.withdrawQueueAddress,
-    abi: withdrawQueueV0821,
-    signerOrProvider: signer,
-  })!
+  const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
 
-  const cellarContract = useContract({
-    address: cellarConfig.cellar.address,
-    abi: cellarConfig.cellar.abi,
-    signerOrProvider: signer,
-  })!
+  const withdrawQueueContract = (() => {
+    if (!publicClient) return
+    return getContract( {
+        address: cellarConfig.chain.withdrawQueueAddress as `0x${string}`,
+        abi: withdrawQueueV0821,
+        client: {
+          public: publicClient,
+          wallet: walletClient
+        }
+      }
+    )
+  })()
+
+  const cellarContract = (() => {
+    if (!publicClient) return
+    return getContract( {
+      address: cellarConfig.cellar.address as `0x${string}`,
+      abi: cellarConfig.cellar.abi,
+      client: {
+        public: publicClient,
+        wallet: walletClient
+      }
+    }
+    )
+  })()
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -242,20 +259,21 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
       return
     }
 
-    const withdrawAmtInBaseDenom = ethers.utils.parseUnits(
+    const withdrawAmtInBaseDenom = parseUnits(
       `${withdrawAmount}`,
       cellarConfig.cellar.decimals
     )
 
     // Get approval if needed
-    const allowance = await cellarContract.allowance(
+    const allowance = await cellarContract?.read.allowance([
       address!,
       getAddress(cellarConfig.chain.withdrawQueueAddress)
-    )
+      ]
+    ) as bigint
 
     let needsApproval
     try {
-      needsApproval = allowance.lt(withdrawAmtInBaseDenom)
+      needsApproval = allowance < withdrawAmtInBaseDenom
     } catch (e) {
       const error = e as Error
       console.error("Invalid Input: ", error.message)
@@ -264,9 +282,12 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
 
     if (needsApproval) {
       try {
-        const { hash } = await cellarContract.approve(
+        // @ts-ignore
+        const { hash } = await cellarContract?.write.approve([
           getAddress(cellarConfig.chain.withdrawQueueAddress),
-          ethers.constants.MaxUint256
+          MaxUint256
+          ],
+          { account: address }
         )
         addToast({
           heading: "ERC20 Approval",
@@ -354,17 +375,19 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         withdrawQueueContract?.estimateGas.updateWithdrawRequest,
-        withdrawQueueContract?.callStatic.updateWithdrawRequest,
+        withdrawQueueContract?.simulate.updateWithdrawRequest,
         [cellarConfig.cellar.address, withdrawTouple],
         330000,
-        660000
+        address
       )
-
-      const tx = await withdrawQueueContract?.updateWithdrawRequest(
+      // @ts-ignore
+      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
         cellarConfig.cellar.address,
-        withdrawTouple,
+        withdrawTouple
+        ],
         {
-          gasLimit: gasLimitEstimated,
+          gas: gasLimitEstimated,
+          account: address
         }
       )
 
@@ -382,7 +405,7 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
 
       await doHandleTransaction({
         cellarConfig,
-        ...tx,
+        hash,
         onSuccess,
         onError,
       })
@@ -436,18 +459,19 @@ export const WithdrawQueueForm: VFC<WithdrawQueueFormProps> = ({
     try {
       if (withdrawQueueContract && address && cellarConfig) {
         const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
+          await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
             cellarConfig.cellar.address
-          )
+          ])
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.isWithdrawRequestValid(
+          await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
             withdrawRequest
-          )
+            ]
+          ) as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
 
       } else {

@@ -16,7 +16,6 @@ import { useHandleTransaction } from "hooks/web3"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { analytics } from "utils/analytics"
 import { useAccount } from "wagmi"
-import { useNetwork } from "wagmi"
 
 export const Rewards = ({
   cellarConfig,
@@ -24,7 +23,7 @@ export const Rewards = ({
   cellarConfig: ConfigProps
 }) => {
   const isMounted = useIsMounted()
-  const { isConnected } = useAccount()
+  const { isConnected, chain: wagmiChain } = useAccount()
   const { data: userData, refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
     cellarConfig.chain.id
@@ -32,8 +31,8 @@ export const Rewards = ({
   const { userStakes } = userData || {}
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const { addToast, close } = useBrandedToast()
+  const { address } = useAccount()
 
-  const { chain: wagmiChain } = useNetwork()
   let buttonsEnabled = true
   if (cellarConfig.chain.wagmiId !== wagmiChain?.id!) {
     buttonsEnabled = false
@@ -41,10 +40,11 @@ export const Rewards = ({
 
   const importToken = useImportToken({
     onSuccess: (data) => {
+      const tokenData = data as unknown as { symbol: string }
       addToast({
         heading: "Import Token",
         status: "success",
-        body: <Text>{data.symbol} added to metamask</Text>,
+        body: <Text>{tokenData.symbol} added to metamask</Text>,
         closeHandler: close,
       })
     },
@@ -100,10 +100,12 @@ export const Rewards = ({
       return
     }
     // analytics.track("rewards.claim-started")
-    const tx = await stakerSigner?.claimAll()
+
+    // @ts-ignore
+    const hash = await stakerSigner?.write.claimAll([], { account: address })
     await doHandleTransaction({
       cellarConfig,
-      ...tx,
+      hash,
       onSuccess: () => {
         refetch()
         analytics.track("rewards.claim-succeeded")

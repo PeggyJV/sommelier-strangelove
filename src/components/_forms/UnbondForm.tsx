@@ -1,4 +1,4 @@
-import { useState, VFC } from "react"
+import { useState } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -17,7 +17,7 @@ interface FormValues {
   unbondAmount: number
 }
 
-export const UnbondForm: VFC = () => {
+export const UnbondForm = () => {
   const {
     register,
     watch,

@@ -1,7 +1,6 @@
 import {
   Button,
   HStack,
-  Image,
   Text,
   Stack,
   Box,
@@ -9,11 +8,9 @@ import {
   PopoverTrigger,
   PopoverBody,
   PopoverContent,
-  AvatarGroup,
-  Avatar,
   Checkbox,
 } from "@chakra-ui/react"
-import { useState, VFC, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { HamburgerIcon } from "components/_icons"
 
 export interface MiscFilterProp {
@@ -26,7 +23,7 @@ export interface MiscFilterProps {
   categories: MiscFilterProp[]
 }
 
-export const MiscFilter: VFC<MiscFilterProps> = (props) => {
+export const MiscFilter = (props: MiscFilterProps) => {
   const [checkedStates, setCheckedStates] = useState(
     new Map(
       props.categories.map((category) => [

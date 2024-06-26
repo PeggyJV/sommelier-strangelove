@@ -1,19 +1,13 @@
-import { BigNumber, constants } from "ethers"
-import { BigNumber as BigNumJS} from "bignumber.js"
-import { fetchBalance } from "@wagmi/core"
+import { getBalance  } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
-import { CellarV0815, CellarStakingV0815 } from "src/abi/types"
-import {
-  convertDecimals,
-  ZERO,
-} from "utils/bigNumber"
 import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
 import { StrategyContracts, StrategyData } from "../types"
-import { getAddress } from "ethers/lib/utils.js"
-import { config as cellarConfig } from "utils/config"
+import { formatUnits, getAddress } from "viem"
+import { wagmiConfig } from "context/wagmiContext"
+import { ZERO } from "utils/bigIntHelpers"
 
 export const getUserData = async ({
   address,
@@ -40,7 +34,7 @@ export const getUserData = async ({
     const decimals = config.baseAsset.decimals
     const symbol = config.baseAsset.symbol
 
-    const shares = await fetchBalance({
+    const shares = await getBalance(wagmiConfig, {
       token: getAddress(config.cellar.address),
       address: getAddress(userAddress),
     })
@@ -48,7 +42,6 @@ export const getUserData = async ({
     const userStakes = await(async () => {
       if (
         !contracts.stakerContract ||
-        !contracts.stakerSigner ||
         (config.staker?.key !== StakerKey.CELLAR_STAKING_V0815 &&
           config.staker?.key !== StakerKey.CELLAR_STAKING_V0821)
       ) {
@@ -57,8 +50,7 @@ export const getUserData = async ({
 
       return await getUserStakes(
         userAddress,
-        contracts.stakerContract as CellarStakingV0815,
-        contracts.stakerSigner as CellarStakingV0815,
+        contracts.stakerContract,
         sommPrice,
         config
       )
@@ -67,59 +59,54 @@ export const getUserData = async ({
     // !!! TODO: We need to rewrite this file and most of the incentive code, pushing this unitl the new staking contracts come out
     // Can do a manual override per strategy if needed here
 
-    const bonded =
-      // Coerce from bignumber.js to ethers BN
-      BigNumber.from(
-        userStakes?.totalBondedAmount?.value
-          ? userStakes?.totalBondedAmount?.value.toFixed()
-          : "0"
-      ) ?? constants.Zero
-    const totalShares = shares.value.add(bonded)
+    const bonded = userStakes?.totalBondedAmount?.value ?? "0"
+
+    const totalShares = shares.value + BigInt(bonded.toString());
 
     const totalAssets = await(async () => {
       if (!contracts.cellarContract) {
         return ZERO
       }
 
-      const cellarContract = contracts.cellarContract as CellarV0815
-      let assets = await cellarContract.convertToAssets(totalShares)
+      const cellarContract = contracts.cellarContract
+
+      // @ts-ignore
+      let assets = await cellarContract.read.convertToAssets([totalShares])
 
       if (typeof assets === "undefined") {
-        assets = constants.Zero
+        assets = BigInt(0)
       }
-      return convertDecimals(assets.toString(), decimals)
+      return formatUnits(assets, decimals)
     })()
 
-    const numTotalAssets = Number(totalAssets.toNumber().toFixed(5))
+    const numTotalAssets = Number(totalAssets).toFixed(5)
 
     let sommRewardsUSD = userStakes
-      ? userStakes.claimAllRewardsUSD.toNumber()
+      ? Number(userStakes.claimAllRewardsUSD)
       : 0
     let sommRewardsRaw = userStakes
       ? symbol !== "USDC"
-        ? userStakes.claimAllRewardsUSD.toNumber() /
+        ? Number(userStakes.claimAllRewardsUSD) /
           parseFloat(baseAssetPrice)
-        : userStakes.claimAllRewardsUSD.toNumber()
+        : Number(userStakes.claimAllRewardsUSD)
       : 0
 
     const netValueInAsset = (() => {
-      return numTotalAssets + Number(sommRewardsRaw)
+      return Number(numTotalAssets) + Number(sommRewardsRaw)
     })()
 
     const netValueWithoutRewardsInAsset = (() => {
-      return numTotalAssets
+      return Number(totalAssets)
     })()
 
     // Denoted in USD
     const netValue = (() => {
-      return totalAssets
-        .multipliedBy(baseAssetPrice)
-        .plus(sommRewardsUSD)
+      return Number(totalAssets) * Number(baseAssetPrice) + sommRewardsUSD
     })()
 
     // Denoted in USD
     const netValueWithoutRewards = (() => {
-      return totalAssets.multipliedBy(baseAssetPrice)
+      return Number(totalAssets) * Number(baseAssetPrice)
     })()
 
 
@@ -133,8 +120,8 @@ export const getUserData = async ({
         netValueInAsset: {
           value: netValueInAsset,
           formatted: netValueInAsset
-            ? `${netValueInAsset.toFixed(
-                showNetValueInAsset(config) ? 5 : 2
+            ? `${Number(netValueInAsset).toFixed(
+                showNetValueInAsset(config) ? 6 : 2
               )} ${config.baseAsset.symbol}`
             : "--",
         },
@@ -142,7 +129,7 @@ export const getUserData = async ({
           value: netValueWithoutRewardsInAsset,
           formatted: netValueWithoutRewardsInAsset
             ? `${netValueWithoutRewardsInAsset.toFixed(
-                showNetValueInAsset(config) ? 5 : 2
+                showNetValueInAsset(config) ? 6 : 2
               )} ${config.baseAsset.symbol}`
             : "--",
         },

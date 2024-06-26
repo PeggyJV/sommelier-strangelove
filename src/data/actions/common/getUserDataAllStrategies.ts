@@ -5,11 +5,6 @@ import { getUserData } from "./getUserData"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps } from "data/types"
-import { fetchBalance } from "@wagmi/core"
-import { getAddress } from "ethers/lib/utils"
-import { getAcceptedDepositAssetsByChain } from "data/tokenConfig"
-import { ResolvedConfig } from "abitype"
-import BigNumber from "bignumber.js"
 
 export const getUserDataAllStrategies = async ({
   allContracts,
@@ -39,12 +34,12 @@ export const getUserDataAllStrategies = async ({
           (item) => item?.address === address && item.config.chain.id === contracts.chain
         )
 
-        const result = await reactQueryClient.fetchQuery(
-          [
+        const result = await reactQueryClient.fetchQuery({
+          queryKey: [
             "USE_USER_DATA",
-            { signer: true, contractAddress: address, userAddress },
+            { contractAddress: address, userAddress },
           ],
-          async () => {
+          queryFn: async () => {
             const strategy = Object.values(cellarDataMap).find(
               ({ config }) =>
                 config.cellar.address.toLowerCase() ===
@@ -73,9 +68,11 @@ export const getUserDataAllStrategies = async ({
               console.log("error", error)
             }
           }
+        }
         )
         return result
       }
+
     )
   )
 
@@ -95,18 +92,18 @@ export const getUserDataAllStrategies = async ({
       total +
       (item
         ? item.userStakes
-          ? item.userStakes.totalClaimAllRewards.value.toNumber()
-          : 0
-        : 0)
+          ? item.userStakes.totalClaimAllRewards.value
+          : 0n
+        : 0n)
     )
-  }, 0)
+  }, 0n)
 
   const totalSommRewardsInUsd = userData.reduce((total, item) => {
     return (
       total +
       (item
         ? item.userStakes
-          ? item.userStakes.claimAllRewardsUSD.toNumber()
+          ? Number(item.userStakes.claimAllRewardsUSD)
           : 0
         : 0)
     )

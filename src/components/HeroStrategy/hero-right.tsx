@@ -11,12 +11,10 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { BuyOrSellModal } from "components/_modals/BuyOrSellModal"
 import { cellarDataMap } from "data/cellarDataMap"
-import { VFC } from "react"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
 import { CountDown } from "./count-down"
 import { addDays } from "date-fns"
-import { NotifyModal } from "components/_modals/NotifyModal"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
 import { CellarType } from "data/types"
@@ -27,9 +25,9 @@ interface HeroStrategyRightProps {
   id: string
 }
 
-export const HeroStrategyRight: VFC<HeroStrategyRightProps> = ({
+export const HeroStrategyRight = ({
   id,
-}) => {
+}: HeroStrategyRightProps) => {
   const content = strategyPageContentData[id]
   const buyOrSellModal = useDisclosure()
   const notifyModal = useDisclosure()

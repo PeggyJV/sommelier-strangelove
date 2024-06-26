@@ -14,9 +14,7 @@ import { strategyPageContentData } from "data/strategyPageContentData"
 import { isUseBigBacktestingModal } from "data/uiConfig"
 import htmr from "htmr"
 import { useRouter } from "next/router"
-import { useState, VFC } from "react"
-import { analytics } from "utils/analytics"
-import { landingType } from "utils/landingType"
+import { useState } from "react"
 
 interface HighlightProps {
   id: string
@@ -29,7 +27,7 @@ export const isValidURL = (value: string) => {
   return res !== null
 }
 
-export const Highlight: VFC<HighlightProps> = ({ id }) => {
+export const Highlight = ({ id }: HighlightProps) => {
   const content = strategyPageContentData[id]
   const [expandHowItWorks, setExpandHowItWorks] = useState(false)
   const howItWorks = content.howItWorks.split("<br/><br/>")

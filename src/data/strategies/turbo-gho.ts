@@ -8,7 +8,6 @@ import {
   StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
-import { GHOIcon } from "components/_icons"
 import { chainSlugMap } from "data/chainConfig"
 
 export const turboGHO: CellarData = {

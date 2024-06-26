@@ -33,4 +33,4 @@ export * from "./real-yield-usd-arb"
 export * from "./turbo-rseth"
 export * from "./real-yield-eth-opt"
 export * from "./turbo-ezeth"
-
+export * from "./real-yield-eth-scroll"

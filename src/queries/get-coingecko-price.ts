@@ -19,21 +19,21 @@ export const fetchCoingeckoPrice = async (
     const result = await data.json()
 
     if (!result.price) {
-      console.error(
-        "No price found: ",
-        result,
-        "\n\ntrying price router..."
-      )
+      // console.error(
+      //   "No price found: ",
+      //   result,
+      //   "\n\ntrying price router..."
+      // )
       throw new Error("No price found")
     }
 
     return result.price + ""
   } catch (error) {
-    console.log(
-      "Error fetching Coingecko Price for token: ",
-      token,
-      "\n\ntrying price router..."
-    )
+    // console.log(
+    //   "Error fetching Coingecko Price for token: ",
+    //   token,
+    //   "\n\ntrying price router..."
+    // )
 
     const chain = chainConfigMap[token.chain]
 
@@ -52,12 +52,12 @@ export const fetchCoingeckoPrice = async (
       )
     }
 
-    const price = await priceRouterContract.getPriceInUSD(
-      token.address
+    const price = await priceRouterContract.read.getPriceInUSD(
+      [token.address]
     )
 
     if (price) {
-      return (price / 10 ** 8).toString()
+      return (Number(price) / 10 ** 8).toString()
     }
 
     throw new Error("Price router could not price: " + token)

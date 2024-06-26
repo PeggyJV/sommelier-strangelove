@@ -13,7 +13,7 @@ import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { isBefore } from "date-fns"
 import { toEther } from "utils/formatCurrency"
-import { useAccount, useNetwork } from "wagmi"
+import { useAccount } from "wagmi"
 import { BaseButton } from "./BaseButton"
 import { useState } from "react"
 
@@ -89,11 +89,10 @@ export function DepositAndWithdrawButton({
   const { data: lpTokenData } = lpToken
 
   const lpTokenDisabled = checkLPtokenDisabled(lpTokenData)
-  const { isConnected } = useAccount()
+  const { isConnected, chain } = useAccount()
   const isBeforeLaunch = checkIsBeforeLaunch(
     row?.original?.launchDate
   )
-  const { chain } = useNetwork()
   const [isOracleModalOpen, setOracleModalOpen] = useState(false)
   const openOracleModal = () => setOracleModalOpen(true)
   const closeOracleModal = () => setOracleModalOpen(false)

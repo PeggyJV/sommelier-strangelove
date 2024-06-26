@@ -3,8 +3,9 @@ import { useBrandedToast } from "hooks/chakra"
 import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
-import { TransactionReceipt } from "@ethersproject/providers"
 import { ConfigProps } from "data/types"
+import { ReactNode } from "react"
+import { TransactionReceipt } from "viem/_types/types/transaction"
 
 type Result =
   | {
@@ -20,10 +21,10 @@ type TxParams = {
   cellarConfig: ConfigProps
   hash: string
   toastBody?: {
-    info?: React.ReactNode
-    success?: React.ReactNode
-    error?: React.ReactNode
-    successWithParams?: (data: Result) => React.ReactNode
+    info?: ReactNode
+    success?: ReactNode
+    error?:ReactNode
+    successWithParams?: (data: Result) => ReactNode
   }
   onSuccess?: () => void
   onError?: (error: Error) => void

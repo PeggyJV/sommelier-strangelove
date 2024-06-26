@@ -2,45 +2,50 @@ import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
 import { config } from "utils/config"
-import { erc20ABI, useAccount, useContract, useSigner } from "wagmi"
+import { useAccount, usePublicClient, useWalletClient } from "wagmi"
+import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
 import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
 import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
 import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
-import { ethers } from "ethers"
 import { getBytes32 } from "utils/getBytes32"
-import { GravityBridge } from "src/abi/types"
 import { analytics } from "utils/analytics"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
-import { getAddress } from "ethers/lib/utils.js"
-import { useNetwork } from "wagmi"
 import { tokenConfigMap } from "data/tokenConfig"
+import { MaxUint256 } from "utils/bigIntHelpers"
 
-// TODO: this needs to be adapted to multichain 
+// TODO: this needs to be adapted to multichain
 export const useBridgeEthToSommTx = () => {
   const { CONTRACT } = config
   // Currently `close` have a bug it only closes the last toast appeared
   // TODO: Fix `close` and implement it here https://github.com/strangelove-ventures/sommelier/issues/431
   const { addToast, update, closeAll } = useBrandedToast()
   const [isLoading, setIsLoading] = useState(false)
-  const { chain } = useNetwork()
-  const { data: signer } = useSigner()
+  const { chain } = useAccount()
+  const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
   const [_, wait] = useWaitForTransaction({
     skip: true,
   })
   const { address } = useAccount()
 
-  const erc20Contract = useContract({
-    address: tokenConfigMap.SOMM_ETHEREUM.address,
-    abi: erc20ABI,
-    signerOrProvider: signer,
+  const erc20Contract = publicClient && getContract({
+    address: tokenConfigMap.SOMM_ETHEREUM.address as `0x${string}`,
+    abi: erc20Abi,
+    client: {
+      wallet: walletClient,
+      public: publicClient
+    }
   })!
 
-  const bridgeContract = useContract({
-    address: CONTRACT.BRIDGE.ADDRESS,
+  const bridgeContract = publicClient && getContract({
+    address: CONTRACT.BRIDGE.ADDRESS as `0x${string}`,
     abi: CONTRACT.BRIDGE.ABI,
-    signerOrProvider: signer,
+    client: {
+      wallet: walletClient,
+      public: publicClient
+    }
   })!
 
   const TxHashToastBody = ({
@@ -140,7 +145,7 @@ export const useBridgeEthToSommTx = () => {
   const doEthToSomm = async (props: BridgeFormValues) => {
     try {
       setIsLoading(true)
-      const convertedAmount = ethers.utils.parseUnits(
+      const convertedAmount = parseUnits(
         String(props.amount),
         tokenConfigMap.SOMM_ETHEREUM.decimals
       )
@@ -152,11 +157,14 @@ export const useBridgeEthToSommTx = () => {
       // })
 
       // Check if approval needed
-      const allowance = await erc20Contract.allowance(
+      // @ts-ignore
+      const allowance = await erc20Contract.read.allowance([
         address!,
         getAddress(CONTRACT.BRIDGE.ADDRESS)
+        ]
       )
-      const needsApproval = allowance.lt(convertedAmount)
+
+      const needsApproval = allowance < convertedAmount
 
       if (needsApproval) {
         addToast({
@@ -169,15 +177,19 @@ export const useBridgeEthToSommTx = () => {
         })
 
         // ERC20 Approval
-        const { hash: erc20Hash } = await erc20Contract.approve(
+        // @ts-ignore
+        const { hash: erc20Hash } = await erc20Contract.write.approve([
           getAddress(CONTRACT.BRIDGE.ADDRESS),
-          ethers.constants.MaxUint256
+          MaxUint256
+          ],
+          { account: address }
         )
         const waitForApproval = wait({
           hash: erc20Hash,
         })
         const resultApproval = await waitForApproval
-        if (resultApproval.data?.status !== 1) {
+
+        if (resultApproval.data?.status !== "success") {
           // analytics.track("bridge.approval-failed", {
           //   value: props.amount,
           // })
@@ -197,7 +209,7 @@ export const useBridgeEthToSommTx = () => {
         }
         if (
           resultApproval?.data?.transactionHash &&
-          resultApproval.data?.status === 1
+          resultApproval.data?.status === "success"
         ) {
           // analytics.track("bridge.approval-succeeded", {
           //   value: props.amount,
@@ -233,16 +245,20 @@ export const useBridgeEthToSommTx = () => {
         closeHandler: closeAll,
       })
       const bytes32 = getBytes32(props.address)
-      const { hash: bridgeHash } = await bridgeContract.sendToCosmos(
+      // @ts-ignore
+      const { hash: bridgeHash } = await bridgeContract.write.sendToCosmos([
         tokenConfigMap.SOMM_ETHEREUM.address,
         bytes32,
         convertedAmount
+        ],
+        { account: address }
       )
       const waitForBridge = wait({
         hash: bridgeHash,
       })
       const resultBridge = await waitForBridge
-      if (resultBridge.data?.status !== 1) {
+
+      if (Number(resultBridge.data?.status) !== 1) {
         analytics.track("bridge.contract-failed", {
           value: props.amount,
           path: "ethToSomm",
@@ -266,7 +282,7 @@ export const useBridgeEthToSommTx = () => {
       }
       if (
         resultBridge?.data?.transactionHash &&
-        resultBridge.data?.status === 1
+        resultBridge.data?.status === "success"
       ) {
         analytics.track("bridge.contract-succeeded", {
           value: props.amount,

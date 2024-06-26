@@ -13,7 +13,7 @@ import {
   Avatar,
   Checkbox,
 } from "@chakra-ui/react"
-import { useState, VFC, useEffect } from "react"
+import { useState, useEffect } from "react"
 import {
   chainConfig,
   Chain,
@@ -28,7 +28,7 @@ export interface ChainFilterProps {
   ) => void
 }
 
-export const ChainFilter: VFC<ChainFilterProps> = (props) => {
+export const ChainFilter = (props: ChainFilterProps) => {
   const handleChainClick = (chainId: string) => {
     props.setSelectedChainIds((current: string[]) => {
       const normalizedChainId = chainId.toLowerCase()
@@ -95,9 +95,9 @@ export const ChainFilter: VFC<ChainFilterProps> = (props) => {
                 <AvatarGroup size="sm" dir="reverse">
                   {props.selectedChainIds
                     .slice(0, 5)
-                    .map((chainStr: String) => {
+                    .map((chainStr: string) => {
                       const chain =
-                        chainConfigMap[chainStr.toLowerCase()]
+                        chainConfigMap[chainStr]
                       return (
                         <Avatar
                           name={chain.displayName}

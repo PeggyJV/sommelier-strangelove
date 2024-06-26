@@ -9,8 +9,6 @@ import {
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
-import { EETHIcon } from "components/_icons"
-import { ETHXIcon } from "components/_icons/ETHXIcon"
 
 export const turboETHx: CellarData = {
   name: "Turbo ETHx",

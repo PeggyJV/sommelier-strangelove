@@ -18,9 +18,9 @@ export const getAllStrategiesData = async ({
   if (!cellarData) return []
   const data = await Promise.all(
     Object.entries(allContracts)?.map(async ([key, contracts]) => {
-      const result = await reactQueryClient.fetchQuery(
-        ["USE_STRATEGY_DATA", { provider: true, address: key }],
-        async () => {
+      const result = await reactQueryClient.fetchQuery({
+        queryKey: ["USE_STRATEGY_DATA", { provider: true, address: key }],
+        queryFn : async () => {
           // Get the contract's chain
           let chain = ""
           if (contracts.chain !== "ethereum") {
@@ -61,8 +61,8 @@ export const getAllStrategiesData = async ({
           } catch (error) {
             console.error(error)
           }
-        },
-        {}
+        }
+        }
       )
 
       return result

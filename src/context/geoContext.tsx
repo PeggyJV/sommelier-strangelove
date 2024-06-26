@@ -8,7 +8,6 @@ import {
   useEffect,
   useState,
 } from "react"
-import { analytics } from "utils/analytics"
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/"
@@ -25,7 +24,7 @@ interface CheckIPContext extends CheckIPState {
 
 const geoContext = createContext<CheckIPContext | null>(null)
 
-export const GeoProvider: FC<ReactNode> = ({ children }) => {
+export const GeoProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [ctx, setCtx] = useState<CheckIPState>({
     country: null,
     region: null,

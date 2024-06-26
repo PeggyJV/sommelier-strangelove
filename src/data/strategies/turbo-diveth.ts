@@ -4,8 +4,7 @@ import {
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
-  CellarType,
-  StakerKey,
+  CellarType
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"

@@ -10,7 +10,6 @@ import {
   Spacer,
   Stack,
   Text,
-  Tooltip,
   useTheme,
   VStack,
 } from "@chakra-ui/react"
@@ -41,28 +40,26 @@ import {
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
-import { useEffect, useState, VFC } from "react"
+import { useEffect, useState } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { formatDecimals } from "utils/bigNumber"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
-import { useAccount, useContract, useSigner } from "wagmi"
+import { useAccount, usePublicClient, useWalletClient } from "wagmi"
+import { getAddress, getContract } from "viem"
 import BondingTableCard from "../BondingTableCard"
 import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
-import { useNetwork } from "wagmi"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
-import { BaseButton } from "components/_buttons/BaseButton"
 
-export const PortfolioCard: VFC<BoxProps> = (props) => {
+export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
-  const { address, isConnected: connected } = useAccount()
+  const { address, isConnected: connected, chain: wagmiChain } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const slug = cellarDataMap[id].slug
@@ -75,7 +72,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   ) as Token[]
 
   // using local state to avoid Next.js errors
-  const [isConnected, setConnected] = useState(false)
+  const [isConnected, setConnected] = useState(false);
   useEffect(() => {
     setConnected(connected)
   }, [connected])
@@ -108,7 +105,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
     : false
 
   // Make sure the user is on the same chain as the strategy
-  const { chain: wagmiChain } = useNetwork()
   let buttonsEnabled = true
   if (strategyData?.config.chain.wagmiId !== wagmiChain?.id!) {
     // Override userdata so as to not confuse people if they're on the wrong chain
@@ -124,18 +120,25 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
 
   const totalShares =
     userData?.userStrategyData.userData?.totalShares.value
+
+  const baseAssetValue = userData?.userStrategyData.userData?.netValueInAsset.formatted
   const { data, isLoading } = useGetPreviewRedeem({
     cellarConfig: staticCelarConfig,
     value: totalShares?.toString(),
   })
 
   // Query withdraw queue status, disable queue button if there is active withdraw pending to prevent confusion
-  const { data: signer } = useSigner()
-  const withdrawQueueContract = useContract({
-    address: cellarConfig.chain.withdrawQueueAddress,
+  const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient();
+
+  const withdrawQueueContract = publicClient && getContract({
+    address: getAddress(cellarConfig.chain.withdrawQueueAddress),
     abi: withdrawQueueV0821,
-    signerOrProvider: signer,
-  })!
+    client: {
+      wallet: walletClient,
+      public: publicClient
+    }
+  })
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
@@ -143,20 +146,22 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
-      if (withdrawQueueContract && address && cellarConfig) {
+      if (walletClient && withdrawQueueContract && address && cellarConfig) {
+        // @ts-ignore
         const withdrawRequest =
-          await withdrawQueueContract?.getUserWithdrawRequest(
+          await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
             cellarConfig.cellar.address
-          )
+          ])
 
         // Check if it's valid
+        // @ts-ignore
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.isWithdrawRequestValid(
+          await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
             withdrawRequest
-          )
+          ]) as unknown as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
       } else {
         setIsActiveWithdrawRequest(false)
@@ -187,8 +192,6 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
           direction={{ base: "column", md: "row" }}
           wrap="wrap"
         >
-
-
           <SimpleGrid
             templateColumns={{
               base: "repeat(1, max-content)",
@@ -224,10 +227,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
               >
                 {isMounted &&
                   (isConnected && !isLoading
-                    ? `${formatDecimals(
-                        data?.toString() || "0",
-                        lpTokenData?.decimals
-                      )} ${activeAsset?.symbol}`
+                    ? baseAssetValue
                     : "--")}
               </CardStat>
             )}
@@ -325,7 +325,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                   <>
                     <HStack paddingTop={"1em"}>
                       <ConnectButton
-                        overrideChainId={cellarConfig.chain.id}
+                        overridechainid={cellarConfig.chain.id}
                         unstyled
                       />
                     </HStack>
@@ -358,7 +358,7 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
                       (isConnected
                         ? (lpTokenData &&
                             toEther(
-                              lpTokenData.formatted,
+                              lpTokenData.value,
                               lpTokenData.decimals,
                               true,
                               2
@@ -426,20 +426,22 @@ export const PortfolioCard: VFC<BoxProps> = (props) => {
             </VStack>
           )}
           {/* Insert PointsDisplay here */}
+{/* 
           {isConnected &&
             address &&
             cellarConfig.cellarNameKey ===
               CellarNameKey.TURBO_EETHV2 && (
               <PointsDisplay userAddress={address} />
             )}
-          {/* {isConnected &&
+          {isConnected &&
             address &&
             (cellarConfig.cellarNameKey ===
               CellarNameKey.REAL_YIELD_ETH_ARB ||
               cellarConfig.cellarNameKey ===
                 CellarNameKey.REAL_YIELD_USD_ARB) && (
               <MerklePoints userAddress={address} merkleRewardsApy={strategyData?.merkleRewardsApy} />
-            )} */}
+            )}
+             */}
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
               <HStack

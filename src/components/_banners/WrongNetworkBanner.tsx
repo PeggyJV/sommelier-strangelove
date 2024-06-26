@@ -9,7 +9,7 @@ import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { InformationIcon } from "components/_icons"
 import { useBrandedToast } from "hooks/chakra"
 import React, { VFC } from "react"
-import { useSwitchNetwork, useNetwork } from "wagmi"
+import { useSwitchChain, useAccount } from "wagmi"
 import { Chain } from "src/data/chainConfig"
 
 interface WrongNetworkBannerProps {
@@ -19,9 +19,9 @@ interface WrongNetworkBannerProps {
 export const WrongNetworkBanner: VFC<WrongNetworkBannerProps> = ({
   chain,
 }) => {
-  const { switchNetworkAsync } = useSwitchNetwork()
+  const { switchChainAsync } = useSwitchChain()
   const { addToast, close } = useBrandedToast()
-  const { chain: wagmiChain } = useNetwork()
+  const { chain: wagmiChain } = useAccount()
 
   // Some pages dont require chain so it can be undefined, continue as normal if so
   if (!chain || !wagmiChain || wagmiChain.id === chain.wagmiId)
@@ -71,7 +71,7 @@ export const WrongNetworkBanner: VFC<WrongNetworkBannerProps> = ({
               borderColor="purple.base"
               onClick={async () => {
                 try {
-                  await switchNetworkAsync?.(chain.wagmiId)
+                  await switchChainAsync?.({chainId: chain.wagmiId})
                   // Reload the page to ensure everything is in sync
                   window.location.reload()
                 } catch (e) {

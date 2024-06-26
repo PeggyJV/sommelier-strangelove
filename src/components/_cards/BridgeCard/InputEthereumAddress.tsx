@@ -8,7 +8,7 @@ import {
   Box,
 } from "@chakra-ui/react"
 import { InformationIcon, MoneyWalletIcon } from "components/_icons"
-import { isAddress } from "ethers/lib/utils"
+import { isAddress } from 'viem'
 import { useBrandedToast } from "hooks/chakra"
 import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"

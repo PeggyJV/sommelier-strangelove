@@ -1,36 +1,37 @@
 import * as React from "react"
 import { ButtonProps, HStack } from "@chakra-ui/react"
-import { useAccount, useNetwork } from "wagmi"
+import { useAccount } from "wagmi"
 import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
 import { ConnectWalletPopover } from "./ConnectWalletPopover"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { MobileConnectedPopover } from "./MobileConnectedPopover"
 import ChainButton from "../ChainButton"
-import { chainConfigMap } from "src/data/chainConfig"
+import { chainConfig, chainConfigMap, getChainByViemId } from "src/data/chainConfig"
 
 export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
   children?: React.ReactNode
-  overrideChainId?: string
+  overridechainid?: string
 }
 
 const ConnectButton = (
   props: ConnectButtonProps
 ) => {
-  const { isConnected } = useAccount()
+  const { isConnected, chain: viemChain } = useAccount()
   const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
-  const { chain } = useNetwork()
+  const chain = getChainByViemId(viemChain?.name)
+
   const [selectedNetwork, setSelectedNetwork] = React.useState(
-    chain?.name.toLowerCase().split(" ")[0] || "ethereum"
+    chain.id
   )
   const handleNetworkChange = (chainId: string) => {
     setSelectedNetwork(chainId)
   }
 
   // For connect buttons that are not on header/should allow chain selection
-  if (props.overrideChainId) {
-    const chain = chainConfigMap[props.overrideChainId]
+  if (props.overridechainid) {
+    const chain = chainConfigMap[props.overridechainid]
     return (
       <ClientOnly>
         <HStack>

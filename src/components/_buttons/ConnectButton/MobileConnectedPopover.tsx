@@ -27,25 +27,23 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
 import { useRouter } from "next/router"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useNetwork } from "wagmi"
 
 export const MobileConnectedPopover = () => {
   const isLarger480 = useBetterMediaQuery("(min-width: 480px)")
 
   const { addToast, close } = useBrandedToast()
   const { disconnect } = useDisconnect()
-  const { address, isConnecting } = useAccount()
+  const { address, isConnecting, chain } = useAccount()
   const { data: ensName, isLoading: ensNameLoading } = useEnsName({
     address,
   })
   const { data: ensAvatar, isLoading: ensAvatarLoading } =
     useEnsAvatar({
-      address: address,
+      name: address,
     })
 
   const id = useRouter().query.id as string | undefined
   const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
-  const { chain } = useNetwork()
 
   function onDisconnect() {
     analytics.track("wallet.disconnected", {

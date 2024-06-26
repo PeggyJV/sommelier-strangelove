@@ -7,10 +7,10 @@ export const styles: Styles = {
     "::selection": { background: "purple.base" },
     "html, body": {
       bgColor: "surface.bg",
-      color: "neutral.100",
+      color: "neutral.100"
     },
     ":root": {
-      colorScheme: "dark",
+      colorScheme: "dark !important",
     },
     body: {
       zIndex: "hide",
@@ -62,6 +62,7 @@ export const styles: Styles = {
       transitionProperty: "all",
       transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
       transitionDuration: "500ms",
+      zIndex: "1 !important"
     },
     ".nav.down": {
       top: "-10rem",

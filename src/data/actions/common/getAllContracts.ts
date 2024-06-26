@@ -1,16 +1,10 @@
-import {
-  getContract,
-  getProvider,
-  fetchSigner,
-  Signer,
-  Provider,
-} from "@wagmi/core"
+import { Client, getContract } from "viem"
 import { cellarDataMap } from "data/cellarDataMap"
 import { AllContracts } from "../types"
 
 export const getAllContracts = async (
-  providerMap: Map<string, Provider>,
-  signerMap: Map<string, Signer | undefined>
+  providerMap: Map<string, Client>,
+  signerMap: Map<string, Client | undefined>
 ) => {
   let contracts: AllContracts = {}
 
@@ -26,37 +20,50 @@ export const getAllContracts = async (
     }
 
     const cellarContract = getContract({
-      address: cellar.config.cellar.address,
+      address: cellar.config.cellar.address as `0x${string}`,
       abi: cellar.config.cellar.abi,
-      signerOrProvider: provider,
+      client: {
+        public: provider
+      },
     })
 
     const cellarSigner = getContract({
-      address: cellar.config.cellar.address,
+      address: cellar.config.cellar.address as `0x${string}`,
       abi: cellar.config.cellar.abi,
-      signerOrProvider: signer || undefined,
+      client: {
+        public: provider,
+        wallet: signer || undefined
+      }
     })
 
     const stakerContract =
       cellar.config.staker &&
       getContract({
-        address: cellar.config.staker.address,
+        address: cellar.config.staker.address as `0x${string}`,
         abi: cellar.config.staker.abi,
-        signerOrProvider: provider,
+        client: {
+          public: provider
+        }
       })
 
     const stakerSigner =
       cellar.config.staker &&
       getContract({
-        address: cellar.config.staker.address,
+        address: cellar.config.staker.address as `0x${string}`,
         abi: cellar.config.staker.abi,
-        signerOrProvider: signer || undefined,
+        client: {
+          public: provider,
+          wallet: signer || undefined
+        }
       })
 
     const cellarRouterSigner = getContract({
-      address: cellar.config.cellarRouter.address,
+      address: cellar.config.cellarRouter.address as `0x${string}`,
       abi: cellar.config.cellarRouter.abi,
-      signerOrProvider: signer || undefined,
+      client: {
+        public: provider,
+        wallet: signer || undefined
+      }
     })
 
     const contract = {

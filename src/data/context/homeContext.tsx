@@ -1,4 +1,4 @@
-import { FC, useState, createContext, useContext } from "react"
+import { FC, useState, createContext, useContext, ReactNode } from "react"
 
 export type Timeline = {
   value: "daily" | "weekly" | "monthly" | "allTime"
@@ -16,7 +16,7 @@ type HomeContextType = {
 
 const HomeContext = createContext<HomeContextType | null>(null)
 
-export const HomeProvider: FC = ({ children }) => {
+export const HomeProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, setState] = useState<Timeline>({
     value: "monthly",
     title: "1M",
