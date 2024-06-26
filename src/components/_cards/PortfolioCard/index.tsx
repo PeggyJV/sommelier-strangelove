@@ -174,6 +174,10 @@ export const PortfolioCard = (props: BoxProps) => {
       setIsActiveWithdrawRequest(false)
     }
   }
+  const isMerkleRewardsException = (config: ConfigProps) => {
+    return config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB
+      ||config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
+  }
 
   useEffect(() => {
     checkWithdrawRequest()
@@ -384,9 +388,9 @@ export const PortfolioCard = (props: BoxProps) => {
                             : "--")}
                       </CardStat>
                     </VStack>
-                    {isBondButtonEnabled(cellarConfig) &&
-                      isStakingAllowed &&
-                      isMounted && (
+                    {isMounted
+                      && (isMerkleRewardsException(cellarConfig) || isStakingAllowed)
+                      && (
                         <BondButton
                           disabled={
                             lpTokenDisabled || !buttonsEnabled
