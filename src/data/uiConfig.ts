@@ -260,10 +260,8 @@ export const bondingPeriodOptions = (
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey ===
       CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   ) {
     return [
@@ -326,6 +324,27 @@ export const bondingPeriodOptions = (
       },
     ]
   }
+  if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB) {
+      return [
+        {
+          title: "10 Day Unbonding",
+          amount: "1.1x SOMM",
+          value: 0,
+        },
+        {
+          title: "14 Day Unbonding",
+          amount: "1.2x SOMM",
+          value: 1,
+        },
+        {
+          title: "20 Day Unbonding",
+          amount: "1.25x SOMM",
+          value: 2,
+        },
+      ]
+    }
   if (
     config.cellarNameKey === CellarNameKey.STEADY_BTC ||
     config.cellarNameKey === CellarNameKey.STEADY_ETH ||
