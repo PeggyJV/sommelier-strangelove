@@ -14,8 +14,6 @@ import {
 import {
   ALCHEMY_API_KEY,
   ALCHEMY_API_URL,
-  QUICKNODE_API_KEY,
-  QUICKNODE_API_URL
 } from "context/rpc_context";
 
 const WALLETCONNECT_PROJECT_ID =
@@ -51,7 +49,7 @@ export const wagmiConfig = createConfig({
     [mainnet.id]: http(`${ALCHEMY_API_URL.ethereum}/${ALCHEMY_API_KEY}`),
     [arbitrum.id]: http(`${ALCHEMY_API_URL.arbitrum}/${ALCHEMY_API_KEY}`),
     [optimism.id]:  http(`${ALCHEMY_API_URL.optimism}/${ALCHEMY_API_KEY}`),
-    [scroll.id]: http(`${QUICKNODE_API_URL.scroll}/${QUICKNODE_API_KEY}`)
+    [scroll.id]: http(scroll.rpcUrls.default.http[0])
   },
 });
 

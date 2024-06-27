@@ -28,6 +28,7 @@ import { useRouter } from "next/router"
 import { chainConfig } from "data/chainConfig"
 import { tokenConfig, tokenConfigMap } from "data/tokenConfig"
 import { useImportToken } from "hooks/web3/useImportToken"
+import { getAddress } from "viem"
 
 export const ConnectedPopover = () => {
   const { addToast, close } = useBrandedToast()
@@ -75,9 +76,9 @@ export const ConnectedPopover = () => {
   const handleImportToken = () => {
     const fullImageUrl = `${window.origin}${tokenConfigMap.SOMM_ETHEREUM.src}`
     importToken.mutate({
-      address: tokenConfigMap.SOMM_ETHEREUM.address,
+      address: getAddress(sommToken?.address ?? ""),
       imageUrl: fullImageUrl,
-      chain: tokenConfigMap.SOMM_ETHEREUM.chain,
+      chain: sommToken?.chain ?? "",
     })
     addToast({
       heading: "Importing Token",
@@ -224,7 +225,7 @@ export const ConnectedPopover = () => {
               py={2}
               px={4}
               fontSize="sm"
-              onClick={handleImportToken} // Add onClick handler
+              onClick={handleImportToken}
               _hover={{
                 cursor: "pointer",
                 bg: "purple.dark",
