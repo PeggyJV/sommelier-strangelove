@@ -1,4 +1,4 @@
-import { formatUnits, parseUnits } from "viem"
+import { formatUnits } from "viem"
 
 export const formatCurrency = (value?: string) => {
   const v =
