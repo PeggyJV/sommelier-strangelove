@@ -9,9 +9,10 @@ import {
   SimpleGrid,
   Spacer,
   Stack,
+  Table,
   Text,
   useTheme,
-  VStack,
+  VStack
 } from "@chakra-ui/react"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
@@ -391,11 +392,14 @@ export const PortfolioCard = (props: BoxProps) => {
                     {isMounted
                       && (isMerkleRewardsException(cellarConfig) || isStakingAllowed)
                       && (
-                        <BondButton
-                          disabled={
-                            lpTokenDisabled || !buttonsEnabled
-                          }
-                        />
+                        <Table>
+                          <BondButton
+                            disabled={
+                              lpTokenDisabled || !buttonsEnabled
+                            }
+                          />
+                        </Table>
+
                       )}
                   </>
                 )}
