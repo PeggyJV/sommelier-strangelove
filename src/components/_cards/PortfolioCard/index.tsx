@@ -352,7 +352,7 @@ export const PortfolioCard = (props: BoxProps) => {
             userAddress={isConnected && address ? address : undefined}
             merkleRewardsApy={strategyData?.merkleRewardsApy}
             fetchMerkleData={() =>
-              fetchMerkleData(cellarConfig.cellar.address, address)
+              fetchMerkleData(cellarConfig.cellar.address, address ?? "")
             }
           />
 
