@@ -1,4 +1,4 @@
-import { formatUnits } from 'viem'
+import { formatUnits, parseUnits } from "viem"
 
 export const formatCurrency = (value?: string) => {
   const v =
@@ -40,9 +40,13 @@ export const toEther = (
       format = typeof format === "boolean" ? 2 : format
       return result.toLocaleString("en-US", { minimumFractionDigits: format, maximumFractionDigits: format });
     }
-    return result.toFixed(precision)
+    return floorToPrecision(result, precision).toString()
   } catch (e) {
     console.log(e)
     return "--"
   }
 }
+const floorToPrecision = (num: number, precision: number) => {
+  const factor = Math.pow(10, precision);
+  return Math.floor(num * factor) / factor;
+};
