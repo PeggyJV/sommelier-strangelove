@@ -392,14 +392,11 @@ export const PortfolioCard = (props: BoxProps) => {
                     {isMounted
                       && (isMerkleRewardsException(cellarConfig) || isStakingAllowed)
                       && (
-                        <Table>
                           <BondButton
                             disabled={
                               lpTokenDisabled || !buttonsEnabled
                             }
                           />
-                        </Table>
-
                       )}
                   </>
                 )}
