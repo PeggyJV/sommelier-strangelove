@@ -40,7 +40,7 @@ export const MerklePoints = ({
             setMerklePoints(response.Response.total_balance)
             setMerkleData(response.Response.tx_data)
           } else {
-            setMerklePoints("0")
+            setMerklePoints("0.00")
           }
         } catch (error) {
           console.error("Failed to fetch Merkle points data:", error)
@@ -56,7 +56,7 @@ export const MerklePoints = ({
             closeHandler: close,
             duration: null,
           })
-          setMerklePoints("0")
+          setMerklePoints("0.00")
         }
       }
 
@@ -219,14 +219,18 @@ export const MerklePoints = ({
         spacing={0}
       >
         {userAddress
-          ? merklePoints
+          ? merklePoints !== null
             ? formatPoints(merklePoints)
             : "Loading..."
           : "--"}
       </CardStat>
       <BaseButton
         onClick={handleClaimMerklePoints}
-        isDisabled={!userAddress || !merklePoints}
+        isDisabled={
+          !userAddress ||
+          merklePoints === null ||
+          merklePoints === "0.00"
+        }
       >
         Claim Merkle Rewards
       </BaseButton>
