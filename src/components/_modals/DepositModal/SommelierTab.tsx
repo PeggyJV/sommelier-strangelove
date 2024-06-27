@@ -800,10 +800,10 @@ export const SommelierTab = ({
           risks; however, this list is not exhaustive, and there may
           be additional risks:
           <br />
-          <br /> - This vault uses leverage which presents a risk for
-          the vault to be liquidated. Although there are safeguards in
-          place to help mitigate this, the liquidation risk is not
-          eliminated.
+          <br />     
+          - 1 steth=1 weth is not hard coded in Aave on Arbitrum unlike Ethereum mainnet. There is a depeg risk for steth.
+          <br /> - Borrow rates on Aave have been far more volatile than borrow rates on Ethereum on Ethereum . 
+          <br /> - This vault uses leverage, which means there is liquidation risk.
           <br />
           <br /> - This vault does liquidity provision which can
           result in impermanent loss.
