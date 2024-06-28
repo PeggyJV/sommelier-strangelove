@@ -3,7 +3,7 @@ import { useBrandedToast } from "hooks/chakra"
 import { useState } from "react"
 import { config } from "utils/config"
 import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
+import { erc20Abi, getContract, parseUnits, getAddress, bytesToHex } from "viem"
 import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
 import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
@@ -178,7 +178,7 @@ export const useBridgeEthToSommTx = () => {
 
         // ERC20 Approval
         // @ts-ignore
-        const { hash: erc20Hash } = await erc20Contract.write.approve([
+        const erc20Hash = await erc20Contract.write.approve([
           getAddress(CONTRACT.BRIDGE.ADDRESS),
           MaxUint256
           ],
@@ -244,11 +244,12 @@ export const useBridgeEthToSommTx = () => {
         duration: null,
         closeHandler: closeAll,
       })
-      const bytes32 = getBytes32(props.address)
+      const bytes32asHex = bytesToHex(getBytes32(props.address))
+
       // @ts-ignore
-      const { hash: bridgeHash } = await bridgeContract.write.sendToCosmos([
+      const bridgeHash = await bridgeContract?.write.sendToCosmos([
         tokenConfigMap.SOMM_ETHEREUM.address,
-        bytes32,
+        bytes32asHex,
         convertedAmount
         ],
         { account: address }
@@ -258,7 +259,7 @@ export const useBridgeEthToSommTx = () => {
       })
       const resultBridge = await waitForBridge
 
-      if (Number(resultBridge.data?.status) !== 1) {
+      if (resultBridge.data?.status !== "success") {
         analytics.track("bridge.contract-failed", {
           value: props.amount,
           path: "ethToSomm",
