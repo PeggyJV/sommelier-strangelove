@@ -245,6 +245,14 @@ export const useBridgeEthToSommTx = () => {
         closeHandler: closeAll,
       })
       const bytes32 = getBytes32(props.address)
+      
+      // Adding console log before sending to Cosmos
+      console.log("Sending to Cosmos with the following details:", {
+        address: tokenConfigMap.SOMM_ETHEREUM.address,
+        destinationBytes: bytes32,
+        amount: convertedAmount
+      });
+
       // @ts-ignore
       const { hash: bridgeHash } = await bridgeContract.write.sendToCosmos([
         tokenConfigMap.SOMM_ETHEREUM.address,
