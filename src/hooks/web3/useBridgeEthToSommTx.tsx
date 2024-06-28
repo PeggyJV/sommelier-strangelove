@@ -178,7 +178,7 @@ export const useBridgeEthToSommTx = () => {
 
         // ERC20 Approval
         // @ts-ignore
-        const { hash: erc20Hash } = await erc20Contract.write.approve([
+        const erc20Hash = await erc20Contract.write.approve([
           getAddress(CONTRACT.BRIDGE.ADDRESS),
           MaxUint256
           ],
@@ -246,7 +246,7 @@ export const useBridgeEthToSommTx = () => {
       })
       const bytes32 = getBytes32(props.address)
       // @ts-ignore
-      const { hash: bridgeHash } = await bridgeContract.write.sendToCosmos([
+      const bridgeHash = await bridgeContract.write.sendToCosmos([
         tokenConfigMap.SOMM_ETHEREUM.address,
         bytes32,
         convertedAmount

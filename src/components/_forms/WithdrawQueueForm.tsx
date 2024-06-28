@@ -283,7 +283,7 @@ export const WithdrawQueueForm = ({
     if (needsApproval) {
       try {
         // @ts-ignore
-        const { hash } = await cellarContract?.write.approve([
+        const hash = await cellarContract?.write.approve([
           getAddress(cellarConfig.chain.withdrawQueueAddress),
           MaxUint256
           ],
