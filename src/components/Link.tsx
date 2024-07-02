@@ -1,12 +1,12 @@
 import { Link as ChLink } from "@chakra-ui/react"
-import NLink from "next/link"
+import NextLink from 'next/link'
 import LinkProps from "types/LinkProps"
 
 export const Link = ({ children, href, ...rest }: LinkProps) => {
   return (
-    <NLink href={href || ""} passHref>
-      {/* @ts-ignore */}
       <ChLink
+        as={NextLink}
+        href={href?.toString() || ""}
         textDecoration="none"
         _hover={{ textDecoration: "none" }}
         sx={{
@@ -21,6 +21,5 @@ export const Link = ({ children, href, ...rest }: LinkProps) => {
       >
         {children}
       </ChLink>
-    </NLink>
   )
 }
