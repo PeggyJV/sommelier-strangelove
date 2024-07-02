@@ -112,8 +112,8 @@ export const InputAmount: React.FC = () => {
       >
         <HStack>
           <Image
-            width="16px"
-            height="16px"
+            width={16}
+            height={16}
             src="/assets/images/coin.png"
             alt="coin logo big"
           />
