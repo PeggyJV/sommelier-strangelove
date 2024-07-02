@@ -234,7 +234,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
                 />
               )}
 
-              <Heading size="sm">{cellarConfig.lpToken.imagePath}</Heading>
+              <Heading size="sm">{lpTokenData?.symbol}</Heading>
             </HStack>
             <VStack spacing={0} align="flex-end">
               <FormControl isInvalid={isError as boolean | undefined}>
