@@ -18,7 +18,6 @@ export const ExchangeTab = ({ title }: { title: string }) => {
           .map((item) => (
             <Link
               key={item.name}
-              // @ts-expect-error - typescript expect url is undefined
               href={item.url}
               onClick={() => {
                 // analytics.track(
