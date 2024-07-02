@@ -6,12 +6,12 @@ import { formatUnits } from "viem"
 const ARB_TOKENS_IN_PERIOD = 30000
 const PERIOD_DAYS = 7
 export const getMerkleRewardsApy = async (
-  stakingContract: any,
+  cellarContract: any,
   cellarConfig: ConfigProps
 ) => {
   const arbPrice = await fetchCoingeckoPrice(tokenConfigMap.ARB_ARBITRUM, "usd");
   const baseAssetPrice = await fetchCoingeckoPrice(cellarConfig.baseAsset, "usd");
-  const totalValueStaked = await fetchTotalValueStaked(stakingContract);
+  const totalValueStaked = await fetchTotalValueStaked(cellarContract);
 
   const totalValueStakedInUsd =
     parseFloat(formatUnits(totalValueStaked, cellarConfig.cellar.decimals)) * Number(baseAssetPrice)
@@ -22,11 +22,11 @@ export const getMerkleRewardsApy = async (
     100
 }
 const fetchTotalValueStaked = async (
-  stakingContract: any
+  cellarContract: any
 ) => {
   try {
-    const totalDeposits = await stakingContract.read.totalDeposits()
-    return totalDeposits
+    const totalAssets = await cellarContract.read.totalAssets()
+    return totalAssets
   } catch (error) {
     console.error("Failed to fetch total value staked:", error)
     return BigInt(0)
