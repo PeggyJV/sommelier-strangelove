@@ -14,7 +14,6 @@ const SentryOptions = {
  * @type {import('next').NextConfig} */
 let nextConfig = {
   reactStrictMode: true,
-  outputFileTracing: false, // Temporary fix for Sentry + Next 12 bug
   async headers() {
     return [
       {
