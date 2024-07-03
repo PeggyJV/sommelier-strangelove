@@ -348,13 +348,16 @@ export const PortfolioCard = (props: BoxProps) => {
             </VStack>
           )}
 
-          <MerklePoints
-            userAddress={isConnected && address ? address : undefined}
-            merkleRewardsApy={strategyData?.merkleRewardsApy}
-            fetchMerkleData={() =>
-              fetchMerkleData(cellarConfig.cellar.address, address ?? "")
-            }
-          />
+{isConnected &&
+  address &&
+  (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) && (
+    <MerklePoints
+      userAddress={address}
+      merkleRewardsApy={strategyData?.merkleRewardsApy}
+      fetchMerkleData={() => fetchMerkleData(cellarConfig.cellar.address, address)}
+    />
+)}
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
