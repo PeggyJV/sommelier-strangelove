@@ -354,7 +354,7 @@ export const PortfolioCard = (props: BoxProps) => {
     <MerklePoints
       userAddress={address}
       merkleRewardsApy={strategyData?.merkleRewardsApy}
-      fetchMerkleData={() => fetchMerkleData(cellarConfig.cellar.address, address)}
+      fetchMerkleData={() => fetchMerkleData(cellarConfig.cellar.address, address ?? "")}
     />
 )}
 
