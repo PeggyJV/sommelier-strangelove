@@ -222,7 +222,7 @@ export const turbodivETH: CellarData = {
         customStrategyHighlightColor: "orange.base",
       },
       {
-        customStrategyHighlight: "DIVA Allocation",
+        customStrategyHighlight: "Lock 2.5 DIVA/ETH/day",
         customStrategyHighlightColor: "#00C04B",
       },
     ],
