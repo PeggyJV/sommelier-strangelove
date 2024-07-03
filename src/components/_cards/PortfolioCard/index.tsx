@@ -217,6 +217,94 @@ export const PortfolioCard = (props: BoxProps) => {
               {isMounted &&
                 (isConnected ? netValue?.formatted || "..." : "--")}
             </CardStat>
+            {/* TODO: Verify PNL result */}
+            {/* <CardStat
+              label="pnl"
+              tooltip={`${
+                ((outputUserData.data.pnl &&
+                  outputUserData.data.pnl.value.toFixed(5, 0)) ||
+                  "...") + "%"
+              }: This represents percentage gains compared to current deposits`}
+              labelProps={{
+                textTransform: "uppercase",
+              }}
+            >
+              {isConnected ? (
+                <Apy
+                  apy={
+                    (outputUserData.data.pnl &&
+                      `${outputUserData.data.pnl.formatted}`) ||
+                    "..."
+                  }
+                />
+              ) : (
+                "--"
+              )}
+            </CardStat> */}
+            <Stack spacing={3} direction="row">
+              {isMounted &&
+                (isConnected ? (
+                  <>
+                    <VStack
+                      spacing={3}
+                      width="100%"
+                      paddingTop={"1em"}
+                    >
+                      <HStack>
+                        {!strategyData?.deprecated && (
+                          <DepositButton
+                            disabled={
+                              !isConnected ||
+                              strategyData?.isContractNotReady ||
+                              !buttonsEnabled
+                            }
+                          />
+                        )}
+                        {cellarConfig.cellarNameKey !==
+                          CellarNameKey.REAL_YIELD_LINK && (
+                          <WithdrawButton
+                            isDeprecated={strategyData?.deprecated}
+                            disabled={
+                              lpTokenDisabled || !buttonsEnabled
+                            }
+                          />
+                        )}
+                      </HStack>
+                      {/*
+                      <>
+                        <WithdrawQueueButton
+                          chain={cellarConfig.chain}
+                          buttonLabel="Enter Withdraw Queue"
+                          disabled={
+                            lpTokenDisabled ||
+                            !buttonsEnabled ||
+                            isActiveWithdrawRequest
+                          }
+                          showTooltip={true}
+                        />
+                      </>
+                        */}
+                      {cellarConfig.cellarNameKey ===
+                        CellarNameKey.REAL_YIELD_LINK && (
+                        <WithdrawQueueButton
+                          chain={cellarConfig.chain}
+                          buttonLabel="Enter Withdraw Queue"
+                          showTooltip={true}
+                        />
+                      )}
+                    </VStack>
+                  </>
+                ) : (
+                  <>
+                    <HStack paddingTop={"1em"}>
+                      <ConnectButton
+                        overridechainid={cellarConfig.chain.id}
+                        unstyled
+                      />
+                    </HStack>
+                  </>
+                ))}
+            </Stack>
 
             {showNetValueInAsset(cellarConfig) && (
               <CardStat
@@ -348,7 +436,7 @@ export const PortfolioCard = (props: BoxProps) => {
             </VStack>
           )}
 
-{/* {
+{
   (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) && (
     <MerklePoints
@@ -356,7 +444,7 @@ export const PortfolioCard = (props: BoxProps) => {
       merkleRewardsApy={strategyData?.merkleRewardsApy}
       fetchMerkleData={() => fetchMerkleData(cellarConfig.cellar.address, address ?? "")}
     />
-)} */}
+)}
 
 
           <CardStat label="Strategy Dashboard">
