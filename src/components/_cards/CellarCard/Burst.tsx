@@ -18,7 +18,7 @@ export const Burst = () => {
         />
         <source srcSet="/assets/images/burst.png" type="image/png" />
         <Image
-          width="160px"
+          width={160}
           height="auto"
           src="/assets/images/burst.png"
           alt=""
