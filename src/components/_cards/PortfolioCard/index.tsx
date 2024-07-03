@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react"
 import {
   Avatar,
   BoxProps,
@@ -9,6 +10,7 @@ import {
   SimpleGrid,
   Spacer,
   Stack,
+  Table,
   Text,
   useTheme,
   VStack,
@@ -40,7 +42,6 @@ import {
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
@@ -52,14 +53,19 @@ import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { CellarNameKey } from "data/types"
+import { CellarNameKey, ConfigProps } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
+import { fetchMerkleData } from "utils/fetchMerkleData"
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
-  const { address, isConnected: connected, chain: wagmiChain } = useAccount()
+  const {
+    address,
+    isConnected: connected,
+    chain: wagmiChain,
+  } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const slug = cellarDataMap[id].slug
@@ -71,8 +77,7 @@ export const PortfolioCard = (props: BoxProps) => {
     cellarConfig.chain.id
   ) as Token[]
 
-  // using local state to avoid Next.js errors
-  const [isConnected, setConnected] = useState(false);
+  const [isConnected, setConnected] = useState(false)
   useEffect(() => {
     setConnected(connected)
   }, [connected])
@@ -104,10 +109,8 @@ export const PortfolioCard = (props: BoxProps) => {
     ? isFuture(stakingEnd.endDate)
     : false
 
-  // Make sure the user is on the same chain as the strategy
   let buttonsEnabled = true
   if (strategyData?.config.chain.wagmiId !== wagmiChain?.id!) {
-    // Override userdata so as to not confuse people if they're on the wrong chain
     userData = undefined
     lpTokenData = undefined
     buttonsEnabled = false
@@ -121,47 +124,50 @@ export const PortfolioCard = (props: BoxProps) => {
   const totalShares =
     userData?.userStrategyData.userData?.totalShares.value
 
-  const baseAssetValue = userData?.userStrategyData.userData?.netValueInAsset.formatted
+  const baseAssetValue =
+    userData?.userStrategyData.userData?.netValueInAsset.formatted
   const { data, isLoading } = useGetPreviewRedeem({
     cellarConfig: staticCelarConfig,
     value: totalShares?.toString(),
   })
 
-  // Query withdraw queue status, disable queue button if there is active withdraw pending to prevent confusion
   const { data: walletClient } = useWalletClient()
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient()
 
-  const withdrawQueueContract = publicClient && getContract({
-    address: getAddress(cellarConfig.chain.withdrawQueueAddress),
-    abi: withdrawQueueV0821,
-    client: {
-      wallet: walletClient,
-      public: publicClient
-    }
-  })
+  const withdrawQueueContract =
+    publicClient &&
+    getContract({
+      address: getAddress(cellarConfig.chain.withdrawQueueAddress),
+      abi: withdrawQueueV0821,
+      client: {
+        wallet: walletClient,
+        public: publicClient,
+      },
+    })
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
 
-  // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
-      if (walletClient && withdrawQueueContract && address && cellarConfig) {
-        // @ts-ignore
+      if (
+        walletClient &&
+        withdrawQueueContract &&
+        address &&
+        cellarConfig
+      ) {
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
-            cellarConfig.cellar.address
+            cellarConfig.cellar.address,
           ])
 
-        // Check if it's valid
-        // @ts-ignore
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.read.isWithdrawRequestValid([
+          (await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
-            withdrawRequest
-          ]) as unknown as boolean
+            withdrawRequest,
+          ])) as unknown as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
       } else {
         setIsActiveWithdrawRequest(false)
@@ -170,6 +176,12 @@ export const PortfolioCard = (props: BoxProps) => {
       console.log(error)
       setIsActiveWithdrawRequest(false)
     }
+  }
+  const isMerkleRewardsException = (config: ConfigProps) => {
+    return (
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+      config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
+    )
   }
 
   useEffect(() => {
@@ -226,9 +238,7 @@ export const PortfolioCard = (props: BoxProps) => {
                 }
               >
                 {isMounted &&
-                  (isConnected && !isLoading
-                    ? baseAssetValue
-                    : "--")}
+                  (isConnected && !isLoading ? baseAssetValue : "--")}
               </CardStat>
             )}
 
@@ -244,94 +254,6 @@ export const PortfolioCard = (props: BoxProps) => {
                 displaySymbol
               />
             </CardStat>
-            {/* TODO: Verify PNL result */}
-            {/* <CardStat
-              label="pnl"
-              tooltip={`${
-                ((outputUserData.data.pnl &&
-                  outputUserData.data.pnl.value.toFixed(5, 0)) ||
-                  "...") + "%"
-              }: This represents percentage gains compared to current deposits`}
-              labelProps={{
-                textTransform: "uppercase",
-              }}
-            >
-              {isConnected ? (
-                <Apy
-                  apy={
-                    (outputUserData.data.pnl &&
-                      `${outputUserData.data.pnl.formatted}`) ||
-                    "..."
-                  }
-                />
-              ) : (
-                "--"
-              )}
-            </CardStat> */}
-            <Stack spacing={3} direction="row">
-              {isMounted &&
-                (isConnected ? (
-                  <>
-                    <VStack
-                      spacing={3}
-                      width="100%"
-                      paddingTop={"1em"}
-                    >
-                      <HStack>
-                        {!strategyData?.deprecated && (
-                          <DepositButton
-                            disabled={
-                              !isConnected ||
-                              strategyData?.isContractNotReady ||
-                              !buttonsEnabled
-                            }
-                          />
-                        )}
-                        {cellarConfig.cellarNameKey !==
-                          CellarNameKey.REAL_YIELD_LINK && (
-                          <WithdrawButton
-                            isDeprecated={strategyData?.deprecated}
-                            disabled={
-                              lpTokenDisabled || !buttonsEnabled
-                            }
-                          />
-                        )}
-                      </HStack>
-                      {/*
-                      <>
-                        <WithdrawQueueButton
-                          chain={cellarConfig.chain}
-                          buttonLabel="Enter Withdraw Queue"
-                          disabled={
-                            lpTokenDisabled ||
-                            !buttonsEnabled ||
-                            isActiveWithdrawRequest
-                          }
-                          showTooltip={true}
-                        />
-                      </>
-                        */}
-                      {cellarConfig.cellarNameKey ===
-                        CellarNameKey.REAL_YIELD_LINK && (
-                        <WithdrawQueueButton
-                          chain={cellarConfig.chain}
-                          buttonLabel="Enter Withdraw Queue"
-                          showTooltip={true}
-                        />
-                      )}
-                    </VStack>
-                  </>
-                ) : (
-                  <>
-                    <HStack paddingTop={"1em"}>
-                      <ConnectButton
-                        overridechainid={cellarConfig.chain.id}
-                        unstyled
-                      />
-                    </HStack>
-                  </>
-                ))}
-            </Stack>
           </SimpleGrid>
           {!isBondedDisabled(cellarConfig) ? (
             <>
@@ -381,9 +303,9 @@ export const PortfolioCard = (props: BoxProps) => {
                             : "--")}
                       </CardStat>
                     </VStack>
-                    {isBondButtonEnabled(cellarConfig) &&
-                      isStakingAllowed &&
-                      isMounted && (
+                    {isMounted &&
+                      (isMerkleRewardsException(cellarConfig) ||
+                        isStakingAllowed) && (
                         <BondButton
                           disabled={
                             lpTokenDisabled || !buttonsEnabled
@@ -425,23 +347,18 @@ export const PortfolioCard = (props: BoxProps) => {
               </CardStat>
             </VStack>
           )}
-          {/* Insert PointsDisplay here */}
-{/* 
-          {isConnected &&
-            address &&
-            cellarConfig.cellarNameKey ===
-              CellarNameKey.TURBO_EETHV2 && (
-              <PointsDisplay userAddress={address} />
-            )}
-          {isConnected &&
-            address &&
-            (cellarConfig.cellarNameKey ===
-              CellarNameKey.REAL_YIELD_ETH_ARB ||
-              cellarConfig.cellarNameKey ===
-                CellarNameKey.REAL_YIELD_USD_ARB) && (
-              <MerklePoints userAddress={address} merkleRewardsApy={strategyData?.merkleRewardsApy} />
-            )}
-             */}
+
+{/* {
+  (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) && (
+    <MerklePoints
+      userAddress={address}
+      merkleRewardsApy={strategyData?.merkleRewardsApy}
+      fetchMerkleData={() => fetchMerkleData(cellarConfig.cellar.address, address ?? "")}
+    />
+)} */}
+
+
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
               <HStack
@@ -462,7 +379,6 @@ export const PortfolioCard = (props: BoxProps) => {
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
           <>
-            {/* Show if only nothing staked */}
             {!userStakes?.userStakes.length &&
               stakingEnd?.endDate &&
               isFuture(stakingEnd?.endDate) && (
