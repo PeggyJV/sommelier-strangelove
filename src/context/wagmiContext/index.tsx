@@ -9,14 +9,11 @@ import {
   coinbaseWallet,
   injected,
   walletConnect,
-  metaMask,
   safe
-} from "@wagmi/connectors";
+} from "@wagmi/connectors"
 import {
   ALCHEMY_API_KEY,
   ALCHEMY_API_URL,
-  QUICKNODE_API_KEY,
-  QUICKNODE_API_URL
 } from "context/rpc_context";
 
 const WALLETCONNECT_PROJECT_ID =
@@ -33,23 +30,26 @@ export const wagmiConfig = createConfig({
         themeMode: 'dark'
       }
     }),
-    metaMask({
-      dappMetadata: {
-        name: "Sommelier Finance",
-        url: "https://www.sommelier.finance/",
-      }
-    }),
+    // MetaMask connector produces type error in production.
+    // "Injected" creates metamask option in case user has MetaMask has installed.
+    // Need to find a solution to display the option when MetaMask isn't installed.
+    // metaMask({
+    //   dappMetadata: {
+    //     name: "Sommelier Finance",
+    //     url: "https://www.sommelier.finance/",
+    //   }
+    // }),
     injected(),
     coinbaseWallet({
       appName: "Sommelier Finance"
     }),
-    safe()  // Adding the safe connector here
+    safe()
   ],
   transports: {
     [mainnet.id]: http(`${ALCHEMY_API_URL.ethereum}/${ALCHEMY_API_KEY}`),
     [arbitrum.id]: http(`${ALCHEMY_API_URL.arbitrum}/${ALCHEMY_API_KEY}`),
     [optimism.id]:  http(`${ALCHEMY_API_URL.optimism}/${ALCHEMY_API_KEY}`),
-    [scroll.id]: http(`${QUICKNODE_API_URL.scroll}/${QUICKNODE_API_KEY}`)
+    [scroll.id]: http(scroll.rpcUrls.default.http[0])
   },
 });
 

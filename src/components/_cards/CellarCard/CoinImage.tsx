@@ -5,10 +5,7 @@ export const CoinImage: React.FC<ImageProps> = (props) => {
   return (
     <Box {...props}>
       <picture>
-        <source
-          srcSet="/assets/images/coin.webp"
-          type="image/webp"
-        />
+        <source srcSet="/assets/images/coin.webp" type="image/webp" />
         <source srcSet="/assets/images/coin.png" type="image/png" />
         <Image
           width="40px"
