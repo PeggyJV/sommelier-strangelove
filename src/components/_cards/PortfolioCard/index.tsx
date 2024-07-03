@@ -348,7 +348,7 @@ export const PortfolioCard = (props: BoxProps) => {
             </VStack>
           )}
 
-{
+{/* {
   (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) && (
     <MerklePoints
@@ -356,7 +356,7 @@ export const PortfolioCard = (props: BoxProps) => {
       merkleRewardsApy={strategyData?.merkleRewardsApy}
       fetchMerkleData={() => fetchMerkleData(cellarConfig.cellar.address, address ?? "")}
     />
-)}
+)} */}
 
 
           <CardStat label="Strategy Dashboard">
