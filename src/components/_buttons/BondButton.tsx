@@ -1,4 +1,4 @@
-import { ButtonProps, useDisclosure, Tooltip, Table } from "@chakra-ui/react"
+import { ButtonProps, useDisclosure, Tooltip } from "@chakra-ui/react"
 import { BondModal } from "components/_modals/BondModal"
 import { BaseButton } from "./BaseButton"
 
@@ -6,7 +6,7 @@ export const BondButton = (props: ButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Table>
+    <>
       <Tooltip
         hasArrow
         arrowShadowColor="purple.base"
@@ -20,6 +20,6 @@ export const BondButton = (props: ButtonProps) => {
         </BaseButton>
       </Tooltip>
       <BondModal isOpen={isOpen} onClose={onClose} />
-    </Table>
+    </>
   )
 }

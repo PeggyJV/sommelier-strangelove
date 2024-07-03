@@ -14,6 +14,7 @@ const SentryOptions = {
  * @type {import('next').NextConfig} */
 let nextConfig = {
   reactStrictMode: true,
+  outputFileTracing: false, // Temporary fix for Sentry + Next 12 bug
   async headers() {
     return [
       {
@@ -34,14 +35,14 @@ let nextConfig = {
         ],
       },
       {
-        source: "/(.*)?", // Matches all pages
+        source: '/(.*)?', // Matches all pages
         headers: [
           {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
-        ],
-      },
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          }
+        ]
+      }
     ]
   },
   redirects: async () => {
