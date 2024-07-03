@@ -4,7 +4,7 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { useBrandedToast } from "hooks/chakra"
 import { Text, VStack } from "@chakra-ui/react"
 import { MerkleRewards } from "../../../../abi/types/MerkleRewards"
-import { usePublicClient, useWalletClient } from "wagmi"
+import { usePublicClient, useWalletClient, useAccount } from "wagmi"
 import { getContract, isHex, keccak256, toBytes } from "viem"
 
 const MERKLE_CONTRACT_ADDRESS =
@@ -29,6 +29,9 @@ export const MerklePoints = ({
 
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
+  const { chain: wagmiChain } = useAccount()
+  const arbitrumChainId = 42161 // Arbitrum One ID
+  const isArbitrum = wagmiChain?.id === arbitrumChainId
 
   useEffect(() => {
     if (userAddress) {
@@ -229,7 +232,8 @@ export const MerklePoints = ({
         isDisabled={
           !userAddress ||
           merklePoints === null ||
-          merklePoints === "0.00"
+          merklePoints === "0.00" ||
+          !isArbitrum
         }
       >
         Claim Merkle Rewards
