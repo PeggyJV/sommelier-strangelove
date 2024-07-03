@@ -304,14 +304,14 @@ export const PortfolioCard = (props: BoxProps) => {
                       </CardStat>
                     </VStack>
                     {isMounted &&
-                      (isMerkleRewardsException(cellarConfig) ||
-                        isStakingAllowed) && (
-                        <BondButton
-                          disabled={
-                            lpTokenDisabled || !buttonsEnabled
-                          }
-                        />
-                      )}
+  (/* isMerkleRewardsException(cellarConfig) || */ isStakingAllowed) && (
+    <BondButton
+      disabled={
+        lpTokenDisabled || !buttonsEnabled
+      }
+    />
+)}
+
                   </>
                 )}
               </SimpleGrid>
