@@ -142,7 +142,7 @@ export const getStrategyData = async ({
 
       if (strategy.slug === utilConfig.CONTRACT.REAL_YIELD_ETH_ARB.SLUG
         || strategy.slug === utilConfig.CONTRACT.REAL_YIELD_USD_ARB.SLUG) {
-        merkleRewardsApy = await getMerkleRewardsApy(stakerContract, config);
+        merkleRewardsApy = await getMerkleRewardsApy(cellarContract, config);
       }
 
       let extraRewardsApy = undefined
