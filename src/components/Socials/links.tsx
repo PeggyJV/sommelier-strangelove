@@ -8,10 +8,10 @@ export const links: Social[] = [
     href: "https://t.me/getsomm",
     title: "telegram",
   },
-  // {
-  //   href: "https://discord.gg/sommfinance",
-  //   title: "discord",
-  // },
+  {
+    href: "https://discord.gg/sommelierfinance",
+    title: "discord",
+  },
   {
     href: "https://twitter.com/sommfinance",
     title: "twitter",

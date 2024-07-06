@@ -17,7 +17,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -158,14 +158,11 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       )
 
       // @ts-ignore
-      const hash = await cellarSigner?.write.redeem([
-          amtInWei,
-          address,
-          address
-        ],
+      const hash = await cellarSigner?.write.redeem(
+        [amtInWei, address, address],
         {
           gas: gasLimitEstimated,
-          account: address
+          account: address,
         }
       )
 
@@ -231,16 +228,16 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
               <Text>
                 Your transaction has failed, if it does not work after
                 waiting some time and retrying please send a message
-                {/* in our{" "}
+                in our{" "}
                 {
                   <Link
-                    href="https://discord.com/channels/814266181267619840/814279703622844426"
+                    href="https://discord.gg/sommelierfinance"
                     isExternal
                     textDecoration="underline"
-                  > */}
+                  >
                     Discord Support channel
-                  {/* </Link>
-                }{" "} */}
+                  </Link>
+                }{" "}
                 tagging a member of the front end team.
               </Text>
             ),
@@ -306,7 +303,8 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
             <VStack spacing={8}>
               <Text textAlign={"center"}>
                 You are attempting to withdraw beyond the liquid
-                reserve. Please submit a withdraw request via the withdraw queue.
+                reserve. Please submit a withdraw request via the
+                withdraw queue.
               </Text>
               <WithdrawQueueButton
                 size="md"
