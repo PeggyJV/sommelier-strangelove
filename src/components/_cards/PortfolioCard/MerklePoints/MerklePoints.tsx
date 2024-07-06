@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from "react"
 import { CardStat } from "components/CardStat"
+import { fetchMerkleData } from "utils/fetchMerkleData"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useBrandedToast } from "hooks/chakra"
-import { Text, VStack } from "@chakra-ui/react"
+import { Text, Box } from "@chakra-ui/react"
 import { MerkleRewards } from "../../../../abi/types/MerkleRewards"
 import { usePublicClient, useWalletClient } from "wagmi"
 import { getContract, isHex, keccak256, toBytes } from "viem"
 
-const MERKLE_CONTRACT_ADDRESS =
-  "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
-
+const MERKLE_CONTRACT_ADDRESS = "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
 interface MerklePointsProps {
-  userAddress?: string
+  userAddress: string,
   merkleRewardsApy?: number
-  fetchMerkleData: () => Promise<any>
 }
 
 export const MerklePoints = ({
-  userAddress,
-  merkleRewardsApy,
-  fetchMerkleData,
+  userAddress, merkleRewardsApy
 }: MerklePointsProps) => {
   const [merklePoints, setMerklePoints] = useState<string | null>(
     null
@@ -31,41 +27,35 @@ export const MerklePoints = ({
   const publicClient = usePublicClient()
 
   useEffect(() => {
-    if (userAddress) {
-      const fetchData = async () => {
-        try {
-          const response = await fetchMerkleData()
-
-          if (response.Response && response.Response.total_balance) {
-            setMerklePoints(response.Response.total_balance)
-            setMerkleData(response.Response.tx_data)
-          } else {
-            setMerklePoints("0.00")
-          }
-        } catch (error) {
-          console.error("Failed to fetch Merkle points data:", error)
-          addToast({
-            heading: "Error fetching data",
-            status: "error",
-            body: (
-              <Text>
-                Failed to fetch Merkle points data:{" "}
-                {(error as Error).message}
-              </Text>
-            ),
-            closeHandler: close,
-            duration: null,
-          })
-          setMerklePoints("0.00")
+    const fetchData = async () => {
+      try {
+        const response = await fetchMerkleData(userAddress)
+        if (response.Response && response.Response.total_balance) {
+          setMerklePoints(response.Response.total_balance)
+          setMerkleData(response.Response.tx_data)
+        } else {
+          setMerklePoints("0")
         }
+      } catch (error) {
+        console.error("Failed to fetch Merkle points data:", error)
+        addToast({
+          heading: "Error fetching data",
+          status: "error",
+          body: (
+            <Text>
+              Failed to fetch Merkle points data:{" "}
+              {(error as Error).message}
+            </Text>
+          ),
+          closeHandler: close,
+          duration: null,
+        })
+        setMerklePoints("0")
       }
-
-      fetchData()
-    } else {
-      setMerklePoints(null)
-      setMerkleData(null)
     }
-  }, [userAddress])
+
+    fetchData()
+  }, [])
 
   const ensureHexPrefix = (value: string) =>
     value.startsWith("0x") ? value : `0x${value}`
@@ -89,18 +79,22 @@ export const MerklePoints = ({
         const merkleRewardsContract = getContract({
           address: MERKLE_CONTRACT_ADDRESS,
           abi: MerkleRewards,
-          client: {
+          client:  {
             wallet: walletClient,
-            public: publicClient,
-          },
+            public: publicClient
+          }
         })
 
+        // Check if the claim has already been made
         const hasClaimed = await merkleRewardsContract.read.claimed([
-          keccak256(
-            toBytes(ensureHexPrefix(merkleData.rootHashes[0]))
-          ) as `0x${string}`,
-          userAddress as `0x${string}`,
-        ])
+            keccak256(
+              toBytes(
+                ensureHexPrefix(merkleData.rootHashes[0])
+              )
+            ) as `0x${string}`,
+            userAddress as `0x${string}`
+          ]
+        )
         if (hasClaimed) {
           addToast({
             heading: "Claim Info",
@@ -118,7 +112,7 @@ export const MerklePoints = ({
             if (!isHex(prefixedHash)) {
               throw new Error(`Invalid hex string: ${prefixedHash}`)
             }
-            return prefixedHash
+            return toBytes(prefixedHash)
           }
         )
 
@@ -131,7 +125,7 @@ export const MerklePoints = ({
                   `Invalid hex string: ${prefixedProof}`
                 )
               }
-              return prefixedProof
+              return toBytes(prefixedProof)
             })
         )
 
@@ -141,8 +135,9 @@ export const MerklePoints = ({
           rootHashes,
           merkleData.tokens,
           merkleData.balances,
-          merkleProofs,
-        ])
+          merkleProofs
+          ]
+        )
 
         await tx.wait()
         addToast({
@@ -154,7 +149,9 @@ export const MerklePoints = ({
         })
       } catch (error) {
         if (error instanceof Error && "code" in error) {
-          if ((error as any).code === "UNPREDICTABLE_GAS_LIMIT") {
+          if (
+            (error as any).code === 'UNPREDICTABLE_GAS_LIMIT'
+          ) {
             console.error(
               "Claim failed: It has already been claimed or another error occurred",
               error
@@ -211,29 +208,23 @@ export const MerklePoints = ({
   }
 
   return (
-    <VStack spacing={4} alignItems="flex-start">
+    <>
       <CardStat
         label="Merkle Points"
         tooltip="The number of Merkle points accumulated. Please note that you will only receive ARB rewards if you also stake your shares in the SOMM staking contract."
         alignSelf="flex-start"
         spacing={0}
       >
-        {userAddress
-          ? merklePoints !== null
-            ? formatPoints(merklePoints)
-            : "Loading..."
-          : "--"}
+        {merklePoints ? formatPoints(merklePoints) : "Loading..."}
       </CardStat>
-      <BaseButton
-        onClick={handleClaimMerklePoints}
-        isDisabled={
-          !userAddress ||
-          merklePoints === null ||
-          merklePoints === "0.00"
-        }
-      >
+      <BaseButton onClick={handleClaimMerklePoints}>
         Claim Merkle Rewards
       </BaseButton>
-    </VStack>
+      <Box>
+        <Text fontSize="xl" fontWeight="bold">
+          Merkle Points APY: {merkleRewardsApy ? `${merkleRewardsApy.toFixed(2)}%` : "N/A"}
+        </Text>
+      </Box>
+    </>
   )
 }

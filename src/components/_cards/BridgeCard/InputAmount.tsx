@@ -52,7 +52,7 @@ export const InputAmount: React.FC = () => {
 
   const { data, error, isLoading, queryKey } = useBalance({
     address: address,
-    token: getAddress(sommToken.address),
+    token: getAddress(sommToken.address)
   })
 
   useEffect(() => {
@@ -175,10 +175,7 @@ export const InputAmount: React.FC = () => {
                     ? (data && toEther(data.value, data.decimals)) ||
                       "--"
                     : (sommBalance &&
-                        formatUnits(
-                          BigInt(sommBalance.amount),
-                          sommDecimal
-                        )) ||
+                        formatUnits(BigInt(sommBalance.amount), sommDecimal)) ||
                       "--"}
                 </Text>
                 <Button
