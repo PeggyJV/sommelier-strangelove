@@ -195,7 +195,7 @@ const WithdrawQueueCard = (props: TableProps) => {
                 > */}
                   Discord Support channel
                 {/* </Link> */}
-              }{" "}
+              {/* }{" "} */}
               tagging a member of the front end team.
             </Text>
           ),
