@@ -231,16 +231,16 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
               <Text>
                 Your transaction has failed, if it does not work after
                 waiting some time and retrying please send a message
-                in our{" "}
+                {/* in our{" "}
                 {
                   <Link
                     href="https://discord.com/channels/814266181267619840/814279703622844426"
                     isExternal
                     textDecoration="underline"
-                  >
+                  > */}
                     Discord Support channel
-                  </Link>
-                }{" "}
+                  {/* </Link>
+                }{" "} */}
                 tagging a member of the front end team.
               </Text>
             ),
