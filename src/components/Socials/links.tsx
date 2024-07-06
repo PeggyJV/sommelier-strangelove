@@ -9,7 +9,7 @@ export const links: Social[] = [
     title: "telegram",
   },
   {
-    href: "https://discord.gg/sommelierfinance",
+    href: "https://discord.gg/sommfinance",
     title: "discord",
   },
   {
