@@ -137,8 +137,10 @@ export const BondForm = ({ onClose }: BondFormProps) => {
         address
       )
       // @ts-ignore
-      const hash = await stakerSigner.write.stake(
-        [depositAmtInWei, bondPeriod],
+      const hash = await stakerSigner.write.stake([
+        depositAmtInWei,
+        bondPeriod
+        ],
         { gas: gasLimitEstimated, account: address }
       )
 
@@ -166,7 +168,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
               our{" "}
               {
                 <Link
-                  href="https://discord.gg/sommelierfinance"
+                  href="https://discord.com/channels/814266181267619840/814279703622844426"
                   isExternal
                   textDecoration="underline"
                 >
@@ -232,9 +234,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
                 />
               )}
 
-              <Heading size="sm">
-                {cellarConfig.lpToken.imagePath}
-              </Heading>
+              <Heading size="sm">{cellarConfig.lpToken.imagePath}</Heading>
             </HStack>
             <VStack spacing={0} align="flex-end">
               <FormControl isInvalid={isError as boolean | undefined}>

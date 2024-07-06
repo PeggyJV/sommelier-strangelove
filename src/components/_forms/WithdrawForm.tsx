@@ -234,7 +234,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
                 in our{" "}
                 {
                   <Link
-                    href="https://discord.gg/sommelierfinance"
+                    href="https://discord.com/channels/814266181267619840/814279703622844426"
                     isExternal
                     textDecoration="underline"
                   >
