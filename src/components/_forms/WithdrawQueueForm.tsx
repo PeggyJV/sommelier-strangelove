@@ -129,27 +129,28 @@ export const WithdrawQueueForm = ({
 
   const withdrawQueueContract = (() => {
     if (!publicClient) return
-    return getContract({
-      address: cellarConfig.chain
-        .withdrawQueueAddress as `0x${string}`,
-      abi: withdrawQueueV0821,
-      client: {
-        public: publicClient,
-        wallet: walletClient,
-      },
-    })
+    return getContract( {
+        address: cellarConfig.chain.withdrawQueueAddress as `0x${string}`,
+        abi: withdrawQueueV0821,
+        client: {
+          public: publicClient,
+          wallet: walletClient
+        }
+      }
+    )
   })()
 
   const cellarContract = (() => {
     if (!publicClient) return
-    return getContract({
+    return getContract( {
       address: cellarConfig.cellar.address as `0x${string}`,
       abi: cellarConfig.cellar.abi,
       client: {
         public: publicClient,
-        wallet: walletClient,
-      },
-    })
+        wallet: walletClient
+      }
+    }
+    )
   })()
 
   const [_, wait] = useWaitForTransaction({
@@ -264,10 +265,11 @@ export const WithdrawQueueForm = ({
     )
 
     // Get approval if needed
-    const allowance = (await cellarContract?.read.allowance([
+    const allowance = await cellarContract?.read.allowance([
       address!,
-      getAddress(cellarConfig.chain.withdrawQueueAddress),
-    ])) as bigint
+      getAddress(cellarConfig.chain.withdrawQueueAddress)
+      ]
+    ) as bigint
 
     let needsApproval
     try {
@@ -281,10 +283,9 @@ export const WithdrawQueueForm = ({
     if (needsApproval) {
       try {
         // @ts-ignore
-        const hash = await cellarContract?.write.approve(
-          [
-            getAddress(cellarConfig.chain.withdrawQueueAddress),
-            MaxUint256,
+        const hash = await cellarContract?.write.approve([
+          getAddress(cellarConfig.chain.withdrawQueueAddress),
+          MaxUint256
           ],
           { account: address }
         )
@@ -369,7 +370,7 @@ export const WithdrawQueueForm = ({
         BigInt(deadlineSeconds),
         BigInt(sharePriceWithDiscountInBaseDenom),
         withdrawAmtInBaseDenom,
-        false,
+        false
       ]
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
@@ -380,14 +381,15 @@ export const WithdrawQueueForm = ({
         address
       )
       // @ts-ignore
-      const hash =
-        await withdrawQueueContract?.write.updateWithdrawRequest(
-          [cellarConfig.cellar.address, withdrawTouple],
-          {
-            gas: gasLimitEstimated,
-            account: address,
-          }
-        )
+      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
+        cellarConfig.cellar.address,
+        withdrawTouple
+        ],
+        {
+          gas: gasLimitEstimated,
+          account: address
+        }
+      )
 
       const onSuccess = () => {
         if (onSuccessfulWithdraw) {
@@ -448,6 +450,7 @@ export const WithdrawQueueForm = ({
     }
   }
 
+
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
 
@@ -458,17 +461,19 @@ export const WithdrawQueueForm = ({
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
-            cellarConfig.cellar.address,
+            cellarConfig.cellar.address
           ])
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          (await withdrawQueueContract?.read.isWithdrawRequestValid([
+          await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
-            withdrawRequest,
-          ])) as boolean
+            withdrawRequest
+            ]
+          ) as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
+
       } else {
         setIsActiveWithdrawRequest(false)
       }
