@@ -13,10 +13,12 @@ import { LighterSkeleton } from "components/_skeleton"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 import { PortofolioItem } from "./PortofolioItem"
 import { formatUSD } from "utils/formatCurrency"
+import { useAccount } from "wagmi"
 
 export const YourPortofolio = () => {
   const { data, isLoading, isError, refetch, isPending } =
     useUserDataAllStrategies()
+  const { chain } = useAccount()
   const valueAndFormatted = ({
     value,
     formatted,
@@ -45,7 +47,9 @@ export const YourPortofolio = () => {
             fontSize="16px"
             mt={3}
           >
-            Your total balance
+            {`Your total balance on ${
+              chain?.name ?? "your current network"
+            }`}
           </Text>
           <LighterSkeleton
             isLoaded={!isLoading}
@@ -84,65 +88,72 @@ export const YourPortofolio = () => {
           >
             <Box w="100%">
               {!isError && data ? (
-                data.strategies.map((strategy) => (
-                  strategy.userStrategyData.strategyData?.slug &&
-                  <PortofolioItem
-                    symbol={
-                      strategy.userStrategyData.userData.symbol || ""
-                    }
-                    bondedToken={Number(
-                      strategy?.userStakes?.totalBondedAmount.value ??
-                        0
-                    )}
-                    key={strategy.userStrategyData.strategyData?.name}
-                    icon={
-                      strategy.userStrategyData.strategyData?.logo ??
-                      ""
-                    }
-                    title={
-                      strategy.userStrategyData.strategyData?.name ??
-                      ""
-                    }
-                    netValueUsd={
-                      strategy.userStrategyData.userData
-                        ?.valueWithoutRewards.formatted ?? ""
-                    }
-                    netValueInAsset={
-                      strategy.userStrategyData.userData
-                        ?.netValueWithoutRewardsInAsset.value ?? 0
-                    }
-                    tokenPrice={valueAndFormatted({
-                      value:
-                        strategy.userStrategyData.strategyData?.token
-                          ?.value,
-                      formatted:
-                        strategy.userStrategyData.strategyData?.token
-                          ?.formatted,
-                    })}
-                    slug={
-                      strategy.userStrategyData.strategyData?.slug ??
-                      ""
-                    }
-                    description={
-                      strategy.userStrategyData.strategyData
-                        ?.description ?? ""
-                    }
-                  />
-                ))
+                data.strategies.map(
+                  (strategy) =>
+                    strategy.userStrategyData.strategyData?.slug && (
+                      <PortofolioItem
+                        symbol={
+                          strategy.userStrategyData.userData.symbol ||
+                          ""
+                        }
+                        bondedToken={Number(
+                          strategy?.userStakes?.totalBondedAmount
+                            .value ?? 0
+                        )}
+                        key={
+                          strategy.userStrategyData.strategyData?.name
+                        }
+                        icon={
+                          strategy.userStrategyData.strategyData
+                            ?.logo ?? ""
+                        }
+                        title={
+                          strategy.userStrategyData.strategyData
+                            ?.name ?? ""
+                        }
+                        netValueUsd={
+                          strategy.userStrategyData.userData
+                            ?.valueWithoutRewards.formatted ?? ""
+                        }
+                        netValueInAsset={
+                          strategy.userStrategyData.userData
+                            ?.netValueWithoutRewardsInAsset.value ?? 0
+                        }
+                        tokenPrice={valueAndFormatted({
+                          value:
+                            strategy.userStrategyData.strategyData
+                              ?.token?.value,
+                          formatted:
+                            strategy.userStrategyData.strategyData
+                              ?.token?.formatted,
+                        })}
+                        slug={
+                          strategy.userStrategyData.strategyData
+                            ?.slug ?? ""
+                        }
+                        description={
+                          strategy.userStrategyData.strategyData
+                            ?.description ?? ""
+                        }
+                      />
+                    )
+                )
               ) : data?.strategies.length === 0 ? (
                 <h1>start </h1>
-              ) : !isPending && (
-                <ErrorCard message="" py="100px">
-                  <Center>
-                    <Button
-                      w="100px"
-                      variant="outline"
-                      onClick={() => refetch()}
-                    >
-                      Retry
-                    </Button>
-                  </Center>
-                </ErrorCard>
+              ) : (
+                !isPending && (
+                  <ErrorCard message="" py="100px">
+                    <Center>
+                      <Button
+                        w="100px"
+                        variant="outline"
+                        onClick={() => refetch()}
+                      >
+                        Retry
+                      </Button>
+                    </Center>
+                  </ErrorCard>
+                )
               )}
             </Box>
           </LighterSkeleton>
