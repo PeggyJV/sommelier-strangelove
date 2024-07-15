@@ -52,7 +52,7 @@ import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { CellarNameKey } from "data/types"
+import { CellarNameKey, ConfigProps } from "data/types"
 import { PointsDisplay } from "./PointsDisplay"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 
@@ -175,6 +175,11 @@ export const PortfolioCard = (props: BoxProps) => {
   useEffect(() => {
     checkWithdrawRequest()
   }, [withdrawQueueContract, address, cellarConfig])
+
+  const isMerkleRewardsException = (config: ConfigProps) => {
+    return config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB
+      ||config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
+  }
 
   return (
     <TransparentCard
@@ -381,9 +386,9 @@ export const PortfolioCard = (props: BoxProps) => {
                             : "--")}
                       </CardStat>
                     </VStack>
-                    {isBondButtonEnabled(cellarConfig) &&
-                      isStakingAllowed &&
-                      isMounted && (
+                    {isMounted
+                      && (isMerkleRewardsException(cellarConfig) || isStakingAllowed)
+                      && (
                         <BondButton
                           disabled={
                             lpTokenDisabled || !buttonsEnabled
