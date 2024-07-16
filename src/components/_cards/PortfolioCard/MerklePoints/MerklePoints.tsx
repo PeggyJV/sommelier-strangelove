@@ -4,7 +4,13 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { useBrandedToast } from "hooks/chakra"
 import { Text, VStack } from "@chakra-ui/react"
 import { MerkleRewards } from "../../../../abi/types/MerkleRewards"
-import { usePublicClient, useWalletClient } from "wagmi"
+import {
+  usePublicClient,
+  useWalletClient,
+  useAccount,
+  useNetwork,
+  useSwitchChain,
+} from "wagmi"
 import { getContract, isHex, keccak256, toBytes } from "viem"
 
 const MERKLE_CONTRACT_ADDRESS =
@@ -25,10 +31,19 @@ export const MerklePoints = ({
     null
   )
   const [merkleData, setMerkleData] = useState<any>(null)
+  const [isArbitrum, setIsArbitrum] = useState<boolean>(false)
   const { addToast, close } = useBrandedToast()
 
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
+  const { isConnected, chain: wagmiChain } = useAccount() // Use useAccount to get the current chain
+  const { switchChainAsync } = useSwitchChain()
+
+  useEffect(() => {
+    if (wagmiChain) {
+      setIsArbitrum(wagmiChain.id === 42161) // Set isArbitrum based on chain ID
+    }
+  }, [wagmiChain])
 
   useEffect(() => {
     if (userAddress) {
@@ -36,11 +51,18 @@ export const MerklePoints = ({
         try {
           const response = await fetchMerkleData()
 
-          if (response.Response && response.Response.total_balance) {
-            setMerklePoints(response.Response.total_balance)
-            setMerkleData(response.Response.tx_data)
+          if (response.Response) {
+            const totalBalance = response.Response.total_balance
+            if (totalBalance && parseFloat(totalBalance) > 0) {
+              setMerklePoints(totalBalance)
+              setMerkleData(response.Response.tx_data)
+            } else {
+              setMerklePoints("0.00")
+              setMerkleData(null)
+            }
           } else {
             setMerklePoints("0.00")
+            setMerkleData(null)
           }
         } catch (error) {
           console.error("Failed to fetch Merkle points data:", error)
@@ -57,6 +79,7 @@ export const MerklePoints = ({
             duration: null,
           })
           setMerklePoints("0.00")
+          setMerkleData(null)
         }
       }
 
@@ -68,7 +91,7 @@ export const MerklePoints = ({
   }, [userAddress])
 
   const ensureHexPrefix = (value: string) =>
-    value.startsWith("0x") ? value : `0x${value}`
+    value?.startsWith("0x") ? value : `0x${value}`
 
   const formatPoints = (points: string): string => {
     const number = parseFloat(points)
@@ -84,15 +107,27 @@ export const MerklePoints = ({
   }
 
   const handleClaimMerklePoints = async () => {
+    if (!walletClient) {
+      addToast({
+        heading: "Wallet Not Connected",
+        status: "error",
+        body: (
+          <Text>
+            Please connect your wallet to claim Merkle rewards.
+          </Text>
+        ),
+        closeHandler: close,
+        duration: null,
+      })
+      return
+    }
+
     if (merkleData && publicClient) {
       try {
         const merkleRewardsContract = getContract({
           address: MERKLE_CONTRACT_ADDRESS,
           abi: MerkleRewards,
-          client: {
-            wallet: walletClient,
-            public: publicClient,
-          },
+          client: walletClient,
         })
 
         const hasClaimed = await merkleRewardsContract.read.claimed([
@@ -135,7 +170,6 @@ export const MerklePoints = ({
             })
         )
 
-        // @ts-ignore
         const tx = await merkleRewardsContract.write.claim([
           userAddress,
           rootHashes,
@@ -144,14 +178,18 @@ export const MerklePoints = ({
           merkleProofs,
         ])
 
-        await tx.wait()
-        addToast({
-          heading: "Success",
-          status: "success",
-          body: <Text>Claim successful</Text>,
-          closeHandler: close,
-          duration: null,
-        })
+        if (tx?.wait) {
+          await tx.wait()
+          addToast({
+            heading: "Success",
+            status: "success",
+            body: <Text>Claim successful</Text>,
+            closeHandler: close,
+            duration: null,
+          })
+        } else {
+          throw new Error("Transaction object is invalid")
+        }
       } catch (error) {
         if (error instanceof Error && "code" in error) {
           if ((error as any).code === "UNPREDICTABLE_GAS_LIMIT") {
@@ -229,7 +267,8 @@ export const MerklePoints = ({
         isDisabled={
           !userAddress ||
           merklePoints === null ||
-          merklePoints === "0.00"
+          merklePoints === "0.00" ||
+          !isArbitrum // Disable if not on Arbitrum chain
         }
       >
         Claim Merkle Rewards
