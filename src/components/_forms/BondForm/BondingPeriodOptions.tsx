@@ -1,22 +1,22 @@
 import {
-  Box,
   Flex,
   HStack,
+  Input,
   StackDivider,
-  Text,
+  Text
 } from "@chakra-ui/react"
 import { ConfigProps } from "data/types"
 import { bondingPeriodOptions } from "data/uiConfig"
-import { VFC, useEffect } from "react"
+import { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 
 interface BondingPeriodOptionsProps {
   cellarConfig: ConfigProps
 }
 
-export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
+export const BondingPeriodOptions = ({
   cellarConfig,
-}) => {
+}: BondingPeriodOptionsProps) => {
   const { register, getValues, setValue } = useFormContext()
   const bondingPeriod = getValues("bondingPeriod")
 
@@ -60,7 +60,7 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
               }}
               onClick={() => setValue("bondingPeriod", value)}
             >
-              <input
+              <Input
                 pos="absolute"
                 border="1px solid red"
                 w={0}
