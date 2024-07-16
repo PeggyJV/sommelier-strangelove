@@ -20,9 +20,11 @@ export const BondButton = (props: ButtonProps) => {
         bg="surface.bg"
         color="neutral.300"
       >
-        <BaseButton onClick={onOpen} {...props}>
-          Boost Yield
-        </BaseButton>
+        <div>
+          <BaseButton onClick={onOpen} {...props}>
+            Boost Yield
+          </BaseButton>
+        </div>
       </Tooltip>
       <BondModal isOpen={isOpen} onClose={onClose} />
     </Table>
