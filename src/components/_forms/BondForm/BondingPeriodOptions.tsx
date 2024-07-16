@@ -17,16 +17,17 @@ interface BondingPeriodOptionsProps {
 export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
   cellarConfig,
 }) => {
-  const { register, getValues } = useFormContext()
+  const { register, getValues, setValue } = useFormContext()
   const bondingPeriod = getValues("bondingPeriod")
 
   useEffect(() => {
-    if (bondingPeriod !== null) {
-      // analytics.track("bond.duration-selected", {
-      //   duration: bondingPeriod.title,
-      // })
+    const options = bondingPeriodOptions(cellarConfig)
+    // Automatically set the bonding period to 14 days if applicable
+    const defaultOption = options.find((option) => option.value === 1)
+    if (defaultOption) {
+      setValue("bondingPeriod", defaultOption.value)
     }
-  }, [bondingPeriod])
+  }, [cellarConfig, setValue])
 
   return (
     <HStack
@@ -52,11 +53,15 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
               py={2}
               _hover={{
                 cursor: "pointer",
+                backgroundColor:
+                  value === bondingPeriod
+                    ? "rgba(96, 80, 155, 0.4)"
+                    : undefined,
               }}
+              onClick={() => setValue("bondingPeriod", value)}
             >
-              <Box
+              <input
                 pos="absolute"
-                as="input"
                 border="1px solid red"
                 w={0}
                 h={0}
@@ -64,27 +69,9 @@ export const BondingPeriodOptions: VFC<BondingPeriodOptionsProps> = ({
                 opacity={0}
                 type="radio"
                 value={value}
-                css={
-                  value === bondingPeriod
-                    ? {
-                        "+ div": {
-                          backgroundColor: "rgba(96, 80, 155, 0.4)",
-                        },
-                      }
-                    : {
-                        "&:checked + div": {
-                          backgroundColor: "rgba(96, 80, 155, 0.4)",
-                        },
-                      }
-                }
+                checked={value === bondingPeriod}
                 {...register("bondingPeriod")}
-              />
-              <Box
-                pos="absolute"
-                top="-0.5rem"
-                w="100%"
-                h="calc(100% + 1rem)"
-                zIndex="hide"
+                style={{ display: "none" }}
               />
               <Text
                 as="span"
