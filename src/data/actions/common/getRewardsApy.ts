@@ -30,7 +30,7 @@ export const getRewardsApy = async ({
 
       // Assuming a user deposits 10k worth of the asset
       const userDeposit = 10000 / Number(assetPrice)
-      const withUserDeposit = Number(totalDepositWithBoost) + userDeposit + Number(assetPrice)
+      const withUserDeposit = (Number(totalDepositWithBoost) + userDeposit) * Number(assetPrice)
 
       potentialStakingApy = Number(rewardRate)
         * Number(sommPrice)
@@ -39,14 +39,9 @@ export const getRewardsApy = async ({
 
     }
 
-
-    console.log({
-      formatted: potentialStakingApy.toString() + "%",
-      value: Number(potentialStakingApy).toFixed(1),
-    })
     return {
-      formatted: potentialStakingApy.toString() + "%",
-      value: Number(potentialStakingApy).toFixed(1),
+      formatted: potentialStakingApy.toFixed(2) + "%",
+      value: potentialStakingApy,
     }
   } catch (error) {
     console.warn(error)
