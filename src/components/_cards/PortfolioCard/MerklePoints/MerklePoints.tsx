@@ -10,6 +10,7 @@ import {
   useAccount,
 } from "wagmi"
 import { getAddress, getContract, isHex, keccak256, toBytes } from "viem"
+import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 
 const MERKLE_CONTRACT_ADDRESS =
   "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
@@ -33,6 +34,10 @@ export const MerklePoints = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
   const { chain: wagmiChain } = useAccount() // Use useAccount to get the current chain
+
+  const [_, wait] = useWaitForTransaction({
+    skip: true,
+  })
 
   useEffect(() => {
     if (wagmiChain) {
@@ -164,19 +169,20 @@ export const MerklePoints = ({
               return prefixedProof
             })
         )
-
-        const tx = await merkleRewardsContract.write.claim([
-          getAddress(userAddress ?? ""),
-          rootHashes,
-          merkleData.tokens,
-          merkleData.balances,
-          merkleProofs,
-        ])
-
         // @ts-ignore
-        if (tx?.wait) {
-          // @ts-ignore
-          await tx.wait()
+        const hash = await merkleRewardsContract.write.claim([
+            getAddress(userAddress ?? ""),
+            rootHashes,
+            merkleData.tokens,
+            merkleData.balances,
+            merkleProofs
+          ]
+        )
+
+        const waitForResult = wait({ confirmations: 1, hash })
+        const result = await waitForResult
+
+        if (result?.data?.transactionHash) {
           addToast({
             heading: "Success",
             status: "success",
@@ -185,8 +191,15 @@ export const MerklePoints = ({
             duration: null,
           })
         } else {
-          throw new Error("Transaction object is invalid")
+          addToast({
+            heading: "Transaction Failed",
+            status: "error",
+            body: <Text>Claim failed</Text>,
+            closeHandler: close,
+            duration: null,
+          })
         }
+
       } catch (error) {
         if (error instanceof Error && "code" in error) {
           if ((error as any).code === "UNPREDICTABLE_GAS_LIMIT") {
