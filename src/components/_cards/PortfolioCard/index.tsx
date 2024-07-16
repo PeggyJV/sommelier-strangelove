@@ -10,7 +10,6 @@ import {
   SimpleGrid,
   Spacer,
   Stack,
-  Table,
   Text,
   useTheme,
   VStack,
@@ -32,7 +31,6 @@ import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import {
   bondingPeriodOptions,
-  isBondButtonEnabled,
   isBondedDisabled,
   isBondingEnabled,
   isRewardsEnabled,
@@ -54,7 +52,6 @@ import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey, ConfigProps } from "data/types"
-import { PointsDisplay } from "./PointsDisplay"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 import { fetchMerkleData } from "utils/fetchMerkleData"
 
@@ -341,7 +338,7 @@ export const PortfolioCard = (props: BoxProps) => {
                     </HStack>
                   </>
                 ))}
-            </Stack>  
+            </Stack>
           </SimpleGrid>
           {!isBondedDisabled(cellarConfig) ? (
             <>
@@ -440,7 +437,6 @@ export const PortfolioCard = (props: BoxProps) => {
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) && (
     <MerklePoints
       userAddress={address}
-      merkleRewardsApy={strategyData?.merkleRewardsApy}
       fetchMerkleData={() => fetchMerkleData(cellarConfig.cellar.address, address ?? "")}
     />
 )}

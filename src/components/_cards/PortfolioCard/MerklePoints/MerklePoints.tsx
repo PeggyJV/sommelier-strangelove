@@ -8,22 +8,19 @@ import {
   usePublicClient,
   useWalletClient,
   useAccount,
-  useSwitchChain,
 } from "wagmi"
-import { getContract, isHex, keccak256, toBytes } from "viem"
+import { getAddress, getContract, isHex, keccak256, toBytes } from "viem"
 
 const MERKLE_CONTRACT_ADDRESS =
   "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
 
 interface MerklePointsProps {
-  userAddress?: string
-  merkleRewardsApy?: number
+  userAddress?: `0x${string}`
   fetchMerkleData: () => Promise<any>
 }
 
 export const MerklePoints = ({
   userAddress,
-  merkleRewardsApy,
   fetchMerkleData,
 }: MerklePointsProps) => {
   const [merklePoints, setMerklePoints] = useState<string | null>(
@@ -35,8 +32,7 @@ export const MerklePoints = ({
 
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
-  const { isConnected, chain: wagmiChain } = useAccount() // Use useAccount to get the current chain
-  const { switchChainAsync } = useSwitchChain()
+  const { chain: wagmiChain } = useAccount() // Use useAccount to get the current chain
 
   useEffect(() => {
     if (wagmiChain) {
@@ -132,8 +128,8 @@ export const MerklePoints = ({
         const hasClaimed = await merkleRewardsContract.read.claimed([
           keccak256(
             toBytes(ensureHexPrefix(merkleData.rootHashes[0]))
-          ) as `0x${string}`,
-          userAddress as `0x${string}`,
+          ),
+          getAddress(userAddress ?? ""),
         ])
         if (hasClaimed) {
           addToast({
@@ -170,14 +166,16 @@ export const MerklePoints = ({
         )
 
         const tx = await merkleRewardsContract.write.claim([
-          userAddress,
+          getAddress(userAddress ?? ""),
           rootHashes,
           merkleData.tokens,
           merkleData.balances,
           merkleProofs,
         ])
 
+        // @ts-ignore
         if (tx?.wait) {
+          // @ts-ignore
           await tx.wait()
           addToast({
             heading: "Success",
