@@ -8,7 +8,6 @@ import {
   usePublicClient,
   useWalletClient,
   useAccount,
-  useNetwork,
   useSwitchChain,
 } from "wagmi"
 import { getContract, isHex, keccak256, toBytes } from "viem"
