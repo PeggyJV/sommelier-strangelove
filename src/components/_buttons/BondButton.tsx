@@ -1,4 +1,9 @@
-import { ButtonProps, useDisclosure, Tooltip } from "@chakra-ui/react"
+import {
+  ButtonProps,
+  useDisclosure,
+  Tooltip,
+  Table,
+} from "@chakra-ui/react"
 import { BondModal } from "components/_modals/BondModal"
 import { BaseButton } from "./BaseButton"
 
@@ -15,9 +20,9 @@ export const BondButton = (props: ButtonProps) => {
         bg="surface.bg"
         color="neutral.300"
       >
-        <BaseButton onClick={onOpen} {...props}>
-          Boost Yield
-        </BaseButton>
+          <BaseButton onClick={onOpen} {...props}>
+            Boost Yield
+          </BaseButton>
       </Tooltip>
       <BondModal isOpen={isOpen} onClose={onClose} />
     </>
