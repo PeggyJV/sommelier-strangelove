@@ -4,12 +4,15 @@ import { BaseButton } from "components/_buttons/BaseButton"
 import { useBrandedToast } from "hooks/chakra"
 import { Text, VStack } from "@chakra-ui/react"
 import { MerkleRewards } from "../../../../abi/types/MerkleRewards"
+import { usePublicClient, useWalletClient, useAccount } from "wagmi"
 import {
-  usePublicClient,
-  useWalletClient,
-  useAccount,
-} from "wagmi"
-import { formatUnits, getAddress, getContract, isHex, keccak256, toBytes } from "viem"
+  formatUnits,
+  getAddress,
+  getContract,
+  isHex,
+  keccak256,
+  toBytes,
+} from "viem"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { ConfigProps } from "data/types"
 import { fetchMerkleData } from "utils/fetchMerkleData"
@@ -24,7 +27,7 @@ interface MerklePointsProps {
 
 export const MerklePoints = ({
   userAddress,
-  cellarConfig
+  cellarConfig,
 }: MerklePointsProps) => {
   const [merklePoints, setMerklePoints] = useState<string | null>(
     null
@@ -44,17 +47,15 @@ export const MerklePoints = ({
     if (userAddress) {
       const fetchData = async () => {
         try {
-          const response = await fetchMerkleData(cellarConfig.cellar.address, address ?? "")
+          const response = await fetchMerkleData(
+            cellarConfig.cellar.address,
+            address ?? ""
+          )
 
           if (response.Response) {
             const totalBalance = response.Response.total_balance
             if (totalBalance && parseFloat(totalBalance) > 0) {
-
-              setMerklePoints(
-                formatUnits(
-                  BigInt(totalBalance),
-                  18)
-              )
+              setMerklePoints(formatUnits(BigInt(totalBalance), 18))
               setMerkleData(response.Response.tx_data)
             } else {
               setMerklePoints("0.00")
@@ -158,13 +159,12 @@ export const MerklePoints = ({
         )
         // @ts-ignore
         const hash = await merkleRewardsContract.write.claim([
-            getAddress(userAddress ?? ""),
-            rootHashes,
-            merkleData.tokens,
-            merkleData.balances,
-            merkleProofs
-          ]
-        )
+          getAddress(userAddress ?? ""),
+          rootHashes,
+          merkleData.tokens,
+          merkleData.balances,
+          merkleProofs,
+        ])
 
         const waitForResult = wait({ confirmations: 1, hash })
         const result = await waitForResult
@@ -186,7 +186,6 @@ export const MerklePoints = ({
             duration: null,
           })
         }
-
       } catch (error) {
         if (error instanceof Error && "code" in error) {
           if ((error as any).code === "UNPREDICTABLE_GAS_LIMIT") {
@@ -248,17 +247,18 @@ export const MerklePoints = ({
   return (
     <VStack spacing={4} alignItems="flex-start">
       <CardStat
-  label="Merkle ARB Rewards"
-  tooltip="Please note that you will receive Merkle ARB rewards if you also stake your shares in the SOMM staking contract."
-  alignSelf="flex-start"
-  spacing={0}
+        label="Merkle ARB Rewards"
+        tooltip="After claiming your rewards, please check to see if you shares are bonded to be eligible for the next set of ARB rewards. New users should bond to receive rewards."
+        alignSelf="flex-start"
+        spacing={0}
       >
-        {
-          userAddress && merklePoints !== null
+        {userAddress
+          ? merklePoints !== null
             ? merklePoints
-            : "--"
-        }
+            : "Loading..."
+          : "--"}
       </CardStat>
+
       <BaseButton
         onClick={handleClaimMerklePoints}
         isDisabled={
