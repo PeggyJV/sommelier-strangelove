@@ -50,46 +50,48 @@ export const MerklePoints = ({
           const response = await fetchMerkleData(
             cellarConfig.cellar.address,
             address ?? ""
-          )
-
+          );
+  
           if (response.Response) {
-            const totalBalance = response.Response.total_balance
+            const totalBalance = response.Response.total_balance;
             if (totalBalance && parseFloat(totalBalance) > 0) {
-              setMerklePoints(formatUnits(BigInt(totalBalance), 18))
-              setMerkleData(response.Response.tx_data)
+              // Convert and round the balance to two decimal places
+              const roundedBalance = parseFloat(formatUnits(BigInt(totalBalance), 18)).toFixed(2);
+              setMerklePoints(roundedBalance);
+              setMerkleData(response.Response.tx_data);
             } else {
-              setMerklePoints("0.00")
-              setMerkleData(null)
+              setMerklePoints("0.00");
+              setMerkleData(null);
             }
           } else {
-            setMerklePoints("0.00")
-            setMerkleData(null)
+            setMerklePoints("0.00");
+            setMerkleData(null);
           }
         } catch (error) {
-          console.error("Failed to fetch Merkle points data:", error)
+          console.error("Failed to fetch Merkle points data:", error);
           addToast({
             heading: "Error fetching data",
             status: "error",
             body: (
               <Text>
-                Failed to fetch Merkle points data:{" "}
-                {(error as Error).message}
+                Failed to fetch Merkle points data: {(error as Error).message}
               </Text>
             ),
             closeHandler: close,
             duration: null,
-          })
-          setMerklePoints("0.00")
-          setMerkleData(null)
+          });
+          setMerklePoints("0.00");
+          setMerkleData(null);
         }
-      }
-
-      fetchData()
+      };
+  
+      fetchData();
     } else {
-      setMerklePoints(null)
-      setMerkleData(null)
+      setMerklePoints(null);
+      setMerkleData(null);
     }
-  }, [userAddress])
+  }, [userAddress]);
+  
 
   const ensureHexPrefix = (value: string) =>
     value?.startsWith("0x") ? value : `0x${value}`
