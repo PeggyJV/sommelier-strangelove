@@ -253,11 +253,11 @@ export const MerklePoints = ({
         alignSelf="flex-start"
         spacing={0}
       >
-        {userAddress
-          ? merklePoints !== null
+        {
+          userAddress && merklePoints !== null
             ? merklePoints
-            : "Loading..."
-          : "--"}
+            : "--"
+        }
       </CardStat>
       <BaseButton
         onClick={handleClaimMerklePoints}

@@ -11,7 +11,7 @@ export const BondButton = (props: ButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Table>
+    <>
       <Tooltip
         hasArrow
         arrowShadowColor="purple.base"
@@ -20,13 +20,11 @@ export const BondButton = (props: ButtonProps) => {
         bg="surface.bg"
         color="neutral.300"
       >
-        <div>
           <BaseButton onClick={onOpen} {...props}>
             Boost Yield
           </BaseButton>
-        </div>
       </Tooltip>
       <BondModal isOpen={isOpen} onClose={onClose} />
-    </Table>
+    </>
   )
 }
