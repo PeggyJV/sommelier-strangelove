@@ -9,52 +9,52 @@ import {
   useWalletClient,
   useAccount,
 } from "wagmi"
-import { getAddress, getContract, isHex, keccak256, toBytes } from "viem"
+import { formatUnits, getAddress, getContract, isHex, keccak256, toBytes } from "viem"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { ConfigProps } from "data/types"
+import { fetchMerkleData } from "utils/fetchMerkleData"
 
 const MERKLE_CONTRACT_ADDRESS =
   "0x6D6444b54FEe95E3C7b15C69EfDE0f0EB3611445"
 
 interface MerklePointsProps {
   userAddress?: `0x${string}`
-  fetchMerkleData: () => Promise<any>
+  cellarConfig: ConfigProps
 }
 
 export const MerklePoints = ({
   userAddress,
-  fetchMerkleData,
+  cellarConfig
 }: MerklePointsProps) => {
   const [merklePoints, setMerklePoints] = useState<string | null>(
     null
   )
   const [merkleData, setMerkleData] = useState<any>(null)
-  const [isArbitrum, setIsArbitrum] = useState<boolean>(false)
   const { addToast, close } = useBrandedToast()
 
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
-  const { chain: wagmiChain } = useAccount() // Use useAccount to get the current chain
+  const { chain, address } = useAccount()
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
   })
 
   useEffect(() => {
-    if (wagmiChain) {
-      setIsArbitrum(wagmiChain.id === 42161) // Set isArbitrum based on chain ID
-    }
-  }, [wagmiChain])
-
-  useEffect(() => {
     if (userAddress) {
       const fetchData = async () => {
         try {
-          const response = await fetchMerkleData()
+          const response = await fetchMerkleData(cellarConfig.cellar.address, address ?? "")
 
           if (response.Response) {
             const totalBalance = response.Response.total_balance
             if (totalBalance && parseFloat(totalBalance) > 0) {
-              setMerklePoints(totalBalance)
+
+              setMerklePoints(
+                formatUnits(
+                  BigInt(totalBalance),
+                  18)
+              )
               setMerkleData(response.Response.tx_data)
             } else {
               setMerklePoints("0.00")
@@ -92,19 +92,6 @@ export const MerklePoints = ({
 
   const ensureHexPrefix = (value: string) =>
     value?.startsWith("0x") ? value : `0x${value}`
-
-  const formatPoints = (points: string): string => {
-    const number = parseFloat(points)
-    if (number >= 1e9) {
-      return `${(number / 1e9).toFixed(2)}B`
-    } else if (number >= 1e6) {
-      return `${(number / 1e6).toFixed(2)}M`
-    } else if (number >= 1e3) {
-      return `${(number / 1e3).toFixed(2)}K`
-    } else {
-      return number.toFixed(2)
-    }
-  }
 
   const handleClaimMerklePoints = async () => {
     if (!walletClient) {
@@ -268,7 +255,7 @@ export const MerklePoints = ({
       >
         {userAddress
           ? merklePoints !== null
-            ? formatPoints(merklePoints)
+            ? merklePoints
             : "Loading..."
           : "--"}
       </CardStat>
@@ -278,7 +265,7 @@ export const MerklePoints = ({
           !userAddress ||
           merklePoints === null ||
           merklePoints === "0.00" ||
-          !isArbitrum // Disable if not on Arbitrum chain
+          chain?.id !== 42161 // Disable if not on Arbitrum chain
         }
       >
         Claim Merkle Rewards

@@ -437,7 +437,7 @@ export const PortfolioCard = (props: BoxProps) => {
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) && (
     <MerklePoints
       userAddress={address}
-      fetchMerkleData={() => fetchMerkleData(cellarConfig.cellar.address, address ?? "")}
+      cellarConfig={cellarConfig}
     />
 )}
 
