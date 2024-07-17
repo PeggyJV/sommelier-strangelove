@@ -248,10 +248,10 @@ export const MerklePoints = ({
   return (
     <VStack spacing={4} alignItems="flex-start">
       <CardStat
-        label="Merkle Points"
-        tooltip="The number of Merkle points accumulated. Please note that you will only receive ARB rewards if you also stake your shares in the SOMM staking contract."
-        alignSelf="flex-start"
-        spacing={0}
+  label="Merkle ARB Rewards"
+  tooltip="Please note that you will receive Merkle ARB rewards if you also stake your shares in the SOMM staking contract."
+  alignSelf="flex-start"
+  spacing={0}
       >
         {
           userAddress && merklePoints !== null
