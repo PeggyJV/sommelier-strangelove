@@ -12,19 +12,21 @@ export const BondButton = (props: ButtonProps) => {
 
   return (
     <>
-      <Tooltip
-        hasArrow
-        arrowShadowColor="purple.base"
-        label="Bond your LP tokens to earn liquidity mining rewards"
-        placement="top"
-        bg="surface.bg"
-        color="neutral.300"
-      >
+      <Table>
+        <Tooltip
+          hasArrow
+          arrowShadowColor="purple.base"
+          label="Bond your LP tokens to earn liquidity mining rewards"
+          placement="top"
+          bg="surface.bg"
+          color="neutral.300"
+        >
           <BaseButton onClick={onOpen} {...props}>
             Boost Yield
           </BaseButton>
-      </Tooltip>
-      <BondModal isOpen={isOpen} onClose={onClose} />
+        </Tooltip>
+        <BondModal isOpen={isOpen} onClose={onClose} />
+      </Table>
     </>
   )
 }
