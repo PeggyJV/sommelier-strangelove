@@ -13,8 +13,6 @@
 First, run the development server:
 
 ```sh
-# using npm
-npm run dev
 
 # using yarn
 yarn dev
