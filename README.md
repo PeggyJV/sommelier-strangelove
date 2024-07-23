@@ -1,13 +1,8 @@
 # somm-boilerplate
 
 - [Getting Started](#getting-started)
-- [GraphQL Codegen](#graphql-codegen)
-- [Updating the schema.json](#updating-the-schemajson)
-- [Using hooks](#using-hooks)
-- [Parsing BigInt](#parsing-bigint)
-- [Learn more about graphql-codegen \& urql](#learn-more-about-graphql-codegen--urql)
+- [Using contracts](#interacting-with-contracts)
 - [Hardcoded values](#hardcoded-values)
-- [The Subgraph](#the-subgraph)
 - [Data Flow](#data-flow)
   - [Getting the data](#getting-the-data)
     - [Data flow](#data-flow-1)
@@ -33,44 +28,36 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-# The Graph / Cellars Subgraph
+## Interacting with contracts
+Viem and wagmi libraries are used for interacting with contracts.
 
-There is a subgraph (elkdao/cellars) currently deployed on the hosted service at [https://api.thegraph.com/subgraphs/name/peggyjv/cellars](https://api.thegraph.com/subgraphs/name/peggyjv/cellars). You can view the schema and query the subgraph directly in a GraphQL playground by clicking the link. This is a great way to familiarize yourself with the data model exposed by the subgraph.
+Instead of creating new contract objects, you can import the existing contract from the "useCreateContracts" hook and use it in the components.
 
-## GraphQL Codegen
+- [Viem Documentation](https://viem.sh/docs/contract/getContract)
+- [Wagmi Documentation](https://wagmi.sh/react/getting-started)
 
-[GraphQL Codgen](https://www.graphql-code-generator.com/docs/getting-started) is configured to automatically generate fully typed hooks based on the `.graphql` queries in the `src/queries` directory. This configuration is defined in `./codegen.yaml`. When adding a new query or modifying an existing one, you must run `yarn generate` to create / update the generated hook.
-
-## Updating the schema.json
-
-The `generated/schema.json` must be updated whenever there is a schema change in the subgraph. To pull the schema from the deployed subgraph directly run `yarn generate:schema`.
-
-## Using hooks
-
-```jsx
-import {useGetWalletQuery} from 'generated/subgraph'
-
-const MyComponent = () => {
-  const [result] = useGetWalletQuery({
-    variables: {
-      walletAddress: '0xc3761EB917CD790B30dAD99f6Cc5b4Ff93C4F9eA',
-  });
-  const {data, fetching, error} = result;
-
-  return <div>data.wallet?.id</div>
-}
+Calling methods syntax:
+```
+contract.(estimateGas|read|simulate|write).(functionName)(args, options)
 ```
 
-## Parsing BigInt
 
-The subgraph is written in AssemblyScript and supports representing 256 bit integers. These scalars are represented as strings when sent to the front end and must be parsed using a BigNumber library such as `@ethersproject/bignumber` in order to perform mathematical operations. See the `@ethersproject/bignumber` [docs](https://docs.ethers.io/v5/api/utils/bignumber/) for more information. Do not use `parseInt` on BigInt strings, the value could be greater than `MAX_SAFE_INTEGER`.
+Examples of reading and writing:
+```ts
+import { useCreateContracts } from "data/hooks/useCreateContracts"
 
-## Learn more about graphql-codegen & urql
+const { cellarSigner } = useCreateContracts(cellarConfig)
 
-- [GraphQL Codgen React](https://www.graphql-code-generator.com/docs/getting-started)
-- [The Guild Best Practices](https://www.the-guild.dev/blog/graphql-codegen-best-practices)
-- [urql Basics](https://formidable.com/open-source/urql/docs/basics/react-preact/)
-- [urql SSR with NextJS](https://formidable.com/open-source/urql/docs/advanced/server-side-rendering/#using-getstaticprops-or-getserversideprops)
+const [isSupported, holdingPosition, depositFee] = await cellarSigner?.read.alternativeAssetData([
+          assetAddress
+        ]
+  ) as [boolean, number, number]
+
+const hash = cellarSigner?.write.deposit(
+        [amtInWei, address],
+        { gas: gasLimitEstimated, account: address }
+  )
+```
 
 # IP Detection using Vercel's headers
 
@@ -91,15 +78,6 @@ Files of note:
 - [`tokenConfig.ts`](./src/data/tokenConfig.ts)
 
 I outline these because they are the hardcoded data used to present asset symbols, apy, supported chains, etc. `cellarDataMap.ts` in particular is extensible, but the most fragile. It depends on an up-to-date cellar address to display the data correctly at a given cellar route. We have it set up to pull in that string from the `config.ts` file, but this certainly needs to be refactored in the future as we continue to support more strategies.
-
-## The Subgraph
-
-Files of note:
-
-- [`subgraph.ts`](./src/generated/subgraph.ts)
-- [`graphql/`](./src/queries/)
-
-Though the core workflow of the subgraph is covered above, writing queries and using the generated hooks are a large chunk of working with the cellar route. **An important note about generating hooks**: For whatever reason, if you've written a new gql query and ran the `yarn generate` command to get your new urql hooks, they may not appear. If this is the case, I just delete the `./src/generated/subgraph.ts` file and rerun the script. That usually works 🤘
 
 ## Data Flow
 
