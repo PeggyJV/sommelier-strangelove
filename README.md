@@ -31,7 +31,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 ## Interacting with contracts
 Viem and wagmi libraries are used for interacting with contracts.
 
-Instead of creating new contract objects, you can import the existing contract from the "useCreateContracts" hook and use it in the components.
+Instead of creating new contract objects, you can import the existing contract from the [`useCreateContracts`](./src/data/hooks/useCreateContracts.tsx) hook and use it in the components.
 
 - [Viem Documentation](https://viem.sh/docs/contract/getContract)
 - [Wagmi Documentation](https://wagmi.sh/react/getting-started)
