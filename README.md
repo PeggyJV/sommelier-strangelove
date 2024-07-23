@@ -59,6 +59,10 @@ const hash = cellarSigner?.write.deposit(
   )
 ```
 
+`read` call returns a single value or a list of values. The types can be seen from the contract abi.
+
+`write` call returns tx hash.
+
 # IP Detection using Vercel's headers
 
 In order to block access to the app from sanctioned and restricted countries we are using Vercel's `x-vercel-ip-country` and `x-vercel-ip-country-region` to detect IP addresses. This is setup via a Next.js API route which reads the file from disk and performs a lookup against the IP. See `src/pages/api/geo.ts`.
