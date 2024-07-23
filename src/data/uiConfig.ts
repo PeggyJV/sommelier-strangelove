@@ -260,10 +260,8 @@ export const bondingPeriodOptions = (
     config.cellarNameKey === CellarNameKey.TURBO_GHO ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey ===
       CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_BTC
   ) {
     return [
@@ -350,6 +348,19 @@ export const bondingPeriodOptions = (
       },
     ]
   }
+  if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
+  ) {
+    return [
+      {
+        title: "14 Day Unbonding",
+        amount: "Merkle Rewards",
+        value: 1,
+      },
+    ]
+  }
+
   if (config.cellarNameKey === CellarNameKey.TURBO_SWETH) {
     return [
       {
@@ -421,10 +432,10 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
-    // } else if (
+      // } else if (
 
-    // ) {
-    //   return "7 Day MA APY"
+      // ) {
+      //   return "7 Day MA APY"
     } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
       return "Estimated Reward APY"
     }
@@ -448,10 +459,10 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
-  // } else if (
+    // } else if (
 
-  // ) {
-  //   return "7 Day MA APY"
+    // ) {
+    //   return "7 Day MA APY"
   } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
     return "Estimated Reward APY"
   }
