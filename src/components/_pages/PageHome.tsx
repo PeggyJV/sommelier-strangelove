@@ -320,9 +320,9 @@ export const PageHome = () => {
       }
 
       // 3. Priority - Somm rewards
-      if ((a?.rewardsApy || b?.rewardsApy) && !(a?.rewardsApy && b?.rewardsApy)) {
-        return a?.rewardsApy ? -1 : 1;
-      }
+      //if ((a?.rewardsApy || b?.rewardsApy) && !(a?.rewardsApy && b?.rewardsApy)) {
+        //return a?.rewardsApy ? -1 : 1;
+      //}
 
       // 4. Priority - TVL
       return parseFloat(b?.tvm?.value ?? '') - parseFloat(a?.tvm?.value ?? '');
