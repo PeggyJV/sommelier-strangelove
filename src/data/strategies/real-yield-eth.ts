@@ -23,7 +23,7 @@ tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho"],
+  protocols: ["AAVE", "Compound", "Uniswap V3", "Morpho", "Pendle"],
   strategyAssets: ["stETH", "cbETH", "rETH", "WETH"],
   performanceSplit: {
     depositors: 80,
@@ -87,6 +87,12 @@ tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
     chain: chainSlugMap.ETHEREUM,
+    badges: [
+      {
+        customStrategyHighlight: "Pendle Support",
+        customStrategyHighlightColor: "#00C04B",
+      },
+    ]
   },
   faq: [
     {
