@@ -92,7 +92,7 @@ export const turboSTETH: CellarData = {
     badges: [
       {
         customStrategyHighlight: "Aave  & LIDO Pool Support",
-        customStrategyHighlightColor: "orange.base",
+        customStrategyHighlightColor: "#00C04B",
       },
       /*
       {

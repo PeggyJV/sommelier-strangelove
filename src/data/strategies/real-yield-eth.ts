@@ -90,7 +90,7 @@ tradedAssets: ["stETH", "cbETH", "rETH", "WETH"],
     badges: [
       {
         customStrategyHighlight: "Pendle Support",
-        customStrategyHighlightColor: "orange.base",
+        customStrategyHighlightColor: "#00C04B",
       },
     ]
   },
