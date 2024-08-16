@@ -79,6 +79,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ARBITRUM.id,
   },
   {
+    src: "/assets/icons/optimism.svg",
+    alt: "Optimism logo",
+    symbol: "OP",
+    address: "0x4200000000000000000000000000000000000042",
+    coinGeckoId: "optimism",
+    decimals: 18,
+    chain: chainSlugMap.OPTIMISM.id,
+  },
+  {
     src: "/assets/icons/eth.png",
     alt: "Ethereum logo",
     symbol: "WETH",
