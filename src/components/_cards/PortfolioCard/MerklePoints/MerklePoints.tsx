@@ -180,6 +180,8 @@ export const MerklePoints = ({
             closeHandler: close,
             duration: null,
           })
+          setMerklePoints("0.00");
+          setMerkleData(null);
         } else {
           addToast({
             heading: "Transaction Failed",
