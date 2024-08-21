@@ -53,7 +53,6 @@ import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
-import { fetchMerkleData } from "utils/fetchMerkleData"
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
@@ -434,7 +433,8 @@ export const PortfolioCard = (props: BoxProps) => {
 
           {
   (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB) && (
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
+    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) && (
     <MerklePoints
       userAddress={address}
       cellarConfig={cellarConfig}

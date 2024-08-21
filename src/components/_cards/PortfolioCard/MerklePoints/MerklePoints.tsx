@@ -49,9 +49,10 @@ export const MerklePoints = ({
         try {
           const response = await fetchMerkleData(
             cellarConfig.cellar.address,
-            address ?? ""
+            address ?? "",
+            cellarConfig.chain.id
           );
-  
+
           if (response.Response) {
             const totalBalance = response.Response.total_balance;
             if (totalBalance && parseFloat(totalBalance) > 0) {
@@ -84,14 +85,14 @@ export const MerklePoints = ({
           setMerkleData(null);
         }
       };
-  
+
       fetchData();
     } else {
       setMerklePoints(null);
       setMerkleData(null);
     }
   }, [userAddress]);
-  
+
 
   const ensureHexPrefix = (value: string) =>
     value?.startsWith("0x") ? value : `0x${value}`
@@ -179,6 +180,8 @@ export const MerklePoints = ({
             closeHandler: close,
             duration: null,
           })
+          setMerklePoints("0.00");
+          setMerkleData(null);
         } else {
           addToast({
             heading: "Transaction Failed",
@@ -189,8 +192,9 @@ export const MerklePoints = ({
           })
         }
       } catch (error) {
-        if (error instanceof Error && "code" in error) {
-          if ((error as any).code === "UNPREDICTABLE_GAS_LIMIT") {
+        if (error instanceof Error) {
+          if ("code" in error &&
+              (error as any).code === "UNPREDICTABLE_GAS_LIMIT") {
             console.error(
               "Claim failed: It has already been claimed or another error occurred",
               error
@@ -208,16 +212,34 @@ export const MerklePoints = ({
               duration: null,
             })
           } else {
-            console.error("Claim failed:", error)
-            addToast({
-              heading: "Claim Failed",
-              status: "error",
-              body: (
-                <Text>Claim failed: {(error as Error).message}</Text>
-              ),
-              closeHandler: close,
-              duration: null,
-            })
+            // @ts-ignore
+            const code = error.cause.code
+            if (code === 4001) {
+              // @ts-ignore
+              const message = error.cause.message;
+              console.error("Claim failed:", error)
+
+              addToast({
+                heading: "Claim Failed",
+                status: "error",
+                body: (
+                  <Text>Claim failed: {message}</Text>
+                ),
+                closeHandler: close,
+                duration: null,
+              })
+            }else {
+              console.error("Claim failed:", error)
+              addToast({
+                heading: "Claim Failed",
+                status: "error",
+                body: (
+                  <Text>Claim failed: {(error as Error).message}</Text>
+                ),
+                closeHandler: close,
+                duration: null,
+              })
+            }
           }
         } else {
           console.error("An unknown error occurred:", error)
@@ -249,16 +271,16 @@ export const MerklePoints = ({
   return (
     <VStack spacing={4} alignItems="flex-start">
       <CardStat
-        label="Merkle ARB Rewards"
-        tooltip="After claiming your rewards, please check to see if you shares are bonded to be eligible for the next set of ARB rewards. New users should bond to receive rewards."
+        label={`Merkle ${cellarConfig.chain.id === "abitrum" ? "ARB" : "OP"} Rewards`}
+        tooltip={`After claiming your rewards, please check to see if you shares are bonded to be eligible for the next set of ${cellarConfig.chain.id === "abitrum" ? "ARB" : "OP"} rewards. New users should bond to receive rewards.`}
         alignSelf="flex-start"
         spacing={0}
       >
-        {userAddress
-          ? merklePoints !== null
+        {
+          userAddress && merklePoints !== null
             ? merklePoints
-            : "Loading..."
-          : "--"}
+            : "--"
+        }
       </CardStat>
 
       <BaseButton
@@ -267,7 +289,8 @@ export const MerklePoints = ({
           !userAddress ||
           merklePoints === null ||
           merklePoints === "0.00" ||
-          chain?.id !== 42161 // Disable if not on Arbitrum chain
+          (cellarConfig.chain.id === "abitrum" && chain?.id !== 42161) ||  // Disable if not on Arbitrum chain
+          (cellarConfig.chain.id === "optimism" && chain?.id !== 10) // Disable if not on on Optimism chain
         }
       >
         Claim Merkle Rewards
