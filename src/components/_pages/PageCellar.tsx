@@ -58,7 +58,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
         <InfoBanner
         text={
           <>
-            <strong>Merkle ARB Rewards for OPT Real Yield (ETH) - Batch Period: August 21-28, 2014</strong>
+            <strong>Merkle OPT Rewards for OPT Real Yield (ETH) - Batch Period: August 21-28, 2014</strong>
           </>
         }
       />
