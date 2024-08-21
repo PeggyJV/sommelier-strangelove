@@ -54,7 +54,17 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
 
   return (
     <Layout chainObj={cellarConfig.chain}>
-      {cellarConfig.cellarNameKey === CellarNameKey.TURBO_EETH && (
+      {cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT && (
+        <InfoBanner
+        text={
+          <>
+            <strong>Merkle OP Rewards for Real Yield ETH OP - Batch Period: August 21-28, 2014</strong>
+          </>
+        }
+      />
+      
+      )}
+            {cellarConfig.cellarNameKey === CellarNameKey.TURBO_EETH && (
         <InfoBanner
           text={
             <>
