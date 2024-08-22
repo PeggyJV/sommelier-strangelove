@@ -58,7 +58,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
         <InfoBanner
         text={
           <>
-            <strong>Merkle OP Rewards for Real Yield ETH OP - Batch Period: August 21-28, 2014</strong>
+            <strong>Merkle OP Rewards for Real Yield ETH OP - Batch Period: August 21-28, 2024</strong>
           </>
         }
       />
