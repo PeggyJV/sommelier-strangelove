@@ -271,8 +271,8 @@ export const MerklePoints = ({
   return (
     <VStack spacing={4} alignItems="flex-start">
       <CardStat
-        label={`Merkle ${cellarConfig.chain.id === "abitrum" ? "ARB" : "OP"} Rewards`}
-        tooltip={`After claiming your rewards, please check to see if you shares are bonded to be eligible for the next set of ${cellarConfig.chain.id === "abitrum" ? "ARB" : "OP"} rewards. New users should bond to receive rewards.`}
+        label={`Merkle ${cellarConfig.chain.id === "arbitrum" ? "ARB" : "OP"} Rewards`}
+        tooltip={`After claiming your rewards, please check to see if you shares are bonded to be eligible for the next set of ${cellarConfig.chain.id === "arbitrum" ? "ARB" : "OP"} rewards. New users should bond to receive rewards.`}
         alignSelf="flex-start"
         spacing={0}
       >
@@ -289,7 +289,7 @@ export const MerklePoints = ({
           !userAddress ||
           merklePoints === null ||
           merklePoints === "0.00" ||
-          (cellarConfig.chain.id === "abitrum" && chain?.id !== 42161) ||  // Disable if not on Arbitrum chain
+          (cellarConfig.chain.id === "arbitrum" && chain?.id !== 42161) ||  // Disable if not on Arbitrum chain
           (cellarConfig.chain.id === "optimism" && chain?.id !== 10) // Disable if not on on Optimism chain
         }
       >
