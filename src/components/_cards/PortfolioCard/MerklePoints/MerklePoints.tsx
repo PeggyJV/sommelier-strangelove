@@ -272,7 +272,7 @@ export const MerklePoints = ({
     <VStack spacing={4} alignItems="flex-start">
       <CardStat
         label={`Merkle ${cellarConfig.chain.id === "arbitrum" ? "ARB" : "OP"} Rewards`}
-        tooltip={`After claiming your rewards, please check to see if you shares are bonded to be eligible for the next set of ${cellarConfig.chain.id === "arbitrum" ? "ARB" : "OP"} rewards. New users should bond to receive rewards.`}
+        tooltip={`Clicking 'Claim Merkle Rewards' button you will receive your collected rewards.`}
         alignSelf="flex-start"
         spacing={0}
       >
