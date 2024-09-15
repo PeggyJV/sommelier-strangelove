@@ -55,17 +55,17 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
   const dateRange = useMemo(() => {
     const now = new Date()
     const currentDay = now.getDay()
-    const wednesday =
-      currentDay === 3
-        ? now
-        : new Date(
-            now.setDate(
-              now.getDate() -
-                currentDay +
-                3 +
-                (currentDay > 3 ? 7 : 0)
-            )
-          )
+
+    // Adjust the current date to the most recent Wednesday
+    const wednesday = new Date(now)
+    if (currentDay !== 3) {
+      // Calculate the offset to find the previous or the same Wednesday
+      const offset =
+        currentDay < 3 ? -(currentDay + 4) : -(currentDay - 3)
+      wednesday.setDate(now.getDate() + offset)
+    }
+
+    // Set the next Tuesday date by adding 6 days to Wednesday
     const nextTuesday = new Date(wednesday.getTime())
     nextTuesday.setDate(wednesday.getDate() + 6)
 
