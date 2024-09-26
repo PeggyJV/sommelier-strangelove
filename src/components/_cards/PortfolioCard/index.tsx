@@ -431,7 +431,7 @@ export const PortfolioCard = (props: BoxProps) => {
             </VStack>
           )}
 
-          { /* {
+{
   (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) && (
@@ -439,7 +439,7 @@ export const PortfolioCard = (props: BoxProps) => {
       userAddress={address}
       cellarConfig={cellarConfig}
     />
-)} */ }
+)}
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
