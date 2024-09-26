@@ -143,12 +143,12 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
                             "0.00%"
                           }`}
                       </Text>
-                      <Text>
+                      {/* <Text>
                         {merkleRewardsApy
                           ? `Merkle Rewards APY ${merkleRewardsApy.toFixed(2)}%`
                           : ''
                           }
-                      </Text>
+                      </Text> */}
                     </>
                   )}
                 </>
