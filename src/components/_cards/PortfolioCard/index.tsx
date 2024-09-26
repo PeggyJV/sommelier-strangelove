@@ -173,12 +173,12 @@ export const PortfolioCard = (props: BoxProps) => {
       setIsActiveWithdrawRequest(false)
     }
   }
-  const isMerkleRewardsException = (config: ConfigProps) => {
-    return (
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
-    )
-  }
+  // const isMerkleRewardsException = (config: ConfigProps) => {
+  //   return (
+  //     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+  //     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
+  //   )
+  // }
 
   useEffect(() => {
     checkWithdrawRequest()
@@ -431,7 +431,7 @@ export const PortfolioCard = (props: BoxProps) => {
             </VStack>
           )}
 
-          {
+          { /* {
   (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) && (
@@ -439,7 +439,7 @@ export const PortfolioCard = (props: BoxProps) => {
       userAddress={address}
       cellarConfig={cellarConfig}
     />
-)}
+)} */ }
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (

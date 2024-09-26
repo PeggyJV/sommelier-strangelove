@@ -82,10 +82,11 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
       }),
     }
   }, [])
+  
 
   return (
     <Layout chainObj={cellarConfig.chain}>
-      {cellarConfig.cellarNameKey ===
+      {/* {cellarConfig.cellarNameKey ===
         CellarNameKey.REAL_YIELD_ETH_OPT && (
         <InfoBanner
           text={
@@ -97,7 +98,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
             </>
           }
         />
-      )}
+      )} */}
       {cellarConfig.cellarNameKey === CellarNameKey.TURBO_EETH && (
         <InfoBanner
           text={
