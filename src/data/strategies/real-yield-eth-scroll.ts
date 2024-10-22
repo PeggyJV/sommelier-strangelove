@@ -49,8 +49,8 @@ export const realYieldEthScroll: CellarData = {
       - Fully automated with built-in auto-compounding.`,
     description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.
 
-    Note that Real Yield ETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
-    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
 
     - This vault uses leverage, which means there is liquidation risk.
     `,

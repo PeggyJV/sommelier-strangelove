@@ -28,7 +28,7 @@ export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
       <Tabs variant="unstyled" isFitted>
         {isHavingExchanges && (
           <TabList gap={2}>
-            <CustomTab>Sommelier</CustomTab>
+            <CustomTab>Somm</CustomTab>
             <CustomTab>Exchange</CustomTab>
           </TabList>
         )}

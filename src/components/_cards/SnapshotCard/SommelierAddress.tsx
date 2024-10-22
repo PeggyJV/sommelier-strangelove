@@ -16,7 +16,7 @@ export const SommelierAddress: React.FC = () => {
     <Stack spacing={2}>
       <HStack justifyContent="space-between">
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
-          Sommelier Address
+          Somm Address
         </Text>
         {isConnected && (
           <Button

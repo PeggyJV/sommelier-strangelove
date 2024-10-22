@@ -1,6 +1,6 @@
 export const sommelierChainConfig = {
   chainId: "sommelier-3",
-  chainName: "Sommelier",
+  chainname: "Somm",
   rpc: "https://rpc.sommelier.network",
   rest: "https://api.sommelier.network",
   stakeCurrency: {
