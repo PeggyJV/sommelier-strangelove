@@ -63,7 +63,7 @@ export const BridgeCard: React.FC = () => {
           <Text fontFamily="Haffer" align="center">
             Your connected wallet is on the {wagmiChain?.name} network. For
             the time being, the bridge is only available between
-            Ethereum and Sommelier. Please switch to{" "}
+            Ethereum and Somm. Please switch to{" "}
             {ethChain.displayName} to use the bridge.
           </Text>
           <HStack align="center" width="100%" justifyContent="center">
@@ -121,7 +121,7 @@ export const BridgeCard: React.FC = () => {
         </Heading>
         <Text fontSize="md" mb="41px">
           Bridge your Ethereum SOMM back home to its native Cosmos
-          representation on Sommelier or from Sommelier to Ethereum.{" "}
+          representation on Somm or from Somme to Ethereum.{" "}
           <Link
             ml={1}
             fontSize="xs"
