@@ -41,7 +41,7 @@ export const ethBtcMomentum: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `ETH-BTC Momentum strategy aims to provide a better risk-return tradeoff than holding ETH and/or BTC. The strategy reacts to positive price movement to buy ETH and/or BTC and decreases positions otherwise. The goal is to overperform simple buy-and-hold strategy, decrease losses during market downturn, and re-establish the long position after prices start to go up, so that Sommelier users will not miss out any subsequent price appreciation.`,
+    goals: `ETH-BTC Momentum strategy aims to provide a better risk-return tradeoff than holding ETH and/or BTC. The strategy reacts to positive price movement to buy ETH and/or BTC and decreases positions otherwise. The goal is to overperform simple buy-and-hold strategy, decrease losses during market downturn, and re-establish the long position after prices start to go up, so that Somm users will not miss out any subsequent price appreciation.`,
 
     highlights: `The vault:
 
@@ -123,7 +123,7 @@ export const ethBtcMomentum: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
     {
       question: "Who decides how to rebalance assets in the cellar?",

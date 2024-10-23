@@ -53,12 +53,9 @@ export async function suggestSommelierChain() {
     console.log("Sommelier chain suggested to Keplr successfully.")
     await window.keplr.enable(sommelierChainConfig.chainId)
   } catch (error) {
-    console.error(
-      "Error suggesting the Sommelier chain to Keplr:",
-      error
-    )
+    console.error("Error suggesting the Somm chain to Keplr:", error)
     alert(
-      "Failed to suggest the Sommelier chain. See console for details."
+      "Failed to suggest the Somm chain. See console for details."
     )
   }
 }
