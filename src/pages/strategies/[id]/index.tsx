@@ -39,12 +39,12 @@ const StrategyLandingPage: NextPage<StrategyLandingPageProps> = (
   return (
     <>
       <NextSeo
-        title={`${landingPageContent.name} | Sommelier Finance`}
+        title={`${landingPageContent.name} | Somm Finance`}
         description={landingPageContent.description}
         openGraph={{
           type: "website",
           url: URL,
-          site_name: "Sommelier Finance",
+          site_name: "Somm Finance",
           images: [
             {
               url: "https://app.sommelier.finance/ogimage.png",

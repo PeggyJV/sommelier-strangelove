@@ -49,7 +49,7 @@ export const realYieldUsdArb: CellarData = {
 
       - Fully automated with built-in auto-compounding.`,
     description: `Maximize stablecoin yield through dynamic lending optimization and liquidity provision.`,
-    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
     
     - This vault does liquidity provision which can result in impermanent loss.`,
   },
@@ -87,7 +87,7 @@ export const realYieldUsdArb: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
   ],
 }

@@ -15,7 +15,7 @@ export const defiStars: CellarData = {
   slug: config.CONTRACT.DEFI_STARS.SLUG,
   dashboard:
     "https://debank.com/profile/0x03df2a53cbed19b824347d6a45d09016c2d1676a",
-    tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
+  tradedAssets: ["COMP", "CRV", "LDO", "MKR", "AAVE", "USDC"],
   launchDate: new Date(2023, 4, 10, 10, 0, 0, 0), // May 10, 2023. 3 pm UTC
   cellarType: CellarType.automatedPortfolio,
   description: `A long-only approach with established DeFi assets and derivatives tokens during the uptrend market periods. React quickly to market changes by managing downtrends.`,
@@ -53,7 +53,7 @@ export const defiStars: CellarData = {
     To evaluate the effectiveness of the proposed strategy, we compare the portfolio's performance against a benchmark scenario of holding assets with no stop plans for price or with no stop plans for price levels and time periods. We evaluate the strategy using Return on Equity (ROE), Maximum Drawdown (MDD), and Sharpe ratio, which is a popular indicator for portfolio tracking.
 
     Overall, DeFi Stars provides a disciplined and diversified exposure to the DeFi sector, helping users manage downside volatility and optimize returns over time. The rebalancing strategy offers a significant improvement over the benchmark scenario and can help users achieve their goals.`,
-    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
     
     - This vault is denominated in USDC but exposes you to volatile crypto assets, which carry a risk of potential loss.`,
   },

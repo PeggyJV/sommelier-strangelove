@@ -66,7 +66,7 @@ export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled
     <Stack spacing={2}>
       <HStack justifyContent="space-between">
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
-          Sommelier Address
+          Somm Address
         </Text>
         <HStack
           as="button"
@@ -92,7 +92,7 @@ export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled
       >
         <Input
           id="somm_address"
-          placeholder="Sommelier address"
+          placeholder="Somm address"
           fontSize="xs"
           fontWeight={700}
           backgroundColor="surface.tertiary"
@@ -103,7 +103,7 @@ export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled
           maxH="64px"
           isDisabled={disabled}
           {...register("somm_address", {
-            required: "Sommelier address is required",
+            required: "Somm address is required",
             validate: validateSommelierAddress,
           })}
           autoComplete="off"
@@ -120,7 +120,7 @@ export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled
               fontWeight="semibold"
               color="red.light"
             >
-              Sommelier address is not valid—make sure it's from a
+              Somm address is not valid—make sure it's from a
               Cosmos wallet.
             </Text>
           </HStack>

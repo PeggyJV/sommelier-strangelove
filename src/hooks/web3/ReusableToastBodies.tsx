@@ -66,7 +66,7 @@ export const BridgeTxHashToastBody = ({
         <Text as="span" fontWeight="bold">
           Destination:
         </Text>
-        <Text as="span">Sommelier to Ethereum Mainnet</Text>
+        <Text as="span">Somm to Ethereum Mainnet</Text>
       </HStack>
       <HStack>
         <Text as="span" fontWeight="bold" width="15ch">

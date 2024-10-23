@@ -536,7 +536,7 @@ export const PortfolioCard = (props: BoxProps) => {
                       >
                         <Image
                           src="/assets/icons/somm.png"
-                          alt="sommelier logo"
+                          alt="somm logo"
                           boxSize={6}
                         />
                         <Heading size="16px">

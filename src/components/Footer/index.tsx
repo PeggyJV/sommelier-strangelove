@@ -43,7 +43,7 @@ const Footer: VFC<ContainerProps> = (props) => {
           fontSize="xs"
         >
           <Text mb={{ base: 6, sm: 0 }} color="neutral.300">
-            &copy; {new Date().getFullYear()} Sommelier
+            &copy; {new Date().getFullYear()} Somm
           </Text>
           <Wrap
             spacing={{ base: 4, lg: 8 }}

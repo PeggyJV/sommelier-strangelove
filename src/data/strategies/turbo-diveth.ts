@@ -4,7 +4,7 @@ import {
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
-  CellarType
+  CellarType,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
@@ -180,14 +180,14 @@ export const turbodivETH: CellarData = {
 
     <strong>Post-divETH Launch Phase</strong>
     Upon divETH launch and oracle integration, the vault will fully integrate this asset. 
-    More specifically, the assets in the BPT can be used in a potential Balancer rETH-divETH pool, essentially converting the committed ETH into divETH and enhancing rETH-divETH liquidity on a major decentralized exchange. The vault is also set to expand its strategies on platforms like Uniswap v3, Balancer/Aura, Aave, Compound, Morpho, and Fraxlend, with future protocol integrations. As Sommelier supports additional DeFi protocols, those capabilities can be added to Turbo divETH through Sommelier governance.
+    More specifically, the assets in the BPT can be used in a potential Balancer rETH-divETH pool, essentially converting the committed ETH into divETH and enhancing rETH-divETH liquidity on a major decentralized exchange. The vault is also set to expand its strategies on platforms like Uniswap v3, Balancer/Aura, Aave, Compound, Morpho, and Fraxlend, with future protocol integrations. As Somm supports additional DeFi protocols, those capabilities can be added to Turbo divETH through Sommelier governance.
     
     Link to the official T&Cs: <a href="https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307" style="color: white; text-decoration: underline;" target="_blank">https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307</a>
     
-    Note that Turbo divETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Turbo divETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
 
-    Risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    Risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
     - This vault will take exposure to divETH, an emerging LST, which means that it may be more susceptible to depeg risk than some of its more established counterparts.
     - This vault does liquidity provision which can result in impermanent loss.`,
@@ -232,12 +232,12 @@ export const turbodivETH: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. You can find the link to the audit reports at <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>. The divETH smart contracts will also receive professional audits before the vault starts taking position with it.",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. You can find the link to the audit reports at <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>. The divETH smart contracts will also receive professional audits before the vault starts taking position with it.",
     },
     {
       question: "Who is eligible to participate?",
       answer:
-        "Although there is no KYC enforced, Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the <a href='https://app.sommelier.finance/user-terms?_gl=1*1rw42lj*_gcl_au*MTIyOTI2NDM0My4xNzA2NTIxMDIy' target='_blank' style='text-decoration: underline;'>Sommelier User Terms</a>.",
+        "Although there is no KYC enforced, Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the <a href='https://app.sommelier.finance/user-terms?_gl=1*1rw42lj*_gcl_au*MTIyOTI2NDM0My4xNzA2NTIxMDIy' target='_blank' style='text-decoration: underline;'>Somm User Terms</a>.",
     },
     {
       question:

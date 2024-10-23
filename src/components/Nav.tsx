@@ -156,7 +156,7 @@ export const Nav = (props: FlexProps) => {
             <Link href="/">
               <Image
                 src="/assets/images/sommelier-icon.svg"
-                alt="sommelier logo1"
+                alt="somm logo1"
                 height="2rem"
               />
             </Link>

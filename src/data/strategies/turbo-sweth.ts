@@ -48,11 +48,11 @@ export const turboSWETH: CellarData = {
     description: `
     The initial phase of Turbo swETH will concentrate on optimizing ticks within Uniswap v3 swETH-ETH pairs due to the vault’s potential to capture sustainable real yield. The vault may also undertake a "peg defense" strategy by cost-effectively acquiring swETH from the market and establishing a narrow liquidity range close to parity. This strategic move aims to arbitrage the swETH peg to its implied value enhancing yield for vault users.
 
-    Lastly, the vault will have the option to allocate to swETH pools on Balancer if yields are favorable, ensuring that Turbo swETH users access the best possible yields. As swETH's presence continues to expand across the Liquid Staking DeFi ecosystem and Sommelier's roster of protocol integrations widens, the Turbo swETH vault stands poised to tap into emerging yield opportunities.
+    Lastly, the vault will have the option to allocate to swETH pools on Balancer if yields are favorable, ensuring that Turbo swETH users access the best possible yields. As swETH's presence continues to expand across the Liquid Staking DeFi ecosystem and Somm's roster of protocol integrations widens, the Turbo swETH vault stands poised to tap into emerging yield opportunities.
 
-    Note that Turbo swETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Turbo swETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
-    Risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    Risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
     - This vault has exposure to swETH, an LST that is not redeemable until Q1 2024, which makes this LST more susceptible to depegs than its redeemable counterparts.
    
@@ -138,7 +138,7 @@ export const turboSWETH: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
   ],
 }
