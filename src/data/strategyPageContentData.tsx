@@ -27,7 +27,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding ETH or BTC",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
       {
@@ -92,7 +92,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding ETH or BTC",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
       {
@@ -158,7 +158,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding USDC",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -226,7 +226,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding USDC",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -296,7 +296,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding USDC",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -385,7 +385,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding USDC",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -461,7 +461,7 @@ export const strategyPageContentData = {
     description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -507,7 +507,7 @@ export const strategyPageContentData = {
     description: `Maximize stablecoin yield through dynamic lending optimization and liquidity provision.`,
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -540,7 +540,7 @@ export const strategyPageContentData = {
     description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -586,7 +586,7 @@ export const strategyPageContentData = {
     description: `Maximize ETH yield through Aave and Compound leveraged staking and Uniswap V3 liquidity provision of ETH liquid staking tokens.`,
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -632,7 +632,7 @@ export const strategyPageContentData = {
     description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -667,7 +667,7 @@ export const strategyPageContentData = {
     description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.`,
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -714,7 +714,7 @@ export const strategyPageContentData = {
     alternativeTo: "DPI",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -764,7 +764,7 @@ export const strategyPageContentData = {
     alternativeTo: "Lending",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -803,7 +803,7 @@ export const strategyPageContentData = {
     alternativeTo: "Lending",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -841,7 +841,7 @@ export const strategyPageContentData = {
     alternativeTo: "Lending",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -879,7 +879,7 @@ export const strategyPageContentData = {
     alternativeTo: "Lending",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -917,7 +917,7 @@ export const strategyPageContentData = {
     alternativeTo: "Lending",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1016,7 +1016,7 @@ export const strategyPageContentData = {
     alternativeTo: "Manual Fraxlend optimization",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1054,7 +1054,7 @@ export const strategyPageContentData = {
     alternativeTo: "Lending WBTC",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1091,7 +1091,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding swETH",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1129,7 +1129,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding GHO",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1164,7 +1164,7 @@ export const strategyPageContentData = {
     alternativeTo: "Lending USDC",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1199,7 +1199,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding stETH/wstETH",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1222,7 +1222,7 @@ export const strategyPageContentData = {
     description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
       {
@@ -1273,7 +1273,7 @@ export const strategyPageContentData = {
     description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
       {
@@ -1337,7 +1337,7 @@ export const strategyPageContentData = {
     alternativeTo: "Manually LPing",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1371,7 +1371,7 @@ export const strategyPageContentData = {
     alternativeTo: "Manually LPing",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1407,7 +1407,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding stETH/wstETH",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1443,7 +1443,7 @@ export const strategyPageContentData = {
     alternativeTo: "Holding WETH or stETH/wstETH",
     exchange: [
       {
-        name: "Somm",
+        name: "Sommelier",
         logo: "/assets/icons/somm.png",
       },
     ],
@@ -1507,7 +1507,7 @@ export const strategyPageContentData = {
       alternativeTo: ``,
       exchange: [
         {
-          name: "Somm",
+          name: "Sommelier",
           logo: "/assets/icons/somm.png",
         },
       ],
@@ -1569,7 +1569,7 @@ export const strategyPageContentData = {
       tradedAssets: ["ETHx", "WETH"],
       exchange: [
         {
-          name: "Somm",
+          name: "Sommelier",
           logo: "/assets/icons/somm.png",
         },
       ],
@@ -1605,7 +1605,7 @@ export const strategyPageContentData = {
       alternativeTo: "Manually LPing",
       exchange: [
         {
-          name: "Somm",
+          name: "Sommelier",
           logo: "/assets/icons/somm.png",
         },
       ],
@@ -1641,7 +1641,7 @@ export const strategyPageContentData = {
       alternativeTo: "Holding stETH/wstETH",
       exchange: [
         {
-          name: "Somm",
+          name: "Sommelier",
           logo: "/assets/icons/somm.png",
         },
       ],
@@ -1676,7 +1676,7 @@ export const strategyPageContentData = {
       tradedAssets: ["WETH", "eETH", "weETH"],
       exchange: [
         {
-          name: "Somm",
+          name: "Sommelier",
           logo: "/assets/icons/somm.png",
         },
       ],

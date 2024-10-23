@@ -1,6 +1,6 @@
 export const sommelierChainConfig = {
   chainId: "sommelier-3",
-  chainname: "Somm",
+  chainName: "Sommelier",
   rpc: "https://rpc.sommelier.network",
   rest: "https://api.sommelier.network",
   stakeCurrency: {
@@ -53,9 +53,12 @@ export async function suggestSommelierChain() {
     console.log("Sommelier chain suggested to Keplr successfully.")
     await window.keplr.enable(sommelierChainConfig.chainId)
   } catch (error) {
-    console.error("Error suggesting the Somm chain to Keplr:", error)
+    console.error(
+      "Error suggesting the Sommelier chain to Keplr:",
+      error
+    )
     alert(
-      "Failed to suggest the Somm chain. See console for details."
+      "Failed to suggest the Sommelier chain. See console for details."
     )
   }
 }
