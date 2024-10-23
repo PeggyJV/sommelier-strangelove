@@ -99,7 +99,7 @@ export const useBridgeEthToSommTx = () => {
           <Text as="span" fontWeight="bold">
             Destination:
           </Text>
-          <Text as="span">Ethereum Mainnet to Sommelier</Text>
+          <Text as="span">Ethereum Mainnet to Somm</Text>
         </HStack>
         <HStack>
           <Text as="span" fontWeight="bold" width="15ch">

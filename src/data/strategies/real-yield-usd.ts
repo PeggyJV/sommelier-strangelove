@@ -14,7 +14,7 @@ export const realYieldUsd: CellarData = {
   name: "Real Yield USD",
   slug: config.CONTRACT.REAL_YIELD_USD.SLUG,
   dashboard: "https://ryusd.sevenseas.capital/",
-tradedAssets: ["USDC", "USDT", "DAI"],
+  tradedAssets: ["USDC", "USDT", "DAI"],
   launchDate: new Date("2023-01-25T00:00:00.000Z"),
   cellarType: CellarType.yieldStrategies,
   description: `Maximize stablecoin yield across Aave, Compound, Uniswap, Morpho and the DAI Savings Rate.`,
@@ -53,7 +53,7 @@ tradedAssets: ["USDC", "USDT", "DAI"],
 
     One important reason that the Real Yield USD Strategy is able to achieve superior yields is that it can manage the complexity of optimizing Uniswap V3 tick ranges. Many other yield strategies can't handle this complexity and therefore just stick to lending optimization. By combining lending and LPing, Real Yield USD aims to provide higher sustained yields than simple lending or LPing strategies.
 `,
-    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
     
     - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events.
     
@@ -105,7 +105,7 @@ tradedAssets: ["USDC", "USDT", "DAI"],
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
     {
       question: "What are the risks?",
