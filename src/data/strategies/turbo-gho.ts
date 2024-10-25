@@ -11,6 +11,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const turboGHO: CellarData = {
+  deprecated: true,
   name: "Turbo GHO",
   slug: config.CONTRACT.TURBO_GHO.SLUG,
   tradedAssets: ["GHO", "USDC", "USDT", "LUSD"],

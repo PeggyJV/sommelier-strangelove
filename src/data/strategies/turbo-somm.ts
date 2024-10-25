@@ -10,6 +10,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const turboSOMM: CellarData = {
+  deprecated: true,
   name: "Turbo SOMM",
   slug: config.CONTRACT.TURBO_SOMM.SLUG,
   tradedAssets: ["SOMM", "WETH"],
