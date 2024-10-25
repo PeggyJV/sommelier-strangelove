@@ -11,6 +11,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const turboezETH: CellarData = {
+  deprecated: true,
   name: "Turbo ezETH",
   slug: config.CONTRACT.TURBO_EZETH.SLUG,
   tradedAssets: ["WETH", "ezETH"],
