@@ -12,7 +12,7 @@ import {
   IconButton,
   Image,
   Stack,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { Link } from "components/Link"
@@ -42,8 +42,8 @@ export const Nav = (props: FlexProps) => {
       }
     })
     return () => {
-      window.removeEventListener("scroll", () => {});
-      setScrolled(false);
+      window.removeEventListener("scroll", () => {})
+      setScrolled(false)
     }
   }, [])
 
@@ -104,13 +104,10 @@ export const Nav = (props: FlexProps) => {
               } else {
                 const pathSegment = routes.pathname.split("/")[1] // Extract the first path segment from pathname
                 isActive =
-                  (item.link === "https://www.sommelier.finance/" ||
-                  item.link ===
-                    "https://www.sommelier.finance/audits" ||
-                  item.link ===
-                    "https://www.sommelier.finance/defi" ||
-                  item.link ===
-                    "https://www.sommelier.finance/staking"
+                  (item.link === "https://www.somm.finance/" ||
+                  item.link === "https://www.somm.finance/audits" ||
+                  item.link === "https://www.somm.finance/defi" ||
+                  item.link === "https://www.somm.finance/staking"
                     ? false // These specific external links always set isActive to false
                     : pathSegment === "strategies"
                     ? "" // If the current pathSegment is "strategies", it seems to imply isActive should not be true/false but an empty string (though this might require further clarification as it contradicts the boolean nature of isActive)
