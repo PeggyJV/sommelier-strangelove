@@ -21,7 +21,7 @@ import { NAV_LINKS } from "utils/navLinks"
 import { LogoTextIcon } from "./_icons"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useScrollDirection } from "hooks/utils/useScrollDirection"
-import { HamburgerIcon } from "./_icons/HamburgerIcon"
+import { HamburgerIcon } from "components/_icons"
 import { Badge, BadgeStatus } from "./Strategy/Carousel/Badge"
 
 export const Nav = (props: FlexProps) => {
@@ -34,15 +34,15 @@ export const Nav = (props: FlexProps) => {
 
   // listen for scroll event to set state
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY >= 80) {
-        setScrolled(true)
-      } else {
-        setScrolled(false)
-      }
-    })
+
+    const listener = () => {
+      setScrolled(window.scrollY >= 80)
+    }
+
+    window.addEventListener("scroll", listener)
+
     return () => {
-      window.removeEventListener("scroll", () => {})
+      window.removeEventListener("scroll", listener)
       setScrolled(false)
     }
   }, [])
