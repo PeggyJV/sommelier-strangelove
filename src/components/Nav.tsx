@@ -12,7 +12,7 @@ import {
   IconButton,
   Image,
   Stack,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react"
 import ConnectButton from "components/_buttons/ConnectButton"
 import { Link } from "components/Link"
@@ -21,7 +21,7 @@ import { NAV_LINKS } from "utils/navLinks"
 import { LogoTextIcon } from "./_icons"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useScrollDirection } from "hooks/utils/useScrollDirection"
-import { HamburgerIcon } from "./_icons/HamburgerIcon"
+import { HamburgerIcon } from "components/_icons"
 import { Badge, BadgeStatus } from "./Strategy/Carousel/Badge"
 
 export const Nav = (props: FlexProps) => {
@@ -34,16 +34,16 @@ export const Nav = (props: FlexProps) => {
 
   // listen for scroll event to set state
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY >= 80) {
-        setScrolled(true)
-      } else {
-        setScrolled(false)
-      }
-    })
+
+    const listener = () => {
+      setScrolled(window.scrollY >= 80)
+    }
+
+    window.addEventListener("scroll", listener)
+
     return () => {
-      window.removeEventListener("scroll", () => {});
-      setScrolled(false);
+      window.removeEventListener("scroll", listener)
+      setScrolled(false)
     }
   }, [])
 
@@ -104,13 +104,10 @@ export const Nav = (props: FlexProps) => {
               } else {
                 const pathSegment = routes.pathname.split("/")[1] // Extract the first path segment from pathname
                 isActive =
-                  (item.link === "https://www.sommelier.finance/" ||
-                  item.link ===
-                    "https://www.sommelier.finance/audits" ||
-                  item.link ===
-                    "https://www.sommelier.finance/defi" ||
-                  item.link ===
-                    "https://www.sommelier.finance/staking"
+                  (item.link === "https://www.somm.finance/" ||
+                  item.link === "https://www.somm.finance/audits" ||
+                  item.link === "https://www.somm.finance/defi" ||
+                  item.link === "https://www.somm.finance/staking"
                     ? false // These specific external links always set isActive to false
                     : pathSegment === "strategies"
                     ? "" // If the current pathSegment is "strategies", it seems to imply isActive should not be true/false but an empty string (though this might require further clarification as it contradicts the boolean nature of isActive)

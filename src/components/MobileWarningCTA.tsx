@@ -35,7 +35,7 @@ export const MobileWarningCTA: FC<FlexProps> = (props) => {
           Join the conversation
         </Link>
         <Link
-          href="https://www.sommelier.finance/"
+          href="https://www.somm.finance/"
           fontWeight="bold"
           textDecoration="underline"
         >

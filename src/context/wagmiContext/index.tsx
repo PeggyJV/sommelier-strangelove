@@ -33,7 +33,7 @@ export const wagmiConfig = createConfig({
     // metaMask({
     //   dappMetadata: {
     //     name: "Somm Finance",
-    //     url: "https://www.sommelier.finance/",
+    //     url: "https://www.somm.finance/",
     //   }
     // }),
     injected(),
