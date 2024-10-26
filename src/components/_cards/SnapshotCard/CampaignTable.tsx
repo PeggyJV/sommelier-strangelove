@@ -85,7 +85,7 @@ const CampaignTable: React.FC = () => {
                   >
                     <HStack>
                       <Link
-                        href="https://www.somm.finance/staking"
+                        href="https://www.sommelier.finance/staking"
                         isExternal
                         color="white.500"
                         textDecoration="underline"

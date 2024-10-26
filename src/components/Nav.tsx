@@ -28,19 +28,16 @@ export const Nav = (props: FlexProps) => {
   const [scrolled, setScrolled] = useState<boolean>(false)
   const scrollDirection = useScrollDirection()
   const { isOpen, onOpen, onClose } = useDisclosure()
-
   const routes = useRouter()
   const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
 
-  // listen for scroll event to set state
+  // Listen for scroll event to set state
   useEffect(() => {
-
     const listener = () => {
       setScrolled(window.scrollY >= 80)
     }
 
     window.addEventListener("scroll", listener)
-
     return () => {
       window.removeEventListener("scroll", listener)
       setScrolled(false)
@@ -87,32 +84,35 @@ export const Nav = (props: FlexProps) => {
               <LogoTextIcon w="9rem" h="2rem" />
             </Link>
             {NAV_LINKS.map((item) => {
-              // Exclude external links from being marked as active.
               const isExternalLink = item.link.startsWith("http")
-              let isActive = false // Declare isActive once before using it
+              let isActive = false
 
-              // Assuming isExternalLink determines if the link is an external URL
               if (!isExternalLink) {
-                // Logic from snapshot-branch for internal links
-                if (item.link === "/") {
-                  // For the home link, check if the pathname is exactly "/"
-                  isActive = routes.pathname === "/"
-                } else {
-                  // For internal links, check if the pathname starts with the link path
-                  isActive = routes.pathname.startsWith(item.link)
-                }
-              } else {
-                const pathSegment = routes.pathname.split("/")[1] // Extract the first path segment from pathname
                 isActive =
-                  (item.link === "https://www.somm.finance/" ||
-                  item.link === "https://www.somm.finance/audits" ||
-                  item.link === "https://www.somm.finance/defi" ||
-                  item.link === "https://www.somm.finance/staking"
-                    ? false // These specific external links always set isActive to false
-                    : pathSegment === "strategies"
-                    ? "" // If the current pathSegment is "strategies", it seems to imply isActive should not be true/false but an empty string (though this might require further clarification as it contradicts the boolean nature of isActive)
-                    : pathSegment) === item.link.split("/")[1]
+                  item.link === "/"
+                    ? routes.pathname === "/"
+                    : routes.pathname.startsWith(item.link)
+              } else {
+                const normalizeUrl = (url) =>
+                  url.replace(/^(https:\/\/)?(www\.)?/, "")
+                const externalLinks = [
+                  "https://somm.finance/",
+                  "https://somm.finance/audits",
+                  "https://somm.finance/defi",
+                  "https://somm.finance/staking",
+                ]
+                const pathSegment = routes.pathname.split("/")[1]
+
+                isActive = externalLinks.some(
+                  (link) =>
+                    normalizeUrl(link) === normalizeUrl(item.link)
+                )
+                  ? false
+                  : pathSegment === "strategies"
+                  ? ""
+                  : pathSegment === item.link.split("/")[1]
               }
+
               return (
                 <Flex key={item.link} align="center">
                   <Link
@@ -135,6 +135,7 @@ export const Nav = (props: FlexProps) => {
           </HStack>
         )}
 
+        {/* Mobile Navigation */}
         {!isLarger992 && (
           <>
             <IconButton
@@ -175,19 +176,12 @@ export const Nav = (props: FlexProps) => {
             <DrawerBody p={0}>
               <Stack alignItems="flex-end" py="160px" px="24px">
                 {NAV_LINKS.map((item) => {
-                  // Exclude external links from being marked as active.
                   const isExternalLink = item.link.startsWith("http")
-                  let isActive = false
-
-                  if (!isExternalLink) {
-                    if (item.link === "/") {
-                      // For the home link, check if the pathname is exactly "/"
-                      isActive = routes.pathname === "/"
-                    } else {
-                      // For internal links, check if the pathname starts with the link path
-                      isActive = routes.pathname.startsWith(item.link)
-                    }
-                  }
+                  let isActive =
+                    !isExternalLink &&
+                    (item.link === "/"
+                      ? routes.pathname === "/"
+                      : routes.pathname.startsWith(item.link))
 
                   return (
                     <Flex key={item.link} align="center">
