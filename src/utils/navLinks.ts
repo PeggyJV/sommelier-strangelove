@@ -12,11 +12,11 @@ export const NAV_LINKS = (() => {
       isNew: true, // Directly set the isNew flag for Snapshot to true
     },
     {
-      link: "https://www.somm.finance/staking",
+      link: "https://www.sommelier.finance/staking",
       title: "Staking",
     },
     {
-      link: "https://www.somm.finance/defi",
+      link: "https://www.sommelier.finance/defi",
       title: "DeFi",
     },
     {
@@ -24,7 +24,7 @@ export const NAV_LINKS = (() => {
       title: "Bridge",
     },
     {
-      link: "https://www.somm.finance/audits",
+      link: "https://www.sommelier.finance/audits",
       title: "Audits",
     },
   ]
