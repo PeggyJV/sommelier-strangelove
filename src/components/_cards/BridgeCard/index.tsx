@@ -121,7 +121,7 @@ export const BridgeCard: React.FC = () => {
         </Heading>
         <Text fontSize="md" mb="41px">
           Bridge your Ethereum SOMM back home to its native Cosmos
-          representation on Somm or from Somme to Ethereum.{" "}
+          representation on Somm or from Somm to Ethereum.{" "}
           <Link
             ml={1}
             fontSize="xs"
