@@ -253,7 +253,7 @@ export const tokenConfig: Token[] = [
     src: "/assets/icons/cbETH.png",
     alt: "cbETH logo",
     symbol: "cbETH",
-    address: "00xadDb6A0412DE1BA0F936DCaeb8Aaa24578dcF3B2",
+    address: "0xadDb6A0412DE1BA0F936DCaeb8Aaa24578dcF3B2",
     coinGeckoId: "coinbase-wrapped-staked-eth",
     decimals: 18,
     chain: chainSlugMap.OPTIMISM.id,
