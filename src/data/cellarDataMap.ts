@@ -37,7 +37,8 @@ import {
   realYieldEthOpt,
   turboezETH,
   realYieldEthScroll,
-  atlanticWeth
+  lobsterAtlanticWETH,
+
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
@@ -45,6 +46,7 @@ cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
   // [config.CONTRACT.REAL_YIELD_ETH_SCROLL.SLUG]: realYieldEthScroll,
+  [config.CONTRACT.LOBSTER_ATLANTICWETH.SLUG]: lobsterAtlanticWETH,
   [config.CONTRACT.TURBO_EZETH.SLUG]: turboezETH,
   [config.CONTRACT.TURBO_RSETH.SLUG]: turborsETH,
   [config.CONTRACT.REAL_YIELD_ETH_OPT.SLUG]: realYieldEthOpt,
@@ -79,13 +81,14 @@ cellarConfig = {
   [config.CONTRACT.STEADY_MATIC.SLUG]: steadyMatic,
   [config.CONTRACT.STEADY_ETH.SLUG]: steadyEth,
   [config.CONTRACT.STEADY_BTC.SLUG]: steadyBtc,
-  [config.CONTRACT.ATLANTIC_WETH.SLUG]: atlanticWeth,
 }
 
 // Create another map of String to CellarData
 // ! For not ethereum cellars the key must be {cellarAddress}-{chainId}
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
+  [config.CONTRACT.LOBSTER_ATLANTICWETH.ADDRESS.toLowerCase() +
+    "-arbitrum"]: lobsterAtlanticWETH,
   [config.CONTRACT.REAL_YIELD_ETH_SCROLL.ADDRESS.toLowerCase() +
   "-scroll"]: realYieldEthScroll,
   [config.CONTRACT.REAL_YIELD_ETH_OPT.ADDRESS.toLowerCase() +
@@ -139,8 +142,6 @@ cellarAddressConfig = {
   [config.CONTRACT.STEADY_MATIC.ADDRESS.toLowerCase()]: steadyMatic,
   [config.CONTRACT.STEADY_ETH.ADDRESS.toLowerCase()]: steadyEth,
   [config.CONTRACT.STEADY_BTC.ADDRESS.toLowerCase()]: steadyBtc,
-  [config.CONTRACT.ATLANTIC_WETH.ADDRESS.toLowerCase() +
-  "-arbitrum"]: atlanticWeth,
 }
 
 export const CellaAddressDataMap = cellarAddressConfig
