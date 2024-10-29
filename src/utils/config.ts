@@ -179,7 +179,7 @@ export const config = {
     },
     LOBSTER_ATLANTICWETH: {
       ADDRESS: "0xC47bB288178Ea40bF520a91826a3DEE9e0DbFA4C",
-      SLUG: "lobster-atlanticweth",
+      SLUG: "lobster-atlantic-weth",
       ABI: CellarV0821MultiDeposit,
     },
     REAL_YIELD_ETH_SCROLL: {

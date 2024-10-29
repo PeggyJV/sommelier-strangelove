@@ -10,7 +10,7 @@ import {
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
-export const realYieldEthArb: CellarData = {
+export const lobsterAtlanticWETH: CellarData = {
   name: "Lobster Atlantic WETH",
   slug: config.CONTRACT.LOBSTER_ATLANTICWETH.SLUG,
   dashboard:
@@ -70,8 +70,7 @@ export const realYieldEthArb: CellarData = {
   faq: [
     {
       question: "TODO",
-      answer:
-        "TODO",
+      answer: "TODO",
     },
   ],
 }
