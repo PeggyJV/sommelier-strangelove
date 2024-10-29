@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { CellaAddressDataMap } from "data/cellarDataMap"
+import { config } from "utils/config"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -21,56 +22,79 @@ const sommelierAPIIndividualStratData = async (
   try {
     let { cellarAddress, chain } = req.query
 
-    const unix_timestamp_24_hours_ago =
-      Math.floor(Date.now() / 1000) - 24 * 60 * 60
+    let tvlTotal;
+    let shareValue;
+    let dayDatas;
 
-    const dailyDataUrl = `https://api.sommelier.finance/dailyData/${chain}/${cellarAddress}/0/latest`
-    const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cellarAddress}/${unix_timestamp_24_hours_ago}/latest`
+    if (cellarAddress === config.CONTRACT.ATLANTIC_WETH.ADDRESS.toLowerCase()) {
+      const lobsterTvlURL = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/tvl/`
+      const lobsterShareValueURL = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/price/`
 
-    const [dailyData, hourlyData] = await Promise.all([
-      fetchData(dailyDataUrl),
-      fetchData(hourlyDataUrl),
-    ])
+      const [tvl, sharePrice] = await Promise.all([
+        fetchData(lobsterTvlURL),
+        fetchData(lobsterShareValueURL),
+      ])
+      tvlTotal = tvl;
 
-    let chainStr = ""
-    if (chain !== "ethereum") {
-      chainStr = "-" + chain
+      const DECIMALS = 6;
+
+      shareValue = Math.floor(
+        sharePrice * (10 ** DECIMALS)
+      ).toString()
+
+    } else {
+      const unix_timestamp_24_hours_ago =
+        Math.floor(Date.now() / 1000) - 24 * 60 * 60
+
+      const dailyDataUrl = `https://api.sommelier.finance/dailyData/${chain}/${cellarAddress}/0/latest`
+      const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cellarAddress}/${unix_timestamp_24_hours_ago}/latest`
+
+      const [dailyData, hourlyData] = await Promise.all([
+        fetchData(dailyDataUrl),
+        fetchData(hourlyDataUrl),
+      ])
+
+      let chainStr = ""
+      if (chain !== "ethereum") {
+        chainStr = "-" + chain
+      }
+
+      let cellarDecimals = CellaAddressDataMap[cellarAddress!.toString().toLowerCase() + chainStr].config.cellar.decimals
+
+      let transformedDailyData = dailyData.Response.map(
+        (dayData: any) => ({
+          date: dayData.unix_seconds,
+          // Multiply by cellarDecimals and drop any decimals
+          shareValue: Math.floor(
+            dayData.share_price * (10 ** cellarDecimals)
+          ).toString(),
+        })
+      )
+
+      // Order by descending date
+      transformedDailyData.sort((a: any, b: any) => b.date - a.date)
+
+      // Do the same for hourly data
+      let transformedHourlyData = hourlyData.Response.map(
+        (hourData: any) => ({
+          date: hourData.unix_seconds,
+          // Multiply by cellarDecimals and drop any decimals
+          shareValue: Math.floor(
+            hourData.share_price * (10 ** cellarDecimals)
+          ).toString(),
+          total_assets: hourData.total_assets,
+          tvl: hourData.tvl,
+        })
+      )
+
+      // Order by descending date
+      transformedHourlyData.sort((a: any, b: any) => b.date - a.date)
+
+      // Most recent hourly
+      tvlTotal = Number(transformedHourlyData[0].tvl) // !! Note this TVL may be up to 1 hour stale bc it doesnt use the tvl api endpoint, not a huge deal but might be weird at launches
+      shareValue = transformedHourlyData[0].shareValue
+      dayDatas = transformedDailyData;
     }
-
-    let cellarDecimals = CellaAddressDataMap[cellarAddress!.toString().toLowerCase() + chainStr].config.cellar.decimals
-
-    let transformedDailyData = dailyData.Response.map(
-      (dayData: any) => ({
-        date: dayData.unix_seconds,
-        // Multiply by cellarDecimals and drop any decimals
-        shareValue: Math.floor(
-          dayData.share_price * (10 ** cellarDecimals)
-        ).toString(),
-      })
-    )
-
-    // Order by descending date
-    transformedDailyData.sort((a: any, b: any) => b.date - a.date)
-
-    // Do the same for hourly data
-    let transformedHourlyData = hourlyData.Response.map(
-      (hourData: any) => ({
-        date: hourData.unix_seconds,
-        // Multiply by cellarDecimals and drop any decimals
-        shareValue: Math.floor(
-          hourData.share_price * (10 ** cellarDecimals)
-        ).toString(),
-        total_assets: hourData.total_assets,
-        tvl: hourData.tvl,
-      })
-    )
-
-    // Order by descending date
-    transformedHourlyData.sort((a: any, b: any) => b.date - a.date)
-
-    // Most recent hourly
-    const baseAssetTvl = Number(transformedHourlyData[0].tvl) // !! Note this TVL may be up to 1 hour stale bc it doesnt use the tvl api endpoint, not a huge deal but might be weird at launches
-
 
     // TODO: Get shareValue and TvlTotal from latest hourly data async
     const formattedResult = {
@@ -78,9 +102,9 @@ const sommelierAPIIndividualStratData = async (
         data: {
           cellar: {
             id: cellarAddress,
-            tvlTotal: String(baseAssetTvl), // Most recent hourly
-            shareValue: transformedHourlyData[0].shareValue, // Most recent hourly
-            dayDatas: transformedDailyData,
+            tvlTotal: String(tvlTotal),
+            shareValue: shareValue,
+            dayDatas: dayDatas,
           },
         },
       },
