@@ -3,9 +3,7 @@ import {
   CellarData,
   CellarKey,
   CellarNameKey,
-  CellarRouterKey,
   CellarType,
-  StakerKey,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
@@ -27,7 +25,7 @@ export const lobsterAtlanticWETH: CellarData = {
   protocols: ["AAVE", "Uniswap V3", "1INCH"],
   strategyAssets: ["WBTC", "WETH"],
   performanceSplit: {
-    depositors: 100,
+    depositors: 136,
     "strategy provider": 0,
     protocol: 0,
   },

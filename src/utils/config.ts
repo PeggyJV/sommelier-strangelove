@@ -184,9 +184,9 @@ export const config = {
       ABI: CellarV0821MultiDeposit,
     },
     LOBSTER_ATLANTICWETH: {
-      ADDRESS: "0xC47bB288178Ea40bF520a91826a3DEE9e0DbFA4C",
+      ADDRESS: "0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
       SLUG: "lobster-atlantic-weth",
-      ABI: CellarV0821MultiDeposit,
+      ABI: DHedgeVault,
     },
     REAL_YIELD_ETH_SCROLL: {
       ADDRESS: "0xd3bb04423b0c98abc9d62f201212f44dc2611200",
@@ -227,11 +227,6 @@ export const config = {
       ADDRESS: "0x27500De405a3212D57177A789E30bb88b0AdbeC5",
       SLUG: "Turbo-ezETH",
       ABI: CellarV0821MultiDeposit,
-    },
-    ATLANTIC_WETH: {
-      ADDRESS: "0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
-      SLUG: "atlantic-weth",
-      ABI: DHedgeVault,
     },
     // Router
     CELLAR_ROUTER_V0815: {

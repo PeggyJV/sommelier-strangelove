@@ -75,7 +75,7 @@ export interface ConfigProps {
     address: string
     imagePath: string
   }
-  cellarRouter: {
+  cellarRouter?: {
     address: string
     abi: Abi
     key: CellarRouterKey
