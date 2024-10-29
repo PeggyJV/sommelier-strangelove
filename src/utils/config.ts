@@ -7,6 +7,7 @@ import { GravityBridge } from "../abi/types/GravityBridge"
 import { CellarStakingV0821 } from "../abi/types/CellarStakingV0821"
 import { EnsoRouter } from "../abi/types/EnsoRouter"
 import { CellarStakingV0815 } from "../abi/types/CellarStakingV0815"
+import { DHedgeVault } from "../abi/types/DHedgeVault"
 
 // Adress should be saved as lowercase
 /** Ensure Checksum Address  */
@@ -221,6 +222,11 @@ export const config = {
       ADDRESS: "0x27500De405a3212D57177A789E30bb88b0AdbeC5",
       SLUG: "Turbo-ezETH",
       ABI: CellarV0821MultiDeposit,
+    },
+    ATLANTIC_WETH: {
+      ADDRESS: "0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
+      SLUG: "atlantic-weth",
+      ABI: DHedgeVault,
     },
     // Router
     CELLAR_ROUTER_V0815: {
