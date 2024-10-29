@@ -177,9 +177,9 @@ export const config = {
       SLUG: "real-yield-eth-arb",
       ABI: CellarV0821MultiDeposit,
     },
-    REAL_YIELD_ETH_OPT: {
+    LOBSTER_ATLANTICWETH: {
       ADDRESS: "0xC47bB288178Ea40bF520a91826a3DEE9e0DbFA4C",
-      SLUG: "real-yield-eth-opt",
+      SLUG: "lobster-atlanticweth",
       ABI: CellarV0821MultiDeposit,
     },
     REAL_YIELD_ETH_SCROLL: {

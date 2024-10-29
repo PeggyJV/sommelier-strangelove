@@ -53,6 +53,7 @@ export const isBondedDisabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
+    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTICWETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   )
 }
@@ -86,6 +87,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTICWETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
@@ -127,6 +129,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
     config.cellarNameKey === CellarNameKey.TURBO_EETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTICWETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
@@ -234,6 +237,7 @@ export const isApyChartEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_STETH ||
     config.cellarNameKey === CellarNameKey.MORPHO_ETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
+    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTICWETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH ||
