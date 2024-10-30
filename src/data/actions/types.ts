@@ -161,6 +161,7 @@ export type GetStrategyDataQuery = {
     id: string
     tvlTotal: string
     shareValue: string
+    apy?: string
     dayDatas: Array<{
       __typename?: "CellarDayData"
       date: number

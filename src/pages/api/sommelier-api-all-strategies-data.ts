@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { CellaAddressDataMap } from "data/cellarDataMap"
 import { chainSlugMap } from "data/chainConfig"
+import { config } from "utils/config"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -324,6 +325,39 @@ const sommelierAPIAllStrategiesData = async (
         returnObj.result.data.cellars.push(cellarObj)
       }
     )
+
+    // Add external strategies data
+
+    const lobsterTvlURL = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/tvl/`
+    const lobsterShareValueURL = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/price/`
+    const lobsterApyUrl = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/apy/`
+
+    const [tvl, sharePrice, lobsterApy] = await Promise.all([
+      fetchData(lobsterTvlURL),
+      fetchData(lobsterShareValueURL),
+      fetchData(lobsterApyUrl),
+    ])
+
+    const tvlTotal = await tvl.json();
+    const price = await sharePrice.json();
+    const apy = await lobsterApy.json();
+
+    const DECIMALS = 6;
+
+    const shareValue = Math.floor(
+      price * (10 ** DECIMALS)
+    ).toString()
+
+    let cellarObj = {
+      id: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS.toLowerCase() + "-arbitrum",
+      dayDatas: "",
+      shareValue: shareValue,
+      tvlTotal: tvlTotal,
+      apy: apy,
+      chain: chainSlugMap.ARBITRUM.id,
+    }
+
+    returnObj.result.data.cellars.push(cellarObj)
 
     res.setHeader(
       "Cache-Control",

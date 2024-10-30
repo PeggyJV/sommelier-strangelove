@@ -44,7 +44,7 @@ export const lobsterAtlanticWETH: CellarData = {
     risks: `TODO`,
   },
   depositTokens: {
-    list: ["WBTC", "WETH"],
+    list: ["WETH"],
   },
 
   config: {

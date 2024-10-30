@@ -204,6 +204,14 @@ export const getStrategyData = async ({
       // }
 
       const baseApy = (() => {
+
+        if (stratData?.apy) {
+          return {
+            formatted: Number(stratData.apy).toFixed(2) + "%",
+            value: stratData.apy,
+          }
+        }
+
         if (config.show7DayAPYTooltip === true) {
           if (dayDatas === undefined || dayDatas.length < 8) {
             return {
