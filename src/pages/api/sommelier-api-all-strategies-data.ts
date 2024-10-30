@@ -328,9 +328,9 @@ const sommelierAPIAllStrategiesData = async (
 
     // Add external strategies data
 
-    const lobsterTvlURL = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/tvl/`
-    const lobsterShareValueURL = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/price/`
-    const lobsterApyUrl = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/apy/`
+    const lobsterTvlURL = `https://api.prod.lobster-protocol.com/v1/vaults/${config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS}/tvl/`
+    const lobsterShareValueURL = `https://api.prod.lobster-protocol.com/v1/vaults/${config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS}/price/`
+    const lobsterApyUrl = `https://api.prod.lobster-protocol.com/v1/vaults/${config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS}/apy/`
 
     const [tvl, sharePrice, lobsterApy] = await Promise.all([
       fetchData(lobsterTvlURL),
