@@ -26,7 +26,7 @@ const sommelierAPIIndividualStratData = async (
     let shareValue;
     let dayDatas;
 
-    if (cellarAddress === config.CONTRACT.ATLANTIC_WETH.ADDRESS.toLowerCase()) {
+    if (cellarAddress === config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS.toLowerCase()) {
       const lobsterTvlURL = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/tvl/`
       const lobsterShareValueURL = `https://api.prod.lobster-protocol.com/v1/vaults/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102/price/`
 

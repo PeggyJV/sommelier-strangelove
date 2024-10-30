@@ -10,7 +10,7 @@ import { chainSlugMap } from "data/chainConfig"
 
 export const lobsterAtlanticWETH: CellarData = {
   name: "Lobster Atlantic WETH",
-  slug: config.CONTRACT.LOBSTER_ATLANTICWETH.SLUG,
+  slug: config.CONTRACT.LOBSTER_ATLANTIC_WETH.SLUG,
   dashboard:
     "https://debank.com/profile/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
   tradedAssets: ["WBTC", "WETH"],
@@ -48,16 +48,16 @@ export const lobsterAtlanticWETH: CellarData = {
   },
 
   config: {
-    id: config.CONTRACT.LOBSTER_ATLANTICWETH.ADDRESS,
+    id: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS,
     baseApy: 10,
     cellarNameKey: CellarNameKey.LOBSTER_ATLANTICWETH,
     lpToken: {
-      address: config.CONTRACT.LOBSTER_ATLANTICWETH.ADDRESS,
+      address: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS,
       imagePath: "/assets/icons/lobster-atlantic-weth.png",
     },
     cellar: {
-      address: config.CONTRACT.LOBSTER_ATLANTICWETH.ADDRESS,
-      abi: config.CONTRACT.LOBSTER_ATLANTICWETH.ABI,
+      address: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS,
+      abi: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ABI,
       key: CellarKey.CELLAR_V2,
       decimals: 18,
     },
