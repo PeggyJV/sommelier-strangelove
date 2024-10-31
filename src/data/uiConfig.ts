@@ -53,7 +53,7 @@ export const isBondedDisabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
-    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTICWETH ||
+    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   )
 }

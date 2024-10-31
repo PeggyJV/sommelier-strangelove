@@ -342,7 +342,7 @@ const sommelierAPIAllStrategiesData = async (
     const price = await sharePrice.json();
     const apy = await lobsterApy.json();
 
-    const DECIMALS = 6;
+    const DECIMALS = 18;
 
     const shareValue = Math.floor(
       price * (10 ** DECIMALS)

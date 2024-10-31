@@ -40,7 +40,7 @@ const sommelierAPIIndividualStratData = async (
       tvlTotal = tvl;
       apy = lobsterApy;
 
-      const DECIMALS = 6;
+      const DECIMALS = 18;
 
       shareValue = Math.floor(
         sharePrice * (10 ** DECIMALS)

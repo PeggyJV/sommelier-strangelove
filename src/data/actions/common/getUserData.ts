@@ -1,6 +1,6 @@
 import { getBalance  } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
-import { ConfigProps, StakerKey } from "data/types"
+import { CellarNameKey, ConfigProps, StakerKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
 import { formatUSD } from "utils/formatCurrency"
 import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
@@ -63,15 +63,20 @@ export const getUserData = async ({
 
     const totalShares = shares.value + BigInt(bonded.toString());
 
-    const totalAssets = await(async () => {
+    let totalAssets = await(async () => {
       if (!contracts.cellarContract) {
         return ZERO
       }
+      let assets;
+      try {
+        const cellarContract = contracts.cellarContract
 
-      const cellarContract = contracts.cellarContract
+        // @ts-ignore
+        assets = await cellarContract.read.convertToAssets([totalShares])
 
-      // @ts-ignore
-      let assets = await cellarContract.read.convertToAssets([totalShares])
+      } catch(e) {
+        console.error(e);
+      }
 
       if (typeof assets === "undefined") {
         assets = BigInt(0)
@@ -79,7 +84,7 @@ export const getUserData = async ({
       return formatUnits(assets, decimals)
     })()
 
-    const numTotalAssets = Number(totalAssets).toFixed(5)
+    let numTotalAssets = Number(totalAssets).toFixed(5)
 
     let sommRewardsUSD = userStakes
       ? Number(userStakes.claimAllRewardsUSD)
@@ -91,24 +96,41 @@ export const getUserData = async ({
         : Number(userStakes.claimAllRewardsUSD)
       : 0
 
-    const netValueInAsset = (() => {
+    let netValueInAsset = (() => {
       return Number(numTotalAssets) + Number(sommRewardsRaw)
     })()
 
-    const netValueWithoutRewardsInAsset = (() => {
+    let netValueWithoutRewardsInAsset = (() => {
       return Number(totalAssets)
     })()
 
-    // Denoted in USD
-    const netValue = (() => {
+    let netValue = (() => {
       return Number(totalAssets) * Number(baseAssetPrice) + sommRewardsUSD
     })()
 
     // Denoted in USD
-    const netValueWithoutRewards = (() => {
+    let netValueWithoutRewards = (() => {
       return Number(totalAssets) * Number(baseAssetPrice)
     })()
 
+
+    // Overrides for external vaults
+    if (config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
+
+      netValueWithoutRewards = Number(formatUnits(totalShares, decimals)) * Number(strategyData?.token?.value);
+
+      netValue = netValueWithoutRewards + sommRewardsUSD;
+
+
+      totalAssets = (netValue / Number(baseAssetPrice)).toString();
+
+      numTotalAssets = Number(totalAssets).toFixed(5);
+
+      netValueInAsset = Number(numTotalAssets) + Number(sommRewardsRaw);
+
+      netValueWithoutRewardsInAsset = Number(totalAssets);
+
+    }
 
     const userStrategyData = {
       strategyData,

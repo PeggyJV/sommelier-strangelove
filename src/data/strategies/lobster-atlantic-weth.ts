@@ -50,7 +50,7 @@ export const lobsterAtlanticWETH: CellarData = {
   config: {
     id: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS,
     baseApy: 10,
-    cellarNameKey: CellarNameKey.LOBSTER_ATLANTICWETH,
+    cellarNameKey: CellarNameKey.LOBSTER_ATLANTIC_WETH,
     lpToken: {
       address: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS,
       imagePath: "/assets/icons/lobster-atlantic-weth.png",

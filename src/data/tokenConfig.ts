@@ -556,13 +556,22 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
-    src: "/assets/icons/ethx.png",
+    src: "/assets/icons/lobster-atlantic-weth.png",
     alt: "ETHx logo",
     symbol: "ETHx",
     address: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
     coinGeckoId: "stader-ethx",
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
+  },
+  {
+    src: "/assets/icons/ethx.png",
+    alt: "Atlantic WETH logo",
+    symbol: "Atlantic WETH",
+    address: "0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
+    coinGeckoId: "atlWETH",
+    decimals: 18,
+    chain: chainSlugMap.ARBITRUM.id,
   },
   {
     src: "",
