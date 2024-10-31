@@ -35,7 +35,7 @@ export const getUserData = async ({
     const symbol = config.baseAsset.symbol
 
     const shares = await getBalance(wagmiConfig, {
-      token: getAddress(config.cellar.address),
+      token: getAddress(config.lpToken.address),
       address: getAddress(userAddress),
     })
 
@@ -64,7 +64,7 @@ export const getUserData = async ({
     const totalShares = shares.value + BigInt(bonded.toString());
 
     let totalAssets = await(async () => {
-      if (!contracts.cellarContract) {
+      if (!contracts.cellarContract && config.cellarNameKey !== CellarNameKey.LOBSTER_ATLANTIC_WETH) {
         return ZERO
       }
       let assets;

@@ -17,7 +17,7 @@ export const estimateGasLimit = async (
     const gas = await fn
     return gasLimitMargin(gas, margin).toString()
   } catch (error) {
-    console.warn("Fail to estimate gas, using known gas limit")
+    console.warn("Fail to estimate gas, using known gas limit", error)
     return knownGasLimit
   }
 }

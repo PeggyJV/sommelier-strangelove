@@ -184,7 +184,8 @@ export const config = {
       ABI: CellarV0821MultiDeposit,
     },
     LOBSTER_ATLANTIC_WETH: {
-      ADDRESS: "0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
+      ADDRESS: "0x80b9411977c4ff8d618f2ac3f29f1e2d623c4d34",
+      TOKEN_ADDRESS: "0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
       SLUG: "lobster-atlantic-weth",
       ABI: DHedgeVault,
     },

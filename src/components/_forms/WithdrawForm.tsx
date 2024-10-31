@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react"
 import {
+  Button,
   FormControl,
   FormErrorMessage,
-  Icon,
-  VStack,
-  Button,
   HStack,
-  Input,
-  Spinner,
+  Icon,
   Image,
-  Stack,
-  Text,
+  Input,
   Link,
   Modal,
-  ModalOverlay,
+  ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
-  ModalBody
+  ModalOverlay,
+  Spinner,
+  Stack,
+  Text,
+  VStack
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -25,7 +25,7 @@ import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
 import { useAccount } from "wagmi"
 import { toEther } from "utils/formatCurrency"
-import { useHandleTransaction } from "hooks/web3"
+import { useApproveERC20, useHandleTransaction } from "hooks/web3"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
@@ -40,7 +40,8 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
-import { parseUnits } from "viem"
+import { formatUnits, parseUnits } from "viem"
+import { CellarNameKey } from "data/types"
 
 interface FormValues {
   withdrawAmount: number
@@ -90,6 +91,11 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
 
   const { doHandleTransaction } = useHandleTransaction()
+
+  const { doApprove } = useApproveERC20({
+    tokenAddress: cellarConfig.lpToken.address,
+    spender: cellarConfig.cellar.address,
+  })
 
   const watchWithdrawAmount = watch("withdrawAmount")
   const isDisabled =
@@ -149,25 +155,42 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
     )
 
     try {
-      const gasLimitEstimated = await estimateGasLimitWithRetry(
-        cellarSigner?.estimateGas.redeem,
-        cellarSigner?.simulate.redeem,
-        [amtInWei, address, address],
+      let gasLimitEstimated;
+      let hash;
+      let amount = Number(formatUnits(amtInWei, cellarConfig.cellar.decimals));
+      let fnName, inputList;
+
+      await doApprove(amount, {
+        onError: (error) => console.error(error)
+      });
+
+      if (cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
+        fnName = 'withdraw';
+        inputList = [
+          cellarConfig.lpToken.address,
+          amtInWei,
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          350000000000000
+        ];
+      } else {
+        fnName = 'redeem';
+        inputList = [amtInWei, address, address];
+      }
+
+      gasLimitEstimated = await estimateGasLimitWithRetry(
+        cellarSigner?.estimateGas[fnName],
+        cellarSigner?.simulate[fnName],
+        inputList,
         330000,
         address
-      )
+      );
 
       // @ts-ignore
-      const hash = await cellarSigner?.write.redeem([
-          amtInWei,
-          address,
-          address
-        ],
-        {
-          gas: gasLimitEstimated,
-          account: address
-        }
-      )
+      hash = await cellarSigner?.write[fnName](inputList, {
+        gas: gasLimitEstimated,
+        account: address
+      });
+
 
       const onSuccess = () => {
         analytics.track("withdraw.succeeded", analyticsData)
