@@ -155,9 +155,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
     )
 
     try {
-      let gasLimitEstimated;
-      let hash;
-      let amount = Number(formatUnits(amtInWei, cellarConfig.cellar.decimals));
+      const amount = Number(formatUnits(amtInWei, cellarConfig.cellar.decimals));
       let fnName, inputList;
 
       await doApprove(amount, {
@@ -177,7 +175,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
         inputList = [amtInWei, address, address];
       }
 
-      gasLimitEstimated = await estimateGasLimitWithRetry(
+      const gasLimitEstimated = await estimateGasLimitWithRetry(
         cellarSigner?.estimateGas[fnName],
         cellarSigner?.simulate[fnName],
         inputList,
@@ -186,7 +184,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       );
 
       // @ts-ignore
-      hash = await cellarSigner?.write[fnName](inputList, {
+      const hash = await cellarSigner?.write[fnName](inputList, {
         gas: gasLimitEstimated,
         account: address
       });
