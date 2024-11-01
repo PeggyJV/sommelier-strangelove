@@ -42,6 +42,8 @@ import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { formatUnits, parseUnits } from "viem"
 import { CellarNameKey } from "data/types"
+import { tokenConfigMap } from "data/tokenConfig"
+import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 
 interface FormValues {
   withdrawAmount: number
@@ -92,6 +94,8 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
 
   const { doHandleTransaction } = useHandleTransaction()
 
+  const [baseAssetPrice, setBaseAssetPrice] = useState<number>(0)
+
   const { doApprove } = useApproveERC20({
     tokenAddress: cellarConfig.lpToken.address,
     spender: cellarConfig.cellar.address,
@@ -122,6 +126,24 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       })
     }
   }, [watchWithdrawAmount, address])
+
+  useEffect(() => {
+    const fetchBaseAssetPrice = async () => {
+      try {
+        const price = await fetchCoingeckoPrice(
+          cellarConfig.baseAsset,
+          "usd"
+        )
+
+        setBaseAssetPrice(Number(price || 0))
+      } catch (error) {
+        console.log(error)
+        console.error("Error fetching base asset price: ", error)
+      }
+    }
+
+    fetchBaseAssetPrice()
+  }, [cellarConfig])
 
   const geo = useGeo()
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
@@ -163,12 +185,20 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       });
 
       if (cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
+        const lpTokenPrice = parseUnits(strategyData?.token?.value ?? "0", cellarConfig.cellar.decimals);
+        const withdrawValueInUsd = lpTokenPrice * amtInWei;
+        const baseAssetPriceInWei = parseUnits(baseAssetPrice.toString(), cellarConfig.cellar.decimals);
+        let withdrawAmountInBase = withdrawValueInUsd / baseAssetPriceInWei
+
+        // Add slippage 1%
+        withdrawAmountInBase = (withdrawAmountInBase * 99n) / 100n
+
         fnName = 'withdraw';
         inputList = [
           cellarConfig.lpToken.address,
           amtInWei,
-          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
-          350000000000000
+          cellarConfig.baseAsset.address,
+          withdrawAmountInBase
         ];
       } else {
         fnName = 'redeem';

@@ -20,7 +20,7 @@ import { ModalMenu } from "components/_menus/ModalMenu"
 import {
   depositAssetTokenConfig,
   Token as TokenType,
-  tokenConfig,
+  tokenConfig
 } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
@@ -360,39 +360,56 @@ export const SommelierTab = ({
     address?: string,
     assetAddress?: string
   ) => {
+    let fnName = "deposit";
+    let inputList, gasLimitEstimated;
+
     if (
       assetAddress !== undefined &&
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
     ) {
-      // @ts-ignore
-      return cellarSigner?.write.multiAssetDeposit(
-        [assetAddress, amtInWei, address],
-        { account: address }
+      fnName = "multiAssetDeposit";
+      inputList = [assetAddress, amtInWei, address];
+
+    } else if (
+      cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+      cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
+    ) {
+      gasLimitEstimated = await estimateGasLimitWithRetry(
+        cellarSigner?.estimateGas.deposit,
+        cellarSigner?.simulate.deposit,
+        [amtInWei, address],
+        1000000,
+        address
       )
+      inputList = [amtInWei, address];
+
+    } else if(cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
+
+      const lpTokenPrice = strategyData?.token?.value;
+
+      let amountInLpToken = lpTokenPrice
+        ? parseUnits(baseAssetPrice.toString(), cellarConfig.cellar.decimals)
+          * amtInWei
+          / parseUnits(lpTokenPrice, cellarConfig.cellar.decimals)
+        : BigInt(0);
+
+      inputList = [
+        cellarConfig.lpToken.address,
+        assetAddress,
+        amtInWei,
+        assetAddress,
+        amountInLpToken
+      ];
+
     } else {
-      if (
-        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-      ) {
-        const gasLimitEstimated = await estimateGasLimitWithRetry(
-          cellarSigner?.estimateGas.deposit,
-          cellarSigner?.simulate.deposit,
-          [amtInWei, address],
-          1000000,
-          address
-        )
-        // @ts-ignore
-        return cellarSigner?.write.deposit([amtInWei, address], {
-          gas: gasLimitEstimated,
-          account: address,
-        })
-      }
-      // @ts-ignore
-      return cellarSigner?.write.deposit([amtInWei, address], {
-        account: address,
-      })
+      inputList = [amtInWei, address];
     }
+    // @ts-ignore
+    return await cellarSigner?.write[fnName](inputList, {
+      gas: gasLimitEstimated,
+      account: address
+    });
   }
 
   const onSubmit = async (data: any, e: any) => {
