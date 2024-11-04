@@ -18,7 +18,6 @@ import { ConnectButtonProps } from "."
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import Image from "next/image"
 import { useBrandedToast } from "hooks/chakra"
-import { insertEvent } from "utils/supabase"
 
 type ConnectWalletPopoverProps = ConnectButtonProps & {
   wagmiChainId?: number
@@ -98,10 +97,10 @@ export const ConnectWalletPopover = ({
         })
 
         if (account && account.length) {
-          insertEvent({
-            event: "wallet.connect-succeeded",
-            address: accounts[0],
-          })
+          // insertEvent({
+          //   event: "wallet.connect-succeeded",
+          //   address: accounts[0],
+          // })
 
           analytics.track("wallet.connect-succeeded", {
             account,

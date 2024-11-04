@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
-const supabasePubKey = process.env.NEXT_PUBLIC_SUPABASE_PUB_KEY ?? ""
+const supabasePubKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
 
 class SupabaseNoop {
   async from(tableName: string) {
@@ -19,36 +19,33 @@ if (enabled) {
 
 export async function insertEvent(options: {
   event: string
-  address: string
-  cellar?: string
+  user_address?: string
+  cellar_address?: string
   transaction_hash?: string
+  amount?: string
+  deposit_token?: string
+  chain_id?: string
 }) {
   if (!enabled) return
 
-  const { event, address, cellar, transaction_hash } = options
-  const user_agent = window.navigator.userAgent
+  const {
+    event,
+    user_address,
+    cellar_address,
+    transaction_hash,
+    amount,
+    deposit_token,
+    chain_id
+  } = options
 
-  switch (event) {
-    case "wallet.connect-succeeded": {
-      await supabase
-        .from("event_connect")
-        .insert({ address, user_agent })
-      break
-    }
-    case "deposit.started": {
-      await supabase
-        .from("event_deposit_started")
-        .insert({ address, cellar, user_agent })
-      break
-    }
-    case "deposit.succeeded": {
-      await supabase.from("event_deposit_success").insert({
-        address,
-        cellar,
-        transaction_hash,
-        user_agent,
-      })
-      break
-    }
+  if (event === "deposit.succeeded") {
+    await supabase.from("deposit").insert({
+      user_address,
+      cellar_address,
+      transaction_hash,
+      amount,
+      deposit_token,
+      chain_id
+    })
   }
 }

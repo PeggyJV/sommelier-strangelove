@@ -425,16 +425,6 @@ export const SommelierTab = ({
     const slippage = data?.slippage
 
     if (!erc20Contract) return
-    insertEvent({
-      event: "deposit.started",
-      address: address ?? "",
-      cellar: cellarConfig.cellar.address,
-    })
-    // analytics.track("deposit.started", {
-    //   ...baseAnalytics,
-    //   stable: tokenSymbol,
-    //   value: depositAmount,
-    // })
 
     // check if approval exists
     // @ts-ignore
@@ -568,13 +558,17 @@ export const SommelierTab = ({
         refetch()
 
         if (depositResult?.data?.transactionHash) {
-          insertEvent({
-            event: "deposit.succeeded",
-            address: address ?? "",
-            cellar: cellarConfig.cellar.address,
-            transaction_hash: depositResult.data.transactionHash,
-            amount: depositAmount
-          })
+          if(cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
+            insertEvent({
+              event: "deposit.succeeded",
+              user_address: address ?? "",
+              cellar_address: cellarConfig.cellar.address,
+              transaction_hash: depositResult.data.transactionHash,
+              amount: depositAmount.toString(),
+              deposit_token: selectedToken?.address,
+              chain_id: cellarConfig.chain.id
+            })
+          }
           analytics.track("deposit.succeeded", {
             ...baseAnalytics,
             stable: tokenSymbol,
