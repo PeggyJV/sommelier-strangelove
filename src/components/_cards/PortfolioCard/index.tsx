@@ -150,7 +150,8 @@ export const PortfolioCard = (props: BoxProps) => {
         walletClient &&
         withdrawQueueContract &&
         address &&
-        cellarConfig
+        cellarConfig &&
+        cellarConfig.cellarNameKey !== CellarNameKey.LOBSTER_ATLANTIC_WETH
       ) {
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([

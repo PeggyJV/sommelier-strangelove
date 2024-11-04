@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getPreviewRedeem } from "data/actions/common/getPreviewShare"
-import { ConfigProps } from "data/types"
+import { CellarNameKey, ConfigProps } from "data/types"
 import { useAccount } from "wagmi"
 import { useCreateContracts } from "./useCreateContracts"
 
@@ -22,6 +22,12 @@ export const useGetPreviewRedeem = ({
     ],
     queryFn: async () => {
       if (!cellarContract) throw new Error("Missing data")
+      // External vault that doesn't have previewRedeem function
+      if (cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
+        return {
+          value: 0,
+        };
+      }
       const data = await getPreviewRedeem({
         cellarContract: signer01,
         value,

@@ -64,7 +64,7 @@ export const getUserData = async ({
     const totalShares = shares.value + BigInt(bonded.toString());
 
     let totalAssets = await(async () => {
-      if (!contracts.cellarContract && config.cellarNameKey !== CellarNameKey.LOBSTER_ATLANTIC_WETH) {
+      if (!contracts.cellarContract || config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
         return ZERO
       }
       let assets;

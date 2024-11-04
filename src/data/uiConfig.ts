@@ -483,7 +483,8 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
+    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH
   ) {
     return true
   }
