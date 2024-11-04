@@ -394,6 +394,8 @@ export const SommelierTab = ({
           / parseUnits(lpTokenPrice, cellarConfig.cellar.decimals)
         : BigInt(0);
 
+      amountInLpToken = amountInLpToken * 99n / 100n
+
       inputList = [
         cellarConfig.lpToken.address,
         assetAddress,
@@ -571,6 +573,7 @@ export const SommelierTab = ({
             address: address ?? "",
             cellar: cellarConfig.cellar.address,
             transaction_hash: depositResult.data.transactionHash,
+            amount: depositAmount
           })
           analytics.track("deposit.succeeded", {
             ...baseAnalytics,
