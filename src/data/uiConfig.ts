@@ -89,6 +89,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT ||
+    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
@@ -404,6 +405,7 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
       config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
       config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
+      config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH ||
       config.cellarNameKey ===
         CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
     ) {
@@ -430,6 +432,7 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
       config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
+      config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
@@ -457,6 +460,7 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
+    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
@@ -526,6 +530,12 @@ export const estimatedApyValue = (config: ConfigProps) => {
     return {
       value: 3.7,
       formatted: "3.70%",
+    }
+  }
+  if (config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
+    return {
+      value: 4.95,
+      formatted: "4.95%",
     }
   }
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI) {
