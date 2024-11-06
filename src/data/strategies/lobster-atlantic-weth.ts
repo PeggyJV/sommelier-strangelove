@@ -14,7 +14,7 @@ export const lobsterAtlanticWETH: CellarData = {
   dashboard:
     "https://debank.com/profile/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
   tradedAssets: ["WETH", "WBTC"],
-  launchDate: new Date(2024, 1, 13, 14, 30, 0, 0),
+  launchDate: new Date(2024, 10, 6, 14, 0, 0, 0),
   cellarType: CellarType.yieldStrategies,
   description: `Outperform ETH with top-tier Liquidity Providing strategies — Effortlessly farm Lobster’s Airdrop rewards.`,
   strategyType: "Yield",
