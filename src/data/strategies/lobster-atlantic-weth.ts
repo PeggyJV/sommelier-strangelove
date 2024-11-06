@@ -22,7 +22,7 @@ export const lobsterAtlanticWETH: CellarData = {
   managementFee: "3.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault",
-  protocols: ["AAVE", "Uniswap V3", "1INCH"],
+  protocols: ["AAVE", "Uniswap V3", "1inch"],
   strategyAssets: ["WBTC", "WETH"],
   performanceSplit: {
     depositors: 136,
