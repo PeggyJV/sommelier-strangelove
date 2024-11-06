@@ -115,6 +115,15 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
+    src: "/assets/icons/wbtc.png",
+    alt: "Bitcoin logo",
+    symbol: "WBTC",
+    address: "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f",
+    coinGeckoId: "wrapped-bitcoin",
+    decimals: 8,
+    chain: chainSlugMap.ARBITRUM.id,
+  },
+  {
     src: "/assets/icons/usdc.png",
     alt: "USD Coin logo",
     symbol: "USDC",
