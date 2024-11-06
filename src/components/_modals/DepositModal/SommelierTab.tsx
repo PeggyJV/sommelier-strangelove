@@ -111,7 +111,7 @@ export const SommelierTab = ({
   const cellarData = cellarDataMap[id]
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
-  const cellarAddress = cellarConfig.id
+  const lpTokenAddress = cellarConfig.lpToken.address
   const [slippageValue, setSlippageValue] = useState("3")
 
   // TODO: Clean and enable below for enso
@@ -168,7 +168,7 @@ export const SommelierTab = ({
   // Base Analytics data to differentiate between cellars
   const baseAnalytics = {
     cellarName,
-    cellarAddress,
+    tokenAddress: lpTokenAddress,
   }
 
   const { data: walletClient } = useWalletClient()
@@ -263,12 +263,12 @@ export const SommelierTab = ({
             watchDepositAmount * 10 ** (selectedToken?.decimals || 0),
         },
       ],
-      tokenOut: cellarAddress,
+      tokenOut: lpTokenAddress,
       slippage: Number(slippageValue),
     }),
     [
       address,
-      cellarAddress,
+      lpTokenAddress,
       selectedToken?.address,
       selectedToken?.decimals,
       strategyData?.activeAsset.address,
@@ -594,7 +594,7 @@ export const SommelierTab = ({
                 <Text
                   onClick={() => {
                     importToken.mutate({
-                      address: cellarAddress,
+                      address: lpTokenAddress,
                       chain: cellarConfig.chain.id,
                     })
                   }}
