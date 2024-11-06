@@ -622,7 +622,9 @@ export const showNetValueInAsset = (config: ConfigProps) => {
 }
 
 export const waitTime = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD) {
+  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH
+  ) {
     return "24 hours"
   } else if (
     // non depracated and with out share price oracle vaults
