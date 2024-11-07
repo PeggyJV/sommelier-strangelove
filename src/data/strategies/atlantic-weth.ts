@@ -8,7 +8,7 @@ import {
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
-export const lobsterAtlanticWETH: CellarData = {
+export const AtlanticWETH: CellarData = {
   name: "Atlantic WETH",
   slug: config.CONTRACT.LOBSTER_ATLANTIC_WETH.SLUG,
   dashboard:
