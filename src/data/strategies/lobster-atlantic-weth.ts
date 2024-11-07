@@ -82,10 +82,15 @@ are here to mitigate this risk.`,
       key: CellarKey.CELLAR_V2,
       decimals: 18,
     },
+    badges: [
+      {
+        customStrategyHighlight: "Lobster Airdrop Farming",
+        customStrategyHighlightColor: "#00C04B",
+      },
+    ],
     baseAsset: tokenConfigMap.WETH_ARBITRUM,
     chain: chainSlugMap.ARBITRUM,
   },
-
   faq: [
     {
       question:
