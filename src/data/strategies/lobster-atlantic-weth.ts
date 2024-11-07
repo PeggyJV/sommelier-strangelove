@@ -9,7 +9,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const lobsterAtlanticWETH: CellarData = {
-  name: "Lobster Atlantic WETH",
+  name: "Atlantic WETH",
   slug: config.CONTRACT.LOBSTER_ATLANTIC_WETH.SLUG,
   dashboard:
     "https://debank.com/profile/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
