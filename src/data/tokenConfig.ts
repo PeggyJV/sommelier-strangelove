@@ -565,7 +565,7 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
-    src: "/assets/icons/atlantic-weth.png",
+    src: "/assets/icons/lobster-atlantic-weth.png",
     alt: "ETHx logo",
     symbol: "ETHx",
     address: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
