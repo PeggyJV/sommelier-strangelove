@@ -103,5 +103,19 @@ effectively turning impermanent loss into an advantage.
 </a>
 `,
     },
+    {
+      question: "How to interpret Atlantic ETH yield?",
+      answer: `The yield displayed is the projected yield that you will get over a year, in ETH.
+    This means that you can hold your ETH, and get an additional share of ETH, that can benefit from the potential variations of the asset.
+    
+    The yield is projected, and represents the performed yield over a specific timeframe, if it lasted during a whole year. 
+    
+    This yield is net, which means that it corresponds to what you will get as a user, and impermanent loss has already been deduced.
+    Lobster and Somm fees have also already been deducted, and incentives have already been included. 
+    <a href="https://lobster-protocol.gitbook.io/lobster-documentation/transparency/incentives" target="_blank" style="text-decoration: underline;">
+        Learn more about Lobster incentives here.
+    </a>
+    `,
+    },
   ],
 }
