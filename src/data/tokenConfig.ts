@@ -565,7 +565,7 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
-    src: "/assets/icons/lobster-atlantic-weth.png",
+    src: "/assets/icons/atlantic-weth.png",
     alt: "ETHx logo",
     symbol: "ETHx",
     address: "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
@@ -641,7 +641,7 @@ let acceptedETHDepositTokens = [
   "swETH",
   "BUSD",
   "rETH BPT",
-  "ETH"
+  "ETH",
 ]
 
 let depositTokenMapETH = tokenConfig.reduce((map, token) => {
@@ -662,7 +662,16 @@ export const acceptedETHDepositTokenMap = Object.keys(
   }, {} as { [symbol: string]: Token })
 
 // --- ARB ACCEPTED TOKENS ---
-let acceptedARBDepositTokens = ["USDC", "USDT", "DAI", "USDC.e", 'WETH', 'wstETH', 'rETH', 'ETH'];
+let acceptedARBDepositTokens = [
+  "USDC",
+  "USDT",
+  "DAI",
+  "USDC.e",
+  "WETH",
+  "wstETH",
+  "rETH",
+  "ETH",
+]
 
 let depositTokenMapARB = tokenConfig.reduce((map, token) => {
   if (acceptedARBDepositTokens.includes(token.symbol)) {
@@ -682,14 +691,13 @@ export const acceptedARBDepositTokenMap = Object.keys(
   }, {} as { [symbol: string]: Token })
 
 // --- OPTIMISM ACCEPTED TOKENS ---
-let acceptedOPTDepositTokens = ['WETH', 'wstETH', 'rETH', 'ETH'];
-
+let acceptedOPTDepositTokens = ["WETH", "wstETH", "rETH", "ETH"]
 
 const acceptedDepositTokensByChain: { [key: string]: any } = {
   ethereum: acceptedETHDepositTokens,
   arbitrum: acceptedARBDepositTokens,
   optimism: acceptedOPTDepositTokens,
-};
+}
 
 // Creatae a map from each token symbol to its config
 export const tokenConfigMap = tokenConfig.reduce((map, token) => {

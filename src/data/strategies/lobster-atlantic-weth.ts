@@ -74,7 +74,7 @@ are here to mitigate this risk.`,
     cellarNameKey: CellarNameKey.LOBSTER_ATLANTIC_WETH,
     lpToken: {
       address: config.CONTRACT.LOBSTER_ATLANTIC_WETH.TOKEN_ADDRESS,
-      imagePath: "/assets/icons/lobster-atlantic-weth.png",
+      imagePath: "/assets/icons/atlantic-weth.png",
     },
     cellar: {
       address: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS,
