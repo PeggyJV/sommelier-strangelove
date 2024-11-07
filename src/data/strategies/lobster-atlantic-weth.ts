@@ -32,7 +32,7 @@ export const lobsterAtlanticWETH: CellarData = {
   strategyProvider: {
     logo: "/assets/images/lobster.png",
     title: "Lobster",
-    href: "www.lobster-protocol.com",
+    href: "https://www.lobster-protocol.com",
     tooltip:
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
