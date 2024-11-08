@@ -405,7 +405,6 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
       config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
       config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-      config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH ||
       config.cellarNameKey ===
         CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
     ) {
@@ -432,7 +431,6 @@ export const apyHoverLabel = (config: ConfigProps) => {
       config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
       config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
       config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-      config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH ||
       config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
     ) {
       return "Estimated APY"
@@ -460,7 +458,6 @@ export const baseApyHoverLabel = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
   ) {
     return "Estimated APY"
@@ -487,8 +484,7 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
-    config.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM
   ) {
     return true
   }

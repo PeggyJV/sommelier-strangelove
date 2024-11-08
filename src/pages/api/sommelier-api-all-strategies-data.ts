@@ -14,14 +14,21 @@ interface CellarType {
   chain: string
 }
 
-async function fetchData(url: string) {
-  const response = await fetch(url, {
+
+async function fetchData(url: string, body?: object) {
+  const options: RequestInit = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-  })
-  return response
+  }
+
+  if (body) {
+    const queryParams = new URLSearchParams(body as Record<string, string>).toString()
+    url = `${url}?${queryParams}`
+  }
+
+  return await fetch(url, options)
 }
 
 const sommelierAPIAllStrategiesData = async (
@@ -335,7 +342,7 @@ const sommelierAPIAllStrategiesData = async (
     const [tvl, sharePrice, lobsterApy] = await Promise.all([
       fetchData(lobsterTvlURL),
       fetchData(lobsterShareValueURL),
-      fetchData(lobsterApyUrl),
+      fetchData(lobsterApyUrl, { time_frame: "all" }),
     ])
 
     const tvlTotal = await tvl.json();

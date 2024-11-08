@@ -5,14 +5,22 @@ import { config } from "utils/config"
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
-async function fetchData(url: string) {
-  const response = await fetch(url, {
+
+async function fetchData(url: string, body?: object) {
+  const options: RequestInit = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-  })
-  return response.json()
+  }
+
+  if (body) {
+    const queryParams = new URLSearchParams(body as Record<string, string>).toString()
+    url = `${url}?${queryParams}`
+  }
+
+  const response =  await fetch(url, options);
+  return response.json();
 }
 
 const sommelierAPIIndividualStratData = async (
@@ -35,7 +43,7 @@ const sommelierAPIIndividualStratData = async (
       const [tvl, sharePrice, lobsterApy] = await Promise.all([
         fetchData(lobsterTvlURL),
         fetchData(lobsterShareValueURL),
-        fetchData(lobsterApyUrl),
+        fetchData(lobsterApyUrl, { time_frame: "all" }),
       ])
       tvlTotal = tvl;
       apy = lobsterApy;
