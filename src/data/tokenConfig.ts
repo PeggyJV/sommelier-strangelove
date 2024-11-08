@@ -583,8 +583,8 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ARBITRUM.id,
   },
   {
-    src: "",
-    alt: "",
+    src: "/assets/icons/neth.png",
+    alt: "ETH logo",
     symbol: "ETH",
     address: "",
     coinGeckoId: "ethereum",
@@ -592,8 +592,8 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
-    src: "",
-    alt: "",
+    src: "/assets/icons/neth.png",
+    alt: "ETH logo",
     symbol: "ETH",
     address: "",
     coinGeckoId: "ethereum",
@@ -601,8 +601,8 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ARBITRUM.id,
   },
   {
-    src: "",
-    alt: "",
+    src: "/assets/icons/neth.png",
+    alt: "ETH logo",
     symbol: "ETH",
     address: "",
     coinGeckoId: "ethereum",
