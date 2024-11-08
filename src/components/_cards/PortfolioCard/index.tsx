@@ -461,13 +461,13 @@ export const PortfolioCard = (props: BoxProps) => {
     />
 )}
 
-            {/* Add Lobster Points display here */}
-            <CardStat
-              label="Lobster Points"
-              tooltip="Your points in the Lobster protocol"
-            >
-              {isMounted && (isConnected ? lobsterPoints ?? "..." : "--")}
-            </CardStat>
+
+            {/* Conditional Rendering for Lobster Points */}
+            {cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH && (
+              <CardStat label="Lobster Points" tooltip="Your points in the Lobster protocol">
+                {isMounted && (isConnected ? lobsterPoints ?? "..." : "--")}
+              </CardStat>
+            )}
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
