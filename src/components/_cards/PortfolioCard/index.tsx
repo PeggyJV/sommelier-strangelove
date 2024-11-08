@@ -53,6 +53,8 @@ import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
+// Add your fetch function here
+import { fetchLobsterPoints } from "utils/fetchLobsterData"  // Import the function to fetch Lobster Points
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
@@ -74,9 +76,30 @@ export const PortfolioCard = (props: BoxProps) => {
   ) as Token[]
 
   const [isConnected, setConnected] = useState(false)
+  const [lobsterPoints, setLobsterPoints] = useState<number | null>(null) // Lobster Points state
+
   useEffect(() => {
     setConnected(connected)
   }, [connected])
+
+  // Fetch Lobster Points conditionally
+  useEffect(() => {
+    const loadLobsterPoints = async () => {
+      if (address) {
+        try {
+          const data = await fetchLobsterPoints(address);
+          setLobsterPoints(data?.user_points || null);
+        } catch (error) {
+          console.error("Error fetching Lobster Points:", error);
+        }
+      }
+    };
+    
+    // Fetch Lobster Points only if connected and cellarNameKey is LOBSTER_ATLANTIC_WETH
+    if (connected && cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
+      loadLobsterPoints();
+    }
+  }, [connected, address, cellarConfig.cellarNameKey]);
 
   const { lpToken } = useUserBalance(cellarConfig)
   let { data: lpTokenData } = lpToken
@@ -174,12 +197,6 @@ export const PortfolioCard = (props: BoxProps) => {
       setIsActiveWithdrawRequest(false)
     }
   }
-  // const isMerkleRewardsException = (config: ConfigProps) => {
-  //   return (
-  //     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-  //     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
-  //   )
-  // }
 
   useEffect(() => {
     checkWithdrawRequest()
@@ -207,6 +224,8 @@ export const PortfolioCard = (props: BoxProps) => {
               md: "repeat(2, max-content)",
             }}
           >
+
+            {/* Existing CardStat components */}
             <CardStat
               label="Net Value"
               tooltip="Net value of assets in the strategy including SOMM rewards"
@@ -441,6 +460,14 @@ export const PortfolioCard = (props: BoxProps) => {
       cellarConfig={cellarConfig}
     />
 )}
+
+            {/* Add Lobster Points display here */}
+            <CardStat
+              label="Lobster Points"
+              tooltip="Your points in the Lobster protocol"
+            >
+              {isMounted && (isConnected ? lobsterPoints ?? "..." : "--")}
+            </CardStat>
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
