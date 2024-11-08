@@ -16,8 +16,8 @@ export const fetchLobsterPoints = async (userAddress: string): Promise<User | nu
     const response = await axios.get(LOBSTER_API_BASE_URL);
 
     // Ensure the response data is an array, then filter for the specific user
-    if (Array.isArray(response.data)) {
-      return response.data.find((user: User) => user.user_public_key === userAddress) || null;
+    if (response.data.leaderboard) {
+      return response.data.leaderboard.find((user: User) => user.user_public_key === userAddress) || null;
     } else {
       console.warn("Unexpected data format received from the Lobster API");
       return null;

@@ -51,7 +51,7 @@ import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { CellarNameKey, ConfigProps } from "data/types"
+import { CellarNameKey } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 // Add your fetch function here
 import { fetchLobsterPoints } from "utils/fetchLobsterData"  // Import the function to fetch Lobster Points
@@ -76,7 +76,7 @@ export const PortfolioCard = (props: BoxProps) => {
   ) as Token[]
 
   const [isConnected, setConnected] = useState(false)
-  const [lobsterPoints, setLobsterPoints] = useState<number | null>(null) // Lobster Points state
+  const [lobsterPoints, setLobsterPoints] = useState<number | undefined>()
 
   useEffect(() => {
     setConnected(connected)
@@ -88,13 +88,13 @@ export const PortfolioCard = (props: BoxProps) => {
       if (address) {
         try {
           const data = await fetchLobsterPoints(address);
-          setLobsterPoints(data?.user_points || null);
+          setLobsterPoints(data?.user_points);
         } catch (error) {
           console.error("Error fetching Lobster Points:", error);
         }
       }
     };
-    
+
     // Fetch Lobster Points only if connected and cellarNameKey is LOBSTER_ATLANTIC_WETH
     if (connected && cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
       loadLobsterPoints();
@@ -461,11 +461,9 @@ export const PortfolioCard = (props: BoxProps) => {
     />
 )}
 
-
-            {/* Conditional Rendering for Lobster Points */}
             {cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH && (
               <CardStat label="Lobster Points" tooltip="Your points in the Lobster protocol">
-                {isMounted && (isConnected ? lobsterPoints ?? "..." : "--")}
+                {isConnected ? lobsterPoints : "--"}
               </CardStat>
             )}
 
