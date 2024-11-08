@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { CardStat } from "components/CardStat" 
-import { fetchLobsterPoints } from "utils/fetchLobsterPoints" // Ensure this function is properly exported in the utils file
+import { fetchLobsterPoints } from "src/utils/fetchLobsterData" // Ensure this function is properly exported in the utils file
 
 // Define the props type for LobsterPointsDisplay
 interface LobsterPointsDisplayProps {
