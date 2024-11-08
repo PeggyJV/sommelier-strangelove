@@ -26,8 +26,6 @@ import { Link } from "components/Link"
 import { config } from "utils/config"
 import {
   useAccount,
-  useBalance,
-  useBlockNumber,
   usePublicClient,
   useWalletClient,
 } from "wagmi"
@@ -65,6 +63,7 @@ import {
 import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { useQueryClient } from "@tanstack/react-query"
+import { useUserBalances } from "data/hooks/useUserBalances"
 
 interface FormValues {
   depositAmount: number
@@ -221,20 +220,11 @@ export const SommelierTab = ({
     skip: true,
   })
 
-  const { data: blockNumber } = useBlockNumber({ watch: true })
+  const { userBalances } = useUserBalances();
 
-  const { data: selectedTokenBalance, queryKey } = useBalance({
-    address: address,
-    token: getAddress(
-      selectedToken?.address ||
-        "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-    ), //WETH Address
-    unit: "wei",
-  })
-
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey })
-  }, [blockNumber, queryClient])
+  const selectedTokenBalance = userBalances.data?.find(
+    b => b.symbol === selectedToken?.symbol
+  );
 
   const erc20Contract =
     selectedToken?.address &&
@@ -362,15 +352,19 @@ export const SommelierTab = ({
   ) => {
     let fnName = "deposit";
     let inputList, gasLimitEstimated;
+    let native = selectedToken?.symbol === "ETH";
 
+    // For multiAssetDeposit
     if (
       assetAddress !== undefined &&
       assetAddress.toLowerCase() !==
-        cellarConfig.baseAsset.address.toLowerCase()
+        cellarConfig.baseAsset.address.toLowerCase() &&
+      selectedToken?.symbol !== "ETH"
     ) {
       fnName = "multiAssetDeposit";
       inputList = [assetAddress, amtInWei, address];
 
+    // For when gas estimation is needed
     } else if (
       cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
       cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
@@ -384,6 +378,7 @@ export const SommelierTab = ({
       )
       inputList = [amtInWei, address];
 
+    // For the Atlantic WETH
     } else if(cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH) {
 
       const lpTokenPrice = strategyData?.token?.value;
@@ -395,26 +390,37 @@ export const SommelierTab = ({
         : BigInt(0);
 
       amountInLpToken = amountInLpToken * 99n / 100n
+      if(native) {
+        inputList = [
+          cellarConfig.lpToken.address,
+          cellarConfig.baseAsset.address,
+          amountInLpToken
+        ];
+        fnName = "depositNative";
+      } else {
+        inputList = [
+          cellarConfig.lpToken.address,
+          assetAddress,
+          amtInWei,
+          assetAddress,
+          amountInLpToken
+        ];
+      }
 
-      inputList = [
-        cellarConfig.lpToken.address,
-        assetAddress,
-        amtInWei,
-        assetAddress,
-        amountInLpToken
-      ];
-
+    // For simple deposit
     } else {
       inputList = [amtInWei, address];
     }
     // @ts-ignore
     return await cellarSigner?.write[fnName](inputList, {
       gas: gasLimitEstimated,
-      account: address
+      account: address,
+      value: native ? amtInWei : 0
     });
   }
 
   const onSubmit = async (data: any, e: any) => {
+
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
@@ -424,33 +430,42 @@ export const SommelierTab = ({
     // if swap slippage is not set, use default value
     const slippage = data?.slippage
 
-    if (!erc20Contract) return
+    if (!erc20Contract && tokenSymbol !== "ETH") return
 
-    // check if approval exists
-    // @ts-ignore
-    const allowance = await erc20Contract.read.allowance(
-      [
-        getAddress(address ?? ""),
-        getAddress(cellarConfig.cellar.address),
-      ],
-      { account: address }
-    )
 
-    const amtInWei = parseUnits(
+    let needsApproval;
+    let approval;
+    let amtInWei = parseUnits(
       depositAmount.toString(),
       selectedTokenBalance?.decimals ?? 0
     )
 
-    let needsApproval
-    try {
-      needsApproval = allowance < amtInWei
-    } catch (e) {
-      const error = e as Error
-      console.error("Invalid Input: ", error.message)
-      return
+    if (tokenSymbol === "ETH") {
+      needsApproval = false;
+      approval = true;
+    } else {
+      // check if approval exists
+      // @ts-ignore
+      const allowance = await erc20Contract.read.allowance(
+        [
+          getAddress(address ?? ""),
+          getAddress(cellarConfig.cellar.address),
+        ],
+        { account: address }
+      )
+
+      try {
+        needsApproval = allowance < amtInWei
+      } catch (e) {
+        const error = e as Error
+        console.error("Invalid Input: ", error.message)
+        return
+      }
+
+      approval = !needsApproval
     }
 
-    let approval = !needsApproval
+
     if (needsApproval) {
       /* analytics.track("deposit.approval-required", {
         ...baseAnalytics,

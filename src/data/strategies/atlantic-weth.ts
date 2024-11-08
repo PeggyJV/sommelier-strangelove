@@ -63,7 +63,7 @@ risks: `
 
   },
   depositTokens: {
-    list: ["WETH"],
+    list: ["WETH", "ETH"]
   },
 
   config: {
