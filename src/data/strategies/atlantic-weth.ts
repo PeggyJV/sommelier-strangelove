@@ -77,7 +77,7 @@ risks: `
     cellar: {
       address: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS,
       abi: config.CONTRACT.LOBSTER_ATLANTIC_WETH.ABI,
-      key: CellarKey.CELLAR_V2,
+      key: CellarKey.CELLAR_EXTERNAL,
       decimals: 18,
     },
     badges: [
