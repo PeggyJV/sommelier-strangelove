@@ -64,6 +64,7 @@ import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { useQueryClient } from "@tanstack/react-query"
 import { useUserBalances } from "data/hooks/useUserBalances"
+import { getTokenByAddress } from "data/actions/common/getToken"
 
 interface FormValues {
   depositAmount: number
@@ -214,7 +215,9 @@ export const SommelierTab = ({
     cellarConfig.chain.id
   )
 
-  const activeAsset = strategyData?.activeAsset
+  const activeAsset = CellarNameKey.LOBSTER_ATLANTIC_WETH
+    ? getTokenByAddress("", cellarConfig.chain.id)
+    : strategyData?.activeAsset
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
