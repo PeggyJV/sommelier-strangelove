@@ -462,7 +462,7 @@ export const PortfolioCard = (props: BoxProps) => {
 )}
 
             {cellarConfig.cellarNameKey === CellarNameKey.LOBSTER_ATLANTIC_WETH && (
-              <CardStat label="Lobster Points" tooltip="Your points in the Lobster protocol">
+              <CardStat label="Lobster Points" tooltip="Your Lobster Points, with which you farm Lobster's Airdrop Campaign.">
                 {isConnected ? lobsterPoints : "--"}
               </CardStat>
             )}
