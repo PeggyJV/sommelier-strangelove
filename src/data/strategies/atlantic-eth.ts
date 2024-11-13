@@ -8,8 +8,8 @@ import {
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
-export const AtlanticWETH: CellarData = {
-  name: "Atlantic WETH",
+export const AtlanticETH: CellarData = {
+  name: "Atlantic ETH",
   slug: config.CONTRACT.LOBSTER_ATLANTIC_WETH.SLUG,
   dashboard:
     "https://debank.com/profile/0x2fcA566933bAAf3F454d816B7947Cb45C7d79102",
@@ -54,16 +54,15 @@ More information <a href="https://lobster-protocol.gitbook.io/lobster-documentat
 
 User terms: <a href="https://www.lobster-protocol.com/app-terms-and-conditions" target="_blank" style="text-decoration: underline;">https://www.lobster-protocol.com/app-terms-and-conditions</a>
 `,
-risks: `
+    risks: `
   All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
 
   - This vault does liquidity provision, which can result in impermanent loss that can affect the performance. By anticipating it, Lobster’s algorithm is able to mitigate its impact. The APY announced is net, and already includes impermanent loss.
 
   - This vault does lending, which means there is a liquidation risk. The constant rebalancing and the security threshold in place are here to mitigate this risk.`,
-
   },
   depositTokens: {
-    list: ["WETH", "ETH"]
+    list: ["WETH", "ETH"],
   },
 
   config: {

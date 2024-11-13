@@ -37,7 +37,7 @@ import {
   realYieldEthOpt,
   turboezETH,
   realYieldEthScroll,
-  AtlanticWETH,
+  AtlanticETH,
 
 } from "./strategies"
 
@@ -46,7 +46,7 @@ cellarConfig = {
   // ! NOTE THIS DETERMINES INITIAL ORDERING
   //[config.CONTRACT.TEST_ARBITRUM_REAL_YIELD_USD.SLUG]:testArbitrumRealYieldUsd, //! Multichain testing contract
   // [config.CONTRACT.REAL_YIELD_ETH_SCROLL.SLUG]: realYieldEthScroll,
-  [config.CONTRACT.LOBSTER_ATLANTIC_WETH.SLUG]: AtlanticWETH,
+  [config.CONTRACT.LOBSTER_ATLANTIC_WETH.SLUG]: AtlanticETH,
   [config.CONTRACT.TURBO_EZETH.SLUG]: turboezETH,
   [config.CONTRACT.TURBO_RSETH.SLUG]: turborsETH,
   [config.CONTRACT.REAL_YIELD_ETH_OPT.SLUG]: realYieldEthOpt,
@@ -88,7 +88,7 @@ cellarConfig = {
 let cellarAddressConfig: CellarAddressDataMap
 cellarAddressConfig = {
   [config.CONTRACT.LOBSTER_ATLANTIC_WETH.ADDRESS.toLowerCase() +
-    "-arbitrum"]: AtlanticWETH,
+    "-arbitrum"]: AtlanticETH,
   [config.CONTRACT.REAL_YIELD_ETH_SCROLL.ADDRESS.toLowerCase() +
   "-scroll"]: realYieldEthScroll,
   [config.CONTRACT.REAL_YIELD_ETH_OPT.ADDRESS.toLowerCase() +
