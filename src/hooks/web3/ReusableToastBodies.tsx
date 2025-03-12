@@ -16,7 +16,7 @@ export const TxHashToastBody = ({
   closeAll: Function
 }) => (
   <Stack>
-    <Stack spacing={0} fontSize="xs">
+    <Stack gap={0} fontSize="xs">
       <Text>{title}</Text>
       <HStack>
         <Text fontWeight="bold">
@@ -55,7 +55,7 @@ export const BridgeTxHashToastBody = ({
   closeAll: Function
 }) => (
   <Stack>
-    <Stack spacing={0} fontSize="xs">
+    <Stack gap={0} fontSize="xs">
       <HStack>
         <Text as="span" fontWeight="bold">
           Amount:

@@ -35,7 +35,7 @@ interface BridgeFormProps {
   wrongNetwork?: boolean
 }
 
-export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
+export const BridgeForm = ({ wrongNetwork }: BridgeFormProps) => {
   const { addToast, closeAll } = useBrandedToast()
   const isMounted = useIsMounted()
   const { watch, handleSubmit, formState, getFieldState, setValue } =
@@ -70,7 +70,8 @@ export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
     !!getFieldState("address").error ||
     !watchSommelierAddress ||
     isEthToSommLoading ||
-    isSommToEthLoading || wrongNetwork
+    isSommToEthLoading ||
+    wrongNetwork
 
   const { connectAsync } = useGrazConnect()
   const { isConnected: isGrazConnected } = useGrazAccount()
@@ -115,9 +116,9 @@ export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
     </HStack>
   )
   return (
-    <Stack spacing="40px" alignItems={"center"}>
+    <Stack gap="40px" alignItems={"center"}>
       <Stack
-        spacing="40px"
+        gap="40px"
         as="form"
         onSubmit={
           watchType === "TO_SOMMELIER"
@@ -125,7 +126,7 @@ export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
             : handleSubmit(doSommToEth)
         }
       >
-        <Stack spacing={6}>
+        <Stack gap={6}>
           <HStack justifyContent="space-between">
             <Stack flex={1}>
               <Text

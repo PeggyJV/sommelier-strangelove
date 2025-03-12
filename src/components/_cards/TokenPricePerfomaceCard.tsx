@@ -31,7 +31,8 @@ export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
@@ -107,7 +108,7 @@ export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
         overflow="visible"
         {...props}
       >
-        <VStack spacing={6} align="stretch">
+        <VStack gap={6} align="stretch">
           <Box h="20rem" mb={{ base: 12, sm: "2.2rem", md: 0 }}>
             <HStack
               justify="space-between"
@@ -115,8 +116,8 @@ export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
               wrap="wrap"
               rowGap={2}
             >
-              <HStack spacing={8}>
-                <VStack spacing={0} align="flex-start">
+              <HStack gap={8}>
+                <VStack gap={0} align="flex-start">
                   <CardHeading>Token Price</CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
@@ -132,7 +133,7 @@ export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
                   </Text>
                 </VStack>
               </HStack>
-              <HStack spacing={2}>
+              <HStack gap={2}>
                 {timeArray.map((button, i) => {
                   const { title, onClick } = button
                   const isSelected = title === timeline

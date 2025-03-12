@@ -34,7 +34,7 @@ export const ClaimForm: VFC = () => {
   return (
     <VStack
       as="form"
-      spacing={8}
+      gap={8}
       align="stretch"
       onSubmit={handleSubmit((data) => setData(data))}
     >

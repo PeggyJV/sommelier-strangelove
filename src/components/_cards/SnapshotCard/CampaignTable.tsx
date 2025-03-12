@@ -43,7 +43,7 @@ const CampaignTable: React.FC = () => {
   const fontSize = useBreakpointValue({ base: "xs", md: "sm" })
 
   return (
-    <VStack spacing={4} align="stretch">
+    <VStack gap={4} align="stretch">
       <InfoBanner text="Details of upcoming campaigns are coming soon." />
       <TableContainer>
         <Table variant="simple" size={tableSize}>
@@ -61,7 +61,7 @@ const CampaignTable: React.FC = () => {
             {campaigns.map((campaign, index) => (
               <Tr key={index}>
                 <Td fontSize={fontSize}>
-                  <HStack spacing="10px">
+                  <HStack gap="10px">
                     <Image
                       src={
                         campaign.name === "RedStone RSG Points"

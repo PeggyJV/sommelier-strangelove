@@ -8,7 +8,7 @@ import {
   Box,
 } from "@chakra-ui/react"
 import { InformationIcon, MoneyWalletIcon } from "components/_icons"
-import { isAddress } from 'viem'
+import { isAddress } from "viem"
 import { useBrandedToast } from "hooks/chakra"
 import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
@@ -48,7 +48,7 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack gap={2}>
       <HStack justifyContent="space-between">
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
           Ethereum Address
@@ -57,7 +57,7 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
         <HStack
           as="button"
           type="button"
-          spacing={1}
+          gap={1}
           onClick={() => onAutofillClick()}
         >
           <Text fontWeight="bold" color="white" fontSize="xs">
@@ -100,7 +100,7 @@ export const InputEthereumAddress: React.FC<InputProps> = ({
         />
       </Box>
       <FormErrorMessage>
-        <HStack spacing="6px">
+        <HStack gap="6px">
           <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
             Address is not valid—make sure your Ethereum address

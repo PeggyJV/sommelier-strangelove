@@ -1,5 +1,5 @@
 export const sizes = {
   container: {
-    lg: "1088px",
+    lg: { value: "1088px" },
   },
 }

@@ -3,7 +3,7 @@ import {
   HStack,
   Input,
   StackDivider,
-  Text
+  Text,
 } from "@chakra-ui/react"
 import { ConfigProps } from "data/types"
 import { bondingPeriodOptions } from "data/uiConfig"
@@ -31,7 +31,7 @@ export const BondingPeriodOptions = ({
 
   return (
     <HStack
-      spacing={0}
+      gap={0}
       justify="space-evenly"
       borderRadius={12}
       border="1px solid"

@@ -46,7 +46,7 @@ const Footer: VFC<ContainerProps> = (props) => {
             &copy; {new Date().getFullYear()} Somm
           </Text>
           <Wrap
-            spacing={{ base: 4, lg: 8 }}
+            gap={{ base: 4, lg: 8 }}
             justify={{ base: "center", sm: "right" }}
             align="center"
             flexDirection={{ base: "column-reverse", sm: "row" }}
@@ -54,7 +54,7 @@ const Footer: VFC<ContainerProps> = (props) => {
             color="neutral.100"
           >
             <HStack
-              spacing={8}
+              gap={8}
               justify="center"
               align="center"
               mt={{ base: 6, sm: 0 }}
@@ -73,7 +73,7 @@ const Footer: VFC<ContainerProps> = (props) => {
               </FooterLink>
             </HStack>
             <HStack
-              spacing={8}
+              gap={8}
               justify="center"
               align="center"
               mt={{ base: 6, sm: 0 }}
@@ -93,7 +93,7 @@ const Footer: VFC<ContainerProps> = (props) => {
             </HStack>
 
             <HStack
-              spacing={8}
+              gap={8}
               justify="center"
               align="center"
               mt={{ base: 6, sm: 0 }}

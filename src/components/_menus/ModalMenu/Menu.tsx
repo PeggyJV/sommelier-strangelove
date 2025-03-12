@@ -43,7 +43,7 @@ export const Menu = ({
   value,
   onChange,
   isDisabled,
-} : MenuProps) => {
+}: MenuProps) => {
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const menuDims = useDimensions(menuRef, true)
@@ -144,7 +144,7 @@ export const Menu = ({
         alignItems: "center",
       }}
     >
-      <VStack w="100%" spacing={0} align="flex-start">
+      <VStack w="100%" gap={0} align="flex-start">
         {/* @ts-ignore using string where number is expected. This is to ensure popover is always placed at the top of button, no matter the height value. */}
         <ChMenu offset={["10%", "100%"]} placement="bottom">
           <MenuButton
@@ -157,7 +157,7 @@ export const Menu = ({
           >
             <HStack>
               {value ? (
-                <HStack spacing={2}>
+                <HStack gap={2}>
                   <Image
                     boxSize={6}
                     src={value.src}
@@ -286,7 +286,7 @@ export const Menu = ({
             </MenuOptionGroup>
           </MenuList>
         </ChMenu>
-        <HStack spacing={0} fontSize="10px" paddingTop="0.75em">
+        <HStack gap={0} fontSize="10px" paddingTop="0.75em">
           <Text as="span">Available: {availableBalance}</Text>
           <Button
             variant="unstyled"
@@ -303,7 +303,7 @@ export const Menu = ({
           </Button>
         </HStack>
       </VStack>
-      <VStack spacing={0} align="flex-end">
+      <VStack gap={0} align="flex-end">
         <Input
           variant="unstyled"
           pr="2"
@@ -372,7 +372,7 @@ export const Menu = ({
             },
           })}
         />
-        <HStack spacing={0} fontSize="11px" textAlign="right" pr="2">
+        <HStack gap={0} fontSize="11px" textAlign="right" pr="2">
           <Text as="span">
             $ {Number(displayedBalance.toFixed(2)).toLocaleString()}
           </Text>

@@ -65,7 +65,7 @@ export const About = () => {
               width={60}
               height={60}
             />
-            <Stack spacing={0}>
+            <Stack gap={0}>
               <Text fontWeight="bold" fontSize="16px">
                 {feature.title}
               </Text>

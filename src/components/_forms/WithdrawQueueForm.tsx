@@ -129,28 +129,27 @@ export const WithdrawQueueForm = ({
 
   const withdrawQueueContract = (() => {
     if (!publicClient) return
-    return getContract( {
-        address: cellarConfig.chain.withdrawQueueAddress as `0x${string}`,
-        abi: withdrawQueueV0821,
-        client: {
-          public: publicClient,
-          wallet: walletClient
-        }
-      }
-    )
+    return getContract({
+      address: cellarConfig.chain
+        .withdrawQueueAddress as `0x${string}`,
+      abi: withdrawQueueV0821,
+      client: {
+        public: publicClient,
+        wallet: walletClient,
+      },
+    })
   })()
 
   const cellarContract = (() => {
     if (!publicClient) return
-    return getContract( {
+    return getContract({
       address: cellarConfig.cellar.address as `0x${string}`,
       abi: cellarConfig.cellar.abi,
       client: {
         public: publicClient,
-        wallet: walletClient
-      }
-    }
-    )
+        wallet: walletClient,
+      },
+    })
   })()
 
   const [_, wait] = useWaitForTransaction({
@@ -265,11 +264,10 @@ export const WithdrawQueueForm = ({
     )
 
     // Get approval if needed
-    const allowance = await cellarContract?.read.allowance([
+    const allowance = (await cellarContract?.read.allowance([
       address!,
-      getAddress(cellarConfig.chain.withdrawQueueAddress)
-      ]
-    ) as bigint
+      getAddress(cellarConfig.chain.withdrawQueueAddress),
+    ])) as bigint
 
     let needsApproval
     try {
@@ -283,9 +281,10 @@ export const WithdrawQueueForm = ({
     if (needsApproval) {
       try {
         // @ts-ignore
-        const hash = await cellarContract?.write.approve([
-          getAddress(cellarConfig.chain.withdrawQueueAddress),
-          MaxUint256
+        const hash = await cellarContract?.write.approve(
+          [
+            getAddress(cellarConfig.chain.withdrawQueueAddress),
+            MaxUint256,
           ],
           { account: address }
         )
@@ -370,7 +369,7 @@ export const WithdrawQueueForm = ({
         BigInt(deadlineSeconds),
         BigInt(sharePriceWithDiscountInBaseDenom),
         withdrawAmtInBaseDenom,
-        false
+        false,
       ]
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
@@ -381,15 +380,14 @@ export const WithdrawQueueForm = ({
         address
       )
       // @ts-ignore
-      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
-        cellarConfig.cellar.address,
-        withdrawTouple
-        ],
-        {
-          gas: gasLimitEstimated,
-          account: address
-        }
-      )
+      const hash =
+        await withdrawQueueContract?.write.updateWithdrawRequest(
+          [cellarConfig.cellar.address, withdrawTouple],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
 
       const onSuccess = () => {
         if (onSuccessfulWithdraw) {
@@ -450,7 +448,6 @@ export const WithdrawQueueForm = ({
     }
   }
 
-
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
 
@@ -461,19 +458,17 @@ export const WithdrawQueueForm = ({
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
-            cellarConfig.cellar.address
+            cellarConfig.cellar.address,
           ])
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.read.isWithdrawRequestValid([
+          (await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
-            withdrawRequest
-            ]
-          ) as boolean
+            withdrawRequest,
+          ])) as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
-
       } else {
         setIsActiveWithdrawRequest(false)
       }
@@ -487,7 +482,7 @@ export const WithdrawQueueForm = ({
   return (
     <VStack
       as="form"
-      spacing={8}
+      gap={8}
       align="stretch"
       onSubmit={handleSubmit(onSubmit)}
     >
@@ -498,7 +493,7 @@ export const WithdrawQueueForm = ({
               <HStack
                 p={4}
                 mb={12}
-                spacing={4}
+                gap={4}
                 align="flex-start"
                 backgroundColor="purple.dark"
                 border="2px solid"
@@ -519,7 +514,7 @@ export const WithdrawQueueForm = ({
               <br />
             </>
           )}
-          <Stack spacing={5}>
+          <Stack gap={5}>
             <Text fontWeight="bold" color="neutral.400" fontSize="xs">
               Enter Shares
             </Text>
@@ -542,7 +537,7 @@ export const WithdrawQueueForm = ({
                   {lpTokenData?.symbol}
                 </Text>
               </HStack>
-              <VStack spacing={0} align="flex-end">
+              <VStack gap={0} align="flex-end">
                 <Input
                   id="amount"
                   variant="unstyled"
@@ -592,7 +587,7 @@ export const WithdrawQueueForm = ({
                     },
                   })}
                 />
-                <HStack spacing={0} fontSize="10px">
+                <HStack gap={0} fontSize="10px">
                   {isBalanceLoading ? (
                     <Spinner size="xs" mr="2" />
                   ) : (
@@ -658,7 +653,7 @@ export const WithdrawQueueForm = ({
                 bg="surface.bg"
                 color="neutral.300"
               >
-                <HStack spacing={1} align="center">
+                <HStack gap={1} align="center">
                   <Text as="span">Priority</Text>
                   <InformationIcon color="neutral.300" boxSize={3} />
                 </HStack>
@@ -715,7 +710,7 @@ export const WithdrawQueueForm = ({
             </HStack>
           </Stack>
         </FormControl>
-        <Stack spacing={5}>
+        <Stack gap={5}>
           <Text
             fontSize="xs"
             fontWeight="semibold"
@@ -723,7 +718,7 @@ export const WithdrawQueueForm = ({
           >
             Transaction Details
           </Text>
-          <Stack spacing={2.5}>
+          <Stack gap={2.5}>
             <TransactionDetailItem
               title="Vault"
               value={<Text>{cellarDataMap[id].name}</Text>}
@@ -741,7 +736,7 @@ export const WithdrawQueueForm = ({
                   bg="surface.bg"
                   color="neutral.300"
                 >
-                  <HStack spacing={1} align="center">
+                  <HStack gap={1} align="center">
                     <Text as="span">Share Price Discount</Text>
                     <InformationIcon
                       color="neutral.300"
@@ -821,7 +816,7 @@ export const WithdrawQueueForm = ({
                   bg="surface.bg"
                   color="neutral.300"
                 >
-                  <HStack spacing={1} align="center">
+                  <HStack gap={1} align="center">
                     <Text as="span">Deadline Hours</Text>
                     <InformationIcon
                       color="neutral.300"

@@ -192,7 +192,7 @@ export const PortfolioCard = (props: BoxProps) => {
       overflow="none"
       zIndex={1}
     >
-      <VStack align="stretch" spacing={8}>
+      <VStack align="stretch" gap={8}>
         <CardStatRow
           gap={{ base: 4, md: 8, lg: 12 }}
           align="flex-start"
@@ -242,7 +242,7 @@ export const PortfolioCard = (props: BoxProps) => {
               label="deposit assets"
               tooltip="Accepted deposit assets"
               alignSelf="flex-start"
-              spacing={0}
+              gap={0}
             >
               <TokenAssets
                 tokens={depositTokenConfig}
@@ -274,15 +274,11 @@ export const PortfolioCard = (props: BoxProps) => {
                 "--"
               )}
             </CardStat> */}
-            <Stack spacing={3} direction="row">
+            <Stack gap={3} direction="row">
               {isMounted &&
                 (isConnected ? (
                   <>
-                    <VStack
-                      spacing={3}
-                      width="100%"
-                      paddingTop={"1em"}
-                    >
+                    <VStack gap={3} width="100%" paddingTop={"1em"}>
                       <HStack>
                         {!strategyData?.deprecated && (
                           <DepositButton
@@ -344,7 +340,7 @@ export const PortfolioCard = (props: BoxProps) => {
               <SimpleGrid
                 templateColumns="repeat(2, max-content)"
                 templateRows="repeat(2, 1fr)"
-                spacing={4}
+                gap={4}
                 alignItems="flex-end"
               >
                 <VStack align="flex-start">
@@ -431,15 +427,17 @@ export const PortfolioCard = (props: BoxProps) => {
             </VStack>
           )}
 
-{
-  (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) && (
-    <MerklePoints
-      userAddress={address}
-      cellarConfig={cellarConfig}
-    />
-)}
+          {(cellarConfig.cellarNameKey ===
+            CellarNameKey.REAL_YIELD_ETH_ARB ||
+            cellarConfig.cellarNameKey ===
+              CellarNameKey.REAL_YIELD_USD_ARB ||
+            cellarConfig.cellarNameKey ===
+              CellarNameKey.REAL_YIELD_ETH_OPT) && (
+            <MerklePoints
+              userAddress={address}
+              cellarConfig={cellarConfig}
+            />
+          )}
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (

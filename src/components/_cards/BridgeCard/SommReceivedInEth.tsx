@@ -10,7 +10,7 @@ export const SommReceivedInEth: React.FC = () => {
   const amount = watch("amount")
   const receivedAmount = amount - bridgeFee
   return (
-    <Stack spacing={2}>
+    <Stack gap={2}>
       <Text color="neutral.300" fontWeight="bold" fontSize="xs">
         SOMM Received in ETH
       </Text>

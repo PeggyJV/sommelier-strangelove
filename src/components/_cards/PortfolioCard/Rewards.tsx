@@ -102,7 +102,9 @@ export const Rewards = ({
     // analytics.track("rewards.claim-started")
 
     // @ts-ignore
-    const hash = await stakerSigner?.write.claimAll([], { account: address })
+    const hash = await stakerSigner?.write.claimAll([], {
+      account: address,
+    })
     await doHandleTransaction({
       cellarConfig,
       hash,
@@ -154,7 +156,7 @@ export const Rewards = ({
           ? ""
           : "repeat(2, 1fr)"
       }
-      spacing={4}
+      gap={4}
       alignItems="flex-end"
       //display={claimAllDisabled ? "none" : "grid"}
     >

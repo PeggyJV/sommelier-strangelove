@@ -130,7 +130,7 @@ export const MiscFilter = (props: MiscFilterProps) => {
                   justifyContent="space-between" // Space between items
                   alignItems="center" // Align items vertically
                   width="100%" // Full width
-                  spacing={3}
+                  gap={3}
                 >
                   <Text fontWeight="semibold">{category.name}</Text>{" "}
                   <Checkbox

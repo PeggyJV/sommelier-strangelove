@@ -136,12 +136,12 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
       overflow="visible"
     >
       <VStack
-        spacing={{ base: 6, sm: 6, md: 8 }}
+        gap={{ base: 6, sm: 6, md: 8 }}
         align={{ sm: "unset", md: "stretch" }}
       >
         <SimpleGrid
           columns={gridColumn}
-          spacing={4}
+          gap={4}
           px={{ base: 6, sm: 0 }}
         >
           <CardStat
@@ -175,9 +175,9 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
             pr={{ sm: 2, lg: 8 }}
           >
             {isManyProtocols ? (
-              <Wrap spacing={3}>
+              <Wrap gap={3}>
                 {(protocolData as ProtocolDataType[]).map((v, i) => (
-                  <HStack key={i} spacing={2}>
+                  <HStack key={i} gap={2}>
                     <Image
                       src={v.icon}
                       alt="Protocol Icon"
@@ -203,7 +203,7 @@ const CellarDetailsCard: VFC<CellarDetailsProps> = ({
           </CardStat>
           <Stack
             direction={{ base: "column", lg: "row" }}
-            spacing={4}
+            gap={4}
             justifyContent="normal"
           >
             <VStack>

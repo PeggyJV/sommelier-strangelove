@@ -14,7 +14,7 @@ export const MobileWarningCTA: FC<FlexProps> = (props) => {
     >
       <VStack
         flex={1}
-        spacing={6}
+        gap={6}
         align="center"
         justify="center"
         fontSize={12}

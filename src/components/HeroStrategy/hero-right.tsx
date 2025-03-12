@@ -25,9 +25,7 @@ interface HeroStrategyRightProps {
   id: string
 }
 
-export const HeroStrategyRight = ({
-  id,
-}: HeroStrategyRightProps) => {
+export const HeroStrategyRight = ({ id }: HeroStrategyRightProps) => {
   const content = strategyPageContentData[id]
   const buyOrSellModal = useDisclosure()
   const notifyModal = useDisclosure()
@@ -84,7 +82,7 @@ export const HeroStrategyRight = ({
     cellarData.cellarType === CellarType.automatedPortfolio
 
   return (
-    <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>
+    <Stack minW={{ base: "100%", md: "380px" }} gap={4}>
       {countdown && launchDate ? (
         <>
           <CountDown launchDate={launchDate} />
@@ -134,7 +132,7 @@ export const HeroStrategyRight = ({
         </>
       )}
 
-      <Stack pt={4} spacing={6} color="neutral.300">
+      <Stack pt={4} gap={6} color="neutral.300">
         <HStack>
           <Box>
             <Text w="150px" fontWeight="semibold">

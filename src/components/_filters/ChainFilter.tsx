@@ -96,8 +96,7 @@ export const ChainFilter = (props: ChainFilterProps) => {
                   {props.selectedChainIds
                     .slice(0, 5)
                     .map((chainStr: string) => {
-                      const chain =
-                        chainConfigMap[chainStr]
+                      const chain = chainConfigMap[chainStr]
                       return (
                         <Avatar
                           name={chain.displayName}
@@ -165,7 +164,7 @@ export const ChainFilter = (props: ChainFilterProps) => {
                     justifyContent="space-between" // Space between items
                     alignItems="center" // Align items vertically
                     width="100%" // Full width
-                    spacing={3}
+                    gap={3}
                   >
                     <Image
                       src={chain.logoPath}

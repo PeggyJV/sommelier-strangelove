@@ -7,7 +7,7 @@ export const GeoBanner: VFC = () => {
     <HStack
       p={4}
       mb={12}
-      spacing={4}
+      gap={4}
       align="flex-start"
       backgroundColor="red.extraDark"
       border="2px solid"

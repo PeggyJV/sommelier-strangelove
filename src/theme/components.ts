@@ -1,32 +1,30 @@
-import { cssVar, ThemeComponents } from "@chakra-ui/react"
+import { defineRecipe } from "@chakra-ui/react";
 
-const $arrowShadow = cssVar("popper-arrow-shadow-color")
-
-export const components: ThemeComponents = {
-  Button: {
-    baseStyle: {
+export const components = {
+  Button: defineRecipe({
+    base: {
       borderRadius: 64,
       color: "text.body.dark",
     },
-  },
-  Heading: {
-    baseStyle: {
+  }),
+  Heading: defineRecipe({
+    base: {
       color: "text.headlines.light",
     },
-  },
-  Tooltip: {
-    baseStyle: {
+  }),
+  Tooltip: defineRecipe({
+    base: {
       px: 3,
       py: 3,
       borderWidth: 1,
       borderRadius: 8,
       borderColor: "purple.base",
-      [$arrowShadow.variable]: "colors.purple.base",
+      "--popper-arrow-shadow-color": "colors.purple.base",
     },
-  },
-  Input: {
-    defaultProps: {
-      focusBorderColor: "purple.base",
+  }),
+  Input: defineRecipe({
+    base: {
+      "--focus-color": "purple.base",
     },
-  },
+  }),
 }

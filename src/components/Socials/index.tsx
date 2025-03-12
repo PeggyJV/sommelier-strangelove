@@ -6,7 +6,7 @@ import { links } from "./links"
 
 export const Socials: VFC<StackProps> = ({ ...rest }) => {
   return (
-    <HStack spacing={8} {...rest}>
+    <HStack gap={8} {...rest}>
       {links.map((social, i) => {
         const { href, title } = social
         return (

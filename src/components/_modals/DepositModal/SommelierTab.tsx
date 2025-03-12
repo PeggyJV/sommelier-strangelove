@@ -1245,7 +1245,7 @@ export const SommelierTab = ({
   }
   return (
     <>
-      <VStack pb={10} spacing={6} align="stretch">
+      <VStack pb={10} gap={6} align="stretch">
         <VStack align="stretch">
           {/* <CardHeading>Strategy details</CardHeading> */}
           <HStack justify="space-between">
@@ -1257,7 +1257,7 @@ export const SommelierTab = ({
             {isLoading ? (
               <Spinner size="xs" />
             ) : (
-              <HStack spacing={1}>
+              <HStack gap={1}>
                 <Avatar
                   boxSize={7}
                   src={currentAsset?.src}
@@ -1275,7 +1275,7 @@ export const SommelierTab = ({
       <FormProvider {...methods}>
         <VStack
           as="form"
-          spacing={5}
+          gap={5}
           align="stretch"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
@@ -1323,7 +1323,7 @@ export const SommelierTab = ({
               </CardHeading>
               {/*
           <HStack justify="space-between">
-            <HStack spacing={1} align="center">
+            <HStack gap={1} align="center">
               <Tooltip
                 hasArrow
                 label="Percent of price slippage you are willing to accept for a trade. Higher slippage tolerance means your transaction is more likely to succeed, but you may get a worse price."
@@ -1331,7 +1331,7 @@ export const SommelierTab = ({
                 color="neutral.300"
                 textAlign="center"
               >
-                <HStack spacing={1} align="center">
+                <HStack gap={1} align="center">
                   <CardHeading fontSize="small">
                     Slippage Tolerance
                   </CardHeading>
@@ -1420,7 +1420,7 @@ export const SommelierTab = ({
           </HStack>
                   */}
               <HStack justify="space-between">
-                <HStack spacing={1} align="center">
+                <HStack gap={1} align="center">
                   <Tooltip
                     hasArrow
                     label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
@@ -1430,7 +1430,7 @@ export const SommelierTab = ({
                     color="neutral.300"
                     textAlign="center"
                   >
-                    <HStack spacing={1} align="center">
+                    <HStack gap={1} align="center">
                       <CardHeading fontSize="small">
                         Alternative Deposit Asset Fee
                       </CardHeading>
@@ -1475,7 +1475,7 @@ export const SommelierTab = ({
               <HStack
                 justifyContent={"center"}
                 p={3}
-                spacing={4}
+                gap={4}
                 align="flex-start"
                 backgroundColor="purple.dark"
                 border="2px solid"
@@ -1513,7 +1513,7 @@ export const SommelierTab = ({
               </Text>
             ) : (
               <HStack justify="space-between" align="center">
-                <HStack spacing={1} align="center">
+                <HStack gap={1} align="center">
                   <Tooltip
                     hasArrow
                     label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
@@ -1521,7 +1521,7 @@ export const SommelierTab = ({
                     color="neutral.300"
                     textAlign="center"
                   >
-                    <HStack spacing={1} align="center">
+                    <HStack gap={1} align="center">
                       <CardHeading fontSize="small">
                         Estimated Tokens Out
                       </CardHeading>
@@ -1537,7 +1537,7 @@ export const SommelierTab = ({
                     <Spinner size="md" paddingRight={"1em"} />
                   </>
                 ) : (
-                  <VStack spacing={0} align="flex-end">
+                  <VStack gap={0} align="flex-end">
                     <Text
                       pr="2"
                       fontSize="lg"
@@ -1548,7 +1548,7 @@ export const SommelierTab = ({
                       ≈ {ensoSharesOut.toFixed(4).toLocaleString()}
                     </Text>
                     <HStack
-                      spacing={0}
+                      gap={0}
                       fontSize="11px"
                       textAlign="right"
                       pr="2"

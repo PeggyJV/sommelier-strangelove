@@ -82,7 +82,6 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
       }),
     }
   }, [])
-  
 
   return (
     <Layout chainObj={cellarConfig.chain}>
@@ -153,9 +152,9 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
           wrap="wrap"
           rowGap={4}
         >
-          <VStack spacing={6} align="flex-start">
+          <VStack gap={6} align="flex-start">
             <BreadCrumb cellarName={staticCellarData.name} id={id} />
-            <HStack spacing={4}>
+            <HStack gap={4}>
               <Heading fontSize="2.5rem">
                 {staticCellarData.name}{" "}
               </Heading>
@@ -168,7 +167,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
           )}
         </HStack>
 
-        <VStack spacing={4} align="stretch">
+        <VStack gap={4} align="stretch">
           <Heading {...h2Styles} pt={12}>
             Your Portfolio
           </Heading>
@@ -176,7 +175,7 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
         </VStack>
       </Section>
       <Section px={{ base: 0, md: 4 }}>
-        <VStack spacing={6} align="stretch">
+        <VStack gap={6} align="stretch">
           {!notLaunched &&
             isApyChartEnabled(cellarConfig) &&
             !isEstimatedApyEnable(cellarConfig) && (

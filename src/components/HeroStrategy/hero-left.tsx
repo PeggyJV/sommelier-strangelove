@@ -18,7 +18,7 @@ export const HeroStrategyLeft: VFC<HeroStrategyLeftProps> = ({
 }) => {
   const content = strategyPageContentData[id]
   return (
-    <Stack spacing={8}>
+    <Stack gap={8}>
       <Stack>
         <Heading size="4xl" fontWeight="900" as="h1">
           {content.name}
@@ -35,7 +35,7 @@ export const HeroStrategyLeft: VFC<HeroStrategyLeftProps> = ({
         </Text>
       </Stack>
       <Heading size="lg">{content.description}</Heading>
-      <HStack spacing={{ base: 2, md: 8 }} pt={10}>
+      <HStack gap={{ base: 2, md: 8 }} pt={10}>
         <Image
           ml={-6}
           src="/assets/images/asset-management.png"

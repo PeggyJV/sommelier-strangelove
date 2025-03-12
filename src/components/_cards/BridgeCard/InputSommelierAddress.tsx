@@ -68,7 +68,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack gap={2}>
       <HStack justifyContent="space-between">
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
           Somm Address
@@ -76,7 +76,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         <HStack
           as="button"
           type="button"
-          spacing={1}
+          gap={1}
           onClick={() => onAutofillClick()}
         >
           <Text fontWeight="bold" color="white" fontSize="xs">
@@ -123,7 +123,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         />
       </Box>
       <FormErrorMessage>
-        <HStack spacing="6px">
+        <HStack gap="6px">
           <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
             Address is not valid—make sure Somm address is from a

@@ -51,48 +51,50 @@ export const MerklePoints = ({
             cellarConfig.cellar.address,
             address ?? "",
             cellarConfig.chain.id
-          );
+          )
 
           if (response.Response) {
-            const totalBalance = response.Response.total_balance;
+            const totalBalance = response.Response.total_balance
             if (totalBalance && parseFloat(totalBalance) > 0) {
               // Convert and round the balance to two decimal places
-              const roundedBalance = parseFloat(formatUnits(BigInt(totalBalance), 18)).toFixed(2);
-              setMerklePoints(roundedBalance);
-              setMerkleData(response.Response.tx_data);
+              const roundedBalance = parseFloat(
+                formatUnits(BigInt(totalBalance), 18)
+              ).toFixed(2)
+              setMerklePoints(roundedBalance)
+              setMerkleData(response.Response.tx_data)
             } else {
-              setMerklePoints("0.00");
-              setMerkleData(null);
+              setMerklePoints("0.00")
+              setMerkleData(null)
             }
           } else {
-            setMerklePoints("0.00");
-            setMerkleData(null);
+            setMerklePoints("0.00")
+            setMerkleData(null)
           }
         } catch (error) {
-          console.error("Failed to fetch Merkle points data:", error);
+          console.error("Failed to fetch Merkle points data:", error)
           addToast({
             heading: "Error fetching data",
             status: "error",
             body: (
               <Text>
-                Failed to fetch Merkle points data: {(error as Error).message}
+                Failed to fetch Merkle points data:{" "}
+                {(error as Error).message}
               </Text>
             ),
             closeHandler: close,
             duration: null,
-          });
-          setMerklePoints("0.00");
-          setMerkleData(null);
+          })
+          setMerklePoints("0.00")
+          setMerkleData(null)
         }
-      };
+      }
 
-      fetchData();
+      fetchData()
     } else {
-      setMerklePoints(null);
-      setMerkleData(null);
+      setMerklePoints(null)
+      setMerkleData(null)
     }
-  }, [userAddress]);
-
+  }, [userAddress])
 
   const ensureHexPrefix = (value: string) =>
     value?.startsWith("0x") ? value : `0x${value}`
@@ -180,8 +182,8 @@ export const MerklePoints = ({
             closeHandler: close,
             duration: null,
           })
-          setMerklePoints("0.00");
-          setMerkleData(null);
+          setMerklePoints("0.00")
+          setMerkleData(null)
         } else {
           addToast({
             heading: "Transaction Failed",
@@ -193,8 +195,10 @@ export const MerklePoints = ({
         }
       } catch (error) {
         if (error instanceof Error) {
-          if ("code" in error &&
-              (error as any).code === "UNPREDICTABLE_GAS_LIMIT") {
+          if (
+            "code" in error &&
+            (error as any).code === "UNPREDICTABLE_GAS_LIMIT"
+          ) {
             console.error(
               "Claim failed: It has already been claimed or another error occurred",
               error
@@ -216,25 +220,25 @@ export const MerklePoints = ({
             const code = error.cause.code
             if (code === 4001) {
               // @ts-ignore
-              const message = error.cause.message;
+              const message = error.cause.message
               console.error("Claim failed:", error)
 
               addToast({
                 heading: "Claim Failed",
                 status: "error",
-                body: (
-                  <Text>Claim failed: {message}</Text>
-                ),
+                body: <Text>Claim failed: {message}</Text>,
                 closeHandler: close,
                 duration: null,
               })
-            }else {
+            } else {
               console.error("Claim failed:", error)
               addToast({
                 heading: "Claim Failed",
                 status: "error",
                 body: (
-                  <Text>Claim failed: {(error as Error).message}</Text>
+                  <Text>
+                    Claim failed: {(error as Error).message}
+                  </Text>
                 ),
                 closeHandler: close,
                 duration: null,
@@ -269,18 +273,16 @@ export const MerklePoints = ({
   }
 
   return (
-    <VStack spacing={4} alignItems="flex-start">
+    <VStack gap={4} alignItems="flex-start">
       <CardStat
-        label={`Merkle ${cellarConfig.chain.id === "arbitrum" ? "ARB" : "OP"} Rewards`}
+        label={`Merkle ${
+          cellarConfig.chain.id === "arbitrum" ? "ARB" : "OP"
+        } Rewards`}
         tooltip={`Clicking 'Claim Merkle Rewards' button you will receive your collected rewards.`}
         alignSelf="flex-start"
-        spacing={0}
+        gap={0}
       >
-        {
-          userAddress && merklePoints !== null
-            ? merklePoints
-            : "--"
-        }
+        {userAddress && merklePoints !== null ? merklePoints : "--"}
       </CardStat>
 
       <BaseButton
@@ -289,7 +291,8 @@ export const MerklePoints = ({
           !userAddress ||
           merklePoints === null ||
           merklePoints === "0.00" ||
-          (cellarConfig.chain.id === "arbitrum" && chain?.id !== 42161) ||  // Disable if not on Arbitrum chain
+          (cellarConfig.chain.id === "arbitrum" &&
+            chain?.id !== 42161) || // Disable if not on Arbitrum chain
           (cellarConfig.chain.id === "optimism" && chain?.id !== 10) // Disable if not on on Optimism chain
         }
       >

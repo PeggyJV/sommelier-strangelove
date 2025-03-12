@@ -30,7 +30,7 @@ export const CardStat: VFC<CardStatProps> = ({
       flex={1}
       align="flex-start"
       whiteSpace="nowrap"
-      spacing={0}
+      gap={0}
       {...rest}
     >
       <Tooltip
@@ -41,7 +41,7 @@ export const CardStat: VFC<CardStatProps> = ({
         color="neutral.300"
         bg="surface.bg"
       >
-        <HStack spacing={1} align="center">
+        <HStack gap={1} align="center">
           <CardHeading {...labelProps}>{label}</CardHeading>
           {tooltip && (
             <>
@@ -51,7 +51,7 @@ export const CardStat: VFC<CardStatProps> = ({
           )}
         </HStack>
       </Tooltip>
-      <HStack spacing={1} align="center">
+      <HStack gap={1} align="center">
         <Flex
           align="center"
           whiteSpace="break-spaces"

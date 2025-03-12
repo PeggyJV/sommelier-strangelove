@@ -59,7 +59,7 @@ export const PercentageText: VFC<PercentageTextProps> = ({
           ? "red.base"
           : "lime.base"
       }
-      spacing={1}
+      gap={1}
       justifyContent="flex-end"
       {...props}
     >

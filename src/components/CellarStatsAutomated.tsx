@@ -35,14 +35,15 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
   })
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
   const dailyChange = strategyData?.changes?.daily
 
   return (
     <HStack
-      spacing={{ base: 2, md: 8 }}
+      gap={{ base: 2, md: 8 }}
       rowGap={4}
       align="start"
       w={{ base: "full", md: "auto" }}
@@ -56,7 +57,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
       }
       {...rest}
     >
-      <VStack spacing={1} align="center">
+      <VStack gap={1} align="center">
         <Heading size="md">
           {isLoading ? <Spinner /> : tokenPrice || "--"}
         </Heading>
@@ -67,14 +68,14 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
           bg="surface.bg"
           color="neutral.300"
         >
-          <HStack spacing={1} align="center">
+          <HStack gap={1} align="center">
             <CardHeading>Token price</CardHeading>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>
         </Tooltip>
       </VStack>
       {isDailyChangeEnabled(cellarConfig) && (
-        <VStack spacing={1} align="center">
+        <VStack gap={1} align="center">
           <PercentageText data={dailyChange} headingSize="md" arrow />
           <Box
             onMouseEnter={debounce(() => {
@@ -88,7 +89,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
               bg="surface.bg"
               color="neutral.300"
             >
-              <HStack spacing={1} align="center">
+              <HStack gap={1} align="center">
                 <CardHeading>1D Change</CardHeading>
                 <InformationIcon color="neutral.300" boxSize={3} />
               </HStack>

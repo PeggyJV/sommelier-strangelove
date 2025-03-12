@@ -17,7 +17,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -158,14 +158,11 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       )
 
       // @ts-ignore
-      const hash = await cellarSigner?.write.redeem([
-          amtInWei,
-          address,
-          address
-        ],
+      const hash = await cellarSigner?.write.redeem(
+        [amtInWei, address, address],
         {
           gas: gasLimitEstimated,
-          account: address
+          account: address,
         }
       )
 
@@ -303,10 +300,11 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
           <ModalHeader>Transaction not submitted</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <VStack spacing={8}>
+            <VStack gap={8}>
               <Text textAlign={"center"}>
                 You are attempting to withdraw beyond the liquid
-                reserve. Please submit a withdraw request via the withdraw queue.
+                reserve. Please submit a withdraw request via the
+                withdraw queue.
               </Text>
               <WithdrawQueueButton
                 size="md"
@@ -319,13 +317,13 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       </Modal>
       <VStack
         as="form"
-        spacing={8}
+        gap={8}
         align="stretch"
         onSubmit={handleSubmit(onSubmit)}
         hidden={isWithdrawQueueModalOpen}
       >
         <FormControl isInvalid={isError as boolean | undefined}>
-          <Stack spacing={2}>
+          <Stack gap={2}>
             <Text fontWeight="bold" color="neutral.400" fontSize="xs">
               Enter Amount
             </Text>
@@ -348,7 +346,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
                   {lpTokenData?.symbol}
                 </Text>
               </HStack>
-              <VStack spacing={0} align="flex-end">
+              <VStack gap={0} align="flex-end">
                 <Input
                   id="amount"
                   variant="unstyled"
@@ -398,7 +396,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
                     },
                   })}
                 />
-                <HStack spacing={0} fontSize="10px">
+                <HStack gap={0} fontSize="10px">
                   {isBalanceLoading ? (
                     <Spinner size="xs" mr="2" />
                   ) : (

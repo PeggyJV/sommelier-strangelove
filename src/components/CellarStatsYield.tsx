@@ -56,16 +56,16 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
   const extraRewardsApy: ApyData = strategyData?.extraRewardsApy
     ? (strategyData.extraRewardsApy as ApyData)
     : { formatted: undefined }
-  const merkleRewardsApy: number | undefined = strategyData?.merkleRewardsApy
-    ? (strategyData.merkleRewardsApy)
-    : undefined
-
+  const merkleRewardsApy: number | undefined =
+    strategyData?.merkleRewardsApy
+      ? strategyData.merkleRewardsApy
+      : undefined
 
   const baseApySumRewards = strategyData?.baseApySumRewards
 
   return (
     <HStack
-      spacing={{ base: 2, md: 8 }}
+      gap={{ base: 2, md: 8 }}
       rowGap={4}
       w={{ base: "full", md: "auto" }}
       justifyContent={{ base: "space-between", md: "unset" }}
@@ -78,7 +78,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
       }
       {...rest}
     >
-      <VStack spacing={1} align="center">
+      <VStack gap={1} align="center">
         <Text as="span" fontSize="21px" fontWeight="bold">
           {tvm ? `${tvm?.formatted}` : <Spinner />}
         </Text>
@@ -89,14 +89,14 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
           bg="surface.bg"
           color="neutral.300"
         >
-          <HStack spacing={1} align="center">
+          <HStack gap={1} align="center">
             <CardHeading>TVL</CardHeading>
             <InformationIcon color="neutral.300" boxSize={3} />
           </HStack>
         </Tooltip>
       </VStack>
       {baseApySumRewards && (
-        <VStack spacing={1} align="center">
+        <VStack gap={1} align="center">
           <Apy
             apy={
               isStrategyLoading ? (
@@ -156,7 +156,7 @@ export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
               bg="surface.bg"
               color="neutral.300"
             >
-              <HStack spacing={1} align="center">
+              <HStack gap={1} align="center">
                 <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
                 {!!apyLabel(cellarConfig) && (
                   <InformationIcon color="neutral.300" boxSize={3} />

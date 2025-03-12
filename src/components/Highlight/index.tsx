@@ -36,10 +36,10 @@ export const Highlight = ({ id }: HighlightProps) => {
   const cellarData = cellarDataMap[id]
 
   return (
-    <Stack direction="column" mt={52} spacing="80px">
-      <Stack spacing="40px">
+    <Stack direction="column" mt={52} gap="80px">
+      <Stack gap="40px">
         <Heading>Strategy Highlights</Heading>
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
           {content.strategyHighlights.card.map((item, index) => (
             <Box
               key={index}
@@ -58,7 +58,7 @@ export const Highlight = ({ id }: HighlightProps) => {
         </Text>
       </Stack>
       {content.backtestingText && (
-        <Stack maxW="40rem" spacing="40px">
+        <Stack maxW="40rem" gap="40px">
           {isValidURL(content.backtestingText) ? (
             <Box>
               <SecondaryButton

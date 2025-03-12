@@ -9,7 +9,7 @@ interface ChartTooltipItem {
 
 export const ChartTooltipItem = (props: ChartTooltipItem) => {
   return (
-    <HStack justifyContent="space-between" spacing={4}>
+    <HStack justifyContent="space-between" gap={4}>
       <HStack>
         <Box
           boxSize="8px"

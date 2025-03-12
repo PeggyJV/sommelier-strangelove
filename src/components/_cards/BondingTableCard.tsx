@@ -15,7 +15,7 @@ import {
   Th,
   Thead,
   Tooltip,
-  Tr
+  Tr,
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { toEther } from "utils/formatCurrency"
@@ -27,7 +27,13 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { bondingPeriodOptions } from "data/uiConfig"
-import { differenceInDays, differenceInHours, differenceInMinutes, formatDistanceToNowStrict, isFuture } from "date-fns"
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  formatDistanceToNowStrict,
+  isFuture,
+} from "date-fns"
 import { formatDistance } from "utils/formatDistance"
 import { LighterSkeleton } from "components/_skeleton"
 import { useGeo } from "context/geoContext"
@@ -133,7 +139,7 @@ const BondingTableCard = (props: TableProps) => {
       // analytics.track("unbond.started")
       // @ts-ignore
       const hash = await stakerSigner?.write.unbond([id], {
-        account: address
+        account: address,
         // gas used around 63000
         //gasLimit: 100000,
       })
@@ -302,7 +308,7 @@ const BondingTableCard = (props: TableProps) => {
                   fontWeight="normal"
                   textTransform="capitalize"
                 >
-                  <HStack spacing={1} align="center">
+                  <HStack gap={1} align="center">
                     <Text>Bonded LP Tokens</Text>
                     <InformationIcon
                       color="neutral.300"
@@ -324,7 +330,7 @@ const BondingTableCard = (props: TableProps) => {
                   fontWeight="normal"
                   textTransform="capitalize"
                 >
-                  <HStack spacing={1} align="center">
+                  <HStack gap={1} align="center">
                     <Text>Selected Unbonding Period</Text>
                     <InformationIcon
                       color="neutral.300"
@@ -350,7 +356,7 @@ const BondingTableCard = (props: TableProps) => {
                     fontWeight="normal"
                     textTransform="capitalize"
                   >
-                    <HStack spacing={1} align="center">
+                    <HStack gap={1} align="center">
                       <Text>
                         {cellarConfig?.customReward?.tokenSymbol ??
                           "SOMM"}{" "}
@@ -381,7 +387,7 @@ const BondingTableCard = (props: TableProps) => {
                       fontWeight="normal"
                       textTransform="capitalize"
                     >
-                      <HStack spacing={1} align="center">
+                      <HStack gap={1} align="center">
                         <Text>SOMM Rewards</Text>
                         <InformationIcon
                           color="neutral.300"
@@ -398,8 +404,7 @@ const BondingTableCard = (props: TableProps) => {
           <Tbody fontWeight="bold">
             {userStakes?.length &&
               userStakes.map((data, i) => {
-                const { amount, lock, unbondTimestamp } =
-                  data
+                const { amount, lock, unbondTimestamp } = data
                 const lockMap = bondingPeriodOptions(cellarConfig)
                 if (amount?.toString() === "0") return null
                 return (
@@ -422,7 +427,7 @@ const BondingTableCard = (props: TableProps) => {
                   >
                     <Td>#{formatTrancheNumber(i + 1)}</Td>
                     <Td>
-                      <HStack spacing={2}>
+                      <HStack gap={2}>
                         <Image
                           src={cellarConfig.lpToken.imagePath}
                           alt="lp token image"
@@ -449,7 +454,7 @@ const BondingTableCard = (props: TableProps) => {
                         {!cellarConfig.customReward
                           ?.customColumnValue ? (
                           <>
-                            <HStack spacing={2}>
+                            <HStack gap={2}>
                               <Image
                                 src={
                                   cellarConfig?.customReward
@@ -462,9 +467,7 @@ const BondingTableCard = (props: TableProps) => {
                                 {claimAllRewards
                                   ? Number(
                                       toEther(
-                                        claimAllRewards[
-                                          i
-                                        ] || "0",
+                                        claimAllRewards[i] || "0",
                                         6,
                                         false,
                                         2
@@ -507,7 +510,7 @@ const BondingTableCard = (props: TableProps) => {
                       cellarConfig.customReward?.showSommRewards ===
                         undefined ? (
                         <>
-                          <HStack spacing={2}>
+                          <HStack gap={2}>
                             <Image
                               src={sommToken.src}
                               alt="reward token image"
@@ -516,8 +519,7 @@ const BondingTableCard = (props: TableProps) => {
                             <Text textAlign="right">
                               {claimAllRewards
                                 ? toEther(
-                                    claimAllRewards[i] ||
-                                      "0",
+                                    claimAllRewards[i] || "0",
                                     6,
                                     false,
                                     2

@@ -51,12 +51,12 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
   const { data: lpTokenData } = lpToken
 
   const baseAsset = tokenConfig.find(
-    (token) => token.symbol === symbol && cellarData.config.chain.id === token.chain
+    (token) =>
+      token.symbol === symbol &&
+      cellarData.config.chain.id === token.chain
   )!
 
-  const { data: coinGeckoPrice, error } = useCoinGeckoPrice(
-    baseAsset
-  )
+  const { data: coinGeckoPrice, error } = useCoinGeckoPrice(baseAsset)
 
   const router = useRouter()
   return (
@@ -120,7 +120,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             />
           </Box>
           <VStack
-            spacing={0}
+            gap={0}
             h="100%"
             alignSelf="baseline"
             alignItems="flex-start"
@@ -144,7 +144,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
           </VStack>
         </Stack>
         <VStack
-          spacing={0}
+          gap={0}
           h="100%"
           alignSelf="baseline"
           alignItems="flex-end"
@@ -154,7 +154,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             {netValueUsd}
           </Text>
           <Text fontWeight={500} fontSize={12} color="neutral.400">
-            {(netValueInAsset).toFixed(
+            {netValueInAsset.toFixed(
               showNetValueInAsset(cellarData.config) ? 5 : 2
             )}
             {` ${symbol}`}

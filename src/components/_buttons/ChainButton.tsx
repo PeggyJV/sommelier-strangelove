@@ -1,8 +1,5 @@
 import {
   Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
   Button,
   Stack,
   Text,
@@ -67,8 +64,8 @@ const ChainButton = ({
   }
 
   return (
-    <Popover placement="bottom">
-      <PopoverTrigger>
+    <Popover.Root placement="bottom">
+      <Popover.Trigger>
         <Button
           bg="none"
           borderWidth={2}
@@ -98,8 +95,8 @@ const ChainButton = ({
             </HStack>
           }
         />
-      </PopoverTrigger>
-      <PopoverContent
+      </Popover.Trigger>
+      <Popover.Content
         p={2}
         maxW="max-content"
         borderWidth={1}
@@ -113,7 +110,7 @@ const ChainButton = ({
           boxShadow: "unset",
         }}
       >
-        <PopoverBody p={0}>
+        <Popover.Body p={0}>
           <Stack>
             {filteredChainKeys.map((chainKey) => {
               const supportedChain = chainConfigMap[chainKey]
@@ -152,9 +149,9 @@ const ChainButton = ({
               )
             })}
           </Stack>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+        </Popover.Body>
+      </Popover.Content>
+    </Popover.Root>
   )
 }
 

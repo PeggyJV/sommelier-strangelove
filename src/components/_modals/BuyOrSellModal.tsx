@@ -66,7 +66,7 @@ analytics.track("strategy.buy-sell", {
                     backgroundColor: "purple.dark",
                   }}
                 >
-                  <HStack spacing={4}>
+                  <HStack gap={4}>
                     <Image
                       alt="uniswap icon"
                       src={value.logo}
@@ -104,7 +104,7 @@ analytics.track("strategy.buy-sell", {
                   backgroundColor: "purple.dark",
                 }}
               >
-                <HStack spacing={4}>
+                <HStack gap={4}>
                   <Image
                     alt={value.name}
                     src={value.logo}

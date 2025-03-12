@@ -35,7 +35,7 @@ export const UnbondForm = () => {
   return (
     <VStack
       as="form"
-      spacing={8}
+      gap={8}
       align="stretch"
       onSubmit={handleSubmit((data) => setData(data))}
     >

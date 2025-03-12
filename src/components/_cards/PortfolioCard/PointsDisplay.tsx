@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { CardStat } from "components/CardStat" 
-import { fetchEtherfiData } from "utils/fetchEtherfiData" 
+import { CardStat } from "components/CardStat"
+import { fetchEtherfiData } from "utils/fetchEtherfiData"
 
 interface PointsDisplayProps {
   userAddress: string
@@ -21,7 +21,6 @@ export const PointsDisplay: React.FC<PointsDisplayProps> = ({
       try {
         const response = await fetchEtherfiData(userAddress)
         if (response.Response) {
-        
           const formattedEtherfiPoints = Number(
             response.Response.loyaltyPoints
           ).toFixed(2)
@@ -46,7 +45,7 @@ export const PointsDisplay: React.FC<PointsDisplayProps> = ({
         label="Ether.fi Points"
         tooltip="The number of Ether.fi points accumulated"
         alignSelf="flex-start"
-        spacing={0}
+        gap={0}
       >
         {etherfiPoints ?? "Loading..."}
       </CardStat>
@@ -54,7 +53,7 @@ export const PointsDisplay: React.FC<PointsDisplayProps> = ({
         label="EigenLayer Points"
         tooltip="The number of EigenLayer points accumulated"
         alignSelf="flex-start"
-        spacing={0}
+        gap={0}
       >
         {eigenlayerPoints ?? "Loading..."}
       </CardStat>

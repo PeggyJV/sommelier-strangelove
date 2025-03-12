@@ -31,7 +31,7 @@ export const WrongNetworkBanner: VFC<WrongNetworkBannerProps> = ({
     <HStack
       p={4}
       mb={12}
-      spacing={4}
+      gap={4}
       align="flex-start"
       backgroundColor="purple.dark"
       border="2px solid"
@@ -40,7 +40,7 @@ export const WrongNetworkBanner: VFC<WrongNetworkBannerProps> = ({
     >
       <InformationIcon color="yellow" boxSize={6} />
       <HStack justifyContent="center" align="flex-start" width="100%">
-        <VStack align="flex-start" spacing={4}>
+        <VStack align="flex-start" gap={4}>
           <Heading size="md" width="100%">
             <HStack
               align="center"
@@ -71,7 +71,7 @@ export const WrongNetworkBanner: VFC<WrongNetworkBannerProps> = ({
               borderColor="purple.base"
               onClick={async () => {
                 try {
-                  await switchChainAsync?.({chainId: chain.wagmiId})
+                  await switchChainAsync?.({ chainId: chain.wagmiId })
                   // Reload the page to ensure everything is in sync
                   window.location.reload()
                 } catch (e) {

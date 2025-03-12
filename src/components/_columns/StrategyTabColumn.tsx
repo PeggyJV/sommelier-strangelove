@@ -185,7 +185,7 @@ export const StrategyTabColumn = ({
           color="neutral.300"
           bg="surface.bg"
         >
-          <HStack spacing={1}>
+          <HStack gap={1}>
             <Text>Net APY</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>

@@ -6,14 +6,14 @@ import { Section } from "components/_layout/Section"
 export const PageCellars: NextPage = () => {
   return (
     <Layout>
-      <VStack spacing={6} align="flex-start">
+      <VStack gap={6} align="flex-start">
         <Section>
           <Grid
             templateColumns="1fr 1fr"
             gap={6}
             justifyItems="center"
           >
-            <VStack align="flex-start" spacing={4} maxW="70ch">
+            <VStack align="flex-start" gap={4} maxW="70ch">
               <Heading>Cellars</Heading>
               <Text>
                 At vero eos et accusamus et iusto odio dignissimos

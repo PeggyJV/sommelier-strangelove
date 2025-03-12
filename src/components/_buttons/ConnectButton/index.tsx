@@ -7,17 +7,20 @@ import { ConnectWalletPopover } from "./ConnectWalletPopover"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { MobileConnectedPopover } from "./MobileConnectedPopover"
 import ChainButton from "../ChainButton"
-import { chainConfig, chainConfigMap, getChainByViemId } from "src/data/chainConfig"
+import {
+  chainConfig,
+  chainConfigMap,
+  getChainByViemId,
+} from "src/data/chainConfig"
 
-export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
+export interface ConnectButtonProps
+  extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
   children?: React.ReactNode
   overridechainid?: string
 }
 
-const ConnectButton = (
-  props: ConnectButtonProps
-) => {
+const ConnectButton = (props: ConnectButtonProps) => {
   const { isConnected, chain: viemChain } = useAccount()
   const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
   const chain = getChainByViemId(viemChain?.name)
@@ -54,7 +57,7 @@ const ConnectButton = (
 
   return (
     <ClientOnly>
-      <HStack spacing={"1.5em"}>
+      <HStack gap={"1.5em"}>
         <ChainButton
           chain={chainConfigMap[selectedNetwork]}
           onChainChange={handleNetworkChange}

@@ -13,7 +13,7 @@ export const SommelierAddress: React.FC = () => {
   const { data, isConnecting, isConnected } = useAccount()
   const { disconnect } = useDisconnect()
   return (
-    <Stack spacing={2}>
+    <Stack gap={2}>
       <HStack justifyContent="space-between">
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
           Somm Address

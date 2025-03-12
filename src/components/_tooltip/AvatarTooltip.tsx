@@ -1,6 +1,5 @@
-import { Avatar, chakra, HStack, Text } from "@chakra-ui/react"
+import { Box, HStack, Image, Text } from "@chakra-ui/react"
 import { Token } from "data/tokenConfig"
-import { Variants, motion } from "framer-motion"
 import { FC } from "react"
 import { getProtocols } from "utils/getProtocols"
 import { Chain } from "data/chainConfig"
@@ -11,37 +10,13 @@ type AvatarTooltipProps = {
   chains?: Chain[]
 }
 
-export const scale: Variants = {
-  exit: {
-    scale: 0.85,
-    opacity: 0,
-    transition: {
-      opacity: { duration: 0.15, easings: "easeInOut" },
-      scale: { duration: 0.2, easings: "easeInOut" },
-    },
-  },
-  enter: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      opacity: { easings: "easeOut", duration: 0.2 },
-      scale: { duration: 0.2, ease: [0.175, 0.885, 0.4, 1.1] },
-    },
-  },
-}
-
 export const AvatarTooltip: FC<AvatarTooltipProps> = ({
   protocols,
   tradedAssets,
   chains,
 }) => {
-  const MotionDiv = chakra(motion.div)
   return (
-    <MotionDiv
-      initial="exit"
-      animate="enter"
-      exit="exit"
-      variants={scale}
+    <Box
       position="absolute"
       bg="neutral.900"
       py="4"
@@ -53,18 +28,30 @@ export const AvatarTooltip: FC<AvatarTooltipProps> = ({
       gap={3}
       rounded="lg"
       mt={4}
+      opacity={1}
+      css={{
+        animation: "fadeIn 0.2s ease-out",
+      }}
     >
       {chains &&
         chains.map((chain: Chain) => {
           return (
             <HStack key={chain.id}>
-              <Avatar
-                name={chain.displayName}
-                src={chain.logoPath}
-                key={chain.id}
-                background={"transparent"}
-                size="sm"
-              />
+              <Box
+                width="32px"
+                height="32px"
+                borderRadius="full"
+                overflow="hidden"
+                background="transparent"
+              >
+                <Image
+                  src={chain.logoPath}
+                  alt={chain.displayName}
+                  width="100%"
+                  height="100%"
+                  objectFit="cover"
+                />
+              </Box>
               <Text fontSize="12px" fontWeight={600}>
                 {chain.displayName}
               </Text>
@@ -76,13 +63,21 @@ export const AvatarTooltip: FC<AvatarTooltipProps> = ({
           const data = getProtocols(protocol)
           return (
             <HStack key={protocol}>
-              <Avatar
-                name={data.title}
-                src={data.icon}
-                key={data.title}
-                background={"transparent"}
-                size="sm"
-              />
+              <Box
+                width="32px"
+                height="32px"
+                borderRadius="full"
+                overflow="hidden"
+                background="transparent"
+              >
+                <Image
+                  src={data.icon}
+                  alt={data.title}
+                  width="100%"
+                  height="100%"
+                  objectFit="cover"
+                />
+              </Box>
               <Text fontSize="12px" fontWeight={600}>
                 {data.title}
               </Text>
@@ -93,19 +88,27 @@ export const AvatarTooltip: FC<AvatarTooltipProps> = ({
         tradedAssets.map(({ symbol, src }: Token) => {
           return (
             <HStack key={symbol}>
-              <Avatar
-                name={symbol}
-                src={src}
-                key={symbol}
+              <Box
+                width="32px"
+                height="32px"
+                borderRadius="full"
+                overflow="hidden"
                 bgColor="white"
-                size="sm"
-              />
+              >
+                <Image
+                  src={src}
+                  alt={symbol}
+                  width="100%"
+                  height="100%"
+                  objectFit="cover"
+                />
+              </Box>
               <Text fontSize="12px" fontWeight={600}>
                 {symbol}
               </Text>
             </HStack>
           )
         })}
-    </MotionDiv>
+    </Box>
   )
 }

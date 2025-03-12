@@ -16,7 +16,7 @@ import { ModalInput } from "components/_inputs/ModalInput"
 import { useBrandedToast } from "hooks/chakra"
 import { useAccount } from "wagmi"
 import { toEther } from "utils/formatCurrency"
-import { parseUnits } from 'viem'
+import { parseUnits } from "viem"
 import { useHandleTransaction } from "hooks/web3"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
@@ -50,7 +50,10 @@ export const UnstakeForm = ({ onClose }: UnstakeFormProps) => {
 
   const { cellarSigner } = useCreateContracts(cellarConfig)
 
-  const { refetch } = useUserStrategyData(cellarConfig.cellar.address, cellarConfig.chain.id)
+  const { refetch } = useUserStrategyData(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
+  )
   const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData } = lpToken
 
@@ -143,7 +146,7 @@ export const UnstakeForm = ({ onClose }: UnstakeFormProps) => {
   return (
     <VStack
       as="form"
-      spacing={8}
+      gap={8}
       align="stretch"
       onSubmit={handleSubmit(onSubmit)}
     >

@@ -24,7 +24,7 @@ export const StrategyProvider: VFC<StrategyProviderProps> = ({
   const { logo, title, href, tooltip } = strategyProvider || {}
 
   return (
-    <VStack spacing={0} align="flex-start">
+    <VStack gap={0} align="flex-start">
       {tooltip ? (
         <Tooltip
           hasArrow
@@ -34,13 +34,13 @@ export const StrategyProvider: VFC<StrategyProviderProps> = ({
           bg="surface.bg"
           color="neutral.300"
         >
-          <HStack spacing={1} align="center">
+          <HStack gap={1} align="center">
             <CardHeading>Strategy Provider</CardHeading>
             <InformationIcon boxSize="12px" />
           </HStack>
         </Tooltip>
       ) : (
-        <HStack spacing={1} align="center">
+        <HStack gap={1} align="center">
           <CardHeading>Strategy Provider</CardHeading>
           <InformationIcon boxSize="12px" />
         </HStack>

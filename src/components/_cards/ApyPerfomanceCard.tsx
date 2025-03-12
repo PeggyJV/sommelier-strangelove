@@ -104,7 +104,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
         zIndex={1}
         {...props}
       >
-        <VStack spacing={6} align="stretch">
+        <VStack gap={6} align="stretch">
           <Box h="20rem" mb={{ base: 12, sm: "2.2rem", md: 0 }}>
             <HStack
               justify="space-between"
@@ -112,10 +112,10 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
               wrap="wrap"
               rowGap={2}
             >
-              <HStack spacing={8}>
-                <VStack spacing={0} align="flex-start">
+              <HStack gap={8}>
+                <VStack gap={0} align="flex-start">
                   <CardHeading>
-                      {timeline} {apyChartLabel(cellarConfig)}
+                    {timeline} {apyChartLabel(cellarConfig)}
                   </CardHeading>
                   <HStack>
                     <Text fontSize="2.5rem" fontWeight="bold">
@@ -127,11 +127,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
                   </Text>
                 </VStack>
               </HStack>
-              <VStack
-                spacing={0}
-                align="flex-start"
-                paddingTop="-1.5rem"
-              >
+              <VStack gap={0} align="flex-start" paddingTop="-1.5rem">
                 <Text
                   fontSize="1rem"
                   fontWeight="bold"
@@ -140,7 +136,7 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
                   Moving Average
                 </Text>
                 <HStack
-                  spacing={2}
+                  gap={2}
                   justifyContent="center"
                   alignItems="center"
                   width="100%"

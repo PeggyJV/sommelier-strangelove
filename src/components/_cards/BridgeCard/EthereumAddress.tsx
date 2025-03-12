@@ -5,7 +5,7 @@ import { useAccount } from "wagmi"
 export const EthereumAddress: React.FC = () => {
   const { address, isConnecting, isConnected } = useAccount()
   return (
-    <Stack spacing={2}>
+    <Stack gap={2}>
       <Text fontWeight="bold" color="neutral.400" fontSize="xs">
         Ethereum Address
       </Text>

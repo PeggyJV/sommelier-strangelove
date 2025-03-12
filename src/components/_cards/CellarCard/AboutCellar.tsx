@@ -27,7 +27,8 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const cellarConfig = cellarDataMap[data.cellarId].config
 
   const { data: strategyData, isLoading } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
 
   const launchDate = strategyData?.launchDate
@@ -55,8 +56,8 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   return (
     <>
       {!countdown && (
-        <Stack mx={2} spacing={1}>
-          <Stack spacing={1}>
+        <Stack mx={2} gap={1}>
+          <Stack gap={1}>
             {isAPYEnabled(cellarConfig) &&
               (isLoading ? (
                 <>
@@ -138,7 +139,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
           padding="12px 16px"
           background="surface.secondary"
           borderRadius={16}
-          spacing={0}
+          gap={0}
           borderWidth={1}
           borderColor="surface.tertiary"
         >

@@ -1,10 +1,10 @@
-import { ButtonProps, forwardRef, useTab } from "@chakra-ui/react"
+import { ButtonProps, useTabs } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
-import React from "react"
+import { forwardRef } from "react"
 
-export const CustomTab = forwardRef<ButtonProps, "button">(
-  (props, ref) => {
-    const tabProps = useTab({
+export const CustomTab = forwardRef<HTMLButtonElement, ButtonProps>(
+  function CustomTab(props, ref) {
+    const tabProps = useTabs({
       ...props,
       ref: ref,
     })

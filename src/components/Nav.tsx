@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import {
   Container,
   Drawer,
@@ -13,45 +13,46 @@ import {
   Image,
   Stack,
   useDisclosure,
-} from "@chakra-ui/react";
-import ConnectButton from "components/_buttons/ConnectButton";
-import { Link } from "components/Link";
-import { useRouter } from "next/router";
-import { NAV_LINKS } from "utils/navLinks";
-import { LogoTextIcon } from "./_icons";
-import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery";
-import { useScrollDirection } from "hooks/utils/useScrollDirection";
-import { HamburgerIcon } from "components/_icons";
-import { Badge, BadgeStatus } from "./Strategy/Carousel/Badge";
+} from "@chakra-ui/react"
+import ConnectButton from "components/_buttons/ConnectButton"
+import { Link } from "components/Link"
+import { useRouter } from "next/router"
+import { NAV_LINKS } from "utils/navLinks"
+import { LogoTextIcon } from "./_icons"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { useScrollDirection } from "hooks/utils/useScrollDirection"
+import { HamburgerIcon } from "components/_icons"
+import { Badge, BadgeStatus } from "./Strategy/Carousel/Badge"
 
 export const Nav = (props: FlexProps) => {
-  const [scrolled, setScrolled] = useState<boolean>(false);
-  const scrollDirection = useScrollDirection();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const routes = useRouter();
-  const isLarger992 = useBetterMediaQuery("(min-width: 992px)");
+  const [scrolled, setScrolled] = useState<boolean>(false)
+  const scrollDirection = useScrollDirection()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const routes = useRouter()
+  const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
 
   // Listen for scroll event to set state
   useEffect(() => {
     const listener = () => {
-      setScrolled(window.scrollY >= 80);
-    };
+      setScrolled(window.scrollY >= 80)
+    }
 
-    window.addEventListener("scroll", listener);
+    window.addEventListener("scroll", listener)
     return () => {
-      window.removeEventListener("scroll", listener);
-      setScrolled(false);
-    };
-  }, []);
+      window.removeEventListener("scroll", listener)
+      setScrolled(false)
+    }
+  }, [])
 
   const styles: FlexProps | false = scrolled && {
     bg: "rgba(26, 26, 26, 0.5)",
     backdropFilter: "blur(8px)",
     borderBottom: "1px solid",
     borderColor: "purple.dark",
-  };
+  }
   const mobileScrollHide =
-    (!isLarger992 && `nav ${scrollDirection === "down" && "down"}`) || undefined;
+    (!isLarger992 && `nav ${scrollDirection === "down" && "down"}`) ||
+    undefined
 
   return (
     <Flex
@@ -78,38 +79,41 @@ export const Nav = (props: FlexProps) => {
       >
         {/* Desktop Navigation */}
         {isLarger992 && (
-          <HStack spacing={10}>
+          <HStack gap={10}>
             <Link href="/">
               <LogoTextIcon w="9rem" h="2rem" />
             </Link>
             {NAV_LINKS.map((item) => {
-              const isExternalLink = item.link.startsWith("http");
-              let isActive = false;
+              const isExternalLink = item.link.startsWith("http")
+              let isActive = false
 
               if (!isExternalLink) {
-                isActive = item.link === "/" 
-                  ? routes.pathname === "/" 
-                  : routes.pathname.startsWith(item.link);
+                isActive =
+                  item.link === "/"
+                    ? routes.pathname === "/"
+                    : routes.pathname.startsWith(item.link)
               } else {
                 // Define a function with typed parameter to normalize URLs
                 const normalizeUrl = (url: string): string =>
-                  url.replace(/^(https:\/\/)?(www\.)?/, "");
-                
+                  url.replace(/^(https:\/\/)?(www\.)?/, "")
+
                 const externalLinks = [
-                    "https://sommelier.finance/",
-                    "https://sommelier.finance/audits",
-                    "https://sommelier.finance/defi",
-                    "https://sommelier.finance/staking"
-                ];
-                const pathSegment = routes.pathname.split("/")[1];
+                  "https://sommelier.finance/",
+                  "https://sommelier.finance/audits",
+                  "https://sommelier.finance/defi",
+                  "https://sommelier.finance/staking",
+                ]
+                const pathSegment = routes.pathname.split("/")[1]
 
                 // Ensure isActive is always a boolean
-                isActive = externalLinks.some(link => normalizeUrl(link) === normalizeUrl(item.link))
-                    ? false
-                    : pathSegment === "strategies"
-                    ? false // Set to false instead of empty string to maintain boolean type
-                    : pathSegment === item.link.split("/")[1];
-                
+                isActive = externalLinks.some(
+                  (link) =>
+                    normalizeUrl(link) === normalizeUrl(item.link)
+                )
+                  ? false
+                  : pathSegment === "strategies"
+                  ? false // Set to false instead of empty string to maintain boolean type
+                  : pathSegment === item.link.split("/")[1]
               }
 
               return (
@@ -129,7 +133,7 @@ export const Nav = (props: FlexProps) => {
                     <Badge status={BadgeStatus.New} ml={2} />
                   )}
                 </Flex>
-              );
+              )
             })}
           </HStack>
         )}
@@ -175,11 +179,12 @@ export const Nav = (props: FlexProps) => {
             <DrawerBody p={0}>
               <Stack alignItems="flex-end" py="160px" px="24px">
                 {NAV_LINKS.map((item) => {
-                  const isExternalLink = item.link.startsWith("http");
-                  let isActive = !isExternalLink && 
-                    (item.link === "/" 
-                      ? routes.pathname === "/" 
-                      : routes.pathname.startsWith(item.link));
+                  const isExternalLink = item.link.startsWith("http")
+                  let isActive =
+                    !isExternalLink &&
+                    (item.link === "/"
+                      ? routes.pathname === "/"
+                      : routes.pathname.startsWith(item.link))
 
                   return (
                     <Flex key={item.link} align="center">
@@ -198,7 +203,7 @@ export const Nav = (props: FlexProps) => {
                         <Badge status={BadgeStatus.New} ml={2} />
                       )}
                     </Flex>
-                  );
+                  )
                 })}
               </Stack>
             </DrawerBody>
@@ -206,5 +211,5 @@ export const Nav = (props: FlexProps) => {
         </Drawer>
       </Container>
     </Flex>
-  );
-};
+  )
+}

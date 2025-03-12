@@ -65,7 +65,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
 
   // if (!isEthereumConnected || wrongNetwork) {
   //   return (
-  //     <Stack spacing={4} align="center">
+  //     <Stack gap={4} align="center">
   //       <ConnectButton
   //         overridechainid={"ethereum"}
   //         unstyled
@@ -186,7 +186,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Stack spacing={4}>
+        <Stack gap={4}>
           {registrationMessage && (
             <Text color="white">{registrationMessage}</Text>
           )}

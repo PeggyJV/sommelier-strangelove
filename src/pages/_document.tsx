@@ -1,7 +1,5 @@
-import { ColorModeScript } from "@chakra-ui/react"
 import { NextPage } from "next"
 import { Head, Html, Main, NextScript } from "next/document"
-import { config } from "theme/index"
 
 const CustomDocument: NextPage = () => {
   return (
@@ -21,7 +19,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </Head>
 
       <body>
-        <ColorModeScript initialColorMode={config.initialColorMode} />
         <Main />
         <NextScript />
         <noscript

@@ -58,8 +58,7 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
 
         return {
           [symbol]: props.constantAllUniqueAssetsArray.find(
-            (token) =>
-              token.symbol === symbol
+            (token) => token.symbol === symbol
           )!,
         }
       }
@@ -119,7 +118,8 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
 
   // Filter tokens based on search term
   const filteredTokens = props.constantAllUniqueAssetsArray.filter(
-    (token) => token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+    (token) =>
+      token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   // Function to clear search input
@@ -234,7 +234,7 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
         <PopoverBody p={0}>
           <SimpleGrid
             columns={2}
-            spacing={3}
+            gap={3}
             paddingTop=".5em"
             paddingBottom=".5em"
           >
@@ -262,7 +262,7 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
                     justifyContent="space-between"
                     alignItems="center"
                     width="100%"
-                    spacing={3}
+                    gap={3}
                   >
                     <Image
                       src={token.path}
@@ -271,7 +271,6 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
                       border="none"
                       boxSize="2em"
                       borderRadius={"50%"}
-
                     />
                     <Text fontWeight="semibold">{token.symbol}</Text>
                     <Checkbox

@@ -52,7 +52,7 @@ export const InputAmount: React.FC = () => {
 
   const { data, error, isLoading, queryKey } = useBalance({
     address: address,
-    token: getAddress(sommToken.address)
+    token: getAddress(sommToken.address),
   })
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export const InputAmount: React.FC = () => {
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack gap={2}>
       <Text fontWeight="bold" color="neutral.400" fontSize="xs">
         Enter Amount
       </Text>
@@ -119,7 +119,7 @@ export const InputAmount: React.FC = () => {
           />
           <Text fontWeight="semibold">SOMM</Text>
         </HStack>
-        <VStack spacing={0} align="flex-end">
+        <VStack gap={0} align="flex-end">
           <Input
             id="amount"
             variant="unstyled"
@@ -164,7 +164,7 @@ export const InputAmount: React.FC = () => {
               },
             })}
           />
-          <HStack spacing={0} fontSize="10px">
+          <HStack gap={0} fontSize="10px">
             {isBalanceLoading ? (
               <Spinner size="xs" mr="2" />
             ) : (
@@ -175,7 +175,10 @@ export const InputAmount: React.FC = () => {
                     ? (data && toEther(data.value, data.decimals)) ||
                       "--"
                     : (sommBalance &&
-                        formatUnits(BigInt(sommBalance.amount), sommDecimal)) ||
+                        formatUnits(
+                          BigInt(sommBalance.amount),
+                          sommDecimal
+                        )) ||
                       "--"}
                 </Text>
                 <Button
@@ -196,7 +199,7 @@ export const InputAmount: React.FC = () => {
         </VStack>
       </HStack>
       {formState.errors.amount && (
-        <HStack spacing="6px">
+        <HStack gap="6px">
           <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
             {formState.errors.amount.message}
@@ -204,7 +207,7 @@ export const InputAmount: React.FC = () => {
         </HStack>
       )}
       {((toEth && grazError) || (toSomm && error)) && (
-        <HStack spacing="6px">
+        <HStack gap="6px">
           <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
             {(toEth && error?.message) ||

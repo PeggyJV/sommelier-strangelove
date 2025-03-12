@@ -30,7 +30,7 @@ export const CroppedMap: VFC<CroppedMapProps> = ({
 
   return (
     <HStack align="flex-start">
-      <HStack role="group" pt={1} spacing={-1.5} {...rest}>
+      <HStack role="group" pt={1} gap={-1.5} {...rest}>
         {tokensCropped?.map((token, i) => {
           const { src, alt, address, symbol, chain } = token
           return (

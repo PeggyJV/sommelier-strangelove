@@ -203,7 +203,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
     <FormProvider {...methods}>
       <VStack
         as="form"
-        spacing={8}
+        gap={8}
         align="stretch"
         onSubmit={handleSubmit(onSubmit, onError)}
       >
@@ -234,7 +234,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
 
               <Heading size="sm">{lpTokenData?.symbol}</Heading>
             </HStack>
-            <VStack spacing={0} align="flex-end">
+            <VStack gap={0} align="flex-end">
               <FormControl isInvalid={isError as boolean | undefined}>
                 <Input
                   variant="unstyled"
@@ -266,7 +266,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
                   })}
                 />
               </FormControl>
-              <HStack spacing={0} fontSize="10px">
+              <HStack gap={0} fontSize="10px">
                 <Text as="span">
                   Available:{" "}
                   {(lpTokenData &&
@@ -320,7 +320,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
                 fontWeight="normal"
                 textTransform="capitalize"
               >
-                <HStack spacing={1} align="center">
+                <HStack gap={1} align="center">
                   <Text>Unbonding period</Text>
                   <InformationIcon color="neutral.300" boxSize={3} />
                 </HStack>

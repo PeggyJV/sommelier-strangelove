@@ -2,9 +2,6 @@ import {
   Avatar,
   HStack,
   Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
   Spinner,
   Text,
   Stack,
@@ -83,8 +80,8 @@ export const MobileConnectedPopover = () => {
   const isEnsLoading = ensAvatarLoading || ensNameLoading
 
   return (
-    <Popover placement="bottom">
-      <PopoverTrigger>
+    <Popover.Root placement="bottom" >
+      <Popover.Trigger>
         <BaseButton
           bg="surface.primary"
           borderWidth={2}
@@ -115,8 +112,8 @@ export const MobileConnectedPopover = () => {
               : truncateString(ensName)
             : truncateWalletAddress(address, isLarger480 ? 3 : 2)}
         </BaseButton>
-      </PopoverTrigger>
-      <PopoverContent
+      </Popover.Trigger>
+      <Popover.Content
         p={2}
         w="auto"
         zIndex={401}
@@ -131,7 +128,7 @@ export const MobileConnectedPopover = () => {
           boxShadow: "unset",
         }}
       >
-        <PopoverBody p={0}>
+        <Popover.Body p={0}>
           <Stack>
             <Link
               href={`${chain?.blockExplorers?.default.url}/address/${address}`}
@@ -178,8 +175,8 @@ export const MobileConnectedPopover = () => {
               <Text fontWeight="semibold">Disconnect Wallet</Text>
             </HStack>
           </Stack>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+        </Popover.Body>
+      </Popover.Content>
+    </Popover.Root>
   )
 }

@@ -9,7 +9,7 @@ export const InfoBanner: VFC<InfoBannerProps> = ({ text }) => {
   return (
     <HStack
       p={4}
-      spacing={4}
+      gap={4}
       align="center"
       justify="center"
       backgroundColor="turquoise.extraDark"

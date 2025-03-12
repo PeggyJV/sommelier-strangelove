@@ -24,7 +24,7 @@ export const UnstakeModal: VFC<UnstakeModalProps> = ({
 
   return (
     <BaseModal heading="Unstake" isOpen={isOpen} onClose={onClose}>
-      <VStack pb={10} spacing={6} align="stretch">
+      <VStack pb={10} gap={6} align="stretch">
         <VStack align="flex-start">
           <CardHeading>available</CardHeading>
           <Text as="span">

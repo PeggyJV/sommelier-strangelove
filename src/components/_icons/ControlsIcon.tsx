@@ -1,9 +1,10 @@
-import { forwardRef, Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { Icon, IconProps } from "@chakra-ui/react"
+import { forwardRef } from "react"
 
-export const ControlsIcon: VFC<IconProps> = forwardRef(
-  (props, ref) => (
-    <Icon ref={ref} viewBox="0 0 16 16" {...props}>
+export const ControlsIcon = forwardRef<SVGSVGElement, IconProps>(
+  function ControlsIcon(props, ref) {
+    return (
+      <Icon ref={ref} viewBox="0 0 16 16" {...props}>
       <path
         d="M13.7143 10.2857C14.9766 10.2857 16 9.26237 16 8C16 6.73764 14.9766 5.71429 13.7143 5.71429C12.4519 5.71429 11.4286 6.73764 11.4286 8C11.4286 9.26237 12.4519 10.2857 13.7143 10.2857Z"
         fill="currentColor"
@@ -17,5 +18,6 @@ export const ControlsIcon: VFC<IconProps> = forwardRef(
         fill="currentColor"
       />
     </Icon>
-  )
+    )
+  }
 )

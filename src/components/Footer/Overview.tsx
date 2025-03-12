@@ -42,7 +42,7 @@ export const Overview = () => {
         alignItems="center"
         gap={{ base: 8, md: 4 }}
       >
-        <VStack spacing="8px">
+        <VStack gap="8px">
           <Text fontSize="16px" fontWeight="bold">
             TVL
           </Text>
@@ -56,7 +56,7 @@ export const Overview = () => {
             </Text>
           </LighterSkeleton>
         </VStack>
-        <VStack spacing="8px">
+        <VStack gap="8px">
           <Text fontSize="16px" fontWeight="bold">
             Total Vaults
           </Text>

@@ -39,7 +39,7 @@ export const ExchangeTab = ({ title }: { title: string }) => {
                 padding={4}
                 borderRadius="xl"
               >
-                <HStack spacing={4}>
+                <HStack gap={4}>
                   <Image
                     alt={item.name}
                     src={item.logo}

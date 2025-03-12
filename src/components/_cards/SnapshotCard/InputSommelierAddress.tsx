@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState, FC } from "react"
 import {
   Stack,
   Input,
@@ -16,10 +16,12 @@ import { getKeplr, mainnetChains, useAccount } from "graz"
 import { validateSommelierAddress } from "utils/validateSommelierAddress"
 import { useBrandedToast } from "hooks/chakra"
 interface InputSommelierAddressProps extends InputProps {
-  disabled?: boolean; 
+  disabled?: boolean
 }
 
-export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled, ...rest }) => {
+export const InputSommelierAddress: FC<
+  InputSommelierAddressProps
+> = ({ disabled, ...rest }) => {
   const { addToast, closeAll } = useBrandedToast()
   const { register, setValue, getFieldState } = useFormContext()
   const isError = !!getFieldState("somm_address").error
@@ -63,7 +65,7 @@ export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack gap={2}>
       <HStack justifyContent="space-between">
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
           Somm Address
@@ -71,7 +73,7 @@ export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled
         <HStack
           as="button"
           type="button"
-          spacing={1}
+          gap={1}
           onClick={onAutofillClick}
         >
           <Text fontWeight="bold" color="white" fontSize="xs">
@@ -113,15 +115,15 @@ export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled
       </Box>
       {isError && (
         <FormErrorMessage>
-          <HStack spacing="6px">
+          <HStack gap="6px">
             <InformationIcon color="red.base" boxSize="12px" />
             <Text
               fontSize="xs"
               fontWeight="semibold"
               color="red.light"
             >
-              Somm address is not valid—make sure it's from a
-              Cosmos wallet.
+              Somm address is not valid—make sure it's from a Cosmos
+              wallet.
             </Text>
           </HStack>
         </FormErrorMessage>

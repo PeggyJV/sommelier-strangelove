@@ -9,7 +9,7 @@ import {
   MenuList,
   MenuOptionGroup,
   Text,
-  useTheme
+  useTheme,
 } from "@chakra-ui/react"
 import { useRef } from "react"
 import { FaChevronDown } from "react-icons/fa"
@@ -81,7 +81,7 @@ export const OnlyTokenMenu = ({
         >
           <HStack>
             {value ? (
-              <HStack spacing={1}>
+              <HStack gap={1}>
                 <Image boxSize={5} src={value.src} alt={value.alt} />
                 <span>{value.symbol}</span>
               </HStack>

@@ -5,7 +5,7 @@ import { CardDivider } from "./_layout/CardDivider"
 export const CardStatRow: VFC<StackProps> = (props) => {
   return (
     <Stack
-      spacing={3}
+      gap={3}
       justify="space-around"
       divider={<CardDivider />}
       {...props}

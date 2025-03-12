@@ -33,14 +33,14 @@ export const YourPortofolio = () => {
   }
 
   return (
-    <VStack spacing="32px" w="full" mt={16}>
+    <VStack gap="32px" w="full" mt={16}>
       <TransparentCard
         fontFamily="Haffer"
         w="100%"
         paddingX={0}
         pt={3}
       >
-        <VStack alignItems="flex-start" w="100%" spacing={0}>
+        <VStack alignItems="flex-start" w="100%" gap={0}>
           <Text
             marginX="auto"
             fontWeight={600}
@@ -184,16 +184,16 @@ export const YourPortofolio = () => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <HStack spacing={4}>
+              <HStack gap={4}>
                 <LogoIcon color="red.normal" p={0} boxSize="30px" />
-                <HStack spacing={0} h="100%" alignItems="flex-start">
+                <HStack gap={0} h="100%" alignItems="flex-start">
                   <Text as="h6" fontSize={16} fontWeight={700}>
                     SOMM
                   </Text>
                 </HStack>
               </HStack>
               <VStack
-                spacing={0}
+                gap={0}
                 h="100%"
                 alignSelf="baseline"
                 alignItems="flex-end"

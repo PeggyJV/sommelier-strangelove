@@ -57,7 +57,7 @@ export const CellarStatsLabel = ({
       bg="surface.bg"
       color="neutral.300"
     >
-      <HStack spacing={1} align="center">
+      <HStack gap={1} align="center">
         <Label ml={1} color="neutral.300">
           {title}
         </Label>

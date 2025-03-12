@@ -7,7 +7,7 @@ export const RestrictedModal = (
 ) => {
   return (
     <BaseModal heading="Access Restricted" {...props}>
-      <Stack spacing={6}>
+      <Stack gap={6}>
         <Text>
           You may be attempting to use Sommelier in a restricted
           territory or while using a VPN which shows your location as

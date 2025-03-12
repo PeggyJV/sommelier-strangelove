@@ -64,15 +64,15 @@ const WithdrawQueueCard = (props: TableProps) => {
 
   const withdrawQueueContract = (() => {
     if (!publicClient) return
-    return getContract( {
-        address: getAddress(cellarConfig.chain.withdrawQueueAddress),
-        abi: WithdrawQueue,
-        client: {
-          wallet: walletClient,
-          public: publicClient
-        }
-      }
-    )})()
+    return getContract({
+      address: getAddress(cellarConfig.chain.withdrawQueueAddress),
+      abi: WithdrawQueue,
+      client: {
+        wallet: walletClient,
+        public: publicClient,
+      },
+    })
+  })()
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
@@ -86,28 +86,36 @@ const WithdrawQueueCard = (props: TableProps) => {
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
-      if (walletClient && withdrawQueueContract && address && cellarConfig) {
+      if (
+        walletClient &&
+        withdrawQueueContract &&
+        address &&
+        cellarConfig
+      ) {
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
-            cellarConfig.cellar.address as `0x${string}`
-            ]
-          )
+            cellarConfig.cellar.address as `0x${string}`,
+          ])
 
         // Check if it's valid
         const isWithdrawRequestValid =
           await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address as `0x${string}`,
             address,
-            withdrawRequest
-            ]
-          )
+            withdrawRequest,
+          ])
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
 
-        setPendingWithdrawShares(Number(withdrawRequest.sharesToWithdraw))
+        setPendingWithdrawShares(
+          Number(withdrawRequest.sharesToWithdraw)
+        )
         setPendingWithdrawSharePrice(
           Number(
-            formatUnits(withdrawRequest.executionSharePrice, cellarConfig.baseAsset.decimals)
+            formatUnits(
+              withdrawRequest.executionSharePrice,
+              cellarConfig.baseAsset.decimals
+            )
           )
         )
         setPendingWithdrawDeadline(Number(withdrawRequest.deadline))
@@ -152,18 +160,17 @@ const WithdrawQueueCard = (props: TableProps) => {
       )
 
       // @ts-ignore
-      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
-        cellarConfig.cellar.address,
-        withdrawTouple
-        ],
-        {
-          gas: gasLimitEstimated,
-          account: address
-        }
-      )
+      const hash =
+        await withdrawQueueContract?.write.updateWithdrawRequest(
+          [cellarConfig.cellar.address, withdrawTouple],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
 
       const onSuccess = () => {
-         // Can track here if we want
+        // Can track here if we want
       }
 
       const onError = (error: Error) => {
@@ -233,7 +240,7 @@ const WithdrawQueueCard = (props: TableProps) => {
             color="neutral.300"
             textAlign={"center"}
           >
-            <HStack spacing={2} align="center">
+            <HStack gap={2} align="center">
               <Heading fontSize="lg">
                 Pending Withdraws in Queue
               </Heading>
@@ -277,7 +284,7 @@ const WithdrawQueueCard = (props: TableProps) => {
                   fontWeight="normal"
                   textTransform="capitalize"
                 >
-                  <HStack spacing={1} align="center">
+                  <HStack gap={1} align="center">
                     <Text>Target Share Price</Text>
                     <InformationIcon
                       color="neutral.300"
@@ -300,7 +307,7 @@ const WithdrawQueueCard = (props: TableProps) => {
                   fontWeight="normal"
                   textTransform="capitalize"
                 >
-                  <HStack spacing={1} align="center">
+                  <HStack gap={1} align="center">
                     <Text>Remaining Time to Fulfill</Text>
                     <InformationIcon
                       color="neutral.300"
@@ -331,7 +338,7 @@ const WithdrawQueueCard = (props: TableProps) => {
               }}
             >
               <Td>
-                <HStack spacing={2}>
+                <HStack gap={2}>
                   <Image
                     src={cellarConfig.lpToken.imagePath}
                     alt="lp token image"
@@ -346,17 +353,14 @@ const WithdrawQueueCard = (props: TableProps) => {
                 </HStack>
               </Td>
               <Td>
-                <HStack spacing={2}>
+                <HStack gap={2}>
                   <Text textAlign="right">
-                    {(
-                      pendingWithdrawSharePrice
-                    )
-                      .toLocaleString()}
+                    {pendingWithdrawSharePrice.toLocaleString()}
                   </Text>
                 </HStack>
               </Td>
               <Td>
-                <HStack spacing={2}>
+                <HStack gap={2}>
                   <Text textAlign="right">
                     {formatTimeRemaining(pendingWithdrawDeadline)}
                   </Text>
@@ -364,7 +368,7 @@ const WithdrawQueueCard = (props: TableProps) => {
               </Td>
               <Td fontWeight="normal">
                 <Flex justify="flex-end">
-                  <HStack spacing={2}>
+                  <HStack gap={2}>
                     <WithdrawQueueButton
                       size="sm"
                       chain={cellarConfig.chain}

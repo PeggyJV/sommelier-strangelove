@@ -1,17 +1,16 @@
-import { Button, ButtonProps, forwardRef } from "@chakra-ui/react"
+import { Button, ButtonProps } from "@chakra-ui/react"
+import { forwardRef } from "react"
 
-export const SecondaryButton = forwardRef<
-  ButtonProps,
-  "button"
->((props, ref) => {
-  return (
-    <Button
-      ref={ref}
-      variant="outline"
-      color="white"
-      borderWidth={2}
+export const SecondaryButton = forwardRef<HTMLButtonElement, ButtonProps>(
+  function SecondaryButton(props, ref) {
+    return (
+      <Button
+        ref={ref}
+        variant="outline"
+        color="white"
+        borderWidth={2}
       borderColor="purple.base"
-      isDisabled={props.disabled}
+      disabled={props.disabled}
       _hover={{ bg: "purple.dark" }}
       _disabled={{
         color: "neutral.400",

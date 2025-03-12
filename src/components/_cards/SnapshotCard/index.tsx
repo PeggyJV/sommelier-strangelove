@@ -56,7 +56,7 @@ export const SnapshotCard: React.FC = () => {
           width="full"
           zIndex={2} // Ensures it overlays other content if needed
         >
-          <VStack spacing={4}>
+          <VStack gap={4}>
             <InformationIcon color="yellow" boxSize={6} />
             <Heading size="md">
               <Text>Wrong Network</Text>
@@ -100,7 +100,7 @@ export const SnapshotCard: React.FC = () => {
       )}
       <Stack
         direction={{ base: "column", md: "row" }}
-        spacing={10}
+        gap={10}
         align={stackAlignment} // Dynamic alignment based on screen size
         width="full"
       >

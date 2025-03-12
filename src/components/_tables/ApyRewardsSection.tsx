@@ -34,7 +34,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
     cellarId,
     baseApySumRewards,
     extraRewardsApy,
-    merkleRewardsApy
+    merkleRewardsApy,
   } = props
   const cellarConfig = cellarDataMap[cellarId].config
   const now = new Date(Date.now()).getTime()
@@ -61,18 +61,14 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   const LogoComponent = cellarConfig.customReward?.logo ?? LogoIcon
 
   if (!baseApy && !rewardsApy && !extraRewardsApy) {
-    return (
-      <Text>
-        --
-      </Text>
-    )
+    return <Text>--</Text>
   }
 
   // TODO: EXTRACT THIS CODE TO COMPONENTS
   // TODO: Why the conditional logic?
   if (cellarType === CellarType.automatedPortfolio) {
     return (
-      <Stack alignItems="flex-end" spacing={0}>
+      <Stack alignItems="flex-end" gap={0}>
         {rewardsApy && (
           <Tooltip
             label={`Rewards ends in ${formatDistanceToNowStrict(
@@ -89,7 +85,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             boxShadow="xl"
             shouldWrapChildren
           >
-            <HStack spacing={1}>
+            <HStack gap={1}>
               <Text fontWeight={550} fontSize="16px">
                 {rewardsApy}
               </Text>
@@ -119,7 +115,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
   } else {
     return (
       <Stack alignItems="flex-end">
-        <HStack spacing={0} alignContent="center" gap={1}>
+        <HStack gap={0} alignContent="center" gap={1}>
           <Tooltip
             label={
               <>
@@ -147,9 +143,10 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                     </Text>
                     <Text>
                       {merkleRewardsApy
-                        ? `Merkle Rewards APY ${merkleRewardsApy.toFixed(2)}%`
-                        : ''
-                      }
+                        ? `Merkle Rewards APY ${merkleRewardsApy.toFixed(
+                            2
+                          )}%`
+                        : ""}
                     </Text>
                   </>
                 ) : (
@@ -202,7 +199,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               boxShadow="xl"
               shouldWrapChildren
             >
-              <HStack spacing={1}>
+              <HStack gap={1}>
                 <CircularProgress
                   value={percentage}
                   color="white"
@@ -254,7 +251,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
                 boxShadow="xl"
                 shouldWrapChildren
               >
-                <HStack spacing={1}>
+                <HStack gap={1}>
                   <CircularProgress
                     value={percentage}
                     color="white"
@@ -293,7 +290,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
               boxShadow="xl"
               shouldWrapChildren
             >
-              <HStack spacing={1}>
+              <HStack gap={1}>
                 <CircularProgress
                   value={percentage}
                   color="white"

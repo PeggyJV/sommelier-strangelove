@@ -14,7 +14,7 @@ export const HeroStrategy: VFC<HeroProps> = ({ id }) => {
         base: "column",
         md: "row",
       }}
-      spacing={12}
+      gap={12}
     >
       <HeroStrategyLeft id={id} />
       <HeroStrategyRight id={id} />

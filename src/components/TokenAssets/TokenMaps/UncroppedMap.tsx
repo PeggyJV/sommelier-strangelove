@@ -18,7 +18,7 @@ export const UncroppedMap: VFC<UncroppedMapProps> = ({
 
   return (
     <HStack>
-      <HStack role="group" pt={1} spacing={-1.5} {...rest}>
+      <HStack role="group" pt={1} gap={-1.5} {...rest}>
         {tokens.map((token, i) => {
           const { src, alt, address, symbol, chain } = token
           return (
