@@ -57,14 +57,16 @@ export const getAllContracts = async (
         }
       })
 
-    const cellarRouterSigner = getContract({
-      address: cellar.config.cellarRouter.address as `0x${string}`,
-      abi: cellar.config.cellarRouter.abi,
-      client: {
-        public: provider,
-        wallet: signer || undefined
-      }
-    })
+    const cellarRouterSigner =
+      cellar.config.cellarRouter &&
+      getContract({
+        address: cellar.config.cellarRouter.address as `0x${string}`,
+        abi: cellar.config.cellarRouter.abi,
+        client: {
+          public: provider,
+          wallet: signer || undefined,
+        },
+      })
 
     const contract = {
       cellarContract,

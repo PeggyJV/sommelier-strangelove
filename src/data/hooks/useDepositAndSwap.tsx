@@ -17,7 +17,7 @@ export const useDepositAndSwap = (config: ConfigProps) => {
     try {
       if (!address) throw new Error("address is undefined")
       if (
-        config.cellarRouter.key ===
+        config.cellarRouter?.key ===
         CellarRouterKey.CELLAR_ROUTER_V0815
       ) {
         return await depositAndSwap_V0815({
@@ -28,7 +28,7 @@ export const useDepositAndSwap = (config: ConfigProps) => {
         })
       }
       if (
-        config.cellarRouter.key ===
+        config.cellarRouter?.key ===
         CellarRouterKey.CELLAR_ROUTER_V0816
       ) {
         return await depositAndSwap_V0816({
