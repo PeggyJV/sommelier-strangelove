@@ -6,10 +6,10 @@ import { CellarNameKey, CellarRouterKey, CellarKey } from "data/types";
 import { WstethIcon } from "components/_icons";
 
 export const alphaSteth: CellarData = {
-  name: "Alpha stETH",
+  name: "Alpha STETH",
   slug: config.CONTRACT.ALPHA_STETH.SLUG,
   startingShareValue: "998206828469480700",
-  tradedAssets: ["WETH", "stETH", "wstETH"],
+  tradedAssets: ["WETH", "stETH", "wstETH", "ETH"],
   launchDate: new Date(Date.UTC(2023, 9, 16, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
@@ -85,20 +85,20 @@ export const alphaSteth: CellarData = {
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [],
-    customReward: {
-      showAPY: true,
-      tokenSymbol: "wstETH",
-      tokenDisplayName: "wstETH",
-      tokenAddress: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
-      imagePath: "/assets/icons/wsteth-logo.jpeg",
-      showBondingRewards: false,
-      showClaim: false,
-      logo: WstethIcon,
-      logoSize: "17px",
-      stakingDurationOverride: new Date(
-        Date.UTC(2023, 10, 15, 14, 0, 0, 0)
-      ),
-      showSommRewards: false,
+    // customReward: {
+    //   showAPY: true,
+    //   tokenSymbol: "wstETH",
+    //   tokenDisplayName: "wstETH",
+    //   tokenAddress: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+    //   imagePath: "/assets/icons/wsteth-logo.jpeg",
+    //   showBondingRewards: false,
+    //   showClaim: false,
+    //   logo: WstethIcon,
+    //   logoSize: "17px",
+    //   stakingDurationOverride: new Date(
+    //     Date.UTC(2023, 10, 15, 14, 0, 0, 0)
+    //   ),
+      // showSommRewards: false,
     },
   },
   faq: [
