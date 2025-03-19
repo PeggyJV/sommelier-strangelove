@@ -12,7 +12,7 @@ import {
   UseDisclosureProps,
 } from "@chakra-ui/react"
 
-import { useEffect, useMemo, useState, type JSX } from "react";
+import { useEffect, useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
@@ -24,13 +24,7 @@ import {
 } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
-import {
-  useAccount,
-  useBalance,
-  useBlockNumber,
-  usePublicClient,
-  useWalletClient,
-} from "wagmi"
+import { useAccount, useBalance, useBlockNumber, usePublicClient, useWalletClient } from "wagmi"
 import { erc20Abi, getContract, parseUnits } from "viem"
 import { getAddress } from "viem"
 
@@ -146,7 +140,7 @@ export const SommelierTab = ({
 
   const importToken = useImportToken({
     onSuccess: (data) => {
-      const tokenData = data as unknown as { symbol: string }
+      const tokenData = data as unknown as { symbol: string};
       addToast({
         heading: "Import Token",
         status: "success",
@@ -208,7 +202,7 @@ export const SommelierTab = ({
     setSelectedToken(value)
   }
 
-  const { cellarSigner } = useCreateContracts(cellarConfig)
+  const { cellarSigner, cellarContract } = useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
     cellarConfig.cellar.address,
@@ -221,6 +215,7 @@ export const SommelierTab = ({
     skip: true,
   })
 
+
   const { data: blockNumber } = useBlockNumber({ watch: true })
 
   const { data: selectedTokenBalance, queryKey } = useBalance({
@@ -229,7 +224,7 @@ export const SommelierTab = ({
       selectedToken?.address ||
         "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
     ), //WETH Address
-    unit: "wei",
+    unit: "wei"
   })
 
   useEffect(() => {
@@ -237,15 +232,14 @@ export const SommelierTab = ({
   }, [blockNumber, queryClient])
 
   const erc20Contract =
-    selectedToken?.address &&
-    publicClient &&
+    selectedToken?.address && publicClient &&
     getContract({
       address: getAddress(selectedToken?.address),
       abi: erc20Abi,
       client: {
         wallet: walletClient,
-        public: publicClient,
-      },
+        public: publicClient
+      }
     })
 
   // New enso route config
@@ -290,17 +284,14 @@ export const SommelierTab = ({
     }
   }, [ensoResponse])
 
-  const ensoRouterContract =
-    publicClient &&
-    getContract({
-      address: getAddress(
-        contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS
-      ),
+
+  const ensoRouterContract = publicClient && getContract({
+      address: getAddress(contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS),
       abi: contractConfig.CONTRACT.ENSO_ROUTER.ABI,
       client: {
         wallet: walletClient,
-        public: publicClient,
-      },
+        public: publicClient
+      }
     })
 
   const isActiveAsset =
@@ -314,10 +305,10 @@ export const SommelierTab = ({
       return 0
     }
 
-    const [isSupported, holdingPosition, depositFee] =
-      (await cellarSigner?.read.alternativeAssetData([
-        assetAddress,
-      ])) as [boolean, number, number]
+    const [isSupported, holdingPosition, depositFee] = await cellarSigner?.read.alternativeAssetData([
+      assetAddress
+      ]
+    ) as [boolean, number, number]
 
     if (!isSupported) {
       throw new Error("Asset is not supported")
@@ -360,14 +351,34 @@ export const SommelierTab = ({
     address?: string,
     assetAddress?: string
   ) => {
+    if(cellarConfig.boringVault) {
+      // @ts-ignore
+      const minimumMint = await cellarContract?.read.previewDeposit([
+        assetAddress,
+        amtInWei,
+        cellarConfig.boringVault?.address,
+        cellarConfig.accountant?.address,
+      ])
+
+      // @ts-ignore
+      return cellarSigner?.write.deposit(
+        [assetAddress, amtInWei, minimumMint],
+        {
+          account: address,
+        }
+      )
+    }
     if (
       assetAddress !== undefined &&
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
     ) {
       // @ts-ignore
-      return cellarSigner?.write.multiAssetDeposit(
-        [assetAddress, amtInWei, address],
+      return cellarSigner?.write.multiAssetDeposit([
+        assetAddress,
+        amtInWei,
+        address
+        ],
         { account: address }
       )
     } else {
@@ -375,6 +386,7 @@ export const SommelierTab = ({
         cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
         cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
       ) {
+
         const gasLimitEstimated = await estimateGasLimitWithRetry(
           cellarSigner?.estimateGas.deposit,
           cellarSigner?.simulate.deposit,
@@ -383,15 +395,16 @@ export const SommelierTab = ({
           address
         )
         // @ts-ignore
-        return cellarSigner?.write.deposit([amtInWei, address], {
-          gas: gasLimitEstimated,
-          account: address,
-        })
+        return cellarSigner?.write.deposit(
+          [amtInWei, address],
+          { gas: gasLimitEstimated, account: address }
+        )
       }
       // @ts-ignore
-      return cellarSigner?.write.deposit([amtInWei, address], {
-        account: address,
-      })
+      return cellarSigner?.write.deposit(
+        [amtInWei, address],
+        { account: address }
+      )
     }
   }
 
@@ -419,10 +432,9 @@ export const SommelierTab = ({
 
     // check if approval exists
     // @ts-ignore
-    const allowance = await erc20Contract.read.allowance(
-      [
-        getAddress(address ?? ""),
-        getAddress(cellarConfig.cellar.address),
+    const allowance = await erc20Contract.read.allowance([
+      getAddress(address ?? ''),
+      getAddress(cellarConfig.boringVault?.address || cellarConfig.cellar.address)
       ],
       { account: address }
     )
@@ -441,7 +453,7 @@ export const SommelierTab = ({
       return
     }
 
-    let approval = !needsApproval
+    let approval = !needsApproval;
     if (needsApproval) {
       /* analytics.track("deposit.approval-required", {
         ...baseAnalytics,
@@ -451,8 +463,10 @@ export const SommelierTab = ({
 
       try {
         // @ts-ignore
-        const hash = await erc20Contract.write.approve(
-          [cellarConfig.cellar.address, amtInWei],
+        const hash = await erc20Contract.write.approve([
+            cellarConfig.boringVault?.address || cellarConfig.cellar.address,
+            amtInWei
+          ],
           { account: address }
         )
         addToast({
@@ -471,7 +485,7 @@ export const SommelierTab = ({
           //   stable: tokenSymbol,
           //   value: depositAmount,
           // })
-          approval = true
+          approval = true;
 
           update({
             heading: "ERC20 Approval",
@@ -511,174 +525,174 @@ export const SommelierTab = ({
       }
     }
     if (approval) {
-      try {
-        // If selected token is cellar's current asset, it is cheaper to deposit into the cellar
-        // directly rather than through the router. Should only use router when swapping into the
-        // cellar's current asset.
+    try {
+      // If selected token is cellar's current asset, it is cheaper to deposit into the cellar
+      // directly rather than through the router. Should only use router when swapping into the
+      // cellar's current asset.
 
-        const hash =
-          isActiveAsset ||
-          cellarData.depositTokens.list.includes(tokenSymbol)
-            ? await deposit(
-                amtInWei,
-                address,
-                data?.selectedToken?.address
-              )
-            : await walletClient!.sendTransaction({
-                account: address,
-                to: ensoRouterContract?.address,
-                value: ensoResponse.tx.data,
-              })
+      const hash =
+        isActiveAsset ||
+        cellarData.depositTokens.list.includes(tokenSymbol)
+          ? await deposit(
+              amtInWei,
+              address,
+              data?.selectedToken?.address
+            )
+          : await walletClient!.sendTransaction({
+              account: address,
+              to: ensoRouterContract?.address,
+              value: ensoResponse.tx.data,
+            })
 
-        if (!hash) throw new Error("response is undefined")
-        addToast({
+      if (!hash) throw new Error("response is undefined")
+      addToast({
+        heading: cellarName + " Cellar Deposit",
+        status: "default",
+        body: <Text>Depositing {selectedToken?.symbol}</Text>,
+        isLoading: true,
+        closeHandler: close,
+        duration: null,
+      })
+      const waitForDeposit = wait({
+        confirmations: 1,
+        hash: hash,
+      })
+
+      const depositResult = await waitForDeposit
+
+      refetch()
+
+      if (depositResult?.data?.transactionHash) {
+        insertEvent({
+          event: "deposit.succeeded",
+          address: address ?? "",
+          cellar: cellarConfig.cellar.address,
+          transaction_hash: depositResult.data.transactionHash,
+        })
+        analytics.track("deposit.succeeded", {
+          ...baseAnalytics,
+          stable: tokenSymbol,
+          value: depositAmount,
+          transaction_hash: depositResult.data.transactionHash,
+        })
+
+        update({
           heading: cellarName + " Cellar Deposit",
-          status: "default",
-          body: <Text>Depositing {selectedToken?.symbol}</Text>,
-          isLoading: true,
-          closeHandler: close,
-          duration: null,
-        })
-        const waitForDeposit = wait({
-          confirmations: 1,
-          hash: hash,
-        })
-
-        const depositResult = await waitForDeposit
-
-        refetch()
-
-        if (depositResult?.data?.transactionHash) {
-          insertEvent({
-            event: "deposit.succeeded",
-            address: address ?? "",
-            cellar: cellarConfig.cellar.address,
-            transaction_hash: depositResult.data.transactionHash,
-          })
-          analytics.track("deposit.succeeded", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-            transaction_hash: depositResult.data.transactionHash,
-          })
-
-          update({
-            heading: cellarName + " Cellar Deposit",
-            body: (
-              <>
-                <Text>Deposit Success</Text>
-                <Link
-                  display="flex"
-                  alignItems="center"
-                  href={`${cellarConfig.chain.blockExplorer.url}/tx/${depositResult?.data?.transactionHash}`}
-                  isExternal
-                  textDecor="underline"
-                >
-                  <Text as="span">{`View on ${cellarConfig.chain.blockExplorer.name}`}</Text>
-                  <ExternalLinkIcon ml={2} />
-                </Link>
-                <Text
-                  onClick={() => {
-                    importToken.mutate({
-                      address: cellarAddress,
-                      chain: cellarConfig.chain.id,
-                    })
-                  }}
-                  textDecor="underline"
-                  as="button"
-                >
-                  Import tokens to wallet
-                </Text>
-                {waitTime(cellarConfig) !== null && (
-                  <Text textAlign="center">
-                    Please wait {waitTime(cellarConfig)} after the
-                    deposit to Withdraw or Bond
-                  </Text>
-                )}
-              </>
-            ),
-            status: "success",
-            closeHandler: closeAll,
-            duration: null, // toast won't close until user presses close button
-          })
-        }
-
-        const isPopUpEnable =
-          cellarData.popUpTitle && cellarData.popUpDescription
-
-        if (!notifyModal?.isOpen) {
-          analytics.track(`${currentStrategies}-notify.modal-opened`)
-        }
-        if (isPopUpEnable) {
-          props.onClose()
-          //@ts-ignore
-          notifyModal?.onOpen()
-        }
-
-        if (depositResult?.error) {
-          analytics.track("deposit.failed", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-          })
-
-          update({
-            heading: cellarName + " Cellar Deposit",
-            body: <Text>Deposit Failed</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
-        }
-      } catch (e) {
-        const error = e as Error
-        if (error.message === "GAS_LIMIT_ERROR") {
-          analytics.track("deposit.failed", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-            message: "GAS_LIMIT_ERROR",
-          })
-          addToast({
-            heading: "Transaction not submitted",
-            body: (
-              <Text>
-                Your transaction has failed, if it does not work after
-                waiting some time and retrying please send a message
-                in our{" "}
-                {
-                  <Link
-                    href="https://discord.com/channels/814266181267619840/814279703622844426"
-                    isExternal
-                    textDecoration="underline"
-                  >
-                    Discord Support channel
-                  </Link>
-                }{" "}
-                tagging a member of the front end team.
+          body: (
+            <>
+              <Text>Deposit Success</Text>
+              <Link
+                display="flex"
+                alignItems="center"
+                href={`${cellarConfig.chain.blockExplorer.url}/tx/${depositResult?.data?.transactionHash}`}
+                isExternal
+                textDecor="underline"
+              >
+                <Text as="span">{`View on ${cellarConfig.chain.blockExplorer.name}`}</Text>
+                <ExternalLinkIcon ml={2} />
+              </Link>
+              <Text
+                onClick={() => {
+                  importToken.mutate({
+                    address: cellarAddress,
+                    chain: cellarConfig.chain.id,
+                  })
+                }}
+                textDecor="underline"
+                as="button"
+              >
+                Import tokens to wallet
               </Text>
-            ),
-            status: "info",
-            closeHandler: closeAll,
-          })
-        } else {
-          console.error(error.message)
-          analytics.track("deposit.rejected", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-          })
-
-          addToast({
-            heading: cellarName + " Deposit",
-            body: <Text>Deposit Cancelled</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
-        }
-
-        console.warn("failed to deposit", e)
+              {waitTime(cellarConfig) !== null && (
+                <Text textAlign="center">
+                  Please wait {waitTime(cellarConfig)} after the
+                  deposit to Withdraw or Bond
+                </Text>
+              )}
+            </>
+          ),
+          status: "success",
+          closeHandler: closeAll,
+          duration: null, // toast won't close until user presses close button
+        })
       }
+
+      const isPopUpEnable =
+        cellarData.popUpTitle && cellarData.popUpDescription
+
+      if (!notifyModal?.isOpen) {
+        analytics.track(`${currentStrategies}-notify.modal-opened`)
+      }
+      if (isPopUpEnable) {
+        props.onClose()
+        //@ts-ignore
+        notifyModal?.onOpen()
+      }
+
+      if (depositResult?.error) {
+        analytics.track("deposit.failed", {
+          ...baseAnalytics,
+          stable: tokenSymbol,
+          value: depositAmount,
+        })
+
+        update({
+          heading: cellarName + " Cellar Deposit",
+          body: <Text>Deposit Failed</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+      }
+    } catch (e) {
+      const error = e as Error
+      if (error.message === "GAS_LIMIT_ERROR") {
+        analytics.track("deposit.failed", {
+          ...baseAnalytics,
+          stable: tokenSymbol,
+          value: depositAmount,
+          message: "GAS_LIMIT_ERROR",
+        })
+        addToast({
+          heading: "Transaction not submitted",
+          body: (
+            <Text>
+              Your transaction has failed, if it does not work after
+              waiting some time and retrying please send a message in
+              our{" "}
+              {
+                <Link
+                  href="https://discord.com/channels/814266181267619840/814279703622844426"
+                  isExternal
+                  textDecoration="underline"
+                >
+                  Discord Support channel
+                </Link>
+              }{" "}
+              tagging a member of the front end team.
+            </Text>
+          ),
+          status: "info",
+          closeHandler: closeAll,
+        })
+      } else {
+        console.error(error.message)
+        analytics.track("deposit.rejected", {
+          ...baseAnalytics,
+          stable: tokenSymbol,
+          value: depositAmount,
+        })
+
+        addToast({
+          heading: cellarName + " Deposit",
+          body: <Text>Deposit Cancelled</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+      }
+
+      console.warn("failed to deposit", e)
     }
+  }
   }
 
   const onError = async (errors: any, e: any) => {
@@ -775,11 +789,12 @@ export const SommelierTab = ({
     fetchBaseAssetPrice()
   }, [cellarConfig])
 
+
   const strategyMessages: Record<string, () => JSX.Element> = {
     "Real Yield ETH": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -797,18 +812,15 @@ export const SommelierTab = ({
     "real yield eth arb": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
           <br />
-          <br />
-          - 1 steth=1 weth is not hard coded in Aave on Arbitrum
-          unlike Ethereum mainnet. There is a depeg risk for steth.
-          <br /> - Borrow rates on Aave have been far more volatile
-          than borrow rates on Ethereum on Ethereum .
-          <br /> - This vault uses leverage, which means there is
-          liquidation risk.
+          <br />     
+          - 1 steth=1 weth is not hard coded in Aave on Arbitrum unlike Ethereum mainnet. There is a depeg risk for steth.
+          <br /> - Borrow rates on Aave have been far more volatile than borrow rates on Ethereum on Ethereum . 
+          <br /> - This vault uses leverage, which means there is liquidation risk.
           <br />
           <br /> - This vault does liquidity provision which can
           result in impermanent loss.
@@ -818,7 +830,7 @@ export const SommelierTab = ({
     "real yield eth opt": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -836,7 +848,7 @@ export const SommelierTab = ({
     "real yield eth scroll": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -854,7 +866,7 @@ export const SommelierTab = ({
     "Real Yield USD": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -871,7 +883,7 @@ export const SommelierTab = ({
     "real yield usd arb": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -897,7 +909,7 @@ export const SommelierTab = ({
         <br />
         <br />
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -915,7 +927,7 @@ export const SommelierTab = ({
     "ETH Trend Growth": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -929,7 +941,7 @@ export const SommelierTab = ({
     "Turbo GHO": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -946,7 +958,7 @@ export const SommelierTab = ({
     "Turbo SWETH": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -969,7 +981,7 @@ export const SommelierTab = ({
     Fraximal: () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -982,7 +994,7 @@ export const SommelierTab = ({
     "Real Yield LINK": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -997,7 +1009,7 @@ export const SommelierTab = ({
     "ETH BTC Trend": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -1011,7 +1023,7 @@ export const SommelierTab = ({
     "ETH BTC Momentum": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -1025,7 +1037,7 @@ export const SommelierTab = ({
     "DeFi Stars": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -1039,7 +1051,7 @@ export const SommelierTab = ({
     "Real Yield ENS": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -1054,7 +1066,7 @@ export const SommelierTab = ({
     "Real Yield UNI": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -1069,7 +1081,7 @@ export const SommelierTab = ({
     "Real Yield SNX": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -1084,7 +1096,7 @@ export const SommelierTab = ({
     "Real Yield 1Inch": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -1099,7 +1111,7 @@ export const SommelierTab = ({
     "Morpho ETH": () => (
       <>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -1118,11 +1130,11 @@ export const SommelierTab = ({
             isExternal
             textDecor="underline"
           >
-            Somm bridge
+            Sommelier bridge
           </Link>
         </Text>
         <Text as="span">
-          All Somm vaults contain smart contract risk and varying
+          All Sommelier vaults contain smart contract risk and varying
           degrees of economic risk. Please take note of the following
           risks; however, this list is not exhaustive, and there may
           be additional risks:
@@ -1134,7 +1146,7 @@ export const SommelierTab = ({
     ),
     "Turbo eETH": () => (
       <Text as="span">
-        All Somm vaults contain smart contract risk and varying
+        All Sommelier vaults contain smart contract risk and varying
         degrees of economic risk. Please take note of the following
         risks; however, this list is not exhaustive, and there may be
         additional risks:
@@ -1145,7 +1157,7 @@ export const SommelierTab = ({
     ),
     "Turbo STETH": () => (
       <Text as="span">
-        All Somm vaults contain smart contract risk and varying
+        All Sommelier vaults contain smart contract risk and varying
         degrees of economic risk. Please take note of the following
         risks; however, this list is not exhaustive, and there may be
         additional risks:
@@ -1156,7 +1168,7 @@ export const SommelierTab = ({
     ),
     turboSTETHstETHDeposit: () => (
       <Text as="span">
-        All Somm vaults contain smart contract risk and varying
+        All Sommelier vaults contain smart contract risk and varying
         degrees of economic risk. Please take note of the following
         risks; however, this list is not exhaustive, and there may be
         additional risks:
@@ -1167,7 +1179,7 @@ export const SommelierTab = ({
     ),
     "Turbo divETH": () => (
       <Text as="span">
-        All Somm vaults contain smart contract risk and varying
+        All Sommelier vaults contain smart contract risk and varying
         degrees of economic risk. Please take note of the following
         risks; however, this list is not exhaustive, and there may be
         additional risks:
@@ -1183,7 +1195,7 @@ export const SommelierTab = ({
     ),
     "Turbo ETHx": () => (
       <Text as="span">
-        All Somm vaults contain smart contract risk and varying
+        All Sommelier vaults contain smart contract risk and varying
         degrees of economic risk. Please take note of the following
         risks; however, this list is not exhaustive, and there may be
         additional risks:
@@ -1199,7 +1211,7 @@ export const SommelierTab = ({
     ),
     "Turbo eETHV2": () => (
       <Text as="span">
-        All Somm vaults contain smart contract risk and varying
+        All Sommelier vaults contain smart contract risk and varying
         degrees of economic risk. Please take note of the following
         risks; however, this list is not exhaustive, and there may be
         additional risks:
@@ -1214,7 +1226,7 @@ export const SommelierTab = ({
     ),
     "Turbo rsETH": () => (
       <Text as="span">
-        All Somm vaults contain smart contract risk and varying
+        All Sommelier vaults contain smart contract risk and varying
         degrees of economic risk. Please take note of the following
         risks; however, this list is not exhaustive, and there may be
         additional risks:
@@ -1229,7 +1241,7 @@ export const SommelierTab = ({
     ),
     "Turbo ezETH": () => (
       <Text as="span">
-        All Somm vaults contain smart contract risk and varying
+        All Sommelier vaults contain smart contract risk and varying
         degrees of economic risk. Please take note of the following
         risks; however, this list is not exhaustive, and there may be
         additional risks:

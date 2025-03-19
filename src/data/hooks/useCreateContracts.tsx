@@ -23,6 +23,17 @@ export const useCreateContracts = (config: ConfigProps) => {
 
   const cellarSigner = (() => {
     if (!publicClient) return
+    if(config.teller) {
+      // Using Teller contracts as signers for BoringVault
+      return getContract( {
+        address: config.teller?.address as `0x${string}`,
+        abi: config.teller?.abi,
+        client: {
+          wallet: walletClient,
+          public: publicClient
+        }
+      })
+    }
     return getContract( {
         address: config.cellar.address as `0x${string}`,
         abi: config.cellar.abi,
