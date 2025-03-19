@@ -1,4 +1,4 @@
-const AccountantWithRateProviders = [
+export const AccountantWithRateProviders = [
   {
     inputs: [
       { internalType: "address", name: "_owner", type: "address" },
