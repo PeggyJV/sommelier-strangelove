@@ -23,7 +23,6 @@ import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
@@ -122,10 +121,11 @@ export const PortfolioCard = (props: BoxProps) => {
     userData?.userStrategyData.userData?.totalShares.value
 
   const baseAssetValue = userData?.userStrategyData.userData?.netValueInAsset.formatted
-  const { data, isLoading } = useGetPreviewRedeem({
-    cellarConfig: staticCelarConfig,
-    value: totalShares?.toString(),
-  })
+
+  // const { data, isLoading } = useGetPreviewRedeem({
+  //   cellarConfig: staticCelarConfig,
+  //   value: totalShares?.toString(),
+  // })
 
   // Query withdraw queue status, disable queue button if there is active withdraw pending to prevent confusion
   const { data: walletClient } = useWalletClient()
@@ -226,7 +226,7 @@ export const PortfolioCard = (props: BoxProps) => {
                 }
               >
                 {isMounted &&
-                  (isConnected && !isLoading
+                  (isConnected
                     ? baseAssetValue
                     : "--")}
               </CardStat>
