@@ -80,7 +80,7 @@ export const alphaSteth: CellarData = {
     cellar: {
       address: config.CONTRACT.ALPHA_STETH.ADDRESS,
       abi: config.CONTRACT.ALPHA_STETH.ABI,
-      key: CellarKey.CELLAR_V2PT5,
+      key: CellarKey.BORING_VAULT,
       decimals: 18,
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,

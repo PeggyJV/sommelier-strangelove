@@ -14,6 +14,7 @@ export enum CellarKey {
   CELLAR_V2 = "CELLAR_V2",
   CELLAR_V2PT5 = "CELLAR_V2PT5",
   CELLAR_V2PT6 = "CELLAR_V2PT6",
+  BORING_VAULT = "BORING_VAULT",
 }
 export enum CellarRouterKey {
   CELLAR_ROUTER_V0815 = "CELLAR_ROUTER_V0815",
