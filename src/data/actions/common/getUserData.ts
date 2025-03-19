@@ -1,4 +1,4 @@
-import { getBalance  } from "@wagmi/core"
+import { getBalance } from "@wagmi/core"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps, StakerKey } from "data/types"
 import { showNetValueInAsset } from "data/uiConfig"
@@ -31,11 +31,12 @@ export const getUserData = async ({
       ({ config }) => config.cellar.address === address && config.chain.id === chain
     )!
     const config: ConfigProps = strategy.config!
-    const decimals = config.baseAsset.decimals
     const symbol = config.baseAsset.symbol
 
     const shares = await getBalance(wagmiConfig, {
-      token: getAddress(config.cellar.address),
+      token: getAddress(
+        config.boringVault?.address || config.cellar.address
+      ),
       address: getAddress(userAddress),
     })
 
@@ -61,23 +62,9 @@ export const getUserData = async ({
 
     const bonded = userStakes?.totalBondedAmount?.value ?? "0"
 
-    const totalShares = shares.value + BigInt(bonded.toString());
+    const totalShares = shares.value + BigInt(bonded.toString())
 
-    const totalAssets = await(async () => {
-      if (!contracts.cellarContract) {
-        return ZERO
-      }
-
-      const cellarContract = contracts.cellarContract
-
-      // @ts-ignore
-      let assets = await cellarContract.read.convertToAssets([totalShares])
-
-      if (typeof assets === "undefined") {
-        assets = BigInt(0)
-      }
-      return formatUnits(assets, decimals)
-    })()
+    const totalAssets = await getAssets(contracts, totalShares, config)
 
     const numTotalAssets = Number(totalAssets).toFixed(5)
 
@@ -108,7 +95,6 @@ export const getUserData = async ({
     const netValueWithoutRewards = (() => {
       return Number(totalAssets) * Number(baseAssetPrice)
     })()
-
 
     const userStrategyData = {
       strategyData,
@@ -155,4 +141,32 @@ export const getUserData = async ({
   })()
 
   return userDataRes
+}
+
+const getAssets = async (
+  contracts: any,
+  totalShares: bigint,
+  config: ConfigProps
+) => {
+  if (!contracts.cellarContract) {
+    return ZERO
+  }
+
+  const cellarContract = contracts.cellarContract
+
+  let assets
+  if (config.boringVault?.address) {
+    const [, boringAssets] = await cellarContract.read.totalAssets([
+      config.boringVault?.address,
+      config.accountant?.address,
+    ])
+    assets = boringAssets
+  } else {
+    assets = await cellarContract.read.convertToAssets([totalShares])
+  }
+
+  if (typeof assets === "undefined") {
+    assets = BigInt(0)
+  }
+  return formatUnits(assets, config.baseAsset.decimals)
 }

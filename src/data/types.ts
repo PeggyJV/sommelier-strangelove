@@ -92,6 +92,22 @@ export interface ConfigProps {
     abi: Abi
     key: StakerKey
   }
+  lens?: {
+    address: string
+    abi: Abi
+  }
+  teller?: {
+    address: string
+    abi: Abi
+  }
+  boringVault?: {
+    address: string
+    abi: Abi
+  }
+  accountant?: {
+    address: string
+    abi: Abi
+  }
   customReward?: CustomReward
   badges?: Badge[]
   baseAsset: Token

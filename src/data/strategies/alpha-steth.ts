@@ -3,6 +3,7 @@ import { config } from "utils/config";
 import { chainSlugMap } from "data/chainConfig";
 import { tokenConfigMap } from "src/data/tokenConfig";
 import { CellarNameKey, CellarRouterKey, CellarKey } from "data/types";
+import { BoringVault } from "src/abi/types/BoringVault/BoringVault"
 
 export const alphaSteth: CellarData = {
   name: "Alpha STETH",
@@ -82,6 +83,14 @@ export const alphaSteth: CellarData = {
       key: CellarKey.BORING_VAULT,
       decimals: 18,
     },
+    accountant: {
+      address: "0x9636E393B898958d51C351bca896e7BF1736943a",
+      abi: AccountantWithRateProviders,
+    },
+    boringVault: {
+      address: "0xeC797D184a8C6Cd1EF01faDC98B575e84B156C18",
+      abi: BoringVault,
+    },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [],
     // customReward: {
@@ -97,7 +106,7 @@ export const alphaSteth: CellarData = {
     //   stakingDurationOverride: new Date(
     //     Date.UTC(2023, 10, 15, 14, 0, 0, 0)
     //   ),
-      // showSommRewards: false,
+    // showSommRewards: false,
     // },
   },
   faq: [

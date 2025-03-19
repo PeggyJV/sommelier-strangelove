@@ -146,7 +146,7 @@ export const PortfolioCard = (props: BoxProps) => {
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
-      if (walletClient && withdrawQueueContract && address && cellarConfig) {
+      if (walletClient && withdrawQueueContract && address && cellarConfig && !cellarConfig.boringVault) {
         // @ts-ignore
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
