@@ -4,6 +4,7 @@ import { chainSlugMap } from "data/chainConfig";
 import { tokenConfigMap } from "src/data/tokenConfig";
 import { CellarNameKey, CellarRouterKey, CellarKey } from "data/types";
 import { BoringVault } from "src/abi/types/BoringVault/BoringVault"
+import { AccountantWithRateProviders } from "src/abi/types/BoringVault/AccountantWithRateProviders"
 
 export const alphaSteth: CellarData = {
   name: "Alpha STETH",
