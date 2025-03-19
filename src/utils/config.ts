@@ -7,7 +7,7 @@ import { GravityBridge } from "../abi/types/GravityBridge"
 import { CellarStakingV0821 } from "../abi/types/CellarStakingV0821"
 import { EnsoRouter } from "../abi/types/EnsoRouter"
 import { CellarStakingV0815 } from "../abi/types/CellarStakingV0815"
-import { BoringVault } from "../abi/types/BoringVault"
+import { ArcticArchitectureLens } from "src/abi/types/BoringVault/ArcticArchitectureLens"
 
 // Adress should be saved as lowercase
 /** Ensure Checksum Address  */
@@ -59,8 +59,8 @@ export const config = {
       SLUG: "AAVE",
     },
     ALPHA_STETH: {
-      ADDRESS: "",
-      ABI: BoringVault,
+      ADDRESS: "0x5232bc0F5999f8dA604c42E1748A13a170F94A1B",
+      ABI: ArcticArchitectureLens,
       SLUG: "Alpha-stETH",
     },
     ETH_BTC_TREND_CELLAR: {
