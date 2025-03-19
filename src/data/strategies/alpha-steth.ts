@@ -3,7 +3,6 @@ import { config } from "utils/config";
 import { chainSlugMap } from "data/chainConfig";
 import { tokenConfigMap } from "src/data/tokenConfig";
 import { CellarNameKey, CellarRouterKey, CellarKey } from "data/types";
-import { WstethIcon } from "components/_icons";
 
 export const alphaSteth: CellarData = {
   name: "Alpha STETH",
@@ -99,7 +98,7 @@ export const alphaSteth: CellarData = {
     //     Date.UTC(2023, 10, 15, 14, 0, 0, 0)
     //   ),
       // showSommRewards: false,
-    },
+    // },
   },
   faq: [
     {
