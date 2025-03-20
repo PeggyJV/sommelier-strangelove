@@ -11,6 +11,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const turborsETH: CellarData = {
+  deprecated: true,
   name: "Turbo rsETH",
   slug: config.CONTRACT.TURBO_RSETH.SLUG,
   tradedAssets: ["WETH", "rsETH"],
@@ -47,10 +48,10 @@ export const turborsETH: CellarData = {
 
     description: `Your gateway to EigenLayer liquid restaking and Kelp's DeFi ecosystem.
     
-    Note that Turbo rsETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Turbo rsETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
 
-    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
     - This vault does liquidity provision which can result in impermanent loss.
     - This vault uses leverage, which means there is liquidation risk.

@@ -140,10 +140,9 @@ export const getStrategyData = async ({
 
       let merkleRewardsApy;
 
-      if (strategy.slug === utilConfig.CONTRACT.REAL_YIELD_ETH_ARB.SLUG
-        || strategy.slug === utilConfig.CONTRACT.REAL_YIELD_USD_ARB.SLUG) {
-        merkleRewardsApy = await getMerkleRewardsApy(cellarContract, config);
-      }
+      // if (strategy.slug === utilConfig.CONTRACT.REAL_YIELD_ETH_OPT.SLUG) {
+      //   merkleRewardsApy = await getMerkleRewardsApy(cellarContract, config);
+      // }
 
       let extraRewardsApy = undefined
       // TODO: This is part of the tech debt above, this is extra rewards APYs if they should be in addition to SOMM rewards

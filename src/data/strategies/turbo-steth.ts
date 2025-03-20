@@ -4,7 +4,7 @@ import {
   CellarKey,
   CellarNameKey,
   CellarRouterKey,
-  CellarType
+  CellarType,
 } from "../types"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { WstethIcon } from "components/_icons"
@@ -23,7 +23,7 @@ export const turboSTETH: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
-  protocols: ["AAVE", "Morpho", "Uniswap V3", "Balancer"],
+  protocols: ["AAVE", "Morpho", "Uniswap V3", "Balancer", "Lido"],
   strategyAssets: ["WETH", "stETH", "wstETH"],
   performanceSplit: {
     depositors: 80,
@@ -46,12 +46,12 @@ export const turboSTETH: CellarData = {
       - Fully automated with built-in auto compounding.`,
 
     description: `
-    Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Sommelier strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
+    Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Somm strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
     
-    Note that Turbo stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Turbo stETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
     Risks: `
-    All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
 
     - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.    
     
@@ -90,6 +90,10 @@ export const turboSTETH: CellarData = {
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [
+      {
+        customStrategyHighlight: "Aave  & LIDO Pool Support",
+        customStrategyHighlightColor: "#00C04B",
+      },
       /*
       {
         customStrategyHighlight: "wstETH Incentives",
@@ -128,7 +132,7 @@ export const turboSTETH: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
   ],
 }

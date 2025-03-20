@@ -11,6 +11,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const turboGHO: CellarData = {
+  deprecated: true,
   name: "Turbo GHO",
   slug: config.CONTRACT.TURBO_GHO.SLUG,
   tradedAssets: ["GHO", "USDC", "USDT", "LUSD"],
@@ -45,11 +46,11 @@ export const turboGHO: CellarData = {
       - Fully automated with built-in auto-compounding.`,
 
     description: `
-    Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies on Aave.
+    Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Somm vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies on Aave.
     
-    Note that Turbo GHO and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Turbo GHO and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
-    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
     - This vault is mainly comprised of decentralized and centralized stablecoins, both of which can experience depeg events. 
     
@@ -141,7 +142,7 @@ export const turboGHO: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
   ],
 }

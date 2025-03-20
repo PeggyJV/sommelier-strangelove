@@ -28,7 +28,7 @@ const App = ({ Component, pageProps }: AppProps) => {
               <QueryProvider>
                 <HomeProvider>
                   <DefaultSeo
-                    title="Sommelier Finance"
+                    title="Somm Finance"
                     description="Access to risk-managed, multi chain vaults powered by off-chain computation"
                     // SEO configuration omitted for brevity
                   />

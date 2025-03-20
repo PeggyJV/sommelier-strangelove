@@ -71,7 +71,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
     <Stack spacing={2}>
       <HStack justifyContent="space-between">
         <Text fontWeight="bold" color="neutral.400" fontSize="xs">
-          Sommelier Address
+          Somm Address
         </Text>
         <HStack
           as="button"
@@ -97,7 +97,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
       >
         <Input
           id="sommelierAddress"
-          placeholder="Enter Sommelier address"
+          placeholder="Enter Somm address"
           fontSize="xs"
           fontWeight={700}
           backgroundColor="surface.tertiary"
@@ -111,7 +111,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           }}
           type="text"
           {...register("address", {
-            required: "Enter Sommelier address",
+            required: "Enter Somm address",
             validate: {
               validAddress: (v) =>
                 validateSommelierAddress(v) || "Address is not valid",
@@ -126,7 +126,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
         <HStack spacing="6px">
           <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
-            Address is not valid—make sure Sommelier address is from a
+            Address is not valid—make sure Somm address is from a
             Cosmos wallet
           </Text>
         </HStack>

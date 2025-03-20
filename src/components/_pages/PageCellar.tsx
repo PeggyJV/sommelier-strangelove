@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { VFC, useMemo } from "react"
 import {
   Heading,
   HeadingProps,
@@ -26,6 +26,7 @@ import { ApyChartProvider } from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
 import { isComingSoon } from "utils/isComingSoon"
 import { InfoBanner } from "components/_banners/InfoBanner"
+
 const h2Styles: HeadingProps = {
   as: "h2",
   fontSize: "2xl",
@@ -46,14 +47,58 @@ const PageCellar: VFC<PageCellarProps> = ({ id }) => {
     staticCellarData.cellarType === CellarType.yieldStrategies
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
-
   const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
   const isRealYield =
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
     cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
 
+  const dateRange = useMemo(() => {
+    const now = new Date()
+    const currentDay = now.getDay()
+
+    // Adjust the current date to the most recent Wednesday
+    const wednesday = new Date(now)
+    if (currentDay !== 3) {
+      // Calculate the offset to find the previous or the same Wednesday
+      const offset =
+        currentDay < 3 ? -(currentDay + 4) : -(currentDay - 3)
+      wednesday.setDate(now.getDate() + offset)
+    }
+
+    // Set the next Tuesday date by adding 6 days to Wednesday
+    const nextTuesday = new Date(wednesday.getTime())
+    nextTuesday.setDate(wednesday.getDate() + 6)
+
+    return {
+      start: wednesday.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }),
+      end: nextTuesday.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }),
+    }
+  }, [])
+  
+
   return (
     <Layout chainObj={cellarConfig.chain}>
+      {/* {cellarConfig.cellarNameKey ===
+        CellarNameKey.REAL_YIELD_ETH_OPT && (
+        <InfoBanner
+          text={
+            <>
+              <strong>
+                Merkle OP Rewards for Real Yield ETH OP - Batch
+                Period: {dateRange.start} - {dateRange.end}
+              </strong>
+            </>
+          }
+        />
+      )} */}
       {cellarConfig.cellarNameKey === CellarNameKey.TURBO_EETH && (
         <InfoBanner
           text={

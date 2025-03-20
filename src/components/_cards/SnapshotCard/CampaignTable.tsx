@@ -127,11 +127,9 @@ const CampaignTable: React.FC = () => {
                   </Td>
                 )}
                 <Td fontSize={fontSize}>
-      
-                    <HStack>
-                      <Text>Completed</Text>
-                    </HStack>
-   
+                  <HStack>
+                    <Text>Completed</Text>
+                  </HStack>
                 </Td>
               </Tr>
             ))}

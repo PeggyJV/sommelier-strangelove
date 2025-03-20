@@ -22,12 +22,12 @@ const CellarPage: NextPage<CellarPageProps> = ({ id, blocked }) => {
   return (
     <>
       <NextSeo
-        title={`${content.name} | Sommelier Finance`}
+        title={`${content.name} | Somm Finance`}
         description={content.description}
         openGraph={{
           type: "website",
           url: URL,
-          site_name: "Sommelier Finance",
+          site_name: "Somm Finance",
           images: [
             {
               url: "https://app.sommelier.finance/ogimage.png",

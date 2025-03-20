@@ -46,11 +46,11 @@ export const realYieldBTC: CellarData = {
       - Fully automated with built-in auto-compounding.`,
 
     description: `
-    The primary goal of Real Yield BTC is to make available sustainable WBTC-denominated yields through a dynamic and evolving set of strategies. Initially, the vault will use Morpho for efficient leveraged ETH staking against WBTC collateral. The vault may additionally borrow ETH to deposit into Real Yield ETH. In the future, there is a possibility for Real Yield BTC to evolve its capabilities by making use of other protocol integrations or Sommelier vaults.
+    The primary goal of Real Yield BTC is to make available sustainable WBTC-denominated yields through a dynamic and evolving set of strategies. Initially, the vault will use Morpho for efficient leveraged ETH staking against WBTC collateral. The vault may additionally borrow ETH to deposit into Real Yield ETH. In the future, there is a possibility for Real Yield BTC to evolve its capabilities by making use of other protocol integrations or Somm vaults.
 
-    Note that Real Yield BTC and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Real Yield BTC and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
-    risks: `All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
+    risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
    
     - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.
     
@@ -90,7 +90,7 @@ export const realYieldBTC: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
   ],
 }

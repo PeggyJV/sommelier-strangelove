@@ -23,8 +23,8 @@ export const MobileWarningCTA: FC<FlexProps> = (props) => {
         <Text textAlign="center">
           This app only works on desktop but please use uniswap link
           to buy the token directly on mobile. Buying a token is
-          easiest way to onboard yourself to sommelier's automated
-          trading strategies which have been expertly curated.
+          easiest way to onboard yourself to Somm's automated trading
+          strategies which have been expertly curated.
         </Text>
         <Link
           href="https://t.me/getsomm"
@@ -35,7 +35,7 @@ export const MobileWarningCTA: FC<FlexProps> = (props) => {
           Join the conversation
         </Link>
         <Link
-          href="https://www.sommelier.finance/"
+          href="https://www.somm.finance/"
           fontWeight="bold"
           textDecoration="underline"
         >
