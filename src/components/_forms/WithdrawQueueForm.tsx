@@ -14,7 +14,6 @@ import {
   Link,
   Tooltip,
   ButtonGroup,
-  useTheme,
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react"
@@ -32,7 +31,6 @@ import { useUserBalance } from "data/hooks/useUserBalance"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
 import { ModalOnlyTokenMenu } from "components/_menus/ModalMenu"
@@ -43,12 +41,12 @@ import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { getAddress } from "viem"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { MaxUint256 } from "utils/bigIntHelpers"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
 
 interface FormValues {
   withdrawAmount: number
   deadlineHours: number
   sharePriceDiscountPercent: number
-  selectedToken: Token
 }
 
 interface WithdrawQueueFormProps {
@@ -56,42 +54,10 @@ interface WithdrawQueueFormProps {
   onSuccessfulWithdraw?: () => void
 }
 
-function scientificToDecimalString(num: number) {
-  // If the number is in scientific notation, split it into base and exponent
-  const sign = Math.sign(num)
-  let [base, exponent] = num
-    .toString()
-    .split("e")
-    .map((item) => parseInt(item, 10))
-
-  // Adjust for negative exponent
-  if (exponent < 0) {
-    let decimalString = Math.abs(base).toString()
-    let padding = Math.abs(exponent) - 1
-    return (
-      (sign < 0 ? "-" : "") +
-      "0." +
-      "0".repeat(padding) +
-      decimalString
-    )
-  }
-
-  // Handle positive exponent or non-scientific numbers (which won't be split)
-  return num.toString()
-}
-
 // Define the preset values for the form
 // TODO: Consider setting presets per chain
 type PresetValueKey = "Low" | "Mid" | "High" | "Custom"
-const PRESET_VALUES: Record<
-  PresetValueKey,
-  { deadlineHours: number; sharePriceDiscountPercent: number }
-> = {
-  High: { deadlineHours: 12, sharePriceDiscountPercent: 0.15 },
-  Mid: { deadlineHours: 24, sharePriceDiscountPercent: 0.05 },
-  Low: { deadlineHours: 72, sharePriceDiscountPercent: 0.01 },
-  Custom: { deadlineHours: 0, sharePriceDiscountPercent: 0 },
-}
+
 
 export const WithdrawQueueForm = ({
   onClose,
@@ -104,7 +70,6 @@ export const WithdrawQueueForm = ({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
-  const theme = useTheme()
 
   const { id: _id } = useDepositModalStore()
 
@@ -118,39 +83,56 @@ export const WithdrawQueueForm = ({
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
-  const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address,
-    cellarConfig.chain.id
-  )
-  const tokenPrice = strategyData?.tokenPrice
 
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
+  const { boringQueue, boringVault } =
+    useCreateContracts(cellarConfig)
+
+  const PRESET_VALUES: Record<
+    PresetValueKey,
+    { deadlineHours: number; sharePriceDiscountPercent: number }
+  > = boringQueue
+    ? {
+        High: { deadlineHours: 72, sharePriceDiscountPercent: 0.1 },
+        Mid: { deadlineHours: 72, sharePriceDiscountPercent: 0.05 },
+        Low: { deadlineHours: 72, sharePriceDiscountPercent: 0.01 },
+        Custom: { deadlineHours: 0, sharePriceDiscountPercent: 0 },
+      }
+    : {
+        High: {
+          deadlineHours: 12,
+          sharePriceDiscountPercent: 0.15,
+        },
+        Mid: { deadlineHours: 24, sharePriceDiscountPercent: 0.05 },
+        Low: { deadlineHours: 72, sharePriceDiscountPercent: 0.01 },
+        Custom: { deadlineHours: 0, sharePriceDiscountPercent: 0 },
+      }
+
   const withdrawQueueContract = (() => {
     if (!publicClient) return
-    return getContract( {
-        address: cellarConfig.chain.withdrawQueueAddress as `0x${string}`,
-        abi: withdrawQueueV0821,
-        client: {
-          public: publicClient,
-          wallet: walletClient
-        }
-      }
-    )
+    return boringQueue ?? getContract({
+      address: cellarConfig.chain
+        .withdrawQueueAddress as `0x${string}`,
+      abi: withdrawQueueV0821,
+      client: {
+        public: publicClient,
+        wallet: walletClient,
+      },
+    })
   })()
 
   const cellarContract = (() => {
     if (!publicClient) return
-    return getContract( {
+    return boringVault ?? getContract({
       address: cellarConfig.cellar.address as `0x${string}`,
       abi: cellarConfig.cellar.abi,
       client: {
         public: publicClient,
-        wallet: walletClient
-      }
-    }
-    )
+        wallet: walletClient,
+      },
+    })
   })()
 
   const [_, wait] = useWaitForTransaction({
@@ -166,7 +148,7 @@ export const WithdrawQueueForm = ({
   })
 
   const [selectedToken, setSelectedToken] = useState<Token | null>(
-    null
+    strategyBaseAsset
   )
 
   function trackedSetSelectedToken(value: Token | null) {
@@ -225,8 +207,7 @@ export const WithdrawQueueForm = ({
   const isError =
     errors.withdrawAmount ||
     errors.deadlineHours ||
-    errors.sharePriceDiscountPercent ||
-    errors.selectedToken
+    errors.sharePriceDiscountPercent
 
   const setMax = () => {
     const amount = parseFloat(
@@ -240,7 +221,6 @@ export const WithdrawQueueForm = ({
     withdrawAmount,
     deadlineHours,
     sharePriceDiscountPercent,
-    selectedToken,
   }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -265,15 +245,18 @@ export const WithdrawQueueForm = ({
     )
 
     // Get approval if needed
-    const allowance = await cellarContract?.read.allowance([
+    const allowance = (await cellarContract?.read.allowance([
       address!,
-      getAddress(cellarConfig.chain.withdrawQueueAddress)
-      ]
-    ) as bigint
+      getAddress(
+        cellarConfig.boringQueue
+          ? cellarConfig.boringQueue.address
+          : cellarConfig.chain.withdrawQueueAddress
+      ),
+    ])) as bigint
 
     let needsApproval
     try {
-      needsApproval = allowance < withdrawAmtInBaseDenom
+      needsApproval = (allowance as bigint) < withdrawAmtInBaseDenom
     } catch (e) {
       const error = e as Error
       console.error("Invalid Input: ", error.message)
@@ -283,9 +266,14 @@ export const WithdrawQueueForm = ({
     if (needsApproval) {
       try {
         // @ts-ignore
-        const hash = await cellarContract?.write.approve([
-          getAddress(cellarConfig.chain.withdrawQueueAddress),
-          MaxUint256
+        const hash = await cellarContract?.write.approve(
+          [
+            getAddress(
+              cellarConfig.boringQueue
+                ? cellarConfig.boringQueue.address
+                : cellarConfig.chain.withdrawQueueAddress
+            ),
+            MaxUint256,
           ],
           { account: address }
         )
@@ -345,50 +333,12 @@ export const WithdrawQueueForm = ({
     }
 
     try {
-      const currentTime = Math.floor(Date.now() / 1000)
-      const deadlineSeconds =
-        Math.floor(deadlineHours * 60 * 60) + currentTime
 
-      // Query share price
-      const previewRedeem: number = parseInt(
-        await fetchCellarPreviewRedeem(
-          id,
-          BigInt(10 ** cellarConfig.cellar.decimals)
-        )
-      )
-      const sharePriceStandardized =
-        previewRedeem / 10 ** cellarConfig.baseAsset.decimals
-      const sharePriceWithDiscount =
-        sharePriceStandardized *
-        ((100 - sharePriceDiscountPercent) / 100)
-      const sharePriceWithDiscountInBaseDenom = Math.floor(
-        sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
-      )
-
-      // Input Touple
-      const withdrawTouple = [
-        BigInt(deadlineSeconds),
-        BigInt(sharePriceWithDiscountInBaseDenom),
-        withdrawAmtInBaseDenom,
-        false
-      ]
-
-      const gasLimitEstimated = await estimateGasLimitWithRetry(
-        withdrawQueueContract?.estimateGas.updateWithdrawRequest,
-        withdrawQueueContract?.simulate.updateWithdrawRequest,
-        [cellarConfig.cellar.address, withdrawTouple],
-        330000,
-        address
-      )
-      // @ts-ignore
-      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
-        cellarConfig.cellar.address,
-        withdrawTouple
-        ],
-        {
-          gas: gasLimitEstimated,
-          account: address
-        }
+      let hash = await doWithdrawTx(
+        deadlineHours,
+        sharePriceDiscountPercent,
+        selectedToken,
+        withdrawAmtInBaseDenom
       )
 
       const onSuccess = () => {
@@ -450,6 +400,84 @@ export const WithdrawQueueForm = ({
     }
   }
 
+  const doWithdrawTx = async (deadlineHours: number, sharePriceDiscountPercent: number, selectedToken: Token | null, withdrawAmtInBaseDenom: bigint) => {
+    const currentTime = Math.floor(Date.now() / 1000)
+    const deadlineSeconds =
+      Math.floor(deadlineHours * 60 * 60) + currentTime
+
+    let hash;
+
+    if (boringQueue) {
+      let discount = sharePriceDiscountPercent * 100
+
+      const deadlineSeconds = deadlineHours * 60 * 60;
+
+      const gasLimitEstimated = await estimateGasLimitWithRetry(
+        boringQueue.estimateGas.requestOnChainWithdraw,
+        boringQueue.simulate.requestOnChainWithdraw,
+        [
+          selectedToken?.address,
+          withdrawAmtInBaseDenom,
+          discount,
+          deadlineSeconds,
+        ],
+        330000,
+        address
+      )
+
+      // @ts-ignore
+      hash = await boringQueue?.write.requestOnChainWithdraw(
+        [
+          selectedToken?.address,
+          withdrawAmtInBaseDenom,
+          discount,
+          deadlineSeconds,
+        ],
+        {
+          gas: gasLimitEstimated,
+          account: address,
+        }
+      )
+    } else {
+      const previewRedeem = parseInt(await fetchCellarPreviewRedeem(
+        id,
+        BigInt(10 ** cellarConfig.cellar.decimals)
+      ))
+
+      const sharePriceStandardized =
+        previewRedeem / 10 ** cellarConfig.baseAsset.decimals
+      const sharePriceWithDiscount =
+        sharePriceStandardized *
+        ((100 - sharePriceDiscountPercent) / 100)
+      const sharePriceWithDiscountInBaseDenom = Math.floor(
+        sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
+      )
+      
+      const withdrawTouple = [
+        BigInt(deadlineSeconds),
+        BigInt(sharePriceWithDiscountInBaseDenom),
+        withdrawAmtInBaseDenom,
+        false,
+      ]
+      const gasLimitEstimated = await estimateGasLimitWithRetry(
+        withdrawQueueContract?.estimateGas.updateWithdrawRequest,
+        withdrawQueueContract?.simulate.updateWithdrawRequest,
+        [cellarConfig.cellar.address, withdrawTouple],
+        330000,
+        address
+      )
+      // @ts-ignore
+      hash = await withdrawQueueContract?.write.updateWithdrawRequest(
+        [cellarConfig.cellar.address, withdrawTouple],
+        {
+          gas: gasLimitEstimated,
+          account: address,
+        }
+      )
+    }
+
+    return hash;
+  }
 
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
@@ -473,7 +501,6 @@ export const WithdrawQueueForm = ({
             ]
           ) as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
-
       } else {
         setIsActiveWithdrawRequest(false)
       }
@@ -482,7 +509,9 @@ export const WithdrawQueueForm = ({
       setIsActiveWithdrawRequest(false)
     }
   }
-  checkWithdrawRequest()
+  if (!boringQueue) {
+    checkWithdrawRequest()
+  }
 
   return (
     <VStack

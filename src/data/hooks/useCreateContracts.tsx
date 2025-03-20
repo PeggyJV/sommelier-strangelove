@@ -7,7 +7,6 @@ export const useCreateContracts = (config: ConfigProps) => {
   const publicClient = usePublicClient()
   const chain = config.chain.id
 
-
   const stakerSigner = (() => {
     if (!config.staker || !publicClient) return
     return getContract({
@@ -15,70 +14,89 @@ export const useCreateContracts = (config: ConfigProps) => {
       abi: config.staker.abi,
       client: {
         wallet: walletClient,
-        public: publicClient
-      }
-      }
-    )
+        public: publicClient,
+      },
+    })
   })()
 
   const cellarSigner = (() => {
     if (!publicClient) return
-    if(config.teller) {
+    if (config.teller) {
       // Using Teller contracts as signers for BoringVault
-      return getContract( {
+      return getContract({
         address: config.teller?.address as `0x${string}`,
         abi: config.teller?.abi,
         client: {
           wallet: walletClient,
-          public: publicClient
-        }
+          public: publicClient,
+        },
       })
     }
-    return getContract( {
-        address: config.cellar.address as `0x${string}`,
-        abi: config.cellar.abi,
-        client: {
-          wallet: walletClient,
-          public: publicClient
-        }
-      }
-    )
+    return getContract({
+      address: config.cellar.address as `0x${string}`,
+      abi: config.cellar.abi,
+      client: {
+        wallet: walletClient,
+        public: publicClient,
+      },
+    })
   })()
   const stakerContract = (() => {
     if (!config.staker || !publicClient) return
-    return getContract( {
+    return getContract({
       address: config.staker.address as `0x${string}`,
       abi: config.staker.abi,
       client: {
-        public: publicClient
-      }
-      }
-    )
+        public: publicClient,
+      },
+    })
   })()
 
   const cellarContract = (() => {
     if (!publicClient) return
-    return getContract( {
-        address: config.cellar.address as `0x${string}`,
-        abi: config.cellar.abi,
-        client: {
-          public: publicClient
-        }
-      }
-    )
+    return getContract({
+      address: config.cellar.address as `0x${string}`,
+      abi: config.cellar.abi,
+      client: {
+        public: publicClient,
+      },
+    })
   })()
 
   const cellarRouterSigner = (() => {
     if (!publicClient || !config.cellarRouter) return
-    return getContract( {
-        address: config.cellarRouter.address as `0x${string}`,
-        abi: config.cellarRouter.abi,
-        client: {
-          public: publicClient,
-          wallet: walletClient
-        }
-      }
-    )
+    return getContract({
+      address: config.cellarRouter.address as `0x${string}`,
+      abi: config.cellarRouter.abi,
+      client: {
+        public: publicClient,
+        wallet: walletClient,
+      },
+    })
+  })()
+
+  const boringVault = (() => {
+    if (!publicClient || !config.boringVault) return
+    return getContract({
+      address: config.boringVault.address as `0x${string}`,
+      abi: config.boringVault.abi,
+      client: {
+        public: publicClient,
+        wallet: walletClient,
+      },
+    })
+  })()
+
+  const boringQueue = (() => {
+    if (!publicClient || !config.boringQueue) return
+    return getContract({
+      address: config.boringQueue.address as `0x${string}`,
+      abi: config.boringQueue.abi,
+      client: {
+        public: publicClient,
+        wallet: walletClient,
+      },
+    })
   })()
 
   const contracts = {
@@ -87,6 +105,8 @@ export const useCreateContracts = (config: ConfigProps) => {
     stakerContract,
     cellarContract,
     cellarRouterSigner,
+    boringVault,
+    boringQueue,
     chain,
   }
 

@@ -100,6 +100,10 @@ export interface ConfigProps {
     address: string
     abi: Abi
   }
+  boringQueue?: {
+    address: string
+    abi: Abi
+  }
   boringVault?: {
     address: string
     abi: Abi
