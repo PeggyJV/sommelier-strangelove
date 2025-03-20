@@ -1,11 +1,8 @@
-import { CellarData, CellarType } from "data/types";
-import { config } from "utils/config";
-import { chainSlugMap } from "data/chainConfig";
-import { tokenConfigMap } from "src/data/tokenConfig";
-import { CellarNameKey, CellarRouterKey, CellarKey } from "data/types";
-import { BoringVault } from "src/abi/types/BoringVault/BoringVault"
-import { AccountantWithRateProviders } from "src/abi/types/BoringVault/AccountantWithRateProviders"
-import { TellerWithLayerZero } from "src/abi/types/BoringVault/TellerWithLayerZero"
+import { CellarData, CellarType } from "data/types"
+import { config } from "utils/config"
+import { chainSlugMap } from "data/chainConfig"
+import { tokenConfigMap } from "src/data/tokenConfig"
+import { CellarNameKey, CellarRouterKey, CellarKey } from "data/types"
 
 export const alphaSteth: CellarData = {
   name: "Alpha STETH",
@@ -71,7 +68,7 @@ export const alphaSteth: CellarData = {
     id: config.CONTRACT.ALPHA_STETH.ADDRESS,
     cellarNameKey: CellarNameKey.ALPHA_STETH,
     lpToken: {
-      address: config.CONTRACT.ALPHA_STETH.ADDRESS,
+      address: config.CONTRACT.ALPHA_STETH_BORING_VAULT.ADDRESS,
       imagePath: "/assets/icons/turbo-steth.png",
     },
     cellarRouter: {
@@ -86,16 +83,20 @@ export const alphaSteth: CellarData = {
       decimals: 18,
     },
     boringVault: {
-      address: "0xeC797D184a8C6Cd1EF01faDC98B575e84B156C18",
-      abi: BoringVault,
+      address: config.CONTRACT.ALPHA_STETH_BORING_VAULT.ADDRESS,
+      abi: config.CONTRACT.ALPHA_STETH_BORING_VAULT.ABI,
     },
     accountant: {
-      address: "0x9636E393B898958d51C351bca896e7BF1736943a",
-      abi: AccountantWithRateProviders,
+      address: config.CONTRACT.ALPHA_STETH_ACCOUNTANT.ADDRESS,
+      abi: config.CONTRACT.ALPHA_STETH_ACCOUNTANT.ABI,
     },
     teller: {
-      address: "0x9c9944473d7DB901fa32dCf29b6434b4e7AD82e9",
-      abi: TellerWithLayerZero,
+      address: config.CONTRACT.ALPHA_STETH_TELLER.ADDRESS,
+      abi: config.CONTRACT.ALPHA_STETH_TELLER.ABI,
+    },
+    boringQueue: {
+      address: config.CONTRACT.ALPHA_STETH_BORING_QUEUE.ADDRESS,
+      abi: config.CONTRACT.ALPHA_STETH_BORING_QUEUE.ABI,
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [],

@@ -35,7 +35,6 @@ import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { waitTime } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
@@ -64,8 +63,6 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
   const { addToast, close, closeAll } = useBrandedToast()
   const { address } = useAccount()
 
-  const [isWithdrawQueueModalOpen, setIsWithdrawQueueModalOpen] =
-    useState(false)
   const openWithdrawQueueModal = () =>
     setIsWithdrawQueueModalOpen(true)
   const closeWithdrawQueueModal = () =>
@@ -78,13 +75,12 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
-  const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address,
-    cellarConfig.chain.id
-  )
-  const tokenPrice = strategyData?.tokenPrice
 
-  const { cellarSigner } = useCreateContracts(cellarConfig)
+  const { cellarSigner, boringQueue } =
+      useCreateContracts(cellarConfig)
+
+  const [isWithdrawQueueModalOpen, setIsWithdrawQueueModalOpen] =
+      useState(!!boringQueue)
 
   const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
@@ -101,11 +97,6 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       toEther(lpTokenData?.formatted, lpTokenData?.decimals, false, 6)
     )
     setValue("withdrawAmount", amount)
-
-    // analytics.track("withdraw.max-selected", {
-    //   account: address,
-    //   amount,
-    // })
   }
 
   useEffect(() => {
@@ -140,8 +131,6 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       account: address,
       amount: withdrawAmount,
     }
-
-    // analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = parseUnits(
       `${withdrawAmount}`,
@@ -263,21 +252,6 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
     }
   }
 
-  function fixed(num: number, fixed: number) {
-    fixed = fixed || 0
-    fixed = Math.pow(10, fixed)
-    return Math.floor(num * fixed) / fixed
-  }
-
-  const formatAsset = (num: number, fixed: number) => {
-    fixed = fixed || 0
-    fixed = Math.pow(10, fixed)
-    if (num < 0.01) {
-      return ">0.01%"
-    }
-    return `${Math.floor(num * fixed) / fixed}%`
-  }
-
   return (
     <>
       <Modal
@@ -300,14 +274,26 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
             boxShadow: "unset",
           }}
         >
-          <ModalHeader>Transaction not submitted</ModalHeader>
+          {boringQueue ? (
+            <ModalHeader>BoringQueue withrawal</ModalHeader>
+          ) : (
+            <ModalHeader>Transaction not submitted</ModalHeader>
+          )}
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={8}>
-              <Text textAlign={"center"}>
-                You are attempting to withdraw beyond the liquid
-                reserve. Please submit a withdraw request via the withdraw queue.
-              </Text>
+              {boringQueue ? (
+                <Text textAlign={"center"}>
+                  Boringvault withdraws are processed using the BoringQueue.
+                  Please submit a withdraw request.
+                </Text>
+              ) : (
+                <Text textAlign={"center"}>
+                  You are attempting to withdraw beyond the liquid
+                  reserve. Please submit a withdraw request via the
+                  withdraw queue.
+                </Text>
+              )}
               <WithdrawQueueButton
                 size="md"
                 chain={cellarConfig.chain}
