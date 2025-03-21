@@ -35,7 +35,7 @@ export const getUserData = async ({
 
     const shares = await getBalance(wagmiConfig, {
       token: getAddress(
-        config.boringVault?.address || config.cellar.address
+       config.cellar.address
       ),
       address: getAddress(userAddress),
     })
@@ -154,18 +154,25 @@ const getBalanceInAsset = async (
   config: ConfigProps,
   userAddress: string
 ) => {
-  if (!contracts.cellarContract) {
+  let contract = config.boringVault 
+    ? contracts.boringVaultLens 
+    : contracts.cellarContract
+
+  if (!contract) {
     return ZERO
   }
-  const cellarContract = contracts.cellarContract
-
-  let assets = config.boringVault?.address
-    ? await cellarContract.read.balanceOfInAssets([
+  let assets = ZERO;
+  try {
+    assets = config.boringVault
+    ? await contract.read.balanceOfInAssets([
         userAddress,
-        config.boringVault?.address,
+        config.cellar.address,
         config.accountant?.address,
       ])
-    : await cellarContract.read.convertToAssets([totalShares])
+    : await contract.read.convertToAssets([totalShares])
+  } catch (error) {
+    return ZERO
+  }
 
   if (typeof assets === "undefined") {
     assets = BigInt(0)

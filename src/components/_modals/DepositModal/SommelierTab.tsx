@@ -208,7 +208,7 @@ export const SommelierTab = ({
     setSelectedToken(value)
   }
 
-  const { cellarSigner, cellarContract } = useCreateContracts(cellarConfig)
+  const { cellarSigner, boringVaultLens } = useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
     cellarConfig.cellar.address,
@@ -362,10 +362,10 @@ export const SommelierTab = ({
   ) => {
     if(cellarConfig.boringVault) {
       // @ts-ignore
-      const minimumMint = await cellarContract?.read.previewDeposit([
+      const minimumMint = await boringVaultLens?.read.previewDeposit([
         assetAddress,
         amtInWei,
-        cellarConfig.boringVault?.address,
+        cellarConfig.cellar.address,
         cellarConfig.accountant?.address,
       ])
 
@@ -439,7 +439,7 @@ export const SommelierTab = ({
     const allowance = await erc20Contract.read.allowance(
       [
         getAddress(address ?? ""),
-        getAddress(cellarConfig.boringVault?.address || cellarConfig.cellar.address),
+        getAddress(cellarConfig.cellar.address),
       ],
       { account: address }
     )
@@ -469,7 +469,7 @@ export const SommelierTab = ({
       try {
         // @ts-ignore
         const hash = await erc20Contract.write.approve([
-            cellarConfig.boringVault?.address || cellarConfig.cellar.address,
+            cellarConfig.cellar.address,
             amtInWei
           ],
           { account: address }

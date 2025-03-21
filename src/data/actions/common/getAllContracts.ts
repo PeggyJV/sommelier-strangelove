@@ -68,12 +68,36 @@ export const getAllContracts = async (
         },
       })
 
+    const boringVaultLens = 
+      cellar.config.lens &&
+        getContract({
+          address: cellar.config.lens.address as `0x${string}`,
+          abi: cellar.config.lens.abi,
+          client: {
+            public: provider,
+            wallet: signer || undefined,
+          },
+        })
+
+    const boringQueue =
+      cellar.config.boringQueue &&
+      getContract({
+        address: cellar.config.boringQueue.address as `0x${string}`,
+        abi: cellar.config.boringQueue.abi,
+        client: {
+          public: provider,
+          wallet: signer || undefined,
+        },
+      })
+
     const contract = {
       cellarContract,
       cellarSigner,
       stakerContract,
       stakerSigner,
       cellarRouterSigner,
+      boringVaultLens,
+      boringQueue,
       chain: cellar.config.chain.id,
     }
 

@@ -97,7 +97,6 @@ export const Menu = ({
             selectedToken!,
             "usd"
           )
-          console.log("price", price)
           const newBalance = rawDepositAmount * Number(price || 0)
           setDisplayedBalance(newBalance)
         } catch (error) {

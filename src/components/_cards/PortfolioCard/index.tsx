@@ -29,7 +29,6 @@ import { useUserBalance } from "data/hooks/useUserBalance"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import {
-  bondingPeriodOptions,
   isBondedDisabled,
   isBondingEnabled,
   isRewardsEnabled,
@@ -50,7 +49,7 @@ import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { CellarNameKey, ConfigProps } from "data/types"
+import { CellarNameKey } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 
 export const PortfolioCard = (props: BoxProps) => {
@@ -63,7 +62,6 @@ export const PortfolioCard = (props: BoxProps) => {
   } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
-  const slug = cellarDataMap[id].slug
   const dashboard = cellarDataMap[id].dashboard
 
   const depositTokens = cellarDataMap[id].depositTokens.list
@@ -95,10 +93,7 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const activeAsset = strategyData?.activeAsset
   const stakingEnd = strategyData?.stakingEnd
-  const bondingPeriods = bondingPeriodOptions(cellarConfig)
-  const maxMultiplier = bondingPeriods[
-    bondingPeriods.length - 1
-  ]?.amount.replace("SOMM", "")
+
 
   const isStakingAllowed = stakingEnd?.endDate
     ? isFuture(stakingEnd.endDate)
@@ -114,17 +109,7 @@ export const PortfolioCard = (props: BoxProps) => {
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
 
-  const staticCelarConfig = cellarConfig
-
-  const totalShares =
-    userData?.userStrategyData.userData?.totalShares.value
-
   const baseAssetValue = userData?.userStrategyData.userData?.netValueInAsset.formatted
-
-  // const { data, isLoading } = useGetPreviewRedeem({
-  //   cellarConfig: staticCelarConfig,
-  //   value: totalShares?.toString(),
-  // })
 
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
@@ -168,12 +153,6 @@ export const PortfolioCard = (props: BoxProps) => {
       setIsActiveWithdrawRequest(false)
     }
   }
-  // const isMerkleRewardsException = (config: ConfigProps) => {
-  //   return (
-  //     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-  //     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
-  //   )
-  // }
 
   useEffect(() => {
     checkWithdrawRequest()

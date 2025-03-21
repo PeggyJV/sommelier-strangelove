@@ -68,13 +68,8 @@ export const alphaSteth: CellarData = {
     id: config.CONTRACT.ALPHA_STETH.ADDRESS,
     cellarNameKey: CellarNameKey.ALPHA_STETH,
     lpToken: {
-      address: config.CONTRACT.ALPHA_STETH_BORING_VAULT.ADDRESS,
+      address: config.CONTRACT.ALPHA_STETH.ADDRESS,
       imagePath: "/assets/icons/turbo-steth.png",
-    },
-    cellarRouter: {
-      address: config.CONTRACT.CELLAR_ROUTER_V0816.ADDRESS,
-      abi: config.CONTRACT.CELLAR_ROUTER_V0816.ABI,
-      key: CellarRouterKey.CELLAR_ROUTER_V0816,
     },
     cellar: {
       address: config.CONTRACT.ALPHA_STETH.ADDRESS,
@@ -82,10 +77,7 @@ export const alphaSteth: CellarData = {
       key: CellarKey.BORING_VAULT,
       decimals: 18,
     },
-    boringVault: {
-      address: config.CONTRACT.ALPHA_STETH_BORING_VAULT.ADDRESS,
-      abi: config.CONTRACT.ALPHA_STETH_BORING_VAULT.ABI,
-    },
+    boringVault: true,
     accountant: {
       address: config.CONTRACT.ALPHA_STETH_ACCOUNTANT.ADDRESS,
       abi: config.CONTRACT.ALPHA_STETH_ACCOUNTANT.ABI,
@@ -97,6 +89,10 @@ export const alphaSteth: CellarData = {
     boringQueue: {
       address: config.CONTRACT.ALPHA_STETH_BORING_QUEUE.ADDRESS,
       abi: config.CONTRACT.ALPHA_STETH_BORING_QUEUE.ABI,
+    },
+    lens: {
+      address: config.CONTRACT.ALPHA_STETH_LENS.ADDRESS,
+      abi: config.CONTRACT.ALPHA_STETH_LENS.ABI,
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [],
