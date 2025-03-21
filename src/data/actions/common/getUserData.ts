@@ -64,7 +64,12 @@ export const getUserData = async ({
 
     const totalShares = shares.value + BigInt(bonded.toString())
 
-    const totalAssets = await getAssets(contracts, totalShares, config)
+    const totalAssets = await getBalanceInAsset(
+      contracts,
+      totalShares,
+      config,
+      userAddress
+    )
 
     const numTotalAssets = Number(totalAssets).toFixed(5)
 
@@ -143,27 +148,24 @@ export const getUserData = async ({
   return userDataRes
 }
 
-const getAssets = async (
+const getBalanceInAsset = async (
   contracts: any,
   totalShares: bigint,
-  config: ConfigProps
+  config: ConfigProps,
+  userAddress: string
 ) => {
   if (!contracts.cellarContract) {
     return ZERO
   }
-
   const cellarContract = contracts.cellarContract
 
-  let assets
-  if (config.boringVault?.address) {
-    const [, boringAssets] = await cellarContract.read.totalAssets([
-      config.boringVault?.address,
-      config.accountant?.address,
-    ])
-    assets = boringAssets
-  } else {
-    assets = await cellarContract.read.convertToAssets([totalShares])
-  }
+  let assets = config.boringVault?.address
+    ? await cellarContract.read.balanceOfInAssets([
+        userAddress,
+        config.boringVault?.address,
+        config.accountant?.address,
+      ])
+    : await cellarContract.read.convertToAssets([totalShares])
 
   if (typeof assets === "undefined") {
     assets = BigInt(0)
