@@ -659,7 +659,11 @@ export const WithdrawQueueForm = ({
               <Text as="span">Asset Out</Text>
               {
                 <ModalOnlyTokenMenu
-                  depositTokens={[strategyBaseAsset.symbol]}
+                  depositTokens={
+                    cellarConfig.boringVault
+                      ? cellarDataMap[id].depositTokens.list
+                      : [strategyBaseAsset.symbol]
+                  }
                   activeAsset={strategyBaseAsset.address}
                   setSelectedToken={trackedSetSelectedToken}
                   //isDisabled={isSubmitting}
