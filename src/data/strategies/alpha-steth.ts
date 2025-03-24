@@ -5,7 +5,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { CellarNameKey, CellarRouterKey, CellarKey } from "data/types"
 
 export const alphaSteth: CellarData = {
-  name: "Alpha STETH",
+  name: "Alpha stETH",
   slug: config.CONTRACT.ALPHA_STETH.SLUG,
   startingShareValue: "998206828469480700",
   tradedAssets: ["WETH", "stETH", "wstETH"],
@@ -61,7 +61,7 @@ export const alphaSteth: CellarData = {
   dashboard:
     "https://debank.com/profile/0xec797d184a8c6cd1ef01fadc98b575e84b156c18",
   depositTokens: {
-    list: ["WETH", "WSTETH", "STETH"],
+    list: ["WETH", "stETH", "wstETH"],
   },
   config: {
     chain: chainSlugMap.ETHEREUM,
