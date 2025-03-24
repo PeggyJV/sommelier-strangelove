@@ -2,7 +2,8 @@ import { CellarData, CellarType } from "data/types"
 import { config } from "utils/config"
 import { chainSlugMap } from "data/chainConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
-import { CellarNameKey, CellarRouterKey, CellarKey } from "data/types"
+import { CellarNameKey, CellarKey } from "data/types"
+import { WstethIcon } from "components/_icons/WstethIcon"
 
 export const alphaSteth: CellarData = {
   name: "Alpha stETH",
@@ -96,21 +97,14 @@ export const alphaSteth: CellarData = {
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [],
-    // customReward: {
-    //   showAPY: true,
-    //   tokenSymbol: "wstETH",
-    //   tokenDisplayName: "wstETH",
-    //   tokenAddress: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
-    //   imagePath: "/assets/icons/wsteth-logo.jpeg",
-    //   showBondingRewards: false,
-    //   showClaim: false,
-    //   logo: WstethIcon,
-    //   logoSize: "17px",
-    //   stakingDurationOverride: new Date(
-    //     Date.UTC(2023, 10, 15, 14, 0, 0, 0)
-    //   ),
-    // showSommRewards: false,
-    // },
+    customReward: {
+      showAPY: false,
+      tokenSymbol: "wstETH",
+      tokenDisplayName: "wstETH",
+      tokenAddress: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      imagePath: "/assets/icons/wsteth-logo.jpeg",
+      showSommRewards: false,
+    },
   },
   faq: [
     {
