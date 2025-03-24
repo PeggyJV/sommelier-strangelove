@@ -3,7 +3,6 @@ import { config } from "utils/config"
 import { chainSlugMap } from "data/chainConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { CellarNameKey, CellarKey } from "data/types"
-import { WstethIcon } from "components/_icons/WstethIcon"
 
 export const alphaSteth: CellarData = {
   name: "Alpha stETH",
