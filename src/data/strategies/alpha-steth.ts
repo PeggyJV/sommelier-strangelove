@@ -96,14 +96,6 @@ export const alphaSteth: CellarData = {
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
     badges: [],
-    customReward: {
-      showAPY: false,
-      tokenSymbol: "wstETH",
-      tokenDisplayName: "wstETH",
-      tokenAddress: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
-      imagePath: "/assets/icons/wsteth-logo.jpeg",
-      showSommRewards: false,
-    },
   },
   faq: [
     {
