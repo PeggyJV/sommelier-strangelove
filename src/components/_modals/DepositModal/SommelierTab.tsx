@@ -310,7 +310,7 @@ export const SommelierTab = ({
   const geo = useGeo()
 
   const queryDepositFeePercent = async (assetAddress: string) => {
-    if (assetAddress === cellarConfig.baseAsset.address) {
+    if (assetAddress === cellarConfig.baseAsset.address || cellarConfig.boringVault) {
       return 0
     }
 
