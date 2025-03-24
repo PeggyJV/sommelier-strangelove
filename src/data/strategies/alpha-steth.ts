@@ -8,8 +8,8 @@ export const alphaSteth: CellarData = {
   name: "Alpha STETH",
   slug: config.CONTRACT.ALPHA_STETH.SLUG,
   startingShareValue: "998206828469480700",
-  tradedAssets: ["WETH", "stETH", "wstETH", "ETH"],
-  launchDate: new Date(Date.UTC(2023, 9, 16, 14, 0, 0, 0)),
+  tradedAssets: ["WETH", "stETH", "wstETH"],
+  launchDate: new Date(Date.UTC(2025, 2, 23, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
   strategyType: "Yield",
@@ -69,7 +69,7 @@ export const alphaSteth: CellarData = {
     cellarNameKey: CellarNameKey.ALPHA_STETH,
     lpToken: {
       address: config.CONTRACT.ALPHA_STETH.ADDRESS,
-      imagePath: "/assets/icons/turbo-steth.png",
+      imagePath: "/assets/icons/alpha-steth.png",
     },
     cellar: {
       address: config.CONTRACT.ALPHA_STETH.ADDRESS,
