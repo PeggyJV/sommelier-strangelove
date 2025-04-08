@@ -106,11 +106,7 @@ export const alphaSteth: CellarData = {
     },
     {
       question: "How is AlphaSTETH different from TurboSTETH?",
-      answer: `AlphaSTETH dynamically reallocates leverage across multiple lending protocols based on market conditions to enhance yield, whereas TurboSTETH does not currently adjust leverage positions between lending platforms.`,
-    },
-    {
-      question: "What are the risks?",
-      answer: `AlphaSteth leverages an upgraded vault architecture to access new opportunities as the lending landscape on Ethereum has evolved with new protocols launching like Morpho and Euler.`,
+      answer: `AlphaSTETH leverages an upgraded vault architecture to access new opportunities as the lending landscape on Ethereum has evolved with new protocols launching like Morpho and Euler.`,
     },
   ],
 }
