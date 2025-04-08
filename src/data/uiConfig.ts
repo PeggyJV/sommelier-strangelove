@@ -95,7 +95,9 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey ===
-      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD ||
+      config.cellarNameKey === CellarNameKey.ALPHA_STETH  
+      
   )
 }
 
@@ -139,6 +141,7 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
       CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD ||
     config.cellarNameKey ===
       CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
+   
   )
 }
 
