@@ -11,7 +11,7 @@ export const alphaSteth: CellarData = {
   tradedAssets: ["WETH", "stETH", "wstETH"],
   launchDate: new Date(Date.UTC(2025, 2, 23, 14, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
-  description: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+  description: `AlphaSTETH dynamically reallocates stETH leverage across multiple leading DeFi protocols to deliver superior ETH yield optimization.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
@@ -32,15 +32,16 @@ export const alphaSteth: CellarData = {
       "A Strategy Provider is responsible for providing the instructions for a cellar to execute",
   },
   strategyBreakdown: {
-    goals: `Use stETH to turbocharge your ETH yields across an evolving set of DeFi strategies.`,
+    goals: `To provide market-leading stETH-denominated yields by intelligently leveraging and reallocating assets across the highest-yielding DeFi platforms.`,
 
     highlights: `
-      - Capable of simultaneously pursuing multiple stETH/wstETH yield opportunities.
-      - Dynamically leverage stake, Uniswap v3 liquidity provision, arbitrage wstETH peg.
-      - Fully automated with built-in auto compounding.`,
+    -Actively shifts leverage between top lending protocols (AAVE, Morpho, Euler) based on optimal borrowing rates.
+    -Integrated new DeFi protocols to unlock higher yields compared to existing strategies.
+    -Automated yield optimization and auto-compounding to boost returns.
+    -Potential additional yield enhancement via Lido incentive rewards. `,
 
     description: `
-    Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Sommelier strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
+    AlphaSTETH represents the next evolution in ETH yield strategies, building upon the foundation of stETH, one of the most trusted liquid staking tokens (LST) in DeFi. This strategy uniquely differentiates itself by dynamically adjusting leverage and allocation across multiple lending protocols (AAVE, Morpho, Euler) based on borrowing costs, liquidity opportunities, and risk-adjusted returns. By continuously optimizing positions and utilizing automated compounding, AlphaSTETH aims to deliver superior yields, enhanced further through potential Lido reward incentives.
     
     Note that Alpha stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
@@ -52,12 +53,12 @@ export const alphaSteth: CellarData = {
     - This vault does liquidity provision which can result in impermanent loss.
     `,
   },
-  overrideApy: {
-    title: "Backtested APY",
-    tooltip:
-      "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
-    value: "4.00%",
-  },
+  // overrideApy: {
+  //   title: "Backtested APY",
+  //   tooltip:
+  //     "Backtested APY results are based on historical backtests. Past performance is not indicative of future results. Actual performance will depend on market conditions",
+  //   value: "4.00%",
+  // },
   dashboard:
     "https://debank.com/profile/0xec797d184a8c6cd1ef01fadc98b575e84b156c18",
   depositTokens: {
@@ -101,7 +102,15 @@ export const alphaSteth: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Sommelier have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
+    },
+    {
+      question: "How is AlphaSTETH different from TurboSTETH?",
+      answer: `AlphaSTETH dynamically reallocates leverage across multiple lending protocols based on market conditions to enhance yield, whereas TurboSTETH does not currently adjust leverage positions between lending platforms.`,
+    },
+    {
+      question: "What are the risks?",
+      answer: `AlphaSteth leverages an upgraded vault architecture to access new opportunities as the lending landscape on Ethereum has evolved with new protocols launching like Morpho and Euler.`,
     },
   ],
 }
