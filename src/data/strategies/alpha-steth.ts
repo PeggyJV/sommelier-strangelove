@@ -17,7 +17,7 @@ export const alphaSteth: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
-  protocols: ["AAVE", "Morpho", "Uniswap V3", "Balancer"],
+  protocols: ["AAVE", "Morpho", "Euler", "Uniswap V3", "Balancer", "Lido"],
   strategyAssets: ["WETH", "stETH", "wstETH"],
   performanceSplit: {
     depositors: 80,
