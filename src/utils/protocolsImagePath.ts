@@ -15,5 +15,6 @@ export const protocolsImage: { [key: string]: string } = {
   "Morpho Blue": `${baseIconPath}/morpho_blue.png`,
   Aura: `${baseIconPath}/aura.webp`,
   Pendle: `${baseIconPath}/pendle.png`,
-  Lido: `${baseIconPath}/lido.png`
+  Lido: `${baseIconPath}/lido.png`,
+  Euler: `${baseIconPath}/euler.png`
 }
