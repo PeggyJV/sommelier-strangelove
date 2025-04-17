@@ -17,7 +17,7 @@ export const alphaSteth: CellarData = {
   managementFee: "1.00%",
   managementFeeTooltip:
     "An annual charge on your deposited amount for the pro-rated period during which your deposit remains in the vault.",
-  protocols: ["AAVE", "Morpho", "Euler", "Uniswap V3", "Balancer", "Lido"],
+  protocols: ["AAVE", "Morpho", "Euler", "Uniswap V3", "Balancer", "Lido", "Mellow", "Unichain"],
   strategyAssets: ["WETH", "stETH", "wstETH"],
   performanceSplit: {
     depositors: 80,
@@ -36,12 +36,13 @@ export const alphaSteth: CellarData = {
 
     highlights: `
     -Actively shifts leverage between top lending protocols (AAVE, Morpho, Euler) based on optimal borrowing rates.
-    -Integrated new DeFi protocols to unlock higher yields compared to existing strategies.
+    -Provides exposure to Unichain LP opportunities for enhanced yield diversification.
+    -Allocates into Mellow vaults utilizing dvSTETH to boost ETH-native yield.
     -Automated yield optimization and auto-compounding to boost returns.
     -Potential additional yield enhancement via Lido incentive rewards. `,
 
     description: `
-    AlphaSTETH represents the next evolution in ETH yield strategies, building upon the foundation of stETH, one of the most trusted liquid staking tokens (LST) in DeFi. This strategy uniquely differentiates itself by dynamically adjusting leverage and allocation across multiple lending protocols (AAVE, Morpho, Euler) based on borrowing costs, liquidity opportunities, and risk-adjusted returns. By continuously optimizing positions and utilizing automated compounding, AlphaSTETH aims to deliver superior yields, enhanced further through potential Lido reward incentives.
+    AlphaSTETH represents the next evolution in ETH yield strategies, combining dynamic leverage management with diversified yield primitives. The strategy reallocates capital between lending markets (AAVE, Morpho, Euler), Unichain liquidity pools, and Mellow vaults (via dvSTETH), based on real-time yield opportunities and risk-adjusted performance. Leveraging smart automation and auto-compounding, AlphaSTETH delivers optimized ETH returns, while remaining flexible to integrate emerging yield sources.
     
     Note that Alpha stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
@@ -106,7 +107,7 @@ export const alphaSteth: CellarData = {
     },
     {
       question: "How is AlphaSTETH different from TurboSTETH?",
-      answer: `AlphaSTETH leverages an upgraded vault architecture to access new opportunities as the lending landscape on Ethereum has evolved with new protocols launching like Morpho and Euler.`,
+      answer: `AlphaSTETH leverages an upgraded vault architecture to access new yield opportunities across a broader set of DeFi protocols. While TurboSTETH primarily focused on classic leverage loops, AlphaSTETH incorporates advanced strategies including Morpho and Euler lending, Unichain LP provisioning, and Mellow’s dvSTETH validator diversification — offering a more flexible and diversified approach to ETH-native yield generation.`,
     },
   ],
 }

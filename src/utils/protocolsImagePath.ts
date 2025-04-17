@@ -16,5 +16,7 @@ export const protocolsImage: { [key: string]: string } = {
   Aura: `${baseIconPath}/aura.webp`,
   Pendle: `${baseIconPath}/pendle.png`,
   Lido: `${baseIconPath}/lido.png`,
-  Euler: `${baseIconPath}/euler.png`
+  Euler: `${baseIconPath}/euler.png`,
+  Mellow: `${baseIconPath}/mellow.png`,
+  Unichain: `${baseIconPath}/unichain.png`
 }
