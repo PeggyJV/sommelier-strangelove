@@ -26,8 +26,6 @@ import { Link } from "components/Link"
 import { config } from "utils/config"
 import {
   useAccount,
-  useBalance,
-  useBlockNumber,
   usePublicClient,
   useWalletClient,
 } from "wagmi"
@@ -65,6 +63,7 @@ import {
 import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { useQueryClient } from "@tanstack/react-query"
+import { useUserBalances } from "data/hooks/useUserBalances"
 
 interface FormValues {
   depositAmount: number
@@ -221,20 +220,11 @@ export const SommelierTab = ({
     skip: true,
   })
 
-  const { data: blockNumber } = useBlockNumber({ watch: true })
+ const { userBalances } = useUserBalances()
 
-  const { data: selectedTokenBalance, queryKey } = useBalance({
-    address: address,
-    token: getAddress(
-      selectedToken?.address ||
-        "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-    ), //WETH Address
-    unit: "wei",
-  })
-
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey })
-  }, [blockNumber, queryClient])
+ const selectedTokenBalance = userBalances.data?.find(
+   (b) => b.symbol === selectedToken?.symbol
+ )
 
   const erc20Contract =
     selectedToken?.address &&
@@ -361,19 +351,22 @@ export const SommelierTab = ({
     assetAddress?: string
   ) => {
     if(cellarConfig.boringVault) {
-      // @ts-ignore
+      let nativeDeposit = selectedToken?.symbol === "ETH"
+
+      // In case of native deposit, the minimum mint is calculated based on WETH
+      // previewDeposit doesn't handle native ETH
       const minimumMint = await boringVaultLens?.read.previewDeposit([
-        assetAddress,
+        nativeDeposit ? cellarConfig.baseAsset.address : assetAddress,
         amtInWei,
         cellarConfig.cellar.address,
         cellarConfig.accountant?.address,
       ])
-
       // @ts-ignore
       return cellarSigner?.write.deposit(
         [assetAddress, amtInWei, minimumMint],
         {
           account: address,
+          value: nativeDeposit ? amtInWei : 0,
         }
       )
     }
@@ -419,10 +412,8 @@ export const SommelierTab = ({
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
 
-    // if swap slippage is not set, use default value
-    const slippage = data?.slippage
-
-    if (!erc20Contract) return
+    let nativeDeposit = selectedToken?.symbol === "ETH"
+    if (!erc20Contract && !nativeDeposit) return
     insertEvent({
       event: "deposit.started",
       address: address ?? "",
@@ -435,14 +426,16 @@ export const SommelierTab = ({
     // })
 
     // check if approval exists
-    // @ts-ignore
-    const allowance = await erc20Contract.read.allowance(
-      [
-        getAddress(address ?? ""),
-        getAddress(cellarConfig.cellar.address),
-      ],
-      { account: address }
-    )
+    const allowance = nativeDeposit
+        ? Number.MAX_SAFE_INTEGER
+      : // @ts-ignore
+        await erc20Contract.read.allowance(
+          [
+            getAddress(address ?? ""),
+            getAddress(cellarConfig.cellar.address),
+          ],
+          { account: address }
+        )
 
     const amtInWei = parseUnits(
       depositAmount.toString(),

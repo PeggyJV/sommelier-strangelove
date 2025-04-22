@@ -565,10 +565,10 @@ export const tokenConfig: Token[] = [
     chain: chainSlugMap.ETHEREUM.id,
   },
   {
-    src: "",
-    alt: "",
+    src: "/assets/icons/neth.png",
+    alt: "ETH logo",
     symbol: "ETH",
-    address: "",
+    address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     coinGeckoId: "ethereum",
     decimals: 18,
     chain: chainSlugMap.ETHEREUM.id,
