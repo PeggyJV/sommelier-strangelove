@@ -82,14 +82,14 @@ function scientificToDecimalString(num: number) {
 
 // Define the preset values for the form
 // TODO: Consider setting presets per chain
-type PresetValueKey = "Low" | "Mid" | "High" | "Custom"
+type PresetValueKey = "Day" | "Days" | "Week" | "Custom"
 const PRESET_VALUES: Record<
   PresetValueKey,
   { deadlineHours: number; sharePriceDiscountPercent: number }
 > = {
-  High: { deadlineHours: 12, sharePriceDiscountPercent: 0.15 },
-  Mid: { deadlineHours: 24, sharePriceDiscountPercent: 0.05 },
-  Low: { deadlineHours: 72, sharePriceDiscountPercent: 0.01 },
+  Day: { deadlineHours: 24, sharePriceDiscountPercent: 0.05 },
+  Days: { deadlineHours: 72, sharePriceDiscountPercent: 0.01 },
+  Week: { deadlineHours: 144, sharePriceDiscountPercent: 0.0 },
   Custom: { deadlineHours: 0, sharePriceDiscountPercent: 0 },
 }
 
@@ -116,11 +116,11 @@ export const WithdrawQueueForm = ({
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
-    cellarConfig.chain.id
+    cellarConfig.chain.id,
   )
   const { data: strategyData } = useStrategyData(
     cellarConfig.cellar.address,
-    cellarConfig.chain.id
+    cellarConfig.chain.id,
   )
   const tokenPrice = strategyData?.tokenPrice
 
@@ -129,28 +129,27 @@ export const WithdrawQueueForm = ({
 
   const withdrawQueueContract = (() => {
     if (!publicClient) return
-    return getContract( {
-        address: cellarConfig.chain.withdrawQueueAddress as `0x${string}`,
-        abi: withdrawQueueV0821,
-        client: {
-          public: publicClient,
-          wallet: walletClient
-        }
-      }
-    )
+    return getContract({
+      address: cellarConfig.chain
+        .withdrawQueueAddress as `0x${string}`,
+      abi: withdrawQueueV0821,
+      client: {
+        public: publicClient,
+        wallet: walletClient,
+      },
+    })
   })()
 
   const cellarContract = (() => {
     if (!publicClient) return
-    return getContract( {
+    return getContract({
       address: cellarConfig.cellar.address as `0x${string}`,
       abi: cellarConfig.cellar.abi,
       client: {
         public: publicClient,
-        wallet: walletClient
-      }
-    }
-    )
+        wallet: walletClient,
+      },
+    })
   })()
 
   const [_, wait] = useWaitForTransaction({
@@ -166,7 +165,7 @@ export const WithdrawQueueForm = ({
   })
 
   const [selectedToken, setSelectedToken] = useState<Token | null>(
-    null
+    null,
   )
 
   function trackedSetSelectedToken(value: Token | null) {
@@ -191,7 +190,7 @@ export const WithdrawQueueForm = ({
       setValue("deadlineHours", preset.deadlineHours)
       setValue(
         "sharePriceDiscountPercent",
-        preset.sharePriceDiscountPercent
+        preset.sharePriceDiscountPercent,
       )
     }
   }
@@ -202,7 +201,7 @@ export const WithdrawQueueForm = ({
     setValue("deadlineHours", preset.deadlineHours)
     setValue(
       "sharePriceDiscountPercent",
-      preset.sharePriceDiscountPercent
+      preset.sharePriceDiscountPercent,
     )
   }, [])
 
@@ -211,7 +210,7 @@ export const WithdrawQueueForm = ({
   const watchWithdrawAmount = watch("withdrawAmount")
   const watchDeadlineHours = watch("deadlineHours")
   const watchSharePriceDiscountPercent = watch(
-    "sharePriceDiscountPercent"
+    "sharePriceDiscountPercent",
   )
 
   const isDisabled =
@@ -230,7 +229,12 @@ export const WithdrawQueueForm = ({
 
   const setMax = () => {
     const amount = parseFloat(
-      toEther(lpTokenData?.formatted, lpTokenData?.decimals, false, 6)
+      toEther(
+        lpTokenData?.formatted,
+        lpTokenData?.decimals,
+        false,
+        6,
+      ),
     )
     setValue("withdrawAmount", amount)
   }
@@ -261,15 +265,14 @@ export const WithdrawQueueForm = ({
 
     const withdrawAmtInBaseDenom = parseUnits(
       `${withdrawAmount}`,
-      cellarConfig.cellar.decimals
+      cellarConfig.cellar.decimals,
     )
 
     // Get approval if needed
-    const allowance = await cellarContract?.read.allowance([
+    const allowance = (await cellarContract?.read.allowance([
       address!,
-      getAddress(cellarConfig.chain.withdrawQueueAddress)
-      ]
-    ) as bigint
+      getAddress(cellarConfig.chain.withdrawQueueAddress),
+    ])) as bigint
 
     let needsApproval
     try {
@@ -283,11 +286,12 @@ export const WithdrawQueueForm = ({
     if (needsApproval) {
       try {
         // @ts-ignore
-        const hash = await cellarContract?.write.approve([
-          getAddress(cellarConfig.chain.withdrawQueueAddress),
-          MaxUint256
+        const hash = await cellarContract?.write.approve(
+          [
+            getAddress(cellarConfig.chain.withdrawQueueAddress),
+            MaxUint256,
           ],
-          { account: address }
+          { account: address },
         )
         addToast({
           heading: "ERC20 Approval",
@@ -353,8 +357,8 @@ export const WithdrawQueueForm = ({
       const previewRedeem: number = parseInt(
         await fetchCellarPreviewRedeem(
           id,
-          BigInt(10 ** cellarConfig.cellar.decimals)
-        )
+          BigInt(10 ** cellarConfig.cellar.decimals),
+        ),
       )
       const sharePriceStandardized =
         previewRedeem / 10 ** cellarConfig.baseAsset.decimals
@@ -362,7 +366,8 @@ export const WithdrawQueueForm = ({
         sharePriceStandardized *
         ((100 - sharePriceDiscountPercent) / 100)
       const sharePriceWithDiscountInBaseDenom = Math.floor(
-        sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
+        sharePriceWithDiscount *
+          10 ** cellarConfig.baseAsset.decimals,
       )
 
       // Input Touple
@@ -370,7 +375,7 @@ export const WithdrawQueueForm = ({
         BigInt(deadlineSeconds),
         BigInt(sharePriceWithDiscountInBaseDenom),
         withdrawAmtInBaseDenom,
-        false
+        false,
       ]
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
@@ -378,18 +383,17 @@ export const WithdrawQueueForm = ({
         withdrawQueueContract?.simulate.updateWithdrawRequest,
         [cellarConfig.cellar.address, withdrawTouple],
         330000,
-        address
+        address,
       )
       // @ts-ignore
-      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
-        cellarConfig.cellar.address,
-        withdrawTouple
-        ],
-        {
-          gas: gasLimitEstimated,
-          account: address
-        }
-      )
+      const hash =
+        await withdrawQueueContract?.write.updateWithdrawRequest(
+          [cellarConfig.cellar.address, withdrawTouple],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          },
+        )
 
       const onSuccess = () => {
         if (onSuccessfulWithdraw) {
@@ -450,7 +454,6 @@ export const WithdrawQueueForm = ({
     }
   }
 
-
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
 
@@ -461,19 +464,17 @@ export const WithdrawQueueForm = ({
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
-            cellarConfig.cellar.address
+            cellarConfig.cellar.address,
           ])
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.read.isWithdrawRequestValid([
+          (await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
-            withdrawRequest
-            ]
-          ) as boolean
+            withdrawRequest,
+          ])) as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
-
       } else {
         setIsActiveWithdrawRequest(false)
       }
@@ -569,7 +570,7 @@ export const WithdrawQueueForm = ({
                           0,
                           decimalPos +
                             cellarConfig.cellar.decimals +
-                            1
+                            1,
                         ) // Keep token decimal places as max
                         event.target.value = val
                       }
@@ -586,8 +587,8 @@ export const WithdrawQueueForm = ({
                               lpTokenData?.formatted,
                               lpTokenData?.decimals,
                               false,
-                              6
-                            )
+                              6,
+                            ),
                           ) || "Insufficient balance",
                     },
                   })}
@@ -604,7 +605,7 @@ export const WithdrawQueueForm = ({
                             lpTokenData.value,
                             lpTokenData.decimals,
                             false,
-                            6
+                            6,
                           )) ||
                           "--"}
                       </Text>
@@ -690,7 +691,7 @@ export const WithdrawQueueForm = ({
                       >
                         {level}
                       </Button>
-                    )
+                    ),
                   )}
                 </ButtonGroup>
                 {/*
