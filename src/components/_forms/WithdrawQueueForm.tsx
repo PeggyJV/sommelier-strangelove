@@ -116,11 +116,11 @@ export const WithdrawQueueForm = ({
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
-    cellarConfig.chain.id,
+    cellarConfig.chain.id
   )
   const { data: strategyData } = useStrategyData(
     cellarConfig.cellar.address,
-    cellarConfig.chain.id,
+    cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
 
@@ -165,7 +165,7 @@ export const WithdrawQueueForm = ({
   })
 
   const [selectedToken, setSelectedToken] = useState<Token | null>(
-    null,
+    null
   )
 
   function trackedSetSelectedToken(value: Token | null) {
@@ -180,7 +180,7 @@ export const WithdrawQueueForm = ({
   }
 
   const [selectedPriority, setSelectedPriority] =
-    useState<PresetValueKey>("Mid")
+    useState<PresetValueKey>("Day")
 
   // Handle the priority selection
   const handleSelect = (value: PresetValueKey) => {
@@ -190,7 +190,7 @@ export const WithdrawQueueForm = ({
       setValue("deadlineHours", preset.deadlineHours)
       setValue(
         "sharePriceDiscountPercent",
-        preset.sharePriceDiscountPercent,
+        preset.sharePriceDiscountPercent
       )
     }
   }
@@ -201,7 +201,7 @@ export const WithdrawQueueForm = ({
     setValue("deadlineHours", preset.deadlineHours)
     setValue(
       "sharePriceDiscountPercent",
-      preset.sharePriceDiscountPercent,
+      preset.sharePriceDiscountPercent
     )
   }, [])
 
@@ -210,7 +210,7 @@ export const WithdrawQueueForm = ({
   const watchWithdrawAmount = watch("withdrawAmount")
   const watchDeadlineHours = watch("deadlineHours")
   const watchSharePriceDiscountPercent = watch(
-    "sharePriceDiscountPercent",
+    "sharePriceDiscountPercent"
   )
 
   const isDisabled =
@@ -229,12 +229,7 @@ export const WithdrawQueueForm = ({
 
   const setMax = () => {
     const amount = parseFloat(
-      toEther(
-        lpTokenData?.formatted,
-        lpTokenData?.decimals,
-        false,
-        6,
-      ),
+      toEther(lpTokenData?.formatted, lpTokenData?.decimals, false, 6)
     )
     setValue("withdrawAmount", amount)
   }
@@ -265,7 +260,7 @@ export const WithdrawQueueForm = ({
 
     const withdrawAmtInBaseDenom = parseUnits(
       `${withdrawAmount}`,
-      cellarConfig.cellar.decimals,
+      cellarConfig.cellar.decimals
     )
 
     // Get approval if needed
@@ -291,7 +286,7 @@ export const WithdrawQueueForm = ({
             getAddress(cellarConfig.chain.withdrawQueueAddress),
             MaxUint256,
           ],
-          { account: address },
+          { account: address }
         )
         addToast({
           heading: "ERC20 Approval",
@@ -357,8 +352,8 @@ export const WithdrawQueueForm = ({
       const previewRedeem: number = parseInt(
         await fetchCellarPreviewRedeem(
           id,
-          BigInt(10 ** cellarConfig.cellar.decimals),
-        ),
+          BigInt(10 ** cellarConfig.cellar.decimals)
+        )
       )
       const sharePriceStandardized =
         previewRedeem / 10 ** cellarConfig.baseAsset.decimals
@@ -366,8 +361,7 @@ export const WithdrawQueueForm = ({
         sharePriceStandardized *
         ((100 - sharePriceDiscountPercent) / 100)
       const sharePriceWithDiscountInBaseDenom = Math.floor(
-        sharePriceWithDiscount *
-          10 ** cellarConfig.baseAsset.decimals,
+        sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
       )
 
       // Input Touple
@@ -383,7 +377,7 @@ export const WithdrawQueueForm = ({
         withdrawQueueContract?.simulate.updateWithdrawRequest,
         [cellarConfig.cellar.address, withdrawTouple],
         330000,
-        address,
+        address
       )
       // @ts-ignore
       const hash =
@@ -392,7 +386,7 @@ export const WithdrawQueueForm = ({
           {
             gas: gasLimitEstimated,
             account: address,
-          },
+          }
         )
 
       const onSuccess = () => {
@@ -570,7 +564,7 @@ export const WithdrawQueueForm = ({
                           0,
                           decimalPos +
                             cellarConfig.cellar.decimals +
-                            1,
+                            1
                         ) // Keep token decimal places as max
                         event.target.value = val
                       }
@@ -587,8 +581,8 @@ export const WithdrawQueueForm = ({
                               lpTokenData?.formatted,
                               lpTokenData?.decimals,
                               false,
-                              6,
-                            ),
+                              6
+                            )
                           ) || "Insufficient balance",
                     },
                   })}
@@ -605,7 +599,7 @@ export const WithdrawQueueForm = ({
                             lpTokenData.value,
                             lpTokenData.decimals,
                             false,
-                            6,
+                            6
                           )) ||
                           "--"}
                       </Text>
@@ -671,7 +665,7 @@ export const WithdrawQueueForm = ({
                   backgroundColor="surface.tertiary"
                   borderRadius={16}
                 >
-                  {(["Low", "Mid", "High"] as PresetValueKey[]).map(
+                  {(["Day", "Days", "Week"] as PresetValueKey[]).map(
                     (level, index, array) => (
                       <Button
                         key={level}
@@ -691,7 +685,7 @@ export const WithdrawQueueForm = ({
                       >
                         {level}
                       </Button>
-                    ),
+                    )
                   )}
                 </ButtonGroup>
                 {/*
