@@ -379,8 +379,8 @@ export const WithdrawQueueForm = ({
         330000,
         address
       )
-      // @ts-ignore
       const hash =
+        // @ts-ignore
         await withdrawQueueContract?.write.updateWithdrawRequest(
           [cellarConfig.cellar.address, withdrawTouple],
           {
