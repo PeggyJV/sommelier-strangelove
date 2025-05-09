@@ -54,11 +54,11 @@ export const createApyChangeDatum = ({
   smooth: boolean
   daysSmoothed: number
   daysRendered: number
-}): { x: Date; y: string }[] | undefined => {
+}): { x: Date; y: string, value: number }[] | undefined => {
   if (!data) return
   if (data.length < 2) return
 
-  const datum: { x: Date; y: string }[] = []
+  const datum: { x: Date; y: string, value: number }[] = []
   // Inception date (configured)
   const launchDate = new Date(launchEpoch * 1000)
   let apyValues: number[] = []
@@ -139,6 +139,7 @@ export const createApyChangeDatum = ({
       datum.push({
         x: new Date(item.date * 1000),
         y: String(apyValue.toFixed(1)) + "%",
+        value: apyValue,
       })
     }
   })

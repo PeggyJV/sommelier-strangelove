@@ -16,8 +16,6 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
-import { getMerkleRewardsApy } from "data/actions/common/getMerkleRewardsApy"
-import { config as utilConfig } from "utils/config"
 
 export const getStrategyData = async ({
   address,
@@ -316,9 +314,8 @@ export const getStrategyData = async ({
         formatted:
           (Number(baseApyValue?.value ?? 0) + Number(rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0))
             .toFixed(2) + "%",
-        value: (baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0)
+        value: Number(baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0)
       }
-
       return {
         activeAsset,
         address,

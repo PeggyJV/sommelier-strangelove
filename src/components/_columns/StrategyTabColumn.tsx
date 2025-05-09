@@ -194,7 +194,7 @@ export const StrategyTabColumn = ({
       accessor: "baseApy",
       Cell: ({ row }: any) => {
         const launchDate = row.original.launchDate
-        if (launchDate && launchDate > Date.now()) {
+        if ((launchDate && launchDate > Date.now()) || !row.original.baseApy) {
           return (
             <Text fontWeight={550} fontSize="16px" textAlign="right">
               --
