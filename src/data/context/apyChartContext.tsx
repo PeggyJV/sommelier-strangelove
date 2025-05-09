@@ -9,9 +9,8 @@ import {
   useCallback,
   ReactNode
 } from "react"
-import { LineProps, Serie } from "@nivo/line"
+import { LineSvgProps, LineSeries } from "@nivo/line"
 import { format, subDays } from "date-fns"
-import { colors } from "theme/colors"
 import {
   getPreviousMonth,
   getPreviousWeek,
@@ -35,8 +34,8 @@ import {
 } from "src/data/actions/types"
 
 export interface DataProps {
-  series?: Serie[]
-  chartProps: Partial<LineProps>
+  series?: LineSeries[]
+  chartProps: Partial<LineSvgProps<LineSeries>>
 }
 
 export interface ApyData {
@@ -54,7 +53,7 @@ type Timeline = "7D" | "30D" | "ALL"
 export interface ApyChartContext {
   isFetching: boolean
   isError: boolean
-  data: DataProps
+  data: DataProps & { label?: string }
   reexecuteWeekly: (
     opts?: Partial<OperationContext> | undefined
   ) => void
@@ -74,7 +73,7 @@ export interface ApyChartContext {
   setShowLine: Dispatch<SetStateAction<ShowLine>>
 }
 
-const hourlyChartProps: Partial<LineProps> = {
+const hourlyChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d %H:%M",
     tickValues: "every 3 hours",
@@ -88,7 +87,7 @@ const hourlyChartProps: Partial<LineProps> = {
   },
 }
 
-const dayChartProps: Partial<LineProps> = {
+const dayChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
     tickValues: "every day",
@@ -102,7 +101,7 @@ const dayChartProps: Partial<LineProps> = {
   },
 }
 
-const monthChartProps: Partial<LineProps> = {
+const monthChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
     tickValues: "every 2 days",
@@ -116,7 +115,7 @@ const monthChartProps: Partial<LineProps> = {
   },
 }
 
-const allTimeChartProps: Partial<LineProps> = {
+const allTimeChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
     tickValues: "every 2 days",
@@ -313,15 +312,14 @@ export const ApyChartProvider: FC<{
     const series = [
       {
         id: "apy",
-        data: apyDatum || [],
-        color: colors.neutral[100],
-        label: "7D",
+        data: apyDatum || []
       },
     ]
 
     setData({
       series,
       chartProps: monthChartProps, // Note the use of month chart props here, this is due to the fixed time window
+      label: "7D",
     })
 
     if (
@@ -345,7 +343,7 @@ export const ApyChartProvider: FC<{
 
       let average =
         Number(
-          apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
+          apyDatum?.reduce((a, b) => Number(a) + Number(b), 0)
         ) / Number(apyDatum?.length)
 
       setApyChange({
@@ -374,15 +372,14 @@ export const ApyChartProvider: FC<{
     const series = [
       {
         id: "apy",
-        data: apyDatum || [],
-        color: colors.neutral[100],
-        label: "30D",
+        data: apyDatum || []
       },
     ]
 
     setData({
       series,
       chartProps: monthChartProps,
+      label: "30D",
     })
 
     if (
@@ -406,7 +403,7 @@ export const ApyChartProvider: FC<{
 
       let average =
         Number(
-          apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
+          apyDatum?.reduce((a, b) => Number(a) + Number(b), 0)
         ) / Number(apyDatum?.length)
 
       setApyChange({
@@ -435,14 +432,13 @@ export const ApyChartProvider: FC<{
     const series = [
       {
         id: "apy",
-        data: apyDatum || [],
-        color: colors.neutral[100],
-        label: "All time",
+        data: apyDatum || []
       },
     ]
     setData({
       series,
       chartProps: allTimeChartProps,
+      label: "All time",
     })
 
     if (
@@ -466,7 +462,7 @@ export const ApyChartProvider: FC<{
 
       let average =
         Number(
-          apyDatum?.reduce((a, b) => Number(a) + Number(b.value), 0)
+          apyDatum?.reduce((a, b) => Number(a) + Number(b), 0)
         ) / Number(apyDatum?.length)
 
       setApyChange({
@@ -478,7 +474,7 @@ export const ApyChartProvider: FC<{
   }, [allTimeData, launchEpoch, cellarConfig.config.cellar.decimals])
 
   // Set data to be returned by hook
-  const [data, setData] = useState<DataProps>({
+  const [data, setData] = useState<DataProps & { label?: string }>({
     series: [{ id: defaultSerieId, data: [{ x: new Date(), y: 0 }] }],
     chartProps: hourlyChartProps,
   })

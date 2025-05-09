@@ -61,7 +61,7 @@ export const createApyChangeDatum = ({
   if (!data) return
   if (data.length < 2) return
 
-  const datum: Datum[] = []
+  const datum: { x: Date; y: string }[] = []
   // Inception date (configured)
   const launchDate = new Date(launchEpoch * 1000)
   let apyValues: number[] = []
@@ -142,7 +142,6 @@ export const createApyChangeDatum = ({
       datum.push({
         x: new Date(item.date * 1000),
         y: String(apyValue.toFixed(1)) + "%",
-        value: apyValue,
       })
     }
   })
