@@ -1,7 +1,7 @@
 import { Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const ChevronRightIcon: VFC<IconProps> = (props) => (
+export const ChevronRightIcon: FC<IconProps> = (props) => (
   <Icon viewBox="0 0 12 12" {...props}>
     <g clipPath="url(#clip0_102_295)">
       <path

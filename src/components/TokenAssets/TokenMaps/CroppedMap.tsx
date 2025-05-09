@@ -9,14 +9,14 @@ import {
 } from "@chakra-ui/react"
 import { ControlsIcon } from "components/_icons"
 import { Token } from "data/tokenConfig"
-import { useState, VFC } from "react"
+import { useState, FC } from "react"
 
 interface CroppedMapProps extends StackProps {
   tokens: Token[]
   displaySymbol?: boolean
 }
 
-export const CroppedMap: VFC<CroppedMapProps> = ({
+export const CroppedMap: FC<CroppedMapProps> = ({
   tokens,
   displaySymbol,
   ...rest

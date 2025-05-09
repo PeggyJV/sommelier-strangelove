@@ -1,7 +1,7 @@
 import { Button, ButtonProps, forwardRef } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const TertiaryButton: VFC<ButtonProps> = forwardRef<
+export const TertiaryButton: FC<ButtonProps> = forwardRef<
   ButtonProps,
   "button"
 >((props, ref) => {

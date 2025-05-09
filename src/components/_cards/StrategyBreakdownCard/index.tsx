@@ -10,7 +10,7 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
@@ -25,7 +25,7 @@ interface StrategyBreakdownProps extends BoxProps {
   cellarId: string
 }
 
-export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
+export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
   cellarId,
   cellarDataMap,
 }) => {

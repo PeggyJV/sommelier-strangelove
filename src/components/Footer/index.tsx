@@ -6,7 +6,7 @@ import {
   Text,
   Wrap,
 } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import { Socials } from "components/Socials"
 import { FooterLink } from "./FooterLink"
 import { ExternalLinkIcon } from "components/_icons"
@@ -16,7 +16,7 @@ import { Overview } from "./Overview"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 
-const Footer: VFC<ContainerProps> = (props) => {
+const Footer: FC<ContainerProps> = (props) => {
   const id = useRouter().query.id as string | undefined
   const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
   return (

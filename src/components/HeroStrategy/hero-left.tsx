@@ -7,13 +7,13 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { strategyPageContentData } from "data/strategyPageContentData"
-import { VFC } from "react"
+import { FC } from "react"
 
 interface HeroStrategyLeftProps {
   id: string
 }
 
-export const HeroStrategyLeft: VFC<HeroStrategyLeftProps> = ({
+export const HeroStrategyLeft: FC<HeroStrategyLeftProps> = ({
   id,
 }) => {
   const content = strategyPageContentData[id]

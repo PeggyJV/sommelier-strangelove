@@ -1,7 +1,7 @@
 import { forwardRef, Input, InputProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const ModalInput: VFC<InputProps> = forwardRef<
+export const ModalInput: FC<InputProps> = forwardRef<
   InputProps,
   "input"
 >((props, ref) => {

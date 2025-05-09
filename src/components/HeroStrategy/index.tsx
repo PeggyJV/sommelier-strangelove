@@ -1,5 +1,5 @@
 import { Stack } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import { HeroStrategyLeft } from "./hero-left"
 import { HeroStrategyRight } from "./hero-right"
 
@@ -7,7 +7,7 @@ interface HeroProps {
   id: string
 }
 
-export const HeroStrategy: VFC<HeroProps> = ({ id }) => {
+export const HeroStrategy: FC<HeroProps> = ({ id }) => {
   return (
     <Stack
       direction={{

@@ -1,10 +1,10 @@
 import { ButtonProps, Tooltip, useDisclosure } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import { SecondaryButton } from "./SecondaryButton"
 import { Chain } from "src/data/chainConfig"
 import { WithdrawQueueModal } from "components/_modals/WithdrawQueueModal"
 
-export const WithdrawQueueButton: VFC<
+export const WithdrawQueueButton: FC<
   ButtonProps & {
     chain: Chain
     buttonLabel: string

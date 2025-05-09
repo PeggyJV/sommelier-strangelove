@@ -1,8 +1,8 @@
-import { VFC } from "react"
+import { FC } from "react"
 import { BarSvgProps, ResponsiveBar } from "@nivo/bar"
 import { ToolTip } from "./BarToolTip"
 
-const BarChart: VFC<BarSvgProps<any>> = ({ data, ...rest }) => {
+const BarChart: FC<BarSvgProps<any>> = ({ data, ...rest }) => {
   return (
     <ResponsiveBar
       data={data}

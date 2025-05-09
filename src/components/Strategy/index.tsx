@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { SectionStrategiesWithImages } from "types/sanity"
-import { useState, VFC } from "react"
+import { useState, FC } from "react"
 import { PortableText } from "@portabletext/react"
 import { HeadingHeavy } from "components/HeadingHeavy"
 import { components } from "./portableText"
@@ -24,7 +24,7 @@ interface StrategyProps extends BoxProps {
   data: SectionStrategiesWithImages
 }
 
-export const Strategy: VFC<StrategyProps> = ({ data, ...rest }) => {
+export const Strategy: FC<StrategyProps> = ({ data, ...rest }) => {
   const [sliderRef, setSliderRef] = useState<Slider | null>(null)
   return (
     <Box {...rest}>

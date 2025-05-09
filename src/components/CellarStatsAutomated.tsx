@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { FC } from "react"
 import {
   Box,
   Heading,
@@ -25,7 +25,7 @@ interface CellarStatsAutomatedProps extends StackProps {
   cellarConfig: ConfigProps
 }
 
-export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
+export const CellarStatsAutomated: FC<CellarStatsAutomatedProps> = ({
   cellarConfig,
   ...rest
 }) => {

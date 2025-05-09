@@ -1,8 +1,8 @@
 import { Heading, HStack, Text, VStack } from "@chakra-ui/react"
 import { BlockIcon } from "components/_icons"
-import React, { VFC } from "react"
+import React, { FC } from "react"
 
-export const GeoBanner: VFC = () => {
+export const GeoBanner: FC = () => {
   return (
     <HStack
       p={4}

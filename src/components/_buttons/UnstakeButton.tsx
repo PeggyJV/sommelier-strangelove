@@ -1,9 +1,9 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import { SecondaryButton } from "./SecondaryButton"
 import { UnstakeModal } from "components/_modals/UnstakeModal"
 
-export const UnstakeButton: VFC<ButtonProps> = (props) => {
+export const UnstakeButton: FC<ButtonProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function closeModal() {

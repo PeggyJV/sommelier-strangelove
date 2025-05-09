@@ -1,8 +1,8 @@
 import { BoxProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import { Card } from "./Card"
 
-export const TransparentCard: VFC<BoxProps> = (props) => {
+export const TransparentCard: FC<BoxProps> = (props) => {
   return (
     <Card
       backgroundColor="surface.primary"

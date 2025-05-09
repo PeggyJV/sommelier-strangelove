@@ -6,7 +6,7 @@ import {
   Wrap,
   Image,
 } from "@chakra-ui/react"
-import { FC, LegacyRef } from "react"
+import { FC, Ref } from "react"
 
 import { sliderSettings } from "./sliderSettings"
 import Slider from "react-slick"
@@ -16,7 +16,7 @@ import { Badge, BadgeStatus } from "./Badge"
 import { CardBase } from "components/_cards/CardBase"
 
 interface SliderProps extends BoxProps {
-  setSliderRef: LegacyRef<Slider>
+  setSliderRef: Ref<Slider>
   data?: StrategyWithImage[]
 }
 

@@ -1,11 +1,11 @@
 import { Text, TextProps } from "@chakra-ui/react"
-import { ReactNode, VFC } from "react"
+import { ReactNode, FC } from "react"
 
 interface ApyProps extends TextProps {
   apy?: ReactNode
 }
 
-export const Apy: VFC<ApyProps> = ({ apy, ...rest }) => {
+export const Apy: FC<ApyProps> = ({ apy, ...rest }) => {
   return (
     <Text
       as="span"

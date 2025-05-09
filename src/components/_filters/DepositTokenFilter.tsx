@@ -16,7 +16,7 @@ import {
   InputRightElement,
   InputGroup,
 } from "@chakra-ui/react"
-import { useState, VFC, useEffect, ChangeEvent } from "react"
+import { useState, FC, useEffect, ChangeEvent } from "react"
 import { ChevronDownIcon, DeleteIcon } from "components/_icons"
 
 export type SymbolPathPair = {
@@ -36,7 +36,7 @@ export interface DepositTokenFilterProps {
   ) => void
 }
 
-export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
+export const DepositTokenFilter: FC<DepositTokenFilterProps> = (
   props
 ) => {
   const handleTokenClick = (symbol: string) => {

@@ -1,8 +1,8 @@
 import { HStack, Text, VStack } from "@chakra-ui/react"
 import { BlockIcon } from "components/_icons"
-import React, { VFC } from "react"
+import React, { FC } from "react"
 
-export const MaintenanceBanner: VFC = () => {
+export const MaintenanceBanner: FC = () => {
   return (
     <HStack
       p={4}

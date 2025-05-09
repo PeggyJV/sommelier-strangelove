@@ -1,4 +1,4 @@
-import { VFC, useMemo } from "react"
+import { FC, useMemo } from "react"
 import {
   Heading,
   HeadingProps,
@@ -38,7 +38,7 @@ export interface PageCellarProps {
   id: string
 }
 
-const PageCellar: VFC<PageCellarProps> = ({ id }) => {
+const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const cellarConfig = cellarDataMap[id].config
   const staticCellarData = cellarDataMap[id]
   const cellarAddress = cellarDataMap[id].config.id

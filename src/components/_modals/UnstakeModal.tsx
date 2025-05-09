@@ -1,6 +1,6 @@
 import { ModalProps, Text, VStack } from "@chakra-ui/react"
 import { CardHeading } from "components/_typography/CardHeading"
-import { VFC } from "react"
+import { FC } from "react"
 import { BaseModal } from "./BaseModal"
 import { toEther } from "utils/formatCurrency"
 import { UnstakeForm } from "components/_forms/UnstakeForm"
@@ -12,7 +12,7 @@ type UnstakeModalProps = Pick<ModalProps, "isOpen" | "onClose"> & {
   onCloseProp: () => void
 }
 
-export const UnstakeModal: VFC<UnstakeModalProps> = ({
+export const UnstakeModal: FC<UnstakeModalProps> = ({
   isOpen,
   onClose,
   onCloseProp,

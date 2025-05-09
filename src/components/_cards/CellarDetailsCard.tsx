@@ -22,7 +22,7 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { isArray } from "lodash"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import { VFC, useState, useEffect } from "react"
+import { FC, useState, useEffect } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
@@ -45,7 +45,7 @@ export interface ProtocolDataType {
   title: string
   icon: string
 }
-const CellarDetailsCard: VFC<CellarDetailsProps> = ({
+const CellarDetailsCard: FC<CellarDetailsProps> = ({
   cellarId,
   cellarDataMap,
 }) => {

@@ -1,5 +1,5 @@
 import { ModalProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import { Token as TokenType } from "data/tokenConfig"
 
 interface FormValues {
@@ -13,7 +13,7 @@ import { ModalWithExchangeTab } from "../ModalWithExchangeTab"
 
 type WithdrawModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
-export const WithdrawModal: VFC<WithdrawModalProps> = (props) => {
+export const WithdrawModal: FC<WithdrawModalProps> = (props) => {
   return (
     <ModalWithExchangeTab
       heading="Withdraw"

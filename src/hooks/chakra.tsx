@@ -22,7 +22,7 @@ interface BaseToast extends Partial<Omit<UseToastOptions, "status">> {
 
 export const useBrandedToast = () => {
   const toast = useToast()
-  const toastIdRef = useRef<ToastId>()
+  const toastIdRef = useRef<ToastId>(undefined)
 
   const close = () => {
     if (toastIdRef.current) {
