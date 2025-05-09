@@ -1,14 +1,12 @@
-import { Datum } from "@nivo/line"
 import { differenceInDays } from "date-fns"
 import { toInteger } from "lodash"
-import { formatDecimals } from "utils/bigIntHelpers"
 
 export const createTokenPriceChangeDatum = (
   data?: { date: number; shareValue: string }[]
-): Datum[] | undefined => {
+): { x: Date; y: string }[] | undefined => {
   if (!data) return
 
-  let datum: Datum[] = []
+  let datum: { x: Date; y: string }[] = []
   data.map((item, index, arr) => {
     const firstData = data[data.length - 1]
     if (firstData) {
@@ -21,7 +19,6 @@ export const createTokenPriceChangeDatum = (
       datum.push({
         x: new Date(item.date * 1000),
         y: String(change),
-        value: formatDecimals(current, 18, 6),
       })
     }
   })
@@ -57,7 +54,7 @@ export const createApyChangeDatum = ({
   smooth: boolean
   daysSmoothed: number
   daysRendered: number
-}): Datum[] | undefined => {
+}): { x: Date; y: string }[] | undefined => {
   if (!data) return
   if (data.length < 2) return
 

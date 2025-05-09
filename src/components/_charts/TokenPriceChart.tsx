@@ -1,8 +1,8 @@
 import { Stack, Text } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
 import {
+  LineSeries,
   Point,
-  PointSymbolProps,
   PointTooltipProps,
 } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
@@ -11,8 +11,7 @@ import {
   Dispatch,
   FunctionComponent,
   SetStateAction,
-  useMemo,
-  VFC,
+  useMemo
 } from "react"
 import { colors } from "theme/colors"
 import { format, isSameDay, isSameHour } from "date-fns"
@@ -30,27 +29,28 @@ const LineChart = dynamic(
 interface TokenPriceChartProps {
   timeline: string
   name: string
-  pointActive?: Point
-  setPointActive: Dispatch<SetStateAction<Point | undefined>>
+  pointActive?: Point<LineSeries>
+  setPointActive: Dispatch<SetStateAction<Point<LineSeries> | undefined>>
 }
-export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
+export const TokenPriceChart = ({
   timeline,
   name: strategyTokenName,
   pointActive,
   setPointActive,
-}) => {
+}: TokenPriceChartProps) => {
   const { data } = useTokenPriceChart()
   const { chartTheme } = useNivoThemes()
-  const lineColors = data.series?.map((item) => item.color)
-  const onMouseMove = (point: Point, event: React.MouseEvent) => {
+  const onMouseMove = (
+    point: Point<LineSeries>
+  ) => {
     setPointActive(point)
   }
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
 
-  const ToolTip: FunctionComponent<PointTooltipProps> = ({
+  const ToolTip: FunctionComponent<PointTooltipProps<LineSeries>> = ({
     point,
   }) => {
-    const { id, serieId } = point
+    const { id } = point
     const [_, i] = id.split(".")
     if (isLarger768) {
       return (
@@ -70,12 +70,12 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
             return (
               <ChartTooltipItem
                 key={item.id}
-                backgroundColor={item.color}
+                backgroundColor="neutral.100"
                 name={name}
                 value={`$${
                   data.series?.find((s) => s.id === item.id)?.data[
                     Number(i)
-                  ]?.value
+                  ]?.y
                 }`}
                 percentage={`${formatPercentage(
                   String(
@@ -99,9 +99,12 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
     return null
   }
 
-  const Point: FunctionComponent<PointSymbolProps> = ({
+  const Point = ({
     color,
     datum,
+  }: {
+    color: string
+    datum: { x: Date; y: string }
   }) => {
     const active =
       timeline === "1D"
@@ -182,7 +185,7 @@ export const TokenPriceChart: VFC<TokenPriceChartProps> = ({
       {...data.chartProps}
       {...hourlyAxisBottom}
       data={data.series || []}
-      colors={lineColors}
+      colors={colors.neutral[100]}
       enableArea={true}
       animate={false}
       crosshairType="x"

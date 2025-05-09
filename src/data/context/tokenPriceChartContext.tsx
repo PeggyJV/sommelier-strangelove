@@ -1,4 +1,4 @@
-import { LineProps, Serie } from "@nivo/line"
+import { LineSvgProps, LineSeries } from "@nivo/line"
 import { format } from "date-fns"
 import {
   GetAllTimeShareValueQuery,
@@ -35,8 +35,8 @@ import {
 } from "utils/chartHelper"
 
 export interface DataProps {
-  series?: Serie[]
-  chartProps: Partial<LineProps>
+  series?: LineSeries[]
+  chartProps: Partial<LineSvgProps<LineSeries>>
 }
 
 export interface TokenPriceData {
@@ -76,7 +76,7 @@ export interface TokenPriceChartContext {
   setShowLine: Dispatch<SetStateAction<ShowLine>>
 }
 
-const hourlyChartProps: Partial<LineProps> = {
+const hourlyChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d %H:%M",
     tickValues: "every 3 hours",
@@ -89,7 +89,7 @@ const hourlyChartProps: Partial<LineProps> = {
     precision: "hour",
   },
 }
-const dayChartProps: Partial<LineProps> = {
+const dayChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
     tickValues: "every day",
@@ -102,7 +102,7 @@ const dayChartProps: Partial<LineProps> = {
     precision: "day",
   },
 }
-const monthChartProps: Partial<LineProps> = {
+const monthChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
     tickValues: "every 2 days",
@@ -115,7 +115,7 @@ const monthChartProps: Partial<LineProps> = {
     precision: "day",
   },
 }
-const allTimeChartProps: Partial<LineProps> = {
+const allTimeChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
     tickValues: "every 2 days",
