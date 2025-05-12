@@ -26,7 +26,6 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { fetchWeeklyShareValueData } from "queries/get-weekly-share-value-data"
 import { fetchMonthlyShareValueData } from "queries/get-monthly-share-value-data"
 import { fetchAllTimeShareValueData } from "queries/get-all-time-share-value-data"
-import { OperationContext } from "urql"
 import {
   GetAllTimeShareValueQuery,
   GetMonthlyShareValueQuery,
@@ -54,15 +53,9 @@ export interface ApyChartContext {
   isFetching: boolean
   isError: boolean
   data: DataProps & { label?: string }
-  reexecuteWeekly: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
-  reexecuteMonthly: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
-  reexecuteAllTime: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
+  reexecuteWeekly: () => void
+  reexecuteMonthly: () => void
+  reexecuteAllTime: () => void
   timeArray: {
     title: string
     onClick: () => void

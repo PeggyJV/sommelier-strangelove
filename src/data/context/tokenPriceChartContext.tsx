@@ -20,10 +20,9 @@ import {
   useEffect,
   useState,
   useCallback,
-  ReactNode
+  ReactNode,
 } from "react"
 import { colors } from "theme/colors"
-import { OperationContext } from "urql"
 import {
   getPrevious24Hours,
   getPreviousMonth,
@@ -54,18 +53,10 @@ export interface TokenPriceChartContext {
   isFetching: boolean
   isError: boolean
   data: DataProps
-  reexecuteHourly: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
-  reexecuteWeekly: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
-  reexecuteMonthly: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
-  reexecuteAllTime: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
+  reexecuteHourly: () => void
+  reexecuteWeekly: () => void
+  reexecuteMonthly: () => void
+  reexecuteAllTime: () => void
   timeArray: {
     title: string
     onClick: () => void
@@ -167,8 +158,8 @@ const prevWeek = getPreviousWeek()
 const prevMonth = getPreviousMonth()
 
 export const TokenPriceChartProvider: FC<{
-  address: string,
-  chain: string,
+  address: string
+  chain: string
   children: ReactNode
 }> = ({ children, address, chain }) => {
   const [showLine, setShowLine] = useState<ShowLine>({
@@ -195,7 +186,11 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setHourlyIsFetching(true)
-    fetchHourlyShareValueData(prev24Hours, address, cellarData.config.chain.id)
+    fetchHourlyShareValueData(
+      prev24Hours,
+      address,
+      cellarData.config.chain.id
+    )
       .then((data) => {
         setHourlyDataRaw(data)
         setHourlyIsFetching(false)
@@ -221,7 +216,11 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setWeeklyIsFetching(true)
-    fetchWeeklyShareValueData(prevWeek, address, cellarData.config.chain.id)
+    fetchWeeklyShareValueData(
+      prevWeek,
+      address,
+      cellarData.config.chain.id
+    )
       .then((data) => {
         setWeeklyDataRaw(data)
         setWeeklyIsFetching(false)
@@ -247,7 +246,11 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setMonthlyIsFetching(true)
-    fetchMonthlyShareValueData(prevMonth, address, cellarData.config.chain.id)
+    fetchMonthlyShareValueData(
+      prevMonth,
+      address,
+      cellarData.config.chain.id
+    )
       .then((data) => {
         setMonthlyDataRaw(data)
         setMonthlyIsFetching(false)

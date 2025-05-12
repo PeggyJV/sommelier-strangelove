@@ -19,7 +19,6 @@ import { tokenConfig } from "data/tokenConfig"
 import { CellarDataMap } from "data/types"
 import { useNivoThemes } from "hooks/nivo"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { isArray } from "lodash"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { FC, useState, useEffect } from "react"
@@ -91,7 +90,7 @@ const CellarDetailsCard: FC<CellarDetailsProps> = ({
   const activeAsset = strategyData?.activeAsset
   const { chain } = useAccount()
 
-  const isManyProtocols = isArray(protocols)
+  const isManyProtocols = Array.isArray(protocols)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {

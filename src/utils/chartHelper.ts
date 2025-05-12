@@ -1,5 +1,4 @@
 import { differenceInDays } from "date-fns"
-import { toInteger } from "lodash"
 
 export const createTokenPriceChangeDatum = (
   data?: { date: number; shareValue: string }[]
@@ -12,8 +11,8 @@ export const createTokenPriceChangeDatum = (
     if (firstData) {
       const current = item.shareValue
       const change = firstData
-        ? ((toInteger(current) - toInteger(firstData.shareValue)) /
-            toInteger(firstData.shareValue)) *
+        ? ((parseInt(current) - parseInt(firstData.shareValue)) /
+            parseInt(firstData.shareValue)) *
           100
         : 0
       datum.push({

@@ -36,7 +36,6 @@ import {
   MiscFilter,
   MiscFilterProp,
 } from "components/_filters/MiscFilter"
-import { isEqual } from "lodash"
 import { DeleteCircleIcon } from "components/_icons"
 import { add, isBefore } from "date-fns"
 import { useAccount } from "wagmi"
@@ -209,8 +208,8 @@ export const PageHome = () => {
 
   const hasFiltersChanged = useMemo(() => {
     return (
-      !isEqual(selectedChainIds, initialChainIds) ||
-      !isEqual(selectedDepositAssets, initialDepositAssets) ||
+      !(JSON.stringify(selectedChainIds) !== JSON.stringify(initialChainIds)) ||
+      !(JSON.stringify(selectedDepositAssets) !== JSON.stringify(initialDepositAssets)) ||
       showDeprecated !== initialShowDeprecated ||
       showIncentivised !== initialShowIncentivised
     )
