@@ -404,9 +404,12 @@ export const PageHome = () => {
               padding="1.75em 2em"
               _hover={{ bg: "purple.dark" }}
               onClick={resetFilters}
-              leftIcon={<Text fontSize={"1.25em"}>Reset</Text>}
-              rightIcon={<DeleteCircleIcon boxSize={4} />}
-            />
+            >
+              <HStack>
+                <Text fontSize={"1.25em"}>Reset</Text>
+                <DeleteCircleIcon boxSize={4} />
+              </HStack> 
+            </Button>
           )}
         </VStack>
       ) : (
@@ -436,9 +439,12 @@ export const PageHome = () => {
               padding="1.75em 2em"
               _hover={{ bg: "purple.dark" }}
               onClick={resetFilters}
-              leftIcon={<Text fontSize={"1.25em"}>Reset</Text>}
-              rightIcon={<DeleteCircleIcon boxSize={4} />}
-            />
+            >
+              <HStack>
+                <Text fontSize={"1.25em"}>Reset</Text>
+                <DeleteCircleIcon boxSize={4} />
+              </HStack> 
+            </Button>
           )}
         </HStack>
       )}

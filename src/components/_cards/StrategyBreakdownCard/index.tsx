@@ -16,7 +16,7 @@ import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
 import { CellarDataMap } from "data/types"
 import { FAQAccordion } from "./FAQAccordion"
-import htmr from "htmr"
+import parse from "html-react-parser"
 import { Link } from "components/Link"
 import { isValidURL } from "utils/isValidUrl"
 
@@ -95,7 +95,7 @@ export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
             }
             return (
               <TabPanel key={i} {...tabPanelProps}>
-                <Box whiteSpace="pre-line">{htmr(value)}</Box>
+                <Box whiteSpace="pre-line">{parse(value)}</Box>
               </TabPanel>
             )
           })}
