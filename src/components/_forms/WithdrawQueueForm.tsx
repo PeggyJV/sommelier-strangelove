@@ -82,14 +82,12 @@ function scientificToDecimalString(num: number) {
 
 // Define the preset values for the form
 // TODO: Consider setting presets per chain
-type PresetValueKey = "Day" | "Days" | "Week" | "Custom"
+type PresetValueKey = "Standard" | "Custom"
 const PRESET_VALUES: Record<
   PresetValueKey,
   { deadlineHours: number; sharePriceDiscountPercent: number }
 > = {
-  Day: { deadlineHours: 24, sharePriceDiscountPercent: 0.05 },
-  Days: { deadlineHours: 72, sharePriceDiscountPercent: 0.01 },
-  Week: { deadlineHours: 144, sharePriceDiscountPercent: 0.0 },
+  Standard: { deadlineHours: 288, sharePriceDiscountPercent: 0.0 },
   Custom: { deadlineHours: 0, sharePriceDiscountPercent: 0 },
 }
 
@@ -180,7 +178,7 @@ export const WithdrawQueueForm = ({
   }
 
   const [selectedPriority, setSelectedPriority] =
-    useState<PresetValueKey>("Day")
+    useState<PresetValueKey>("Standard")
 
   // Handle the priority selection
   const handleSelect = (value: PresetValueKey) => {
@@ -665,7 +663,7 @@ export const WithdrawQueueForm = ({
                   backgroundColor="surface.tertiary"
                   borderRadius={16}
                 >
-                  {(["Day", "Days", "Week"] as PresetValueKey[]).map(
+                  {(["Standard"] as PresetValueKey[]).map(
                     (level, index, array) => (
                       <Button
                         key={level}
