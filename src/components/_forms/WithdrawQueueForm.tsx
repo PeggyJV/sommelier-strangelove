@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -13,10 +13,6 @@ import {
   Text,
   Link,
   Tooltip,
-  ButtonGroup,
-  useTheme,
-  InputGroup,
-  InputRightElement,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -32,7 +28,6 @@ import { useUserBalance } from "data/hooks/useUserBalance"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
 import { ModalOnlyTokenMenu } from "components/_menus/ModalMenu"
@@ -56,40 +51,8 @@ interface WithdrawQueueFormProps {
   onSuccessfulWithdraw?: () => void
 }
 
-function scientificToDecimalString(num: number) {
-  // If the number is in scientific notation, split it into base and exponent
-  const sign = Math.sign(num)
-  let [base, exponent] = num
-    .toString()
-    .split("e")
-    .map((item) => parseInt(item, 10))
-
-  // Adjust for negative exponent
-  if (exponent < 0) {
-    let decimalString = Math.abs(base).toString()
-    let padding = Math.abs(exponent) - 1
-    return (
-      (sign < 0 ? "-" : "") +
-      "0." +
-      "0".repeat(padding) +
-      decimalString
-    )
-  }
-
-  // Handle positive exponent or non-scientific numbers (which won't be split)
-  return num.toString()
-}
-
-// Define the preset values for the form
-// TODO: Consider setting presets per chain
-type PresetValueKey = "Standard" | "Custom"
-const PRESET_VALUES: Record<
-  PresetValueKey,
-  { deadlineHours: number; sharePriceDiscountPercent: number }
-> = {
-  Standard: { deadlineHours: 288, sharePriceDiscountPercent: 0.0 },
-  Custom: { deadlineHours: 0, sharePriceDiscountPercent: 0 },
-}
+const DEADLINE_HOURS = 288;
+const SHARE_PRICE_DISCOUNT_PERCENT = 0;
 
 export const WithdrawQueueForm = ({
   onClose,
@@ -102,7 +65,6 @@ export const WithdrawQueueForm = ({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
-  const theme = useTheme()
 
   const { id: _id } = useDepositModalStore()
 
@@ -116,11 +78,6 @@ export const WithdrawQueueForm = ({
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
-  const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address,
-    cellarConfig.chain.id
-  )
-  const tokenPrice = strategyData?.tokenPrice
 
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
@@ -177,53 +134,11 @@ export const WithdrawQueueForm = ({
     setSelectedToken(value)
   }
 
-  const [selectedPriority, setSelectedPriority] =
-    useState<PresetValueKey>("Standard")
-
-  // Handle the priority selection
-  const handleSelect = (value: PresetValueKey) => {
-    setSelectedPriority(value)
-    if (value !== "Custom") {
-      const preset = PRESET_VALUES[value]
-      setValue("deadlineHours", preset.deadlineHours)
-      setValue(
-        "sharePriceDiscountPercent",
-        preset.sharePriceDiscountPercent
-      )
-    }
-  }
-
-  useEffect(() => {
-    // Initial setting of values based on default selection
-    const preset = PRESET_VALUES[selectedPriority]
-    setValue("deadlineHours", preset.deadlineHours)
-    setValue(
-      "sharePriceDiscountPercent",
-      preset.sharePriceDiscountPercent
-    )
-  }, [])
-
   const { doHandleTransaction } = useHandleTransaction()
 
   const watchWithdrawAmount = watch("withdrawAmount")
-  const watchDeadlineHours = watch("deadlineHours")
-  const watchSharePriceDiscountPercent = watch(
-    "sharePriceDiscountPercent"
-  )
 
-  const isDisabled =
-    isNaN(watchWithdrawAmount) ||
-    watchWithdrawAmount <= 0 ||
-    isNaN(watchDeadlineHours) ||
-    watchDeadlineHours <= 0 ||
-    isNaN(watchSharePriceDiscountPercent) ||
-    watchSharePriceDiscountPercent < 0
-
-  const isError =
-    errors.withdrawAmount ||
-    errors.deadlineHours ||
-    errors.sharePriceDiscountPercent ||
-    errors.selectedToken
+  const isDisabled = isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
 
   const setMax = () => {
     const amount = parseFloat(
@@ -235,9 +150,6 @@ export const WithdrawQueueForm = ({
   const geo = useGeo()
   const onSubmit = async ({
     withdrawAmount,
-    deadlineHours,
-    sharePriceDiscountPercent,
-    selectedToken,
   }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -344,7 +256,7 @@ export const WithdrawQueueForm = ({
     try {
       const currentTime = Math.floor(Date.now() / 1000)
       const deadlineSeconds =
-        Math.floor(deadlineHours * 60 * 60) + currentTime
+        Math.floor(DEADLINE_HOURS * 60 * 60) + currentTime
 
       // Query share price
       const previewRedeem: number = parseInt(
@@ -357,7 +269,7 @@ export const WithdrawQueueForm = ({
         previewRedeem / 10 ** cellarConfig.baseAsset.decimals
       const sharePriceWithDiscount =
         sharePriceStandardized *
-        ((100 - sharePriceDiscountPercent) / 100)
+        ((100 - SHARE_PRICE_DISCOUNT_PERCENT) / 100)
       const sharePriceWithDiscountInBaseDenom = Math.floor(
         sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
       )
@@ -681,42 +593,16 @@ export const WithdrawQueueForm = ({
                   pr="2"
                   type="number"
                   step="any"
-                  defaultValue="0.00"
+                  defaultValue={DEADLINE_HOURS}
                   placeholder="0.00"
                   fontSize="lg"
                   fontWeight={700}
                   textAlign="right"
-                  backgroundColor={
-                    selectedPriority === "Custom"
-                      ? "surface.tertiary"
-                      : "none" //"neutral.500"
-                  }
                   width="25%"
                   padding={2}
                   borderRadius={16}
                   height="2.2em"
-                  disabled={selectedPriority !== "Custom"}
-                  {...register("deadlineHours", {
-                    onChange: (event) => {
-                      let val = event.target.value
-
-                      const decimalPos = val.indexOf(".")
-
-                      if (
-                        decimalPos !== -1 &&
-                        val.length - decimalPos - 1 > 2
-                      ) {
-                        val = val.substring(0, decimalPos + 3)
-                        event.target.value = val
-                      }
-                    },
-                    required: "Enter amount",
-                    valueAsNumber: true,
-                    validate: {
-                      positive: (v) =>
-                        v > 0 || "You must submit a positive amount.",
-                    },
-                  })}
+                  disabled={true}
                 />
               </HStack>
               <FormErrorMessage color="energyYellow">
