@@ -16,7 +16,7 @@ import {
   InputRightElement,
   InputGroup,
 } from "@chakra-ui/react"
-import { useState, VFC, useEffect, ChangeEvent } from "react"
+import { useState, FC, useEffect, ChangeEvent } from "react"
 import { ChevronDownIcon, DeleteIcon } from "components/_icons"
 
 export type SymbolPathPair = {
@@ -36,7 +36,7 @@ export interface DepositTokenFilterProps {
   ) => void
 }
 
-export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
+export const DepositTokenFilter: FC<DepositTokenFilterProps> = (
   props
 ) => {
   const handleTokenClick = (symbol: string) => {
@@ -127,6 +127,47 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
     setSearchTerm("")
   }
 
+  const AssetDisplay = () => {
+    return (
+      <HStack>
+        <Text fontSize={"1.25em"}>Deposit Assets</Text>
+        <HStack justifyContent={"center"}>
+          <AvatarGroup size="sm">
+            {[
+              ...["WETH", "USDC", "WBTC", "SOMM", "stETH"].filter(
+                (symbol) => props.selectedDepositAssets[symbol]
+              ),
+              ...Object.keys(props.selectedDepositAssets).filter(
+                (symbol) =>
+                  !["WETH", "USDC", "WBTC", "SOMM", "stETH"].includes(
+                    symbol
+                  )
+              ),
+            ]
+              .slice(0, 5)
+              .map((symbol) => {
+                const token = props.selectedDepositAssets[symbol]
+                return (
+                  <Avatar
+                    name={token.symbol}
+                    src={token.path}
+                    key={token.symbol}
+                    background="transparent"
+                    border="none"
+                  />
+                )
+              })}
+          </AvatarGroup>
+          {Object.keys(props.selectedDepositAssets).length > 5 && (
+            <Text fontWeight={600}>
+              +{Object.keys(props.selectedDepositAssets).length - 5}
+            </Text>
+          )}
+        </HStack>
+      </HStack>
+    )
+  }
+
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
@@ -135,7 +176,6 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
           borderWidth={2.5}
           borderColor="purple.base"
           borderRadius="1em"
-          rightIcon={<ChevronDownIcon />}
           w="auto"
           fontFamily="Haffer"
           fontSize={12}
@@ -143,61 +183,12 @@ export const DepositTokenFilter: VFC<DepositTokenFilterProps> = (
           _hover={{
             bg: "purple.dark",
           }}
-          leftIcon={
-            <HStack>
-              <Text fontSize={"1.25em"}>Deposit Assets</Text>
-              <HStack justifyContent={"center"}>
-                <AvatarGroup size="sm">
-                  {[
-                    ...[
-                      "WETH",
-                      "USDC",
-                      "WBTC",
-                      "SOMM",
-                      "stETH",
-                    ].filter(
-                      (symbol) => props.selectedDepositAssets[symbol]
-                    ),
-                    ...Object.keys(
-                      props.selectedDepositAssets
-                    ).filter(
-                      (symbol) =>
-                        ![
-                          "WETH",
-                          "USDC",
-                          "WBTC",
-                          "SOMM",
-                          "stETH",
-                        ].includes(symbol)
-                    ),
-                  ]
-                    .slice(0, 5)
-                    .map((symbol) => {
-                      const token =
-                        props.selectedDepositAssets[symbol]
-                      return (
-                        <Avatar
-                          name={token.symbol}
-                          src={token.path}
-                          key={token.symbol}
-                          background="transparent"
-                          border="none"
-                        />
-                      )
-                    })}
-                </AvatarGroup>
-                {Object.keys(props.selectedDepositAssets).length >
-                  5 && (
-                  <Text fontWeight={600}>
-                    +
-                    {Object.keys(props.selectedDepositAssets).length -
-                      5}
-                  </Text>
-                )}
-              </HStack>
-            </HStack>
-          }
-        />
+        >
+          <HStack>
+            <AssetDisplay />
+            <ChevronDownIcon />
+          </HStack>
+        </Button>
       </PopoverTrigger>
 
       <PopoverContent

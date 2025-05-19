@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -13,10 +13,6 @@ import {
   Text,
   Link,
   Tooltip,
-  ButtonGroup,
-  useTheme,
-  InputGroup,
-  InputRightElement,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -32,7 +28,6 @@ import { useUserBalance } from "data/hooks/useUserBalance"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
-import { useStrategyData } from "data/hooks/useStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
 import { ModalOnlyTokenMenu } from "components/_menus/ModalMenu"
@@ -56,42 +51,8 @@ interface WithdrawQueueFormProps {
   onSuccessfulWithdraw?: () => void
 }
 
-function scientificToDecimalString(num: number) {
-  // If the number is in scientific notation, split it into base and exponent
-  const sign = Math.sign(num)
-  let [base, exponent] = num
-    .toString()
-    .split("e")
-    .map((item) => parseInt(item, 10))
-
-  // Adjust for negative exponent
-  if (exponent < 0) {
-    let decimalString = Math.abs(base).toString()
-    let padding = Math.abs(exponent) - 1
-    return (
-      (sign < 0 ? "-" : "") +
-      "0." +
-      "0".repeat(padding) +
-      decimalString
-    )
-  }
-
-  // Handle positive exponent or non-scientific numbers (which won't be split)
-  return num.toString()
-}
-
-// Define the preset values for the form
-// TODO: Consider setting presets per chain
-type PresetValueKey = "Low" | "Mid" | "High" | "Custom"
-const PRESET_VALUES: Record<
-  PresetValueKey,
-  { deadlineHours: number; sharePriceDiscountPercent: number }
-> = {
-  High: { deadlineHours: 12, sharePriceDiscountPercent: 0.15 },
-  Mid: { deadlineHours: 24, sharePriceDiscountPercent: 0.05 },
-  Low: { deadlineHours: 72, sharePriceDiscountPercent: 0.01 },
-  Custom: { deadlineHours: 0, sharePriceDiscountPercent: 0 },
-}
+const DEADLINE_HOURS = 288;
+const SHARE_PRICE_DISCOUNT_PERCENT = 0;
 
 export const WithdrawQueueForm = ({
   onClose,
@@ -104,7 +65,6 @@ export const WithdrawQueueForm = ({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
-  const theme = useTheme()
 
   const { id: _id } = useDepositModalStore()
 
@@ -118,39 +78,33 @@ export const WithdrawQueueForm = ({
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
-  const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address,
-    cellarConfig.chain.id
-  )
-  const tokenPrice = strategyData?.tokenPrice
 
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
   const withdrawQueueContract = (() => {
     if (!publicClient) return
-    return getContract( {
-        address: cellarConfig.chain.withdrawQueueAddress as `0x${string}`,
-        abi: withdrawQueueV0821,
-        client: {
-          public: publicClient,
-          wallet: walletClient
-        }
-      }
-    )
+    return getContract({
+      address: cellarConfig.chain
+        .withdrawQueueAddress as `0x${string}`,
+      abi: withdrawQueueV0821,
+      client: {
+        public: publicClient,
+        wallet: walletClient,
+      },
+    })
   })()
 
   const cellarContract = (() => {
     if (!publicClient) return
-    return getContract( {
+    return getContract({
       address: cellarConfig.cellar.address as `0x${string}`,
       abi: cellarConfig.cellar.abi,
       client: {
         public: publicClient,
-        wallet: walletClient
-      }
-    }
-    )
+        wallet: walletClient,
+      },
+    })
   })()
 
   const [_, wait] = useWaitForTransaction({
@@ -180,53 +134,11 @@ export const WithdrawQueueForm = ({
     setSelectedToken(value)
   }
 
-  const [selectedPriority, setSelectedPriority] =
-    useState<PresetValueKey>("Mid")
-
-  // Handle the priority selection
-  const handleSelect = (value: PresetValueKey) => {
-    setSelectedPriority(value)
-    if (value !== "Custom") {
-      const preset = PRESET_VALUES[value]
-      setValue("deadlineHours", preset.deadlineHours)
-      setValue(
-        "sharePriceDiscountPercent",
-        preset.sharePriceDiscountPercent
-      )
-    }
-  }
-
-  useEffect(() => {
-    // Initial setting of values based on default selection
-    const preset = PRESET_VALUES[selectedPriority]
-    setValue("deadlineHours", preset.deadlineHours)
-    setValue(
-      "sharePriceDiscountPercent",
-      preset.sharePriceDiscountPercent
-    )
-  }, [])
-
   const { doHandleTransaction } = useHandleTransaction()
 
   const watchWithdrawAmount = watch("withdrawAmount")
-  const watchDeadlineHours = watch("deadlineHours")
-  const watchSharePriceDiscountPercent = watch(
-    "sharePriceDiscountPercent"
-  )
 
-  const isDisabled =
-    isNaN(watchWithdrawAmount) ||
-    watchWithdrawAmount <= 0 ||
-    isNaN(watchDeadlineHours) ||
-    watchDeadlineHours <= 0 ||
-    isNaN(watchSharePriceDiscountPercent) ||
-    watchSharePriceDiscountPercent < 0
-
-  const isError =
-    errors.withdrawAmount ||
-    errors.deadlineHours ||
-    errors.sharePriceDiscountPercent ||
-    errors.selectedToken
+  const isDisabled = isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
 
   const setMax = () => {
     const amount = parseFloat(
@@ -238,9 +150,6 @@ export const WithdrawQueueForm = ({
   const geo = useGeo()
   const onSubmit = async ({
     withdrawAmount,
-    deadlineHours,
-    sharePriceDiscountPercent,
-    selectedToken,
   }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -265,11 +174,10 @@ export const WithdrawQueueForm = ({
     )
 
     // Get approval if needed
-    const allowance = await cellarContract?.read.allowance([
+    const allowance = (await cellarContract?.read.allowance([
       address!,
-      getAddress(cellarConfig.chain.withdrawQueueAddress)
-      ]
-    ) as bigint
+      getAddress(cellarConfig.chain.withdrawQueueAddress),
+    ])) as bigint
 
     let needsApproval
     try {
@@ -283,9 +191,10 @@ export const WithdrawQueueForm = ({
     if (needsApproval) {
       try {
         // @ts-ignore
-        const hash = await cellarContract?.write.approve([
-          getAddress(cellarConfig.chain.withdrawQueueAddress),
-          MaxUint256
+        const hash = await cellarContract?.write.approve(
+          [
+            getAddress(cellarConfig.chain.withdrawQueueAddress),
+            MaxUint256,
           ],
           { account: address }
         )
@@ -347,7 +256,7 @@ export const WithdrawQueueForm = ({
     try {
       const currentTime = Math.floor(Date.now() / 1000)
       const deadlineSeconds =
-        Math.floor(deadlineHours * 60 * 60) + currentTime
+        Math.floor(DEADLINE_HOURS * 60 * 60) + currentTime
 
       // Query share price
       const previewRedeem: number = parseInt(
@@ -360,7 +269,7 @@ export const WithdrawQueueForm = ({
         previewRedeem / 10 ** cellarConfig.baseAsset.decimals
       const sharePriceWithDiscount =
         sharePriceStandardized *
-        ((100 - sharePriceDiscountPercent) / 100)
+        ((100 - SHARE_PRICE_DISCOUNT_PERCENT) / 100)
       const sharePriceWithDiscountInBaseDenom = Math.floor(
         sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
       )
@@ -370,7 +279,7 @@ export const WithdrawQueueForm = ({
         BigInt(deadlineSeconds),
         BigInt(sharePriceWithDiscountInBaseDenom),
         withdrawAmtInBaseDenom,
-        false
+        false,
       ]
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
@@ -380,16 +289,15 @@ export const WithdrawQueueForm = ({
         330000,
         address
       )
-      // @ts-ignore
-      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
-        cellarConfig.cellar.address,
-        withdrawTouple
-        ],
-        {
-          gas: gasLimitEstimated,
-          account: address
-        }
-      )
+      const hash =
+        // @ts-ignore
+        await withdrawQueueContract?.write.updateWithdrawRequest(
+          [cellarConfig.cellar.address, withdrawTouple],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
 
       const onSuccess = () => {
         if (onSuccessfulWithdraw) {
@@ -450,7 +358,6 @@ export const WithdrawQueueForm = ({
     }
   }
 
-
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
 
@@ -461,19 +368,17 @@ export const WithdrawQueueForm = ({
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
-            cellarConfig.cellar.address
+            cellarConfig.cellar.address,
           ])
 
         // Check if it's valid
         const isWithdrawRequestValid =
-          await withdrawQueueContract?.read.isWithdrawRequestValid([
+          (await withdrawQueueContract?.read.isWithdrawRequestValid([
             cellarConfig.cellar.address,
             address,
-            withdrawRequest
-            ]
-          ) as boolean
+            withdrawRequest,
+          ])) as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
-
       } else {
         setIsActiveWithdrawRequest(false)
       }
@@ -648,71 +553,6 @@ export const WithdrawQueueForm = ({
                 />
               }
             </HStack>
-            <HStack justify="space-between" alignItems="start">
-              <Tooltip
-                hasArrow
-                placement="top-start"
-                label={
-                  "Preconfigured options that allow you to specify how aggressive you would like your withdraw request to be."
-                }
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <HStack spacing={1} align="center">
-                  <Text as="span">Priority</Text>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
-              <VStack align="end">
-                <ButtonGroup
-                  isAttached
-                  variant="solid"
-                  backgroundColor="surface.tertiary"
-                  borderRadius={16}
-                >
-                  {(["Low", "Mid", "High"] as PresetValueKey[]).map(
-                    (level, index, array) => (
-                      <Button
-                        key={level}
-                        colorScheme={
-                          selectedPriority === level
-                            ? "purple"
-                            : "none"
-                        }
-                        onClick={() => handleSelect(level)}
-                        borderRadius={16}
-                        size="sm"
-                        textColor={
-                          selectedPriority === level
-                            ? "neutral.600"
-                            : "white"
-                        }
-                      >
-                        {level}
-                      </Button>
-                    )
-                  )}
-                </ButtonGroup>
-                {/*
-                <Text
-                  fontSize="sm"
-                  cursor="pointer"
-                  color={
-                    selectedPriority === "Custom"
-                      ? "purple.light"
-                      : "gray.500"
-                  }
-                  fontWeight={
-                    selectedPriority === "Custom" ? "bold" : "none"
-                  }
-                  onClick={() => handleSelect("Custom")}
-                  mt={2}
-                >
-                  Custom
-                </Text>
-                */}
-              </VStack>
-            </HStack>
           </Stack>
         </FormControl>
         <Stack spacing={5}>
@@ -728,88 +568,6 @@ export const WithdrawQueueForm = ({
               title="Vault"
               value={<Text>{cellarDataMap[id].name}</Text>}
             />
-            <FormControl
-              isInvalid={!!errors.sharePriceDiscountPercent}
-            >
-              <HStack justify="space-between">
-                <Tooltip
-                  hasArrow
-                  placement="top"
-                  label={
-                    "How much of a discount under the current share price you are willing to accept to fulfill the withdrawal. The higher the discount, the more likely your request will be fulfilled."
-                  }
-                  bg="surface.bg"
-                  color="neutral.300"
-                >
-                  <HStack spacing={1} align="center">
-                    <Text as="span">Share Price Discount</Text>
-                    <InformationIcon
-                      color="neutral.300"
-                      boxSize={3}
-                    />
-                  </HStack>
-                </Tooltip>
-                <InputGroup width="25%" alignItems="center">
-                  <Input
-                    id="sharePrice"
-                    variant="unstyled"
-                    type="number"
-                    step="any"
-                    defaultValue="0.00"
-                    placeholder="0.00"
-                    fontSize="lg"
-                    fontWeight={700}
-                    textAlign="right"
-                    backgroundColor={
-                      selectedPriority === "Custom"
-                        ? "surface.tertiary"
-                        : "none" //"neutral.500"
-                    }
-                    padding={2}
-                    borderRadius={16}
-                    pr={8}
-                    height="2.2em"
-                    disabled={selectedPriority !== "Custom"}
-                    {...register("sharePriceDiscountPercent", {
-                      onChange: (event) => {
-                        let val = event.target.value
-
-                        const decimalPos = val.indexOf(".")
-
-                        if (
-                          decimalPos !== -1 &&
-                          val.length - decimalPos - 1 > 2
-                        ) {
-                          val = val.substring(0, decimalPos + 3)
-                          event.target.value = val
-                        }
-                      },
-                      required: "Enter amount",
-                      valueAsNumber: true,
-                      validate: {
-                        positive: (v) =>
-                          v >= 0 ||
-                          "You must submit a positive amount.",
-                      },
-                    })}
-                  />
-                  <InputRightElement pointerEvents="none">
-                    <Text>%</Text>
-                  </InputRightElement>
-                </InputGroup>
-              </HStack>
-              <FormErrorMessage color="energyYellow">
-                <Icon
-                  p={0.5}
-                  mr={1}
-                  color="surface.bg"
-                  bg="red.base"
-                  borderRadius="50%"
-                  as={AiOutlineInfo}
-                />
-                {errors.sharePriceDiscountPercent?.message}
-              </FormErrorMessage>
-            </FormControl>
             <FormControl isInvalid={!!errors.deadlineHours}>
               <HStack justify="space-between">
                 <Tooltip
@@ -835,42 +593,16 @@ export const WithdrawQueueForm = ({
                   pr="2"
                   type="number"
                   step="any"
-                  defaultValue="0.00"
+                  defaultValue={DEADLINE_HOURS}
                   placeholder="0.00"
                   fontSize="lg"
                   fontWeight={700}
                   textAlign="right"
-                  backgroundColor={
-                    selectedPriority === "Custom"
-                      ? "surface.tertiary"
-                      : "none" //"neutral.500"
-                  }
                   width="25%"
                   padding={2}
                   borderRadius={16}
                   height="2.2em"
-                  disabled={selectedPriority !== "Custom"}
-                  {...register("deadlineHours", {
-                    onChange: (event) => {
-                      let val = event.target.value
-
-                      const decimalPos = val.indexOf(".")
-
-                      if (
-                        decimalPos !== -1 &&
-                        val.length - decimalPos - 1 > 2
-                      ) {
-                        val = val.substring(0, decimalPos + 3)
-                        event.target.value = val
-                      }
-                    },
-                    required: "Enter amount",
-                    valueAsNumber: true,
-                    validate: {
-                      positive: (v) =>
-                        v > 0 || "You must submit a positive amount.",
-                    },
-                  })}
+                  disabled={true}
                 />
               </HStack>
               <FormErrorMessage color="energyYellow">

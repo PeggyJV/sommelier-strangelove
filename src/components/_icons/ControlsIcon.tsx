@@ -1,7 +1,7 @@
 import { forwardRef, Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const ControlsIcon: VFC<IconProps> = forwardRef(
+export const ControlsIcon: FC<IconProps> = forwardRef(
   (props, ref) => (
     <Icon ref={ref} viewBox="0 0 16 16" {...props}>
       <path

@@ -12,7 +12,7 @@ import { BaseModal } from "components/_modals/BaseModal"
 import { cellarDataMap } from "data/cellarDataMap"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import { isUseBigBacktestingModal } from "data/uiConfig"
-import htmr from "htmr"
+import parse from "html-react-parser"
 import { useRouter } from "next/router"
 import { useState } from "react"
 
@@ -54,7 +54,7 @@ export const Highlight = ({ id }: HighlightProps) => {
         </SimpleGrid>
         <Text maxW="40rem" color="#D9D7E0">
           {content.strategyHighlights.description &&
-            htmr(content.strategyHighlights.description)}
+            parse(content.strategyHighlights.description)}
         </Text>
       </Stack>
       {content.backtestingText && (
@@ -99,7 +99,7 @@ export const Highlight = ({ id }: HighlightProps) => {
                   />
                 )}
                 <Text whiteSpace="pre-line" mt="4">
-                  {htmr(content.backtestingText)}
+                  {parse(content.backtestingText)}
                 </Text>
               </BaseModal>
             </Box>

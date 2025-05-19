@@ -1,5 +1,5 @@
 import { Tabs, TabList, TabPanels, TabPanel } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
 import React from "react"
 import { useRouter } from "next/router"
@@ -14,7 +14,7 @@ interface ModalWithExchangeTabProps
   sommelierTab: React.ReactNode
 }
 
-export const ModalWithExchangeTab: VFC<ModalWithExchangeTabProps> = (
+export const ModalWithExchangeTab: FC<ModalWithExchangeTabProps> = (
   props
 ) => {
   const { id: _id } = useDepositModalStore()

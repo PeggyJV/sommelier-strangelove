@@ -3,7 +3,6 @@ import { Image, Text } from "@chakra-ui/react"
 // import { add } from "date-fns"
 // import { be } from "date-fns/locale"
 // import { on } from "events"
-// import { at, some, take, each } from "lodash"
 import { config } from "utils/config"
 
 export const strategyPageContentData = {

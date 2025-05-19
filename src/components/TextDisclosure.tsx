@@ -1,10 +1,10 @@
 import { Box, BoxProps, Flex, useDisclosure } from "@chakra-ui/react"
 import { BaseButton } from "components/_buttons/BaseButton"
-import { VFC } from "react"
+import { FC } from "react"
 import { BiMinus } from "react-icons/bi"
 import { BsPlus } from "react-icons/bs"
 
-export const TextDisclosure: VFC<BoxProps> = ({
+export const TextDisclosure: FC<BoxProps> = ({
   children,
   ...rest
 }) => {

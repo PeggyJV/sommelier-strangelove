@@ -1,7 +1,7 @@
 import { Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const MoneyWalletIcon: VFC<IconProps> = (props) => (
+export const MoneyWalletIcon: FC<IconProps> = (props) => (
   <Icon viewBox="0 0 12 12" {...props}>
     {/* eslint-disable-next-line react/no-unknown-property */}
     <g clipPath="url(#clip0_239_32)">

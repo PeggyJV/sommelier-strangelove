@@ -1,8 +1,8 @@
 import { StackProps, VStack } from '@chakra-ui/react'
-import { VFC } from 'react'
+import { FC } from 'react'
 import { CardDivider } from './_layout/CardDivider'
 
-export const CardStatColumn: VFC<StackProps> = props => {
+export const CardStatColumn: FC<StackProps> = props => {
   return (
     <VStack
       spacing={3}

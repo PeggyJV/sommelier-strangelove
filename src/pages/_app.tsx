@@ -1,7 +1,6 @@
 import { ChakraProvider, DarkMode } from "@chakra-ui/react"
 import { DialogProvider } from "context/dialogContext"
 import type { AppProps } from "next/app"
-import PlausibleProvider from "next-plausible"
 import theme from "theme/index"
 
 import { QueryProvider } from "context/wagmiContext"
@@ -18,9 +17,9 @@ import { HomeProvider } from "data/context/homeContext"
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <QueryClientProvider client={reactQueryClient}>
-      <PlausibleProvider
+      {/* <PlausibleProvider
         domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
-      >
+      > */}
         <ChakraProvider theme={theme}>
           <GeoProvider>
             <GlobalFonts />
@@ -41,7 +40,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             </DialogProvider>
           </GeoProvider>
         </ChakraProvider>
-      </PlausibleProvider>
+      {/* </PlausibleProvider> */}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )

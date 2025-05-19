@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { FC } from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 import { ArrowDownFillIcon } from "./_icons/ArrowDownFillIcon"
 import { ArrowUpFillIcon } from "./_icons/ArrowUpFillIcon"
@@ -11,7 +11,7 @@ interface PercentageHeadingProps {
   isDataNegative?: boolean | 0
 }
 
-export const PercentageHeading: VFC<PercentageHeadingProps> = ({
+export const PercentageHeading: FC<PercentageHeadingProps> = ({
   arrow,
   isDataNegative,
   arrowT2,

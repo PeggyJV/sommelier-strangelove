@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const BackgroundAssets: VFC = () => {
+export const BackgroundAssets: FC = () => {
   return (
     <>
       <Box

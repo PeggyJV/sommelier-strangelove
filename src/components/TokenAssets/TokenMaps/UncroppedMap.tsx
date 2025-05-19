@@ -1,13 +1,13 @@
 import { Avatar, HStack, StackProps, Text } from "@chakra-ui/react"
 import { Token } from "data/tokenConfig"
-import { useState, VFC } from "react"
+import { useState, FC } from "react"
 
 interface UncroppedMapProps extends StackProps {
   tokens: Token[]
   displaySymbol?: boolean
 }
 
-export const UncroppedMap: VFC<UncroppedMapProps> = ({
+export const UncroppedMap: FC<UncroppedMapProps> = ({
   tokens,
   displaySymbol,
   ...rest

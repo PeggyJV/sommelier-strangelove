@@ -1,5 +1,5 @@
 import { IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import { Token } from "src/data/tokenConfig"
 import { Chain } from "data/chainConfig"
 import { Abi } from "viem"
@@ -129,7 +129,7 @@ export interface CustomReward {
   showClaim?: boolean
   customClaimMsg?: string
   customRewardAPYTooltip?: string
-  logo?: VFC<IconProps>
+  logo?: FC<IconProps>
   logoSize?: string
   customRewardLongMessage?: string
   rewardHyperLink?: string

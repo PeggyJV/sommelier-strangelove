@@ -1,10 +1,10 @@
 import { ModalProps } from "@chakra-ui/react"
 import { WithdrawForm } from "components/_forms/WithdrawForm"
-import { VFC } from "react"
+import { FC } from "react"
 
 type WithdrawModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
-export const SommelierTab: VFC<WithdrawModalProps> = ({
+export const SommelierTab: FC<WithdrawModalProps> = ({
   isOpen,
   onClose,
 }) => {

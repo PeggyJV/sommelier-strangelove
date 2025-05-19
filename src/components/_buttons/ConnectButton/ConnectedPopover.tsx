@@ -137,27 +137,21 @@ export const ConnectedPopover = () => {
           borderWidth={2}
           borderColor="purple.base"
           borderRadius="full"
-          rightIcon={
-            <HStack>
-              {walletAddressIcon()}
-              <ChevronDownIcon />
-            </HStack>
-          }
           w="auto"
           zIndex={401}
           isLoading={isLoading}
-          leftIcon={
-            isLoading ? (
-              <Spinner size="xs" />
-            ) : undefined
-          }
           fontFamily="Haffer"
           fontSize={12}
           _hover={{
             bg: "purple.dark",
           }}
         >
-          {ensName ? ensName : truncateWalletAddress(address)}
+          <HStack>
+            {isLoading ? <Spinner size="xs" /> : undefined}
+            {ensName ? ensName : truncateWalletAddress(address)}
+            {walletAddressIcon()}
+            <ChevronDownIcon />
+          </HStack>
         </BaseButton>
       </PopoverTrigger>
       <PopoverContent

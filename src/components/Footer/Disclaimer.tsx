@@ -1,7 +1,7 @@
-import { VFC } from "react"
+import { FC } from "react"
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react"
 
-export const Disclaimer: VFC<FlexProps> = (props) => {
+export const Disclaimer: FC<FlexProps> = (props) => {
   return (
     <Flex {...props}>
       <Box marginTop="64px" color="neutral.300" fontSize="xs">

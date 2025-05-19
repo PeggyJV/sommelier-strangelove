@@ -1,10 +1,10 @@
 import { HStack, StackProps, Text } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
-import { VFC } from "react"
+import { FC } from "react"
 import { links } from "./links"
 
-export const Socials: VFC<StackProps> = ({ ...rest }) => {
+export const Socials: FC<StackProps> = ({ ...rest }) => {
   return (
     <HStack spacing={8} {...rest}>
       {links.map((social, i) => {

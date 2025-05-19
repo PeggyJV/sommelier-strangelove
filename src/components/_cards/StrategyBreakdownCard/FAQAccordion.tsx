@@ -9,7 +9,7 @@ import {
   Icon,
 } from "@chakra-ui/react"
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"
-import htmr from "htmr"
+import parse from "html-react-parser"
 
 interface Props extends AccordionProps {
   data: {
@@ -46,7 +46,7 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
                   />
                 </AccordionButton>
                 <AccordionPanel pb={4} px={0}>
-                  {item.answer && htmr(item.answer)}
+                  {item.answer && parse(item.answer)}
                 </AccordionPanel>
               </>
             )}

@@ -1,7 +1,7 @@
 import { Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const PearlIcon: VFC<IconProps> = (props) => (
+export const PearlIcon: FC<IconProps> = (props) => (
   <Icon viewBox="0 0 23 21" {...props}>
     <circle cx="11" cy="10.5" r="10" fill="#DBC7BC" />
     <g filter="url(#filter0_f_1413_37935)">

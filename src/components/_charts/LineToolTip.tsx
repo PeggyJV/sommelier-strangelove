@@ -1,9 +1,8 @@
-import { Box, BoxProps, forwardRef, Text } from "@chakra-ui/react"
-import { PointTooltipProps } from "@nivo/line"
-import { VFC } from "react"
+import { Box, ComponentWithAs, forwardRef, Text } from "@chakra-ui/react"
+import { LineSeries, PointTooltipProps } from "@nivo/line"
 
-export const ToolTip: VFC<BoxProps & PointTooltipProps> = forwardRef(
-  ({ point }, ref) => {
+export const ToolTip: ComponentWithAs<"span", PointTooltipProps<LineSeries>> =
+  forwardRef(({ point }, ref) => {
     const { data } = point
 
     return (
