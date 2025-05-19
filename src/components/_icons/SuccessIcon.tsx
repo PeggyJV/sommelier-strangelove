@@ -1,4 +1,4 @@
 import { FaRegCheckCircle } from "react-icons/fa"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const SuccessIcon: VFC = () => <FaRegCheckCircle />
+export const SuccessIcon: FC = () => <FaRegCheckCircle />

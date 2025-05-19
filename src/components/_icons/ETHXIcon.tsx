@@ -1,7 +1,7 @@
 import { Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const ETHXIcon: VFC<IconProps> = (props) => (
+export const ETHXIcon: FC<IconProps> = (props) => (
   <Icon viewBox="0 0 25 24" {...props}>
     <path
       fillRule="evenodd"

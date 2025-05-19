@@ -74,11 +74,6 @@ const ChainButton = ({
           borderWidth={2}
           borderColor="purple.base"
           borderRadius="full"
-          rightIcon={
-            <HStack>
-              <ChevronDownIcon />
-            </HStack>
-          }
           w="auto"
           zIndex={401}
           fontFamily="Haffer"
@@ -86,18 +81,18 @@ const ChainButton = ({
           _hover={{
             bg: "purple.dark",
           }}
-          leftIcon={
-            <HStack>
-              <Image
-                src={effectiveChain.logoPath}
-                alt={effectiveChain.displayName}
-                boxSize="24px"
-                background={"transparent"}
-              />
-              <Text>{effectiveChain.displayName}</Text>
-            </HStack>
-          }
-        />
+        >
+          <HStack>
+            <Image
+              src={effectiveChain.logoPath}
+              alt={effectiveChain.displayName}
+              boxSize="24px"
+              background={"transparent"}
+            />
+            <Text>{effectiveChain.displayName}</Text>
+            <ChevronDownIcon />
+          </HStack>
+        </Button>
       </PopoverTrigger>
       <PopoverContent
         p={2}

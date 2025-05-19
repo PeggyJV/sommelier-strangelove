@@ -1,27 +1,23 @@
-import { Datum } from "@nivo/line"
 import { differenceInDays } from "date-fns"
-import { toInteger } from "lodash"
-import { formatDecimals } from "utils/bigIntHelpers"
 
 export const createTokenPriceChangeDatum = (
   data?: { date: number; shareValue: string }[]
-): Datum[] | undefined => {
+): { x: Date; y: string }[] | undefined => {
   if (!data) return
 
-  let datum: Datum[] = []
+  let datum: { x: Date; y: string }[] = []
   data.map((item, index, arr) => {
     const firstData = data[data.length - 1]
     if (firstData) {
       const current = item.shareValue
       const change = firstData
-        ? ((toInteger(current) - toInteger(firstData.shareValue)) /
-            toInteger(firstData.shareValue)) *
+        ? ((parseInt(current) - parseInt(firstData.shareValue)) /
+            parseInt(firstData.shareValue)) *
           100
         : 0
       datum.push({
         x: new Date(item.date * 1000),
         y: String(change),
-        value: formatDecimals(current, 18, 6),
       })
     }
   })
@@ -57,11 +53,11 @@ export const createApyChangeDatum = ({
   smooth: boolean
   daysSmoothed: number
   daysRendered: number
-}): Datum[] | undefined => {
+}): { x: Date; y: string, value: number }[] | undefined => {
   if (!data) return
   if (data.length < 2) return
 
-  const datum: Datum[] = []
+  const datum: { x: Date; y: string, value: number }[] = []
   // Inception date (configured)
   const launchDate = new Date(launchEpoch * 1000)
   let apyValues: number[] = []

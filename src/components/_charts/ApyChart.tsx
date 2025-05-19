@@ -1,18 +1,13 @@
 import { Stack, Text } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
-import {
-  Point,
-  PointSymbolProps,
-  PointTooltipProps,
-} from "@nivo/line"
+import { LineSeries, Point, PointTooltipProps, AllowedValue } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
 import {
   Dispatch,
   FunctionComponent,
   SetStateAction,
-  useMemo,
-  VFC,
+  useMemo
 } from "react"
 import { colors } from "theme/colors"
 import { format, isSameDay, isSameHour } from "date-fns"
@@ -28,28 +23,29 @@ const LineChart = dynamic(
 )
 interface TokenPriceChartProps {
   timeline: string
-  name: string
-  pointActive?: Point
-  setPointActive: Dispatch<SetStateAction<Point | undefined>>
+  pointActive?: Point<LineSeries>
+  setPointActive: Dispatch<
+    SetStateAction<Point<LineSeries> | undefined>
+  >
 }
-export const ApyChart: VFC<TokenPriceChartProps> = ({
+export const ApyChart = ({
   timeline,
-  name: strategyTokenName,
   pointActive,
   setPointActive,
-}) => {
+}: TokenPriceChartProps) => {
   const { data } = useApyChart()
   const { chartTheme } = useNivoThemes()
-  const lineColors = data.series?.map((item) => item.color)
-  const onMouseMove = (point: Point, event: React.MouseEvent) => {
+  const onMouseMove = (
+    point: Point<LineSeries>
+  ) => {
     setPointActive(point)
   }
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
 
-  const ToolTip: FunctionComponent<PointTooltipProps> = ({
+  const ToolTip: FunctionComponent<PointTooltipProps<LineSeries>> = ({
     point,
   }) => {
-    const { id, serieId } = point
+    const { id } = point
     const [_, i] = id.split(".")
     if (isLarger768) {
       return (
@@ -65,8 +61,8 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
             return (
               <ChartTooltipItem
                 key={item.id}
-                backgroundColor={item.color}
-                name={item.label + " Moving Average APY"}
+                backgroundColor="neutral.100"
+                name={data.label + " Moving Average APY"}
                 percentage={`${String(
                   data.series?.find((s) => s.id === item.id)?.data[
                     Number(i)
@@ -77,7 +73,9 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
           })}
           <Text color="neutral.400">
             {format(
-              new Date(String(data.series?.[0].data[Number(i)].x)),
+              new Date(
+                String(data.series?.[0].data[Number(i)].x)
+              ),
               "MMM, d, yyyy, HH:mm"
             )}
           </Text>
@@ -87,9 +85,12 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
     return null
   }
 
-  const Point: FunctionComponent<PointSymbolProps> = ({
+  const Point = ({
     color,
     datum,
+  }: {
+    color: string
+    datum: { x: AllowedValue; y: AllowedValue }
   }) => {
     const active =
       timeline === "1D"
@@ -102,7 +103,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
             new Date(String(pointActive?.data.x))
           )
     if (active) {
-      return <ChartPoint fill={color} stroke={colors.neutral[100]} />
+      return <ChartPoint fill={color} stroke="neutral.100" />
     }
     return null
   }
@@ -163,7 +164,7 @@ export const ApyChart: VFC<TokenPriceChartProps> = ({
       {...data.chartProps}
       {...hourlyAxisBottom}
       data={data.series || []}
-      colors={lineColors}
+      colors={colors.neutral[100]}
       animate={false}
       crosshairType="x"
       defs={[

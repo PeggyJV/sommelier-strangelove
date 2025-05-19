@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { FC } from "react"
 import {
   Breadcrumb as ChBreadcrumb,
   BreadcrumbItem,
@@ -12,7 +12,7 @@ interface CustomBCProps extends BreadcrumbProps {
   cellarName?: string
 }
 
-export const BreadCrumb: VFC<CustomBCProps> = ({
+export const BreadCrumb: FC<CustomBCProps> = ({
   id,
   cellarName,
   ...rest

@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Menu } from "./Menu"
 import { ModalOnlyTokenMenuProps, OnlyTokenMenu } from "./OnlyTokenMenu"
@@ -16,7 +16,7 @@ export interface ModalMenuProps {
   isDisabled?: boolean
 }
 
-export const ModalMenu: VFC<ModalMenuProps> = ({
+export const ModalMenu: FC<ModalMenuProps> = ({
   depositTokens,
   activeAsset,
   selectedTokenBalance,
@@ -49,7 +49,7 @@ export const ModalMenu: VFC<ModalMenuProps> = ({
   )
 }
 
-export const ModalOnlyTokenMenu: VFC<ModalOnlyTokenMenuProps> = ({
+export const ModalOnlyTokenMenu: FC<ModalOnlyTokenMenuProps> = ({
   depositTokens,
   activeAsset,
   setSelectedToken,

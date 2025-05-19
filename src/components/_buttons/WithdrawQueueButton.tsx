@@ -2,6 +2,7 @@ import { ButtonProps, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { SecondaryButton } from "./SecondaryButton"
 import { WithdrawQueueModal } from "components/_modals/WithdrawQueueModal"
 import { Chain } from "src/data/chainConfig"
+
 export const WithdrawQueueButton = ({ buttonLabel, onSuccessfulWithdraw, showTooltip, ...props }: ButtonProps & {
   buttonLabel: string
   onSuccessfulWithdraw?: () => void

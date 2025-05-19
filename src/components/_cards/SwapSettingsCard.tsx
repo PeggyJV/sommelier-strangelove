@@ -1,10 +1,10 @@
-import { VFC } from "react"
+import { FC } from "react"
 import { Box, Flex, Input } from "@chakra-ui/react"
 import { CardHeading } from "components/_typography/CardHeading"
 import { config } from "utils/config"
 import { useFormContext } from "react-hook-form"
 
-export const SwapSettingsCard: VFC = () => {
+export const SwapSettingsCard: FC = () => {
   const { register } = useFormContext()
 
   return (

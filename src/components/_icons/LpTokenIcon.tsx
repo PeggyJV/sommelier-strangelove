@@ -1,7 +1,7 @@
 import { Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const LpTokenIcon: VFC<IconProps> = (props) => (
+export const LpTokenIcon: FC<IconProps> = (props) => (
   <Icon viewBox="0 0 16 16" {...props}>
     <path fill="url(#pattern0)" d="M0 0H16V16H0z" />
     <defs>

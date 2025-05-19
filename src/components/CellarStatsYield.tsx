@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { FC } from "react"
 import {
   Box,
   HStack,
@@ -27,7 +27,7 @@ interface CellarStatsYieldProps extends StackProps {
   cellarId: string
 }
 
-export const CellarStatsYield: VFC<CellarStatsYieldProps> = ({
+export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
   cellarId,
   ...rest
 }) => {

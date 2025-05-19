@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { FC } from "react"
 import dynamic from "next/dynamic"
 import { Box, HStack, Text, useTheme, VStack } from "@chakra-ui/react"
 import { formatCurrency } from "utils/formatCurrency"
@@ -15,7 +15,7 @@ interface CurrentDepositsProps {
   asset?: string
 }
 
-export const CurrentDeposits: VFC<CurrentDepositsProps> = ({
+export const CurrentDeposits: FC<CurrentDepositsProps> = ({
   currentDeposits,
   cellarCap,
   asset,

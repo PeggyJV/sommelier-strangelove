@@ -68,6 +68,14 @@ export const MiscFilter = (props: MiscFilterProps) => {
     )
   }, [props.categories])
 
+  const MiscDisplay = () => {
+    return (
+      <HStack>
+        <Text fontSize={"1.25em"}>Filters</Text>
+      </HStack>
+    )
+  }
+
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
@@ -83,13 +91,12 @@ export const MiscFilter = (props: MiscFilterProps) => {
           _hover={{
             bg: "purple.dark",
           }}
-          leftIcon={
-            <HStack>
-              <Text fontSize={"1.25em"}>Filters</Text>
-            </HStack>
-          }
-          rightIcon={<HamburgerIcon boxSize={3.5} />}
-        />
+        >
+          <HStack>
+            <MiscDisplay />
+            <HamburgerIcon boxSize={3.5} />
+          </HStack>
+        </Button>
       </PopoverTrigger>
 
       <PopoverContent

@@ -90,30 +90,29 @@ export const MobileConnectedPopover = () => {
           borderWidth={2}
           borderColor="purple.base"
           borderRadius="full"
-          rightIcon={
-            <HStack>
-              {walletAddressIcon()}
-              <ChevronDownIcon />
-            </HStack>
-          }
           minW="max-content"
           isLoading={isLoading}
           // loading state fetching ENS
-          leftIcon={
-            ((isLoading || isEnsLoading) && <Spinner size="xs" />) ||
-            undefined
-          }
           fontFamily="Haffer"
           fontSize={12}
           _hover={{
             bg: "purple.dark",
           }}
         >
-          {ensName
-            ? isLarger480
-              ? ensName
-              : truncateString(ensName)
-            : truncateWalletAddress(address, isLarger480 ? 3 : 2)}
+          <HStack>
+            {
+            ((isLoading || isEnsLoading) && <Spinner size="xs" />) ||
+            undefined
+          }
+
+            {ensName
+              ? isLarger480
+                ? ensName
+                : truncateString(ensName)
+              : truncateWalletAddress(address, isLarger480 ? 3 : 2)}
+            {walletAddressIcon()}
+            <ChevronDownIcon />
+          </HStack>
         </BaseButton>
       </PopoverTrigger>
       <PopoverContent

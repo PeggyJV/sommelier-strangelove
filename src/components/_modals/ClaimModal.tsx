@@ -1,12 +1,12 @@
 import { ModalProps, Text, VStack } from '@chakra-ui/react'
 import { ClaimForm } from 'components/_forms/ClaimForm'
 import { CardHeading } from 'components/_typography/CardHeading'
-import { VFC } from 'react'
+import { FC } from 'react'
 import { BaseModal } from './BaseModal'
 
 type ClaimModalProps = Pick<ModalProps, 'isOpen' | 'onClose'>
 
-export const ClaimModal: VFC<ClaimModalProps> = props => {
+export const ClaimModal: FC<ClaimModalProps> = props => {
   return (
     <BaseModal heading='Claim' {...props}>
       <VStack pb={10} spacing={6} align='stretch'>

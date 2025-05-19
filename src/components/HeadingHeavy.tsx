@@ -2,7 +2,7 @@ import { Heading, HeadingProps } from "@chakra-ui/react"
 import { ReactElement } from "react"
 
 interface Props extends HeadingProps {
-  children: string | ReactElement | ReactElement[] | undefined
+  children: string | ReactElement<any> | ReactElement<any>[] | undefined
 }
 
 export const HeadingHeavy: React.FC<Props> = ({

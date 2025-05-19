@@ -1,7 +1,7 @@
 import { Text, TextProps, forwardRef } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const CardHeading: VFC<TextProps> = forwardRef(
+export const CardHeading: FC<TextProps> = forwardRef(
   (props, ref) => {
     return (
       <Text

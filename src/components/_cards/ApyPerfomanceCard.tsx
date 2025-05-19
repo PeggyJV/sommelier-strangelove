@@ -8,42 +8,37 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react"
-import { useState, VFC } from "react"
+import { useState } from "react"
 import { TransparentCard } from "./TransparentCard"
 import { CardHeading } from "components/_typography/CardHeading"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ErrorCard } from "./ErrorCard"
-import { Point } from "@nivo/line"
+import { LineSeries, Point } from "@nivo/line"
 import { ChartTooltipItem } from "components/_charts/ChartTooltipItem"
 import { format } from "date-fns"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useApyChart } from "data/context/apyChartContext"
 import { ApyChart } from "components/_charts/ApyChart"
-import { useStrategyData } from "data/hooks/useStrategyData"
 import { apyChartLabel } from "data/uiConfig"
 
-export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
+export const ApyPerfomanceCard = (props: BoxProps) => {
   const { data, timeArray, apyChange, isFetching, isError } =
     useApyChart()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
 
-  const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address,
-    cellarConfig.chain.id
-  )
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   // Default timeline
   const [timeline, setTimeline] = useState<string>(
     timeArray[timeArray.length - 1].title
   )
-  const [pointActive, setPointActive] = useState<Point>()
+  const [pointActive, setPointActive] = useState<Point<LineSeries>>()
 
   const MobileTooltip = () => {
     if (!!pointActive && !isLarger768) {
-      const { id: pointId, serieId } = pointActive
+      const { id: pointId } = pointActive
       const [_, i] = pointId.split(".")
       return (
         <Stack
@@ -55,14 +50,10 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
           textTransform="capitalize"
         >
           {data.series?.map((item) => {
-            const name = (() => {
-              if (item.id === "apy") return cellarDataMap[id]?.name
-              return ""
-            })()
             return (
               <ChartTooltipItem
                 key={item.id}
-                backgroundColor={item.color}
+                backgroundColor="neutral.100"
                 name="30D MA APY"
                 percentage={`${String(
                   data.series?.find((s) => s.id === item.id)?.data[
@@ -187,7 +178,6 @@ export const ApyPerfomanceCard: VFC<BoxProps> = (props) => {
             </HStack>
             <ApyChart
               timeline={timeline}
-              name={cellarDataMap[id].name}
               pointActive={pointActive}
               setPointActive={setPointActive}
             />

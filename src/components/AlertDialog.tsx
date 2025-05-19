@@ -12,7 +12,7 @@ import { useRef } from "react"
 
 export const AlertDialog = () => {
   const { title, body, isOpen, onClose } = useDialog()
-  const closeRef = useRef<HTMLButtonElement>(null)
+  const closeRef = useRef<HTMLButtonElement>({} as HTMLButtonElement)
 
   if (!isOpen) {
     return null

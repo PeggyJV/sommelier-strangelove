@@ -1,7 +1,7 @@
 import { Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const LoadingIcon: VFC<IconProps> = (props) => (
+export const LoadingIcon: FC<IconProps> = (props) => (
   <Icon viewBox="0 0 16 16" {...props}>
     <path
       d="M8 4.72C7.77359 4.71704 7.55729 4.62579 7.39718 4.46568C7.23707 4.30557 7.14582 4.08927 7.14286 3.86286V1.00572C7.14286 0.778389 7.23316 0.560372 7.39391 0.399626C7.55465 0.238881 7.77267 0.148575 8 0.148575C8.22733 0.148575 8.44535 0.238881 8.60609 0.399626C8.76684 0.560372 8.85714 0.778389 8.85714 1.00572V3.86286C8.85418 4.08927 8.76293 4.30557 8.60282 4.46568C8.44271 4.62579 8.22641 4.71704 8 4.72Z"

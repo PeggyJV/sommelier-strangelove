@@ -1,8 +1,7 @@
-import { VFC } from "react"
-import { ResponsiveLine, LineSvgProps } from "@nivo/line"
+import { ResponsiveLine, LineSvgProps, LineSeries } from "@nivo/line"
 import { ToolTip } from "./LineToolTip"
 
-const LineChart: VFC<LineSvgProps> = ({ data, ...rest }) => {
+const LineChart = ({ data, ...rest }: LineSvgProps<LineSeries>) => {
   return (
     <ResponsiveLine
       data={data}

@@ -12,9 +12,9 @@ import {
   MenuList,
   MenuOptionGroup,
   Text,
-  useDimensions,
   useTheme,
 } from "@chakra-ui/react"
+import { useSize } from "@chakra-ui/react-use-size"
 import { useRef, useState, useEffect, ChangeEvent } from "react"
 import { FaChevronDown } from "react-icons/fa"
 import { getTokenConfig, Token } from "data/tokenConfig"
@@ -46,7 +46,7 @@ export const Menu = ({
 } : MenuProps) => {
   const { colors } = useTheme()
   const menuRef = useRef(null)
-  const menuDims = useDimensions(menuRef, true)
+  const { width } = useSize(menuRef) ?? { width: 0 }
   const { register, setValue, clearErrors, watch } = useFormContext()
   const availableBalance = `${toEther(
     selectedTokenBalance?.value,
@@ -179,7 +179,7 @@ export const Menu = ({
             borderRadius={16}
             zIndex="overlay"
             boxShadow={`0 2px 24px 0 ${colors.surface.tertiary}`}
-            w={menuDims?.borderBox.width}
+            w={width}
             maxH="30em"
             overflowY="auto"
             scrollBehavior="smooth"

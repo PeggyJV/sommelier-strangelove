@@ -1,5 +1,5 @@
 import { ModalProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import React from "react"
 import { SommelierTab } from "./SommelierTab"
 import { ModalWithExchangeTab } from "../ModalWithExchangeTab"
@@ -11,7 +11,7 @@ type WithdrawQueueModalProps = Pick<
   onSuccessfulWithdraw?: () => void
 }
 
-export const WithdrawQueueModal: VFC<WithdrawQueueModalProps> = ({
+export const WithdrawQueueModal: FC<WithdrawQueueModalProps> = ({
   onSuccessfulWithdraw,
   ...props
 }) => {

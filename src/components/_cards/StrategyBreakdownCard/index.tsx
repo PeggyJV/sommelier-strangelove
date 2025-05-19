@@ -10,13 +10,13 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
 import { CellarDataMap } from "data/types"
 import { FAQAccordion } from "./FAQAccordion"
-import htmr from "htmr"
+import parse from "html-react-parser"
 import { Link } from "components/Link"
 import { isValidURL } from "utils/isValidUrl"
 
@@ -25,7 +25,7 @@ interface StrategyBreakdownProps extends BoxProps {
   cellarId: string
 }
 
-export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
+export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
   cellarId,
   cellarDataMap,
 }) => {
@@ -95,7 +95,7 @@ export const StrategyBreakdownCard: VFC<StrategyBreakdownProps> = ({
             }
             return (
               <TabPanel key={i} {...tabPanelProps}>
-                <Box whiteSpace="pre-line">{htmr(value)}</Box>
+                <Box whiteSpace="pre-line">{parse(value)}</Box>
               </TabPanel>
             )
           })}
