@@ -7,7 +7,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { CellarDataMap } from "data/types"
-import { VFC } from "react"
+import { FC } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { Link } from "./Link"
 import { InformationIcon } from "./_icons"
@@ -18,7 +18,7 @@ export type StrategyProviderProps = Pick<
   "strategyProvider"
 >
 
-export const StrategyProvider: VFC<StrategyProviderProps> = ({
+export const StrategyProvider: FC<StrategyProviderProps> = ({
   strategyProvider,
 }) => {
   const { logo, title, href, tooltip } = strategyProvider || {}

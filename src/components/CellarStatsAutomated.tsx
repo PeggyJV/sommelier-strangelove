@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { FC } from "react"
 import {
   Box,
   Heading,
@@ -17,7 +17,6 @@ import {
   tokenPriceTooltipContent,
 } from "data/uiConfig"
 import { ConfigProps } from "data/types"
-import { debounce } from "lodash"
 import { PercentageText } from "./PercentageText"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
@@ -25,7 +24,7 @@ interface CellarStatsAutomatedProps extends StackProps {
   cellarConfig: ConfigProps
 }
 
-export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
+export const CellarStatsAutomated: FC<CellarStatsAutomatedProps> = ({
   cellarConfig,
   ...rest
 }) => {
@@ -76,11 +75,7 @@ export const CellarStatsAutomated: VFC<CellarStatsAutomatedProps> = ({
       {isDailyChangeEnabled(cellarConfig) && (
         <VStack spacing={1} align="center">
           <PercentageText data={dailyChange} headingSize="md" arrow />
-          <Box
-            onMouseEnter={debounce(() => {
-              // analytics.track("user.tooltip-opened-daily-change")
-            }, 1000)}
-          >
+          <Box>
             <Tooltip
               hasArrow
               placement="top"

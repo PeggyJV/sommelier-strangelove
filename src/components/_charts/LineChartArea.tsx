@@ -1,9 +1,8 @@
 import { linearGradientDef } from "@nivo/core"
-import { LineSvgProps } from "@nivo/line"
-import { VFC } from "react"
+import { LineSvgProps, LineSeries } from "@nivo/line"
 import LineChart from "./LineChart"
 
-const LineChartArea: VFC<LineSvgProps> = ({ data, ...rest }) => {
+const LineChartArea = ({ data, ...rest }: LineSvgProps<LineSeries>) => {
   return (
     <LineChart
       data={data}

@@ -1,14 +1,14 @@
-import { ReactElement, VFC } from "react"
+import { ReactElement, FC } from "react"
 import { Box, Select, SelectProps } from "@chakra-ui/react"
 
 interface Props extends SelectProps {
   chains: string[]
 }
 
-export const ChainSelector: VFC<Props> = ({
+export const ChainSelector: FC<Props> = ({
   chains,
   ...rest
-}): ReactElement => {
+}): ReactElement<any> => {
   return (
     <Select borderRadius={25} fontWeight="medium" {...rest}>
       {chains.map((chain, i) => (

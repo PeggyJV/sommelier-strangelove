@@ -1,7 +1,7 @@
 import { Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const InformationIcon: VFC<IconProps> = (props) => (
+export const InformationIcon: FC<IconProps> = (props) => (
   <Icon viewBox="0 0 16 16" {...props}>
     <g clipPath="url(#clip0_134_58)">
       <path

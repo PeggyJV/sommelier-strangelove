@@ -1,4 +1,4 @@
-import { VFC } from "react"
+import { FC } from "react"
 import { Box, Container, Flex, FlexProps } from "@chakra-ui/react"
 import { Nav } from "../Nav"
 import Footer from "../Footer"
@@ -11,7 +11,7 @@ interface LayoutProps extends FlexProps {
   chainObj?: Chain
 }
 
-export const Layout: VFC<LayoutProps> = ({ chainObj, children, ...rest }) => {
+export const Layout: FC<LayoutProps> = ({ chainObj, children, ...rest }) => {
   const { isConnected } = useAccount()
   const isMounted = useIsMounted()
 

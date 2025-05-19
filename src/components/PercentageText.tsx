@@ -1,6 +1,6 @@
 import { Box, Heading, HStack, StackProps } from "@chakra-ui/react"
 import { useHome } from "data/context/homeContext"
-import { useEffect, useState, VFC } from "react"
+import { useEffect, useState, FC } from "react"
 import { PercentageHeading } from "./PercentageHeading"
 
 interface PercentageTextProps extends StackProps {
@@ -11,7 +11,7 @@ interface PercentageTextProps extends StackProps {
   fontWeight?: number
 }
 
-export const PercentageText: VFC<PercentageTextProps> = ({
+export const PercentageText: FC<PercentageTextProps> = ({
   data,
   headingSize = "sm",
   arrow,

@@ -1,11 +1,11 @@
-import { VFC, ReactNode } from "react"
+import { FC, ReactNode } from "react"
 import { HStack, VStack, Text } from "@chakra-ui/react"
 
 interface InfoBannerProps {
   text: ReactNode
 }
 
-export const InfoBanner: VFC<InfoBannerProps> = ({ text }) => {
+export const InfoBanner: FC<InfoBannerProps> = ({ text }) => {
   return (
     <HStack
       p={4}

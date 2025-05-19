@@ -1,4 +1,4 @@
-import { ReactNode, VFC } from "react"
+import { ReactNode, FC } from "react"
 import {
   Flex,
   HStack,
@@ -17,7 +17,7 @@ interface CardStatProps extends StackProps {
   statIcon?: any
 }
 
-export const CardStat: VFC<CardStatProps> = ({
+export const CardStat: FC<CardStatProps> = ({
   label,
   labelProps,
   tooltip,

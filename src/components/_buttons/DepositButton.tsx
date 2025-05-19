@@ -2,7 +2,7 @@ import { ButtonProps, useDisclosure } from "@chakra-ui/react"
 import ClientOnly from "components/ClientOnly"
 import { DepositModal } from "components/_modals/DepositModal"
 import { NotifyModal } from "components/_modals/NotifyModal"
-import { VFC } from "react"
+import { FC } from "react"
 import { BaseButton } from "./BaseButton"
 import {
   Text,
@@ -18,7 +18,7 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
 
-export const DepositButton: VFC<ButtonProps> = (props) => {
+export const DepositButton: FC<ButtonProps> = (props) => {
   const depositModal = useDisclosure()
   const notifyModal = useDisclosure()
 

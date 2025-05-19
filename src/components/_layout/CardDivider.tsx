@@ -1,6 +1,6 @@
 import { StackDivider, StackDividerProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const CardDivider: VFC<StackDividerProps> = (props) => {
+export const CardDivider: FC<StackDividerProps> = (props) => {
   return <StackDivider borderColor="purple.dark" {...props} />
 }

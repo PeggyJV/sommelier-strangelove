@@ -11,7 +11,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
 import { useTable, useSortBy } from "react-table"
 
@@ -25,7 +25,7 @@ interface BorderTrProps extends TableRowProps {
   name: string
 }
 
-export const BorderTr: VFC<BorderTrProps> = ({
+export const BorderTr: FC<BorderTrProps> = ({
   slug,
   name,
   ...props
@@ -85,7 +85,7 @@ export const BorderTr: VFC<BorderTrProps> = ({
   )
 }
 
-export const BorderTd: VFC<TableCellProps> = (props) => {
+export const BorderTd: FC<TableCellProps> = (props) => {
   return <Td {...props} py={7} />
 }
 
@@ -96,7 +96,7 @@ export interface StrategyTableProps {
   columns: any
 }
 
-export const SidebarTable: VFC<StrategyTableProps> = ({
+export const SidebarTable: FC<StrategyTableProps> = ({
   columns,
   data,
 }) => {

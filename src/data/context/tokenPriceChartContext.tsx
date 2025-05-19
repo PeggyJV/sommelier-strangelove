@@ -1,4 +1,4 @@
-import { LineProps, Serie } from "@nivo/line"
+import { LineSvgProps, LineSeries } from "@nivo/line"
 import { format } from "date-fns"
 import {
   GetAllTimeShareValueQuery,
@@ -20,10 +20,9 @@ import {
   useEffect,
   useState,
   useCallback,
-  ReactNode
+  ReactNode,
 } from "react"
 import { colors } from "theme/colors"
-import { OperationContext } from "urql"
 import {
   getPrevious24Hours,
   getPreviousMonth,
@@ -35,8 +34,8 @@ import {
 } from "utils/chartHelper"
 
 export interface DataProps {
-  series?: Serie[]
-  chartProps: Partial<LineProps>
+  series?: LineSeries[]
+  chartProps: Partial<LineSvgProps<LineSeries>>
 }
 
 export interface TokenPriceData {
@@ -54,18 +53,10 @@ export interface TokenPriceChartContext {
   isFetching: boolean
   isError: boolean
   data: DataProps
-  reexecuteHourly: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
-  reexecuteWeekly: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
-  reexecuteMonthly: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
-  reexecuteAllTime: (
-    opts?: Partial<OperationContext> | undefined
-  ) => void
+  reexecuteHourly: () => void
+  reexecuteWeekly: () => void
+  reexecuteMonthly: () => void
+  reexecuteAllTime: () => void
   timeArray: {
     title: string
     onClick: () => void
@@ -76,7 +67,7 @@ export interface TokenPriceChartContext {
   setShowLine: Dispatch<SetStateAction<ShowLine>>
 }
 
-const hourlyChartProps: Partial<LineProps> = {
+const hourlyChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d %H:%M",
     tickValues: "every 3 hours",
@@ -89,7 +80,7 @@ const hourlyChartProps: Partial<LineProps> = {
     precision: "hour",
   },
 }
-const dayChartProps: Partial<LineProps> = {
+const dayChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
     tickValues: "every day",
@@ -102,7 +93,7 @@ const dayChartProps: Partial<LineProps> = {
     precision: "day",
   },
 }
-const monthChartProps: Partial<LineProps> = {
+const monthChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
     tickValues: "every 2 days",
@@ -115,7 +106,7 @@ const monthChartProps: Partial<LineProps> = {
     precision: "day",
   },
 }
-const allTimeChartProps: Partial<LineProps> = {
+const allTimeChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
     tickValues: "every 2 days",
@@ -167,8 +158,8 @@ const prevWeek = getPreviousWeek()
 const prevMonth = getPreviousMonth()
 
 export const TokenPriceChartProvider: FC<{
-  address: string,
-  chain: string,
+  address: string
+  chain: string
   children: ReactNode
 }> = ({ children, address, chain }) => {
   const [showLine, setShowLine] = useState<ShowLine>({
@@ -195,7 +186,11 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setHourlyIsFetching(true)
-    fetchHourlyShareValueData(prev24Hours, address, cellarData.config.chain.id)
+    fetchHourlyShareValueData(
+      prev24Hours,
+      address,
+      cellarData.config.chain.id
+    )
       .then((data) => {
         setHourlyDataRaw(data)
         setHourlyIsFetching(false)
@@ -221,7 +216,11 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setWeeklyIsFetching(true)
-    fetchWeeklyShareValueData(prevWeek, address, cellarData.config.chain.id)
+    fetchWeeklyShareValueData(
+      prevWeek,
+      address,
+      cellarData.config.chain.id
+    )
       .then((data) => {
         setWeeklyDataRaw(data)
         setWeeklyIsFetching(false)
@@ -247,7 +246,11 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setMonthlyIsFetching(true)
-    fetchMonthlyShareValueData(prevMonth, address, cellarData.config.chain.id)
+    fetchMonthlyShareValueData(
+      prevMonth,
+      address,
+      cellarData.config.chain.id
+    )
       .then((data) => {
         setMonthlyDataRaw(data)
         setMonthlyIsFetching(false)

@@ -1,7 +1,7 @@
 import { Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const WstethIcon: VFC<IconProps> = (props) => (
+export const WstethIcon: FC<IconProps> = (props) => (
   <Icon viewBox="0 0 20 28" {...props}>
     <circle cx="9.8" cy="14" r="13" fill="#FFFFFF"/>
     <path

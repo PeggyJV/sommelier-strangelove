@@ -1,7 +1,7 @@
-import { VFC } from 'react'
+import { FC } from 'react'
 import { Box, BoxProps } from '@chakra-ui/react'
 
-export type CardProps = VFC<BoxProps>
+export type CardProps = FC<BoxProps>
 
 export const Card: CardProps = props => {
   return (

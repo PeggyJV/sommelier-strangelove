@@ -8,7 +8,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react"
-import { useState, VFC } from "react"
+import { useState } from "react"
 import { TransparentCard } from "./TransparentCard"
 import { CardHeading } from "components/_typography/CardHeading"
 import { analytics } from "utils/analytics"
@@ -16,7 +16,7 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { PercentageText } from "components/PercentageText"
 import { ErrorCard } from "./ErrorCard"
-import { Point } from "@nivo/line"
+import { LineSeries, Point } from "@nivo/line"
 import { ChartTooltipItem } from "components/_charts/ChartTooltipItem"
 import { formatPercentage } from "utils/chartHelper"
 import { format } from "date-fns"
@@ -25,22 +25,23 @@ import { useTokenPriceChart } from "data/context/tokenPriceChartContext"
 import { TokenPriceChart } from "components/_charts/TokenPriceChart"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
-export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
+export const TokenPricePerfomanceCard = (props: BoxProps) => {
   const { data, timeArray, tokenPriceChange, isFetching, isError } =
     useTokenPriceChart()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { data: strategyData } = useStrategyData(
-    cellarConfig.cellar.address, cellarConfig.chain.id
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id
   )
   const tokenPrice = strategyData?.tokenPrice
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
   const [timeline, setTimeline] = useState<string>("1M")
-  const [pointActive, setPointActive] = useState<Point>()
+  const [pointActive, setPointActive] = useState<Point<LineSeries>>()
 
   const MobileTooltip = () => {
     if (!!pointActive && !isLarger768) {
-      const { id: pointId, serieId } = pointActive
+      const { id: pointId } = pointActive
       const [_, i] = pointId.split(".")
       return (
         <Stack
@@ -61,12 +62,12 @@ export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
             return (
               <ChartTooltipItem
                 key={item.id}
-                backgroundColor={item.color}
+                backgroundColor="neutral.100"
                 name={name}
                 value={`$${
                   data.series?.find((s) => s.id === item.id)?.data[
                     Number(i)
-                  ]?.value
+                  ]?.y
                 }`}
                 percentage={`${formatPercentage(
                   String(
@@ -80,7 +81,9 @@ export const TokenPricePerfomanceCard: VFC<BoxProps> = (props) => {
           })}
           <Text color="neutral.400">
             {format(
-              new Date(String(data.series?.[0].data[Number(i)].x)),
+              new Date(
+                String(data.series?.[0].data[Number(i)]?.x)
+              ),
               "MMM, d, yyyy, HH:mm"
             )}
           </Text>

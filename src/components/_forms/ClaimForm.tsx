@@ -1,4 +1,4 @@
-import { useState, VFC } from "react"
+import { useState, FC } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -17,7 +17,7 @@ interface FormValues {
   claimAmount: number
 }
 
-export const ClaimForm: VFC = () => {
+export const ClaimForm: FC = () => {
   const {
     register,
     watch,

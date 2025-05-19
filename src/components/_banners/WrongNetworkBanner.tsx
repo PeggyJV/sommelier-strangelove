@@ -8,7 +8,7 @@ import {
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { InformationIcon } from "components/_icons"
 import { useBrandedToast } from "hooks/chakra"
-import React, { VFC } from "react"
+import React, { FC } from "react"
 import { useSwitchChain, useAccount } from "wagmi"
 import { Chain } from "src/data/chainConfig"
 
@@ -16,7 +16,7 @@ interface WrongNetworkBannerProps {
   chain?: Chain
 }
 
-export const WrongNetworkBanner: VFC<WrongNetworkBannerProps> = ({
+export const WrongNetworkBanner: FC<WrongNetworkBannerProps> = ({
   chain,
 }) => {
   const { switchChainAsync } = useSwitchChain()

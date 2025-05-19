@@ -1,15 +1,14 @@
 import {
   Circle,
+  ComponentWithAs,
   forwardRef,
   HStack,
-  StackProps,
   Text,
 } from "@chakra-ui/react"
 import { BarTooltipProps } from "@nivo/bar"
-import { VFC } from "react"
 
-export const ToolTip: VFC<StackProps & BarTooltipProps<any>> =
-  forwardRef(({ color, id, value }, ref) => {
+export const ToolTip: ComponentWithAs<"span", BarTooltipProps<any>> = forwardRef(
+  ({ color, id, value }, ref) => {
     return (
       <HStack
         ref={ref}
@@ -27,4 +26,5 @@ export const ToolTip: VFC<StackProps & BarTooltipProps<any>> =
         </Text>
       </HStack>
     )
-  })
+  }
+)

@@ -72,6 +72,35 @@ export const ChainFilter = (props: ChainFilterProps) => {
     setCheckedStates(newCheckedStates)
   }, [props.selectedChainIds])
 
+  const NetworkDisplay = () => (
+    <HStack spacing={2}>
+      <Text fontSize={"1.25em"}>Networks</Text>
+      <HStack justifyContent={"center"}>
+        <AvatarGroup size="sm" dir="reverse">
+          {props.selectedChainIds
+            .slice(0, 5)
+            .map((chainStr: string) => {
+              const chain = chainConfigMap[chainStr]
+              return (
+                <Avatar
+                  name={chain.displayName}
+                  src={chain.logoPath}
+                  key={chain.id}
+                  background="transparent"
+                  border="none"
+                />
+              )
+            })}
+        </AvatarGroup>
+        {props.selectedChainIds.length > 5 && (
+          <Text fontWeight={600}>
+            +{props.selectedChainIds.length - 5}
+          </Text>
+        )}
+      </HStack>
+    </HStack>
+  )
+
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
@@ -80,7 +109,6 @@ export const ChainFilter = (props: ChainFilterProps) => {
           borderWidth={2.5}
           borderColor="purple.base"
           borderRadius="1em"
-          rightIcon={<ChevronDownIcon />}
           w="auto"
           fontFamily="Haffer"
           fontSize={12}
@@ -88,41 +116,12 @@ export const ChainFilter = (props: ChainFilterProps) => {
           _hover={{
             bg: "purple.dark",
           }}
-          leftIcon={
-            <HStack>
-              <Text fontSize={"1.25em"}>Networks</Text>
-              <HStack justifyContent={"center"}>
-                <AvatarGroup size="sm" dir="reverse">
-                  {props.selectedChainIds
-                    .slice(0, 5)
-                    .map((chainStr: string) => {
-                      const chain =
-                        chainConfigMap[chainStr]
-                      return (
-                        <Avatar
-                          name={chain.displayName}
-                          src={chain.logoPath}
-                          key={chain.id}
-                          background="transparent"
-                          border="none"
-                        />
-                      )
-                    })}
-                </AvatarGroup>
-                {props.selectedChainIds.length > 5 && (
-                  <Text fontWeight={600}>
-                    +{props.selectedChainIds.length - 5}
-                  </Text>
-                )}
-              </HStack>
-              {props.selectedChainIds.length > 5 && (
-                <Text fontSize="sm">
-                  +{props.selectedChainIds.length - 5}
-                </Text>
-              )}
-            </HStack>
-          }
-        />
+        >
+          <HStack>
+            <NetworkDisplay />
+            <ChevronDownIcon />
+          </HStack>
+        </Button>
       </PopoverTrigger>
 
       <PopoverContent

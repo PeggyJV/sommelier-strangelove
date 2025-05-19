@@ -13,8 +13,8 @@ export const useTypingText = (
     words[wordIndex].split("")
   )
   const direction = useRef(BACKWARD)
-  const typingInterval = useRef<number>()
-  const letterIndex = useRef<number>()
+  const typingInterval = useRef<number>(undefined)
+  const letterIndex = useRef<number>(undefined)
 
   useEffect(() => {
     let pauseCounter = 0

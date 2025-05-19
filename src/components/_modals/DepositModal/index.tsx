@@ -1,5 +1,5 @@
 import { ModalProps, UseDisclosureProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
 import { SommelierTab } from "./SommelierTab"
 import { ModalWithExchangeTab } from "../ModalWithExchangeTab"
@@ -9,7 +9,7 @@ interface DepositModalProps
   notifyModal: UseDisclosureProps
 }
 
-export const DepositModal: VFC<DepositModalProps> = ({
+export const DepositModal: FC<DepositModalProps> = ({
   notifyModal,
   ...props
 }) => {

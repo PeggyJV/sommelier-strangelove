@@ -70,10 +70,14 @@ export const getUserData = async ({
 
       const cellarContract = contracts.cellarContract
 
-      // @ts-ignore
-      let assets = await cellarContract.read.convertToAssets([totalShares])
+      let assets;
 
-      if (typeof assets === "undefined") {
+      try {
+        // @ts-ignore
+        assets = await cellarContract.read.convertToAssets([
+          totalShares,
+        ])
+      } catch (error) {
         assets = BigInt(0)
       }
       return formatUnits(assets, decimals)

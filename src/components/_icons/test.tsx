@@ -1,7 +1,7 @@
 import { Icon, IconProps } from "@chakra-ui/react"
-import { VFC } from "react"
+import { FC } from "react"
 
-export const testIcon: VFC<IconProps> = (props) => (
+export const testIcon: FC<IconProps> = (props) => (
   <Icon viewBox="0 0 400 400" {...props}>
     <rect
       width="405"
