@@ -329,18 +329,11 @@ export const WithdrawQueueForm = ({
 
     if (boringQueue) {
 
-      let discount_percent =
+      let discount =
         cellarConfig.withdrawTokenConfig?.[selectedToken.symbol]
           ?.minDiscount ?? SHARE_PRICE_DISCOUNT_PERCENT
 
-      let discount = discount_percent * 100
-
       const deadlineSeconds = DEADLINE_HOURS * 60 * 60
-
-      console.log("deadlineSeconds", deadlineSeconds)
-      console.log("withdrawAmtInBaseDenom", withdrawAmtInBaseDenom)
-      console.log("discount", discount)
-      console.log("selectedToken?.address", selectedToken?.address)
 
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         boringQueue.estimateGas.requestOnChainWithdraw,
@@ -414,6 +407,7 @@ export const WithdrawQueueForm = ({
 
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
+    console.log("checkWithdrawRequest")
     try {
       if (withdrawQueueContract && address && cellarConfig) {
         const withdrawRequest =

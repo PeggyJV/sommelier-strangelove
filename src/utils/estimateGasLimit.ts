@@ -85,7 +85,7 @@ export const estimateGasLimitWithRetry = async (
             gasLimitEstimated = lastTryGasLimit
           }
         } catch (error) {
-          throw new Error("GAS_LIMIT_ERROR")
+          throw new Error("GAS_LIMIT_ERROR", { cause: error })
         }
       }
       count++
