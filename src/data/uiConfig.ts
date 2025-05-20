@@ -493,6 +493,16 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
   return false
 }
 
+export const isWithdrawQueueEnabled = (config: ConfigProps) => {
+  if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
+  ) {
+    return true
+  }
+  return false
+}
+
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const apyChartLabel = (config: ConfigProps) => {
   if (

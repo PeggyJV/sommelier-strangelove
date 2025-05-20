@@ -32,6 +32,7 @@ import {
   isBondedDisabled,
   isBondingEnabled,
   isRewardsEnabled,
+  isWithdrawQueueEnabled,
   lpTokenTooltipContent,
   showNetValueInAsset,
 } from "data/uiConfig"
@@ -269,8 +270,7 @@ export const PortfolioCard = (props: BoxProps) => {
                             }
                           />
                         )}
-                        {cellarConfig.cellarNameKey !==
-                          CellarNameKey.REAL_YIELD_LINK && (
+                        {!isWithdrawQueueEnabled(cellarConfig) && (
                           <WithdrawButton
                             isDeprecated={strategyData?.deprecated}
                             disabled={
@@ -293,8 +293,7 @@ export const PortfolioCard = (props: BoxProps) => {
                         />
                       </>
                         */}
-                      {cellarConfig.cellarNameKey ===
-                        CellarNameKey.REAL_YIELD_LINK && (
+                      {isWithdrawQueueEnabled(cellarConfig) && (
                         <WithdrawQueueButton
                           chain={cellarConfig.chain}
                           buttonLabel="Enter Withdraw Queue"
