@@ -663,8 +663,12 @@ export const WithdrawQueueForm = ({
                         variant="unstyled"
                         type="number"
                         step="any"
-                        defaultValue="1"
-                        placeholder="1"
+                        defaultValue={
+                          cellarConfig.withdrawTokenConfig?.[
+                            selectedToken.symbol
+                          ]?.minDiscount
+                        }
+                        placeholder="0"
                         fontSize="lg"
                         fontWeight={700}
                         textAlign="right"

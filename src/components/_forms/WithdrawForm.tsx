@@ -78,11 +78,11 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
     cellarConfig.chain.id
   )
 
-  const { cellarSigner, boringQueue } =
+  const { cellarSigner } =
       useCreateContracts(cellarConfig)
 
   const [isWithdrawQueueModalOpen, setIsWithdrawQueueModalOpen] =
-      useState(!!boringQueue)
+      useState(false)
 
   const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
@@ -276,26 +276,15 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
             boxShadow: "unset",
           }}
         >
-          {boringQueue ? (
-            <ModalHeader>BoringQueue withrawal</ModalHeader>
-          ) : (
-            <ModalHeader>Transaction not submitted</ModalHeader>
-          )}
+          <ModalHeader>Transaction not submitted</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={8}>
-              {boringQueue ? (
-                <Text textAlign={"center"}>
-                  Boringvault withdraws are processed using the BoringQueue.
-                  Please submit a withdraw request.
-                </Text>
-              ) : (
-                <Text textAlign={"center"}>
-                  You are attempting to withdraw beyond the liquid
-                  reserve. Please submit a withdraw request via the
-                  withdraw queue.
-                </Text>
-              )}
+              <Text textAlign={"center"}>
+                You are attempting to withdraw beyond the liquid
+                reserve. Please submit a withdraw request via the
+                withdraw queue.
+              </Text>
               <WithdrawQueueButton
                 size="md"
                 chain={cellarConfig.chain}
