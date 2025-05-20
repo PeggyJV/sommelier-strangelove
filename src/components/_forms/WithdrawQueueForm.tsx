@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -13,6 +13,8 @@ import {
   Text,
   Link,
   Tooltip,
+  InputRightElement,
+  InputGroup,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -111,11 +113,11 @@ export const WithdrawQueueForm = ({
     defaultValues: {},
   })
 
-  const [selectedToken, setSelectedToken] = useState<Token | null>(
+  const [selectedToken, setSelectedToken] = useState<Token>(
     strategyBaseAsset
   )
 
-  function trackedSetSelectedToken(value: Token | null) {
+  function trackedSetSelectedToken(value: Token) {
     if (value && value !== selectedToken) {
       // analytics.track("deposit.stable-selected", {
       //   ...baseAnalytics,
@@ -318,7 +320,7 @@ export const WithdrawQueueForm = ({
     }
   }
 
-  const doWithdrawTx = async (selectedToken: Token | null, withdrawAmtInBaseDenom: bigint) => {
+  const doWithdrawTx = async (selectedToken: Token, withdrawAmtInBaseDenom: bigint) => {
     const currentTime = Math.floor(Date.now() / 1000)
     const deadlineSeconds =
       Math.floor(DEADLINE_HOURS * 60 * 60) + currentTime
@@ -326,7 +328,12 @@ export const WithdrawQueueForm = ({
     let hash;
 
     if (boringQueue) {
-      let discount = SHARE_PRICE_DISCOUNT_PERCENT * 100
+
+      let discount_percent =
+        cellarConfig.withdrawTokenConfig?.[selectedToken.symbol]
+          ?.minDiscount ?? SHARE_PRICE_DISCOUNT_PERCENT
+
+      let discount = discount_percent * 100
 
       const deadlineSeconds = DEADLINE_HOURS * 60 * 60
 
@@ -431,9 +438,15 @@ export const WithdrawQueueForm = ({
       setIsActiveWithdrawRequest(false)
     }
   }
-  if (!boringQueue) {
-    checkWithdrawRequest()
-  }
+
+  useEffect(() => {
+    const checkRequest = async () => {
+      if (!boringQueue) {
+        await checkWithdrawRequest()
+      }
+    }
+    checkRequest()
+  }, [boringQueue, withdrawQueueContract, address, cellarConfig])
 
   return (
     <VStack
@@ -594,7 +607,10 @@ export const WithdrawQueueForm = ({
                 <ModalOnlyTokenMenu
                   depositTokens={
                     cellarConfig.boringVault
-                      ? cellarDataMap[id].depositTokens.list
+                      ? Object.keys(
+                          cellarDataMap[id].config
+                            .withdrawTokenConfig!
+                        )
                       : [strategyBaseAsset.symbol]
                   }
                   activeAsset={strategyBaseAsset.address}
@@ -618,55 +634,114 @@ export const WithdrawQueueForm = ({
               title="Vault"
               value={<Text>{cellarDataMap[id].name}</Text>}
             />
-            <FormControl isInvalid={!!errors.deadlineHours}>
-              <HStack justify="space-between">
-                <Tooltip
-                  hasArrow
-                  placement="top"
-                  label={
-                    "How many hours the request will be valid for. If the request is not fulfilled within this duration, it will be cancelled."
-                  }
-                  bg="surface.bg"
-                  color="neutral.300"
+            {boringQueue && (
+              <>
+                <FormControl
+                  isInvalid={!!errors.sharePriceDiscountPercent}
                 >
-                  <HStack spacing={1} align="center">
-                    <Text as="span">Deadline Hours</Text>
-                    <InformationIcon
+                  <HStack justify="space-between">
+                    <Tooltip
+                      hasArrow
+                      placement="top"
+                      label={
+                        "How much of a discount under the current share price you are willing to accept to fulfill the withdrawal. The higher the discount, the more likely your request will be fulfilled."
+                      }
+                      bg="surface.bg"
                       color="neutral.300"
-                      boxSize={3}
+                    >
+                      <HStack spacing={1} align="center">
+                        <Text as="span">Share Price Discount</Text>
+                        <InformationIcon
+                          color="neutral.300"
+                          boxSize={3}
+                        />
+                      </HStack>
+                    </Tooltip>
+                    <InputGroup width="25%" alignItems="center">
+                      <Input
+                        id="sharePrice"
+                        variant="unstyled"
+                        type="number"
+                        step="any"
+                        defaultValue="1"
+                        placeholder="1"
+                        fontSize="lg"
+                        fontWeight={700}
+                        textAlign="right"
+                        padding={2}
+                        borderRadius={16}
+                        pr={8}
+                        height="2.2em"
+                        disabled={true}
+                      />
+                      <InputRightElement pointerEvents="none">
+                        <Text>%</Text>
+                      </InputRightElement>
+                    </InputGroup>
+                  </HStack>
+                  <FormErrorMessage color="energyYellow">
+                    <Icon
+                      p={0.5}
+                      mr={1}
+                      color="surface.bg"
+                      bg="red.base"
+                      borderRadius="50%"
+                      as={AiOutlineInfo}
+                    />
+                    {errors.sharePriceDiscountPercent?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={!!errors.deadlineHours}>
+                  <HStack justify="space-between">
+                    <Tooltip
+                      hasArrow
+                      placement="top"
+                      label={
+                        "How many hours the request will be valid for. If the request is not fulfilled within this duration, it will be cancelled."
+                      }
+                      bg="surface.bg"
+                      color="neutral.300"
+                    >
+                      <HStack spacing={1} align="center">
+                        <Text as="span">Deadline Hours</Text>
+                        <InformationIcon
+                          color="neutral.300"
+                          boxSize={3}
+                        />
+                      </HStack>
+                    </Tooltip>
+                    <Input
+                      id="deadline"
+                      variant="unstyled"
+                      pr="2"
+                      type="number"
+                      step="any"
+                      defaultValue={DEADLINE_HOURS}
+                      placeholder="0.00"
+                      fontSize="lg"
+                      fontWeight={700}
+                      textAlign="right"
+                      width="25%"
+                      padding={2}
+                      borderRadius={16}
+                      height="2.2em"
+                      disabled={true}
                     />
                   </HStack>
-                </Tooltip>
-                <Input
-                  id="deadline"
-                  variant="unstyled"
-                  pr="2"
-                  type="number"
-                  step="any"
-                  defaultValue={DEADLINE_HOURS}
-                  placeholder="0.00"
-                  fontSize="lg"
-                  fontWeight={700}
-                  textAlign="right"
-                  width="25%"
-                  padding={2}
-                  borderRadius={16}
-                  height="2.2em"
-                  disabled={true}
-                />
-              </HStack>
-              <FormErrorMessage color="energyYellow">
-                <Icon
-                  p={0.5}
-                  mr={1}
-                  color="surface.bg"
-                  bg="red.base"
-                  borderRadius="50%"
-                  as={AiOutlineInfo}
-                />
-                {errors.deadlineHours?.message}
-              </FormErrorMessage>
-            </FormControl>
+                  <FormErrorMessage color="energyYellow">
+                    <Icon
+                      p={0.5}
+                      mr={1}
+                      color="surface.bg"
+                      bg="red.base"
+                      borderRadius="50%"
+                      as={AiOutlineInfo}
+                    />
+                    {errors.deadlineHours?.message}
+                  </FormErrorMessage>
+                </FormControl>
+              </>
+            )}
           </Stack>
         </Stack>
       </FormProvider>

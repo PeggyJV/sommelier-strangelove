@@ -97,6 +97,20 @@ export const alphaSteth: CellarData = {
       abi: config.CONTRACT.ALPHA_STETH_LENS.ABI,
     },
     baseAsset: tokenConfigMap.WETH_ETHEREUM,
+    withdrawTokenConfig: {
+      stETH: {
+        minDiscount: 1,
+        maxDiscount: 10,
+        minimumSecondsToDeadline: 259200,
+        minimumShares: 0,
+      },
+      wstETH: {
+        minDiscount: 2,
+        maxDiscount: 10,
+        minimumSecondsToDeadline: 259200,
+        minimumShares: 0,
+      },
+    },
     badges: [],
   },
   faq: [
