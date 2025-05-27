@@ -41,6 +41,7 @@ import { getAddress } from "viem"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { MaxUint256 } from "utils/bigIntHelpers"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useBoringQueueWithdrawals } from "data/hooks/useBoringQueueWithdrawals"
 
 interface FormValues {
   withdrawAmount: number
@@ -79,6 +80,12 @@ export const WithdrawQueueForm = ({
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
     cellarConfig.chain.id
+  )
+
+  const { data: boringQueueWithdrawals } = useBoringQueueWithdrawals(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id,
+    { enabled: !!cellarConfig.boringQueue }
   )
 
   const { data: walletClient } = useWalletClient()
@@ -407,9 +414,8 @@ export const WithdrawQueueForm = ({
 
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
-    console.log("checkWithdrawRequest")
     try {
-      if (withdrawQueueContract && address && cellarConfig) {
+      if (withdrawQueueContract && address && cellarConfig && !boringQueue) {
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
@@ -424,6 +430,13 @@ export const WithdrawQueueForm = ({
             withdrawRequest,
           ])) as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
+      } else if (
+        boringQueue &&
+        boringQueueWithdrawals &&
+        address &&
+        cellarConfig
+      ) {
+        setIsActiveWithdrawRequest(boringQueueWithdrawals?.open_requests.length > 0)
       } else {
         setIsActiveWithdrawRequest(false)
       }
@@ -435,9 +448,7 @@ export const WithdrawQueueForm = ({
 
   useEffect(() => {
     const checkRequest = async () => {
-      if (!boringQueue) {
-        await checkWithdrawRequest()
-      }
+      await checkWithdrawRequest()
     }
     checkRequest()
   }, [boringQueue, withdrawQueueContract, address, cellarConfig])
