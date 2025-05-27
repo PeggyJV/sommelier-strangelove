@@ -29,6 +29,8 @@ import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useBrandedToast } from "hooks/chakra"
 import { WithdrawQueue } from "../../abi/types/WithdrawQueue"
+import { useBoringQueueWithdrawals } from "data/hooks/useBoringQueueWithdrawals"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
 
 function formatTimeRemaining(deadline: number): string {
   const deadlineInMs = deadline * 1000
@@ -59,6 +61,12 @@ const WithdrawQueueCard = (props: TableProps) => {
   const cellarConfig = cellarDataMap[id].config
   const { address } = useAccount()
 
+  const { data: boringQueueWithdrawals } = useBoringQueueWithdrawals(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id,
+    { enabled: !!cellarConfig.boringQueue }
+  )
+
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
@@ -74,8 +82,8 @@ const WithdrawQueueCard = (props: TableProps) => {
       }
     )})()
 
-  const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
-    useState(false)
+  const { boringQueue } = useCreateContracts(cellarConfig)
+
   const [pendingWithdrawShares, setPendingWithdrawShares] =
     useState(0)
   const [pendingWithdrawSharePrice, setPendingWithdrawSharePrice] =
@@ -86,23 +94,13 @@ const WithdrawQueueCard = (props: TableProps) => {
   // Check if a user has an active withdraw request
   const checkWithdrawRequest = async () => {
     try {
-      if (walletClient && withdrawQueueContract && address && cellarConfig) {
+      if (walletClient && withdrawQueueContract && address && cellarConfig && !boringQueueWithdrawals) {
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
             cellarConfig.cellar.address as `0x${string}`
             ]
           )
-
-        // Check if it's valid
-        const isWithdrawRequestValid =
-          await withdrawQueueContract?.read.isWithdrawRequestValid([
-            cellarConfig.cellar.address as `0x${string}`,
-            address,
-            withdrawRequest
-            ]
-          )
-        setIsActiveWithdrawRequest(isWithdrawRequestValid)
 
         setPendingWithdrawShares(Number(withdrawRequest.sharesToWithdraw))
         setPendingWithdrawSharePrice(
@@ -111,15 +109,18 @@ const WithdrawQueueCard = (props: TableProps) => {
           )
         )
         setPendingWithdrawDeadline(Number(withdrawRequest.deadline))
+      } else if (boringQueueWithdrawals) {
+        const request = boringQueueWithdrawals.open_requests[0].metadata;
+        setPendingWithdrawShares(Number(request.amountOfShares))
+        setPendingWithdrawSharePrice(request.amountOfAssets / request.amountOfShares)
+        setPendingWithdrawDeadline(new Date().getTime() + request.secondsToDeadline)
       } else {
-        setIsActiveWithdrawRequest(false)
         setPendingWithdrawShares(0)
         setPendingWithdrawSharePrice(0)
         setPendingWithdrawDeadline(0)
       }
     } catch (error) {
       console.log(error)
-      setIsActiveWithdrawRequest(false)
       setPendingWithdrawShares(0)
       setPendingWithdrawSharePrice(0)
       setPendingWithdrawDeadline(0)
@@ -135,32 +136,63 @@ const WithdrawQueueCard = (props: TableProps) => {
   const geo = useGeo()
 
   const handleCancellation = async () => {
+    console.log("handleCancellation")
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
 
     try {
-      // Input Touple
-      const withdrawTouple = [0, 0, 0]
+      let hash;
 
-      const gasLimitEstimated = await estimateGasLimitWithRetry(
-        withdrawQueueContract?.estimateGas.updateWithdrawRequest,
-        withdrawQueueContract?.simulate.updateWithdrawRequest,
-        [cellarConfig.cellar.address, withdrawTouple],
-        330000,
-        address
-      )
+      if (boringQueueWithdrawals) {
+        const request =
+          boringQueueWithdrawals.open_requests[0].metadata
 
-      // @ts-ignore
-      const hash = await withdrawQueueContract?.write.updateWithdrawRequest([
-        cellarConfig.cellar.address,
-        withdrawTouple
-        ],
-        {
-          gas: gasLimitEstimated,
-          account: address
-        }
-      )
+        const withdrawTouple = [
+          request.nonce,
+          address,
+          request.assetOut,
+          request.amountOfShares,
+          request.amountOfAssets,
+          request.creationTime,
+          request.secondsToMaturity,
+          request.secondsToDeadline,
+        ]
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          boringQueue?.estimateGas.cancelOnChainWithdraw,
+          boringQueue?.simulate.cancelOnChainWithdraw,
+          [withdrawTouple],
+          330000,
+          address
+        )
+        // @ts-ignore
+        hash = await boringQueue?.write.cancelOnChainWithdraw(
+          [withdrawTouple],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
+      } else {
+        const withdrawTouple = [0, 0, 0]
+
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          withdrawQueueContract?.estimateGas.updateWithdrawRequest,
+          withdrawQueueContract?.simulate.updateWithdrawRequest,
+          [cellarConfig.cellar.address, withdrawTouple],
+          330000,
+          address
+        )
+        // @ts-ignore
+        hash = await withdrawQueueContract?.write.updateWithdrawRequest(
+          [cellarConfig.cellar.address, withdrawTouple],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
+      }
+      
 
       const onSuccess = () => {
          // Can track here if we want

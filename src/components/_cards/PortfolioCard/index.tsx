@@ -52,6 +52,7 @@ import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
+import { useBoringQueueWithdrawals } from "data/hooks/useBoringQueueWithdrawals"
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
@@ -64,6 +65,12 @@ export const PortfolioCard = (props: BoxProps) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const dashboard = cellarDataMap[id].dashboard
+
+  const { data: boringQueueWithdrawals } = useBoringQueueWithdrawals(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id,
+    { enabled: !!cellarConfig.boringQueue }
+  )
 
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(
@@ -131,7 +138,13 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const checkWithdrawRequest = async () => {
     try {
-      if (walletClient && withdrawQueueContract && address && cellarConfig && !cellarConfig.boringVault) {
+      if (
+        walletClient &&
+        withdrawQueueContract &&
+        address &&
+        cellarConfig &&
+        !boringQueueWithdrawals
+      ) {
         // @ts-ignore
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
@@ -146,6 +159,14 @@ export const PortfolioCard = (props: BoxProps) => {
             withdrawRequest,
           ])) as unknown as boolean
         setIsActiveWithdrawRequest(isWithdrawRequestValid)
+      } else if (
+        boringQueueWithdrawals &&
+        cellarConfig.boringVault &&
+        address
+      ) {
+        setIsActiveWithdrawRequest(
+          boringQueueWithdrawals?.open_requests.length > 0
+        )
       } else {
         setIsActiveWithdrawRequest(false)
       }
