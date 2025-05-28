@@ -27,6 +27,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { useWithdrawRequestStatus } from "data/hooks/useWithdrawRequestStatus"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import {
   isBondedDisabled,
@@ -102,7 +103,6 @@ export const PortfolioCard = (props: BoxProps) => {
   const activeAsset = strategyData?.activeAsset
   const stakingEnd = strategyData?.stakingEnd
 
-
   const isStakingAllowed = stakingEnd?.endDate
     ? isFuture(stakingEnd.endDate)
     : false
@@ -133,52 +133,7 @@ export const PortfolioCard = (props: BoxProps) => {
       },
     })
 
-  const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
-    useState(false)
-
-  const checkWithdrawRequest = async () => {
-    try {
-      if (
-        walletClient &&
-        withdrawQueueContract &&
-        address &&
-        cellarConfig &&
-        !boringQueueWithdrawals
-      ) {
-        // @ts-ignore
-        const withdrawRequest =
-          await withdrawQueueContract?.read.getUserWithdrawRequest([
-            address,
-            cellarConfig.cellar.address,
-          ])
-
-        const isWithdrawRequestValid =
-          (await withdrawQueueContract?.read.isWithdrawRequestValid([
-            cellarConfig.cellar.address,
-            address,
-            withdrawRequest,
-          ])) as unknown as boolean
-        setIsActiveWithdrawRequest(isWithdrawRequestValid)
-      } else if (
-        boringQueueWithdrawals &&
-        cellarConfig.boringVault &&
-        address
-      ) {
-        setIsActiveWithdrawRequest(
-          boringQueueWithdrawals?.open_requests.length > 0
-        )
-      } else {
-        setIsActiveWithdrawRequest(false)
-      }
-    } catch (error) {
-      console.log(error)
-      setIsActiveWithdrawRequest(false)
-    }
-  }
-
-  useEffect(() => {
-    checkWithdrawRequest()
-  }, [withdrawQueueContract, address, cellarConfig])
+  const isActiveWithdrawRequest = useWithdrawRequestStatus(cellarConfig)
 
   return (
     <TransparentCard

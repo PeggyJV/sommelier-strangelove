@@ -42,6 +42,7 @@ import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions
 import { MaxUint256 } from "utils/bigIntHelpers"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useBoringQueueWithdrawals } from "data/hooks/useBoringQueueWithdrawals"
+import { useWithdrawRequestStatus } from "data/hooks/useWithdrawRequestStatus"
 
 interface FormValues {
   withdrawAmount: number
@@ -409,49 +410,7 @@ export const WithdrawQueueForm = ({
     return hash;
   }
 
-  const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
-    useState(false)
-
-  // Check if a user has an active withdraw request
-  const checkWithdrawRequest = async () => {
-    try {
-      if (withdrawQueueContract && address && cellarConfig && !boringQueue) {
-        const withdrawRequest =
-          await withdrawQueueContract?.read.getUserWithdrawRequest([
-            address,
-            cellarConfig.cellar.address,
-          ])
-
-        // Check if it's valid
-        const isWithdrawRequestValid =
-          (await withdrawQueueContract?.read.isWithdrawRequestValid([
-            cellarConfig.cellar.address,
-            address,
-            withdrawRequest,
-          ])) as boolean
-        setIsActiveWithdrawRequest(isWithdrawRequestValid)
-      } else if (
-        boringQueue &&
-        boringQueueWithdrawals &&
-        address &&
-        cellarConfig
-      ) {
-        setIsActiveWithdrawRequest(boringQueueWithdrawals?.open_requests.length > 0)
-      } else {
-        setIsActiveWithdrawRequest(false)
-      }
-    } catch (error) {
-      console.log(error)
-      setIsActiveWithdrawRequest(false)
-    }
-  }
-
-  useEffect(() => {
-    const checkRequest = async () => {
-      await checkWithdrawRequest()
-    }
-    checkRequest()
-  }, [boringQueue, withdrawQueueContract, address, cellarConfig])
+  const isActiveWithdrawRequest = useWithdrawRequestStatus(cellarConfig);
 
   return (
     <VStack

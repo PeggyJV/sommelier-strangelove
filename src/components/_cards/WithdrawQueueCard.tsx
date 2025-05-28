@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import {
   Table,
   Thead,
@@ -56,7 +56,7 @@ function formatTimeRemaining(deadline: number): string {
 }
 
 const WithdrawQueueCard = (props: TableProps) => {
-  const { addToast, update, close, closeAll } = useBrandedToast()
+  const { addToast, closeAll } = useBrandedToast()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const { address } = useAccount()
@@ -70,17 +70,21 @@ const WithdrawQueueCard = (props: TableProps) => {
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
-  const withdrawQueueContract = (() => {
+  const withdrawQueueContract = useMemo(() => {
     if (!publicClient) return
-    return getContract( {
-        address: getAddress(cellarConfig.chain.withdrawQueueAddress),
-        abi: WithdrawQueue,
-        client: {
-          wallet: walletClient,
-          public: publicClient
-        }
-      }
-    )})()
+    return getContract({
+      address: getAddress(cellarConfig.chain.withdrawQueueAddress),
+      abi: WithdrawQueue,
+      client: {
+        wallet: walletClient,
+        public: publicClient,
+      },
+    })
+  }, [
+    publicClient,
+    walletClient,
+    cellarConfig.chain.withdrawQueueAddress,
+  ])
 
   const { boringQueue } = useCreateContracts(cellarConfig)
 
@@ -92,28 +96,37 @@ const WithdrawQueueCard = (props: TableProps) => {
     useState(0)
 
   // Check if a user has an active withdraw request
-  const checkWithdrawRequest = async () => {
+  const setWithdrawRequestData = async () => {
     try {
-      if (walletClient && withdrawQueueContract && address && cellarConfig && !boringQueueWithdrawals) {
+      if (
+        walletClient &&
+        withdrawQueueContract &&
+        address &&
+        cellarConfig &&
+        !boringQueueWithdrawals
+      ) {
         const withdrawRequest =
           await withdrawQueueContract?.read.getUserWithdrawRequest([
             address,
-            cellarConfig.cellar.address as `0x${string}`
-            ]
-          )
+            cellarConfig.cellar.address as `0x${string}`,
+          ])
 
         setPendingWithdrawShares(Number(withdrawRequest.sharesToWithdraw))
         setPendingWithdrawSharePrice(
           Number(
-            formatUnits(withdrawRequest.executionSharePrice, cellarConfig.baseAsset.decimals)
+            formatUnits(
+              withdrawRequest.executionSharePrice,
+              cellarConfig.baseAsset.decimals
+            )
           )
         )
         setPendingWithdrawDeadline(Number(withdrawRequest.deadline))
       } else if (boringQueueWithdrawals) {
-        const request = boringQueueWithdrawals.open_requests[0].metadata;
+        const request = boringQueueWithdrawals.open_requests[0].metadata
+
         setPendingWithdrawShares(Number(request.amountOfShares))
         setPendingWithdrawSharePrice(request.amountOfAssets / request.amountOfShares)
-        setPendingWithdrawDeadline(new Date().getTime() + request.secondsToDeadline)
+        setPendingWithdrawDeadline(request.creationTime + request.secondsToDeadline)
       } else {
         setPendingWithdrawShares(0)
         setPendingWithdrawSharePrice(0)
@@ -128,15 +141,14 @@ const WithdrawQueueCard = (props: TableProps) => {
   }
 
   useEffect(() => {
-    checkWithdrawRequest()
-  }, [withdrawQueueContract, address, cellarConfig])
+    setWithdrawRequestData()
+  }, [address, cellarConfig, boringQueueWithdrawals])
 
   const { doHandleTransaction } = useHandleTransaction()
 
   const geo = useGeo()
 
   const handleCancellation = async () => {
-    console.log("handleCancellation")
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
@@ -380,10 +392,7 @@ const WithdrawQueueCard = (props: TableProps) => {
               <Td>
                 <HStack spacing={2}>
                   <Text textAlign="right">
-                    {(
-                      pendingWithdrawSharePrice
-                    )
-                      .toLocaleString()}
+                    {pendingWithdrawSharePrice.toLocaleString()}
                   </Text>
                 </HStack>
               </Td>
@@ -401,7 +410,7 @@ const WithdrawQueueCard = (props: TableProps) => {
                       size="sm"
                       chain={cellarConfig.chain}
                       buttonLabel="Replace Withdraw Request"
-                      onSuccessfulWithdraw={checkWithdrawRequest}
+                      onSuccessfulWithdraw={setWithdrawRequestData}
                     />
                     <SecondaryButton
                       size="sm"
@@ -410,7 +419,7 @@ const WithdrawQueueCard = (props: TableProps) => {
                         handleCancellation()
 
                         // Refresh Data
-                        checkWithdrawRequest()
+                        setWithdrawRequestData()
                       }}
                     >
                       Cancel Request
