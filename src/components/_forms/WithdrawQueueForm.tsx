@@ -142,6 +142,8 @@ export const WithdrawQueueForm = ({
 
   const isDisabled = isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
 
+    const isActiveWithdrawRequest = useWithdrawRequestStatus(cellarConfig)
+
   const setMax = () => {
     const amount = parseFloat(
       toEther(lpTokenData?.formatted, lpTokenData?.decimals, false, 6)
@@ -343,33 +345,70 @@ export const WithdrawQueueForm = ({
 
       const deadlineSeconds = DEADLINE_HOURS * 60 * 60
 
-      const gasLimitEstimated = await estimateGasLimitWithRetry(
-        boringQueue.estimateGas.requestOnChainWithdraw,
-        boringQueue.simulate.requestOnChainWithdraw,
-        [
-          selectedToken?.address,
-          withdrawAmtInBaseDenom,
-          discount,
-          deadlineSeconds,
-        ],
-        330000,
-        address
-      )
+      if (isActiveWithdrawRequest && boringQueueWithdrawals) {
+        // Replace existing BoringQueuerequest
+        const request = boringQueueWithdrawals.open_requests[0].metadata
 
-      // @ts-ignore
-      hash = await boringQueue?.write.requestOnChainWithdraw(
-        [
-          selectedToken?.address,
-          withdrawAmtInBaseDenom,
-          discount,
-          deadlineSeconds,
-        ],
-        {
-          gas: gasLimitEstimated,
-          account: address,
-        }
-      )
+        const oldRequestTouple = [
+          request.nonce,
+          address,
+          request.assetOut,
+          request.amountOfShares,
+          request.amountOfAssets,
+          request.creationTime,
+          request.secondsToMaturity,
+          request.secondsToDeadline,
+        ]
+
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          boringQueue.estimateGas.replaceOnChainWithdraw,
+          boringQueue.simulate.replaceOnChainWithdraw,
+          [oldRequestTouple, discount, deadlineSeconds],
+          330000,
+          address
+        )
+
+        // @ts-ignore
+        hash = await boringQueue?.write.replaceOnChainWithdraw(
+          [oldRequestTouple, discount, deadlineSeconds],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
+      } else {
+        // Create new BoringQueue request
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          boringQueue.estimateGas.requestOnChainWithdraw,
+          boringQueue.simulate.requestOnChainWithdraw,
+          [
+            selectedToken?.address,
+            withdrawAmtInBaseDenom,
+            discount,
+            deadlineSeconds,
+          ],
+          330000,
+          address
+        )
+
+        // @ts-ignore
+        hash = await boringQueue?.write.requestOnChainWithdraw(
+          [
+            selectedToken?.address,
+            withdrawAmtInBaseDenom,
+            discount,
+            deadlineSeconds,
+          ],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
+      }
+
+      
     } else {
+      // Create or replace WithdrawQueue request
       const previewRedeem = parseInt(await fetchCellarPreviewRedeem(
         id,
         BigInt(10 ** cellarConfig.cellar.decimals)
@@ -409,8 +448,6 @@ export const WithdrawQueueForm = ({
 
     return hash;
   }
-
-  const isActiveWithdrawRequest = useWithdrawRequestStatus(cellarConfig);
 
   return (
     <VStack
