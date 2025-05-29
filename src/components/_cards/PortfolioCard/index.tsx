@@ -53,7 +53,6 @@ import WithdrawQueueCard from "../WithdrawQueueCard"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
-import { useBoringQueueWithdrawals } from "data/hooks/useBoringQueueWithdrawals"
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
@@ -66,12 +65,6 @@ export const PortfolioCard = (props: BoxProps) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const dashboard = cellarDataMap[id].dashboard
-
-  const { data: boringQueueWithdrawals } = useBoringQueueWithdrawals(
-    cellarConfig.cellar.address,
-    cellarConfig.chain.id,
-    { enabled: !!cellarConfig.boringQueue }
-  )
 
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(

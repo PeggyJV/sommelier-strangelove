@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { useAccount, usePublicClient, useWalletClient } from "wagmi"
 import { getAddress, getContract } from "viem"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
@@ -10,7 +10,6 @@ export const useWithdrawRequestStatus = (
 ) => {
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
-  const isMounted = useRef(true)
   const { address } = useAccount()
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
@@ -54,35 +53,25 @@ export const useWithdrawRequestStatus = (
               [cellarConfig.cellar.address, address, withdrawRequest]
             )) as unknown as boolean
 
-          if (isMounted.current) {
-            setIsActiveWithdrawRequest(isWithdrawRequestValid)
-          }
+          setIsActiveWithdrawRequest(isWithdrawRequestValid)
         } else if (
           boringQueueWithdrawals &&
           cellarConfig.boringVault &&
           address
         ) {
-          if (isMounted.current) {
-            setIsActiveWithdrawRequest(
-              boringQueueWithdrawals?.open_requests.length > 0
-            )
-          }
-        } else if (isMounted.current) {
+          setIsActiveWithdrawRequest(
+            boringQueueWithdrawals?.open_requests.length > 0
+          )
+        } else {
           setIsActiveWithdrawRequest(false)
         }
       } catch (error) {
-        console.log(error)
-        if (isMounted.current) {
-          setIsActiveWithdrawRequest(false)
-        }
+        console.error(error)
+        setIsActiveWithdrawRequest(false)
       }
     }
 
     checkWithdrawRequest()
-
-    return () => {
-      isMounted.current = false
-    }
   }, [
     withdrawQueueContract,
     address,
