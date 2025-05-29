@@ -30,6 +30,7 @@ export const useBoringQueueWithdrawals = (
         chain
       )
     },
+    enabled: !!vaultAddress && !!userAddress && !!chain,
     ...options,
   })
   return query
