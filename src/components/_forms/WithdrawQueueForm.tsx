@@ -462,7 +462,7 @@ export const WithdrawQueueForm = ({
             <>
               <HStack
                 p={4}
-                mb={12}
+                mb={boringQueue ? 0 : 12}
                 spacing={4}
                 align="flex-start"
                 backgroundColor="purple.dark"
@@ -479,6 +479,31 @@ export const WithdrawQueueForm = ({
                   You currently have a withdraw request pending in the
                   queue, submitting a new withdraw request will
                   replace your current one.
+                </Text>
+              </HStack>
+              <br />
+            </>
+          )}
+          {isActiveWithdrawRequest && boringQueue && (
+            <>
+              <HStack
+                p={4}
+                mb={12}
+                spacing={4}
+                align="flex-start"
+                backgroundColor="purple.dark"
+                border="2px solid"
+                borderRadius={16}
+                borderColor="purple.base"
+              >
+                <Text
+                  color="white"
+                  fontSize="s"
+                  textAlign={"center"}
+                  fontWeight={"bold"}
+                >
+                  When replacing a BoringQueue request, only the
+                  deadline is updated.
                 </Text>
               </HStack>
               <br />
@@ -518,6 +543,7 @@ export const WithdrawQueueForm = ({
                   placeholder="0.00"
                   fontSize="lg"
                   fontWeight={700}
+                  disabled={isActiveWithdrawRequest && !!boringQueue}
                   textAlign="right"
                   {...register("withdrawAmount", {
                     onChange: (event) => {
@@ -582,6 +608,7 @@ export const WithdrawQueueForm = ({
                         fontSize="inherit"
                         fontWeight={600}
                         onClick={setMax}
+                        disabled={isActiveWithdrawRequest && !!boringQueue}
                       >
                         max
                       </Button>
@@ -616,7 +643,7 @@ export const WithdrawQueueForm = ({
                   }
                   activeAsset={strategyBaseAsset.address}
                   setSelectedToken={trackedSetSelectedToken}
-                  //isDisabled={isSubmitting}
+                  isDisabled={isActiveWithdrawRequest && !!boringQueue}
                 />
               }
             </HStack>
@@ -771,11 +798,11 @@ export const WithdrawQueueForm = ({
         <FAQAccordion
           data={[
             {
-            question: "What is the Withdraw Queue?",
-            answer: `The Withdraw Queue is a way for users to submit a withdraw request if they are trying to withdraw more than the liquid reserve from a strategy. Once the request is submitted, it will be eventually fulfilled on behalf of the user and the withdrawn funds will appear automatically in the user's wallet (assuming the requests is fulfilled within the time constraint specified by the user). A withdraw request through the queue also has a much lower gas cost for users compared to instant withdrawals.`,
-          },
-        ]}
-      />
+              question: "What is the Withdraw Queue?",
+              answer: `The Withdraw Queue is a way for users to submit a withdraw request if they are trying to withdraw more than the liquid reserve from a strategy. Once the request is submitted, it will be eventually fulfilled on behalf of the user and the withdrawn funds will appear automatically in the user's wallet (assuming the requests is fulfilled within the time constraint specified by the user). A withdraw request through the queue also has a much lower gas cost for users compared to instant withdrawals.`,
+            },
+          ]}
+        />
       )}
     </VStack>
   )
