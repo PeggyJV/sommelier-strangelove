@@ -14,7 +14,6 @@ import {
 
 import { useEffect, useMemo, useState, type JSX } from "react";
 import { FormProvider, useForm } from "react-hook-form"
-import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import {
@@ -31,7 +30,7 @@ import {
   usePublicClient,
   useWalletClient,
 } from "wagmi"
-import { sendCalls } from "@wagmi/core"
+import { getCallsStatus, sendCalls } from "@wagmi/core"
 import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
@@ -58,11 +57,6 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import {
-  useEnsoRoutes,
-  EnsoRouteConfig,
-} from "data/hooks/useEnsoRoutes"
-import { config as contractConfig } from "src/utils/config"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { useQueryClient } from "@tanstack/react-query"
 import { wagmiConfig } from "context/wagmiContext";
@@ -113,21 +107,6 @@ export const SommelierTab = ({
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
-  const [slippageValue, setSlippageValue] = useState("3")
-
-  // TODO: Clean and enable below for enso
-  /*
-  // Drop active asset from deposit tokens to put active asset at the top of the token list
-  if (cellarConfig.chain.id === chainSlugMap.ETHEREUM.id) {
-    acceptedDepositTokenMap = acceptedETHDepositTokenMap
-  } else if (cellarConfig.chain.id === chainSlugMap.ARBITRUM.id) {
-    acceptedDepositTokenMap = acceptedARBDepositTokenMap
-  } else {
-    throw new Error(
-      `Need to create new accepted token map for chain: ${cellarConfig.chain.id}`
-    )
-  }
-  */
 
   let depositTokens: string[] = cellarData.depositTokens.list
   // Drop base asset from deposit token list
@@ -248,65 +227,6 @@ export const SommelierTab = ({
         public: publicClient,
       },
     })
-
-  // New enso route config
-  // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token
-  const ensoRouteConfig: EnsoRouteConfig = useMemo(
-    () => ({
-      fromAddress: address!,
-      tokensIn: [
-        {
-          address:
-            selectedToken?.address ||
-            strategyData?.activeAsset.address.toLowerCase() ||
-            "",
-          amountBaseDenom:
-            watchDepositAmount * 10 ** (selectedToken?.decimals || 0),
-        },
-      ],
-      tokenOut: cellarAddress,
-      slippage: Number(slippageValue),
-    }),
-    [
-      address,
-      cellarAddress,
-      selectedToken?.address,
-      selectedToken?.decimals,
-      strategyData?.activeAsset.address,
-      watchDepositAmount,
-      slippageValue,
-    ]
-  )
-
-  const [lastEnsoResponse, setLastEnsoResponse] = useState<any>(null)
-
-  const { ensoResponse, ensoError, ensoLoading } = useEnsoRoutes(
-    ensoRouteConfig,
-    !isSubmitting,
-    lastEnsoResponse
-  )
-  useEffect(() => {
-    if (ensoResponse) {
-      setLastEnsoResponse(ensoResponse)
-    }
-  }, [ensoResponse])
-
-  const ensoRouterContract =
-    publicClient &&
-    getContract({
-      address: getAddress(
-        contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS
-      ),
-      abi: contractConfig.CONTRACT.ENSO_ROUTER.ABI,
-      client: {
-        wallet: walletClient,
-        public: publicClient,
-      },
-    })
-
-  const isActiveAsset =
-    selectedToken?.address?.toLowerCase() ===
-    strategyData?.activeAsset?.address?.toLowerCase()
 
   const geo = useGeo()
 
@@ -431,28 +351,16 @@ export const SommelierTab = ({
           args: [amtInWei, address],
         },
       ],
+      chainId: cellarConfig.chain.wagmiId,
+      experimental_fallback: true,
     })
 
-    // TODO: Check if this is correct
-    const hash = id;
     try {
-      // If selected token is cellar's current asset, it is cheaper to deposit into the cellar
-      // directly rather than through the router. Should only use router when swapping into the
-      // cellar's current asset.
-
-      // const hash =
-      //   isActiveAsset ||
-      //   cellarData.depositTokens.list.includes(tokenSymbol)
-      //     ? await deposit(
-      //         amtInWei,
-      //         address,
-      //         data?.selectedToken?.address
-      //       )
-      //     : await walletClient!.sendTransaction({
-      //         account: address,
-      //         to: ensoRouterContract?.address,
-      //         value: ensoResponse.tx.data,
-      //       })
+      const hash = await deposit(
+        amtInWei,
+        address,
+        data?.selectedToken?.address
+      )
 
       if (!hash) throw new Error("response is undefined")
       addToast({
@@ -637,8 +545,6 @@ export const SommelierTab = ({
     )
   }, [activeAsset, currentAsset])
 
-  const [ensoSharesOut, setEnsoSharesOut] = useState<number>(0)
-
   const [cellarSharePreviewRedeem, setCellarSharePreviewRedeem] =
     useState<number>(0)
 
@@ -662,21 +568,6 @@ export const SommelierTab = ({
 
     fetchCellarSharePreviewRedeem()
   }, [cellarConfig.cellar.address, cellarConfig.cellar.decimals])
-
-  useEffect(() => {
-    if (
-      watchDepositAmount === undefined ||
-      watchDepositAmount <= 0 ||
-      Number.isNaN(watchDepositAmount)
-    ) {
-      setEnsoSharesOut(0)
-    } else {
-      setEnsoSharesOut(
-        Number(ensoResponse?.amountOut || 0) /
-          10 ** cellarConfig.cellar.decimals
-      )
-    }
-  }, [watchDepositAmount, ensoResponse, cellarConfig])
 
   const [baseAssetPrice, setBaseAssetPrice] = useState<number>(0)
 
@@ -1419,100 +1310,7 @@ export const SommelierTab = ({
               </HStack>
             </>
           ) : null}
-          {!cellarData.depositTokens.list.includes(
-            selectedToken?.symbol || ""
-          ) ? (
-            ensoError !== null &&
-            watchDepositAmount !== 0 &&
-            !isNaN(watchDepositAmount) ? (
-              <Text
-                pr="2"
-                fontSize="lg"
-                fontWeight={700}
-                textAlign="center"
-                width="100%"
-              >
-                {ensoError}
-              </Text>
-            ) : (
-              <HStack justify="space-between" align="center">
-                <HStack spacing={1} align="center">
-                  <Tooltip
-                    hasArrow
-                    label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
-                    bg="surface.bg"
-                    color="neutral.300"
-                    textAlign="center"
-                  >
-                    <HStack spacing={1} align="center">
-                      <CardHeading fontSize="small">
-                        Estimated Tokens Out
-                      </CardHeading>
-                      <InformationIcon
-                        color="neutral.300"
-                        boxSize={3}
-                      />
-                    </HStack>
-                  </Tooltip>
-                </HStack>
-                {ensoLoading ? (
-                  <>
-                    <Spinner size="md" paddingRight={"1em"} />
-                  </>
-                ) : (
-                  <VStack spacing={0} align="flex-end">
-                    <Text
-                      pr="2"
-                      fontSize="lg"
-                      fontWeight={700}
-                      textAlign="right"
-                      width="100%"
-                    >
-                      ≈ {ensoSharesOut.toFixed(4).toLocaleString()}
-                    </Text>
-                    <HStack
-                      spacing={0}
-                      fontSize="11px"
-                      textAlign="right"
-                      pr="2"
-                    >
-                      <Text as="span">
-                        ${" "}
-                        {(
-                          ensoSharesOut *
-                          cellarSharePreviewRedeem *
-                          baseAssetPrice
-                        )
-                          .toFixed(2)
-                          .toLocaleString()}
-                      </Text>
-                    </HStack>
-                  </VStack>
-                )}
-              </HStack>
-            )
-          ) : (
-            <></>
-          )}
-          <BaseButton
-            type="submit"
-            isDisabled={
-              isDisabled ||
-              (selectedToken?.symbol !== activeAsset?.symbol &&
-                !cellarData.depositTokens.list.includes(
-                  selectedToken?.symbol || ""
-                ) &&
-                (isDisabled ||
-                  ensoLoading ||
-                  (!ensoLoading && ensoError !== null)))
-            }
-            isLoading={isSubmitting}
-            fontSize={21}
-            py={8}
-            px={12}
-          >
-            Submit
-          </BaseButton>
+          
           {/* <Text textAlign="center">
             Depositing active asset (
             <Avatar
