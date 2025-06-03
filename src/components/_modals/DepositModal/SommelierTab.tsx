@@ -12,7 +12,7 @@ import {
   UseDisclosureProps,
 } from "@chakra-ui/react"
 
-import { useEffect, useMemo, useState, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { AiOutlineInfo } from "react-icons/ai"
 import { ModalMenu } from "components/_menus/ModalMenu"
@@ -30,7 +30,12 @@ import {
   usePublicClient,
   useWalletClient,
 } from "wagmi"
-import { getCallsStatus, sendCalls } from "@wagmi/core"
+import {
+  getCallsStatus,
+  getCapabilities,
+  sendCalls,
+  waitForTransactionReceipt,
+} from "@wagmi/core"
 import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
@@ -51,15 +56,14 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { waitTime } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
-import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
-import { CellarNameKey } from "data/types"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { useQueryClient } from "@tanstack/react-query"
-import { wagmiConfig } from "context/wagmiContext";
+import { wagmiConfig } from "context/wagmiContext"
+import { BaseButton } from "components/_buttons/BaseButton"
 
 interface FormValues {
   depositAmount: number
@@ -278,41 +282,126 @@ export const SommelierTab = ({
 
   const deposit = async (
     amtInWei: bigint,
-    address?: string,
-    assetAddress?: string
+    assetAddress: `0x${string}`,
+    approval: boolean,
+    canDoBatchCall: boolean
   ) => {
+    let fnName
+    let args
     if (
       assetAddress !== undefined &&
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
     ) {
-      // @ts-ignore
-      return cellarSigner?.write.multiAssetDeposit(
-        [assetAddress, amtInWei, address],
-        { account: address }
-      )
+      fnName = "multiAssetDeposit"
+      args = [assetAddress, amtInWei, address]
     } else {
-      if (
-        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-      ) {
-        const gasLimitEstimated = await estimateGasLimitWithRetry(
-          cellarSigner?.estimateGas.deposit,
-          cellarSigner?.simulate.deposit,
-          [amtInWei, address],
-          1000000,
-          address
-        )
-        // @ts-ignore
-        return cellarSigner?.write.deposit([amtInWei, address], {
-          gas: gasLimitEstimated,
-          account: address,
+      fnName = "deposit"
+      args = [amtInWei, address]
+    }
+    if (canDoBatchCall && !approval) {
+      const { id } = await sendCalls(wagmiConfig, {
+        calls: [
+          {
+            to: assetAddress,
+            abi: erc20Abi,
+            functionName: "approve",
+            args: [
+              cellarConfig.cellar.address as `0x${string}`,
+              amtInWei,
+            ],
+          },
+          {
+            to: cellarConfig.cellar.address as `0x${string}`,
+            abi: cellarConfig.cellar.abi,
+            functionName: "deposit",
+            args: [amtInWei, address],
+          },
+        ],
+        chainId: cellarConfig.chain.wagmiId,
+        experimental_fallback: true,
+      })
+
+      const depositResult = await getCallsStatus(wagmiConfig, {
+        id,
+      })
+
+      let finalResult = depositResult
+      while (finalResult.status === "pending") {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        finalResult = await getCallsStatus(wagmiConfig, {
+          id,
         })
       }
+
+      if (finalResult.status === "failure") {
+        throw new Error("Batch Deposit failed")
+      }
+
+      return finalResult.receipts
+    }
+
+    // @ts-ignore
+    const hash = await cellarSigner?.write[fnName](args, {
+      account: address,
+    })
+
+    const depositResult = await waitForTransactionReceipt(
+      wagmiConfig,
+      {
+        confirmations: 1,
+        hash: hash,
+      }
+    )
+    return [depositResult]
+  }
+
+  const doApprovalTx = async (amtInWei: bigint): Promise<boolean> => {
+    try {
       // @ts-ignore
-      return cellarSigner?.write.deposit([amtInWei, address], {
-        account: address,
+      const hash = await erc20Contract.write.approve(
+        [cellarConfig.cellar.address, amtInWei],
+        { account: address }
+      )
+      addToast({
+        heading: "ERC20 Approval",
+        status: "default",
+        body: <Text>Approving ERC20</Text>,
+        isLoading: true,
+        closeHandler: close,
+        duration: null,
       })
+      const waitForApproval = wait({ confirmations: 1, hash })
+      const result = await waitForApproval
+      if (result?.data?.transactionHash) {
+        update({
+          heading: "ERC20 Approval",
+          body: <Text>ERC20 Approved</Text>,
+          status: "success",
+          closeHandler: closeAll,
+        })
+        return true
+      } else if (result?.error) {
+        update({
+          heading: "ERC20 Approval",
+          body: <Text>Approval Failed</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+        return false
+      }
+      return false
+    } catch (e) {
+      const error = e as Error
+      console.error(error.message)
+
+      addToast({
+        heading: "ERC20 Approval",
+        body: <Text>Approval Cancelled</Text>,
+        status: "error",
+        closeHandler: closeAll,
+      })
+      return false
     }
   }
 
@@ -330,185 +419,170 @@ export const SommelierTab = ({
       cellar: cellarConfig.cellar.address,
     })
 
+    const walletCapabilities = await getCapabilities(wagmiConfig)
+    const atomicStatus =
+      walletCapabilities[cellarConfig.chain.wagmiId]?.atomic?.status
+
+    const canDoBatchCall =
+      atomicStatus === "ready" || atomicStatus === "supported"
+
+    const allowance = await erc20Contract.read.allowance(
+      [
+        getAddress(address ?? ""),
+        getAddress(cellarConfig.cellar.address),
+      ],
+      { account: address }
+    )
 
     const amtInWei = parseUnits(
       depositAmount.toString(),
       selectedTokenBalance?.decimals ?? 0
     )
 
-    const { id } = await sendCalls(wagmiConfig, {
-      calls: [
-        {
-          to: data?.selectedToken?.address,
-          abi: erc20Abi,
-          functionName: "approve",
-          args: [cellarConfig.cellar.address, amtInWei],
-        },
-        {
-          to: cellarConfig.cellar.address,
-          abi: cellarConfig.cellar.abi,
-          functionName: "deposit",
-          args: [amtInWei, address],
-        },
-      ],
-      chainId: cellarConfig.chain.wagmiId,
-      experimental_fallback: true,
-    })
+    let needsApproval = allowance < amtInWei
+    let approval = !needsApproval
 
-    try {
-      const hash = await deposit(
-        amtInWei,
-        address,
-        data?.selectedToken?.address
-      )
+    if (needsApproval && !canDoBatchCall) {
+      approval = await doApprovalTx(amtInWei)
+    }
 
-      if (!hash) throw new Error("response is undefined")
-      addToast({
-        heading: cellarName + " Cellar Deposit",
-        status: "default",
-        body: <Text>Depositing {selectedToken?.symbol}</Text>,
-        isLoading: true,
-        closeHandler: close,
-        duration: null,
-      })
-      const waitForDeposit = wait({
-        confirmations: 1,
-        hash: hash,
-      })
+    if (approval || canDoBatchCall) {
+      try {
+        const receipts = await deposit(
+          amtInWei,
+          data?.selectedToken?.address,
+          approval,
+          canDoBatchCall
+        )
 
-      const depositResult = await waitForDeposit
-
-      refetch()
-
-      if (depositResult?.data?.transactionHash) {
-        insertEvent({
-          event: "deposit.succeeded",
-          address: address ?? "",
-          cellar: cellarConfig.cellar.address,
-          transaction_hash: depositResult.data.transactionHash,
-        })
-        analytics.track("deposit.succeeded", {
-          ...baseAnalytics,
-          stable: tokenSymbol,
-          value: depositAmount,
-          transaction_hash: depositResult.data.transactionHash,
-        })
-
-        update({
-          heading: cellarName + " Cellar Deposit",
-          body: (
-            <>
-              <Text>Deposit Success</Text>
-              <Link
-                display="flex"
-                alignItems="center"
-                href={`${cellarConfig.chain.blockExplorer.url}/tx/${depositResult?.data?.transactionHash}`}
-                isExternal
-                textDecor="underline"
-              >
-                <Text as="span">{`View on ${cellarConfig.chain.blockExplorer.name}`}</Text>
-                <ExternalLinkIcon ml={2} />
-              </Link>
-              <Text
-                onClick={() => {
-                  importToken.mutate({
-                    address: cellarAddress,
-                    chain: cellarConfig.chain.id,
-                  })
-                }}
-                textDecor="underline"
-                as="button"
-              >
-                Import tokens to wallet
-              </Text>
-              {waitTime(cellarConfig) !== null && (
-                <Text textAlign="center">
-                  Please wait {waitTime(cellarConfig)} after the
-                  deposit to Withdraw or Bond
-                </Text>
-              )}
-            </>
-          ),
-          status: "success",
-          closeHandler: closeAll,
-          duration: null, // toast won't close until user presses close button
-        })
-      }
-
-      const isPopUpEnable =
-        cellarData.popUpTitle && cellarData.popUpDescription
-
-      if (!notifyModal?.isOpen) {
-        analytics.track(`${currentStrategies}-notify.modal-opened`)
-      }
-      if (isPopUpEnable) {
-        props.onClose()
-        //@ts-ignore
-        notifyModal?.onOpen()
-      }
-
-      if (depositResult?.error) {
-        analytics.track("deposit.failed", {
-          ...baseAnalytics,
-          stable: tokenSymbol,
-          value: depositAmount,
-        })
-
-        update({
-          heading: cellarName + " Cellar Deposit",
-          body: <Text>Deposit Failed</Text>,
-          status: "error",
-          closeHandler: closeAll,
-        })
-      }
-    } catch (e) {
-      const error = e as Error
-      if (error.message === "GAS_LIMIT_ERROR") {
-        analytics.track("deposit.failed", {
-          ...baseAnalytics,
-          stable: tokenSymbol,
-          value: depositAmount,
-          message: "GAS_LIMIT_ERROR",
-        })
         addToast({
-          heading: "Transaction not submitted",
-          body: (
-            <Text>
-              Your transaction has failed, if it does not work after
-              waiting some time and retrying please send a message
-              in our{" "}
-              {
+          heading: cellarName + " Cellar Deposit",
+          status: "default",
+          body: <Text>Depositing {selectedToken?.symbol}</Text>,
+          isLoading: true,
+          closeHandler: close,
+          duration: null,
+        })
+
+        refetch()
+
+        if (receipts?.[0]?.status === "success") {
+          insertEvent({
+            event: "deposit.succeeded",
+            address: address ?? "",
+            cellar: cellarConfig.cellar.address,
+            transaction_hash: receipts![0].transactionHash,
+          })
+          analytics.track("deposit.succeeded", {
+            ...baseAnalytics,
+            stable: tokenSymbol,
+            value: depositAmount,
+            transaction_hash: receipts![0].transactionHash,
+          })
+
+          update({
+            heading: cellarName + " Cellar Deposit",
+            body: (
+              <>
+                <Text>Deposit Success</Text>
                 <Link
-                  href="https://discord.com/channels/814266181267619840/814279703622844426"
+                  display="flex"
+                  alignItems="center"
+                  href={`${cellarConfig.chain.blockExplorer.url}/tx/${
+                    receipts![0].transactionHash
+                  }`}
                   isExternal
-                  textDecoration="underline"
+                  textDecor="underline"
                 >
-                  Discord Support channel
+                  <Text as="span">{`View on ${cellarConfig.chain.blockExplorer.name}`}</Text>
+                  <ExternalLinkIcon ml={2} />
                 </Link>
-              }{" "}
-              tagging a member of the front end team.
-            </Text>
-          ),
-          status: "info",
-          closeHandler: closeAll,
-        })
-      } else {
-        console.error(error.message)
-        analytics.track("deposit.rejected", {
-          ...baseAnalytics,
-          stable: tokenSymbol,
-          value: depositAmount,
-        })
+                <Text
+                  onClick={() => {
+                    importToken.mutate({
+                      address: cellarAddress,
+                      chain: cellarConfig.chain.id,
+                    })
+                  }}
+                  textDecor="underline"
+                  as="button"
+                >
+                  Import tokens to wallet
+                </Text>
+                {waitTime(cellarConfig) !== null && (
+                  <Text textAlign="center">
+                    Please wait {waitTime(cellarConfig)} after the
+                    deposit to Withdraw or Bond
+                  </Text>
+                )}
+              </>
+            ),
+            status: "success",
+            closeHandler: closeAll,
+            duration: null, // toast won't close until user presses close button
+          })
+        }
 
-        addToast({
-          heading: cellarName + " Deposit",
-          body: <Text>Deposit Cancelled</Text>,
-          status: "error",
-          closeHandler: closeAll,
-        })
+        const isPopUpEnable =
+          cellarData.popUpTitle && cellarData.popUpDescription
+
+        if (!notifyModal?.isOpen) {
+          analytics.track(`${currentStrategies}-notify.modal-opened`)
+        }
+        if (isPopUpEnable) {
+          props.onClose()
+          //@ts-ignore
+          notifyModal?.onOpen()
+        }
+      } catch (e) {
+        const error = e as Error
+        if (error.message === "GAS_LIMIT_ERROR") {
+          analytics.track("deposit.failed", {
+            ...baseAnalytics,
+            stable: tokenSymbol,
+            value: depositAmount,
+            message: "GAS_LIMIT_ERROR",
+          })
+          addToast({
+            heading: "Transaction not submitted",
+            body: (
+              <Text>
+                Your transaction has failed, if it does not work after
+                waiting some time and retrying please send a message
+                in our{" "}
+                {
+                  <Link
+                    href="https://discord.com/channels/814266181267619840/814279703622844426"
+                    isExternal
+                    textDecoration="underline"
+                  >
+                    Discord Support channel
+                  </Link>
+                }{" "}
+                tagging a member of the front end team.
+              </Text>
+            ),
+            status: "info",
+            closeHandler: closeAll,
+          })
+        } else {
+          console.error(error.message)
+          analytics.track("deposit.rejected", {
+            ...baseAnalytics,
+            stable: tokenSymbol,
+            value: depositAmount,
+          })
+
+          addToast({
+            heading: cellarName + " Deposit",
+            body: <Text>Deposit Cancelled</Text>,
+            status: "error",
+            closeHandler: closeAll,
+          })
+        }
+
+        console.warn("failed to deposit", e)
       }
-
-      console.warn("failed to deposit", e)
     }
   }
 
@@ -1310,7 +1384,22 @@ export const SommelierTab = ({
               </HStack>
             </>
           ) : null}
-          
+          <BaseButton
+            type="submit"
+            isDisabled={
+              isDisabled ||
+              (selectedToken?.symbol !== activeAsset?.symbol &&
+                !cellarData.depositTokens.list.includes(
+                  selectedToken?.symbol || ""
+                ))
+            }
+            isLoading={isSubmitting}
+            fontSize={21}
+            py={8}
+            px={12}
+          >
+            Submit
+          </BaseButton>
           {/* <Text textAlign="center">
             Depositing active asset (
             <Avatar
