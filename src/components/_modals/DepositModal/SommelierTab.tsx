@@ -44,7 +44,6 @@ import {
   InformationIcon,
   GreenCheckCircleIcon,
 } from "components/_icons"
-import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { CardHeading } from "components/_typography/CardHeading"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
@@ -60,7 +59,6 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { useQueryClient } from "@tanstack/react-query"
 import { wagmiConfig } from "context/wagmiContext"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -74,30 +72,6 @@ interface FormValues {
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
   notifyModal?: UseDisclosureProps
-}
-
-function scientificToDecimalString(num: number) {
-  // If the number is in scientific notation, split it into base and exponent
-  const sign = Math.sign(num)
-  let [base, exponent] = num
-    .toString()
-    .split("e")
-    .map((item) => parseInt(item, 10))
-
-  // Adjust for negative exponent
-  if (exponent < 0) {
-    let decimalString = Math.abs(base).toString()
-    let padding = Math.abs(exponent) - 1
-    return (
-      (sign < 0 ? "-" : "") +
-      "0." +
-      "0".repeat(padding) +
-      decimalString
-    )
-  }
-
-  // Handle positive exponent or non-scientific numbers (which won't be split)
-  return num.toString()
 }
 
 //! This handles all deposits, not just the tab
@@ -618,50 +592,6 @@ export const SommelierTab = ({
       depositAssetTokenConfig.splice(indexOfActiveAsset, 1)[0]
     )
   }, [activeAsset, currentAsset])
-
-  const [cellarSharePreviewRedeem, setCellarSharePreviewRedeem] =
-    useState<number>(0)
-
-  useEffect(() => {
-    const fetchCellarSharePreviewRedeem = async () => {
-      try {
-        const previewRedeem = await fetchCellarPreviewRedeem(
-          cellarData.slug,
-          BigInt(10 ** cellarConfig.cellar.decimals)
-        )
-        setCellarSharePreviewRedeem(
-          previewRedeem / 10 ** cellarConfig.cellar.decimals
-        )
-      } catch (error) {
-        console.error(
-          "Error fetching cellar share preview redeem: ",
-          error
-        )
-      }
-    }
-
-    fetchCellarSharePreviewRedeem()
-  }, [cellarConfig.cellar.address, cellarConfig.cellar.decimals])
-
-  const [baseAssetPrice, setBaseAssetPrice] = useState<number>(0)
-
-  useEffect(() => {
-    const fetchBaseAssetPrice = async () => {
-      try {
-        const price = await fetchCoingeckoPrice(
-          cellarConfig.baseAsset,
-          "usd"
-        )
-
-        setBaseAssetPrice(Number(price || 0))
-      } catch (error) {
-        console.log(error)
-        console.error("Error fetching base asset price: ", error)
-      }
-    }
-
-    fetchBaseAssetPrice()
-  }, [cellarConfig])
 
   const strategyMessages: Record<string, () => JSX.Element> = {
     "Real Yield ETH": () => (
@@ -1188,125 +1118,11 @@ export const SommelierTab = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
-          {/* selectedToken?.symbol !== activeAsset?.symbol ? (
-            <Tooltip
-              hasArrow
-              //label=""
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack pr={2} textAlign="center">
-                <Text fontFamily={"inherit"}>
-                  Non accounting asset deposits go through a router
-                  and bundle a series of swaps and subsequent vault
-                  deposit.
-                </Text>
-              </HStack>
-            </Tooltip>
-          ) : null*/}
           {selectedToken?.symbol !== activeAsset?.symbol ? (
             <>
               <CardHeading paddingTop="2em">
                 Transaction details
               </CardHeading>
-              {/*
-          <HStack justify="space-between">
-            <HStack spacing={1} align="center">
-              <Tooltip
-                hasArrow
-                label="Percent of price slippage you are willing to accept for a trade. Higher slippage tolerance means your transaction is more likely to succeed, but you may get a worse price."
-                bg="surface.bg"
-                color="neutral.300"
-                textAlign="center"
-              >
-                <HStack spacing={1} align="center">
-                  <CardHeading fontSize="small">
-                    Slippage Tolerance
-                  </CardHeading>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
-            </HStack>
-            {cellarData.depositTokens.list.includes(
-              selectedToken?.symbol || ""
-            ) ? (
-              <Tooltip
-                hasArrow
-                label="No slippage when depositing directly into a vault."
-                bg="surface.bg"
-                color="neutral.300"
-                textAlign="center"
-              >
-                <HStack pr={2}>
-                  <GreenCheckCircleIcon></GreenCheckCircleIcon>
-                  <Text fontFamily={"inherit"}>None</Text>
-                </HStack>
-              </Tooltip>
-            ) : (
-              <Box maxW="200px">
-                <InputGroup>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={20}
-                    placeholder="0"
-                    width="4.5em"
-                    disabled={isSubmitting ?? false}
-                    value={
-                      slippageValue !== undefined ? slippageValue : ""
-                    }
-                    onChange={(e) => {
-                      const inputValue = e.target.value
-
-                      // If input is empty, set state to an empty string and return
-                      if (inputValue === "") {
-                        setSlippageValue("")
-                        return
-                      }
-
-                      // Parse the input value to a float with 2 decimal places
-                      const num = parseFloat(inputValue)
-
-                      // If number is between 0 and 20, update the state
-                      if (!isNaN(num) && num >= 0 && num <= 20) {
-                        setSlippageValue(String(num))
-                      } else {
-                        addToast({
-                          heading: "Invalid Slippage Tolerance",
-                          body: (
-                            <Text>
-                              Slippage tolerance must be between 0 and
-                              20%
-                            </Text>
-                          ),
-                          status: "warning",
-                          closeHandler: closeAll,
-                        })
-
-                        // Clamp the value to the 0-20 range
-                        const clampedValue = Math.min(
-                          Math.max(num, 0),
-                          20
-                        )
-                        setSlippageValue(String(clampedValue))
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const inputValue = e.target.value
-                      if (
-                        !inputValue ||
-                        isNaN(parseFloat(inputValue))
-                      ) {
-                        setSlippageValue("0")
-                      }
-                    }}
-                  />
-                  <InputRightAddon>%</InputRightAddon>
-                </InputGroup>
-              </Box>
-            )}
-          </HStack>
-                  */}
               <HStack justify="space-between">
                 <HStack spacing={1} align="center">
                   <Tooltip
@@ -1400,42 +1216,6 @@ export const SommelierTab = ({
           >
             Submit
           </BaseButton>
-          {/* <Text textAlign="center">
-            Depositing active asset (
-            <Avatar
-              ml="-2.5px"
-              boxSize={6}
-              src={activeAsset?.src}
-              name={activeAsset?.alt}
-              borderWidth={2}
-              borderColor="surface.bg"
-              bg="surface.bg"
-            />
-            {activeAsset?.symbol}) will save gas fees
-          </Text> */}
-          {/*depositTokens.length > 1 && (
-            <Text textAlign="center">
-              <Text textAlign="center">
-                Current Base asset is (
-                <Avatar
-                  ml="-2.5px"
-                  boxSize={6}
-                  src={activeAsset?.src}
-                  name={activeAsset?.alt}
-                  borderWidth={2}
-                  borderColor="surface.bg"
-                  bg="surface.bg"
-                />
-                {activeAsset?.symbol}).
-                <br />
-                <br />
-              </Text>
-              <Text>
-                There could be high slippage when depositing non base
-                assets. Please swap outside our app for better rates.
-              </Text>
-            </Text>
-                )*/}
           {strategyMessages[currentStrategies] ? (
             strategyMessages[currentStrategies]()
           ) : (
