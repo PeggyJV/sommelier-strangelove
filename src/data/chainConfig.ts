@@ -11,7 +11,7 @@ export interface Chain {
   id: string
   viemId: string
   viemChain: ViemChain
-  wagmiId: number
+  wagmiId: 10 | 1 | 42161 | 534352
   displayName: string
   logoPath: string
   alt: string
@@ -30,7 +30,7 @@ export const placeholderChain: Chain = {
   id: "unknown",
   viemChain: mainnet,
   viemId: "",
-  wagmiId: 0,
+  wagmiId: 1,
   displayName: "Switch Chain (Unsupported)",
   logoPath: "/assets/icons/unknownchain.svg",
   alt: "Placeholder logo",

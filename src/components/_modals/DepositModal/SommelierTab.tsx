@@ -12,9 +12,8 @@ import {
   UseDisclosureProps,
 } from "@chakra-ui/react"
 
-import { useEffect, useMemo, useState, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import {
@@ -29,8 +28,13 @@ import {
   usePublicClient,
   useWalletClient,
 } from "wagmi"
-import { erc20Abi, getContract, parseUnits } from "viem"
-import { getAddress } from "viem"
+import {
+  getCallsStatus,
+  getCapabilities,
+  sendCalls,
+  waitForTransactionReceipt,
+} from "@wagmi/core"
+import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
@@ -38,7 +42,6 @@ import {
   InformationIcon,
   GreenCheckCircleIcon,
 } from "components/_icons"
-import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { CardHeading } from "components/_typography/CardHeading"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
@@ -50,19 +53,12 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { waitTime } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
-import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
-import { CellarNameKey } from "data/types"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import {
-  useEnsoRoutes,
-  EnsoRouteConfig,
-} from "data/hooks/useEnsoRoutes"
-import { config as contractConfig } from "src/utils/config"
-import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
-import { useQueryClient } from "@tanstack/react-query"
+import { wagmiConfig } from "context/wagmiContext"
+import { BaseButton } from "components/_buttons/BaseButton"
 import { useUserBalances } from "data/hooks/useUserBalances"
 
 interface FormValues {
@@ -76,30 +72,6 @@ interface DepositModalProps
   notifyModal?: UseDisclosureProps
 }
 
-function scientificToDecimalString(num: number) {
-  // If the number is in scientific notation, split it into base and exponent
-  const sign = Math.sign(num)
-  let [base, exponent] = num
-    .toString()
-    .split("e")
-    .map((item) => parseInt(item, 10))
-
-  // Adjust for negative exponent
-  if (exponent < 0) {
-    let decimalString = Math.abs(base).toString()
-    let padding = Math.abs(exponent) - 1
-    return (
-      (sign < 0 ? "-" : "") +
-      "0." +
-      "0".repeat(padding) +
-      decimalString
-    )
-  }
-
-  // Handle positive exponent or non-scientific numbers (which won't be split)
-  return num.toString()
-}
-
 //! This handles all deposits, not just the tab
 export const SommelierTab = ({
   notifyModal,
@@ -111,21 +83,6 @@ export const SommelierTab = ({
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
-  const [slippageValue, setSlippageValue] = useState("3")
-
-  // TODO: Clean and enable below for enso
-  /*
-  // Drop active asset from deposit tokens to put active asset at the top of the token list
-  if (cellarConfig.chain.id === chainSlugMap.ETHEREUM.id) {
-    acceptedDepositTokenMap = acceptedETHDepositTokenMap
-  } else if (cellarConfig.chain.id === chainSlugMap.ARBITRUM.id) {
-    acceptedDepositTokenMap = acceptedARBDepositTokenMap
-  } else {
-    throw new Error(
-      `Need to create new accepted token map for chain: ${cellarConfig.chain.id}`
-    )
-  }
-  */
 
   let depositTokens: string[] = cellarData.depositTokens.list
   // Drop base asset from deposit token list
@@ -173,7 +130,6 @@ export const SommelierTab = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
   const { address } = useAccount()
-  const queryClient = useQueryClient()
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
@@ -238,65 +194,6 @@ export const SommelierTab = ({
       },
     })
 
-  // New enso route config
-  // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token
-  const ensoRouteConfig: EnsoRouteConfig = useMemo(
-    () => ({
-      fromAddress: address!,
-      tokensIn: [
-        {
-          address:
-            selectedToken?.address ||
-            strategyData?.activeAsset.address.toLowerCase() ||
-            "",
-          amountBaseDenom:
-            watchDepositAmount * 10 ** (selectedToken?.decimals || 0),
-        },
-      ],
-      tokenOut: cellarAddress,
-      slippage: Number(slippageValue),
-    }),
-    [
-      address,
-      cellarAddress,
-      selectedToken?.address,
-      selectedToken?.decimals,
-      strategyData?.activeAsset.address,
-      watchDepositAmount,
-      slippageValue,
-    ]
-  )
-
-  const [lastEnsoResponse, setLastEnsoResponse] = useState<any>(null)
-
-  const { ensoResponse, ensoError, ensoLoading } = useEnsoRoutes(
-    ensoRouteConfig,
-    !isSubmitting,
-    lastEnsoResponse
-  )
-  useEffect(() => {
-    if (ensoResponse) {
-      setLastEnsoResponse(ensoResponse)
-    }
-  }, [ensoResponse])
-
-  const ensoRouterContract =
-    publicClient &&
-    getContract({
-      address: getAddress(
-        contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS
-      ),
-      abi: contractConfig.CONTRACT.ENSO_ROUTER.ABI,
-      client: {
-        wallet: walletClient,
-        public: publicClient,
-      },
-    })
-
-  const isActiveAsset =
-    selectedToken?.address?.toLowerCase() ===
-    strategyData?.activeAsset?.address?.toLowerCase()
-
   const geo = useGeo()
 
   const queryDepositFeePercent = async (assetAddress: string) => {
@@ -304,7 +201,7 @@ export const SommelierTab = ({
       return 0
     }
 
-    const [isSupported, holdingPosition, depositFee] =
+    const [isSupported,_ , depositFee] =
       (await cellarSigner?.read.alternativeAssetData([
         assetAddress,
       ])) as [boolean, number, number]
@@ -347,10 +244,15 @@ export const SommelierTab = ({
 
   const deposit = async (
     amtInWei: bigint,
-    address?: string,
-    assetAddress?: string
+    assetAddress: `0x${string}`,
+    approval: boolean,
+    canDoBatchCall: boolean
   ) => {
-    if(cellarConfig.boringVault) {
+    let fnName
+    let args
+    let value
+
+    if (cellarConfig.boringVault) {
       let nativeDeposit = selectedToken?.symbol === "ETH"
 
       // In case of native deposit, the minimum mint is calculated based on WETH
@@ -360,48 +262,126 @@ export const SommelierTab = ({
         amtInWei,
         cellarConfig.cellar.address,
         cellarConfig.accountant?.address,
-      ])
-      // @ts-ignore
-      return cellarSigner?.write.deposit(
-        [assetAddress, amtInWei, minimumMint],
-        {
-          account: address,
-          value: nativeDeposit ? amtInWei : 0,
-        }
-      )
+      ]) 
+      fnName = "deposit"
+      args = [assetAddress, amtInWei, minimumMint]
+      value = nativeDeposit ? amtInWei : BigInt(0)
     }
-    if (
+    else if (
       assetAddress !== undefined &&
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
     ) {
-      // @ts-ignore
-      return cellarSigner?.write.multiAssetDeposit(
-        [assetAddress, amtInWei, address],
-        { account: address }
-      )
+      fnName = "multiAssetDeposit"
+      args = [assetAddress, amtInWei, address]
     } else {
-      if (
-        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-      ) {
-        const gasLimitEstimated = await estimateGasLimitWithRetry(
-          cellarSigner?.estimateGas.deposit,
-          cellarSigner?.simulate.deposit,
-          [amtInWei, address],
-          1000000,
-          address
-        )
-        // @ts-ignore
-        return cellarSigner?.write.deposit([amtInWei, address], {
-          gas: gasLimitEstimated,
-          account: address,
+      fnName = "deposit"
+      args = [amtInWei, address]
+    }
+    
+    if (canDoBatchCall && !approval) {
+      // Batch deposit flow
+      const { id } = await sendCalls(wagmiConfig, {
+        calls: [
+          {
+            to: assetAddress,
+            abi: erc20Abi,
+            functionName: "approve",
+            args: [cellarConfig.cellar.address as `0x${string}`, amtInWei],
+          },
+          {
+            to: cellarSigner?.address as `0x${string}`,
+            abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
+            functionName: fnName,
+            args: args,
+            value: value,
+          },
+        ],
+        chainId: cellarConfig.chain.wagmiId,
+        experimental_fallback: true,
+      })
+
+      const depositResult = await getCallsStatus(wagmiConfig, {
+        id,
+      })
+
+      let finalResult = depositResult
+      while (finalResult.status === "pending") {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        finalResult = await getCallsStatus(wagmiConfig, {
+          id,
         })
       }
+
+      if (finalResult.status === "failure") {
+        throw new Error("Batch Deposit failed")
+      }
+
+      return finalResult.receipts
+    }
+    // Regular deposit flow
+    // @ts-ignore
+    const hash = await cellarSigner?.write[fnName](args, {
+      account: address,
+      value: value,
+    })
+
+    const depositResult = await waitForTransactionReceipt(
+      wagmiConfig,
+      {
+        confirmations: 1,
+        hash: hash,
+      }
+    )
+    return [depositResult]
+  }
+
+  const doApprovalTx = async (amtInWei: bigint): Promise<boolean> => {
+    try {
       // @ts-ignore
-      return cellarSigner?.write.deposit([amtInWei, address], {
-        account: address,
+      const hash = await erc20Contract.write.approve(
+        [cellarConfig.cellar.address, amtInWei],
+        { account: address }
+      )
+      addToast({
+        heading: "ERC20 Approval",
+        status: "default",
+        body: <Text>Approving ERC20</Text>,
+        isLoading: true,
+        closeHandler: close,
+        duration: null,
       })
+      const waitForApproval = wait({ confirmations: 1, hash })
+      const result = await waitForApproval
+      if (result?.data?.transactionHash) {
+        update({
+          heading: "ERC20 Approval",
+          body: <Text>ERC20 Approved</Text>,
+          status: "success",
+          closeHandler: closeAll,
+        })
+        return true
+      } else if (result?.error) {
+        update({
+          heading: "ERC20 Approval",
+          body: <Text>Approval Failed</Text>,
+          status: "error",
+          closeHandler: closeAll,
+        })
+        return false
+      }
+      return false
+    } catch (e) {
+      const error = e as Error
+      console.error(error.message)
+
+      addToast({
+        heading: "ERC20 Approval",
+        body: <Text>Approval Cancelled</Text>,
+        status: "error",
+        closeHandler: closeAll,
+      })
+      return false
     }
   }
 
@@ -419,15 +399,16 @@ export const SommelierTab = ({
       address: address ?? "",
       cellar: cellarConfig.cellar.address,
     })
-    // analytics.track("deposit.started", {
-    //   ...baseAnalytics,
-    //   stable: tokenSymbol,
-    //   value: depositAmount,
-    // })
 
-    // check if approval exists
+    const walletCapabilities = await getCapabilities(wagmiConfig)
+    const atomicStatus =
+      walletCapabilities[cellarConfig.chain.wagmiId]?.atomic?.status
+
+    const canDoBatchCall =
+      atomicStatus === "ready" || atomicStatus === "supported"
+
     const allowance = nativeDeposit
-        ? Number.MAX_SAFE_INTEGER
+      ? Number.MAX_SAFE_INTEGER
       : // @ts-ignore
         await erc20Contract.read.allowance(
           [
@@ -442,107 +423,22 @@ export const SommelierTab = ({
       selectedTokenBalance?.decimals ?? 0
     )
 
-    let needsApproval
-    try {
-      needsApproval = allowance < amtInWei
-    } catch (e) {
-      const error = e as Error
-      console.error("Invalid Input: ", error.message)
-      return
-    }
-
+    let needsApproval = allowance < amtInWei
     let approval = !needsApproval
-    if (needsApproval) {
-      /* analytics.track("deposit.approval-required", {
-        ...baseAnalytics,
-       stable: tokenSymbol,
-        value: depositAmount,
-      })*/
 
-      try {
-        // @ts-ignore
-        const hash = await erc20Contract.write.approve([
-            cellarConfig.cellar.address,
-            amtInWei
-          ],
-          { account: address }
-        )
-        addToast({
-          heading: "ERC20 Approval",
-          status: "default",
-          body: <Text>Approving ERC20</Text>,
-          isLoading: true,
-          closeHandler: close,
-          duration: null,
-        })
-        const waitForApproval = wait({ confirmations: 1, hash })
-        const result = await waitForApproval
-        if (result?.data?.transactionHash) {
-          // analytics.track("deposit.approval-granted", {
-          //   ...baseAnalytics,
-          //   stable: tokenSymbol,
-          //   value: depositAmount,
-          // })
-          approval = true
-
-          update({
-            heading: "ERC20 Approval",
-            body: <Text>ERC20 Approved</Text>,
-            status: "success",
-            closeHandler: closeAll,
-          })
-        } else if (result?.error) {
-          // analytics.track("deposit.approval-failed", {
-          //   ...baseAnalytics,
-          //   stable: tokenSymbol,
-          //   value: depositAmount,
-          // })
-
-          update({
-            heading: "ERC20 Approval",
-            body: <Text>Approval Failed</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
-        }
-      } catch (e) {
-        const error = e as Error
-        console.error(error.message)
-        // analytics.track("deposit.approval-cancelled", {
-        //   ...baseAnalytics,
-        //   stable: tokenSymbol,
-        //   value: depositAmount,
-        // })
-
-        addToast({
-          heading: "ERC20 Approval",
-          body: <Text>Approval Cancelled</Text>,
-          status: "error",
-          closeHandler: closeAll,
-        })
-      }
+    if (needsApproval && !canDoBatchCall) {
+      approval = await doApprovalTx(amtInWei)
     }
-    if (approval) {
+
+    if (approval || canDoBatchCall) {
       try {
-        // If selected token is cellar's current asset, it is cheaper to deposit into the cellar
-        // directly rather than through the router. Should only use router when swapping into the
-        // cellar's current asset.
+        const receipts = await deposit(
+          amtInWei,
+          data?.selectedToken?.address,
+          approval,
+          canDoBatchCall
+        )
 
-        const hash =
-          isActiveAsset ||
-          cellarData.depositTokens.list.includes(tokenSymbol)
-            ? await deposit(
-                amtInWei,
-                address,
-                data?.selectedToken?.address
-              )
-            : await walletClient!.sendTransaction({
-                account: address,
-                to: ensoRouterContract?.address,
-                value: ensoResponse.tx.data,
-              })
-
-        if (!hash) throw new Error("response is undefined")
         addToast({
           heading: cellarName + " Cellar Deposit",
           status: "default",
@@ -551,27 +447,21 @@ export const SommelierTab = ({
           closeHandler: close,
           duration: null,
         })
-        const waitForDeposit = wait({
-          confirmations: 1,
-          hash: hash,
-        })
-
-        const depositResult = await waitForDeposit
 
         refetch()
 
-        if (depositResult?.data?.transactionHash) {
+        if (receipts?.[0]?.status === "success") {
           insertEvent({
             event: "deposit.succeeded",
             address: address ?? "",
             cellar: cellarConfig.cellar.address,
-            transaction_hash: depositResult.data.transactionHash,
+            transaction_hash: receipts![0].transactionHash,
           })
           analytics.track("deposit.succeeded", {
             ...baseAnalytics,
             stable: tokenSymbol,
             value: depositAmount,
-            transaction_hash: depositResult.data.transactionHash,
+            transaction_hash: receipts![0].transactionHash,
           })
 
           update({
@@ -582,7 +472,9 @@ export const SommelierTab = ({
                 <Link
                   display="flex"
                   alignItems="center"
-                  href={`${cellarConfig.chain.blockExplorer.url}/tx/${depositResult?.data?.transactionHash}`}
+                  href={`${cellarConfig.chain.blockExplorer.url}/tx/${
+                    receipts![0].transactionHash
+                  }`}
                   isExternal
                   textDecor="underline"
                 >
@@ -625,21 +517,6 @@ export const SommelierTab = ({
           props.onClose()
           //@ts-ignore
           notifyModal?.onOpen()
-        }
-
-        if (depositResult?.error) {
-          analytics.track("deposit.failed", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-          })
-
-          update({
-            heading: cellarName + " Cellar Deposit",
-            body: <Text>Deposit Failed</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
         }
       } catch (e) {
         const error = e as Error
@@ -725,67 +602,6 @@ export const SommelierTab = ({
       depositAssetTokenConfig.splice(indexOfActiveAsset, 1)[0]
     )
   }, [activeAsset, currentAsset])
-
-  const [ensoSharesOut, setEnsoSharesOut] = useState<number>(0)
-
-  const [cellarSharePreviewRedeem, setCellarSharePreviewRedeem] =
-    useState<number>(0)
-
-  useEffect(() => {
-    const fetchCellarSharePreviewRedeem = async () => {
-      try {
-        const previewRedeem = await fetchCellarPreviewRedeem(
-          cellarData.slug,
-          BigInt(10 ** cellarConfig.cellar.decimals)
-        )
-        setCellarSharePreviewRedeem(
-          previewRedeem / 10 ** cellarConfig.cellar.decimals
-        )
-      } catch (error) {
-        console.error(
-          "Error fetching cellar share preview redeem: ",
-          error
-        )
-      }
-    }
-
-    fetchCellarSharePreviewRedeem()
-  }, [cellarConfig.cellar.address, cellarConfig.cellar.decimals])
-
-  useEffect(() => {
-    if (
-      watchDepositAmount === undefined ||
-      watchDepositAmount <= 0 ||
-      Number.isNaN(watchDepositAmount)
-    ) {
-      setEnsoSharesOut(0)
-    } else {
-      setEnsoSharesOut(
-        Number(ensoResponse?.amountOut || 0) /
-          10 ** cellarConfig.cellar.decimals
-      )
-    }
-  }, [watchDepositAmount, ensoResponse, cellarConfig])
-
-  const [baseAssetPrice, setBaseAssetPrice] = useState<number>(0)
-
-  useEffect(() => {
-    const fetchBaseAssetPrice = async () => {
-      try {
-        const price = await fetchCoingeckoPrice(
-          cellarConfig.baseAsset,
-          "usd"
-        )
-
-        setBaseAssetPrice(Number(price || 0))
-      } catch (error) {
-        console.log(error)
-        console.error("Error fetching base asset price: ", error)
-      }
-    }
-
-    fetchBaseAssetPrice()
-  }, [cellarConfig])
 
   const strategyMessages: Record<string, () => JSX.Element> = {
     "Real Yield ETH": () => (
@@ -1312,125 +1128,11 @@ export const SommelierTab = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
-          {/* selectedToken?.symbol !== activeAsset?.symbol ? (
-            <Tooltip
-              hasArrow
-              //label=""
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack pr={2} textAlign="center">
-                <Text fontFamily={"inherit"}>
-                  Non accounting asset deposits go through a router
-                  and bundle a series of swaps and subsequent vault
-                  deposit.
-                </Text>
-              </HStack>
-            </Tooltip>
-          ) : null*/}
           {selectedToken?.symbol !== activeAsset?.symbol ? (
             <>
               <CardHeading paddingTop="2em">
                 Transaction details
               </CardHeading>
-              {/*
-          <HStack justify="space-between">
-            <HStack spacing={1} align="center">
-              <Tooltip
-                hasArrow
-                label="Percent of price slippage you are willing to accept for a trade. Higher slippage tolerance means your transaction is more likely to succeed, but you may get a worse price."
-                bg="surface.bg"
-                color="neutral.300"
-                textAlign="center"
-              >
-                <HStack spacing={1} align="center">
-                  <CardHeading fontSize="small">
-                    Slippage Tolerance
-                  </CardHeading>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
-            </HStack>
-            {cellarData.depositTokens.list.includes(
-              selectedToken?.symbol || ""
-            ) ? (
-              <Tooltip
-                hasArrow
-                label="No slippage when depositing directly into a vault."
-                bg="surface.bg"
-                color="neutral.300"
-                textAlign="center"
-              >
-                <HStack pr={2}>
-                  <GreenCheckCircleIcon></GreenCheckCircleIcon>
-                  <Text fontFamily={"inherit"}>None</Text>
-                </HStack>
-              </Tooltip>
-            ) : (
-              <Box maxW="200px">
-                <InputGroup>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={20}
-                    placeholder="0"
-                    width="4.5em"
-                    disabled={isSubmitting ?? false}
-                    value={
-                      slippageValue !== undefined ? slippageValue : ""
-                    }
-                    onChange={(e) => {
-                      const inputValue = e.target.value
-
-                      // If input is empty, set state to an empty string and return
-                      if (inputValue === "") {
-                        setSlippageValue("")
-                        return
-                      }
-
-                      // Parse the input value to a float with 2 decimal places
-                      const num = parseFloat(inputValue)
-
-                      // If number is between 0 and 20, update the state
-                      if (!isNaN(num) && num >= 0 && num <= 20) {
-                        setSlippageValue(String(num))
-                      } else {
-                        addToast({
-                          heading: "Invalid Slippage Tolerance",
-                          body: (
-                            <Text>
-                              Slippage tolerance must be between 0 and
-                              20%
-                            </Text>
-                          ),
-                          status: "warning",
-                          closeHandler: closeAll,
-                        })
-
-                        // Clamp the value to the 0-20 range
-                        const clampedValue = Math.min(
-                          Math.max(num, 0),
-                          20
-                        )
-                        setSlippageValue(String(clampedValue))
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const inputValue = e.target.value
-                      if (
-                        !inputValue ||
-                        isNaN(parseFloat(inputValue))
-                      ) {
-                        setSlippageValue("0")
-                      }
-                    }}
-                  />
-                  <InputRightAddon>%</InputRightAddon>
-                </InputGroup>
-              </Box>
-            )}
-          </HStack>
-                  */}
               <HStack justify="space-between">
                 <HStack spacing={1} align="center">
                   <Tooltip
@@ -1508,81 +1210,6 @@ export const SommelierTab = ({
               </HStack>
             </>
           ) : null}
-          {!cellarData.depositTokens.list.includes(
-            selectedToken?.symbol || ""
-          ) ? (
-            ensoError !== null &&
-            watchDepositAmount !== 0 &&
-            !isNaN(watchDepositAmount) ? (
-              <Text
-                pr="2"
-                fontSize="lg"
-                fontWeight={700}
-                textAlign="center"
-                width="100%"
-              >
-                {ensoError}
-              </Text>
-            ) : (
-              <HStack justify="space-between" align="center">
-                <HStack spacing={1} align="center">
-                  <Tooltip
-                    hasArrow
-                    label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
-                    bg="surface.bg"
-                    color="neutral.300"
-                    textAlign="center"
-                  >
-                    <HStack spacing={1} align="center">
-                      <CardHeading fontSize="small">
-                        Estimated Tokens Out
-                      </CardHeading>
-                      <InformationIcon
-                        color="neutral.300"
-                        boxSize={3}
-                      />
-                    </HStack>
-                  </Tooltip>
-                </HStack>
-                {ensoLoading ? (
-                  <>
-                    <Spinner size="md" paddingRight={"1em"} />
-                  </>
-                ) : (
-                  <VStack spacing={0} align="flex-end">
-                    <Text
-                      pr="2"
-                      fontSize="lg"
-                      fontWeight={700}
-                      textAlign="right"
-                      width="100%"
-                    >
-                      ≈ {ensoSharesOut.toFixed(4).toLocaleString()}
-                    </Text>
-                    <HStack
-                      spacing={0}
-                      fontSize="11px"
-                      textAlign="right"
-                      pr="2"
-                    >
-                      <Text as="span">
-                        ${" "}
-                        {(
-                          ensoSharesOut *
-                          cellarSharePreviewRedeem *
-                          baseAssetPrice
-                        )
-                          .toFixed(2)
-                          .toLocaleString()}
-                      </Text>
-                    </HStack>
-                  </VStack>
-                )}
-              </HStack>
-            )
-          ) : (
-            <></>
-          )}
           <BaseButton
             type="submit"
             isDisabled={
@@ -1590,10 +1217,7 @@ export const SommelierTab = ({
               (selectedToken?.symbol !== activeAsset?.symbol &&
                 !cellarData.depositTokens.list.includes(
                   selectedToken?.symbol || ""
-                ) &&
-                (isDisabled ||
-                  ensoLoading ||
-                  (!ensoLoading && ensoError !== null)))
+                ))
             }
             isLoading={isSubmitting}
             fontSize={21}
@@ -1602,42 +1226,6 @@ export const SommelierTab = ({
           >
             Submit
           </BaseButton>
-          {/* <Text textAlign="center">
-            Depositing active asset (
-            <Avatar
-              ml="-2.5px"
-              boxSize={6}
-              src={activeAsset?.src}
-              name={activeAsset?.alt}
-              borderWidth={2}
-              borderColor="surface.bg"
-              bg="surface.bg"
-            />
-            {activeAsset?.symbol}) will save gas fees
-          </Text> */}
-          {/*depositTokens.length > 1 && (
-            <Text textAlign="center">
-              <Text textAlign="center">
-                Current Base asset is (
-                <Avatar
-                  ml="-2.5px"
-                  boxSize={6}
-                  src={activeAsset?.src}
-                  name={activeAsset?.alt}
-                  borderWidth={2}
-                  borderColor="surface.bg"
-                  bg="surface.bg"
-                />
-                {activeAsset?.symbol}).
-                <br />
-                <br />
-              </Text>
-              <Text>
-                There could be high slippage when depositing non base
-                assets. Please swap outside our app for better rates.
-              </Text>
-            </Text>
-                )*/}
           {strategyMessages[currentStrategies] ? (
             strategyMessages[currentStrategies]()
           ) : (
