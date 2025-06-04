@@ -7,6 +7,7 @@ import {
   Spacer,
   Text,
   VStack,
+  Image,
 } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
@@ -413,9 +414,7 @@ export const PageHome = () => {
           </Link>
         </VStack>
         <VStack align="center" justify="center">
-          <Text textAlign="center">
-            LOGO HERE
-          </Text>
+          <Image src="/assets/images/eth-lido-uni.svg" alt="Alpha stETH" />
         </VStack>
       </HStack>
       {isMobile ? (
