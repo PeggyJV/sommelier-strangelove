@@ -398,8 +398,7 @@ export const PageHome = () => {
         </VStack>
         <VStack align="center" justify="center">
           <Link
-            isExternal
-            href="https://app.sommelier.finance"
+            href="https://sommelier-web-git-boringvault-integration-sommelierfinance.vercel.app/strategies/Alpha-stETH/manage"
             textDecoration="none"
           >
             <SecondaryButton
