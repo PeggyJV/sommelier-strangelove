@@ -61,7 +61,7 @@ export const alphaSteth: CellarData = {
   //   value: "4.00%",
   // },
   dashboard:
-    "https://debank.com/profile/0xec797d184a8c6cd1ef01fadc98b575e84b156c18",
+    "https://debank.com/profile/0xef417FCE1883c6653E7dC6AF7c6F85CCDE84Aa09",
   depositTokens: {
     list: ["WETH", "stETH", "wstETH", "ETH"],
   },
