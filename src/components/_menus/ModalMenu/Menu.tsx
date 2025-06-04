@@ -13,8 +13,8 @@ import {
   MenuOptionGroup,
   Text,
   useTheme,
+  useSize,
 } from "@chakra-ui/react"
-import { useSize } from "@chakra-ui/react-use-size"
 import { useRef, useState, useEffect, ChangeEvent } from "react"
 import { FaChevronDown } from "react-icons/fa"
 import { getTokenConfig, Token } from "data/tokenConfig"
