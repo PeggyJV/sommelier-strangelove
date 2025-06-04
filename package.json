@@ -10,9 +10,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "start": "next start",
-    "test": "jest --config jest.json",
-    "chakra:gen": "chakra-cli tokens ./src/theme/index.ts --out ./src/theme/theme.types.ts",
-    "postinstall": "yarn chakra:gen"
+    "test": "jest --config jest.json"
   },
   "dependencies": {
     "@analytics/mixpanel": "^0.4.0",
