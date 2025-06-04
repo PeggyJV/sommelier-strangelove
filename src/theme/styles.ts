@@ -1,6 +1,4 @@
-import { Styles } from "@chakra-ui/theme-tools"
-
-export const styles: Styles = {
+export const styles = {
   global: {
     MozSelection: { background: "purple.base" },
     WebKitSelection: { background: "purple.base" },
