@@ -9,7 +9,7 @@ export const alphaSteth: CellarData = {
   slug: config.CONTRACT.ALPHA_STETH.SLUG,
   startingShareValue: "998206828469480700",
   tradedAssets: ["WETH", "stETH", "wstETH"],
-  launchDate: new Date(Date.UTC(2025, 3, 7, 14, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2025, 6, 5, 0, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `AlphaSTETH dynamically reallocates stETH leverage across multiple leading DeFi protocols to deliver superior ETH yield optimization.`,
   strategyType: "Yield",
