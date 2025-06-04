@@ -1,7 +1,9 @@
 import {
   Button,
   Center,
+  Heading,
   HStack,
+  Link,
   Spacer,
   Text,
   VStack,
@@ -36,11 +38,12 @@ import {
   MiscFilter,
   MiscFilterProp,
 } from "components/_filters/MiscFilter"
-import { DeleteCircleIcon } from "components/_icons"
+import { ArrowRightIcon, DeleteCircleIcon, ExternalLinkIcon } from "components/_icons"
 import { add, isBefore } from "date-fns"
 import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
+import { SecondaryButton } from "components/_buttons/SecondaryButton"
 
 export const PageHome = () => {
   const {
@@ -377,6 +380,45 @@ export const PageHome = () => {
           </Text>
         </VStack>
       </HStack> */}
+      <HStack
+        p={4}
+        mb={6}
+        spacing={4}
+        align="center"
+        justify="space-evenly"
+      >
+        <VStack align="center" justify="center" w="30%">
+          <Heading textAlign="center">
+            Alpha STETH - Make stETH Great Again
+          </Heading>
+          <Text textAlign="center">
+            A dynamic strategy to optimize yield thorugh AL-enhanced
+            staking and automated DeFi strategies.
+          </Text>
+        </VStack>
+        <VStack align="center" justify="center">
+          <Link
+            isExternal
+            href="https://app.sommelier.finance"
+            textDecoration="none"
+          >
+            <SecondaryButton
+              fontSize="md"
+              px={4}
+              py={2}
+              h="50px"
+              textDecoration="none"
+            >
+              Explore Vault
+            </SecondaryButton>
+          </Link>
+        </VStack>
+        <VStack align="center" justify="center">
+          <Text textAlign="center">
+            LOGO HERE
+          </Text>
+        </VStack>
+      </HStack>
       {isMobile ? (
         <VStack width="100%" padding={"2em 0em"} spacing="2em">
           <ChainFilter
