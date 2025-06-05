@@ -4,14 +4,14 @@ import { chainSlugMap } from "data/chainConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { CellarNameKey, CellarKey } from "data/types"
 
-export const alphaSteth: CellarData = {
-  name: "Alpha stETH",
+export const ggv: CellarData = {
+  name: "GGV",
   slug: config.CONTRACT.ALPHA_STETH.SLUG,
   startingShareValue: "998206828469480700",
   tradedAssets: ["WETH", "stETH", "wstETH"],
   launchDate: new Date(Date.UTC(2025, 5, 5, 0, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
-  description: `AlphaSTETH dynamically reallocates stETH exposure across trusted DeFi protocols — including Mellow’s dvSTETH and Unichain — to unlock reward potential in ETH-native strategies.`,
+  description: `GGV dynamically reallocates stETH exposure across trusted DeFi protocols — including Mellow’s dvSTETH and Unichain — to unlock reward potential in ETH-native strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
@@ -42,9 +42,9 @@ export const alphaSteth: CellarData = {
     -Additional rewards may be enabled through Lido incentives. `,
 
     description: `
-    AlphaSTETH represents the next evolution in ETH reward strategies, combining dynamic capital management with diversified blue-chip primitives. The strategy reallocates across lending markets (AAVE, Morpho, Euler), Unichain liquidity pools, and Mellow vaults (via dvSTETH), based on real-time reward signals and protocol performance. Smart automation enables seamless execution and compounding while maintaining exposure to trusted DeFi strategies.
+    GGV represents the next evolution in ETH reward strategies, combining dynamic capital management with diversified blue-chip primitives. The strategy reallocates across lending markets (AAVE, Morpho, Euler), Unichain liquidity pools, and Mellow vaults (via dvSTETH), based on real-time reward signals and protocol performance. Smart automation enables seamless execution and compounding while maintaining exposure to trusted DeFi strategies.
 
-    Note that Alpha stETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that GGV and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries – for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
     Risks: `
     All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
@@ -65,7 +65,7 @@ export const alphaSteth: CellarData = {
     cellarNameKey: CellarNameKey.ALPHA_STETH,
     lpToken: {
       address: config.CONTRACT.ALPHA_STETH.ADDRESS,
-      imagePath: "/assets/icons/alpha-steth.png",
+      imagePath: "/assets/icons/ggv.png",
     },
     cellar: {
       address: config.CONTRACT.ALPHA_STETH.ADDRESS,
@@ -114,8 +114,10 @@ export const alphaSteth: CellarData = {
         "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. And you can find the link of audit reports here <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>",
     },
     {
-      question: "How is AlphaSTETH different from TurboSTETH?",
-      answer: `AlphaSTETH leverages an upgraded vault architecture to access new reward opportunities across a broader set of DeFi protocols. While TurboSTETH primarily focused on classic leverage loops, AlphaSTETH incorporates advanced strategies including Morpho and Euler lending, Unichain LP provisioning, and Mellow’s dvSTETH validator diversification — offering a more flexible and diversified approach to ETH-native reward strategies.`,
+      question: "How is GGV different from TurboSTETH?",
+      answer: `GGV leverages an upgraded vault architecture to access new reward opportunities across a broader set of DeFi protocols. While TurboSTETH primarily focused on classic leverage loops, GGV incorporates advanced strategies including Morpho and Euler lending, Unichain LP provisioning, and Mellow’s dvSTETH validator diversification — offering a more flexible and diversified approach to ETH-native reward strategies.`,
     },
   ],
 }
+
+
