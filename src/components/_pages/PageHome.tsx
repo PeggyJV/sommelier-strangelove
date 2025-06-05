@@ -391,7 +391,7 @@ export const PageHome = () => {
         >
           <VStack align="center" justify="center" w="100%">
             <Heading textAlign="center">
-              Alpha STETH - Make stETH Great Again
+              GGV - Make stETH Great Again
             </Heading>
             <Text textAlign="center">
               A dynamic strategy to optimize yield thorugh AL-enhanced
