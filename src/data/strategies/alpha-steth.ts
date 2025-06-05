@@ -4,7 +4,7 @@ import { chainSlugMap } from "data/chainConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { CellarNameKey, CellarKey } from "data/types"
 
-export const ggv: CellarData = {
+export const alphaSteth: CellarData = {
   name: "GGV",
   slug: config.CONTRACT.ALPHA_STETH.SLUG,
   startingShareValue: "998206828469480700",
