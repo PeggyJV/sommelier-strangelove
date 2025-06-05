@@ -39,7 +39,7 @@ import {
   MiscFilter,
   MiscFilterProp,
 } from "components/_filters/MiscFilter"
-import { ArrowRightIcon, DeleteCircleIcon, ExternalLinkIcon } from "components/_icons"
+import { DeleteCircleIcon } from "components/_icons"
 import { add, isBefore } from "date-fns"
 import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
@@ -381,42 +381,87 @@ export const PageHome = () => {
           </Text>
         </VStack>
       </HStack> */}
-      <HStack
-        p={4}
-        mb={6}
-        spacing={4}
-        align="center"
-        justify="space-evenly"
-      >
-        <VStack align="center" justify="center" w="30%">
-          <Heading textAlign="center">
-            Alpha STETH - Make stETH Great Again
-          </Heading>
-          <Text textAlign="center">
-            A dynamic strategy to optimize yield thorugh AL-enhanced
-            staking and automated DeFi strategies.
-          </Text>
-        </VStack>
-        <VStack align="center" justify="center">
-          <Link
-            href="https://sommelier-web-git-boringvault-integration-sommelierfinance.vercel.app/strategies/Alpha-stETH/manage"
-            textDecoration="none"
-          >
-            <SecondaryButton
-              fontSize="md"
-              px={4}
-              py={2}
-              h="50px"
+      {isMobile ? (
+        <VStack
+          p={4}
+          mb={6}
+          spacing={4}
+          align="center"
+          justify="center"
+        >
+          <VStack align="center" justify="center" w="100%">
+            <Heading textAlign="center">
+              Alpha STETH - Make stETH Great Again
+            </Heading>
+            <Text textAlign="center">
+              A dynamic strategy to optimize yield thorugh AL-enhanced
+              staking and automated DeFi strategies.
+            </Text>
+          </VStack>
+          <VStack align="center" justify="center">
+            <Link
+              href="https://sommelier-web-git-boringvault-integration-sommelierfinance.vercel.app/strategies/Alpha-stETH/manage"
               textDecoration="none"
             >
-              Explore Vault
-            </SecondaryButton>
-          </Link>
+              <SecondaryButton
+                fontSize="md"
+                px={4}
+                py={2}
+                h="50px"
+                textDecoration="none"
+              >
+                Explore Vault
+              </SecondaryButton>
+            </Link>
+          </VStack>
+          <VStack align="center" justify="center">
+            <Image
+              src="/assets/images/eth-lido-uni.svg"
+              alt="Alpha stETH"
+            />
+          </VStack>
         </VStack>
-        <VStack align="center" justify="center">
-          <Image src="/assets/images/eth-lido-uni.svg" alt="Alpha stETH" />
-        </VStack>
-      </HStack>
+      ) : (
+        <HStack
+          p={4}
+          mb={6}
+          spacing={4}
+          align="center"
+          justify="space-evenly"
+        >
+          <VStack align="center" justify="center" w="30%">
+            <Heading textAlign="center">
+              Alpha STETH - Make stETH Great Again
+            </Heading>
+            <Text textAlign="center">
+              A dynamic strategy to optimize yield thorugh AL-enhanced
+              staking and automated DeFi strategies.
+            </Text>
+          </VStack>
+          <VStack align="center" justify="center">
+            <Link
+              href="https://sommelier-web-git-boringvault-integration-sommelierfinance.vercel.app/strategies/Alpha-stETH/manage"
+              textDecoration="none"
+            >
+              <SecondaryButton
+                fontSize="md"
+                px={4}
+                py={2}
+                h="50px"
+                textDecoration="none"
+              >
+                Explore Vault
+              </SecondaryButton>
+            </Link>
+          </VStack>
+          <VStack align="center" justify="center">
+            <Image
+              src="/assets/images/eth-lido-uni.svg"
+              alt="Alpha stETH"
+            />
+          </VStack>
+        </HStack>
+      )}
       {isMobile ? (
         <VStack width="100%" padding={"2em 0em"} spacing="2em">
           <ChainFilter
@@ -447,7 +492,7 @@ export const PageHome = () => {
               <HStack>
                 <Text fontSize={"1.25em"}>Reset</Text>
                 <DeleteCircleIcon boxSize={4} />
-              </HStack> 
+              </HStack>
             </Button>
           )}
         </VStack>
@@ -482,7 +527,7 @@ export const PageHome = () => {
               <HStack>
                 <Text fontSize={"1.25em"}>Reset</Text>
                 <DeleteCircleIcon boxSize={4} />
-              </HStack> 
+              </HStack>
             </Button>
           )}
         </HStack>
