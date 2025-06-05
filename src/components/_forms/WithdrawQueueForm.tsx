@@ -92,8 +92,20 @@ export const WithdrawQueueForm = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
-  const { boringQueue, cellarContract } =
+  const { boringQueue } =
     useCreateContracts(cellarConfig)
+
+  const cellarContract = (() => {
+    if (!publicClient) return
+    return getContract({
+          address: cellarConfig.cellar.address as `0x${string}`,
+          abi: cellarConfig.cellar.abi,
+          client: {
+            public: publicClient,
+            wallet: walletClient,
+          },
+        })
+  })()
 
   const withdrawQueueContract = (() => {
     if (!publicClient) return
