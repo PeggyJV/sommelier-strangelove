@@ -9,7 +9,7 @@ export const alphaSteth: CellarData = {
   slug: config.CONTRACT.ALPHA_STETH.SLUG,
   startingShareValue: "998206828469480700",
   tradedAssets: ["WETH", "stETH", "wstETH"],
-  launchDate: new Date(Date.UTC(2025, 6, 5, 0, 0, 0, 0)),
+  launchDate: new Date(Date.UTC(2025, 5, 5, 0, 0, 0, 0)),
   cellarType: CellarType.yieldStrategies,
   description: `AlphaSTETH dynamically reallocates stETH exposure across trusted DeFi protocols — including Mellow’s dvSTETH and Unichain — to unlock reward potential in ETH-native strategies.`,
   strategyType: "Yield",
