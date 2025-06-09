@@ -90,6 +90,10 @@ export const HeroTr: FC<BorderTrProps> = ({
         borderColor: "purple.base",
         borderRadius: "10px",
         height: "200px",
+        backgroundImage: "url('/assets/images/waves-bg-simple.svg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
         boxShadow: "0 0 15px 5px rgba(147, 51, 234, 0.3)",
         transition: "box-shadow 0.3s ease-in-out",
         "&:hover": {
