@@ -73,7 +73,6 @@ export const PageHome = () => {
 
   const columns = isDesktop
     ? StrategyDesktopColumn({
-        timeline,
         onDepositModalOpen: ({
           id,
           type,
@@ -89,7 +88,6 @@ export const PageHome = () => {
       })
     : isTab && !isMobile
     ? StrategyTabColumn({
-        timeline,
         onDepositModalOpen: ({
           id,
           type,
@@ -103,21 +101,8 @@ export const PageHome = () => {
           })
         },
       })
-    : StrategyMobileColumn({
-        timeline,
-        onDepositModalOpen: ({
-          id,
-          type,
-        }: {
-          id: string
-          type: DepositModalType
-        }) => {
-          setIsOpen({
-            id,
-            type,
-          })
-        },
-      })
+    : StrategyMobileColumn()
+  
 
   const allChainIds = chainConfig.map((chain) => chain.id)
 

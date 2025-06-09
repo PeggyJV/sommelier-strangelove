@@ -3,17 +3,6 @@ import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 
-type StrategyMobileColumnProps = {
-  timeline: Timeline
-  onDepositModalOpen: ({
-    id,
-    type,
-  }: {
-    id: string
-    type: DepositModalType
-  }) => void
-}
-
 type RowData = {
   original: {
     baseApySumRewards?: {
@@ -25,10 +14,7 @@ type RowData = {
   }
 }
 
-export const StrategyMobileColumn = ({
-  timeline,
-  onDepositModalOpen,
-}: StrategyMobileColumnProps) => {
+export const StrategyMobileColumn = () => {
   return [
     {
       Header: () => (

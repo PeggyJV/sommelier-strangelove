@@ -6,14 +6,11 @@ import {
   Box,
   Flex,
 } from "@chakra-ui/react"
-import { PercentageText } from "components/PercentageText"
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
-import { isTokenPriceEnabledApp } from "data/uiConfig"
-import { cellarDataMap } from "data/cellarDataMap"
 import { InformationIcon } from "components/_icons"
 import { Avatar, AvatarGroup } from "@chakra-ui/react"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
@@ -21,7 +18,6 @@ import { useState } from "react"
 import { CellValue } from "react-table"
 
 type StrategyTabColumnProps = {
-  timeline: Timeline
   onDepositModalOpen: ({
     id,
     type,
@@ -48,7 +44,6 @@ type RowData = {
 }
 
 export const StrategyTabColumn = ({
-  timeline,
   onDepositModalOpen,
 }: StrategyTabColumnProps) => {
   return [
@@ -225,49 +220,6 @@ export const StrategyTabColumn = ({
         )
         return valB - valA
       },
-    },
-    {
-      Header: () => (
-        <Text>
-          {`${timeline.title} Token Price`}
-          <br />
-        </Text>
-      ),
-      accessor: `changes.${timeline.value}`,
-      Cell: ({ row }: any) => {
-        const cellarConfig = cellarDataMap[row.original.slug].config
-
-        if (!isTokenPriceEnabledApp(cellarConfig))
-          return (
-            <VStack>
-              <Tooltip
-                label={`Token price change`}
-                color="neutral.100"
-                border="0"
-                fontSize="12px"
-                bg="neutral.900"
-                fontWeight={600}
-                py="4"
-                px="6"
-                boxShadow="xl"
-                shouldWrapChildren
-              >
-                <PercentageText
-                  data={row.original.changes?.[timeline.value]}
-                  arrowT2
-                  fontWeight={600}
-                />
-              </Tooltip>
-            </VStack>
-          )
-
-        return (
-          <Text fontWeight={550} fontSize="16px" textAlign="center">
-            --
-          </Text>
-        )
-      },
-      disableSortBy: true, // This line disables sorting for this column
     },
     {
       Header: () => <Text>Deposit</Text>,
