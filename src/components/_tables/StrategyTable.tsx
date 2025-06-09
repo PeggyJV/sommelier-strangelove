@@ -202,7 +202,6 @@ export const StrategyTable: FC<StrategyTableProps> = ({
               : "strategies/" + row.original.slug + "/manage"
 
             if (row.original.isHero) {
-              console.log(row.original)
               return (
                 <HeroTr
                   slug={href}
