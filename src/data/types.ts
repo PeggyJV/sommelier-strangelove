@@ -172,6 +172,7 @@ export interface CustomReward {
 export interface CellarData {
   isContractNotReady?: boolean
   deprecated?: boolean
+  isHero?: boolean
   name: string
   slug: string
   dashboard: string

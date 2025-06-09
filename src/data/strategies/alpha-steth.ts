@@ -10,6 +10,7 @@ export const alphaSteth: CellarData = {
   startingShareValue: "998206828469480700",
   tradedAssets: ["WETH", "stETH", "wstETH"],
   launchDate: new Date(Date.UTC(2025, 5, 5, 0, 0, 0, 0)),
+  isHero: true,
   cellarType: CellarType.yieldStrategies,
   description: `GGV dynamically reallocates stETH exposure across trusted DeFi protocols — including Mellow’s dvSTETH and Unichain — to unlock reward potential in ETH-native strategies.`,
   strategyType: "Yield",

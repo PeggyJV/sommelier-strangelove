@@ -29,6 +29,7 @@ interface StrategySectionProps extends StackProps {
   rewards?: string
   isDeprecated?: boolean
   badges?: Badge[]
+  isHero?: boolean
 }
 
 export const formatText = (text: string, isMobile: boolean) => {
@@ -70,6 +71,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   rewards,
   isDeprecated,
   badges,
+  isHero,
   ...props
 }) => {
   const [isMobile, setIsMobile] = useState(
@@ -122,7 +124,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             fontSize="0.75rem"
             fontWeight={600}
           >
-            <Heading fontSize="1rem">{title}</Heading>{" "}
+            <Heading fontSize={isHero ? "2rem" : "1rem"}>{title}</Heading>{" "}
           </Flex>
           <Flex
             gap={1}
