@@ -19,7 +19,6 @@ import { ModalWithExchangeTab } from "components/_modals/ModalWithExchangeTab"
 import { WithdrawModal } from "components/_modals/WithdrawModal"
 import { TransparentSkeleton } from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
-import { useHome } from "data/context/homeContext"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import {
   DepositModalType,
@@ -67,7 +66,6 @@ export const PageHome = () => {
     id,
   } = useDepositModalStore()
 
-  const { timeline } = useHome();
   const { isConnected } = useAccount();
   const { userBalances } = useUserBalances();
 

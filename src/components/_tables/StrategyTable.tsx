@@ -65,6 +65,46 @@ export const BorderTr: FC<BorderTrProps> = ({
   )
 }
 
+export const HeroTr: FC<BorderTrProps> = ({
+  slug,
+  name,
+  ...props
+}) => {
+  const router = useRouter()
+  return (
+    <Tr
+      // _notLast={{
+      //   borderBottom: "1px solid",
+      //   borderColor: "surface.secondary",
+      // }}
+      _hover={{
+        backgroundImage: "url('/assets/images/waves-bg.svg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+      sx={{
+        padding: "10px",
+        fontSize: "40px",
+        border: "2.5px solid",
+        borderColor: "purple.base",
+        borderRadius: "10px",
+        height: "200px",
+        boxShadow: "0 0 15px 5px rgba(147, 51, 234, 0.3)",
+        transition: "box-shadow 0.3s ease-in-out",
+        "&:hover": {
+          boxShadow: "0 0 20px 8px rgba(147, 51, 234, 0.5)",
+        },
+      }}
+      cursor="pointer"
+      onClick={() => {
+        router.push(slug)
+      }}
+      {...props}
+    />
+  )
+}
+
 export const BorderTd: FC<TableCellProps> = (props) => {
   return <Td {...props} py={7} />
 }
@@ -155,10 +195,33 @@ export const StrategyTable: FC<StrategyTableProps> = ({
         >
           {rows.map((row, indexRow) => {
             prepareRow(row)
+
             const countdown = isComingSoon(row.original.launchDate)
             const href = countdown
               ? "strategies/" + row.original.slug
               : "strategies/" + row.original.slug + "/manage"
+
+            if (row.original.isHero) {
+              console.log(row.original)
+              return (
+                <HeroTr
+                  slug={href}
+                  name={row.original.name}
+                  key={indexRow}
+                >
+                  {row.cells.map((cell, indexData) => {
+                    return (
+                      <BorderTd
+                        {...cell.getCellProps()}
+                        key={indexData}
+                      >
+                        {cell.render("Cell")}
+                      </BorderTd>
+                    )
+                  })}
+                </HeroTr>
+              )
+            }
             return (
               <BorderTr
                 opacity={row.original.deprecated ? 0.5 : 1}
