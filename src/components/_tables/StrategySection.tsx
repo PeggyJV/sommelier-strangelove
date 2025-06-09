@@ -113,6 +113,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
       >
         <Image
           boxSize="40px"
+          boxShadow={isHero ? "0 0 15px 5px rgba(147, 51, 234, 0.3)" : "none"}
           src={icon}
           rounded="full"
           alt="strategy icon"
