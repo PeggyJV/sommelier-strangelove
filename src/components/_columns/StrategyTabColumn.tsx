@@ -127,6 +127,7 @@ export const StrategyTabColumn = ({
                   key={row.original.config.chain.id}
                   background={"transparent"}
                   border={"none"}
+                  boxShadow={row.original.isHero ? "0 0 15px 5px rgba(147, 51, 234, 0.3)" : "none"}
                   sx={{
                     width: "2.2em", // custom width
                     height: "2.2em", // custom height
