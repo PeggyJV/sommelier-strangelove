@@ -399,7 +399,7 @@ export const PageHome = () => {
           </VStack>
           <VStack align="center" justify="center">
             <Image
-              src="/assets/images/eth-lido-uni.svg"
+              src="/assets/images/eth-lido-uni-2.png"
               alt="Alpha stETH"
             />
           </VStack>
@@ -439,7 +439,7 @@ export const PageHome = () => {
           </VStack>
           <VStack align="center" justify="center">
             <Image
-              src="/assets/images/eth-lido-uni.svg"
+              src="/assets/images/eth-lido-uni-2.png"
               alt="Alpha stETH"
             />
           </VStack>
