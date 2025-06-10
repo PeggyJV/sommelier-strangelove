@@ -148,11 +148,11 @@ export function DepositAndWithdrawButton({
           }
           onDepositModalOpen({
             id: row.original.slug,
-            type: "deposit",
+            type: id === "Alpha-stETH" ? "deposit" : "migrate",
           })
         }}
       >
-        {getButtonText(row.original.deprecated, lpTokenDisabled)}
+        {id === "Alpha-stETH" ? "Deposit" : "Migrate"}
       </BaseButton>
       {isOracleModalOpen && (
         <Modal isOpen={isOracleModalOpen} onClose={closeOracleModal} isCentered>
