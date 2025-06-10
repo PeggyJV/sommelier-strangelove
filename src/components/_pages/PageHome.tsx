@@ -44,6 +44,7 @@ import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
+import { MigrationModal } from "components/_modals/MigrationModal"
 
 export const PageHome = () => {
   const {
@@ -554,6 +555,10 @@ export const PageHome = () => {
             />
             <WithdrawModal
               isOpen={isOpen && modalType === "withdraw"}
+              onClose={onClose}
+            />
+            <MigrationModal
+              isOpen={isOpen && modalType === "migrate"}
               onClose={onClose}
             />
           </>
