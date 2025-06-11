@@ -75,9 +75,32 @@ const checkButtonDisabled = (
 
 const getButtonText = (
   isDeprecated: boolean,
-  lpTokenDisabled: boolean
-) =>
-  isDeprecated ? (lpTokenDisabled ? "Closed" : "Withdraw") : "Deposit"
+  lpTokenDisabled: boolean,
+  cellarConfig: any,
+  id: string
+) => {
+  if (isDeprecated) {
+    return lpTokenDisabled ? "Closed" : "Withdraw"
+  }
+
+  const buttonType = getButtonType(cellarConfig, id)
+  return buttonType === "deposit" ? "Deposit" : "Migrate"
+}
+
+const getButtonType = (cellarConfig: any, id: string) => {
+  const alphaStEth = cellarDataMap["Alpha-stETH"]
+  const includesBaseAsset = alphaStEth.depositTokens.list.includes(
+    cellarConfig.baseAsset.symbol
+  )
+  if (
+    id === "Alpha-stETH" ||
+    !includesBaseAsset ||
+    cellarConfig.chain.id !== "ethereum"
+  ) {
+    return "deposit"
+  }
+  return "migrate"
+}
 
 export function DepositAndWithdrawButton({
   row,
@@ -148,14 +171,23 @@ export function DepositAndWithdrawButton({
           }
           onDepositModalOpen({
             id: row.original.slug,
-            type: id === "Alpha-stETH" ? "deposit" : "migrate",
+            type: getButtonType(cellarConfig, id),
           })
         }}
       >
-        {id === "Alpha-stETH" ? "Deposit" : "Migrate"}
+        {getButtonText(
+          row.original.deprecated,
+          lpTokenDisabled,
+          cellarConfig,
+          id
+        )}
       </BaseButton>
       {isOracleModalOpen && (
-        <Modal isOpen={isOracleModalOpen} onClose={closeOracleModal} isCentered>
+        <Modal
+          isOpen={isOracleModalOpen}
+          onClose={closeOracleModal}
+          isCentered
+        >
           <ModalOverlay />
           <ModalContent
             p={2}
