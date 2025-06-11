@@ -33,8 +33,6 @@ import { useGeo } from "context/geoContext"
 import { waitTime } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
-import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
-import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { erc20Abi, getAddress, getContract, parseUnits } from "viem"
 import { wagmiConfig } from "context/wagmiContext"
 import { ExternalLinkIcon } from "components/_icons"
@@ -87,6 +85,15 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
       },
     })
 
+  const cellarContract = 
+  publicClient && getContract({
+    address: getAddress(cellarConfig.cellar.address),
+    abi: cellarConfig.cellar.abi,
+    client: {
+      public: publicClient,
+    },
+  })
+
   const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
 
@@ -116,7 +123,7 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
-    if (withdrawAmount <= 0 || !erc20Contract) return
+    if (withdrawAmount <= 0 || !erc20Contract || !cellarContract) return
 
     if (!address) {
       addToast({
@@ -144,8 +151,8 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
 
     if (!canDoBatchCall) {
       addToast({
-        heading: "Migration",
-        body: <Text>Migration is not supported on this wallet.</Text>,
+        heading: "Migration not supported",
+        body: <Text>Migration is not supported on this chain or wallet.</Text>,
         status: "error",
         closeHandler: closeAll,
       })
@@ -156,24 +163,11 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
       `${withdrawAmount}`,
       cellarConfig.cellar.decimals
     )
+    const amountOfBaseAsset = await cellarContract.read.convertToAssets([amtInWei]) as bigint
 
     try {
-      // const gasLimitEstimated = await estimateGasLimitWithRetry(
-      //   cellarSigner?.estimateGas.redeem,
-      //   cellarSigner?.simulate.redeem,
-      //   [amtInWei, address, address],
-      //   330000,
-      //   address
-      // )
 
-      // // @ts-ignore
-      // const hash = await cellarSigner?.write.redeem(
-      //   [amtInWei, address, address],
-      //   {
-      //     gas: gasLimitEstimated,
-      //     account: address,
-      //   }
-      // )
+      // Redeem call to the cellar
       withdrawalCall = {
         to: cellarConfig.cellar.address as `0x${string}`,
         abi: cellarConfig.cellar.abi,
@@ -182,25 +176,16 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
       }
       batchCalls.push(withdrawalCall)
 
-      // check if we need to swap
-      let needToSwap = !alphaStEth.depositTokens.list.includes(
-        cellarConfig.baseAsset.symbol
-      )
-
-      if (needToSwap) {
-        // swap to alphaStEth deposit asset (always stETH?)
-      }
-
-
+      // Approval call, if needed
       const allowance = await erc20Contract.read.allowance(
         [
           getAddress(address ?? ""),
-          getAddress(cellarConfig.cellar.address),
+          getAddress(alphaStEth.config.cellar.address),
         ],
         { account: address }
       )
 
-      let needsApproval = allowance < amtInWei
+      let needsApproval = allowance < amountOfBaseAsset
       if (needsApproval) {
         approvalCall = {
           to: cellarConfig.baseAsset.address as `0x${string}`,
@@ -208,18 +193,16 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
           functionName: erc20Abi[3].name,
           args: [
             alphaStEth.config.cellar.address as `0x${string}`,
-            amtInWei,
+            amountOfBaseAsset,
           ] as const,
         }
         batchCalls.push(approvalCall)
       }
 
       // Deposit call to BoringVault
-
-      // @ts-ignore
       const minimumMint = await boringVaultLens?.read.previewDeposit([
         cellarConfig.baseAsset.address,
-        amtInWei,
+        amountOfBaseAsset,
         alphaStEth.config.cellar.address,
         alphaStEth.config.accountant?.address,
       ])
@@ -228,7 +211,7 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
         to: cellarSigner?.address as `0x${string}`,
         abi: cellarSigner?.abi!,
         functionName: "deposit",
-        args: [cellarConfig.baseAsset.address, amtInWei, minimumMint],
+        args: [cellarConfig.baseAsset.address, amountOfBaseAsset, minimumMint],
       }
       batchCalls.push(depositCall)
 
@@ -251,7 +234,7 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
       }
 
       if (finalResult.status === "failure") {
-        throw new Error("Batch Deposit failed")
+        throw new Error("Batch Migration failed")
       }
 
       addToast({
@@ -290,79 +273,20 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
           closeHandler: closeAll,
           duration: null,
         })
+        onClose()
       }
 
     } catch (e) {
       const error = e as Error
-
-      // Get Redeemable Assets
-      const redeemableAssets: number = parseInt(
-        await fetchCellarRedeemableReserves(id)
-      )
-
-      // previewRedeem on the shares the user is attempting to withdraw
-      // Only get previewRedeem on 1 share to optimize caching and do relevant math below
-      const previewRedeem: number = parseInt(
-        await fetchCellarPreviewRedeem(
-          id,
-          BigInt(10 ** cellarConfig.cellar.decimals)
-        )
-      )
-      const redeemAmt: number = Math.floor(
-        previewRedeem * watchWithdrawAmount
-      )
-      const redeemingMoreThanAvailible = redeemAmt > redeemableAssets
-
-      /*
-      console.log("---")
-      console.log("Reedemable assets: ", redeemableAssets)
-      console.log("Withdraw amount: ", watchWithdrawAmount)
-      console.log("Preview redeem: ", previewRedeem)
-      console.log("Redeeming amt: ", redeemAmt)
-      console.log("Redeeming more than availible: ", redeemingMoreThanAvailible)
-      console.log("---")
-      */
-
-      // Check if attempting to withdraw more than availible
-      if (redeemingMoreThanAvailible) {
-        // TODO: Open a modal with information about the withdraw queue
-      } else {
-        if (error.message === "GAS_LIMIT_ERROR") {
-          addToast({
-            heading: "Transaction not submitted",
-            body: (
-              <Text>
-                Your transaction has failed, if it does not work after
-                waiting some time and retrying please send a message
-                in our{" "}
-                {
-                  <Link
-                    href="https://discord.com/channels/814266181267619840/814279703622844426"
-                    isExternal
-                    textDecoration="underline"
-                  >
-                    Discord Support channel
-                  </Link>
-                }{" "}
-                tagging a member of the front end team.
-              </Text>
-            ),
-            status: "info",
-            closeHandler: closeAll,
-          })
-        } else {
-          console.error(error)
-          addToast({
-            heading: "Withdraw",
-            body: <Text>Withdraw Cancelled</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
-        }
-
-        refetch()
-        setValue("withdrawAmount", 0)
-      }
+      console.error(error)
+      addToast({
+        heading: "Migration",
+        body: <Text>Migration Failed, please try migrating manually by withdrawing from the old cellar and depositing into the new one.</Text>,
+        status: "error",
+        closeHandler: closeAll,
+      })
+      refetch()
+      setValue("withdrawAmount", 0)
     }
   }
 
@@ -526,12 +450,6 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
         >
           Submit
         </BaseButton>
-        {waitTime(cellarConfig) !== null && (
-          <Text textAlign="center">
-            Please wait {waitTime(cellarConfig)} after the deposit to
-            Withdraw
-          </Text>
-        )}
       </VStack>
     </>
   )
