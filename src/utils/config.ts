@@ -358,7 +358,7 @@ export const config = {
       ABI: AccountantWithRateProviders,
     },
     ALPHA_STETH_TELLER: {
-      ADDRESS: "0xE89fAaf3968ACa5dCB054D4a9287E54aa84F67e9",
+      ADDRESS: "0x0baAb6db8d694E1511992b504476ef4073fe614B",
       ABI: TellerWithLayerZero,
     },
     ALPHA_STETH_BORING_QUEUE: {
@@ -366,7 +366,7 @@ export const config = {
       ABI: BoringOnChainQueue,
     },
     ALPHA_STETH_LENS: {
-      ADDRESS: "0x5232bc0F5999f8dA604c42E1748A13a170F94A1B",
+      ADDRESS: "0xA2c83e64990C6C53b76390678436d63d006534fB",
       ABI: ArcticArchitectureLens,
     },
   },

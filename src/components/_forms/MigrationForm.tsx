@@ -248,7 +248,7 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
 
       refetch()
 
-      if (finalResult.receipts?.[0]?.status === "success") {
+      if (finalResult.receipts?.at(-1)?.status === "success") {
 
         update({
           heading: "Alpha stETH Cellar Deposit",
