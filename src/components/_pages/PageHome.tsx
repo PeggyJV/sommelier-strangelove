@@ -19,7 +19,6 @@ import { ModalWithExchangeTab } from "components/_modals/ModalWithExchangeTab"
 import { WithdrawModal } from "components/_modals/WithdrawModal"
 import { TransparentSkeleton } from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
-import { useHome } from "data/context/homeContext"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import {
   DepositModalType,
@@ -45,6 +44,7 @@ import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
+import { MigrationModal } from "components/_modals/MigrationModal"
 
 export const PageHome = () => {
   const {
@@ -67,7 +67,6 @@ export const PageHome = () => {
     id,
   } = useDepositModalStore()
 
-  const { timeline } = useHome();
   const { isConnected } = useAccount();
   const { userBalances } = useUserBalances();
 
@@ -376,7 +375,7 @@ export const PageHome = () => {
         >
           <VStack align="center" justify="center" w="100%">
             <Heading textAlign="center">
-              GGV - Make stETH Great Again
+              Alpha stETH - Right time and right place liquidity 
             </Heading>
             <Text textAlign="center">
               A dynamic strategy to optimize yield thorugh AL-enhanced
@@ -401,7 +400,7 @@ export const PageHome = () => {
           </VStack>
           <VStack align="center" justify="center">
             <Image
-              src="/assets/images/eth-lido-uni.svg"
+              src="/assets/images/eth-lido-uni-2.png"
               alt="Alpha stETH"
             />
           </VStack>
@@ -416,7 +415,7 @@ export const PageHome = () => {
         >
           <VStack align="center" justify="center" w="30%">
             <Heading textAlign="center">
-              GGV - Make stETH Great Again
+              Alpha stETH - Right time and right place liquidity 
             </Heading>
             <Text textAlign="center">
               A dynamic strategy to optimize yield thorugh AL-enhanced
@@ -441,7 +440,7 @@ export const PageHome = () => {
           </VStack>
           <VStack align="center" justify="center">
             <Image
-              src="/assets/images/eth-lido-uni.svg"
+              src="/assets/images/eth-lido-uni-2.png"
               alt="Alpha stETH"
             />
           </VStack>
@@ -556,6 +555,10 @@ export const PageHome = () => {
             />
             <WithdrawModal
               isOpen={isOpen && modalType === "withdraw"}
+              onClose={onClose}
+            />
+            <MigrationModal
+              isOpen={isOpen && modalType === "migrate"}
               onClose={onClose}
             />
           </>

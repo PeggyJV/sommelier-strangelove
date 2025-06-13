@@ -39,10 +39,9 @@ export const getStrategyData = async ({
           config.chain.id === contracts.chain
       )!
       const config: ConfigProps = strategy.config!
-      const decimals = config.baseAsset.decimals
       const symbol = config.baseAsset.symbol
 
-      const { stakerContract, cellarContract } = contracts
+      const { stakerContract } = contracts
       const strategyData = stratData
       const dayDatas = strategyData?.dayDatas
       const deprecated = strategy.deprecated
@@ -59,6 +58,8 @@ export const getStrategyData = async ({
         !!launchDate &&
         isBefore(launchDate, add(new Date(), { weeks: 4 }))
       const isContractNotReady = strategy.isContractNotReady
+
+      const isHero = strategy.isHero
 
       const hideValue =
         isComingSoon(launchDate) &&
@@ -325,6 +326,7 @@ export const getStrategyData = async ({
         depositTokens,
         description,
         isNew,
+        isHero,
         isStakingOngoing,
         isContractNotReady,
         launchDate,

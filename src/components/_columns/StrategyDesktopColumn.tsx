@@ -75,6 +75,7 @@ export const StrategyDesktopColumn = ({
             isDeprecated={row.original.deprecated}
             w={56}
             badges={row.original.config.badges}
+            isHero={row.original.isHero}
           />
         )
       },
@@ -242,17 +243,18 @@ export const StrategyDesktopColumn = ({
       accessor: "tvm.value",
       Cell: ({
         row: {
-          original: { launchDate, tvm },
+          original: { launchDate, tvm, isHero },
         },
       }: {
         row: {
           original: {
             launchDate: number
             tvm: { value: number; formatted: string }
+            isHero: boolean
           }
         }
       }) => (
-        <Text fontWeight={550} fontSize="16px" textAlign="right">
+        <Text fontWeight={550} fontSize={isHero ? "20px" : "16px"} textAlign="right">
           {launchDate && launchDate > Date.now()
             ? "--"
             : tvm?.formatted ?? "--"}

@@ -1,7 +1,6 @@
 import {
   Text,
   Tooltip,
-  VStack,
   HStack,
   Box,
   Flex,
@@ -9,7 +8,6 @@ import {
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
-import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { InformationIcon } from "components/_icons"
 import { Avatar, AvatarGroup } from "@chakra-ui/react"
@@ -64,6 +62,7 @@ export const StrategyTabColumn = ({
           description={row.original.description}
           isDeprecated={row.original.deprecated}
           badges={row.original.config.badges}
+          isHero={row.original.isHero}
           w={56}
         />
       ),
@@ -128,6 +127,7 @@ export const StrategyTabColumn = ({
                   key={row.original.config.chain.id}
                   background={"transparent"}
                   border={"none"}
+                  boxShadow={row.original.isHero ? "0 0 15px 5px rgba(147, 51, 234, 0.3)" : "none"}
                   sx={{
                     width: "2.2em", // custom width
                     height: "2.2em", // custom height
@@ -163,7 +163,7 @@ export const StrategyTabColumn = ({
       Header: "TVL",
       accessor: "tvm.value",
       Cell: ({ row }: any) => (
-        <Text fontWeight={550} fontSize="16px" textAlign="right">
+        <Text fontWeight={550} fontSize={row.original.isHero ? "20px" : "16px"} textAlign="right">
           {row.original.launchDate &&
           row.original.launchDate > Date.now()
             ? "--"
