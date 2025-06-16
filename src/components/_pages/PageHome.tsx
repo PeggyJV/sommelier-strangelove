@@ -400,7 +400,7 @@ export const PageHome = () => {
           </VStack>
           <VStack align="center" justify="center">
             <Image
-              src="/assets/images/eth-lido-uni-2.png"
+              src="/assets/images/eth-lido-uni.png"
               alt="Alpha stETH"
             />
           </VStack>
@@ -440,7 +440,7 @@ export const PageHome = () => {
           </VStack>
           <VStack align="center" justify="center">
             <Image
-              src="/assets/images/eth-lido-uni-2.png"
+              src="/assets/images/eth-lido-uni.png"
               alt="Alpha stETH"
             />
           </VStack>
