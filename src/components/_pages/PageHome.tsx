@@ -365,87 +365,50 @@ export const PageHome = () => {
           </Text>
         </VStack>
       </HStack> */}
-      {isMobile ? (
+      <HStack
+        p={4}
+        mb={6}
+        spacing={4}
+        align="center"
+        justify="space-evenly"
+        flexDir={{ base: "column", md: "row" }}
+      >
         <VStack
-          p={4}
-          mb={6}
-          spacing={4}
           align="center"
           justify="center"
+          w={{ base: "100%", md: "30%" }}
         >
-          <VStack align="center" justify="center" w="100%">
-            <Heading textAlign="center">
-              Alpha stETH - Right time and right place liquidity 
-            </Heading>
-            <Text textAlign="center">
-              A dynamic strategy to optimize yield thorugh AI-enhanced
-              staking and automated DeFi strategies.
-            </Text>
-          </VStack>
-          <VStack align="center" justify="center">
-            <Link
-              href="/strategies/Alpha-stETH/manage"
-              textDecoration="none"
-            >
-              <SecondaryButton
-                fontSize="md"
-                px={4}
-                py={2}
-                h="50px"
-                textDecoration="none"
-              >
-                Explore Vault
-              </SecondaryButton>
-            </Link>
-          </VStack>
-          <VStack align="center" justify="center">
-            <Image
-              src="/assets/images/eth-lido-uni.png"
-              alt="Alpha stETH"
-            />
-          </VStack>
+          <Heading textAlign="center">
+            Alpha stETH - Right time and right place liquidity
+          </Heading>
+          <Text textAlign="center">
+            A dynamic strategy to optimize yield thorugh AI-enhanced
+            staking and automated DeFi strategies.
+          </Text>
         </VStack>
-      ) : (
-        <HStack
-          p={4}
-          mb={6}
-          spacing={4}
-          align="center"
-          justify="space-evenly"
-        >
-          <VStack align="center" justify="center" w="30%">
-            <Heading textAlign="center">
-              Alpha stETH - Right time and right place liquidity 
-            </Heading>
-            <Text textAlign="center">
-              A dynamic strategy to optimize yield thorugh AI-enhanced
-              staking and automated DeFi strategies.
-            </Text>
-          </VStack>
-          <VStack align="center" justify="center">
-            <Link
-              href="/strategies/Alpha-stETH/manage"
+        <VStack align="center" justify="center">
+          <Link
+            href="/strategies/Alpha-stETH/manage"
+            textDecoration="none"
+          >
+            <SecondaryButton
+              fontSize="md"
+              px={4}
+              py={2}
+              h="50px"
               textDecoration="none"
             >
-              <SecondaryButton
-                fontSize="md"
-                px={4}
-                py={2}
-                h="50px"
-                textDecoration="none"
-              >
-                Explore Vault
-              </SecondaryButton>
-            </Link>
-          </VStack>
-          <VStack align="center" justify="center">
-            <Image
-              src="/assets/images/eth-lido-uni.png"
-              alt="Alpha stETH"
-            />
-          </VStack>
-        </HStack>
-      )}
+              Explore Vault
+            </SecondaryButton>
+          </Link>
+        </VStack>
+        <VStack align="center" justify="center">
+          <Image
+            src="/assets/images/eth-lido-uni.png"
+            alt="Alpha stETH"
+          />
+        </VStack>
+      </HStack>
       {isMobile ? (
         <VStack width="100%" padding={"2em 0em"} spacing="2em">
           <ChainFilter

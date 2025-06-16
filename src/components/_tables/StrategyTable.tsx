@@ -99,6 +99,9 @@ export const HeroTr: FC<BorderTrProps> = ({
         "&:hover": {
           boxShadow: "0 0 20px 8px rgba(147, 51, 234, 0.5)",
         },
+        "@media (max-width: 768px)": {
+          backgroundImage: "url('/assets/images/waves-bg.svg')",
+        },
       }}
       cursor="pointer"
       onClick={() => {
