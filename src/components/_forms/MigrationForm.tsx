@@ -30,7 +30,6 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { useGeo } from "context/geoContext"
-import { waitTime } from "data/uiConfig"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { erc20Abi, getAddress, getContract, parseUnits } from "viem"
@@ -278,16 +277,26 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
 
     } catch (e) {
       const error = e as Error
-      console.error(error)
+      const isUserRejection = error.message?.includes('User rejected')
+      
       addToast({
         heading: "Migration",
-        body: <Text>Migration Failed, please try migrating manually by withdrawing from the old cellar and depositing into the new one.</Text>,
+      body: (
+        <Text>
+          {isUserRejection 
+            ? "Migration cancelled" 
+            : "Migration failed. Please try manual migration."}
+        </Text>
+        ),
         status: "error",
         closeHandler: closeAll,
       })
       refetch()
-      setValue("withdrawAmount", 0)
-    }
+     if (!isUserRejection) {
+       refetch()
+      }
+       setValue("withdrawAmount", 0)
+     }
   }
 
   return (
