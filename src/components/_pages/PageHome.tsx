@@ -378,7 +378,7 @@ export const PageHome = () => {
               Alpha stETH - Right time and right place liquidity 
             </Heading>
             <Text textAlign="center">
-              A dynamic strategy to optimize yield thorugh AL-enhanced
+              A dynamic strategy to optimize yield thorugh AI-enhanced
               staking and automated DeFi strategies.
             </Text>
           </VStack>
@@ -418,7 +418,7 @@ export const PageHome = () => {
               Alpha stETH - Right time and right place liquidity 
             </Heading>
             <Text textAlign="center">
-              A dynamic strategy to optimize yield thorugh AL-enhanced
+              A dynamic strategy to optimize yield thorugh AI-enhanced
               staking and automated DeFi strategies.
             </Text>
           </VStack>
