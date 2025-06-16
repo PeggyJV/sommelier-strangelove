@@ -84,20 +84,19 @@ const getButtonText = (
   }
 
   const buttonType = getButtonType(cellarConfig, id)
-  return buttonType === "deposit" ? "Deposit" : "Migrate"
+  return buttonType === "deposit" ? "Deposit" : buttonType === "migrate" ? "Migrate" : "Withdraw"
 }
 
-const getButtonType = (cellarConfig: any, id: string) => {
+const getButtonType = (cellarConfig: any, id: string): "withdraw" | "deposit" | "migrate" => {
   const alphaStEth = cellarDataMap["Alpha-stETH"]
   const includesBaseAsset = alphaStEth.depositTokens.list.includes(
     cellarConfig.baseAsset.symbol
   )
-  if (
-    id === "Alpha-stETH" ||
-    !includesBaseAsset ||
-    cellarConfig.chain.id !== "ethereum"
-  ) {
+  if (id === "Alpha-stETH") {
     return "deposit"
+  }
+  if (!includesBaseAsset || cellarConfig.chain.id !== "ethereum") {
+    return "withdraw"
   }
   return "migrate"
 }
