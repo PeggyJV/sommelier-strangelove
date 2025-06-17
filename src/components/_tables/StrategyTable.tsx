@@ -15,8 +15,8 @@ import { memo, FC } from "react"
 import { useTable, useSortBy } from "react-table"
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { AllStrategiesData } from "data/actions/types"
-import { useRouter } from "next/router"
 import { isComingSoon } from "utils/isComingSoon"
+import Link from "next/link"
 
 interface BorderTrProps extends TableRowProps {
   slug: string
@@ -28,7 +28,6 @@ export const BorderTr: FC<BorderTrProps> = ({
   name,
   ...props
 }) => {
-  const router = useRouter()
   return (
     <Tr
       _notLast={{
@@ -39,25 +38,6 @@ export const BorderTr: FC<BorderTrProps> = ({
         bg: "surface.secondary",
       }}
       cursor="pointer"
-      onClick={() => {
-        router.push(slug)
-        // const landingTyp = landingType()
-        // analytics.track("strategy.selection", {
-        //   strategyCard: name,
-        //   landingType: landingType(),
-        // })
-        // if (landingTyp === DIRECT) {
-        //   analytics.track("strategy.selection.direct", {
-        //     strategyCard: name,
-        //     landingType: landingTyp,
-        //   })
-        // } else {
-        //   analytics.track("strategy.selection.indirect", {
-        //     strategyCard: name,
-        //     landingType: landingTyp,
-        //   })
-        // }
-      }}
       {...props}
     />
   )
@@ -68,7 +48,6 @@ export const HeroTr: FC<BorderTrProps> = ({
   name,
   ...props
 }) => {
-  const router = useRouter()
   return (
     <Tr
       // _notLast={{
@@ -102,16 +81,25 @@ export const HeroTr: FC<BorderTrProps> = ({
         },
       }}
       cursor="pointer"
-      onClick={() => {
-        router.push(slug)
-      }}
       {...props}
     />
   )
 }
 
-export const BorderTd: FC<TableCellProps> = (props) => {
-  return <Td {...props} py={7} />
+export const BorderTd: FC<TableCellProps & { href: string }> = ({
+  href,
+  ...props
+}) => {
+  return (
+    <Td py={7}>
+      <Link
+        href={href}
+        style={{ display: "block", width: "100%", height: "100%" }}
+      >
+        {props.children}
+      </Link>
+    </Td>
+  )
 }
 
 export interface StrategyTableProps {
@@ -218,6 +206,7 @@ export const StrategyTable = memo(({
                       <BorderTd
                         {...cell.getCellProps()}
                         key={indexData}
+                        href={href}
                       >
                         {cell.render("Cell")}
                       </BorderTd>
@@ -239,6 +228,7 @@ export const StrategyTable = memo(({
                     <BorderTd
                       {...cell.getCellProps()}
                       key={indexData}
+                      href={href}
                     >
                       {cell.render("Cell")}
                     </BorderTd>

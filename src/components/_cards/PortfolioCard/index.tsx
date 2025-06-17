@@ -114,7 +114,6 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const isActiveWithdrawRequest =
     useWithdrawRequestStatus(cellarConfig)
-  console.log("portfolio card")
 
   return (
     <TransparentCard
