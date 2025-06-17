@@ -138,6 +138,7 @@ export const ConnectWalletPopover = ({
       isOpen={isOpen}
       onOpen={openWalletSelection}
       onClose={onClose}
+      isLazy
     >
       <PopoverTrigger>
         <BaseButton {...styles} {...rest}>

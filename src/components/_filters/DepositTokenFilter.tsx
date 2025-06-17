@@ -16,7 +16,7 @@ import {
   InputRightElement,
   InputGroup,
 } from "@chakra-ui/react"
-import { useState, FC, useEffect, ChangeEvent } from "react"
+import { useState, FC, useEffect, ChangeEvent, useMemo } from "react"
 import { ChevronDownIcon, DeleteIcon } from "components/_icons"
 
 export type SymbolPathPair = {
@@ -58,8 +58,7 @@ export const DepositTokenFilter: FC<DepositTokenFilterProps> = (
 
         return {
           [symbol]: props.constantAllUniqueAssetsArray.find(
-            (token) =>
-              token.symbol === symbol
+            (token) => token.symbol === symbol
           )!,
         }
       }
@@ -118,45 +117,46 @@ export const DepositTokenFilter: FC<DepositTokenFilterProps> = (
   }
 
   // Filter tokens based on search term
-  const filteredTokens = props.constantAllUniqueAssetsArray.filter(
-    (token) => token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTokens = useMemo(
+    () =>
+      props.constantAllUniqueAssetsArray.filter((token) =>
+        token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [props.constantAllUniqueAssetsArray, searchTerm]
   )
 
-  // Function to clear search input
-  const clearSearch = () => {
-    setSearchTerm("")
-  }
+  const displayedAssets = useMemo(() => {
+    const commonTokens = ["WETH", "USDC", "WBTC", "SOMM", "stETH"]
+    const selectedCommonTokens = commonTokens.filter(
+      (symbol) => props.selectedDepositAssets[symbol]
+    )
+    const otherSelectedTokens = Object.keys(
+      props.selectedDepositAssets
+    ).filter((symbol) => !commonTokens.includes(symbol))
+    return [...selectedCommonTokens, ...otherSelectedTokens].slice(
+      0,
+      5
+    )
+  }, [props.selectedDepositAssets])
 
-  const AssetDisplay = () => {
-    return (
+  const AssetDisplay = useMemo(
+    () => (
       <HStack>
         <Text fontSize={"1.25em"}>Deposit Assets</Text>
         <HStack justifyContent={"center"}>
           <AvatarGroup size="sm">
-            {[
-              ...["WETH", "USDC", "WBTC", "SOMM", "stETH"].filter(
-                (symbol) => props.selectedDepositAssets[symbol]
-              ),
-              ...Object.keys(props.selectedDepositAssets).filter(
-                (symbol) =>
-                  !["WETH", "USDC", "WBTC", "SOMM", "stETH"].includes(
-                    symbol
-                  )
-              ),
-            ]
-              .slice(0, 5)
-              .map((symbol) => {
-                const token = props.selectedDepositAssets[symbol]
-                return (
-                  <Avatar
-                    name={token.symbol}
-                    src={token.path}
-                    key={token.symbol}
-                    background="transparent"
-                    border="none"
-                  />
-                )
-              })}
+            {displayedAssets.map((symbol) => {
+              const token = props.selectedDepositAssets[symbol]
+              return (
+                <Avatar
+                  name={token.symbol}
+                  src={token.path}
+                  key={token.symbol}
+                  background="transparent"
+                  border="none"
+                />
+              )
+            })}
           </AvatarGroup>
           {Object.keys(props.selectedDepositAssets).length > 5 && (
             <Text fontWeight={600}>
@@ -165,11 +165,17 @@ export const DepositTokenFilter: FC<DepositTokenFilterProps> = (
           )}
         </HStack>
       </HStack>
-    )
+    ),
+    [displayedAssets, props.selectedDepositAssets]
+  )
+
+  // Function to clear search input
+  const clearSearch = () => {
+    setSearchTerm("")
   }
 
   return (
-    <Popover placement="bottom">
+    <Popover placement="bottom" isLazy>
       <PopoverTrigger>
         <Button
           bg="none"
@@ -185,7 +191,7 @@ export const DepositTokenFilter: FC<DepositTokenFilterProps> = (
           }}
         >
           <HStack>
-            <AssetDisplay />
+            {AssetDisplay}
             <ChevronDownIcon />
           </HStack>
         </Button>
@@ -262,7 +268,6 @@ export const DepositTokenFilter: FC<DepositTokenFilterProps> = (
                       border="none"
                       boxSize="2em"
                       borderRadius={"50%"}
-
                     />
                     <Text fontWeight="semibold">{token.symbol}</Text>
                     <Checkbox

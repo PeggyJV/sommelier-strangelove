@@ -11,10 +11,8 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react"
-import { FC } from "react"
-
+import { memo, FC } from "react"
 import { useTable, useSortBy } from "react-table"
-
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { AllStrategiesData } from "data/actions/types"
 import { useRouter } from "next/router"
@@ -121,10 +119,10 @@ export interface StrategyTableProps {
   columns: any
 }
 
-export const StrategyTable: FC<StrategyTableProps> = ({
+export const StrategyTable = memo(({
   columns,
   data,
-}) => {
+}: StrategyTableProps) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -254,3 +252,4 @@ export const StrategyTable: FC<StrategyTableProps> = ({
     </TableContainer>
   )
 }
+)

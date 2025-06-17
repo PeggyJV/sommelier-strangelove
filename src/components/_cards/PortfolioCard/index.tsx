@@ -43,14 +43,12 @@ import { useRouter } from "next/router"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { toEther } from "utils/formatCurrency"
 import { formatDistance } from "utils/formatDistance"
-import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { getAddress, getContract } from "viem"
+import { useAccount } from "wagmi"
 import BondingTableCard from "../BondingTableCard"
 import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
-import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { CellarNameKey } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 
@@ -100,33 +98,23 @@ export const PortfolioCard = (props: BoxProps) => {
     ? isFuture(stakingEnd.endDate)
     : false
 
-  let buttonsEnabled = true
-  if (strategyData?.config.chain.wagmiId !== wagmiChain?.id!) {
+  const buttonsEnabled =
+    strategyData?.config.chain.wagmiId === wagmiChain?.id
+
+  if (!buttonsEnabled) {
     userData = undefined
     lpTokenData = undefined
-    buttonsEnabled = false
   }
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
 
-  const baseAssetValue = userData?.userStrategyData.userData?.netValueInAsset.formatted
+  const baseAssetValue =
+    userData?.userStrategyData.userData?.netValueInAsset.formatted
 
-  const { data: walletClient } = useWalletClient()
-  const publicClient = usePublicClient()
-
-  const withdrawQueueContract =
-    publicClient &&
-    getContract({
-      address: getAddress(cellarConfig.chain.withdrawQueueAddress),
-      abi: withdrawQueueV0821,
-      client: {
-        wallet: walletClient,
-        public: publicClient,
-      },
-    })
-
-  const isActiveWithdrawRequest = useWithdrawRequestStatus(cellarConfig)
+  const isActiveWithdrawRequest =
+    useWithdrawRequestStatus(cellarConfig)
+  console.log("portfolio card")
 
   return (
     <TransparentCard
@@ -177,10 +165,7 @@ export const PortfolioCard = (props: BoxProps) => {
                   </Text>
                 }
               >
-                {isMounted &&
-                  (isConnected
-                    ? baseAssetValue
-                    : "--")}
+                {isMounted && (isConnected ? baseAssetValue : "--")}
               </CardStat>
             )}
 
@@ -375,15 +360,17 @@ export const PortfolioCard = (props: BoxProps) => {
             </VStack>
           )}
 
-{
-  (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) && (
-    <MerklePoints
-      userAddress={address}
-      cellarConfig={cellarConfig}
-    />
-)}
+          {(cellarConfig.cellarNameKey ===
+            CellarNameKey.REAL_YIELD_ETH_ARB ||
+            cellarConfig.cellarNameKey ===
+              CellarNameKey.REAL_YIELD_USD_ARB ||
+            cellarConfig.cellarNameKey ===
+              CellarNameKey.REAL_YIELD_ETH_OPT) && (
+            <MerklePoints
+              userAddress={address}
+              cellarConfig={cellarConfig}
+            />
+          )}
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
