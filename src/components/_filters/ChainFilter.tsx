@@ -102,7 +102,7 @@ export const ChainFilter = (props: ChainFilterProps) => {
   )
 
   return (
-    <Popover placement="bottom">
+    <Popover placement="bottom" isLazy>
       <PopoverTrigger>
         <Button
           bg="none"
