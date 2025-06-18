@@ -379,7 +379,7 @@ export const PageHome = () => {
           w={{ base: "100%", md: "30%" }}
         >
           <Heading textAlign="center">
-            Alpha stETH - Right time and right place liquidity
+            Alpha STETH - Right time and right place liquidity
           </Heading>
           <Text textAlign="center">
             A dynamic strategy to optimize yield thorugh AI-enhanced
