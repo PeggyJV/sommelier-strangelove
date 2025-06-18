@@ -405,7 +405,7 @@ export const PageHome = () => {
         <VStack align="center" justify="center">
           <Image
             src="/assets/images/eth-lido-uni.png"
-            alt="Alpha stETH"
+            alt="Alpha STETH"
           />
         </VStack>
       </HStack>
