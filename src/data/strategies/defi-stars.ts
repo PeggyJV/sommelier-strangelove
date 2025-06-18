@@ -11,6 +11,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const defiStars: CellarData = {
+  deprecated: true,
   name: "DeFi Stars",
   slug: config.CONTRACT.DEFI_STARS.SLUG,
   dashboard:

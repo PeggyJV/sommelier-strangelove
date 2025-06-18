@@ -11,6 +11,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const fraximal: CellarData = {
+  deprecated: true,
   name: "Fraximal",
   slug: config.CONTRACT.FRAXIMAL.SLUG,
   dashboard: "https://fraximal.sevenseas.capital/",
