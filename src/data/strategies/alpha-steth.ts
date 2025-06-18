@@ -5,7 +5,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { CellarNameKey, CellarKey } from "data/types"
 
 export const alphaSteth: CellarData = {
-  name: "Alpha stETH",
+  name: "Alpha STETH",
   slug: config.CONTRACT.ALPHA_STETH.SLUG,
   startingShareValue: "998206828469480700",
   tradedAssets: ["WETH", "stETH", "wstETH"],
