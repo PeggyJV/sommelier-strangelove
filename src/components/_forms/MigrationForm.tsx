@@ -250,7 +250,7 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
       if (finalResult.receipts?.at(-1)?.status === "success") {
 
         update({
-          heading: "Alpha stETH Cellar Deposit",
+          heading: "Alpha STETH Cellar Deposit",
           body: (
             <>
               <Text>Deposit Success</Text>
