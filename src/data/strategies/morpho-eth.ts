@@ -11,6 +11,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const morphoETH: CellarData = {
+  deprecated: true,
   name: "Morpho ETH Maximizer",
   slug: config.CONTRACT.MORPHO_ETH.SLUG,
   tradedAssets: ["WETH", "stETH", "wstETH"],
