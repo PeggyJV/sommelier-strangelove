@@ -12,7 +12,7 @@ import {
 import { BaseButton, BaseButtonProps } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
 import { useAccount, useConnect } from "wagmi"
-import React from "react"
+import React, { memo } from "react"
 import { analytics } from "utils/analytics"
 import { ConnectButtonProps } from "."
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
@@ -24,7 +24,7 @@ type ConnectWalletPopoverProps = ConnectButtonProps & {
   wagmiChainId?: number
 }
 
-export const ConnectWalletPopover = ({
+export const ConnectWalletPopover = memo(({
   unstyled,
   children,
   wagmiChainId,
@@ -200,3 +200,4 @@ export const ConnectWalletPopover = ({
     </Popover>
   )
 }
+)

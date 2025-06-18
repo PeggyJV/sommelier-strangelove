@@ -25,7 +25,7 @@ import {
   useDepositModalStore,
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useCallback } from "react"
 import { ChainFilter } from "components/_filters/ChainFilter"
 import { chainConfig } from "src/data/chainConfig"
 import {
@@ -70,37 +70,39 @@ export const PageHome = () => {
   const { isConnected } = useAccount();
   const { userBalances } = useUserBalances();
 
-  const columns = isDesktop
-    ? StrategyDesktopColumn({
-        onDepositModalOpen: ({
-          id,
-          type,
-        }: {
-          id: string
-          type: DepositModalType
-        }) => {
-          setIsOpen({
+  const columns = useMemo(() => {
+    return isDesktop
+      ? StrategyDesktopColumn({
+          onDepositModalOpen: ({
             id,
             type,
-          })
-        },
-      })
-    : isTab && !isMobile
-    ? StrategyTabColumn({
-        onDepositModalOpen: ({
-          id,
-          type,
-        }: {
-          id: string
-          type: DepositModalType
-        }) => {
-          setIsOpen({
+          }: {
+            id: string
+            type: DepositModalType
+          }) => {
+            setIsOpen({
+              id,
+              type,
+            })
+          },
+        })
+      : isTab && !isMobile
+      ? StrategyTabColumn({
+          onDepositModalOpen: ({
             id,
             type,
-          })
-        },
-      })
-    : StrategyMobileColumn()
+          }: {
+            id: string
+            type: DepositModalType
+          }) => {
+            setIsOpen({
+              id,
+              type,
+            })
+          },
+        })
+      : StrategyMobileColumn()
+  }, [isDesktop, isTab, isMobile, setIsOpen])
   
 
   const allChainIds = chainConfig.map((chain) => chain.id)
@@ -135,31 +137,23 @@ export const PageHome = () => {
   const constantAllUniqueAssetsArray = Object.values(uniqueAssetsMap)
 
   // Always float up "WETH", "USDC", "WBTC", "SOMM", "stETH" to the top of the list in that order for the inital render
-  const constantOrderedAllUniqueAssetsArray = [
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "WETH"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "USDC"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "WBTC"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "SOMM"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "stETH"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) =>
-        pair.symbol !== "WETH" &&
-        pair.symbol !== "USDC" &&
-        pair.symbol !== "WBTC" &&
-        pair.symbol !== "SOMM" &&
-        pair.symbol !== "stETH"
-    ),
-  ]
+  const constantOrderedAllUniqueAssetsArray = useMemo(() => {
+    return [
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "WETH"),
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "USDC"),
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "WBTC"),
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "SOMM"),
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "stETH"),
+      ...constantAllUniqueAssetsArray.filter(
+        (pair) =>
+          pair.symbol !== "WETH" &&
+          pair.symbol !== "USDC" &&
+          pair.symbol !== "WBTC" &&
+          pair.symbol !== "SOMM" &&
+          pair.symbol !== "stETH"
+      ),
+    ]
+  }, [constantAllUniqueAssetsArray])
 
   const [selectedChainIds, setSelectedChainIds] =
     useState<string[]>(allChainIds)
@@ -208,7 +202,7 @@ export const PageHome = () => {
     showIncentivised,
   ])
 
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     setSelectedChainIds(initialChainIds)
     setSelectedDepositAssets(initialDepositAssets)
     setShowDeprecated(initialShowDeprecated)
@@ -227,7 +221,7 @@ export const PageHome = () => {
         stateSetFunction: setShowDeprecated,
       },
     ])
-  }
+  }, [])
 
   const strategyData = useMemo(() => {
     const filteredData = data?.filter((item) => {
