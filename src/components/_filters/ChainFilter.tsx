@@ -13,7 +13,7 @@ import {
   Avatar,
   Checkbox,
 } from "@chakra-ui/react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, memo } from "react"
 import {
   chainConfig,
   Chain,
@@ -28,7 +28,7 @@ export interface ChainFilterProps {
   ) => void
 }
 
-export const ChainFilter = (props: ChainFilterProps) => {
+export const ChainFilter = memo((props: ChainFilterProps) => {
   const handleChainClick = (chainId: string) => {
     props.setSelectedChainIds((current: string[]) => {
       const normalizedChainId = chainId.toLowerCase()
@@ -72,25 +72,32 @@ export const ChainFilter = (props: ChainFilterProps) => {
     setCheckedStates(newCheckedStates)
   }, [props.selectedChainIds])
 
-  const NetworkDisplay = () => (
+  const ChainAvatar = memo(({ chainStr }: { chainStr: string }) => {
+    const chain = chainConfigMap[chainStr]
+    return (
+      <Avatar
+        name={chain.displayName}
+        src={chain.logoPath}
+        key={chain.id}
+        background="transparent"
+        border="none"
+        size="sm"
+        marginLeft="-0.5rem"
+        _last={{ marginLeft: 1 }}
+      />
+    )
+  })
+
+  const NetworkDisplay = memo(() => (
     <HStack spacing={2}>
       <Text fontSize={"1.25em"}>Networks</Text>
       <HStack justifyContent={"center"}>
-        <AvatarGroup size="sm" dir="reverse">
+        <AvatarGroup size="sm" dir="reverse" max={5}>
           {props.selectedChainIds
             .slice(0, 5)
-            .map((chainStr: string) => {
-              const chain = chainConfigMap[chainStr]
-              return (
-                <Avatar
-                  name={chain.displayName}
-                  src={chain.logoPath}
-                  key={chain.id}
-                  background="transparent"
-                  border="none"
-                />
-              )
-            })}
+            .map((chainStr: string) => (
+              <ChainAvatar key={chainStr} chainStr={chainStr} />
+            ))}
         </AvatarGroup>
         {props.selectedChainIds.length > 5 && (
           <Text fontWeight={600}>
@@ -99,7 +106,7 @@ export const ChainFilter = (props: ChainFilterProps) => {
         )}
       </HStack>
     </HStack>
-  )
+  ))
 
   return (
     <Popover placement="bottom" isLazy>
@@ -194,3 +201,4 @@ export const ChainFilter = (props: ChainFilterProps) => {
     </Popover>
   )
 }
+)
