@@ -50,10 +50,6 @@ export const HeroTr: FC<BorderTrProps> = ({
 }) => {
   return (
     <Tr
-      // _notLast={{
-      //   borderBottom: "1px solid",
-      //   borderColor: "surface.secondary",
-      // }}
       _hover={{
         backgroundImage: "url('/assets/images/waves-bg.svg')",
         backgroundSize: "cover",
