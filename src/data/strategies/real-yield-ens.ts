@@ -10,6 +10,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const realYieldENS: CellarData = {
+  deprecated: true,
   name: "Real Yield ENS",
   slug: config.CONTRACT.REAL_YIELD_ENS.SLUG,
   dashboard:
