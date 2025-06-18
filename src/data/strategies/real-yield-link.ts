@@ -10,6 +10,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const realYieldLink: CellarData = {
+  deprecated: true,
   name: "Real Yield LINK",
   slug: config.CONTRACT.REAL_YIELD_LINK.SLUG,
   dashboard: "https://rygov.sevenseas.capital/",
