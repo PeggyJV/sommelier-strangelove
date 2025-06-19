@@ -12,10 +12,10 @@ import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
-import { Timeline } from "data/context/homeContext"
+import { Chain } from "data/chainConfig"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
-import { useState } from "react"
+import { memo, useState } from "react"
 import { CellValue } from "react-table"
 import { analytics } from "utils/analytics"
 
@@ -50,6 +50,40 @@ function trackVaultInteraction(vaultName: string) {
     vault: vaultName,
   })
 }
+
+const AssetAvatarGroup = memo(({
+  assets,
+}: {
+  assets: Token[]
+}) => {
+  return (
+    <AvatarGroup size="sm">
+      {assets?.map((asset: Token) => (
+        <Avatar
+          name={asset?.symbol}
+          src={asset?.src}
+          key={asset?.symbol}
+        />
+      ))}
+    </AvatarGroup>
+  )
+})
+
+const ChainAvatar = memo(({ chain }: { chain: Chain }) => (
+  <AvatarGroup>
+      <Avatar
+        name={chain.displayName}
+        src={chain.logoPath}
+        key={chain.id}
+        background={"transparent"}
+        border={"none"}
+        sx={{
+          width: "2.0em",
+          height: "2.0em",
+        }}
+      />
+    </AvatarGroup>
+))
 
 export const StrategyDesktopColumn = ({
   onDepositModalOpen,
@@ -137,17 +171,7 @@ export const StrategyDesktopColumn = ({
             w={"100%"}
           >
             <HStack justifyContent={"center"}>
-              <AvatarGroup size="sm">
-                {getFirst4Value?.map((asset: Token) => {
-                  return (
-                    <Avatar
-                      name={asset?.symbol}
-                      src={asset?.src}
-                      key={asset?.symbol}
-                    />
-                  )
-                })}
-              </AvatarGroup>
+              <AssetAvatarGroup assets={getFirst4Value} />
               {value.length > 6 && (
                 <Text fontWeight={600}>+{getRemainingValue}</Text>
               )}
@@ -200,19 +224,7 @@ export const StrategyDesktopColumn = ({
             w={"80%"}
           >
             <HStack justifyContent={"right"}>
-              <AvatarGroup>
-                <Avatar
-                  name={row.original.config.chain.displayName}
-                  src={row.original.config.chain.logoPath}
-                  key={row.original.config.chain.id}
-                  background={"transparent"}
-                  border={"none"}
-                  sx={{
-                    width: "2.0em", // custom width
-                    height: "2.0em", // custom height
-                  }}
-                />
-              </AvatarGroup>
+              <ChainAvatar chain={row.original.config.chain} />
             </HStack>
             <Flex alignItems="center" direction="column">
               {isHover && (

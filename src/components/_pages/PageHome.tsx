@@ -108,33 +108,39 @@ export const PageHome = () => {
   const allChainIds = chainConfig.map((chain) => chain.id)
 
   //Get all deposit assets from all strategies and turn it into a set of unique values
-  const allDepositAssets: SymbolPathPair[] = Object.values(
-    cellarDataMap
-  )
-    .map((cellarData: CellarData): SymbolPathPair[] => {
-      // Don't include deprecated strategies
-      if (cellarData.deprecated) {
-        return []
+  const { 
+    uniqueAssetsMap, 
+    constantAllUniqueAssetsArray
+  }: 
+  { uniqueAssetsMap: Record<string, SymbolPathPair>, 
+    constantAllUniqueAssetsArray: SymbolPathPair[] 
+  } = useMemo(() => {
+    let allDepositAssets = Object.values(cellarDataMap)
+      .map((cellarData: CellarData): SymbolPathPair[] => {
+        // Don't include deprecated strategies
+        if (cellarData.deprecated) {
+          return []
+        }
+        return cellarData.depositTokens.list.map((symbol) => ({
+          symbol: symbol,
+          path: `/assets/icons/${symbol.toLowerCase()}.png`,
+        }))
+      })
+      .flat()
+
+    // Create an object to ensure uniqueness
+    const uniqueAssetsMap: Record<string, SymbolPathPair> = {}
+
+    allDepositAssets.forEach((pair: SymbolPathPair) => {
+      if (!uniqueAssetsMap[pair.symbol]) {
+        uniqueAssetsMap[pair.symbol] = pair
       }
-
-      return cellarData.depositTokens.list.map((symbol) => ({
-        symbol: symbol,
-        path: `/assets/icons/${symbol.toLowerCase()}.png`,
-      }))
     })
-    .flat()
-
-  // Create an object to ensure uniqueness
-  const uniqueAssetsMap: Record<string, SymbolPathPair> = {}
-
-  allDepositAssets.forEach((pair: SymbolPathPair) => {
-    if (!uniqueAssetsMap[pair.symbol]) {
-      uniqueAssetsMap[pair.symbol] = pair
-    }
-  })
-
-  // Copy the unique assets into a constants array
+    // Copy the unique assets into a constants array
   const constantAllUniqueAssetsArray = Object.values(uniqueAssetsMap)
+
+    return { uniqueAssetsMap, constantAllUniqueAssetsArray }
+  }, [cellarDataMap])
 
   // Always float up "WETH", "USDC", "WBTC", "SOMM", "stETH" to the top of the list in that order for the inital render
   const constantOrderedAllUniqueAssetsArray = useMemo(() => {
