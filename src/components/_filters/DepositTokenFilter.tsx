@@ -16,7 +16,7 @@ import {
   InputRightElement,
   InputGroup,
 } from "@chakra-ui/react"
-import { useState, FC, useEffect, ChangeEvent, useMemo } from "react"
+import { useState, FC, useEffect, ChangeEvent, useMemo, memo } from "react"
 import { ChevronDownIcon, DeleteIcon } from "components/_icons"
 
 export type SymbolPathPair = {
@@ -36,7 +36,7 @@ export interface DepositTokenFilterProps {
   ) => void
 }
 
-export const DepositTokenFilter: FC<DepositTokenFilterProps> = (
+export const DepositTokenFilter: FC<DepositTokenFilterProps> = memo((
   props
 ) => {
   const handleTokenClick = (symbol: string) => {
@@ -290,3 +290,4 @@ export const DepositTokenFilter: FC<DepositTokenFilterProps> = (
     </Popover>
   )
 }
+)
