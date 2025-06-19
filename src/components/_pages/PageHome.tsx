@@ -315,7 +315,7 @@ export const PageHome = () => {
       return parseFloat(b?.tvm?.value ?? '') - parseFloat(a?.tvm?.value ?? '');
     });
   }, [
-    data,
+    data?.length,
     selectedChainIds,
     selectedDepositAssets,
     showDeprecated,

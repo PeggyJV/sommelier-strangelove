@@ -19,6 +19,7 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import Image from "next/image"
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
+import { useMemo } from "react"
 
 type ConnectWalletPopoverProps = ConnectButtonProps & {
   wagmiChainId?: number
@@ -33,7 +34,6 @@ export const ConnectWalletPopover = memo(({
   const { onOpen, onClose, isOpen } = useDisclosure()
   const { addToast } = useBrandedToast()
   const {
-    isConnected,
     isConnecting,
     connector: activeConnector,
   } = useAccount()
@@ -63,9 +63,9 @@ export const ConnectWalletPopover = memo(({
     },
   }
 
-  const { connect, connectors, isPending } = useConnect({
-    mutation: {
-      onError: (error, args) => {
+  const mutation = useMemo(
+    () => ({
+      onError: (error: any, args: any) => {
         const currentPageLink =
           typeof window !== "undefined" ? window.location.href : "N/A"
 
@@ -79,15 +79,13 @@ export const ConnectWalletPopover = memo(({
           error: error.name,
           message: error.message,
           wallet: args.connector.name,
-          pageLink: currentPageLink, // Added
-          // Add other data like walletSoftware and walletVersion if available
+          pageLink: currentPageLink,
         })
       },
-      onSuccess: (data, args) => {
+      onSuccess: (data: any, args: any) => {
         const { accounts } = data
-        const  account = accounts[0]
+        const account = accounts[0]
         const walletSoftware = args.connector.name
-        //const walletVersion = args.connector.version // Placeholder. Adjust based on where you get this info.
         const currentPageLink =
           typeof window !== "undefined" ? window.location.href : "N/A"
 
@@ -107,15 +105,18 @@ export const ConnectWalletPopover = memo(({
             account,
             wallet: args.connector.name,
             walletSoftware,
-            //walletVersion,
             pageLink: currentPageLink,
           })
 
-          // Refresh the page upon successful connection
           window.location.reload()
         }
       },
-    }
+    }),
+    [addToast]
+  )
+
+  const { connect, connectors, isPending } = useConnect({
+    mutation,
   })
 
   const openWalletSelection = () => {
