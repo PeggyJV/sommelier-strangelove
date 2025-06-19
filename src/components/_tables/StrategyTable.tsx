@@ -16,7 +16,7 @@ import { useTable, useSortBy } from "react-table"
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { AllStrategiesData } from "data/actions/types"
 import { isComingSoon } from "utils/isComingSoon"
-import Link from "next/link"
+import { useRouter } from "next/router"
 
 interface BorderTrProps extends TableRowProps {
   slug: string
@@ -28,6 +28,7 @@ export const BorderTr: FC<BorderTrProps> = ({
   name,
   ...props
 }) => {
+  const router = useRouter()
   return (
     <Tr
       _notLast={{
@@ -38,6 +39,9 @@ export const BorderTr: FC<BorderTrProps> = ({
         bg: "surface.secondary",
       }}
       cursor="pointer"
+      onClick={() => {
+        router.push(slug)
+      }}
       {...props}
     />
   )
@@ -48,6 +52,7 @@ export const HeroTr: FC<BorderTrProps> = ({
   name,
   ...props
 }) => {
+  const router = useRouter()
   return (
     <Tr
       _hover={{
@@ -76,6 +81,9 @@ export const HeroTr: FC<BorderTrProps> = ({
           backgroundImage: "url('/assets/images/waves-bg.svg')",
         },
       }}
+      onClick={() => {
+        router.push(slug)
+      }}
       cursor="pointer"
       {...props}
     />
@@ -88,12 +96,7 @@ export const BorderTd: FC<TableCellProps & { href: string }> = ({
 }) => {
   return (
     <Td py={7}>
-      <Link
-        href={href}
-        style={{ display: "block", width: "100%", height: "100%" }}
-      >
-        {props.children}
-      </Link>
+      {props.children}
     </Td>
   )
 }

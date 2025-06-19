@@ -24,11 +24,8 @@ export const useUserDataAllStrategies = () => {
   const query = useQuery({
     queryKey: [
       "USE_USER_DATA_ALL_STRATEGIES",
-      {
-        allContracts: !!allContracts,
-        signer: walletClient,
-        userAddress: address,
-      },
+      address,
+      viemChain?.id,
     ],
     queryFn: async () => {
       return await getUserDataAllStrategies({

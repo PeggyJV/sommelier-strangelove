@@ -42,14 +42,7 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
     strategyAddress +
     (config.chain.id !== "ethereum" ? "-" + chain : "")
   const query = useQuery({
-    queryKey: [
-      "USE_USER_DATA",
-      {
-        signer: true,
-        contractAddress: strategyAddress,
-        userAddress,
-      },
-    ],
+    queryKey: ["USE_USER_DATA", strategyAddress, chain, userAddress],
     queryFn: async () => {
       return await getUserData({
         contracts: allContracts![key],

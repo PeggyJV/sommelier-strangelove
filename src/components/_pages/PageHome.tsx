@@ -9,6 +9,7 @@ import {
   VStack,
   Image,
 } from "@chakra-ui/react"
+import NextLink from "next/link"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -387,9 +388,8 @@ export const PageHome = () => {
           </Text>
         </VStack>
         <VStack align="center" justify="center">
-          <Link
+          <NextLink
             href="/strategies/Alpha-stETH/manage"
-            textDecoration="none"
           >
             <SecondaryButton
               fontSize="md"
@@ -400,7 +400,7 @@ export const PageHome = () => {
             >
               Explore Vault
             </SecondaryButton>
-          </Link>
+          </NextLink>
         </VStack>
         <VStack align="center" justify="center">
           <Image
