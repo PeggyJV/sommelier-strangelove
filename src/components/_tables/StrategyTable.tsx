@@ -103,99 +103,124 @@ export interface StrategyTableProps {
   columns: any
 }
 
-export const StrategyTable = memo(({
-  columns,
-  data,
-}: StrategyTableProps) => {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable<any>(
-    {
-      columns,
-      data,
-    },
-    useSortBy
-  )
+export const StrategyTable = memo(
+  ({ columns, data }: StrategyTableProps) => {
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      return null
+    }
 
-  return (
-    <TableContainer
-      borderColor="surface.secondary"
-      borderWidth={1}
-      rounded="xl"
-    >
-      <Table
-        {...getTableProps()}
-        variant="unstyled"
-        sx={{
-          borderCollapse: "collapse",
-        }}
-        rounded="lg"
+    StrategyTable.displayName = "StrategyTable"
+
+    const {
+      getTableProps,
+      getTableBodyProps,
+      headerGroups,
+      rows,
+      prepareRow,
+    } = useTable<any>(
+      {
+        columns,
+        data,
+      },
+      useSortBy
+    )
+    return (
+      <TableContainer
+        borderColor="surface.secondary"
+        borderWidth={1}
+        rounded="xl"
       >
-        <Thead border="none" color="neutral.400">
-          {headerGroups.map((headerGroup, index) => (
-            <Tr
-              {...headerGroup.getHeaderGroupProps()}
-              key={index}
-              bg="surface.primary"
-              borderBottom="1px solid"
-              borderColor="surface.secondary"
-            >
-              {headerGroup.headers.map((column: any, index) => {
-                return column.canSort ? (
-                  <Th
-                    {...column.getHeaderProps(
-                      column.getSortByToggleProps()
-                    )}
-                    userSelect="none"
-                    textTransform="unset"
-                    key={index}
-                  >
-                    <Flex
-                      alignItems="center"
-                      gap={2}
-                      justifyContent="end"
+        <Table
+          {...getTableProps()}
+          variant="unstyled"
+          sx={{
+            borderCollapse: "collapse",
+          }}
+          rounded="lg"
+        >
+          <Thead border="none" color="neutral.400">
+            {headerGroups.map((headerGroup, index) => (
+              <Tr
+                {...headerGroup.getHeaderGroupProps()}
+                key={index}
+                bg="surface.primary"
+                borderBottom="1px solid"
+                borderColor="surface.secondary"
+              >
+                {headerGroup.headers.map((column: any, index) => {
+                  return column.canSort ? (
+                    <Th
+                      {...column.getHeaderProps(
+                        column.getSortByToggleProps()
+                      )}
+                      userSelect="none"
+                      textTransform="unset"
+                      key={index}
+                    >
+                      <Flex
+                        alignItems="center"
+                        gap={2}
+                        justifyContent="end"
+                      >
+                        {column.render("Header")}
+                        <Icon as={SortingArrowIcon} boxSize={3} />
+                      </Flex>
+                    </Th>
+                  ) : (
+                    <Th
+                      {...column.getHeaderProps()}
+                      userSelect="none"
+                      textTransform="unset"
+                      key={index}
+                      maxW={1}
                     >
                       {column.render("Header")}
-                      <Icon as={SortingArrowIcon} boxSize={3} />
-                    </Flex>
-                  </Th>
-                ) : (
-                  <Th
-                    {...column.getHeaderProps()}
-                    userSelect="none"
-                    textTransform="unset"
-                    key={index}
-                    maxW={1}
+                    </Th>
+                  )
+                })}
+              </Tr>
+            ))}
+          </Thead>
+          <Tbody
+            backgroundColor="surface.primary"
+            {...getTableBodyProps()}
+          >
+            {rows.map((row, indexRow) => {
+              prepareRow(row)
+
+              const countdown = isComingSoon(row.original.launchDate)
+              const href = countdown
+                ? "strategies/" + row.original.slug
+                : "strategies/" + row.original.slug + "/manage"
+
+              if (row.original.isHero) {
+                return (
+                  <HeroTr
+                    slug={href}
+                    name={row.original.name}
+                    key={indexRow}
                   >
-                    {column.render("Header")}
-                  </Th>
+                    {row.cells.map((cell, indexData) => {
+                      return (
+                        <BorderTd
+                          {...cell.getCellProps()}
+                          key={indexData}
+                          href={href}
+                        >
+                          {cell.render("Cell")}
+                        </BorderTd>
+                      )
+                    })}
+                  </HeroTr>
                 )
-              })}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody
-          backgroundColor="surface.primary"
-          {...getTableBodyProps()}
-        >
-          {rows.map((row, indexRow) => {
-            prepareRow(row)
-
-            const countdown = isComingSoon(row.original.launchDate)
-            const href = countdown
-              ? "strategies/" + row.original.slug
-              : "strategies/" + row.original.slug + "/manage"
-
-            if (row.original.isHero) {
+              }
               return (
-                <HeroTr
+                <BorderTr
+                  opacity={row.original.deprecated ? 0.5 : 1}
+                  {...row.getRowProps()}
+                  key={indexRow}
                   slug={href}
                   name={row.original.name}
-                  key={indexRow}
                 >
                   {row.cells.map((cell, indexData) => {
                     return (
@@ -208,34 +233,12 @@ export const StrategyTable = memo(({
                       </BorderTd>
                     )
                   })}
-                </HeroTr>
+                </BorderTr>
               )
-            }
-            return (
-              <BorderTr
-                opacity={row.original.deprecated ? 0.5 : 1}
-                {...row.getRowProps()}
-                key={indexRow}
-                slug={href}
-                name={row.original.name}
-              >
-                {row.cells.map((cell, indexData) => {
-                  return (
-                    <BorderTd
-                      {...cell.getCellProps()}
-                      key={indexData}
-                      href={href}
-                    >
-                      {cell.render("Cell")}
-                    </BorderTd>
-                  )
-                })}
-              </BorderTr>
-            )
-          })}
-        </Tbody>
-      </Table>
-    </TableContainer>
-  )
-}
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    )
+  }
 )
