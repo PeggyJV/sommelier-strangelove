@@ -8,8 +8,16 @@ import { useStrategyData } from "./useStrategyData"
 import { useUserBalance } from "./useUserBalance"
 import { tokenConfig } from "data/tokenConfig"
 
+const useWalletClientConditional = () => {
+  const { isConnected } = useAccount()
+  if (!isConnected) {
+    return { data: undefined }
+  }
+  return useWalletClient()
+}
+
 export const useUserStrategyData = (strategyAddress: string, chain: string) => {
-  const { data: walletClient } = useWalletClient()
+  const { data: walletClient } = useWalletClientConditional()
   const { address: userAddress } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategyData = useStrategyData(strategyAddress, chain)
