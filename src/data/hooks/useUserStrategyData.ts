@@ -1,23 +1,20 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUserData } from "data/actions/common/getUserData"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useAccount, useWalletClient } from "wagmi"
+import { useAccount } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
 import { useUserBalance } from "./useUserBalance"
 import { tokenConfig } from "data/tokenConfig"
-
-const useWalletClientConditional = () => {
-  const { isConnected } = useAccount()
-  if (!isConnected) {
-    return { data: undefined }
-  }
-  return useWalletClient()
-}
+import { getWalletClient } from "@wagmi/core"
+import { wagmiConfig } from "context/wagmiContext"
 
 export const useUserStrategyData = (strategyAddress: string, chain: string) => {
-  const { data: walletClient } = useWalletClientConditional()
+  const { isConnected } = useAccount()
+  const walletClient = isConnected
+    ? getWalletClient(wagmiConfig)
+    : undefined
   const { address: userAddress } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategyData = useStrategyData(strategyAddress, chain)

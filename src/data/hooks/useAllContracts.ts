@@ -4,23 +4,18 @@ import {
   http,
   useAccount,
   usePublicClient,
-  useWalletClient,
 } from "wagmi"
+import { getWalletClient } from "@wagmi/core"
 import { chainConfig } from "data/chainConfig"
 import { INFURA_API_KEY } from "src/context/rpc_context"
 import { createPublicClient } from "viem"
-
-const useWalletClientConditional = () => {
-  const { isConnected } = useAccount()
-  if (!isConnected) {
-    return { data: undefined }
-  }
-  return useWalletClient()
-}
+import { wagmiConfig } from "context/wagmiContext"
 
 export const useAllContracts = () => {
   const publicClient = usePublicClient()
-  const { data: walletClient } = useWalletClientConditional()
+  const { isConnected } = useAccount()
+
+  const walletClient = isConnected ? getWalletClient(wagmiConfig) : undefined
 
   const query = useQuery({
     queryKey: [
