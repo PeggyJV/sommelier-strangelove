@@ -276,6 +276,13 @@ export const PageHome = () => {
     }) || []
 
     return filteredData.sort((a, b) => {
+      // Move Alpha stETH to the top of the list
+      if (a?.slug === "Alpha-stETH") {
+        return -1;
+      }
+      if (b?.slug === "Alpha-stETH") {
+        return 1;
+      }
 
       // 1. Priority - strategies deposit assets that user holds
       if (isConnected && userBalances.data) {
