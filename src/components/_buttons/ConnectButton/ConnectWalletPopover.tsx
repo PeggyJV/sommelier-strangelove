@@ -19,7 +19,6 @@ import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import Image from "next/image"
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
-import { useMemo } from "react"
 
 type ConnectWalletPopoverProps = ConnectButtonProps & {
   wagmiChainId?: number
@@ -34,10 +33,9 @@ export const ConnectWalletPopover = memo(({
   const { onOpen, onClose, isOpen } = useDisclosure()
   const { addToast } = useBrandedToast()
   const {
-    isConnecting,
     connector: activeConnector,
   } = useAccount()
-  const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
+
   const isLarger480 = useBetterMediaQuery("(min-width: 480px)")
 
   const styles: BaseButtonProps | false = !unstyled && {
@@ -63,8 +61,7 @@ export const ConnectWalletPopover = memo(({
     },
   }
 
-  const mutation = useMemo(
-    () => ({
+  const mutation = {
       onError: (error: any, args: any) => {
         const currentPageLink =
           typeof window !== "undefined" ? window.location.href : "N/A"
@@ -111,9 +108,7 @@ export const ConnectWalletPopover = memo(({
           window.location.reload()
         }
       },
-    }),
-    [addToast]
-  )
+    }
 
   const { connect, connectors, isPending } = useConnect({
     mutation,
@@ -180,7 +175,7 @@ export const ConnectWalletPopover = memo(({
                   }}
                 >
                   <HStack>
-                    {isConnecting && isPending ? (
+                    {isPending ? (
                       <Spinner />
                     ) : (
                       <Image
