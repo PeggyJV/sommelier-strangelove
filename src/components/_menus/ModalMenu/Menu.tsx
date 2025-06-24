@@ -86,12 +86,9 @@ export const Menu = ({
     )
   }
   const [displayedBalance, setDisplayedBalance] = useState(0)
-  const [isLoadingPrice, setIsLoadingPrice] = useState(false) // TODO: if coingecko ends up being kinda slow use this to render loading icon
   useEffect(() => {
     const fetchAndUpdateBalance = async () => {
       if (rawDepositAmount) {
-        setIsLoadingPrice(true) // Start the loading state
-
         try {
           const price = await fetchCoingeckoPrice(
             selectedToken!,
@@ -102,8 +99,6 @@ export const Menu = ({
         } catch (error) {
           console.error("Error fetching price:", error)
         }
-
-        setIsLoadingPrice(false) // End the loading state
       } else {
         setDisplayedBalance(0)
       }

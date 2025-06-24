@@ -9,6 +9,7 @@ import {
   VStack,
   Image,
 } from "@chakra-ui/react"
+import NextLink from "next/link"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -25,7 +26,7 @@ import {
   useDepositModalStore,
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useCallback } from "react"
 import { ChainFilter } from "components/_filters/ChainFilter"
 import { chainConfig } from "src/data/chainConfig"
 import {
@@ -70,96 +71,96 @@ export const PageHome = () => {
   const { isConnected } = useAccount();
   const { userBalances } = useUserBalances();
 
-  const columns = isDesktop
-    ? StrategyDesktopColumn({
-        onDepositModalOpen: ({
-          id,
-          type,
-        }: {
-          id: string
-          type: DepositModalType
-        }) => {
-          setIsOpen({
+  const columns = useMemo(() => {
+    return isDesktop
+      ? StrategyDesktopColumn({
+          onDepositModalOpen: ({
             id,
             type,
-          })
-        },
-      })
-    : isTab && !isMobile
-    ? StrategyTabColumn({
-        onDepositModalOpen: ({
-          id,
-          type,
-        }: {
-          id: string
-          type: DepositModalType
-        }) => {
-          setIsOpen({
+          }: {
+            id: string
+            type: DepositModalType
+          }) => {
+            setIsOpen({
+              id,
+              type,
+            })
+          },
+        })
+      : isTab && !isMobile
+      ? StrategyTabColumn({
+          onDepositModalOpen: ({
             id,
             type,
-          })
-        },
-      })
-    : StrategyMobileColumn()
+          }: {
+            id: string
+            type: DepositModalType
+          }) => {
+            setIsOpen({
+              id,
+              type,
+            })
+          },
+        })
+      : StrategyMobileColumn()
+  }, [isDesktop, isTab, isMobile, setIsOpen])
   
 
   const allChainIds = chainConfig.map((chain) => chain.id)
 
   //Get all deposit assets from all strategies and turn it into a set of unique values
-  const allDepositAssets: SymbolPathPair[] = Object.values(
-    cellarDataMap
-  )
-    .map((cellarData: CellarData): SymbolPathPair[] => {
-      // Don't include deprecated strategies
-      if (cellarData.deprecated) {
-        return []
+  const { 
+    uniqueAssetsMap, 
+    constantAllUniqueAssetsArray
+  }: 
+  { uniqueAssetsMap: Record<string, SymbolPathPair>, 
+    constantAllUniqueAssetsArray: SymbolPathPair[] 
+  } = useMemo(() => {
+    let allDepositAssets = Object.values(cellarDataMap)
+      .map((cellarData: CellarData): SymbolPathPair[] => {
+        // Don't include deprecated strategies
+        if (cellarData.deprecated) {
+          return []
+        }
+        return cellarData.depositTokens.list.map((symbol) => ({
+          symbol: symbol,
+          path: `/assets/icons/${symbol.toLowerCase()}.png`,
+        }))
+      })
+      .flat()
+
+    // Create an object to ensure uniqueness
+    const uniqueAssetsMap: Record<string, SymbolPathPair> = {}
+
+    allDepositAssets.forEach((pair: SymbolPathPair) => {
+      if (!uniqueAssetsMap[pair.symbol]) {
+        uniqueAssetsMap[pair.symbol] = pair
       }
-
-      return cellarData.depositTokens.list.map((symbol) => ({
-        symbol: symbol,
-        path: `/assets/icons/${symbol.toLowerCase()}.png`,
-      }))
     })
-    .flat()
-
-  // Create an object to ensure uniqueness
-  const uniqueAssetsMap: Record<string, SymbolPathPair> = {}
-
-  allDepositAssets.forEach((pair: SymbolPathPair) => {
-    if (!uniqueAssetsMap[pair.symbol]) {
-      uniqueAssetsMap[pair.symbol] = pair
-    }
-  })
-
-  // Copy the unique assets into a constants array
+    // Copy the unique assets into a constants array
   const constantAllUniqueAssetsArray = Object.values(uniqueAssetsMap)
 
+    return { uniqueAssetsMap, constantAllUniqueAssetsArray }
+  }, [cellarDataMap])
+
   // Always float up "WETH", "USDC", "WBTC", "SOMM", "stETH" to the top of the list in that order for the inital render
-  const constantOrderedAllUniqueAssetsArray = [
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "WETH"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "USDC"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "WBTC"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "SOMM"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) => pair.symbol === "stETH"
-    ),
-    ...constantAllUniqueAssetsArray.filter(
-      (pair) =>
-        pair.symbol !== "WETH" &&
-        pair.symbol !== "USDC" &&
-        pair.symbol !== "WBTC" &&
-        pair.symbol !== "SOMM" &&
-        pair.symbol !== "stETH"
-    ),
-  ]
+  const constantOrderedAllUniqueAssetsArray = useMemo(() => {
+    return [
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "WETH"),
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "USDC"),
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "WBTC"),
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "SOMM"),
+      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "stETH"),
+      ...constantAllUniqueAssetsArray.filter(
+        (pair) =>
+          pair.symbol !== "WETH" &&
+          pair.symbol !== "USDC" &&
+          pair.symbol !== "WBTC" &&
+          pair.symbol !== "SOMM" &&
+          pair.symbol !== "stETH"
+      ),
+    ]
+  }, [constantAllUniqueAssetsArray])
 
   const [selectedChainIds, setSelectedChainIds] =
     useState<string[]>(allChainIds)
@@ -208,7 +209,7 @@ export const PageHome = () => {
     showIncentivised,
   ])
 
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     setSelectedChainIds(initialChainIds)
     setSelectedDepositAssets(initialDepositAssets)
     setShowDeprecated(initialShowDeprecated)
@@ -227,7 +228,7 @@ export const PageHome = () => {
         stateSetFunction: setShowDeprecated,
       },
     ])
-  }
+  }, [])
 
   const strategyData = useMemo(() => {
     const filteredData = data?.filter((item) => {
@@ -275,6 +276,13 @@ export const PageHome = () => {
     }) || []
 
     return filteredData.sort((a, b) => {
+      // Move Alpha stETH to the top of the list
+      if (a?.slug === "Alpha-stETH") {
+        return -1;
+      }
+      if (b?.slug === "Alpha-stETH") {
+        return 1;
+      }
 
       // 1. Priority - strategies deposit assets that user holds
       if (isConnected && userBalances.data) {
@@ -315,7 +323,7 @@ export const PageHome = () => {
       return parseFloat(b?.tvm?.value ?? '') - parseFloat(a?.tvm?.value ?? '');
     });
   }, [
-    data,
+    data?.length,
     selectedChainIds,
     selectedDepositAssets,
     showDeprecated,
@@ -379,7 +387,7 @@ export const PageHome = () => {
           w={{ base: "100%", md: "30%" }}
         >
           <Heading textAlign="center">
-            Alpha stETH - Right time and right place liquidity
+            Alpha STETH - Right time and right place liquidity
           </Heading>
           <Text textAlign="center">
             A dynamic strategy to optimize yield thorugh AI-enhanced
@@ -387,9 +395,8 @@ export const PageHome = () => {
           </Text>
         </VStack>
         <VStack align="center" justify="center">
-          <Link
+          <NextLink
             href="/strategies/Alpha-stETH/manage"
-            textDecoration="none"
           >
             <SecondaryButton
               fontSize="md"
@@ -400,12 +407,12 @@ export const PageHome = () => {
             >
               Explore Vault
             </SecondaryButton>
-          </Link>
+          </NextLink>
         </VStack>
         <VStack align="center" justify="center">
           <Image
             src="/assets/images/eth-lido-uni.png"
-            alt="Alpha stETH"
+            alt="Alpha STETH"
           />
         </VStack>
       </HStack>

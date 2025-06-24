@@ -12,7 +12,7 @@ import {
 import { BaseButton, BaseButtonProps } from "../BaseButton"
 import { MoneyWalletIcon } from "components/_icons"
 import { useAccount, useConnect } from "wagmi"
-import React from "react"
+import React, { memo } from "react"
 import { analytics } from "utils/analytics"
 import { ConnectButtonProps } from "."
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
@@ -24,7 +24,7 @@ type ConnectWalletPopoverProps = ConnectButtonProps & {
   wagmiChainId?: number
 }
 
-export const ConnectWalletPopover = ({
+export const ConnectWalletPopover = memo(({
   unstyled,
   children,
   wagmiChainId,
@@ -33,11 +33,9 @@ export const ConnectWalletPopover = ({
   const { onOpen, onClose, isOpen } = useDisclosure()
   const { addToast } = useBrandedToast()
   const {
-    isConnected,
-    isConnecting,
     connector: activeConnector,
   } = useAccount()
-  const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
+
   const isLarger480 = useBetterMediaQuery("(min-width: 480px)")
 
   const styles: BaseButtonProps | false = !unstyled && {
@@ -63,9 +61,8 @@ export const ConnectWalletPopover = ({
     },
   }
 
-  const { connect, connectors, isPending } = useConnect({
-    mutation: {
-      onError: (error, args) => {
+  const mutation = {
+      onError: (error: any, args: any) => {
         const currentPageLink =
           typeof window !== "undefined" ? window.location.href : "N/A"
 
@@ -79,15 +76,13 @@ export const ConnectWalletPopover = ({
           error: error.name,
           message: error.message,
           wallet: args.connector.name,
-          pageLink: currentPageLink, // Added
-          // Add other data like walletSoftware and walletVersion if available
+          pageLink: currentPageLink,
         })
       },
-      onSuccess: (data, args) => {
+      onSuccess: (data: any, args: any) => {
         const { accounts } = data
-        const  account = accounts[0]
+        const account = accounts[0]
         const walletSoftware = args.connector.name
-        //const walletVersion = args.connector.version // Placeholder. Adjust based on where you get this info.
         const currentPageLink =
           typeof window !== "undefined" ? window.location.href : "N/A"
 
@@ -107,15 +102,16 @@ export const ConnectWalletPopover = ({
             account,
             wallet: args.connector.name,
             walletSoftware,
-            //walletVersion,
             pageLink: currentPageLink,
           })
 
-          // Refresh the page upon successful connection
           window.location.reload()
         }
       },
     }
+
+  const { connect, connectors, isPending } = useConnect({
+    mutation,
   })
 
   const openWalletSelection = () => {
@@ -138,6 +134,7 @@ export const ConnectWalletPopover = ({
       isOpen={isOpen}
       onOpen={openWalletSelection}
       onClose={onClose}
+      isLazy
     >
       <PopoverTrigger>
         <BaseButton {...styles} {...rest}>
@@ -178,7 +175,7 @@ export const ConnectWalletPopover = ({
                   }}
                 >
                   <HStack>
-                    {isConnecting && isPending ? (
+                    {isPending ? (
                       <Spinner />
                     ) : (
                       <Image
@@ -199,3 +196,4 @@ export const ConnectWalletPopover = ({
     </Popover>
   )
 }
+)

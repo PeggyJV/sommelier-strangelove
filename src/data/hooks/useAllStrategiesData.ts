@@ -10,7 +10,6 @@ import { tokenConfig } from "data/tokenConfig"
 import { getChainByViemId, supportedChains } from "src/data/chainConfig"
 
 export const useAllStrategiesData = () => {
-  const client = usePublicClient()
   const { chain: viemChain } = useAccount()
   const { data: allContracts } = useAllContracts()
 
@@ -50,7 +49,7 @@ export const useAllStrategiesData = () => {
   }, [])
 
   const query = useQuery({
-    queryKey: ["USE_ALL_STRATEGIES_DATA", client?.uid ],
+    queryKey: ["USE_ALL_STRATEGIES_DATA", viemChain?.id],
     queryFn: async () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,

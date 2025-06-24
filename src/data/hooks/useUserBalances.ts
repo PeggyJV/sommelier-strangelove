@@ -88,7 +88,8 @@ export const useUserBalances = () => {
     queryKey: ["USE_USER_BALANCES"],
     queryFn: async () => {
       return await fetchBalances()
-    }
+    },
+    enabled: !!chain && !!address
   }
   )
 

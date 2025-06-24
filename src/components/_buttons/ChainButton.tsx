@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react"
 import { ChevronDownIcon, CheckIcon } from "components/_icons"
 import { useSwitchChain, useAccount } from "wagmi"
+import { useMemo } from "react"
 
 import {
   chainConfigMap,
@@ -36,10 +37,13 @@ const ChainButton = ({
 
   const effectiveChain = chainConfigMap[chain.id] || placeholderChain
 
-  const chainKeys = Object.keys(chainConfigMap)
-  const filteredChainKeys = chainKeys.filter((key) =>
-    supportedChains.includes(key)
-  )
+  const filteredChainKeys= useMemo(() => {
+    const chainKeys = Object.keys(chainConfigMap)
+    const filteredChainKeys = chainKeys.filter((key) =>
+      supportedChains.includes(key)
+    )
+    return filteredChainKeys 
+  }, [])
 
   const handleNetworkChange = async (chainId: string) => {
     try {
@@ -67,7 +71,7 @@ const ChainButton = ({
   }
 
   return (
-    <Popover placement="bottom">
+    <Popover placement="bottom" isLazy>
       <PopoverTrigger>
         <Button
           bg="none"

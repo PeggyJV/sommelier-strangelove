@@ -153,16 +153,6 @@ export const SommelierTab = ({
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
 
-  function trackedSetSelectedToken(value: TokenType | null) {
-    if (value && value !== selectedToken) {
-      // analytics.track("deposit.stable-selected", {
-      //   ...baseAnalytics,
-      //   stable: value.symbol,
-      // })
-    }
-    setSelectedToken(value)
-  }
-
   const { cellarSigner, boringVaultLens } = useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
@@ -1110,7 +1100,7 @@ export const SommelierTab = ({
           <FormControl isInvalid={isError as boolean | undefined}>
             <ModalMenu
               depositTokens={depositTokens}
-              setSelectedToken={trackedSetSelectedToken}
+              setSelectedToken={setSelectedToken}
               activeAsset={activeAsset?.address}
               selectedTokenBalance={selectedTokenBalance}
               isDisabled={isSubmitting}

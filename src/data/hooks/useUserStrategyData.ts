@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUserData } from "data/actions/common/getUserData"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useAccount, useWalletClient } from "wagmi"
+import { useAccount } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
@@ -9,7 +9,6 @@ import { useUserBalance } from "./useUserBalance"
 import { tokenConfig } from "data/tokenConfig"
 
 export const useUserStrategyData = (strategyAddress: string, chain: string) => {
-  const { data: walletClient } = useWalletClient()
   const { address: userAddress } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategyData = useStrategyData(strategyAddress, chain)
@@ -42,14 +41,7 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
     strategyAddress +
     (config.chain.id !== "ethereum" ? "-" + chain : "")
   const query = useQuery({
-    queryKey: [
-      "USE_USER_DATA",
-      {
-        signer: true,
-        contractAddress: strategyAddress,
-        userAddress,
-      },
-    ],
+    queryKey: ["USE_USER_DATA", strategyAddress, chain, userAddress],
     queryFn: async () => {
       return await getUserData({
         contracts: allContracts![key],
@@ -62,8 +54,8 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
       })
     },
     enabled:
+      !!userAddress &&
       !!allContracts &&
-      !!walletClient &&
       !!sommPrice.data &&
       !!lpToken &&
       !!baseAssetPrice &&

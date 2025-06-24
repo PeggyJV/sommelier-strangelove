@@ -11,6 +11,7 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { chainSlugMap } from "data/chainConfig"
 
 export const ethTrendGrowth: CellarData = {
+  deprecated: true,
   name: "ETH Trend Growth",
   slug: config.CONTRACT.ETH_TREND_GROWTH.SLUG,
   dashboard:

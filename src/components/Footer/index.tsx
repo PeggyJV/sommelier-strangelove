@@ -6,7 +6,7 @@ import {
   Text,
   Wrap,
 } from "@chakra-ui/react"
-import { FC } from "react"
+import { FC, memo } from "react"
 import { Socials } from "components/Socials"
 import { FooterLink } from "./FooterLink"
 import { ExternalLinkIcon } from "components/_icons"
@@ -122,4 +122,4 @@ const Footer: FC<ContainerProps> = (props) => {
   )
 }
 
-export default Footer
+export default memo(Footer)
