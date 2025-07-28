@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_BASE_URL = "https://api.somm.finance/merkle/"
+const API_BASE_URL = "https://api.sommelier.finance/merkle/"
 
 export const fetchMerkleData = async (
   vaultAddress: string,

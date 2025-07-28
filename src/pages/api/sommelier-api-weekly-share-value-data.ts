@@ -14,7 +14,7 @@ const sommelierAPIWeeklyShareValueData = async (
     const startEpochNumber = Number(epoch)
 
     const data = await fetch(
-      `https://api.somm.finance/dailyData/${chain}/${cellarAddress}/${startEpochNumber}/latest`,
+      `https://api.sommelier.finance/dailyData/${chain}/${cellarAddress}/${startEpochNumber}/latest`,
       {
         method: "GET",
         headers: {

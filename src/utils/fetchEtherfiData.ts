@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_BASE_URL = "https://api.somm.finance/etherfi/ethereum/"
+const API_BASE_URL = "https://api.sommelier.finance/etherfi/ethereum/"
 
 export const fetchEtherfiData = async (userAddress: string) => {
   try {
