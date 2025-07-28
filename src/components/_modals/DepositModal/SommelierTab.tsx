@@ -1114,7 +1114,7 @@ export const SommelierTab = ({
         <Text as="span" style={{ textAlign: "center" }}>
           Bridge your SOMM tokens to Ethereum via{" "}
           <Link
-            href="https://app.somm.finance/bridge"
+            href="https://app.sommelier.finance/bridge"
             isExternal
             textDecor="underline"
           >

@@ -18,7 +18,7 @@ export const RestrictedModal = (
           location, and you are not using Safari Private browsing,
           then try again. To learn more, view our{" "}
           <Link
-            href="https://app.somm.finance/user-terms"
+            href="https://app.sommelier.finance/user-terms"
             isExternal
             textDecor="underline"
           >

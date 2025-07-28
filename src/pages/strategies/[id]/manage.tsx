@@ -30,7 +30,7 @@ const CellarPage: NextPage<CellarPageProps> = ({ id, blocked }) => {
           site_name: "Somm Finance",
           images: [
             {
-              url: "https://app.somm.finance/ogimage.png",
+              url: "https://app.sommelier.finance/ogimage.png",
               width: 1200,
               height: 630,
               alt: "Your dynamic DeFi strategy connoisseur",

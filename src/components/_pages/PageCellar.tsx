@@ -105,7 +105,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
             <>
               Turbo eETH V1 (current vault) is migrating to{" "}
               <a
-                href="https://app.somm.finance/Turbo-eETHV2/manage"
+                href="https://app.sommelier.finance/Turbo-eETHV2/manage"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ textDecoration: "underline" }}
@@ -117,7 +117,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
                 Your capital in V1 is already earning the native yield
                 from{" "}
                 <a
-                  href="https://app.somm.finance/Turbo-eETHV2/manage"
+                  href="https://app.sommelier.finance/Turbo-eETHV2/manage"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ textDecoration: "underline" }}
@@ -132,7 +132,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
                 withdraw your assets from Turbo eETH V1 and deposit
                 into{" "}
                 <a
-                  href="https://app.somm.finance/Turbo-eETHV2/manage"
+                  href="https://app.sommelier.finance/Turbo-eETHV2/manage"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ textDecoration: "underline" }}

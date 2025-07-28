@@ -185,7 +185,7 @@ export const turbodivETH: CellarData = {
     
     Link to the official T&Cs: <a href="https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307" style="color: white; text-decoration: underline;" target="_blank">https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307</a>
     
-    Note that Turbo divETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+    Note that Turbo divETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
 
     Risks: `All Somm vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
@@ -238,7 +238,7 @@ export const turbodivETH: CellarData = {
     {
       question: "Who is eligible to participate?",
       answer:
-        "Although there is no KYC enforced, Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the <a href='https://app.somm.finance/user-terms?_gl=1*1rw42lj*_gcl_au*MTIyOTI2NDM0My4xNzA2NTIxMDIy' target='_blank' style='text-decoration: underline;'>Somm User Terms</a>.",
+        "Although there is no KYC enforced, Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the <a href='https://app.sommelier.finance/user-terms?_gl=1*1rw42lj*_gcl_au*MTIyOTI2NDM0My4xNzA2NTIxMDIy' target='_blank' style='text-decoration: underline;'>Somm User Terms</a>.",
     },
     {
       question:

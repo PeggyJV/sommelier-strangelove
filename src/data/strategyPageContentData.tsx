@@ -564,7 +564,7 @@ export const strategyPageContentData = {
       ],
       description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
       <br/><br/>
-      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
     },
     howItWorks: `The vault will initially generate yield using two primary techniques, but has the ability to integrate with other protocols for new capabilities in the future. The techniques initially used in the vault:
@@ -610,7 +610,7 @@ export const strategyPageContentData = {
       ],
       description: `Liquid Staked Tokens (LSTs) have gained significant traction since Ethereum's transition to proof-of-stake by allowing users to earn staking yield while also using that capital within DeFi, resolving the tension between securing the network and accessing liquidity to pursue DeFi opportunities. The innovations from liquid staking providers like Lido and RocketPool have seen LSTs become a growing component of Ethereum DeFi, and Real Yield ETH is poised to be a powerful vault for capturing organic yield across prominent LSTs.
       <br/><br/>
-      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
     },
     howItWorks: `The vault will initially generate yield using two primary techniques, but has the ability to integrate with other protocols for new capabilities in the future. The techniques initially used in the vault:
@@ -654,7 +654,7 @@ export const strategyPageContentData = {
       ],
       description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.
       <br/><br/>
-      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
     },
     howItWorks: ``,
@@ -689,7 +689,7 @@ export const strategyPageContentData = {
       ],
       description: `Maximize your ETH through leveraged staking and liquidity provision of ETH liquid staking tokens.
       <br/><br/>
-      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
     },
     howItWorks: ``,
@@ -775,7 +775,7 @@ export const strategyPageContentData = {
       ],
       description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
       <br/><br/>
-      Note that Real Yield LINK and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield LINK and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
 
       `,
     },
@@ -814,7 +814,7 @@ export const strategyPageContentData = {
       ],
       description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
       <br/><br/>
-      Note that Real Yield 1INCH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield 1INCH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
 `,
     },
     howItWorks: `
@@ -852,7 +852,7 @@ export const strategyPageContentData = {
       ],
       description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
       <br/><br/>
-      Note that Real Yield ENS and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield ENS and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
 `,
     },
     howItWorks: `
@@ -890,7 +890,7 @@ export const strategyPageContentData = {
       ],
       description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
       <br/><br/>
-      Note that Real Yield SNX and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield SNX and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
 `,
     },
     howItWorks: `
@@ -928,7 +928,7 @@ export const strategyPageContentData = {
       ],
       description: `The purpose of this vault is to provide token holders with a passive yield opportunity for their assets. For some of these tokens, yield opportunities are sparse and the vault presents an opportunity to earn more yield. For other tokens, the vault presents a liquid yield opportunity that is higher than typical lending rates (at least in current conditions).
       <br/><br/>
-      Note that Real Yield UNI and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield UNI and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
 `,
     },
     howItWorks: `
@@ -960,7 +960,7 @@ export const strategyPageContentData = {
       ],
       description: `Your gateway to EigenLayer liquid restaking and Kelp's DeFi ecosystem.
       <br/><br/>
-      Note that Turbo rsETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Turbo rsETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
 `,
     },
     howItWorks: ``,
@@ -991,7 +991,7 @@ export const strategyPageContentData = {
       ],
       description: `Your gateway to EigenLayer liquid restaking and Renzo's DeFi ecosystem.
       <br/><br/>
-      Note that Turbo ezETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Turbo ezETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
 `,
     },
     howItWorks: ``,
@@ -1027,7 +1027,7 @@ export const strategyPageContentData = {
       ],
       description: `The Fraximal vault is poised to offer users the best way to get involved in Fraxlend through automated repositioning to ensure the vault captures optimized yields, while avoiding the on-going gas costs of rebalancing.
       <br/><br/>
-      Note that Fraximal and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+      Note that Fraximal and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: `
     On Fraxlend, the yield offered to FRAX suppliers is characteristically volatile, which offers opportunities but also requires constant monitoring and repositioning. The money market accepts a wide variety of smaller cap tokens as collateral, making for fluctuating yield opportunities ranging from 0.5% to more than 20%. This vault will automate the process of capturing the highest interest rates available at any given moment, while also mitigating risk by ensuring that the vault is not overly exposed to any specific lending pool at a time.
@@ -1065,7 +1065,7 @@ export const strategyPageContentData = {
       ],
       description: `The primary goal of Real Yield BTC is to make available sustainable WBTC-denominated yields through a dynamic and evolving set of vaults. Initially, the vault will use Morpho for efficient leveraged ETH staking against WBTC collateral. The vault may additionally borrow ETH to deposit into Real Yield ETH. In the future, there is a possibility for Real Yield BTC to evolve its capabilities by making use of other protocol integrations or Somm vaults.
       <br/><br/>
-      Note that Real Yield BTC and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+      Note that Real Yield BTC and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: `
     The vault will enable WBTC as collateral on Morpho to borrow ETH and then leverage stake. Any yield generated from staking in excess of the borrow cost is used to purchase WBTC to add to your position.`,
@@ -1104,7 +1104,7 @@ export const strategyPageContentData = {
       <br/><br/>
       Lastly, the vault will have the option to allocate to swETH pools on Balancer if yields are favorable, ensuring that Turbo swETH users access the best possible yields. As swETH's presence continues to expand across the Liquid Staking DeFi ecosystem and Somm's roster of protocol integrations widens, the Turbo swETH vault stands poised to tap into emerging yield opportunities.
       <br/><br/>
-      Note that Turbo swETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+      Note that Turbo swETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: `The vault engages in tick optimization by pairing swETH and WETH on Uniswap V3 to generate yield for depositors and to improve swap efficiency for swETH. As the Swell ecosystem grows and swETH integrates with additional applications the vault may take advantage of other yield opportunities that are whitelisted by governance. `,
   },
@@ -1139,7 +1139,7 @@ export const strategyPageContentData = {
         `Fully automated with built-in auto-compounding.`,
       ],
       description: `Turbo GHO will be a multi-strategy vault that aims to give depositors the highest yield available for GHO and GHO/stable pairs. The innovative Sommelier vault architecture will allow Turbo GHO to allocate to the strategy or strategies that are optimal based on market conditions. A major focus for Turbo GHO will be LPing on Uniswap V3 with GHO paired with either USDC, USDT, or LUSD (the paired stable coin will be decided upon based on volume and liquidity structures). Beyond Uniswap, the vault will harness GHO's potential to implement strategies, including looping strategies on Aave. <br/><br/>
-      Note that Turbo GHO and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+      Note that Turbo GHO and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: `The initial phase of Turbo GHO will concentrate on optimizing ticks within Uniswap v3 GHO-stablecoin pairs due to the vault’s potential to capture sustainable real yield. The vault will have the option to allocate to GHO pools on Balancer if yields are favorable, ensuring that GHO users access the best possible yields. Lastly, the vault will have the ability to borrow against GHO as part of hedging or looping strategies.`,
   },
@@ -1174,7 +1174,7 @@ export const strategyPageContentData = {
       ],
       description: `We have been optimizing our trend-following strategy with ETH over the past 2 years to identify the best indicators that best determine when we should be fully exposed to ETH to maximize exposure to upside volatility while also setting a dynamic stop loss to minimize drawdowns. Since this strategy is focused on the daily timeframe, the trading costs are minimal to execute this strategy, and the yields from Real Yield ETH will be helpful to grow the ETH position since the average trade is held for 2-3 months based on the backtested data. When the trend-following strategy flips bearish and it is confirmed via a daily market close, the long ETH position is exited to Real Yield USD so stablecoin yield is generated while the strategy is not exposed to ETH downside volatility which minimizes drawdowns.
        <br/><br/>
-      Note that ETH Trend Growth and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+      Note that ETH Trend Growth and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: ``,
   },
@@ -1210,7 +1210,7 @@ export const strategyPageContentData = {
       ],
       description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Somm strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
      <br/><br/>
-    Note that Turbo stETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    Note that Turbo stETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: ``,
   },
@@ -1346,7 +1346,7 @@ export const strategyPageContentData = {
       ],
       description: `Somm is ready to strengthen its connection with the growing collective of SOMM token holders on Ethereum, enabling them to actively engage in the SOMM community without the need to bridge out of Ethereum. This is done through the Turbo SOMM vault, which provides users the option to deposit their SOMM incentives into a separate vault focused on optimizing an ETH-SOMM LP position on Uniswap v3. Users of the vault will be able to retain some exposure to SOMM while also earning swap fees generated on this trading pair.      
       <br/><br/>
-      Note that Turbo SOMM and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+      Note that Turbo SOMM and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: ``,
   },
@@ -1382,7 +1382,7 @@ export const strategyPageContentData = {
       ],
       description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.      
       <br/><br/>
-      Note that Turbo eETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+      Note that Turbo eETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: ``,
   },
@@ -1418,7 +1418,7 @@ export const strategyPageContentData = {
       ],
       description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Somm strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
      <br/><br/>
-    Note that Turbo stETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    Note that Turbo stETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: ``,
   },
@@ -1454,7 +1454,7 @@ export const strategyPageContentData = {
       ],
       description: `Supercharge your ETH lending and leveraged staking experience on Morpho Blue.
      <br/><br/>
-    Note that Morpho ETH Maximizer and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    Note that Morpho ETH Maximizer and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
     },
     howItWorks: ``,
   },
@@ -1482,7 +1482,7 @@ export const strategyPageContentData = {
       ],
       description: `Maximize ETH yield through staking and liquidity provision of ETH liquid staking tokens.
       <br/><br/>
-      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Real Yield ETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
     },
     howItWorks: ``,
@@ -1544,7 +1544,7 @@ export const strategyPageContentData = {
       <br/><br/>
       Link to the official T&Cs: <a href="https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307" style="color: white; text-decoration: underline;" target="_blank">https://www.tally.xyz/gov/diva/proposal/96793334092430167694944466053987118900614331217239498770103733484972019888307</a>
       <br/><br/>
-      Note that Turbo divETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
+      Note that Turbo divETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
       `,
       },
       howItWorks: ``,
@@ -1580,7 +1580,7 @@ export const strategyPageContentData = {
         ],
         description: `Gain exposure to ETHx DeFi opportunities through this dynamic and evolving vault.
      <br/><br/>
-    Note that Turbo ETHx and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    Note that Turbo ETHx and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
       },
       howItWorks: ``,
     },
@@ -1616,7 +1616,7 @@ export const strategyPageContentData = {
         ],
         description: `To start, Turbo eETH will primarily provide DEX liquidity on Uniswap V3 and Balancer to eETH-ETH pairs. The vault will also do a small amount of ETH lending on Aave and Morpho as an alternate strategy to diversify its yield sources.      
       <br/><br/>
-      Note that Turbo eETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+      Note that Turbo eETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
       },
       howItWorks: ``,
     },
@@ -1652,7 +1652,7 @@ export const strategyPageContentData = {
         ],
         description: `Lido’s stETH is one of the most well-regarded and widely used ETH LSTs in DeFi. Its numerous DeFi integrations and deep liquidity make it an attractive asset to use for dynamic Somm strategies. This vault will focus on dynamically providing liquidity across leverage staking, concentrated liquidity provision on DEXs and LST-ETH peg arbitrage to optimize ETH yields for users.
      <br/><br/>
-    Note that Turbo stETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+    Note that Turbo stETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
       },
       howItWorks: ``,
     },
@@ -1688,7 +1688,7 @@ export const strategyPageContentData = {
         ],
         description: `Turbo eETH aims to be your gateway to EigenLayer liquid restaking and ether.fi's DeFi ecosystem. The vault will pursue a number of DeFi strategies, including leveraged staking weETH to maximize EigenLayer and ether.fi points as well as LPing to eETH pairs on DEXs.     
           <br/><br/>
-          Note that Turbo eETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.somm.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
+          Note that Turbo eETH and Somm vaults are not open to persons or citizens of the United States and other restricted countries - for more details please refer to the Somm <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>`,
       },
       howItWorks: ``,
     },
