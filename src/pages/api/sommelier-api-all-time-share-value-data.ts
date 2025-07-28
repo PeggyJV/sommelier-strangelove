@@ -12,7 +12,7 @@ const sommelierAPIAllTimeShareValueData = async (
     let { cellarAddress, chain } = req.query
 
     const data = await fetch(
-      `https://api.sommelier.finance/dailyData/${chain}/${cellarAddress}/0/latest`,
+      `https://api.somm.finance/dailyData/${chain}/${cellarAddress}/0/latest`,
       {
         method: "GET",
         headers: {

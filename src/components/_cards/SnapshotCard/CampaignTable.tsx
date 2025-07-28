@@ -85,7 +85,7 @@ const CampaignTable: React.FC = () => {
                   >
                     <HStack>
                       <Link
-                        href="https://www.sommelier.finance/staking"
+                        href="https://www.somm.finance/staking"
                         isExternal
                         color="white.500"
                         textDecoration="underline"
@@ -111,7 +111,7 @@ const CampaignTable: React.FC = () => {
                     >
                       <HStack>
                         <Link
-                          href="https://app.sommelier.finance/strategies/real-yield-eth-arb/manage"
+                          href="https://app.somm.finance/strategies/real-yield-eth-arb/manage"
                           isExternal
                           color="white.500"
                           textDecoration="underline"

@@ -9,7 +9,7 @@ const sommelierAPITVL = async (
 ) => {
   try {
     const data = await fetch(
-      `https://api.sommelier.finance/tvl`,
+      `https://api.somm.finance/tvl`,
       {
         method: "GET",
         headers: {

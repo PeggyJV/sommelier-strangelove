@@ -96,7 +96,7 @@ export const Strategy: FC<StrategyProps> = ({ data, ...rest }) => {
 
       <Link
         isExternal
-        href="https://app.sommelier.finance"
+        href="https://app.somm.finance"
         textDecoration="none"
       >
         <SecondaryButton
