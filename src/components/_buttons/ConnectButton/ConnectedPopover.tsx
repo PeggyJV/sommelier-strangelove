@@ -82,7 +82,7 @@ export const ConnectedPopover = () => {
     })
     addToast({
       heading: "Importing Token",
-      body: <Text>Importing SOMM token to wallet...</Text>,
+      body: <Text>Importing token to wallet...</Text>,
       status: "info",
     })
   }
@@ -228,9 +228,7 @@ export const ConnectedPopover = () => {
             >
               <HStack>
                 <Avatar src={avatarSrc} size="2xs" />
-                <Text fontWeight="semibold">
-                  Import SOMM token to Wallet
-                </Text>
+                <Text fontWeight="semibold">Import token to wallet</Text>
               </HStack>
             </Stack>
           </Stack>

@@ -43,6 +43,7 @@ export const StrategyMobileColumn = ({
             icon={row.original.logo}
             title={row.original.name}
             provider={row.original.provider.title}
+            vaultType={row.original.vaultType}
             type={row.original.type}
             date={row.original.launchDate}
             description={row.original.description}

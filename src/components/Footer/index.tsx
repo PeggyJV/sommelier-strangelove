@@ -11,6 +11,7 @@ import { Socials } from "components/Socials"
 import { FooterLink } from "./FooterLink"
 import { ExternalLinkIcon } from "components/_icons"
 import { Disclaimer } from "./Disclaimer"
+import { VaultsDisclaimer } from "./VaultsDisclaimer"
 // import { About } from "./About"
 import { Overview } from "./Overview"
 import { useRouter } from "next/router"
@@ -23,7 +24,8 @@ const Footer: FC<ContainerProps> = (props) => {
     <Container maxW="container.lg">
       {/* <About /> */}
       {!selectedStrategy && <Overview />}
-      <Disclaimer />
+      {/* Show a specific disclaimer only on the Vaults page (no strategy selected) */}
+      {!selectedStrategy ? <VaultsDisclaimer /> : <Disclaimer />}
       <Container
         as="footer"
         display="flex"

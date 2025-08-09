@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
 import { CellarType, Badge } from "data/types"
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { StrategyDate } from "./StrategyDate"
 import React from "react"
 
@@ -23,6 +23,7 @@ interface StrategySectionProps extends StackProps {
   title: string
   description: string
   provider?: string
+  vaultType?: "legacy" | "new"
   type?: number
   date?: string
   netValue?: string
@@ -63,6 +64,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   icon,
   title,
   provider,
+  vaultType,
   type,
   description,
   date,
@@ -72,9 +74,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   badges,
   ...props
 }) => {
-  const [isMobile, setIsMobile] = useState(
-    window.innerWidth <= 767
-  )
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767)
 
   useEffect(() => {
     const handleResize = () => {
@@ -170,6 +170,13 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             {provider &&
               strategyType &&
               formatText(`${provider} · ${strategyType}`, isMobile)}
+            {vaultType && (
+              <Text color="neutral.400" fontSize="12px">
+                {vaultType === "legacy"
+                  ? "(Legacy vault)"
+                  : "(New vault)"}
+              </Text>
+            )}
             {netValue && (
               <Text
                 color="neutral.400"

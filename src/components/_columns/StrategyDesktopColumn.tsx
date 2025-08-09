@@ -6,19 +6,15 @@ import {
   HStack,
   Text,
   Tooltip,
-  VStack,
 } from "@chakra-ui/react"
-import { PercentageText } from "components/PercentageText"
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { InformationIcon } from "components/_icons"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
-import { cellarDataMap } from "data/cellarDataMap"
 import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
-import { isTokenPriceEnabledApp } from "data/uiConfig"
 import { useState } from "react"
 import { CellValue } from "react-table"
 import { analytics } from "utils/analytics"
@@ -75,6 +71,7 @@ export const StrategyDesktopColumn = ({
             onClick={() => trackVaultInteraction(row.original.name)}
             title={row.original.name}
             provider={row.original.provider.title}
+            vaultType={row.original.vaultType}
             type={row.original.type}
             date={row.original.launchDate}
             description={row.original.description}
@@ -269,13 +266,13 @@ export const StrategyDesktopColumn = ({
       Header: () => (
         <Tooltip
           arrowShadowColor="purple.base"
-          label="APY after any platform and strategy provider fees, inclusive of rewards program earnings when an active rewards program is in place"
+          label="Net of fees; calculated from share value using NAV bands. Your realized yield may differ based on when you enter and exit."
           placement="top"
           color="neutral.300"
           bg="surface.bg"
         >
           <HStack spacing={1}>
-            <Text>Net APY</Text>
+            <Text>Current Yield</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
         </Tooltip>
@@ -320,47 +317,41 @@ export const StrategyDesktopColumn = ({
     },
     {
       Header: () => (
-        <Text>
-          {`${timeline.title} Token Price`}
-          <br />
-        </Text>
+        <Tooltip
+          arrowShadowColor="purple.base"
+          label="Optional benefits that may apply to new vaults"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack spacing={1}>
+            <Text>Optionality</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
       ),
-      accessor: `changes.${timeline.value}`,
+      id: "optionality",
+      accessor: (row: any) => row.vaultType,
       Cell: ({ row }: any) => {
-        const cellarConfig = cellarDataMap[row.original.slug].config
-
-        if (!isTokenPriceEnabledApp(cellarConfig))
+        const vt = row.original.vaultType
+        // Placeholder logic: default "Yield" for new; "Not available" for legacy
+        if (vt === "legacy") {
           return (
-            <VStack>
-              <Tooltip
-                label={`Token price change`}
-                color="neutral.100"
-                border="0"
-                fontSize="12px"
-                bg="neutral.900"
-                fontWeight={600}
-                py="4"
-                px="6"
-                boxShadow="xl"
-                shouldWrapChildren
-              >
-                <PercentageText
-                  data={row.original.changes?.[timeline.value]}
-                  arrowT2
-                  fontWeight={600}
-                />
-              </Tooltip>
-            </VStack>
+            <Text fontWeight={600} fontSize="12px" textAlign="center">
+              Not available
+            </Text>
           )
-
+        }
+        // TODO: derive actual list when data fields are available
         return (
-          <Text fontWeight={550} fontSize="16px" textAlign="center">
-            --
+          <Text fontWeight={600} fontSize="12px" textAlign="center">
+            Yield
           </Text>
         )
       },
-      disableSortBy: true, // This line disables sorting for this column
+      disableSortBy: true,
     },
+    // Removed 1M Token Price column
 
     // Deposit column
     {

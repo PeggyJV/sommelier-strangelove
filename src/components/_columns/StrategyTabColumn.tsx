@@ -64,6 +64,7 @@ export const StrategyTabColumn = ({
           icon={row.original.logo}
           title={row.original.name}
           provider={row.original.provider.title}
+          vaultType={row.original.vaultType}
           type={row.original.type}
           date={row.original.launchDate}
           description={row.original.description}
@@ -180,13 +181,13 @@ export const StrategyTabColumn = ({
       Header: () => (
         <Tooltip
           arrowShadowColor="purple.base"
-          label="APY after any platform and strategy provider fees, inclusive of rewards program earnings when an active rewards program is in place"
+          label="Net of fees; calculated from share value using NAV bands. Your realized yield may differ based on when you enter and exit."
           placement="top"
           color="neutral.300"
           bg="surface.bg"
         >
           <HStack spacing={1}>
-            <Text>Net APY</Text>
+            <Text>Current Yield</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
         </Tooltip>
@@ -194,7 +195,10 @@ export const StrategyTabColumn = ({
       accessor: "baseApy",
       Cell: ({ row }: any) => {
         const launchDate = row.original.launchDate
-        if ((launchDate && launchDate > Date.now()) || !row.original.baseApy) {
+        if (
+          (launchDate && launchDate > Date.now()) ||
+          !row.original.baseApy
+        ) {
           return (
             <Text fontWeight={550} fontSize="16px" textAlign="right">
               --
@@ -228,47 +232,39 @@ export const StrategyTabColumn = ({
     },
     {
       Header: () => (
-        <Text>
-          {`${timeline.title} Token Price`}
-          <br />
-        </Text>
+        <Tooltip
+          arrowShadowColor="purple.base"
+          label="Optional benefits that may apply to new vaults"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack spacing={1}>
+            <Text>Optionality</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
       ),
-      accessor: `changes.${timeline.value}`,
+      id: "optionality",
+      accessor: (row: any) => row.vaultType,
       Cell: ({ row }: any) => {
-        const cellarConfig = cellarDataMap[row.original.slug].config
-
-        if (!isTokenPriceEnabledApp(cellarConfig))
+        const vt = row.original.vaultType
+        if (vt === "legacy") {
           return (
-            <VStack>
-              <Tooltip
-                label={`Token price change`}
-                color="neutral.100"
-                border="0"
-                fontSize="12px"
-                bg="neutral.900"
-                fontWeight={600}
-                py="4"
-                px="6"
-                boxShadow="xl"
-                shouldWrapChildren
-              >
-                <PercentageText
-                  data={row.original.changes?.[timeline.value]}
-                  arrowT2
-                  fontWeight={600}
-                />
-              </Tooltip>
-            </VStack>
+            <Text fontWeight={600} fontSize="12px" textAlign="center">
+              Not available
+            </Text>
           )
-
+        }
         return (
-          <Text fontWeight={550} fontSize="16px" textAlign="center">
-            --
+          <Text fontWeight={600} fontSize="12px" textAlign="center">
+            Yield
           </Text>
         )
       },
-      disableSortBy: true, // This line disables sorting for this column
+      disableSortBy: true,
     },
+    // Removed 1M Token Price column
     {
       Header: () => <Text>Deposit</Text>,
       id: "deposit",

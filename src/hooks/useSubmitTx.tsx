@@ -38,8 +38,7 @@ export const useSubmitTx = () => {
       body: (
         <VStack align='flex-start'>
           <Text>
-            You now have 12345.678 LP tokens available in this cellar. Lock your
-            LP tokens for certain period of time to earn SOMM token rewards.
+            You now have 12345.678 LP tokens available in this vault.
           </Text>
           <BaseButton variant='solid'>Start Earning</BaseButton>
         </VStack>

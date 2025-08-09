@@ -134,7 +134,7 @@ export const useBridgeSommToEthTx = () => {
                   })
                 }}
               >
-                Import SOMM token to wallet
+                Import token to wallet
               </Text>
             </>
           ),

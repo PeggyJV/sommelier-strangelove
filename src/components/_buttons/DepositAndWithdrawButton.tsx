@@ -97,65 +97,83 @@ export function DepositAndWithdrawButton({
   const openOracleModal = () => setOracleModalOpen(true)
   const closeOracleModal = () => setOracleModalOpen(false)
 
+  const typeTooltipLabel =
+    row.original.vaultType === "legacy"
+      ? "Legacy vault. Execution handled by strategy provider. Withdrawal rules may apply."
+      : "Deposit into a vault with transparent execution and user control."
+
   return (
     <Tooltip
       bg="surface.bg"
       color="neutral.300"
-      label={
-        row.original.deprecated
-          ? "Vault Deprecated"
-          : "Connect your wallet first"
-      }
+      arrowShadowColor="purple.base"
+      placement="top"
+      label={typeTooltipLabel}
       shouldWrapChildren
-      display={checkDisplay(
-        row.original.deprecated,
-        lpTokenDisabled,
-        isConnected,
-        isBeforeLaunch
-      )}
     >
-      <BaseButton
-        disabled={checkButtonDisabled(
-          row.original?.isContractNotReady,
+      <Tooltip
+        bg="surface.bg"
+        color="neutral.300"
+        label={
+          row.original.deprecated
+            ? "Vault Deprecated"
+            : "Connect your wallet first"
+        }
+        shouldWrapChildren
+        display={checkDisplay(
           row.original.deprecated,
           lpTokenDisabled,
           isConnected,
           isBeforeLaunch
         )}
-        variant="solid"
-        onClick={async (e) => {
-          e.stopPropagation()
-          // analytics.track("home.deposit.modal-opened")
+      >
+        <BaseButton
+          disabled={checkButtonDisabled(
+            row.original?.isContractNotReady,
+            row.original.deprecated,
+            lpTokenDisabled,
+            isConnected,
+            isBeforeLaunch
+          )}
+          variant="solid"
+          onClick={async (e) => {
+            e.stopPropagation()
+            // analytics.track("home.deposit.modal-opened")
 
-          // Check if user is on the right chain, if not prompt them to switch
-          if (chain?.id !== cellarConfig.chain.wagmiId) {
-            // Continue to manage page where user can switch
-            window.location.href = `/strategies/${id}/manage`
-            return
-          }
-          //! if share price oracle updating..
-          //if (row.original.slug === "Turbo-SOMM") {
-          //  openOracleModal()
-          //  return
-          //}
+            // Check if user is on the right chain, if not prompt them to switch
+            if (chain?.id !== cellarConfig.chain.wagmiId) {
+              // Continue to manage page where user can switch
+              window.location.href = `/strategies/${id}/manage`
+              return
+            }
+            //! if share price oracle updating..
+            //if (row.original.slug === "Turbo-SOMM") {
+            //  openOracleModal()
+            //  return
+            //}
 
-          if (row.original.deprecated) {
+            if (row.original.deprecated) {
+              onDepositModalOpen({
+                id: row.original.slug,
+                type: "withdraw",
+              })
+              return
+            }
             onDepositModalOpen({
               id: row.original.slug,
-              type: "withdraw",
+              type: "deposit",
             })
-            return
-          }
-          onDepositModalOpen({
-            id: row.original.slug,
-            type: "deposit",
-          })
-        }}
-      >
-        {getButtonText(row.original.deprecated, lpTokenDisabled)}
-      </BaseButton>
+          }}
+        >
+          {getButtonText(row.original.deprecated, lpTokenDisabled)}
+        </BaseButton>
+      </Tooltip>
       {isOracleModalOpen && (
-        <Modal isOpen={isOracleModalOpen} onClose={closeOracleModal} isCentered>
+        <Modal
+          isOpen={isOracleModalOpen}
+          onClose={closeOracleModal}
+          isCentered
+        >
           <ModalOverlay />
           <ModalContent
             p={2}

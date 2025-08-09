@@ -408,9 +408,9 @@ export const apyLabel = (config: ConfigProps) => {
     ) {
       return "Estimated APY"
     }
-    return "Net APY"
+    return "Current Yield"
   }
-  return "Net APY"
+  return "Current Yield"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE

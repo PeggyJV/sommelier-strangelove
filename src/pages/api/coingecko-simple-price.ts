@@ -39,12 +39,42 @@ const coinGeckoSimplePrice = async (
         }),
       },
     })
+    // Handle non-200 without throwing to avoid breaking UI
     if (data.status !== 200) {
-      throw new Error("failed to fetch data")
+      console.warn(
+        "coingecko-simple-price non-200",
+        data.status,
+        baseId,
+        quoteId
+      )
+      res.setHeader(
+        "Cache-Control",
+        "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
+      )
+      res.setHeader("Access-Control-Allow-Origin", baseUrl)
+      res.status(200).json({ price: null })
+      return
     }
     const result = await data.json()
 
-    const price = result[baseId][quoteId]
+    const price = result?.[baseId]?.[quoteId] ?? null
+
+    // Guard missing tokens
+    if (price === null || price === undefined) {
+      console.warn(
+        "coingecko-simple-price missing price",
+        JSON.stringify(result).slice(0, 120) + "...",
+        baseId,
+        quoteId
+      )
+      res.setHeader(
+        "Cache-Control",
+        "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
+      )
+      res.setHeader("Access-Control-Allow-Origin", baseUrl)
+      res.status(200).json({ price: null })
+      return
+    }
     res.setHeader(
       "Cache-Control",
       "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
@@ -55,13 +85,13 @@ const coinGeckoSimplePrice = async (
     })
   } catch (error) {
     console.error(error)
-    res
-      .status(500)
-      .send({
-        error: "failed to fetch data",
-        message:
-          (error as Error).message || "An unknown error occurred",
-      })
+    // For resilience, return a 200 with null price to avoid client errors
+    res.setHeader(
+      "Cache-Control",
+      "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
+    )
+    res.setHeader("Access-Control-Allow-Origin", baseUrl)
+    res.status(200).send({ price: null })
   }
 }
 

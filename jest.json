@@ -4,6 +4,11 @@
   "testEnvironment": "node",
   "testTimeout": 300000,
   "testRegex": ".spec.ts$",
+  "moduleNameMapper": {
+    "^utils/(.*)$": "<rootDir>/utils/$1",
+    "^data/(.*)$": "<rootDir>/data/$1",
+    "^src/(.*)$": "<rootDir>/$1"
+  },
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   }
