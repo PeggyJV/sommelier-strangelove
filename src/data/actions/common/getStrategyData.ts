@@ -16,6 +16,7 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
+import { classifyVaultType } from "utils/classifyVaultType"
 
 export const getStrategyData = async ({
   address,
@@ -86,10 +87,8 @@ export const getStrategyData = async ({
 
         return tokens
       })()
-      const depositTokens = strategy.depositTokens.list;
-      const stakingEnd = await getStakingEnd(
-        stakerContract
-      )
+      const depositTokens = strategy.depositTokens.list
+      const stakingEnd = await getStakingEnd(stakerContract)
       const isStakingOngoing =
         stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
 
@@ -136,7 +135,7 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      let merkleRewardsApy;
+      let merkleRewardsApy
 
       // if (strategy.slug === utilConfig.CONTRACT.REAL_YIELD_ETH_OPT.SLUG) {
       //   merkleRewardsApy = await getMerkleRewardsApy(cellarContract, config);
@@ -215,11 +214,10 @@ export const getStrategyData = async ({
           for (let i = 0; i < 7; i++) {
             // Get annualized apy for each shareValue
             let nowValue = BigInt(dayDatas![i].shareValue)
-            let startValue = BigInt(
-              dayDatas![i + 1].shareValue
-            )
+            let startValue = BigInt(dayDatas![i + 1].shareValue)
 
-            let yieldGain = Number(nowValue - startValue) / Number(startValue)
+            let yieldGain =
+              Number(nowValue - startValue) / Number(startValue)
 
             // Take the gains since inception and annualize it to get APY since inception
             let dailyApy = yieldGain * 365 * 100
@@ -312,10 +310,23 @@ export const getStrategyData = async ({
       // TODO: Rewards APY should be a list of APYs for each rewards token, this is incurred tech debt
       const baseApySumRewards = {
         formatted:
-          (Number(baseApyValue?.value ?? 0) + Number(rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0))
-            .toFixed(2) + "%",
-        value: Number(baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0)
+          (
+            Number(baseApyValue?.value ?? 0) +
+            Number(rewardsApy?.value ?? 0) +
+            (merkleRewardsApy ?? 0)
+          ).toFixed(2) + "%",
+        value:
+          Number(baseApyValue?.value ?? 0) +
+          (rewardsApy?.value ?? 0) +
+          (merkleRewardsApy ?? 0),
       }
+
+      // Classify vault type as "legacy" or "new"
+      const vaultType = classifyVaultType({
+        deprecated,
+        strategyProvider: provider,
+      })
+
       return {
         activeAsset,
         address,
@@ -344,7 +355,8 @@ export const getStrategyData = async ({
         token,
         config,
         extraRewardsApy,
-        merkleRewardsApy
+        merkleRewardsApy,
+        vaultType,
       }
     } catch (e) {
       console.error("Error fetching strategy data")
