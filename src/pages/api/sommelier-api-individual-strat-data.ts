@@ -25,7 +25,7 @@ const sommelierAPIIndividualStratData = async (
       Math.floor(Date.now() / 1000) - 24 * 60 * 60
 
     const dailyDataUrl = `https://api.sommelier.finance/dailyData/${chain}/${cellarAddress}/0/latest`
-    const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cellarAddress}/${unix_timestamp_24_hours_ago}/latest`
+const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cellarAddress}/${unix_timestamp_24_hours_ago}/latest`
 
     const [dailyData, hourlyData] = await Promise.all([
       fetchData(dailyDataUrl),

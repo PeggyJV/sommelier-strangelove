@@ -39,10 +39,10 @@ const sommelierAPIAllStrategiesData = async (
 
     //! Whenever theres a new chain supported this needs to be updated
     let allEthereumStrategyData = `https://api.sommelier.finance/dailyData/ethereum/allCellars/${monthAgoEpoch}/latest`
-    let allArbitrumStrategyData = `https://api.sommelier.finance/dailyData/arbitrum/allCellars/${monthAgoEpoch}/latest`
-    let allOptimismStrategyData = `https://api.sommelier.finance/dailyData/optimism/allCellars/${monthAgoEpoch}/latest`
-    let allScrollStrategyData = `https://api.sommelier.finance/dailyData/scroll/allCellars/${monthAgoEpoch}/latest`
-    let tvlData = `https://api.sommelier.finance/tvl`
+let allArbitrumStrategyData = `https://api.sommelier.finance/dailyData/arbitrum/allCellars/${monthAgoEpoch}/latest`
+let allOptimismStrategyData = `https://api.sommelier.finance/dailyData/optimism/allCellars/${monthAgoEpoch}/latest`
+let allScrollStrategyData = `https://api.sommelier.finance/dailyData/scroll/allCellars/${monthAgoEpoch}/latest`
+let tvlData = `https://api.sommelier.finance/tvl`
 
     const [
       allEthereumStrategyDataResponse,
