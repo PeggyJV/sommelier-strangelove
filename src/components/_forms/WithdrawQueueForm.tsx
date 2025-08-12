@@ -51,8 +51,8 @@ interface WithdrawQueueFormProps {
   onSuccessfulWithdraw?: () => void
 }
 
-const DEADLINE_HOURS = 288;
-const SHARE_PRICE_DISCOUNT_PERCENT = 0;
+const DEADLINE_HOURS = 288
+const SHARE_PRICE_DISCOUNT_PERCENT = 0.25
 
 export const WithdrawQueueForm = ({
   onClose,
@@ -138,7 +138,8 @@ export const WithdrawQueueForm = ({
 
   const watchWithdrawAmount = watch("withdrawAmount")
 
-  const isDisabled = isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
+  const isDisabled =
+    isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
 
   const setMax = () => {
     const amount = parseFloat(
@@ -148,9 +149,7 @@ export const WithdrawQueueForm = ({
   }
 
   const geo = useGeo()
-  const onSubmit = async ({
-    withdrawAmount,
-  }: FormValues) => {
+  const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
