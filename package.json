@@ -56,8 +56,8 @@
     "react-table": "^7.8.0",
     "sanity-codegen": "^0.9.8",
     "slick-carousel": "^1.8.1",
-    "viem": "^2.30.5",
-    "wagmi": "^2.15.4",
+    "viem": "2.27.4",
+    "wagmi": "2.13.4",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
@@ -88,5 +88,9 @@
     "tabWidth": 2,
     "useTabs": false,
     "bracketSpacing": true
+  },
+  "resolutions": {
+    "viem": "2.27.4",
+    "wagmi": "2.13.4"
   }
 }
