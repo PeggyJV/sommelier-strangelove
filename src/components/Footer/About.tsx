@@ -40,7 +40,7 @@ export const About = () => {
         <Text fontWeight="bold" fontSize="21px">
           About
         </Text>
-        <Link isExternal href="https://sommelier.finance">
+        <Link isExternal href="https://somm.finance">
           <Button
             display="flex"
             flexDir="row"

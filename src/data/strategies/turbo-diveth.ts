@@ -233,7 +233,7 @@ export const turbodivETH: CellarData = {
     {
       question: "Are the smart contracts audited?",
       answer:
-        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. You can find the link to the audit reports at <a style='border-bottom: 1px solid; border-color:white' href='https://www.sommelier.finance/audits' target='_blank'>sommelier.finance/audits</a>. The divETH smart contracts will also receive professional audits before the vault starts taking position with it.",
+        "Yes, all smart contracts on Somm have been audited by an independent third-party auditor. You can find the link to the audit reports at <a style='border-bottom: 1px solid; border-color:white' href='https://www.somm.finance/audits' target='_blank'>somm.finance/audits</a>. The divETH smart contracts will also receive professional audits before the vault starts taking position with it.",
     },
     {
       question: "Who is eligible to participate?",
