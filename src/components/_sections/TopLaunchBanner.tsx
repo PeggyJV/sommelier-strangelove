@@ -30,17 +30,7 @@ export default function TopLaunchBanner({
       as="section"
       borderWidth="1px"
       borderColor="border.subtle"
-      bgGradient="linear(to-r, banner.bg.start 0%, banner.bg.mid 45%, banner.bg.end 100%)"
-      _after={{
-        content: '""',
-        position: "absolute",
-        right: 0,
-        top: 0,
-        bottom: 0,
-        width: { base: 0, md: "40%" },
-        bg: "linear-gradient(90deg, var(--chakra-colors-banner-bloom-cyanA), var(--chakra-colors-banner-bloom-cyanB))",
-        pointerEvents: "none",
-      }}
+      bg="surface.bg"
       rounded="xl"
       px={{ base: 4, md: 6 }}
       py={{ base: 4, md: 6, lg: 7 }}
@@ -48,37 +38,6 @@ export default function TopLaunchBanner({
       position="relative"
       overflow="hidden"
     >
-      {/* Subtle pattern overlays */}
-      <Box
-        aria-hidden
-        position="absolute"
-        top={{ base: "-10%", md: "-8%" }}
-        right={{ base: "-10%", md: "-6%" }}
-        w={{ base: 0, md: "38%" }}
-        h={{ base: 0, md: "60%" }}
-        opacity={0.08}
-        bgImage="radial-gradient(circle at 50% 50%, rgba(41,227,254,0.9) 0px, rgba(41,227,254,0) 70%)"
-        bgSize="120px 120px"
-        bgRepeat="repeat"
-        filter="blur(1px)"
-        mixBlendMode="screen"
-        pointerEvents="none"
-      />
-      <Box
-        aria-hidden
-        position="absolute"
-        bottom={{ base: "-10%", md: "-8%" }}
-        right={{ base: "-15%", md: "-10%" }}
-        w={{ base: 0, md: "45%" }}
-        h={{ base: 0, md: "55%" }}
-        opacity={0.06}
-        bgImage="radial-gradient(circle at 50% 50%, rgba(0,163,255,0.9) 0px, rgba(0,163,255,0) 70%)"
-        bgSize="140px 140px"
-        bgRepeat="repeat"
-        filter="blur(1px)"
-        mixBlendMode="screen"
-        pointerEvents="none"
-      />
 
       {/* GG icon bottom-right, non-blocking, hidden < md */}
       <Box
@@ -205,10 +164,11 @@ export default function TopLaunchBanner({
               height="40px"
               px="20px"
               fontWeight={600}
-              bg="banner.cta.filled.bg"
-              color="banner.cta.filled.fg"
+              bg="cta.filled.bg"
+              color="cta.filled.fg"
               _hover={{ bg: "whiteAlpha.800" }}
               _active={{ bg: "whiteAlpha.900" }}
+              _focusVisible={{ boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)" }}
             >
               Explore Vault
             </Button>
@@ -221,8 +181,8 @@ export default function TopLaunchBanner({
               fontWeight={600}
               variant="outline"
               bg="transparent"
-              color="banner.cta.outline.fg"
-              borderColor="banner.cta.outline.br"
+              color="cta.outline.fg"
+              borderColor="cta.outline.br"
               borderWidth="2px"
               _hover={{
                 bg: "white",
@@ -234,9 +194,7 @@ export default function TopLaunchBanner({
                 color: "black",
                 borderColor: "white",
               }}
-              _focusVisible={{
-                boxShadow: "0 0 0 3px rgba(255,255,255,0.45)",
-              }}
+              _focusVisible={{ boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)" }}
             >
               View Strategy Blog
             </Button>
