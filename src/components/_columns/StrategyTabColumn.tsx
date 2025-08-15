@@ -63,6 +63,7 @@ export const StrategyTabColumn = ({
           isDeprecated={row.original.deprecated}
           badges={row.original.config.badges}
           isHero={row.original.isHero}
+          isSommNative={row.original.isSommNative}
           w={56}
         />
       ),

@@ -1,15 +1,11 @@
 import {
   Button,
   Center,
-  Heading,
   HStack,
-  Link,
   Spacer,
   Text,
   VStack,
-  Image,
 } from "@chakra-ui/react"
-import NextLink from "next/link"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
@@ -44,7 +40,8 @@ import { add, isBefore } from "date-fns"
 import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
-import { SecondaryButton } from "components/_buttons/SecondaryButton"
+import TopLaunchBanner from "components/_sections/TopLaunchBanner"
+import { LAUNCH_DATE_ALPHA_STETH } from "data/uiConfig"
 import { MigrationModal } from "components/_modals/MigrationModal"
 
 export const PageHome = () => {
@@ -68,8 +65,8 @@ export const PageHome = () => {
     id,
   } = useDepositModalStore()
 
-  const { isConnected } = useAccount();
-  const { userBalances } = useUserBalances();
+  const { isConnected } = useAccount()
+  const { userBalances } = useUserBalances()
 
   const columns = useMemo(() => {
     return isDesktop
@@ -104,17 +101,16 @@ export const PageHome = () => {
         })
       : StrategyMobileColumn()
   }, [isDesktop, isTab, isMobile, setIsOpen])
-  
 
   const allChainIds = chainConfig.map((chain) => chain.id)
 
   //Get all deposit assets from all strategies and turn it into a set of unique values
-  const { 
-    uniqueAssetsMap, 
-    constantAllUniqueAssetsArray
-  }: 
-  { uniqueAssetsMap: Record<string, SymbolPathPair>, 
-    constantAllUniqueAssetsArray: SymbolPathPair[] 
+  const {
+    uniqueAssetsMap,
+    constantAllUniqueAssetsArray,
+  }: {
+    uniqueAssetsMap: Record<string, SymbolPathPair>
+    constantAllUniqueAssetsArray: SymbolPathPair[]
   } = useMemo(() => {
     let allDepositAssets = Object.values(cellarDataMap)
       .map((cellarData: CellarData): SymbolPathPair[] => {
@@ -138,7 +134,8 @@ export const PageHome = () => {
       }
     })
     // Copy the unique assets into a constants array
-  const constantAllUniqueAssetsArray = Object.values(uniqueAssetsMap)
+    const constantAllUniqueAssetsArray =
+      Object.values(uniqueAssetsMap)
 
     return { uniqueAssetsMap, constantAllUniqueAssetsArray }
   }, [cellarDataMap])
@@ -146,11 +143,21 @@ export const PageHome = () => {
   // Always float up "WETH", "USDC", "WBTC", "SOMM", "stETH" to the top of the list in that order for the inital render
   const constantOrderedAllUniqueAssetsArray = useMemo(() => {
     return [
-      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "WETH"),
-      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "USDC"),
-      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "WBTC"),
-      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "SOMM"),
-      ...constantAllUniqueAssetsArray.filter((pair) => pair.symbol === "stETH"),
+      ...constantAllUniqueAssetsArray.filter(
+        (pair) => pair.symbol === "WETH"
+      ),
+      ...constantAllUniqueAssetsArray.filter(
+        (pair) => pair.symbol === "USDC"
+      ),
+      ...constantAllUniqueAssetsArray.filter(
+        (pair) => pair.symbol === "WBTC"
+      ),
+      ...constantAllUniqueAssetsArray.filter(
+        (pair) => pair.symbol === "SOMM"
+      ),
+      ...constantAllUniqueAssetsArray.filter(
+        (pair) => pair.symbol === "stETH"
+      ),
       ...constantAllUniqueAssetsArray.filter(
         (pair) =>
           pair.symbol !== "WETH" &&
@@ -197,8 +204,14 @@ export const PageHome = () => {
 
   const hasFiltersChanged = useMemo(() => {
     return (
-      !(JSON.stringify(selectedChainIds) !== JSON.stringify(initialChainIds)) ||
-      !(JSON.stringify(selectedDepositAssets) !== JSON.stringify(initialDepositAssets)) ||
+      !(
+        JSON.stringify(selectedChainIds) !==
+        JSON.stringify(initialChainIds)
+      ) ||
+      !(
+        JSON.stringify(selectedDepositAssets) !==
+        JSON.stringify(initialDepositAssets)
+      ) ||
       showDeprecated !== initialShowDeprecated ||
       showIncentivised !== initialShowIncentivised
     )
@@ -231,97 +244,115 @@ export const PageHome = () => {
   }, [])
 
   const strategyData = useMemo(() => {
-    const filteredData = data?.filter((item) => {
-      // Chain filter
-      const isChainSelected = selectedChainIds.includes(
-        item?.config.chain.id!
-      )
+    const filteredData =
+      data?.filter((item) => {
+        // Chain filter
+        const isChainSelected = selectedChainIds.includes(
+          item?.config.chain.id!
+        )
 
-      // Deposit asset filter
-      const hasSelectedDepositAsset = cellarDataMap[
-        item!.slug
+        // Deposit asset filter
+        const hasSelectedDepositAsset = cellarDataMap[
+          item!.slug
         ].depositTokens.list.some((tokenSymbol) =>
-        selectedDepositAssets.hasOwnProperty(tokenSymbol)
-      )
+          selectedDepositAssets.hasOwnProperty(tokenSymbol)
+        )
 
-      // Deprecated filter
-      const isDeprecated = cellarDataMap[item!.slug].deprecated
-      const deprecatedCondition = showDeprecated
-        ? isDeprecated
-        : !isDeprecated
+        // Deprecated filter
+        const isDeprecated = cellarDataMap[item!.slug].deprecated
+        const deprecatedCondition = showDeprecated
+          ? isDeprecated
+          : !isDeprecated
 
-      // Incentivised filter
-      //    Badge check for custom rewards
-      const hasGreenBadge = cellarDataMap[
-        item!.slug
+        // Incentivised filter
+        //    Badge check for custom rewards
+        const hasGreenBadge = cellarDataMap[
+          item!.slug
         ].config.badges?.some(
-        (badge) => badge.customStrategyHighlightColor === "#00C04B"
-      )
+          (badge) => badge.customStrategyHighlightColor === "#00C04B"
+        )
 
-      //    Staking period check for somm/vesting rewards
-      const hasLiveStakingPeriod =
-        item?.rewardsApy?.value !== undefined &&
-        Number(item?.rewardsApy?.value) > 0
+        //    Staking period check for somm/vesting rewards
+        const hasLiveStakingPeriod =
+          item?.rewardsApy?.value !== undefined &&
+          Number(item?.rewardsApy?.value) > 0
 
-      const incentivisedCondition = showIncentivised
-        ? hasGreenBadge || hasLiveStakingPeriod
-        : true
+        const incentivisedCondition = showIncentivised
+          ? hasGreenBadge || hasLiveStakingPeriod
+          : true
 
-      return (
-        isChainSelected &&
-        hasSelectedDepositAsset &&
-        deprecatedCondition &&
-        incentivisedCondition
-      )
-    }) || []
+        return (
+          isChainSelected &&
+          hasSelectedDepositAsset &&
+          deprecatedCondition &&
+          incentivisedCondition
+        )
+      }) || []
 
     return filteredData.sort((a, b) => {
       // Move Alpha stETH to the top of the list
       if (a?.slug === "Alpha-stETH") {
-        return -1;
+        return -1
       }
       if (b?.slug === "Alpha-stETH") {
-        return 1;
+        return 1
       }
 
       // 1. Priority - strategies deposit assets that user holds
       if (isConnected && userBalances.data) {
         for (const balance of userBalances.data) {
-          const doesStrategyHaveAsset = (strategy: StrategyData) => strategy?.depositTokens?.some(
-            asset => {
+          const doesStrategyHaveAsset = (strategy: StrategyData) =>
+            strategy?.depositTokens?.some((asset) => {
               // if user has ETH consider it as they had WETH
-              if (balance.symbol.toUpperCase() === "ETH" && asset.toUpperCase() === "WETH") {
-                return true;
+              if (
+                balance.symbol.toUpperCase() === "ETH" &&
+                asset.toUpperCase() === "WETH"
+              ) {
+                return true
               }
-               return asset.toUpperCase() === balance.symbol.toUpperCase()
-            }
-          )
-          const strategyAHasAsset = doesStrategyHaveAsset(a);
-          const strategyBHasAsset = doesStrategyHaveAsset(b);
+              return (
+                asset.toUpperCase() === balance.symbol.toUpperCase()
+              )
+            })
+          const strategyAHasAsset = doesStrategyHaveAsset(a)
+          const strategyBHasAsset = doesStrategyHaveAsset(b)
 
-          if ((strategyAHasAsset || strategyBHasAsset) && !(strategyAHasAsset && strategyBHasAsset)) {
-            return strategyAHasAsset ? -1 : 1;
+          if (
+            (strategyAHasAsset || strategyBHasAsset) &&
+            !(strategyAHasAsset && strategyBHasAsset)
+          ) {
+            return strategyAHasAsset ? -1 : 1
           }
         }
       }
       // 2. Priority - new strategies
-      const isNewStrategy = (strategy: StrategyData) => isBefore(new Date(), add(new Date(strategy?.launchDate ?? ''), { weeks: 4 }));
-      const isANew = isNewStrategy(a);
-      const isBNew = isNewStrategy(b);
+      const isNewStrategy = (strategy: StrategyData) =>
+        isBefore(
+          new Date(),
+          add(new Date(strategy?.launchDate ?? ""), { weeks: 4 })
+        )
+      const isANew = isNewStrategy(a)
+      const isBNew = isNewStrategy(b)
       if (isANew && isBNew) {
-        return new Date(b?.launchDate ?? '').getTime() - new Date(a?.launchDate ?? '').getTime();
+        return (
+          new Date(b?.launchDate ?? "").getTime() -
+          new Date(a?.launchDate ?? "").getTime()
+        )
       } else if (isANew || isBNew) {
-        return isANew ? -1 : 1;
+        return isANew ? -1 : 1
       }
 
       // 3. Priority - Somm rewards
       //if ((a?.rewardsApy || b?.rewardsApy) && !(a?.rewardsApy && b?.rewardsApy)) {
-        //return a?.rewardsApy ? -1 : 1;
+      //return a?.rewardsApy ? -1 : 1;
       //}
 
       // 4. Priority - TVL
-      return parseFloat(b?.tvm?.value ?? '') - parseFloat(a?.tvm?.value ?? '');
-    });
+      return (
+        parseFloat(b?.tvm?.value ?? "") -
+        parseFloat(a?.tvm?.value ?? "")
+      )
+    })
   }, [
     data?.length,
     selectedChainIds,
@@ -329,12 +360,16 @@ export const PageHome = () => {
     showDeprecated,
     showIncentivised,
     userBalances.data,
-    isConnected
+    isConnected,
   ])
 
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
+      <TopLaunchBanner
+        targetDate={new Date(LAUNCH_DATE_ALPHA_STETH)}
+        blogHref="#"
+      />
       {/*
         <InfoBanner
           text={
@@ -344,78 +379,6 @@ export const PageHome = () => {
         />
       }
       */}
-      {/* <HStack
-        p={4}
-        mb={6}
-        spacing={4}
-        align="center"
-        justify="center"
-        backgroundColor="turquoise.extraDark"
-        border="2px solid"
-        borderRadius={16}
-        borderColor="turquoise.dark"
-      >
-        <VStack align="center" justify="center">
-          <Text textAlign="center">
-            Turbo GHO co-incentives are progressing through Aave
-            governance and could be funded shortly after Oct 22nd.
-            Learn more{" "}
-            <Link
-              href="https://app.aave.com/governance/proposal/?proposalId=347"
-              isExternal
-              display="inline-flex"
-              alignItems="center"
-              fontWeight={600}
-            >
-              <Text as="span">here</Text>
-              <ExternalLinkIcon ml={2} alignSelf="center" />
-            </Link>
-          </Text>
-        </VStack>
-      </HStack> */}
-      <HStack
-        p={4}
-        mb={6}
-        spacing={4}
-        align="center"
-        justify="space-evenly"
-        flexDir={{ base: "column", md: "row" }}
-      >
-        <VStack
-          align="center"
-          justify="center"
-          w={{ base: "100%", md: "30%" }}
-        >
-          <Heading textAlign="center">
-            Alpha STETH - Right time and right place liquidity
-          </Heading>
-          <Text textAlign="center">
-            A dynamic strategy to optimize yield thorugh AI-enhanced
-            staking and automated DeFi strategies.
-          </Text>
-        </VStack>
-        <VStack align="center" justify="center">
-          <NextLink
-            href="/strategies/Alpha-stETH/manage"
-          >
-            <SecondaryButton
-              fontSize="md"
-              px={4}
-              py={2}
-              h="50px"
-              textDecoration="none"
-            >
-              Explore Vault
-            </SecondaryButton>
-          </NextLink>
-        </VStack>
-        <VStack align="center" justify="center">
-          <Image
-            src="/assets/images/eth-lido-uni.png"
-            alt="Alpha STETH"
-          />
-        </VStack>
-      </HStack>
       {isMobile ? (
         <VStack width="100%" padding={"2em 0em"} spacing="2em">
           <ChainFilter
