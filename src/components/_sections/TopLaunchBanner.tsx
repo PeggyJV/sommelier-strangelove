@@ -1,14 +1,4 @@
-import {
-  Box,
-  Stack,
-  Text,
-  Button,
-  Link,
-  Flex,
-  HStack,
-  Image,
-  SimpleGrid,
-} from "@chakra-ui/react"
+import { Box, Stack, Text, Button, Link, Flex, HStack, Image, SimpleGrid } from "@chakra-ui/react"
 import NextLink from "next/link"
 import Countdown from "components/_common/Countdown"
 
@@ -27,12 +17,23 @@ export default function TopLaunchBanner({
 
   return (
     <Box
+      as="section"
       borderWidth="1px"
       borderColor="whiteAlpha.200"
-      bgGradient="linear(to-r, blackAlpha.600, blackAlpha.500 40%, rgba(0,163,255,0.14) 75%, rgba(41,227,254,0.12))"
+      bgGradient="linear(to-r, #0B0F17, #0B0F17 45%, #0B2438)"
+      _after={{
+        content: '""',
+        position: "absolute",
+        right: 0,
+        top: 0,
+        bottom: 0,
+        width: { base: 0, md: "40%" },
+        bg: "linear-gradient(90deg, rgba(0,163,255,0.12), rgba(41,227,254,0.10))",
+        pointerEvents: "none",
+      }}
       rounded="xl"
       px={{ base: 4, md: 6 }}
-      py={{ base: 5, md: 6 }}
+      py={{ base: 4, md: 6, lg: 7 }}
       mb={{ base: 6, md: 8 }}
       position="relative"
       overflow="hidden"
@@ -47,29 +48,52 @@ export default function TopLaunchBanner({
       </Box>
 
       {/* Grid: 1 col on md/sm, 2 cols on lg with fixed right width */}
-      <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 8 }} templateColumns={{ base: undefined, lg: "1fr minmax(300px,360px)" }} alignItems={{ base: "start", lg: "start" }}>
+      <SimpleGrid
+        columns={{ base: 1, lg: 2 }}
+        spacing={{ base: 5, lg: 8 }}
+        templateColumns={{ base: undefined, lg: "1fr minmax(300px,360px)" }}
+        alignItems={{ base: "start", lg: "start" }}
+      >
         {/* LEFT COLUMN - content */}
         <Stack spacing={4} maxW="860px">
-          {/* Header row */}
-          <HStack spacing={{ base: 3, md: 3.5 }} align="center" flexWrap="nowrap">
-            <Text fontWeight={600} fontSize={{ base: "sm", md: "md" }}>
+          {/* Pill header */}
+          <HStack
+            spacing={3}
+            bg="whiteAlpha.100"
+            px={3}
+            py={1}
+            rounded="full"
+            w="fit-content"
+          >
+            <Text fontSize={{ base: "xs", md: "sm" }} fontWeight={600} color="whiteAlpha.900">
               Launching August 19
             </Text>
-            <HStack spacing={{ base: 2, md: 2 }} align="center" whiteSpace="nowrap">
-              <Image src={lidoSrc} fallbackSrc={lidoFallbackPng} alt="Lido" h="1.08em" w="auto" verticalAlign="middle" style={{ transform: "translateY(-0.5px)" }} opacity={0.8} loading="eager" decoding="async" />
-              <Text color="gray.300" fontSize={{ base: "xs", md: "sm" }}>
+            <HStack spacing={1.5} whiteSpace="nowrap">
+              <Image
+                src={lidoSrc}
+                fallbackSrc={lidoFallbackPng}
+                alt="Lido"
+                h="1.05em"
+                w="auto"
+                verticalAlign="middle"
+                style={{ transform: "translateY(-0.5px)" }}
+                opacity={0.8}
+                loading="eager"
+                decoding="async"
+              />
+              <Text fontSize={{ base: "xs", md: "sm" }} fontWeight={600} color="whiteAlpha.900">
                 Powered by Lido
               </Text>
             </HStack>
           </HStack>
 
           {/* Heading */}
-          <Text as="h2" fontSize={{ base: "3xl", md: "5xl" }} fontWeight={800}>
+          <Text as="h2" fontSize={{ base: "3xl", md: "5xl" }} fontWeight={800} mb={{ base: 2, md: 3 }}>
             Alpha stETH Vault
           </Text>
 
           {/* Countdown directly under heading on md/sm */}
-          <Box display={{ base: "block", lg: "none" }} mt={{ base: 3, md: 4 }}>
+          <Box display={{ base: "block", lg: "none" }} mb={4}>
             <Countdown size="lg" targetDate={targetDate} />
           </Box>
 
@@ -78,28 +102,56 @@ export default function TopLaunchBanner({
             Built in collaboration with Lido, Alpha stETH offers simplified access to multiple Ethereum reward strategies through a single, composable vault.
           </Text>
 
-          {/* Bullets */}
-          <Stack direction={{ base: "column", md: "row" }} spacing={6} color="gray.200" mt={{ base: 3, md: 3 }}>
-            <HStack spacing={2}>
-              <Box as="span" boxSize={2} rounded="full" bg="green.400" />
-              <Text>Blue-chip DeFi exposure</Text>
-            </HStack>
-            <HStack spacing={2}>
-              <Box as="span" boxSize={2} rounded="full" bg="green.400" />
-              <Text>stETH rewards made simple</Text>
-            </HStack>
-            <HStack spacing={2}>
-              <Box as="span" boxSize={2} rounded="full" bg="green.400" />
-              <Text>No legacy vault dependency</Text>
-            </HStack>
-          </Stack>
+          {/* Key-point pills */}
+          <HStack wrap="wrap" spacing={2} mb={5}>
+            {["Blue-chip DeFi exposure", "stETH rewards made simple", "No legacy vault dependency"].map((k) => (
+              <Text
+                key={k}
+                as="span"
+                bg="whiteAlpha.100"
+                color="whiteAlpha.900"
+                rounded="full"
+                px={3}
+                py={1}
+                fontSize="sm"
+              >
+                {k}
+              </Text>
+            ))}
+          </HStack>
 
           {/* CTAs */}
-          <HStack spacing={3} pt={{ base: 4, md: 4 }}>
-            <Button as={NextLink} href="/strategies/Alpha-stETH/manage" variant="solid" size="lg">
+          <HStack spacing={{ base: 3, md: 4 }}>
+            <Button
+              as={NextLink}
+              href="/strategies/Alpha-stETH/manage"
+              size="md"
+              height="40px"
+              px="20px"
+              fontWeight={600}
+              bg="white"
+              color="black"
+              _hover={{ bg: "whiteAlpha.800" }}
+              _active={{ bg: "whiteAlpha.900" }}
+            >
               Explore Vault
             </Button>
-            <Button as={Link} href={blogHref} variant="outline" size="lg">
+            <Button
+              as={Link}
+              href={blogHref}
+              size="md"
+              height="40px"
+              px="20px"
+              fontWeight={600}
+              variant="outline"
+              bg="transparent"
+              color="white"
+              borderColor="whiteAlpha.900"
+              borderWidth="2px"
+              _hover={{ bg: "white", color: "black", borderColor: "white" }}
+              _active={{ bg: "white", color: "black", borderColor: "white" }}
+              _focusVisible={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.45)" }}
+            >
               View Strategy Blog
             </Button>
           </HStack>

@@ -94,37 +94,33 @@ export default function Countdown({
     label: string,
     ariaLabel: string
   ) => (
-    <Box textAlign="center" px={s.px} py={s.py}>
+    <Box
+      textAlign="center"
+      px={s.px}
+      py={s.py}
+      minW={{ base: 18, md: 20 }}
+      bg="whiteAlpha.100"
+      rounded="lg"
+      backdropFilter="auto"
+      backdropBlur="2px"
+    >
       <VisuallyHidden>{ariaLabel}</VisuallyHidden>
-      <Text fontWeight={700} fontSize={s.number} lineHeight={1}>
+      <Text fontWeight={700} fontSize={s.number} lineHeight={1} color="white">
         {value.toString().padStart(2, "0")}
       </Text>
-      <Text fontSize={s.label} color="neutral.400">
+      <Text fontSize={s.label} color="gray.300">
         {label}
       </Text>
     </Box>
   )
 
   return (
-    <Stack
-      direction={{ base: "row", sm: "row" }}
-      spacing={s.gap}
-      align="center"
-      justify="center"
-    >
+    <Stack direction={{ base: "row" }} spacing={s.gap} align="center" justify="center">
       <HStack spacing={s.gap} align="stretch">
         {unitBox(parts.days, "Days", `Days: ${parts.days}`)}
         {unitBox(parts.hours, "Hours", `Hours: ${parts.hours}`)}
-        {unitBox(
-          parts.minutes,
-          "Minutes",
-          `Minutes: ${parts.minutes}`
-        )}
-        {unitBox(
-          parts.seconds,
-          "Seconds",
-          `Seconds: ${parts.seconds}`
-        )}
+        {unitBox(parts.minutes, "Minutes", `Minutes: ${parts.minutes}`)}
+        {unitBox(parts.seconds, "Seconds", `Seconds: ${parts.seconds}`)}
       </HStack>
     </Stack>
   )
