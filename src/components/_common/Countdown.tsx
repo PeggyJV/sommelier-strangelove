@@ -100,21 +100,16 @@ export default function Countdown({
       px={s.px}
       py={s.py}
       minW={{ base: 18, md: 20 }}
-      bg="whiteAlpha.100"
+      bg="count.box.bg"
       rounded="lg"
       backdropFilter="auto"
       backdropBlur="2px"
     >
       <VisuallyHidden>{ariaLabel}</VisuallyHidden>
-      <Text
-        fontWeight={700}
-        fontSize={s.number}
-        lineHeight={1}
-        color="white"
-      >
+      <Text fontWeight={700} fontSize={s.number} lineHeight={1} color="count.box.fg">
         {value.toString().padStart(2, "0")}
       </Text>
-      <Text fontSize={s.label} color="gray.300">
+      <Text fontSize={s.label} color="count.box.sub">
         {label}
       </Text>
     </Box>

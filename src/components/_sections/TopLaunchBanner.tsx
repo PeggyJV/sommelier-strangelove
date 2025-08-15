@@ -30,7 +30,7 @@ export default function TopLaunchBanner({
       as="section"
       borderWidth="1px"
       borderColor="border.subtle"
-      bgGradient="linear(to-r, banner.gradient.start, banner.gradient.end)"
+      bgGradient="linear(to-r, banner.bg.start 0%, banner.bg.mid 45%, banner.bg.end 100%)"
       _after={{
         content: '""',
         position: "absolute",
@@ -113,7 +113,14 @@ export default function TopLaunchBanner({
         {/* LEFT COLUMN - content */}
         <Stack spacing={4} maxW="860px">
           {/* Pill header */}
-          <HStack spacing={3} bg="chip.bg" px={3} py={1} rounded="full" w="fit-content">
+          <HStack
+            spacing={3}
+            bg="chip.bg"
+            px={3}
+            py={1}
+            rounded="full"
+            w="fit-content"
+          >
             <Text
               fontSize={{ base: "xs", md: "sm" }}
               fontWeight={600}
@@ -134,14 +141,24 @@ export default function TopLaunchBanner({
                 loading="eager"
                 decoding="async"
               />
-              <Text fontSize={{ base: "xs", md: "sm" }} fontWeight={600} color="chip.fg">
+              <Text
+                fontSize={{ base: "xs", md: "sm" }}
+                fontWeight={600}
+                color="chip.fg"
+              >
                 Powered by Lido
               </Text>
             </HStack>
           </HStack>
 
           {/* Heading */}
-          <Text as="h2" textStyle="heroTitle" fontSize={{ base: "3xl", md: "5xl" }} color="text.primary" mb={{ base: 2, md: 3 }}>
+          <Text
+            as="h2"
+            textStyle="heroTitle"
+            fontSize={{ base: "3xl", md: "5xl" }}
+            color="text.primary"
+            mb={{ base: 2, md: 3 }}
+          >
             Alpha stETH Vault
           </Text>
 
@@ -164,7 +181,16 @@ export default function TopLaunchBanner({
               "stETH rewards made simple",
               "No legacy vault dependency",
             ].map((k) => (
-              <Text key={k} as="span" bg="chip.bg" color="chip.fg" rounded="full" px={3} py={1} fontSize="sm">
+              <Text
+                key={k}
+                as="span"
+                bg="chip.bg"
+                color="chip.fg"
+                rounded="full"
+                px={3}
+                py={1}
+                fontSize="sm"
+              >
                 {k}
               </Text>
             ))}
@@ -172,10 +198,46 @@ export default function TopLaunchBanner({
 
           {/* CTAs */}
           <HStack spacing={{ base: 3, md: 4 }}>
-            <Button as={NextLink} href="/strategies/Alpha-stETH/manage" size="md" height="40px" px="20px" fontWeight={600} bg="banner.cta.filled.bg" color="banner.cta.filled.fg" _hover={{ bg: "whiteAlpha.800" }} _active={{ bg: "whiteAlpha.900" }}>
+            <Button
+              as={NextLink}
+              href="/strategies/Alpha-stETH/manage"
+              size="md"
+              height="40px"
+              px="20px"
+              fontWeight={600}
+              bg="banner.cta.filled.bg"
+              color="banner.cta.filled.fg"
+              _hover={{ bg: "whiteAlpha.800" }}
+              _active={{ bg: "whiteAlpha.900" }}
+            >
               Explore Vault
             </Button>
-            <Button as={Link} href={blogHref} size="md" height="40px" px="20px" fontWeight={600} variant="outline" bg="transparent" color="banner.cta.outline.fg" borderColor="banner.cta.outline.br" borderWidth="2px" _hover={{ bg: "white", color: "black", borderColor: "white" }} _active={{ bg: "white", color: "black", borderColor: "white" }} _focusVisible={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.45)" }}>
+            <Button
+              as={Link}
+              href={blogHref}
+              size="md"
+              height="40px"
+              px="20px"
+              fontWeight={600}
+              variant="outline"
+              bg="transparent"
+              color="banner.cta.outline.fg"
+              borderColor="banner.cta.outline.br"
+              borderWidth="2px"
+              _hover={{
+                bg: "white",
+                color: "black",
+                borderColor: "white",
+              }}
+              _active={{
+                bg: "white",
+                color: "black",
+                borderColor: "white",
+              }}
+              _focusVisible={{
+                boxShadow: "0 0 0 3px rgba(255,255,255,0.45)",
+              }}
+            >
               View Strategy Blog
             </Button>
           </HStack>
