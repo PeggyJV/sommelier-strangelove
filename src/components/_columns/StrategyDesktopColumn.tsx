@@ -51,11 +51,7 @@ function trackVaultInteraction(vaultName: string) {
   })
 }
 
-const AssetAvatarGroup = memo(({
-  assets,
-}: {
-  assets: Token[]
-}) => {
+const AssetAvatarGroup = memo(({ assets }: { assets: Token[] }) => {
   return (
     <AvatarGroup size="sm">
       {assets?.map((asset: Token) => (
@@ -71,18 +67,18 @@ const AssetAvatarGroup = memo(({
 
 const ChainAvatar = memo(({ chain }: { chain: Chain }) => (
   <AvatarGroup>
-      <Avatar
-        name={chain.displayName}
-        src={chain.logoPath}
-        key={chain.id}
-        background={"transparent"}
-        border={"none"}
-        sx={{
-          width: "2.0em",
-          height: "2.0em",
-        }}
-      />
-    </AvatarGroup>
+    <Avatar
+      name={chain.displayName}
+      src={chain.logoPath}
+      key={chain.id}
+      background={"transparent"}
+      border={"none"}
+      sx={{
+        width: "2.0em",
+        height: "2.0em",
+      }}
+    />
+  </AvatarGroup>
 ))
 
 export const StrategyDesktopColumn = ({
@@ -267,7 +263,11 @@ export const StrategyDesktopColumn = ({
           }
         }
       }) => (
-        <Text fontWeight={550} fontSize={isHero ? "20px" : "16px"} textAlign="right">
+        <Text
+          fontWeight={550}
+          fontSize={isHero ? "20px" : "16px"}
+          textAlign="right"
+        >
           {launchDate && launchDate > Date.now()
             ? "--"
             : tvm?.formatted ?? "--"}

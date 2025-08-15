@@ -332,9 +332,7 @@ export const getStrategyData = async ({
       const providerName = norm(provider?.title)
       const isSommNative =
         providerName.includes("somm") ||
-        s === "alpha-steth" ||
-        s === "alpha-steth-vault" ||
-        s === "alpha-steth-gg"
+        s.includes("alpha-steth")
 
       if (process.env.NODE_ENV !== "production" && s.includes("alpha-steth")) {
         // eslint-disable-next-line no-console
