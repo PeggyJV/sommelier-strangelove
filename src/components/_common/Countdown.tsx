@@ -106,7 +106,12 @@ export default function Countdown({
       backdropBlur="2px"
     >
       <VisuallyHidden>{ariaLabel}</VisuallyHidden>
-      <Text fontWeight={700} fontSize={s.number} lineHeight={1} color="count.box.fg">
+      <Text
+        fontWeight={700}
+        fontSize={s.number}
+        lineHeight={1}
+        color="count.box.fg"
+      >
         {value.toString().padStart(2, "0")}
       </Text>
       <Text fontSize={s.label} color="count.box.sub">
