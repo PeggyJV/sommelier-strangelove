@@ -76,7 +76,8 @@ export default function Countdown({
     intervalRef.current = window.setInterval(tick, 1000)
 
     return () => {
-      if (intervalRef.current) window.clearInterval(intervalRef.current)
+      if (intervalRef.current)
+        window.clearInterval(intervalRef.current)
     }
   }, [targetDate])
 
@@ -105,7 +106,12 @@ export default function Countdown({
       backdropBlur="2px"
     >
       <VisuallyHidden>{ariaLabel}</VisuallyHidden>
-      <Text fontWeight={700} fontSize={s.number} lineHeight={1} color="white">
+      <Text
+        fontWeight={700}
+        fontSize={s.number}
+        lineHeight={1}
+        color="white"
+      >
         {value.toString().padStart(2, "0")}
       </Text>
       <Text fontSize={s.label} color="gray.300">
@@ -115,12 +121,25 @@ export default function Countdown({
   )
 
   return (
-    <Stack direction={{ base: "row" }} spacing={s.gap} align="center" justify="center">
+    <Stack
+      direction={{ base: "row" }}
+      spacing={s.gap}
+      align="center"
+      justify="center"
+    >
       <HStack spacing={s.gap} align="stretch">
         {unitBox(parts.days, "Days", `Days: ${parts.days}`)}
         {unitBox(parts.hours, "Hours", `Hours: ${parts.hours}`)}
-        {unitBox(parts.minutes, "Minutes", `Minutes: ${parts.minutes}`)}
-        {unitBox(parts.seconds, "Seconds", `Seconds: ${parts.seconds}`)}
+        {unitBox(
+          parts.minutes,
+          "Minutes",
+          `Minutes: ${parts.minutes}`
+        )}
+        {unitBox(
+          parts.seconds,
+          "Seconds",
+          `Seconds: ${parts.seconds}`
+        )}
       </HStack>
     </Stack>
   )
