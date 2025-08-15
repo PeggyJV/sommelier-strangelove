@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
 import { CellarType, Badge } from "data/types"
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { StrategyDate } from "./StrategyDate"
 import React from "react"
 
@@ -76,9 +76,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   isSommNative,
   ...props
 }) => {
-  const [isMobile, setIsMobile] = useState(
-    window.innerWidth <= 767
-  )
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767)
 
   useEffect(() => {
     const handleResize = () => {
@@ -115,7 +113,9 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
       >
         <Image
           boxSize="40px"
-          boxShadow={isHero ? "0 0 15px 5px rgba(147, 51, 234, 0.3)" : "none"}
+          boxShadow={
+            isHero ? "0 0 15px 5px rgba(147, 51, 234, 0.3)" : "none"
+          }
           src={icon}
           rounded="full"
           alt="strategy icon"
@@ -127,7 +127,9 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             fontSize="0.75rem"
             fontWeight={600}
           >
-            <Heading fontSize={isHero ? "2rem" : "1rem"}>{title}</Heading>{" "}
+            <Heading fontSize={isHero ? "2rem" : "1rem"}>
+              {title}
+            </Heading>{" "}
           </Flex>
           <Flex
             gap={1}
