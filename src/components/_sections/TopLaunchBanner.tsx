@@ -38,7 +38,6 @@ export default function TopLaunchBanner({
       position="relative"
       overflow="hidden"
     >
-
       {/* GG icon bottom-right, non-blocking, hidden < md */}
       <Box
         aria-hidden
@@ -168,7 +167,10 @@ export default function TopLaunchBanner({
               color="cta.filled.fg"
               _hover={{ bg: "whiteAlpha.800" }}
               _active={{ bg: "whiteAlpha.900" }}
-              _focusVisible={{ boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)" }}
+              _focusVisible={{
+                boxShadow:
+                  "0 0 0 3px var(--chakra-colors-purple-base)",
+              }}
             >
               Explore Vault
             </Button>
@@ -194,7 +196,10 @@ export default function TopLaunchBanner({
                 color: "black",
                 borderColor: "white",
               }}
-              _focusVisible={{ boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)" }}
+              _focusVisible={{
+                boxShadow:
+                  "0 0 0 3px var(--chakra-colors-purple-base)",
+              }}
             >
               View Strategy Blog
             </Button>
