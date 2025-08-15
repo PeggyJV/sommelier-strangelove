@@ -96,8 +96,7 @@ export const isAPYEnabled = (config: ConfigProps) => {
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey ===
       CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD ||
-      config.cellarNameKey === CellarNameKey.ALPHA_STETH  
-      
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
   )
 }
 
@@ -141,7 +140,6 @@ export const isTokenPriceEnabledApp = (config: ConfigProps) => {
       CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD ||
     config.cellarNameKey ===
       CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
-   
   )
 }
 
@@ -387,6 +385,9 @@ export const isUseBigBacktestingModal = (config: ConfigProps) => {
   }
   return "2xl"
 }
+
+// Launch dates and UI toggles
+export const LAUNCH_DATE_ALPHA_STETH = "2025-08-19T00:00:00Z"
 
 export const apyLabel = (config: ConfigProps) => {
   if (

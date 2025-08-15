@@ -17,6 +17,15 @@ import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
 
+// Normalize helper for robust matching
+const norm = (s?: string) =>
+  (s ?? "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/_/g, "-")
+    .replace(/-+/g, "-")
+    .trim()
+
 export const getStrategyData = async ({
   address,
   contracts,
@@ -317,6 +326,20 @@ export const getStrategyData = async ({
             .toFixed(2) + "%",
         value: Number(baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0)
       }
+
+      // Determine Somm-native status (in-house strategies)
+      const s = norm(slug || name)
+      const providerName = norm(provider?.title)
+      const isSommNative =
+        providerName.includes("somm") ||
+        s === "alpha-steth" ||
+        s === "alpha-steth-vault" ||
+        s === "alpha-steth-gg"
+
+      if (process.env.NODE_ENV !== "production" && s.includes("alpha-steth")) {
+        // eslint-disable-next-line no-console
+        console.log("[strategy]", s, { providerName, isSommNative })
+      }
       return {
         activeAsset,
         address,
@@ -346,7 +369,8 @@ export const getStrategyData = async ({
         token,
         config,
         extraRewardsApy,
-        merkleRewardsApy
+        merkleRewardsApy,
+        isSommNative,
       }
     } catch (e) {
       console.error("Error fetching strategy data")

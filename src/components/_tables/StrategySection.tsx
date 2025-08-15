@@ -30,6 +30,7 @@ interface StrategySectionProps extends StackProps {
   isDeprecated?: boolean
   badges?: Badge[]
   isHero?: boolean
+  isSommNative?: boolean
 }
 
 export const formatText = (text: string, isMobile: boolean) => {
@@ -72,6 +73,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   isDeprecated,
   badges,
   isHero,
+  isSommNative,
   ...props
 }) => {
   const [isMobile, setIsMobile] = useState(
@@ -135,6 +137,26 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             paddingTop={".2em"}
           >
             <StrategyDate date={date} deprecated={isDeprecated} />
+            {/* Somm-native badge first when present */}
+            {isSommNative && (
+              <Text
+                as="span"
+                aria-label="Somm-native"
+                title="Somm-native"
+                bg="#2ECC71"
+                color="#FFFFFF"
+                fontSize="11px"
+                fontWeight={600}
+                px="10px"
+                py="4px"
+                borderRadius="9999px"
+                lineHeight="1"
+                display="inline-flex"
+                alignItems="center"
+              >
+                Somm-native
+              </Text>
+            )}
             {badges && badges.length > 0 && (
               <Wrap
                 spacing="2"

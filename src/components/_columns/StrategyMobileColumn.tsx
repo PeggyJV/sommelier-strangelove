@@ -34,6 +34,7 @@ export const StrategyMobileColumn = () => {
             description={row.original.description}
             isDeprecated={row.original.deprecated}
             badges={row.original.config.badges}
+            isSommNative={row.original.isSommNative}
           />
         )
       },

@@ -110,6 +110,7 @@ export const StrategyDesktopColumn = ({
             w={56}
             badges={row.original.config.badges}
             isHero={row.original.isHero}
+            isSommNative={row.original.isSommNative}
           />
         )
       },
