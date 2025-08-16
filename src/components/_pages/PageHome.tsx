@@ -1,6 +1,8 @@
 import {
+  Box,
   Button,
   Center,
+  Grid,
   HStack,
   Spacer,
   Text,
@@ -41,6 +43,8 @@ import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import TopLaunchBanner from "components/_sections/TopLaunchBanner"
+import WithdrawalStatusPanel from "components/_sections/WithdrawalStatusPanel"
+import SectionHeader from "components/_sections/SectionHeader"
 import { alphaSteth } from "data/strategies/alpha-steth"
 import { MigrationModal } from "components/_modals/MigrationModal"
 
@@ -363,13 +367,42 @@ export const PageHome = () => {
     isConnected,
   ])
 
+  const bannerTargetDate: Date =
+    alphaSteth.launchDate ??
+    new Date(Date.UTC(2025, 7, 19, 0, 0, 0, 0))
+
+  const { sommNative, legacy } = useMemo(() => {
+    const list = strategyData || []
+    return {
+      sommNative: list.filter((v) => v?.isSommNative),
+      legacy: list.filter((v) => !v?.isSommNative),
+    }
+  }, [strategyData])
+
+  const WithdrawalStatusPanel = () => (
+    <Box
+      mt={6}
+      mb={4}
+      borderWidth="1px"
+      borderColor="surface.secondary"
+      rounded="xl"
+      px={4}
+      py={3}
+      bg="surface.primary"
+    >
+      <Text fontSize="sm" color="neutral.300">
+        Legacy vaults may have paused deposits. Review withdrawal
+        options in each vault’s details.
+      </Text>
+    </Box>
+  )
+
+  // ColumnHeaders removed (no longer used)
+
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
-      <TopLaunchBanner
-        targetDate={alphaSteth.launchDate}
-        blogHref="#"
-      />
+      <TopLaunchBanner targetDate={bannerTargetDate} blogHref="#" />
       {/*
         <InfoBanner
           text={
@@ -469,7 +502,29 @@ export const PageHome = () => {
           </ErrorCard>
         ) : (
           <>
-            <StrategyTable columns={columns} data={strategyData} />
+            {sommNative.length > 0 && (
+              <>
+                <SectionHeader
+                  title="Somm-native Vaults"
+                  pill="Active"
+                  pillColor="green"
+                />
+                <StrategyTable columns={columns} data={sommNative} />
+              </>
+            )}
+
+            {legacy.length > 0 && <WithdrawalStatusPanel />}
+
+            {legacy.length > 0 && (
+              <>
+                <SectionHeader
+                  title="Legacy Vaults (Managed by Seven Seas)"
+                  pill="Legacy"
+                  pillColor="orange"
+                />
+                <StrategyTable columns={columns} data={legacy} />
+              </>
+            )}
           </>
         )}
 

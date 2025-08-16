@@ -76,5 +76,25 @@ export const StrategyMobileColumn = () => {
         </Text>
       ),
     },
+    {
+      Header: () => <Text>Net Rewards</Text>,
+      accessor: "baseApy",
+      Cell: ({ row }: any) => {
+        const value = row.original.baseApySumRewards?.formatted
+        const launchDate = row.original.launchDate
+        if (launchDate && launchDate > Date.now()) {
+          return (
+            <Text fontWeight={550} fontSize="16px" textAlign="right">
+              --
+            </Text>
+          )
+        }
+        return (
+          <Text fontWeight={600} fontSize="16px" textAlign="right">
+            {value ?? "--"}
+          </Text>
+        )
+      },
+    },
   ]
 }

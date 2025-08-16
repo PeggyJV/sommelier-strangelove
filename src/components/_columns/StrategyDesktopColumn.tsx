@@ -1,6 +1,7 @@
 import {
   Avatar,
   AvatarGroup,
+  Badge,
   Box,
   Flex,
   HStack,
@@ -8,8 +9,8 @@ import {
   Tooltip,
 } from "@chakra-ui/react"
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
+import { VaultActionButton } from "components/_buttons/VaultActionButton"
 import { InformationIcon } from "components/_icons"
-import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
 import { Chain } from "data/chainConfig"
@@ -93,21 +94,30 @@ export const StrategyDesktopColumn = ({
       ),
       accessor: "name",
       Cell: ({ row }: any) => {
+        const shortDesc = row.original?.shortDescription
+        const providerText =
+          row.original?.provider?.title || row.original?.provider
         return (
-          <StrategySection
-            icon={row.original.logo}
-            onClick={() => trackVaultInteraction(row.original.name)}
-            title={row.original.name}
-            provider={row.original.provider.title}
-            type={row.original.type}
-            date={row.original.launchDate}
-            description={row.original.description}
-            isDeprecated={row.original.deprecated}
-            w={56}
-            badges={row.original.config.badges}
-            isHero={row.original.isHero}
-            isSommNative={row.original.isSommNative}
-          />
+          <Box>
+            <HStack spacing={2}>
+              <Text fontWeight="bold">{row.original?.name}</Text>
+            </HStack>
+            <HStack spacing={2} mt="1">
+              {row.original?.isSommNative && (
+                <Badge colorScheme="purple">Somm-native</Badge>
+              )}
+              {providerText && (
+                <Text fontSize="sm" color="whiteAlpha.800">
+                  {providerText}
+                </Text>
+              )}
+            </HStack>
+            {shortDesc && (
+              <Text mt="1" fontSize="sm" color="whiteAlpha.800">
+                {shortDesc}
+              </Text>
+            )}
+          </Box>
         )
       },
       disableSortBy: false,
@@ -117,127 +127,6 @@ export const StrategyDesktopColumn = ({
           rowA.original.activeAsset?.symbol.toLowerCase() || ""
         const valB =
           rowB.original.activeAsset?.symbol.toLowerCase() || ""
-
-        // Normal Sorting
-        if (valA > valB) return 1
-
-        if (valB > valA) return -1
-
-        return 0
-      },
-    },
-    {
-      Header: () => (
-        <Tooltip
-          arrowShadowColor="purple.base"
-          label="Vault will have exposure to 1 or more of these assets at any given time"
-          placement="top"
-          color="neutral.300"
-          bg="surface.bg"
-        >
-          <HStack
-            style={{ textAlign: "center", width: "100%" }}
-            justifyContent={"center"}
-          >
-            <Text>Assets</Text>
-            <InformationIcon color="neutral.400" boxSize={3} />
-          </HStack>
-        </Tooltip>
-      ),
-      accessor: "tradedAssets",
-      Cell: ({ cell: { value } }: CellValue) => {
-        const getFirst4Value = value.slice(0, 4)
-        const getRemainingValue = value.length - getFirst4Value.length
-        const [isHover, setIsHover] = useState(false)
-        const handleMouseOver = () => {
-          setIsHover(true)
-        }
-        const handleMouseLeave = () => {
-          setIsHover(false)
-        }
-        if (!value)
-          return (
-            <Text fontWeight={600} fontSize="12px">
-              --
-            </Text>
-          )
-        return (
-          <Box
-            onMouseLeave={handleMouseLeave}
-            onMouseOver={handleMouseOver}
-            w={"100%"}
-          >
-            <HStack justifyContent={"center"}>
-              <AssetAvatarGroup assets={getFirst4Value} />
-              {value.length > 6 && (
-                <Text fontWeight={600}>+{getRemainingValue}</Text>
-              )}
-            </HStack>
-            <Flex alignItems="center" direction="column">
-              {isHover && <AvatarTooltip tradedAssets={value} />}
-            </Flex>
-          </Box>
-        )
-      },
-      disableSortBy: true,
-    },
-    {
-      Header: () => (
-        <Tooltip
-          arrowShadowColor="purple.base"
-          label="The chain the vault is deployed on"
-          placement="top"
-          color="neutral.300"
-          bg="surface.bg"
-        >
-          <HStack
-            style={{ textAlign: "right", width: "100%" }}
-            justifyContent={"right"}
-          >
-            <Text>Chain</Text>
-            <InformationIcon color="neutral.400" boxSize={3} />
-          </HStack>
-        </Tooltip>
-      ),
-      accessor: "chain",
-      Cell: ({ cell: { row } }: CellValue) => {
-        const [isHover, setIsHover] = useState(false)
-        const handleMouseOver = () => {
-          setIsHover(true)
-        }
-        const handleMouseLeave = () => {
-          setIsHover(false)
-        }
-        if (!row)
-          return (
-            <Text fontWeight={600} fontSize="12px">
-              --
-            </Text>
-          )
-        return (
-          <Box
-            onMouseLeave={handleMouseLeave}
-            onMouseOver={handleMouseOver}
-            w={"80%"}
-          >
-            <HStack justifyContent={"right"}>
-              <ChainAvatar chain={row.original.config.chain} />
-            </HStack>
-            <Flex alignItems="center" direction="column">
-              {isHover && (
-                <AvatarTooltip chains={[row.original.config.chain]} />
-              )}
-            </Flex>
-          </Box>
-        )
-      },
-      disableSortBy: false,
-      sortType: (rowA: RowData, rowB: RowData) => {
-        // Sort by chain
-        const valA =
-          rowA.original.config.chain.displayName.toLowerCase() || ""
-        const valB =
-          rowB.original.config.chain.displayName.toLowerCase() || ""
 
         // Normal Sorting
         if (valA > valB) return 1
@@ -278,13 +167,13 @@ export const StrategyDesktopColumn = ({
       Header: () => (
         <Tooltip
           arrowShadowColor="purple.base"
-          label="APY after any platform and strategy provider fees, inclusive of rewards program earnings when an active rewards program is in place"
+          label="Net rewards inclusive of base yield and any rewards program when active"
           placement="top"
           color="neutral.300"
           bg="surface.bg"
         >
           <HStack spacing={1}>
-            <Text>Net APY</Text>
+            <Text>Net Rewards</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
         </Tooltip>
@@ -292,6 +181,7 @@ export const StrategyDesktopColumn = ({
       accessor: "baseApy",
       Cell: ({ row }: any) => {
         const launchDate = row.original.launchDate
+        const value = row.original.baseApySumRewards?.formatted
         if (launchDate && launchDate > Date.now()) {
           return (
             <Text fontWeight={550} fontSize="16px" textAlign="right">
@@ -300,18 +190,9 @@ export const StrategyDesktopColumn = ({
           )
         }
         return (
-          <ApyRewardsSection
-            cellarId={row.original.slug}
-            baseApy={row.original.baseApy?.formatted}
-            rewardsApy={row.original.rewardsApy?.formatted}
-            stackingEndDate={row.original.stakingEnd?.endDate}
-            date={row.original.launchDate}
-            baseApySumRewards={
-              row.original.baseApySumRewards?.formatted
-            }
-            extraRewardsApy={row.original.extraRewardsApy?.formatted}
-            merkleRewardsApy={row.original.merkleRewardsApy}
-          />
+          <Text fontWeight={600} fontSize="16px" textAlign="right">
+            {value ?? "--"}
+          </Text>
         )
       },
       sortType: (rowA: RowData, rowB: RowData) => {
@@ -327,15 +208,74 @@ export const StrategyDesktopColumn = ({
         return valB - valA
       },
     },
+    {
+      Header: () => (
+        <Tooltip
+          arrowShadowColor="purple.base"
+          label="The chain the vault is deployed on"
+          placement="top"
+          color="neutral.300"
+          bg="surface.bg"
+        >
+          <HStack
+            style={{ textAlign: "right", width: "100%" }}
+            justifyContent={"right"}
+          >
+            <Text>Chain</Text>
+            <InformationIcon color="neutral.400" boxSize={3} />
+          </HStack>
+        </Tooltip>
+      ),
+      accessor: "chain",
+      Cell: ({ cell: { row } }: CellValue) => {
+        const [isHover, setIsHover] = useState(false)
+        const handleMouseOver = () => {
+          setIsHover(true)
+        }
+        const handleMouseLeave = () => {
+          setIsHover(false)
+        }
+        if (!row)
+          return (
+            <Text fontWeight={600} fontSize="12px">
+              --
+            </Text>
+          )
+        return (
+          <Box
+            aria-label={`Chain: ${row.original.config.chain.displayName}`}
+            onMouseLeave={handleMouseLeave}
+            onMouseOver={handleMouseOver}
+            w={"80%"}
+          >
+            <HStack justifyContent={"right"}>
+              <ChainAvatar chain={row.original.config.chain} />
+            </HStack>
+            <Flex alignItems="center" direction="column">
+              {isHover && (
+                <AvatarTooltip chains={[row.original.config.chain]} />
+              )}
+            </Flex>
+          </Box>
+        )
+      },
+      disableSortBy: false,
+      sortType: (rowA: RowData, rowB: RowData) => {
+        const valA =
+          rowA.original.config.chain.displayName.toLowerCase() || ""
+        const valB =
+          rowB.original.config.chain.displayName.toLowerCase() || ""
+        if (valA > valB) return 1
+        if (valB > valA) return -1
+        return 0
+      },
+    },
     // Deposit column
     {
-      Header: () => <Text>Deposit</Text>,
+      Header: () => <Text>Action</Text>,
       id: "deposit",
       Cell: ({ row }: any) => (
-        <DepositAndWithdrawButton
-          row={row}
-          onDepositModalOpen={onDepositModalOpen}
-        />
+        <VaultActionButton vault={row.original} />
       ),
     },
   ]

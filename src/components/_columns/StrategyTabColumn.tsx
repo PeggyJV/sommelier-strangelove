@@ -178,13 +178,13 @@ export const StrategyTabColumn = ({
       Header: () => (
         <Tooltip
           arrowShadowColor="purple.base"
-          label="APY after any platform and strategy provider fees, inclusive of rewards program earnings when an active rewards program is in place"
+          label="Net rewards inclusive of base yield and any rewards program when active"
           placement="top"
           color="neutral.300"
           bg="surface.bg"
         >
           <HStack spacing={1}>
-            <Text>Net APY</Text>
+            <Text>Net Rewards</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
         </Tooltip>
@@ -192,10 +192,8 @@ export const StrategyTabColumn = ({
       accessor: "baseApy",
       Cell: ({ row }: any) => {
         const launchDate = row.original.launchDate
-        if (
-          (launchDate && launchDate > Date.now()) ||
-          !row.original.baseApy
-        ) {
+        const value = row.original.baseApySumRewards?.formatted
+        if (launchDate && launchDate > Date.now()) {
           return (
             <Text fontWeight={550} fontSize="16px" textAlign="right">
               --
@@ -203,18 +201,9 @@ export const StrategyTabColumn = ({
           )
         }
         return (
-          <ApyRewardsSection
-            cellarId={row.original.slug}
-            baseApy={row.original.baseApy?.formatted}
-            rewardsApy={row.original.rewardsApy?.formatted}
-            stackingEndDate={row.original.stakingEnd?.endDate}
-            date={row.original.launchDate}
-            baseApySumRewards={
-              row.original.baseApySumRewards?.formatted
-            }
-            extraRewardsApy={row.original.extraRewardsApy?.formatted}
-            merkleRewardsApy={row.original.merkleRewardsApy}
-          />
+          <Text fontWeight={600} fontSize="16px" textAlign="right">
+            {value ?? "--"}
+          </Text>
         )
       },
       sortType: (rowA: RowData, rowB: RowData) => {

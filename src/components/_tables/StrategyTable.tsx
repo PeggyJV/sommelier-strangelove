@@ -31,6 +31,9 @@ export const BorderTr: FC<BorderTrProps> = ({
   const router = useRouter()
   return (
     <Tr
+      tabIndex={0}
+      role="link"
+      aria-label={`Open ${name}`}
       _notLast={{
         borderBottom: "1px solid",
         borderColor: "surface.secondary",
@@ -38,9 +41,20 @@ export const BorderTr: FC<BorderTrProps> = ({
       _hover={{
         bg: "surface.secondary",
       }}
+      _focusVisible={{
+        outline: "2px solid",
+        outlineColor: "purple.base",
+        outlineOffset: "2px",
+      }}
       cursor="pointer"
       onClick={() => {
         router.push(slug)
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          router.push(slug)
+        }
       }}
       {...props}
     />
@@ -55,6 +69,9 @@ export const HeroTr: FC<BorderTrProps> = ({
   const router = useRouter()
   return (
     <Tr
+      tabIndex={0}
+      role="link"
+      aria-label={`Open ${name}`}
       _hover={{
         backgroundImage: "url('/assets/images/waves-bg.svg')",
         backgroundSize: "cover",
@@ -81,10 +98,21 @@ export const HeroTr: FC<BorderTrProps> = ({
           backgroundImage: "url('/assets/images/waves-bg.svg')",
         },
       }}
+      _focusVisible={{
+        outline: "2px solid",
+        outlineColor: "purple.base",
+        outlineOffset: "2px",
+      }}
       onClick={() => {
         router.push(slug)
       }}
       cursor="pointer"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          router.push(slug)
+        }
+      }}
       {...props}
     />
   )
@@ -94,11 +122,7 @@ export const BorderTd: FC<TableCellProps & { href: string }> = ({
   href,
   ...props
 }) => {
-  return (
-    <Td py={7}>
-      {props.children}
-    </Td>
-  )
+  return <Td py={7}>{props.children}</Td>
 }
 
 export interface StrategyTableProps {
@@ -166,7 +190,12 @@ export const StrategyTable = memo(
                         justifyContent="end"
                       >
                         {column.render("Header")}
-                        <Icon as={SortingArrowIcon} boxSize={3} />
+                        <Icon
+                          as={SortingArrowIcon}
+                          boxSize={3}
+                          opacity={0.5}
+                          cursor="default"
+                        />
                       </Flex>
                     </Th>
                   ) : (

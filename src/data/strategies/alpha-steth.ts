@@ -4,6 +4,12 @@ import { chainSlugMap } from "data/chainConfig"
 import { tokenConfigMap } from "src/data/tokenConfig"
 import { CellarNameKey, CellarKey } from "data/types"
 
+export const isSommNative = true
+export const provider = "Somm Finance + Lido"
+export const shortDescription =
+  "Dynamic leveraged stETH across blue-chip DeFi; no legacy vault dependency."
+export const status = "active" // active | withdrawals-only | paused
+
 export const alphaSteth: CellarData = {
   name: "Alpha STETH",
   slug: config.CONTRACT.ALPHA_STETH.SLUG,
