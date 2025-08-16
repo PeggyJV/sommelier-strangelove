@@ -101,10 +101,12 @@ export default function Countdown({
       textAlign="center"
       px={s.px}
       py={s.py}
-      minW={{ base: 16, md: 18 }}
+      minW="auto"
       bg="count.box.bg"
       borderWidth={variant === "boxed" ? 1 : 0}
-      borderColor={variant === "boxed" ? "count.box.border" : undefined}
+      borderColor={
+        variant === "boxed" ? "count.box.border" : undefined
+      }
       rounded="lg"
       backdropFilter="auto"
       backdropBlur="2px"
@@ -131,10 +133,14 @@ export default function Countdown({
       align="center"
       justify="center"
     >
-      <Wrap
-        shouldWrapChildren
-        spacing={{ base: 3, md: s.gap }}
-        maxW="100%"
+      <Box
+        display="grid"
+        gridTemplateColumns={{
+          base: "repeat(2, minmax(56px, 1fr))",
+          md: "repeat(4, minmax(56px, 1fr))",
+        }}
+        gap={{ base: 3, md: 4 }}
+        w="100%"
       >
         {unitBox(parts.days, "Days", `Days: ${parts.days}`)}
         {unitBox(parts.hours, "Hours", `Hours: ${parts.hours}`)}
@@ -148,7 +154,7 @@ export default function Countdown({
           "Seconds",
           `Seconds: ${parts.seconds}`
         )}
-      </Wrap>
+      </Box>
     </Stack>
   )
 }
