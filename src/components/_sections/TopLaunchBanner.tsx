@@ -29,8 +29,8 @@ export default function TopLaunchBanner({
     <Box
       as="section"
       borderWidth="1px"
-      borderColor="border.subtle"
-      bg="surface.bg"
+      borderColor="banner.border"
+      bgGradient="linear(to-r, banner.bg.start 0%, banner.bg.mid 45%, banner.bg.end 100%)"
       rounded="xl"
       px={{ base: 4, md: 6 }}
       py={{ base: 4, md: 6, lg: 7 }}
@@ -38,6 +38,15 @@ export default function TopLaunchBanner({
       position="relative"
       overflow="hidden"
     >
+      {/* Soft radial glow */}
+      <Box
+        position="absolute"
+        inset="auto auto 0 0"
+        w="60%"
+        h="140%"
+        bg="radial-gradient(600px 300px at 20% 30%, rgba(108,78,217,.25), transparent 70%)"
+        pointerEvents="none"
+      />
       {/* GG icon bottom-right, non-blocking, hidden < md */}
       <Box
         aria-hidden

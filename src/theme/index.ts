@@ -27,10 +27,10 @@ const theme = extendTheme({
       "text.secondary": { default: "neutral.300" },
       "border.subtle": { default: "whiteAlpha.200" },
       // Banner-specific tokens (UI-only)
-      // Preferred aliases mapped to existing app colors
-      "banner.bg.start": { default: "surface.bg" },
-      "banner.bg.mid": { default: "neutral.900" },
-      "banner.bg.end": { default: "neutral.800" },
+      // Preferred aliases mapped to brand gradient (Somm → Lido)
+      "banner.bg.start": { default: "purple.dark" },
+      "banner.bg.mid": { default: "purple.base" },
+      "banner.bg.end": { default: "#00A3FF" },
       "banner.border": { default: "border.subtle" },
       // Back-compat
       "banner.gradient.start": { default: "#0B0F17" },
@@ -43,8 +43,8 @@ const theme = extendTheme({
       "banner.text.h1": { default: "text.primary" },
       "banner.text.body": { default: "text.secondary" },
       // CTA (generic + banner)
-      "cta.filled.bg": { default: "white" },
-      "cta.filled.fg": { default: "black" },
+      "cta.filled.bg": { default: "purple.base" },
+      "cta.filled.fg": { default: "white" },
       "cta.outline.fg": { default: "whiteAlpha.900" },
       "cta.outline.br": { default: "white" },
       "banner.cta.filled.bg": { default: "white" },
@@ -54,10 +54,11 @@ const theme = extendTheme({
       // Chips & pill
       "chip.bg": { default: "whiteAlpha.100" },
       "chip.fg": { default: "whiteAlpha.900" },
-      "banner.pill.bg": { default: "chip.bg" },
-      "banner.pill.fg": { default: "chip.fg" },
+      "banner.pill.bg": { default: "rgba(0,163,255,0.16)" },
+      "banner.pill.fg": { default: "text.primary" },
       // Countdown boxes
-      "count.box.bg": { default: "surface.primary" },
+      "count.box.bg": { default: "whiteAlpha.100" },
+      "count.box.border": { default: "rgba(108,78,217,0.45)" },
       "count.box.fg": { default: "white" },
       "count.box.sub": { default: "text.secondary" },
     },

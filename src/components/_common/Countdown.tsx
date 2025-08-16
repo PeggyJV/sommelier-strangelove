@@ -1,4 +1,10 @@
-import { Box, Wrap, Stack, Text, VisuallyHidden } from "@chakra-ui/react"
+import {
+  Box,
+  Wrap,
+  Stack,
+  Text,
+  VisuallyHidden,
+} from "@chakra-ui/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 type CountdownSize = "sm" | "md" | "lg"
@@ -7,6 +13,7 @@ export interface CountdownProps {
   targetDate: Date
   onExpire?: () => void
   size?: CountdownSize
+  variant?: "boxed" | "plain"
 }
 
 type TimeParts = {
@@ -46,6 +53,7 @@ export default function Countdown({
   targetDate,
   onExpire,
   size = "md",
+  variant = "plain",
 }: CountdownProps) {
   // Prevent hydration mismatch: render zeros until mounted
   const [mounted, setMounted] = useState(false)
@@ -95,6 +103,8 @@ export default function Countdown({
       py={s.py}
       minW={{ base: 16, md: 18 }}
       bg="count.box.bg"
+      borderWidth={variant === "boxed" ? 1 : 0}
+      borderColor={variant === "boxed" ? "count.box.border" : undefined}
       rounded="lg"
       backdropFilter="auto"
       backdropBlur="2px"
@@ -115,12 +125,29 @@ export default function Countdown({
   )
 
   return (
-    <Stack direction={{ base: "row" }} spacing={s.gap} align="center" justify="center">
-      <Wrap shouldWrapChildren spacing={{ base: 3, md: s.gap }} maxW="100%">
+    <Stack
+      direction={{ base: "row" }}
+      spacing={s.gap}
+      align="center"
+      justify="center"
+    >
+      <Wrap
+        shouldWrapChildren
+        spacing={{ base: 3, md: s.gap }}
+        maxW="100%"
+      >
         {unitBox(parts.days, "Days", `Days: ${parts.days}`)}
         {unitBox(parts.hours, "Hours", `Hours: ${parts.hours}`)}
-        {unitBox(parts.minutes, "Minutes", `Minutes: ${parts.minutes}`)}
-        {unitBox(parts.seconds, "Seconds", `Seconds: ${parts.seconds}`)}
+        {unitBox(
+          parts.minutes,
+          "Minutes",
+          `Minutes: ${parts.minutes}`
+        )}
+        {unitBox(
+          parts.seconds,
+          "Seconds",
+          `Seconds: ${parts.seconds}`
+        )}
       </Wrap>
     </Stack>
   )
