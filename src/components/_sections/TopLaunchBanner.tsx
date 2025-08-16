@@ -6,13 +6,13 @@ import {
   Link,
   Flex,
   HStack,
-  Image,
   Grid,
   GridItem,
 } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
 import NextLink from "next/link"
 import Countdown from "components/_common/Countdown"
+import NextImage from "next/image"
 
 type Props = {
   targetDate: Date
@@ -51,14 +51,12 @@ export default function TopLaunchBanner({
           pointerEvents="none"
           display={{ base: "none", md: "block" }}
         >
-          <Image
+          <NextImage
             src="/assets/icons/GG.png"
             alt=""
-            h={{ md: 12, lg: 16 }}
-            w="auto"
-            filter="none"
-            opacity={1}
-            mixBlendMode="normal"
+            width={96}
+            height={96}
+            priority={false}
           />
         </Box>
 
@@ -83,6 +81,13 @@ export default function TopLaunchBanner({
                 rounded="full"
                 w="fit-content"
               >
+                <NextImage
+                  src="/assets/icons/lido.png"
+                  alt="Lido"
+                  width={32}
+                  height={32}
+                  priority={false}
+                />
                 <Text
                   fontSize={{ base: "xs", md: "sm" }}
                   fontWeight={600}
@@ -99,19 +104,12 @@ export default function TopLaunchBanner({
                   aria-label="Lido official website"
                 >
                   <HStack spacing={1.5} whiteSpace="nowrap">
-                    <Image
+                    <NextImage
                       src={lidoSrc}
-                      fallbackSrc={lidoFallbackPng}
                       alt="Lido"
-                      h="1.05em"
-                      w="auto"
-                      verticalAlign="middle"
-                      style={{ transform: "translateY(-0.5px)" }}
-                      filter="none"
-                      mixBlendMode="normal"
-                      opacity={1}
-                      loading="eager"
-                      decoding="async"
+                      width={20}
+                      height={20}
+                      priority={false}
                     />
                     <Text
                       fontSize={{ base: "xs", md: "sm" }}
