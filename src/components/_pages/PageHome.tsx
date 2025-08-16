@@ -41,7 +41,7 @@ import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import TopLaunchBanner from "components/_sections/TopLaunchBanner"
-import { LAUNCH_DATE_ALPHA_STETH } from "data/uiConfig"
+import { alphaSteth } from "data/strategies/alpha-steth"
 import { MigrationModal } from "components/_modals/MigrationModal"
 
 export const PageHome = () => {
@@ -367,7 +367,7 @@ export const PageHome = () => {
   return (
     <LayoutWithSidebar>
       <TopLaunchBanner
-        targetDate={new Date(LAUNCH_DATE_ALPHA_STETH)}
+        targetDate={alphaSteth.launchDate}
         blogHref="#"
       />
       {/*
