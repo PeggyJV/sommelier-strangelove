@@ -64,7 +64,7 @@ export default function TopLaunchBanner({
         spacing={{ base: 5, lg: 8 }}
         templateColumns={{
           base: undefined,
-          lg: "1fr minmax(300px,360px)",
+          lg: "minmax(0,1fr) minmax(260px,340px)",
         }}
         alignItems={{ base: "start", lg: "start" }}
       >
@@ -212,7 +212,9 @@ export default function TopLaunchBanner({
           align={{ lg: "flex-start" }}
           justify="flex-start"
         >
-          <Countdown size="lg" targetDate={targetDate} />
+          <Box maxW="100%" overflow="hidden" pr={2}>
+            <Countdown size="lg" targetDate={targetDate} />
+          </Box>
         </Flex>
       </SimpleGrid>
     </Box>
