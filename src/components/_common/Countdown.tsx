@@ -1,4 +1,4 @@
-import { Box, Wrap, WrapItem, Stack, Text, VisuallyHidden } from "@chakra-ui/react"
+import { Box, Wrap, Stack, Text, VisuallyHidden } from "@chakra-ui/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 type CountdownSize = "sm" | "md" | "lg"
@@ -117,10 +117,10 @@ export default function Countdown({
   return (
     <Stack direction={{ base: "row" }} spacing={s.gap} align="center" justify="center">
       <Wrap shouldWrapChildren spacing={{ base: 3, md: s.gap }} maxW="100%">
-        <WrapItem>{unitBox(parts.days, "Days", `Days: ${parts.days}`)}</WrapItem>
-        <WrapItem>{unitBox(parts.hours, "Hours", `Hours: ${parts.hours}`)}</WrapItem>
-        <WrapItem>{unitBox(parts.minutes, "Minutes", `Minutes: ${parts.minutes}`)}</WrapItem>
-        <WrapItem>{unitBox(parts.seconds, "Seconds", `Seconds: ${parts.seconds}`)}</WrapItem>
+        {unitBox(parts.days, "Days", `Days: ${parts.days}`)}
+        {unitBox(parts.hours, "Hours", `Hours: ${parts.hours}`)}
+        {unitBox(parts.minutes, "Minutes", `Minutes: ${parts.minutes}`)}
+        {unitBox(parts.seconds, "Seconds", `Seconds: ${parts.seconds}`)}
       </Wrap>
     </Stack>
   )

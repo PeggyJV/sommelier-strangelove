@@ -8,7 +8,7 @@ import { shadows } from "./shadows"
 
 // https://chakra-ui.com/docs/theming/theme#config
 export const config: ThemeConfig = {
-  initialColorMode: "light"
+  initialColorMode: "light",
 }
 
 // https://chakra-ui.com/docs/theming/customize-theme
@@ -37,6 +37,8 @@ const theme = extendTheme({
       "banner.gradient.end": { default: "#0B2438" },
       "banner.bloom.cyanA": { default: "rgba(0,163,255,0.12)" },
       "banner.bloom.cyanB": { default: "rgba(41,227,254,0.10)" },
+      // Lido accent
+      "banner.lido.info": { default: "#00A3FF" },
       // Text
       "banner.text.h1": { default: "text.primary" },
       "banner.text.body": { default: "text.secondary" },
