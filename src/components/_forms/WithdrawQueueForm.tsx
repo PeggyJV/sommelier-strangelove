@@ -37,6 +37,7 @@ import { InformationIcon } from "components/_icons"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
+import { WITHDRAW_DEADLINE_HOURS } from "src/constants/withdraw"
 import { getAddress } from "viem"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { MaxUint256 } from "utils/bigIntHelpers"
@@ -46,8 +47,6 @@ import { useWithdrawRequestStatus } from "data/hooks/useWithdrawRequestStatus"
 
 interface FormValues {
   withdrawAmount: number
-  deadlineHours: number
-  sharePriceDiscountPercent: number
 }
 
 interface WithdrawQueueFormProps {
@@ -55,8 +54,7 @@ interface WithdrawQueueFormProps {
   onSuccessfulWithdraw?: () => void
 }
 
-const DEADLINE_HOURS = 288
-const SHARE_PRICE_DISCOUNT_PERCENT = 0.25
+const DEADLINE_HOURS = WITHDRAW_DEADLINE_HOURS
 
 export const WithdrawQueueForm = ({
   onClose,
@@ -350,9 +348,9 @@ export const WithdrawQueueForm = ({
 
     if (boringQueue) {
 
-      let discount =
-        cellarConfig.withdrawTokenConfig?.[selectedToken.symbol]
-          ?.minDiscount ?? SHARE_PRICE_DISCOUNT_PERCENT
+      const discount = cellarConfig.withdrawTokenConfig?.[
+        selectedToken.symbol
+      ]?.minDiscount ?? 0
 
       const deadlineSeconds = DEADLINE_HOURS * 60 * 60
 
@@ -427,9 +425,7 @@ export const WithdrawQueueForm = ({
 
       const sharePriceStandardized =
         previewRedeem / 10 ** cellarConfig.baseAsset.decimals
-      const sharePriceWithDiscount =
-        sharePriceStandardized *
-        ((100 - SHARE_PRICE_DISCOUNT_PERCENT) / 100)
+      const sharePriceWithDiscount = sharePriceStandardized
       const sharePriceWithDiscountInBaseDenom = Math.floor(
         sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
       )
@@ -675,113 +671,24 @@ export const WithdrawQueueForm = ({
             />
             {boringQueue && (
               <>
-                <FormControl
-                  isInvalid={!!errors.sharePriceDiscountPercent}
-                >
+                <FormControl>
                   <HStack justify="space-between">
-                    <Tooltip
-                      hasArrow
-                      placement="top"
-                      label={
-                        "How much of a discount under the current share price you are willing to accept to fulfill the withdrawal. The higher the discount, the more likely your request will be fulfilled."
-                      }
-                      bg="surface.bg"
-                      color="neutral.300"
-                    >
-                      <HStack spacing={1} align="center">
-                        <Text as="span">Share Price Discount</Text>
-                        <InformationIcon
-                          color="neutral.300"
-                          boxSize={3}
-                        />
-                      </HStack>
-                    </Tooltip>
+                    <Text as="span">Withdrawal deadline</Text>
                     <InputGroup width="25%" alignItems="center">
                       <Input
-                        id="sharePrice"
                         variant="unstyled"
-                        type="number"
-                        step="any"
-                        defaultValue={
-                          cellarConfig.withdrawTokenConfig?.[
-                            selectedToken.symbol
-                          ]?.minDiscount
-                        }
-                        placeholder="0"
+                        value="14 days"
+                        isReadOnly
+                        aria-readonly
                         fontSize="lg"
                         fontWeight={700}
                         textAlign="right"
                         padding={2}
                         borderRadius={16}
-                        pr={8}
                         height="2.2em"
-                        disabled={true}
                       />
-                      <InputRightElement pointerEvents="none">
-                        <Text>%</Text>
-                      </InputRightElement>
                     </InputGroup>
                   </HStack>
-                  <FormErrorMessage color="energyYellow">
-                    <Icon
-                      p={0.5}
-                      mr={1}
-                      color="surface.bg"
-                      bg="red.base"
-                      borderRadius="50%"
-                      as={AiOutlineInfo}
-                    />
-                    {errors.sharePriceDiscountPercent?.message}
-                  </FormErrorMessage>
-                </FormControl>
-                <FormControl isInvalid={!!errors.deadlineHours}>
-                  <HStack justify="space-between">
-                    <Tooltip
-                      hasArrow
-                      placement="top"
-                      label={
-                        "How many hours the request will be valid for. If the request is not fulfilled within this duration, it will be cancelled."
-                      }
-                      bg="surface.bg"
-                      color="neutral.300"
-                    >
-                      <HStack spacing={1} align="center">
-                        <Text as="span">Deadline Hours</Text>
-                        <InformationIcon
-                          color="neutral.300"
-                          boxSize={3}
-                        />
-                      </HStack>
-                    </Tooltip>
-                    <Input
-                      id="deadline"
-                      variant="unstyled"
-                      pr="2"
-                      type="number"
-                      step="any"
-                      defaultValue={DEADLINE_HOURS}
-                      placeholder="0.00"
-                      fontSize="lg"
-                      fontWeight={700}
-                      textAlign="right"
-                      width="25%"
-                      padding={2}
-                      borderRadius={16}
-                      height="2.2em"
-                      disabled={true}
-                    />
-                  </HStack>
-                  <FormErrorMessage color="energyYellow">
-                    <Icon
-                      p={0.5}
-                      mr={1}
-                      color="surface.bg"
-                      bg="red.base"
-                      borderRadius="50%"
-                      as={AiOutlineInfo}
-                    />
-                    {errors.deadlineHours?.message}
-                  </FormErrorMessage>
                 </FormControl>
               </>
             )}
