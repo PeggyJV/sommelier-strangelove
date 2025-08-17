@@ -107,11 +107,11 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     <Box>
       <Grid
         templateColumns={{ base: "1fr", md: "1.2fr 1.1fr 1fr" }}
-        gap={{ base: 4, md: 6 }}
+        gap={{ base: 3, md: 6 }}
         alignItems="center"
       >
         {/* Left column: Identity */}
-        <HStack spacing={3} align="center" minW={0}>
+        <HStack spacing={{ base: 2, md: 3 }} align="center" minW={0}>
           <Image
             src={
               vault?.isSommNative
@@ -119,13 +119,14 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                 : (vault as any)?.logo
             }
             alt={vault?.name || "Vault"}
-            boxSize="40px"
+            boxSize={{ base: "32px", md: "40px" }}
             rounded="full"
+            flexShrink={0}
           />
-          <VStack spacing={1} align="flex-start" minW={0}>
+          <VStack spacing={1} align="flex-start" minW={0} flex={1}>
             <HStack spacing={2} flexWrap="wrap" minW={0}>
               <Text
-                fontSize={{ base: "lg", md: "xl" }}
+                fontSize={{ base: "md", md: "xl" }}
                 fontWeight={800}
                 noOfLines={1}
               >
@@ -134,7 +135,9 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             </HStack>
             <HStack spacing={2} flexWrap="wrap">
               {vault?.isSommNative && (
-                <Badge colorScheme="blue">Somm-native</Badge>
+                <Badge colorScheme="blue" fontSize={{ base: "xs", md: "sm" }}>
+                  Somm-native
+                </Badge>
               )}
               {chainLogo && (
                 <HStack
@@ -149,7 +152,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                     src={chainLogo}
                     background="transparent"
                     border="none"
-                    sx={{ width: "18px", height: "18px" }}
+                    sx={{ width: "16px", height: "16px" }}
                   />
                   <Text fontSize="xs" color="whiteAlpha.800">
                     {chainLabel}
@@ -159,7 +162,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             </HStack>
             {providerText && (
               <Text
-                fontSize="sm"
+                fontSize={{ base: "xs", md: "sm" }}
                 color="whiteAlpha.800"
                 noOfLines={1}
               >
@@ -171,8 +174,8 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
 
         {/* Center column: KPIs in equal widths */}
         <Grid
-          templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-          gap={4}
+          templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(3, 1fr)" }}
+          gap={{ base: 2, md: 4 }}
           alignItems="center"
         >
           <KPIBox label="TVL" value={safeValue(tvl)} align="left" />
@@ -198,7 +201,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             {isPreLaunch ? (
               <ActionButton
                 variantStyle="primary"
-                size="md"
+                size={{ base: "sm", md: "md" }}
                 isDisabled
                 onClick={(e) => e.stopPropagation()}
               >
@@ -207,7 +210,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             ) : (
               <ActionButton
                 variantStyle="primary"
-                size="md"
+                size={{ base: "sm", md: "md" }}
                 onClick={(e) => {
                   e.stopPropagation()
                   if (!vault?.slug) return
@@ -228,7 +231,12 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
 
       {/* One-line description */}
       {oneLineDesc && (
-        <Text mt={3} fontSize="sm" color="neutral.300" noOfLines={1}>
+        <Text 
+          mt={{ base: 2, md: 3 }} 
+          fontSize={{ base: "xs", md: "sm" }} 
+          color="neutral.300" 
+          noOfLines={1}
+        >
           {oneLineDesc}
         </Text>
       )}
