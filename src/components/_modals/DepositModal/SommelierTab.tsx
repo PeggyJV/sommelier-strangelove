@@ -20,6 +20,7 @@ import {
   depositAssetTokenConfig,
   Token as TokenType,
   tokenConfig,
+  getTokenConfig,
 } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
