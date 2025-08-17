@@ -353,9 +353,11 @@ export const WithdrawQueueForm = ({
     let hash
 
     if (boringQueue) {
-      const discount = BigInt(Math.floor(SHARE_PRICE_DISCOUNT_PERCENT * 10000))
+      const discount = BigInt(
+        Math.floor(SHARE_PRICE_DISCOUNT_PERCENT * 10000)
+      )
 
-      const deadlineSeconds = DEADLINE_HOURS * 60 * 60
+      const deadlineSeconds = BigInt(DEADLINE_HOURS * 60 * 60)
 
       if (isActiveWithdrawRequest && boringQueueWithdrawals) {
         // Replace existing BoringQueuerequest
@@ -677,7 +679,6 @@ export const WithdrawQueueForm = ({
               title="Vault"
               value={<Text>{cellarDataMap[id].name}</Text>}
             />
-
           </Stack>
         </Stack>
       </FormProvider>
