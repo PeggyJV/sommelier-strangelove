@@ -531,11 +531,11 @@ export const SommelierTab = ({
                   onClick={() => {
                     if (!importToken.isPending) {
                       console.log("Importing token with address:", cellarAddress)
-                      console.log("Importing token with image:", `${window.location.origin}${cellarConfig.lpToken.imagePath}`)
+                      console.log("Importing token with image:", `${window.origin}${cellarConfig.lpToken.imagePath}`)
                       importToken.mutate({
                         address: cellarAddress,
                         chain: cellarConfig.chain.id,
-                        imageUrl: `${window.location.origin}${cellarConfig.lpToken.imagePath}`,
+                        imageUrl: `${window.origin}${cellarConfig.lpToken.imagePath}`,
                       })
                     }
                   }}
