@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getUserData } from "data/actions/common/getUserData"
+import { getUserDataWithContracts } from "data/actions/common/getUserData"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useAccount } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
@@ -43,7 +43,7 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const query = useQuery({
     queryKey: ["USE_USER_DATA", strategyAddress, chain, userAddress],
     queryFn: async () => {
-      return await getUserData({
+      return await getUserDataWithContracts({
         contracts: allContracts![key],
         address: strategyAddress,
         strategyData: strategyData.data!,
