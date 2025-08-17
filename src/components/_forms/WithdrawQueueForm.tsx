@@ -56,7 +56,8 @@ interface WithdrawQueueFormProps {
   onSuccessfulWithdraw?: () => void
 }
 
-const DEADLINE_HOURS = WITHDRAW_DEADLINE_HOURS
+const DEADLINE_HOURS = 288
+const SHARE_PRICE_DISCOUNT_PERCENT = 0.25
 
 export const WithdrawQueueForm = ({
   onClose,
@@ -352,9 +353,7 @@ export const WithdrawQueueForm = ({
     let hash
 
     if (boringQueue) {
-      const discount =
-        cellarConfig.withdrawTokenConfig?.[selectedToken.symbol]
-          ?.minDiscount ?? 0
+      const discount = SHARE_PRICE_DISCOUNT_PERCENT
 
       const deadlineSeconds = DEADLINE_HOURS * 60 * 60
 
@@ -678,21 +677,7 @@ export const WithdrawQueueForm = ({
               title="Vault"
               value={<Text>{cellarDataMap[id].name}</Text>}
             />
-            {boringQueue && (
-              <>
-                <FormControl>
-                  <FormLabel>Withdrawal deadline</FormLabel>
-                  <Input
-                    value="14 days (fixed)"
-                    isReadOnly
-                    aria-readonly
-                  />
-                  <FormHelperText>
-                    This window is fixed by protocol.
-                  </FormHelperText>
-                </FormControl>
-              </>
-            )}
+
           </Stack>
         </Stack>
       </FormProvider>
