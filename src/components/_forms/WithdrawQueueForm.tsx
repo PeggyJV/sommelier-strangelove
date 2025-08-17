@@ -197,7 +197,8 @@ export const WithdrawQueueForm = ({
         status: "error",
         body: (
           <Text>
-            You don&apos;t have enough {lpTokenData?.symbol || "tokens"} to withdraw this amount.
+            You don&apos;t have enough{" "}
+            {lpTokenData?.symbol || "tokens"} to withdraw this amount.
             <br />
             Available: {lpTokenData?.formatted || "0"}
             <br />
@@ -308,7 +309,7 @@ export const WithdrawQueueForm = ({
         boringQueue: !!boringQueue,
         cellarAddress: cellarConfig.cellar.address,
       })
-      
+
       let hash = await doWithdrawTx(
         selectedToken,
         withdrawAmtInBaseDenom
