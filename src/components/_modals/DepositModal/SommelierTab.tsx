@@ -477,6 +477,9 @@ export const SommelierTab = ({
 
     if (approval || canDoBatchCall) {
       try {
+        // Add a small delay to prevent spam filter triggers
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
         const receipts = await deposit(
           amtInWei,
           data?.selectedToken?.address,
@@ -530,8 +533,14 @@ export const SommelierTab = ({
                 <Text
                   onClick={() => {
                     if (!importToken.isPending) {
-                      console.log("Importing token with address:", cellarAddress)
-                      console.log("Importing token with image:", `${window.origin}${cellarConfig.lpToken.imagePath}`)
+                      console.log(
+                        "Importing token with address:",
+                        cellarAddress
+                      )
+                      console.log(
+                        "Importing token with image:",
+                        `${window.origin}${cellarConfig.lpToken.imagePath}`
+                      )
                       importToken.mutate({
                         address: cellarAddress,
                         chain: cellarConfig.chain.id,
@@ -543,7 +552,9 @@ export const SommelierTab = ({
                   as="button"
                   disabled={importToken.isPending}
                 >
-                  {importToken.isPending ? "Importing..." : "Import tokens to wallet"}
+                  {importToken.isPending
+                    ? "Importing..."
+                    : "Import tokens to wallet"}
                 </Text>
                 {waitTime(cellarConfig) !== null && (
                   <Text textAlign="center">
@@ -572,7 +583,33 @@ export const SommelierTab = ({
         }
       } catch (e) {
         const error = e as Error
-        if (error.message === "GAS_LIMIT_ERROR") {
+        console.error("Deposit error:", error)
+
+        if (
+          error.message.includes("spam filter") ||
+          error.message.includes("not been authorized")
+        ) {
+          analytics.track("deposit.failed", {
+            ...baseAnalytics,
+            stable: tokenSymbol,
+            value: depositAmount,
+            message: "SPAM_FILTER_ERROR",
+          })
+          addToast({
+            heading: "Transaction Blocked",
+            body: (
+              <Text>
+                Your transaction was blocked by MetaMask's spam
+                filter. Please try:
+                <br />• Clearing MetaMask activity data
+                <br />• Waiting a few minutes before retrying
+                <br />• Using a different amount
+              </Text>
+            ),
+            status: "warning",
+            closeHandler: closeAll,
+          })
+        } else if (error.message === "GAS_LIMIT_ERROR") {
           analytics.track("deposit.failed", {
             ...baseAnalytics,
             stable: tokenSymbol,
