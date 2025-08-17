@@ -134,6 +134,8 @@ export const SommelierTab = ({
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
+  const [isDepositFeeLoading, setIsDepositFeeLoading] = useState(false)
+  const [depositFee, setDepositFee] = useState(0)
   const methods = useForm<FormValues>({
     defaultValues: { slippage: config.SWAP.SLIPPAGE },
   })
