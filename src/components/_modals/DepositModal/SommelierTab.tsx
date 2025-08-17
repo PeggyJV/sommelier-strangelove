@@ -45,7 +45,7 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useWaitForTransaction } from "data/hooks/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { waitTime } from "data/uiConfig"
+import { waitTime, depositAssetDefaultValue } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { useStrategyData } from "data/hooks/useStrategyData"
@@ -136,6 +136,26 @@ export const SommelierTab = ({
   const methods = useForm<FormValues>({
     defaultValues: { slippage: config.SWAP.SLIPPAGE },
   })
+
+  // Set default selected token when component mounts
+  useEffect(() => {
+    if (!selectedToken && depositTokens.length > 0) {
+      const depositTokenConfig = getTokenConfig(
+        depositTokens,
+        cellarConfig.chain.id
+      ) as TokenType[]
+
+      // Get the default deposit asset for this cellar
+      const defaultAssetSymbol =
+        depositAssetDefaultValue(cellarConfig)
+      const defaultToken =
+        depositTokenConfig.find(
+          (token) => token.symbol === defaultAssetSymbol
+        ) || depositTokenConfig[0]
+
+      setSelectedToken(defaultToken)
+    }
+  }, [selectedToken, depositTokens, cellarConfig])
   const {
     watch,
     handleSubmit,

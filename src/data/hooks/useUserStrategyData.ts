@@ -72,13 +72,14 @@ export const useUserStrategyData = (
       // Calculate net value using LP token balance and token price
       const shares = lpTokenData.value
       const sharesFormatted = lpTokenData.formatted
-      const tokenPrice = parseFloat(
-        strategyData.data.tokenPrice || "0"
-      )
-      const baseAssetPriceValue = parseFloat(baseAssetPrice || "0")
+      const tokenPrice =
+        parseFloat(
+          (strategyData.data.tokenPrice || "0").replace("$", "")
+        ) || 0
+      const baseAssetPriceValue =
+        parseFloat(baseAssetPrice || "0") || 0
 
-      const netValue =
-        Number(sharesFormatted) * tokenPrice * baseAssetPriceValue
+      const netValue = Number(sharesFormatted) * tokenPrice
 
       // Calculate net value in base asset for strategies that support it
       const netValueInAsset =

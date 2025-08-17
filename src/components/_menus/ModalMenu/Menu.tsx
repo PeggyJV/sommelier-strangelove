@@ -25,6 +25,7 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
+import { depositAssetDefaultValue } from "data/uiConfig"
 import {
   ActiveAssetIcon,
   CellarGradientIcon,
@@ -43,7 +44,7 @@ export const Menu = ({
   value,
   onChange,
   isDisabled,
-} : MenuProps) => {
+}: MenuProps) => {
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const { width } = useSize(menuRef) ?? { width: 0 }
@@ -64,9 +65,17 @@ export const Menu = ({
     depositTokens,
     cellarConfig.chain.id
   ) as Token[]
+
+  // Get the default deposit asset for this cellar
+  const defaultAssetSymbol = depositAssetDefaultValue(cellarConfig)
+  const defaultToken =
+    depositTokenConfig.find(
+      (token) => token.symbol === defaultAssetSymbol
+    ) || depositTokenConfig[0]
+
   const [selectedToken, setSelectedToken] = useState<
     Token | undefined
-  >(depositTokenConfig[0]) // First one is always active asset
+  >(defaultToken)
 
   const setMax = () => {
     // analytics.track("deposit.max-selected", {
