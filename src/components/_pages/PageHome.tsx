@@ -37,6 +37,7 @@ import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import TopLaunchBanner from "components/_sections/TopLaunchBanner"
 import WithdrawalWarningBanner from "components/_sections/WithdrawalWarningBanner"
+import { sortVaults } from "utils/sortVaults"
 
 import SectionHeader from "components/_sections/SectionHeader"
 import { alphaSteth } from "data/strategies/alpha-steth"
@@ -319,32 +320,28 @@ export const PageHome = () => {
     const sommNative = list.filter((v) => v?.isSommNative)
     const legacy = list.filter((v) => !v?.isSommNative)
 
-    // Sorting rules for legacy list
-    if (!isConnected) {
-      // 1) Disconnected: sort by highest TVL
-      legacy.sort((a, b) => {
-        const aTvl = parseFloat(a?.tvm?.value ?? "0")
-        const bTvl = parseFloat(b?.tvm?.value ?? "0")
-        return bTvl - aTvl
-      })
-    } else {
-      // 2) Connected: show vaults with positive Net Value on top (sorted by net value desc),
-      // followed by the rest sorted by TVL. Avoids NAV overriding TVL when NAV is zero/unknown.
-      const netOf = (v: any) =>
-        Number(v?.userStrategyData?.userData?.netValue?.value ?? 0)
-      const withNet = legacy.filter((v: any) => netOf(v) > 0)
-      const withoutNet = legacy.filter((v: any) => netOf(v) <= 0)
+    // Normalize to util input shape and sort deterministically
+    const mapToSortable = (arr: any[]) =>
+      arr.map((v) => ({
+        ref: v,
+        name: v?.name,
+        metrics: { tvl: Number(v?.tvm?.value ?? 0) },
+        user: {
+          netValue: Number(
+            v?.userStrategyData?.userData?.netValue?.value ?? 0
+          ),
+        },
+      }))
 
-      withNet.sort((a: any, b: any) => netOf(b) - netOf(a))
-      withoutNet.sort((a: any, b: any) => {
-        const aTvl = parseFloat(a?.tvm?.value ?? "0")
-        const bTvl = parseFloat(b?.tvm?.value ?? "0")
-        return bTvl - aTvl
-      })
+    const sortedLegacy = sortVaults(mapToSortable(legacy), isConnected).map(
+      (x) => x.ref
+    )
 
-      legacy.splice(0, legacy.length, ...withNet, ...withoutNet)
-    }
-    return { sommNative, legacy }
+    const sortedSomm = sortVaults(mapToSortable(sommNative), isConnected).map(
+      (x) => x.ref
+    )
+
+    return { sommNative: sortedSomm, legacy: sortedLegacy }
   }, [strategyData, isConnected, userBalances?.data])
 
   const WithdrawalStatusPanel = () => (
