@@ -2,6 +2,7 @@ import { Text, Tooltip, HStack, Box, Flex } from "@chakra-ui/react"
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
+import StrategyRow from "components/_vaults/StrategyRow"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { InformationIcon } from "components/_icons"
 import { Avatar, AvatarGroup } from "@chakra-ui/react"
@@ -46,21 +47,26 @@ export const StrategyTabColumn = ({
         </span>
       ),
       accessor: "name",
-      Cell: ({ row }: any) => (
-        <StrategySection
-          icon={row.original.logo}
-          title={row.original.name}
-          provider={row.original.provider.title}
-          type={row.original.type}
-          date={row.original.launchDate}
-          description={row.original.description}
-          isDeprecated={row.original.deprecated}
-          badges={row.original.config.badges}
-          isHero={row.original.isHero}
-          isSommNative={row.original.isSommNative}
-          w={56}
-        />
-      ),
+      Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) {
+          return <StrategyRow vault={row.original} />
+        }
+        return (
+          <StrategySection
+            icon={row.original.logo}
+            title={row.original.name}
+            provider={row.original.provider.title}
+            type={row.original.type}
+            date={row.original.launchDate}
+            description={row.original.description}
+            isDeprecated={row.original.deprecated}
+            badges={row.original.config.badges}
+            isHero={row.original.isHero}
+            isSommNative={row.original.isSommNative}
+            w={56}
+          />
+        )
+      },
       disableSortBy: false,
       sortType: (rowA: RowData, rowB: RowData) => {
         // Sort by active asset asset
@@ -95,6 +101,7 @@ export const StrategyTabColumn = ({
 
       accessor: "chain",
       Cell: ({ cell: { row } }: CellValue) => {
+        if ((row as any)?.original?.isSommNative) return null
         const [isHover, setIsHover] = useState(false)
         const handleMouseOver = () => {
           setIsHover(true)
@@ -161,18 +168,21 @@ export const StrategyTabColumn = ({
     {
       Header: "TVL",
       accessor: "tvm.value",
-      Cell: ({ row }: any) => (
-        <Text
-          fontWeight={550}
-          fontSize={row.original.isHero ? "20px" : "16px"}
-          textAlign="right"
-        >
-          {row.original.launchDate &&
-          row.original.launchDate > Date.now()
-            ? "--"
-            : row.original.tvm?.formatted ?? "--"}
-        </Text>
-      ),
+      Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) return null
+        return (
+          <Text
+            fontWeight={550}
+            fontSize={row.original.isHero ? "20px" : "16px"}
+            textAlign="right"
+          >
+            {row.original.launchDate &&
+            row.original.launchDate > Date.now()
+              ? "--"
+              : row.original.tvm?.formatted ?? "--"}
+          </Text>
+        )
+      },
     },
     {
       Header: () => (
@@ -191,8 +201,9 @@ export const StrategyTabColumn = ({
       ),
       accessor: "baseApy",
       Cell: ({ row }: any) => {
-        const launchDate = row.original.launchDate
+        if (row.original?.isSommNative) return null
         const value = row.original.baseApySumRewards?.formatted
+        const launchDate = row.original.launchDate
         if (launchDate && launchDate > Date.now()) {
           return (
             <Text fontWeight={550} fontSize="16px" textAlign="right">
@@ -219,12 +230,15 @@ export const StrategyTabColumn = ({
     {
       Header: () => <Text>Deposit</Text>,
       id: "deposit",
-      Cell: ({ row }: any) => (
-        <DepositAndWithdrawButton
-          row={row}
-          onDepositModalOpen={onDepositModalOpen}
-        />
-      ),
+      Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) return null
+        return (
+          <DepositAndWithdrawButton
+            row={row}
+            onDepositModalOpen={onDepositModalOpen}
+          />
+        )
+      },
     },
   ]
 }

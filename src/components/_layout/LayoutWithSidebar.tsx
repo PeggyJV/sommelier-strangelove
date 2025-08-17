@@ -6,7 +6,9 @@ import { FC, ReactNode, useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
 import { useInView } from "react-intersection-observer"
 
-export const LayoutWithSidebar: FC<{ children: ReactNode }> = ({ children }) => {
+export const LayoutWithSidebar: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const { isConnected: connected } = useAccount()
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -15,10 +17,13 @@ export const LayoutWithSidebar: FC<{ children: ReactNode }> = ({ children }) => 
   })
 
   // using local state to avoid Next.js errors
-  const [isConnected, setConnected] = useState(false);
+  const [isConnected, setConnected] = useState(false)
   useEffect(() => {
     setConnected(connected)
   }, [connected])
+
+  // Temporarily disabled – only needed once multiple vault groups exist
+  const hasSidebar = false
 
   return (
     <Box display="block">
@@ -39,13 +44,13 @@ export const LayoutWithSidebar: FC<{ children: ReactNode }> = ({ children }) => 
             pb={8}
           >
             <Box
-              w={{ base: "full", xl: "900px" }}
-              flex={7}
+              w={{ base: "full", xl: hasSidebar ? "900px" : "full" }}
+              flex={hasSidebar ? 7 : 1}
               ref={containerRef}
             >
               {children}
             </Box>
-            {isConnected && (
+            {hasSidebar && (
               <Box minW={{ base: "full", lg: "300px" }} flex={3}>
                 <Sidebar />
               </Box>

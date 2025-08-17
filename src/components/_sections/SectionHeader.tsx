@@ -1,11 +1,12 @@
 import { Badge, HStack, Heading } from "@chakra-ui/react"
+import { ReactNode } from "react"
 
 export default function SectionHeader({
   title,
   pill,
   pillColor,
 }: {
-  title: string
+  title: ReactNode
   pill?: string
   pillColor?: string
 }) {

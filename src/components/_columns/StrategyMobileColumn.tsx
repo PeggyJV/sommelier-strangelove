@@ -1,5 +1,6 @@
 import { Text } from "@chakra-ui/react"
 import { StrategySection } from "components/_tables/StrategySection"
+import StrategyRow from "components/_vaults/StrategyRow"
 import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 
@@ -24,6 +25,9 @@ export const StrategyMobileColumn = () => {
       ),
       accessor: "name",
       Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) {
+          return <StrategyRow vault={row.original} />
+        }
         return (
           <StrategySection
             icon={row.original.logo}
