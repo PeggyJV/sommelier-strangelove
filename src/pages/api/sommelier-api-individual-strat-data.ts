@@ -20,6 +20,17 @@ const sommelierAPIIndividualStratData = async (
 ) => {
   try {
     let { cellarAddress, chain } = req.query
+    if (!cellarAddress || !chain) {
+      res.setHeader(
+        "Cache-Control",
+        "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
+      )
+      res.setHeader("Access-Control-Allow-Origin", baseUrl)
+      return res.status(200).json({
+        status: "data_pending",
+        note: "missing_params",
+      })
+    }
 
     const unix_timestamp_24_hours_ago =
       Math.floor(Date.now() / 1000) - 24 * 60 * 60
@@ -37,10 +48,24 @@ const sommelierAPIIndividualStratData = async (
       chainStr = "-" + chain
     }
 
-    let cellarDecimals =
-      CellaAddressDataMap[
-        cellarAddress!.toString().toLowerCase() + chainStr
-      ].config.cellar.decimals
+    const key = cellarAddress!.toString().toLowerCase() + chainStr
+    const cellarEntry = (CellaAddressDataMap as any)?.[key]
+    if (!cellarEntry) {
+      res.setHeader(
+        "Cache-Control",
+        "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
+      )
+      res.setHeader("Access-Control-Allow-Origin", baseUrl)
+      return res.status(200).json({
+        cellarAddress,
+        chain,
+        status: "data_pending",
+        shareValue: null,
+        tvlTotal: null,
+        baseAssetTvl: null,
+      })
+    }
+    let cellarDecimals = cellarEntry.config.cellar.decimals
 
     let transformedDailyData = dailyData.Response.map(
       (dayData: any) => ({
