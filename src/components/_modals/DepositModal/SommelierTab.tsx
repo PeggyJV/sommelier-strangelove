@@ -539,7 +539,7 @@ export const SommelierTab = ({
   const currentAsset = getCurrentAsset(
     tokenConfig,
     cellarConfig.chain.id,
-    activeAsset?.address
+    selectedToken?.address
   )
 
   // Move active asset to top of token list.
@@ -555,7 +555,7 @@ export const SommelierTab = ({
       0,
       depositAssetTokenConfig.splice(indexOfActiveAsset, 1)[0]
     )
-  }, [activeAsset, currentAsset])
+  }, [selectedToken, currentAsset])
 
   const strategyMessages: Record<string, () => JSX.Element> = {
     "Real Yield ETH": () => (
@@ -1065,7 +1065,7 @@ export const SommelierTab = ({
             <ModalMenu
               depositTokens={depositTokens}
               setSelectedToken={setSelectedToken}
-              activeAsset={activeAsset?.address}
+              activeAsset={selectedToken?.address}
               selectedTokenBalance={selectedTokenBalance}
               isDisabled={isSubmitting}
             />
@@ -1082,7 +1082,7 @@ export const SommelierTab = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
-          {selectedToken?.symbol !== activeAsset?.symbol ? (
+          {selectedToken?.symbol !== cellarConfig.baseAsset.symbol ? (
             <>
               <CardHeading paddingTop="2em">
                 Transaction details
@@ -1150,7 +1150,8 @@ export const SommelierTab = ({
                 borderRadius={16}
                 borderColor="purple.base"
               >
-                {selectedToken?.symbol !== activeAsset?.symbol ? (
+                {selectedToken?.symbol !==
+                cellarConfig.baseAsset.symbol ? (
                   <Text
                     fontFamily={"inherit"}
                     fontWeight={"bold"}
@@ -1168,7 +1169,8 @@ export const SommelierTab = ({
             type="submit"
             isDisabled={
               isDisabled ||
-              (selectedToken?.symbol !== activeAsset?.symbol &&
+              (selectedToken?.symbol !==
+                cellarConfig.baseAsset.symbol &&
                 !cellarData.depositTokens.list.includes(
                   selectedToken?.symbol || ""
                 ))

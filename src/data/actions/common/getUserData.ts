@@ -4,6 +4,7 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { getStrategyData } from "./getStrategyData"
 import { getAllStrategiesData } from "./getAllStrategiesData"
 import { useQuery } from "@tanstack/react-query"
+import { formatUSD } from "utils/formatCurrency"
 
 export const getUserData = async (
   address: string,
@@ -39,6 +40,93 @@ export const getUserData = async (
     stakedShares: stakedShares.value,
     strategyData,
     allStrategiesData,
+  }
+}
+
+export const getUserDataWithContracts = async ({
+  contracts,
+  address,
+  strategyData,
+  userAddress,
+  sommPrice,
+  baseAssetPrice,
+  chain,
+}: {
+  contracts: any
+  address: string
+  strategyData: any
+  userAddress: string
+  sommPrice: string
+  baseAssetPrice: string
+  chain: string
+}) => {
+  try {
+    const cellarContract = contracts.cellarContract
+    const stakerContract = contracts.stakerContract
+
+    if (!cellarContract || !stakerContract) {
+      return {
+        userStrategyData: {
+          userData: {
+            netValue: { formatted: "0", value: 0 },
+            shares: { formatted: "0", value: 0n },
+            stakedShares: { formatted: "0", value: 0n },
+          },
+          strategyData,
+        },
+        userStakes: null,
+      }
+    }
+
+    const shares = await cellarContract.read.balanceOf([
+      userAddress as `0x${string}`,
+    ])
+    const stakedShares = await stakerContract.read.balanceOf([
+      userAddress as `0x${string}`,
+    ])
+
+    const sharesFormatted = formatUnits(shares, 18)
+    const stakedSharesFormatted = formatUnits(stakedShares, 18)
+    const totalShares = shares + stakedShares
+
+    const netValue =
+      totalShares *
+      parseFloat(strategyData.tokenPrice) *
+      parseFloat(baseAssetPrice)
+
+    return {
+      userStrategyData: {
+        userData: {
+          netValue: {
+            formatted: formatUSD(netValue.toString(), 2),
+            value: netValue,
+          },
+          shares: {
+            formatted: sharesFormatted,
+            value: shares,
+          },
+          stakedShares: {
+            formatted: stakedSharesFormatted,
+            value: stakedShares,
+          },
+        },
+        strategyData,
+      },
+      userStakes: null,
+    }
+  } catch (error) {
+    console.error("Error in getUserData:", error)
+    return {
+      userStrategyData: {
+        userData: {
+          netValue: { formatted: "0", value: 0 },
+          shares: { formatted: "0", value: 0n },
+          stakedShares: { formatted: "0", value: 0n },
+        },
+        strategyData,
+      },
+      userStakes: null,
+    }
   }
 }
 
