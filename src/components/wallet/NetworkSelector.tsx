@@ -119,6 +119,11 @@ export default function NetworkSelector({
             size={mode === "inline" ? "lg" : "md"}
             w={fullWidth ? "100%" : undefined}
             height={"44px"}
+            _focusVisible={{
+              boxShadow:
+                "0 0 0 3px var(--chakra-colors-purple-base)",
+            }}
+            aria-describedby={caption ? "network-switch-caption" : undefined}
           >
             {`Switch to ${requiredChain.displayName}`}
           </Button>
@@ -130,7 +135,7 @@ export default function NetworkSelector({
         />
       </HStack>
       {caption && (
-        <Text fontSize="xs" color="neutral.400">
+        <Text id="network-switch-caption" fontSize="xs" color="neutral.400">
           {caption}
         </Text>
       )}

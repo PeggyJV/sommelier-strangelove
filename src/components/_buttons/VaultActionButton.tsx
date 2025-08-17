@@ -40,13 +40,17 @@ export function VaultActionButton({
   return (
     <>
       {isWrongChain && status !== "paused" ? (
-        <Popover placement="bottom" isLazy>
+        <Popover placement="bottom" isLazy returnFocusOnClose initialFocusRef={undefined}>
           <PopoverTrigger>
             <Button
               size="md"
               height="44px"
               minW="148px"
               onClick={(e) => e.stopPropagation()}
+              _focusVisible={{
+                boxShadow:
+                  "0 0 0 3px var(--chakra-colors-purple-base)",
+              }}
             >
               Switch network
             </Button>
@@ -58,6 +62,10 @@ export function VaultActionButton({
             borderRadius={12}
             bg="surface.bg"
             _focus={{ outline: "unset", boxShadow: "unset" }}
+            _focusVisible={{
+              boxShadow:
+                "0 0 0 3px var(--chakra-colors-purple-base)",
+            }}
           >
             <PopoverBody>
               <Stack spacing={2}>

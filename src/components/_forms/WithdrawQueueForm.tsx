@@ -92,27 +92,13 @@ export const WithdrawQueueForm = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
-  const { boringQueue } =
-    useCreateContracts(cellarConfig)
+  const { boringQueue } = useCreateContracts(cellarConfig)
 
   const cellarContract = (() => {
     if (!publicClient) return
     return getContract({
-          address: cellarConfig.cellar.address as `0x${string}`,
-          abi: cellarConfig.cellar.abi,
-          client: {
-            public: publicClient,
-            wallet: walletClient,
-          },
-        })
-  })()
-
-  const withdrawQueueContract = (() => {
-    if (!publicClient) return
-    return boringQueue ?? getContract({
-      address: cellarConfig.chain
-        .withdrawQueueAddress as `0x${string}`,
-      abi: withdrawQueueV0821,
+      address: cellarConfig.cellar.address as `0x${string}`,
+      abi: cellarConfig.cellar.abi,
       client: {
         public: publicClient,
         wallet: walletClient,
@@ -120,6 +106,21 @@ export const WithdrawQueueForm = ({
     })
   })()
 
+  const withdrawQueueContract = (() => {
+    if (!publicClient) return
+    return (
+      boringQueue ??
+      getContract({
+        address: cellarConfig.chain
+          .withdrawQueueAddress as `0x${string}`,
+        abi: withdrawQueueV0821,
+        client: {
+          public: publicClient,
+          wallet: walletClient,
+        },
+      })
+    )
+  })()
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -133,9 +134,8 @@ export const WithdrawQueueForm = ({
     defaultValues: {},
   })
 
-  const [selectedToken, setSelectedToken] = useState<Token>(
-    strategyBaseAsset
-  )
+  const [selectedToken, setSelectedToken] =
+    useState<Token>(strategyBaseAsset)
 
   function trackedSetSelectedToken(value: Token) {
     if (value && value !== selectedToken) {
@@ -155,7 +155,8 @@ export const WithdrawQueueForm = ({
   const isDisabled =
     isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
 
-    const isActiveWithdrawRequest = useWithdrawRequestStatus(cellarConfig)
+  const isActiveWithdrawRequest =
+    useWithdrawRequestStatus(cellarConfig)
 
   const setMax = () => {
     const amount = parseFloat(
@@ -276,7 +277,6 @@ export const WithdrawQueueForm = ({
     }
 
     try {
-
       let hash = await doWithdrawTx(
         selectedToken,
         withdrawAmtInBaseDenom
@@ -341,24 +341,27 @@ export const WithdrawQueueForm = ({
     }
   }
 
-  const doWithdrawTx = async (selectedToken: Token, withdrawAmtInBaseDenom: bigint) => {
+  const doWithdrawTx = async (
+    selectedToken: Token,
+    withdrawAmtInBaseDenom: bigint
+  ) => {
     const currentTime = Math.floor(Date.now() / 1000)
     const deadlineSeconds =
       Math.floor(DEADLINE_HOURS * 60 * 60) + currentTime
 
-    let hash;
+    let hash
 
     if (boringQueue) {
-
-      const discount = cellarConfig.withdrawTokenConfig?.[
-        selectedToken.symbol
-      ]?.minDiscount ?? 0
+      const discount =
+        cellarConfig.withdrawTokenConfig?.[selectedToken.symbol]
+          ?.minDiscount ?? 0
 
       const deadlineSeconds = DEADLINE_HOURS * 60 * 60
 
       if (isActiveWithdrawRequest && boringQueueWithdrawals) {
         // Replace existing BoringQueuerequest
-        const request = boringQueueWithdrawals.open_requests[0].metadata
+        const request =
+          boringQueueWithdrawals.open_requests[0].metadata
 
         const oldRequestTouple = [
           request.nonce,
@@ -416,14 +419,14 @@ export const WithdrawQueueForm = ({
           }
         )
       }
-
-      
     } else {
       // Create or replace WithdrawQueue request
-      const previewRedeem = parseInt(await fetchCellarPreviewRedeem(
-        id,
-        BigInt(10 ** cellarConfig.cellar.decimals)
-      ))
+      const previewRedeem = parseInt(
+        await fetchCellarPreviewRedeem(
+          id,
+          BigInt(10 ** cellarConfig.cellar.decimals)
+        )
+      )
 
       const sharePriceStandardized =
         previewRedeem / 10 ** cellarConfig.baseAsset.decimals
@@ -431,7 +434,7 @@ export const WithdrawQueueForm = ({
       const sharePriceWithDiscountInBaseDenom = Math.floor(
         sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
       )
-      
+
       const withdrawTouple = [
         BigInt(deadlineSeconds),
         BigInt(sharePriceWithDiscountInBaseDenom),
@@ -455,7 +458,7 @@ export const WithdrawQueueForm = ({
       )
     }
 
-    return hash;
+    return hash
   }
 
   return (
@@ -617,7 +620,9 @@ export const WithdrawQueueForm = ({
                         fontSize="inherit"
                         fontWeight={600}
                         onClick={setMax}
-                        disabled={isActiveWithdrawRequest && !!boringQueue}
+                        disabled={
+                          isActiveWithdrawRequest && !!boringQueue
+                        }
                       >
                         max
                       </Button>
@@ -652,7 +657,9 @@ export const WithdrawQueueForm = ({
                   }
                   activeAsset={strategyBaseAsset.address}
                   setSelectedToken={trackedSetSelectedToken}
-                  isDisabled={isActiveWithdrawRequest && !!boringQueue}
+                  isDisabled={
+                    isActiveWithdrawRequest && !!boringQueue
+                  }
                 />
               }
             </HStack>
@@ -675,8 +682,14 @@ export const WithdrawQueueForm = ({
               <>
                 <FormControl>
                   <FormLabel>Withdrawal deadline</FormLabel>
-                  <Input value="14 days (fixed)" isReadOnly aria-readonly />
-                  <FormHelperText>This window is fixed by protocol.</FormHelperText>
+                  <Input
+                    value="14 days (fixed)"
+                    isReadOnly
+                    aria-readonly
+                  />
+                  <FormHelperText>
+                    This window is fixed by protocol.
+                  </FormHelperText>
                 </FormControl>
               </>
             )}
