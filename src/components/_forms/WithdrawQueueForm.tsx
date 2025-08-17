@@ -190,6 +190,25 @@ export const WithdrawQueueForm = ({
       cellarConfig.cellar.decimals
     )
 
+    // Check if user has sufficient balance
+    if (!lpTokenData || lpTokenData.value < withdrawAmtInBaseDenom) {
+      addToast({
+        heading: "Insufficient Balance",
+        status: "error",
+        body: (
+          <Text>
+            You don&apos;t have enough {lpTokenData?.symbol || "tokens"} to withdraw this amount.
+            <br />
+            Available: {lpTokenData?.formatted || "0"}
+            <br />
+            Requested: {withdrawAmount}
+          </Text>
+        ),
+        closeHandler: closeAll,
+      })
+      return
+    }
+
     const allowance = (await cellarContract?.read.allowance([
       address!,
       getAddress(
@@ -278,6 +297,18 @@ export const WithdrawQueueForm = ({
     }
 
     try {
+      // Add debugging information
+      console.log("Withdraw attempt details:", {
+        selectedToken: selectedToken?.symbol,
+        withdrawAmount: withdrawAmount,
+        withdrawAmtInBaseDenom: withdrawAmtInBaseDenom.toString(),
+        lpTokenBalance: lpTokenData?.formatted,
+        lpTokenValue: lpTokenData?.value?.toString(),
+        isActiveWithdrawRequest,
+        boringQueue: !!boringQueue,
+        cellarAddress: cellarConfig.cellar.address,
+      })
+      
       let hash = await doWithdrawTx(
         selectedToken,
         withdrawAmtInBaseDenom
