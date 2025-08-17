@@ -1,10 +1,42 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
+  "moduleFileExtensions": ["js", "json", "ts", "tsx"],
   "rootDir": "src",
-  "testEnvironment": "node",
+  "testEnvironment": "jsdom",
   "testTimeout": 300000,
-  "testRegex": ".spec.ts$",
+  "testRegex": ".spec.(ts|tsx)$",
+  "setupFilesAfterEnv": ["<rootDir>/__tests__/setup.ts"],
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
-  }
+    "^.+\\.(t|j)sx?$": [
+      "ts-jest",
+      {
+        "tsconfig": "tsconfig.test.json"
+      }
+    ]
+  },
+  "moduleNameMapper": {
+    "^@/(.*)$": "<rootDir>/$1",
+    "^components/(.*)$": "<rootDir>/components/$1",
+    "^data/(.*)$": "<rootDir>/data/$1",
+    "^utils/(.*)$": "<rootDir>/utils/$1",
+    "^hooks/(.*)$": "<rootDir>/hooks/$1",
+    "^context/(.*)$": "<rootDir>/context/$1",
+    "^theme/(.*)$": "<rootDir>/theme/$1",
+    "^src/(.*)$": "<rootDir>/$1"
+  },
+  "collectCoverageFrom": [
+    "**/*.{ts,tsx}",
+    "!**/*.d.ts",
+    "!**/node_modules/**",
+    "!**/__tests__/**",
+    "!**/coverage/**"
+  ],
+  "coverageReporters": ["text", "lcov", "html"],
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/.next/",
+    "/coverage/"
+  ],
+  "transformIgnorePatterns": [
+    "node_modules/(?!(wagmi|@wagmi|viem|@viem)/)"
+  ]
 }

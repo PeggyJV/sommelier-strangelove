@@ -4,23 +4,16 @@ import {
   http,
   useAccount,
   usePublicClient,
+  useWalletClient,
 } from "wagmi"
 import { chainConfig } from "data/chainConfig"
 import { INFURA_API_KEY } from "src/context/rpc_context"
 import { createPublicClient } from "viem"
-import { createWalletClient, custom } from "viem"
-import { mainnet } from "viem/chains"
 
 export const useAllContracts = () => {
   const publicClient = usePublicClient()
+  const walletClient = useWalletClient()
   const { isConnected } = useAccount()
-
-  const walletClient = isConnected
-    ? createWalletClient({
-        chain: publicClient?.chain,
-        transport: custom(window.ethereum!),
-      })
-    : undefined
 
   const query = useQuery({
     queryKey: [
