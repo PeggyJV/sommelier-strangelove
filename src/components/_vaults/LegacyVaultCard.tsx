@@ -27,6 +27,7 @@ import ConnectGate from "components/wallet/ConnectGate"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import ChainSwitcherInline from "components/network/ChainSwitcherInline"
 import ActionButton from "components/ui/ActionButton"
+import { coerceNetValue, parseMoneyString } from "utils/money"
 
 type StrategyLike = {
   slug?: string
@@ -69,10 +70,6 @@ export default function LegacyVaultCard({
     : undefined
   const { lpToken } = useUserBalance(cellarConfig as any)
   const { data: lpTokenData } = lpToken
-  const lpTokenDisabled =
-    !lpTokenData ||
-    Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <=
-      0
   const { switchChainAsync } = useSwitchChain()
   const desiredChainId = cellarConfig?.chain?.wagmiId
   const needsSwitch = !!desiredChainId && chain?.id !== desiredChainId
@@ -84,6 +81,15 @@ export default function LegacyVaultCard({
     stratAddress && stratChainId
       ? useUserStrategyData(stratAddress, stratChainId)
       : ({} as any)
+  
+  // Use user's actual net value for withdrawal logic, not the display net value
+  const userNetValue = userStratData?.userStrategyData?.userData?.netValue?.formatted
+  const nv = coerceNetValue(userNetValue)
+  const canWithdraw = Number.isFinite(nv) && nv > 0
+  const lpTokenDisabled =
+    !lpTokenData ||
+    Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <=
+      0
   const userNetValueFmt: string | undefined = (userStratData as any)
     ?.userStrategyData?.userData?.netValue?.formatted
 
@@ -247,6 +253,15 @@ export default function LegacyVaultCard({
           </VStack>
         </Grid>
 
+        {/* Debug Info */}
+        {process.env.NEXT_PUBLIC_DEBUG_SORT === "1" && (
+          <div className="text-xs opacity-60">
+            nv={coerceNetValue(userNetValue)} tvl=
+            {parseMoneyString(vault?.tvm?.formatted)} connected=
+            {String(Boolean(isConnected))}
+          </div>
+        )}
+
         {/* Action */}
         <VStack spacing={2} align={{ base: "stretch", md: "end" }}>
           <ConnectGate
@@ -314,13 +329,11 @@ export default function LegacyVaultCard({
               >
                 <ActionButton
                   variantStyle={
-                    lpTokenDisabled || !vault?.slug
-                      ? "ghost"
-                      : "primary"
+                    !canWithdraw || !vault?.slug ? "ghost" : "primary"
                   }
                   size="md"
                   minW="180px"
-                  isDisabled={lpTokenDisabled || !vault?.slug}
+                  isDisabled={!canWithdraw || !vault?.slug}
                   onClick={async (e) => {
                     e.stopPropagation()
                     if (!vault?.slug) return

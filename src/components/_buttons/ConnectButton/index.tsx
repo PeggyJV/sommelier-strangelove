@@ -7,26 +7,33 @@ import { ConnectWalletPopover } from "./ConnectWalletPopover"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { MobileConnectedPopover } from "./MobileConnectedPopover"
 import ChainButton from "../ChainButton"
-import { chainConfig, chainConfigMap, getChainByViemId } from "src/data/chainConfig"
+import {
+  chainConfig,
+  chainConfigMap,
+  getChainByViemId,
+} from "src/data/chainConfig"
 
-export interface ConnectButtonProps extends Omit<ButtonProps, "children"> {
+export interface ConnectButtonProps
+  extends Omit<ButtonProps, "children"> {
   unstyled?: boolean
   children?: React.ReactNode
   overridechainid?: string
 }
 
-const ConnectButton = (
-  props: ConnectButtonProps
-) => {
+const ConnectButton = (props: ConnectButtonProps) => {
   const { isConnected, chain: viemChain } = useAccount()
   const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
   const chain = getChainByViemId(viemChain?.name)
 
-  const [selectedNetwork, setSelectedNetwork] = React.useState(
-    chain.id
-  )
+  // Use the actual current chain from wallet, fallback to default if not connected
+  const currentChainId = chain?.id || "ethereum"
+
+  // Ensure we have a valid chain config
+  const currentChainConfig =
+    chainConfigMap[currentChainId] || chainConfigMap["ethereum"]
+
   const handleNetworkChange = (chainId: string) => {
-    setSelectedNetwork(chainId)
+    // This will be handled by the ChainButton component
   }
 
   // For connect buttons that are not on header/should allow chain selection
@@ -56,7 +63,7 @@ const ConnectButton = (
     <ClientOnly>
       <HStack spacing={"1.5em"}>
         <ChainButton
-          chain={chainConfigMap[selectedNetwork]}
+          chain={currentChainConfig}
           onChainChange={handleNetworkChange}
         />
 
@@ -68,7 +75,7 @@ const ConnectButton = (
           )
         ) : (
           <ConnectWalletPopover
-            wagmiChainId={chainConfigMap[selectedNetwork].wagmiId}
+            wagmiChainId={currentChainConfig.wagmiId}
             {...props}
           />
         )}

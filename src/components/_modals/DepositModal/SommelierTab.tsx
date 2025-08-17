@@ -55,6 +55,12 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useUserBalances } from "data/hooks/useUserBalances"
+import {
+  handleTransactionError,
+  getTransactionErrorToast,
+  getTransactionErrorAnalytics,
+  type TransactionErrorContext,
+} from "utils/handleTransactionError"
 
 interface FormValues {
   depositAmount: number
@@ -354,10 +360,48 @@ export const SommelierTab = ({
       return false
     } catch (error) {
       console.error("Approval error:", error)
+
+      // Use centralized error handling for approval
+      const errorContext: TransactionErrorContext = {
+        vaultName: cellarName,
+        tokenSymbol: cellarConfig.baseAsset.symbol,
+        transactionType: "approve",
+        chainId: cellarConfig.chain.id,
+      }
+
+      const normalizedError = handleTransactionError(
+        error as Error,
+        errorContext
+      )
+      const toastConfig = getTransactionErrorToast(
+        normalizedError,
+        errorContext
+      )
+      const analyticsData = getTransactionErrorAnalytics(
+        normalizedError,
+        errorContext
+      )
+
+      // Track analytics
+      analytics.track("approval.rejected", {
+        ...analyticsData,
+      })
+
+      // Show toast with popup guidance if needed
+      const toastBody = toastConfig.showPopupGuidance ? (
+        <Text>
+          {toastConfig.body}
+          <br />
+          Enable popups for MetaMask and retry.
+        </Text>
+      ) : (
+        <Text>{toastConfig.body}</Text>
+      )
+
       addToast({
-        heading: "Approval Cancelled",
-        body: <Text>Token approval was cancelled.</Text>,
-        status: "error",
+        heading: toastConfig.heading,
+        body: toastBody,
+        status: toastConfig.status,
         closeHandler: close,
       })
       return false
@@ -585,94 +629,51 @@ export const SommelierTab = ({
         const error = e as Error
         console.error("Deposit error:", error)
 
-        if (
-          error.message.includes("spam filter") ||
-          error.message.includes("not been authorized")
-        ) {
-          analytics.track("deposit.failed", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-            message: "SPAM_FILTER_ERROR",
-          })
-          addToast({
-            heading: "Transaction Blocked",
-            body: (
-              <Text>
-                Your transaction was blocked by MetaMask's spam
-                filter. Please try:
-                <br />• Clearing MetaMask activity data
-                <br />• Waiting a few minutes before retrying
-                <br />• Using a different amount
-              </Text>
-            ),
-            status: "warning",
-            closeHandler: closeAll,
-          })
-        } else if (
-          error.message.includes("User rejected") ||
-          error.message.includes("User denied")
-        ) {
-          analytics.track("deposit.rejected", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-            message: "USER_REJECTED",
-          })
-          addToast({
-            heading: cellarName + " Deposit",
-            body: (
-              <Text>
-                Deposit Cancelled - Transaction was rejected
-              </Text>
-            ),
-            status: "info",
-            closeHandler: closeAll,
-          })
-        } else if (error.message === "GAS_LIMIT_ERROR") {
-          analytics.track("deposit.failed", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-            message: "GAS_LIMIT_ERROR",
-          })
-          addToast({
-            heading: "Transaction not submitted",
-            body: (
-              <Text>
-                Your transaction has failed, if it does not work after
-                waiting some time and retrying please send a message
-                in our{" "}
-                {
-                  <Link
-                    href="https://discord.com/channels/814266181267619840/814279703622844426"
-                    isExternal
-                    textDecoration="underline"
-                  >
-                    Discord Support channel
-                  </Link>
-                }{" "}
-                tagging a member of the front end team.
-              </Text>
-            ),
-            status: "info",
-            closeHandler: closeAll,
-          })
-        } else {
-          console.error(error.message)
-          analytics.track("deposit.rejected", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-          })
-
-          addToast({
-            heading: cellarName + " Deposit",
-            body: <Text>Deposit Cancelled</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
+        // Use centralized error handling
+        const errorContext: TransactionErrorContext = {
+          vaultName: cellarName,
+          tokenSymbol,
+          transactionType: "deposit",
+          value: depositAmount,
+          chainId: cellarConfig.chain.id,
         }
+
+        const normalizedError = handleTransactionError(
+          error,
+          errorContext
+        )
+        const toastConfig = getTransactionErrorToast(
+          normalizedError,
+          errorContext
+        )
+        const analyticsData = getTransactionErrorAnalytics(
+          normalizedError,
+          errorContext
+        )
+
+        // Track analytics
+        analytics.track("deposit.rejected", {
+          ...baseAnalytics,
+          ...analyticsData,
+        })
+
+        // Show toast with popup guidance if needed
+        const toastBody = toastConfig.showPopupGuidance ? (
+          <Text>
+            {toastConfig.body}
+            <br />
+            Enable popups for MetaMask and retry.
+          </Text>
+        ) : (
+          <Text>{toastConfig.body}</Text>
+        )
+
+        addToast({
+          heading: toastConfig.heading,
+          body: toastBody,
+          status: toastConfig.status,
+          closeHandler: closeAll,
+        })
 
         console.warn("failed to deposit", e)
       }
