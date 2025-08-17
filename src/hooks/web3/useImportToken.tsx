@@ -50,6 +50,13 @@ export const useImportToken = (callbacks?: ImportTokenCallbacks) => {
       // Try to import to wallet (MetaMask)
       if (typeof window !== "undefined" && window.ethereum) {
         try {
+          console.log("Attempting to import token to MetaMask:", {
+            address: params.address,
+            symbol: tokenData[1].result,
+            decimals: tokenData[2].result,
+            image: params.imageUrl,
+          })
+          
           await window.ethereum.request({
             method: "wallet_watchAsset",
             params: {
@@ -62,9 +69,14 @@ export const useImportToken = (callbacks?: ImportTokenCallbacks) => {
               },
             },
           })
+          
+          console.log("Token import to MetaMask successful")
         } catch (error) {
-          console.warn("Failed to import token to wallet:", error)
+          console.error("Failed to import token to wallet:", error)
+          throw error
         }
+      } else {
+        console.warn("MetaMask not available for token import")
       }
 
       return tokenInfo
