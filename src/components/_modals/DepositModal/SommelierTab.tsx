@@ -126,6 +126,7 @@ export const SommelierTab = ({
   const { address } = useAccount()
   const { writeContractAsync } = useWriteContract()
   const { data: waitForTransaction } = useWaitForTransactionReceipt()
+  const geo = useGeo()
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
