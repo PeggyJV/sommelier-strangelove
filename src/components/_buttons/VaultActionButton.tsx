@@ -10,6 +10,8 @@ import {
 } from "@chakra-ui/react"
 import { useAccount, useSwitchChain } from "wagmi"
 import ChainSwitcherInline from "components/network/ChainSwitcherInline"
+import { BaseButton } from "./BaseButton"
+import { SecondaryButton } from "./SecondaryButton"
 
 export type VaultStatus = "active" | "paused" | "withdrawals-only"
 
@@ -25,7 +27,7 @@ export function VaultActionButton({
   const status: VaultStatus = vault?.status ?? "active"
   const label =
     status === "withdrawals-only"
-      ? "Withdraw"
+      ? "Enter Withdrawal"
       : status === "paused"
       ? "Paused"
       : "Deposit"
@@ -48,7 +50,7 @@ export function VaultActionButton({
           closeOnBlur={false}
         >
           <PopoverTrigger>
-            <Button
+            <BaseButton
               size="md"
               height="44px"
               minW="148px"
@@ -58,13 +60,9 @@ export function VaultActionButton({
                   e.stopPropagation()
                 }
               }}
-              _focusVisible={{
-                boxShadow:
-                  "0 0 0 3px var(--chakra-colors-purple-base)",
-              }}
             >
               Switch network
-            </Button>
+            </BaseButton>
           </PopoverTrigger>
           <PopoverContent
             p={3}
@@ -103,26 +101,45 @@ export function VaultActionButton({
           </PopoverContent>
         </Popover>
       ) : (
-        <Button
-          size="md"
-          height="44px"
-          minW="148px"
-          isDisabled={status === "paused"}
-          onClick={(e) => {
-            e.stopPropagation()
-            vault?.onAction?.()
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.stopPropagation()
-            }
-          }}
-          _focusVisible={{
-            boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
-          }}
-        >
-          {label}
-        </Button>
+        <>
+          {status === "withdrawals-only" ? (
+            <SecondaryButton
+              size="md"
+              height="44px"
+              minW="148px"
+              isDisabled={status === "paused"}
+              onClick={(e) => {
+                e.stopPropagation()
+                vault?.onAction?.()
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.stopPropagation()
+                }
+              }}
+            >
+              {label}
+            </SecondaryButton>
+          ) : (
+            <BaseButton
+              size="md"
+              height="44px"
+              minW="148px"
+              isDisabled={status === "paused"}
+              onClick={(e) => {
+                e.stopPropagation()
+                vault?.onAction?.()
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.stopPropagation()
+                }
+              }}
+            >
+              {label}
+            </BaseButton>
+          )}
+        </>
       )}
     </>
   )
