@@ -29,6 +29,7 @@ import {
   usePublicClient,
   useWriteContract,
   useWaitForTransactionReceipt,
+  getCapabilities,
 } from "wagmi"
 import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
 
