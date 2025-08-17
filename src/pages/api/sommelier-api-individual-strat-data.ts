@@ -25,7 +25,7 @@ const sommelierAPIIndividualStratData = async (
       Math.floor(Date.now() / 1000) - 24 * 60 * 60
 
     const dailyDataUrl = `https://api.sommelier.finance/dailyData/${chain}/${cellarAddress}/0/latest`
-const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cellarAddress}/${unix_timestamp_24_hours_ago}/latest`
+    const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cellarAddress}/${unix_timestamp_24_hours_ago}/latest`
 
     const [dailyData, hourlyData] = await Promise.all([
       fetchData(dailyDataUrl),
@@ -37,14 +37,17 @@ const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cella
       chainStr = "-" + chain
     }
 
-    let cellarDecimals = CellaAddressDataMap[cellarAddress!.toString().toLowerCase() + chainStr].config.cellar.decimals
+    let cellarDecimals =
+      CellaAddressDataMap[
+        cellarAddress!.toString().toLowerCase() + chainStr
+      ].config.cellar.decimals
 
     let transformedDailyData = dailyData.Response.map(
       (dayData: any) => ({
         date: dayData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
         shareValue: Math.floor(
-          dayData.share_price * (10 ** cellarDecimals)
+          dayData.share_price * 10 ** cellarDecimals
         ).toString(),
       })
     )
@@ -58,7 +61,7 @@ const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cella
         date: hourData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
         shareValue: Math.floor(
-          hourData.share_price * (10 ** cellarDecimals)
+          hourData.share_price * 10 ** cellarDecimals
         ).toString(),
         total_assets: hourData.total_assets,
         tvl: hourData.tvl,
@@ -68,9 +71,28 @@ const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cella
     // Order by descending date
     transformedHourlyData.sort((a: any, b: any) => b.date - a.date)
 
+    // Guard: if no hourly data, return data_pending instead of 500
+    if (
+      !Array.isArray(transformedHourlyData) ||
+      transformedHourlyData.length === 0
+    ) {
+      res.setHeader(
+        "Cache-Control",
+        "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
+      )
+      res.setHeader("Access-Control-Allow-Origin", baseUrl)
+      return res.status(200).json({
+        cellarAddress,
+        chain,
+        status: "data_pending",
+        shareValue: null,
+        tvlTotal: null,
+        baseAssetTvl: null,
+      })
+    }
+
     // Most recent hourly
     const baseAssetTvl = Number(transformedHourlyData[0].tvl) // !! Note this TVL may be up to 1 hour stale bc it doesnt use the tvl api endpoint, not a huge deal but might be weird at launches
-
 
     // TODO: Get shareValue and TvlTotal from latest hourly data async
     const formattedResult = {
@@ -96,12 +118,11 @@ const hourlyDataUrl = `https://api.sommelier.finance/hourlyData/${chain}/${cella
     res.status(200).json(formattedResult)
   } catch (error) {
     console.error(error)
-    res
-      .status(500)
-      .send({
-        error: "failed to fetch data",
-        message: (error as Error).message || "An unknown error occurred",
-      })
+    res.status(500).send({
+      error: "failed to fetch data",
+      message:
+        (error as Error).message || "An unknown error occurred",
+    })
   }
 }
 

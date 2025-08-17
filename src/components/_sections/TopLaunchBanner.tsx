@@ -10,6 +10,7 @@ import {
   GridItem,
 } from "@chakra-ui/react"
 import NextLink from "next/link"
+import * as React from "react"
 import Countdown from "components/_common/Countdown"
 import NextImage from "next/image"
 
@@ -24,6 +25,35 @@ export default function TopLaunchBanner({
 }: Props) {
   const lidoSrc = "/assets/images/eth-lido-uni.svg"
   const lidoFallbackPng = "/assets/icons/lido.png"
+
+  // Simple expandable copy helper for 3-line clamp -> expand inline
+  function ExpandableBody({ text }: { text: string }) {
+    const [expanded, setExpanded] = React.useState(false)
+    return (
+      <Box mt={{ base: 3, md: 4 }}>
+        <Text
+          textStyle="bodyMd"
+          noOfLines={expanded ? undefined : 3}
+          display="-webkit-box"
+          sx={{
+            WebkitLineClamp: expanded ? "unset" : 3,
+            WebkitBoxOrient: "vertical",
+          }}
+        >
+          {text}
+        </Text>
+        <Button
+          onClick={() => setExpanded((v) => !v)}
+          size="sm"
+          variant="link"
+          color="chip.fg"
+          mt={1}
+        >
+          {expanded ? "Read less" : "Read more"}
+        </Button>
+      </Box>
+    )
+  }
 
   return (
     <Box
@@ -132,19 +162,27 @@ export default function TopLaunchBanner({
                 Alpha stETH Vault
               </Text>
 
+              {/* One-line value proposition under title (clamped to 1 line) */}
+              <Text
+                fontSize={{ base: "sm", md: "md" }}
+                color="text.secondary"
+                noOfLines={1}
+              >
+                Dynamic leveraged stETH strategy powered by Somm +
+                Lido.
+              </Text>
+
               {/* Mobile/Tablet countdown directly under heading */}
               <Box display={{ base: "block", lg: "none" }} mb={4}>
                 <Countdown size="lg" targetDate={targetDate} />
               </Box>
 
-              {/* Paragraph (technical overview, avoid duplicating card metrics) */}
-              <Text textStyle="bodyMd" mt={{ base: 3, md: 4 }}>
-                Built with Lido, Alpha stETH dynamically reallocates
-                stETH across Aave, Morpho, Unichain, and Mellow to
-                capture sustainable rewards. Automated risk controls
-                and off-chain strategy computation ensure secure,
-                efficient deployment.
-              </Text>
+              {/* Paragraph with clamp + Read more disclosure */}
+              <ExpandableBody
+                text={
+                  "Built with Lido, Alpha stETH dynamically reallocates stETH across Aave, Morpho, Unichain, and Mellow to capture sustainable rewards. Automated risk controls and off-chain strategy computation ensure secure, efficient deployment."
+                }
+              />
 
               {/* Key-point pills (non-interactive) */}
               <HStack wrap="wrap" spacing={2} mb={5}>

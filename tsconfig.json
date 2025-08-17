@@ -16,6 +16,7 @@
       "data/*": ["src/data/*"],
       "components/*": ["src/components/*"],
       "context/*": ["src/context/*"],
+      "providers/*": ["src/providers/*"],
       "hooks/*": ["src/hooks/*"],
       "pages/*": ["src/pages/*"],
       "public/*": ["public/*"],
