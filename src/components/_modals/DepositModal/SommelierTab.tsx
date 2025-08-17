@@ -29,7 +29,6 @@ import {
   usePublicClient,
   useWriteContract,
   useWaitForTransactionReceipt,
-  getCapabilities,
 } from "wagmi"
 import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
 
@@ -379,12 +378,8 @@ export const SommelierTab = ({
       cellar: cellarConfig.cellar.address,
     })
 
-    const walletCapabilities = await getCapabilities(publicClient)
-    const atomicStatus =
-      walletCapabilities[cellarConfig.chain.wagmiId]?.atomic?.status
-
-    const canDoBatchCall =
-      atomicStatus === "ready" || atomicStatus === "supported"
+    // For now, assume batch calls are not supported to avoid the getCapabilities issue
+    const canDoBatchCall = false
 
     const allowance = nativeDeposit
       ? Number.MAX_SAFE_INTEGER
