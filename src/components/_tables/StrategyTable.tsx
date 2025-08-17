@@ -128,10 +128,11 @@ export const BorderTd: FC<TableCellProps & { href: string }> = ({
 export interface StrategyTableProps {
   data: AllStrategiesData
   columns: any
+  showHeader?: boolean
 }
 
 export const StrategyTable = memo(
-  ({ columns, data }: StrategyTableProps) => {
+  ({ columns, data, showHeader = true }: StrategyTableProps) => {
     if (!data || !Array.isArray(data) || data.length === 0) {
       return null
     }
@@ -165,54 +166,56 @@ export const StrategyTable = memo(
           }}
           rounded="lg"
         >
-          <Thead border="none" color="neutral.400">
-            {headerGroups.map((headerGroup, index) => (
-              <Tr
-                {...headerGroup.getHeaderGroupProps()}
-                key={index}
-                bg="surface.primary"
-                borderBottom="1px solid"
-                borderColor="surface.secondary"
-              >
-                {headerGroup.headers.map((column: any, index) => {
-                  return column.canSort ? (
-                    <Th
-                      {...column.getHeaderProps(
-                        column.getSortByToggleProps()
-                      )}
-                      userSelect="none"
-                      textTransform="unset"
-                      key={index}
-                    >
-                      <Flex
-                        alignItems="center"
-                        gap={2}
-                        justifyContent="end"
+          {showHeader && (
+            <Thead border="none" color="neutral.400">
+              {headerGroups.map((headerGroup, index) => (
+                <Tr
+                  {...headerGroup.getHeaderGroupProps()}
+                  key={index}
+                  bg="surface.primary"
+                  borderBottom="1px solid"
+                  borderColor="surface.secondary"
+                >
+                  {headerGroup.headers.map((column: any, index) => {
+                    return column.canSort ? (
+                      <Th
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps()
+                        )}
+                        userSelect="none"
+                        textTransform="unset"
+                        key={index}
+                      >
+                        <Flex
+                          alignItems="center"
+                          gap={2}
+                          justifyContent="end"
+                        >
+                          {column.render("Header")}
+                          <Icon
+                            as={SortingArrowIcon}
+                            boxSize={3}
+                            opacity={0.5}
+                            cursor="default"
+                          />
+                        </Flex>
+                      </Th>
+                    ) : (
+                      <Th
+                        {...column.getHeaderProps()}
+                        userSelect="none"
+                        textTransform="unset"
+                        key={index}
+                        maxW={1}
                       >
                         {column.render("Header")}
-                        <Icon
-                          as={SortingArrowIcon}
-                          boxSize={3}
-                          opacity={0.5}
-                          cursor="default"
-                        />
-                      </Flex>
-                    </Th>
-                  ) : (
-                    <Th
-                      {...column.getHeaderProps()}
-                      userSelect="none"
-                      textTransform="unset"
-                      key={index}
-                      maxW={1}
-                    >
-                      {column.render("Header")}
-                    </Th>
-                  )
-                })}
-              </Tr>
-            ))}
-          </Thead>
+                      </Th>
+                    )
+                  })}
+                </Tr>
+              ))}
+            </Thead>
+          )}
           <Tbody
             backgroundColor="surface.primary"
             {...getTableBodyProps()}

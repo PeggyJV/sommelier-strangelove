@@ -25,28 +25,23 @@ import {
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { useMemo, useState, useCallback } from "react"
-import { ChainFilter } from "components/_filters/ChainFilter"
 import { chainConfig } from "src/data/chainConfig"
-import {
-  DepositTokenFilter,
-  SymbolPathPair,
-} from "components/_filters/DepositTokenFilter"
+import { SymbolPathPair } from "components/_filters/DepositTokenFilter"
 import { cellarDataMap } from "src/data/cellarDataMap"
 import { CellarData } from "src/data/types"
-import {
-  MiscFilter,
-  MiscFilterProp,
-} from "components/_filters/MiscFilter"
-import { DeleteCircleIcon } from "components/_icons"
+import { MiscFilterProp } from "components/_filters/MiscFilter"
+
 import { add, isBefore } from "date-fns"
 import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import TopLaunchBanner from "components/_sections/TopLaunchBanner"
-import WithdrawalStatusPanel from "components/_sections/WithdrawalStatusPanel"
+import WithdrawalWarningBanner from "components/_sections/WithdrawalWarningBanner"
+
 import SectionHeader from "components/_sections/SectionHeader"
 import { alphaSteth } from "data/strategies/alpha-steth"
 import { MigrationModal } from "components/_modals/MigrationModal"
+import LegacyVaultCard from "components/_vaults/LegacyVaultCard"
 
 export const PageHome = () => {
   const {
@@ -248,51 +243,7 @@ export const PageHome = () => {
   }, [])
 
   const strategyData = useMemo(() => {
-    const filteredData =
-      data?.filter((item) => {
-        // Chain filter
-        const isChainSelected = selectedChainIds.includes(
-          item?.config.chain.id!
-        )
-
-        // Deposit asset filter
-        const hasSelectedDepositAsset = cellarDataMap[
-          item!.slug
-        ].depositTokens.list.some((tokenSymbol) =>
-          selectedDepositAssets.hasOwnProperty(tokenSymbol)
-        )
-
-        // Deprecated filter
-        const isDeprecated = cellarDataMap[item!.slug].deprecated
-        const deprecatedCondition = showDeprecated
-          ? isDeprecated
-          : !isDeprecated
-
-        // Incentivised filter
-        //    Badge check for custom rewards
-        const hasGreenBadge = cellarDataMap[
-          item!.slug
-        ].config.badges?.some(
-          (badge) => badge.customStrategyHighlightColor === "#00C04B"
-        )
-
-        //    Staking period check for somm/vesting rewards
-        const hasLiveStakingPeriod =
-          item?.rewardsApy?.value !== undefined &&
-          Number(item?.rewardsApy?.value) > 0
-
-        const incentivisedCondition = showIncentivised
-          ? hasGreenBadge || hasLiveStakingPeriod
-          : true
-
-        return (
-          isChainSelected &&
-          hasSelectedDepositAsset &&
-          deprecatedCondition &&
-          incentivisedCondition
-        )
-      }) || []
-
+    const filteredData = data || []
     return filteredData.sort((a, b) => {
       // Move Alpha stETH to the top of the list
       if (a?.slug === "Alpha-stETH") {
@@ -357,15 +308,7 @@ export const PageHome = () => {
         parseFloat(a?.tvm?.value ?? "")
       )
     })
-  }, [
-    data?.length,
-    selectedChainIds,
-    selectedDepositAssets,
-    showDeprecated,
-    showIncentivised,
-    userBalances.data,
-    isConnected,
-  ])
+  }, [data?.length, userBalances.data, isConnected])
 
   const bannerTargetDate: Date =
     alphaSteth.launchDate ??
@@ -373,11 +316,36 @@ export const PageHome = () => {
 
   const { sommNative, legacy } = useMemo(() => {
     const list = strategyData || []
-    return {
-      sommNative: list.filter((v) => v?.isSommNative),
-      legacy: list.filter((v) => !v?.isSommNative),
+    const sommNative = list.filter((v) => v?.isSommNative)
+    const legacy = list.filter((v) => !v?.isSommNative)
+
+    // Sorting rules for legacy list
+    if (!isConnected) {
+      // 1) Disconnected: sort by highest TVL
+      legacy.sort((a, b) => {
+        const aTvl = parseFloat(a?.tvm?.value ?? "0")
+        const bTvl = parseFloat(b?.tvm?.value ?? "0")
+        return bTvl - aTvl
+      })
+    } else {
+      // 2) Connected: show vaults with positive Net Value on top (sorted by net value desc),
+      // followed by the rest sorted by TVL. Avoids NAV overriding TVL when NAV is zero/unknown.
+      const netOf = (v: any) =>
+        Number(v?.userStrategyData?.userData?.netValue?.value ?? 0)
+      const withNet = legacy.filter((v: any) => netOf(v) > 0)
+      const withoutNet = legacy.filter((v: any) => netOf(v) <= 0)
+
+      withNet.sort((a: any, b: any) => netOf(b) - netOf(a))
+      withoutNet.sort((a: any, b: any) => {
+        const aTvl = parseFloat(a?.tvm?.value ?? "0")
+        const bTvl = parseFloat(b?.tvm?.value ?? "0")
+        return bTvl - aTvl
+      })
+
+      legacy.splice(0, legacy.length, ...withNet, ...withoutNet)
     }
-  }, [strategyData])
+    return { sommNative, legacy }
+  }, [strategyData, isConnected, userBalances?.data])
 
   const WithdrawalStatusPanel = () => (
     <Box
@@ -412,76 +380,7 @@ export const PageHome = () => {
         />
       }
       */}
-      {isMobile ? (
-        <VStack width="100%" padding={"2em 0em"} spacing="2em">
-          <ChainFilter
-            selectedChainIds={selectedChainIds}
-            setSelectedChainIds={setSelectedChainIds}
-          />
-          <DepositTokenFilter
-            constantAllUniqueAssetsArray={
-              constantOrderedAllUniqueAssetsArray
-            }
-            selectedDepositAssets={selectedDepositAssets}
-            setSelectedDepositAssets={setSelectedDepositAssets}
-          />
-          <MiscFilter categories={selectedMiscFilters} />
-          {hasFiltersChanged && (
-            <Button
-              bg="none"
-              borderWidth={2.5}
-              borderColor="purple.base"
-              borderRadius="1em"
-              w="auto"
-              fontFamily="Haffer"
-              fontSize={12}
-              padding="1.75em 2em"
-              _hover={{ bg: "purple.dark" }}
-              onClick={resetFilters}
-            >
-              <HStack>
-                <Text fontSize={"1.25em"}>Reset</Text>
-                <DeleteCircleIcon boxSize={4} />
-              </HStack>
-            </Button>
-          )}
-        </VStack>
-      ) : (
-        <HStack width="100%" padding={"2em 0em"} spacing="2em">
-          <ChainFilter
-            selectedChainIds={selectedChainIds}
-            setSelectedChainIds={setSelectedChainIds}
-          />
-          <DepositTokenFilter
-            constantAllUniqueAssetsArray={
-              constantOrderedAllUniqueAssetsArray
-            }
-            selectedDepositAssets={selectedDepositAssets}
-            setSelectedDepositAssets={setSelectedDepositAssets}
-          />
-          <Spacer />
-          <MiscFilter categories={selectedMiscFilters} />
-          {hasFiltersChanged && (
-            <Button
-              bg="none"
-              borderWidth={2.5}
-              borderColor="purple.base"
-              borderRadius="1em"
-              w="auto"
-              fontFamily="Haffer"
-              fontSize={12}
-              padding="1.75em 2em"
-              _hover={{ bg: "purple.dark" }}
-              onClick={resetFilters}
-            >
-              <HStack>
-                <Text fontSize={"1.25em"}>Reset</Text>
-                <DeleteCircleIcon boxSize={4} />
-              </HStack>
-            </Button>
-          )}
-        </HStack>
-      )}
+      {/* Filters removed – always show full vault list */}
       <TransparentSkeleton
         height={loading ? "400px" : "auto"}
         w="full"
@@ -504,25 +403,42 @@ export const PageHome = () => {
           <>
             {sommNative.length > 0 && (
               <>
-                <SectionHeader
-                  title="Somm-native Vaults"
-                  pill="Active"
-                  pillColor="green"
+                <SectionHeader title="Somm-native Vaults" />
+                <StrategyTable
+                  columns={columns}
+                  data={sommNative}
+                  showHeader={false}
                 />
-                <StrategyTable columns={columns} data={sommNative} />
               </>
             )}
-
-            {legacy.length > 0 && <WithdrawalStatusPanel />}
 
             {legacy.length > 0 && (
               <>
                 <SectionHeader
-                  title="Legacy Vaults (Managed by Seven Seas)"
-                  pill="Legacy"
-                  pillColor="orange"
+                  title={
+                    <>
+                      Legacy Vaults (Managed by{" "}
+                      <a
+                        href="https://sevenseas.capital/"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        style={{ textDecoration: "underline" }}
+                      >
+                        Seven Seas
+                      </a>
+                      )
+                    </>
+                  }
                 />
-                <StrategyTable columns={columns} data={legacy} />
+                <WithdrawalWarningBanner />
+                <VStack spacing={4} align="stretch" mt={2}>
+                  {legacy.map((v) => (
+                    <LegacyVaultCard
+                      key={v?.slug ?? v?.name}
+                      vault={v}
+                    />
+                  ))}
+                </VStack>
               </>
             )}
           </>

@@ -1,10 +1,12 @@
 import { Flex } from "@chakra-ui/react"
-import { YourPortofolio } from "./YourPortofolio"
+// Temporarily disabled – only needed once multiple vault groups exist
+// import { YourPortofolio } from "./YourPortofolio"
 
 export const Sidebar = () => {
   return (
     <Flex>
-      <YourPortofolio />
+      {/* Temporarily disabled – only needed once multiple vault groups exist */}
+      {/* <YourPortofolio /> */}
     </Flex>
   )
 }

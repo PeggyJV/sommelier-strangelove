@@ -110,19 +110,22 @@ export default function Countdown({
       rounded="lg"
       backdropFilter="auto"
       backdropBlur="2px"
+      whiteSpace="nowrap"
     >
       <VisuallyHidden>{ariaLabel}</VisuallyHidden>
-      <Text
-        fontWeight={700}
-        fontSize={s.number}
-        lineHeight={1}
-        color="count.box.fg"
-      >
-        {value.toString().padStart(2, "0")}
-      </Text>
-      <Text fontSize={s.label} color="count.box.sub">
-        {label}
-      </Text>
+      <Stack spacing={1} align="center" justify="center">
+        <Text
+          fontWeight={700}
+          fontSize={s.number}
+          lineHeight={1}
+          color="count.box.fg"
+        >
+          {value.toString().padStart(2, "0")}
+        </Text>
+        <Text fontSize={s.label} color="count.box.sub">
+          {label}
+        </Text>
+      </Stack>
     </Box>
   )
 

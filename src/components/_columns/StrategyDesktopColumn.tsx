@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react"
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { VaultActionButton } from "components/_buttons/VaultActionButton"
+import StrategyRow from "components/_vaults/StrategyRow"
 import { InformationIcon } from "components/_icons"
 import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
@@ -94,6 +95,9 @@ export const StrategyDesktopColumn = ({
       ),
       accessor: "name",
       Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) {
+          return <StrategyRow vault={row.original} />
+        }
         const shortDesc = row.original?.shortDescription
         const providerText =
           row.original?.provider?.title || row.original?.provider
@@ -103,9 +107,6 @@ export const StrategyDesktopColumn = ({
               <Text fontWeight="bold">{row.original?.name}</Text>
             </HStack>
             <HStack spacing={2} mt="1">
-              {row.original?.isSommNative && (
-                <Badge colorScheme="purple">Somm-native</Badge>
-              )}
               {providerText && (
                 <Text fontSize="sm" color="whiteAlpha.800">
                   {providerText}
@@ -141,7 +142,7 @@ export const StrategyDesktopColumn = ({
       accessor: "tvm.value",
       Cell: ({
         row: {
-          original: { launchDate, tvm, isHero },
+          original: { launchDate, tvm, isHero, isSommNative },
         },
       }: {
         row: {
@@ -149,19 +150,23 @@ export const StrategyDesktopColumn = ({
             launchDate: number
             tvm: { value: number; formatted: string }
             isHero: boolean
+            isSommNative?: boolean
           }
         }
-      }) => (
-        <Text
-          fontWeight={550}
-          fontSize={isHero ? "20px" : "16px"}
-          textAlign="right"
-        >
-          {launchDate && launchDate > Date.now()
-            ? "--"
-            : tvm?.formatted ?? "--"}
-        </Text>
-      ),
+      }) => {
+        if (isSommNative) return null
+        return (
+          <Text
+            fontWeight={550}
+            fontSize={isHero ? "20px" : "16px"}
+            textAlign="right"
+          >
+            {launchDate && launchDate > Date.now()
+              ? "--"
+              : tvm?.formatted ?? "--"}
+          </Text>
+        )
+      },
     },
     {
       Header: () => (
@@ -180,6 +185,7 @@ export const StrategyDesktopColumn = ({
       ),
       accessor: "baseApy",
       Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) return null
         const launchDate = row.original.launchDate
         const value = row.original.baseApySumRewards?.formatted
         if (launchDate && launchDate > Date.now()) {
@@ -228,6 +234,7 @@ export const StrategyDesktopColumn = ({
       ),
       accessor: "chain",
       Cell: ({ cell: { row } }: CellValue) => {
+        if ((row as any)?.original?.isSommNative) return null
         const [isHover, setIsHover] = useState(false)
         const handleMouseOver = () => {
           setIsHover(true)
@@ -274,9 +281,10 @@ export const StrategyDesktopColumn = ({
     {
       Header: () => <Text>Action</Text>,
       id: "deposit",
-      Cell: ({ row }: any) => (
-        <VaultActionButton vault={row.original} />
-      ),
+      Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) return null
+        return <VaultActionButton vault={row.original} />
+      },
     },
   ]
 }

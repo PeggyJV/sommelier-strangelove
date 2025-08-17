@@ -40,7 +40,7 @@ export const tokenConfig: Token[] = [
     address: "0x4e914bbdcde0f455a8ac9d59d3bf739c46287ed2", //NEED TO UPDATE
     coinGeckoId: "sommelier",
     decimals: 6,
-    chain: chainSlugMap.SCROLL.id,
+    chain: chainSlugMap.OPTIMISM.id,
   },
   {
     src: "/assets/icons/somm.png",
@@ -103,7 +103,7 @@ export const tokenConfig: Token[] = [
     address: "0x5300000000000000000000000000000000000004",
     coinGeckoId: "weth",
     decimals: 18,
-    chain: chainSlugMap.SCROLL.id,
+    chain: chainSlugMap.OPTIMISM.id,
   },
   {
     src: "/assets/icons/wbtc.png",
@@ -292,7 +292,7 @@ export const tokenConfig: Token[] = [
     address: "0x53878B874283351D26d206FA512aEcE1Bef6C0dD",
     coinGeckoId: "rocket-pool-eth",
     decimals: 18,
-    chain: chainSlugMap.SCROLL.id,
+    chain: chainSlugMap.OPTIMISM.id,
   },
   {
     src: "/assets/icons/steth.png",
@@ -481,7 +481,7 @@ export const tokenConfig: Token[] = [
     address: "0xf610A9dfB7C89644979b4A0f27063E9e7d7Cda32",
     coinGeckoId: "wrapped-steth",
     decimals: 18,
-    chain: chainSlugMap.SCROLL.id,
+    chain: chainSlugMap.OPTIMISM.id,
   },
   {
     src: "/assets/icons/usdc.png",
@@ -623,7 +623,7 @@ let acceptedETHDepositTokens = [
   "swETH",
   "BUSD",
   "rETH BPT",
-  "ETH"
+  "ETH",
 ]
 
 let depositTokenMapETH = tokenConfig.reduce((map, token) => {
@@ -644,7 +644,16 @@ export const acceptedETHDepositTokenMap = Object.keys(
   }, {} as { [symbol: string]: Token })
 
 // --- ARB ACCEPTED TOKENS ---
-let acceptedARBDepositTokens = ["USDC", "USDT", "DAI", "USDC.e", 'WETH', 'wstETH', 'rETH', 'ETH'];
+let acceptedARBDepositTokens = [
+  "USDC",
+  "USDT",
+  "DAI",
+  "USDC.e",
+  "WETH",
+  "wstETH",
+  "rETH",
+  "ETH",
+]
 
 let depositTokenMapARB = tokenConfig.reduce((map, token) => {
   if (acceptedARBDepositTokens.includes(token.symbol)) {
@@ -664,14 +673,13 @@ export const acceptedARBDepositTokenMap = Object.keys(
   }, {} as { [symbol: string]: Token })
 
 // --- OPTIMISM ACCEPTED TOKENS ---
-let acceptedOPTDepositTokens = ['WETH', 'wstETH', 'rETH', 'ETH'];
-
+let acceptedOPTDepositTokens = ["WETH", "wstETH", "rETH", "ETH"]
 
 const acceptedDepositTokensByChain: { [key: string]: any } = {
   ethereum: acceptedETHDepositTokens,
   arbitrum: acceptedARBDepositTokens,
   optimism: acceptedOPTDepositTokens,
-};
+}
 
 // Creatae a map from each token symbol to its config
 export const tokenConfigMap = tokenConfig.reduce((map, token) => {

@@ -9,7 +9,6 @@ import {
   Grid,
   GridItem,
 } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
 import NextLink from "next/link"
 import Countdown from "components/_common/Countdown"
 import NextImage from "next/image"
@@ -138,11 +137,13 @@ export default function TopLaunchBanner({
                 <Countdown size="lg" targetDate={targetDate} />
               </Box>
 
-              {/* Paragraph */}
+              {/* Paragraph (technical overview, avoid duplicating card metrics) */}
               <Text textStyle="bodyMd" mt={{ base: 3, md: 4 }}>
-                Built in collaboration with Lido, Alpha stETH offers
-                simplified access to multiple Ethereum reward
-                strategies through a single, composable vault.
+                Built with Lido, Alpha stETH dynamically reallocates
+                stETH across Aave, Morpho, Unichain, and Mellow to
+                capture sustainable rewards. Automated risk controls
+                and off-chain strategy computation ensure secure,
+                efficient deployment.
               </Text>
 
               {/* Key-point pills (non-interactive) */}
@@ -240,37 +241,7 @@ export default function TopLaunchBanner({
           </GridItem>
         </Grid>
 
-        {/* Scroll cue arrow (animated) */}
-        {(() => {
-          const bounceFade = keyframes`
-          0%, 100% { transform: translate(-50%, 0); opacity: 0.6; }
-          50% { transform: translate(-50%, 6px); opacity: 1; }
-        `
-          return (
-            <Box
-              aria-hidden
-              position="absolute"
-              left="50%"
-              bottom={3}
-              transform="translateX(-50%)"
-              pointerEvents="none"
-              as="svg"
-              viewBox="0 0 24 24"
-              boxSize={6}
-              color="text.secondary"
-              animation={`${bounceFade} 2.2s ease-in-out infinite`}
-            >
-              <path
-                d="M6 9l6 6 6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </Box>
-          )
-        })()}
+        {/* Scroll cue arrow removed per request */}
       </Box>
     </Box>
   )

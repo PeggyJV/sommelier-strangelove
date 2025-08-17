@@ -5,10 +5,12 @@ import { tokenConfigMap } from "src/data/tokenConfig"
 import { CellarNameKey, CellarKey } from "data/types"
 
 export const isSommNative = true
-export const provider = "Somm Finance + Lido"
+export const provider = "Somm Protocol"
 export const shortDescription =
   "Dynamic leveraged stETH across blue-chip DeFi; no legacy vault dependency."
 export const status = "active" // active | withdrawals-only | paused
+export const builtWith = ["Lido", "EigenLayer"]
+export const launchDateISO = "2025-08-19T00:00:00Z"
 
 export const alphaSteth: CellarData = {
   name: "Alpha STETH",
@@ -16,9 +18,9 @@ export const alphaSteth: CellarData = {
   startingShareValue: "998206828469480700",
   tradedAssets: ["WETH", "stETH", "wstETH"],
   launchDate: new Date(Date.UTC(2025, 7, 19, 0, 0, 0, 0)),
-  isHero: true,
+  isHero: false,
   cellarType: CellarType.yieldStrategies,
-  description: `Alpha STETH dynamically reallocates stETH exposure across trusted DeFi protocols — including Mellow’s dvSTETH and Unichain — to unlock reward potential in ETH-native strategies.`,
+  description: `Alpha STETH dynamically reallocates stETH exposure across trusted DeFi protocols including Mellow’s dvSTETH and Unichain to unlock reward potential in ETH-native strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
