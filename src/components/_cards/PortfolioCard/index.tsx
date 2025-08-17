@@ -77,9 +77,6 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const { lpToken } = useUserBalance(cellarConfig)
   let { data: lpTokenData } = lpToken
-  const lpTokenDisabled =
-    !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
-
   const { data: strategyData, isLoading: isStrategyLoading } =
     useStrategyData(
       cellarConfig.cellar.address,
@@ -108,6 +105,14 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
+
+  const lpTokenDisabled =
+    !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
+
+  // Check if user has any value in the vault (either LP tokens or net value)
+  const hasValueInVault =
+    (lpTokenData && Number(lpTokenData?.value ?? "0") > 0) ||
+    (netValue && Number(netValue?.value ?? "0") > 0)
 
   const baseAssetValue =
     userData?.userStrategyData.userData?.netValueInAsset?.formatted
@@ -227,7 +232,7 @@ export const PortfolioCard = (props: BoxProps) => {
                           <WithdrawButton
                             isDeprecated={strategyData?.deprecated}
                             disabled={
-                              lpTokenDisabled || !buttonsEnabled
+                              !hasValueInVault || !buttonsEnabled
                             }
                           />
                         )}
@@ -250,6 +255,9 @@ export const PortfolioCard = (props: BoxProps) => {
                         <WithdrawQueueButton
                           chain={cellarConfig.chain}
                           buttonLabel="Enter Withdraw Queue"
+                          disabled={
+                            !hasValueInVault || !buttonsEnabled
+                          }
                           showTooltip={true}
                         />
                       )}

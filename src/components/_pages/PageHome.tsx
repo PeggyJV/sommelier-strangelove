@@ -35,9 +35,10 @@ import { add, isBefore } from "date-fns"
 import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
+import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 import TopLaunchBanner from "components/_sections/TopLaunchBanner"
 import WithdrawalWarningBanner from "components/_sections/WithdrawalWarningBanner"
-import { sortVaults } from "utils/sortVaults"
+import { sortVaultsForMainPage } from "utils/sortVaults"
 
 import SectionHeader from "components/_sections/SectionHeader"
 import { alphaSteth } from "data/strategies/alpha-steth"
@@ -68,6 +69,7 @@ export const PageHome = () => {
 
   const { isConnected } = useAccount()
   const { userBalances } = useUserBalances()
+  const { data: userDataAllStrategies } = useUserDataAllStrategies()
 
   const columns = useMemo(() => {
     return isDesktop
@@ -328,29 +330,63 @@ export const PageHome = () => {
 
     // Normalize to util input shape and sort deterministically
     const mapToSortable = (arr: any[]) =>
-      arr.map((v) => ({
-        ref: v,
-        name: v?.name,
-        metrics: { tvl: Number(v?.tvm?.value ?? 0) },
-        user: {
-          netValue: Number(
-            v?.userStrategyData?.userData?.netValue?.value ?? 0
-          ),
-        },
-      }))
+      arr.map((v) => {
+        // Find matching user data for this vault
+        const userData = userDataAllStrategies?.strategies?.find(
+          (userStrategy) => {
+            const strategyAddress =
+              userStrategy?.userStrategyData?.strategyData?.address
+            const strategyChain =
+              userStrategy?.userStrategyData?.strategyData?.config
+                ?.chain?.id
+            const vaultAddress = v?.config?.cellar?.address
+            const vaultChain = v?.config?.chain?.id
 
-    const sortedLegacy = sortVaults(
+
+
+            return (
+              strategyAddress === vaultAddress &&
+              strategyChain === vaultChain
+            )
+          }
+        )
+
+        const netValue = Number(
+          userData?.userStrategyData?.userData?.netValue?.value ?? 0
+        )
+
+        // Merge user data into the strategy data
+        const enrichedVault = {
+          ...v,
+          netValue: userData?.userStrategyData?.userData?.netValue,
+          userStrategyData: userData?.userStrategyData,
+        }
+
+        return {
+          ref: enrichedVault,
+          name: v?.name,
+          tvl: v?.tvm?.formatted,
+          netValue: userData?.userStrategyData?.userData?.netValue?.formatted,
+        }
+      })
+
+    const sortedLegacy = sortVaultsForMainPage(
       mapToSortable(legacy),
-      isConnected
+      { connected: isConnected }
     ).map((x) => x.ref)
 
-    const sortedSomm = sortVaults(
+    const sortedSomm = sortVaultsForMainPage(
       mapToSortable(sommNative),
-      isConnected
+      { connected: isConnected }
     ).map((x) => x.ref)
 
     return { sommNative: sortedSomm, legacy: sortedLegacy }
-  }, [strategyData, isConnected, userBalances?.data])
+  }, [
+    strategyData,
+    isConnected,
+    userBalances?.data,
+    userDataAllStrategies?.strategies,
+  ])
 
   const WithdrawalStatusPanel = () => (
     <Box

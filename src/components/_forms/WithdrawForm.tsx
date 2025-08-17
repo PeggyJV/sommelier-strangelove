@@ -17,7 +17,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -40,6 +40,12 @@ import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-ass
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { parseUnits } from "viem"
+import {
+  handleTransactionError,
+  getTransactionErrorToast,
+  getTransactionErrorAnalytics,
+  type TransactionErrorContext,
+} from "utils/handleTransactionError"
 
 interface FormValues {
   withdrawAmount: number
@@ -65,7 +71,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
 
   const openWithdrawQueueModal = () =>
     setIsWithdrawQueueModalOpen(true)
-  const closeWithdrawQueueModal = () => { 
+  const closeWithdrawQueueModal = () => {
     setIsWithdrawQueueModalOpen(false)
     onClose()
   }
@@ -78,11 +84,10 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
     cellarConfig.chain.id
   )
 
-  const { cellarSigner } =
-      useCreateContracts(cellarConfig)
+  const { cellarSigner } = useCreateContracts(cellarConfig)
 
   const [isWithdrawQueueModalOpen, setIsWithdrawQueueModalOpen] =
-      useState(false)
+    useState(false)
 
   const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
@@ -149,14 +154,11 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       )
 
       // @ts-ignore
-      const hash = await cellarSigner?.write.redeem([
-          amtInWei,
-          address,
-          address
-        ],
+      const hash = await cellarSigner?.write.redeem(
+        [amtInWei, address, address],
         {
           gas: gasLimitEstimated,
-          account: address
+          account: address,
         }
       )
 
@@ -215,38 +217,49 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
         // Open a modal with information about the withdraw queue
         openWithdrawQueueModal()
       } else {
-        if (error.message === "GAS_LIMIT_ERROR") {
-          addToast({
-            heading: "Transaction not submitted",
-            body: (
-              <Text>
-                Your transaction has failed, if it does not work after
-                waiting some time and retrying please send a message
-                in our{" "}
-                {
-                  <Link
-                    href="https://discord.com/channels/814266181267619840/814279703622844426"
-                    isExternal
-                    textDecoration="underline"
-                  >
-                    Discord Support channel
-                  </Link>
-                }{" "}
-                tagging a member of the front end team.
-              </Text>
-            ),
-            status: "info",
-            closeHandler: closeAll,
-          })
-        } else {
-          console.error(error)
-          addToast({
-            heading: "Withdraw",
-            body: <Text>Withdraw Cancelled</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
+        // Use centralized error handling
+        const errorContext: TransactionErrorContext = {
+          vaultName: cellarDataMap[id].name,
+          transactionType: "withdraw",
+          value: withdrawAmount,
+          chainId: cellarConfig.chain.id,
         }
+
+        const normalizedError = handleTransactionError(
+          error,
+          errorContext
+        )
+        const toastConfig = getTransactionErrorToast(
+          normalizedError,
+          errorContext
+        )
+        const analyticsData = getTransactionErrorAnalytics(
+          normalizedError,
+          errorContext
+        )
+
+        // Track analytics
+        analytics.track("withdraw.rejected", {
+          ...analyticsData,
+        })
+
+        // Show toast with popup guidance if needed
+        const toastBody = toastConfig.showPopupGuidance ? (
+          <Text>
+            {toastConfig.body}
+            <br />
+            Enable popups for MetaMask and retry.
+          </Text>
+        ) : (
+          <Text>{toastConfig.body}</Text>
+        )
+
+        addToast({
+          heading: toastConfig.heading,
+          body: toastBody,
+          status: toastConfig.status,
+          closeHandler: closeAll,
+        })
 
         refetch()
         setValue("withdrawAmount", 0)

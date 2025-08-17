@@ -16,15 +16,18 @@ const variantTokens: Record<
   Partial<ButtonProps>
 > = {
   primary: {
-    bg: "cta.filled.bg",
-    color: "cta.filled.fg",
-    _hover: { bg: "whiteAlpha.800" },
-    _active: { bg: "whiteAlpha.900" },
+    bg: "gradient.primary",
+    color: "white",
+    borderWidth: "2px",
+    borderColor: "purple.base",
+    _hover: { bg: "purple.dark" },
+    _active: { bg: "purple.dark" },
     _disabled: {
-      bg: "whiteAlpha.200",
-      color: "whiteAlpha.600",
+      bg: "purple.dark",
+      color: "neutral.400",
+      borderColor: "purple.dark",
       cursor: "not-allowed",
-      _hover: { bg: "whiteAlpha.200" },
+      _hover: { bg: "purple.dark" },
     },
   },
   secondary: {
