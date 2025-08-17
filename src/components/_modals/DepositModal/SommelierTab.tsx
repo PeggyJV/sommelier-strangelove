@@ -135,7 +135,8 @@ export const SommelierTab = ({
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
-  const [isDepositFeeLoading, setIsDepositFeeLoading] = useState(false)
+  const [isDepositFeeLoading, setIsDepositFeeLoading] =
+    useState(false)
   const [depositFee, setDepositFee] = useState(0)
   const methods = useForm<FormValues>({
     defaultValues: { slippage: config.SWAP.SLIPPAGE },
@@ -363,6 +364,50 @@ export const SommelierTab = ({
     }
   }
 
+  const deposit = async (
+    amtInWei: bigint,
+    tokenAddress: string,
+    approval: boolean,
+    canDoBatchCall: boolean,
+    isNativeDeposit: boolean
+  ): Promise<any[]> => {
+    try {
+      let hash: string
+
+      if (isNativeDeposit) {
+        // Native ETH deposit
+        hash = await writeContractAsync({
+          address: cellarConfig.cellar.address as `0x${string}`,
+          abi: cellarConfig.cellar.abi,
+          functionName: "deposit",
+          args: [amtInWei, address],
+          value: amtInWei,
+        })
+      } else {
+        // ERC20 token deposit
+        hash = await writeContractAsync({
+          address: cellarConfig.cellar.address as `0x${string}`,
+          abi: cellarConfig.cellar.abi,
+          functionName: "deposit",
+          args: [amtInWei, address],
+        })
+      }
+
+      if (hash) {
+        const receipt = await publicClient.waitForTransactionReceipt({
+          hash: hash,
+        })
+
+        return [receipt]
+      }
+
+      return []
+    } catch (error) {
+      console.error("Deposit error:", error)
+      throw error
+    }
+  }
+
   const onSubmit = async (data: any, e: any) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -410,7 +455,8 @@ export const SommelierTab = ({
           amtInWei,
           data?.selectedToken?.address,
           approval,
-          canDoBatchCall
+          canDoBatchCall,
+          nativeDeposit
         )
 
         addToast({
