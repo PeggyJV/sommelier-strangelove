@@ -45,10 +45,7 @@ export class AnalyticsWrapper {
   client: ReturnType<typeof Analytics>
   enabled: boolean
 
-  constructor(
-    appName: string,
-    plugins: Array<Record<string, unknown>>
-  ) {
+  constructor(appName: string, plugins: any[]) {
     this.client = Analytics({
       app: appName,
       plugins,

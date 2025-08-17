@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { VStack } from "@chakra-ui/react"
-import { getSortedVaults } from "state/vaults/selectors"
+import { sortVaults } from "utils/sortVaults"
 import LegacyVaultCard from "components/_vaults/LegacyVaultCard"
 import StrategyRow from "components/_vaults/StrategyRow"
 import { useAccount } from "wagmi"
@@ -8,7 +8,19 @@ import { useAccount } from "wagmi"
 export default function VaultList({ vaults }: { vaults: any[] }) {
   const { isConnected } = useAccount()
   const sorted = useMemo(
-    () => getSortedVaults(isConnected, vaults),
+    () =>
+      sortVaults(
+        vaults.map((v) => ({
+          ...v,
+          metrics: { tvl: Number(v?.tvm?.value ?? 0) },
+          user: {
+            netValue: Number(
+              v?.userStrategyData?.userData?.netValue?.value ?? 0
+            ),
+          },
+        })),
+        isConnected
+      ),
     [isConnected, vaults]
   )
 
