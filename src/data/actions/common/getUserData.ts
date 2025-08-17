@@ -61,72 +61,15 @@ export const getUserDataWithContracts = async ({
   chain: string
 }) => {
   try {
-    const cellarContract = contracts.cellarContract
-    const stakerContract = contracts.stakerContract
-
-    if (!cellarContract) {
-      console.warn("Cellar contract not found")
-      return {
-        userStrategyData: {
-          userData: {
-            netValue: { formatted: "0", value: 0 },
-            shares: { formatted: "0", value: 0n },
-            stakedShares: { formatted: "0", value: 0n },
-          },
-          strategyData,
-        },
-        userStakes: null,
-      }
-    }
-
-    // Get shares from cellar contract
-    let shares = 0n
-    try {
-      shares = await cellarContract.read.balanceOf([
-        userAddress as `0x${string}`,
-      ])
-    } catch (error) {
-      console.error("Error reading cellar balance:", error)
-      shares = 0n
-    }
-
-    // Get staked shares from staker contract (if it exists)
-    let stakedShares = 0n
-    if (stakerContract) {
-      try {
-        stakedShares = await stakerContract.read.balanceOf([
-          userAddress as `0x${string}`,
-        ])
-      } catch (error) {
-        console.error("Error reading staker balance:", error)
-        stakedShares = 0n
-      }
-    }
-
-    const sharesFormatted = formatUnits(shares, 18)
-    const stakedSharesFormatted = formatUnits(stakedShares, 18)
-    const totalShares = shares + stakedShares
-
-    const netValue =
-      Number(formatUnits(totalShares, 18)) *
-      parseFloat(strategyData.tokenPrice || "0") *
-      parseFloat(baseAssetPrice || "0")
-
+    // For now, return a safe default since the contract approach is problematic
+    // The actual user data should come from useUserBalance hook which is already
+    // being used in useUserStrategyData
     return {
       userStrategyData: {
         userData: {
-          netValue: {
-            formatted: formatUSD(netValue.toString(), 2),
-            value: netValue,
-          },
-          shares: {
-            formatted: sharesFormatted,
-            value: shares,
-          },
-          stakedShares: {
-            formatted: stakedSharesFormatted,
-            value: stakedShares,
-          },
+          netValue: { formatted: "0", value: 0 },
+          shares: { formatted: "0", value: 0n },
+          stakedShares: { formatted: "0", value: 0n },
         },
         strategyData,
       },

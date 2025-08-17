@@ -7,6 +7,7 @@ import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
 import { useUserBalance } from "./useUserBalance"
 import { tokenConfig } from "data/tokenConfig"
+import { formatUSD } from "utils/formatCurrency"
 
 export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const { address: userAddress } = useAccount()
@@ -43,21 +44,56 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
   const query = useQuery({
     queryKey: ["USE_USER_DATA", strategyAddress, chain, userAddress],
     queryFn: async () => {
-      return await getUserDataWithContracts({
-        contracts: allContracts![key],
-        address: strategyAddress,
-        strategyData: strategyData.data!,
-        userAddress: userAddress!,
-        sommPrice: sommPrice.data ?? "0",
-        baseAssetPrice: baseAssetPrice ?? "0",
-        chain: chain,
-      })
+      // Use the LP token data from useUserBalance instead of contract calls
+      const lpTokenData = lpToken.data
+      
+      if (!lpTokenData || !strategyData.data) {
+        return {
+          userStrategyData: {
+            userData: {
+              netValue: { formatted: "0", value: 0 },
+              shares: { formatted: "0", value: 0n },
+              stakedShares: { formatted: "0", value: 0n },
+            },
+            strategyData: strategyData.data,
+          },
+          userStakes: null,
+        }
+      }
+
+      // Calculate net value using LP token balance and token price
+      const shares = lpTokenData.value
+      const sharesFormatted = lpTokenData.formatted
+      const tokenPrice = parseFloat(strategyData.data.tokenPrice || "0")
+      const baseAssetPriceValue = parseFloat(baseAssetPrice || "0")
+      
+      const netValue = Number(sharesFormatted) * tokenPrice * baseAssetPriceValue
+
+      return {
+        userStrategyData: {
+          userData: {
+            netValue: {
+              formatted: formatUSD(netValue.toString(), 2),
+              value: netValue,
+            },
+            shares: {
+              formatted: sharesFormatted,
+              value: shares,
+            },
+            stakedShares: {
+              formatted: "0",
+              value: 0n,
+            },
+          },
+          strategyData: strategyData.data,
+        },
+        userStakes: null,
+      }
     },
     enabled:
       !!userAddress &&
-      !!allContracts &&
       !!sommPrice.data &&
-      !!lpToken &&
+      !!lpToken.data &&
       !!baseAssetPrice &&
       !!strategyData.data &&
       isNoDataSource === false,
