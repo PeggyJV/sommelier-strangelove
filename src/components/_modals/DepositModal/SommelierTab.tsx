@@ -374,23 +374,49 @@ export const SommelierTab = ({
     try {
       let hash: string
 
-      if (isNativeDeposit) {
-        // Native ETH deposit
-        hash = await writeContractAsync({
-          address: cellarConfig.cellar.address as `0x${string}`,
-          abi: cellarConfig.cellar.abi,
-          functionName: "deposit",
-          args: [amtInWei, address],
-          value: amtInWei,
-        })
+      // For BoringVault (like Alpha STETH), use the teller contract
+      if (cellarConfig.teller) {
+        // Calculate minimum mint amount (0 for now, can be enhanced later)
+        const minimumMint = 0n
+
+        if (isNativeDeposit) {
+          // Native ETH deposit
+          hash = await writeContractAsync({
+            address: cellarConfig.teller.address as `0x${string}`,
+            abi: cellarConfig.teller.abi,
+            functionName: "deposit",
+            args: [tokenAddress, amtInWei, minimumMint],
+            value: amtInWei,
+          })
+        } else {
+          // ERC20 token deposit
+          hash = await writeContractAsync({
+            address: cellarConfig.teller.address as `0x${string}`,
+            abi: cellarConfig.teller.abi,
+            functionName: "deposit",
+            args: [tokenAddress, amtInWei, minimumMint],
+          })
+        }
       } else {
-        // ERC20 token deposit
-        hash = await writeContractAsync({
-          address: cellarConfig.cellar.address as `0x${string}`,
-          abi: cellarConfig.cellar.abi,
-          functionName: "deposit",
-          args: [amtInWei, address],
-        })
+        // Standard cellar deposit
+        if (isNativeDeposit) {
+          // Native ETH deposit
+          hash = await writeContractAsync({
+            address: cellarConfig.cellar.address as `0x${string}`,
+            abi: cellarConfig.cellar.abi,
+            functionName: "deposit",
+            args: [amtInWei, address],
+            value: amtInWei,
+          })
+        } else {
+          // ERC20 token deposit
+          hash = await writeContractAsync({
+            address: cellarConfig.cellar.address as `0x${string}`,
+            abi: cellarConfig.cellar.abi,
+            functionName: "deposit",
+            args: [amtInWei, address],
+          })
+        }
       }
 
       if (hash) {
