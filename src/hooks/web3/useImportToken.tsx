@@ -1,39 +1,75 @@
 import { erc20Abi } from "viem"
 import { usePublicClient } from "wagmi"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 
-export const useImportToken = (tokenAddress: string) => {
+interface ImportTokenParams {
+  address: string
+  imageUrl?: string
+  chain?: string
+}
+
+interface ImportTokenCallbacks {
+  onSuccess?: (data: any) => void
+  onError?: (error: Error) => void
+}
+
+export const useImportToken = (callbacks?: ImportTokenCallbacks) => {
   const publicClient = usePublicClient()
 
-  return useQuery({
-    queryKey: ["USE_IMPORT_TOKEN", tokenAddress],
-    queryFn: async () => {
+  return useMutation({
+    mutationFn: async (params: ImportTokenParams) => {
+      // Get token data
       const tokenData = await publicClient.multicall({
         contracts: [
           {
-            address: tokenAddress as `0x${string}`,
+            address: params.address as `0x${string}`,
             abi: erc20Abi,
             functionName: "name",
           },
           {
-            address: tokenAddress as `0x${string}`,
+            address: params.address as `0x${string}`,
             abi: erc20Abi,
             functionName: "symbol",
           },
           {
-            address: tokenAddress as `0x${string}`,
+            address: params.address as `0x${string}`,
             abi: erc20Abi,
             functionName: "decimals",
           },
         ],
       })
 
-      return {
+      const tokenInfo = {
         name: tokenData[0].result,
         symbol: tokenData[1].result,
         decimals: tokenData[2].result,
+        address: params.address,
+        imageUrl: params.imageUrl,
       }
+
+      // Try to import to wallet (MetaMask)
+      if (typeof window !== "undefined" && window.ethereum) {
+        try {
+          await window.ethereum.request({
+            method: "wallet_watchAsset",
+            params: {
+              type: "ERC20",
+              options: {
+                address: params.address,
+                symbol: tokenData[1].result,
+                decimals: tokenData[2].result,
+                image: params.imageUrl,
+              },
+            },
+          })
+        } catch (error) {
+          console.warn("Failed to import token to wallet:", error)
+        }
+      }
+
+      return tokenInfo
     },
-    enabled: Boolean(tokenAddress && publicClient),
+    onSuccess: callbacks?.onSuccess,
+    onError: callbacks?.onError,
   })
 }
