@@ -36,27 +36,27 @@ const cellarPreviewRedeem = async (
       chain = cellarConfig.chain
     }
 
-    const contract = await queryContract(
-      address,
-      abi,
-      chain
-    )
+    const contract = await queryContract(address, abi, chain)
 
     let shareValue = 0
-
-    if (contract) {
-      shareValue = cellarConfig.boringQueue
-        ? (await contract.read.previewAssetsOut([
-            cellarConfig.baseAsset.address,
-            sharesNum,
-            0,
-          ])) as unknown as number
-        : (await contract.read.previewRedeem([
-            sharesNum,
-          ])) as unknown as number
-
-    } else {
-      throw new Error("failed to load contract")
+    if (!contract) throw new Error("failed to load contract")
+    try {
+      if (cellarConfig.boringQueue) {
+        // previewAssetsOut for boring queue
+        shareValue = (await contract.read.previewAssetsOut([
+          cellarConfig.baseAsset.address,
+          sharesNum,
+          0,
+        ])) as unknown as number
+      } else {
+        // legacy previewRedeem
+        shareValue = (await contract.read.previewRedeem([
+          sharesNum,
+        ])) as unknown as number
+      }
+    } catch (e) {
+      // Return safe default instead of crashing
+      shareValue = 0 as number
     }
 
     res.setHeader(
@@ -65,7 +65,7 @@ const cellarPreviewRedeem = async (
     )
     res.setHeader("Access-Control-Allow-Origin", baseUrl)
     res.status(200).json({
-      sharesValue: shareValue.toString(), // Convert the result to string to ensure it can be serialized in JSON
+      sharesValue: shareValue.toString(),
     })
   } catch (error) {
     console.error(error)

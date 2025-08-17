@@ -1,14 +1,15 @@
 import { ConfigProps } from "data/types"
-import { useWalletClient, usePublicClient } from "wagmi"
+import { useWalletClient, usePublicClient, useAccount } from "wagmi"
 import { getContract } from "viem"
 
 export const useCreateContracts = (config: ConfigProps) => {
+  const { isConnected } = useAccount()
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
   const chain = config.chain.id
 
   const stakerSigner = (() => {
-    if (!config.staker || !publicClient) return
+    if (!config.staker || !publicClient || !isConnected) return
     return getContract({
       address: config.staker.address as `0x${string}`,
       abi: config.staker.abi,
@@ -20,7 +21,7 @@ export const useCreateContracts = (config: ConfigProps) => {
   })()
 
   const cellarSigner = (() => {
-    if (!publicClient) return
+    if (!publicClient || !isConnected) return
     if (config.teller) {
       // Using Teller contracts as signers for BoringVault
       return getContract({
@@ -64,7 +65,7 @@ export const useCreateContracts = (config: ConfigProps) => {
   })()
 
   const cellarRouterSigner = (() => {
-    if (!publicClient || !config.cellarRouter) return
+    if (!publicClient || !config.cellarRouter || !isConnected) return
     return getContract({
       address: config.cellarRouter.address as `0x${string}`,
       abi: config.cellarRouter.abi,
@@ -82,7 +83,7 @@ export const useCreateContracts = (config: ConfigProps) => {
       abi: config.lens.abi,
       client: {
         public: publicClient,
-        wallet: walletClient,
+        // read-only is fine here; no wallet required
       },
     })
   })()
@@ -94,7 +95,7 @@ export const useCreateContracts = (config: ConfigProps) => {
       abi: config.boringQueue.abi,
       client: {
         public: publicClient,
-        wallet: walletClient,
+        wallet: isConnected ? walletClient : undefined,
       },
     })
   })()
