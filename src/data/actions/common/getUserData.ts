@@ -64,7 +64,8 @@ export const getUserDataWithContracts = async ({
     const cellarContract = contracts.cellarContract
     const stakerContract = contracts.stakerContract
 
-    if (!cellarContract || !stakerContract) {
+    if (!cellarContract) {
+      console.warn("Cellar contract not found")
       return {
         userStrategyData: {
           userData: {
@@ -78,21 +79,38 @@ export const getUserDataWithContracts = async ({
       }
     }
 
-    const shares = await cellarContract.read.balanceOf([
-      userAddress as `0x${string}`,
-    ])
-    const stakedShares = await stakerContract.read.balanceOf([
-      userAddress as `0x${string}`,
-    ])
+    // Get shares from cellar contract
+    let shares = 0n
+    try {
+      shares = await cellarContract.read.balanceOf([
+        userAddress as `0x${string}`,
+      ])
+    } catch (error) {
+      console.error("Error reading cellar balance:", error)
+      shares = 0n
+    }
+
+    // Get staked shares from staker contract (if it exists)
+    let stakedShares = 0n
+    if (stakerContract) {
+      try {
+        stakedShares = await stakerContract.read.balanceOf([
+          userAddress as `0x${string}`,
+        ])
+      } catch (error) {
+        console.error("Error reading staker balance:", error)
+        stakedShares = 0n
+      }
+    }
 
     const sharesFormatted = formatUnits(shares, 18)
     const stakedSharesFormatted = formatUnits(stakedShares, 18)
     const totalShares = shares + stakedShares
 
     const netValue =
-      totalShares *
-      parseFloat(strategyData.tokenPrice) *
-      parseFloat(baseAssetPrice)
+      Number(formatUnits(totalShares, 18)) *
+      parseFloat(strategyData.tokenPrice || "0") *
+      parseFloat(baseAssetPrice || "0")
 
     return {
       userStrategyData: {
