@@ -609,6 +609,26 @@ export const SommelierTab = ({
             status: "warning",
             closeHandler: closeAll,
           })
+        } else if (
+          error.message.includes("User rejected") ||
+          error.message.includes("User denied")
+        ) {
+          analytics.track("deposit.rejected", {
+            ...baseAnalytics,
+            stable: tokenSymbol,
+            value: depositAmount,
+            message: "USER_REJECTED",
+          })
+          addToast({
+            heading: cellarName + " Deposit",
+            body: (
+              <Text>
+                Deposit Cancelled - Transaction was rejected
+              </Text>
+            ),
+            status: "info",
+            closeHandler: closeAll,
+          })
         } else if (error.message === "GAS_LIMIT_ERROR") {
           analytics.track("deposit.failed", {
             ...baseAnalytics,
