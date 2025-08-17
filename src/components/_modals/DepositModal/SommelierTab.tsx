@@ -464,7 +464,7 @@ export const SommelierTab = ({
         )
 
     const amtInWei = parseUnits(
-      depositAmount.toString(),
+      depositAmount.toFixed(selectedTokenBalance?.decimals ?? 18),
       selectedTokenBalance?.decimals ?? 0
     )
 
