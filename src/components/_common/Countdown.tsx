@@ -103,31 +103,42 @@ export default function Countdown({
       flexDir="column"
       alignItems="center"
       whiteSpace="nowrap"
+      minW="fit-content"
+      sx={{ fontVariantNumeric: "tabular-nums" }}
     >
       <VisuallyHidden>{ariaLabel}</VisuallyHidden>
-      <Text
-        as="span"
-        fontWeight={700}
-        fontSize={s.number}
-        lineHeight={1}
-        color="count.box.fg"
-        sx={{ fontVariantNumeric: "tabular-nums" }}
-      >
-        {value.toString().padStart(2, "0")}
-      </Text>
-      <Text as="span" fontSize={s.label} color="count.box.sub">
-        {label}
-      </Text>
+      <Stack spacing={1} align="center" justify="center">
+        <Text
+          fontWeight={700}
+          fontSize={s.number}
+          lineHeight={1}
+          color="count.box.fg"
+          sx={{ fontVariantNumeric: "tabular-nums" }}
+        >
+          {value.toString().padStart(2, "0")}
+        </Text>
+        <Text fontSize={s.label} color="count.box.sub">
+          {label}
+        </Text>
+      </Stack>
     </Box>
   )
 
   return (
-    <Box role="timer" aria-live="polite" aria-atomic="true" w="full">
+    <Box 
+      role="timer" 
+      aria-live="polite" 
+      aria-atomic="true" 
+      w="full"
+      overflow="hidden"
+    >
       <HStack
         spacing={s.gap}
         justify="space-between"
         align="center"
         w="full"
+        minW="320px"
+        maxW="100%"
       >
         {unitBox(parts.days, "Days", `Days: ${parts.days}`)}
         {unitBox(parts.hours, "Hours", `Hours: ${parts.hours}`)}

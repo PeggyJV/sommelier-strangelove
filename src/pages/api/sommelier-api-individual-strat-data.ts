@@ -1,25 +1,28 @@
-import { NextApiRequest, NextApiResponse } from "next"
+import type { NextApiRequest, NextApiResponse } from "next"
 import { CellaAddressDataMap } from "data/cellarDataMap"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
-async function fetchData(url: string) {
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-  return response.json()
+const fetchData = async (url: string) => {
+  try {
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Fetch error:", error)
+    return null
+  }
 }
 
-const sommelierAPIIndividualStratData = async (
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
-) => {
+) {
   try {
-    let { cellarAddress, chain } = req.query
+    const { cellarAddress, chain } = req.query
     if (!cellarAddress || !chain) {
       res.setHeader(
         "Cache-Control",
@@ -43,6 +46,23 @@ const sommelierAPIIndividualStratData = async (
       fetchData(hourlyDataUrl),
     ])
 
+    if (!dailyData || !hourlyData) {
+      res.setHeader(
+        "Cache-Control",
+        "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
+      )
+      res.setHeader("Access-Control-Allow-Origin", baseUrl)
+      return res.status(200).json({
+        cellarAddress,
+        chain,
+        status: "data_pending",
+        shareValue: null,
+        tvlTotal: null,
+        baseAssetTvl: null,
+        note: "api_fetch_failed",
+      })
+    }
+
     let chainStr = ""
     if (chain !== "ethereum") {
       chainStr = "-" + chain
@@ -63,11 +83,13 @@ const sommelierAPIIndividualStratData = async (
         shareValue: null,
         tvlTotal: null,
         baseAssetTvl: null,
+        note: "unknown_cellar_address",
       })
     }
-    let cellarDecimals = cellarEntry.config.cellar.decimals
 
-    let transformedDailyData = dailyData.Response.map(
+    const cellarDecimals = cellarEntry.config.cellar.decimals
+
+    const transformedDailyData = dailyData.Response.map(
       (dayData: any) => ({
         date: dayData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
@@ -81,7 +103,7 @@ const sommelierAPIIndividualStratData = async (
     transformedDailyData.sort((a: any, b: any) => b.date - a.date)
 
     // Do the same for hourly data
-    let transformedHourlyData = hourlyData.Response.map(
+    const transformedHourlyData = hourlyData.Response.map(
       (hourData: any) => ({
         date: hourData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
@@ -113,6 +135,7 @@ const sommelierAPIIndividualStratData = async (
         shareValue: null,
         tvlTotal: null,
         baseAssetTvl: null,
+        note: "no_hourly_data",
       })
     }
 
@@ -142,13 +165,20 @@ const sommelierAPIIndividualStratData = async (
     // Format similar to subgraph queries so as to not rewrite large swaths of code
     res.status(200).json(formattedResult)
   } catch (error) {
-    console.error(error)
-    res.status(500).send({
-      error: "failed to fetch data",
-      message:
-        (error as Error).message || "An unknown error occurred",
+    console.error("API Error:", error)
+    res.setHeader(
+      "Cache-Control",
+      "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
+    )
+    res.setHeader("Access-Control-Allow-Origin", baseUrl)
+    res.status(200).json({
+      cellarAddress: req.query.cellarAddress,
+      chain: req.query.chain,
+      status: "data_pending",
+      shareValue: null,
+      tvlTotal: null,
+      baseAssetTvl: null,
+      note: "internal_error",
     })
   }
 }
-
-export default sommelierAPIIndividualStratData

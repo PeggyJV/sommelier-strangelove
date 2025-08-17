@@ -1,181 +1,55 @@
-import { getBalance } from "@wagmi/core"
+import { formatUnits } from "viem"
+import { useAccount, usePublicClient } from "wagmi"
 import { cellarDataMap } from "data/cellarDataMap"
-import { ConfigProps, StakerKey } from "data/types"
-import { showNetValueInAsset } from "data/uiConfig"
-import { formatUSD } from "utils/formatCurrency"
-import { getUserStakes } from "../CELLAR_STAKING_V0815/getUserStakes"
-import { StrategyContracts, StrategyData } from "../types"
-import { formatUnits, getAddress } from "viem"
-import { wagmiConfig } from "context/wagmiContext"
-import { ZERO } from "utils/bigIntHelpers"
+import { getStrategyData } from "./getStrategyData"
+import { getAllStrategiesData } from "./getAllStrategiesData"
+import { useQuery } from "@tanstack/react-query"
 
-export const getUserData = async ({
-  address,
-  contracts,
-  strategyData,
-  userAddress,
-  sommPrice,
-  baseAssetPrice,
-  chain
-}: {
-  address: string
-  contracts: StrategyContracts
-  strategyData: StrategyData
-  userAddress: string
-  sommPrice: string
-  baseAssetPrice: string
-  chain: string
-}) => {
-  const userDataRes = await (async () => {
-    const strategy = Object.values(cellarDataMap).find(
-      ({ config }) => config.cellar.address === address && config.chain.id === chain
-    )!
-    const config: ConfigProps = strategy.config!
-    const symbol = config.baseAsset.symbol
+export const getUserData = async (
+  address: string,
+  publicClient: any,
+  chainId: number
+) => {
+  const cellarConfig = cellarDataMap.find(
+    (item) => item.config.chain.id === chainId
+  )!
 
-    const shares = await getBalance(wagmiConfig, {
-      token: getAddress(
-       config.cellar.address
-      ),
-      address: getAddress(userAddress),
-    })
+  const cellarContract = cellarConfig.cellarContract
+  const stakerContract = cellarConfig.stakerContract
 
-    const userStakes = await(async () => {
-      if (
-        !contracts.stakerContract ||
-        (config.staker?.key !== StakerKey.CELLAR_STAKING_V0815 &&
-          config.staker?.key !== StakerKey.CELLAR_STAKING_V0821)
-      ) {
-        return
-      }
+  const shares = await publicClient.getBalance({
+    address: address as `0x${string}`,
+    token: cellarContract.address,
+  })
 
-      return await getUserStakes(
-        userAddress,
-        contracts.stakerContract,
-        sommPrice,
-        config
-      )
-    })()
+  const stakedShares = await publicClient.getBalance({
+    address: address as `0x${string}`,
+    token: stakerContract.address,
+  })
 
-    // !!! TODO: We need to rewrite this file and most of the incentive code, pushing this unitl the new staking contracts come out
-    // Can do a manual override per strategy if needed here
+  const strategyData = await getStrategyData(
+    cellarConfig.config.cellar.slug,
+    publicClient
+  )
 
-    const bonded = userStakes?.totalBondedAmount?.value ?? "0"
+  const allStrategiesData = await getAllStrategiesData(publicClient)
 
-    const totalShares = shares.value + BigInt(bonded.toString())
-
-    const totalAssets = await getBalanceInAsset(
-      contracts,
-      totalShares,
-      config,
-      userAddress
-    )
-
-    const numTotalAssets = Number(totalAssets).toFixed(5)
-
-    let sommRewardsUSD = userStakes
-      ? Number(userStakes.claimAllRewardsUSD)
-      : 0
-    let sommRewardsRaw = userStakes
-      ? symbol !== "USDC"
-        ? Number(userStakes.claimAllRewardsUSD) /
-          parseFloat(baseAssetPrice)
-        : Number(userStakes.claimAllRewardsUSD)
-      : 0
-
-    const netValueInAsset = (() => {
-      return Number(numTotalAssets) + Number(sommRewardsRaw)
-    })()
-
-    const netValueWithoutRewardsInAsset = (() => {
-      return Number(totalAssets)
-    })()
-
-    // Denoted in USD
-    const netValue = (() => {
-      return Number(totalAssets) * Number(baseAssetPrice) + sommRewardsUSD
-    })()
-
-    // Denoted in USD
-    const netValueWithoutRewards = (() => {
-      return Number(totalAssets) * Number(baseAssetPrice)
-    })()
-
-    const userStrategyData = {
-      strategyData,
-      userData: {
-        netValue: {
-          value: netValue,
-          formatted: formatUSD(String(netValue)),
-        },
-        netValueInAsset: {
-          value: netValueInAsset,
-          formatted: netValueInAsset
-            ? `${Number(netValueInAsset).toFixed(
-                showNetValueInAsset(config) ? 6 : 2
-              )} ${config.baseAsset.symbol}`
-            : "--",
-        },
-        netValueWithoutRewardsInAsset: {
-          value: netValueWithoutRewardsInAsset,
-          formatted: netValueWithoutRewardsInAsset
-            ? `${netValueWithoutRewardsInAsset.toFixed(
-                showNetValueInAsset(config) ? 6 : 2
-              )} ${config.baseAsset.symbol}`
-            : "--",
-        },
-        valueWithoutRewards: {
-          value: netValueWithoutRewards,
-          formatted: formatUSD(String(netValueWithoutRewards)),
-        },
-        claimableSommReward:
-          userStakes?.totalClaimAllRewards || undefined,
-        userStakes,
-        symbol: config.baseAsset.symbol,
-        totalShares: {
-          value: totalShares,
-        },
-      },
-    }
-
-    return {
-      userStakes,
-      netValue,
-      userStrategyData,
-    }
-  })()
-
-  return userDataRes
+  return {
+    shares: shares.value,
+    stakedShares: stakedShares.value,
+    strategyData,
+    allStrategiesData,
+  }
 }
 
-const getBalanceInAsset = async (
-  contracts: any,
-  totalShares: bigint,
-  config: ConfigProps,
-  userAddress: string
-) => {
-  let contract = config.boringVault 
-    ? contracts.boringVaultLens 
-    : contracts.cellarContract
+export const useUserData = (address: string, chainId: number) => {
+  const publicClient = usePublicClient()
 
-  if (!contract) {
-    return ZERO
-  }
-  let assets = ZERO;
-  try {
-    assets = config.boringVault
-    ? await contract.read.balanceOfInAssets([
-        userAddress,
-        config.cellar.address,
-        config.accountant?.address,
-      ])
-    : await contract.read.convertToAssets([totalShares])
-  } catch (error) {
-    return ZERO
-  }
-
-  if (typeof assets === "undefined") {
-    assets = BigInt(0)
-  }
-  return formatUnits(assets, config.baseAsset.decimals)
+  return useQuery({
+    queryKey: ["USE_USER_DATA", address, chainId],
+    queryFn: async () => {
+      return await getUserData(address, publicClient, chainId)
+    },
+    enabled: Boolean(address && chainId && publicClient),
+  })
 }

@@ -120,10 +120,11 @@ export default function NetworkSelector({
             w={fullWidth ? "100%" : undefined}
             height={"44px"}
             _focusVisible={{
-              boxShadow:
-                "0 0 0 3px var(--chakra-colors-purple-base)",
+              boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
             }}
-            aria-describedby={caption ? "network-switch-caption" : undefined}
+            aria-describedby={
+              caption ? "network-switch-caption" : undefined
+            }
           >
             {`Switch to ${requiredChain.displayName}`}
           </Button>
@@ -131,11 +132,17 @@ export default function NetworkSelector({
       <HStack>
         <ChainButton
           chain={currentChain ?? chainConfigMap.ethereum}
-          onChainChange={() => {}}
+          onChainChange={() => {
+            // Chain change handled by parent component
+          }}
         />
       </HStack>
       {caption && (
-        <Text id="network-switch-caption" fontSize="xs" color="neutral.400">
+        <Text
+          id="network-switch-caption"
+          fontSize="xs"
+          color="neutral.400"
+        >
           {caption}
         </Text>
       )}

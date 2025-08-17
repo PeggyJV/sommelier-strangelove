@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { WagmiProvider, createConfig, http, type Config } from "wagmi"
 import { mainnet, arbitrum, optimism } from "wagmi/chains"
+import { initWalletCoreOnce } from "utils/wallet/initOnce"
 
 export default function WagmiClientProvider({
   children,
@@ -14,6 +15,11 @@ export default function WagmiClientProvider({
     let cancelled = false
     async function init() {
       try {
+        // Use one-time init guard for WalletConnect
+        initWalletCoreOnce(() => {
+          // This will only run once per session
+        })
+
         // Dynamic ESM import on client only
         const mod = await import("@wagmi/connectors")
         const walletConnect = mod.walletConnect
@@ -37,7 +43,8 @@ export default function WagmiClientProvider({
           ssr: false,
         })
         if (!cancelled) setConfig(cfg)
-      } catch {
+      } catch (error) {
+        console.warn("Failed to initialize WalletConnect:", error)
         // Fallback to no connectors so build never crashes
         const cfg = createConfig({
           chains: [mainnet, arbitrum, optimism],

@@ -26,14 +26,9 @@ import { config } from "utils/config"
 import {
   useAccount,
   usePublicClient,
-  useWalletClient,
+  useWriteContract,
+  useWaitForTransactionReceipt,
 } from "wagmi"
-import {
-  getCallsStatus,
-  getCapabilities,
-  sendCalls,
-  waitForTransactionReceipt,
-} from "@wagmi/core"
 import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
@@ -48,7 +43,7 @@ import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { useWaitForTransaction } from "data/hooks/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { waitTime } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
@@ -57,7 +52,6 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { wagmiConfig } from "context/wagmiContext"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { useUserBalances } from "data/hooks/useUserBalances"
 
@@ -127,9 +121,10 @@ export const SommelierTab = ({
     cellarAddress,
   }
 
-  const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
   const { address } = useAccount()
+  const { writeContractAsync } = useWriteContract()
+  const { data: waitForTransaction } = useWaitForTransactionReceipt()
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
@@ -153,223 +148,192 @@ export const SommelierTab = ({
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
 
-  const { cellarSigner, boringVaultLens } = useCreateContracts(cellarConfig)
+  const { cellarSigner, boringVaultLens } =
+    useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
 
-  const activeAsset = strategyData?.activeAsset
+  const { userBalances } = useUserBalances()
 
-  const [_, wait] = useWaitForTransaction({
-    skip: true,
-  })
-
- const { userBalances } = useUserBalances()
-
- const selectedTokenBalance = userBalances.data?.find(
-   (b) => b.symbol === selectedToken?.symbol
- )
+  const selectedTokenBalance = userBalances.data?.find(
+    (b) => b.symbol === selectedToken?.symbol
+  )
 
   const erc20Contract =
-    selectedToken?.address &&
+    cellarConfig.baseAsset.address &&
     publicClient &&
     getContract({
-      address: getAddress(selectedToken?.address),
+      address: getAddress(cellarConfig.baseAsset.address),
       abi: erc20Abi,
       client: {
-        wallet: walletClient,
         public: publicClient,
       },
     })
 
-  const geo = useGeo()
+  const cellarContract =
+    publicClient &&
+    getContract({
+      address: getAddress(cellarConfig.cellar.address),
+      abi: cellarConfig.cellar.abi,
+      client: {
+        public: publicClient,
+      },
+    })
 
   const queryDepositFeePercent = async (assetAddress: string) => {
-    if (assetAddress === cellarConfig.baseAsset.address || cellarConfig.boringVault) {
+    if (
+      assetAddress === cellarConfig.baseAsset.address ||
+      cellarConfig.boringVault
+    ) {
       return 0
     }
 
-    const [isSupported,_ , depositFee] =
+    const [isSupported, _, depositFee] =
       (await cellarSigner?.read.alternativeAssetData([
         assetAddress,
-      ])) as [boolean, number, number]
+      ])) ?? [false, 0, 0]
 
-    if (!isSupported) {
-      throw new Error("Asset is not supported")
-    }
-
-    // 6 decimal place precision
-    return depositFee / 10 ** 6
+    return isSupported ? Number(depositFee) : 0
   }
 
-  const [depositFee, setDepositFee] = useState<number>(0) // Use lowercase 'number'
-  const [isDepositFeeLoading, setIsDepositFeeLoading] =
-    useState<boolean>(false)
-
-  useEffect(() => {
-    // Define an async function inside the useEffect
-    const fetchDepositFee = async () => {
-      setIsDepositFeeLoading(true)
-
-      if (selectedToken?.address) {
-        try {
-          const depositFee = await queryDepositFeePercent(
-            selectedToken.address
-          )
-          setDepositFee(depositFee)
-        } catch (error) {
-          console.error("Error fetching deposit fee:", error)
-          throw error
-        }
-      }
-
-      setIsDepositFeeLoading(false)
-    }
-
-    // Call the async function
-    fetchDepositFee()
-  }, [selectedToken])
-
-  const deposit = async (
+  const doDepositTx = async (
+    nativeDeposit: boolean,
     amtInWei: bigint,
-    assetAddress: `0x${string}`,
-    approval: boolean,
-    canDoBatchCall: boolean
-  ) => {
-    let fnName
-    let args
-    let value
+    assetAddress: string
+  ): Promise<any> => {
+    let fnName: string
+    let args: any[]
+    let value: bigint
 
     if (cellarConfig.boringVault) {
-      let nativeDeposit = selectedToken?.symbol === "ETH"
-
-      // In case of native deposit, the minimum mint is calculated based on WETH
-      // previewDeposit doesn't handle native ETH
       const minimumMint = await boringVaultLens?.read.previewDeposit([
-        nativeDeposit ? cellarConfig.baseAsset.address : assetAddress,
+        assetAddress,
         amtInWei,
         cellarConfig.cellar.address,
         cellarConfig.accountant?.address,
-      ]) 
+      ])
       fnName = "deposit"
       args = [assetAddress, amtInWei, minimumMint]
       value = nativeDeposit ? amtInWei : BigInt(0)
-    }
-    else if (
+    } else if (
       assetAddress !== undefined &&
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
     ) {
-      fnName = "multiAssetDeposit"
-      args = [assetAddress, amtInWei, address]
+      const minimumMint = await cellarSigner?.read.previewDeposit([
+        assetAddress,
+        amtInWei,
+      ])
+      fnName = "deposit"
+      args = [assetAddress, amtInWei, minimumMint]
+      value = BigInt(0)
     } else {
+      const minimumMint = await cellarSigner?.read.previewDeposit([
+        amtInWei,
+      ])
       fnName = "deposit"
       args = [amtInWei, address]
     }
-    
-    if (canDoBatchCall && !approval) {
-      // Batch deposit flow
-      const { id } = await sendCalls(wagmiConfig, {
-        calls: [
-          {
-            to: assetAddress,
-            abi: erc20Abi,
-            functionName: "approve",
-            args: [cellarConfig.cellar.address as `0x${string}`, amtInWei],
-          },
-          {
-            to: cellarSigner?.address as `0x${string}`,
-            abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
-            functionName: fnName,
-            args: args,
-            value: value,
-          },
-        ],
-        chainId: cellarConfig.chain.wagmiId,
-        experimental_fallback: true,
+
+    try {
+      const hash = await writeContractAsync({
+        address: cellarSigner?.address as `0x${string}`,
+        abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
+        functionName: fnName,
+        args: args,
+        value: value,
       })
 
-      const depositResult = await getCallsStatus(wagmiConfig, {
-        id,
-      })
-
-      let finalResult = depositResult
-      while (finalResult.status === "pending") {
-        await new Promise((resolve) => setTimeout(resolve, 2000))
-        finalResult = await getCallsStatus(wagmiConfig, {
-          id,
+      if (hash) {
+        addToast({
+          heading: "Deposit in Progress",
+          body: <Text>Your deposit is being processed.</Text>,
+          status: "info",
+          closeHandler: close,
         })
-      }
 
-      if (finalResult.status === "failure") {
-        throw new Error("Batch Deposit failed")
-      }
+        const receipt = await publicClient.waitForTransactionReceipt({
+          hash: hash,
+        })
 
-      return finalResult.receipts
+        if (receipt.status === "success") {
+          addToast({
+            heading: "Deposit Successful",
+            body: (
+              <Text>
+                Your deposit has been completed successfully.
+              </Text>
+            ),
+            status: "success",
+            closeHandler: close,
+          })
+          return [receipt]
+        } else {
+          addToast({
+            heading: "Deposit Failed",
+            body: <Text>Deposit failed. Please try again.</Text>,
+            status: "error",
+            closeHandler: close,
+          })
+          throw new Error("Deposit failed")
+        }
+      }
+    } catch (error) {
+      console.error("Deposit error:", error)
+      throw error
     }
-    // Regular deposit flow
-    // @ts-ignore
-    const hash = await cellarSigner?.write[fnName](args, {
-      account: address,
-      value: value,
-    })
-
-    const depositResult = await waitForTransactionReceipt(
-      wagmiConfig,
-      {
-        confirmations: 1,
-        hash: hash,
-      }
-    )
-    return [depositResult]
   }
 
   const doApprovalTx = async (amtInWei: bigint): Promise<boolean> => {
     try {
-      // @ts-ignore
-      const hash = await erc20Contract.write.approve(
-        [cellarConfig.cellar.address, amtInWei],
-        { account: address }
-      )
-      addToast({
-        heading: "ERC20 Approval",
-        status: "default",
-        body: <Text>Approving ERC20</Text>,
-        isLoading: true,
-        closeHandler: close,
-        duration: null,
+      const hash = await writeContractAsync({
+        address: cellarConfig.baseAsset.address as `0x${string}`,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [cellarConfig.cellar.address, amtInWei],
       })
-      const waitForApproval = wait({ confirmations: 1, hash })
-      const result = await waitForApproval
-      if (result?.data?.transactionHash) {
-        update({
-          heading: "ERC20 Approval",
-          body: <Text>ERC20 Approved</Text>,
-          status: "success",
-          closeHandler: closeAll,
+
+      if (hash) {
+        addToast({
+          heading: "Approving Token",
+          body: <Text>Please approve the token transfer.</Text>,
+          status: "info",
+          closeHandler: close,
         })
-        return true
-      } else if (result?.error) {
-        update({
-          heading: "ERC20 Approval",
-          body: <Text>Approval Failed</Text>,
-          status: "error",
-          closeHandler: closeAll,
+
+        const receipt = await publicClient.waitForTransactionReceipt({
+          hash: hash,
         })
-        return false
+
+        if (receipt.status === "success") {
+          addToast({
+            heading: "Token Approved",
+            body: <Text>Token approval successful.</Text>,
+            status: "success",
+            closeHandler: close,
+          })
+          return true
+        } else {
+          addToast({
+            heading: "Approval Failed",
+            body: <Text>Token approval failed.</Text>,
+            status: "error",
+            closeHandler: close,
+          })
+          return false
+        }
       }
       return false
-    } catch (e) {
-      const error = e as Error
-      console.error(error.message)
-
+    } catch (error) {
+      console.error("Approval error:", error)
       addToast({
-        heading: "ERC20 Approval",
-        body: <Text>Approval Cancelled</Text>,
+        heading: "Approval Cancelled",
+        body: <Text>Token approval was cancelled.</Text>,
         status: "error",
-        closeHandler: closeAll,
+        closeHandler: close,
       })
       return false
     }
@@ -390,7 +354,7 @@ export const SommelierTab = ({
       cellar: cellarConfig.cellar.address,
     })
 
-    const walletCapabilities = await getCapabilities(wagmiConfig)
+    const walletCapabilities = await getCapabilities(publicClient)
     const atomicStatus =
       walletCapabilities[cellarConfig.chain.wagmiId]?.atomic?.status
 
