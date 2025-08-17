@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"
 import {
   FormControl,
   FormErrorMessage,
+  FormLabel,
+  FormHelperText,
   Icon,
   VStack,
   Button,
@@ -672,23 +674,9 @@ export const WithdrawQueueForm = ({
             {boringQueue && (
               <>
                 <FormControl>
-                  <HStack justify="space-between">
-                    <Text as="span">Withdrawal deadline</Text>
-                    <InputGroup width="25%" alignItems="center">
-                      <Input
-                        variant="unstyled"
-                        value="14 days"
-                        isReadOnly
-                        aria-readonly
-                        fontSize="lg"
-                        fontWeight={700}
-                        textAlign="right"
-                        padding={2}
-                        borderRadius={16}
-                        height="2.2em"
-                      />
-                    </InputGroup>
-                  </HStack>
+                  <FormLabel>Withdrawal deadline</FormLabel>
+                  <Input value="14 days (fixed)" isReadOnly aria-readonly />
+                  <FormHelperText>This window is fixed by protocol.</FormHelperText>
                 </FormControl>
               </>
             )}
