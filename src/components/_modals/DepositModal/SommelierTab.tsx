@@ -529,16 +529,21 @@ export const SommelierTab = ({
                 </Link>
                 <Text
                   onClick={() => {
-                    importToken.mutate({
-                      address: cellarAddress,
-                      chain: cellarConfig.chain.id,
-                      imageUrl: `${window.location.origin}${cellarConfig.lpToken.imagePath}`,
-                    })
+                    if (!importToken.isPending) {
+                      console.log("Importing token with address:", cellarAddress)
+                      console.log("Importing token with image:", `${window.location.origin}${cellarConfig.lpToken.imagePath}`)
+                      importToken.mutate({
+                        address: cellarAddress,
+                        chain: cellarConfig.chain.id,
+                        imageUrl: `${window.location.origin}${cellarConfig.lpToken.imagePath}`,
+                      })
+                    }
                   }}
                   textDecor="underline"
                   as="button"
+                  disabled={importToken.isPending}
                 >
-                  Import tokens to wallet
+                  {importToken.isPending ? "Importing..." : "Import tokens to wallet"}
                 </Text>
                 {waitTime(cellarConfig) !== null && (
                   <Text textAlign="center">
