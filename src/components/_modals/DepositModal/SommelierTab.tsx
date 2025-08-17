@@ -532,6 +532,7 @@ export const SommelierTab = ({
                     importToken.mutate({
                       address: cellarAddress,
                       chain: cellarConfig.chain.id,
+                      imageUrl: cellarConfig.lpToken.imagePath,
                     })
                   }}
                   textDecor="underline"
