@@ -110,7 +110,7 @@ export const PortfolioCard = (props: BoxProps) => {
   const userStakes = userData?.userStakes
 
   const baseAssetValue =
-    userData?.userStrategyData.userData?.netValueInAsset.formatted
+    userData?.userStrategyData.userData?.netValueInAsset?.formatted
 
   const isActiveWithdrawRequest =
     useWithdrawRequestStatus(cellarConfig)
