@@ -75,7 +75,6 @@ export const getAllContracts = async (
           abi: cellar.config.lens.abi,
           client: {
             public: provider,
-            wallet: signer || undefined,
           },
         })
 
