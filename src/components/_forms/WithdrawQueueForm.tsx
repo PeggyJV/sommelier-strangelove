@@ -353,7 +353,7 @@ export const WithdrawQueueForm = ({
     let hash
 
     if (boringQueue) {
-      const discount = SHARE_PRICE_DISCOUNT_PERCENT
+      const discount = BigInt(Math.floor(SHARE_PRICE_DISCOUNT_PERCENT * 10000))
 
       const deadlineSeconds = DEADLINE_HOURS * 60 * 60
 
