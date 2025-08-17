@@ -174,7 +174,10 @@ export default function TopLaunchBanner({
 
               {/* Mobile/Tablet countdown directly under heading */}
               <Box display={{ base: "block", lg: "none" }} mb={4}>
-                <Countdown size="lg" targetDate={targetDate} />
+                <Countdown
+                  size="lg"
+                  targetDate={targetDate}
+                />
               </Box>
 
               {/* Paragraph with clamp + Read more disclosure */}

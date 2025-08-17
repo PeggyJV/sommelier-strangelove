@@ -7,6 +7,24 @@ export const components: ThemeComponents = {
     baseStyle: {
       borderRadius: 64,
       color: "text.body.dark",
+      _focusVisible: {
+        boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+      },
+    },
+  },
+  Link: {
+    baseStyle: {
+      _focusVisible: {
+        boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+        outline: "none",
+      },
+    },
+  },
+  IconButton: {
+    baseStyle: {
+      _focusVisible: {
+        boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+      },
     },
   },
   Heading: {

@@ -28,6 +28,7 @@ export default function KPIBox({
         fontSize={{ base: "xl", md: "2xl" }}
         fontWeight={800}
         lineHeight={1}
+        sx={{ fontVariantNumeric: "tabular-nums" }}
       >
         {value ?? ""}
       </Text>
