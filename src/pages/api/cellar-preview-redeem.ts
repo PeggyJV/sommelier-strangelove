@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { cellarDataMap } from "data/cellarDataMap"
 import { queryContract } from "context/rpc_context"
+import { parseUnits } from "viem"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -10,21 +11,40 @@ const cellarPreviewRedeem = async (
   res: NextApiResponse
 ) => {
   try {
-    let { cellarId, shares } = req.query
-    cellarId = cellarId as string
-    const sharesNum: BigInt = shares as unknown as BigInt
+    const { cellarId, shares } = req.query
+    const cellarIdStr = cellarId as string
+    const sharesNum: bigint = shares as unknown as bigint
 
-    if (!cellarId || !sharesNum) {
-      res.status(400).send({
+    if (!cellarIdStr || !sharesNum) {
+      res.setHeader(
+        "Cache-Control",
+        "public, maxage=60, s-maxage=60, stale-while-revalidate=120"
+      )
+      res.setHeader("Access-Control-Allow-Origin", baseUrl)
+      return res.status(200).json({
+        sharesValue: "0",
         error: "missing cellar id or shares",
         message: "missing cellar id or shares",
       })
-      return
     }
-    const cellarConfig = cellarDataMap[cellarId]?.config;
-    let address;
-    let abi;
-    let chain;
+
+    const cellarConfig = cellarDataMap[cellarIdStr]?.config
+    if (!cellarConfig) {
+      res.setHeader(
+        "Cache-Control",
+        "public, maxage=60, s-maxage=60, stale-while-revalidate=120"
+      )
+      res.setHeader("Access-Control-Allow-Origin", baseUrl)
+      return res.status(200).json({
+        sharesValue: "0",
+        error: "unknown cellar",
+        message: `Cellar config for ${cellarIdStr} not found`,
+      })
+    }
+
+    let address
+    let abi
+    let chain
 
     if (cellarConfig.boringQueue) {
       address = cellarConfig.boringQueue.address
@@ -39,7 +59,19 @@ const cellarPreviewRedeem = async (
     const contract = await queryContract(address, abi, chain)
 
     let shareValue = 0
-    if (!contract) throw new Error("failed to load contract")
+    if (!contract) {
+      res.setHeader(
+        "Cache-Control",
+        "public, maxage=60, s-maxage=60, stale-while-revalidate=120"
+      )
+      res.setHeader("Access-Control-Allow-Origin", baseUrl)
+      return res.status(200).json({
+        sharesValue: "0",
+        error: "contract_not_found",
+        message: "Failed to load contract",
+      })
+    }
+
     try {
       if (cellarConfig.boringQueue) {
         // previewAssetsOut for boring queue
@@ -55,8 +87,9 @@ const cellarPreviewRedeem = async (
         ])) as unknown as number
       }
     } catch (e) {
+      console.warn("Contract read failed:", e)
       // Return safe default instead of crashing
-      shareValue = 0 as number
+      shareValue = 0
     }
 
     res.setHeader(
@@ -68,14 +101,18 @@ const cellarPreviewRedeem = async (
       sharesValue: shareValue.toString(),
     })
   } catch (error) {
-    console.error(error)
-    res
-      .status(500)
-      .send({
-        error: "failed to fetch data",
-        message:
-          (error as Error).message || "An unknown error occurred",
-      })
+    console.error("API Error:", error)
+    res.setHeader(
+      "Cache-Control",
+      "public, maxage=60, s-maxage=60, stale-while-revalidate=120"
+    )
+    res.setHeader("Access-Control-Allow-Origin", baseUrl)
+    return res.status(200).json({
+      sharesValue: "0",
+      error: "request_failed",
+      message:
+        (error as Error).message || "An unknown error occurred",
+    })
   }
 }
 

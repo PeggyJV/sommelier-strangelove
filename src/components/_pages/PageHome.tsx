@@ -112,7 +112,7 @@ export const PageHome = () => {
     uniqueAssetsMap: Record<string, SymbolPathPair>
     constantAllUniqueAssetsArray: SymbolPathPair[]
   } = useMemo(() => {
-    let allDepositAssets = Object.values(cellarDataMap)
+    const allDepositAssets = Object.values(cellarDataMap)
       .map((cellarData: CellarData): SymbolPathPair[] => {
         // Don't include deprecated strategies
         if (cellarData.deprecated) {
@@ -259,6 +259,11 @@ export const PageHome = () => {
         for (const balance of userBalances.data) {
           const doesStrategyHaveAsset = (strategy: StrategyData) =>
             strategy?.depositTokens?.some((asset) => {
+              // Guard against undefined/null assets
+              if (!asset || !balance.symbol) {
+                return false
+              }
+
               // if user has ETH consider it as they had WETH
               if (
                 balance.symbol.toUpperCase() === "ETH" &&

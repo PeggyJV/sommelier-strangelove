@@ -40,13 +40,24 @@ export function VaultActionButton({
   return (
     <>
       {isWrongChain && status !== "paused" ? (
-        <Popover placement="bottom" isLazy returnFocusOnClose initialFocusRef={undefined}>
+        <Popover
+          placement="bottom"
+          isLazy
+          returnFocusOnClose
+          initialFocusRef={undefined}
+          closeOnBlur={false}
+        >
           <PopoverTrigger>
             <Button
               size="md"
               height="44px"
               minW="148px"
               onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.stopPropagation()
+                }
+              }}
               _focusVisible={{
                 boxShadow:
                   "0 0 0 3px var(--chakra-colors-purple-base)",
@@ -63,8 +74,7 @@ export function VaultActionButton({
             bg="surface.bg"
             _focus={{ outline: "unset", boxShadow: "unset" }}
             _focusVisible={{
-              boxShadow:
-                "0 0 0 3px var(--chakra-colors-purple-base)",
+              boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
             }}
           >
             <PopoverBody>
@@ -101,6 +111,14 @@ export function VaultActionButton({
           onClick={(e) => {
             e.stopPropagation()
             vault?.onAction?.()
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.stopPropagation()
+            }
+          }}
+          _focusVisible={{
+            boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
           }}
         >
           {label}

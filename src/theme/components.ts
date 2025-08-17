@@ -9,6 +9,7 @@ export const components: ThemeComponents = {
       color: "text.body.dark",
       _focusVisible: {
         boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+        outline: "none",
       },
     },
   },
@@ -24,6 +25,7 @@ export const components: ThemeComponents = {
     baseStyle: {
       _focusVisible: {
         boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+        outline: "none",
       },
     },
   },
@@ -42,9 +44,43 @@ export const components: ThemeComponents = {
       [$arrowShadow.variable]: "colors.purple.base",
     },
   },
+  Popover: {
+    baseStyle: {
+      content: {
+        _focusVisible: {
+          boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+          outline: "none",
+        },
+      },
+    },
+  },
   Input: {
     defaultProps: {
       focusBorderColor: "purple.base",
+    },
+    baseStyle: {
+      _focusVisible: {
+        boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+        outline: "none",
+      },
+    },
+  },
+  Select: {
+    baseStyle: {
+      field: {
+        _focusVisible: {
+          boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+          outline: "none",
+        },
+      },
+    },
+  },
+  Textarea: {
+    baseStyle: {
+      _focusVisible: {
+        boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+        outline: "none",
+      },
     },
   },
 }

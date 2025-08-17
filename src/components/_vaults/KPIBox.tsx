@@ -4,12 +4,14 @@ type KPIBoxProps = StackProps & {
   label: string
   value?: string | number | null
   align?: "left" | "center" | "right"
+  fontVariantNumeric?: "tabular-nums" | "normal"
 }
 
 export default function KPIBox({
   label,
   value,
   align = "left",
+  fontVariantNumeric = "tabular-nums",
   ...rest
 }: KPIBoxProps) {
   return (
@@ -22,17 +24,19 @@ export default function KPIBox({
           ? "flex-end"
           : "center"
       }
+      minW={0}
       {...rest}
     >
       <Text
         fontSize={{ base: "xl", md: "2xl" }}
         fontWeight={800}
         lineHeight={1}
-        sx={{ fontVariantNumeric: "tabular-nums" }}
+        sx={{ fontVariantNumeric }}
+        isTruncated
       >
         {value ?? ""}
       </Text>
-      <Text fontSize="xs" color="neutral.400">
+      <Text fontSize="xs" color="neutral.400" isTruncated>
         {label}
       </Text>
     </Stack>

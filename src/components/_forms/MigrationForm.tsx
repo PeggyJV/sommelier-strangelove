@@ -17,12 +17,7 @@ import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
-import { useAccount, usePublicClient } from "wagmi"
-import {
-  getCallsStatus,
-  getCapabilities,
-  sendCalls,
-} from "@wagmi/core"
+import { useAccount, usePublicClient, useWriteContract, useWaitForTransactionReceipt } from "wagmi"
 import { toEther } from "utils/formatCurrency"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
@@ -33,7 +28,6 @@ import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { erc20Abi, getAddress, getContract, parseUnits } from "viem"
-import { wagmiConfig } from "context/wagmiContext"
 import { ExternalLinkIcon } from "components/_icons"
 
 interface FormValues {
@@ -58,6 +52,7 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
   const { addToast, close, closeAll, update } = useBrandedToast()
   const { address } = useAccount()
   const publicClient = usePublicClient()
+  const { writeContractAsync } = useWriteContract()
 
   const id = (useRouter().query.id as string) || _id
   const cellarConfig = cellarDataMap[id].config
@@ -84,14 +79,15 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
       },
     })
 
-  const cellarContract = 
-  publicClient && getContract({
-    address: getAddress(cellarConfig.cellar.address),
-    abi: cellarConfig.cellar.abi,
-    client: {
-      public: publicClient,
-    },
-  })
+  const cellarContract =
+    publicClient &&
+    getContract({
+      address: getAddress(cellarConfig.cellar.address),
+      abi: cellarConfig.cellar.abi,
+      client: {
+        public: publicClient,
+      },
+    })
 
   const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
@@ -122,83 +118,60 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
-    if (withdrawAmount <= 0 || !erc20Contract || !cellarContract) return
+    if (withdrawAmount <= 0 || !erc20Contract || !cellarContract)
+      return
 
     if (!address) {
       addToast({
-        heading: "Withdraw Position",
-        status: "default",
-        body: <Text>Connect Wallet</Text>,
-        closeHandler: close,
-        duration: null,
-      })
-
-      return
-    }
-
-    let withdrawalCall
-    let approvalCall
-    let depositCall
-    let batchCalls = []
-
-    const walletCapabilities = await getCapabilities(wagmiConfig)
-    const atomicStatus =
-      walletCapabilities[cellarConfig.chain.wagmiId]?.atomic?.status
-
-    const canDoBatchCall =
-      atomicStatus === "ready" || atomicStatus === "supported"
-
-    if (!canDoBatchCall) {
-      addToast({
-        heading: "Migration not supported",
-        body: <Text>Migration is not supported on this chain or wallet.</Text>,
+        heading: "Connect Wallet",
+        body: <Text>Please connect your wallet to continue.</Text>,
         status: "error",
         closeHandler: closeAll,
       })
       return
     }
 
-    const amtInWei = parseUnits(
-      `${withdrawAmount}`,
-      cellarConfig.cellar.decimals
-    )
-    const amountOfBaseAsset = await cellarContract.read.convertToAssets([amtInWei]) as bigint
-
     try {
-
-      // Redeem call to the cellar
-      withdrawalCall = {
-        to: cellarConfig.cellar.address as `0x${string}`,
-        abi: cellarConfig.cellar.abi,
-        functionName: "redeem",
-        args: [amtInWei, address, address],
-      }
-      batchCalls.push(withdrawalCall)
-
-      // Approval call, if needed
-      const allowance = await erc20Contract.read.allowance(
-        [
-          getAddress(address ?? ""),
-          getAddress(alphaStEth.config.cellar.address),
-        ],
-        { account: address }
+      const amtInWei = parseUnits(
+        `${withdrawAmount}`,
+        cellarConfig.cellar.decimals
       )
+      const amountOfBaseAsset =
+        (await cellarContract.read.convertToAssets([
+          amtInWei,
+        ])) as bigint
+
+      // Check allowance and approve if needed
+      const allowance = await erc20Contract.read.allowance([
+        getAddress(address),
+        getAddress(alphaStEth.config.cellar.address),
+      ])
 
       let needsApproval = allowance < amountOfBaseAsset
       if (needsApproval) {
-        approvalCall = {
-          to: cellarConfig.baseAsset.address as `0x${string}`,
+        const approvalHash = await writeContractAsync({
+          address: cellarConfig.baseAsset.address as `0x${string}`,
           abi: erc20Abi,
-          functionName: erc20Abi[3].name,
+          functionName: "approve",
           args: [
             alphaStEth.config.cellar.address as `0x${string}`,
             amountOfBaseAsset,
-          ] as const,
+          ],
+        })
+
+        if (approvalHash) {
+          addToast({
+            heading: "Approving Token",
+            body: <Text>Please approve the token transfer.</Text>,
+            status: "info",
+            closeHandler: close,
+          })
+
+          await publicClient.waitForTransactionReceipt({ hash: approvalHash })
         }
-        batchCalls.push(approvalCall)
       }
 
-      // Deposit call to BoringVault
+      // Get minimum mint amount
       const minimumMint = await boringVaultLens?.read.previewDeposit([
         cellarConfig.baseAsset.address,
         amountOfBaseAsset,
@@ -206,97 +179,69 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
         alphaStEth.config.accountant?.address,
       ])
 
-      depositCall = {
-        to: cellarSigner?.address as `0x${string}`,
+      // Execute migration
+      const migrationHash = await writeContractAsync({
+        address: cellarSigner?.address as `0x${string}`,
         abi: cellarSigner?.abi!,
         functionName: "deposit",
-        args: [cellarConfig.baseAsset.address, amountOfBaseAsset, minimumMint],
-      }
-      batchCalls.push(depositCall)
-
-      const { id } = await sendCalls(wagmiConfig, {
-        calls: batchCalls,
-        chainId: cellarConfig.chain.wagmiId,
-        experimental_fallback: true,
+        args: [
+          cellarConfig.baseAsset.address,
+          amountOfBaseAsset,
+          minimumMint,
+        ],
       })
 
-      const depositResult = await getCallsStatus(wagmiConfig, {
-        id,
-      })
-
-      let finalResult = depositResult
-      while (finalResult.status === "pending") {
-        await new Promise((resolve) => setTimeout(resolve, 2000))
-        finalResult = await getCallsStatus(wagmiConfig, {
-          id,
+      if (migrationHash) {
+        addToast({
+          heading: "Migration in Progress",
+          body: <Text>Your migration is being processed.</Text>,
+          status: "info",
+          closeHandler: close,
         })
-      }
 
-      if (finalResult.status === "failure") {
-        throw new Error("Batch Migration failed")
-      }
-
-      addToast({
-        heading: "Migrating to Alpha STETH",
-        status: "default",
-        body: <Text>Depositing {cellarConfig.baseAsset.symbol}</Text>,
-        isLoading: true,
-        closeHandler: close,
-        duration: null,
-      })
-
-      refetch()
-
-      if (finalResult.receipts?.at(-1)?.status === "success") {
-
-        update({
-          heading: "Alpha STETH Cellar Deposit",
-          body: (
-            <>
-              <Text>Deposit Success</Text>
-              <Link
-                display="flex"
-                alignItems="center"
-                href={`${
-                  alphaStEth.config.chain.blockExplorer.url
-                }/tx/${finalResult.receipts![0].transactionHash}`}
-                isExternal
-                textDecor="underline"
-              >
-                <Text as="span">{`View on ${alphaStEth.config.chain.blockExplorer.name}`}</Text>
-                <ExternalLinkIcon ml={2} />
-              </Link>
-            </>
-          ),
-          status: "success",
-          closeHandler: closeAll,
-          duration: null,
+        const receipt = await publicClient.waitForTransactionReceipt({ 
+          hash: migrationHash 
         })
-        onClose()
-      }
 
+        if (receipt.status === "success") {
+          addToast({
+            heading: "Migration Successful",
+            body: <Text>Your migration has been completed successfully.</Text>,
+            status: "success",
+            closeHandler: close,
+          })
+          refetch()
+          onClose()
+        } else {
+          addToast({
+            heading: "Migration Failed",
+            body: <Text>Migration failed. Please try again.</Text>,
+            status: "error",
+            closeHandler: close,
+          })
+        }
+      }
     } catch (e) {
       const error = e as Error
-      const isUserRejection = error.message?.includes('User rejected')
-      
+      const isUserRejection = error.message?.includes("User rejected")
+
       addToast({
         heading: "Migration",
-      body: (
-        <Text>
-          {isUserRejection 
-            ? "Migration cancelled" 
-            : "Migration failed. Please try manual migration."}
-        </Text>
+        body: (
+          <Text>
+            {isUserRejection
+              ? "Migration cancelled"
+              : "Migration failed. Please try manual migration."}
+          </Text>
         ),
         status: "error",
         closeHandler: closeAll,
       })
-      refetch()
-     if (!isUserRejection) {
-       refetch()
+      if (!isUserRejection) {
+        refetch()
       }
-       setValue("withdrawAmount", 0)
-     }
+      setValue("withdrawAmount", 0)
+    }
   }
 
   return (

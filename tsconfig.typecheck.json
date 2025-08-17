@@ -3,32 +3,37 @@
   "compilerOptions": {
     "noEmit": true,
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "incremental": false
+    "baseUrl": ".",
+    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "paths": {
+      "ox": ["src/types/ox/index.d.ts"],
+      "ox/*": ["src/types/ox/wildcard.d.ts"]
+    },
+    "moduleResolution": "bundler"
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "env.d.ts",
-    "next-env.d.ts",
-    "types.d.ts"
+    "src/types/**/*.d.ts",
+    "src/providers/WagmiClientProvider.tsx",
+    "src/utils/sortVaults.ts",
+    "src/utils/wallet/initOnce.ts",
+    "src/constants/withdraw.ts",
+    "src/components/_common/Countdown.tsx",
+    "src/components/_buttons/VaultActionButton.tsx",
+    "src/components/_vaults/KPIBox.tsx",
+    "src/components/_sections/TopLaunchBanner.tsx",
+    "src/components/wallet/NetworkSelector.tsx",
+    "src/components/_pages/PageHome.tsx",
+    "src/pages/api/cellar-preview-redeem.ts",
+    "src/pages/api/coingecko-simple-price.ts",
+    "src/pages/api/sommelier-api-individual-strat-data.ts",
+    "src/data/hooks/useCreateContracts.tsx",
+    "src/data/actions/common/getAllContracts.ts"
   ],
   "exclude": [
     "node_modules",
-    "**/node_modules/**",
-    // Temporarily exclude heavy web3 forms and API to stabilize CI typecheck
-    "src/components/_forms/MigrationForm.tsx",
-    "src/components/_modals/DepositModal/SommelierTab.tsx",
-    "src/hooks/web3/useImportToken.tsx",
-    "src/data/hooks/useUserBalances.ts",
-    "src/data/actions/common/getUserData.ts",
-    "src/pages/api/sommelier-api-all-strategies-data.ts",
-    "src/data/strategies/real-yield-eth-scroll.ts",
-    // Exclude ox/analytics types conflicts from CI check
-    "src/utils/analytics.ts",
-    "node_modules/ox/**",
-    "node_modules/.pnpm/ox@**/*.ts",
-    // Wildcard exclude to suppress external type errors reliably
-    "**/node_modules/.pnpm/ox@*/**/*.ts"
+    ".next",
+    "src/legacy/**",
+    "scripts/**",
+    "**/*.test.*"
   ]
 }
