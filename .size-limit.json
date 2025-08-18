@@ -1,15 +1,7 @@
 [
   {
-    "name": "Main route First Load JS budget",
-    "path": ".next/static/chunks/**/*.js",
+    "name": "Approx initial bundle (app entry)",
+    "path": "src/pages/_app.tsx",
     "limit": "700 kB"
-  }
-]
-
-[
-  {
-    "name": "Home Page",
-    "path": ".next/static/chunks/pages/index-61cfa75caa775549.js",
-    "limit": "662 kB"
   }
 ]
