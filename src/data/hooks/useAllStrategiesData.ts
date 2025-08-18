@@ -7,7 +7,10 @@ import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
 import { GetAllStrategiesDataQuery } from "data/actions/types"
 import { tokenConfig } from "data/tokenConfig"
-import { getChainByViemId, supportedChains } from "src/data/chainConfig"
+import {
+  getChainByViemId,
+  supportedChains,
+} from "src/data/chainConfig"
 
 export const useAllStrategiesData = () => {
   const { chain: viemChain } = useAccount()
@@ -16,7 +19,9 @@ export const useAllStrategiesData = () => {
   const chain = getChainByViemId(viemChain?.name)
 
   const sommToken = tokenConfig.find((token) => {
-    const compareChain = supportedChains.includes(chain ? chain.id : "")
+    const compareChain = supportedChains.includes(
+      chain ? chain.id : ""
+    )
       ? "ethereum"
       : chain?.id
     return (
@@ -43,9 +48,9 @@ export const useAllStrategiesData = () => {
       })
       .catch((error) => setError(error))
     return () => {
-      setError(null);
-      setcellarData(undefined);
-    };
+      setError(null)
+      setcellarData(undefined)
+    }
   }, [])
 
   const query = useQuery({
@@ -58,8 +63,8 @@ export const useAllStrategiesData = () => {
       })
     },
     enabled: !!allContracts && !!sommPrice && !!cellarData,
-  }
-  )
+    staleTime: 120_000,
+  })
 
   return {
     ...query,

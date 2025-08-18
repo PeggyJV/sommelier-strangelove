@@ -29,6 +29,7 @@ import {
   usePublicClient,
   useWriteContract,
   useWaitForTransactionReceipt,
+  useSwitchChain,
 } from "wagmi"
 import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
 
@@ -129,7 +130,8 @@ export const SommelierTab = ({
   }
 
   const publicClient = usePublicClient()
-  const { address } = useAccount()
+  const { address, chain } = useAccount()
+  const { switchChainAsync } = useSwitchChain()
   const { writeContractAsync } = useWriteContract()
   const { data: waitForTransaction } = useWaitForTransactionReceipt()
   const geo = useGeo()
@@ -176,8 +178,9 @@ export const SommelierTab = ({
   const isError =
     errors.depositAmount !== undefined ||
     errors.slippage !== undefined
-  const isDisabled =
-    isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
+  // Balance/chain guards
+  const desiredChainId = cellarConfig?.chain?.wagmiId
+  const needsSwitch = !!desiredChainId && chain?.id !== desiredChainId
 
   const { cellarSigner, boringVaultLens } =
     useCreateContracts(cellarConfig)
@@ -192,6 +195,17 @@ export const SommelierTab = ({
   const selectedTokenBalance = userBalances.data?.find(
     (b) => b.symbol === selectedToken?.symbol
   )
+
+  const availableAmount = Number(selectedTokenBalance?.formatted ?? 0)
+  const insufficientBalance =
+    Number.isFinite(availableAmount) &&
+    Number(watchDepositAmount) > availableAmount
+  const isDisabled =
+    isNaN(watchDepositAmount) ||
+    watchDepositAmount <= 0 ||
+    isError ||
+    insufficientBalance ||
+    needsSwitch
 
   const erc20Contract =
     cellarConfig.baseAsset.address &&
@@ -228,6 +242,50 @@ export const SommelierTab = ({
       ])) ?? [false, 0, 0]
 
     return isSupported ? Number(depositFee) : 0
+  }
+
+  // Helper: wrap writeContractAsync and swallow user-rejected with toast, returning undefined
+  const safeWriteContract = async (
+    params: Parameters<typeof writeContractAsync>[0],
+    context: TransactionErrorContext
+  ): Promise<string | undefined> => {
+    try {
+      const hash = await writeContractAsync(params)
+      return hash
+    } catch (e) {
+      const normalized = handleTransactionError(e as Error, context)
+      if (normalized.type === "USER_REJECTED") {
+        const toastConfig = getTransactionErrorToast(
+          normalized,
+          context
+        )
+        const analyticsData = getTransactionErrorAnalytics(
+          normalized,
+          context
+        )
+        analytics.track(`${context.transactionType}.rejected`, {
+          ...baseAnalytics,
+          ...analyticsData,
+        })
+        const toastBody = toastConfig.showPopupGuidance ? (
+          <Text>
+            {toastConfig.body}
+            <br />
+            Enable popups for MetaMask and retry.
+          </Text>
+        ) : (
+          <Text>{toastConfig.body}</Text>
+        )
+        addToast({
+          heading: toastConfig.heading,
+          body: toastBody,
+          status: toastConfig.status,
+          closeHandler: closeAll,
+        })
+        return undefined
+      }
+      throw e
+    }
   }
 
   const doDepositTx = async (
@@ -270,13 +328,21 @@ export const SommelierTab = ({
     }
 
     try {
-      const hash = await writeContractAsync({
-        address: cellarSigner?.address as `0x${string}`,
-        abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
-        functionName: fnName,
-        args: args,
-        value: value,
-      })
+      const hash = await safeWriteContract(
+        {
+          address: cellarSigner?.address as `0x${string}`,
+          abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
+          functionName: fnName,
+          args: args,
+          value: value,
+        },
+        {
+          vaultName: cellarName,
+          tokenSymbol: selectedToken?.symbol,
+          transactionType: "deposit",
+          chainId: cellarConfig.chain.id,
+        }
+      )
 
       if (hash) {
         addToast({
@@ -320,12 +386,20 @@ export const SommelierTab = ({
 
   const doApprovalTx = async (amtInWei: bigint): Promise<boolean> => {
     try {
-      const hash = await writeContractAsync({
-        address: cellarConfig.baseAsset.address as `0x${string}`,
-        abi: erc20Abi,
-        functionName: "approve",
-        args: [cellarConfig.cellar.address, amtInWei],
-      })
+      const hash = await safeWriteContract(
+        {
+          address: cellarConfig.baseAsset.address as `0x${string}`,
+          abi: erc20Abi,
+          functionName: "approve",
+          args: [cellarConfig.cellar.address, amtInWei],
+        },
+        {
+          vaultName: cellarName,
+          tokenSymbol: cellarConfig.baseAsset.symbol,
+          transactionType: "approve",
+          chainId: cellarConfig.chain.id,
+        }
+      )
 
       if (hash) {
         addToast({
@@ -425,41 +499,73 @@ export const SommelierTab = ({
 
         if (isNativeDeposit) {
           // Native ETH deposit
-          hash = await writeContractAsync({
-            address: cellarConfig.teller.address as `0x${string}`,
-            abi: cellarConfig.teller.abi,
-            functionName: "deposit",
-            args: [tokenAddress, amtInWei, minimumMint],
-            value: amtInWei,
-          })
+          hash = (await safeWriteContract(
+            {
+              address: cellarConfig.teller.address as `0x${string}`,
+              abi: cellarConfig.teller.abi,
+              functionName: "deposit",
+              args: [tokenAddress, amtInWei, minimumMint],
+              value: amtInWei,
+            },
+            {
+              vaultName: cellarName,
+              tokenSymbol: selectedToken?.symbol,
+              transactionType: "deposit",
+              chainId: cellarConfig.chain.id,
+            }
+          )) as string
         } else {
           // ERC20 token deposit
-          hash = await writeContractAsync({
-            address: cellarConfig.teller.address as `0x${string}`,
-            abi: cellarConfig.teller.abi,
-            functionName: "deposit",
-            args: [tokenAddress, amtInWei, minimumMint],
-          })
+          hash = (await safeWriteContract(
+            {
+              address: cellarConfig.teller.address as `0x${string}`,
+              abi: cellarConfig.teller.abi,
+              functionName: "deposit",
+              args: [tokenAddress, amtInWei, minimumMint],
+            },
+            {
+              vaultName: cellarName,
+              tokenSymbol: selectedToken?.symbol,
+              transactionType: "deposit",
+              chainId: cellarConfig.chain.id,
+            }
+          )) as string
         }
       } else {
         // Standard cellar deposit
         if (isNativeDeposit) {
           // Native ETH deposit
-          hash = await writeContractAsync({
-            address: cellarConfig.cellar.address as `0x${string}`,
-            abi: cellarConfig.cellar.abi,
-            functionName: "deposit",
-            args: [amtInWei, address],
-            value: amtInWei,
-          })
+          hash = (await safeWriteContract(
+            {
+              address: cellarConfig.cellar.address as `0x${string}`,
+              abi: cellarConfig.cellar.abi,
+              functionName: "deposit",
+              args: [amtInWei, address],
+              value: amtInWei,
+            },
+            {
+              vaultName: cellarName,
+              tokenSymbol: selectedToken?.symbol,
+              transactionType: "deposit",
+              chainId: cellarConfig.chain.id,
+            }
+          )) as string
         } else {
           // ERC20 token deposit
-          hash = await writeContractAsync({
-            address: cellarConfig.cellar.address as `0x${string}`,
-            abi: cellarConfig.cellar.abi,
-            functionName: "deposit",
-            args: [amtInWei, address],
-          })
+          hash = (await safeWriteContract(
+            {
+              address: cellarConfig.cellar.address as `0x${string}`,
+              abi: cellarConfig.cellar.abi,
+              functionName: "deposit",
+              args: [amtInWei, address],
+            },
+            {
+              vaultName: cellarName,
+              tokenSymbol: selectedToken?.symbol,
+              transactionType: "deposit",
+              chainId: cellarConfig.chain.id,
+            }
+          )) as string
         }
       }
 
@@ -474,6 +580,56 @@ export const SommelierTab = ({
       return []
     } catch (error) {
       console.error("Deposit error:", error)
+
+      // Normalize and handle user-rejected errors gracefully to avoid dev overlay
+      const errorContext: TransactionErrorContext = {
+        vaultName: cellarName,
+        tokenSymbol: selectedToken?.symbol,
+        transactionType: "deposit",
+        chainId: cellarConfig.chain.id,
+      }
+      const normalizedError = handleTransactionError(
+        error as Error,
+        errorContext
+      )
+
+      if (normalizedError.type === "USER_REJECTED") {
+        const toastConfig = getTransactionErrorToast(
+          normalizedError,
+          errorContext
+        )
+        const analyticsData = getTransactionErrorAnalytics(
+          normalizedError,
+          errorContext
+        )
+
+        analytics.track("deposit.rejected", {
+          ...baseAnalytics,
+          ...analyticsData,
+        })
+
+        const toastBody = toastConfig.showPopupGuidance ? (
+          <Text>
+            {toastConfig.body}
+            <br />
+            Enable popups for MetaMask and retry.
+          </Text>
+        ) : (
+          <Text>{toastConfig.body}</Text>
+        )
+
+        addToast({
+          heading: toastConfig.heading,
+          body: toastBody,
+          status: toastConfig.status,
+          closeHandler: closeAll,
+        })
+
+        // Do not rethrow user-rejected to prevent red runtime overlay
+        return []
+      }
+
+      // For all other errors, rethrow to be handled by caller
       throw error
     }
   }
@@ -532,14 +688,10 @@ export const SommelierTab = ({
           nativeDeposit
         )
 
-        addToast({
-          heading: cellarName + " Cellar Deposit",
-          status: "default",
-          body: <Text>Depositing {selectedToken?.symbol}</Text>,
-          isLoading: true,
-          closeHandler: close,
-          duration: null,
-        })
+        // If no receipts, likely user canceled; a toast was already shown by error handler
+        if (!receipts || receipts.length === 0) {
+          return
+        }
 
         refetch()
 
@@ -1321,6 +1473,26 @@ export const SommelierTab = ({
               </HStack>
             </>
           ) : null}
+          {needsSwitch && (
+            <BaseButton
+              type="button"
+              isDisabled={isSubmitting}
+              onClick={async () => {
+                try {
+                  if (desiredChainId) {
+                    await switchChainAsync?.({
+                      chainId: desiredChainId,
+                    })
+                  }
+                } catch {}
+              }}
+              fontSize={18}
+              py={4}
+              px={8}
+            >
+              Switch network to proceed
+            </BaseButton>
+          )}
           <BaseButton
             type="submit"
             isDisabled={
@@ -1336,8 +1508,13 @@ export const SommelierTab = ({
             py={8}
             px={12}
           >
-            Submit
+            {isSubmitting ? "Waiting for wallet…" : "Submit"}
           </BaseButton>
+          {insufficientBalance && (
+            <Text color="red.base" fontSize="sm">
+              Insufficient balance for the entered amount.
+            </Text>
+          )}
           {strategyMessages[currentStrategies] ? (
             strategyMessages[currentStrategies]()
           ) : (

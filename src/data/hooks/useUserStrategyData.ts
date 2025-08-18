@@ -123,6 +123,7 @@ export const useUserStrategyData = (
       !!baseAssetPrice &&
       !!strategyData.data &&
       isNoDataSource === false,
+    staleTime: 120_000,
   })
   return query
 }

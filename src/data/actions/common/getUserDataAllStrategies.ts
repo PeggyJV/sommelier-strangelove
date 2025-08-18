@@ -20,62 +20,69 @@ export const getUserDataAllStrategies = async ({
   chain: string
 }) => {
   const userDataRes = await Promise.all(
-    Object.entries(allContracts)?.map(
-      async ([key, contracts]) => {
-        // Only get data for the current chain
-        if (contracts.chain !== chain) {
-          return
-        }
-
-        // If chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
-        const address = key.split("-")[0]
-
-        const strategyData = strategiesData.find(
-          (item) => item?.address === address && item.config.chain.id === contracts.chain
-        )
-
-        const result = await reactQueryClient.fetchQuery({
-          queryKey: [
-            "USE_USER_DATA",
-            { contractAddress: address, userAddress },
-          ],
-          queryFn: async () => {
-            const strategy = Object.values(cellarDataMap).find(
-              ({ config }) =>
-                config.cellar.address.toLowerCase() ===
-                address.toLowerCase() && config.chain.id === contracts.chain
-            )!
-
-            const config: ConfigProps = strategy.config!
-
-            const baseAsset = config.baseAsset
-            const baseAssetPrice = await fetchCoingeckoPrice(
-              baseAsset,
-              "usd"
-            )
-
-            try {
-              return await getUserData({
-                address,
-                contracts,
-                sommPrice,
-                strategyData: strategyData,
-                userAddress,
-                baseAssetPrice: baseAssetPrice!,
-                chain: contracts.chain,
-              })
-            } catch (error) {
-              console.log("error", error)
-            }
-          }
-        }
-        )
-        return result
+    Object.entries(allContracts)?.map(async ([key, contracts]) => {
+      // Only get data for the current chain
+      if (contracts.chain !== chain) {
+        return
       }
 
-    )
-  )
+      // If chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
+      const address = key.split("-")[0]
 
+      const strategyData = strategiesData.find(
+        (item) =>
+          item?.address === address &&
+          item.config.chain.id === contracts.chain
+      )
+
+      const result = await reactQueryClient.fetchQuery({
+        queryKey: [
+          "USE_USER_DATA",
+          { contractAddress: address, userAddress },
+        ],
+        queryFn: async () => {
+          const strategy = Object.values(cellarDataMap).find(
+            ({ config }) =>
+              config.cellar.address.toLowerCase() ===
+                address.toLowerCase() &&
+              config.chain.id === contracts.chain
+          )!
+
+          const config: ConfigProps = strategy.config!
+
+          const baseAsset = config.baseAsset
+          const baseAssetPrice = await fetchCoingeckoPrice(
+            baseAsset,
+            "usd"
+          )
+
+          try {
+            return await getUserData({
+              address,
+              contracts,
+              sommPrice,
+              strategyData: strategyData,
+              userAddress,
+              baseAssetPrice: baseAssetPrice!,
+              chain: contracts.chain,
+            })
+          } catch (error) {
+            console.log("error", error)
+            // Return a safe fallback to keep the query defined
+            return {
+              shares: 0n,
+              stakedShares: 0n,
+              strategyData: null,
+              allStrategiesData: null,
+              netValue: 0,
+              userStakes: null,
+            } as any
+          }
+        },
+      })
+      return result
+    })
+  )
 
   const userData = userDataRes.filter((item) => !!item)
 

@@ -11,7 +11,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react"
-import { memo, FC } from "react"
+import { memo, FC, Suspense } from "react"
 import { useTable, useSortBy } from "react-table"
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { AllStrategiesData } from "data/actions/types"

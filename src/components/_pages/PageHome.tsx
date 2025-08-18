@@ -15,17 +15,25 @@ import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
 import { StrategyTabColumn } from "components/_columns/StrategyTabColumn"
 import { LayoutWithSidebar } from "components/_layout/LayoutWithSidebar"
 import { SommelierTab } from "components/_modals/DepositModal/SommelierTab"
-import { ModalWithExchangeTab } from "components/_modals/ModalWithExchangeTab"
-import { WithdrawModal } from "components/_modals/WithdrawModal"
-import { TransparentSkeleton } from "components/_skeleton"
+import {
+  TransparentSkeleton,
+  LightSkeleton,
+} from "components/_skeleton"
 import { StrategyTable } from "components/_tables/StrategyTable"
+import SommNativeList from "components/SommNativeList"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import {
   DepositModalType,
   useDepositModalStore,
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useMemo, useState, useCallback, useEffect } from "react"
+import {
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  Suspense,
+} from "react"
 import { chainConfig } from "src/data/chainConfig"
 import { SymbolPathPair } from "components/_filters/DepositTokenFilter"
 import { cellarDataMap } from "src/data/cellarDataMap"
@@ -37,6 +45,7 @@ import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
+import { useSommNativeVaults } from "data/hooks/useSommNativeVaults"
 import TopLaunchBanner from "components/_sections/TopLaunchBanner"
 import WithdrawalWarningBanner from "components/_sections/WithdrawalWarningBanner"
 import { sortVaultsForMainPage } from "utils/sortVaults"
@@ -46,6 +55,7 @@ import { alphaSteth } from "data/strategies/alpha-steth"
 import { MigrationModal } from "components/_modals/MigrationModal"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 import dynamic from "next/dynamic"
+import { InView } from "react-intersection-observer"
 import { ChevronUpIcon, ChevronDownIcon } from "components/_icons"
 import {
   restoreLegacyVisibility,
@@ -55,6 +65,29 @@ import {
 // Dynamically import the legacy vaults section with no SSR
 const LegacyVaultsSection = dynamic(
   () => import("components/legacy/LegacyVaultsSection"),
+  { ssr: false, loading: () => null }
+)
+
+// Defer heavy modals until opened
+const DynamicModalWithExchangeTab = dynamic(
+  () =>
+    import("components/_modals/ModalWithExchangeTab").then((m) => ({
+      default: m.ModalWithExchangeTab,
+    })),
+  { ssr: false, loading: () => null }
+)
+const DynamicWithdrawModal = dynamic(
+  () =>
+    import("components/_modals/WithdrawModal").then((m) => ({
+      default: m.WithdrawModal,
+    })),
+  { ssr: false, loading: () => null }
+)
+const DynamicMigrationModal = dynamic(
+  () =>
+    import("components/_modals/MigrationModal").then((m) => ({
+      default: m.MigrationModal,
+    })),
   { ssr: false, loading: () => null }
 )
 
@@ -89,6 +122,8 @@ export const PageHome = () => {
   const { isConnected } = useAccount()
   const { userBalances } = useUserBalances()
   const { data: userDataAllStrategies } = useUserDataAllStrategies()
+  const { data: sommNativeMin, isLoading: isSommMinLoading } =
+    useSommNativeVaults()
 
   const columns = useMemo(() => {
     return isDesktop
@@ -398,12 +433,19 @@ export const PageHome = () => {
       { connected: isConnected }
     ).map((x) => x.ref)
 
-    return { sommNative: sortedSomm, legacy: sortedLegacy }
+    // If minimal Somm-native list is available, prefer it to avoid heavy data needs
+    const preferredSomm =
+      Array.isArray(sommNativeMin) && sommNativeMin.length
+        ? sommNativeMin
+        : sortedSomm
+
+    return { sommNative: preferredSomm as any, legacy: sortedLegacy }
   }, [
     strategyData,
     isConnected,
     userBalances?.data,
     userDataAllStrategies?.strategies,
+    sommNativeMin,
   ])
 
   const WithdrawalStatusPanel = () => (
@@ -464,11 +506,9 @@ export const PageHome = () => {
             {sommNative.length > 0 && (
               <>
                 <SectionHeader title="Somm-native Vaults" />
-                <StrategyTable
-                  columns={columns}
-                  data={sommNative}
-                  showHeader={false}
-                />
+                <Suspense fallback={<LightSkeleton height="200px" />}>
+                  <SommNativeList columns={columns} />
+                </Suspense>
               </>
             )}
 
@@ -536,7 +576,7 @@ export const PageHome = () => {
 
         {id && (
           <>
-            <ModalWithExchangeTab
+            <DynamicModalWithExchangeTab
               heading="Deposit"
               isOpen={isOpen && modalType === "deposit"}
               onClose={onClose}
@@ -547,11 +587,11 @@ export const PageHome = () => {
                 />
               }
             />
-            <WithdrawModal
+            <DynamicWithdrawModal
               isOpen={isOpen && modalType === "withdraw"}
               onClose={onClose}
             />
-            <MigrationModal
+            <DynamicMigrationModal
               isOpen={isOpen && modalType === "migrate"}
               onClose={onClose}
             />

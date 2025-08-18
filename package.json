@@ -24,6 +24,7 @@
     "test:all": "jest --config jest.json --coverage --verbose",
     "lighthouse": "lhci autorun --collect.numberOfRuns=3 --assert.preset=lighthouse:recommended",
     "size-limit": "size-limit",
+    "size": "size-limit",
     "perf:analyze": "ANALYZE=true next build",
     "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
     "perf:report": "node scripts/generate-perf-report.js"
