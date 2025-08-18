@@ -7,6 +7,7 @@ import {
   Spacer,
   Text,
   VStack,
+  Collapse,
 } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
 import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn"
@@ -24,7 +25,7 @@ import {
   useDepositModalStore,
 } from "data/hooks/useDepositModalStore"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { useMemo, useState, useCallback } from "react"
+import { useMemo, useState, useCallback, useEffect } from "react"
 import { chainConfig } from "src/data/chainConfig"
 import { SymbolPathPair } from "components/_filters/DepositTokenFilter"
 import { cellarDataMap } from "src/data/cellarDataMap"
@@ -43,10 +44,28 @@ import { sortVaultsForMainPage } from "utils/sortVaults"
 import SectionHeader from "components/_sections/SectionHeader"
 import { alphaSteth } from "data/strategies/alpha-steth"
 import { MigrationModal } from "components/_modals/MigrationModal"
-import LegacyVaultCard from "components/_vaults/LegacyVaultCard"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
+import dynamic from "next/dynamic"
+import { ChevronUpIcon, ChevronDownIcon } from "components/_icons"
+import {
+  restoreLegacyVisibility,
+  saveLegacyVisibility,
+} from "utils/legacyVisibility"
+
+// Dynamically import the legacy vaults section with no SSR
+const LegacyVaultsSection = dynamic(
+  () => import("components/legacy/LegacyVaultsSection"),
+  { ssr: false, loading: () => null }
+)
 
 export const PageHome = () => {
+  const [showLegacy, setShowLegacy] = useState<boolean>(
+    restoreLegacyVisibility()
+  )
+
+  useEffect(() => {
+    saveLegacyVisibility(showLegacy)
+  }, [showLegacy])
   const {
     data,
     isLoading,
@@ -342,8 +361,6 @@ export const PageHome = () => {
             const vaultAddress = v?.config?.cellar?.address
             const vaultChain = v?.config?.chain?.id
 
-
-
             return (
               strategyAddress === vaultAddress &&
               strategyChain === vaultChain
@@ -366,7 +383,8 @@ export const PageHome = () => {
           ref: enrichedVault,
           name: v?.name,
           tvl: v?.tvm?.formatted,
-          netValue: userData?.userStrategyData?.userData?.netValue?.formatted,
+          netValue:
+            userData?.userStrategyData?.userData?.netValue?.formatted,
         }
       })
 
@@ -454,35 +472,65 @@ export const PageHome = () => {
               </>
             )}
 
+            {/* Legacy Vaults Toggle Button */}
             {legacy.length > 0 && (
-              <>
-                <SectionHeader
-                  title={
-                    <>
-                      Legacy Vaults (Managed by{" "}
-                      <a
-                        href="https://sevenseas.capital/"
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        style={{ textDecoration: "underline" }}
-                      >
-                        Seven Seas
-                      </a>
-                      )
-                    </>
+              <Box
+                display="flex"
+                justifyContent="center"
+                mt={6}
+                mb={4}
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  leftIcon={
+                    showLegacy ? (
+                      <ChevronUpIcon />
+                    ) : (
+                      <ChevronDownIcon />
+                    )
                   }
-                />
-                <WithdrawalWarningBanner />
-                <VStack spacing={4} align="stretch" mt={2}>
-                  {legacy.map((v) => (
-                    <LegacyVaultCard
-                      key={v?.slug ?? v?.name}
-                      vault={v}
-                    />
-                  ))}
-                </VStack>
-              </>
+                  onClick={() => {
+                    setShowLegacy((v) => !v)
+                    if (showLegacy) {
+                      document
+                        .getElementById("legacy-vaults")
+                        ?.scrollIntoView({
+                          block: "start",
+                          behavior: "smooth",
+                        })
+                    }
+                  }}
+                  aria-controls="legacy-vaults"
+                  aria-expanded={showLegacy}
+                  alignSelf="center"
+                  _hover={{
+                    borderColor: "purple.base",
+                    color: "purple.base",
+                  }}
+                >
+                  {showLegacy
+                    ? "Hide Legacy Vaults"
+                    : `Show Legacy Vaults${
+                        legacy.length > 0 ? ` (${legacy.length})` : ""
+                      }`}
+                </Button>
+              </Box>
             )}
+
+            {/* Legacy Vaults Collapsible Section */}
+            <Collapse
+              in={showLegacy}
+              animateOpacity
+              style={{ overflow: "visible" }}
+            >
+              <Box as="section" id="legacy-vaults" mt={4}>
+                <LegacyVaultsSection
+                  legacyVaults={legacy}
+                  enabled={showLegacy}
+                />
+              </Box>
+            </Collapse>
           </>
         )}
 
