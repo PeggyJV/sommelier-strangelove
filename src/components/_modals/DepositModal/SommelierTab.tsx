@@ -62,6 +62,7 @@ import {
   getTransactionErrorAnalytics,
   type TransactionErrorContext,
 } from "utils/handleTransactionError"
+import { logTxDebug } from "utils/txDebug"
 
 interface FormValues {
   depositAmount: number
@@ -207,6 +208,21 @@ export const SommelierTab = ({
     insufficientBalance ||
     needsSwitch
 
+  // Debug snapshot
+  logTxDebug("deposit.ui_state", {
+    id,
+    cellarName,
+    chainId: chain?.id,
+    desiredChainId,
+    needsSwitch,
+    selectedToken: selectedToken?.symbol,
+    selectedTokenAddress: selectedToken?.address,
+    depositAmount: watchDepositAmount,
+    availableAmount,
+    insufficientBalance,
+    isDisabled,
+  })
+
   const erc20Contract =
     cellarConfig.baseAsset.address &&
     publicClient &&
@@ -250,11 +266,21 @@ export const SommelierTab = ({
     context: TransactionErrorContext
   ): Promise<string | undefined> => {
     try {
+      logTxDebug("write.request", {
+        to: (params as any)?.address,
+        fn: (params as any)?.functionName,
+        args: (params as any)?.args,
+        value: (params as any)?.value,
+        context,
+      })
       const hash = await writeContractAsync(params)
+      logTxDebug("write.submitted", { hash })
       return hash
     } catch (e) {
+      logTxDebug("write.error", { message: (e as Error)?.message })
       const normalized = handleTransactionError(e as Error, context)
       if (normalized.type === "USER_REJECTED") {
+        logTxDebug("write.rejected", { context })
         const toastConfig = getTransactionErrorToast(
           normalized,
           context
@@ -662,11 +688,20 @@ export const SommelierTab = ({
           ],
           { account: address }
         )
+    logTxDebug("deposit.allowance", {
+      nativeDeposit,
+      allowance: nativeDeposit ? "MAX_SAFE_INTEGER" : String(allowance),
+    })
 
     const amtInWei = parseUnits(
       depositAmount.toFixed(selectedTokenBalance?.decimals ?? 18),
       selectedTokenBalance?.decimals ?? 0
     )
+    logTxDebug("deposit.amountParsed", {
+      depositAmount,
+      decimals: selectedTokenBalance?.decimals,
+      amtInWei: String(amtInWei),
+    })
 
     let needsApproval = allowance < amtInWei
     let approval = !needsApproval
@@ -690,12 +725,16 @@ export const SommelierTab = ({
 
         // If no receipts, likely user canceled; a toast was already shown by error handler
         if (!receipts || receipts.length === 0) {
+          logTxDebug("deposit.no_receipt", { reason: "likely user cancel" })
           return
         }
 
         refetch()
 
         if (receipts?.[0]?.status === "success") {
+          logTxDebug("deposit.success", {
+            txHash: receipts![0].transactionHash,
+          })
           insertEvent({
             event: "deposit.succeeded",
             address: address ?? "",
