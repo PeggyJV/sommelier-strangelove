@@ -10,7 +10,10 @@ export const txDebugEnabled = (): boolean => {
   return false
 }
 
-export const logTxDebug = (event: string, payload: Record<string, unknown>) => {
+export const logTxDebug = (
+  event: string,
+  payload: Record<string, unknown>
+) => {
   if (!txDebugEnabled()) return
   try {
     // Console
@@ -24,5 +27,3 @@ export const logTxDebug = (event: string, payload: Record<string, unknown>) => {
     })
   } catch {}
 }
-
-

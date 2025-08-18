@@ -690,7 +690,9 @@ export const SommelierTab = ({
         )
     logTxDebug("deposit.allowance", {
       nativeDeposit,
-      allowance: nativeDeposit ? "MAX_SAFE_INTEGER" : String(allowance),
+      allowance: nativeDeposit
+        ? "MAX_SAFE_INTEGER"
+        : String(allowance),
     })
 
     const amtInWei = parseUnits(
@@ -725,7 +727,9 @@ export const SommelierTab = ({
 
         // If no receipts, likely user canceled; a toast was already shown by error handler
         if (!receipts || receipts.length === 0) {
-          logTxDebug("deposit.no_receipt", { reason: "likely user cancel" })
+          logTxDebug("deposit.no_receipt", {
+            reason: "likely user cancel",
+          })
           return
         }
 
