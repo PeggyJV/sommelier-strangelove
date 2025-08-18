@@ -23,3 +23,12 @@ export function saveLegacyVisibility(v: boolean): void {
     // Silently fail if localStorage is not available
   }
 }
+
+// Legacy functions for backward compatibility
+export const getLegacyVisibility = (): boolean => {
+  return restoreLegacyVisibility()
+}
+
+export const setLegacyVisibility = (visible: boolean): void => {
+  saveLegacyVisibility(visible)
+}
