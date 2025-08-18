@@ -9,14 +9,17 @@ import { fetchIndividualCellarStrategyData } from "queries/get-individual-strate
 import { useState, useEffect } from "react"
 import { tokenConfig } from "data/tokenConfig"
 
-export const useStrategyData = (address: string, chain: string) => {
+export const useStrategyData = (
+  address: string,
+  chain: string,
+  enabled: boolean = true
+) => {
   const publicClient = usePublicClient()
 
   const { data: allContracts } = useAllContracts()
   const sommToken = tokenConfig.find(
     (token) =>
-      token.coinGeckoId === "sommelier" &&
-      token.chain === chain
+      token.coinGeckoId === "sommelier" && token.chain === chain
   )!
 
   const { data: sommPrice } = useCoinGeckoPrice(sommToken)
@@ -54,9 +57,7 @@ export const useStrategyData = (address: string, chain: string) => {
   )!.config
   const isNoDataSource = Boolean(config!.isNoDataSource)
   const baseAsset = config.baseAsset
-  const { data: baseAssetPrice } = useCoinGeckoPrice(
-    baseAsset
-  )
+  const { data: baseAssetPrice } = useCoinGeckoPrice(baseAsset)
 
   // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
   const key =
@@ -80,12 +81,12 @@ export const useStrategyData = (address: string, chain: string) => {
       return result
     },
     enabled:
+      enabled &&
       !!allContracts &&
       !!sommPrice &&
       (isNoDataSource || !!stratData) &&
       !!baseAssetPrice,
-    }
-  )
+  })
 
   return {
     ...query,

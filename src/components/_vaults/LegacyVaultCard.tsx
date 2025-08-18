@@ -43,8 +43,10 @@ type StrategyLike = {
 
 export default function LegacyVaultCard({
   vault,
+  enabled = true,
 }: {
   vault?: StrategyLike
+  enabled?: boolean
 }) {
   const router = useRouter()
   const { setIsOpen } = useDepositModalStore()
@@ -79,11 +81,12 @@ export default function LegacyVaultCard({
   const stratChainId = cellarConfig?.chain?.id
   const { data: userStratData } =
     stratAddress && stratChainId
-      ? useUserStrategyData(stratAddress, stratChainId)
+      ? useUserStrategyData(stratAddress, stratChainId, enabled)
       : ({} as any)
-  
+
   // Use user's actual net value for withdrawal logic, not the display net value
-  const userNetValue = userStratData?.userStrategyData?.userData?.netValue?.formatted
+  const userNetValue =
+    userStratData?.userStrategyData?.userData?.netValue?.formatted
   const nv = coerceNetValue(userNetValue)
   const canWithdraw = Number.isFinite(nv) && nv > 0
   const lpTokenDisabled =

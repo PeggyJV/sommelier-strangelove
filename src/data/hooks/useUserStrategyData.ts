@@ -12,7 +12,8 @@ import { showNetValueInAsset } from "data/uiConfig"
 
 export const useUserStrategyData = (
   strategyAddress: string,
-  chain: string
+  chain: string,
+  enabled: boolean = true
 ) => {
   const { address: userAddress } = useAccount()
   const { data: allContracts } = useAllContracts()
@@ -115,6 +116,7 @@ export const useUserStrategyData = (
       }
     },
     enabled:
+      enabled &&
       !!userAddress &&
       !!sommPrice.data &&
       !!lpToken.data &&
