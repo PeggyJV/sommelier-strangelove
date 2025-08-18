@@ -46,6 +46,7 @@ import { MaxUint256 } from "utils/bigIntHelpers"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useBoringQueueWithdrawals } from "data/hooks/useBoringQueueWithdrawals"
 import { useWithdrawRequestStatus } from "data/hooks/useWithdrawRequestStatus"
+import { logTxDebug } from "utils/txDebug"
 
 interface FormValues {
   withdrawAmount: number
@@ -137,6 +138,38 @@ export const WithdrawQueueForm = ({
 
   const [selectedToken, setSelectedToken] =
     useState<Token>(strategyBaseAsset)
+
+  const [isWithdrawAllowed, setIsWithdrawAllowed] = useState<boolean | null>(
+    null
+  )
+
+  // Preflight: check if queue allows withdraws for selected asset (boring queue)
+  useEffect(() => {
+    let cancelled = false
+    const run = async () => {
+      try {
+        if (!boringQueue || !selectedToken?.address) {
+          setIsWithdrawAllowed(null)
+          return
+        }
+        const res = await boringQueue.read.withdrawAssets([
+          selectedToken.address,
+        ])
+        const allow = Array.isArray(res) ? Boolean(res[0]) : Boolean(res)
+        if (!cancelled) setIsWithdrawAllowed(allow)
+        logTxDebug("withdraw.preflight", {
+          assetOut: selectedToken.address,
+          allow,
+        })
+      } catch (e) {
+        if (!cancelled) setIsWithdrawAllowed(null)
+      }
+    }
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [boringQueue, selectedToken])
 
   function trackedSetSelectedToken(value: Token) {
     if (value && value !== selectedToken) {
@@ -310,6 +343,25 @@ export const WithdrawQueueForm = ({
         cellarAddress: cellarConfig.cellar.address,
       })
 
+      // Guard: if boring queue and asset disabled, show UI and stop
+      if (boringQueue && isWithdrawAllowed === false) {
+        addToast({
+          heading: "Withdraw Queue",
+          status: "info",
+          body: (
+            <Text>
+              Withdraw queue is currently not available for {selectedToken.symbol}.
+              Please choose a different asset or try again later.
+            </Text>
+          ),
+          closeHandler: closeAll,
+        })
+        logTxDebug("withdraw.blocked_asset", {
+          assetOut: selectedToken.address,
+        })
+        return
+      }
+
       let hash = await doWithdrawTx(
         selectedToken,
         withdrawAmtInBaseDenom
@@ -338,6 +390,24 @@ export const WithdrawQueueForm = ({
       console.error(error)
 
       if (error.message === "GAS_LIMIT_ERROR") {
+        const causeMsg = (error as any)?.cause?.message || ""
+        if (causeMsg.includes("BoringOnChainQueue__WithdrawsNotAllowedForAsset")) {
+          addToast({
+            heading: "Withdraw Queue",
+            body: (
+              <Text>
+                Withdraw queue is currently not available for {selectedToken.symbol}.
+                Please choose a different asset or try again later.
+              </Text>
+            ),
+            status: "info",
+            closeHandler: closeAll,
+          })
+          logTxDebug("withdraw.error_not_allowed", {
+            assetOut: selectedToken.address,
+          })
+          return
+        }
         addToast({
           heading: "Transaction not submitted",
           body: (
@@ -717,7 +787,9 @@ export const WithdrawQueueForm = ({
 
       <BaseButton
         type="submit"
-        isDisabled={isDisabled}
+        isDisabled={
+          isDisabled || (boringQueue ? isWithdrawAllowed === false : false)
+        }
         isLoading={isSubmitting}
         fontSize={21}
         py={6}
@@ -725,6 +797,11 @@ export const WithdrawQueueForm = ({
       >
         Submit
       </BaseButton>
+      {boringQueue && isWithdrawAllowed === false && (
+        <Text color="yellow.300" fontSize="sm">
+          Withdraw queue is currently not available for {selectedToken.symbol}.
+        </Text>
+      )}
       {/*waitTime(cellarConfig) !== null && (
         <Text textAlign="center">
           Please wait {waitTime(cellarConfig)} after the deposit to
