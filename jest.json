@@ -3,7 +3,7 @@
   "rootDir": "src",
   "testEnvironment": "jsdom",
   "testTimeout": 300000,
-  "testRegex": ".spec.(ts|tsx)$",
+  "testRegex": ".*\\.spec\\.(ts|tsx)$",
   "setupFilesAfterEnv": ["<rootDir>/__tests__/setup.ts"],
   "transform": {
     "^.+\\.(t|j)sx?$": [
