@@ -40,8 +40,7 @@ jobs:
       run: pnpm start &
     
     - name: Wait for server
-      run: sleep 10
-    
+      run: npx --yes wait-on -t 120000 http-get://localhost:3000
     - name: Run Lighthouse CI
       run: pnpm lighthouse
       env:
