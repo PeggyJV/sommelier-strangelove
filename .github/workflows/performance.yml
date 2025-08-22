@@ -50,7 +50,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: lighthouse-results
-        path: ./artifacts/lhci/
-    
+        path: ./lhci-reports/
     - name: Run tests
       run: pnpm test:all
