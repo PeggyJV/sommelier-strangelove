@@ -1,0 +1,49 @@
+name: Performance Validation
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  performance:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: pnpm install
+    
+    - name: Build application
+      run: pnpm build
+    
+    - name: Run size-limit
+      run: pnpm size-limit
+    
+    - name: Start server
+      run: pnpm start &
+    
+    - name: Wait for server
+      run: sleep 10
+    
+    - name: Run Lighthouse CI
+      run: pnpm lighthouse
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+    
+    - name: Upload Lighthouse results
+      uses: actions/upload-artifact@v4
+      with:
+        name: lighthouse-results
+        path: ./artifacts/lhci/
+    
+    - name: Run tests
+      run: pnpm test:all
