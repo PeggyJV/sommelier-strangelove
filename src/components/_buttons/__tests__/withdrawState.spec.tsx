@@ -68,12 +68,16 @@ describe("Withdrawal Button State", () => {
       },
     }
 
-    return render(
+    const utils = render(
       <DepositAndWithdrawButton
         row={mockRow}
         onDepositModalOpen={jest.fn()}
       />
     )
+    return {
+      ...utils,
+      getBtn: () => utils.getByRole('group'),
+    }
   }
 
   test("$0.04 → enabled", () => {
@@ -90,26 +94,26 @@ describe("Withdrawal Button State", () => {
 
   test("$0.00 → disabled", () => {
     renderWithNetValue({ value: 0, formatted: "$0.00" })
-    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
-    expect(button).toBeDisabled()
+    const { getBtn } = renderWithNetValue({ value: 0, formatted: "$0.00" })
+    expect(getBtn()).toHaveAttribute('disabled')
   })
 
   test("– → disabled", () => {
     renderWithNetValue("–")
-    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
-    expect(button).toBeDisabled()
+    const { getBtn } = renderWithNetValue("–")
+    expect(getBtn()).toHaveAttribute('disabled')
   })
 
   test("missing → disabled", () => {
     renderWithNetValue(null)
-    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
-    expect(button).toBeDisabled()
+    const { getBtn } = renderWithNetValue(null)
+    expect(getBtn()).toHaveAttribute('disabled')
   })
 
   test("negative → disabled", () => {
     renderWithNetValue({ value: -1, formatted: "-$1.00" })
-    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
-    expect(button).toBeDisabled()
+    const { getBtn } = renderWithNetValue({ value: -1, formatted: "-$1.00" })
+    expect(getBtn()).toHaveAttribute('disabled')
   })
 
   test("string $0.04 → enabled", () => {
@@ -120,7 +124,7 @@ describe("Withdrawal Button State", () => {
 
   test("string $0.00 → disabled", () => {
     renderWithNetValue("$0.00")
-    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
-    expect(button).toBeDisabled()
+    const { getBtn } = renderWithNetValue("$0.00")
+    expect(getBtn()).toHaveAttribute('disabled')
   })
 })

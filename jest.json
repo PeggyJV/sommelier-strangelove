@@ -6,6 +6,8 @@
     "url": "http://localhost/"
   },
   "testTimeout": 300000,
+  "clearMocks": true,
+  "restoreMocks": true,
   "testRegex": ".spec.(ts|tsx)$",
   "setupFilesAfterEnv": ["<rootDir>/__tests__/setup.ts"],
   "transform": {
