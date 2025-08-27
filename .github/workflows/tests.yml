@@ -2,9 +2,11 @@ name: Tests
 
 on:
   pull_request:
-    branches: [staging, main]
+    # Run for PRs into any branch (safe: no secrets used)
+    branches: ['**']
   push:
-    branches: [staging]
+    # Run on pushes to any branch to validate before PR is opened
+    branches: ['**']
 
 jobs:
   unit_integration:
