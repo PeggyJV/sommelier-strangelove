@@ -24,7 +24,8 @@
     "^hooks/(.*)$": "<rootDir>/hooks/$1",
     "^context/(.*)$": "<rootDir>/context/$1",
     "^theme/(.*)$": "<rootDir>/theme/$1",
-    "^src/(.*)$": "<rootDir>/$1"
+    "^src/(.*)$": "<rootDir>/$1",
+    "^wagmi/chains$": "<rootDir>/__tests__/stubs/wagmi-chains.js"
   },
   "collectCoverageFrom": [
     "**/*.{ts,tsx}",
@@ -44,7 +45,10 @@
   },
   "reporters": [
     "default",
-    ["jest-junit", { "outputDirectory": "test-results", "outputName": "junit.xml" }]
+    [
+      "jest-junit",
+      { "outputDirectory": "test-results", "outputName": "junit.xml" }
+    ]
   ],
   "testPathIgnorePatterns": [
     "/node_modules/",
