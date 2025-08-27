@@ -2,6 +2,9 @@
   "moduleFileExtensions": ["js", "json", "ts", "tsx"],
   "rootDir": "src",
   "testEnvironment": "jsdom",
+  "testEnvironmentOptions": {
+    "url": "http://localhost/"
+  },
   "testTimeout": 300000,
   "testRegex": ".spec.(ts|tsx)$",
   "setupFilesAfterEnv": ["<rootDir>/__tests__/setup.ts"],
@@ -31,6 +34,18 @@
     "!**/coverage/**"
   ],
   "coverageReporters": ["text", "lcov", "html"],
+  "coverageThreshold": {
+    "global": {
+      "branches": 40,
+      "functions": 50,
+      "lines": 50,
+      "statements": 50
+    }
+  },
+  "reporters": [
+    "default",
+    ["jest-junit", { "outputDirectory": "test-results", "outputName": "junit.xml" }]
+  ],
   "testPathIgnorePatterns": [
     "/node_modules/",
     "/.next/",
