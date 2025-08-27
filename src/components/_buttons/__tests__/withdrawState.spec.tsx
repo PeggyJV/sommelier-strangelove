@@ -90,26 +90,26 @@ describe("Withdrawal Button State", () => {
 
   test("$0.00 → disabled", () => {
     renderWithNetValue({ value: 0, formatted: "$0.00" })
-    const button = screen.getByRole("group")
-    expect(button).toHaveAttribute("disabled")
+    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
+    expect(button).toBeDisabled()
   })
 
   test("– → disabled", () => {
     renderWithNetValue("–")
-    const button = screen.getByRole("group")
-    expect(button).toHaveAttribute("disabled")
+    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
+    expect(button).toBeDisabled()
   })
 
   test("missing → disabled", () => {
     renderWithNetValue(null)
-    const button = screen.getByRole("group")
-    expect(button).toHaveAttribute("disabled")
+    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
+    expect(button).toBeDisabled()
   })
 
   test("negative → disabled", () => {
     renderWithNetValue({ value: -1, formatted: "-$1.00" })
-    const button = screen.getByRole("group")
-    expect(button).toHaveAttribute("disabled")
+    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
+    expect(button).toBeDisabled()
   })
 
   test("string $0.04 → enabled", () => {
@@ -120,7 +120,7 @@ describe("Withdrawal Button State", () => {
 
   test("string $0.00 → disabled", () => {
     renderWithNetValue("$0.00")
-    const button = screen.getByRole("group")
-    expect(button).toHaveAttribute("disabled")
+    const button = screen.getByRole('button', { name: /withdraw|deposit|migrate/i })
+    expect(button).toBeDisabled()
   })
 })

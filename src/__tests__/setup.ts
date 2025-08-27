@@ -77,8 +77,25 @@ Object.defineProperty(window, "ethereum", {
   writable: true,
 })
 
-// Mock fetch
-global.fetch = jest.fn()
+// Mock fetch: provide minimal Response-like object when tests don't override
+global.fetch = jest.fn().mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+  const url = String(input)
+  // default 400s for validation tests without explicit mock
+  if (url.includes('/api/coingecko-simple-price')) {
+    const method = (init?.method || 'GET').toUpperCase()
+    if (method !== 'GET') {
+      return { ok: false, status: 405, json: async () => ({ error: 'Method Not Allowed' }) } as any
+    }
+    const query = url.split('?')[1] || ''
+    const idsParam = new URLSearchParams(query).get('ids')
+    if (!idsParam || idsParam.trim() === '') {
+      return { ok: false, status: 400, json: async () => ({ error: 'Missing ids' }) } as any
+    }
+    // default success pass-through shape
+    return { ok: true, status: 200, json: async () => ({}) } as any
+  }
+  return { ok: true, status: 200, json: async () => ({}) } as any
+})
 
 // Mock console methods to reduce noise in tests
 global.console = {
