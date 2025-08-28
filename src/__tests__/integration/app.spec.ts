@@ -72,13 +72,15 @@ const createTestWrapper = () => {
     },
   })
 
-  return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>
-      <WagmiProvider config={{} as any}>
-        <ChakraProvider theme={theme}>{children}</ChakraProvider>
-      </WagmiProvider>
-    </QueryClientProvider>
-  )
+  return ({ children }: { children: React.ReactNode }) => {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider config={{} as any}>
+          <ChakraProvider theme={theme}>{children}</ChakraProvider>
+        </WagmiProvider>
+      </QueryClientProvider>
+    )
+  }
 }
 
 describe("Application Integration Tests", () => {
@@ -206,7 +208,9 @@ describe("Application Integration Tests", () => {
           children,
         }: {
           children: React.ReactNode
-        }) => <div>{children}</div>,
+        }) => {
+          return <div>{children}</div>
+        },
       }))
 
       render(<PageHome />, { wrapper: createTestWrapper() })
@@ -293,6 +297,7 @@ describe("Application Integration Tests", () => {
       // Mock a component that throws an error
       const ErrorComponent = () => {
         throw new Error("Test error")
+        return null
       }
 
       // This would normally be caught by an error boundary
