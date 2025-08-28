@@ -41,10 +41,16 @@ jobs:
           for i in 1 2 3; do
             pnpm install --frozen-lockfile --network-timeout 300000 && break || echo "pnpm install failed (attempt $i), retrying in 10s" && sleep 10;
           done
+      - name: Verify ESLint installation
+        run: |
+          echo "Checking if ESLint is installed..."
+          pnpm list eslint
+          echo "ESLint version:"
+          pnpm exec eslint --version
       - name: Typecheck
         run: pnpm run typecheck:scoped
       - name: Lint (repo, strict)
-        run: pnpm run lint:ci || pnpm run lint:ci; test $? -eq 0
+        run: pnpm run lint:ci
       - name: Upload ESLint JUnit
         if: always()
         uses: actions/upload-artifact@v4
