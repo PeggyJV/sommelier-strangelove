@@ -76,7 +76,7 @@ describe("Withdrawal Button State", () => {
     )
     return {
       ...utils,
-      getBtn: () => utils.getByRole('group'),
+      getBtn: () => utils.getAllByRole("group")[0],
     }
   }
 
@@ -94,26 +94,32 @@ describe("Withdrawal Button State", () => {
 
   test("$0.00 → disabled", () => {
     renderWithNetValue({ value: 0, formatted: "$0.00" })
-    const { getBtn } = renderWithNetValue({ value: 0, formatted: "$0.00" })
-    expect(getBtn()).toHaveAttribute('disabled')
+    const { getBtn } = renderWithNetValue({
+      value: 0,
+      formatted: "$0.00",
+    })
+    expect(getBtn()).toHaveAttribute("disabled")
   })
 
   test("– → disabled", () => {
     renderWithNetValue("–")
     const { getBtn } = renderWithNetValue("–")
-    expect(getBtn()).toHaveAttribute('disabled')
+    expect(getBtn()).toHaveAttribute("disabled")
   })
 
   test("missing → disabled", () => {
     renderWithNetValue(null)
     const { getBtn } = renderWithNetValue(null)
-    expect(getBtn()).toHaveAttribute('disabled')
+    expect(getBtn()).toHaveAttribute("disabled")
   })
 
   test("negative → disabled", () => {
     renderWithNetValue({ value: -1, formatted: "-$1.00" })
-    const { getBtn } = renderWithNetValue({ value: -1, formatted: "-$1.00" })
-    expect(getBtn()).toHaveAttribute('disabled')
+    const { getBtn } = renderWithNetValue({
+      value: -1,
+      formatted: "-$1.00",
+    })
+    expect(getBtn()).toHaveAttribute("disabled")
   })
 
   test("string $0.04 → enabled", () => {
@@ -125,6 +131,6 @@ describe("Withdrawal Button State", () => {
   test("string $0.00 → disabled", () => {
     renderWithNetValue("$0.00")
     const { getBtn } = renderWithNetValue("$0.00")
-    expect(getBtn()).toHaveAttribute('disabled')
+    expect(getBtn()).toHaveAttribute("disabled")
   })
 })

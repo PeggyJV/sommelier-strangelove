@@ -61,6 +61,35 @@ jest.mock("wagmi", () => ({
   createConfig: jest.fn(),
 }))
 
+// Mock viem http transport to avoid real network in tests that accidentally construct clients
+jest.mock("viem/clients/transports/http", () => ({
+  http: () => () => {
+    throw new Error("Network error")
+  },
+}))
+
+// Mock viem core to avoid real client behavior in unit tests
+jest.mock("viem", () => {
+  return {
+    createPublicClient: jest
+      .fn()
+      .mockImplementation(({ transport }) => {
+        return {
+          async getBlockNumber() {
+            throw new Error("HTTP request failed")
+          },
+          async readContract({ abi }: any) {
+            if (!abi || (Array.isArray(abi) && abi.length === 0)) {
+              throw new Error("AbiFunctionNotFoundError")
+            }
+            throw new Error("Contract read failed")
+          },
+        }
+      }),
+    http: (...args: any[]) => ({}),
+  }
+})
+
 // Mock environment variables
 process.env.NEXT_PUBLIC_ALCHEMY_KEY = "test-alchemy-key"
 process.env.NEXT_PUBLIC_INFURA_API_KEY = "test-infura-key"
@@ -78,24 +107,40 @@ Object.defineProperty(window, "ethereum", {
 })
 
 // Mock fetch: provide minimal Response-like object when tests don't override
-global.fetch = jest.fn().mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-  const url = String(input)
-  // default 400s for validation tests without explicit mock
-  if (url.includes('/api/coingecko-simple-price')) {
-    const method = (init?.method || 'GET').toUpperCase()
-    if (method !== 'GET') {
-      return { ok: false, status: 405, json: async () => ({ error: 'Method Not Allowed' }) } as any
+global.fetch = jest
+  .fn()
+  .mockImplementation(
+    async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      // default 400s for validation tests without explicit mock
+      if (url.includes("/api/coingecko-simple-price")) {
+        const method = (init?.method || "GET").toUpperCase()
+        if (method !== "GET") {
+          return {
+            ok: false,
+            status: 405,
+            json: async () => ({ error: "Method Not Allowed" }),
+          } as any
+        }
+        const query = url.split("?")[1] || ""
+        const idsParam = new URLSearchParams(query).get("ids")
+        if (!idsParam || idsParam.trim() === "") {
+          return {
+            ok: false,
+            status: 400,
+            json: async () => ({ error: "Missing ids" }),
+          } as any
+        }
+        // default success pass-through shape
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({}),
+        } as any
+      }
+      return { ok: true, status: 200, json: async () => ({}) } as any
     }
-    const query = url.split('?')[1] || ''
-    const idsParam = new URLSearchParams(query).get('ids')
-    if (!idsParam || idsParam.trim() === '') {
-      return { ok: false, status: 400, json: async () => ({ error: 'Missing ids' }) } as any
-    }
-    // default success pass-through shape
-    return { ok: true, status: 200, json: async () => ({}) } as any
-  }
-  return { ok: true, status: 200, json: async () => ({}) } as any
-})
+  )
 
 // Mock console methods to reduce noise in tests
 global.console = {
@@ -106,4 +151,3 @@ global.console = {
   warn: jest.fn(),
   error: jest.fn(),
 }
-

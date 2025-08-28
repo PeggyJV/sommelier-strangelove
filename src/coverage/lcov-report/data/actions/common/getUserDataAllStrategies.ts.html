@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -196,7 +196,14 @@
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -220,23 +227,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -246,6 +242,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,13 +274,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -351,62 +365,69 @@ export const <span class="cstat-no" title="statement not covered" >getUserDataAl
   chain: string
 }) =&gt; {
   const userDataRes = <span class="cstat-no" title="statement not covered" >await Promise.all(</span>
-    Object.entries(allContracts)?.map(
-<span class="fstat-no" title="function not covered" >      async </span>([key, contracts]) =&gt; {
-        // Only get data for the current chain
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (contracts.chain !== chain) {</span>
-<span class="cstat-no" title="statement not covered" >          return</span>
-        }
-&nbsp;
-        // If chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
-        const address = <span class="cstat-no" title="statement not covered" >key.split("-")[0]</span>
-&nbsp;
-        const strategyData = <span class="cstat-no" title="statement not covered" >strategiesData.find(</span>
-<span class="fstat-no" title="function not covered" >          (i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item?.address === address &amp;&amp; item.config.chain.id === contracts.chain</span>
-        )
-&nbsp;
-        const result = <span class="cstat-no" title="statement not covered" >await reactQueryClient.fetchQuery({</span>
-          queryKey: [
-            "USE_USER_DATA",
-            { contractAddress: address, userAddress },
-          ],
-          queryFn: <span class="fstat-no" title="function not covered" >async </span>() =&gt; {
-            const strategy = <span class="cstat-no" title="statement not covered" >Object.values(cellarDataMap).find(</span>
-<span class="fstat-no" title="function not covered" >              ({</span> config }) =&gt;
-<span class="cstat-no" title="statement not covered" >                config.cellar.address.toLowerCase() ===</span>
-                address.toLowerCase() &amp;&amp; config.chain.id === contracts.chain
-            )!
-&nbsp;
-            const config: ConfigProps = <span class="cstat-no" title="statement not covered" >strategy.config!</span>
-&nbsp;
-            const baseAsset = <span class="cstat-no" title="statement not covered" >config.baseAsset</span>
-            const baseAssetPrice = <span class="cstat-no" title="statement not covered" >await fetchCoingeckoPrice(</span>
-              baseAsset,
-              "usd"
-            )
-&nbsp;
-<span class="cstat-no" title="statement not covered" >            try {</span>
-<span class="cstat-no" title="statement not covered" >              return await getUserData({</span>
-                address,
-                contracts,
-                sommPrice,
-                strategyData: strategyData,
-                userAddress,
-                baseAssetPrice: baseAssetPrice!,
-                chain: contracts.chain,
-              })
-            } catch (error) {
-<span class="cstat-no" title="statement not covered" >              console.log("error", error)</span>
-            }
-          }
-        }
-        )
-<span class="cstat-no" title="statement not covered" >        return result</span>
+    Object.entries(allContracts)?.map(<span class="fstat-no" title="function not covered" >async </span>([key, contracts]) =&gt; {
+      // Only get data for the current chain
+<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (contracts.chain !== chain) {</span>
+<span class="cstat-no" title="statement not covered" >        return</span>
       }
 &nbsp;
-    )
-  )
+      // If chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
+      const address = <span class="cstat-no" title="statement not covered" >key.split("-")[0]</span>
 &nbsp;
+      const strategyData = <span class="cstat-no" title="statement not covered" >strategiesData.find(</span>
+<span class="fstat-no" title="function not covered" >        (i</span>tem) =&gt;
+<span class="cstat-no" title="statement not covered" >          item?.address === address &amp;&amp;</span>
+          item.config.chain.id === contracts.chain
+      )
+&nbsp;
+      const result = <span class="cstat-no" title="statement not covered" >await reactQueryClient.fetchQuery({</span>
+        queryKey: [
+          "USE_USER_DATA",
+          { contractAddress: address, userAddress },
+        ],
+        queryFn: <span class="fstat-no" title="function not covered" >async </span>() =&gt; {
+          const strategy = <span class="cstat-no" title="statement not covered" >Object.values(cellarDataMap).find(</span>
+<span class="fstat-no" title="function not covered" >            ({</span> config }) =&gt;
+<span class="cstat-no" title="statement not covered" >              config.cellar.address.toLowerCase() ===</span>
+                address.toLowerCase() &amp;&amp;
+              config.chain.id === contracts.chain
+          )!
+&nbsp;
+          const config: ConfigProps = <span class="cstat-no" title="statement not covered" >strategy.config!</span>
+&nbsp;
+          const baseAsset = <span class="cstat-no" title="statement not covered" >config.baseAsset</span>
+          const baseAssetPrice = <span class="cstat-no" title="statement not covered" >await fetchCoingeckoPrice(</span>
+            baseAsset,
+            "usd"
+          )
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          try {</span>
+<span class="cstat-no" title="statement not covered" >            return await getUserData({</span>
+              address,
+              contracts,
+              sommPrice,
+              strategyData: strategyData,
+              userAddress,
+              baseAssetPrice: baseAssetPrice!,
+              chain: contracts.chain,
+            })
+          } catch (error) {
+<span class="cstat-no" title="statement not covered" >            console.log("error", error)</span>
+            // Return a safe fallback to keep the query defined
+<span class="cstat-no" title="statement not covered" >            return {</span>
+              shares: 0n,
+              stakedShares: 0n,
+              strategyData: null,
+              allStrategiesData: null,
+              netValue: 0,
+              userStakes: null,
+            } as any
+          }
+        },
+      })
+<span class="cstat-no" title="statement not covered" >      return result</span>
+    })
+  )
 &nbsp;
   const userData = <span class="cstat-no" title="statement not covered" >userDataRes.filter(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >!!item)</span></span>
 &nbsp;
@@ -469,7 +490,7 @@ export const <span class="cstat-no" title="statement not covered" >getUserDataAl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-18T11:52:33.625Z
+                at 2025-08-28T09:49:50.526Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
