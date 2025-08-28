@@ -47,6 +47,8 @@ jobs:
           pnpm list eslint
           echo "ESLint version:"
           pnpm exec eslint --version
+      - name: Create reports directory
+        run: mkdir -p reports
       - name: Typecheck
         run: pnpm run typecheck:scoped
       - name: Lint (repo, strict)
@@ -93,6 +95,10 @@ jobs:
           for i in 1 2 3; do
             pnpm install --frozen-lockfile --network-timeout 300000 && break || echo "pnpm install failed (attempt $i), retrying in 10s" && sleep 10;
           done
+      - name: Verify dependencies
+        run: |
+          echo "Checking if dependencies are installed..."
+          pnpm list --depth=0
       - name: Build
         run: pnpm build
       - name: Install Playwright browsers
