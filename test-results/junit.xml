@@ -1,141 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="29" failures="5" errors="0" time="0.963">
-  <testsuite name="Withdrawal Button State" errors="0" failures="5" skipped="0" timestamp="2025-08-28T14:22:32" time="0.564" tests="8">
-    <testcase classname="Withdrawal Button State $0.04 → enabled" name="Withdrawal Button State $0.04 → enabled" time="0.025">
-    </testcase>
-    <testcase classname="Withdrawal Button State $0.79 → enabled" name="Withdrawal Button State $0.79 → enabled" time="0.004">
-    </testcase>
-    <testcase classname="Withdrawal Button State $0.00 → disabled" name="Withdrawal Button State $0.00 → disabled" time="0.007">
-      <failure>Error: expect(element).toHaveAttribute(&quot;disabled&quot;) // element.hasAttribute(&quot;disabled&quot;)
-
-Expected the element to have attribute:
-  disabled
-Received:
-  null
-    at Object.&lt;anonymous&gt; (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/src/components/_buttons/__tests__/withdrawState.spec.tsx:101:22)
-    at Promise.then.completed (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:231:10)
-    at _callCircusTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:316:40)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at _runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:252:3)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:126:9)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:121:9)
-    at run (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:71:3)
-    at runAndTransformResultsToJestFormat (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
-    at jestAdapter (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
-    at runTestInternal (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
-    at runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)</failure>
-    </testcase>
-    <testcase classname="Withdrawal Button State – → disabled" name="Withdrawal Button State – → disabled" time="0.005">
-      <failure>Error: expect(element).toHaveAttribute(&quot;disabled&quot;) // element.hasAttribute(&quot;disabled&quot;)
-
-Expected the element to have attribute:
-  disabled
-Received:
-  null
-    at Object.&lt;anonymous&gt; (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/src/components/_buttons/__tests__/withdrawState.spec.tsx:107:22)
-    at Promise.then.completed (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:231:10)
-    at _callCircusTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:316:40)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at _runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:252:3)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:126:9)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:121:9)
-    at run (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:71:3)
-    at runAndTransformResultsToJestFormat (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
-    at jestAdapter (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
-    at runTestInternal (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
-    at runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)</failure>
-    </testcase>
-    <testcase classname="Withdrawal Button State missing → disabled" name="Withdrawal Button State missing → disabled" time="0.005">
-      <failure>Error: expect(element).toHaveAttribute(&quot;disabled&quot;) // element.hasAttribute(&quot;disabled&quot;)
-
-Expected the element to have attribute:
-  disabled
-Received:
-  null
-    at Object.&lt;anonymous&gt; (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/src/components/_buttons/__tests__/withdrawState.spec.tsx:113:22)
-    at Promise.then.completed (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:231:10)
-    at _callCircusTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:316:40)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at _runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:252:3)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:126:9)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:121:9)
-    at run (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:71:3)
-    at runAndTransformResultsToJestFormat (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
-    at jestAdapter (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
-    at runTestInternal (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
-    at runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)</failure>
-    </testcase>
-    <testcase classname="Withdrawal Button State negative → disabled" name="Withdrawal Button State negative → disabled" time="0.005">
-      <failure>Error: expect(element).toHaveAttribute(&quot;disabled&quot;) // element.hasAttribute(&quot;disabled&quot;)
-
-Expected the element to have attribute:
-  disabled
-Received:
-  null
-    at Object.&lt;anonymous&gt; (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/src/components/_buttons/__tests__/withdrawState.spec.tsx:122:22)
-    at Promise.then.completed (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:231:10)
-    at _callCircusTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:316:40)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at _runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:252:3)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:126:9)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:121:9)
-    at run (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:71:3)
-    at runAndTransformResultsToJestFormat (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
-    at jestAdapter (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
-    at runTestInternal (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
-    at runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)</failure>
-    </testcase>
-    <testcase classname="Withdrawal Button State string $0.04 → enabled" name="Withdrawal Button State string $0.04 → enabled" time="0.002">
-    </testcase>
-    <testcase classname="Withdrawal Button State string $0.00 → disabled" name="Withdrawal Button State string $0.00 → disabled" time="0.004">
-      <failure>Error: expect(element).toHaveAttribute(&quot;disabled&quot;) // element.hasAttribute(&quot;disabled&quot;)
-
-Expected the element to have attribute:
-  disabled
-Received:
-  null
-    at Object.&lt;anonymous&gt; (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/src/components/_buttons/__tests__/withdrawState.spec.tsx:134:22)
-    at Promise.then.completed (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/utils.js:231:10)
-    at _callCircusTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:316:40)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at _runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:252:3)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:126:9)
-    at _runTestsForDescribeBlock (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:121:9)
-    at run (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/run.js:71:3)
-    at runAndTransformResultsToJestFormat (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
-    at jestAdapter (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-circus@29.7.0_babel-plugin-macros@3.1.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
-    at runTestInternal (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
-    at runTest (/Users/henriots/Desktop/projektid/SOMM/sommelier-strangelove/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)</failure>
-    </testcase>
-  </testsuite>
-  <testsuite name="sortVaults" errors="0" failures="0" skipped="0" timestamp="2025-08-28T14:22:33" time="0.024" tests="4">
-    <testcase classname="sortVaults not connected → TVL desc" name="sortVaults not connected → TVL desc" time="0.001">
-    </testcase>
-    <testcase classname="sortVaults connected → Net Value desc, fallback TVL" name="sortVaults connected → Net Value desc, fallback TVL" time="0">
-    </testcase>
-    <testcase classname="sortVaults handles various net value formats" name="sortVaults handles various net value formats" time="0.001">
-    </testcase>
-    <testcase classname="sortVaults handles TVL with K/M/B suffixes" name="sortVaults handles TVL with K/M/B suffixes" time="0">
-    </testcase>
-  </testsuite>
-  <testsuite name="RPC Connection Tests" errors="0" failures="0" skipped="0" timestamp="2025-08-28T14:22:33" time="0.026" tests="17">
-    <testcase classname="RPC Connection Tests RPC Endpoint Health Checks should handle Alchemy RPC connection failure gracefully" name="RPC Connection Tests RPC Endpoint Health Checks should handle Alchemy RPC connection failure gracefully" time="0.001">
+<testsuites name="jest tests" tests="63" failures="0" errors="0" time="2.012">
+  <testsuite name="RPC Connection Tests" errors="0" failures="0" skipped="0" timestamp="2025-08-28T14:50:32" time="0.293" tests="17">
+    <testcase classname="RPC Connection Tests RPC Endpoint Health Checks should handle Alchemy RPC connection failure gracefully" name="RPC Connection Tests RPC Endpoint Health Checks should handle Alchemy RPC connection failure gracefully" time="0.003">
     </testcase>
     <testcase classname="RPC Connection Tests RPC Endpoint Health Checks should handle Infura RPC connection failure gracefully" name="RPC Connection Tests RPC Endpoint Health Checks should handle Infura RPC connection failure gracefully" time="0">
     </testcase>
     <testcase classname="RPC Connection Tests RPC Endpoint Health Checks should handle public RPC endpoint failure gracefully" name="RPC Connection Tests RPC Endpoint Health Checks should handle public RPC endpoint failure gracefully" time="0.001">
     </testcase>
-    <testcase classname="RPC Connection Tests RPC Endpoint Health Checks should handle timeout errors gracefully" name="RPC Connection Tests RPC Endpoint Health Checks should handle timeout errors gracefully" time="0.001">
+    <testcase classname="RPC Connection Tests RPC Endpoint Health Checks should handle timeout errors gracefully" name="RPC Connection Tests RPC Endpoint Health Checks should handle timeout errors gracefully" time="0">
     </testcase>
     <testcase classname="RPC Connection Tests RPC Configuration Tests should use Alchemy when API key is available" name="RPC Connection Tests RPC Configuration Tests should use Alchemy when API key is available" time="0">
     </testcase>
@@ -143,7 +15,7 @@ Received:
     </testcase>
     <testcase classname="RPC Connection Tests RPC Configuration Tests should fallback to public endpoint when no API keys are available" name="RPC Connection Tests RPC Configuration Tests should fallback to public endpoint when no API keys are available" time="0">
     </testcase>
-    <testcase classname="RPC Connection Tests Error Recovery Tests should retry failed requests with exponential backoff" name="RPC Connection Tests Error Recovery Tests should retry failed requests with exponential backoff" time="0">
+    <testcase classname="RPC Connection Tests Error Recovery Tests should retry failed requests with exponential backoff" name="RPC Connection Tests Error Recovery Tests should retry failed requests with exponential backoff" time="0.001">
     </testcase>
     <testcase classname="RPC Connection Tests Error Recovery Tests should handle rate limiting gracefully" name="RPC Connection Tests Error Recovery Tests should handle rate limiting gracefully" time="0">
     </testcase>
@@ -162,6 +34,104 @@ Received:
     <testcase classname="RPC Connection Tests Environment Variable Tests should handle missing environment variables gracefully" name="RPC Connection Tests Environment Variable Tests should handle missing environment variables gracefully" time="0">
     </testcase>
     <testcase classname="RPC Connection Tests Environment Variable Tests should use environment variables when available" name="RPC Connection Tests Environment Variable Tests should use environment variables when available" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="CoinGecko API Tests" errors="0" failures="0" skipped="0" timestamp="2025-08-28T14:50:32" time="0.296" tests="11">
+    <testcase classname="CoinGecko API Tests API Error Handling should handle unknown coin ID gracefully" name="CoinGecko API Tests API Error Handling should handle unknown coin ID gracefully" time="0.003">
+    </testcase>
+    <testcase classname="CoinGecko API Tests API Error Handling should handle network errors gracefully" name="CoinGecko API Tests API Error Handling should handle network errors gracefully" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests API Error Handling should handle malformed response gracefully" name="CoinGecko API Tests API Error Handling should handle malformed response gracefully" time="0.001">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Input Validation should handle missing base parameter" name="CoinGecko API Tests Input Validation should handle missing base parameter" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Input Validation should handle missing quote parameter" name="CoinGecko API Tests Input Validation should handle missing quote parameter" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Input Validation should handle empty parameters" name="CoinGecko API Tests Input Validation should handle empty parameters" time="0.001">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Successful API Calls should return price for valid coin" name="CoinGecko API Tests Successful API Calls should return price for valid coin" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Successful API Calls should handle multiple currencies" name="CoinGecko API Tests Successful API Calls should handle multiple currencies" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Caching Headers should set proper cache headers" name="CoinGecko API Tests Caching Headers should set proper cache headers" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests API Key Handling should use pro API when key is available" name="CoinGecko API Tests API Key Handling should use pro API when key is available" time="0.001">
+    </testcase>
+    <testcase classname="CoinGecko API Tests API Key Handling should use free API when no key is available" name="CoinGecko API Tests API Key Handling should use free API when no key is available" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="sortVaults" errors="0" failures="0" skipped="0" timestamp="2025-08-28T14:50:32" time="0.296" tests="4">
+    <testcase classname="sortVaults not connected → TVL desc" name="sortVaults not connected → TVL desc" time="0.002">
+    </testcase>
+    <testcase classname="sortVaults connected → Net Value desc, fallback TVL" name="sortVaults connected → Net Value desc, fallback TVL" time="0">
+    </testcase>
+    <testcase classname="sortVaults handles various net value formats" name="sortVaults handles various net value formats" time="0">
+    </testcase>
+    <testcase classname="sortVaults handles TVL with K/M/B suffixes" name="sortVaults handles TVL with K/M/B suffixes" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="StrategyRow" errors="0" failures="0" skipped="0" timestamp="2025-08-28T14:50:32" time="1.397" tests="31">
+    <testcase classname="StrategyRow Component Rendering should render vault name correctly" name="StrategyRow Component Rendering should render vault name correctly" time="0.049">
+    </testcase>
+    <testcase classname="StrategyRow Component Rendering should render provider name correctly" name="StrategyRow Component Rendering should render provider name correctly" time="0.013">
+    </testcase>
+    <testcase classname="StrategyRow Component Rendering should render Somm-native badge for Somm-native vaults" name="StrategyRow Component Rendering should render Somm-native badge for Somm-native vaults" time="0.011">
+    </testcase>
+    <testcase classname="StrategyRow Component Rendering should render chain badge with logo" name="StrategyRow Component Rendering should render chain badge with logo" time="0.011">
+    </testcase>
+    <testcase classname="StrategyRow Component Rendering should render TVL value correctly" name="StrategyRow Component Rendering should render TVL value correctly" time="0.009">
+    </testcase>
+    <testcase classname="StrategyRow Component Rendering should render Net Value correctly" name="StrategyRow Component Rendering should render Net Value correctly" time="0.009">
+    </testcase>
+    <testcase classname="StrategyRow Component Rendering should render Net Rewards correctly" name="StrategyRow Component Rendering should render Net Rewards correctly" time="0.009">
+    </testcase>
+    <testcase classname="StrategyRow Component Rendering should render description correctly" name="StrategyRow Component Rendering should render description correctly" time="0.007">
+    </testcase>
+    <testcase classname="StrategyRow Responsive Design should have responsive grid layout" name="StrategyRow Responsive Design should have responsive grid layout" time="0.01">
+    </testcase>
+    <testcase classname="StrategyRow Responsive Design should have responsive image sizing" name="StrategyRow Responsive Design should have responsive image sizing" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Responsive Design should have responsive font sizes" name="StrategyRow Responsive Design should have responsive font sizes" time="0.009">
+    </testcase>
+    <testcase classname="StrategyRow Responsive Design should have responsive spacing" name="StrategyRow Responsive Design should have responsive spacing" time="0.007">
+    </testcase>
+    <testcase classname="StrategyRow KPI Grid Layout should render KPI grid with three columns" name="StrategyRow KPI Grid Layout should render KPI grid with three columns" time="0.009">
+    </testcase>
+    <testcase classname="StrategyRow KPI Grid Layout should have horizontal KPI layout on mobile" name="StrategyRow KPI Grid Layout should have horizontal KPI layout on mobile" time="0.007">
+    </testcase>
+    <testcase classname="StrategyRow Action Button should render deposit button when connected" name="StrategyRow Action Button should render deposit button when connected" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Action Button should render &quot;Deposit&quot; button when connected" name="StrategyRow Action Button should render &quot;Deposit&quot; button when connected" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Action Button should have responsive button sizing" name="StrategyRow Action Button should have responsive button sizing" time="0.007">
+    </testcase>
+    <testcase classname="StrategyRow Error Handling should handle missing vault name gracefully" name="StrategyRow Error Handling should handle missing vault name gracefully" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Error Handling should handle missing provider gracefully" name="StrategyRow Error Handling should handle missing provider gracefully" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Error Handling should handle missing TVL gracefully" name="StrategyRow Error Handling should handle missing TVL gracefully" time="0.007">
+    </testcase>
+    <testcase classname="StrategyRow Error Handling should handle missing rewards gracefully" name="StrategyRow Error Handling should handle missing rewards gracefully" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Error Handling should handle missing chain config gracefully" name="StrategyRow Error Handling should handle missing chain config gracefully" time="0.006">
+    </testcase>
+    <testcase classname="StrategyRow Error Handling should handle missing description gracefully" name="StrategyRow Error Handling should handle missing description gracefully" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Data Display should display fallback values when data is missing" name="StrategyRow Data Display should display fallback values when data is missing" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Data Display should handle zero values correctly" name="StrategyRow Data Display should handle zero values correctly" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Data Display should handle large numbers correctly" name="StrategyRow Data Display should handle large numbers correctly" time="0.007">
+    </testcase>
+    <testcase classname="StrategyRow Accessibility should have proper alt text for images" name="StrategyRow Accessibility should have proper alt text for images" time="0.008">
+    </testcase>
+    <testcase classname="StrategyRow Accessibility should have proper ARIA labels" name="StrategyRow Accessibility should have proper ARIA labels" time="0.007">
+    </testcase>
+    <testcase classname="StrategyRow Accessibility should be keyboard navigable" name="StrategyRow Accessibility should be keyboard navigable" time="0.007">
+    </testcase>
+    <testcase classname="StrategyRow Pre-launch State should show countdown for pre-launch vaults" name="StrategyRow Pre-launch State should show countdown for pre-launch vaults" time="0.011">
+    </testcase>
+    <testcase classname="StrategyRow Pre-launch State should disable deposit button for pre-launch vaults" name="StrategyRow Pre-launch State should disable deposit button for pre-launch vaults" time="0.011">
     </testcase>
   </testsuite>
 </testsuites>
