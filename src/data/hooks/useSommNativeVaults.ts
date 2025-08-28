@@ -29,10 +29,19 @@ export function useSommNativeVaults() {
   return useQuery<{ data: ApiVault[] }, Error, SommNativeListItem[]>({
     queryKey: ["USE_SOMM_NATIVE_VAULTS_MIN"],
     queryFn: async () => {
-      const res = await fetch("/api/new-vaults")
-      if (!res.ok)
-        throw new Error("Failed to fetch somm native vaults")
-      return res.json()
+      try {
+        const res = await fetch("/api/new-vaults")
+        if (!res.ok) {
+          throw new Error(
+            `Failed to fetch somm native vaults: ${res.status} ${res.statusText}`
+          )
+        }
+        return res.json()
+      } catch (error) {
+        console.warn("Failed to fetch somm native vaults:", error)
+        // Return empty data structure when fetch fails
+        return { data: [] }
+      }
     },
     select: (resp) => {
       const items = resp?.data ?? []
@@ -60,5 +69,8 @@ export function useSommNativeVaults() {
     },
     staleTime: 120_000,
     suspense: true,
+    retry: 3,
+    retryDelay: (attemptIndex) =>
+      Math.min(1000 * 2 ** attemptIndex, 30000),
   })
 }
