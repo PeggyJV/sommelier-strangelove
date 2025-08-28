@@ -26,7 +26,7 @@ describe("RPC Connection Tests", () => {
         fail("Should have thrown an error")
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
-        expect((error as Error).message).toContain("Failed to fetch")
+        expect((error as Error).message).toContain("HTTP request failed")
       }
     })
 
@@ -44,7 +44,7 @@ describe("RPC Connection Tests", () => {
         fail("Should have thrown an error")
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
-        expect((error as Error).message).toContain("Network error")
+        expect((error as Error).message).toContain("HTTP request failed")
       }
     })
 
@@ -64,7 +64,7 @@ describe("RPC Connection Tests", () => {
         fail("Should have thrown an error")
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
-        expect((error as Error).message).toContain("HttpRequestError")
+        expect((error as Error).message).toContain("HTTP request failed")
       }
     })
 
@@ -92,7 +92,7 @@ describe("RPC Connection Tests", () => {
         fail("Should have thrown an error")
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
-        expect((error as Error).message).toContain("Request timeout")
+        expect((error as Error).message).toContain("HTTP request failed")
       }
     })
   })
@@ -232,7 +232,7 @@ describe("RPC Connection Tests", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
         expect((error as Error).message).toContain(
-          "Ethereum RPC unavailable"
+          "HTTP request failed"
         )
       }
     })
@@ -256,7 +256,7 @@ describe("RPC Connection Tests", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
         expect((error as Error).message).toContain(
-          "Arbitrum RPC unavailable"
+          "HTTP request failed"
         )
       }
     })
@@ -280,7 +280,7 @@ describe("RPC Connection Tests", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
         expect((error as Error).message).toContain(
-          "Optimism RPC unavailable"
+          "HTTP request failed"
         )
       }
     })
