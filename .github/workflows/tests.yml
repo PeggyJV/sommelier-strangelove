@@ -22,9 +22,20 @@ jobs:
           cache: 'pnpm'
       - name: Print versions
         run: |
+          echo "Node.js version:"
           node -v
+          echo "pnpm version:"
           pnpm -v
-          pnpm ls eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-config-next typescript || true
+          echo "Current directory:"
+          pwd
+          echo "Directory contents:"
+          ls -la
+          echo "Checking if node_modules exists:"
+          ls -la node_modules || echo "node_modules does not exist yet"
+      - name: Check package.json
+        run: |
+          echo "Package.json contents:"
+          cat package.json | grep -A 10 -B 5 "eslint"
       - name: Setup pnpm store cache
         id: pnpm-cache
         run: |
@@ -39,8 +50,18 @@ jobs:
       - name: Install deps (with retry)
         run: |
           for i in 1 2 3; do
-            pnpm install --frozen-lockfile --network-timeout 300000 && break || echo "pnpm install failed (attempt $i), retrying in 10s" && sleep 10;
+            echo "Installation attempt $i..."
+            pnpm install --frozen-lockfile --network-timeout 300000 && echo "Installation successful" && break || echo "pnpm install failed (attempt $i), retrying in 10s" && sleep 10;
           done
+      - name: Verify installation
+        run: |
+          echo "Verifying installation..."
+          echo "node_modules exists:"
+          ls -la node_modules || echo "node_modules not found"
+          echo "ESLint binary exists:"
+          ls -la node_modules/.bin/eslint || echo "ESLint binary not found"
+          echo "pnpm list output:"
+          pnpm list --depth=0 | grep eslint || echo "ESLint not found in pnpm list"
       - name: Verify ESLint installation
         run: |
           echo "Checking if ESLint is installed..."
