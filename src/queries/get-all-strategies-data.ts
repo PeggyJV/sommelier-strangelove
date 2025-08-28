@@ -14,14 +14,24 @@ export const fetchCellarStrategyData = async () => {
 
   try {
     const data = await fetch(url)
+
+    if (!data.ok) {
+      throw new Error(`HTTP error! status: ${data.status}`)
+    }
+
     const result = await data.json()
 
     return result.result
   } catch (error) {
-    console.log(
+    console.warn(
       "Error fetching Aggregate Cellar Strategy Data",
       error
     )
-    throw Error(error as string)
+    // Return a default structure instead of throwing
+    return {
+      data: {
+        cellars: [],
+      },
+    }
   }
 }
