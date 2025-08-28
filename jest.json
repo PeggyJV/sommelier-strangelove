@@ -27,7 +27,11 @@
     "^context/(.*)$": "<rootDir>/context/$1",
     "^theme/(.*)$": "<rootDir>/theme/$1",
     "^src/(.*)$": "<rootDir>/$1",
-    "^wagmi/chains$": "<rootDir>/__tests__/stubs/wagmi-chains.js"
+    "^wagmi/chains$": "<rootDir>/__tests__/stubs/wagmi-chains.js",
+    "^wagmi/actions$": "<rootDir>/__tests__/stubs/wagmi-actions.ts",
+    "^@rainbow-me/rainbowkit$": "<rootDir>/__tests__/stubs/rainbowkit.tsx",
+    "^viem/clients/transports/http$": "<rootDir>/__tests__/stubs/viem-http.ts",
+    "^viem$": "<rootDir>/__tests__/stubs/viem-core.ts"
   },
   "collectCoverageFrom": [
     "**/*.{ts,tsx}",
@@ -58,6 +62,6 @@
     "/coverage/"
   ],
   "transformIgnorePatterns": [
-    "node_modules/(?!(wagmi|@wagmi|viem|@viem)/)"
+    "node_modules/(?!(@rainbow-me|wagmi|@wagmi|viem|@viem)/)"
   ]
 }

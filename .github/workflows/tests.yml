@@ -20,6 +20,11 @@ jobs:
         with:
           node-version: 22
           cache: 'pnpm'
+      - name: Print versions
+        run: |
+          node -v
+          pnpm -v
+          pnpm ls eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-config-next typescript || true
       - name: Setup pnpm store cache
         id: pnpm-cache
         run: |
@@ -38,8 +43,14 @@ jobs:
           done
       - name: Typecheck
         run: pnpm run typecheck:scoped
-      - name: Lint (scoped)
-        run: pnpm run lint:scoped
+      - name: Lint (repo, strict)
+        run: pnpm run lint:ci || pnpm run lint:ci; test $? -eq 0
+      - name: Upload ESLint JUnit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eslint-junit
+          path: reports/eslint-junit.xml
       - name: Test with coverage
         run: pnpm run test:all -- --coverage
       - name: Upload coverage

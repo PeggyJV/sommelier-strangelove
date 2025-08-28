@@ -119,14 +119,14 @@ describe("CoinGecko API Tests", () => {
       mockReq.query = {}
 
       const response = await fetch("/api/coingecko-simple-price")
-      expect(response.status).toBe(400)
+      expect(response && (response as any).status).toBe(400)
     })
 
     it("should handle empty coin IDs array", async () => {
       mockReq.query = { ids: "" }
 
       const response = await fetch("/api/coingecko-simple-price?ids=")
-      expect(response.status).toBe(400)
+      expect(response && (response as any).status).toBe(400)
     })
 
     it("should handle invalid coin ID format", async () => {
@@ -135,7 +135,7 @@ describe("CoinGecko API Tests", () => {
       const response = await fetch(
         "/api/coingecko-simple-price?ids=invalid-format-123"
       )
-      expect(response.status).toBe(400)
+      expect(response && (response as any).status).toBe(400)
     })
 
     it("should handle multiple coin IDs", async () => {
@@ -255,7 +255,7 @@ describe("CoinGecko API Tests", () => {
       const response = await fetch("/api/coingecko-simple-price", {
         method: "POST",
       })
-      expect(response.status).toBe(405)
+      expect(response && (response as any).status).toBe(405)
     })
 
     it("should reject PUT requests", async () => {
@@ -264,7 +264,7 @@ describe("CoinGecko API Tests", () => {
       const response = await fetch("/api/coingecko-simple-price", {
         method: "PUT",
       })
-      expect(response.status).toBe(405)
+      expect(response && (response as any).status).toBe(405)
     })
 
     it("should reject DELETE requests", async () => {
@@ -273,7 +273,7 @@ describe("CoinGecko API Tests", () => {
       const response = await fetch("/api/coingecko-simple-price", {
         method: "DELETE",
       })
-      expect(response.status).toBe(405)
+      expect(response && (response as any).status).toBe(405)
     })
   })
 
@@ -374,4 +374,3 @@ describe("CoinGecko API Tests", () => {
     })
   })
 })
-
