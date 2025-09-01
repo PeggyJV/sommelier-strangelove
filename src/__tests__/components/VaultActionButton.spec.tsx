@@ -1,13 +1,11 @@
 import React from "react"
 import {
-  render,
   screen,
   fireEvent,
   waitFor,
 } from "@testing-library/react"
-import { ChakraProvider } from "@chakra-ui/react"
 import { VaultActionButton } from "../../components/_buttons/VaultActionButton"
-import theme from "../../theme"
+import { renderWithProviders } from "../../../tests/utils/renderWithProviders"
 
 // Mock the deposit modal store
 jest.mock("../../data/hooks/useDepositModalStore", () => ({
@@ -15,12 +13,6 @@ jest.mock("../../data/hooks/useDepositModalStore", () => ({
     setIsOpen: jest.fn(),
   }),
 }))
-
-const renderWithTheme = (component: React.ReactElement) => {
-  return render(
-    <ChakraProvider theme={theme}>{component}</ChakraProvider>
-  )
-}
 
 describe("VaultActionButton", () => {
   const mockVault = {
@@ -40,7 +32,7 @@ describe("VaultActionButton", () => {
 
   describe("Button Rendering", () => {
     it('should render "Deposit" button for active vault', () => {
-      renderWithTheme(<VaultActionButton vault={mockVault} />)
+      renderWithProviders(<VaultActionButton vault={mockVault} />)
       expect(screen.getByText("Deposit")).toBeInTheDocument()
     })
 
@@ -49,37 +41,35 @@ describe("VaultActionButton", () => {
         ...mockVault,
         status: "withdrawals-only" as const,
       }
-      renderWithTheme(<VaultActionButton vault={withdrawalVault} />)
+      renderWithProviders(<VaultActionButton vault={withdrawalVault} />)
       expect(screen.getByText("Enter Withdrawal")).toBeInTheDocument()
     })
 
     it('should render "Paused" button for paused vault', () => {
       const pausedVault = { ...mockVault, status: "paused" as const }
-      renderWithTheme(<VaultActionButton vault={pausedVault} />)
+      renderWithProviders(<VaultActionButton vault={pausedVault} />)
       expect(screen.getByText("Paused")).toBeInTheDocument()
     })
 
     it('should render "Switch network" button when on wrong chain', () => {
-      // Mock useAccount to return different chain
-      jest.doMock("wagmi", () => ({
-        useAccount: () => ({
-          address: "0x1234567890123456789012345678901234567890",
-          isConnected: true,
-          chain: { id: 137, name: "Polygon" }, // Different chain
-        }),
-        useSwitchChain: () => ({
-          switchChainAsync: jest.fn(),
-        }),
-      }))
-
-      renderWithTheme(<VaultActionButton vault={mockVault} />)
+      // Create a vault that expects a different chain
+      const wrongChainVault = {
+        ...mockVault,
+        config: {
+          chain: {
+            wagmiId: 137, // Polygon
+            displayName: "Polygon",
+          },
+        },
+      }
+      renderWithProviders(<VaultActionButton vault={wrongChainVault} />)
       expect(screen.getByText("Switch network")).toBeInTheDocument()
     })
   })
 
   describe("Button Interactions", () => {
     it("should call onAction when Deposit button is clicked", async () => {
-      renderWithTheme(<VaultActionButton vault={mockVault} />)
+      renderWithProviders(<VaultActionButton vault={mockVault} />)
 
       const depositButton = screen.getByText("Deposit")
       fireEvent.click(depositButton)
@@ -94,7 +84,7 @@ describe("VaultActionButton", () => {
         ...mockVault,
         status: "withdrawals-only" as const,
       }
-      renderWithTheme(<VaultActionButton vault={withdrawalVault} />)
+      renderWithProviders(<VaultActionButton vault={withdrawalVault} />)
 
       const withdrawalButton = screen.getByText("Enter Withdrawal")
       fireEvent.click(withdrawalButton)
@@ -106,7 +96,7 @@ describe("VaultActionButton", () => {
 
     it("should not call onAction when Paused button is clicked", async () => {
       const pausedVault = { ...mockVault, status: "paused" as const }
-      renderWithTheme(<VaultActionButton vault={pausedVault} />)
+      renderWithProviders(<VaultActionButton vault={pausedVault} />)
 
       const pausedButton = screen.getByText("Paused")
       fireEvent.click(pausedButton)
@@ -119,7 +109,7 @@ describe("VaultActionButton", () => {
 
   describe("Button Styling", () => {
     it("should have correct styling for Deposit button (BaseButton)", () => {
-      renderWithTheme(<VaultActionButton vault={mockVault} />)
+      renderWithProviders(<VaultActionButton vault={mockVault} />)
 
       const depositButton = screen.getByText("Deposit")
       expect(depositButton).toHaveClass("chakra-button")
@@ -134,7 +124,7 @@ describe("VaultActionButton", () => {
         ...mockVault,
         status: "withdrawals-only" as const,
       }
-      renderWithTheme(<VaultActionButton vault={withdrawalVault} />)
+      renderWithProviders(<VaultActionButton vault={withdrawalVault} />)
 
       const withdrawalButton = screen.getByText("Enter Withdrawal")
       expect(withdrawalButton).toHaveClass("chakra-button")
@@ -146,19 +136,17 @@ describe("VaultActionButton", () => {
     })
 
     it("should have correct styling for Switch network button (BaseButton)", () => {
-      // Mock useAccount to return different chain
-      jest.doMock("wagmi", () => ({
-        useAccount: () => ({
-          address: "0x1234567890123456789012345678901234567890",
-          isConnected: true,
-          chain: { id: 137, name: "Polygon" },
-        }),
-        useSwitchChain: () => ({
-          switchChainAsync: jest.fn(),
-        }),
-      }))
-
-      renderWithTheme(<VaultActionButton vault={mockVault} />)
+      // Create a vault that expects a different chain
+      const wrongChainVault = {
+        ...mockVault,
+        config: {
+          chain: {
+            wagmiId: 137, // Polygon
+            displayName: "Polygon",
+          },
+        },
+      }
+      renderWithProviders(<VaultActionButton vault={wrongChainVault} />)
 
       const switchButton = screen.getByText("Switch network")
       expect(switchButton).toHaveClass("chakra-button")
@@ -171,7 +159,7 @@ describe("VaultActionButton", () => {
 
   describe("Accessibility", () => {
     it("should have proper ARIA attributes", () => {
-      renderWithTheme(<VaultActionButton vault={mockVault} />)
+      renderWithProviders(<VaultActionButton vault={mockVault} />)
 
       const depositButton = screen.getByText("Deposit")
       expect(depositButton).toHaveAttribute("role", "button")
@@ -180,14 +168,14 @@ describe("VaultActionButton", () => {
 
     it("should be disabled when vault is paused", () => {
       const pausedVault = { ...mockVault, status: "paused" as const }
-      renderWithTheme(<VaultActionButton vault={pausedVault} />)
+      renderWithProviders(<VaultActionButton vault={pausedVault} />)
 
       const pausedButton = screen.getByText("Paused")
       expect(pausedButton).toBeDisabled()
     })
 
     it("should handle keyboard navigation", () => {
-      renderWithTheme(<VaultActionButton vault={mockVault} />)
+      renderWithProviders(<VaultActionButton vault={mockVault} />)
 
       const depositButton = screen.getByText("Deposit")
 
@@ -209,7 +197,7 @@ describe("VaultActionButton", () => {
       const vaultWithoutConfig = { status: "active" as const }
 
       expect(() => {
-        renderWithTheme(
+        renderWithProviders(
           <VaultActionButton vault={vaultWithoutConfig} />
         )
       }).not.toThrow()
@@ -222,7 +210,7 @@ describe("VaultActionButton", () => {
       }
 
       expect(() => {
-        renderWithTheme(
+        renderWithProviders(
           <VaultActionButton vault={vaultWithoutChain} />
         )
       }).not.toThrow()
@@ -240,7 +228,7 @@ describe("VaultActionButton", () => {
       }
 
       expect(() => {
-        renderWithTheme(
+        renderWithProviders(
           <VaultActionButton vault={vaultWithoutAction} />
         )
       }).not.toThrow()

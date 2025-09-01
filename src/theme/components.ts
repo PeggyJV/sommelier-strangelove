@@ -73,6 +73,7 @@ export const components: ThemeComponents = {
     },
   },
   Popover: {
+    parts: ["content"],
     baseStyle: {
       content: {
         _focusVisible: {

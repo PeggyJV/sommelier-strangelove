@@ -87,7 +87,7 @@ const checkButtonDisabled = (
     return true
   }
 
-  var res = isDeprecated
+  const res = isDeprecated
     ? !hasValueInVault
       ? true
       : false
@@ -260,6 +260,7 @@ export function DepositAndWithdrawButton({
                 ),
               })
             }}
+            data-testid="withdraw-btn"
           >
             {buttonText}
           </SecondaryButton>
@@ -307,6 +308,7 @@ export function DepositAndWithdrawButton({
                 ),
               })
             }}
+            data-testid="deposit-btn"
           >
             {buttonText}
           </BaseButton>

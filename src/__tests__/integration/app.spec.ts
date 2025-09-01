@@ -30,9 +30,9 @@ jest.mock("wagmi", () => ({
   useSwitchChain: () => ({
     switchChainAsync: jest.fn(),
   }),
-  WagmiProvider: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+  WagmiProvider: ({ children }: { children: React.ReactNode }) => {
+    return React.createElement("div", null, children)
+  },
 }))
 
 jest.mock("../../data/hooks/useAllStrategiesData", () => ({

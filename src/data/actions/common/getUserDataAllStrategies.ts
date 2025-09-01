@@ -117,7 +117,7 @@ export const getUserDataAllStrategies = async ({
   }, 0)
   type Data = Awaited<ReturnType<typeof getUserDataWithContracts>>
   const isData = (item: Data | undefined): item is Data => {
-    return Number(item?.netValue) > 0
+    return Boolean(item && typeof (item as any).netValue === 'number' && (item as any).netValue > 0)
   }
   const cleanData = userData.filter(isData)
 

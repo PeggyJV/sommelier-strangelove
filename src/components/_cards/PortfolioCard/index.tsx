@@ -317,8 +317,8 @@ export const PortfolioCard = (props: BoxProps) => {
                       >
                         {isMounted &&
                           (isConnected
-                            ? userStakes?.totalBondedAmount
-                                .formatted || "..."
+                            ? (userStakes as any)?.totalBondedAmount
+                                ?.formatted || "..."
                             : "--")}
                       </CardStat>
                     </VStack>
@@ -398,7 +398,7 @@ export const PortfolioCard = (props: BoxProps) => {
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
           <>
-            {!userStakes?.userStakes.length &&
+            {(userStakes as any) && !(userStakes as any).userStakes?.length &&
               stakingEnd?.endDate &&
               isFuture(stakingEnd?.endDate) && (
                 <>
@@ -516,7 +516,7 @@ export const PortfolioCard = (props: BoxProps) => {
                 isLoaded={!isUserDataLoading}
               >
                 {isConnected &&
-                  Boolean(userStakes?.userStakes.length) && (
+                  Boolean((userStakes as any) && (userStakes as any).userStakes?.length) && (
                     <BondingTableCard />
                   )}
               </LighterSkeleton>

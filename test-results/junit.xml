@@ -1,3 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="0" failures="0" errors="0" time="0.668">
+<testsuites name="jest tests" tests="36" failures="0" errors="0" time="1.978">
+  <testsuite name="CoinGecko API Tests" errors="0" failures="0" skipped="0" timestamp="2025-09-01T17:29:19" time="0.202" tests="11">
+    <testcase classname="CoinGecko API Tests API Error Handling should handle unknown coin ID gracefully" name="CoinGecko API Tests API Error Handling should handle unknown coin ID gracefully" time="0.001">
+    </testcase>
+    <testcase classname="CoinGecko API Tests API Error Handling should handle network errors gracefully" name="CoinGecko API Tests API Error Handling should handle network errors gracefully" time="0.001">
+    </testcase>
+    <testcase classname="CoinGecko API Tests API Error Handling should handle malformed response gracefully" name="CoinGecko API Tests API Error Handling should handle malformed response gracefully" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Input Validation should handle missing base parameter" name="CoinGecko API Tests Input Validation should handle missing base parameter" time="0.001">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Input Validation should handle missing quote parameter" name="CoinGecko API Tests Input Validation should handle missing quote parameter" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Input Validation should handle empty parameters" name="CoinGecko API Tests Input Validation should handle empty parameters" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Successful API Calls should return price for valid coin" name="CoinGecko API Tests Successful API Calls should return price for valid coin" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Successful API Calls should handle multiple currencies" name="CoinGecko API Tests Successful API Calls should handle multiple currencies" time="0.001">
+    </testcase>
+    <testcase classname="CoinGecko API Tests Caching Headers should set proper cache headers" name="CoinGecko API Tests Caching Headers should set proper cache headers" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests API Key Handling should use pro API when key is available" name="CoinGecko API Tests API Key Handling should use pro API when key is available" time="0">
+    </testcase>
+    <testcase classname="CoinGecko API Tests API Key Handling should use free API when no key is available" name="CoinGecko API Tests API Key Handling should use free API when no key is available" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="sortVaults" errors="0" failures="0" skipped="0" timestamp="2025-09-01T17:29:19" time="0.038" tests="4">
+    <testcase classname="sortVaults not connected → TVL desc" name="sortVaults not connected → TVL desc" time="0.001">
+    </testcase>
+    <testcase classname="sortVaults connected → Net Value desc, fallback TVL" name="sortVaults connected → Net Value desc, fallback TVL" time="0">
+    </testcase>
+    <testcase classname="sortVaults handles various net value formats" name="sortVaults handles various net value formats" time="0">
+    </testcase>
+    <testcase classname="sortVaults handles TVL with K/M/B suffixes" name="sortVaults handles TVL with K/M/B suffixes" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="legacyVisibility" errors="0" failures="0" skipped="0" timestamp="2025-09-01T17:29:20" time="0.035" tests="8">
+    <testcase classname="legacyVisibility restoreLegacyVisibility should return false when localStorage is not available" name="legacyVisibility restoreLegacyVisibility should return false when localStorage is not available" time="0.001">
+    </testcase>
+    <testcase classname="legacyVisibility restoreLegacyVisibility should return false when localStorage.getItem throws" name="legacyVisibility restoreLegacyVisibility should return false when localStorage.getItem throws" time="0">
+    </testcase>
+    <testcase classname="legacyVisibility restoreLegacyVisibility should return false when stored value is not &quot;1&quot;" name="legacyVisibility restoreLegacyVisibility should return false when stored value is not &quot;1&quot;" time="0">
+    </testcase>
+    <testcase classname="legacyVisibility restoreLegacyVisibility should return true when stored value is &quot;1&quot;" name="legacyVisibility restoreLegacyVisibility should return true when stored value is &quot;1&quot;" time="0">
+    </testcase>
+    <testcase classname="legacyVisibility saveLegacyVisibility should not call localStorage when window is not available" name="legacyVisibility saveLegacyVisibility should not call localStorage when window is not available" time="0">
+    </testcase>
+    <testcase classname="legacyVisibility saveLegacyVisibility should not call localStorage when setItem throws" name="legacyVisibility saveLegacyVisibility should not call localStorage when setItem throws" time="0">
+    </testcase>
+    <testcase classname="legacyVisibility saveLegacyVisibility should store &quot;1&quot; when setting visibility to true" name="legacyVisibility saveLegacyVisibility should store &quot;1&quot; when setting visibility to true" time="0">
+    </testcase>
+    <testcase classname="legacyVisibility saveLegacyVisibility should store &quot;0&quot; when setting visibility to false" name="legacyVisibility saveLegacyVisibility should store &quot;0&quot; when setting visibility to false" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Simple Component Test" errors="0" failures="0" skipped="0" timestamp="2025-09-01T17:29:20" time="0.117" tests="2">
+    <testcase classname="Simple Component Test should render a simple component" name="Simple Component Test should render a simple component" time="0.037">
+    </testcase>
+    <testcase classname="Simple Component Test should handle basic user interactions" name="Simple Component Test should handle basic user interactions" time="0.008">
+    </testcase>
+  </testsuite>
+  <testsuite name="Legacy Vaults Integration" errors="0" failures="0" skipped="0" timestamp="2025-09-01T17:29:20" time="0.027" tests="7">
+    <testcase classname="Legacy Vaults Integration localStorage persistence should persist user choice to localStorage when showing" name="Legacy Vaults Integration localStorage persistence should persist user choice to localStorage when showing" time="0">
+    </testcase>
+    <testcase classname="Legacy Vaults Integration localStorage persistence should persist user choice to localStorage when hiding" name="Legacy Vaults Integration localStorage persistence should persist user choice to localStorage when hiding" time="0">
+    </testcase>
+    <testcase classname="Legacy Vaults Integration localStorage persistence should restore user choice from localStorage on page load" name="Legacy Vaults Integration localStorage persistence should restore user choice from localStorage on page load" time="0">
+    </testcase>
+    <testcase classname="Legacy Vaults Integration localStorage persistence should default to false when no preference is stored" name="Legacy Vaults Integration localStorage persistence should default to false when no preference is stored" time="0">
+    </testcase>
+    <testcase classname="Legacy Vaults Integration SSR compatibility should handle SSR environment gracefully" name="Legacy Vaults Integration SSR compatibility should handle SSR environment gracefully" time="0">
+    </testcase>
+    <testcase classname="Legacy Vaults Integration Error handling should handle localStorage errors gracefully" name="Legacy Vaults Integration Error handling should handle localStorage errors gracefully" time="0">
+    </testcase>
+    <testcase classname="Legacy Vaults Integration Error handling should handle localStorage getItem errors gracefully" name="Legacy Vaults Integration Error handling should handle localStorage getItem errors gracefully" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="validateSommelierAddress" errors="0" failures="0" skipped="0" timestamp="2025-09-01T17:29:20" time="0.028" tests="1">
+    <testcase classname="validateSommelierAddress It should validate the address is sommelier correct encoded address" name="validateSommelierAddress It should validate the address is sommelier correct encoded address" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Basic Test Setup" errors="0" failures="0" skipped="0" timestamp="2025-09-01T17:29:20" time="0.024" tests="3">
+    <testcase classname="Basic Test Setup should run basic tests" name="Basic Test Setup should run basic tests" time="0">
+    </testcase>
+    <testcase classname="Basic Test Setup should handle async operations" name="Basic Test Setup should handle async operations" time="0">
+    </testcase>
+    <testcase classname="Basic Test Setup should handle environment variables" name="Basic Test Setup should handle environment variables" time="0">
+    </testcase>
+  </testsuite>
 </testsuites>

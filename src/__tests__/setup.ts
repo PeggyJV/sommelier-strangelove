@@ -62,33 +62,17 @@ jest.mock("wagmi", () => ({
 }))
 
 // Mock viem http transport to avoid real network in tests that accidentally construct clients
-jest.mock("viem/clients/transports/http", () => ({
+jest.mock("viem", () => ({
   http: () => () => {
     throw new Error("Network error")
   },
+  createPublicClient: jest.fn().mockImplementation(() => ({
+    getBlockNumber: jest.fn().mockRejectedValue(new Error("HTTP request failed")),
+    readContract: jest.fn().mockRejectedValue(new Error("Contract read failed")),
+  })),
 }))
 
-// Mock viem core to avoid real client behavior in unit tests
-jest.mock("viem", () => {
-  return {
-    createPublicClient: jest
-      .fn()
-      .mockImplementation(({ transport }) => {
-        return {
-          async getBlockNumber() {
-            throw new Error("HTTP request failed")
-          },
-          async readContract({ abi }: any) {
-            if (!abi || (Array.isArray(abi) && abi.length === 0)) {
-              throw new Error("AbiFunctionNotFoundError")
-            }
-            throw new Error("Contract read failed")
-          },
-        }
-      }),
-    http: (...args: any[]) => ({}),
-  }
-})
+
 
 // Mock environment variables
 process.env.NEXT_PUBLIC_ALCHEMY_KEY = "test-alchemy-key"
