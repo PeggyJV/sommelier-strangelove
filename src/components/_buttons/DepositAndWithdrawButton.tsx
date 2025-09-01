@@ -157,23 +157,6 @@ export function DepositAndWithdrawButton({
   const lpTokenDisabled = checkLPtokenDisabled(lpTokenData)
   const hasValueInVault = checkHasValueInVault(lpTokenData, netValue)
 
-  // Debug logging for withdrawal button logic
-  if (
-    process.env.NEXT_PUBLIC_DEBUG_SORT === "1" &&
-    row.original?.name?.includes("Real Yield ETH")
-  ) {
-    console.log("Withdrawal button debug:", {
-      name: row.original?.name,
-      netValue: netValue,
-      coerceNetValue: coerceNetValue(netValue),
-      hasValueInVault: hasValueInVault,
-      isDeprecated: row.original?.deprecated,
-      buttonText: buttonText,
-      isWithdrawButton:
-        buttonText === "Withdraw" || buttonText === "Withdraw Only",
-    })
-  }
-
   const { isConnected, chain } = useAccount()
   const isBeforeLaunch = checkIsBeforeLaunch(
     row?.original?.launchDate
@@ -189,8 +172,23 @@ export function DepositAndWithdrawButton({
     id
   )
 
-  const isWithdrawButton =
-    buttonText === "Withdraw" || buttonText === "Withdraw Only"
+  const isWithdrawButton = buttonText === "Withdraw"
+
+  // Debug logging for withdrawal button logic
+  if (
+    process.env.NEXT_PUBLIC_DEBUG_SORT === "1" &&
+    row.original?.name?.includes("Real Yield ETH")
+  ) {
+    console.log("Withdrawal button debug:", {
+      name: row.original?.name,
+      netValue: netValue,
+      coerceNetValue: coerceNetValue(netValue),
+      hasValueInVault: hasValueInVault,
+      isDeprecated: row.original?.deprecated,
+      buttonText: buttonText,
+      isWithdrawButton: buttonText === "Withdraw",
+    })
+  }
 
   return (
     <>

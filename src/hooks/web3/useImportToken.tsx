@@ -19,6 +19,8 @@ export const useImportToken = (callbacks?: ImportTokenCallbacks) => {
   return useMutation({
     mutationFn: async (params: ImportTokenParams) => {
       // Get token data
+      if (!publicClient) return
+      
       const tokenData = await publicClient.multicall({
         contracts: [
           {

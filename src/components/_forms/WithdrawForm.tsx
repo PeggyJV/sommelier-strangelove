@@ -222,7 +222,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
           vaultName: cellarDataMap[id].name,
           transactionType: "withdraw",
           value: withdrawAmount,
-          chainId: cellarConfig.chain.id,
+          chainId: cellarConfig.chain.wagmiId,
         }
 
         const normalizedError = handleTransactionError(

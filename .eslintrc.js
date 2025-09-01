@@ -18,4 +18,17 @@ module.exports = {
     "@next/next/no-html-link-for-pages": "off",
     "@next/next/no-img-element": "off",
   },
+  ignorePatterns: [
+    "**/__tests__/**/*",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "coverage/**",
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    ".next/**",
+    "vercel-kv.d..ts"
+  ],
 }

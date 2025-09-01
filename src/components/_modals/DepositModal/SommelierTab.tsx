@@ -45,7 +45,7 @@ import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useWaitForTransaction } from "data/hooks/useWaitForTransactions"
+import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { waitTime, depositAssetDefaultValue } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
@@ -252,10 +252,10 @@ export const SommelierTab = ({
       return 0
     }
 
-    const [isSupported, _, depositFee] =
-      (await cellarSigner?.read.alternativeAssetData([
-        assetAddress,
-      ])) ?? [false, 0, 0]
+    const result = await cellarSigner?.read.alternativeAssetData([
+      assetAddress,
+    ])
+    const [isSupported, _, depositFee] = result ?? [false, 0, 0]
 
     return isSupported ? Number(depositFee) : 0
   }
@@ -366,7 +366,7 @@ export const SommelierTab = ({
           vaultName: cellarName,
           tokenSymbol: selectedToken?.symbol,
           transactionType: "deposit",
-          chainId: cellarConfig.chain.id,
+          chainId: cellarConfig.chain.wagmiId,
         }
       )
 
@@ -423,7 +423,7 @@ export const SommelierTab = ({
           vaultName: cellarName,
           tokenSymbol: cellarConfig.baseAsset.symbol,
           transactionType: "approve",
-          chainId: cellarConfig.chain.id,
+          chainId: cellarConfig.chain.wagmiId,
         }
       )
 
@@ -466,7 +466,7 @@ export const SommelierTab = ({
         vaultName: cellarName,
         tokenSymbol: cellarConfig.baseAsset.symbol,
         transactionType: "approve",
-        chainId: cellarConfig.chain.id,
+        chainId: cellarConfig.chain.wagmiId,
       }
 
       const normalizedError = handleTransactionError(
@@ -537,7 +537,7 @@ export const SommelierTab = ({
               vaultName: cellarName,
               tokenSymbol: selectedToken?.symbol,
               transactionType: "deposit",
-              chainId: cellarConfig.chain.id,
+              chainId: cellarConfig.chain.wagmiId,
             }
           )) as string
         } else {
@@ -553,7 +553,7 @@ export const SommelierTab = ({
               vaultName: cellarName,
               tokenSymbol: selectedToken?.symbol,
               transactionType: "deposit",
-              chainId: cellarConfig.chain.id,
+              chainId: cellarConfig.chain.wagmiId,
             }
           )) as string
         }
@@ -573,7 +573,7 @@ export const SommelierTab = ({
               vaultName: cellarName,
               tokenSymbol: selectedToken?.symbol,
               transactionType: "deposit",
-              chainId: cellarConfig.chain.id,
+              chainId: cellarConfig.chain.wagmiId,
             }
           )) as string
         } else {
@@ -589,7 +589,7 @@ export const SommelierTab = ({
               vaultName: cellarName,
               tokenSymbol: selectedToken?.symbol,
               transactionType: "deposit",
-              chainId: cellarConfig.chain.id,
+              chainId: cellarConfig.chain.wagmiId,
             }
           )) as string
         }
@@ -612,7 +612,7 @@ export const SommelierTab = ({
         vaultName: cellarName,
         tokenSymbol: selectedToken?.symbol,
         transactionType: "deposit",
-        chainId: cellarConfig.chain.id,
+        chainId: cellarConfig.chain.wagmiId,
       }
       const normalizedError = handleTransactionError(
         error as Error,
@@ -830,7 +830,7 @@ export const SommelierTab = ({
           tokenSymbol,
           transactionType: "deposit",
           value: depositAmount,
-          chainId: cellarConfig.chain.id,
+          chainId: cellarConfig.chain.wagmiId,
         }
 
         const normalizedError = handleTransactionError(

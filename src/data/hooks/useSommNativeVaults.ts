@@ -68,7 +68,7 @@ export function useSommNativeVaults() {
       })
     },
     staleTime: 120_000,
-    suspense: true,
+
     retry: 3,
     retryDelay: (attemptIndex) =>
       Math.min(1000 * 2 ** attemptIndex, 30000),
