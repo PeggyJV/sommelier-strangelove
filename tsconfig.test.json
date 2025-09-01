@@ -5,9 +5,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "types": ["jest", "node", "@testing-library/jest-dom"]
+    "types": ["jest", "node", "@testing-library/jest-dom"],
+    "skipLibCheck": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", ".next", "coverage", "src/__tests__/**/*"]
+  "include": ["src/**/*", "src/__tests__/**/*"],
+  "exclude": ["node_modules", ".next", "coverage"]
 }
 

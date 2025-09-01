@@ -105,6 +105,33 @@ export function getConflictResolutionInstructions(): string[] {
   return instructions
 }
 
+// Get debug information about wallet providers
+export function getProviderDebugInfo(): any {
+  if (typeof window === "undefined") return { error: "Not in browser" }
+
+  try {
+    const ethereum = getSafeEthereumProvider()
+    if (!ethereum) return { error: "No ethereum provider found" }
+
+    return {
+      hasConflicts: hasWalletConflicts(),
+      detectedProviders: getDetectedWalletProviders(),
+      recommendedProvider: getRecommendedProvider(),
+      ethereum: {
+        isMetaMask: ethereum.isMetaMask,
+        isCoinbaseWallet: ethereum.isCoinbaseWallet,
+        isWalletConnect: ethereum.isWalletConnect,
+        isConnected: ethereum.isConnected,
+        selectedAddress: ethereum.selectedAddress,
+        chainId: ethereum.chainId,
+      },
+      timestamp: new Date().toISOString(),
+    }
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Unknown error" }
+  }
+}
+
 // Get wallet provider information for debugging
 export function getWalletProviderInfo() {
   if (typeof window === "undefined") {

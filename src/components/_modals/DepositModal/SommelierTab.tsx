@@ -255,7 +255,9 @@ export const SommelierTab = ({
     const result = await cellarSigner?.read.alternativeAssetData([
       assetAddress,
     ])
-    const [isSupported, _, depositFee] = result ?? [false, 0, 0]
+    if (!result) return 0
+
+    const [isSupported, _, depositFee] = result as [boolean, any, any]
 
     return isSupported ? Number(depositFee) : 0
   }
@@ -351,24 +353,27 @@ export const SommelierTab = ({
       ])
       fnName = "deposit"
       args = [amtInWei, address]
+      value = BigInt(0)
     }
 
     try {
-      const hash = await safeWriteContract(
-        {
-          address: cellarSigner?.address as `0x${string}`,
-          abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
-          functionName: fnName,
-          args: args,
-          value: value,
-        },
-        {
-          vaultName: cellarName,
-          tokenSymbol: selectedToken?.symbol,
-          transactionType: "deposit",
-          chainId: cellarConfig.chain.wagmiId,
-        }
-      )
+      const contractParams: any = {
+        address: cellarSigner?.address as `0x${string}`,
+        abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
+        functionName: fnName,
+        args: args,
+      }
+
+      if (value > 0) {
+        contractParams.value = value
+      }
+
+      const hash = await safeWriteContract(contractParams, {
+        vaultName: cellarName,
+        tokenSymbol: selectedToken?.symbol,
+        transactionType: "deposit",
+        chainId: cellarConfig.chain.wagmiId,
+      })
 
       if (hash) {
         addToast({
@@ -378,11 +383,13 @@ export const SommelierTab = ({
           closeHandler: close,
         })
 
-        const receipt = await publicClient.waitForTransactionReceipt({
-          hash: hash,
-        })
+        const receipt = await publicClient?.waitForTransactionReceipt(
+          {
+            hash: hash as `0x${string}`,
+          }
+        )
 
-        if (receipt.status === "success") {
+        if (receipt?.status === "success") {
           addToast({
             heading: "Deposit Successful",
             body: (
@@ -435,11 +442,13 @@ export const SommelierTab = ({
           closeHandler: close,
         })
 
-        const receipt = await publicClient.waitForTransactionReceipt({
-          hash: hash,
-        })
+        const receipt = await publicClient?.waitForTransactionReceipt(
+          {
+            hash: hash as `0x${string}`,
+          }
+        )
 
-        if (receipt.status === "success") {
+        if (receipt?.status === "success") {
           addToast({
             heading: "Token Approved",
             body: <Text>Token approval successful.</Text>,
@@ -525,21 +534,23 @@ export const SommelierTab = ({
 
         if (isNativeDeposit) {
           // Native ETH deposit
-          hash = (await safeWriteContract(
-            {
-              address: cellarConfig.teller.address as `0x${string}`,
-              abi: cellarConfig.teller.abi,
-              functionName: "deposit",
-              args: [tokenAddress, amtInWei, minimumMint],
-              value: amtInWei,
-            },
-            {
-              vaultName: cellarName,
-              tokenSymbol: selectedToken?.symbol,
-              transactionType: "deposit",
-              chainId: cellarConfig.chain.wagmiId,
-            }
-          )) as string
+          const tellerParams: any = {
+            address: cellarConfig.teller.address as `0x${string}`,
+            abi: cellarConfig.teller.abi,
+            functionName: "deposit",
+            args: [tokenAddress, amtInWei, minimumMint],
+          }
+
+          if (amtInWei > 0) {
+            tellerParams.value = amtInWei
+          }
+
+          hash = (await safeWriteContract(tellerParams, {
+            vaultName: cellarName,
+            tokenSymbol: selectedToken?.symbol,
+            transactionType: "deposit",
+            chainId: cellarConfig.chain.wagmiId,
+          })) as string
         } else {
           // ERC20 token deposit
           hash = (await safeWriteContract(
@@ -561,14 +572,19 @@ export const SommelierTab = ({
         // Standard cellar deposit
         if (isNativeDeposit) {
           // Native ETH deposit
+          const cellarParams: any = {
+            address: cellarConfig.cellar.address as `0x${string}`,
+            abi: cellarConfig.cellar.abi,
+            functionName: "deposit",
+            args: [amtInWei, address],
+          }
+          
+          if (amtInWei > 0) {
+            cellarParams.value = amtInWei
+          }
+          
           hash = (await safeWriteContract(
-            {
-              address: cellarConfig.cellar.address as `0x${string}`,
-              abi: cellarConfig.cellar.abi,
-              functionName: "deposit",
-              args: [amtInWei, address],
-              value: amtInWei,
-            },
+            cellarParams,
             {
               vaultName: cellarName,
               tokenSymbol: selectedToken?.symbol,
@@ -596,9 +612,11 @@ export const SommelierTab = ({
       }
 
       if (hash) {
-        const receipt = await publicClient.waitForTransactionReceipt({
-          hash: hash,
-        })
+        const receipt = await publicClient?.waitForTransactionReceipt(
+          {
+            hash: hash as `0x${string}`,
+          }
+        )
 
         return [receipt]
       }
