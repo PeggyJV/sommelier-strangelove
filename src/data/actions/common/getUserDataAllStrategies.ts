@@ -1,7 +1,7 @@
 import { AllContracts, AllStrategiesData } from "../types"
 import { formatUSD, toEther } from "utils/formatCurrency"
 import { reactQueryClient } from "utils/reactQuery"
-import { getUserData } from "./getUserData"
+import { getUserDataWithContracts } from "./getUserData"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { cellarDataMap } from "data/cellarDataMap"
 import { ConfigProps } from "data/types"
@@ -57,7 +57,7 @@ export const getUserDataAllStrategies = async ({
           )
 
           try {
-            return await getUserData({
+            return await getUserDataWithContracts({
               address,
               contracts,
               sommPrice,
@@ -115,7 +115,7 @@ export const getUserDataAllStrategies = async ({
         : 0)
     )
   }, 0)
-  type Data = Awaited<ReturnType<typeof getUserData>>
+  type Data = Awaited<ReturnType<typeof getUserDataWithContracts>>
   const isData = (item: Data | undefined): item is Data => {
     return Number(item?.netValue) > 0
   }

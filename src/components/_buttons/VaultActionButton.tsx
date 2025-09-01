@@ -107,7 +107,7 @@ export function VaultActionButton({
               size="md"
               height="44px"
               minW="148px"
-              isDisabled={status === "paused"}
+              isDisabled={false}
               onClick={(e) => {
                 e.stopPropagation()
                 vault?.onAction?.()

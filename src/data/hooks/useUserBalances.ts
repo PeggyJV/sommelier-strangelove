@@ -32,6 +32,8 @@ export const useUserBalances = () => {
           return
         }
         try {
+          if (!publicClient) return
+          
           let balance
           if (token?.symbol === "ETH") {
             balance = await publicClient.getBalance({
@@ -65,7 +67,21 @@ export const useUserBalances = () => {
             }
           }
 
-          if (balance.value !== 0n) {
+          if (typeof balance === 'bigint') {
+            // Handle native ETH balance
+            if (balance !== 0n) {
+              const price = await fetchCoingeckoPrice(token!, "usd")
+              const valueInUSD = Number(formatUnits(balance, 18)) * Number(price || 0)
+              depositAssetBalances.push({
+                value: balance,
+                decimals: 18,
+                symbol: "ETH",
+                formatted: formatUnits(balance, 18),
+                valueInUSD,
+              })
+            }
+          } else if (balance.value !== 0n) {
+            // Handle ERC20 token balance
             // fix because token comes with different naming
             if (balance.symbol === "B-rETH-STABLE") {
               balance.symbol = "rETH BPT"
