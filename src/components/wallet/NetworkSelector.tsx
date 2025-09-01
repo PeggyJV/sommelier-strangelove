@@ -34,7 +34,7 @@ export default function NetworkSelector({
   const handleQuickSwitch = async () => {
     if (!requiredChain) return
     try {
-      await requestSwitchWithAdd(requiredChain.wagmiId)
+      await requestSwitchWithAdd(requiredChain.wagmiId as 1 | 42161 | 8453)
       onSwitched?.(requiredChain.wagmiId)
     } catch (e: any) {
       addToast({

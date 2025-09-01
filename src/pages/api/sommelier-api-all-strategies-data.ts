@@ -275,57 +275,6 @@ const sommelierAPIAllStrategiesData = async (
       }
     )
 
-    // ! Scroll transform (disabled)
-    Object.keys(fetchedScrollData.Response).forEach(
-      (cellarAddress) => {
-        // If the cellar address is not in the CellaAddressDataMap skip it
-        if (
-          CellaAddressDataMap[
-            cellarAddress!.toString().toLowerCase() + "-scroll"
-          ] === undefined
-        ) {
-          console.warn(`${cellarAddress} not a valid cellar address`)
-          return
-        }
-
-        let cellarDecimals =
-          CellaAddressDataMap[
-            cellarAddress!.toString().toLowerCase() + "-scroll"
-          ].config.cellar.decimals
-
-        let transformedData = fetchedScrollData.Response[
-          cellarAddress
-        ].map((dayData: any) => ({
-          date: dayData.unix_seconds,
-          // Multiply by cellarDecimals and drop any decimals
-          shareValue: Math.floor(
-            dayData.share_price * 10 ** cellarDecimals
-          ).toString(),
-        }))
-
-        // Order by descending date
-        transformedData.sort((a: any, b: any) => b.date - a.date)
-
-        // Get tvl
-        let tvl = fetchedTVL.Response[cellarAddress + "-scroll"]
-
-        if (tvl === undefined) {
-          tvl = 0
-        }
-
-        // Create a new response object with the transformed data
-        let cellarObj = {
-          id: cellarAddress.toLowerCase() + "-scroll",
-          dayDatas: transformedData,
-          shareValue: transformedData[0].shareValue,
-          tvlTotal: tvl,
-          // chain: chainSlugMap.SCROLL.id,
-        }
-
-        returnObj.result.data.cellars.push(cellarObj)
-      }
-    )
-
     res.setHeader(
       "Cache-Control",
       "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"

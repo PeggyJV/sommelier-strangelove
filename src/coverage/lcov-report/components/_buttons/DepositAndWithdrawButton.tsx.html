@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.07% </span>
+                <span class="strong">42.62% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>28/65</span>
+                <span class='fraction'>26/61</span>
             </div>
         
             
@@ -419,9 +419,7 @@
 <a name='L354'></a><a href='#L354'>354</a>
 <a name='L355'></a><a href='#L355'>355</a>
 <a name='L356'></a><a href='#L356'>356</a>
-<a name='L357'></a><a href='#L357'>357</a>
-<a name='L358'></a><a href='#L358'>358</a>
-<a name='L359'></a><a href='#L359'>359</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L357'></a><a href='#L357'>357</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -580,6 +578,23 @@
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -595,25 +610,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -938,23 +934,6 @@ export function DepositAndWithdrawButton({
   const lpTokenDisabled = checkLPtokenDisabled(lpTokenData)
   const hasValueInVault = checkHasValueInVault(lpTokenData, netValue)
 &nbsp;
-  // Debug logging for withdrawal button logic
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (
-    process.env.NEXT_PUBLIC_DEBUG_SORT === "1" &amp;&amp;
-<span class="branch-1 cbranch-no" title="branch not covered" >    row.original?.name?.includes("Real Yield ETH")</span>
-  ) {
-<span class="cstat-no" title="statement not covered" >    console.log("Withdrawal button debug:", {</span>
-      name: row.original?.name,
-      netValue: netValue,
-      coerceNetValue: coerceNetValue(netValue),
-      hasValueInVault: hasValueInVault,
-      isDeprecated: row.original?.deprecated,
-      buttonText: buttonText,
-      isWithdrawButton:
-        buttonText === "Withdraw" || buttonText === "Withdraw Only",
-    })
-  }
-&nbsp;
   const { isConnected, chain } = useAccount()
   const isBeforeLaunch = checkIsBeforeLaunch(
     row?.original?.launchDate
@@ -970,8 +949,23 @@ export function DepositAndWithdrawButton({
     id
   )
 &nbsp;
-  const isWithdrawButton =
-    buttonText === "Withdraw" || buttonText === "Withdraw Only"
+  const isWithdrawButton = buttonText === "Withdraw"
+&nbsp;
+  // Debug logging for withdrawal button logic
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (
+    process.env.NEXT_PUBLIC_DEBUG_SORT === "1" &amp;&amp;
+<span class="branch-1 cbranch-no" title="branch not covered" >    row.original?.name?.includes("Real Yield ETH")</span>
+  ) {
+<span class="cstat-no" title="statement not covered" >    console.log("Withdrawal button debug:", {</span>
+      name: row.original?.name,
+      netValue: netValue,
+      coerceNetValue: coerceNetValue(netValue),
+      hasValueInVault: hasValueInVault,
+      isDeprecated: row.original?.deprecated,
+      buttonText: buttonText,
+      isWithdrawButton: buttonText === "Withdraw",
+    })
+  }
 &nbsp;
   return (
     &lt;&gt;
@@ -1144,7 +1138,7 @@ export function DepositAndWithdrawButton({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-28T09:49:50.526Z
+                at 2025-09-01T17:09:33.425Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

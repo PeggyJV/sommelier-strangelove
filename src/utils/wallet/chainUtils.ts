@@ -2,7 +2,7 @@ import { switchChain } from "wagmi/actions"
 import { config } from "../../lib/wagmi"
 import { chainConfig } from "data/chainConfig"
 
-export async function requestSwitch(chainId: number) {
+export async function requestSwitch(chainId: 1 | 42161 | 8453) {
   try {
     await switchChain(config, { chainId })
     return true
@@ -15,7 +15,7 @@ export async function requestSwitch(chainId: number) {
   }
 }
 
-export async function requestSwitchWithAdd(chainId: number) {
+export async function requestSwitchWithAdd(chainId: 1 | 42161 | 8453) {
   try {
     await switchChain(config, { chainId })
     return true
@@ -70,11 +70,11 @@ export async function requestSwitchWithAdd(chainId: number) {
   }
 }
 
-export function getChainById(chainId: number) {
+export function getChainById(chainId: 1 | 42161 | 8453) {
   return chainConfig.find((c) => c.wagmiId === chainId)
 }
 
-export function getChainDisplayName(chainId: number): string {
+export function getChainDisplayName(chainId: 1 | 42161 | 8453): string {
   const chain = getChainById(chainId)
   return chain?.displayName || `Chain ${chainId}`
 }

@@ -16,4 +16,9 @@ module.exports = {
       default: { url: "https://optimistic.etherscan.io" },
     },
   },
+  base: {
+    id: 8453,
+    name: "Base",
+    blockExplorers: { default: { url: "https://basescan.org" } },
+  },
 }

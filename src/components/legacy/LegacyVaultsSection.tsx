@@ -38,13 +38,15 @@ export default function LegacyVaultsSection({
       />
       <WithdrawalWarningBanner />
       <VStack spacing={4} align="stretch" mt={2}>
-        {legacyVaults.map((v) => (
-          <LegacyVaultCard
-            key={v?.slug ?? v?.name}
-            vault={v}
-            enabled={enabled}
-          />
-        ))}
+        {legacyVaults
+          .filter((v): v is NonNullable<typeof v> => v !== null)
+          .map((v) => (
+            <LegacyVaultCard
+              key={v?.slug ?? v?.name}
+              vault={v}
+              enabled={enabled}
+            />
+          ))}
       </VStack>
     </Box>
   )

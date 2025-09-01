@@ -27,7 +27,7 @@ export const useWithdrawRequestStatus = (
       address: getAddress(cellarConfig.chain.withdrawQueueAddress),
       abi: withdrawQueueV0821,
       client: {
-        wallet: walletClient,
+        wallet: walletClient?.data,
         public: publicClient,
       },
     })
@@ -43,20 +43,18 @@ export const useWithdrawRequestStatus = (
             cellarConfig &&
             !boringQueueWithdrawals
           ) {
-            // @ts-ignore
             const withdrawRequest =
-              await withdrawQueueContract?.read.getUserWithdrawRequest(
-                [address, cellarConfig.cellar.address]
-              )
+              await withdrawQueueContract.read.getUserWithdrawRequest([
+                address,
+                cellarConfig.cellar.address,
+              ])
 
             const isWithdrawRequestValid =
-              (await withdrawQueueContract?.read.isWithdrawRequestValid(
-                [
-                  cellarConfig.cellar.address,
-                  address,
-                  withdrawRequest,
-                ]
-              )) as unknown as boolean
+              (await withdrawQueueContract.read.isWithdrawRequestValid([
+                cellarConfig.cellar.address,
+                address,
+                withdrawRequest,
+              ])) as unknown as boolean
 
             setIsActiveWithdrawRequest(isWithdrawRequestValid)
           } else if (
