@@ -163,6 +163,13 @@ export const StrategyTable = memo(
           variant="unstyled"
           sx={{
             borderCollapse: "collapse",
+            // On mobile, show only the first column (which renders the full card)
+            // to avoid squeezing and clipping action buttons inside complex cells.
+            // Preserve tablet/desktop layouts unchanged.
+            "@media (max-width: 768px)": {
+              "thead th:nth-of-type(n+2)": { display: "none" },
+              "tbody td:nth-of-type(n+2)": { display: "none" },
+            },
           }}
           rounded="lg"
         >
