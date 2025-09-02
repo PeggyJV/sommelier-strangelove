@@ -13,7 +13,8 @@ export const config = getDefaultConfig({
     [mainnet.id]: http(process.env.NEXT_PUBLIC_MAINNET_RPC),
     [arbitrum.id]: http(process.env.NEXT_PUBLIC_ARBITRUM_RPC),
     [optimism.id]: http(
-      process.env.NEXT_PUBLIC_OPTIMISM_RPC || "https://mainnet.optimism.io"
+      process.env.NEXT_PUBLIC_OPTIMISM_RPC ||
+        "https://mainnet.optimism.io"
     ),
     [base.id]: http(process.env.NEXT_PUBLIC_BASE_RPC),
   },

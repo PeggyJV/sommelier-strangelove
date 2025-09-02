@@ -57,8 +57,9 @@ interface WithdrawQueueFormProps {
   onSuccessfulWithdraw?: () => void
 }
 
-const DEADLINE_HOURS = 288
-const SHARE_PRICE_DISCOUNT_PERCENT = 0.25
+// Use global withdraw deadline (14 days) and express discount in basis points
+// 0.25% => 25 bps
+const DISCOUNT_BPS = 25
 
 export const WithdrawQueueForm = ({
   onClose,
@@ -408,6 +409,22 @@ export const WithdrawQueueForm = ({
           })
           return
         }
+        if (causeMsg.includes("BoringOnChainQueue__BadDiscount")) {
+          addToast({
+            heading: "Withdraw Queue",
+            body: (
+              <Text>
+                Withdraw request rejected: discount is invalid. Please try again later.
+              </Text>
+            ),
+            status: "info",
+            closeHandler: closeAll,
+          })
+          logTxDebug("withdraw.error_bad_discount", {
+            assetOut: selectedToken.address,
+          })
+          return
+        }
         addToast({
           heading: "Transaction not submitted",
           body: (
@@ -450,16 +467,14 @@ export const WithdrawQueueForm = ({
   ) => {
     const currentTime = Math.floor(Date.now() / 1000)
     const deadlineSeconds =
-      Math.floor(DEADLINE_HOURS * 60 * 60) + currentTime
+      Math.floor(WITHDRAW_DEADLINE_HOURS * 60 * 60) + currentTime
 
     let hash
 
     if (boringQueue) {
-      const discount = BigInt(
-        Math.floor(SHARE_PRICE_DISCOUNT_PERCENT * 10000)
-      )
+      const discount = BigInt(DISCOUNT_BPS)
 
-      const deadlineSeconds = BigInt(DEADLINE_HOURS * 60 * 60)
+      const deadlineSeconds = BigInt(WITHDRAW_DEADLINE_HOURS * 60 * 60)
 
       if (isActiveWithdrawRequest && boringQueueWithdrawals) {
         // Replace existing BoringQueuerequest

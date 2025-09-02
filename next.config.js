@@ -67,12 +67,6 @@ let nextConfig = {
         permanent: true,
         basePath: false,
       },
-      {
-        source: "/strategies/:slug/manage",
-        destination: "/strategies/:slug",
-        permanent: true,
-        basePath: false,
-      },
     ]
   },
 }
