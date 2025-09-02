@@ -558,19 +558,21 @@ export const PageHome = () => {
               </Box>
             )}
 
-            {/* Legacy Vaults Collapsible Section */}
-            <Collapse
-              in={showLegacy}
-              animateOpacity
-              style={{ overflow: "visible" }}
-            >
-              <Box as="section" id="legacy-vaults" mt={4}>
-                <LegacyVaultsSection
-                  legacyVaults={legacy}
-                  enabled={showLegacy}
-                />
-              </Box>
-            </Collapse>
+            {/* Legacy Vaults Collapsible Section (mount on demand) */}
+            {showLegacy && (
+              <Collapse
+                in={showLegacy}
+                animateOpacity
+                style={{ overflow: "visible" }}
+              >
+                <Box as="section" id="legacy-vaults" mt={4}>
+                  <LegacyVaultsSection
+                    legacyVaults={legacy}
+                    enabled={showLegacy}
+                  />
+                </Box>
+              </Collapse>
+            )}
           </>
         )}
 

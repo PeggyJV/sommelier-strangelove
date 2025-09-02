@@ -70,7 +70,10 @@ export default function LegacyVaultCard({
   const cellarConfig = vault?.slug
     ? cellarDataMap[vault.slug]?.config
     : undefined
-  const { lpToken } = useUserBalance(cellarConfig as any)
+  const { lpToken } = useUserBalance(
+    cellarConfig as any,
+    enabled
+  )
   const { data: lpTokenData } = lpToken
   const { switchChainAsync } = useSwitchChain()
   const desiredChainId = cellarConfig?.chain?.wagmiId
