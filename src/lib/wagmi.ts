@@ -1,15 +1,14 @@
 // src/lib/wagmi.ts
-import { createConfig, http } from "wagmi"
+import { http } from "wagmi"
 import { mainnet, arbitrum, base, optimism } from "wagmi/chains"
-import { walletConnect } from "wagmi/connectors"
+import { getDefaultConfig } from "@rainbow-me/rainbowkit"
 
-export const config = createConfig({
+// Use RainbowKit's default config so the Connect modal shows common wallets
+// including WalletConnect and Ledger by default.
+export const config = getDefaultConfig({
+  appName: "Sommelier",
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
   chains: [mainnet, arbitrum, optimism, base],
-  connectors: [
-    walletConnect({
-      projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
-    }),
-  ],
   transports: {
     [mainnet.id]: http(process.env.NEXT_PUBLIC_MAINNET_RPC),
     [arbitrum.id]: http(process.env.NEXT_PUBLIC_ARBITRUM_RPC),
@@ -18,4 +17,5 @@ export const config = createConfig({
     ),
     [base.id]: http(process.env.NEXT_PUBLIC_BASE_RPC),
   },
+  ssr: true,
 })
