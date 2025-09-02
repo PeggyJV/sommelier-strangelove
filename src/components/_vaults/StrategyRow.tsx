@@ -115,11 +115,21 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     : "Dynamically reallocates stETH across Aave, Morpho, Unichain, and Mellow."
 
   return (
-    <Box>
+    <Box
+      // Ensure mobile rows have enough vertical space for the CTA
+      // and that content never overflows the card boundary
+      sx={{
+        "@media (max-width: 768px)": {
+          paddingBottom: "8px",
+        },
+      }}
+    >
       <Grid
         templateColumns={{ base: "1fr", md: "1.2fr 1.1fr 1fr" }}
         gap={{ base: 3, md: 6 }}
         alignItems="center"
+        // Prevent button clipping due to hidden overflow on grid/td parents
+        overflow="visible"
       >
         {/* Left column: Identity */}
         <HStack spacing={{ base: 2, md: 3 }} align="center" minW={0}>
@@ -209,7 +219,16 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
         </Grid>
 
         {/* Right column: chain + primary action with single helper */}
-        <VStack spacing={2} align={{ base: "stretch", md: "end" }}>
+        <VStack
+          spacing={2}
+          align={{ base: "stretch", md: "end" }}
+          // Reserve vertical space on mobile so the button never gets clipped
+          sx={{
+            "@media (max-width: 768px)": {
+              minHeight: "56px",
+            },
+          }}
+        >
           <ConnectGate
             fallbackLabel="Connect wallet to deposit"
             fullWidth
@@ -218,7 +237,8 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             {isPreLaunch ? (
               <ActionButton
                 variantStyle="primary"
-                size={{ base: "sm", md: "md" }}
+                size={{ base: "md", md: "md" }}
+                fullWidth
                 isDisabled
                 onClick={(e) => e.stopPropagation()}
               >
@@ -227,7 +247,8 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             ) : (
               <ActionButton
                 variantStyle="primary"
-                size={{ base: "sm", md: "md" }}
+                size={{ base: "md", md: "md" }}
+                fullWidth
                 onClick={(e) => {
                   e.stopPropagation()
                   if (!vault?.slug) return
