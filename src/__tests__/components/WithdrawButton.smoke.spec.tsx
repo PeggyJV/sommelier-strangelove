@@ -5,6 +5,9 @@ import { renderWithProviders } from "../../../tests/utils/renderWithProviders"
 jest.mock("data/hooks/useUserBalance", () => ({
   useUserBalance: () => ({ lpToken: { data: undefined } }),
 }))
+jest.mock("wagmi/chains", () => ({
+  mainnet: { id: 1, name: "Ethereum" },
+}))
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 
 describe("Withdraw button smoke test", () => {
@@ -33,5 +36,3 @@ describe("Withdraw button smoke test", () => {
     expect(btn).toBeDisabled()
   })
 })
-
-

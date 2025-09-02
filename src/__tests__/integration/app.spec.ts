@@ -30,9 +30,8 @@ jest.mock("wagmi", () => ({
   useSwitchChain: () => ({
     switchChainAsync: jest.fn(),
   }),
-  WagmiProvider: ({ children }: { children: React.ReactNode }) => {
-    return React.createElement("div", null, children)
-  },
+  WagmiProvider: ({ children }: { children: React.ReactNode }) =>
+    ({ children } as any),
 }))
 
 jest.mock("../../data/hooks/useAllStrategiesData", () => ({
@@ -64,16 +63,16 @@ jest.mock("../../data/hooks/useAllStrategiesData", () => ({
   }),
 }))
 
-const createTestWrapper = () => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-      },
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
     },
-  })
+  },
+})
 
-  return ({ children }: { children: React.ReactNode }) => (
+function TestWrapper({ children }: { children: React.ReactNode }) {
+  return (
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={{} as any}>
         <ChakraProvider theme={theme}>{children}</ChakraProvider>
@@ -89,7 +88,7 @@ describe("Application Integration Tests", () => {
 
   describe("Home Page Integration", () => {
     it("should render home page with vaults", async () => {
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         expect(screen.getByText("Alpha STETH")).toBeInTheDocument()
@@ -101,7 +100,7 @@ describe("Application Integration Tests", () => {
     })
 
     it("should display vault statistics correctly", async () => {
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         expect(screen.getByText("$231.86")).toBeInTheDocument()
@@ -118,7 +117,7 @@ describe("Application Integration Tests", () => {
         }),
       }))
 
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       // Should show loading state
       expect(screen.getByText(/loading/i)).toBeInTheDocument()
@@ -133,7 +132,7 @@ describe("Application Integration Tests", () => {
         }),
       }))
 
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       // Should show error state
       expect(screen.getByText(/error/i)).toBeInTheDocument()
@@ -149,7 +148,7 @@ describe("Application Integration Tests", () => {
         value: 375,
       })
 
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         expect(screen.getByText("Alpha STETH")).toBeInTheDocument()
@@ -170,7 +169,7 @@ describe("Application Integration Tests", () => {
         value: 1920,
       })
 
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         expect(screen.getByText("Alpha STETH")).toBeInTheDocument()
@@ -210,7 +209,7 @@ describe("Application Integration Tests", () => {
         }) => <div>{children}</div>,
       }))
 
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         expect(
@@ -220,7 +219,7 @@ describe("Application Integration Tests", () => {
     })
 
     it("should show deposit button when connected", async () => {
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         expect(screen.getByText("Deposit")).toBeInTheDocument()
@@ -260,7 +259,7 @@ describe("Application Integration Tests", () => {
         }),
       }))
 
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         expect(screen.getByText("Alpha STETH")).toBeInTheDocument()
@@ -279,7 +278,7 @@ describe("Application Integration Tests", () => {
         }),
       }))
 
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         expect(
@@ -298,7 +297,7 @@ describe("Application Integration Tests", () => {
 
       // This would normally be caught by an error boundary
       expect(() => {
-        render(<ErrorComponent />, { wrapper: createTestWrapper() })
+        render(<ErrorComponent />, { wrapper: TestWrapper })
       }).toThrow("Test error")
     })
 
@@ -310,7 +309,7 @@ describe("Application Integration Tests", () => {
       }))
 
       expect(() => {
-        render(<PageHome />, { wrapper: createTestWrapper() })
+        render(<PageHome />, { wrapper: TestWrapper })
       }).toThrow("Async error")
     })
   })
@@ -349,7 +348,7 @@ describe("Application Integration Tests", () => {
       }))
 
       const startTime = Date.now()
-      render(<PageHome />, { wrapper: createTestWrapper() })
+      render(<PageHome />, { wrapper: TestWrapper })
       const endTime = Date.now()
 
       // Should render within reasonable time
@@ -362,4 +361,3 @@ describe("Application Integration Tests", () => {
     })
   })
 })
-
