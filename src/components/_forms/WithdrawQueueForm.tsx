@@ -410,9 +410,10 @@ export const WithdrawQueueForm = ({
           return
         }
         if (causeMsg.includes("BoringOnChainQueue__BadDiscount")) {
+          const tokenSymbol = (selectedToken?.symbol || "") as string
           const rules: any =
             (cellarConfig as any)?.withdrawTokenConfig?.[
-              selectedToken?.symbol as keyof typeof (cellarConfig as any).withdrawTokenConfig
+              tokenSymbol
             ]
           const minPct = rules?.minDiscount ?? undefined
           const maxPct = rules?.maxDiscount ?? undefined
