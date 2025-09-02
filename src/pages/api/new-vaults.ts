@@ -25,7 +25,7 @@ export default async function handler(
 
     // Map address->tvl from aggregator result (normalize keys to lowercase)
     const tvlByKey: Record<string, number> = {}
-    for (const c of (agg?.data?.cellars ?? [])) {
+    for (const c of agg?.data?.cellars ?? []) {
       // keys in aggregator are address or address-<chain>
       const key = String(c?.id ?? "").toLowerCase()
       tvlByKey[key] = Number((c as any)?.tvlTotal || 0)

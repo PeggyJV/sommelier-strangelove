@@ -20,7 +20,7 @@
   "transform": {
     "^.+\\.(t|j)sx?$": [
       "babel-jest",
-      { "configFile": "<rootDir>/babel-jest.config.js" }
+      { "configFile": "<rootDir>/jest.babel.config.js" }
     ]
   },
   "transformIgnorePatterns": [

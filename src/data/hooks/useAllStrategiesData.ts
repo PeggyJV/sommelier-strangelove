@@ -44,6 +44,8 @@ export const useAllStrategiesData = () => {
           setError(error)
         } else {
           setcellarData(data)
+          // Clear any previous error once data is successfully loaded
+          setError(null)
         }
       })
       .catch((error) => setError(error))

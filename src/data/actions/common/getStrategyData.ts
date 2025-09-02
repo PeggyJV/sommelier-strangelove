@@ -45,8 +45,15 @@ export const getStrategyData = async ({
         ({ config }) =>
           config.cellar.address.toLowerCase() ===
             address.toLowerCase() &&
-          config.chain.id === contracts.chain
-      )!
+          config.chain.id === (contracts as any)?.chain
+      )
+      if (!strategy) {
+        throw new Error(
+          `Strategy not found for address ${address} on chain ${
+            (contracts as any)?.chain
+          }`
+        )
+      }
       const config: ConfigProps = strategy.config!
       const symbol = config.baseAsset.symbol
 
@@ -84,7 +91,7 @@ export const getStrategyData = async ({
 
       let tvm = hideValue
         ? undefined
-        : getTvm(String(Number(strategyData?.tvlTotal)))
+        : getTvm(String(Number(strategyData?.tvlTotal ?? 0)))
 
       const tradedAssets = (() => {
         const assets = strategy.tradedAssets

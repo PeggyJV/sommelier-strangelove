@@ -59,32 +59,21 @@ const sommelierAPIAllStrategiesData = async (
       fetchData(tvlData),
     ])
 
-    if (
-      allEthereumStrategyDataResponse.status !== 200 ||
-      allArbitrumStrategyDataResponse.status !== 200 ||
-      allOptimismStrategyDataResponse.status !== 200 ||
-      false ||
-      tvlDataResponse.status !== 200
-    ) {
-      throw new Error(
-        "failed to fetch data: ETH Strategy Response code: " +
-          allEthereumStrategyDataResponse.status +
-          " Arbitrum Strategy Response code: " +
-          allArbitrumStrategyDataResponse.status +
-          " Optimism Strategy Response code: " +
-          allOptimismStrategyDataResponse.status +
-          " Scroll Strategy Response code: DISABLED " +
-          " Tvl Response code:" +
-          tvlDataResponse.status
-      )
-    }
+    // Proceed even if one chain fails; use empty responses for non-200
+    const okEth = allEthereumStrategyDataResponse.status === 200
+    const okArb = allArbitrumStrategyDataResponse.status === 200
+    const okOp = allOptimismStrategyDataResponse.status === 200
+    const okTvl = tvlDataResponse.status === 200
 
-    const fetchedEthData =
-      await allEthereumStrategyDataResponse.json()
-    const fetchedArbitrumData =
-      await allArbitrumStrategyDataResponse.json()
-    const fetchedOptimismData =
-      await allOptimismStrategyDataResponse.json()
+    const fetchedEthData = okEth
+      ? await allEthereumStrategyDataResponse.json()
+      : { Response: {} }
+    const fetchedArbitrumData = okArb
+      ? await allArbitrumStrategyDataResponse.json()
+      : { Response: {} }
+    const fetchedOptimismData = okOp
+      ? await allOptimismStrategyDataResponse.json()
+      : { Response: {} }
     const fetchedScrollData = { Response: {} as any }
 
     let returnObj = {
@@ -95,7 +84,9 @@ const sommelierAPIAllStrategiesData = async (
       },
     }
 
-    const fetchedTVL = await tvlDataResponse.json()
+    const fetchedTVL = okTvl
+      ? await tvlDataResponse.json()
+      : { Response: {} }
 
     // Do this loop per chain
     // For each key perform transformation
@@ -130,7 +121,10 @@ const sommelierAPIAllStrategiesData = async (
       transformedData.sort((a: any, b: any) => b.date - a.date)
 
       // Get tvl
-      let tvl = fetchedTVL.Response[cellarAddress]
+      let tvl =
+        fetchedTVL?.Response?.[cellarAddress] ??
+        fetchedTVL?.Response?.[cellarAddress?.toLowerCase?.()] ??
+        0
 
       if (tvl === undefined) {
         tvl = 0
@@ -187,7 +181,12 @@ const sommelierAPIAllStrategiesData = async (
         transformedData.sort((a: any, b: any) => b.date - a.date)
 
         // Get tvl
-        let tvl = fetchedTVL.Response[cellarAddress + "-arbitrum"]
+        let tvl =
+          fetchedTVL?.Response?.[cellarAddress + "-arbitrum"] ??
+          fetchedTVL?.Response?.[
+            cellarAddress?.toLowerCase?.() + "-arbitrum"
+          ] ??
+          0
 
         if (tvl === undefined) {
           tvl = 0
@@ -247,7 +246,12 @@ const sommelierAPIAllStrategiesData = async (
         transformedData.sort((a: any, b: any) => b.date - a.date)
 
         // Get tvl
-        let tvl = fetchedTVL.Response[cellarAddress + "-optimism"]
+        let tvl =
+          fetchedTVL?.Response?.[cellarAddress + "-optimism"] ??
+          fetchedTVL?.Response?.[
+            cellarAddress?.toLowerCase?.() + "-optimism"
+          ] ??
+          0
 
         if (tvl === undefined) {
           tvl = 0
