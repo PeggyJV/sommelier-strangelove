@@ -410,11 +410,20 @@ export const WithdrawQueueForm = ({
           return
         }
         if (causeMsg.includes("BoringOnChainQueue__BadDiscount")) {
+          const rules: any =
+            (cellarConfig as any)?.withdrawTokenConfig?.[
+              selectedToken?.symbol as keyof typeof (cellarConfig as any).withdrawTokenConfig
+            ]
+          const minPct = rules?.minDiscount ?? undefined
+          const maxPct = rules?.maxDiscount ?? undefined
           addToast({
             heading: "Withdraw Queue",
             body: (
               <Text>
-                Withdraw request rejected: discount is invalid. Please try again later.
+                Withdraw request rejected: discount is invalid.
+                {minPct !== undefined && maxPct !== undefined
+                  ? ` Allowed range for ${selectedToken.symbol}: ${minPct}%–${maxPct}%.`
+                  : ""}
               </Text>
             ),
             status: "info",
@@ -466,15 +475,31 @@ export const WithdrawQueueForm = ({
     withdrawAmtInBaseDenom: bigint
   ) => {
     const currentTime = Math.floor(Date.now() / 1000)
-    const deadlineSeconds =
-      Math.floor(WITHDRAW_DEADLINE_HOURS * 60 * 60) + currentTime
+    const configuredRules: any =
+      (cellarConfig as any)?.withdrawTokenConfig?.[
+        selectedToken?.symbol as keyof typeof (cellarConfig as any).withdrawTokenConfig
+      ]
+    const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
+    const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
+    // Our desired default is 25 bps; clamp to per-asset rules if present
+    const desiredBps = DISCOUNT_BPS
+    const discountBps =
+      minBps && maxBps
+        ? Math.max(minBps, Math.min(desiredBps, maxBps))
+        : desiredBps
+    const minDeadline = Number(
+      configuredRules?.minimumSecondsToDeadline ?? 0
+    )
+    const policyDeadline = Math.floor(WITHDRAW_DEADLINE_HOURS * 60 * 60)
+    const effectiveDeadlineSeconds = Math.max(policyDeadline, minDeadline)
+    const deadlineSeconds = currentTime + effectiveDeadlineSeconds
 
     let hash
 
     if (boringQueue) {
-      const discount = BigInt(DISCOUNT_BPS)
+      const discount = BigInt(discountBps)
 
-      const deadlineSeconds = BigInt(WITHDRAW_DEADLINE_HOURS * 60 * 60)
+      const deadlineSeconds = BigInt(effectiveDeadlineSeconds)
 
       if (isActiveWithdrawRequest && boringQueueWithdrawals) {
         // Replace existing BoringQueuerequest
