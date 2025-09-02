@@ -18,3 +18,4 @@ studio/node_modules
 .env*.local
 idea/
 .idea
+.playwright-mcp
