@@ -96,10 +96,10 @@ export const Nav = (props: FlexProps) => {
                   url.replace(/^(https:\/\/)?(www\.)?/, "");
                 
                 const externalLinks = [
-                    "https://sommelier.finance/",
-                    "https://sommelier.finance/audits",
-                    "https://sommelier.finance/defi",
-                    "https://sommelier.finance/staking"
+                    "https://somm.finance/",
+                    "https://somm.finance/audits",
+                    "https://somm.finance/defi",
+                    "https://somm.finance/staking"
                 ];
                 const pathSegment = routes.pathname.split("/")[1];
 
