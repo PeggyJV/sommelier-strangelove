@@ -228,12 +228,15 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
               minHeight: "56px",
             },
           }}
+          w="100%"
+          minW={0}
         >
-          <ConnectGate
-            fallbackLabel="Connect wallet to deposit"
-            fullWidth
-            overrideChainId={(vault as any)?.config?.chain?.id}
-          >
+          <Box px={{ base: 3, md: 0 }} w="100%">
+            <ConnectGate
+              fallbackLabel="Connect wallet to deposit"
+              fullWidth
+              overrideChainId={(vault as any)?.config?.chain?.id}
+            >
             {isPreLaunch ? (
               <ActionButton
                 variantStyle="primary"
@@ -258,7 +261,8 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                 Deposit
               </ActionButton>
             )}
-          </ConnectGate>
+            </ConnectGate>
+          </Box>
           {isPreLaunch && remaining && (
             <Text fontSize="xs" color="neutral.400">
               Available in: {remaining}
