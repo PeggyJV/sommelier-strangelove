@@ -74,7 +74,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     ?.userStrategyData?.userData?.netValue?.formatted
 
   const safeValue = (v?: string | number | null) =>
-    v === undefined || v === null || v === "" || v === 0 || v === "0"
+    v === undefined || v === null || v === ""
       ? "–"
       : v
 
