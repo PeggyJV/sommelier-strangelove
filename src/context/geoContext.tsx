@@ -9,8 +9,11 @@ import {
   useState,
 } from "react"
 
+// In browser, prefer relative path to avoid CORS in dev when running on non-default ports
 const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/"
+  typeof window === "undefined"
+    ? process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/"
+    : "/"
 
 type CheckIPState = {
   country: string | null

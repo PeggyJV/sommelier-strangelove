@@ -70,19 +70,23 @@ export const useStrategyData = (
       { provider: publicClient?.uid, address: key },
     ],
     queryFn: async () => {
+      const contractsForKey = allContracts?.[key]
+      if (!contractsForKey) {
+        return null
+      }
       const result = await getStrategyData({
         address,
-        contracts: allContracts![key]!,
+        contracts: contractsForKey as any,
         sommPrice: sommPrice ?? "0",
         stratData: structuredClone(stratData?.cellar),
         baseAssetPrice: baseAssetPrice ?? "0",
       })
-
       return result
     },
     enabled:
       enabled &&
       !!allContracts &&
+      !!allContracts[key] &&
       !!sommPrice &&
       (isNoDataSource || !!stratData) &&
       !!baseAssetPrice,
