@@ -433,10 +433,15 @@ export const PageHome = () => {
       { connected: isConnected }
     ).map((x) => x.ref)
 
-    // If minimal Somm-native list is available, prefer it to avoid heavy data needs
+    // Merge minimal Somm-native list (tvl) into full items to keep rich fields
     const preferredSomm =
       Array.isArray(sommNativeMin) && sommNativeMin.length
-        ? sommNativeMin
+        ? sortedSomm.map((full) => {
+            const min = (sommNativeMin as any[]).find(
+              (m) => m.slug === full.slug
+            )
+            return min ? { ...full, tvm: min.tvm } : full
+          })
         : sortedSomm
 
     return { sommNative: preferredSomm as any, legacy: sortedLegacy }
@@ -507,7 +512,7 @@ export const PageHome = () => {
               <>
                 <SectionHeader title="Somm-native Vaults" />
                 <Suspense fallback={<LightSkeleton height="200px" />}>
-                  <SommNativeList columns={columns} />
+                  <SommNativeList columns={columns} data={sommNative} />
                 </Suspense>
               </>
             )}

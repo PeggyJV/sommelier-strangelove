@@ -4,10 +4,12 @@ import { useSommNativeVaults } from "data/hooks/useSommNativeVaults"
 
 type Props = {
   columns: any
+  data?: any[]
 }
 
-export default function SommNativeList({ columns }: Props) {
-  const { data } = useSommNativeVaults()
+export default function SommNativeList({ columns, data: propData }: Props) {
+  const { data: hookData } = useSommNativeVaults()
+  const data = propData ?? hookData
   if (!data || data.length === 0) return null
   return (
     <StrategyTable
