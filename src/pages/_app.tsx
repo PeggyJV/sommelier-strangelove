@@ -17,7 +17,6 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import { reactQueryClient } from "utils/reactQuery"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { HomeProvider } from "data/context/homeContext"
-import { reportWebVitals } from "utils/webVitals"
 
 const App = ({ Component, pageProps }: AppProps) => {
   // Suppress unhandled promise rejections for user-rejected wallet actions to avoid dev overlay
@@ -122,9 +121,5 @@ const App = ({ Component, pageProps }: AppProps) => {
   )
 }
 
-// Report Web Vitals
-if (typeof window !== "undefined") {
-  reportWebVitals()
-}
 
 export default App
