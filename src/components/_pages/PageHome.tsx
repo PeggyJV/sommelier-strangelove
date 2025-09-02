@@ -512,7 +512,10 @@ export const PageHome = () => {
               <>
                 <SectionHeader title="Somm-native Vaults" />
                 <Suspense fallback={<LightSkeleton height="200px" />}>
-                  <SommNativeList columns={columns} data={sommNative} />
+                  <SommNativeList
+                    columns={columns}
+                    data={sommNative}
+                  />
                 </Suspense>
               </>
             )}

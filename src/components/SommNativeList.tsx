@@ -7,7 +7,10 @@ type Props = {
   data?: any[]
 }
 
-export default function SommNativeList({ columns, data: propData }: Props) {
+export default function SommNativeList({
+  columns,
+  data: propData,
+}: Props) {
   const { data: hookData } = useSommNativeVaults()
   const data = propData ?? hookData
   if (!data || data.length === 0) return null
