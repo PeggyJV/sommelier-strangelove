@@ -143,9 +143,9 @@ export function DepositAndWithdrawButton({
   row,
   onDepositModalOpen,
 }: DepositAndWithdrawButtonProps) {
-  const id = row.original.slug
-  const cellarConfig = cellarDataMap[id].config
-  const { lpToken } = useUserBalance(cellarConfig)
+  const id = row?.original?.slug
+  const cellarConfig = id ? cellarDataMap[id]?.config : undefined
+  const { lpToken } = useUserBalance(cellarConfig as any)
   const { data: lpTokenData } = lpToken
 
   // Get net value from row data (main page data structure)
@@ -166,10 +166,10 @@ export function DepositAndWithdrawButton({
   const closeOracleModal = () => setOracleModalOpen(false)
 
   const buttonText = getButtonText(
-    row.original.deprecated,
+    Boolean(row?.original?.deprecated),
     lpTokenDisabled,
     cellarConfig,
-    id
+    id as string
   )
 
   const isWithdrawButton = buttonText === "Withdraw"
@@ -233,7 +233,10 @@ export function DepositAndWithdrawButton({
               // analytics.track("home.deposit.modal-opened")
 
               // Check if user is on the right chain, if not prompt them to switch
-              if (chain?.id !== cellarConfig.chain.wagmiId) {
+              if (
+                cellarConfig &&
+                chain?.id !== cellarConfig?.chain?.wagmiId
+              ) {
                 // Continue to manage page where user can switch
                 window.location.href = `/strategies/${id}/manage`
                 return
@@ -255,8 +258,8 @@ export function DepositAndWithdrawButton({
                 id: row.original.slug,
                 type: getButtonType(
                   cellarConfig,
-                  id,
-                  row.original.deprecated
+                  id as string,
+                  Boolean(row?.original?.deprecated)
                 ),
               })
             }}
@@ -281,7 +284,10 @@ export function DepositAndWithdrawButton({
               // analytics.track("home.deposit.modal-opened")
 
               // Check if user is on the right chain, if not prompt them to switch
-              if (chain?.id !== cellarConfig.chain.wagmiId) {
+              if (
+                cellarConfig &&
+                chain?.id !== cellarConfig?.chain?.wagmiId
+              ) {
                 // Continue to manage page where user can switch
                 window.location.href = `/strategies/${id}/manage`
                 return
@@ -303,8 +309,8 @@ export function DepositAndWithdrawButton({
                 id: row.original.slug,
                 type: getButtonType(
                   cellarConfig,
-                  id,
-                  row.original.deprecated
+                  id as string,
+                  Boolean(row?.original?.deprecated)
                 ),
               })
             }}
