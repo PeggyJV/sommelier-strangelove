@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from "react"
 import ConnectGate from "components/wallet/ConnectGate"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { useStrategyData } from "data/hooks/useStrategyData"
 import KPIBox from "components/_vaults/KPIBox"
 import ActionButton from "components/ui/ActionButton"
 
@@ -42,7 +43,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
   const built = Array.isArray(vault?.builtWith)
     ? vault?.builtWith
     : []
-  const tvl = vault?.tvm?.formatted
+  // Prefer list TVL; fallback to individual strategy data if missing
   const netVal =
     typeof vault?.baseApySumRewards?.value === "string"
       ? parseFloat(vault?.baseApySumRewards?.value)
@@ -61,6 +62,11 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
   // User net value (reuse manage page logic via hook)
   const strategyAddress = vault?.config?.cellar?.address
   const strategyChainId = vault?.config?.chain?.id
+  const { data: stratData } =
+    strategyAddress && strategyChainId
+      ? useStrategyData(strategyAddress, strategyChainId)
+      : ({} as any)
+  const tvl = stratData?.tvm?.formatted ?? vault?.tvm?.formatted
   const { data: userStratData } =
     strategyAddress && strategyChainId
       ? useUserStrategyData(
