@@ -157,6 +157,8 @@ export const StrategyTable = memo(
         borderColor="surface.secondary"
         borderWidth={1}
         rounded="xl"
+        // Ensure any button glow/outline is not cut off vertically on mobile
+        overflow="visible"
       >
         <Table
           {...getTableProps()}
@@ -170,6 +172,9 @@ export const StrategyTable = memo(
               "thead th:nth-of-type(n+2)": { display: "none" },
               "tbody td:nth-of-type(n+2)": { display: "none" },
             },
+            // Let rows/cells render visual effects outside cell bounds
+            "tbody tr": { overflow: "visible" },
+            "tbody td": { overflow: "visible" },
           }}
           rounded="lg"
         >
