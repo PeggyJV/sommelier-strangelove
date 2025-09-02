@@ -1,6 +1,11 @@
 import { switchChain } from "wagmi/actions"
 import { config } from "../../lib/wagmi"
 import { chainConfig } from "data/chainConfig"
+import {
+  ALCHEMY_API_KEY,
+  INFURA_API_KEY,
+  QUICKNODE_API_KEY,
+} from "src/context/rpc_context"
 
 export async function requestSwitch(chainId: 1 | 42161 | 8453) {
   try {
@@ -28,11 +33,32 @@ export async function requestSwitchWithAdd(chainId: 1 | 42161 | 8453) {
       }
 
       try {
-        const rpcUrls = [
-          (chain as any).infuraRpcUrl,
-          (chain as any).alchemyRpcUrl,
-          (chain as any).quicknodeRpcUrl,
-        ].filter(Boolean)
+        // Build provider URLs with API keys when available
+        const keyedUrls = [
+          (chain as any).infuraRpcUrl && INFURA_API_KEY
+            ? `${(chain as any).infuraRpcUrl}/${INFURA_API_KEY}`
+            : undefined,
+          (chain as any).alchemyRpcUrl && ALCHEMY_API_KEY
+            ? `${(chain as any).alchemyRpcUrl}/${ALCHEMY_API_KEY}`
+            : undefined,
+          (chain as any).quicknodeRpcUrl && QUICKNODE_API_KEY
+            ? `${(chain as any).quicknodeRpcUrl}/${QUICKNODE_API_KEY}`
+            : undefined,
+        ].filter(Boolean) as string[]
+
+        // Public RPC fallbacks to avoid wallet prompting for provider login
+        const publicFallbacks: Record<number, string[]> = {
+          1: [
+            "https://cloudflare-eth.com",
+            "https://rpc.ankr.com/eth",
+          ],
+          42161: ["https://arb1.arbitrum.io/rpc"],
+          10: ["https://mainnet.optimism.io"],
+          8453: ["https://base-rpc.publicnode.com"],
+        }
+        const rpcUrls = keyedUrls.length
+          ? keyedUrls
+          : publicFallbacks[chainId] || []
 
         await (window as any).ethereum.request({
           method: "wallet_addEthereumChain",
