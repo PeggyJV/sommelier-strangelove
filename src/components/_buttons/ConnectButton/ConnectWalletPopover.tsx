@@ -46,6 +46,8 @@ export const ConnectWalletPopover = memo(
             <Button
               onClick={openConnectModal}
               variant="sommOutline"
+              w={rest.w || rest.width || "100%"}
+              minH={{ base: "48px", md: rest.minH }}
               {...rest}
             >
               {(children as string) || "Connect Wallet"}

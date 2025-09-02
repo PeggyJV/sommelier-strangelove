@@ -41,7 +41,7 @@ const ConnectButton = (props: ConnectButtonProps) => {
     const chain = chainConfigMap[props.overridechainid]
     return (
       <ClientOnly>
-        <HStack>
+        <HStack w="100%">
           {isConnected ? (
             isLarger992 ? (
               <ConnectedPopover />
