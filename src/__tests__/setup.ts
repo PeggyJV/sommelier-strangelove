@@ -67,12 +67,14 @@ jest.mock("viem", () => ({
     throw new Error("Network error")
   },
   createPublicClient: jest.fn().mockImplementation(() => ({
-    getBlockNumber: jest.fn().mockRejectedValue(new Error("HTTP request failed")),
-    readContract: jest.fn().mockRejectedValue(new Error("Contract read failed")),
+    getBlockNumber: jest
+      .fn()
+      .mockRejectedValue(new Error("HTTP request failed")),
+    readContract: jest
+      .fn()
+      .mockRejectedValue(new Error("Contract read failed")),
   })),
 }))
-
-
 
 // Mock environment variables
 process.env.NEXT_PUBLIC_ALCHEMY_KEY = "test-alchemy-key"
@@ -134,4 +136,38 @@ global.console = {
   info: jest.fn(),
   warn: jest.fn(),
   error: jest.fn(),
+}
+
+// In jsdom, ensure localStorage/sessionStorage exist for libs that access them
+const createMemoryStorage = () => {
+  const map = new Map<string, string>()
+  return {
+    getItem: (k: string) => (map.has(k) ? String(map.get(k)) : null),
+    setItem: (k: string, v: string) => {
+      map.set(k, String(v))
+    },
+    removeItem: (k: string) => {
+      map.delete(k)
+    },
+    clear: () => {
+      map.clear()
+    },
+    key: (i: number) => Array.from(map.keys())[i] ?? null,
+    get length() {
+      return map.size
+    },
+  } as any
+}
+
+if (typeof (globalThis as any).localStorage === "undefined") {
+  Object.defineProperty(globalThis, "localStorage", {
+    value: createMemoryStorage(),
+    writable: false,
+  })
+}
+if (typeof (globalThis as any).sessionStorage === "undefined") {
+  Object.defineProperty(globalThis, "sessionStorage", {
+    value: createMemoryStorage(),
+    writable: false,
+  })
 }
