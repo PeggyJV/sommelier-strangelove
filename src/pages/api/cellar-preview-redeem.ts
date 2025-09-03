@@ -21,17 +21,40 @@ const cellarPreviewRedeem = async (
       })
       return
     }
+    const cellarConfig = cellarDataMap[cellarId]?.config;
+    let address;
+    let abi;
+    let chain;
 
-    const cellar = await queryContract(
-      cellarDataMap[cellarId]?.config.id,
-      cellarDataMap[cellarId]?.config.cellar.abi,
-      cellarDataMap[cellarId]?.config.chain
+    if (cellarConfig.boringQueue) {
+      address = cellarConfig.boringQueue.address
+      abi = cellarConfig.boringQueue.abi
+      chain = cellarConfig.chain
+    } else {
+      address = cellarConfig.cellar.address
+      abi = cellarConfig.cellar.abi
+      chain = cellarConfig.chain
+    }
+
+    const contract = await queryContract(
+      address,
+      abi,
+      chain
     )
 
-    let shareValue: number = 0
+    let shareValue = 0
 
-    if (cellar) {
-      shareValue = await cellar.read.previewRedeem([sharesNum]) as unknown as number
+    if (contract) {
+      shareValue = cellarConfig.boringQueue
+        ? (await contract.read.previewAssetsOut([
+            cellarConfig.baseAsset.address,
+            sharesNum,
+            0,
+          ])) as unknown as number
+        : (await contract.read.previewRedeem([
+            sharesNum,
+          ])) as unknown as number
+
     } else {
       throw new Error("failed to load contract")
     }

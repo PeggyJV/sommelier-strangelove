@@ -62,11 +62,6 @@ export const config = {
       ABI: CellarV0815,
       SLUG: "AAVE",
     },
-    ALPHA_STETH: {
-      ADDRESS: "0x5232bc0F5999f8dA604c42E1748A13a170F94A1B",
-      ABI: ArcticArchitectureLens,
-      SLUG: "Alpha-stETH",
-    },
     ETH_BTC_TREND_CELLAR: {
       ADDRESS: "0x6b7f87279982d919bbf85182ddeab179b366d8f2",
       ABI: CellarV0816,
@@ -353,9 +348,10 @@ export const config = {
       SLUG: "Turbo-eETHV2",
       ABI: CellarStakingV0821,
     },
-    ALPHA_STETH_BORING_VAULT: {
+    ALPHA_STETH: {
       ADDRESS: "0xeC797D184a8C6Cd1EF01faDC98B575e84B156C18",
       ABI: BoringVault,
+      SLUG: "Alpha-stETH",
     },
     ALPHA_STETH_ACCOUNTANT: {
       ADDRESS: "0x9636E393B898958d51C351bca896e7BF1736943a",
@@ -368,6 +364,10 @@ export const config = {
     ALPHA_STETH_BORING_QUEUE: {
       ADDRESS: "0xC189Ab0f959460Df161A875fD5fc1037dEd97D08",
       ABI: BoringOnChainQueue,
+    },
+    ALPHA_STETH_LENS: {
+      ADDRESS: "0x5232bc0F5999f8dA604c42E1748A13a170F94A1B",
+      ABI: ArcticArchitectureLens,
     },
   },
   cleargate: {

@@ -104,10 +104,7 @@ export interface ConfigProps {
     address: string
     abi: Abi
   }
-  boringVault?: {
-    address: string
-    abi: Abi
-  }
+  boringVault?: boolean
   accountant?: {
     address: string
     abi: Abi

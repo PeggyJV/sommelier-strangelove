@@ -87,7 +87,7 @@ export const WithdrawQueueForm = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
-  const { boringQueue, boringVault } =
+  const { boringQueue, cellarContract } =
     useCreateContracts(cellarConfig)
 
   const PRESET_VALUES: Record<
@@ -123,17 +123,6 @@ export const WithdrawQueueForm = ({
     })
   })()
 
-  const cellarContract = (() => {
-    if (!publicClient) return
-    return boringVault ?? getContract({
-      address: cellarConfig.cellar.address as `0x${string}`,
-      abi: cellarConfig.cellar.abi,
-      client: {
-        public: publicClient,
-        wallet: walletClient,
-      },
-    })
-  })()
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -934,14 +923,16 @@ export const WithdrawQueueForm = ({
           enter the Withdraw Queue.
         </Text>
       )*/}
-      <FAQAccordion
-        data={[
-          {
+      {!cellarConfig.boringVault && (
+        <FAQAccordion
+          data={[
+            {
             question: "What is the Withdraw Queue?",
             answer: `The Withdraw Queue is a way for users to submit a withdraw request if they are trying to withdraw more than the liquid reserve from a strategy. Once the request is submitted, it will be eventually fulfilled on behalf of the user and the withdrawn funds will appear automatically in the user's wallet (assuming the requests is fulfilled within the time constraint specified by the user). A withdraw request through the queue also has a much lower gas cost for users compared to instant withdrawals.`,
           },
         ]}
       />
+      )}
     </VStack>
   )
 }

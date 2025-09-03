@@ -75,11 +75,11 @@ export const useCreateContracts = (config: ConfigProps) => {
     })
   })()
 
-  const boringVault = (() => {
-    if (!publicClient || !config.boringVault) return
+  const boringVaultLens = (() => {
+    if (!publicClient || !config.lens) return
     return getContract({
-      address: config.boringVault.address as `0x${string}`,
-      abi: config.boringVault.abi,
+      address: config.lens.address as `0x${string}`,
+      abi: config.lens.abi,
       client: {
         public: publicClient,
         wallet: walletClient,
@@ -105,7 +105,7 @@ export const useCreateContracts = (config: ConfigProps) => {
     stakerContract,
     cellarContract,
     cellarRouterSigner,
-    boringVault,
+    boringVaultLens,
     boringQueue,
     chain,
   }
