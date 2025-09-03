@@ -553,7 +553,9 @@ export const SommelierTab = ({
         } catch {}
 
         // Apply a small tolerance so gas estimation does not flag likely-to-fail
-        const slippageBps = BigInt(Math.round((config.SWAP.SLIPPAGE ?? 0.5) * 100))
+        const slippageBps = BigInt(
+          Math.round((config.SWAP.SLIPPAGE ?? 0.5) * 100)
+        )
         const minShares =
           shareAmount > 0n
             ? shareAmount - (shareAmount * slippageBps) / 10000n
@@ -590,7 +592,9 @@ export const SommelierTab = ({
             cellarConfig.accountant?.address,
           ])
           if (typeof mm === "bigint") {
-            const slippageBps = BigInt(Math.round((config.SWAP.SLIPPAGE ?? 0.5) * 100))
+            const slippageBps = BigInt(
+              Math.round((config.SWAP.SLIPPAGE ?? 0.5) * 100)
+            )
             minimumMint =
               mm > 0n ? mm - (mm * slippageBps) / 10000n : 0n
           }
@@ -1630,29 +1634,7 @@ export const SommelierTab = ({
                   ) : null}
                 </HStack>
               )}
-              <HStack
-                justifyContent={"center"}
-                p={3}
-                spacing={4}
-                align="flex-start"
-                backgroundColor="purple.dark"
-                border="2px solid"
-                borderRadius={16}
-                borderColor="purple.base"
-              >
-                {selectedToken?.symbol !==
-                cellarConfig.baseAsset.symbol ? (
-                  <Text
-                    fontFamily={"inherit"}
-                    fontWeight={"bold"}
-                    textAlign="center"
-                  >
-                    {
-                      "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."
-                    }
-                  </Text>
-                ) : null}
-              </HStack>
+              {/* Removed cross-asset withdrawal disclaimer for Alpha STETH */}
             </>
           ) : null}
           {needsSwitch && (
