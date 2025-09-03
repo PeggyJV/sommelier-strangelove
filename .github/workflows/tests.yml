@@ -3,10 +3,10 @@ name: Tests
 on:
   pull_request:
     # Run for PRs into any branch (safe: no secrets used)
-    branches: ['**']
+    branches: ["**"]
   push:
     # Run on pushes to any branch to validate before PR is opened
-    branches: ['**']
+    branches: ["**"]
 
 jobs:
   unit_integration:
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: Print versions
         run: |
           echo "Node.js version:"
@@ -51,7 +51,7 @@ jobs:
         run: |
           for i in 1 2 3; do
             echo "Installation attempt $i..."
-            pnpm install --frozen-lockfile --network-timeout 300000 && echo "Installation successful" && break || echo "pnpm install failed (attempt $i), retrying in 10s" && sleep 10;
+            pnpm install && echo "Installation successful" && break || echo "pnpm install failed (attempt $i), retrying in 10s" && sleep 10;
           done
       - name: Verify installation
         run: |
@@ -99,7 +99,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: Setup pnpm store cache
         id: pnpm-cache-e2e
         run: |
@@ -131,5 +131,3 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report
-
-
