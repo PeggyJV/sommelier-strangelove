@@ -552,6 +552,13 @@ export const SommelierTab = ({
           if (typeof mm === "bigint") shareAmount = mm
         } catch {}
 
+        // Apply a small tolerance so gas estimation does not flag likely-to-fail
+        const slippageBps = BigInt(Math.round((config.SWAP.SLIPPAGE ?? 0.5) * 100))
+        const minShares =
+          shareAmount > 0n
+            ? shareAmount - (shareAmount * slippageBps) / 10000n
+            : 0n
+
         hash = (await safeWriteContract(
           {
             address: cellarConfig.cellar.address as `0x${string}`,
@@ -562,7 +569,7 @@ export const SommelierTab = ({
               tokenAddress,
               amtInWei,
               getAddress(address ?? ""),
-              shareAmount,
+              minShares,
             ],
           },
           {
@@ -582,7 +589,11 @@ export const SommelierTab = ({
             cellarConfig.cellar.address,
             cellarConfig.accountant?.address,
           ])
-          if (typeof mm === "bigint") minimumMint = mm
+          if (typeof mm === "bigint") {
+            const slippageBps = BigInt(Math.round((config.SWAP.SLIPPAGE ?? 0.5) * 100))
+            minimumMint =
+              mm > 0n ? mm - (mm * slippageBps) / 10000n : 0n
+          }
         } catch {}
 
         if (isNativeDeposit) {
