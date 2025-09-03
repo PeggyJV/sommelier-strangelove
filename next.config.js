@@ -47,6 +47,9 @@ let nextConfig = {
     "@cosmjs/launchpad",
     "@cosmjs/proto-signing",
     "@cosmjs/stargate",
+    "@cosmjs/encoding",
+    "@cosmjs/amino",
+    "@cosmjs/cosmwasm-stargate",
     "graz",
     "@tanstack/react-query",
     "@tanstack/react-query-devtools",
@@ -73,6 +76,19 @@ let nextConfig = {
           /^node:/,
           (resource) => {
             resource.request = resource.request.replace(/^node:/, "")
+          }
+        )
+      )
+
+      // Fix @cosmjs ESM/CommonJS compatibility issue for Vercel builds
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /@cosmjs\/(encoding|amino|proto-signing|stargate|cosmwasm-stargate)$/,
+          (resource) => {
+            const pkg = resource.request.replace("@cosmjs/", "")
+            resource.request = require.resolve(
+              `@cosmjs/${pkg}/build/index.js`
+            )
           }
         )
       )

@@ -32,7 +32,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
   const onAutofillClick = async (isValidateAddress?: boolean) => {
     try {
       const keplr = getKeplr()
-      const key = await keplr.getKey(mainnetChains.sommelier.chainId)
+      const key = await keplr.getKey(sommelierChain.chainId)
       if (!key.bech32Address) throw new Error("Address not defined")
       setValue(
         "address",

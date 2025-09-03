@@ -10,12 +10,6 @@ import { sommelierChain } from "utils/graz/chains"
 
 const grazConfig = configureGraz({
   chains: [sommelierChain],
-  chainsConfig: {
-    [sommelierChain.chainId]: {
-      rpc: "https://sommelier-rpc.polkachu.com/",
-      rest: "https://sommelier-api.polkachu.com/",
-    },
-  },
 })
 
 const Bridge: NextPage = () => {

@@ -33,7 +33,7 @@ export const InputSommelierAddress: FC<
     try {
       const keplr = await getKeplr()
       if (!keplr) throw new Error("Keplr extension not found")
-      const key = await keplr.getKey(mainnetChains.sommelier.chainId)
+      const key = await keplr.getKey(sommelierChain.chainId)
       if (!key.bech32Address) throw new Error("Address not defined")
       setValue("somm_address", key.bech32Address, {
         shouldValidate: true,
