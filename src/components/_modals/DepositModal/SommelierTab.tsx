@@ -271,12 +271,26 @@ export const SommelierTab = ({
         value: (params as any)?.value,
         context,
       })
-      // Provide our own gas & fee params to avoid wallet overestimation
+      // Prefer simulate → write flow, fallback to estimate
       let prepared: any = { ...(params as any) }
       try {
         if (publicClient && address) {
-          const gasEstimate: bigint =
-            await publicClient.estimateContractGas({
+          // 1) Try simulation to get accurate request (gas, fees, calldata)
+          const sim = await publicClient.simulateContract({
+            address: (params as any)?.address,
+            abi: (params as any)?.abi,
+            functionName: (params as any)?.functionName,
+            args: (params as any)?.args,
+            value: (params as any)?.value,
+            account: getAddress(address),
+          })
+          prepared = { ...sim.request }
+          // 5% buffer on gas if present
+          if (prepared.gas && typeof prepared.gas === "bigint") {
+            prepared.gas = (prepared.gas * 105n) / 100n
+          } else {
+            // Fallback estimate if simulation did not return gas
+            const gasEstimate = await publicClient.estimateContractGas({
               address: (params as any)?.address,
               abi: (params as any)?.abi,
               functionName: (params as any)?.functionName,
@@ -284,22 +298,45 @@ export const SommelierTab = ({
               value: (params as any)?.value,
               account: getAddress(address),
             })
-          const gasWithBuffer = (gasEstimate * 105n) / 100n
-          const fees = await publicClient
-            .estimateFeesPerGas()
-            .catch(() => null)
-          prepared.gas = gasWithBuffer
-          if (fees?.maxFeePerGas)
-            prepared.maxFeePerGas = fees.maxFeePerGas
-          if (fees?.maxPriorityFeePerGas)
-            prepared.maxPriorityFeePerGas = fees.maxPriorityFeePerGas
-          prepared.type = 'eip1559'
+            prepared.gas = (gasEstimate * 105n) / 100n
+          }
           prepared.account = getAddress(address)
+          prepared.type = "eip1559"
+          // Ensure fees exist
+          if (!prepared.maxFeePerGas || !prepared.maxPriorityFeePerGas) {
+            const fees = await publicClient
+              .estimateFeesPerGas()
+              .catch(() => null)
+            if (fees?.maxFeePerGas) prepared.maxFeePerGas = fees.maxFeePerGas
+            if (fees?.maxPriorityFeePerGas)
+              prepared.maxPriorityFeePerGas = fees.maxPriorityFeePerGas
+          }
         }
       } catch (e) {
-        logTxDebug("write.gas_estimate_failed", {
-          message: (e as Error)?.message,
-        })
+        logTxDebug("write.simulation_failed", { message: (e as Error)?.message })
+        try {
+          if (publicClient && address) {
+            const gasEstimate: bigint = await publicClient.estimateContractGas({
+              address: (params as any)?.address,
+              abi: (params as any)?.abi,
+              functionName: (params as any)?.functionName,
+              args: (params as any)?.args,
+              value: (params as any)?.value,
+              account: getAddress(address),
+            })
+            const fees = await publicClient
+              .estimateFeesPerGas()
+              .catch(() => null)
+            prepared.gas = (gasEstimate * 105n) / 100n
+            if (fees?.maxFeePerGas) prepared.maxFeePerGas = fees.maxFeePerGas
+            if (fees?.maxPriorityFeePerGas)
+              prepared.maxPriorityFeePerGas = fees.maxPriorityFeePerGas
+            prepared.type = "eip1559"
+            prepared.account = getAddress(address)
+          }
+        } catch (ee) {
+          logTxDebug("write.gas_estimate_failed", { message: (ee as Error)?.message })
+        }
       }
 
       const hash = await writeContractAsync(prepared)
