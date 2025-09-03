@@ -534,8 +534,17 @@ export const SommelierTab = ({
 
       // For BoringVault (like Alpha STETH), use the teller contract
       if (cellarConfig.teller) {
-        // Calculate minimum mint amount (0 for now, can be enhanced later)
-        const minimumMint = 0n
+        // Calculate minimum mint amount via Lens to aid gas estimation & slippage safety
+        let minimumMint = 0n
+        try {
+          const mm = await boringVaultLens?.read.previewDeposit([
+            tokenAddress,
+            amtInWei,
+            cellarConfig.cellar.address,
+            cellarConfig.accountant?.address,
+          ])
+          if (typeof mm === "bigint") minimumMint = mm
+        } catch {}
 
         if (isNativeDeposit) {
           // Native ETH deposit
