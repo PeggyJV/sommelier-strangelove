@@ -1574,12 +1574,12 @@ export const SommelierTab = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
-          {selectedToken?.symbol !== cellarConfig.baseAsset.symbol ? (
+          {!isAlphaSteth &&
+          selectedToken?.symbol !== cellarConfig.baseAsset.symbol ? (
             <>
               <CardHeading paddingTop="2em">
                 Transaction details
               </CardHeading>
-              {!isAlphaSteth && (
                 <HStack justify="space-between">
                   <HStack spacing={1} align="center">
                     <Tooltip
@@ -1633,7 +1633,6 @@ export const SommelierTab = ({
                     </>
                   ) : null}
                 </HStack>
-              )}
               {/* Removed cross-asset withdrawal disclaimer for Alpha STETH */}
             </>
           ) : null}
