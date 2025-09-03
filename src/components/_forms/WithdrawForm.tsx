@@ -65,8 +65,10 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
 
   const openWithdrawQueueModal = () =>
     setIsWithdrawQueueModalOpen(true)
-  const closeWithdrawQueueModal = () =>
+  const closeWithdrawQueueModal = () => { 
     setIsWithdrawQueueModalOpen(false)
+    onClose()
+  }
 
   const id = (useRouter().query.id as string) || _id
   const cellarConfig = cellarDataMap[id].config
