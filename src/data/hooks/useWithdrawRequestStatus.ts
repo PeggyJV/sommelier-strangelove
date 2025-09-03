@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { useAccount, useChainId, usePublicClient } from "wagmi"
-import { getAddress, getContract, createWalletClient, custom } from "viem"
+import { useAccount, useChainId, usePublicClient, useWalletClient } from "wagmi"
+import { getAddress, getContract } from "viem"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { useBoringQueueWithdrawals } from "./useBoringQueueWithdrawals"
 import { ConfigProps } from "data/types"
@@ -13,13 +13,7 @@ export const useWithdrawRequestStatus = (
   const { address, isConnected } = useAccount()
   const chainId = useChainId()
   const publicClient = usePublicClient()
-
-  const walletClient = isConnected
-    ? createWalletClient({
-        chain: publicClient?.chain,
-        transport: custom(window.ethereum!),
-      })
-    : undefined
+  const walletClient = useWalletClient()
 
   const { data: boringQueueWithdrawals } = useBoringQueueWithdrawals(
     cellarConfig.cellar.address,

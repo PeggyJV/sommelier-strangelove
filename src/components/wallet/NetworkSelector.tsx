@@ -1,36 +1,24 @@
-import {
-  Box,
-  Button,
-  HStack,
-  Stack,
-  Text,
-  VisuallyHidden,
-} from "@chakra-ui/react"
-import { useAccount, useSwitchChain } from "wagmi"
-import {
-  Chain,
-  chainConfig,
-  chainConfigMap,
-} from "src/data/chainConfig"
-import { useMemo } from "react"
-import ChainButton from "components/_buttons/ChainButton"
+import React, { useMemo } from "react"
+import { Button, Stack, Text, VisuallyHidden } from "@chakra-ui/react"
+import { useAccount } from "wagmi"
 import { useBrandedToast } from "hooks/chakra"
+import { chainConfig, Chain } from "data/chainConfig"
+import { requestSwitchWithAdd } from "utils/wallet/chainUtils"
 
-export type NetworkSelectorMode = "inline" | "header"
-
-export default function NetworkSelector({
-  mode = "inline",
-  requiredChainId,
-  onSwitched,
-  fullWidth,
-}: {
-  mode?: NetworkSelectorMode
+interface NetworkSelectorProps {
   requiredChainId?: number
+  mode?: "inline" | "button"
   onSwitched?: (chainId: number) => void
   fullWidth?: boolean
-}) {
+}
+
+export default function NetworkSelector({
+  requiredChainId,
+  mode = "button",
+  onSwitched,
+  fullWidth = false,
+}: NetworkSelectorProps) {
   const { chain } = useAccount()
-  const { switchChainAsync } = useSwitchChain()
   const { addToast } = useBrandedToast()
 
   const currentChain: Chain | undefined = useMemo(() => {
@@ -46,54 +34,9 @@ export default function NetworkSelector({
   const handleQuickSwitch = async () => {
     if (!requiredChain) return
     try {
-      await switchChainAsync({ chainId: requiredChain.wagmiId })
+      await requestSwitchWithAdd(requiredChain.wagmiId)
       onSwitched?.(requiredChain.wagmiId)
     } catch (e: any) {
-      // If chain not added in wallet, try wallet_addEthereumChain
-      if (
-        e?.code === 4902 &&
-        typeof window !== "undefined" &&
-        (window as any)?.ethereum
-      ) {
-        try {
-          const rpcUrls = [
-            (requiredChain as any).infuraRpcUrl,
-            (requiredChain as any).alchemyRpcUrl,
-            (requiredChain as any).quicknodeRpcUrl,
-          ].filter(Boolean)
-          await (window as any).ethereum.request({
-            method: "wallet_addEthereumChain",
-            params: [
-              {
-                chainId: "0x" + requiredChain.wagmiId.toString(16),
-                chainName: requiredChain.displayName,
-                rpcUrls: rpcUrls.length ? rpcUrls : undefined,
-                nativeCurrency: {
-                  name: "ETH",
-                  symbol: "ETH",
-                  decimals: 18,
-                },
-                blockExplorerUrls: [
-                  requiredChain.blockExplorer?.url,
-                ].filter(Boolean),
-              },
-            ],
-          })
-          await switchChainAsync({ chainId: requiredChain.wagmiId })
-          onSwitched?.(requiredChain.wagmiId)
-          return
-        } catch (addErr: any) {
-          addToast({
-            heading: "Add network failed",
-            status: "error",
-            body: (
-              <Text>
-                {addErr?.message ?? "Unable to add network"}
-              </Text>
-            ),
-          })
-        }
-      }
       addToast({
         heading: "Network switch failed",
         status: "error",
@@ -129,19 +72,12 @@ export default function NetworkSelector({
             {`Switch to ${requiredChain.displayName}`}
           </Button>
         )}
-      <HStack>
-        <ChainButton
-          chain={currentChain ?? chainConfigMap.ethereum}
-          onChainChange={() => {
-            // Chain change handled by parent component
-          }}
-        />
-      </HStack>
       {caption && (
         <Text
           id="network-switch-caption"
-          fontSize="xs"
-          color="neutral.400"
+          fontSize="sm"
+          color="gray.500"
+          textAlign="center"
         >
           {caption}
         </Text>

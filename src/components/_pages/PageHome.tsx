@@ -43,6 +43,7 @@ import SectionHeader from "components/_sections/SectionHeader"
 import { alphaSteth } from "data/strategies/alpha-steth"
 import { MigrationModal } from "components/_modals/MigrationModal"
 import LegacyVaultCard from "components/_vaults/LegacyVaultCard"
+import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 
 export const PageHome = () => {
   const {
@@ -374,6 +375,7 @@ export const PageHome = () => {
   const loading = isFetching || isRefetching || isLoading
   return (
     <LayoutWithSidebar>
+      <WalletHealthBanner />
       <TopLaunchBanner targetDate={bannerTargetDate} blogHref="#" />
       {/*
         <InfoBanner

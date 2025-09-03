@@ -47,7 +47,7 @@ export default function ConnectGate({
         height="44px"
         minW="148px"
         w={fullWidth ? "100%" : undefined}
-        variant="solid"
+        variant="sommOutline"
       />
     </Box>
   )

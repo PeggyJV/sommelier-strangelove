@@ -6,6 +6,7 @@ import { Layout } from "components/_layout/Layout"
 import { NextPage } from "next"
 import { useRouter } from "next/router"
 import { CustomFaqSection, HomeWithImages } from "types/sanity"
+import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 
 export interface StrategyLandingPageProps {
   id: string
@@ -23,6 +24,7 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   const router = useRouter()
   return (
     <Layout>
+      <WalletHealthBanner />
       <Box px={{ base: 4, sm: 0 }}>
         <Link
           mb={4}

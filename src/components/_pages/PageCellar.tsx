@@ -26,6 +26,7 @@ import { ApyChartProvider } from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
 import { isComingSoon } from "utils/isComingSoon"
 import { InfoBanner } from "components/_banners/InfoBanner"
+import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -51,6 +52,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
 
   return (
     <Layout chainObj={cellarConfig.chain}>
+      <WalletHealthBanner />
       {cellarConfig.cellarNameKey === CellarNameKey.TURBO_EETH && (
         <InfoBanner
           text={
