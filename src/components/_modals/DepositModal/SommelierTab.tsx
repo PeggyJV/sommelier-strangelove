@@ -272,7 +272,7 @@ export const SommelierTab = ({
         context,
       })
       // Provide our own gas & fee params to avoid wallet overestimation
-      let prepared = { ...(params as any) }
+      let prepared: any = { ...(params as any) }
       try {
         if (publicClient && address) {
           const gasEstimate: bigint =
@@ -293,6 +293,8 @@ export const SommelierTab = ({
             prepared.maxFeePerGas = fees.maxFeePerGas
           if (fees?.maxPriorityFeePerGas)
             prepared.maxPriorityFeePerGas = fees.maxPriorityFeePerGas
+          prepared.type = 'eip1559'
+          prepared.account = getAddress(address)
         }
       } catch (e) {
         logTxDebug("write.gas_estimate_failed", {
