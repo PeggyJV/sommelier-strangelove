@@ -22,6 +22,43 @@ let nextConfig = {
     // Temporary until upstream types stabilize; typecheck runs in CI
     ignoreBuildErrors: true,
   },
+  // Transpile packages that might have ESM issues
+  transpilePackages: [
+    "@keplr-wallet/cosmos",
+    "@keplr-wallet/types",
+    "@cosmjs/launchpad",
+    "@cosmjs/proto-signing",
+    "@cosmjs/stargate",
+    "graz",
+  ],
+  // Webpack configuration for better compatibility
+  webpack: (config, { isServer }) => {
+    // Handle node polyfills for client-side
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+        crypto: false,
+        stream: false,
+        buffer: false,
+        util: false,
+        path: false,
+        os: false,
+      }
+    }
+
+    // Better handling of .mjs files
+    config.module.rules.push({
+      test: /\.m?js$/,
+      resolve: {
+        fullySpecified: false,
+      },
+    })
+
+    return config
+  },
   async headers() {
     return [
       {
