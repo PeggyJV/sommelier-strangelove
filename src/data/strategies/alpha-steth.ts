@@ -20,7 +20,7 @@ export const alphaSteth: CellarData = {
   launchDate: new Date(Date.UTC(2025, 7, 19, 0, 0, 0, 0)),
   isHero: false,
   cellarType: CellarType.yieldStrategies,
-  description: `Alpha STETH dynamically reallocates stETH exposure across trusted DeFi protocols including Mellow’s dvSTETH and Unichain to unlock reward potential in ETH-native strategies.`,
+  description: `Alpha STETH dynamically reallocates stETH exposure across trusted DeFi protocols including Uniswap, Morpho, Balancer, Fluid to unlock reward potential in ETH-native strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
@@ -67,8 +67,8 @@ export const alphaSteth: CellarData = {
     Risks: `
     All Sommelier vaults contain smart contract risk and varying degrees of economic risk. Please take note of the following risks; however, this list is not exhaustive, and there may be additional risks:
 
-    - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.    
-    
+    - This vault uses leverage which presents a risk for the vault to be liquidated. Although there are safeguards in place to help mitigate this, the liquidation risk is not eliminated.
+
     - This vault does liquidity provision which can result in impermanent loss.
     `,
   },
@@ -133,7 +133,7 @@ export const alphaSteth: CellarData = {
     },
     {
       question: "How is Alpha STETH different from TurboSTETH?",
-      answer: `Alpha STETH leverages an upgraded vault architecture to access new reward opportunities across a broader set of DeFi protocols. While TurboSTETH primarily focused on classic leverage loops, Alpha STETH incorporates advanced strategies including Morpho and Euler lending, Unichain LP provisioning, and Mellow’s dvSTETH validator diversification — offering a more flexible and diversified approach to ETH-native reward strategies.`,
+      answer: `Alpha STETH leverages an upgraded vault architecture to access new reward opportunities across a broader set of DeFi protocols. While TurboSTETH primarily focused on classic leverage loops, Alpha STETH incorporates advanced strategies including Morpho and Euler lending, ETH L2 and more - offering a more flexible and diversified approach to ETH-native reward strategies.`,
     },
   ],
 }
