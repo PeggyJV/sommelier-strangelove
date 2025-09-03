@@ -3,7 +3,11 @@ import { DialogProvider } from "context/dialogContext"
 import type { AppProps } from "next/app"
 import theme from "theme/index"
 
-import { QueryProvider } from "context/wagmiContext"
+import dynamic from "next/dynamic"
+const WagmiClientProvider = dynamic(
+  () => import("providers/WagmiClientProvider"),
+  { ssr: false }
+)
 import { AlertDialog } from "components/AlertDialog"
 import "utils/analytics"
 import { GlobalFonts } from "theme/GlobalFonts"
@@ -20,26 +24,26 @@ const App = ({ Component, pageProps }: AppProps) => {
       {/* <PlausibleProvider
         domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
       > */}
-        <ChakraProvider theme={theme}>
-          <GeoProvider>
-            <GlobalFonts />
-            <DialogProvider>
-              <QueryProvider>
-                <HomeProvider>
-                  <DefaultSeo
-                    title="Somm Finance"
-                    description="Access to risk-managed, multi chain vaults powered by off-chain computation"
-                    // SEO configuration omitted for brevity
-                  />
-                  <DarkMode>
-                    <Component {...pageProps} />
-                  </DarkMode>
-                  <AlertDialog />
-                </HomeProvider>
-              </QueryProvider>
-            </DialogProvider>
-          </GeoProvider>
-        </ChakraProvider>
+      <ChakraProvider theme={theme}>
+        <GeoProvider>
+          <GlobalFonts />
+          <DialogProvider>
+            <WagmiClientProvider>
+              <HomeProvider>
+                <DefaultSeo
+                  title="Somm Finance"
+                  description="Access to risk-managed, multi chain vaults powered by off-chain computation"
+                  // SEO configuration omitted for brevity
+                />
+                <DarkMode>
+                  <Component {...pageProps} />
+                </DarkMode>
+                <AlertDialog />
+              </HomeProvider>
+            </WagmiClientProvider>
+          </DialogProvider>
+        </GeoProvider>
+      </ChakraProvider>
       {/* </PlausibleProvider> */}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

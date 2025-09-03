@@ -1,9 +1,9 @@
 import {
   Box,
-  Wrap,
   Stack,
   Text,
   VisuallyHidden,
+  HStack,
 } from "@chakra-ui/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
@@ -98,52 +98,36 @@ export default function Countdown({
     ariaLabel: string
   ) => (
     <Box
-      textAlign="center"
-      px={s.px}
-      py={s.py}
-      minW="auto"
-      bg="count.box.bg"
-      borderWidth={variant === "boxed" ? 1 : 0}
-      borderColor={
-        variant === "boxed" ? "count.box.border" : undefined
-      }
-      rounded="lg"
-      backdropFilter="auto"
-      backdropBlur="2px"
+      as="span"
+      display="inline-flex"
+      flexDir="column"
+      alignItems="center"
       whiteSpace="nowrap"
     >
       <VisuallyHidden>{ariaLabel}</VisuallyHidden>
-      <Stack spacing={1} align="center" justify="center">
-        <Text
-          fontWeight={700}
-          fontSize={s.number}
-          lineHeight={1}
-          color="count.box.fg"
-        >
-          {value.toString().padStart(2, "0")}
-        </Text>
-        <Text fontSize={s.label} color="count.box.sub">
-          {label}
-        </Text>
-      </Stack>
+      <Text
+        as="span"
+        fontWeight={700}
+        fontSize={s.number}
+        lineHeight={1}
+        color="count.box.fg"
+        sx={{ fontVariantNumeric: "tabular-nums" }}
+      >
+        {value.toString().padStart(2, "0")}
+      </Text>
+      <Text as="span" fontSize={s.label} color="count.box.sub">
+        {label}
+      </Text>
     </Box>
   )
 
   return (
-    <Stack
-      direction={{ base: "row" }}
-      spacing={s.gap}
-      align="center"
-      justify="center"
-    >
-      <Box
-        display="grid"
-        gridTemplateColumns={{
-          base: "repeat(2, minmax(56px, 1fr))",
-          md: "repeat(4, minmax(56px, 1fr))",
-        }}
-        gap={{ base: 3, md: 4 }}
-        w="100%"
+    <Box role="timer" aria-live="polite" aria-atomic="true" w="full">
+      <HStack
+        spacing={s.gap}
+        justify="space-between"
+        align="center"
+        w="full"
       >
         {unitBox(parts.days, "Days", `Days: ${parts.days}`)}
         {unitBox(parts.hours, "Hours", `Hours: ${parts.hours}`)}
@@ -157,7 +141,7 @@ export default function Countdown({
           "Seconds",
           `Seconds: ${parts.seconds}`
         )}
-      </Box>
-    </Stack>
+      </HStack>
+    </Box>
   )
 }
