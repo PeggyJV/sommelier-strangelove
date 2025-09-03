@@ -1,0 +1,27 @@
+{
+  "functions": {
+    "pages/api/*.ts": {
+      "maxDuration": 30
+    },
+    "pages/strategies/*/manage.tsx": {
+      "maxDuration": 30,
+      "memory": 3008
+    }
+  },
+  "env": {
+    "NODE_OPTIONS": "--max-old-space-size=8192"
+  },
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--max-old-space-size=8192",
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  },
+  "framework": "nextjs",
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "ignoreCommand": "git diff HEAD^ HEAD --quiet .",
+  "github": {
+    "silent": true
+  }
+}
