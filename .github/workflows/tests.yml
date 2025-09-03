@@ -158,6 +158,28 @@ jobs:
       - name: Test with coverage
         run: |
           echo "=== Running Jest tests ==="
+
+          echo "Verifying Babel configuration..."
+          if [ -f "babel.config.js" ]; then
+            echo "✓ babel.config.js found"
+          elif [ -f ".babelrc.js" ]; then
+            echo "✓ .babelrc.js found"
+          elif [ -f ".babelrc" ]; then
+            echo "✓ .babelrc found"
+          else
+            echo "⚠️ No Babel config found, checking for other configurations..."
+            ls -la *.config.js | grep babel || echo "No babel config files found"
+          fi
+
+          echo ""
+          echo "Checking Jest configuration..."
+          if [ -f "jest.json" ]; then
+            echo "✓ jest.json found"
+            echo "Transform config:"
+            cat jest.json | grep -A 3 '"transform"' || echo "No transform config found"
+          fi
+
+          echo ""
           echo "Checking for test files..."
           find src -name "*.spec.ts" -o -name "*.spec.tsx" -o -name "*.test.ts" -o -name "*.test.tsx" | grep -v node_modules | grep -v mocks | grep -v stubs | wc -l | xargs -I {} echo "Found {} test files"
 
