@@ -19,3 +19,5 @@ studio/node_modules
 idea/
 .idea
 yarn.lock
+src/coverage/
+coverage/
