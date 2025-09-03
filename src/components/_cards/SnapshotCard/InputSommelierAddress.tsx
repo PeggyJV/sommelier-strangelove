@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState, FC } from "react"
 import {
   Stack,
   Input,
@@ -12,14 +12,17 @@ import {
 import { useFormContext } from "react-hook-form"
 import { Link } from "components/Link"
 import { ExternalLinkIcon, InformationIcon } from "components/_icons"
-import { getKeplr, mainnetChains, useAccount } from "graz"
+import { getKeplr, useAccount } from "graz"
 import { validateSommelierAddress } from "utils/validateSommelierAddress"
 import { useBrandedToast } from "hooks/chakra"
+import { sommelierChain } from "utils/graz/chains"
 interface InputSommelierAddressProps extends InputProps {
-  disabled?: boolean; 
+  disabled?: boolean
 }
 
-export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled, ...rest }) => {
+export const InputSommelierAddress: FC<
+  InputSommelierAddressProps
+> = ({ disabled, ...rest }) => {
   const { addToast, closeAll } = useBrandedToast()
   const { register, setValue, getFieldState } = useFormContext()
   const isError = !!getFieldState("somm_address").error
@@ -120,8 +123,8 @@ export const InputSommelierAddress: FC<InputSommelierAddressProps> = ({ disabled
               fontWeight="semibold"
               color="red.light"
             >
-              Somm address is not valid—make sure it's from a
-              Cosmos wallet.
+              Somm address is not valid—make sure it's from a Cosmos
+              wallet.
             </Text>
           </HStack>
         </FormErrorMessage>

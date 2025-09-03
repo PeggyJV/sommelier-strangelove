@@ -1,18 +1,19 @@
 import { PageSnapshot } from "components/_pages/PageSnapshot"
-import { configureGraz, GrazChain, mainnetChains } from "graz"
+import { configureGraz } from "graz"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import { useRouter } from "next/router"
 import { origin } from "utils/origin"
-
-const chain: GrazChain = {
-  ...mainnetChains.sommelier,
-  rpc: "https://sommelier-rpc.polkachu.com/",
-  rest: "https://sommelier-api.polkachu.com/",
-}
+import { sommelierChain } from "utils/graz/chains"
 
 configureGraz({
-  defaultChain: chain,
+  chains: [sommelierChain],
+  chainsConfig: {
+    [sommelierChain.chainId]: {
+      rpc: "https://sommelier-rpc.polkachu.com/",
+      rest: "https://sommelier-api.polkachu.com/",
+    },
+  },
 })
 
 const Snapshot: NextPage = () => {

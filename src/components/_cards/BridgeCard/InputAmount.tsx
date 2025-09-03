@@ -15,8 +15,8 @@ import { formatUnits, getAddress } from "viem"
 import {
   useBalances as useGrazBalances,
   useAccount as useGrazAccount,
-  mainnetChains,
 } from "graz"
+import { sommelierChain } from "utils/graz/chains"
 import { toEther } from "utils/formatCurrency"
 import { useFormContext } from "react-hook-form"
 import { BridgeFormValues } from "."
@@ -52,7 +52,7 @@ export const InputAmount: React.FC = () => {
 
   const { data, error, isLoading, queryKey } = useBalance({
     address: address,
-    token: getAddress(sommToken.address)
+    token: getAddress(sommToken.address),
   })
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export const InputAmount: React.FC = () => {
   } = useGrazBalances()
   const sommBalance = grazData?.find((item) => item.denom === "usomm")
   const sommDecimal =
-    mainnetChains.sommelier.currencies.find(
+    sommelierChain.currencies.find(
       (item) => item.coinMinimalDenom === "usomm"
     )?.coinDecimals || 6
 
@@ -175,7 +175,10 @@ export const InputAmount: React.FC = () => {
                     ? (data && toEther(data.value, data.decimals)) ||
                       "--"
                     : (sommBalance &&
-                        formatUnits(BigInt(sommBalance.amount), sommDecimal)) ||
+                        formatUnits(
+                          BigInt(sommBalance.amount),
+                          sommDecimal
+                        )) ||
                       "--"}
                 </Text>
                 <Button

@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { useBrandedToast } from "hooks/chakra"
 import { BridgeFormValues } from "components/_cards/BridgeCard"
-import { useAccount, useSigners } from "graz"
+import { useAccount } from "graz"
+import { useSigners } from "utils/graz/helpers"
 import { txClient } from "src/vendor/ignite/gravity.v1"
 import { analytics } from "utils/analytics"
 import {
@@ -39,10 +40,7 @@ export const useBridgeSommToEthTx = () => {
       }
 
       const amountReceived = props.amount - 50
-      const convertedAmount = parseUnits(
-        String(amountReceived),
-        6
-      )
+      const convertedAmount = parseUnits(String(amountReceived), 6)
 
       analytics.track("bridge.contract-started", {
         value: props.amount,
@@ -126,7 +124,7 @@ export const useBridgeSommToEthTx = () => {
                 display="block"
                 mt={3}
                 onClick={() => {
-                  const fullImageUrl = `${window.origin}${tokenConfigMap.SOMM_ETHEREUM.src}`; // TODO: Change once bridge supports other chains
+                  const fullImageUrl = `${window.origin}${tokenConfigMap.SOMM_ETHEREUM.src}` // TODO: Change once bridge supports other chains
                   importToken.mutate({
                     address: tokenConfigMap.SOMM_ETHEREUM.address,
                     imageUrl: fullImageUrl,

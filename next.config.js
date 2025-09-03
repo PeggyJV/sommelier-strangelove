@@ -48,9 +48,11 @@ let nextConfig = {
     "@cosmjs/proto-signing",
     "@cosmjs/stargate",
     "graz",
+    "@tanstack/react-query",
+    "@tanstack/react-query-devtools",
   ],
   // Webpack configuration for better compatibility
-  webpack: (config, { isServer, dev }) => {
+  webpack: (config, { isServer, dev, webpack }) => {
     // Optimize webpack cache and module resolution
     config.cache = {
       type: "filesystem",
@@ -59,11 +61,40 @@ let nextConfig = {
       },
     }
 
+    // Handle pino-pretty which is only needed for dev and has Node.js dependencies
+    if (!isServer) {
+      config.plugins.push(
+        new webpack.IgnorePlugin({
+          resourceRegExp: /^pino-pretty$/,
+        })
+      )
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /^node:/,
+          (resource) => {
+            resource.request = resource.request.replace(/^node:/, "")
+          }
+        )
+      )
+    }
+
     // Optimize module resolution to reduce file operations
     config.resolve = {
       ...config.resolve,
       symlinks: false,
       extensions: [".ts", ".tsx", ".js", ".jsx", ".mjs", ".json"],
+      // Prefer ES modules over CommonJS
+      mainFields: ["module", "main"],
+      alias: {
+        ...config.resolve.alias,
+        // Force ES module resolution for problematic packages
+        "@walletconnect/utils$":
+          "@walletconnect/utils/dist/index.es.js",
+        "@walletconnect/core$":
+          "@walletconnect/core/dist/index.es.js",
+        "@walletconnect/sign-client$":
+          "@walletconnect/sign-client/dist/index.es.js",
+      },
     }
 
     // Handle node polyfills for client-side
@@ -79,6 +110,22 @@ let nextConfig = {
         util: false,
         path: false,
         os: false,
+        worker_threads: false,
+        module: false,
+        perf_hooks: false,
+        child_process: false,
+        process: false,
+        events: false,
+        // Additional fallbacks for pino
+        "node:stream": false,
+        "node:worker_threads": false,
+      }
+
+      // Exclude pino and related modules from client bundle
+      config.externals = {
+        ...config.externals,
+        "pino-pretty": "commonjs pino-pretty",
+        pino: "commonjs pino",
       }
     }
 
@@ -90,8 +137,16 @@ let nextConfig = {
       },
     })
 
+    // Force WalletConnect packages to be treated as ES modules
+    config.module.rules.push({
+      test: /node_modules\/@walletconnect/,
+      resolve: {
+        fullySpecified: false,
+        preferRelative: false,
+      },
+    })
+
     // Add webpack ignore plugin for unnecessary viem files
-    const webpack = require("webpack")
     config.plugins.push(
       new webpack.IgnorePlugin({
         resourceRegExp: /^\.\/locale$/,
