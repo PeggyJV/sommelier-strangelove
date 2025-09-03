@@ -47,6 +47,7 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useBoringQueueWithdrawals } from "data/hooks/useBoringQueueWithdrawals"
 import { useWithdrawRequestStatus } from "data/hooks/useWithdrawRequestStatus"
 import { logTxDebug } from "utils/txDebug"
+import { config } from "utils/config"
 
 interface FormValues {
   withdrawAmount: number
@@ -676,7 +677,8 @@ export const WithdrawQueueForm = ({
       effectiveDeadlineSec !== null
         ? effectiveDeadlineSec
         : Math.max(policyDeadline, minDeadline)
-    const deadlineSeconds = currentTime + effectiveDeadlineSeconds
+    const absoluteDeadlineSeconds =
+      currentTime + effectiveDeadlineSeconds
 
     let hash
 
@@ -763,7 +765,7 @@ export const WithdrawQueueForm = ({
       )
 
       const withdrawTouple = [
-        BigInt(deadlineSeconds),
+        BigInt(absoluteDeadlineSeconds),
         BigInt(sharePriceWithDiscountInBaseDenom),
         withdrawAmtInBaseDenom,
         false,
@@ -841,8 +843,10 @@ export const WithdrawQueueForm = ({
                   textAlign={"center"}
                   fontWeight={"bold"}
                 >
-                  When replacing a BoringQueue request, only the
-                  deadline is updated.
+                  {((useRouter().query.id as string) || _id) ===
+                  config.CONTRACT.ALPHA_STETH.SLUG
+                    ? "When replacing a BoringQueue request, your amount and asset are preserved; the deadline and discount can be updated."
+                    : "When replacing a BoringQueue request, only the deadline is updated."}
                 </Text>
               </HStack>
               <br />
@@ -976,21 +980,32 @@ export const WithdrawQueueForm = ({
                 <ModalOnlyTokenMenu
                   depositTokens={
                     cellarConfig.boringVault
-                      ? Object.keys(
-                          cellarDataMap[id].config
-                            .withdrawTokenConfig!
-                        ).filter((sym) =>
-                          sym === "WETH"
-                            ? true
-                            : isWithdrawAllowed === null
-                            ? true
-                            : sym === selectedToken.symbol
-                            ? true
-                            : true
-                        )
+                      ? ((useRouter().query.id as string) || _id) ===
+                        config.CONTRACT.ALPHA_STETH.SLUG
+                        ? Object.keys(
+                            cellarDataMap[id].config
+                              .withdrawTokenConfig!
+                          )
+                        : Object.keys(
+                            cellarDataMap[id].config
+                              .withdrawTokenConfig!
+                          ).filter((sym) =>
+                            sym === "WETH"
+                              ? true
+                              : isWithdrawAllowed === null
+                              ? true
+                              : sym === selectedToken.symbol
+                              ? true
+                              : true
+                          )
                       : [strategyBaseAsset.symbol]
                   }
-                  activeAsset={strategyBaseAsset.address}
+                  activeAsset={
+                    ((useRouter().query.id as string) || _id) ===
+                    config.CONTRACT.ALPHA_STETH.SLUG
+                      ? selectedToken.address
+                      : strategyBaseAsset.address
+                  }
                   setSelectedToken={trackedSetSelectedToken}
                   isDisabled={
                     isActiveWithdrawRequest && !!boringQueue
@@ -1032,6 +1047,15 @@ export const WithdrawQueueForm = ({
       >
         Submit
       </BaseButton>
+      {((useRouter().query.id as string) || _id) ===
+        config.CONTRACT.ALPHA_STETH.SLUG &&
+        boringQueue &&
+        isRequestValid &&
+        preflightMessage && (
+          <Text color="neutral.300" fontSize="sm">
+            {preflightMessage}
+          </Text>
+        )}
       {boringQueue &&
         (isWithdrawAllowed === false || isRequestValid === false) && (
           <Text color="yellow.300" fontSize="sm">

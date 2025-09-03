@@ -63,6 +63,7 @@
     "@vanilla-extract/private": "^1.0.5",
     "@vanilla-extract/sprinkles": "^1.6.3",
     "@vercel/kv": "^1.0.1",
+    "@wagmi/connectors": "^5.1.0",
     "@wagmi/core": "2.14.6",
     "analytics": "^0.8.1",
     "axios": "^1.2.2",
