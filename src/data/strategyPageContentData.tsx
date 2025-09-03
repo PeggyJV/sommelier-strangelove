@@ -1694,3 +1694,31 @@ export const strategyPageContentData = {
     },
   },
 }
+
+// Ensure Alpha stETH has landing content so the strategy page does not
+// redirect to `/manage` and conflict with the Next.js redirect rule.
+// Minimal content is sufficient for the page to render safely.
+strategyPageContentData[config.CONTRACT.ALPHA_STETH.SLUG] = {
+  name: "Alpha stETH",
+  provider: "Sommelier",
+  providerUrl: "https://sommelier.finance/",
+  description:
+    "Dynamic stETH allocation across venues to capture sustainable rewards.",
+  ticker: <Text>ALPHA-stETH</Text>,
+  tradedAssets: ["stETH"],
+  exchange: [
+    {
+      name: "Sommelier",
+      logo: "/assets/icons/somm.png",
+    },
+  ],
+  strategyHighlights: {
+    card: [
+      "Automated allocation across DeFi venues",
+      "Built on stETH collateral",
+      "Risk-managed with off-chain computation",
+    ],
+    description: "",
+  },
+  howItWorks: "",
+}

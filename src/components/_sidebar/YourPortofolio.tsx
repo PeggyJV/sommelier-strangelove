@@ -93,12 +93,12 @@ export const YourPortofolio = () => {
                     strategy.userStrategyData.strategyData?.slug && (
                       <PortofolioItem
                         symbol={
-                          strategy.userStrategyData.userData.symbol ||
+                          strategy.userStrategyData.strategyData?.symbol ||
                           ""
                         }
                         bondedToken={Number(
-                          strategy?.userStakes?.totalBondedAmount
-                            .value ?? 0
+                          (strategy?.userStakes as any)?.totalBondedAmount
+                            ?.value ?? 0
                         )}
                         key={
                           strategy.userStrategyData.strategyData?.name
@@ -113,11 +113,11 @@ export const YourPortofolio = () => {
                         }
                         netValueUsd={
                           strategy.userStrategyData.userData
-                            ?.valueWithoutRewards.formatted ?? ""
+                            ?.netValue?.formatted ?? ""
                         }
                         netValueInAsset={
                           strategy.userStrategyData.userData
-                            ?.netValueWithoutRewardsInAsset.value ?? 0
+                            ?.netValue?.value ?? 0
                         }
                         tokenPrice={valueAndFormatted({
                           value:

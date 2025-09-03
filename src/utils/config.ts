@@ -7,6 +7,11 @@ import { GravityBridge } from "../abi/types/GravityBridge"
 import { CellarStakingV0821 } from "../abi/types/CellarStakingV0821"
 import { EnsoRouter } from "../abi/types/EnsoRouter"
 import { CellarStakingV0815 } from "../abi/types/CellarStakingV0815"
+import { ArcticArchitectureLens } from "src/abi/types/BoringVault/ArcticArchitectureLens"
+import { BoringVault } from "src/abi/types/BoringVault/BoringVault"
+import { AccountantWithRateProviders } from "src/abi/types/BoringVault/AccountantWithRateProviders"
+import { TellerWithLayerZero } from "src/abi/types/BoringVault/TellerWithLayerZero"
+import { BoringOnChainQueue } from "src/abi/types/BoringVault/BoringOnChainQueue"
 
 // Adress should be saved as lowercase
 /** Ensure Checksum Address  */
@@ -342,6 +347,27 @@ export const config = {
       ADDRESS: "0x4A0c0BA71647Be8AF0D98F565EcdB6B8ddE07B47",
       SLUG: "Turbo-eETHV2",
       ABI: CellarStakingV0821,
+    },
+    ALPHA_STETH: {
+      ADDRESS: "0xef417FCE1883c6653E7dC6AF7c6F85CCDE84Aa09",
+      ABI: BoringVault,
+      SLUG: "Alpha-stETH",
+    },
+    ALPHA_STETH_ACCOUNTANT: {
+      ADDRESS: "0xc873F2b7b3BA0a7faA2B56e210E3B965f2b618f5",
+      ABI: AccountantWithRateProviders,
+    },
+    ALPHA_STETH_TELLER: {
+      ADDRESS: "0x0baAb6db8d694E1511992b504476ef4073fe614B",
+      ABI: TellerWithLayerZero,
+    },
+    ALPHA_STETH_BORING_QUEUE: {
+      ADDRESS: "0xe39682c3C44b73285A2556D4869041e674d1a6B7",
+      ABI: BoringOnChainQueue,
+    },
+    ALPHA_STETH_LENS: {
+      ADDRESS: "0xA2c83e64990C6C53b76390678436d63d006534fB",
+      ABI: ArcticArchitectureLens,
     },
   },
   cleargate: {

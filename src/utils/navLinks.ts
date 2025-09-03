@@ -9,7 +9,7 @@ export const NAV_LINKS = (() => {
     {
       link: "/snapshot",
       title: "Snapshot",
-      isNew: true, // Directly set the isNew flag for Snapshot to true
+      isNew: false,
     },
     {
       link: "https://www.somm.finance/staking",

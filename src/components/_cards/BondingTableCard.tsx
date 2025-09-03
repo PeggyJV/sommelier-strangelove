@@ -79,7 +79,7 @@ const BondingTableCard = (props: TableProps) => {
 
   const stakingEnd = strategyData?.stakingEnd
   const userDatas = userData?.userStakes
-  const { userStakes, claimAllRewards } = userDatas || {}
+  const { userStakes = [], claimAllRewards = [] } = userDatas || {}
 
   const { doHandleTransaction } = useHandleTransaction()
 
@@ -397,7 +397,7 @@ const BondingTableCard = (props: TableProps) => {
           </Thead>
           <Tbody fontWeight="bold">
             {userStakes?.length &&
-              userStakes.map((data, i) => {
+              userStakes.map((data: any, i: number) => {
                 const { amount, lock, unbondTimestamp } =
                   data
                 const lockMap = bondingPeriodOptions(cellarConfig)

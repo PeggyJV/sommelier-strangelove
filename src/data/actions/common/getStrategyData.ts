@@ -17,6 +17,15 @@ import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
 
+// Normalize helper for robust matching
+const norm = (s?: string) =>
+  (s ?? "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/_/g, "-")
+    .replace(/-+/g, "-")
+    .trim()
+
 export const getStrategyData = async ({
   address,
   contracts,
@@ -36,13 +45,19 @@ export const getStrategyData = async ({
         ({ config }) =>
           config.cellar.address.toLowerCase() ===
             address.toLowerCase() &&
-          config.chain.id === contracts.chain
-      )!
+          config.chain.id === (contracts as any)?.chain
+      )
+      if (!strategy) {
+        throw new Error(
+          `Strategy not found for address ${address} on chain ${
+            (contracts as any)?.chain
+          }`
+        )
+      }
       const config: ConfigProps = strategy.config!
-      const decimals = config.baseAsset.decimals
       const symbol = config.baseAsset.symbol
 
-      const { stakerContract, cellarContract } = contracts
+      const { stakerContract } = contracts
       const strategyData = stratData
       const dayDatas = strategyData?.dayDatas
       const deprecated = strategy.deprecated
@@ -60,6 +75,8 @@ export const getStrategyData = async ({
         isBefore(launchDate, add(new Date(), { weeks: 4 }))
       const isContractNotReady = strategy.isContractNotReady
 
+      const isHero = strategy.isHero
+
       const hideValue =
         isComingSoon(launchDate) &&
         process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
@@ -74,7 +91,7 @@ export const getStrategyData = async ({
 
       let tvm = hideValue
         ? undefined
-        : getTvm(String(Number(strategyData?.tvlTotal)))
+        : getTvm(String(Number(strategyData?.tvlTotal ?? 0)))
 
       const tradedAssets = (() => {
         const assets = strategy.tradedAssets
@@ -86,10 +103,8 @@ export const getStrategyData = async ({
 
         return tokens
       })()
-      const depositTokens = strategy.depositTokens.list;
-      const stakingEnd = await getStakingEnd(
-        stakerContract
-      )
+      const depositTokens = strategy.depositTokens.list
+      const stakingEnd = await getStakingEnd(stakerContract)
       const isStakingOngoing =
         stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
 
@@ -136,7 +151,7 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      let merkleRewardsApy;
+      let merkleRewardsApy
 
       // if (strategy.slug === utilConfig.CONTRACT.REAL_YIELD_ETH_OPT.SLUG) {
       //   merkleRewardsApy = await getMerkleRewardsApy(cellarContract, config);
@@ -215,11 +230,10 @@ export const getStrategyData = async ({
           for (let i = 0; i < 7; i++) {
             // Get annualized apy for each shareValue
             let nowValue = BigInt(dayDatas![i].shareValue)
-            let startValue = BigInt(
-              dayDatas![i + 1].shareValue
-            )
+            let startValue = BigInt(dayDatas![i + 1].shareValue)
 
-            let yieldGain = Number(nowValue - startValue) / Number(startValue)
+            let yieldGain =
+              Number(nowValue - startValue) / Number(startValue)
 
             // Take the gains since inception and annualize it to get APY since inception
             let dailyApy = yieldGain * 365 * 100
@@ -312,9 +326,29 @@ export const getStrategyData = async ({
       // TODO: Rewards APY should be a list of APYs for each rewards token, this is incurred tech debt
       const baseApySumRewards = {
         formatted:
-          (Number(baseApyValue?.value ?? 0) + Number(rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0))
-            .toFixed(2) + "%",
-        value: Number(baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0)
+          (
+            Number(baseApyValue?.value ?? 0) +
+            Number(rewardsApy?.value ?? 0) +
+            (merkleRewardsApy ?? 0)
+          ).toFixed(2) + "%",
+        value:
+          Number(baseApyValue?.value ?? 0) +
+          (rewardsApy?.value ?? 0) +
+          (merkleRewardsApy ?? 0),
+      }
+
+      // Determine Somm-native status (in-house strategies)
+      const s = norm(slug || name)
+      const providerName = norm(provider?.title)
+      const isSommNative =
+        providerName.includes("somm") || s.includes("alpha-steth")
+
+      if (
+        process.env.NODE_ENV !== "production" &&
+        s.includes("alpha-steth")
+      ) {
+        // eslint-disable-next-line no-console
+        console.log("[strategy]", s, { providerName, isSommNative })
       }
       return {
         activeAsset,
@@ -325,6 +359,7 @@ export const getStrategyData = async ({
         depositTokens,
         description,
         isNew,
+        isHero,
         isStakingOngoing,
         isContractNotReady,
         launchDate,
@@ -344,11 +379,12 @@ export const getStrategyData = async ({
         token,
         config,
         extraRewardsApy,
-        merkleRewardsApy
+        merkleRewardsApy,
+        isSommNative,
       }
-    } catch (e) {
-      console.error("Error fetching strategy data")
-      console.error(address, e)
+    } catch (error) {
+      console.error(error)
+      return null
     }
   })()
 

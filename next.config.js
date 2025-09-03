@@ -42,14 +42,14 @@ let nextConfig = {
         ],
       },
       {
-        source: '/(.*)?', // Matches all pages
+        source: "/(.*)?", // Matches all pages
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          }
-        ]
-      }
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+        ],
+      },
     ]
   },
   redirects: async () => {
@@ -67,12 +67,6 @@ let nextConfig = {
         permanent: true,
         basePath: false,
       },
-      // {
-      //   source: "/strategies/:slug/manage",
-      //   destination: "/strategies/:slug",
-      //   permanent: true,
-      //   basePath: false,
-      // },
     ]
   },
 }

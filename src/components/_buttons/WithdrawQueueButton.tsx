@@ -1,17 +1,13 @@
 import { ButtonProps, Tooltip, useDisclosure } from "@chakra-ui/react"
-import { FC } from "react"
-import { SecondaryButton } from "./SecondaryButton"
-import { Chain } from "src/data/chainConfig"
+import { BaseButton } from "./BaseButton"
 import { WithdrawQueueModal } from "components/_modals/WithdrawQueueModal"
-
-export const WithdrawQueueButton: FC<
-  ButtonProps & {
-    chain: Chain
-    buttonLabel: string
-    onSuccessfulWithdraw?: () => void
-    showTooltip?: boolean
-  }
-> = ({ buttonLabel, onSuccessfulWithdraw, showTooltip, ...props }) => {
+import { Chain } from "src/data/chainConfig"
+export const WithdrawQueueButton = ({ buttonLabel, onSuccessfulWithdraw, showTooltip, ...props }: ButtonProps & {
+  buttonLabel: string
+  onSuccessfulWithdraw?: () => void
+  showTooltip?: boolean
+  chain: Chain
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function closeModal() {
@@ -32,14 +28,14 @@ export const WithdrawQueueButton: FC<
         hidden={!showTooltip}
         textAlign="center"
       >
-        <SecondaryButton
+        <BaseButton
           onClick={(e) => {
             onOpen()
           }}
           {...props}
         >
           {buttonLabel}
-        </SecondaryButton>
+        </BaseButton>
       </Tooltip>
       <WithdrawQueueModal
         isOpen={isOpen}

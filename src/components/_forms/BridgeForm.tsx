@@ -35,7 +35,7 @@ interface BridgeFormProps {
   wrongNetwork?: boolean
 }
 
-export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
+export const BridgeForm = ({ wrongNetwork }: BridgeFormProps) => {
   const { addToast, closeAll } = useBrandedToast()
   const isMounted = useIsMounted()
   const { watch, handleSubmit, formState, getFieldState, setValue } =
@@ -70,7 +70,8 @@ export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
     !!getFieldState("address").error ||
     !watchSommelierAddress ||
     isEthToSommLoading ||
-    isSommToEthLoading || wrongNetwork
+    isSommToEthLoading ||
+    wrongNetwork
 
   const { connectAsync } = useGrazConnect()
   const { isConnected: isGrazConnected } = useGrazAccount()
@@ -222,7 +223,7 @@ export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
       {isMounted && !buttonEnabled && toSomm && (
         <ConnectButton
           overridechainid={"ethereum"}
-          unstyled
+          variant="sommOutline"
           height="69px"
           fontSize="21px"
         >
@@ -233,6 +234,7 @@ export const BridgeForm = ({wrongNetwork}: BridgeFormProps) => {
         <BaseButton
           height="69px"
           fontSize="21px"
+          variant="sommOutline"
           onClick={async () => {
             try {
               await connectAsync()

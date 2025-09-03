@@ -1,42 +1,69 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts", "tsx"],
-  "rootDir": "src",
   "testEnvironment": "jsdom",
+  "setupFiles": ["<rootDir>/src/__tests__/polyfills.ts"],
+  "setupFilesAfterEnv": ["<rootDir>/src/__tests__/setup.ts"],
+  "testMatch": [
+    "**/__tests__/**/*.(ts|tsx|js)",
+    "**/*.(test|spec).(ts|tsx|js)"
+  ],
+  "testPathIgnorePatterns": [
+    "<rootDir>/node_modules/",
+    "<rootDir>/e2e/",
+    "<rootDir>/src/__tests__/stubs/",
+    "<rootDir>/src/__tests__/setup.ts",
+    "<rootDir>/src/__tests__/polyfills.ts",
+    "<rootDir>/src/__tests__/mocks/"
+  ],
   "testTimeout": 300000,
-  "testRegex": ".*\\.spec\\.(ts|tsx)$",
-  "setupFilesAfterEnv": ["<rootDir>/__tests__/setup.ts"],
+  "clearMocks": true,
+  "restoreMocks": true,
   "transform": {
     "^.+\\.(t|j)sx?$": [
-      "ts-jest",
-      {
-        "tsconfig": "tsconfig.test.json"
-      }
+      "babel-jest",
+      { "configFile": "<rootDir>/jest.babel.config.js" }
     ]
   },
+  "transformIgnorePatterns": [
+    "node_modules/(?!((\\.pnpm/)?(@rainbow-me|wagmi|@wagmi|viem|@viem|@tanstack/query-core|@tanstack/react-query))(.*))"
+  ],
   "moduleNameMapper": {
-    "^@/(.*)$": "<rootDir>/$1",
-    "^components/(.*)$": "<rootDir>/components/$1",
-    "^data/(.*)$": "<rootDir>/data/$1",
-    "^utils/(.*)$": "<rootDir>/utils/$1",
-    "^hooks/(.*)$": "<rootDir>/hooks/$1",
-    "^context/(.*)$": "<rootDir>/context/$1",
-    "^theme/(.*)$": "<rootDir>/theme/$1",
-    "^src/(.*)$": "<rootDir>/$1"
+    "^wagmi/chains$": "<rootDir>/src/__tests__/mocks/wagmi-chains.ts",
+    "^wagmi$": "<rootDir>/src/__tests__/mocks/wagmi.ts",
+    "^wagmi/(.*)$": "<rootDir>/src/__tests__/mocks/wagmi.ts",
+    "^analytics$": "<rootDir>/src/__tests__/mocks/analytics.ts",
+    "^@analytics/(.*)$": "<rootDir>/src/__tests__/mocks/analytics.ts",
+    "^components/(.*)$": "<rootDir>/src/components/$1",
+    "^data/(.*)$": "<rootDir>/src/data/$1",
+    "^utils/(.*)$": "<rootDir>/src/utils/$1",
+    "^hooks/(.*)$": "<rootDir>/src/hooks/$1",
+    "^context/(.*)$": "<rootDir>/src/context/$1",
+    "^queries/(.*)$": "<rootDir>/src/queries/$1",
+    "^types/(.*)$": "<rootDir>/src/types/$1",
+    "^constants/(.*)$": "<rootDir>/src/constants/$1",
+    "^styles/(.*)$": "<rootDir>/src/styles/$1",
+    "^pages/(.*)$": "<rootDir>/src/pages/$1",
+    "^api/(.*)$": "<rootDir>/src/pages/api/$1",
+    "^src/(.*)$": "<rootDir>/src/$1"
   },
   "collectCoverageFrom": [
-    "**/*.{ts,tsx}",
-    "!**/*.d.ts",
-    "!**/node_modules/**",
-    "!**/__tests__/**",
-    "!**/coverage/**"
+    "src/**/*.{ts,tsx}",
+    "!src/**/__tests__/**",
+    "!src/**/mocks/**"
   ],
   "coverageReporters": ["text", "lcov", "html"],
-  "testPathIgnorePatterns": [
-    "/node_modules/",
-    "/.next/",
-    "/coverage/"
-  ],
-  "transformIgnorePatterns": [
-    "node_modules/(?!(wagmi|@wagmi|viem|@viem)/)"
+  "coverageThreshold": {
+    "global": {
+      "branches": 0,
+      "functions": 0,
+      "lines": 0,
+      "statements": 0
+    }
+  },
+  "reporters": [
+    "default",
+    [
+      "jest-junit",
+      { "outputDirectory": "test-results", "outputName": "junit.xml" }
+    ]
   ]
 }

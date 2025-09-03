@@ -1,18 +1,8 @@
 import { Text } from "@chakra-ui/react"
 import { StrategySection } from "components/_tables/StrategySection"
+import StrategyRow from "components/_vaults/StrategyRow"
 import { Timeline } from "data/context/homeContext"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
-
-type StrategyMobileColumnProps = {
-  timeline: Timeline
-  onDepositModalOpen: ({
-    id,
-    type,
-  }: {
-    id: string
-    type: DepositModalType
-  }) => void
-}
 
 type RowData = {
   original: {
@@ -25,10 +15,7 @@ type RowData = {
   }
 }
 
-export const StrategyMobileColumn = ({
-  timeline,
-  onDepositModalOpen,
-}: StrategyMobileColumnProps) => {
+export const StrategyMobileColumn = () => {
   return [
     {
       Header: () => (
@@ -38,6 +25,9 @@ export const StrategyMobileColumn = ({
       ),
       accessor: "name",
       Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) {
+          return <StrategyRow vault={row.original} />
+        }
         return (
           <StrategySection
             icon={row.original.logo}
@@ -48,6 +38,7 @@ export const StrategyMobileColumn = ({
             description={row.original.description}
             isDeprecated={row.original.deprecated}
             badges={row.original.config.badges}
+            isSommNative={row.original.isSommNative}
           />
         )
       },
@@ -88,6 +79,26 @@ export const StrategyMobileColumn = ({
             : tvm?.formatted ?? "--"}
         </Text>
       ),
+    },
+    {
+      Header: () => <Text>Net Rewards</Text>,
+      accessor: "baseApy",
+      Cell: ({ row }: any) => {
+        const value = row.original.baseApySumRewards?.formatted
+        const launchDate = row.original.launchDate
+        if (launchDate && launchDate > Date.now()) {
+          return (
+            <Text fontWeight={550} fontSize="16px" textAlign="right">
+              --
+            </Text>
+          )
+        }
+        return (
+          <Text fontWeight={600} fontSize="16px" textAlign="right">
+            {value ?? "--"}
+          </Text>
+        )
+      },
     },
   ]
 }

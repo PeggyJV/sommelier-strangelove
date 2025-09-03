@@ -39,6 +39,9 @@ export const depositAssetDefaultValue = (config: ConfigProps) => {
   ) {
     return "USDT"
   }
+  if (config.cellarNameKey === CellarNameKey.ALPHA_STETH) {
+    return "WETH"
+  }
   return "USDC"
 }
 
@@ -53,7 +56,8 @@ export const isBondedDisabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
   )
 }
 
@@ -94,7 +98,8 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey ===
-      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
   )
 }
 
@@ -384,6 +389,9 @@ export const isUseBigBacktestingModal = (config: ConfigProps) => {
   return "2xl"
 }
 
+// Launch dates and UI toggles
+export const LAUNCH_DATE_ALPHA_STETH = "2025-08-19T00:00:00Z"
+
 export const apyLabel = (config: ConfigProps) => {
   if (
     (config.cellar.key !== CellarKey.CELLAR_V0815 &&
@@ -483,6 +491,16 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
+  ) {
+    return true
+  }
+  return false
+}
+
+export const isWithdrawQueueEnabled = (config: ConfigProps) => {
+  if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
   ) {
     return true
   }
@@ -600,6 +618,12 @@ export const estimatedApyValue = (config: ConfigProps) => {
       value: 6.0,
       formatted: "6.0%",
     }
+  }
+
+  // Default return for unmatched cases
+  return {
+    value: 0,
+    formatted: "0.00%",
   }
 }
 export const showNetValueInAsset = (config: ConfigProps) => {

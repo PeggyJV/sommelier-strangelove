@@ -7,17 +7,21 @@ import { fetchCellarStrategyData } from "queries/get-all-strategies-data"
 import { useState, useEffect } from "react"
 import { GetAllStrategiesDataQuery } from "data/actions/types"
 import { tokenConfig } from "data/tokenConfig"
-import { getChainByViemId, supportedChains } from "src/data/chainConfig"
+import {
+  getChainByViemId,
+  supportedChains,
+} from "src/data/chainConfig"
 
 export const useAllStrategiesData = () => {
-  const client = usePublicClient()
   const { chain: viemChain } = useAccount()
   const { data: allContracts } = useAllContracts()
 
   const chain = getChainByViemId(viemChain?.name)
 
   const sommToken = tokenConfig.find((token) => {
-    const compareChain = supportedChains.includes(chain ? chain.id : "")
+    const compareChain = supportedChains.includes(
+      chain ? chain.id : ""
+    )
       ? "ethereum"
       : chain?.id
     return (
@@ -40,17 +44,19 @@ export const useAllStrategiesData = () => {
           setError(error)
         } else {
           setcellarData(data)
+          // Clear any previous error once data is successfully loaded
+          setError(null)
         }
       })
       .catch((error) => setError(error))
     return () => {
-      setError(null);
-      setcellarData(undefined);
-    };
+      setError(null)
+      setcellarData(undefined)
+    }
   }, [])
 
   const query = useQuery({
-    queryKey: ["USE_ALL_STRATEGIES_DATA", client?.uid ],
+    queryKey: ["USE_ALL_STRATEGIES_DATA", viemChain?.id],
     queryFn: async () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,
@@ -59,8 +65,8 @@ export const useAllStrategiesData = () => {
       })
     },
     enabled: !!allContracts && !!sommPrice && !!cellarData,
-  }
-  )
+    staleTime: 120_000,
+  })
 
   return {
     ...query,

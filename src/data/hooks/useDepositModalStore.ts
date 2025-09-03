@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-export type DepositModalType = "deposit" | "withdraw"
+export type DepositModalType = "deposit" | "withdraw" | "migrate"
 
 interface DepositModalStore {
   isOpen: boolean
