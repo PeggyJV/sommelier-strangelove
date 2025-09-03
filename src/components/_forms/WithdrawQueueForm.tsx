@@ -1,7 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   FormControl,
   FormErrorMessage,
+  FormLabel,
+  FormHelperText,
   Icon,
   VStack,
   Button,
@@ -13,6 +15,8 @@ import {
   Text,
   Link,
   Tooltip,
+  InputRightElement,
+  InputGroup,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -35,15 +39,17 @@ import { InformationIcon } from "components/_icons"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
+import { WITHDRAW_DEADLINE_HOURS } from "src/constants/withdraw"
 import { getAddress } from "viem"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { MaxUint256 } from "utils/bigIntHelpers"
+import { useCreateContracts } from "data/hooks/useCreateContracts"
+import { useBoringQueueWithdrawals } from "data/hooks/useBoringQueueWithdrawals"
+import { useWithdrawRequestStatus } from "data/hooks/useWithdrawRequestStatus"
+import { logTxDebug } from "utils/txDebug"
 
 interface FormValues {
   withdrawAmount: number
-  deadlineHours: number
-  sharePriceDiscountPercent: number
-  selectedToken: Token
 }
 
 interface WithdrawQueueFormProps {
@@ -51,8 +57,9 @@ interface WithdrawQueueFormProps {
   onSuccessfulWithdraw?: () => void
 }
 
-const DEADLINE_HOURS = 288
-const SHARE_PRICE_DISCOUNT_PERCENT = 0.25
+// Use global withdraw deadline (14 days) and express discount in basis points
+// 0.25% => 25 bps
+const DISCOUNT_BPS = 25
 
 export const WithdrawQueueForm = ({
   onClose,
@@ -79,21 +86,16 @@ export const WithdrawQueueForm = ({
     cellarConfig.chain.id
   )
 
+  const { data: boringQueueWithdrawals } = useBoringQueueWithdrawals(
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id,
+    { enabled: !!cellarConfig.boringQueue }
+  )
+
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
 
-  const withdrawQueueContract = (() => {
-    if (!publicClient) return
-    return getContract({
-      address: cellarConfig.chain
-        .withdrawQueueAddress as `0x${string}`,
-      abi: withdrawQueueV0821,
-      client: {
-        public: publicClient,
-        wallet: walletClient,
-      },
-    })
-  })()
+  const { boringQueue } = useCreateContracts(cellarConfig)
 
   const cellarContract = (() => {
     if (!publicClient) return
@@ -105,6 +107,22 @@ export const WithdrawQueueForm = ({
         wallet: walletClient,
       },
     })
+  })()
+
+  const withdrawQueueContract = (() => {
+    if (!publicClient) return
+    return (
+      boringQueue ??
+      getContract({
+        address: cellarConfig.chain
+          .withdrawQueueAddress as `0x${string}`,
+        abi: withdrawQueueV0821,
+        client: {
+          public: publicClient,
+          wallet: walletClient,
+        },
+      })
+    )
   })()
 
   const [_, wait] = useWaitForTransaction({
@@ -119,11 +137,57 @@ export const WithdrawQueueForm = ({
     defaultValues: {},
   })
 
-  const [selectedToken, setSelectedToken] = useState<Token | null>(
-    null
-  )
+  const [selectedToken, setSelectedToken] =
+    useState<Token>(strategyBaseAsset)
 
-  function trackedSetSelectedToken(value: Token | null) {
+  const [isWithdrawAllowed, setIsWithdrawAllowed] = useState<
+    boolean | null
+  >(null)
+
+  // Pre-validation of request: simulate on-chain call before enabling Submit
+  const [isRequestValid, setIsRequestValid] = useState<
+    boolean | null
+  >(null)
+  const [preflightMessage, setPreflightMessage] = useState<string>("")
+  const [isValidating, setIsValidating] = useState<boolean>(false)
+  const [discountBpsChosen, setDiscountBpsChosen] = useState<
+    number | null
+  >(null)
+  const [effectiveDeadlineSec, setEffectiveDeadlineSec] = useState<
+    number | null
+  >(null)
+
+  // Preflight: check if queue allows withdraws for selected asset (boring queue)
+  useEffect(() => {
+    let cancelled = false
+    const run = async () => {
+      try {
+        if (!boringQueue || !selectedToken?.address) {
+          setIsWithdrawAllowed(null)
+          return
+        }
+        const res = await boringQueue.read.withdrawAssets([
+          selectedToken.address,
+        ])
+        const allow = Array.isArray(res)
+          ? Boolean(res[0])
+          : Boolean(res)
+        if (!cancelled) setIsWithdrawAllowed(allow)
+        logTxDebug("withdraw.preflight", {
+          assetOut: selectedToken.address,
+          allow,
+        })
+      } catch (e) {
+        if (!cancelled) setIsWithdrawAllowed(null)
+      }
+    }
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [boringQueue, selectedToken])
+
+  function trackedSetSelectedToken(value: Token) {
     if (value && value !== selectedToken) {
       // analytics.track("deposit.stable-selected", {
       //   ...baseAnalytics,
@@ -141,6 +205,9 @@ export const WithdrawQueueForm = ({
   const isDisabled =
     isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
 
+  const isActiveWithdrawRequest =
+    useWithdrawRequestStatus(cellarConfig)
+
   const setMax = () => {
     const amount = parseFloat(
       toEther(lpTokenData?.formatted, lpTokenData?.decimals, false, 6)
@@ -149,6 +216,162 @@ export const WithdrawQueueForm = ({
   }
 
   const geo = useGeo()
+
+  // Simulate the request with current inputs to pre‑validate before enabling submit
+  useEffect(() => {
+    let cancelled = false
+    const run = async () => {
+      // Only validate for boringQueue path and when an amount is present
+      if (!boringQueue || !selectedToken?.address) {
+        setIsRequestValid(null)
+        setPreflightMessage("")
+        setDiscountBpsChosen(null)
+        setEffectiveDeadlineSec(null)
+        return
+      }
+      if (isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0) {
+        setIsRequestValid(null)
+        setPreflightMessage("")
+        setDiscountBpsChosen(null)
+        setEffectiveDeadlineSec(null)
+        return
+      }
+      try {
+        setIsValidating(true)
+        // Compute shares and parameters exactly like in submit path
+        const withdrawAmtInBaseDenom = parseUnits(
+          `${watchWithdrawAmount}`,
+          cellarConfig.cellar.decimals
+        )
+
+        const tokenSymbolForRules = (selectedToken?.symbol ||
+          "") as string
+        const configuredRules: any = (cellarConfig as any)
+          ?.withdrawTokenConfig?.[tokenSymbolForRules]
+        const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
+        const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
+        const desiredBps = DISCOUNT_BPS
+        const startBps =
+          minBps && maxBps
+            ? Math.max(minBps, Math.min(desiredBps, maxBps))
+            : desiredBps
+        const minDeadline = Number(
+          configuredRules?.minimumSecondsToDeadline ?? 0
+        )
+        const policyDeadline = Math.floor(
+          WITHDRAW_DEADLINE_HOURS * 60 * 60
+        )
+        const effectiveDeadlineSeconds = Math.max(
+          policyDeadline,
+          minDeadline
+        )
+        setEffectiveDeadlineSec(effectiveDeadlineSeconds)
+        // Probe upwards in 25 bps steps until simulation succeeds
+        const step = 25
+        const upper = maxBps && maxBps > 0 ? maxBps : startBps
+        let found: number | null = null
+        for (let bps = startBps; bps <= upper; bps += step) {
+          try {
+            if (isActiveWithdrawRequest && boringQueueWithdrawals) {
+              const request =
+                boringQueueWithdrawals.open_requests[0].metadata
+              const oldRequestTouple = [
+                request.nonce,
+                address,
+                request.assetOut,
+                request.amountOfShares,
+                request.amountOfAssets,
+                request.creationTime,
+                request.secondsToMaturity,
+                request.secondsToDeadline,
+              ]
+              await boringQueue.simulate.replaceOnChainWithdraw(
+                [
+                  oldRequestTouple,
+                  BigInt(bps),
+                  BigInt(effectiveDeadlineSeconds),
+                ],
+                { account: address }
+              )
+            } else {
+              await boringQueue.simulate.requestOnChainWithdraw(
+                [
+                  selectedToken.address,
+                  withdrawAmtInBaseDenom,
+                  BigInt(bps),
+                  BigInt(effectiveDeadlineSeconds),
+                ],
+                { account: address }
+              )
+            }
+            found = bps
+            break
+          } catch (_) {
+            continue
+          }
+        }
+        if (!cancelled) {
+          if (found !== null) {
+            setIsRequestValid(true)
+            setDiscountBpsChosen(found)
+            setPreflightMessage(
+              `Queue minimum discount auto‑selected: ${(
+                found / 100
+              ).toFixed(2)}%`
+            )
+          } else {
+            setIsRequestValid(false)
+          }
+        }
+      } catch (e) {
+        if (cancelled) return
+        const msg = (
+          (e as any)?.cause?.message ||
+          (e as Error).message ||
+          ""
+        ).toString()
+        setIsRequestValid(false)
+        if (
+          msg.includes(
+            "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
+          )
+        ) {
+          setPreflightMessage(
+            `Withdraw queue is currently not available for ${selectedToken.symbol}.`
+          )
+        } else if (msg.includes("BoringOnChainQueue__BadDiscount")) {
+          const rules: any = (cellarConfig as any)
+            ?.withdrawTokenConfig?.[
+            (selectedToken?.symbol || "") as string
+          ]
+          const minPct = rules?.minDiscount
+          const maxPct = rules?.maxDiscount
+          setPreflightMessage(
+            `Discount invalid. Allowed range for ${selectedToken.symbol}: ${minPct}%–${maxPct}%.`
+          )
+        } else {
+          setPreflightMessage(
+            "Request not currently valid. Please review inputs and try again."
+          )
+        }
+      } finally {
+        if (!cancelled) setIsValidating(false)
+      }
+    }
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [
+    boringQueue,
+    selectedToken?.address,
+    selectedToken?.symbol,
+    watchWithdrawAmount,
+    isActiveWithdrawRequest,
+    boringQueueWithdrawals,
+    address,
+    cellarConfig,
+  ])
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -172,15 +395,38 @@ export const WithdrawQueueForm = ({
       cellarConfig.cellar.decimals
     )
 
-    // Get approval if needed
+    // Check if user has sufficient balance
+    if (!lpTokenData || lpTokenData.value < withdrawAmtInBaseDenom) {
+      addToast({
+        heading: "Insufficient Balance",
+        status: "error",
+        body: (
+          <Text>
+            You don&apos;t have enough{" "}
+            {lpTokenData?.symbol || "tokens"} to withdraw this amount.
+            <br />
+            Available: {lpTokenData?.formatted || "0"}
+            <br />
+            Requested: {withdrawAmount}
+          </Text>
+        ),
+        closeHandler: closeAll,
+      })
+      return
+    }
+
     const allowance = (await cellarContract?.read.allowance([
       address!,
-      getAddress(cellarConfig.chain.withdrawQueueAddress),
+      getAddress(
+        cellarConfig.boringQueue
+          ? cellarConfig.boringQueue.address
+          : cellarConfig.chain.withdrawQueueAddress
+      ),
     ])) as bigint
 
     let needsApproval
     try {
-      needsApproval = allowance < withdrawAmtInBaseDenom
+      needsApproval = (allowance as bigint) < withdrawAmtInBaseDenom
     } catch (e) {
       const error = e as Error
       console.error("Invalid Input: ", error.message)
@@ -192,7 +438,11 @@ export const WithdrawQueueForm = ({
         // @ts-ignore
         const hash = await cellarContract?.write.approve(
           [
-            getAddress(cellarConfig.chain.withdrawQueueAddress),
+            getAddress(
+              cellarConfig.boringQueue
+                ? cellarConfig.boringQueue.address
+                : cellarConfig.chain.withdrawQueueAddress
+            ),
             MaxUint256,
           ],
           { account: address }
@@ -253,50 +503,42 @@ export const WithdrawQueueForm = ({
     }
 
     try {
-      const currentTime = Math.floor(Date.now() / 1000)
-      const deadlineSeconds =
-        Math.floor(DEADLINE_HOURS * 60 * 60) + currentTime
+      // Add debugging information
+      console.log("Withdraw attempt details:", {
+        selectedToken: selectedToken?.symbol,
+        withdrawAmount: withdrawAmount,
+        withdrawAmtInBaseDenom: withdrawAmtInBaseDenom.toString(),
+        lpTokenBalance: lpTokenData?.formatted,
+        lpTokenValue: lpTokenData?.value?.toString(),
+        isActiveWithdrawRequest,
+        boringQueue: !!boringQueue,
+        cellarAddress: cellarConfig.cellar.address,
+      })
 
-      // Query share price
-      const previewRedeem: number = parseInt(
-        await fetchCellarPreviewRedeem(
-          id,
-          BigInt(10 ** cellarConfig.cellar.decimals)
-        )
-      )
-      const sharePriceStandardized =
-        previewRedeem / 10 ** cellarConfig.baseAsset.decimals
-      const sharePriceWithDiscount =
-        sharePriceStandardized *
-        ((100 - SHARE_PRICE_DISCOUNT_PERCENT) / 100)
-      const sharePriceWithDiscountInBaseDenom = Math.floor(
-        sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
-      )
+      // Guard: if boring queue and asset disabled, show UI and stop
+      if (boringQueue && isWithdrawAllowed === false) {
+        addToast({
+          heading: "Withdraw Queue",
+          status: "info",
+          body: (
+            <Text>
+              Withdraw queue is currently not available for{" "}
+              {selectedToken.symbol}. Please choose a different asset
+              or try again later.
+            </Text>
+          ),
+          closeHandler: closeAll,
+        })
+        logTxDebug("withdraw.blocked_asset", {
+          assetOut: selectedToken.address,
+        })
+        return
+      }
 
-      // Input Touple
-      const withdrawTouple = [
-        BigInt(deadlineSeconds),
-        BigInt(sharePriceWithDiscountInBaseDenom),
-        withdrawAmtInBaseDenom,
-        false,
-      ]
-
-      const gasLimitEstimated = await estimateGasLimitWithRetry(
-        withdrawQueueContract?.estimateGas.updateWithdrawRequest,
-        withdrawQueueContract?.simulate.updateWithdrawRequest,
-        [cellarConfig.cellar.address, withdrawTouple],
-        330000,
-        address
+      let hash = await doWithdrawTx(
+        selectedToken,
+        withdrawAmtInBaseDenom
       )
-      const hash =
-        // @ts-ignore
-        await withdrawQueueContract?.write.updateWithdrawRequest(
-          [cellarConfig.cellar.address, withdrawTouple],
-          {
-            gas: gasLimitEstimated,
-            account: address,
-          }
-        )
 
       const onSuccess = () => {
         if (onSuccessfulWithdraw) {
@@ -321,6 +563,53 @@ export const WithdrawQueueForm = ({
       console.error(error)
 
       if (error.message === "GAS_LIMIT_ERROR") {
+        const causeMsg = (error as any)?.cause?.message || ""
+        if (
+          causeMsg.includes(
+            "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
+          )
+        ) {
+          addToast({
+            heading: "Withdraw Queue",
+            body: (
+              <Text>
+                Withdraw queue is currently not available for{" "}
+                {selectedToken.symbol}. Please choose a different
+                asset or try again later.
+              </Text>
+            ),
+            status: "info",
+            closeHandler: closeAll,
+          })
+          logTxDebug("withdraw.error_not_allowed", {
+            assetOut: selectedToken.address,
+          })
+          return
+        }
+        if (causeMsg.includes("BoringOnChainQueue__BadDiscount")) {
+          const tokenSymbol = (selectedToken?.symbol || "") as string
+          const rules: any = (cellarConfig as any)
+            ?.withdrawTokenConfig?.[tokenSymbol]
+          const minPct = rules?.minDiscount ?? undefined
+          const maxPct = rules?.maxDiscount ?? undefined
+          addToast({
+            heading: "Withdraw Queue",
+            body: (
+              <Text>
+                Withdraw request rejected: discount is invalid.
+                {minPct !== undefined && maxPct !== undefined
+                  ? ` Allowed range for ${selectedToken.symbol}: ${minPct}%–${maxPct}%.`
+                  : ""}
+              </Text>
+            ),
+            status: "info",
+            closeHandler: closeAll,
+          })
+          logTxDebug("withdraw.error_bad_discount", {
+            assetOut: selectedToken.address,
+          })
+          return
+        }
         addToast({
           heading: "Transaction not submitted",
           body: (
@@ -357,36 +646,147 @@ export const WithdrawQueueForm = ({
     }
   }
 
-  const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
-    useState(false)
+  const doWithdrawTx = async (
+    selectedToken: Token,
+    withdrawAmtInBaseDenom: bigint
+  ) => {
+    const currentTime = Math.floor(Date.now() / 1000)
+    const tokenSymbolForRules = (selectedToken?.symbol ||
+      "") as string
+    const configuredRules: any = (cellarConfig as any)
+      ?.withdrawTokenConfig?.[tokenSymbolForRules]
+    const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
+    const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
+    // Our desired default is 25 bps; clamp to per-asset rules if present
+    const desiredBps = DISCOUNT_BPS
+    // Prefer the pre‑validated/auto‑selected discount if available
+    const discountBps =
+      discountBpsChosen !== null
+        ? discountBpsChosen
+        : minBps && maxBps
+        ? Math.max(minBps, Math.min(desiredBps, maxBps))
+        : desiredBps
+    const minDeadline = Number(
+      configuredRules?.minimumSecondsToDeadline ?? 0
+    )
+    const policyDeadline = Math.floor(
+      WITHDRAW_DEADLINE_HOURS * 60 * 60
+    )
+    const effectiveDeadlineSeconds =
+      effectiveDeadlineSec !== null
+        ? effectiveDeadlineSec
+        : Math.max(policyDeadline, minDeadline)
+    const deadlineSeconds = currentTime + effectiveDeadlineSeconds
 
-  // Check if a user has an active withdraw request
-  const checkWithdrawRequest = async () => {
-    try {
-      if (withdrawQueueContract && address && cellarConfig) {
-        const withdrawRequest =
-          await withdrawQueueContract?.read.getUserWithdrawRequest([
-            address,
-            cellarConfig.cellar.address,
-          ])
+    let hash
 
-        // Check if it's valid
-        const isWithdrawRequestValid =
-          (await withdrawQueueContract?.read.isWithdrawRequestValid([
-            cellarConfig.cellar.address,
-            address,
-            withdrawRequest,
-          ])) as boolean
-        setIsActiveWithdrawRequest(isWithdrawRequestValid)
+    if (boringQueue) {
+      const discount = BigInt(discountBps)
+
+      const deadlineSeconds = BigInt(effectiveDeadlineSeconds)
+
+      if (isActiveWithdrawRequest && boringQueueWithdrawals) {
+        // Replace existing BoringQueuerequest
+        const request =
+          boringQueueWithdrawals.open_requests[0].metadata
+
+        const oldRequestTouple = [
+          request.nonce,
+          address,
+          request.assetOut,
+          request.amountOfShares,
+          request.amountOfAssets,
+          request.creationTime,
+          request.secondsToMaturity,
+          request.secondsToDeadline,
+        ]
+
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          boringQueue.estimateGas.replaceOnChainWithdraw,
+          boringQueue.simulate.replaceOnChainWithdraw,
+          [oldRequestTouple, discount, deadlineSeconds],
+          330000,
+          address
+        )
+
+        // @ts-ignore
+        hash = await boringQueue?.write.replaceOnChainWithdraw(
+          [oldRequestTouple, discount, deadlineSeconds],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
       } else {
-        setIsActiveWithdrawRequest(false)
+        // Create new BoringQueue request
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          boringQueue.estimateGas.requestOnChainWithdraw,
+          boringQueue.simulate.requestOnChainWithdraw,
+          [
+            selectedToken?.address,
+            withdrawAmtInBaseDenom,
+            discount,
+            deadlineSeconds,
+          ],
+          330000,
+          address
+        )
+
+        // @ts-ignore
+        hash = await boringQueue?.write.requestOnChainWithdraw(
+          [
+            selectedToken?.address,
+            withdrawAmtInBaseDenom,
+            discount,
+            deadlineSeconds,
+          ],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
       }
-    } catch (error) {
-      console.log(error)
-      setIsActiveWithdrawRequest(false)
+    } else {
+      // Create or replace WithdrawQueue request
+      const previewRedeem = parseInt(
+        await fetchCellarPreviewRedeem(
+          id,
+          BigInt(10 ** cellarConfig.cellar.decimals)
+        )
+      )
+
+      const sharePriceStandardized =
+        previewRedeem / 10 ** cellarConfig.baseAsset.decimals
+      const sharePriceWithDiscount = sharePriceStandardized
+      const sharePriceWithDiscountInBaseDenom = Math.floor(
+        sharePriceWithDiscount * 10 ** cellarConfig.baseAsset.decimals
+      )
+
+      const withdrawTouple = [
+        BigInt(deadlineSeconds),
+        BigInt(sharePriceWithDiscountInBaseDenom),
+        withdrawAmtInBaseDenom,
+        false,
+      ]
+      const gasLimitEstimated = await estimateGasLimitWithRetry(
+        withdrawQueueContract?.estimateGas.updateWithdrawRequest,
+        withdrawQueueContract?.simulate.updateWithdrawRequest,
+        [cellarConfig.cellar.address, withdrawTouple],
+        330000,
+        address
+      )
+      // @ts-ignore
+      hash = await withdrawQueueContract?.write.updateWithdrawRequest(
+        [cellarConfig.cellar.address, withdrawTouple],
+        {
+          gas: gasLimitEstimated,
+          account: address,
+        }
+      )
     }
+
+    return hash
   }
-  checkWithdrawRequest()
 
   return (
     <VStack
@@ -398,6 +798,32 @@ export const WithdrawQueueForm = ({
       <FormProvider {...modalFormMethods}>
         <FormControl isInvalid={!!errors.withdrawAmount}>
           {isActiveWithdrawRequest && (
+            <>
+              <HStack
+                p={4}
+                mb={boringQueue ? 0 : 12}
+                spacing={4}
+                align="flex-start"
+                backgroundColor="purple.dark"
+                border="2px solid"
+                borderRadius={16}
+                borderColor="purple.base"
+              >
+                <Text
+                  color="white"
+                  fontSize="s"
+                  textAlign={"center"}
+                  fontWeight={"bold"}
+                >
+                  You currently have a withdraw request pending in the
+                  queue, submitting a new withdraw request will
+                  replace your current one.
+                </Text>
+              </HStack>
+              <br />
+            </>
+          )}
+          {isActiveWithdrawRequest && boringQueue && (
             <>
               <HStack
                 p={4}
@@ -415,9 +841,8 @@ export const WithdrawQueueForm = ({
                   textAlign={"center"}
                   fontWeight={"bold"}
                 >
-                  You currently have a withdraw request pending in the
-                  queue, submitting a new withdraw request will
-                  replace your current one.
+                  When replacing a BoringQueue request, only the
+                  deadline is updated.
                 </Text>
               </HStack>
               <br />
@@ -457,6 +882,7 @@ export const WithdrawQueueForm = ({
                   placeholder="0.00"
                   fontSize="lg"
                   fontWeight={700}
+                  disabled={isActiveWithdrawRequest && !!boringQueue}
                   textAlign="right"
                   {...register("withdrawAmount", {
                     onChange: (event) => {
@@ -521,6 +947,9 @@ export const WithdrawQueueForm = ({
                         fontSize="inherit"
                         fontWeight={600}
                         onClick={setMax}
+                        disabled={
+                          isActiveWithdrawRequest && !!boringQueue
+                        }
                       >
                         max
                       </Button>
@@ -545,10 +974,27 @@ export const WithdrawQueueForm = ({
               <Text as="span">Asset Out</Text>
               {
                 <ModalOnlyTokenMenu
-                  depositTokens={[strategyBaseAsset.symbol]}
+                  depositTokens={
+                    cellarConfig.boringVault
+                      ? Object.keys(
+                          cellarDataMap[id].config
+                            .withdrawTokenConfig!
+                        ).filter((sym) =>
+                          sym === "WETH"
+                            ? true
+                            : isWithdrawAllowed === null
+                            ? true
+                            : sym === selectedToken.symbol
+                            ? true
+                            : true
+                        )
+                      : [strategyBaseAsset.symbol]
+                  }
                   activeAsset={strategyBaseAsset.address}
                   setSelectedToken={trackedSetSelectedToken}
-                  //isDisabled={isSubmitting}
+                  isDisabled={
+                    isActiveWithdrawRequest && !!boringQueue
+                  }
                 />
               }
             </HStack>
@@ -567,62 +1013,18 @@ export const WithdrawQueueForm = ({
               title="Vault"
               value={<Text>{cellarDataMap[id].name}</Text>}
             />
-            <FormControl isInvalid={!!errors.deadlineHours}>
-              <HStack justify="space-between">
-                <Tooltip
-                  hasArrow
-                  placement="top"
-                  label={
-                    "How many hours the request will be valid for. If the request is not fulfilled within this duration, it will be cancelled."
-                  }
-                  bg="surface.bg"
-                  color="neutral.300"
-                >
-                  <HStack spacing={1} align="center">
-                    <Text as="span">Deadline Hours</Text>
-                    <InformationIcon
-                      color="neutral.300"
-                      boxSize={3}
-                    />
-                  </HStack>
-                </Tooltip>
-                <Input
-                  id="deadline"
-                  variant="unstyled"
-                  pr="2"
-                  type="number"
-                  step="any"
-                  defaultValue={DEADLINE_HOURS}
-                  placeholder="0.00"
-                  fontSize="lg"
-                  fontWeight={700}
-                  textAlign="right"
-                  width="25%"
-                  padding={2}
-                  borderRadius={16}
-                  height="2.2em"
-                  disabled={true}
-                />
-              </HStack>
-              <FormErrorMessage color="energyYellow">
-                <Icon
-                  p={0.5}
-                  mr={1}
-                  color="surface.bg"
-                  bg="red.base"
-                  borderRadius="50%"
-                  as={AiOutlineInfo}
-                />
-                {errors.deadlineHours?.message}
-              </FormErrorMessage>
-            </FormControl>
           </Stack>
         </Stack>
       </FormProvider>
 
       <BaseButton
         type="submit"
-        isDisabled={isDisabled}
+        isDisabled={
+          isDisabled ||
+          (boringQueue ? isWithdrawAllowed === false : false) ||
+          (boringQueue ? isRequestValid === false : false) ||
+          isValidating
+        }
         isLoading={isSubmitting}
         fontSize={21}
         py={6}
@@ -630,20 +1032,29 @@ export const WithdrawQueueForm = ({
       >
         Submit
       </BaseButton>
+      {boringQueue &&
+        (isWithdrawAllowed === false || isRequestValid === false) && (
+          <Text color="yellow.300" fontSize="sm">
+            {preflightMessage ||
+              `Withdraw queue is currently not available for ${selectedToken.symbol}.`}
+          </Text>
+        )}
       {/*waitTime(cellarConfig) !== null && (
         <Text textAlign="center">
           Please wait {waitTime(cellarConfig)} after the deposit to
           enter the Withdraw Queue.
         </Text>
       )*/}
-      <FAQAccordion
-        data={[
-          {
-            question: "What is the Withdraw Queue?",
-            answer: `The Withdraw Queue is a way for users to submit a withdraw request if they are trying to withdraw more than the liquid reserve from a strategy. Once the request is submitted, it will be eventually fulfilled on behalf of the user and the withdrawn funds will appear automatically in the user's wallet (assuming the requests is fulfilled within the time constraint specified by the user). A withdraw request through the queue also has a much lower gas cost for users compared to instant withdrawals.`,
-          },
-        ]}
-      />
+      {!cellarConfig.boringVault && (
+        <FAQAccordion
+          data={[
+            {
+              question: "What is the Withdraw Queue?",
+              answer: `The Withdraw Queue is a way for users to submit a withdraw request if they are trying to withdraw more than the liquid reserve from a strategy. Once the request is submitted, it will be eventually fulfilled on behalf of the user and the withdrawn funds will appear automatically in the user's wallet (assuming the requests is fulfilled within the time constraint specified by the user). A withdraw request through the queue also has a much lower gas cost for users compared to instant withdrawals.`,
+            },
+          ]}
+        />
+      )}
     </VStack>
   )
 }

@@ -18,3 +18,6 @@ studio/node_modules
 .env*.local
 idea/
 .idea
+yarn.lock
+src/coverage/
+coverage/

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import {
   Container,
   Drawer,
@@ -24,7 +24,7 @@ import { useScrollDirection } from "hooks/utils/useScrollDirection";
 import { HamburgerIcon } from "components/_icons";
 import { Badge, BadgeStatus } from "./Strategy/Carousel/Badge";
 
-export const Nav = (props: FlexProps) => {
+export const Nav = memo((props: FlexProps) => {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const scrollDirection = useScrollDirection();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -207,4 +207,5 @@ export const Nav = (props: FlexProps) => {
       </Container>
     </Flex>
   );
-};
+}
+);

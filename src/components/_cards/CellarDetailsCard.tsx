@@ -7,7 +7,6 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  useTheme,
   VStack,
   Wrap,
 } from "@chakra-ui/react"
@@ -17,23 +16,12 @@ import { TokenAssets } from "components/TokenAssets"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { tokenConfig } from "data/tokenConfig"
 import { CellarDataMap } from "data/types"
-import { useNivoThemes } from "hooks/nivo"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import dynamic from "next/dynamic"
-import { useRouter } from "next/router"
 import { FC, useState, useEffect } from "react"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { protocolsImage } from "utils/protocolsImagePath"
 import { StrategyBreakdownCard } from "./StrategyBreakdownCard"
 import { TransparentCard } from "./TransparentCard"
-import { useAccount } from "wagmi"
-
-const BarChart = dynamic(
-  () => import("components/_charts/BarChart"),
-  {
-    ssr: false,
-  }
-)
 
 interface CellarDetailsProps extends BoxProps {
   cellarId: string
@@ -48,9 +36,7 @@ const CellarDetailsCard: FC<CellarDetailsProps> = ({
   cellarId,
   cellarDataMap,
 }) => {
-  const { barChartTheme } = useNivoThemes()
   const isLarger400 = useBetterMediaQuery("(min-width: 400px)")
-  const theme = useTheme()
   const {
     protocols,
     strategyType,
@@ -61,7 +47,6 @@ const CellarDetailsCard: FC<CellarDetailsProps> = ({
     performanceSplit,
     strategyProvider,
     name,
-    slug,
     config: { id },
   } = cellarDataMap[cellarId]
 
@@ -76,19 +61,16 @@ const CellarDetailsCard: FC<CellarDetailsProps> = ({
   const cellarStrategyAssets = filterTokenConfig.filter((token) =>
     strategyAssets?.includes(token.symbol)
   )
-  const router = useRouter()
-  const performanceSplitKeys = Object.keys(performanceSplit)
   const cellarConfig = cellarDataMap[cellarId].config
   const performanceFee =
     (performanceSplit["protocol"] ?? 0) +
     (performanceSplit["strategy provider"] ?? 0)
 
-  const { data: strategyData, isLoading } = useStrategyData(
+  const { data: strategyData } = useStrategyData(
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
   const activeAsset = strategyData?.activeAsset
-  const { chain } = useAccount()
 
   const isManyProtocols = Array.isArray(protocols)
   const [isMobile, setIsMobile] = useState(false)

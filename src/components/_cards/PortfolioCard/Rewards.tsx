@@ -60,7 +60,7 @@ export const Rewards = ({
   })
 
   const userRewards =
-    userStakes?.totalClaimAllRewards?.value.toString()
+    (userStakes as any)?.totalClaimAllRewards?.value.toString()
 
   const claimAllDisabled =
     !isConnected ||
@@ -189,8 +189,8 @@ export const Rewards = ({
                   {isMounted &&
                     (cellarConfig.customReward?.customRewardMessage ??
                       (isConnected
-                        ? userStakes?.totalClaimAllRewards
-                            .formatted || "..."
+                        ? (userStakes as any)?.totalClaimAllRewards
+                            ?.formatted || "..."
                         : "--"))}
                 </Text>
               </CardStat>
@@ -214,7 +214,7 @@ export const Rewards = ({
                 <Text textAlign="center">
                   {isMounted &&
                     (isConnected
-                      ? userStakes?.totalClaimAllRewards.formatted ||
+                      ? (userStakes as any)?.totalClaimAllRewards?.formatted ||
                         "..."
                       : "--")}
                 </Text>

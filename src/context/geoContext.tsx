@@ -9,8 +9,11 @@ import {
   useState,
 } from "react"
 
+// In browser, prefer relative path to avoid CORS in dev when running on non-default ports
 const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/"
+  typeof window === "undefined"
+    ? process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/"
+    : "/"
 
 type CheckIPState = {
   country: string | null
@@ -24,7 +27,9 @@ interface CheckIPContext extends CheckIPState {
 
 const geoContext = createContext<CheckIPContext | null>(null)
 
-export const GeoProvider: FC<{ children: ReactNode }> = ({ children }) => {
+export const GeoProvider: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [ctx, setCtx] = useState<CheckIPState>({
     country: null,
     region: null,
@@ -34,11 +39,26 @@ export const GeoProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     const getRegionData = async () => {
-      const res = await fetch(`${BASE_URL}api/geo`, {
-        method: "GET",
-      })
-      const data = await res.json()
-      setCtx(data)
+      try {
+        const res = await fetch(`${BASE_URL}api/geo`, {
+          method: "GET",
+        })
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`)
+        }
+
+        const data = await res.json()
+        setCtx(data)
+      } catch (error) {
+        console.warn("Failed to fetch geo data:", error)
+        // Set default values when geo data fetch fails
+        setCtx({
+          country: null,
+          region: null,
+          isRestricted: false,
+        })
+      }
     }
 
     getRegionData()

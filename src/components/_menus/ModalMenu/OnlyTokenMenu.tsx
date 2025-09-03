@@ -9,7 +9,6 @@ import {
   MenuList,
   MenuOptionGroup,
   Text,
-  useTheme
 } from "@chakra-ui/react"
 import { useRef } from "react"
 import { FaChevronDown } from "react-icons/fa"
@@ -24,12 +23,14 @@ export interface ModalOnlyTokenMenuProps {
   depositTokens: string[]
   setSelectedToken: (value: any) => void
   activeAsset?: string
+  isDisabled?: boolean
 }
 
 export interface MenuOnlyTokenProps
   extends Omit<ModalOnlyTokenMenuProps, "setSelectedToken"> {
   value: Token
   onChange: (...events: any[]) => void
+  isDisabled?: boolean
 }
 
 export const OnlyTokenMenu = ({
@@ -37,10 +38,10 @@ export const OnlyTokenMenu = ({
   activeAsset,
   value,
   onChange,
+  isDisabled,
 }: MenuOnlyTokenProps) => {
-  const { colors } = useTheme()
   const menuRef = useRef(null)
-  const { register, setValue, clearErrors } = useFormContext()
+  const { clearErrors } = useFormContext()
 
   const { id: _id } = useDepositModalStore()
   const id = (useRouter().query.id as string) || _id
@@ -78,6 +79,7 @@ export const OnlyTokenMenu = ({
           appearance="none"
           fontSize="lg"
           fontWeight={700}
+          disabled={isDisabled}
         >
           <HStack>
             {value ? (
@@ -122,6 +124,7 @@ export const OnlyTokenMenu = ({
                   value={symbol}
                   borderRadius={8}
                   _hover={{ bg: "rgba(96, 80, 155, 0.4)" }}
+                  disabled={isDisabled}
                   onClick={() => {
                     clearErrors()
                     onChange(token)

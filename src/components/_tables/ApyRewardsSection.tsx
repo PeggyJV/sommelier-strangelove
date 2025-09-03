@@ -59,6 +59,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
 
   const cellarType = cellarDataMap[cellarId].cellarType
   const LogoComponent = cellarConfig.customReward?.logo ?? LogoIcon
+  const isHero = cellarDataMap[cellarId].isHero
 
   if (!baseApy && !rewardsApy && !extraRewardsApy) {
     return (
@@ -167,7 +168,7 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
             boxShadow="xl"
             shouldWrapChildren
           >
-            <Text fontWeight={550} fontSize="16px">
+            <Text fontWeight={550} fontSize={isHero ? "20px" : "16px"}>
               {baseApySumRewards ?? "-"}
             </Text>
           </Tooltip>

@@ -1,19 +1,9 @@
-import {
-  Text,
-  Tooltip,
-  VStack,
-  HStack,
-  Box,
-  Flex,
-} from "@chakra-ui/react"
-import { PercentageText } from "components/PercentageText"
+import { Text, Tooltip, HStack, Box, Flex } from "@chakra-ui/react"
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
-import { Timeline } from "data/context/homeContext"
+import StrategyRow from "components/_vaults/StrategyRow"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
-import { isTokenPriceEnabledApp } from "data/uiConfig"
-import { cellarDataMap } from "data/cellarDataMap"
 import { InformationIcon } from "components/_icons"
 import { Avatar, AvatarGroup } from "@chakra-ui/react"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
@@ -21,7 +11,6 @@ import { useState } from "react"
 import { CellValue } from "react-table"
 
 type StrategyTabColumnProps = {
-  timeline: Timeline
   onDepositModalOpen: ({
     id,
     type,
@@ -48,7 +37,6 @@ type RowData = {
 }
 
 export const StrategyTabColumn = ({
-  timeline,
   onDepositModalOpen,
 }: StrategyTabColumnProps) => {
   return [
@@ -59,19 +47,26 @@ export const StrategyTabColumn = ({
         </span>
       ),
       accessor: "name",
-      Cell: ({ row }: any) => (
-        <StrategySection
-          icon={row.original.logo}
-          title={row.original.name}
-          provider={row.original.provider.title}
-          type={row.original.type}
-          date={row.original.launchDate}
-          description={row.original.description}
-          isDeprecated={row.original.deprecated}
-          badges={row.original.config.badges}
-          w={56}
-        />
-      ),
+      Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) {
+          return <StrategyRow vault={row.original} />
+        }
+        return (
+          <StrategySection
+            icon={row.original.logo}
+            title={row.original.name}
+            provider={row.original.provider.title}
+            type={row.original.type}
+            date={row.original.launchDate}
+            description={row.original.description}
+            isDeprecated={row.original.deprecated}
+            badges={row.original.config.badges}
+            isHero={row.original.isHero}
+            isSommNative={row.original.isSommNative}
+            w={56}
+          />
+        )
+      },
       disableSortBy: false,
       sortType: (rowA: RowData, rowB: RowData) => {
         // Sort by active asset asset
@@ -106,6 +101,7 @@ export const StrategyTabColumn = ({
 
       accessor: "chain",
       Cell: ({ cell: { row } }: CellValue) => {
+        if ((row as any)?.original?.isSommNative) return null
         const [isHover, setIsHover] = useState(false)
         const handleMouseOver = () => {
           setIsHover(true)
@@ -133,6 +129,11 @@ export const StrategyTabColumn = ({
                   key={row.original.config.chain.id}
                   background={"transparent"}
                   border={"none"}
+                  boxShadow={
+                    row.original.isHero
+                      ? "0 0 15px 5px rgba(147, 51, 234, 0.3)"
+                      : "none"
+                  }
                   sx={{
                     width: "2.2em", // custom width
                     height: "2.2em", // custom height
@@ -167,34 +168,43 @@ export const StrategyTabColumn = ({
     {
       Header: "TVL",
       accessor: "tvm.value",
-      Cell: ({ row }: any) => (
-        <Text fontWeight={550} fontSize="16px" textAlign="right">
-          {row.original.launchDate &&
-          row.original.launchDate > Date.now()
-            ? "--"
-            : row.original.tvm?.formatted ?? "--"}
-        </Text>
-      ),
+      Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) return null
+        return (
+          <Text
+            fontWeight={550}
+            fontSize={row.original.isHero ? "20px" : "16px"}
+            textAlign="right"
+          >
+            {row.original.launchDate &&
+            row.original.launchDate > Date.now()
+              ? "--"
+              : row.original.tvm?.formatted ?? "--"}
+          </Text>
+        )
+      },
     },
     {
       Header: () => (
         <Tooltip
           arrowShadowColor="purple.base"
-          label="APY after any platform and strategy provider fees, inclusive of rewards program earnings when an active rewards program is in place"
+          label="Net rewards inclusive of base yield and any rewards program when active"
           placement="top"
           color="neutral.300"
           bg="surface.bg"
         >
           <HStack spacing={1}>
-            <Text>Net APY</Text>
+            <Text>Net Rewards</Text>
             <InformationIcon color="neutral.400" boxSize={3} />
           </HStack>
         </Tooltip>
       ),
       accessor: "baseApy",
       Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) return null
+        const value = row.original.baseApySumRewards?.formatted
         const launchDate = row.original.launchDate
-        if ((launchDate && launchDate > Date.now()) || !row.original.baseApy) {
+        if (launchDate && launchDate > Date.now()) {
           return (
             <Text fontWeight={550} fontSize="16px" textAlign="right">
               --
@@ -202,18 +212,9 @@ export const StrategyTabColumn = ({
           )
         }
         return (
-          <ApyRewardsSection
-            cellarId={row.original.slug}
-            baseApy={row.original.baseApy?.formatted}
-            rewardsApy={row.original.rewardsApy?.formatted}
-            stackingEndDate={row.original.stakingEnd?.endDate}
-            date={row.original.launchDate}
-            baseApySumRewards={
-              row.original.baseApySumRewards?.formatted
-            }
-            extraRewardsApy={row.original.extraRewardsApy?.formatted}
-            merkleRewardsApy={row.original.merkleRewardsApy}
-          />
+          <Text fontWeight={600} fontSize="16px" textAlign="right">
+            {value ?? "--"}
+          </Text>
         )
       },
       sortType: (rowA: RowData, rowB: RowData) => {
@@ -227,57 +228,17 @@ export const StrategyTabColumn = ({
       },
     },
     {
-      Header: () => (
-        <Text>
-          {`${timeline.title} Token Price`}
-          <br />
-        </Text>
-      ),
-      accessor: `changes.${timeline.value}`,
-      Cell: ({ row }: any) => {
-        const cellarConfig = cellarDataMap[row.original.slug].config
-
-        if (!isTokenPriceEnabledApp(cellarConfig))
-          return (
-            <VStack>
-              <Tooltip
-                label={`Token price change`}
-                color="neutral.100"
-                border="0"
-                fontSize="12px"
-                bg="neutral.900"
-                fontWeight={600}
-                py="4"
-                px="6"
-                boxShadow="xl"
-                shouldWrapChildren
-              >
-                <PercentageText
-                  data={row.original.changes?.[timeline.value]}
-                  arrowT2
-                  fontWeight={600}
-                />
-              </Tooltip>
-            </VStack>
-          )
-
-        return (
-          <Text fontWeight={550} fontSize="16px" textAlign="center">
-            --
-          </Text>
-        )
-      },
-      disableSortBy: true, // This line disables sorting for this column
-    },
-    {
       Header: () => <Text>Deposit</Text>,
       id: "deposit",
-      Cell: ({ row }: any) => (
-        <DepositAndWithdrawButton
-          row={row}
-          onDepositModalOpen={onDepositModalOpen}
-        />
-      ),
+      Cell: ({ row }: any) => {
+        if (row.original?.isSommNative) return null
+        return (
+          <DepositAndWithdrawButton
+            row={row}
+            onDepositModalOpen={onDepositModalOpen}
+          />
+        )
+      },
     },
   ]
 }

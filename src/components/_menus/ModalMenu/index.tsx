@@ -53,6 +53,7 @@ export const ModalOnlyTokenMenu: FC<ModalOnlyTokenMenuProps> = ({
   depositTokens,
   activeAsset,
   setSelectedToken,
+  isDisabled,
 }) => {
   const { control } = useFormContext()
 
@@ -66,6 +67,7 @@ export const ModalOnlyTokenMenu: FC<ModalOnlyTokenMenuProps> = ({
             depositTokens={depositTokens}
             value={value}
             activeAsset={activeAsset}
+            isDisabled={isDisabled}
             onChange={(data) => {
               // Todo: shouldn't need to do this hack
               setSelectedToken(data)

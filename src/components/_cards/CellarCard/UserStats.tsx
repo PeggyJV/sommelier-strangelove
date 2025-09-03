@@ -86,7 +86,7 @@ export const UserStats: React.FC<Props> = ({
               boxSize={3}
             />
             {isMounted && isConnected
-              ? userStakes?.totalClaimAllRewards.formatted || "..."
+              ? (userStakes as any)?.totalClaimAllRewards?.formatted || "..."
               : "--"}
           </Heading>
           <Label color="neutral.300">Rewards</Label>
