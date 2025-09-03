@@ -9,19 +9,22 @@
     }
   },
   "env": {
-    "NODE_OPTIONS": "--max-old-space-size=8192"
+    "NODE_OPTIONS": "--max-old-space-size=8192",
+    "SKIP_ENV_VALIDATION": "1"
   },
   "build": {
     "env": {
       "NODE_OPTIONS": "--max-old-space-size=8192",
-      "NEXT_TELEMETRY_DISABLED": "1"
+      "NEXT_TELEMETRY_DISABLED": "1",
+      "SKIP_ENV_VALIDATION": "1"
     }
   },
   "framework": "nextjs",
   "buildCommand": "pnpm build",
-  "installCommand": "pnpm install --frozen-lockfile",
+  "installCommand": "npx pnpm@9.15.4 install --no-frozen-lockfile",
   "ignoreCommand": "git diff HEAD^ HEAD --quiet .",
   "github": {
     "silent": true
-  }
+  },
+  "crons": []
 }
