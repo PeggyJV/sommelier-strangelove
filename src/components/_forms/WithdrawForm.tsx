@@ -46,6 +46,7 @@ import {
   getTransactionErrorAnalytics,
   type TransactionErrorContext,
 } from "utils/handleTransactionError"
+import { config } from "utils/config"
 
 interface FormValues {
   withdrawAmount: number
@@ -145,6 +146,28 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
     )
 
     try {
+      // Alpha STETH: pre-check redeemable liquidity to avoid failing redeem tx
+      if (
+        ((useRouter().query.id as string) || _id) ===
+        config.CONTRACT.ALPHA_STETH.SLUG
+      ) {
+        const redeemableAssets: number = parseInt(
+          await fetchCellarRedeemableReserves(id)
+        )
+        const previewRedeem: number = parseInt(
+          await fetchCellarPreviewRedeem(
+            id,
+            BigInt(10 ** cellarConfig.cellar.decimals)
+          )
+        )
+        const redeemAmt: number = Math.floor(
+          previewRedeem * watchWithdrawAmount
+        )
+        if (redeemAmt > redeemableAssets) {
+          openWithdrawQueueModal()
+          return
+        }
+      }
       const gasLimitEstimated = await estimateGasLimitWithRetry(
         cellarSigner?.estimateGas.redeem,
         cellarSigner?.simulate.redeem,
