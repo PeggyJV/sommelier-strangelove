@@ -7,37 +7,28 @@ module.exports = {
   parserOptions: {
     tsconfigRootDir: __dirname,
     project: ["./tsconfig.json"],
-    // Silence the parser's TypeScript version support warning
-    warnOnUnsupportedTypeScriptVersion: false,
   },
   extends: [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
   ],
-  plugins: ["@typescript-eslint", "unused-imports"],
+  plugins: ["@typescript-eslint"],
   rules: {
-    // Next.js specifics
+    // Temporary: avoid plugin crash while we align configs
     "@next/next/no-html-link-for-pages": "off",
     "@next/next/no-img-element": "off",
-
-    // Disable noisy rules to get to zero warnings
-    "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
-    "@typescript-eslint/ban-types": "off",
-    "@typescript-eslint/triple-slash-reference": "off",
-
-    "react-hooks/exhaustive-deps": "off",
-    "react-hooks/rules-of-hooks": "off",
-    "react/no-children-prop": "off",
-    "react/display-name": "off",
-    "react/no-unescaped-entities": "off",
-
-    // Unused import handling (disabled to avoid warnings)
-    "unused-imports/no-unused-imports": "off",
-    "unused-imports/no-unused-imports-ts": "off",
-
+    // Temporary: reduce strictness to get CI pipeline working
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",
+    "@typescript-eslint/ban-types": "warn",
+    "@typescript-eslint/triple-slash-reference": "warn",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/no-children-prop": "warn",
+    "react/display-name": "warn",
+    "react/no-unescaped-entities": "warn",
+    "react-hooks/rules-of-hooks": "warn",
     "prefer-const": "off",
   },
   ignorePatterns: [
@@ -46,16 +37,11 @@ module.exports = {
     "**/*.spec.tsx",
     "**/*.test.ts",
     "**/*.test.tsx",
-    "tests/**",
     "coverage/**",
     "node_modules/**",
     "dist/**",
     "build/**",
     ".next/**",
-    // Ignore vendored and type-definition sources that we don't control
-    "src/vendor/**",
-    "src/vendor/ignite/**",
-    "src/types/**",
-    "vercel-kv.d.ts",
+    "vercel-kv.d..ts"
   ],
 }

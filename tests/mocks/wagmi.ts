@@ -111,5 +111,5 @@ export const injected = () => ({
 })
 
 // Provider component
-export const WagmiConfig = ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children)
+export const WagmiConfig = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
