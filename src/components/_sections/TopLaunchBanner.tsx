@@ -200,7 +200,11 @@ export default function TopLaunchBanner({
                   Explore Vault
                 </Button>
 
-                <Link href={blogHref} isExternal _hover={{ textDecoration: "none" }}>
+                <Link
+                  href={blogHref}
+                  isExternal
+                  _hover={{ textDecoration: "none" }}
+                >
                   <Button
                     size="md"
                     height="40px"
