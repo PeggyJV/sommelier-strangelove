@@ -54,6 +54,8 @@
     "@nivo/core": "^0.95.0",
     "@nivo/line": "^0.95.0",
     "@nivo/theming": "^0.99.0",
+    "@noble/curves": "^1.9.1",
+    "@noble/hashes": "^1.8.0",
     "@portabletext/react": "^3.1.0",
     "@portabletext/types": "^2.0.15",
     "@rainbow-me/rainbowkit": "^2.0.0",
