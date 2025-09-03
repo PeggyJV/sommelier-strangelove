@@ -147,10 +147,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
 
     try {
       // Alpha STETH: pre-check redeemable liquidity to avoid failing redeem tx
-      if (
-        ((useRouter().query.id as string) || _id) ===
-        config.CONTRACT.ALPHA_STETH.SLUG
-      ) {
+      if (id === config.CONTRACT.ALPHA_STETH.SLUG) {
         const redeemableAssets: number = parseInt(
           await fetchCellarRedeemableReserves(id)
         )
