@@ -156,7 +156,14 @@ jobs:
             echo "::warning::ESLint found issues in the code. Check the logs above for details."
           fi
       - name: Test with coverage
-        run: pnpm run test:all -- --coverage
+        run: |
+          echo "=== Running Jest tests ==="
+          echo "Checking for test files..."
+          find src -name "*.spec.ts" -o -name "*.spec.tsx" -o -name "*.test.ts" -o -name "*.test.tsx" | grep -v node_modules | grep -v mocks | grep -v stubs | wc -l | xargs -I {} echo "Found {} test files"
+
+          echo ""
+          echo "Running tests with coverage..."
+          pnpm run test:all:ci
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
