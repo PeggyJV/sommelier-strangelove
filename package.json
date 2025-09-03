@@ -89,7 +89,6 @@
     "react-table": "^7.8.0",
     "sanity-codegen": "^0.9.8",
     "slick-carousel": "^1.8.1",
-    "starknet": "^7.6.4",
     "viem": "^2.33.3",
     "wagmi": "^2.14.10",
     "web-vitals": "^5.1.0",
