@@ -22,6 +22,53 @@ let nextConfig = {
     // Temporary until upstream types stabilize; typecheck runs in CI
     ignoreBuildErrors: true,
   },
+
+  // Minimal EMFILE optimizations
+  experimental: {
+    // Optimize imports for large packages to reduce file operations
+    optimizePackageImports: [
+      "viem",
+      "@wagmi/core",
+      "wagmi",
+      "@tanstack/react-query",
+      "@chakra-ui/react",
+      "@rainbow-me/rainbowkit",
+    ],
+    // Use webpack build worker to reduce main thread file operations
+    webpackBuildWorker: true,
+  },
+
+  // Simple webpack optimizations for file handling
+  webpack: (config, { isServer, dev }) => {
+    // Enable filesystem cache to reduce file operations
+    if (!dev) {
+      config.cache = {
+        type: "filesystem",
+        buildDependencies: {
+          config: [__filename],
+        },
+      }
+    }
+
+    // Reduce file resolution overhead
+    config.resolve = {
+      ...config.resolve,
+      symlinks: false,
+    }
+
+    // Handle node polyfills for client-side
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      }
+    }
+
+    return config
+  },
+
   async headers() {
     return [
       {
@@ -52,6 +99,7 @@ let nextConfig = {
       },
     ]
   },
+
   redirects: async () => {
     // because aave was using "cellars" not "strategies" we should redirect to handle previous user
     return [
