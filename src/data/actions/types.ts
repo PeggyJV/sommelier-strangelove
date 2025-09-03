@@ -90,6 +90,8 @@ export interface StrategyContracts {
   stakerContract?: ReturnType<typeof getContract>
   stakerSigner?: ReturnType<typeof getContract>
   cellarRouterSigner?: ReturnType<typeof getContract>
+  boringVaultLens?: ReturnType<typeof getContract>
+  boringQueue?: ReturnType<typeof getContract>
   chain: string
 }
 export type AllContracts = Record<string, StrategyContracts>
@@ -186,6 +188,6 @@ export type GetAllStrategiesDataQuery = {
 }
 
 export type GetTVLDataQuery = {
-  [address: string]: number;
-  'total_tvl': number;
+  [address: string]: number
+  total_tvl: number
 }
