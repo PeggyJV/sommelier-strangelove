@@ -109,6 +109,14 @@ export interface ConfigProps {
     address: string
     abi: Abi
   }
+  withdrawTokenConfig?: {
+    [key: string]: {
+      minDiscount: number
+      maxDiscount: number
+      minimumSecondsToDeadline: number
+      minimumShares: number
+    }
+  }
   customReward?: CustomReward
   badges?: Badge[]
   baseAsset: Token
@@ -205,6 +213,34 @@ export interface CellarData {
     question: string
     answer: string
   }[]
+}
+
+export interface BoringCellarData extends CellarData {
+  lens?: {
+    address: string
+    abi: Abi
+  }
+  teller?: {
+    address: string
+    abi: Abi
+  }
+  boringQueue?: {
+    address: string
+    abi: Abi
+  }
+  boringVault?: boolean
+  accountant?: {
+    address: string
+    abi: Abi
+  }
+  withdrawTokenConfig?: {
+    [key: string]: {
+      minDiscount: number
+      maxDiscount: number
+      minimumSecondsToDeadline: number
+      minimumShares: number
+    }
+  }
 }
 export interface CellarDataMap {
   [key: string]: CellarData
