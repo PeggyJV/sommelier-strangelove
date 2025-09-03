@@ -765,31 +765,8 @@ export const SommelierTab = ({
       cellarConfig.cellar.address.toLowerCase() ===
         config.CONTRACT.ALPHA_STETH.ADDRESS.toLowerCase()
 
-    let preferEnterRoute = false
-    if (cellarConfig.teller && isAlphaSteth && !nativeDeposit) {
-      try {
-        const tellerContract =
-          publicClient &&
-          getContract({
-            address: getAddress(cellarConfig.teller.address),
-            abi: cellarConfig.teller.abi,
-            client: { public: publicClient },
-          })
-        // @ts-ignore
-        const ad: any = await (tellerContract as any)?.read.assetData(
-          [getAddress(data?.selectedToken?.address)]
-        )
-        const allowDeposits = Array.isArray(ad)
-          ? Boolean(ad[0])
-          : Boolean(ad?.allowDeposits)
-        const paused = Boolean(
-          await boringVaultLens?.read.isTellerPaused([
-            cellarConfig.teller.address,
-          ])
-        )
-        preferEnterRoute = paused || !allowDeposits
-      } catch {}
-    }
+    // Default to the cheaper enter() path for Alpha STETH ERC20 deposits
+    const preferEnterRoute = isAlphaSteth && !nativeDeposit
 
     if (!address) {
       return
@@ -1039,7 +1016,7 @@ export const SommelierTab = ({
   const currentAsset = getCurrentAsset(
     tokenConfig,
     cellarConfig.chain.id,
-    selectedToken?.address
+    cellarConfig.baseAsset.address
   )
 
   // Move active asset to top of token list.
