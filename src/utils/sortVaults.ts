@@ -15,7 +15,8 @@ export function sortVaults<T extends Vault>(
 ): T[] {
   return [...list].sort((a, b) => {
     if (isConnected) {
-      const nv = toNumber(b.user?.netValue) - toNumber(a.user?.netValue)
+      const nv =
+        toNumber(b.user?.netValue) - toNumber(a.user?.netValue)
       if (nv) return nv
       const tvl = toNumber(b.metrics?.tvl) - toNumber(a.metrics?.tvl)
       if (tvl) return tvl
@@ -28,5 +29,3 @@ export function sortVaults<T extends Vault>(
     return an < bn ? -1 : an > bn ? 1 : 0
   })
 }
-
-

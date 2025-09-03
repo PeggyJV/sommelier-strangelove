@@ -333,13 +333,15 @@ export const PageHome = () => {
         },
       }))
 
-    const sortedLegacy = sortVaults(mapToSortable(legacy), isConnected).map(
-      (x) => x.ref
-    )
+    const sortedLegacy = sortVaults(
+      mapToSortable(legacy),
+      isConnected
+    ).map((x) => x.ref)
 
-    const sortedSomm = sortVaults(mapToSortable(sommNative), isConnected).map(
-      (x) => x.ref
-    )
+    const sortedSomm = sortVaults(
+      mapToSortable(sommNative),
+      isConnected
+    ).map((x) => x.ref)
 
     return { sommNative: sortedSomm, legacy: sortedLegacy }
   }, [strategyData, isConnected, userBalances?.data])
