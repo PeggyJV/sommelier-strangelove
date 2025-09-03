@@ -36,6 +36,14 @@
     "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
     "perf:report": "node scripts/generate-perf-report.js"
   },
+  "pnpm": {
+    "overrides": {
+      "@noble/hashes": "1.8.0",
+      "@noble/curves": "1.9.1",
+      "@noble/hashes@*": "1.8.0",
+      "@noble/curves@*": "1.9.1"
+    }
+  },
   "dependencies": {
     "@analytics/mixpanel": "^0.4.0",
     "@chakra-ui/react": "^2.8.2",

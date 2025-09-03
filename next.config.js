@@ -128,6 +128,33 @@ let nextConfig = {
           )
         )
       )
+
+      // Force @noble packages to use root versions, not nested ones
+      // This handles the issue with @walletconnect/utils having nested incompatible versions
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /@noble\/(hashes|curves)/,
+          (resource) => {
+            // Extract the package name and subpath if any
+            const match = resource.request.match(
+              /@noble\/(hashes|curves)(\/.*)?$/
+            )
+            if (match) {
+              const pkg = match[1]
+              const subpath = match[2] || ""
+              // Force resolution to root node_modules version
+              try {
+                resource.request = require.resolve(
+                  `@noble/${pkg}${subpath}`
+                )
+              } catch {
+                // If subpath doesn't resolve directly, use the main package
+                resource.request = require.resolve(`@noble/${pkg}`)
+              }
+            }
+          }
+        )
+      )
     }
 
     // Optimize module resolution to reduce file operations
@@ -139,6 +166,20 @@ let nextConfig = {
       mainFields: ["module", "main"],
       alias: {
         ...config.resolve.alias,
+        // Force @noble packages to use root versions
+        "@noble/hashes": require.resolve("@noble/hashes"),
+        "@noble/curves": require.resolve("@noble/curves"),
+        "@noble/hashes/utils": require.resolve("@noble/hashes/utils"),
+        "@noble/hashes/sha3": require.resolve("@noble/hashes/sha3"),
+        "@noble/hashes/sha256": require.resolve(
+          "@noble/hashes/sha256"
+        ),
+        "@noble/hashes/ripemd160": require.resolve(
+          "@noble/hashes/ripemd160"
+        ),
+        "@noble/curves/secp256k1": require.resolve(
+          "@noble/curves/secp256k1"
+        ),
         // Force ES module resolution for problematic packages
         "@walletconnect/utils$":
           "@walletconnect/utils/dist/index.es.js",
