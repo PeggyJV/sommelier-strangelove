@@ -1,4 +1,4 @@
-import PageCellar from "components/_pages/PageCellar"
+import dynamic from "next/dynamic"
 import { cellarDataMap } from "data/cellarDataMap"
 import { GetServerSideProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
@@ -11,6 +11,12 @@ export interface CellarPageProps {
   id: string
   blocked: boolean
 }
+
+// Defer heavy client-only modules (charts, d3, viem ENS, etc.) to the browser
+const PageCellar = dynamic(() => import("components/_pages/PageCellar"), {
+  ssr: false,
+  loading: () => null,
+})
 
 const CellarPage: NextPage<CellarPageProps> = ({ id, blocked }) => {
   const router = useRouter()
