@@ -1,12 +1,7 @@
 [
   {
-    "name": "Pages First Load shared",
-    "path": ".next/static/chunks/pages/_app-*.js",
-    "limit": "230 kB"
-  },
-  {
-    "name": "App /vaults First Load JS",
-    "path": ".next/static/chunks/app/vaults/page-*.js",
-    "limit": "100 kB"
+    "name": "Home Page",
+    "path": ".next/static/chunks/pages/index-61cfa75caa775549.js",
+    "limit": "662 kB"
   }
 ]

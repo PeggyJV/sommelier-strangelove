@@ -19,7 +19,7 @@ export default function LegacyVaultsSection({
   }
 
   return (
-    <>
+    <Box as="section" id="legacy-vaults">
       <SectionHeader
         title={
           <>
@@ -46,6 +46,6 @@ export default function LegacyVaultsSection({
           />
         ))}
       </VStack>
-    </>
+    </Box>
   )
 }

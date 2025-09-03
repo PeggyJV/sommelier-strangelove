@@ -17,16 +17,8 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'pnpm'
+        cache: 'npm'
     
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 9
-
-    - name: Enable Corepack (safety)
-      run: corepack enable
-
     - name: Install dependencies
       run: pnpm install
     
@@ -40,7 +32,8 @@ jobs:
       run: pnpm start &
     
     - name: Wait for server
-      run: npx --yes wait-on -t 120000 http-get://localhost:3000
+      run: sleep 10
+    
     - name: Run Lighthouse CI
       run: pnpm lighthouse
       env:
@@ -50,6 +43,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: lighthouse-results
-        path: ./lhci-reports/
+        path: ./artifacts/lhci/
+    
     - name: Run tests
       run: pnpm test:all

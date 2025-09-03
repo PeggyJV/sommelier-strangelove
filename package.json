@@ -21,7 +21,12 @@
     "test:api": "jest --config jest.json --testPathPattern=__tests__/api",
     "test:utils": "jest --config jest.json --testPathPattern=__tests__/utils",
     "test:hooks": "jest --config jest.json --testPathPattern=__tests__/hooks",
-    "test:all": "jest --config jest.json --coverage --verbose"
+    "test:all": "jest --config jest.json --coverage --verbose",
+    "lighthouse": "lhci autorun --collect.numberOfRuns=3 --assert.preset=lighthouse:recommended",
+    "size-limit": "size-limit",
+    "perf:analyze": "ANALYZE=true next build",
+    "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
+    "perf:report": "node scripts/generate-perf-report.js"
   },
   "dependencies": {
     "@analytics/mixpanel": "^0.4.0",
@@ -34,7 +39,6 @@
     "@emotion/styled": "^11.11.5",
     "@keplr-wallet/cosmos": "^0.12.74",
     "@keplr-wallet/types": "^0.11.3",
-    "@next/bundle-analyzer": "15.3.2",
     "@nivo/bar": "^0.95.0",
     "@nivo/core": "^0.95.0",
     "@nivo/line": "^0.95.0",
@@ -74,11 +78,15 @@
     "slick-carousel": "^1.8.1",
     "viem": "^2.33.3",
     "wagmi": "^2.14.10",
+    "web-vitals": "^5.1.0",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@babel/core": "^7.27.1",
     "@chakra-ui/cli": "2.2.1",
+    "@lhci/cli": "^0.15.1",
+    "@next/bundle-analyzer": "15.3.2",
+    "@size-limit/preset-app": "^11.2.0",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
@@ -96,6 +104,7 @@
     "jest": "^29.0.1",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^2",
+    "size-limit": "^11.2.0",
     "ts-jest": "^29.4.0",
     "ts-prune": "^0",
     "typescript": "^5.4.5"
