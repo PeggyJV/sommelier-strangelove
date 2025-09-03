@@ -115,6 +115,11 @@ module.exports = {
             pkg.dependencies["@noble/curves"] = "1.9.1"
           }
 
+          // Force axios to use the root version
+          if (pkg.dependencies["axios"]) {
+            pkg.dependencies["axios"] = "^1.2.2"
+          }
+
           // Ensure consistent @cosmjs versions
           Object.keys(pkg.dependencies).forEach((dep) => {
             if (dep.startsWith("@cosmjs/")) {
@@ -125,6 +130,13 @@ module.exports = {
               }
             }
           })
+        }
+      }
+
+      // Special handling for @cosmjs/launchpad which uses old axios
+      if (pkg.name === "@cosmjs/launchpad") {
+        if (pkg.dependencies && pkg.dependencies["axios"]) {
+          pkg.dependencies["axios"] = "^1.2.2"
         }
       }
 
@@ -274,6 +286,22 @@ module.exports = {
           if (pkg.dependencies["@noble/hashes"]) {
             pkg.dependencies["@noble/hashes"] = "1.8.0"
           }
+        }
+      }
+
+      // ====================
+      // Axios version alignment
+      // ====================
+      // Force all packages to use consistent axios version
+      if (pkg.dependencies && pkg.dependencies["axios"]) {
+        const axiosVersion = pkg.dependencies["axios"]
+        // Update old axios versions to the one in package.json
+        if (
+          axiosVersion.startsWith("0.") ||
+          axiosVersion === "^0.21.4" ||
+          axiosVersion === "0.27.2"
+        ) {
+          pkg.dependencies["axios"] = "^1.2.2"
         }
       }
 

@@ -25,6 +25,7 @@ const PROBLEMATIC_PACKAGES = [
   "graz",
   "wagmi",
   "viem",
+  "axios",
 ]
 
 // Packages that should have symlinks created for them
@@ -281,6 +282,61 @@ if (fs.existsSync(grazNodeModules)) {
     console.log("Removing nested @keplr-wallet from graz...")
     fs.rmSync(grazKeplr, { recursive: true, force: true })
   }
+}
+
+// Fix axios nested installations
+console.log("\n🔧 Fixing axios nested installations...")
+const findAndRemoveNestedAxios = (dir) => {
+  if (!fs.existsSync(dir)) return
+
+  const axiosPath = path.join(dir, "node_modules", "axios")
+  if (fs.existsSync(axiosPath)) {
+    const parentName = path.basename(
+      path.dirname(path.dirname(axiosPath))
+    )
+    console.log(`Removing nested axios from ${parentName}`)
+    fs.rmSync(axiosPath, { recursive: true, force: true })
+  }
+}
+
+// Check @cosmjs packages for nested axios
+const cosmjsPath = path.join(nodeModulesPath, "@cosmjs")
+if (fs.existsSync(cosmjsPath)) {
+  const entries = fs.readdirSync(cosmjsPath, { withFileTypes: true })
+  entries.forEach((entry) => {
+    if (entry.isDirectory()) {
+      findAndRemoveNestedAxios(path.join(cosmjsPath, entry.name))
+    }
+  })
+}
+
+// Create symlink for axios if needed in @cosmjs packages
+const axiosSource = path.join(nodeModulesPath, "axios")
+if (fs.existsSync(axiosSource)) {
+  ;["@cosmjs/launchpad", "@cosmjs/tendermint-rpc"].forEach((pkg) => {
+    const pkgPath = path.join(nodeModulesPath, ...pkg.split("/"))
+    if (fs.existsSync(pkgPath)) {
+      const pkgNodeModules = path.join(pkgPath, "node_modules")
+      if (!fs.existsSync(pkgNodeModules)) {
+        fs.mkdirSync(pkgNodeModules, { recursive: true })
+      }
+
+      const axiosLink = path.join(pkgNodeModules, "axios")
+      if (!fs.existsSync(axiosLink)) {
+        try {
+          const symlinkType =
+            process.platform === "win32" ? "junction" : "dir"
+          fs.symlinkSync(axiosSource, axiosLink, symlinkType)
+          console.log(`Created axios symlink for ${pkg}`)
+        } catch (err) {
+          console.error(
+            `Failed to create axios symlink for ${pkg}:`,
+            err.message
+          )
+        }
+      }
+    }
+  })
 }
 
 // Fix any remaining nested viem installations

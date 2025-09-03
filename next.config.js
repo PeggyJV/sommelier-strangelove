@@ -181,6 +181,8 @@ let nextConfig = {
         "@noble/curves/secp256k1": require.resolve(
           "@noble/curves/secp256k1"
         ),
+        // Force axios to use root version to prevent nested installations
+        axios: require.resolve("axios"),
         // Force ES module resolution for problematic packages
         "@walletconnect/utils$":
           "@walletconnect/utils/dist/index.es.js",
