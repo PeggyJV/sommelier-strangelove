@@ -527,13 +527,57 @@ export const SommelierTab = ({
     tokenAddress: string,
     approval: boolean,
     canDoBatchCall: boolean,
-    isNativeDeposit: boolean
+    isNativeDeposit: boolean,
+    preferEnterRoute: boolean
   ): Promise<any[]> => {
     try {
       let hash: string
 
-      // For BoringVault (like Alpha STETH), use the teller contract
-      if (cellarConfig.teller) {
+      // For Alpha STETH specifically, route ERC20 deposits via BoringVault.enter
+      const isAlphaSteth =
+        id === config.CONTRACT.ALPHA_STETH.SLUG ||
+        cellarConfig.cellar.address.toLowerCase() ===
+          config.CONTRACT.ALPHA_STETH.ADDRESS.toLowerCase()
+
+      if (
+        cellarConfig.teller &&
+        isAlphaSteth &&
+        !isNativeDeposit &&
+        preferEnterRoute
+      ) {
+        // Compute shares via Lens then call BoringVault.enter
+        let shareAmount = 0n
+        try {
+          const mm = await boringVaultLens?.read.previewDeposit([
+            tokenAddress,
+            amtInWei,
+            cellarConfig.cellar.address,
+            cellarConfig.accountant?.address,
+          ])
+          if (typeof mm === "bigint") shareAmount = mm
+        } catch {}
+
+        hash = (await safeWriteContract(
+          {
+            address: cellarConfig.cellar.address as `0x${string}`,
+            abi: cellarConfig.cellar.abi,
+            functionName: "enter",
+            args: [
+              getAddress(address ?? ""),
+              tokenAddress,
+              amtInWei,
+              getAddress(address ?? ""),
+              shareAmount,
+            ],
+          },
+          {
+            vaultName: cellarName,
+            tokenSymbol: selectedToken?.symbol,
+            transactionType: "deposit",
+            chainId: cellarConfig.chain.wagmiId,
+          }
+        )) as string
+      } else if (cellarConfig.teller) {
         // Calculate minimum mint amount via Lens to aid gas estimation & slippage safety
         let minimumMint = 0n
         try {
@@ -721,16 +765,53 @@ export const SommelierTab = ({
     // For now, assume batch calls are not supported to avoid the getCapabilities issue
     const canDoBatchCall = false
 
+    const isAlphaSteth =
+      id === config.CONTRACT.ALPHA_STETH.SLUG ||
+      cellarConfig.cellar.address.toLowerCase() ===
+        config.CONTRACT.ALPHA_STETH.ADDRESS.toLowerCase()
+
+    let preferEnterRoute = false
+    if (cellarConfig.teller && isAlphaSteth && !nativeDeposit) {
+      try {
+        const tellerContract =
+          publicClient &&
+          getContract({
+            address: getAddress(cellarConfig.teller.address),
+            abi: cellarConfig.teller.abi,
+            client: { public: publicClient },
+          })
+        // @ts-ignore
+        const ad: any = await (tellerContract as any)?.read.assetData(
+          [getAddress(data?.selectedToken?.address)]
+        )
+        const allowDeposits = Array.isArray(ad)
+          ? Boolean(ad[0])
+          : Boolean(ad?.allowDeposits)
+        const paused = Boolean(
+          await boringVaultLens?.read.isTellerPaused([
+            cellarConfig.teller.address,
+          ])
+        )
+        preferEnterRoute = paused || !allowDeposits
+      } catch {}
+    }
+
     const allowance = nativeDeposit
       ? Number.MAX_SAFE_INTEGER
       : // For ERC20, check allowance of the selected token to the correct spender
-        // BoringVault (Alpha STETH): spender is Teller; Legacy cellar: spender is Cellar
+        // Alpha STETH: if Teller allowed → Teller, else BoringVault; Others: Teller if present else Cellar
         // @ts-ignore
         await erc20Contract.read.allowance(
           [
             getAddress(address ?? ""),
             getAddress(
-              cellarConfig.teller?.address || cellarConfig.cellar.address
+              isAlphaSteth
+                ? preferEnterRoute
+                  ? cellarConfig.cellar.address
+                  : cellarConfig.teller?.address ||
+                    cellarConfig.cellar.address
+                : cellarConfig.teller?.address ||
+                    cellarConfig.cellar.address
             ),
           ],
           { account: address }
@@ -764,7 +845,13 @@ export const SommelierTab = ({
         amtInWei,
         getAddress(selectedToken!.address),
         getAddress(
-          cellarConfig.teller?.address || cellarConfig.cellar.address
+          isAlphaSteth
+            ? preferEnterRoute
+              ? cellarConfig.cellar.address
+              : cellarConfig.teller?.address ||
+                cellarConfig.cellar.address
+            : cellarConfig.teller?.address ||
+                cellarConfig.cellar.address
         )
       )
     }
@@ -779,7 +866,8 @@ export const SommelierTab = ({
           data?.selectedToken?.address,
           approval,
           canDoBatchCall,
-          nativeDeposit
+          nativeDeposit,
+          preferEnterRoute
         )
 
         // If no receipts, likely user canceled; a toast was already shown by error handler
