@@ -578,20 +578,17 @@ export const SommelierTab = ({
             functionName: "deposit",
             args: [amtInWei, address],
           }
-          
+
           if (amtInWei > 0) {
             cellarParams.value = amtInWei
           }
-          
-          hash = (await safeWriteContract(
-            cellarParams,
-            {
-              vaultName: cellarName,
-              tokenSymbol: selectedToken?.symbol,
-              transactionType: "deposit",
-              chainId: cellarConfig.chain.wagmiId,
-            }
-          )) as string
+
+          hash = (await safeWriteContract(cellarParams, {
+            vaultName: cellarName,
+            tokenSymbol: selectedToken?.symbol,
+            transactionType: "deposit",
+            chainId: cellarConfig.chain.wagmiId,
+          })) as string
         } else {
           // ERC20 token deposit
           hash = (await safeWriteContract(
@@ -617,6 +614,20 @@ export const SommelierTab = ({
             hash: hash as `0x${string}`,
           }
         )
+
+        // Show a confirmation toast for BoringVault (e.g., Alpha STETH) deposits
+        if (receipt?.status === "success" && cellarConfig.teller) {
+          addToast({
+            heading: "Deposit Successful",
+            body: (
+              <Text>
+                Your deposit has been completed successfully.
+              </Text>
+            ),
+            status: "success",
+            closeHandler: close,
+          })
+        }
 
         return [receipt]
       }
