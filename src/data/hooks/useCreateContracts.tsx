@@ -58,7 +58,7 @@ export const useCreateContracts = (config: ConfigProps) => {
   })()
 
   const cellarRouterSigner = (() => {
-    if (!publicClient) return
+    if (!publicClient || !config.cellarRouter) return
     return getContract( {
         address: config.cellarRouter.address as `0x${string}`,
         abi: config.cellarRouter.abi,

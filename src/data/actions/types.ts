@@ -89,7 +89,7 @@ export interface StrategyContracts {
   cellarSigner: ReturnType<typeof getContract>
   stakerContract?: ReturnType<typeof getContract>
   stakerSigner?: ReturnType<typeof getContract>
-  cellarRouterSigner: ReturnType<typeof getContract>
+  cellarRouterSigner?: ReturnType<typeof getContract>
   chain: string
 }
 export type AllContracts = Record<string, StrategyContracts>
