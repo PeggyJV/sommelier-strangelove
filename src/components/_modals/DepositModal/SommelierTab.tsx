@@ -87,6 +87,11 @@ export const SommelierTab = ({
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
 
+  const isAlphaSteth =
+    id === config.CONTRACT.ALPHA_STETH.SLUG ||
+    cellarConfig.cellar.address.toLowerCase() ===
+      config.CONTRACT.ALPHA_STETH.ADDRESS.toLowerCase()
+
   let depositTokens: string[] = cellarData.depositTokens.list
   // Drop base asset from deposit token list
   depositTokens = depositTokens.filter(
@@ -1583,59 +1588,59 @@ export const SommelierTab = ({
               <CardHeading paddingTop="2em">
                 Transaction details
               </CardHeading>
-              <HStack justify="space-between">
-                <HStack spacing={1} align="center">
-                  <Tooltip
-                    hasArrow
-                    label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
-                  however, it may incur a small fee due to the
-                  management of positions at the smart contract level."
-                    bg="surface.bg"
-                    color="neutral.300"
-                    textAlign="center"
-                  >
-                    <HStack spacing={1} align="center">
-                      <CardHeading fontSize="small">
-                        Alternative Deposit Asset Fee
-                      </CardHeading>
-                      <InformationIcon
-                        color="neutral.300"
-                        boxSize={3}
-                      />
-                    </HStack>
-                  </Tooltip>
+              {!isAlphaSteth && (
+                <HStack justify="space-between">
+                  <HStack spacing={1} align="center">
+                    <Tooltip
+                      hasArrow
+                      label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault; however, it may incur a small fee due to the management of positions at the smart contract level."
+                      bg="surface.bg"
+                      color="neutral.300"
+                      textAlign="center"
+                    >
+                      <HStack spacing={1} align="center">
+                        <CardHeading fontSize="small">
+                          Alternative Deposit Asset Fee
+                        </CardHeading>
+                        <InformationIcon
+                          color="neutral.300"
+                          boxSize={3}
+                        />
+                      </HStack>
+                    </Tooltip>
+                  </HStack>
+                  {cellarData.depositTokens.list.includes(
+                    selectedToken?.symbol || ""
+                  ) ? (
+                    <>
+                      {isDepositFeeLoading ? (
+                        <Spinner size="md" paddingRight={"1em"} />
+                      ) : (
+                        <Tooltip
+                          hasArrow
+                          label={
+                            depositFee === 0 ? "No deposit fee." : null
+                          }
+                          bg="surface.bg"
+                          color="neutral.300"
+                          textAlign="center"
+                        >
+                          <HStack pr={2}>
+                            {depositFee === 0 ? (
+                              <GreenCheckCircleIcon />
+                            ) : null}
+                            <Text fontFamily={"inherit"}>
+                              {depositFee === 0
+                                ? "None"
+                                : `${depositFee}%`}
+                            </Text>
+                          </HStack>
+                        </Tooltip>
+                      )}
+                    </>
+                  ) : null}
                 </HStack>
-                {cellarData.depositTokens.list.includes(
-                  selectedToken?.symbol || ""
-                ) ? (
-                  <>
-                    {isDepositFeeLoading ? (
-                      <Spinner size="md" paddingRight={"1em"} />
-                    ) : (
-                      <Tooltip
-                        hasArrow
-                        label={
-                          depositFee === 0 ? "No deposit fee." : null
-                        }
-                        bg="surface.bg"
-                        color="neutral.300"
-                        textAlign="center"
-                      >
-                        <HStack pr={2}>
-                          {depositFee === 0 ? (
-                            <GreenCheckCircleIcon />
-                          ) : null}
-                          <Text fontFamily={"inherit"}>
-                            {depositFee === 0
-                              ? "None"
-                              : `${depositFee}%`}
-                          </Text>
-                        </HStack>
-                      </Tooltip>
-                    )}
-                  </>
-                ) : null}
-              </HStack>
+              )}
               <HStack
                 justifyContent={"center"}
                 p={3}
