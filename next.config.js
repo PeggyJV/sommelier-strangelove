@@ -81,9 +81,20 @@ let nextConfig = {
       )
 
       // Fix @cosmjs ESM/CommonJS compatibility issue for Vercel builds
+      // Use our patch file for @cosmjs/encoding to ensure exports work correctly
       config.plugins.push(
         new webpack.NormalModuleReplacementPlugin(
-          /@cosmjs\/(encoding|amino|proto-signing|stargate|cosmwasm-stargate)$/,
+          /@cosmjs\/encoding$/,
+          require.resolve(
+            "./src/utils/patches/cosmjs-encoding-patch.js"
+          )
+        )
+      )
+
+      // Handle other @cosmjs modules
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /@cosmjs\/(amino|proto-signing|stargate|cosmwasm-stargate)$/,
           (resource) => {
             const pkg = resource.request.replace("@cosmjs/", "")
             resource.request = require.resolve(
@@ -110,6 +121,10 @@ let nextConfig = {
           "@walletconnect/core/dist/index.es.js",
         "@walletconnect/sign-client$":
           "@walletconnect/sign-client/dist/index.es.js",
+        // Ensure @cosmjs/encoding always uses our patch
+        "@cosmjs/encoding$": require.resolve(
+          "./src/utils/patches/cosmjs-encoding-patch.js"
+        ),
       },
     }
 
@@ -148,6 +163,15 @@ let nextConfig = {
     // Better handling of .mjs files
     config.module.rules.push({
       test: /\.m?js$/,
+      resolve: {
+        fullySpecified: false,
+      },
+    })
+
+    // Ensure @cosmjs modules are handled as CommonJS
+    config.module.rules.push({
+      test: /node_modules\/@cosmjs/,
+      type: "javascript/auto",
       resolve: {
         fullySpecified: false,
       },
