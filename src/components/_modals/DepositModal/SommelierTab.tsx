@@ -223,11 +223,12 @@ export const SommelierTab = ({
     isDisabled,
   })
 
+  // ERC20 contract for the currently selected token (not always base asset)
   const erc20Contract =
-    cellarConfig.baseAsset.address &&
+    selectedToken?.address &&
     publicClient &&
     getContract({
-      address: getAddress(cellarConfig.baseAsset.address),
+      address: getAddress(selectedToken.address),
       abi: erc20Abi,
       client: {
         public: publicClient,
@@ -417,18 +418,22 @@ export const SommelierTab = ({
     }
   }
 
-  const doApprovalTx = async (amtInWei: bigint): Promise<boolean> => {
+  const doApprovalTx = async (
+    amtInWei: bigint,
+    tokenAddress: string,
+    spender: string
+  ): Promise<boolean> => {
     try {
       const hash = await safeWriteContract(
         {
-          address: cellarConfig.baseAsset.address as `0x${string}`,
+          address: tokenAddress as `0x${string}`,
           abi: erc20Abi,
           functionName: "approve",
-          args: [cellarConfig.cellar.address, amtInWei],
+          args: [spender as `0x${string}`, amtInWei],
         },
         {
           vaultName: cellarName,
-          tokenSymbol: cellarConfig.baseAsset.symbol,
+          tokenSymbol: selectedToken?.symbol,
           transactionType: "approve",
           chainId: cellarConfig.chain.wagmiId,
         }
@@ -473,7 +478,7 @@ export const SommelierTab = ({
       // Use centralized error handling for approval
       const errorContext: TransactionErrorContext = {
         vaultName: cellarName,
-        tokenSymbol: cellarConfig.baseAsset.symbol,
+        tokenSymbol: selectedToken?.symbol,
         transactionType: "approve",
         chainId: cellarConfig.chain.wagmiId,
       }
@@ -709,11 +714,15 @@ export const SommelierTab = ({
 
     const allowance = nativeDeposit
       ? Number.MAX_SAFE_INTEGER
-      : // @ts-ignore
+      : // For ERC20, check allowance of the selected token to the correct spender
+        // BoringVault (Alpha STETH): spender is Teller; Legacy cellar: spender is Cellar
+        // @ts-ignore
         await erc20Contract.read.allowance(
           [
             getAddress(address ?? ""),
-            getAddress(cellarConfig.cellar.address),
+            getAddress(
+              cellarConfig.teller?.address || cellarConfig.cellar.address
+            ),
           ],
           { account: address }
         )
@@ -737,8 +746,14 @@ export const SommelierTab = ({
     let needsApproval = allowance < amtInWei
     let approval = !needsApproval
 
-    if (needsApproval && !canDoBatchCall) {
-      approval = await doApprovalTx(amtInWei)
+    if (needsApproval && !canDoBatchCall && !nativeDeposit) {
+      approval = await doApprovalTx(
+        amtInWei,
+        getAddress(selectedToken!.address),
+        getAddress(
+          cellarConfig.teller?.address || cellarConfig.cellar.address
+        )
+      )
     }
 
     if (approval || canDoBatchCall) {
