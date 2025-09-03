@@ -477,7 +477,10 @@ export const PageHome = () => {
   return (
     <LayoutWithSidebar>
       <WalletHealthBanner />
-      <TopLaunchBanner targetDate={bannerTargetDate} blogHref="#" />
+      <TopLaunchBanner
+        targetDate={bannerTargetDate}
+        blogHref="https://somm.finance/blog/putting-steth-to-work-where-it-matters-most"
+      />
       {/*
         <InfoBanner
           text={

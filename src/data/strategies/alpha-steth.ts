@@ -108,7 +108,7 @@ export const alphaSteth: CellarData = {
       address: config.CONTRACT.ALPHA_STETH_LENS.ADDRESS,
       abi: config.CONTRACT.ALPHA_STETH_LENS.ABI,
     },
-    baseAsset: tokenConfigMap.WETH_ETHEREUM,
+    baseAsset: tokenConfigMap.stETH_ETHEREUM,
     withdrawTokenConfig: {
       stETH: {
         minDiscount: 1,

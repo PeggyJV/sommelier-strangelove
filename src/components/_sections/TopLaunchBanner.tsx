@@ -21,7 +21,7 @@ type Props = {
 
 export default function TopLaunchBanner({
   targetDate,
-  blogHref = "#",
+  blogHref = "https://somm.finance/blog/putting-steth-to-work-where-it-matters-most",
 }: Props) {
   const lidoSrc = "/assets/images/eth-lido-uni.svg"
   const lidoFallbackPng = "/assets/icons/lido.png"
@@ -200,12 +200,7 @@ export default function TopLaunchBanner({
                   Explore Vault
                 </Button>
 
-                <Tooltip
-                  hasArrow
-                  label="Coming soon. Strategy deep‑dive will be published shortly."
-                  placement="top"
-                  openDelay={200}
-                >
+                <Link href={blogHref} isExternal _hover={{ textDecoration: "none" }}>
                   <Button
                     size="md"
                     height="40px"
@@ -217,8 +212,6 @@ export default function TopLaunchBanner({
                     color="cta.outline.fg"
                     borderColor="cta.outline.br"
                     borderWidth="2px"
-                    isDisabled
-                    pointerEvents="none"
                     _focusVisible={{
                       boxShadow:
                         "0 0 0 3px var(--chakra-colors-purple-base)",
@@ -226,7 +219,7 @@ export default function TopLaunchBanner({
                   >
                     View Strategy Blog
                   </Button>
-                </Tooltip>
+                </Link>
               </HStack>
             </Stack>
           </GridItem>
