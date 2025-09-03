@@ -742,9 +742,13 @@ export const SommelierTab = ({
         : String(allowance),
     })
 
+    const tokenDecimals =
+      (selectedTokenBalance?.decimals as number | undefined) ??
+      (selectedToken?.decimals as number | undefined) ??
+      18
     const amtInWei = parseUnits(
-      depositAmount.toFixed(selectedTokenBalance?.decimals ?? 18),
-      selectedTokenBalance?.decimals ?? 0
+      depositAmount.toFixed(tokenDecimals),
+      tokenDecimals
     )
     logTxDebug("deposit.amountParsed", {
       depositAmount,
