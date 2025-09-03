@@ -1,0 +1,83 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Next.js build output
+.next
+out
+dist
+build
+
+# Testing
+coverage
+test-results
+reports
+*.log
+playwright-report
+
+# IDE
+.vscode
+.idea
+.cursor
+
+# Environment files
+*.env
+*.env.local
+*.env.production
+*.env.development
+
+# Static files
+public
+
+# Vendor/third-party code
+src/vendor
+vendor
+
+# Generated files
+*.generated.ts
+*.generated.tsx
+*.generated.js
+*.generated.jsx
+
+# Config files that might not need linting
+next-env.d.ts
+env.d.ts
+
+# Performance and analysis
+.lighthouserc.json
+lighthouserc.js
+perf
+
+# Documentation
+_docs
+_templates
+*.md
+
+# Scripts that might have different rules
+scripts
+
+# Test configuration files
+jest.*.js
+babel-jest.config.js
+playwright.config.ts
+
+# Build configuration
+next.config.js
+tsconfig.tsbuildinfo
+
+# Package manager files
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Sentry configuration files
+sentry.*.config.ts
+
+# Type definition files that might be external
+types.d.ts
+*.d.ts
+
+# Temporary files
+tmp
+temp
+*.tmp

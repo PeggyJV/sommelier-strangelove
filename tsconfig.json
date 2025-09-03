@@ -76,6 +76,13 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "types.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "playwright.config.ts",
+    "sentry.client.config.ts",
+    "sentry.server.config.ts",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
   ]
 }
