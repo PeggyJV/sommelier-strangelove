@@ -16,6 +16,7 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
+import { config as utilConfig } from "src/utils/config"
 
 // Normalize helper for robust matching
 const norm = (s?: string) =>
@@ -216,7 +217,7 @@ export const getStrategyData = async ({
       //   }
       // }
 
-      const baseApy = (() => {
+      const baseApy = await (async () => {
         if (config.show7DayAPYTooltip === true) {
           if (dayDatas === undefined || dayDatas.length < 8) {
             return {
@@ -268,6 +269,70 @@ export const getStrategyData = async ({
           return baseAPY
         }
         **/
+
+        // Custom APY calculation for Alpha stETH vault
+        if (strategy.slug === utilConfig.CONTRACT.ALPHA_STETH.SLUG) {
+          let total_monthly_stETH = 57.5 // This needs to be manually adjusted
+
+          // Get total assets from BoringVault lens contract
+          if (contracts.boringVaultLens && config.accountant) {
+            try {
+              const [, totalAssets] = await (
+                contracts.boringVaultLens as any
+              ).read.totalAssets([
+                config.cellar.address as `0x${string}`,
+                config.accountant.address as `0x${string}`,
+              ])
+
+              // Convert totalAssets to human-readable format (assuming 18 decimals for stETH)
+              const totalAssetsInStETH = Number(totalAssets) / 1e18
+
+              if (totalAssetsInStETH > 0) {
+                // Calculate extra APY from monthly stETH rewards
+                // Formula: (total_monthly_stETH / 30 / total_assets) * 365 * 100
+                const extraApy =
+                  (total_monthly_stETH / 30 / totalAssetsInStETH) *
+                  365 *
+                  100
+
+                // Get base APY from day data or config
+                const baseApyValue = (() => {
+                  if (dayDatas === undefined || dayDatas.length < 8) {
+                    return config.baseApy || 0
+                  }
+
+                  // Use the existing 7-day moving average calculation
+                  let movingAvg7D = 0
+                  for (let i = 0; i < 7; i++) {
+                    let nowValue = BigInt(dayDatas![i].shareValue)
+                    let startValue = BigInt(
+                      dayDatas![i + 1].shareValue
+                    )
+                    let yieldGain =
+                      Number(nowValue - startValue) /
+                      Number(startValue)
+                    let dailyApy = yieldGain * 365 * 100
+                    movingAvg7D += dailyApy
+                  }
+                  return movingAvg7D / 7
+                })()
+
+                // Return combined APY
+                const totalApy = baseApyValue + extraApy
+                return {
+                  formatted: totalApy.toFixed(2) + "%",
+                  value: totalApy,
+                }
+              }
+            } catch (error) {
+              console.error(
+                "Error calculating Alpha stETH APY:",
+                error
+              )
+              // Fall through to default calculation
+            }
+          }
+        }
 
         if (hideValue) return
         if (!isAPYEnabled(config)) return
