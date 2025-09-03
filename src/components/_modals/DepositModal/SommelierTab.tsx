@@ -228,17 +228,7 @@ export const SommelierTab = ({
     isDisabled,
   })
 
-  // ERC20 contract for the currently selected token (not always base asset)
-  const erc20Contract =
-    selectedToken?.address &&
-    publicClient &&
-    getContract({
-      address: getAddress(selectedToken.address),
-      abi: erc20Abi,
-      client: {
-        public: publicClient,
-      },
-    })
+  // (ERC20 contract instance not required for allowance; use publicClient.readContract instead)
 
   const cellarContract =
     publicClient &&
@@ -760,7 +750,7 @@ export const SommelierTab = ({
     const depositAmount = data?.depositAmount
 
     let nativeDeposit = selectedToken?.symbol === "ETH"
-    if (!erc20Contract && !nativeDeposit) return
+    if (!publicClient && !nativeDeposit) return
     insertEvent({
       event: "deposit.started",
       address: address ?? "",
@@ -801,32 +791,9 @@ export const SommelierTab = ({
       } catch {}
     }
 
-    const allowance = nativeDeposit
-      ? Number.MAX_SAFE_INTEGER
-      : // For ERC20, check allowance of the selected token to the correct spender
-        // Alpha STETH: if Teller allowed → Teller, else BoringVault; Others: Teller if present else Cellar
-        // @ts-ignore
-        await erc20Contract.read.allowance(
-          [
-            getAddress(address ?? ""),
-            getAddress(
-              isAlphaSteth
-                ? preferEnterRoute
-                  ? cellarConfig.cellar.address
-                  : cellarConfig.teller?.address ||
-                    cellarConfig.cellar.address
-                : cellarConfig.teller?.address ||
-                    cellarConfig.cellar.address
-            ),
-          ],
-          { account: address }
-        )
-    logTxDebug("deposit.allowance", {
-      nativeDeposit,
-      allowance: nativeDeposit
-        ? "MAX_SAFE_INTEGER"
-        : String(allowance),
-    })
+    if (!address) {
+      return
+    }
 
     const tokenDecimals =
       (selectedTokenBalance?.decimals as number | undefined) ??
@@ -840,6 +807,38 @@ export const SommelierTab = ({
       depositAmount,
       decimals: selectedTokenBalance?.decimals,
       amtInWei: String(amtInWei),
+    })
+
+    const spender = getAddress(
+      isAlphaSteth
+        ? preferEnterRoute
+          ? cellarConfig.cellar.address
+          : cellarConfig.teller?.address ||
+            cellarConfig.cellar.address
+        : cellarConfig.teller?.address || cellarConfig.cellar.address
+    ) as `0x${string}`
+
+    const owner = getAddress(address) as `0x${string}`
+
+    let allowance: bigint
+    if (nativeDeposit) {
+      allowance = amtInWei
+    } else {
+      if (!publicClient) {
+        return
+      }
+      allowance = await publicClient.readContract({
+        address: getAddress(selectedToken!.address),
+        abi: erc20Abi,
+        functionName: "allowance",
+        args: [owner, spender],
+      })
+    }
+    logTxDebug("deposit.allowance", {
+      nativeDeposit,
+      allowance: nativeDeposit
+        ? "MAX_SAFE_INTEGER"
+        : String(allowance),
     })
 
     let needsApproval = allowance < amtInWei
@@ -1619,7 +1618,9 @@ export const SommelierTab = ({
                         <Tooltip
                           hasArrow
                           label={
-                            depositFee === 0 ? "No deposit fee." : null
+                            depositFee === 0
+                              ? "No deposit fee."
+                              : null
                           }
                           bg="surface.bg"
                           color="neutral.300"
