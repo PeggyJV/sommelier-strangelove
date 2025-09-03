@@ -170,30 +170,16 @@ let nextConfig = {
         // Force @noble packages to use root versions
         "@noble/hashes": require.resolve("@noble/hashes"),
         "@noble/curves": require.resolve("@noble/curves"),
-        "@noble/hashes/utils": path.join(
-          require.resolve("@noble/hashes"),
-          "..",
-          "utils.js"
+        "@noble/hashes/utils": require.resolve("@noble/hashes/utils"),
+        "@noble/hashes/sha3": require.resolve("@noble/hashes/sha3"),
+        "@noble/hashes/sha256": require.resolve(
+          "@noble/hashes/sha256"
         ),
-        "@noble/hashes/sha3": path.join(
-          require.resolve("@noble/hashes"),
-          "..",
-          "sha3.js"
+        "@noble/hashes/ripemd160": require.resolve(
+          "@noble/hashes/ripemd160"
         ),
-        "@noble/hashes/sha256": path.join(
-          require.resolve("@noble/hashes"),
-          "..",
-          "sha256.js"
-        ),
-        "@noble/hashes/ripemd160": path.join(
-          require.resolve("@noble/hashes"),
-          "..",
-          "ripemd160.js"
-        ),
-        "@noble/curves/secp256k1": path.join(
-          require.resolve("@noble/curves"),
-          "..",
-          "secp256k1.js"
+        "@noble/curves/secp256k1": require.resolve(
+          "@noble/curves/secp256k1"
         ),
         // Force ES module resolution for problematic packages
         "@walletconnect/utils$":

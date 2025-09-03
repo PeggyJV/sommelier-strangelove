@@ -34,7 +34,8 @@
     "size": "size-limit",
     "perf:analyze": "ANALYZE=true next build",
     "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
-    "perf:report": "node scripts/generate-perf-report.js"
+    "perf:report": "node scripts/generate-perf-report.js",
+    "postinstall": "node scripts/fix-keplr-nested.js"
   },
   "pnpm": {
     "overrides": {
@@ -58,8 +59,11 @@
     "@cosmjs/stargate": "^0.32.4",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@keplr-wallet/common": "0.12.269",
     "@keplr-wallet/cosmos": "^0.12.74",
+    "@keplr-wallet/crypto": "0.12.269",
     "@keplr-wallet/types": "^0.11.3",
+    "@keplr-wallet/unit": "0.12.269",
     "@nivo/bar": "^0.95.0",
     "@nivo/core": "^0.95.0",
     "@nivo/line": "^0.95.0",

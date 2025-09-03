@@ -12,7 +12,7 @@ overrides:
   '@walletconnect/universal-provider': ^2.21.8
   '@walletconnect/sign-client': ^2.21.8
 
-pnpmfileChecksum: 7mxqievct653sol47y2u7xpwdi
+pnpmfileChecksum: tka6kgg6pnr445j7xf55inv6ca
 
 importers:
 
@@ -51,12 +51,21 @@ importers:
       '@emotion/styled':
         specifier: ^11.11.5
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.1.3)(react@19.1.0))(@types/react@19.1.3)(react@19.1.0)
+      '@keplr-wallet/common':
+        specifier: 0.12.269
+        version: 0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)
       '@keplr-wallet/cosmos':
         specifier: ^0.12.74
-        version: 0.12.269(bitcoinjs-lib@6.1.7)
+        version: 0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)
+      '@keplr-wallet/crypto':
+        specifier: 0.12.269
+        version: 0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)
       '@keplr-wallet/types':
         specifier: ^0.11.3
         version: 0.11.64
+      '@keplr-wallet/unit':
+        specifier: 0.12.269
+        version: 0.12.269
       '@nivo/bar':
         specifier: ^0.95.0
         version: 0.95.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -146,7 +155,7 @@ importers:
         version: 11.18.2(@emotion/is-prop-valid@1.3.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       graz:
         specifier: ^0.3.4
-        version: 0.3.4(@cosmjs/amino@0.32.4)(@cosmjs/cosmwasm-stargate@0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@cosmjs/encoding@0.32.4)(@cosmjs/proto-signing@0.32.4)(@cosmjs/stargate@0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@tanstack/react-query@5.85.9(react@19.1.0))(@types/react@19.1.3)(@vercel/kv@1.0.1)(bufferutil@4.0.9)(react@19.1.0)(typescript@5.9.2)(use-sync-external-store@1.5.0(react@19.1.0))(utf-8-validate@5.0.10)(zod@3.25.76)
+        version: 0.3.4(@cosmjs/amino@0.32.4)(@cosmjs/cosmwasm-stargate@0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@cosmjs/encoding@0.32.4)(@cosmjs/proto-signing@0.32.4)(@cosmjs/stargate@0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@tanstack/react-query@5.85.9(react@19.1.0))(@types/react@19.1.3)(@vercel/kv@1.0.1)(bitcoinjs-lib@6.1.7)(bufferutil@4.0.9)(react@19.1.0)(starknet@7.6.4)(typescript@5.9.2)(use-sync-external-store@1.5.0(react@19.1.0))(utf-8-validate@5.0.10)(zod@3.25.76)
       html-react-parser:
         specifier: ^5.2.5
         version: 5.2.6(@types/react@19.1.3)(react@19.1.0)
@@ -1569,22 +1578,11 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@keplr-wallet/common@0.12.156':
-    resolution: {integrity: sha512-E9OyrFI9OiTkCUX2QK2ZMsTMYcbPAPLOpZ9Bl/1cLoOMjlgrPAGYsHm8pmWt2ydnWJS10a4ckOmlxE5HgcOK1A==}
-
   '@keplr-wallet/common@0.12.269':
     resolution: {integrity: sha512-NR4dD8eYVNwT/u1ooSBB2hdQzG1zVY3yVdGduyZiflWMUkAIQof9qyGRyp7TXACud+tMnpxpPWT9Zq21e3Sa2g==}
 
-  '@keplr-wallet/cosmos@0.12.156':
-    resolution: {integrity: sha512-ru+PDOiJaC6Lke7cWVG1A/bOzoNXAHmWyt8S+1WF3lt0ZKwCe+rb+HGkfhHCji2WA8Dt4cU8GGN/nPXfoY0b6Q==}
-
   '@keplr-wallet/cosmos@0.12.269':
     resolution: {integrity: sha512-J4DTLjcLECXOwqJTLvo1CADzQE8/X55qs0U68HS67+c7KwnResK9wmHX99IGIQzR0rLC6xnNSm8fYZiq65hgPQ==}
-
-  '@keplr-wallet/crypto@0.12.156':
-    resolution: {integrity: sha512-pIm9CkFQH4s9J8YunluGJvsh6KeE7HappeHM5BzKXyzuDO/gDtOQizclev9hGcfJxNu6ejlYXLK7kTmWpsHR0Q==}
-    peerDependencies:
-      starknet: ^6
 
   '@keplr-wallet/crypto@0.12.269':
     resolution: {integrity: sha512-XFXhr/oATbJDmSTfXkKgr6wQnt/VY1qeIh5QgD5Y0KGrBMnZwLUw1Oyxd6Z4GTYlfU9kh23nGZUA6bnm4dwLiQ==}
@@ -1595,14 +1593,8 @@ packages:
   '@keplr-wallet/proto-types@0.12.12':
     resolution: {integrity: sha512-iAqqNlJpxu/8j+SwOXEH2ymM4W0anfxn+eNeWuqz2c/0JxGTWeLURioxQmCtewtllfHdDHHcoQ7/S+NmXiaEgQ==}
 
-  '@keplr-wallet/proto-types@0.12.156':
-    resolution: {integrity: sha512-jxFgL1PZQldmr54gm1bFCs4FXujpyu8BhogytEc9WTCJdH4uqkNOCvEfkDvR65LRUZwp6MIGobFGYDVmfK16hA==}
-
   '@keplr-wallet/proto-types@0.12.269':
     resolution: {integrity: sha512-/jiiTGw86oipWINjhQdz0QaV0Ly/bf63lEGHCoNrU4i/i922RBhn0q33kmXNuIz2FDS5lIIiTBJsLLnRuvScxQ==}
-
-  '@keplr-wallet/simple-fetch@0.12.156':
-    resolution: {integrity: sha512-FPgpxEBjG6xRbMM0IwHSmYy22lU+QJ3VzmKTM8237p3v9Vj/HBSZUCYFhq2E1+hwdxd+XLtA6UipB7SBQNswrw==}
 
   '@keplr-wallet/simple-fetch@0.12.269':
     resolution: {integrity: sha512-iGgwDWt2fySnywQVqGVvugGf/EwAXIqqsMYcmDmvpZxw68hB2GkYoG+HMFnU4/dDFR4z3XTqKhpTQe33L3kmSg==}
@@ -1612,19 +1604,6 @@ packages:
 
   '@keplr-wallet/types@0.12.12':
     resolution: {integrity: sha512-fo6b8j9EXnJukGvZorifJWEm1BPIrvaTLuu5PqaU5k1ANDasm/FL1NaUuaTBVvhRjINtvVXqYpW/rVUinA9MBA==}
-
-  '@keplr-wallet/types@0.12.156':
-    resolution: {integrity: sha512-Z/Lf6VEsl/Am3birKE8ZEVZj/x5YGSoTdFMDtq/EfcB+hcJ/ogoiZTVEBweAig/2zcu7MsZvFTVMEXu5+y3e4A==}
-    peerDependencies:
-      starknet: ^6
-
-  '@keplr-wallet/types@0.12.269':
-    resolution: {integrity: sha512-O4dX2H8O72RxfV4KcVIx0sa1rpFaxV/IeX8lOaysIythva2vVhdNy43PKztddxzjYrRb4RBU8itdzwx1e5Gi8g==}
-    peerDependencies:
-      starknet: ^7
-
-  '@keplr-wallet/unit@0.12.156':
-    resolution: {integrity: sha512-GGMOFsGCTv36ZWEBt8ONgYw64zYRsYmaV4ZccNHGo8NGWwQwB6OhcVYpwvjbZdB4K9tsQNJQEv16qsSpurDBGQ==}
 
   '@keplr-wallet/unit@0.12.269':
     resolution: {integrity: sha512-G7IkKJxB0WzSx+I0WLlvTxEylw6PgYItdK+/wXOuQmhdZJgyE02QZLSmiD6CGaFnTT525oCDC8klL0sFoBAvXw==}
@@ -2426,6 +2405,9 @@ packages:
   '@scure/base@1.1.9':
     resolution: {integrity: sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg==}
 
+  '@scure/base@1.2.1':
+    resolution: {integrity: sha512-DGmGtC8Tt63J5GfHgfl5CuAXh96VF/LD8K9Hr/Gv0J2lAoRGlPOMpqMpMbCTOoOJMZCk2Xt+DskdDyn6dEFdzQ==}
+
   '@scure/base@1.2.6':
     resolution: {integrity: sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==}
 
@@ -2440,6 +2422,9 @@ packages:
 
   '@scure/bip39@1.6.0':
     resolution: {integrity: sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A==}
+
+  '@scure/starknet@1.1.0':
+    resolution: {integrity: sha512-83g3M6Ix2qRsPN4wqLDqiRZ2GBNbjVWfboJE/9UjfG+MHr6oDSu/CWgy8hsBSJejr09DkkL+l0Ze4KVrlCIdtQ==}
 
   '@sentry-internal/browser-utils@9.17.0':
     resolution: {integrity: sha512-37n6NXtkUfdK7YiP3L5DJvhA/iusOmnjHQdX1e2VwI6a29xHCl/vRqLR3XNr5K4m+49al+3fWo2ltcKsfV+0xw==}
@@ -2619,6 +2604,12 @@ packages:
 
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
+
+  '@starknet-io/types-js@0.7.10':
+    resolution: {integrity: sha512-1VtCqX4AHWJlRRSYGSn+4X1mqolI1Tdq62IwzoU2vUuEE72S1OlEeGhpvd6XsdqXcfHmVzYfj8k1XtKBQqwo9w==}
+
+  '@starknet-io/types-js@0.8.4':
+    resolution: {integrity: sha512-0RZ3TZHcLsUTQaq1JhDSCM8chnzO4/XNsSCozwDET64JK5bjFDIf2ZUkta+tl5Nlbf4usoU7uZiDI/Q57kt2SQ==}
 
   '@supabase/auth-js@2.71.1':
     resolution: {integrity: sha512-mMIQHBRc+SKpZFRB2qtupuzulaUhFYupNyxqDj5Jp/LyPvcWvjaJzZzObv6URtL/O6lPxkanASnotGtNpS3H2Q==}
@@ -3343,6 +3334,10 @@ packages:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
     deprecated: Use your platform's native atob() and btoa() methods instead
 
+  abi-wan-kanabi@2.2.4:
+    resolution: {integrity: sha512-0aA81FScmJCPX+8UvkXLki3X1+yPQuWxEkqXBVKltgPAK79J+NB+Lp5DouMXa7L6f+zcRlIA/6XO7BN/q9fnvg==}
+    hasBin: true
+
   abitype@1.1.0:
     resolution: {integrity: sha512-6Vh4HcRxNMLA0puzPjM5GBgT4aAcFGKZzSgAXvuZ27shJP6NEpielTuqbBmZILR5/xd0PizkBGy5hReKz9jl5A==}
     peerDependencies:
@@ -3467,6 +3462,9 @@ packages:
   ansi-styles@5.2.0:
     resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
     engines: {node: '>=10'}
+
+  ansicolors@0.3.2:
+    resolution: {integrity: sha512-QXu7BPrP29VllRxH8GwB7x5iX5qWKAAMLqKQGWTeLWVlNHNOpVMJ91dsxQAIWXpjuW5wqvxu3Jd/nRjrJ+0pqg==}
 
   anymatch@3.1.3:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
@@ -3878,6 +3876,10 @@ packages:
   capture-stack-trace@1.0.2:
     resolution: {integrity: sha512-X/WM2UQs6VMHUtjUDnZTRI+i1crWteJySFzr9UpGoQa4WQffXVTTXuekjl7TjZRlcF2XfjgITT0HxZ9RnxeT0w==}
     engines: {node: '>=0.10.0'}
+
+  cardinal@2.1.1:
+    resolution: {integrity: sha512-JSr5eOgoEymtYHBjNWyjrMqet9Am2miJhlfKNdqLp6zoeAh0KN5dRAcxlecj5mAJrmQomgiOBj35xHLrFjqBpw==}
+    hasBin: true
 
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -5097,6 +5099,10 @@ packages:
   from2@2.3.0:
     resolution: {integrity: sha512-OMcX/4IC/uqEPVgGeyfN22LJk6AZrMkRZHxcHBMBvHScDGgwTm2GT2Wkgtocyd3JfZffjj2kYUDXXII0Fk9W0g==}
 
+  fs-extra@10.1.0:
+    resolution: {integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==}
+    engines: {node: '>=12'}
+
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
@@ -6021,6 +6027,9 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
+  jsonfile@6.2.0:
+    resolution: {integrity: sha512-FGuPw30AdOIUTRMC2OMRtQV+jkVj2cfPqSeWXv1NEAJ1qZ5zb1X6z1mFhbfOB/iy3ssJCD+3KuZ8r8C3uVFlAg==}
+
   jsx-ast-utils@3.3.5:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
@@ -6191,6 +6200,9 @@ packages:
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
+
+  lossless-json@4.2.0:
+    resolution: {integrity: sha512-bsHH3x+7acZfqokfn9Ks/ej96yF/z6oGGw1aBmXesq4r3fAjhdG4uYuqzDgZMk5g1CZUd5w3kwwIp9K1LOYUiA==}
 
   lowercase-keys@1.0.1:
     resolution: {integrity: sha512-G2Lj61tXDnVFFOi8VZds+SoQjtQC3dgokKdDG2mTm1tx4m50NUHBOZSBwQQHyy0V12A0JTG4icfZQH+xPyh8VA==}
@@ -7197,6 +7209,9 @@ packages:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
     engines: {node: '>=8'}
 
+  redeyed@2.1.1:
+    resolution: {integrity: sha512-FNpGGo1DycYAdnrKFxCMmKYgo/mILAqtRYbkdQD8Ep/Hk2PQ5+aEAEx+IU713RTDmuBaH0c8P5ZozurNu5ObRQ==}
+
   reflect.getprototypeof@1.0.10:
     resolution: {integrity: sha512-00o4I+DVrefhv+nX0ulyi3biSHCPDe+yLv5o/p6d/UVlirijB8E16FtfwSAi4g3tcqrQ4lRAqQSoFEZJehYEcw==}
     engines: {node: '>= 0.4'}
@@ -7602,6 +7617,10 @@ packages:
     resolution: {integrity: sha512-WjlahMgHmCJpqzU8bIBy4qtsZdU9lRlcZE3Lvyej6t4tuOuv1vk57OW3MBrj6hXBFx/nNoC9MPMTcr5YA7NQbg==}
     engines: {node: '>=6'}
 
+  starknet@7.6.4:
+    resolution: {integrity: sha512-FB20IaLCDbh/XomkB+19f5jmNxG+RzNdRO7QUhm7nfH81UPIt2C/MyWAlHCYkbv2wznSEb73wpxbp9tytokTgQ==}
+    engines: {node: '>=22'}
+
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
     engines: {node: '>= 0.8'}
@@ -7920,6 +7939,9 @@ packages:
       jest-util:
         optional: true
 
+  ts-mixer@6.0.4:
+    resolution: {integrity: sha512-ufKpbmrugz5Aou4wcr5Wc1UUFWOLhq+Fm6qa6P0w0K5Qw2yhaUoiWszhCVuNQyNwrlGiscHOmqYoAox1PtvgjA==}
+
   ts-morph@13.0.3:
     resolution: {integrity: sha512-pSOfUMx8Ld/WUreoSzvMFQG5i9uEiWIsBYjpU9+TTASOeUa89j5HykomeqVULm1oqWtBdleI3KEFRLrlA3zGIw==}
 
@@ -8069,6 +8091,10 @@ packages:
   universalify@0.2.0:
     resolution: {integrity: sha512-CJ1QgKmNg3CwvAv/kOFmtnEN05f0D/cn9QntgNOQlQF9dgvVTHj3t+8JPdjqawCHk7V/KA+fbUqzZ9XWhcqPUg==}
     engines: {node: '>= 4.0.0'}
+
+  universalify@2.0.1:
+    resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
+    engines: {node: '>= 10.0.0'}
 
   unpipe@1.0.0:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
@@ -10480,68 +10506,38 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@keplr-wallet/common@0.12.156':
+  '@keplr-wallet/common@0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)':
     dependencies:
-      '@keplr-wallet/crypto': 0.12.156
-      '@keplr-wallet/types': 0.12.156
-      buffer: 6.0.3
-      delay: 4.4.1
-    transitivePeerDependencies:
-      - starknet
-
-  '@keplr-wallet/common@0.12.269(bitcoinjs-lib@6.1.7)':
-    dependencies:
-      '@keplr-wallet/crypto': 0.12.269(bitcoinjs-lib@6.1.7)
-      '@keplr-wallet/types': 0.12.269
+      '@keplr-wallet/crypto': 0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)
+      '@keplr-wallet/types': 0.11.64
       buffer: 6.0.3
       delay: 4.4.1
     transitivePeerDependencies:
       - bitcoinjs-lib
+      - debug
       - starknet
 
-  '@keplr-wallet/cosmos@0.12.156':
+  '@keplr-wallet/cosmos@0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)':
     dependencies:
       '@ethersproject/address': 5.8.0
-      '@keplr-wallet/common': 0.12.156
-      '@keplr-wallet/crypto': 0.12.156
-      '@keplr-wallet/proto-types': 0.12.156
-      '@keplr-wallet/simple-fetch': 0.12.156
-      '@keplr-wallet/types': 0.12.156
-      '@keplr-wallet/unit': 0.12.156
-      bech32: 1.1.4
-      buffer: 6.0.3
-      long: 4.0.0
-      protobufjs: 6.11.4
-    transitivePeerDependencies:
-      - starknet
-
-  '@keplr-wallet/cosmos@0.12.269(bitcoinjs-lib@6.1.7)':
-    dependencies:
-      '@ethersproject/address': 5.8.0
-      '@keplr-wallet/common': 0.12.269(bitcoinjs-lib@6.1.7)
-      '@keplr-wallet/crypto': 0.12.269(bitcoinjs-lib@6.1.7)
+      '@keplr-wallet/common': 0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)
+      '@keplr-wallet/crypto': 0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)
       '@keplr-wallet/proto-types': 0.12.269
       '@keplr-wallet/simple-fetch': 0.12.269
-      '@keplr-wallet/types': 0.12.269
+      '@keplr-wallet/types': 0.11.64
       '@keplr-wallet/unit': 0.12.269
+      '@noble/curves': 1.9.1
+      '@noble/hashes': 1.8.0
       bech32: 1.1.4
       buffer: 6.0.3
       long: 4.0.0
       protobufjs: 6.11.4
     transitivePeerDependencies:
       - bitcoinjs-lib
+      - debug
       - starknet
 
-  '@keplr-wallet/crypto@0.12.156':
-    dependencies:
-      '@noble/curves': 1.9.1
-      '@noble/hashes': 1.8.0
-      bip32: 2.0.6
-      bip39: 3.1.0
-      bs58check: 2.1.2
-      buffer: 6.0.3
-
-  '@keplr-wallet/crypto@0.12.269(bitcoinjs-lib@6.1.7)':
+  '@keplr-wallet/crypto@0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)':
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
@@ -10551,13 +10547,9 @@ snapshots:
       bs58check: 2.1.2
       buffer: 6.0.3
       ecpair: 2.1.0
+      starknet: 7.6.4
 
   '@keplr-wallet/proto-types@0.12.12':
-    dependencies:
-      long: 4.0.0
-      protobufjs: 6.11.4
-
-  '@keplr-wallet/proto-types@0.12.156':
     dependencies:
       long: 4.0.0
       protobufjs: 6.11.4
@@ -10566,8 +10558,6 @@ snapshots:
     dependencies:
       long: 4.0.0
       protobufjs: 6.11.4
-
-  '@keplr-wallet/simple-fetch@0.12.156': {}
 
   '@keplr-wallet/simple-fetch@0.12.269': {}
 
@@ -10582,29 +10572,13 @@ snapshots:
     dependencies:
       long: 4.0.0
 
-  '@keplr-wallet/types@0.12.156':
-    dependencies:
-      long: 4.0.0
-
-  '@keplr-wallet/types@0.12.269':
-    dependencies:
-      long: 4.0.0
-
-  '@keplr-wallet/unit@0.12.156':
-    dependencies:
-      '@keplr-wallet/types': 0.12.156
-      big-integer: 1.6.52
-      utility-types: 3.11.0
-    transitivePeerDependencies:
-      - starknet
-
   '@keplr-wallet/unit@0.12.269':
     dependencies:
-      '@keplr-wallet/types': 0.12.269
+      '@keplr-wallet/types': 0.11.64
       big-integer: 1.6.52
       utility-types: 3.11.0
     transitivePeerDependencies:
-      - starknet
+      - debug
 
   '@lhci/cli@0.15.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
@@ -11958,6 +11932,8 @@ snapshots:
 
   '@scure/base@1.1.9': {}
 
+  '@scure/base@1.2.1': {}
+
   '@scure/base@1.2.6': {}
 
   '@scure/bip32@1.4.0':
@@ -11981,6 +11957,11 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
+
+  '@scure/starknet@1.1.0':
+    dependencies:
+      '@noble/curves': 1.9.1
+      '@noble/hashes': 1.8.0
 
   '@sentry-internal/browser-utils@9.17.0':
     dependencies:
@@ -12242,6 +12223,10 @@ snapshots:
       - utf-8-validate
 
   '@socket.io/component-emitter@3.1.2': {}
+
+  '@starknet-io/types-js@0.7.10': {}
+
+  '@starknet-io/types-js@0.8.4': {}
 
   '@supabase/auth-js@2.71.1':
     dependencies:
@@ -13491,6 +13476,13 @@ snapshots:
 
   abab@2.0.6: {}
 
+  abi-wan-kanabi@2.2.4:
+    dependencies:
+      ansicolors: 0.3.2
+      cardinal: 2.1.1
+      fs-extra: 10.1.0
+      yargs: 17.7.2
+
   abitype@1.1.0(typescript@5.9.2)(zod@3.22.4):
     optionalDependencies:
       typescript: 5.9.2
@@ -13608,6 +13600,8 @@ snapshots:
       color-convert: 2.0.1
 
   ansi-styles@5.2.0: {}
+
+  ansicolors@0.3.2: {}
 
   anymatch@3.1.3:
     dependencies:
@@ -14153,6 +14147,11 @@ snapshots:
   caniuse-lite@1.0.30001739: {}
 
   capture-stack-trace@1.0.2: {}
+
+  cardinal@2.1.1:
+    dependencies:
+      ansicolors: 0.3.2
+      redeyed: 2.1.1
 
   chalk@2.4.2:
     dependencies:
@@ -15630,6 +15629,12 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 2.3.8
 
+  fs-extra@10.1.0:
+    dependencies:
+      graceful-fs: 4.2.11
+      jsonfile: 6.2.0
+      universalify: 2.0.1
+
   fs.realpath@1.0.0: {}
 
   fsevents@2.3.2:
@@ -15815,7 +15820,7 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graz@0.3.4(@cosmjs/amino@0.32.4)(@cosmjs/cosmwasm-stargate@0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@cosmjs/encoding@0.32.4)(@cosmjs/proto-signing@0.32.4)(@cosmjs/stargate@0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@tanstack/react-query@5.85.9(react@19.1.0))(@types/react@19.1.3)(@vercel/kv@1.0.1)(bufferutil@4.0.9)(react@19.1.0)(typescript@5.9.2)(use-sync-external-store@1.5.0(react@19.1.0))(utf-8-validate@5.0.10)(zod@3.25.76):
+  graz@0.3.4(@cosmjs/amino@0.32.4)(@cosmjs/cosmwasm-stargate@0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@cosmjs/encoding@0.32.4)(@cosmjs/proto-signing@0.32.4)(@cosmjs/stargate@0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@tanstack/react-query@5.85.9(react@19.1.0))(@types/react@19.1.3)(@vercel/kv@1.0.1)(bitcoinjs-lib@6.1.7)(bufferutil@4.0.9)(react@19.1.0)(starknet@7.6.4)(typescript@5.9.2)(use-sync-external-store@1.5.0(react@19.1.0))(utf-8-validate@5.0.10)(zod@3.25.76):
     dependencies:
       '@cosmjs/amino': 0.32.4
       '@cosmjs/cosmwasm-stargate': 0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -15824,8 +15829,8 @@ snapshots:
       '@cosmjs/stargate': 0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@cosmsnap/snapper': 0.2.7
       '@dao-dao/cosmiframe': 1.0.0(@cosmjs/amino@0.32.4)(@cosmjs/proto-signing@0.32.4)
-      '@keplr-wallet/cosmos': 0.12.156
-      '@keplr-wallet/types': 0.12.156
+      '@keplr-wallet/cosmos': 0.12.269(bitcoinjs-lib@6.1.7)(starknet@7.6.4)
+      '@keplr-wallet/types': 0.11.64
       '@metamask/providers': 12.0.0
       '@tanstack/react-query': 5.85.9(react@19.1.0)
       '@vectis/extension-client': 0.7.2
@@ -15855,8 +15860,10 @@ snapshots:
       - '@vercel/functions'
       - '@vercel/kv'
       - aws4fetch
+      - bitcoinjs-lib
       - bufferutil
       - db0
+      - debug
       - encoding
       - immer
       - ioredis
@@ -16896,6 +16903,12 @@ snapshots:
 
   json5@2.2.3: {}
 
+  jsonfile@6.2.0:
+    dependencies:
+      universalify: 2.0.1
+    optionalDependencies:
+      graceful-fs: 4.2.11
+
   jsx-ast-utils@3.3.5:
     dependencies:
       array-includes: 3.1.9
@@ -17114,6 +17127,8 @@ snapshots:
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
+
+  lossless-json@4.2.0: {}
 
   lowercase-keys@1.0.1: {}
 
@@ -18129,6 +18144,10 @@ snapshots:
       indent-string: 4.0.0
       strip-indent: 3.0.0
 
+  redeyed@2.1.1:
+    dependencies:
+      esprima: 4.0.1
+
   reflect.getprototypeof@1.0.10:
     dependencies:
       call-bind: 1.0.8
@@ -18639,6 +18658,19 @@ snapshots:
     dependencies:
       type-fest: 0.7.1
 
+  starknet@7.6.4:
+    dependencies:
+      '@noble/curves': 1.9.1
+      '@noble/hashes': 1.8.0
+      '@scure/base': 1.2.1
+      '@scure/starknet': 1.1.0
+      '@starknet-io/starknet-types-07': '@starknet-io/types-js@0.7.10'
+      '@starknet-io/starknet-types-08': '@starknet-io/types-js@0.8.4'
+      abi-wan-kanabi: 2.2.4
+      lossless-json: 4.2.0
+      pako: 2.1.0
+      ts-mixer: 6.0.4
+
   statuses@2.0.1: {}
 
   stop-iteration-iterator@1.1.0:
@@ -18958,6 +18990,8 @@ snapshots:
       babel-jest: 30.1.2(@babel/core@7.28.3)
       jest-util: 30.0.5
 
+  ts-mixer@6.0.4: {}
+
   ts-morph@13.0.3:
     dependencies:
       '@ts-morph/common': 0.12.3
@@ -19119,6 +19153,8 @@ snapshots:
       crypto-random-string: 2.0.0
 
   universalify@0.2.0: {}
+
+  universalify@2.0.1: {}
 
   unpipe@1.0.0: {}
 
