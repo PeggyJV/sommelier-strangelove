@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react"
-import { useAccount, usePublicClient, useWalletClient } from "wagmi"
+import { useAccount, useChainId, useChains, usePublicClient, useWalletClient } from "wagmi"
 import { getAddress, getContract } from "viem"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { useBoringQueueWithdrawals } from "./useBoringQueueWithdrawals"
 import { ConfigProps } from "data/types"
+
+const useWalletClientConditional = () => {
+  const { isConnected } = useAccount()
+  if (!isConnected) {
+    return { data: undefined }
+  }
+  return useWalletClient()
+}
 
 export const useWithdrawRequestStatus = (
   cellarConfig: ConfigProps
@@ -11,7 +19,8 @@ export const useWithdrawRequestStatus = (
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
   const { address } = useAccount()
-  const { data: walletClient } = useWalletClient()
+  const { data: walletClient } = useWalletClientConditional()
+  const chainId = useChainId()
   const publicClient = usePublicClient()
 
   const { data: boringQueueWithdrawals } = useBoringQueueWithdrawals(
@@ -33,42 +42,46 @@ export const useWithdrawRequestStatus = (
 
   useEffect(() => {
     const checkWithdrawRequest = async () => {
-      try {
-        if (
-          walletClient &&
-          withdrawQueueContract &&
-          address &&
-          cellarConfig &&
-          !boringQueueWithdrawals
-        ) {
-          // @ts-ignore
-          const withdrawRequest =
-            await withdrawQueueContract?.read.getUserWithdrawRequest([
-              address,
-              cellarConfig.cellar.address,
-            ])
+      if (chainId !== cellarConfig.chain.wagmiId) return
+        try {
+          if (
+            walletClient &&
+            withdrawQueueContract &&
+            address &&
+            cellarConfig &&
+            !boringQueueWithdrawals
+          ) {
+            // @ts-ignore
+            const withdrawRequest =
+              await withdrawQueueContract?.read.getUserWithdrawRequest(
+                [address, cellarConfig.cellar.address]
+              )
 
-          const isWithdrawRequestValid =
-            (await withdrawQueueContract?.read.isWithdrawRequestValid(
-              [cellarConfig.cellar.address, address, withdrawRequest]
-            )) as unknown as boolean
+            const isWithdrawRequestValid =
+              (await withdrawQueueContract?.read.isWithdrawRequestValid(
+                [
+                  cellarConfig.cellar.address,
+                  address,
+                  withdrawRequest,
+                ]
+              )) as unknown as boolean
 
-          setIsActiveWithdrawRequest(isWithdrawRequestValid)
-        } else if (
-          boringQueueWithdrawals &&
-          cellarConfig.boringVault &&
-          address
-        ) {
-          setIsActiveWithdrawRequest(
-            boringQueueWithdrawals?.open_requests.length > 0
-          )
-        } else {
+            setIsActiveWithdrawRequest(isWithdrawRequestValid)
+          } else if (
+            boringQueueWithdrawals &&
+            cellarConfig.boringVault &&
+            address
+          ) {
+            setIsActiveWithdrawRequest(
+              boringQueueWithdrawals?.open_requests.length > 0
+            )
+          } else {
+            setIsActiveWithdrawRequest(false)
+          }
+        } catch (error) {
+          console.error(error)
           setIsActiveWithdrawRequest(false)
         }
-      } catch (error) {
-        console.error(error)
-        setIsActiveWithdrawRequest(false)
-      }
     }
 
     checkWithdrawRequest()
