@@ -51,8 +51,6 @@ export const MobileConnectedPopover = () => {
     })
 
     disconnect()
-    // Refresh window
-    window.location.reload()
   }
 
   const walletAddressIcon = () => {
