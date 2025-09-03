@@ -1,6 +1,16 @@
-export type TransactionType = 'deposit' | 'withdraw' | 'approve' | 'bond' | 'claim' | 'bridge'
+export type TransactionType =
+  | "deposit"
+  | "withdraw"
+  | "approve"
+  | "bond"
+  | "claim"
+  | "bridge"
 
-export type TransactionErrorType = 'USER_REJECTED' | 'GAS_LIMIT_ERROR' | 'SPAM_FILTER_ERROR' | 'OTHER'
+export type TransactionErrorType =
+  | "USER_REJECTED"
+  | "GAS_LIMIT_ERROR"
+  | "SPAM_FILTER_ERROR"
+  | "OTHER"
 
 export interface TransactionError {
   type: TransactionErrorType
@@ -24,47 +34,58 @@ export const handleTransactionError = (
   context: TransactionErrorContext
 ): TransactionError => {
   // Check for user rejection patterns
-  const isUserRejected = 
-    (error as any)?.code === 4001 ||
-    error.message.includes('User rejected') ||
-    error.message.includes('User denied') ||
-    error.message.includes('MetaMask Tx Signature: User denied') ||
-    error.message.includes('User rejected the request')
+  const anyErr: any = error as any
+  const combined = [
+    anyErr?.message,
+    anyErr?.shortMessage,
+    anyErr?.cause?.message,
+    anyErr?.cause?.shortMessage,
+    anyErr?.walk?.()?.message,
+  ]
+    .filter(Boolean)
+    .join(" | ")
+
+  const isUserRejected =
+    anyErr?.code === 4001 ||
+    combined.includes("User rejected") ||
+    combined.includes("User denied") ||
+    combined.includes("MetaMask Tx Signature: User denied") ||
+    combined.includes("User rejected the request")
 
   if (isUserRejected) {
     return {
-      type: 'USER_REJECTED',
-      message: 'Transaction was rejected by user',
-      originalError: error
+      type: "USER_REJECTED",
+      message: "Transaction was rejected by user",
+      originalError: error,
     }
   }
 
   // Check for spam filter errors
   if (
-    error.message.includes('spam filter') ||
-    error.message.includes('not been authorized')
+    error.message.includes("spam filter") ||
+    error.message.includes("not been authorized")
   ) {
     return {
-      type: 'SPAM_FILTER_ERROR',
-      message: 'Transaction blocked by spam filter',
-      originalError: error
+      type: "SPAM_FILTER_ERROR",
+      message: "Transaction blocked by spam filter",
+      originalError: error,
     }
   }
 
   // Check for gas limit errors
-  if (error.message === 'GAS_LIMIT_ERROR') {
+  if (error.message === "GAS_LIMIT_ERROR") {
     return {
-      type: 'GAS_LIMIT_ERROR',
-      message: 'Gas limit exceeded',
-      originalError: error
+      type: "GAS_LIMIT_ERROR",
+      message: "Gas limit exceeded",
+      originalError: error,
     }
   }
 
   // Default to other error
   return {
-    type: 'OTHER',
+    type: "OTHER",
     message: error.message,
-    originalError: error
+    originalError: error,
   }
 }
 
@@ -76,38 +97,42 @@ export const getTransactionErrorToast = (
   context: TransactionErrorContext
 ) => {
   const { vaultName, transactionType } = context
-  
+
   switch (error.type) {
-    case 'USER_REJECTED':
+    case "USER_REJECTED":
       return {
-        heading: `${vaultName} ${getTransactionTypeDisplay(transactionType)}`,
+        heading: `${vaultName} ${getTransactionTypeDisplay(
+          transactionType
+        )}`,
         body: `Transaction was rejected`,
-        status: 'info' as const,
-        showPopupGuidance: true
+        status: "info" as const,
+        showPopupGuidance: true,
       }
-    
-    case 'SPAM_FILTER_ERROR':
+
+    case "SPAM_FILTER_ERROR":
       return {
-        heading: 'Transaction Blocked',
+        heading: "Transaction Blocked",
         body: `Your transaction was blocked by MetaMask's spam filter. Please try:
 • Clearing MetaMask activity data
 • Waiting a few minutes before retrying
 • Using a different amount`,
-        status: 'warning' as const
+        status: "warning" as const,
       }
-    
-    case 'GAS_LIMIT_ERROR':
+
+    case "GAS_LIMIT_ERROR":
       return {
-        heading: 'Transaction not submitted',
+        heading: "Transaction not submitted",
         body: `Your transaction has failed. If it does not work after waiting some time and retrying, please contact support.`,
-        status: 'info' as const
+        status: "info" as const,
       }
-    
+
     default:
       return {
-        heading: `${vaultName} ${getTransactionTypeDisplay(transactionType)}`,
+        heading: `${vaultName} ${getTransactionTypeDisplay(
+          transactionType
+        )}`,
         body: error.message,
-        status: 'error' as const
+        status: "error" as const,
       }
   }
 }
@@ -117,13 +142,20 @@ export const getTransactionErrorToast = (
  */
 const getTransactionTypeDisplay = (type: TransactionType): string => {
   switch (type) {
-    case 'deposit': return 'Deposit'
-    case 'withdraw': return 'Withdraw'
-    case 'approve': return 'Approval'
-    case 'bond': return 'Bond'
-    case 'claim': return 'Claim'
-    case 'bridge': return 'Bridge'
-    default: return 'Transaction'
+    case "deposit":
+      return "Deposit"
+    case "withdraw":
+      return "Withdraw"
+    case "approve":
+      return "Approval"
+    case "bond":
+      return "Bond"
+    case "claim":
+      return "Claim"
+    case "bridge":
+      return "Bridge"
+    default:
+      return "Transaction"
   }
 }
 
@@ -141,6 +173,6 @@ export const getTransactionErrorAnalytics = (
     value: context.value,
     chainId: context.chainId,
     message: error.type,
-    errorMessage: error.message
+    errorMessage: error.message,
   }
 }

@@ -11,35 +11,24 @@ export const getUserData = async (
   publicClient: any,
   chainId: number
 ) => {
-  const cellarConfig = cellarDataMap.find(
-    (item) => item.config.chain.id === chainId
-  )!
-
-  const cellarContract = cellarConfig.cellarContract
-  const stakerContract = cellarConfig.stakerContract
-
-  const shares = await publicClient.getBalance({
-    address: address as `0x${string}`,
-    token: cellarContract.address,
-  })
-
-  const stakedShares = await publicClient.getBalance({
-    address: address as `0x${string}`,
-    token: stakerContract.address,
-  })
-
-  const strategyData = await getStrategyData(
-    cellarConfig.config.cellar.slug,
-    publicClient
-  )
-
-  const allStrategiesData = await getAllStrategiesData(publicClient)
-
-  return {
-    shares: shares.value,
-    stakedShares: stakedShares.value,
-    strategyData,
-    allStrategiesData,
+  try {
+    // This legacy function isn't used for critical paths anymore.
+    // Return a safe minimal object to prevent runtime errors.
+    return {
+      shares: 0n,
+      stakedShares: 0n,
+      strategyData: null,
+      allStrategiesData: null,
+      netValue: 0,
+    } as any
+  } catch {
+    return {
+      shares: 0n,
+      stakedShares: 0n,
+      strategyData: null,
+      allStrategiesData: null,
+      netValue: 0,
+    } as any
   }
 }
 

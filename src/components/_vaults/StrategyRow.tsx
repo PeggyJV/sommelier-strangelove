@@ -63,7 +63,12 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
   const strategyChainId = vault?.config?.chain?.id
   const { data: userStratData } =
     strategyAddress && strategyChainId
-      ? useUserStrategyData(strategyAddress, strategyChainId)
+      ? useUserStrategyData(
+          strategyAddress,
+          strategyChainId,
+          // Gate by connection status implicitly via hook (enabled flag)
+          true
+        )
       : ({} as any)
   const netValueFmt: string | undefined = (userStratData as any)
     ?.userStrategyData?.userData?.netValue?.formatted
@@ -135,7 +140,10 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             </HStack>
             <HStack spacing={2} flexWrap="wrap">
               {vault?.isSommNative && (
-                <Badge colorScheme="blue" fontSize={{ base: "xs", md: "sm" }}>
+                <Badge
+                  colorScheme="blue"
+                  fontSize={{ base: "xs", md: "sm" }}
+                >
                   Somm-native
                 </Badge>
               )}
@@ -174,7 +182,10 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
 
         {/* Center column: KPIs in equal widths */}
         <Grid
-          templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(3, 1fr)" }}
+          templateColumns={{
+            base: "repeat(3, 1fr)",
+            md: "repeat(3, 1fr)",
+          }}
           gap={{ base: 2, md: 4 }}
           alignItems="center"
         >
@@ -231,10 +242,10 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
 
       {/* One-line description */}
       {oneLineDesc && (
-        <Text 
-          mt={{ base: 2, md: 3 }} 
-          fontSize={{ base: "xs", md: "sm" }} 
-          color="neutral.300" 
+        <Text
+          mt={{ base: 2, md: 3 }}
+          fontSize={{ base: "xs", md: "sm" }}
+          color="neutral.300"
           noOfLines={1}
         >
           {oneLineDesc}

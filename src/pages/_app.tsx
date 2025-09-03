@@ -20,6 +20,77 @@ import { HomeProvider } from "data/context/homeContext"
 import { reportWebVitals } from "utils/webVitals"
 
 const App = ({ Component, pageProps }: AppProps) => {
+  // Suppress unhandled promise rejections for user-rejected wallet actions to avoid dev overlay
+  if (typeof window !== "undefined") {
+    const handler = (event: PromiseRejectionEvent) => {
+      try {
+        const reason: any = event?.reason
+        const msg = String(
+          reason?.message || reason?.shortMessage || reason || ""
+        )
+        if (
+          msg.includes("User rejected") ||
+          msg.includes("User denied") ||
+          msg.includes("MetaMask Tx Signature: User denied")
+        ) {
+          event.preventDefault()
+        }
+      } catch {}
+    }
+    const errorHandler = (event: ErrorEvent) => {
+      try {
+        const err: any = event?.error
+        const msg = String(err?.message || event?.message || "")
+        if (
+          msg.includes("ContractFunctionExecutionError") &&
+          (msg.includes("User rejected") ||
+            msg.includes("User denied") ||
+            msg.includes("MetaMask Tx Signature: User denied"))
+        ) {
+          event.preventDefault()
+        }
+      } catch {}
+    }
+    // Ensure we don't add multiple listeners on HMR
+    ;(window as any).__somm_unhandledrejection_handler__ &&
+      window.removeEventListener(
+        "unhandledrejection",
+        (window as any).__somm_unhandledrejection_handler__
+      )
+    window.addEventListener("unhandledrejection", handler)
+    ;(window as any).__somm_unhandledrejection_handler__ = handler
+    ;(window as any).__somm_error_handler__ &&
+      window.removeEventListener(
+        "error",
+        (window as any).__somm_error_handler__ as any
+      )
+    window.addEventListener("error", errorHandler)
+    ;(window as any).__somm_error_handler__ = errorHandler
+
+    // Patch console.error to suppress known benign user-rejected messages in dev
+    const originalConsoleError = console.error.bind(console)
+    const patched = (...args: any[]) => {
+      try {
+        const text = args
+          .map((a) => (a instanceof Error ? a.message : String(a)))
+          .join(" ")
+        if (
+          text.includes("ContractFunctionExecutionError") &&
+          (text.includes("User rejected") ||
+            text.includes("User denied") ||
+            text.includes("MetaMask Tx Signature: User denied"))
+        ) {
+          return
+        }
+      } catch {}
+      originalConsoleError(...args)
+    }
+    ;(window as any).__somm_console_error__ &&
+      (console.error = (window as any).__somm_console_error__)
+    ;(window as any).__somm_console_error__ = patched
+    console.error = patched
+  }
+
   return (
     <QueryClientProvider client={reactQueryClient}>
       {/* <PlausibleProvider
@@ -52,7 +123,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 }
 
 // Report Web Vitals
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   reportWebVitals()
 }
 
