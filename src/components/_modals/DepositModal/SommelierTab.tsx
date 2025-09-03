@@ -271,7 +271,30 @@ export const SommelierTab = ({
         value: (params as any)?.value,
         context,
       })
-      const hash = await writeContractAsync(params)
+      // Provide our own gas & fee params to avoid wallet overestimation
+      let prepared = { ...(params as any) }
+      try {
+        if (publicClient && address) {
+          const gasEstimate: bigint = await publicClient.estimateContractGas({
+            address: (params as any)?.address,
+            abi: (params as any)?.abi,
+            functionName: (params as any)?.functionName,
+            args: (params as any)?.args,
+            value: (params as any)?.value,
+            account: getAddress(address),
+          })
+          const gasWithBuffer = (gasEstimate * 115n) / 100n
+          const fees = await publicClient.estimateFeesPerGas().catch(() => null)
+          prepared.gas = gasWithBuffer
+          if (fees?.maxFeePerGas) prepared.maxFeePerGas = fees.maxFeePerGas
+          if (fees?.maxPriorityFeePerGas)
+            prepared.maxPriorityFeePerGas = fees.maxPriorityFeePerGas
+        }
+      } catch (e) {
+        logTxDebug("write.gas_estimate_failed", { message: (e as Error)?.message })
+      }
+
+      const hash = await writeContractAsync(prepared)
       logTxDebug("write.submitted", { hash })
       return hash
     } catch (e) {
