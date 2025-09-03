@@ -91,16 +91,41 @@ let nextConfig = {
         )
       )
 
-      // Handle other @cosmjs modules
+      // Use our patch file for @cosmjs/amino to ensure exports work correctly
       config.plugins.push(
         new webpack.NormalModuleReplacementPlugin(
-          /@cosmjs\/(amino|proto-signing|stargate|cosmwasm-stargate)$/,
-          (resource) => {
-            const pkg = resource.request.replace("@cosmjs/", "")
-            resource.request = require.resolve(
-              `@cosmjs/${pkg}/build/index.js`
-            )
-          }
+          /@cosmjs\/amino$/,
+          require.resolve("./src/utils/patches/cosmjs-amino-patch.js")
+        )
+      )
+
+      // Use our patch file for @cosmjs/proto-signing to ensure exports work correctly
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /@cosmjs\/proto-signing$/,
+          require.resolve(
+            "./src/utils/patches/cosmjs-proto-signing-patch.js"
+          )
+        )
+      )
+
+      // Use our patch file for @cosmjs/stargate to ensure exports work correctly
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /@cosmjs\/stargate$/,
+          require.resolve(
+            "./src/utils/patches/cosmjs-stargate-patch.js"
+          )
+        )
+      )
+
+      // Use our patch file for @cosmjs/cosmwasm-stargate to ensure exports work correctly
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /@cosmjs\/cosmwasm-stargate$/,
+          require.resolve(
+            "./src/utils/patches/cosmjs-cosmwasm-stargate-patch.js"
+          )
         )
       )
     }
@@ -121,9 +146,21 @@ let nextConfig = {
           "@walletconnect/core/dist/index.es.js",
         "@walletconnect/sign-client$":
           "@walletconnect/sign-client/dist/index.es.js",
-        // Ensure @cosmjs/encoding always uses our patch
+        // Ensure @cosmjs modules always use our patches
         "@cosmjs/encoding$": require.resolve(
           "./src/utils/patches/cosmjs-encoding-patch.js"
+        ),
+        "@cosmjs/amino$": require.resolve(
+          "./src/utils/patches/cosmjs-amino-patch.js"
+        ),
+        "@cosmjs/proto-signing$": require.resolve(
+          "./src/utils/patches/cosmjs-proto-signing-patch.js"
+        ),
+        "@cosmjs/stargate$": require.resolve(
+          "./src/utils/patches/cosmjs-stargate-patch.js"
+        ),
+        "@cosmjs/cosmwasm-stargate$": require.resolve(
+          "./src/utils/patches/cosmjs-cosmwasm-stargate-patch.js"
         ),
       },
     }
