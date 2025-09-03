@@ -7,14 +7,8 @@ import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
 import { useUserBalance } from "./useUserBalance"
 import { tokenConfig } from "data/tokenConfig"
-import { getWalletClient } from "@wagmi/core"
-import { wagmiConfig } from "context/wagmiContext"
 
 export const useUserStrategyData = (strategyAddress: string, chain: string) => {
-  const { isConnected } = useAccount()
-  const walletClient = isConnected
-    ? getWalletClient(wagmiConfig)
-    : undefined
   const { address: userAddress } = useAccount()
   const { data: allContracts } = useAllContracts()
   const strategyData = useStrategyData(strategyAddress, chain)
@@ -60,8 +54,8 @@ export const useUserStrategyData = (strategyAddress: string, chain: string) => {
       })
     },
     enabled:
+      !!userAddress &&
       !!allContracts &&
-      !!walletClient &&
       !!sommPrice.data &&
       !!lpToken &&
       !!baseAssetPrice &&

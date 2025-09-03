@@ -25,8 +25,6 @@ import { Link } from "components/Link"
 import { config } from "utils/config"
 import {
   useAccount,
-  useBalance,
-  useBlockNumber,
   usePublicClient,
   useWalletClient,
 } from "wagmi"
@@ -59,9 +57,9 @@ import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { useQueryClient } from "@tanstack/react-query"
 import { wagmiConfig } from "context/wagmiContext"
 import { BaseButton } from "components/_buttons/BaseButton"
+import { useUserBalances } from "data/hooks/useUserBalances"
 
 interface FormValues {
   depositAmount: number
@@ -132,7 +130,6 @@ export const SommelierTab = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
   const { address } = useAccount()
-  const queryClient = useQueryClient()
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
@@ -156,17 +153,7 @@ export const SommelierTab = ({
   const isDisabled =
     isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
 
-  function trackedSetSelectedToken(value: TokenType | null) {
-    if (value && value !== selectedToken) {
-      // analytics.track("deposit.stable-selected", {
-      //   ...baseAnalytics,
-      //   stable: value.symbol,
-      // })
-    }
-    setSelectedToken(value)
-  }
-
-  const { cellarSigner } = useCreateContracts(cellarConfig)
+  const { cellarSigner, boringVaultLens } = useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
     cellarConfig.cellar.address,
@@ -179,20 +166,11 @@ export const SommelierTab = ({
     skip: true,
   })
 
-  const { data: blockNumber } = useBlockNumber({ watch: true })
+ const { userBalances } = useUserBalances()
 
-  const { data: selectedTokenBalance, queryKey } = useBalance({
-    address: address,
-    token: getAddress(
-      selectedToken?.address ||
-        "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-    ), //WETH Address
-    unit: "wei",
-  })
-
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey })
-  }, [blockNumber, queryClient])
+ const selectedTokenBalance = userBalances.data?.find(
+   (b) => b.symbol === selectedToken?.symbol
+ )
 
   const erc20Contract =
     selectedToken?.address &&
@@ -209,11 +187,11 @@ export const SommelierTab = ({
   const geo = useGeo()
 
   const queryDepositFeePercent = async (assetAddress: string) => {
-    if (assetAddress === cellarConfig.baseAsset.address) {
+    if (assetAddress === cellarConfig.baseAsset.address || cellarConfig.boringVault) {
       return 0
     }
 
-    const [isSupported, holdingPosition, depositFee] =
+    const [isSupported,_ , depositFee] =
       (await cellarSigner?.read.alternativeAssetData([
         assetAddress,
       ])) as [boolean, number, number]
@@ -262,7 +240,24 @@ export const SommelierTab = ({
   ) => {
     let fnName
     let args
-    if (
+    let value
+
+    if (cellarConfig.boringVault) {
+      let nativeDeposit = selectedToken?.symbol === "ETH"
+
+      // In case of native deposit, the minimum mint is calculated based on WETH
+      // previewDeposit doesn't handle native ETH
+      const minimumMint = await boringVaultLens?.read.previewDeposit([
+        nativeDeposit ? cellarConfig.baseAsset.address : assetAddress,
+        amtInWei,
+        cellarConfig.cellar.address,
+        cellarConfig.accountant?.address,
+      ]) 
+      fnName = "deposit"
+      args = [assetAddress, amtInWei, minimumMint]
+      value = nativeDeposit ? amtInWei : BigInt(0)
+    }
+    else if (
       assetAddress !== undefined &&
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
@@ -273,23 +268,23 @@ export const SommelierTab = ({
       fnName = "deposit"
       args = [amtInWei, address]
     }
+    
     if (canDoBatchCall && !approval) {
+      // Batch deposit flow
       const { id } = await sendCalls(wagmiConfig, {
         calls: [
           {
             to: assetAddress,
             abi: erc20Abi,
             functionName: "approve",
-            args: [
-              cellarConfig.cellar.address as `0x${string}`,
-              amtInWei,
-            ],
+            args: [cellarConfig.cellar.address as `0x${string}`, amtInWei],
           },
           {
-            to: cellarConfig.cellar.address as `0x${string}`,
-            abi: cellarConfig.cellar.abi,
-            functionName: "deposit",
-            args: [amtInWei, address],
+            to: cellarSigner?.address as `0x${string}`,
+            abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
+            functionName: fnName,
+            args: args,
+            value: value,
           },
         ],
         chainId: cellarConfig.chain.wagmiId,
@@ -314,10 +309,11 @@ export const SommelierTab = ({
 
       return finalResult.receipts
     }
-
+    // Regular deposit flow
     // @ts-ignore
     const hash = await cellarSigner?.write[fnName](args, {
       account: address,
+      value: value,
     })
 
     const depositResult = await waitForTransactionReceipt(
@@ -386,7 +382,8 @@ export const SommelierTab = ({
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
 
-    if (!erc20Contract) return
+    let nativeDeposit = selectedToken?.symbol === "ETH"
+    if (!erc20Contract && !nativeDeposit) return
     insertEvent({
       event: "deposit.started",
       address: address ?? "",
@@ -400,13 +397,16 @@ export const SommelierTab = ({
     const canDoBatchCall =
       atomicStatus === "ready" || atomicStatus === "supported"
 
-    const allowance = await erc20Contract.read.allowance(
-      [
-        getAddress(address ?? ""),
-        getAddress(cellarConfig.cellar.address),
-      ],
-      { account: address }
-    )
+    const allowance = nativeDeposit
+      ? Number.MAX_SAFE_INTEGER
+      : // @ts-ignore
+        await erc20Contract.read.allowance(
+          [
+            getAddress(address ?? ""),
+            getAddress(cellarConfig.cellar.address),
+          ],
+          { account: address }
+        )
 
     const amtInWei = parseUnits(
       depositAmount.toString(),
@@ -1100,7 +1100,7 @@ export const SommelierTab = ({
           <FormControl isInvalid={isError as boolean | undefined}>
             <ModalMenu
               depositTokens={depositTokens}
-              setSelectedToken={trackedSetSelectedToken}
+              setSelectedToken={setSelectedToken}
               activeAsset={activeAsset?.address}
               selectedTokenBalance={selectedTokenBalance}
               isDisabled={isSubmitting}
