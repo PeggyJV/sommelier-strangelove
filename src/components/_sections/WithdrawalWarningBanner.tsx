@@ -62,26 +62,7 @@ export default function WithdrawalWarningBanner() {
         </Link>
       </HStack>
 
-      <Text fontWeight="semibold" mb={2}>
-        Withdrawal Status (as of Aug 13):
-      </Text>
-      <OrderedList spacing={2} mb={4} pl={4}>
-        <ListItem>
-          ~800 ETH of liquidity is being unlocked and going live
-        </ListItem>
-        <ListItem>
-          A 0.25 bps withdrawal discount has been added to help manage
-          deleveraging
-        </ListItem>
-        <ListItem>Withdrawal queue UI has been updated</ListItem>
-        <ListItem>
-          <Text as="span" fontWeight="bold">
-            Recommended:
-          </Text>{" "}
-          If you already submitted a withdrawal, consider replacing it
-          to benefit from the new logic and faster processing
-        </ListItem>
-      </OrderedList>
+      {/* Status list removed per request */}
 
       <Text fontWeight="semibold" mb={2}>
         For general Somm support or questions about new vaults:

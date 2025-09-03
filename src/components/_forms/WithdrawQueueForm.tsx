@@ -140,9 +140,22 @@ export const WithdrawQueueForm = ({
   const [selectedToken, setSelectedToken] =
     useState<Token>(strategyBaseAsset)
 
-  const [isWithdrawAllowed, setIsWithdrawAllowed] = useState<boolean | null>(
-    null
-  )
+  const [isWithdrawAllowed, setIsWithdrawAllowed] = useState<
+    boolean | null
+  >(null)
+
+  // Pre-validation of request: simulate on-chain call before enabling Submit
+  const [isRequestValid, setIsRequestValid] = useState<
+    boolean | null
+  >(null)
+  const [preflightMessage, setPreflightMessage] = useState<string>("")
+  const [isValidating, setIsValidating] = useState<boolean>(false)
+  const [discountBpsChosen, setDiscountBpsChosen] = useState<
+    number | null
+  >(null)
+  const [effectiveDeadlineSec, setEffectiveDeadlineSec] = useState<
+    number | null
+  >(null)
 
   // Preflight: check if queue allows withdraws for selected asset (boring queue)
   useEffect(() => {
@@ -156,7 +169,9 @@ export const WithdrawQueueForm = ({
         const res = await boringQueue.read.withdrawAssets([
           selectedToken.address,
         ])
-        const allow = Array.isArray(res) ? Boolean(res[0]) : Boolean(res)
+        const allow = Array.isArray(res)
+          ? Boolean(res[0])
+          : Boolean(res)
         if (!cancelled) setIsWithdrawAllowed(allow)
         logTxDebug("withdraw.preflight", {
           assetOut: selectedToken.address,
@@ -201,6 +216,162 @@ export const WithdrawQueueForm = ({
   }
 
   const geo = useGeo()
+
+  // Simulate the request with current inputs to pre‑validate before enabling submit
+  useEffect(() => {
+    let cancelled = false
+    const run = async () => {
+      // Only validate for boringQueue path and when an amount is present
+      if (!boringQueue || !selectedToken?.address) {
+        setIsRequestValid(null)
+        setPreflightMessage("")
+        setDiscountBpsChosen(null)
+        setEffectiveDeadlineSec(null)
+        return
+      }
+      if (isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0) {
+        setIsRequestValid(null)
+        setPreflightMessage("")
+        setDiscountBpsChosen(null)
+        setEffectiveDeadlineSec(null)
+        return
+      }
+      try {
+        setIsValidating(true)
+        // Compute shares and parameters exactly like in submit path
+        const withdrawAmtInBaseDenom = parseUnits(
+          `${watchWithdrawAmount}`,
+          cellarConfig.cellar.decimals
+        )
+
+        const tokenSymbolForRules = (selectedToken?.symbol ||
+          "") as string
+        const configuredRules: any = (cellarConfig as any)
+          ?.withdrawTokenConfig?.[tokenSymbolForRules]
+        const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
+        const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
+        const desiredBps = DISCOUNT_BPS
+        const startBps =
+          minBps && maxBps
+            ? Math.max(minBps, Math.min(desiredBps, maxBps))
+            : desiredBps
+        const minDeadline = Number(
+          configuredRules?.minimumSecondsToDeadline ?? 0
+        )
+        const policyDeadline = Math.floor(
+          WITHDRAW_DEADLINE_HOURS * 60 * 60
+        )
+        const effectiveDeadlineSeconds = Math.max(
+          policyDeadline,
+          minDeadline
+        )
+        setEffectiveDeadlineSec(effectiveDeadlineSeconds)
+        // Probe upwards in 25 bps steps until simulation succeeds
+        const step = 25
+        const upper = maxBps && maxBps > 0 ? maxBps : startBps
+        let found: number | null = null
+        for (let bps = startBps; bps <= upper; bps += step) {
+          try {
+            if (isActiveWithdrawRequest && boringQueueWithdrawals) {
+              const request =
+                boringQueueWithdrawals.open_requests[0].metadata
+              const oldRequestTouple = [
+                request.nonce,
+                address,
+                request.assetOut,
+                request.amountOfShares,
+                request.amountOfAssets,
+                request.creationTime,
+                request.secondsToMaturity,
+                request.secondsToDeadline,
+              ]
+              await boringQueue.simulate.replaceOnChainWithdraw(
+                [
+                  oldRequestTouple,
+                  BigInt(bps),
+                  BigInt(effectiveDeadlineSeconds),
+                ],
+                { account: address }
+              )
+            } else {
+              await boringQueue.simulate.requestOnChainWithdraw(
+                [
+                  selectedToken.address,
+                  withdrawAmtInBaseDenom,
+                  BigInt(bps),
+                  BigInt(effectiveDeadlineSeconds),
+                ],
+                { account: address }
+              )
+            }
+            found = bps
+            break
+          } catch (_) {
+            continue
+          }
+        }
+        if (!cancelled) {
+          if (found !== null) {
+            setIsRequestValid(true)
+            setDiscountBpsChosen(found)
+            setPreflightMessage(
+              `Queue minimum discount auto‑selected: ${(
+                found / 100
+              ).toFixed(2)}%`
+            )
+          } else {
+            setIsRequestValid(false)
+          }
+        }
+      } catch (e) {
+        if (cancelled) return
+        const msg = (
+          (e as any)?.cause?.message ||
+          (e as Error).message ||
+          ""
+        ).toString()
+        setIsRequestValid(false)
+        if (
+          msg.includes(
+            "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
+          )
+        ) {
+          setPreflightMessage(
+            `Withdraw queue is currently not available for ${selectedToken.symbol}.`
+          )
+        } else if (msg.includes("BoringOnChainQueue__BadDiscount")) {
+          const rules: any = (cellarConfig as any)
+            ?.withdrawTokenConfig?.[
+            (selectedToken?.symbol || "") as string
+          ]
+          const minPct = rules?.minDiscount
+          const maxPct = rules?.maxDiscount
+          setPreflightMessage(
+            `Discount invalid. Allowed range for ${selectedToken.symbol}: ${minPct}%–${maxPct}%.`
+          )
+        } else {
+          setPreflightMessage(
+            "Request not currently valid. Please review inputs and try again."
+          )
+        }
+      } finally {
+        if (!cancelled) setIsValidating(false)
+      }
+    }
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [
+    boringQueue,
+    selectedToken?.address,
+    selectedToken?.symbol,
+    watchWithdrawAmount,
+    isActiveWithdrawRequest,
+    boringQueueWithdrawals,
+    address,
+    cellarConfig,
+  ])
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -351,8 +522,9 @@ export const WithdrawQueueForm = ({
           status: "info",
           body: (
             <Text>
-              Withdraw queue is currently not available for {selectedToken.symbol}.
-              Please choose a different asset or try again later.
+              Withdraw queue is currently not available for{" "}
+              {selectedToken.symbol}. Please choose a different asset
+              or try again later.
             </Text>
           ),
           closeHandler: closeAll,
@@ -392,13 +564,18 @@ export const WithdrawQueueForm = ({
 
       if (error.message === "GAS_LIMIT_ERROR") {
         const causeMsg = (error as any)?.cause?.message || ""
-        if (causeMsg.includes("BoringOnChainQueue__WithdrawsNotAllowedForAsset")) {
+        if (
+          causeMsg.includes(
+            "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
+          )
+        ) {
           addToast({
             heading: "Withdraw Queue",
             body: (
               <Text>
-                Withdraw queue is currently not available for {selectedToken.symbol}.
-                Please choose a different asset or try again later.
+                Withdraw queue is currently not available for{" "}
+                {selectedToken.symbol}. Please choose a different
+                asset or try again later.
               </Text>
             ),
             status: "info",
@@ -411,10 +588,8 @@ export const WithdrawQueueForm = ({
         }
         if (causeMsg.includes("BoringOnChainQueue__BadDiscount")) {
           const tokenSymbol = (selectedToken?.symbol || "") as string
-          const rules: any =
-            (cellarConfig as any)?.withdrawTokenConfig?.[
-              tokenSymbol
-            ]
+          const rules: any = (cellarConfig as any)
+            ?.withdrawTokenConfig?.[tokenSymbol]
           const minPct = rules?.minDiscount ?? undefined
           const maxPct = rules?.maxDiscount ?? undefined
           addToast({
@@ -476,23 +651,31 @@ export const WithdrawQueueForm = ({
     withdrawAmtInBaseDenom: bigint
   ) => {
     const currentTime = Math.floor(Date.now() / 1000)
-    const configuredRules: any =
-      (cellarConfig as any)?.withdrawTokenConfig?.[
-        selectedToken?.symbol as keyof typeof (cellarConfig as any).withdrawTokenConfig
-      ]
+    const tokenSymbolForRules = (selectedToken?.symbol ||
+      "") as string
+    const configuredRules: any = (cellarConfig as any)
+      ?.withdrawTokenConfig?.[tokenSymbolForRules]
     const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
     const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
     // Our desired default is 25 bps; clamp to per-asset rules if present
     const desiredBps = DISCOUNT_BPS
+    // Prefer the pre‑validated/auto‑selected discount if available
     const discountBps =
-      minBps && maxBps
+      discountBpsChosen !== null
+        ? discountBpsChosen
+        : minBps && maxBps
         ? Math.max(minBps, Math.min(desiredBps, maxBps))
         : desiredBps
     const minDeadline = Number(
       configuredRules?.minimumSecondsToDeadline ?? 0
     )
-    const policyDeadline = Math.floor(WITHDRAW_DEADLINE_HOURS * 60 * 60)
-    const effectiveDeadlineSeconds = Math.max(policyDeadline, minDeadline)
+    const policyDeadline = Math.floor(
+      WITHDRAW_DEADLINE_HOURS * 60 * 60
+    )
+    const effectiveDeadlineSeconds =
+      effectiveDeadlineSec !== null
+        ? effectiveDeadlineSec
+        : Math.max(policyDeadline, minDeadline)
     const deadlineSeconds = currentTime + effectiveDeadlineSeconds
 
     let hash
@@ -796,6 +979,14 @@ export const WithdrawQueueForm = ({
                       ? Object.keys(
                           cellarDataMap[id].config
                             .withdrawTokenConfig!
+                        ).filter((sym) =>
+                          sym === "WETH"
+                            ? true
+                            : isWithdrawAllowed === null
+                            ? true
+                            : sym === selectedToken.symbol
+                            ? true
+                            : true
                         )
                       : [strategyBaseAsset.symbol]
                   }
@@ -829,7 +1020,10 @@ export const WithdrawQueueForm = ({
       <BaseButton
         type="submit"
         isDisabled={
-          isDisabled || (boringQueue ? isWithdrawAllowed === false : false)
+          isDisabled ||
+          (boringQueue ? isWithdrawAllowed === false : false) ||
+          (boringQueue ? isRequestValid === false : false) ||
+          isValidating
         }
         isLoading={isSubmitting}
         fontSize={21}
@@ -838,11 +1032,13 @@ export const WithdrawQueueForm = ({
       >
         Submit
       </BaseButton>
-      {boringQueue && isWithdrawAllowed === false && (
-        <Text color="yellow.300" fontSize="sm">
-          Withdraw queue is currently not available for {selectedToken.symbol}.
-        </Text>
-      )}
+      {boringQueue &&
+        (isWithdrawAllowed === false || isRequestValid === false) && (
+          <Text color="yellow.300" fontSize="sm">
+            {preflightMessage ||
+              `Withdraw queue is currently not available for ${selectedToken.symbol}.`}
+          </Text>
+        )}
       {/*waitTime(cellarConfig) !== null && (
         <Text textAlign="center">
           Please wait {waitTime(cellarConfig)} after the deposit to

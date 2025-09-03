@@ -8,10 +8,10 @@ import {
   HStack,
   Grid,
   GridItem,
+  Tooltip,
 } from "@chakra-ui/react"
 import NextLink from "next/link"
 import * as React from "react"
-import Countdown from "components/_common/Countdown"
 import NextImage from "next/image"
 
 type Props = {
@@ -26,31 +26,11 @@ export default function TopLaunchBanner({
   const lidoSrc = "/assets/images/eth-lido-uni.svg"
   const lidoFallbackPng = "/assets/icons/lido.png"
 
-  // Simple expandable copy helper for 3-line clamp -> expand inline
+  // Static body text (no "Read more" control)
   function ExpandableBody({ text }: { text: string }) {
-    const [expanded, setExpanded] = React.useState(false)
     return (
       <Box mt={{ base: 3, md: 4 }}>
-        <Text
-          textStyle="bodyMd"
-          noOfLines={expanded ? undefined : 3}
-          display="-webkit-box"
-          sx={{
-            WebkitLineClamp: expanded ? "unset" : 3,
-            WebkitBoxOrient: "vertical",
-          }}
-        >
-          {text}
-        </Text>
-        <Button
-          onClick={() => setExpanded((v) => !v)}
-          size="sm"
-          variant="link"
-          color="chip.fg"
-          mt={1}
-        >
-          {expanded ? "Read less" : "Read more"}
-        </Button>
+        <Text textStyle="bodyMd">{text}</Text>
       </Box>
     )
   }
@@ -117,13 +97,7 @@ export default function TopLaunchBanner({
                   height={32}
                   priority={false}
                 />
-                <Text
-                  fontSize={{ base: "xs", md: "sm" }}
-                  fontWeight={600}
-                  color="chip.fg"
-                >
-                  Launching August 19
-                </Text>
+                {/* Launch date removed */}
 
                 {/* keep as Link (your current file links to lido.fi); remove Link wrapper if you want non-interactive */}
                 <Link
@@ -172,13 +146,7 @@ export default function TopLaunchBanner({
                 Lido.
               </Text>
 
-              {/* Mobile/Tablet countdown directly under heading */}
-              <Box display={{ base: "block", lg: "none" }} mb={4}>
-                <Countdown
-                  size="lg"
-                  targetDate={targetDate}
-                />
-              </Box>
+              {/* Countdown disabled */}
 
               {/* Paragraph with clamp + Read more disclosure */}
               <ExpandableBody
@@ -232,54 +200,41 @@ export default function TopLaunchBanner({
                   Explore Vault
                 </Button>
 
-                <Button
-                  as={Link}
-                  href={blogHref}
-                  size="md"
-                  height="40px"
-                  px="20px"
-                  fontWeight={600}
-                  fontSize="sm"
-                  variant="outline"
-                  bg="transparent"
-                  color="cta.outline.fg"
-                  borderColor="cta.outline.br"
-                  borderWidth="2px"
-                  _hover={{
-                    bg: "white",
-                    color: "black",
-                    borderColor: "white",
-                  }}
-                  _active={{
-                    bg: "white",
-                    color: "black",
-                    borderColor: "white",
-                  }}
-                  _focusVisible={{
-                    boxShadow:
-                      "0 0 0 3px var(--chakra-colors-purple-base)",
-                  }}
+                <Tooltip
+                  hasArrow
+                  label="Coming soon. Strategy deep‑dive will be published shortly."
+                  placement="top"
+                  openDelay={200}
                 >
-                  View Strategy Blog
-                </Button>
+                  <Button
+                    size="md"
+                    height="40px"
+                    px="20px"
+                    fontWeight={600}
+                    fontSize="sm"
+                    variant="outline"
+                    bg="transparent"
+                    color="cta.outline.fg"
+                    borderColor="cta.outline.br"
+                    borderWidth="2px"
+                    isDisabled
+                    pointerEvents="none"
+                    _focusVisible={{
+                      boxShadow:
+                        "0 0 0 3px var(--chakra-colors-purple-base)",
+                    }}
+                  >
+                    View Strategy Blog
+                  </Button>
+                </Tooltip>
               </HStack>
             </Stack>
           </GridItem>
 
-          {/* RIGHT COLUMN — desktop countdown */}
-          <GridItem display={{ base: "none", lg: "block" }}>
-            <Flex align="flex-start" justify="flex-start">
-              <Box
-                position="relative"
-                zIndex={1}
-                maxW="100%"
-                overflow="hidden"
-                pr={2}
-              >
-                <Countdown size="lg" targetDate={targetDate} />
-              </Box>
-            </Flex>
-          </GridItem>
+          {/* RIGHT COLUMN — countdown disabled */}
+          <GridItem
+            display={{ base: "none", lg: "block" }}
+          ></GridItem>
         </Grid>
 
         {/* Scroll cue arrow removed per request */}
