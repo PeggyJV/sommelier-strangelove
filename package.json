@@ -38,10 +38,12 @@
   },
   "pnpm": {
     "overrides": {
-      "@noble/hashes": "1.8.0",
-      "@noble/curves": "1.9.1",
-      "@noble/hashes@*": "1.8.0",
-      "@noble/curves@*": "1.9.1"
+      "@vanilla-extract/sprinkles": "^1.6.3",
+      "@vanilla-extract/css": "^1.14.0",
+      "@vanilla-extract/private": "^1.0.5",
+      "@walletconnect/ethereum-provider": "^2.21.8",
+      "@walletconnect/universal-provider": "^2.21.8",
+      "@walletconnect/sign-client": "^2.21.8"
     }
   },
   "dependencies": {
@@ -62,8 +64,8 @@
     "@nivo/core": "^0.95.0",
     "@nivo/line": "^0.95.0",
     "@nivo/theming": "^0.99.0",
-    "@noble/curves": "^1.9.1",
-    "@noble/hashes": "^1.8.0",
+    "@noble/curves": "1.9.1",
+    "@noble/hashes": "1.8.0",
     "@portabletext/react": "^3.1.0",
     "@portabletext/types": "^2.0.15",
     "@rainbow-me/rainbowkit": "^2.0.0",
@@ -155,15 +157,5 @@
     "tabWidth": 2,
     "useTabs": false,
     "bracketSpacing": true
-  },
-  "pnpm": {
-    "overrides": {
-      "@vanilla-extract/sprinkles": "^1.6.3",
-      "@vanilla-extract/css": "^1.14.0",
-      "@vanilla-extract/private": "^1.0.5",
-      "@walletconnect/ethereum-provider": "^2.21.8",
-      "@walletconnect/universal-provider": "^2.21.8",
-      "@walletconnect/sign-client": "^2.21.8"
-    }
   }
 }
