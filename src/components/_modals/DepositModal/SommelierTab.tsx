@@ -308,6 +308,24 @@ export const SommelierTab = ({
         })
         return undefined
       }
+      // MetaMask sometimes returns this viem error even when a popup was shown but no hash is returned.
+      // Treat it as a soft failure so the UI can recover without a red overlay.
+      const msg = (e as Error)?.message || ""
+      if (msg.includes("does not have a transaction hash")) {
+        addToast({
+          heading: "Transaction not submitted",
+          body: (
+            <Text>
+              Wallet did not return a transaction hash. If you confirmed,
+              check wallet activity; otherwise try again.
+            </Text>
+          ),
+          status: "warning",
+          closeHandler: closeAll,
+        })
+        logTxDebug("write.no_hash_from_wallet", { context })
+        return undefined
+      }
       throw e
     }
   }
