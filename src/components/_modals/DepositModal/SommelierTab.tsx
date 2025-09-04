@@ -26,12 +26,17 @@ import { Link } from "components/Link"
 import { config } from "utils/config"
 import {
   useAccount,
-  usePublicClient,
   useWriteContract,
   useWaitForTransactionReceipt,
   useSwitchChain,
 } from "wagmi"
-import { erc20Abi, getContract, parseUnits, getAddress } from "viem"
+import {
+  erc20Abi,
+  getContract,
+  parseUnits,
+  getAddress,
+  PublicClient,
+} from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
 import { insertEvent } from "utils/supabase"
@@ -63,6 +68,8 @@ import {
   type TransactionErrorContext,
 } from "utils/handleTransactionError"
 import { logTxDebug } from "utils/txDebug"
+import { getActiveProvider } from "context/rpc_context"
+import { chainConfigMap } from "data/chainConfig"
 
 interface FormValues {
   depositAmount: number
@@ -130,7 +137,6 @@ export const SommelierTab = ({
     cellarAddress,
   }
 
-  const publicClient = usePublicClient()
   const { address, chain } = useAccount()
   const { switchChainAsync } = useSwitchChain()
   const { writeContractAsync } = useWriteContract()
@@ -223,25 +229,43 @@ export const SommelierTab = ({
     isDisabled,
   })
 
+  // Get paid RPC client
+  const [paidClient, setPaidClient] = useState<PublicClient | null>(
+    null
+  )
+
+  useEffect(() => {
+    const initializePaidClient = async () => {
+      if (cellarConfig?.chain?.id) {
+        const chainConfig = chainConfigMap[cellarConfig.chain.id]
+        if (chainConfig) {
+          const client = await getActiveProvider(chainConfig)
+          setPaidClient(client)
+        }
+      }
+    }
+    initializePaidClient()
+  }, [cellarConfig?.chain?.id])
+
   // ERC20 contract for the currently selected token (not always base asset)
   const erc20Contract =
     selectedToken?.address &&
-    publicClient &&
+    paidClient &&
     getContract({
       address: getAddress(selectedToken.address),
       abi: erc20Abi,
       client: {
-        public: publicClient,
+        public: paidClient,
       },
     })
 
   const cellarContract =
-    publicClient &&
+    paidClient &&
     getContract({
       address: getAddress(cellarConfig.cellar.address),
       abi: cellarConfig.cellar.abi,
       client: {
-        public: publicClient,
+        public: paidClient,
       },
     })
 
@@ -384,11 +408,9 @@ export const SommelierTab = ({
           closeHandler: close,
         })
 
-        const receipt = await publicClient?.waitForTransactionReceipt(
-          {
-            hash: hash as `0x${string}`,
-          }
-        )
+        const receipt = await paidClient?.waitForTransactionReceipt({
+          hash: hash as `0x${string}`,
+        })
 
         if (receipt?.status === "success") {
           addToast({
@@ -447,11 +469,9 @@ export const SommelierTab = ({
           closeHandler: close,
         })
 
-        const receipt = await publicClient?.waitForTransactionReceipt(
-          {
-            hash: hash as `0x${string}`,
-          }
-        )
+        const receipt = await paidClient?.waitForTransactionReceipt({
+          hash: hash as `0x${string}`,
+        })
 
         if (receipt?.status === "success") {
           addToast({
@@ -614,11 +634,9 @@ export const SommelierTab = ({
       }
 
       if (hash) {
-        const receipt = await publicClient?.waitForTransactionReceipt(
-          {
-            hash: hash as `0x${string}`,
-          }
-        )
+        const receipt = await paidClient?.waitForTransactionReceipt({
+          hash: hash as `0x${string}`,
+        })
 
         // Show a confirmation toast for BoringVault (e.g., Alpha STETH) deposits
         if (receipt?.status === "success" && cellarConfig.teller) {
@@ -720,9 +738,7 @@ export const SommelierTab = ({
         await erc20Contract.read.allowance(
           [
             getAddress(address ?? ""),
-            getAddress(
-              cellarConfig.teller?.address || cellarConfig.cellar.address
-            ),
+            getAddress(cellarConfig.cellar.address),
           ],
           { account: address }
         )
@@ -750,9 +766,7 @@ export const SommelierTab = ({
       approval = await doApprovalTx(
         amtInWei,
         getAddress(selectedToken!.address),
-        getAddress(
-          cellarConfig.teller?.address || cellarConfig.cellar.address
-        )
+        getAddress(cellarConfig.cellar.address)
       )
     }
 
