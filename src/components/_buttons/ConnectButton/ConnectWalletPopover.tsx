@@ -1,7 +1,8 @@
 import React, { memo } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { ConnectButtonProps } from "."
-import { Button } from "@chakra-ui/react"
+import { Button as UIBtn } from "components/ui/Button"
+import { Button as CkButton, Text, HStack } from "@chakra-ui/react"
 import { useWalletConnection } from "hooks/web3/useWalletConnection"
 
 type ConnectWalletPopoverProps = ConnectButtonProps & {
@@ -20,15 +21,15 @@ export const ConnectWalletPopover = memo(
     // If connecting, show cancel button
     if (isConnecting) {
       return (
-        <Button
+        <UIBtn
           onClick={cancelConnection}
-          colorScheme="red"
-          variant="outline"
-          size="sm"
+          variant="danger"
+          size="md"
+          w={{ base: "100%", md: "auto" }}
           {...rest}
         >
           Cancel Connection
-        </Button>
+        </UIBtn>
       )
     }
 
@@ -43,15 +44,32 @@ export const ConnectWalletPopover = memo(
           mounted,
         }) => {
           return (
-            <Button
+            <CkButton
               onClick={openConnectModal}
-              variant="sommOutline"
-              w={rest.w || rest.width || "100%"}
-              minH={{ base: "48px", md: rest.minH }}
+              bg="surface.bg"
+              borderWidth={2}
+              borderColor="purple.base"
+              borderRadius="full"
+              w="auto"
+              fontFamily="Haffer"
+              fontSize={12}
+              px={3}
+              h={"36px"}
+              _hover={{ bg: "purple.dark" }}
+              _active={{
+                bg: "purple.dark",
+                transform: "translateY(0)",
+              }}
+              _focusVisible={{
+                boxShadow:
+                  "0 0 0 3px var(--chakra-colors-purple-base)",
+              }}
               {...rest}
             >
-              {(children as string) || "Connect Wallet"}
-            </Button>
+              <Text fontWeight="semibold">
+                {(children as string) || "Connect Wallet"}
+              </Text>
+            </CkButton>
           )
         }}
       </ConnectButton.Custom>

@@ -3,7 +3,7 @@ import ClientOnly from "components/ClientOnly"
 import { DepositModal } from "components/_modals/DepositModal"
 import { NotifyModal } from "components/_modals/NotifyModal"
 import { FC } from "react"
-import { BaseButton } from "./BaseButton"
+import { Button } from "components/ui/Button"
 import {
   Text,
   Modal,
@@ -32,8 +32,10 @@ export const DepositButton: FC<ButtonProps> = (props) => {
 
   return (
     <ClientOnly>
-      <BaseButton
-        variant="solid"
+      <Button
+        variant="primary"
+        size="lg"
+        w={{ base: "100%", md: "auto" }}
         onClick={(e) => {
           e.stopPropagation()
           //! if share price oracle updating..
@@ -51,9 +53,13 @@ export const DepositButton: FC<ButtonProps> = (props) => {
         {...props}
       >
         Deposit
-      </BaseButton>
+      </Button>
       {isOracleModalOpen ? (
-        <Modal isOpen={isOracleModalOpen} onClose={closeOracleModal} isCentered>
+        <Modal
+          isOpen={isOracleModalOpen}
+          onClose={closeOracleModal}
+          isCentered
+        >
           <ModalOverlay />
           <ModalContent
             p={2}

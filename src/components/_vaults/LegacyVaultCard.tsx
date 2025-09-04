@@ -14,6 +14,7 @@ import {
   PopoverContent,
   PopoverBody,
 } from "@chakra-ui/react"
+import MetricsRow from "components/ui/MetricsRow"
 import {
   useDepositModalStore,
   DepositModalType,
@@ -70,10 +71,7 @@ export default function LegacyVaultCard({
   const cellarConfig = vault?.slug
     ? cellarDataMap[vault.slug]?.config
     : undefined
-  const { lpToken } = useUserBalance(
-    cellarConfig as any,
-    enabled
-  )
+  const { lpToken } = useUserBalance(cellarConfig as any, enabled)
   const { data: lpTokenData } = lpToken
   const { switchChainAsync } = useSwitchChain()
   const desiredChainId = cellarConfig?.chain?.wagmiId
@@ -209,55 +207,25 @@ export default function LegacyVaultCard({
           </VStack>
         </HStack>
 
-        {/* KPIs */}
-        <Grid
-          templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-          gap={4}
-          alignItems="center"
-        >
-          <VStack spacing={1} align="flex-start">
-            <Text
-              fontSize={{ base: "xl", md: "2xl" }}
-              fontWeight={800}
-              lineHeight={1}
-            >
-              {safeVal(tvl)}
-            </Text>
-            <Text fontSize="xs" color="neutral.400">
-              TVL
-            </Text>
-          </VStack>
-          <VStack spacing={1} align="center">
-            <Text
-              fontSize={{ base: "xl", md: "2xl" }}
-              fontWeight={800}
-              lineHeight={1}
-            >
-              {safeVal(userNetValueFmt)}
-            </Text>
-            <Text fontSize="xs" color="neutral.400">
-              Net Value
-            </Text>
-          </VStack>
-          <VStack spacing={1} align="flex-end">
-            <HStack spacing={1}>
-              <Text
-                fontSize={{ base: "xl", md: "2xl" }}
-                fontWeight={800}
-                lineHeight={1}
-                color={rewardsColor}
-              >
-                {safeVal(netFormatted)}
-              </Text>
-              <Text fontSize="sm" color={rewardsColor} aria-hidden>
-                {rewardsArrow}
-              </Text>
-            </HStack>
-            <Text fontSize="xs" color="neutral.400">
-              Net Rewards
-            </Text>
-          </VStack>
-        </Grid>
+        {/* KPIs: single-line horizontal rows */}
+        <VStack spacing={2} align="stretch">
+          <MetricsRow label="TVL" value={safeVal(tvl)} />
+          <MetricsRow
+            label="Net Value"
+            value={safeVal(userNetValueFmt)}
+          />
+          <MetricsRow
+            label="Net Rewards"
+            value={`${safeVal(netFormatted)} ${rewardsArrow}`}
+            tone={
+              typeof netValueNum === "number"
+                ? netValueNum >= 0
+                  ? "positive"
+                  : "negative"
+                : "default"
+            }
+          />
+        </VStack>
 
         {/* Debug Info */}
         {process.env.NEXT_PUBLIC_DEBUG_SORT === "1" && (

@@ -9,8 +9,12 @@ import {
   HStack,
   Box,
   Image,
+  useBreakpointValue,
+  useDisclosure,
+  VisuallyHidden,
 } from "@chakra-ui/react"
 import { ChevronDownIcon, CheckIcon } from "components/_icons"
+// Revert to image-based icons as requested
 import { useSwitchChain, useAccount } from "wagmi"
 import { useMemo } from "react"
 
@@ -34,15 +38,18 @@ const ChainButton = ({
   const { switchChainAsync } = useSwitchChain()
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const effectiveChain = chainConfigMap[chain.id] || placeholderChain
+  // Stable fallback: default to Ethereum on first paint
+  const DEFAULT_CHAIN = chainConfigMap["ethereum"] || placeholderChain
+  const effectiveChain = chainConfigMap[chain.id] || DEFAULT_CHAIN
 
-  const filteredChainKeys= useMemo(() => {
+  const filteredChainKeys = useMemo(() => {
     const chainKeys = Object.keys(chainConfigMap)
     const filteredChainKeys = chainKeys.filter((key) =>
       supportedChains.includes(key)
     )
-    return filteredChainKeys 
+    return filteredChainKeys
   }, [])
 
   const handleNetworkChange = async (chainId: string) => {
@@ -54,9 +61,8 @@ const ChainButton = ({
 
       await switchChainAsync({ chainId: chainConfig.wagmiId })
       onChainChange && onChainChange(chainId)
-      if (isConnected) {
-        window.location.reload()
-      }
+      // Close the dropdown and rely on wagmi state to update the label
+      onClose()
     } catch (e) {
       const error = e as Error
       console.error("Failed to switch the network: ", error?.message)
@@ -70,31 +76,51 @@ const ChainButton = ({
     }
   }
 
+  // Use logoPath images provided by chain config
+
   return (
-    <Popover placement="bottom" isLazy>
+    <Popover
+      placement="bottom-start"
+      isLazy
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+    >
       <PopoverTrigger>
         <Button
-          bg="none"
+          bg="surface.bg"
           borderWidth={2}
           borderColor="purple.base"
           borderRadius="full"
           w="auto"
-          zIndex={401}
           fontFamily="Haffer"
           fontSize={12}
-          _hover={{
-            bg: "purple.dark",
+          px={3}
+          h={"36px"}
+          minW="120px"
+          _hover={{ bg: "purple.dark" }}
+          _active={{ bg: "purple.dark", transform: "translateY(0)" }}
+          _focusVisible={{
+            boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
           }}
         >
-          <HStack>
+          <HStack
+            spacing={2}
+            align="center"
+            minW={0}
+            flexShrink={0}
+            data-testid="chain-trigger"
+          >
             <Image
               src={effectiveChain.logoPath}
               alt={effectiveChain.displayName}
-              boxSize="24px"
+              boxSize="18px"
               background={"transparent"}
             />
-            <Text>{effectiveChain.displayName}</Text>
-            <ChevronDownIcon />
+            <Text fontWeight="semibold" whiteSpace="nowrap">
+              {effectiveChain.displayName}
+            </Text>
+            <ChevronDownIcon boxSize="12px" />
           </HStack>
         </Button>
       </PopoverTrigger>
@@ -111,9 +137,16 @@ const ChainButton = ({
           outlineOffset: "unset",
           boxShadow: "unset",
         }}
+        w={{ base: "calc(100vw - 24px)", md: "auto" }}
+        boxShadow="0px 12px 24px rgba(0,0,0,0.35)"
+        zIndex="dropdown"
+        maxW="320px"
       >
         <PopoverBody p={0}>
-          <Stack>
+          <VisuallyHidden aria-live="polite">
+            Select network
+          </VisuallyHidden>
+          <Stack spacing={1}>
             {filteredChainKeys.map((chainKey) => {
               const supportedChain = chainConfigMap[chainKey]
               return (
@@ -132,19 +165,33 @@ const ChainButton = ({
                     bg: "purple.dark",
                     borderColor: "surface.tertiary",
                   }}
+                  _focusVisible={{
+                    boxShadow:
+                      "0 0 0 3px var(--chakra-colors-purple-base)",
+                  }}
+                  role="menuitemradio"
+                  aria-checked={
+                    supportedChain.id === effectiveChain.id
+                  }
                 >
-                  <HStack>
+                  <HStack spacing={3} align="center">
                     <Image
                       src={supportedChain.logoPath}
                       alt={supportedChain.displayName}
-                      boxSize="24px"
+                      boxSize="18px"
                       background={"transparent"}
                     />
-                    <Text fontWeight="semibold">
+                    <Text
+                      fontWeight={
+                        supportedChain.id === effectiveChain.id
+                          ? "bold"
+                          : "semibold"
+                      }
+                    >
                       {supportedChain.displayName}
                     </Text>
                     {supportedChain.id === effectiveChain.id && (
-                      <CheckIcon color={"#00C04B"} />
+                      <CheckIcon color={"#00C04B"} ml="auto" />
                     )}
                   </HStack>
                 </Box>

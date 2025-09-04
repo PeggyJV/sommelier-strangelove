@@ -271,75 +271,7 @@ export const SommelierTab = ({
         value: (params as any)?.value,
         context,
       })
-      // Prefer simulate → write flow, fallback to estimate
-      let prepared: any = { ...(params as any) }
-      try {
-        if (publicClient && address) {
-          // 1) Try simulation to get accurate request (gas, fees, calldata)
-          const sim = await publicClient.simulateContract({
-            address: (params as any)?.address,
-            abi: (params as any)?.abi,
-            functionName: (params as any)?.functionName,
-            args: (params as any)?.args,
-            value: (params as any)?.value,
-            account: getAddress(address),
-          })
-          prepared = { ...sim.request }
-          // 5% buffer on gas if present
-          if (prepared.gas && typeof prepared.gas === "bigint") {
-            prepared.gas = (prepared.gas * 105n) / 100n
-          } else {
-            // Fallback estimate if simulation did not return gas
-            const gasEstimate = await publicClient.estimateContractGas({
-              address: (params as any)?.address,
-              abi: (params as any)?.abi,
-              functionName: (params as any)?.functionName,
-              args: (params as any)?.args,
-              value: (params as any)?.value,
-              account: getAddress(address),
-            })
-            prepared.gas = (gasEstimate * 105n) / 100n
-          }
-          prepared.account = getAddress(address)
-          prepared.type = "eip1559"
-          // Ensure fees exist
-          if (!prepared.maxFeePerGas || !prepared.maxPriorityFeePerGas) {
-            const fees = await publicClient
-              .estimateFeesPerGas()
-              .catch(() => null)
-            if (fees?.maxFeePerGas) prepared.maxFeePerGas = fees.maxFeePerGas
-            if (fees?.maxPriorityFeePerGas)
-              prepared.maxPriorityFeePerGas = fees.maxPriorityFeePerGas
-          }
-        }
-      } catch (e) {
-        logTxDebug("write.simulation_failed", { message: (e as Error)?.message })
-        try {
-          if (publicClient && address) {
-            const gasEstimate: bigint = await publicClient.estimateContractGas({
-              address: (params as any)?.address,
-              abi: (params as any)?.abi,
-              functionName: (params as any)?.functionName,
-              args: (params as any)?.args,
-              value: (params as any)?.value,
-              account: getAddress(address),
-            })
-            const fees = await publicClient
-              .estimateFeesPerGas()
-              .catch(() => null)
-            prepared.gas = (gasEstimate * 105n) / 100n
-            if (fees?.maxFeePerGas) prepared.maxFeePerGas = fees.maxFeePerGas
-            if (fees?.maxPriorityFeePerGas)
-              prepared.maxPriorityFeePerGas = fees.maxPriorityFeePerGas
-            prepared.type = "eip1559"
-            prepared.account = getAddress(address)
-          }
-        } catch (ee) {
-          logTxDebug("write.gas_estimate_failed", { message: (ee as Error)?.message })
-        }
-      }
-
-      const hash = await writeContractAsync(prepared)
+      const hash = await writeContractAsync(params)
       logTxDebug("write.submitted", { hash })
       return hash
     } catch (e) {
@@ -590,86 +522,14 @@ export const SommelierTab = ({
     tokenAddress: string,
     approval: boolean,
     canDoBatchCall: boolean,
-    isNativeDeposit: boolean,
-    preferEnterRoute: boolean
+    isNativeDeposit: boolean
   ): Promise<any[]> => {
     try {
       let hash: string
-
-      // For Alpha STETH specifically, route ERC20 deposits via BoringVault.enter
-      const isAlphaSteth =
-        id === config.CONTRACT.ALPHA_STETH.SLUG ||
-        cellarConfig.cellar.address.toLowerCase() ===
-          config.CONTRACT.ALPHA_STETH.ADDRESS.toLowerCase()
-
-      if (
-        cellarConfig.teller &&
-        isAlphaSteth &&
-        !isNativeDeposit &&
-        preferEnterRoute
-      ) {
-        // Compute shares via Lens then call BoringVault.enter
-        let shareAmount = 0n
-        try {
-          const mm = await boringVaultLens?.read.previewDeposit([
-            tokenAddress,
-            amtInWei,
-            cellarConfig.cellar.address,
-            cellarConfig.accountant?.address,
-          ])
-          if (typeof mm === "bigint") shareAmount = mm
-        } catch {}
-
-        // Apply a small tolerance so gas estimation does not flag likely-to-fail
-        const slippageBps = BigInt(
-          Math.round((config.SWAP.SLIPPAGE ?? 0.5) * 100)
-        )
-        const minShares =
-          shareAmount > 0n
-            ? shareAmount - (shareAmount * slippageBps) / 10000n
-            : 0n
-
-        hash = (await safeWriteContract(
-          {
-            address: cellarConfig.cellar.address as `0x${string}`,
-            abi: cellarConfig.cellar.abi,
-            functionName: "enter",
-            args: [
-              getAddress(address ?? ""),
-              tokenAddress,
-              amtInWei,
-              getAddress(address ?? ""),
-              minShares,
-            ],
-          },
-          {
-            vaultName: cellarName,
-            tokenSymbol: selectedToken?.symbol,
-            transactionType: "deposit",
-            chainId: cellarConfig.chain.wagmiId,
-          }
-        )) as string
-      } else if (cellarConfig.teller) {
-        // Calculate minimum mint amount via Lens to aid gas estimation & slippage safety
-        let minimumMint = 0n
-        try {
-          const mm = await boringVaultLens?.read.previewDeposit([
-            tokenAddress,
-            amtInWei,
-            cellarConfig.cellar.address,
-            cellarConfig.accountant?.address,
-          ])
-          if (typeof mm === "bigint") {
-            const slippageBps = BigInt(
-              Math.round((config.SWAP.SLIPPAGE ?? 0.5) * 100)
-            )
-            minimumMint =
-              mm > 0n ? mm - (mm * slippageBps) / 10000n : 0n
-          }
-        } catch {}
+      if (cellarConfig.teller) {
+        const minimumMint = 0n
 
         if (isNativeDeposit) {
-          // Native ETH deposit
           const tellerParams: any = {
             address: cellarConfig.teller.address as `0x${string}`,
             abi: cellarConfig.teller.abi,
@@ -688,7 +548,6 @@ export const SommelierTab = ({
             chainId: cellarConfig.chain.wagmiId,
           })) as string
         } else {
-          // ERC20 token deposit
           hash = (await safeWriteContract(
             {
               address: cellarConfig.teller.address as `0x${string}`,
@@ -843,14 +702,6 @@ export const SommelierTab = ({
     // For now, assume batch calls are not supported to avoid the getCapabilities issue
     const canDoBatchCall = false
 
-    const isAlphaSteth =
-      id === config.CONTRACT.ALPHA_STETH.SLUG ||
-      cellarConfig.cellar.address.toLowerCase() ===
-        config.CONTRACT.ALPHA_STETH.ADDRESS.toLowerCase()
-
-    // Default to the cheaper enter() path for Alpha STETH ERC20 deposits
-    const preferEnterRoute = isAlphaSteth && !nativeDeposit
-
     if (!address) {
       return
     }
@@ -870,12 +721,7 @@ export const SommelierTab = ({
     })
 
     const spender = getAddress(
-      isAlphaSteth
-        ? preferEnterRoute
-          ? cellarConfig.cellar.address
-          : cellarConfig.teller?.address ||
-            cellarConfig.cellar.address
-        : cellarConfig.teller?.address || cellarConfig.cellar.address
+      cellarConfig.teller?.address || cellarConfig.cellar.address
     ) as `0x${string}`
 
     const owner = getAddress(address) as `0x${string}`
@@ -909,13 +755,7 @@ export const SommelierTab = ({
         amtInWei,
         getAddress(selectedToken!.address),
         getAddress(
-          isAlphaSteth
-            ? preferEnterRoute
-              ? cellarConfig.cellar.address
-              : cellarConfig.teller?.address ||
-                cellarConfig.cellar.address
-            : cellarConfig.teller?.address ||
-                cellarConfig.cellar.address
+          cellarConfig.teller?.address || cellarConfig.cellar.address
         )
       )
     }
@@ -930,8 +770,7 @@ export const SommelierTab = ({
           data?.selectedToken?.address,
           approval,
           canDoBatchCall,
-          nativeDeposit,
-          preferEnterRoute
+          nativeDeposit
         )
 
         // If no receipts, likely user canceled; a toast was already shown by error handler
