@@ -1,19 +1,16 @@
 import { useQuery } from "@tanstack/react-query"
 import { getAllContracts } from "data/actions/common/getAllContracts"
-import {
-  http,
-  useAccount,
-  usePublicClient,
-  useWalletClient,
-} from "wagmi"
+import { http, usePublicClient, useWalletClient } from "wagmi"
 import { chainConfig } from "data/chainConfig"
-import { INFURA_API_KEY } from "src/context/rpc_context"
+import {
+  INFURA_API_KEY,
+  ALCHEMY_API_KEY,
+} from "src/context/rpc_context"
 import { createPublicClient } from "viem"
 
 export const useAllContracts = () => {
   const publicClient = usePublicClient()
   const walletClient = useWalletClient()
-  const { isConnected } = useAccount()
 
   const query = useQuery({
     queryKey: [
@@ -27,18 +24,27 @@ export const useAllContracts = () => {
       const chainId = publicClient?.chain?.id
 
       chainConfig.forEach((chain) => {
-        if (chain.wagmiId !== chainId) {
-          providerMap.set(
-            chain.id,
-            createPublicClient({
-              chain: chain.viemChain,
-              transport: http(
-                `${chain.infuraRpcUrl}/${INFURA_API_KEY}`
-              ),
-            })
-          )
-        } else {
-          providerMap.set(chain.id, publicClient)
+        // Always use paid RPC providers for reads instead of wallet's public client
+        // Priority: Alchemy > Infura > fallback to public RPC
+        let rpcUrl: string | undefined
+
+        if (chain.alchemyRpcUrl && ALCHEMY_API_KEY) {
+          rpcUrl = `${chain.alchemyRpcUrl}/${ALCHEMY_API_KEY}`
+        } else if (chain.infuraRpcUrl && INFURA_API_KEY) {
+          rpcUrl = `${chain.infuraRpcUrl}/${INFURA_API_KEY}`
+        }
+        // If neither paid provider is available, http() without URL will use public RPCs
+
+        providerMap.set(
+          chain.id,
+          createPublicClient({
+            chain: chain.viemChain,
+            transport: http(rpcUrl),
+          })
+        )
+
+        // Only set signer when chain matches the connected wallet
+        if (chain.wagmiId === chainId) {
           signerMap.set(chain.id, walletClient)
         }
       })
