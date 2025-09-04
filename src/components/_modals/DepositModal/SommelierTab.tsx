@@ -316,8 +316,8 @@ export const SommelierTab = ({
           heading: "Transaction not submitted",
           body: (
             <Text>
-              Wallet did not return a transaction hash. If you confirmed,
-              check wallet activity; otherwise try again.
+              Wallet did not return a transaction hash. If you
+              confirmed, check wallet activity; otherwise try again.
             </Text>
           ),
           status: "warning",
