@@ -15,7 +15,7 @@ export const useWithdrawRequestStatus = (
 ) => {
   const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
     useState(false)
-  const { address, isConnected } = useAccount()
+  const { address } = useAccount()
   const chainId = useChainId()
   const walletClient = useWalletClient()
 

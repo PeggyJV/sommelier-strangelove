@@ -56,8 +56,27 @@ let nextConfig = {
       symlinks: false,
     }
 
-    // Handle node polyfills for client-side
+    // Fix viem module resolution issue by mocking Safe connector
     if (!isServer) {
+      const path = require("path")
+
+      // Redirect Safe imports to our mock to prevent viem CJS issues
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        // Mock the Safe packages that cause viem CJS import issues
+        "@safe-global/safe-apps-sdk": path.resolve(
+          __dirname,
+          "src/lib/mocks/safe-mock.js"
+        ),
+        "@safe-global/safe-apps-provider": path.resolve(
+          __dirname,
+          "src/lib/mocks/safe-mock.js"
+        ),
+        // Also redirect any viem CJS imports to ESM as a fallback
+        "viem/_cjs": "viem",
+        "viem/dist/cjs": "viem",
+      }
+
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,

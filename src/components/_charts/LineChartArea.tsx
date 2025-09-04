@@ -1,8 +1,16 @@
 import { linearGradientDef } from "@nivo/core"
 import { LineSvgProps, LineSeries } from "@nivo/line"
-import LineChart from "./LineChart"
+import dynamic from "next/dynamic"
 
-const LineChartArea = ({ data, ...rest }: LineSvgProps<LineSeries>) => {
+const LineChart = dynamic(() => import("./LineChart"), {
+  ssr: false,
+  loading: () => null,
+})
+
+const LineChartArea = ({
+  data,
+  ...rest
+}: LineSvgProps<LineSeries>) => {
   return (
     <LineChart
       data={data}

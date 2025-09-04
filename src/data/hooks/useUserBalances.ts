@@ -133,7 +133,7 @@ export const useUserBalances = () => {
     queryFn: async () => {
       return await fetchBalances()
     },
-    enabled: Boolean(publicClient && address && chain),
+    enabled: Boolean(address && chain),
   })
 
   return {
