@@ -1,12 +1,38 @@
 import { ConfigProps } from "data/types"
-import { useWalletClient, usePublicClient, useAccount } from "wagmi"
-import { getContract } from "viem"
+import { useWalletClient, useAccount, http } from "wagmi"
+import { getContract, createPublicClient } from "viem"
+import { useMemo } from "react"
+import { chainConfig } from "data/chainConfig"
+import {
+  INFURA_API_KEY,
+  ALCHEMY_API_KEY,
+} from "src/context/rpc_context"
 
 export const useCreateContracts = (config: ConfigProps) => {
   const { isConnected } = useAccount()
   const { data: walletClient } = useWalletClient()
-  const publicClient = usePublicClient()
   const chain = config.chain.id
+
+  // Create publicClient with configured paid RPC providers
+  const publicClient = useMemo(() => {
+    const chainObj = chainConfig.find(
+      (c) => c.wagmiId === config.chain.wagmiId
+    )
+    if (!chainObj) return null
+
+    // Priority: Alchemy > Infura > fallback to public RPC
+    let rpcUrl: string | undefined
+    if (chainObj.alchemyRpcUrl && ALCHEMY_API_KEY) {
+      rpcUrl = `${chainObj.alchemyRpcUrl}/${ALCHEMY_API_KEY}`
+    } else if (chainObj.infuraRpcUrl && INFURA_API_KEY) {
+      rpcUrl = `${chainObj.infuraRpcUrl}/${INFURA_API_KEY}`
+    }
+
+    return createPublicClient({
+      chain: chainObj.viemChain,
+      transport: http(rpcUrl),
+    })
+  }, [config.chain.wagmiId])
 
   const stakerSigner = (() => {
     if (!config.staker || !publicClient || !isConnected) return

@@ -6,6 +6,7 @@ const BarChart = dynamic(
   () => import("components/_charts/BarChart"),
   {
     ssr: false,
+    loading: () => null,
   }
 )
 

@@ -1,17 +1,13 @@
 import { Stack, Text } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
-import {
-  LineSeries,
-  Point,
-  PointTooltipProps,
-} from "@nivo/line"
+import { LineSeries, Point, PointTooltipProps } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
 import {
   Dispatch,
   FunctionComponent,
   SetStateAction,
-  useMemo
+  useMemo,
 } from "react"
 import { colors } from "theme/colors"
 import { format, isSameDay, isSameHour } from "date-fns"
@@ -24,13 +20,16 @@ const LineChart = dynamic(
   () => import("components/_charts/LineChart"),
   {
     ssr: false,
+    loading: () => null,
   }
 )
 interface TokenPriceChartProps {
   timeline: string
   name: string
   pointActive?: Point<LineSeries>
-  setPointActive: Dispatch<SetStateAction<Point<LineSeries> | undefined>>
+  setPointActive: Dispatch<
+    SetStateAction<Point<LineSeries> | undefined>
+  >
 }
 export const TokenPriceChart = ({
   timeline,
@@ -40,9 +39,7 @@ export const TokenPriceChart = ({
 }: TokenPriceChartProps) => {
   const { data } = useTokenPriceChart()
   const { chartTheme } = useNivoThemes()
-  const onMouseMove = (
-    point: Point<LineSeries>
-  ) => {
+  const onMouseMove = (point: Point<LineSeries>) => {
     setPointActive(point)
   }
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")

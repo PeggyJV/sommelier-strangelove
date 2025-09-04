@@ -55,9 +55,6 @@ importers:
       '@nivo/line':
         specifier: ^0.95.0
         version: 0.95.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/theming':
-        specifier: ^0.99.0
-        version: 0.99.0(react@19.1.0)
       '@portabletext/react':
         specifier: ^3.1.0
         version: 3.2.1(react@19.1.0)
@@ -269,6 +266,9 @@ importers:
       size-limit:
         specifier: ^11.2.0
         version: 11.2.0
+      string-replace-loader:
+        specifier: ^3.2.0
+        version: 3.2.0(webpack@5.101.2(@swc/core@1.13.3))
       ts-jest:
         specifier: ^29.4.0
         version: 29.4.1(@babel/core@7.28.3)(@jest/transform@30.1.2)(@jest/types@30.0.5)(babel-jest@30.1.2(@babel/core@7.28.3))(jest-util@30.0.5)(jest@29.7.0(@types/node@17.0.21)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@17.0.21)(typescript@5.9.2)))(typescript@5.9.2)
@@ -1789,11 +1789,6 @@ packages:
     resolution: {integrity: sha512-KvQnt/T47xyUjFhMAf33MzOgS2Hx/vFBo8H6hrOBQv3/GKgWO/lmoVeyjK3MzGyKzxIqXayJvlB7kNCGGNeC6Q==}
     peerDependencies:
       react: '>= 16.14.0 < 20.0.0'
-
-  '@nivo/theming@0.99.0':
-    resolution: {integrity: sha512-KvXlf0nqBzh/g2hAIV9bzscYvpq1uuO3TnFN3RDXGI72CrbbZFTGzprPju3sy/myVsauv+Bb+V4f5TZ0jkYKRg==}
-    peerDependencies:
-      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
   '@nivo/tooltip@0.95.0':
     resolution: {integrity: sha512-FTE3orwvH+xKSIZtXCOlWX93opTX4/HrnKXaHVKsNZL/eh/7CgOpIC8jNo8X8IQeeWfe+kTEEk6UzOoP3J/j/A==}
@@ -7521,6 +7516,12 @@ packages:
     resolution: {integrity: sha512-+l6rNN5fYHNhZZy41RXsYptCjA2Igmq4EG7kZAYFQI1E1VTXarr6ZPXBg6eq7Y6eK4FEhY6AJlyuFIb/v/S0VQ==}
     engines: {node: '>=10'}
 
+  string-replace-loader@3.2.0:
+    resolution: {integrity: sha512-q7+F4DC6MAKkszF3ZQEuZ3dDH25wXPxFA0maTLk3TOTAYPLDgwqCeCKIvOd8xJhYYYl+EXusYRCyKIJliT/olg==}
+    engines: {node: '>=4'}
+    peerDependencies:
+      webpack: ^5
+
   string-width@2.1.1:
     resolution: {integrity: sha512-nOqH59deCq9SRHlxq1Aw85Jnt4w6KvLKqWVik6oA9ZklXLNIOlqg4F2yrT1MVaTjAqvVwdfeZ7w7aCvJD7ugkw==}
     engines: {node: '>=4'}
@@ -10797,11 +10798,6 @@ snapshots:
       - react-dom
 
   '@nivo/theming@0.95.0(react@19.1.0)':
-    dependencies:
-      lodash: 4.17.21
-      react: 19.1.0
-
-  '@nivo/theming@0.99.0(react@19.1.0)':
     dependencies:
       lodash: 4.17.21
       react: 19.1.0
@@ -17955,6 +17951,11 @@ snapshots:
     dependencies:
       char-regex: 1.0.2
       strip-ansi: 6.0.1
+
+  string-replace-loader@3.2.0(webpack@5.101.2(@swc/core@1.13.3)):
+    dependencies:
+      schema-utils: 4.3.2
+      webpack: 5.101.2(@swc/core@1.13.3)
 
   string-width@2.1.1:
     dependencies:
