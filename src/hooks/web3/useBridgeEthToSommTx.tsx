@@ -1,9 +1,15 @@
 import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useBrandedToast } from "hooks/chakra"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { config } from "utils/config"
 import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { erc20Abi, getContract, parseUnits, getAddress, bytesToHex } from "viem"
+import {
+  erc20Abi,
+  getContract,
+  parseUnits,
+  getAddress,
+  bytesToHex,
+} from "viem"
 import { HStack, IconButton, Stack, Text } from "@chakra-ui/react"
 import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
@@ -30,23 +36,27 @@ export const useBridgeEthToSommTx = () => {
   })
   const { address } = useAccount()
 
-  const erc20Contract = publicClient && getContract({
-    address: tokenConfigMap.SOMM_ETHEREUM.address as `0x${string}`,
-    abi: erc20Abi,
-    client: {
-      wallet: walletClient,
-      public: publicClient
-    }
-  })!
+  const erc20Contract =
+    publicClient &&
+    getContract({
+      address: tokenConfigMap.SOMM_ETHEREUM.address as `0x${string}`,
+      abi: erc20Abi,
+      client: {
+        wallet: walletClient,
+        public: publicClient,
+      },
+    })!
 
-  const bridgeContract = publicClient && getContract({
-    address: CONTRACT.BRIDGE.ADDRESS as `0x${string}`,
-    abi: CONTRACT.BRIDGE.ABI,
-    client: {
-      wallet: walletClient,
-      public: publicClient
-    }
-  })!
+  const bridgeContract =
+    publicClient &&
+    getContract({
+      address: CONTRACT.BRIDGE.ADDRESS as `0x${string}`,
+      abi: CONTRACT.BRIDGE.ABI,
+      client: {
+        wallet: walletClient,
+        public: publicClient,
+      },
+    })!
 
   const TxHashToastBody = ({
     title,
@@ -160,9 +170,8 @@ export const useBridgeEthToSommTx = () => {
       // @ts-ignore
       const allowance = await erc20Contract.read.allowance([
         address!,
-        getAddress(CONTRACT.BRIDGE.ADDRESS)
-        ]
-      )
+        getAddress(CONTRACT.BRIDGE.ADDRESS),
+      ])
 
       const needsApproval = allowance < convertedAmount
 
@@ -178,10 +187,8 @@ export const useBridgeEthToSommTx = () => {
 
         // ERC20 Approval
         // @ts-ignore
-        const erc20Hash = await erc20Contract.write.approve([
-          getAddress(CONTRACT.BRIDGE.ADDRESS),
-          MaxUint256
-          ],
+        const erc20Hash = await erc20Contract.write.approve(
+          [getAddress(CONTRACT.BRIDGE.ADDRESS), MaxUint256],
           { account: address }
         )
         const waitForApproval = wait({
@@ -247,10 +254,11 @@ export const useBridgeEthToSommTx = () => {
       const bytes32asHex = bytesToHex(getBytes32(props.address))
 
       // @ts-ignore
-      const bridgeHash = await bridgeContract?.write.sendToCosmos([
-        tokenConfigMap.SOMM_ETHEREUM.address,
-        bytes32asHex,
-        convertedAmount
+      const bridgeHash = await bridgeContract?.write.sendToCosmos(
+        [
+          tokenConfigMap.SOMM_ETHEREUM.address,
+          bytes32asHex,
+          convertedAmount,
         ],
         { account: address }
       )

@@ -22,8 +22,8 @@ import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
-import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { getContract, parseUnits } from "viem"
+import { useAccount, useWalletClient } from "wagmi"
+import { getContract, parseUnits, PublicClient } from "viem"
 import { toEther } from "utils/formatCurrency"
 import { useHandleTransaction } from "hooks/web3"
 import { useRouter } from "next/router"
@@ -48,6 +48,8 @@ import { useBoringQueueWithdrawals } from "data/hooks/useBoringQueueWithdrawals"
 import { useWithdrawRequestStatus } from "data/hooks/useWithdrawRequestStatus"
 import { logTxDebug } from "utils/txDebug"
 import { config } from "utils/config"
+import { getActiveProvider } from "context/rpc_context"
+import { chainConfigMap } from "data/chainConfig"
 
 interface FormValues {
   withdrawAmount: number
@@ -94,24 +96,41 @@ export const WithdrawQueueForm = ({
   )
 
   const { data: walletClient } = useWalletClient()
-  const publicClient = usePublicClient()
+
+  // Get paid RPC client
+  const [paidClient, setPaidClient] = useState<PublicClient | null>(
+    null
+  )
+
+  useEffect(() => {
+    const initializePaidClient = async () => {
+      if (cellarConfig?.chain?.id) {
+        const chainConfigData = chainConfigMap[cellarConfig.chain.id]
+        if (chainConfigData) {
+          const client = await getActiveProvider(chainConfigData)
+          setPaidClient(client)
+        }
+      }
+    }
+    initializePaidClient()
+  }, [cellarConfig?.chain?.id])
 
   const { boringQueue } = useCreateContracts(cellarConfig)
 
   const cellarContract = (() => {
-    if (!publicClient) return
+    if (!paidClient) return
     return getContract({
       address: cellarConfig.cellar.address as `0x${string}`,
       abi: cellarConfig.cellar.abi,
       client: {
-        public: publicClient,
+        public: paidClient,
         wallet: walletClient,
       },
     })
   })()
 
   const withdrawQueueContract = (() => {
-    if (!publicClient) return
+    if (!paidClient) return
     return (
       boringQueue ??
       getContract({
@@ -119,7 +138,7 @@ export const WithdrawQueueForm = ({
           .withdrawQueueAddress as `0x${string}`,
         abi: withdrawQueueV0821,
         client: {
-          public: publicClient,
+          public: paidClient,
           wallet: walletClient,
         },
       })
