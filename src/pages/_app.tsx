@@ -1,25 +1,56 @@
+import React from "react"
 import { ChakraProvider, DarkMode } from "@chakra-ui/react"
 import { DialogProvider } from "context/dialogContext"
 import type { AppProps } from "next/app"
 import theme from "theme/index"
 
 import dynamic from "next/dynamic"
+
 const WagmiClientProvider = dynamic(
   () => import("providers/WagmiClientProvider"),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => null, // Prevent layout shift during loading
+  }
 )
 import { AlertDialog } from "components/AlertDialog"
 import "utils/analytics"
 import { GlobalFonts } from "theme/GlobalFonts"
 import { GeoProvider } from "context/geoContext"
 import { DefaultSeo } from "next-seo"
-import { QueryClientProvider } from "@tanstack/react-query"
-import { reactQueryClient } from "utils/reactQuery"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query"
 import { HomeProvider } from "data/context/homeContext"
 import { reportWebVitals } from "utils/webVitals"
 
+const ReactQueryDevtools = dynamic(
+  () =>
+    import("@tanstack/react-query-devtools").then(
+      (mod) => mod.ReactQueryDevtools
+    ),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+)
+
 const App = ({ Component, pageProps }: AppProps) => {
+  // Create QueryClient inside component to avoid SSR issues
+  const [queryClient] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            staleTime: 5 * 60 * 1000,
+            refetchOnMount: false,
+          },
+        },
+      })
+  )
+
   // Suppress unhandled promise rejections for user-rejected wallet actions to avoid dev overlay
   if (typeof window !== "undefined") {
     const handler = (event: PromiseRejectionEvent) => {
@@ -92,7 +123,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   }
 
   return (
-    <QueryClientProvider client={reactQueryClient}>
+    <QueryClientProvider client={queryClient}>
       {/* <PlausibleProvider
         domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
       > */}

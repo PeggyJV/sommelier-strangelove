@@ -27,7 +27,7 @@
     }
   },
   "framework": "nextjs",
-  "installCommand": "npx pnpm@9 install --no-frozen-lockfile",
+  "installCommand": "npx pnpm@9 install --no-frozen-lockfile --config.strict-peer-dependencies=false",
   "github": {
     "silent": true
   }
