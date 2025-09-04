@@ -1,8 +1,12 @@
 import { getAcceptedDepositAssetsByChain } from "data/tokenConfig"
 import { ResolvedRegister } from "abitype"
-import { erc20Abi, formatUnits } from "viem"
-import { useAccount, usePublicClient } from "wagmi"
+import { erc20Abi, formatUnits, createPublicClient } from "viem"
+import { useAccount, http } from "wagmi"
 import { chainConfig } from "data/chainConfig"
+import {
+  INFURA_API_KEY,
+  ALCHEMY_API_KEY,
+} from "src/context/rpc_context"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { useQuery } from "@tanstack/react-query"
 
@@ -16,13 +20,26 @@ type Balance = {
 
 export const useUserBalances = () => {
   const { address, chain } = useAccount()
-  const publicClient = usePublicClient()
 
   const fetchBalances = async () => {
     const depositAssetBalances: Balance[] = []
     const chainObj = chainConfig.find(
       (item) => item.wagmiId === chain?.id
     )!
+
+    // Create publicClient with configured paid RPC providers
+    // Priority: Alchemy > Infura > fallback to public RPC
+    let rpcUrl: string | undefined
+    if (chainObj.alchemyRpcUrl && ALCHEMY_API_KEY) {
+      rpcUrl = `${chainObj.alchemyRpcUrl}/${ALCHEMY_API_KEY}`
+    } else if (chainObj.infuraRpcUrl && INFURA_API_KEY) {
+      rpcUrl = `${chainObj.infuraRpcUrl}/${INFURA_API_KEY}`
+    }
+
+    const publicClient = createPublicClient({
+      chain: chainObj.viemChain,
+      transport: http(rpcUrl),
+    })
 
     const tokenList = getAcceptedDepositAssetsByChain(chainObj.id)
 
@@ -33,7 +50,7 @@ export const useUserBalances = () => {
         }
         try {
           if (!publicClient) return
-          
+
           let balance
           if (token?.symbol === "ETH") {
             balance = await publicClient.getBalance({
@@ -53,8 +70,13 @@ export const useUserBalances = () => {
 
             // Guard against undefined/null results
             const balanceResult = result[0]?.result
-            if (balanceResult === null || balanceResult === undefined) {
-              console.warn(`Balance result is null/undefined for token ${token.symbol}`)
+            if (
+              balanceResult === null ||
+              balanceResult === undefined
+            ) {
+              console.warn(
+                `Balance result is null/undefined for token ${token.symbol}`
+              )
               return
             }
 
@@ -62,16 +84,20 @@ export const useUserBalances = () => {
               value: balanceResult as bigint,
               decimals: token.decimals,
               symbol: token.symbol,
-              formatted: formatUnits(balanceResult as bigint, token.decimals),
+              formatted: formatUnits(
+                balanceResult as bigint,
+                token.decimals
+              ),
               valueInUSD: 0,
             }
           }
 
-          if (typeof balance === 'bigint') {
+          if (typeof balance === "bigint") {
             // Handle native ETH balance
             if (balance !== 0n) {
               const price = await fetchCoingeckoPrice(token!, "usd")
-              const valueInUSD = Number(formatUnits(balance, 18)) * Number(price || 0)
+              const valueInUSD =
+                Number(formatUnits(balance, 18)) * Number(price || 0)
               depositAssetBalances.push({
                 value: balance,
                 decimals: 18,

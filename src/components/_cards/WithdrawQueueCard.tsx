@@ -18,13 +18,23 @@ import {
 } from "@chakra-ui/react"
 import { SecondaryButton } from "components/_buttons/SecondaryButton"
 import { useHandleTransaction } from "hooks/web3"
+import { chainConfig } from "data/chainConfig"
+import {
+  INFURA_API_KEY,
+  ALCHEMY_API_KEY,
+} from "src/context/rpc_context"
 import { InformationIcon } from "components/_icons"
 import { InnerCard } from "./InnerCard"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useGeo } from "context/geoContext"
-import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { formatUnits, getAddress, getContract } from "viem"
+import { useAccount, useWalletClient, http } from "wagmi"
+import {
+  formatUnits,
+  getAddress,
+  getContract,
+  createPublicClient,
+} from "viem"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useBrandedToast } from "hooks/chakra"
@@ -68,7 +78,27 @@ const WithdrawQueueCard = (props: TableProps) => {
   )
 
   const { data: walletClient } = useWalletClient()
-  const publicClient = usePublicClient()
+
+  // Create publicClient with configured paid RPC providers
+  const publicClient = useMemo(() => {
+    const chain = chainConfig.find(
+      (c) => c.wagmiId === cellarConfig.chain.wagmiId
+    )
+    if (!chain) return null
+
+    // Priority: Alchemy > Infura > fallback to public RPC
+    let rpcUrl: string | undefined
+    if (chain.alchemyRpcUrl && ALCHEMY_API_KEY) {
+      rpcUrl = `${chain.alchemyRpcUrl}/${ALCHEMY_API_KEY}`
+    } else if (chain.infuraRpcUrl && INFURA_API_KEY) {
+      rpcUrl = `${chain.infuraRpcUrl}/${INFURA_API_KEY}`
+    }
+
+    return createPublicClient({
+      chain: chain.viemChain,
+      transport: http(rpcUrl),
+    })
+  }, [cellarConfig.chain.wagmiId])
 
   const withdrawQueueContract = useMemo(() => {
     if (!publicClient) return
@@ -111,7 +141,9 @@ const WithdrawQueueCard = (props: TableProps) => {
             cellarConfig.cellar.address as `0x${string}`,
           ])
 
-        setPendingWithdrawShares(Number(withdrawRequest.sharesToWithdraw))
+        setPendingWithdrawShares(
+          Number(withdrawRequest.sharesToWithdraw)
+        )
         setPendingWithdrawSharePrice(
           Number(
             formatUnits(
@@ -122,11 +154,16 @@ const WithdrawQueueCard = (props: TableProps) => {
         )
         setPendingWithdrawDeadline(Number(withdrawRequest.deadline))
       } else if (boringQueueWithdrawals) {
-        const request = boringQueueWithdrawals.open_requests[0].metadata
+        const request =
+          boringQueueWithdrawals.open_requests[0].metadata
 
         setPendingWithdrawShares(Number(request.amountOfShares))
-        setPendingWithdrawSharePrice(request.amountOfAssets / request.amountOfShares)
-        setPendingWithdrawDeadline(request.creationTime + request.secondsToDeadline)
+        setPendingWithdrawSharePrice(
+          request.amountOfAssets / request.amountOfShares
+        )
+        setPendingWithdrawDeadline(
+          request.creationTime + request.secondsToDeadline
+        )
       } else {
         setPendingWithdrawShares(0)
         setPendingWithdrawSharePrice(0)
@@ -154,7 +191,7 @@ const WithdrawQueueCard = (props: TableProps) => {
     }
 
     try {
-      let hash;
+      let hash
 
       if (boringQueueWithdrawals) {
         const request =
@@ -196,18 +233,18 @@ const WithdrawQueueCard = (props: TableProps) => {
           address
         )
         // @ts-ignore
-        hash = await withdrawQueueContract?.write.updateWithdrawRequest(
-          [cellarConfig.cellar.address, withdrawTouple],
-          {
-            gas: gasLimitEstimated,
-            account: address,
-          }
-        )
+        hash =
+          await withdrawQueueContract?.write.updateWithdrawRequest(
+            [cellarConfig.cellar.address, withdrawTouple],
+            {
+              gas: gasLimitEstimated,
+              account: address,
+            }
+          )
       }
-      
 
       const onSuccess = () => {
-         // Can track here if we want
+        // Can track here if we want
       }
 
       const onError = (error: Error) => {
