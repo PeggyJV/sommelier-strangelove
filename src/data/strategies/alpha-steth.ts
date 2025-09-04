@@ -75,7 +75,7 @@ export const alphaSteth: CellarData = {
   dashboard:
     "https://debank.com/profile/0xef417FCE1883c6653E7dC6AF7c6F85CCDE84Aa09",
   depositTokens: {
-    list: ["WETH", "stETH", "wstETH", "ETH"],
+    list: ["WETH", "stETH", "ETH"],
   },
   config: {
     chain: chainSlugMap.ETHEREUM,
