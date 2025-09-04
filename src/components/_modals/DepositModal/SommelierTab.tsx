@@ -738,10 +738,7 @@ export const SommelierTab = ({
         await erc20Contract.read.allowance(
           [
             getAddress(address ?? ""),
-            getAddress(
-              cellarConfig.teller?.address ||
-                cellarConfig.cellar.address
-            ),
+            getAddress(cellarConfig.cellar.address),
           ],
           { account: address }
         )
@@ -769,9 +766,7 @@ export const SommelierTab = ({
       approval = await doApprovalTx(
         amtInWei,
         getAddress(selectedToken!.address),
-        getAddress(
-          cellarConfig.teller?.address || cellarConfig.cellar.address
-        )
+        getAddress(cellarConfig.cellar.address)
       )
     }
 
