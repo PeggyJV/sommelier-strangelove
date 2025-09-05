@@ -25,7 +25,7 @@ type RpcEvent = {
 
 function domainAllowed(host?: string) {
   if (!host) return false
-  return host.endsWith("somm.finance")
+  return host.endsWith("somm.finance") || host.endsWith("sommelier.finance")
 }
 
 function keyEvent(ts: number, id: string) {

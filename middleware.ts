@@ -3,7 +3,8 @@ import type { NextRequest } from "next/server"
 
 export function middleware(req: NextRequest) {
   const host = req.headers.get("host") || req.nextUrl.host
-  if (!host || !host.endsWith("somm.finance")) {
+  const allowed = host && (host.endsWith("somm.finance") || host.endsWith("sommelier.finance"))
+  if (!allowed) {
     return new NextResponse("Forbidden", { status: 403 })
   }
 
