@@ -25,7 +25,10 @@ type RpcEvent = {
 
 function domainAllowed(host?: string) {
   if (!host) return false
-  return host.endsWith("somm.finance") || host.endsWith("sommelier.finance")
+  return (
+    host.endsWith("somm.finance") ||
+    host.endsWith("sommelier.finance")
+  )
 }
 
 function keyEvent(ts: number, id: string) {
@@ -73,6 +76,9 @@ export default async function handler(
 
   const pipeline: Array<Promise<unknown>> = []
   for (const evt of events) {
+    // normalize addresses to lowercase for indexing
+    if (evt.wallet) evt.wallet = evt.wallet.toLowerCase()
+    if (evt.to) evt.to = evt.to.toLowerCase()
     const id = ulidLike()
     const key = keyEvent(evt.timestampMs || Date.now(), id)
     pipeline.push(setJson(key, evt))
@@ -94,7 +100,7 @@ export default async function handler(
     if (evt.to) {
       pipeline.push(
         zadd(
-          `rpc:index:contract:${evt.to.toLowerCase()}:${day}`,
+          `rpc:index:contract:${evt.to}:${day}`,
           evt.timestampMs,
           key
         )
