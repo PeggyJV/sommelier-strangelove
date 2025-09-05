@@ -55,29 +55,15 @@ export default async function handler(
 
   if (format === "csv") {
     res.setHeader("Content-Type", "text/csv; charset=utf-8")
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="rpc-report-${days[0]}_to_${
+        days[days.length - 1]
+      }.csv"`
+    )
   } else {
     res.setHeader("Content-Type", "application/json; charset=utf-8")
   }
-  res.setHeader(
-    "Content-Disposition",
-    `attachment; filename="rpc-report-${days[0]}_to_${
-      days[days.length - 1]
-    }.csv"`
-  )
-
-  const header = [
-    "timestampMs",
-    "txHash",
-    "contractAddress",
-    "wallet",
-    "domain",
-    "pagePath",
-    "method",
-    "stage",
-    "amount",
-    "status",
-  ]
-  res.write(header.join(",") + "\n")
 
   const contractFilter = contract || address
   const idxKeyPrefix = wallet
@@ -90,6 +76,23 @@ export default async function handler(
     return res
       .status(400)
       .json({ error: "wallet or contract filter required" })
+  }
+
+  // For CSV responses, write header once after successful validation
+  if (format === "csv") {
+    const header = [
+      "timestampMs",
+      "txHash",
+      "contractAddress",
+      "wallet",
+      "domain",
+      "pagePath",
+      "method",
+      "stage",
+      "amount",
+      "status",
+    ]
+    res.write(header.join(",") + "\n")
   }
 
   for (const day of days) {
