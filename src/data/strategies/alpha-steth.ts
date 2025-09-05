@@ -38,8 +38,8 @@ export const alphaSteth: CellarData = {
   ],
   strategyAssets: ["WETH", "stETH", "wstETH"],
   performanceSplit: {
-    depositors: 80,
-    "strategy provider": 15,
+    depositors: 85,
+    "strategy provider": 10,
     protocol: 5,
   },
   strategyProvider: {
