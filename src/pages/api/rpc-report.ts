@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { kv } from "@vercel/kv"
+import { getJson, zrange } from "src/lib/attribution/kv"
 
 function parseDate(s?: string) {
   if (!s) return null
@@ -26,6 +26,10 @@ export default async function handler(
   const wallet = (req.query.wallet as string) || undefined
   const contract =
     (req.query.contract as string)?.toLowerCase() || undefined
+  const address =
+    (req.query.address as string)?.toLowerCase() || undefined
+  const limit = parseInt(String(req.query.limit || "100"))
+  const format = (req.query.format as string) || "csv"
   const domain = (req.query.domain as string) || undefined
 
   if (!from || !to)
@@ -49,7 +53,11 @@ export default async function handler(
     days.push(d.toISOString().slice(0, 10))
   }
 
-  res.setHeader("Content-Type", "text/csv; charset=utf-8")
+  if (format === "csv") {
+    res.setHeader("Content-Type", "text/csv; charset=utf-8")
+  } else {
+    res.setHeader("Content-Type", "application/json; charset=utf-8")
+  }
   res.setHeader(
     "Content-Disposition",
     `attachment; filename="rpc-report-${days[0]}_to_${
@@ -71,10 +79,11 @@ export default async function handler(
   ]
   res.write(header.join(",") + "\n")
 
+  const contractFilter = contract || address
   const idxKeyPrefix = wallet
     ? (day: string) => `rpc:index:wallet:${wallet}:${day}`
-    : contract
-    ? (day: string) => `rpc:index:contract:${contract}:${day}`
+    : contractFilter
+    ? (day: string) => `rpc:index:contract:${contractFilter}:${day}`
     : null
 
   if (!idxKeyPrefix) {
@@ -85,31 +94,35 @@ export default async function handler(
 
   for (const day of days) {
     const zkey = idxKeyPrefix(day)
-    const members = (await kv.zrange(zkey, 0, -1)) as string[]
+    const members = (await zrange(zkey, 0, -1)) as string[]
     if (!members?.length) continue
 
     const pipeline: Array<Promise<any>> = []
-    for (const m of members) pipeline.push(kv.json.get(m, "$"))
+    for (const m of members.slice(-limit)) pipeline.push(getJson(m))
     const results = await Promise.all(pipeline)
 
     for (const raw of results) {
-      const evt = Array.isArray(raw) ? raw[0] : raw
+      const evt = raw
       if (!evt) continue
       if (domain && evt.domain !== domain) continue
 
-      const row = [
-        csvEscape(evt.timestampMs),
-        csvEscape(evt.txHash),
-        csvEscape(evt.to),
-        csvEscape(evt.wallet),
-        csvEscape(evt.domain),
-        csvEscape(evt.pagePath),
-        csvEscape(evt.method),
-        csvEscape(evt.stage),
-        csvEscape(evt.amount),
-        csvEscape(evt.status),
-      ]
-      res.write(row.join(",") + "\n")
+      if (format === "csv") {
+        const row = [
+          csvEscape(evt.timestampMs),
+          csvEscape(evt.txHash),
+          csvEscape(evt.to),
+          csvEscape(evt.wallet),
+          csvEscape(evt.domain),
+          csvEscape(evt.pagePath),
+          csvEscape(evt.method),
+          csvEscape(evt.stage),
+          csvEscape(evt.amount),
+          csvEscape(evt.status),
+        ]
+        res.write(row.join(",") + "\n")
+      } else {
+        res.write(JSON.stringify(evt) + "\n")
+      }
     }
   }
 

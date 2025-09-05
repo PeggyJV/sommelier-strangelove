@@ -1,5 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { kv } from "@vercel/kv"
+import {
+  zadd,
+  setJson,
+  sadd,
+  incr,
+  expire,
+} from "src/lib/attribution/kv"
 
 type RpcEvent = {
   stage: "request" | "submitted" | "receipt" | "error"
@@ -39,8 +45,8 @@ async function rateLimit(bucket: string, limit: number) {
   const key = `rpc:rl:${bucket}:${new Date()
     .toISOString()
     .slice(0, 16)}` // per minute
-  const c = ((await kv.incr(key)) as number) || 0
-  await kv.expire(key, 120)
+  const c = ((await incr(key)) as number) || 0
+  await expire(key, 120)
   return c <= limit
 }
 
@@ -69,27 +75,29 @@ export default async function handler(
   for (const evt of events) {
     const id = ulidLike()
     const key = keyEvent(evt.timestampMs || Date.now(), id)
-    pipeline.push(kv.json.set(key, "$", evt))
+    pipeline.push(setJson(key, evt))
 
     // Indices
     const day = dayFromTs(evt.timestampMs || Date.now())
     if (evt.wallet) {
       pipeline.push(
-        kv.zadd(`rpc:index:wallet:${evt.wallet}:${day}`, {
-          score: evt.timestampMs,
-          member: key,
-        })
+        zadd(
+          `rpc:index:wallet:${evt.wallet}:${day}`,
+          evt.timestampMs,
+          key
+        )
       )
     }
     if (evt.txHash) {
-      pipeline.push(kv.sadd(`rpc:index:tx:${evt.txHash}`, key))
+      pipeline.push(sadd(`rpc:index:tx:${evt.txHash}`, key))
     }
     if (evt.to) {
       pipeline.push(
-        kv.zadd(`rpc:index:contract:${evt.to.toLowerCase()}:${day}`, {
-          score: evt.timestampMs,
-          member: key,
-        })
+        zadd(
+          `rpc:index:contract:${evt.to.toLowerCase()}:${day}`,
+          evt.timestampMs,
+          key
+        )
       )
     }
   }
