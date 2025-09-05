@@ -20,7 +20,7 @@ export const alphaSteth: CellarData = {
   launchDate: new Date(Date.UTC(2025, 7, 19, 0, 0, 0, 0)),
   isHero: false,
   cellarType: CellarType.yieldStrategies,
-  description: `Alpha STETH dynamically reallocates stETH exposure across trusted DeFi protocols including Uniswap, Morpho, Balancer, Fluid to unlock reward potential in ETH-native strategies.`,
+  description: `Alpha STETH dynamically reallocates stETH exposure across trusted DeFi protocols including Uniswap, Morpho, and Balancer to unlock reward potential in ETH-native strategies.`,
   strategyType: "Yield",
   strategyTypeTooltip: "Strategy takes long positions in crypto",
   managementFee: "1.00%",
@@ -39,8 +39,8 @@ export const alphaSteth: CellarData = {
   strategyAssets: ["WETH", "stETH", "wstETH"],
   performanceSplit: {
     depositors: 90,
-    "strategy provider": 5,
-    protocol: 5,
+    "strategy provider": 10,
+    protocol: 0,
   },
   strategyProvider: {
     logo: "/assets/images/seven-seas.png",
@@ -53,11 +53,11 @@ export const alphaSteth: CellarData = {
     goals: `To offer access to curated reward opportunities on stETH by reallocating across trusted blue-chip DeFi protocols.`,
 
     highlights: `
-    -Actively shifts leverage between top lending protocols (AAVE, Morpho, Euler) based on optimal borrowing rates.
-    -Provides exposure to Unichain LP opportunities for reward diversification.
-    -Allocates into Mellow vaults utilizing dvSTETH to unlock ETH-native rewards.
-    -Automated strategy execution and auto-compounding.
-    -Additional rewards may be enabled through Lido incentives. `,
+    - Actively shifts leverage between top lending protocols (AAVE, Morpho, Euler) based on optimal borrowing rates.
+    - Provides exposure to Unichain LP opportunities for reward diversification.
+    - Allocates into Mellow vaults utilizing dvSTETH to unlock ETH-native rewards.
+    - Automated strategy execution and auto-compounding.
+    - Additional rewards may be enabled through Lido incentives. `,
 
     description: `
     Alpha STETH represents the next evolution in ETH reward strategies, combining dynamic capital management with diversified blue-chip primitives. The strategy reallocates across lending markets (AAVE, Morpho, Euler), Unichain liquidity pools, and Mellow vaults (via dvSTETH), based on real-time reward signals and protocol performance. Smart automation enables seamless execution and compounding while maintaining exposure to trusted DeFi strategies.
