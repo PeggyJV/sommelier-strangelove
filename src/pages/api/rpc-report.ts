@@ -23,7 +23,7 @@ export default async function handler(
 
   const from = parseDate(String(req.query.from || ""))
   const to = parseDate(String(req.query.to || ""))
-  const wallet = (req.query.wallet as string) || undefined
+  const wallet = (req.query.wallet as string)?.toLowerCase() || undefined
   const contract =
     (req.query.contract as string)?.toLowerCase() || undefined
   const address =
