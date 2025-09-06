@@ -23,7 +23,8 @@ export default async function handler(
 
   const from = parseDate(String(req.query.from || ""))
   const to = parseDate(String(req.query.to || ""))
-  const wallet = (req.query.wallet as string)?.toLowerCase() || undefined
+  const wallet =
+    (req.query.wallet as string)?.toLowerCase() || undefined
   const contract =
     (req.query.contract as string)?.toLowerCase() || undefined
   const address =
@@ -77,6 +78,22 @@ export default async function handler(
       .status(400)
       .json({ error: "wallet or contract filter required" })
   }
+
+  // Debug/observability headers to validate runtime KV configuration
+  try {
+    const attribUrl = process.env.ATTRIB_KV_KV_REST_API_URL || ""
+    const fallbackUrl = process.env.KV_REST_API_URL || ""
+    const using = attribUrl ? "ATTRIB" : fallbackUrl ? "KV" : "NONE"
+    const chosenUrl = attribUrl || fallbackUrl || ""
+    let host = ""
+    try {
+      host = chosenUrl ? new URL(chosenUrl).host : ""
+    } catch {}
+    res.setHeader("x-somm-kv-source", using)
+    if (host) res.setHeader("x-somm-kv-host", host)
+    const sampleIdx = idxKeyPrefix(days[0])
+    res.setHeader("x-somm-idx-sample", sampleIdx)
+  } catch {}
 
   // For CSV responses, write header once after successful validation
   if (format === "csv") {
