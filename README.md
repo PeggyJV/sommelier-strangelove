@@ -26,7 +26,15 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Attribution logging (Alpha STETH)
+
+- Enable via env: `NEXT_PUBLIC_ATTRIBUTION_ENABLED=true` and Vercel KV creds (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`).
+- Client capture wraps viem transports and EIP-1193 providers; events are sent to `/api/ingest-rpc`.
+- CSV report: `/api/rpc-report?from=YYYY-MM-DD&to=YYYY-MM-DD&wallet=0x...` or `&contract=0x...` (optional `&domain=`).
+- Extend attribution registry with `NEXT_PUBLIC_ATTRIBUTION_EXTRA_ADDRESSES=0x...,0x...`.
+
 ## Interacting with contracts
+
 Viem and wagmi libraries are used for interacting with contracts.
 
 Instead of creating new contract objects, you can import the existing contract from the [`useCreateContracts`](./src/data/hooks/useCreateContracts.tsx) hook and use it in the components.
@@ -35,26 +43,29 @@ Instead of creating new contract objects, you can import the existing contract f
 - [Wagmi Documentation](https://wagmi.sh/react/getting-started)
 
 Calling methods syntax:
+
 ```
 contract.(estimateGas|read|simulate|write).(functionName)(args, options)
 ```
 
-
 Examples of reading and writing:
+
 ```ts
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 
 const { cellarSigner } = useCreateContracts(cellarConfig)
 
-const [isSupported, holdingPosition, depositFee] = await cellarSigner?.read.alternativeAssetData([
-          assetAddress
-        ]
-  ) as [boolean, number, number]
+const [isSupported, holdingPosition, depositFee] =
+  (await cellarSigner?.read.alternativeAssetData([assetAddress])) as [
+    boolean,
+    number,
+    number
+  ]
 
-const hash = cellarSigner?.write.deposit(
-        [amtInWei, address],
-        { gas: gasLimitEstimated, account: address }
-  )
+const hash = cellarSigner?.write.deposit([amtInWei, address], {
+  gas: gasLimitEstimated,
+  account: address,
+})
 ```
 
 `read` call returns a single value or a list of values. The types can be seen from the contract abi.
