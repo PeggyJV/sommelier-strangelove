@@ -20,6 +20,8 @@ export type RpcEvent = {
   contractMatch?: boolean
   strategyKey?: string
   timestampMs: number
+  userAgent?: string
+  platform?: string
 }
 
 function redactParams(method: string, params: unknown): unknown {
@@ -62,6 +64,14 @@ export function createCapturingTransport(args: {
         const { domain, pagePath, sessionId, wallet } =
           args.getContext()
         const timestampMs = Date.now()
+        const ua =
+          typeof navigator !== "undefined"
+            ? navigator.userAgent
+            : undefined
+        const platform =
+          typeof navigator !== "undefined"
+            ? navigator.platform
+            : undefined
         const requestEvent: RpcEvent = {
           stage: "request",
           domain,
@@ -72,6 +82,8 @@ export function createCapturingTransport(args: {
           method,
           paramsRedacted: redactParams(method, params),
           timestampMs,
+          userAgent: ua,
+          platform,
         }
         sendToIngest([requestEvent])
 
@@ -99,6 +111,8 @@ export function createCapturingTransport(args: {
               contractMatch: isAttributedAddress(registry, to),
               strategyKey: "ALPHA_STETH",
               timestampMs: Date.now(),
+              userAgent: ua,
+              platform,
             }
             sendToIngest([evt])
           }
@@ -115,6 +129,8 @@ export function createCapturingTransport(args: {
             method,
             paramsRedacted: redactParams(method, params),
             timestampMs: Date.now(),
+            userAgent: ua,
+            platform,
           }
           sendToIngest([evt])
           throw err

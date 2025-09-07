@@ -25,6 +25,15 @@ type RpcEvent = {
 
 function domainAllowed(host?: string) {
   if (!host) return false
+  const allowLocal = process.env.ATTRIBUTION_ALLOW_LOCAL === "true"
+  if (allowLocal) {
+    if (
+      host.includes("localhost") ||
+      host.includes("127.0.0.1") ||
+      host.endsWith(".local")
+    )
+      return true
+  }
   return (
     host.endsWith("somm.finance") ||
     host.endsWith("sommelier.finance")
@@ -79,8 +88,29 @@ export default async function handler(
     // normalize addresses to lowercase for indexing
     if (evt.wallet) evt.wallet = evt.wallet.toLowerCase()
     if (evt.to) evt.to = evt.to.toLowerCase()
+    if (evt.txHash) evt.txHash = evt.txHash.toLowerCase()
     const id = ulidLike()
     const key = keyEvent(evt.timestampMs || Date.now(), id)
+
+    // Idempotency: skip duplicates for same (txHash,stage,sessionId)
+    const stage = evt.stage
+    const sessionId = evt.sessionId || ""
+    const txh = evt.txHash || ""
+    let dedupeKey: string | null = null
+    if (txh && stage && sessionId) {
+      dedupeKey = `rpc:dedupe:${txh}:${stage}:${sessionId}`
+    }
+
+    if (dedupeKey) {
+      // Use incr as a simple set-if-new primitive with short TTL
+      const already = (await incr(dedupeKey)) as number
+      await expire(dedupeKey, 3600) // ~1h TTL
+      if (already > 1) {
+        // Duplicate, skip persisting and indexing this event
+        continue
+      }
+    }
+
     pipeline.push(setJson(key, evt))
 
     // Indices

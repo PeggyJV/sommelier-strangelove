@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { getJson, zrange } from "src/lib/attribution/kv"
+import { getJson, zrange, smembers } from "src/lib/attribution/kv"
 
 function parseDate(s?: string) {
   if (!s) return null
@@ -29,38 +29,49 @@ export default async function handler(
     (req.query.contract as string)?.toLowerCase() || undefined
   const address =
     (req.query.address as string)?.toLowerCase() || undefined
+  const tx = (req.query.tx as string)?.toLowerCase() || undefined
   const limit = parseInt(String(req.query.limit || "100"))
   const format = (req.query.format as string) || "csv"
   const domain = (req.query.domain as string) || undefined
 
-  if (!from || !to)
-    return res.status(400).json({ error: "from/to required" })
+  if (!tx && (!from || !to))
+    return res
+      .status(400)
+      .json({ error: "from/to required (omit when using tx)" })
 
   const days: string[] = []
-  for (
-    let d = new Date(
-      Date.UTC(
-        from.getUTCFullYear(),
-        from.getUTCMonth(),
-        from.getUTCDate()
-      )
-    );
-    d <=
-    new Date(
-      Date.UTC(to.getUTCFullYear(), to.getUTCMonth(), to.getUTCDate())
-    );
-    d.setUTCDate(d.getUTCDate() + 1)
-  ) {
-    days.push(d.toISOString().slice(0, 10))
+  if (!tx && from && to) {
+    for (
+      let d = new Date(
+        Date.UTC(
+          from.getUTCFullYear(),
+          from.getUTCMonth(),
+          from.getUTCDate()
+        )
+      );
+      d <=
+      new Date(
+        Date.UTC(
+          to.getUTCFullYear(),
+          to.getUTCMonth(),
+          to.getUTCDate()
+        )
+      );
+      d.setUTCDate(d.getUTCDate() + 1)
+    ) {
+      days.push(d.toISOString().slice(0, 10))
+    }
   }
 
   if (format === "csv") {
     res.setHeader("Content-Type", "text/csv; charset=utf-8")
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename="rpc-report-${days[0]}_to_${
-        days[days.length - 1]
-      }.csv"`
+      tx
+        ? `attachment; filename="rpc-report-tx-${tx}.csv"`
+        : `attachment; filename="rpc-report-${days[0]}_to_${
+            days[days.length - 1]
+          }.csv"`
     )
   } else {
     res.setHeader("Content-Type", "application/json; charset=utf-8")
@@ -69,6 +80,8 @@ export default async function handler(
   const contractFilter = contract || address
   const idxKeyPrefix = wallet
     ? (day: string) => `rpc:index:wallet:${wallet}:${day}`
+    : tx
+    ? (_day: string) => `rpc:index:tx:${tx}`
     : contractFilter
     ? (day: string) => `rpc:index:contract:${contractFilter}:${day}`
     : null
@@ -104,6 +117,9 @@ export default async function handler(
       "txHash",
       "contractAddress",
       "wallet",
+      "clientConnector",
+      "userAgent",
+      "platform",
       "domain",
       "pagePath",
       "method",
@@ -114,9 +130,13 @@ export default async function handler(
     csvRows.push(header.join(","))
   }
 
-  for (const day of days) {
-    const zkey = idxKeyPrefix(day)
-    const members = (await zrange(zkey, 0, -1)) as string[]
+  // When tx filter provided, search single global set, not per-day
+  const dayLoop = tx ? ["__tx__"] : days
+  for (const day of dayLoop) {
+    const zkey = tx ? idxKeyPrefix("__tx__") : idxKeyPrefix(day)
+    const members = tx
+      ? ((await smembers(zkey)) as string[])
+      : ((await zrange(zkey, 0, -1)) as string[])
     if (!members?.length) continue
 
     const pipeline: Array<Promise<any>> = []
@@ -134,6 +154,9 @@ export default async function handler(
           csvEscape(evt.txHash),
           csvEscape(evt.to),
           csvEscape(evt.wallet),
+          csvEscape(evt.clientConnector),
+          csvEscape(evt.userAgent),
+          csvEscape(evt.platform),
           csvEscape(evt.domain),
           csvEscape(evt.pagePath),
           csvEscape(evt.method),
@@ -153,4 +176,3 @@ export default async function handler(
     res.json(jsonRows)
   }
 }
-
