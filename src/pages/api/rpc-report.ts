@@ -134,9 +134,25 @@ export default async function handler(
   const dayLoop = tx ? ["__tx__"] : days
   for (const day of dayLoop) {
     const zkey = tx ? idxKeyPrefix("__tx__") : idxKeyPrefix(day)
-    const members = tx
-      ? ((await smembers(zkey)) as string[])
-      : ((await zrange(zkey, 0, -1)) as string[])
+    // Be tolerant to either SET or ZSET for index keys
+    let members: string[] = []
+    let idxType = "unknown"
+    if (tx) {
+      members = ((await smembers(zkey)) as string[]) || []
+      if (members.length) idxType = "set"
+      if (!members.length) {
+        members = ((await zrange(zkey, 0, -1)) as string[]) || []
+        if (members.length) idxType = "zset"
+      }
+    } else {
+      members = ((await zrange(zkey, 0, -1)) as string[]) || []
+      if (members.length) idxType = "zset"
+      if (!members.length) {
+        members = ((await smembers(zkey)) as string[]) || []
+        if (members.length) idxType = "set"
+      }
+    }
+    try { if (idxType !== "unknown") res.setHeader("x-somm-idx-type", idxType) } catch {}
     if (!members?.length) continue
 
     const pipeline: Array<Promise<any>> = []
