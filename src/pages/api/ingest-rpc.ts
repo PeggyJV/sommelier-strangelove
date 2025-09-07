@@ -26,6 +26,10 @@ type RpcEvent = {
 function domainAllowed(host?: string) {
   if (!host) return false
   const allowLocal = process.env.ATTRIBUTION_ALLOW_LOCAL === "true"
+  const allowSuffixes = (process.env.ATTRIBUTION_ALLOW_HOST_SUFFIXES || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
   if (allowLocal) {
     if (
       host.includes("localhost") ||
@@ -34,10 +38,18 @@ function domainAllowed(host?: string) {
     )
       return true
   }
-  return (
+  if (
     host.endsWith("somm.finance") ||
     host.endsWith("sommelier.finance")
   )
+    return true
+
+  // Allow additional suffixes via env, e.g. ".vercel.app" for preview links
+  for (const suffix of allowSuffixes) {
+    if (suffix && host.endsWith(suffix)) return true
+  }
+
+  return false
 }
 
 function keyEvent(ts: number, id: string) {
