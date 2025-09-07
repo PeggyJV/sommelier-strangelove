@@ -26,7 +26,9 @@ type RpcEvent = {
 function domainAllowed(host?: string) {
   if (!host) return false
   const allowLocal = process.env.ATTRIBUTION_ALLOW_LOCAL === "true"
-  const allowSuffixes = (process.env.ATTRIBUTION_ALLOW_HOST_SUFFIXES || "")
+  const allowSuffixes = (
+    process.env.ATTRIBUTION_ALLOW_HOST_SUFFIXES || ""
+  )
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean)
@@ -102,7 +104,11 @@ export default async function handler(
     if (evt.to) evt.to = evt.to.toLowerCase()
     if (evt.txHash) evt.txHash = evt.txHash.toLowerCase()
     const id = ulidLike()
-    const key = keyEvent(evt.timestampMs || Date.now(), id)
+    const ts = evt.timestampMs ?? Date.now()
+    if (evt.timestampMs == null) {
+      evt.timestampMs = ts
+    }
+    const key = keyEvent(ts, id)
 
     // Idempotency: skip duplicates for same (txHash,stage,sessionId)
     const stage = evt.stage
@@ -126,14 +132,10 @@ export default async function handler(
     pipeline.push(setJson(key, evt))
 
     // Indices
-    const day = dayFromTs(evt.timestampMs || Date.now())
+    const day = dayFromTs(ts)
     if (evt.wallet) {
       pipeline.push(
-        zadd(
-          `rpc:index:wallet:${evt.wallet}:${day}`,
-          evt.timestampMs,
-          key
-        )
+        zadd(`rpc:index:wallet:${evt.wallet}:${day}`, ts, key)
       )
     }
     if (evt.txHash) {
@@ -141,11 +143,7 @@ export default async function handler(
     }
     if (evt.to) {
       pipeline.push(
-        zadd(
-          `rpc:index:contract:${evt.to}:${day}`,
-          evt.timestampMs,
-          key
-        )
+        zadd(`rpc:index:contract:${evt.to}:${day}`, ts, key)
       )
     }
   }

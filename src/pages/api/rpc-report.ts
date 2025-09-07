@@ -152,7 +152,10 @@ export default async function handler(
         if (members.length) idxType = "set"
       }
     }
-    try { if (idxType !== "unknown") res.setHeader("x-somm-idx-type", idxType) } catch {}
+    try {
+      if (idxType !== "unknown")
+        res.setHeader("x-somm-idx-type", idxType)
+    } catch {}
     if (!members?.length) continue
 
     const pipeline: Array<Promise<any>> = []
