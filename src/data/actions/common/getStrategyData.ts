@@ -272,65 +272,85 @@ export const getStrategyData = async ({
 
         // Custom APY calculation for Alpha stETH vault
         if (strategy.slug === utilConfig.CONTRACT.ALPHA_STETH.SLUG) {
-          let total_monthly_stETH = 57.5 // This needs to be manually adjusted
+          try {
+            // Determine if we are within the first 3 months after launch
+            const inFirst3Months =
+              !!launchDate && isBefore(new Date(), add(launchDate, { months: 3 }))
 
-          // Get total assets from BoringVault lens contract
-          if (contracts.boringVaultLens && config.accountant) {
-            try {
-              const [, totalAssets] = await (
-                contracts.boringVaultLens as any
-              ).read.totalAssets([
-                config.cellar.address as `0x${string}`,
-                config.accountant.address as `0x${string}`,
-              ])
-
-              // Convert totalAssets to human-readable format (assuming 18 decimals for stETH)
-              const totalAssetsInStETH = Number(totalAssets) / 1e18
-
-              if (totalAssetsInStETH > 0) {
-                // Calculate extra APY from monthly stETH rewards
-                // Formula: (total_monthly_stETH / 30 / total_assets) * 365 * 100
-                const extraApy =
-                  (total_monthly_stETH / 30 / totalAssetsInStETH) *
-                  365 *
-                  100
-
-                // Get base APY from day data or config
-                const baseApyValue = (() => {
-                  if (dayDatas === undefined || dayDatas.length < 8) {
-                    return config.baseApy || 0
-                  }
-
-                  // Use the existing 7-day moving average calculation
-                  let movingAvg7D = 0
-                  for (let i = 0; i < 7; i++) {
-                    let nowValue = BigInt(dayDatas![i].shareValue)
-                    let startValue = BigInt(
-                      dayDatas![i + 1].shareValue
-                    )
-                    let yieldGain =
-                      Number(nowValue - startValue) /
-                      Number(startValue)
-                    let dailyApy = yieldGain * 365 * 100
-                    movingAvg7D += dailyApy
-                  }
-                  return movingAvg7D / 7
-                })()
-
-                // Return combined APY
-                const totalApy = baseApyValue + extraApy
-                return {
-                  formatted: totalApy.toFixed(2) + "%",
-                  value: totalApy,
-                }
+            // Helper: compute 24h APR from the two most recent dayDatas entries
+            const get24hAPR = (): number | undefined => {
+              if (!dayDatas || dayDatas.length < 2) return undefined
+              try {
+                const nowValue = BigInt(dayDatas[0].shareValue)
+                const prevValue = BigInt(dayDatas[1].shareValue)
+                if (prevValue === BigInt(0)) return undefined
+                const gain = Number(nowValue - prevValue) / Number(prevValue)
+                const apr = gain * 365 * 100
+                return Number.isFinite(apr) ? apr : undefined
+              } catch {
+                return undefined
               }
-            } catch (error) {
-              console.error(
-                "Error calculating Alpha stETH APY:",
-                error
-              )
-              // Fall through to default calculation
             }
+
+            // Helper: compute incentive APR from BoringVault lens + monthly incentive assumption
+            const getIncentiveAPR = async (): Promise<number | undefined> => {
+              if (!(contracts.boringVaultLens && config.accountant)) return undefined
+              const total_monthly_stETH = 57.5 // Manual input; adjust as needed
+              try {
+                const [, totalAssets] = await (
+                  contracts.boringVaultLens as any
+                ).read.totalAssets([
+                  config.cellar.address as `0x${string}`,
+                  config.accountant.address as `0x${string}`,
+                ])
+                const totalAssetsInStETH = Number(totalAssets) / 1e18
+                if (totalAssetsInStETH <= 0) return undefined
+                const incentiveAPR = ((total_monthly_stETH / 30) / totalAssetsInStETH) * 365 * 100
+                return Number.isFinite(incentiveAPR) ? incentiveAPR : undefined
+              } catch (err) {
+                console.error("Alpha stETH incentive APR error:", err)
+                return undefined
+              }
+            }
+
+            if (inFirst3Months) {
+              const [incentiveAPR, dailyAPR] = await Promise.all([
+                getIncentiveAPR(),
+                Promise.resolve(get24hAPR()),
+              ])
+              const selected = Math.max(
+                incentiveAPR ?? Number.NEGATIVE_INFINITY,
+                dailyAPR ?? Number.NEGATIVE_INFINITY
+              )
+              const value = Number.isFinite(selected) ? selected : (config.baseApy ?? 0)
+              return {
+                formatted: value.toFixed(2) + "%",
+                value,
+              }
+            } else {
+              // Use 7-day trailing average APR after the first 3 months
+              let value: number
+              if (dayDatas && dayDatas.length >= 8) {
+                let movingAvg7D = 0
+                for (let i = 0; i < 7; i++) {
+                  const nowValue = BigInt(dayDatas[i].shareValue)
+                  const startValue = BigInt(dayDatas[i + 1].shareValue)
+                  const yieldGain = Number(nowValue - startValue) / Number(startValue)
+                  const dailyApy = yieldGain * 365 * 100
+                  movingAvg7D += dailyApy
+                }
+                value = movingAvg7D / 7
+              } else {
+                value = config.baseApy || 0
+              }
+              return {
+                formatted: value.toFixed(2) + "%",
+                value,
+              }
+            }
+          } catch (error) {
+            console.error("Error calculating Alpha stETH APY:", error)
+            // Fall through to default calculation
           }
         }
 

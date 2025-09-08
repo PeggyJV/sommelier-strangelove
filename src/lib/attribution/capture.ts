@@ -19,6 +19,9 @@ export type RpcEvent = {
   to?: string
   contractMatch?: boolean
   strategyKey?: string
+  // Optional fields for deposit attribution
+  amount?: string
+  status?: string
   timestampMs: number
 }
 
