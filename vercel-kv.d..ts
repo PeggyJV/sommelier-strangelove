@@ -21,19 +21,19 @@ declare module "@vercel/kv" {
       key: string,
       start: number,
       stop: number,
-      opts?: { byScore?: boolean; byLex?: boolean; rev?: boolean }
+      opts?: Record<string, any>
     ) => Promise<string[]>
     zrangebyscore?: (
       key: string,
       min: number | string,
       max: number | string,
-      opts?: { limit?: { offset: number; count: number } }
+      opts?: Record<string, any>
     ) => Promise<string[]>
     zrevrangebyscore?: (
       key: string,
       max: number | string,
       min: number | string,
-      opts?: { limit?: { offset: number; count: number } }
+      opts?: Record<string, any>
     ) => Promise<string[]>
 
     // Counters / expiry
