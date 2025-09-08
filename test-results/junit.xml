@@ -1,3 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="0" failures="0" errors="0" time="1.536">
+<testsuites name="jest tests" tests="5" failures="0" errors="0" time="0.544">
+  <testsuite name="wrapConnector → submitted POST (Jest)" errors="0" failures="0" skipped="0" timestamp="2025-09-08T10:03:58" time="0.304" tests="5">
+    <testcase classname="wrapConnector → submitted POST (Jest) posts submitted with txHash when method is eth_sendTransaction (string hash)" name="wrapConnector → submitted POST (Jest) posts submitted with txHash when method is eth_sendTransaction (string hash)" time="0.001">
+    </testcase>
+    <testcase classname="wrapConnector → submitted POST (Jest) posts submitted with txHash when method is eth_sendRawTransaction (object with hash)" name="wrapConnector → submitted POST (Jest) posts submitted with txHash when method is eth_sendRawTransaction (object with hash)" time="0.001">
+    </testcase>
+    <testcase classname="wrapConnector → submitted POST (Jest) does not POST for read-only methods (eth_call)" name="wrapConnector → submitted POST (Jest) does not POST for read-only methods (eth_call)" time="0.001">
+    </testcase>
+    <testcase classname="wrapConnector → submitted POST (Jest) is idempotent: wrapping same connector twice does not double-patch" name="wrapConnector → submitted POST (Jest) is idempotent: wrapping same connector twice does not double-patch" time="0">
+    </testcase>
+    <testcase classname="wrapConnector → submitted POST (Jest) swallows fetch errors and still returns provider result" name="wrapConnector → submitted POST (Jest) swallows fetch errors and still returns provider result" time="0">
+    </testcase>
+  </testsuite>
 </testsuites>

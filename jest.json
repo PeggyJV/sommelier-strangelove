@@ -18,10 +18,7 @@
   "clearMocks": true,
   "restoreMocks": true,
   "transform": {
-    "^.+\\.(t|j)sx?$": [
-      "babel-jest",
-      { "configFile": "<rootDir>/jest.babel.config.js" }
-    ]
+    "^.+\\.(t|j)sx?$": "babel-jest"
   },
   "transformIgnorePatterns": [
     "node_modules/(?!((\\.pnpm/)?(@rainbow-me|wagmi|@wagmi|viem|@viem|@tanstack/query-core|@tanstack/react-query))(.*))"

@@ -14,7 +14,7 @@ import { wrapConnector } from "src/lib/attribution/wallet"
 
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!
 
-let connectors = connectorsForWallets(
+const rkConnectors = connectorsForWallets(
   [
     {
       groupName: "Recommended",
@@ -33,9 +33,15 @@ let connectors = connectorsForWallets(
   }
 )
 
-if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED === "true") {
-  connectors = (connectors as any).map((c: any) => wrapConnector(c))
-}
+// Always resolve to an ARRAY first (handle factory form)
+const baseConnectors: any[] =
+  typeof rkConnectors === "function" ? rkConnectors() : rkConnectors
+
+// Conditionally wrap for attribution capture
+const connectors: any[] =
+  process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED === "true"
+    ? baseConnectors.map((c: any) => wrapConnector(c))
+    : baseConnectors
 
 function getContext() {
   return {

@@ -69,17 +69,15 @@ export const useWaitForTransaction = ({
           throw new Error("hash or wait is required")
 
         let promise: Promise<TransactionReceipt>
-        if (config_.wait)
-          { // @ts-ignore
-            promise = config_.wait(config_.confirmations)
-          }
-        else if (config_.hash)
+        if (config_.wait) {
+          // @ts-ignore
+          promise = config_.wait(config_.confirmations)
+        } else if (config_.hash)
           promise = publicClient!.waitForTransactionReceipt({
-              confirmations: config_.confirmations,
-              hash: config_.hash as `0x${string}`,
-              timeout: config_.timeout
-            }
-          )
+            confirmations: config_.confirmations,
+            hash: config_.hash as `0x${string}`,
+            timeout: config_.timeout,
+          })
         else throw new Error("hash or wait is required")
 
         setState((x) => ({ ...x, loading: true }))
@@ -89,7 +87,7 @@ export const useWaitForTransaction = ({
         }
         return { data: receipt, error: undefined }
       } catch (error_) {
-        const error = <Error>error_
+        const error = error_ as Error
         if (!didCancel) {
           setState((x) => ({ ...x, error, loading: false }))
         }
