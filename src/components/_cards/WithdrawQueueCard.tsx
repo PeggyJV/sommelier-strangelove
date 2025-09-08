@@ -232,8 +232,9 @@ const WithdrawQueueCard = (props: TableProps) => {
           330000,
           address
         )
-        // @ts-ignore
+        // @ts-ignore - write method typed only when wallet client is non-undefined
         hash =
+          // @ts-ignore
           await withdrawQueueContract?.write.updateWithdrawRequest(
             [cellarConfig.cellar.address, withdrawTouple],
             {

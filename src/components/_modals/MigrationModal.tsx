@@ -1,5 +1,5 @@
 import { ModalProps, Text, VStack } from "@chakra-ui/react"
-import { MigrationForm } from "components/_forms/MigrationForm"
+import { AlphaStethMigrationForm } from "components/_forms/AlphaStethMigrationForm"
 import { CardHeading } from "components/_typography/CardHeading"
 import { BaseModal } from "./BaseModal"
 
@@ -16,7 +16,7 @@ export const MigrationModal = (props: MigrationModalProps) => {
           </Text>
         </VStack>
       </VStack>
-      <MigrationForm onClose={props.onClose} />
+      <AlphaStethMigrationForm onClose={props.onClose} />
     </BaseModal>
   )
 }

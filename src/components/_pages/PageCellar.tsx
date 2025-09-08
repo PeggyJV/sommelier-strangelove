@@ -27,6 +27,9 @@ import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
 import { isComingSoon } from "utils/isComingSoon"
 import { InfoBanner } from "components/_banners/InfoBanner"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
+import dynamic from "next/dynamic"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { BaseButton } from "components/_buttons/BaseButton"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -41,6 +44,19 @@ export interface PageCellarProps {
 
 const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const cellarConfig = cellarDataMap[id].config
+  const isAlphaSteth = id === "Alpha-stETH"
+  const { isOpen, onClose, setIsOpen } = useDepositModalStore()
+  const DynamicMigrationModal = useMemo(
+    () =>
+      dynamic(
+        () =>
+          import("components/_modals/MigrationModal").then((m) => ({
+            default: m.MigrationModal,
+          })),
+        { ssr: false, loading: () => null }
+      ),
+    []
+  )
   const staticCellarData = cellarDataMap[id]
   const cellarAddress = cellarDataMap[id].config.id
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
@@ -126,6 +142,24 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
           <Heading {...h2Styles} pt={12}>
             Your Portfolio
           </Heading>
+          {isAlphaSteth && (
+            <VStack align="flex-start">
+              <BaseButton
+                onClick={() =>
+                  setIsOpen({ id: id, type: "migrate" })
+                }
+              >
+                Migrate from Real Yield ETH or Turbo stETH
+              </BaseButton>
+              {/* Mount the modal only when opened */}
+              {id && (
+                <DynamicMigrationModal
+                  isOpen={isOpen}
+                  onClose={onClose}
+                />
+              )}
+            </VStack>
+          )}
           <PortfolioCard />
         </VStack>
       </Section>
