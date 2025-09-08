@@ -20,14 +20,23 @@ type RpcEvent = {
   to?: string
   contractMatch?: boolean
   strategyKey?: string
+  // Optional fields for deposit attribution enrichment
+  amount?: string
+  status?: string
+  blockNumber?: number
+  blockHash?: string
+  token?: string
+  decimals?: number
   timestampMs: number
 }
 
 function domainAllowed(host?: string) {
   if (!host) return false
+  const h = host.toLowerCase()
   return (
-    host.endsWith("somm.finance") ||
-    host.endsWith("sommelier.finance")
+    h.endsWith("somm.finance") ||
+    h.endsWith("sommelier.finance") ||
+    h.endsWith(".vercel.app")
   )
 }
 
@@ -109,5 +118,71 @@ export default async function handler(
   }
 
   await Promise.all(pipeline)
+
+  // Alpha STETH deposit specialized indexing (by wallet and by block)
+  try {
+    const depositWrites: Array<Promise<any>> = []
+    for (const evt of events) {
+      const isAlphaStethDepositReceipt =
+        evt.stage === "receipt" &&
+        evt.method === "deposit" &&
+        evt.strategyKey === "ALPHA_STETH" &&
+        !!evt.txHash &&
+        typeof evt.blockNumber === "number" &&
+        !!evt.wallet
+
+      if (!isAlphaStethDepositReceipt) continue
+
+      const chainId = evt.chainId || 1
+      const txHash = String(evt.txHash)
+      const blockNumber = Number(evt.blockNumber)
+      const wallet = (evt.wallet || "").toLowerCase()
+      const amount = evt.amount ? String(evt.amount) : undefined
+
+      const eventId = `${chainId}:${txHash}`
+      const eventKey = `alpha-steth:deposit:event:${eventId}`
+
+      const record = {
+        product: "alpha-steth",
+        chainId,
+        txHash,
+        to: evt.to,
+        blockNumber,
+        blockHash: evt.blockHash || null,
+        ethAddress: wallet,
+        amount,
+        token: evt.token ?? null,
+        decimals:
+          typeof evt.decimals === "number" ? evt.decimals : null,
+        timestamp: evt.timestampMs || Date.now(),
+        domain: evt.domain,
+        pagePath: evt.pagePath,
+        sessionId: evt.sessionId,
+        status: evt.status || "success",
+      }
+
+      depositWrites.push(setJson(eventKey, record))
+      depositWrites.push(
+        zadd(
+          `alpha-steth:deposit:index:eth:${wallet}:by_block`,
+          blockNumber,
+          eventId
+        )
+      )
+      depositWrites.push(
+        zadd(
+          `alpha-steth:deposit:index:block:global`,
+          blockNumber,
+          eventId
+        )
+      )
+    }
+
+    if (depositWrites.length) await Promise.all(depositWrites)
+  } catch (e) {
+    // Best-effort enrichment; do not fail request if this part fails
+    console.error("alpha-steth deposit indexing error", e)
+  }
+
   res.json({ ok: true, count: events.length })
 }

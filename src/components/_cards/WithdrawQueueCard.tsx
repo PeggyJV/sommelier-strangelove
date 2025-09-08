@@ -28,7 +28,7 @@ import { InnerCard } from "./InnerCard"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useGeo } from "context/geoContext"
-import { useAccount, useWalletClient, http } from "wagmi"
+import { useAccount, useWalletClient, http, useWriteContract } from "wagmi"
 import {
   formatUnits,
   getAddress,
@@ -78,6 +78,7 @@ const WithdrawQueueCard = (props: TableProps) => {
   )
 
   const { data: walletClient } = useWalletClient()
+  const { writeContractAsync } = useWriteContract()
 
   // Create publicClient with configured paid RPC providers
   const publicClient = useMemo(() => {
@@ -223,24 +224,69 @@ const WithdrawQueueCard = (props: TableProps) => {
           }
         )
       } else {
-        const withdrawTouple = [0, 0, 0]
+        if (!withdrawQueueContract) {
+          addToast({
+            heading: "Withdraw Queue",
+            body: <Text>Withdraw queue contract not available.</Text>,
+            status: "error",
+            closeHandler: closeAll,
+          })
+          return
+        }
+        if (!address) {
+          addToast({
+            heading: "Withdraw Queue",
+            body: <Text>Connect your wallet to cancel a request.</Text>,
+            status: "info",
+            closeHandler: closeAll,
+          })
+          return
+        }
+
+        // Fetch current request to build a proper cancel update (sharesToWithdraw = 0)
+        const current = await withdrawQueueContract.read.getUserWithdrawRequest([
+          address,
+          cellarConfig.cellar.address as `0x${string}`,
+        ])
+
+        if (current.sharesToWithdraw === 0n) {
+          addToast({
+            heading: "Withdraw Queue",
+            body: <Text>No pending withdraw request to cancel.</Text>,
+            status: "info",
+            closeHandler: closeAll,
+          })
+          return
+        }
+
+        const withdrawUpdate = {
+          deadline: current.deadline,
+          executionSharePrice: current.executionSharePrice,
+          sharesToWithdraw: 0n, // cancel by setting shares to 0
+          inSolve: false,
+        } as const
 
         const gasLimitEstimated = await estimateGasLimitWithRetry(
-          withdrawQueueContract?.estimateGas.updateWithdrawRequest,
-          withdrawQueueContract?.simulate.updateWithdrawRequest,
-          [cellarConfig.cellar.address, withdrawTouple],
+          withdrawQueueContract.estimateGas.updateWithdrawRequest,
+          withdrawQueueContract.simulate.updateWithdrawRequest,
+          [cellarConfig.cellar.address, withdrawUpdate],
           330000,
           address
         )
-        // @ts-ignore
-        hash =
-          await withdrawQueueContract?.write.updateWithdrawRequest(
-            [cellarConfig.cellar.address, withdrawTouple],
-            {
-              gas: gasLimitEstimated,
-              account: address,
-            }
-          )
+
+        hash = await writeContractAsync({
+          address: getAddress(
+            cellarConfig.chain.withdrawQueueAddress
+          ) as `0x${string}`,
+          abi: WithdrawQueue,
+          functionName: "updateWithdrawRequest",
+          args: [
+            getAddress(cellarConfig.cellar.address) as `0x${string}`,
+            withdrawUpdate,
+          ],
+          account: getAddress(address),
+          gas: gasLimitEstimated as bigint,
+        })
       }
 
       const onSuccess = () => {
