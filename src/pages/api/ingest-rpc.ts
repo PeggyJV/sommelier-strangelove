@@ -32,9 +32,11 @@ type RpcEvent = {
 
 function domainAllowed(host?: string) {
   if (!host) return false
+  const h = host.toLowerCase()
   return (
-    host.endsWith("somm.finance") ||
-    host.endsWith("sommelier.finance")
+    h.endsWith("somm.finance") ||
+    h.endsWith("sommelier.finance") ||
+    h.endsWith(".vercel.app")
   )
 }
 
