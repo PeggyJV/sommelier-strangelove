@@ -1,20 +1,6 @@
 import { Redis } from "@upstash/redis"
 
-// Forbid legacy KV_* envs anywhere
-const forbidden = [
-  "KV_REST_API_URL",
-  "KV_REST_API_TOKEN",
-  "KV_REST_API_READ_ONLY_TOKEN",
-  "KV_URL",
-]
-for (const n of forbidden) {
-  if (process.env[n]) {
-    throw new Error(
-      `[attrib-kv] Forbidden legacy env present: ${n}. Use ATTRIB_KV_KV_REST_API_URL/TOKEN only.`
-    )
-  }
-}
-
+// Single-source attribution KV client: read only ATTRIB_* REST envs
 const URL = process.env.ATTRIB_KV_KV_REST_API_URL || ""
 const TOKEN = process.env.ATTRIB_KV_KV_REST_API_TOKEN || ""
 
