@@ -22,6 +22,9 @@ import ConnectButton from "components/_buttons/ConnectButton"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
+import { BaseButton } from "components/_buttons/BaseButton"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { config as utilConfig } from "utils/config"
 import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useStrategyData } from "data/hooks/useStrategyData"
@@ -63,6 +66,17 @@ export const PortfolioCard = (props: BoxProps) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const dashboard = cellarDataMap[id].dashboard
+  const { setIsOpen } = useDepositModalStore()
+  const isAlphaSteth = id === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+  const isRealYieldEth =
+    id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
+  const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
+
+  // Source vault configs for migration eligibility
+  const realYieldEthConfig =
+    cellarDataMap[utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG].config
+  const turboStethConfig =
+    cellarDataMap[utilConfig.CONTRACT.TURBO_STETH.SLUG].config
 
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(
@@ -77,6 +91,16 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const { lpToken } = useUserBalance(cellarConfig)
   let { data: lpTokenData } = lpToken
+
+  // Balances in potential source vaults for migration (only when connected)
+  const { lpToken: realYieldEthBalance } = useUserBalance(
+    realYieldEthConfig,
+    isConnected
+  )
+  const { lpToken: turboStethBalance } = useUserBalance(
+    turboStethConfig,
+    isConnected
+  )
   const { data: strategyData, isLoading: isStrategyLoading } =
     useStrategyData(
       cellarConfig.cellar.address,
@@ -119,6 +143,26 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const isActiveWithdrawRequest =
     useWithdrawRequestStatus(cellarConfig)
+
+  // Show migration button only if on Alpha STETH page, correct chain, and user has
+  // a positive balance in either Real-Yield-ETH or Turbo-STETH
+  const hasMigrationSourceBalance =
+    ((realYieldEthBalance?.data?.value as unknown as bigint) ?? 0n) >
+      0n ||
+    ((turboStethBalance?.data?.value as unknown as bigint) ?? 0n) > 0n
+
+  // Show migration button on Alpha stETH page if user has source balances,
+  // or on source vault pages (Real Yield ETH / Turbo stETH) if user has balance there
+  const showMigrationButton = Boolean(
+    buttonsEnabled &&
+      ((isAlphaSteth && hasMigrationSourceBalance) ||
+        (isRealYieldEth &&
+          ((realYieldEthBalance?.data?.value as unknown as bigint) ??
+            0n) > 0n) ||
+        (isTurboSteth &&
+          ((turboStethBalance?.data?.value as unknown as bigint) ??
+            0n) > 0n))
+  )
 
   return (
     <TransparentCard
@@ -261,6 +305,16 @@ export const PortfolioCard = (props: BoxProps) => {
                           showTooltip={true}
                         />
                       )}
+
+                      {showMigrationButton && (
+                        <BaseButton
+                          onClick={() =>
+                            setIsOpen({ id, type: "migrate" })
+                          }
+                        >
+                          Migrate to Alpha STETH
+                        </BaseButton>
+                      )}
                     </VStack>
                   </>
                 ) : (
@@ -398,7 +452,8 @@ export const PortfolioCard = (props: BoxProps) => {
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
           <>
-            {(userStakes as any) && !(userStakes as any).userStakes?.length &&
+            {(userStakes as any) &&
+              !(userStakes as any).userStakes?.length &&
               stakingEnd?.endDate &&
               isFuture(stakingEnd?.endDate) && (
                 <>
@@ -516,9 +571,10 @@ export const PortfolioCard = (props: BoxProps) => {
                 isLoaded={!isUserDataLoading}
               >
                 {isConnected &&
-                  Boolean((userStakes as any) && (userStakes as any).userStakes?.length) && (
-                    <BondingTableCard />
-                  )}
+                  Boolean(
+                    (userStakes as any) &&
+                      (userStakes as any).userStakes?.length
+                  ) && <BondingTableCard />}
               </LighterSkeleton>
             )}
             {isConnected && isActiveWithdrawRequest && (

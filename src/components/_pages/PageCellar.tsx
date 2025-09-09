@@ -29,7 +29,10 @@ import { InfoBanner } from "components/_banners/InfoBanner"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 import dynamic from "next/dynamic"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
-import { BaseButton } from "components/_buttons/BaseButton"
+import { useUserBalance } from "data/hooks/useUserBalance"
+import { config as utilConfig } from "utils/config"
+
+import { useAccount } from "wagmi"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -45,7 +48,11 @@ export interface PageCellarProps {
 const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const cellarConfig = cellarDataMap[id].config
   const isAlphaSteth = id === "Alpha-stETH"
-  const { isOpen, onClose, setIsOpen } = useDepositModalStore()
+  const isRealYieldEth =
+    id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
+  const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
+  const { isOpen, onClose } = useDepositModalStore()
+  const { isConnected } = useAccount()
   const DynamicMigrationModal = useMemo(
     () =>
       dynamic(
@@ -57,6 +64,15 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
       ),
     []
   )
+
+  // Check if user should see migration prompt for Real Yield ETH or Turbo stETH
+
+  // Check if Alpha stETH vault has available capacity (not at max TVL)
+  const showMigrationForSourceVault = useMemo(() => {
+    if (!isRealYieldEth && !isTurboSteth) return false
+    // You could add additional checks here for Alpha stETH capacity if needed
+    return true
+  }, [isRealYieldEth, isTurboSteth])
   const staticCellarData = cellarDataMap[id]
   const cellarAddress = cellarDataMap[id].config.id
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
@@ -142,23 +158,11 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
           <Heading {...h2Styles} pt={12}>
             Your Portfolio
           </Heading>
-          {isAlphaSteth && (
-            <VStack align="flex-start">
-              <BaseButton
-                onClick={() =>
-                  setIsOpen({ id: id, type: "migrate" })
-                }
-              >
-                Migrate from Real Yield ETH or Turbo stETH
-              </BaseButton>
-              {/* Mount the modal only when opened */}
-              {id && (
-                <DynamicMigrationModal
-                  isOpen={isOpen}
-                  onClose={onClose}
-                />
-              )}
-            </VStack>
+          {(isAlphaSteth || showMigrationForSourceVault) && id && (
+            <DynamicMigrationModal
+              isOpen={isOpen}
+              onClose={onClose}
+            />
           )}
           <PortfolioCard />
         </VStack>

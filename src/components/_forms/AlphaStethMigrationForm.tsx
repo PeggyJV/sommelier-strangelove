@@ -47,7 +47,7 @@ interface AlphaStethMigrationFormProps {
 
 export const AlphaStethMigrationForm = ({
   onClose,
-  onSuccessfulMigration
+  onSuccessfulMigration,
 }: AlphaStethMigrationFormProps) => {
   const {
     register,
@@ -62,22 +62,34 @@ export const AlphaStethMigrationForm = ({
   const publicClient = usePublicClient()
   const { writeContractAsync } = useWriteContract()
 
-  const [sourceVault, setSourceVault] = useState<"real-yield-eth" | "turbo-steth" | null>(null)
-  const [migrationStep, setMigrationStep] = useState<"checking" | "selection" | "withdraw" | "deposit" | "complete">("checking")
+  const [sourceVault, setSourceVault] = useState<
+    "real-yield-eth" | "turbo-steth" | null
+  >(null)
+  const [migrationStep, setMigrationStep] = useState<
+    "checking" | "selection" | "withdraw" | "deposit" | "complete"
+  >("checking")
 
   // Get vault configurations
-  const realYieldEthConfig = cellarDataMap["Real-Yield-ETH"].config
-  const turboStethConfig = cellarDataMap["Turbo-stETH"].config
-  const alphaStethConfig = cellarDataMap["Alpha-stETH"].config
+  const realYieldEthConfig =
+    cellarDataMap[utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG].config
+  const turboStethConfig =
+    cellarDataMap[utilConfig.CONTRACT.TURBO_STETH.SLUG].config
+  const alphaStethConfig =
+    cellarDataMap[utilConfig.CONTRACT.ALPHA_STETH.SLUG].config
 
   // Check user balances in both source vaults
-  const { lpToken: realYieldEthBalance } = useUserBalance(realYieldEthConfig)
-  const { lpToken: turboStethBalance } = useUserBalance(turboStethConfig)
+  const { lpToken: realYieldEthBalance } = useUserBalance(
+    realYieldEthConfig
+  )
+  const { lpToken: turboStethBalance } =
+    useUserBalance(turboStethConfig)
 
-  const { cellarSigner: alphaStethSigner, boringVaultLens } = useCreateContracts(alphaStethConfig)
+  const { cellarSigner: alphaStethSigner, boringVaultLens } =
+    useCreateContracts(alphaStethConfig)
 
   const watchWithdrawAmount = watch("withdrawAmount")
-  const isDisabled = isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
+  const isDisabled =
+    isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
   const isError = errors.withdrawAmount
 
   // Check user positions on load
@@ -88,11 +100,27 @@ export const AlphaStethMigrationForm = ({
         return
       }
 
-      const realYieldEthHasBalance = realYieldEthBalance.data &&
-        parseFloat(toEther(realYieldEthBalance.data.value, realYieldEthBalance.data.decimals, false, 6)) > 0
+      const realYieldEthHasBalance =
+        realYieldEthBalance.data &&
+        parseFloat(
+          toEther(
+            realYieldEthBalance.data.value,
+            realYieldEthBalance.data.decimals,
+            false,
+            6
+          )
+        ) > 0
 
-      const turboStethHasBalance = turboStethBalance.data &&
-        parseFloat(toEther(turboStethBalance.data.value, turboStethBalance.data.decimals, false, 6)) > 0
+      const turboStethHasBalance =
+        turboStethBalance.data &&
+        parseFloat(
+          toEther(
+            turboStethBalance.data.value,
+            turboStethBalance.data.decimals,
+            false,
+            6
+          )
+        ) > 0
 
       if (realYieldEthHasBalance && turboStethHasBalance) {
         // User has positions in both - let them choose
@@ -109,7 +137,10 @@ export const AlphaStethMigrationForm = ({
       }
     }
 
-    if (realYieldEthBalance.data !== undefined && turboStethBalance.data !== undefined) {
+    if (
+      realYieldEthBalance.data !== undefined &&
+      turboStethBalance.data !== undefined
+    ) {
       checkPositions()
     }
   }, [realYieldEthBalance.data, turboStethBalance.data, address])
@@ -117,28 +148,35 @@ export const AlphaStethMigrationForm = ({
   const setMax = () => {
     if (!sourceVault) return
 
-    const balanceData = sourceVault === "real-yield-eth"
-      ? realYieldEthBalance.data
-      : turboStethBalance.data
+    const balanceData =
+      sourceVault === "real-yield-eth"
+        ? realYieldEthBalance.data
+        : turboStethBalance.data
 
     if (balanceData) {
-      const amount = parseFloat(toEther(balanceData.value, balanceData.decimals, false, 6))
+      const amount = parseFloat(
+        toEther(balanceData.value, balanceData.decimals, false, 6)
+      )
       setValue("withdrawAmount", amount)
     }
   }
 
   const getSourceVaultConfig = () => {
-    return sourceVault === "real-yield-eth" ? realYieldEthConfig : turboStethConfig
+    return sourceVault === "real-yield-eth"
+      ? realYieldEthConfig
+      : turboStethConfig
   }
 
   const getSourceVaultData = () => {
     return sourceVault === "real-yield-eth"
-      ? cellarDataMap["Real-Yield-ETH"]
-      : cellarDataMap["Turbo-stETH"]
+      ? cellarDataMap[utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG]
+      : cellarDataMap[utilConfig.CONTRACT.TURBO_STETH.SLUG]
   }
 
   const getCurrentBalance = () => {
-    return sourceVault === "real-yield-eth" ? realYieldEthBalance : turboStethBalance
+    return sourceVault === "real-yield-eth"
+      ? realYieldEthBalance
+      : turboStethBalance
   }
 
   const geo = useGeo()
@@ -188,13 +226,14 @@ export const AlphaStethMigrationForm = ({
           body: (
             <VStack align="start" spacing={2}>
               <Text>
-                Your requested amount exceeds the vault’s liquid reserves
-                for immediate withdrawal. To avoid the withdrawal queue, try a
-                smaller amount or withdraw later when liquidity improves.
+                Your requested amount exceeds the vault’s liquid
+                reserves for immediate withdrawal. To avoid the
+                withdrawal queue, try a smaller amount or withdraw
+                later when liquidity improves.
               </Text>
               <Text fontSize="sm" color="neutral.400">
-                Tip: You can also submit a withdraw request from the source
-                vault’s manage page.
+                Tip: You can also submit a withdraw request from the
+                source vault’s manage page.
               </Text>
             </VStack>
           ),
@@ -213,15 +252,26 @@ export const AlphaStethMigrationForm = ({
         client: { public: publicClient },
       })
 
-      const amtInWei = parseUnits(`${withdrawAmount}`, sourceConfig.cellar.decimals)
+      const amtInWei = parseUnits(
+        `${withdrawAmount}`,
+        sourceConfig.cellar.decimals
+      )
 
       // Get amount of base asset from withdrawal
-      const amountOfBaseAsset = await sourceContract.read.convertToAssets([amtInWei]) as bigint
+      const amountOfBaseAsset =
+        (await sourceContract.read.convertToAssets([
+          amtInWei,
+        ])) as bigint
 
       // Execute withdrawal
       addToast({
         heading: "Step 1: Withdrawing from Source Vault",
-        body: <Text>Withdrawing {withdrawAmount} tokens from {getSourceVaultData().name}...</Text>,
+        body: (
+          <Text>
+            Withdrawing {withdrawAmount} tokens from{" "}
+            {getSourceVaultData().name}...
+          </Text>
+        ),
         status: "info",
         closeHandler: close,
       })
@@ -233,7 +283,9 @@ export const AlphaStethMigrationForm = ({
         args: [amountOfBaseAsset, address, address],
       })
 
-      await publicClient.waitForTransactionReceipt({ hash: withdrawHash })
+      await publicClient.waitForTransactionReceipt({
+        hash: withdrawHash,
+      })
 
       setMigrationStep("deposit")
 
@@ -246,14 +298,16 @@ export const AlphaStethMigrationForm = ({
 
       const allowance = await erc20Contract.read.allowance([
         getAddress(address),
-        getAddress(alphaStethConfig.teller?.address || alphaStethConfig.cellar.address),
+        getAddress(alphaStethConfig.cellar.address),
       ])
 
       let needsApproval = allowance < amountOfBaseAsset
       if (needsApproval) {
         addToast({
           heading: "Step 2: Approving Token",
-          body: <Text>Approving tokens for Alpha STETH deposit...</Text>,
+          body: (
+            <Text>Approving tokens for Alpha STETH deposit...</Text>
+          ),
           status: "info",
           closeHandler: close,
         })
@@ -263,21 +317,25 @@ export const AlphaStethMigrationForm = ({
           abi: erc20Abi,
           functionName: "approve",
           args: [
-            (alphaStethConfig.teller?.address || alphaStethConfig.cellar.address) as `0x${string}`,
+            alphaStethConfig.cellar.address as `0x${string}`,
             amountOfBaseAsset,
           ],
         })
 
-        await publicClient.waitForTransactionReceipt({ hash: approvalHash })
+        await publicClient.waitForTransactionReceipt({
+          hash: approvalHash,
+        })
       }
 
       // Step 3: Get minimum mint amount for Alpha STETH
-      const minimumMint = boringVaultLens && await boringVaultLens.read.previewDeposit([
-        sourceConfig.baseAsset.address,
-        amountOfBaseAsset,
-        alphaStethConfig.cellar.address,
-        alphaStethConfig.accountant?.address,
-      ])
+      const minimumMint =
+        boringVaultLens &&
+        (await boringVaultLens.read.previewDeposit([
+          sourceConfig.baseAsset.address,
+          amountOfBaseAsset,
+          alphaStethConfig.cellar.address,
+          alphaStethConfig.accountant?.address,
+        ]))
 
       // Step 4: Execute deposit to Alpha STETH
       addToast({
@@ -288,8 +346,8 @@ export const AlphaStethMigrationForm = ({
       })
 
       const depositHash = await writeContractAsync({
-        address: alphaStethSigner?.address as `0x${string}`,
-        abi: alphaStethSigner?.abi!,
+        address: alphaStethConfig.teller?.address as `0x${string}`,
+        abi: alphaStethConfig.teller?.abi!,
         functionName: "deposit",
         args: [
           sourceConfig.baseAsset.address,
@@ -298,7 +356,9 @@ export const AlphaStethMigrationForm = ({
         ],
       })
 
-      const receipt = await publicClient.waitForTransactionReceipt({ hash: depositHash })
+      const receipt = await publicClient.waitForTransactionReceipt({
+        hash: depositHash,
+      })
 
       if (receipt.status === "success") {
         setMigrationStep("complete")
@@ -306,8 +366,12 @@ export const AlphaStethMigrationForm = ({
           heading: "Migration Complete!",
           body: (
             <VStack align="start" spacing={2}>
-              <Text>Successfully migrated {withdrawAmount} tokens</Text>
-              <Text fontSize="sm">From: {getSourceVaultData().name}</Text>
+              <Text>
+                Successfully migrated {withdrawAmount} tokens
+              </Text>
+              <Text fontSize="sm">
+                From: {getSourceVaultData().name}
+              </Text>
               <Text fontSize="sm">To: Alpha STETH</Text>
             </VStack>
           ),
@@ -320,7 +384,11 @@ export const AlphaStethMigrationForm = ({
       } else {
         addToast({
           heading: "Migration Failed",
-          body: <Text>Migration failed during deposit. Please try again.</Text>,
+          body: (
+            <Text>
+              Migration failed during deposit. Please try again.
+            </Text>
+          ),
           status: "error",
           closeHandler: close,
         })
@@ -360,9 +428,12 @@ export const AlphaStethMigrationForm = ({
   if (migrationStep === "selection") {
     return (
       <VStack spacing={6} align="stretch">
-        <Text fontWeight="bold" fontSize="lg">Choose Source Vault</Text>
+        <Text fontWeight="bold" fontSize="lg">
+          Choose Source Vault
+        </Text>
         <Text color="neutral.400">
-          Select which vault you'd like to migrate from to Alpha STETH:
+          Select which vault you'd like to migrate from to Alpha
+          STETH:
         </Text>
 
         <Stack spacing={4}>
@@ -371,13 +442,21 @@ export const AlphaStethMigrationForm = ({
             p={4}
             borderRadius="lg"
             border="1px solid"
-            borderColor={sourceVault === "real-yield-eth" ? "purple.base" : "neutral.600"}
+            borderColor={
+              sourceVault === "real-yield-eth"
+                ? "purple.base"
+                : "neutral.600"
+            }
             cursor="pointer"
             onClick={() => {
               setSourceVault("real-yield-eth")
               setMigrationStep("withdraw")
             }}
-            bg={sourceVault === "real-yield-eth" ? "purple.dark" : "surface.secondary"}
+            bg={
+              sourceVault === "real-yield-eth"
+                ? "purple.dark"
+                : "surface.secondary"
+            }
           >
             <Flex justify="space-between" align="center">
               <HStack>
@@ -390,15 +469,29 @@ export const AlphaStethMigrationForm = ({
                 <VStack align="start" spacing={0}>
                   <Text fontWeight="semibold">Real Yield ETH</Text>
                   <Text fontSize="sm" color="neutral.400">
-                    Balance: {realYieldEthBalance.data
-                      ? toEther(realYieldEthBalance.data.value, realYieldEthBalance.data.decimals, false, 6)
-                      : "0.00"
-                    }
+                    Balance:{" "}
+                    {realYieldEthBalance.data
+                      ? toEther(
+                          realYieldEthBalance.data.value,
+                          realYieldEthBalance.data.decimals,
+                          false,
+                          6
+                        )
+                      : "0.00"}
                   </Text>
                 </VStack>
               </HStack>
-              {parseFloat(toEther(realYieldEthBalance.data?.value, realYieldEthBalance.data?.decimals, false, 6)) > 0 && (
-                <Badge colorScheme="green" variant="subtle">Available</Badge>
+              {parseFloat(
+                toEther(
+                  realYieldEthBalance.data?.value,
+                  realYieldEthBalance.data?.decimals,
+                  false,
+                  6
+                )
+              ) > 0 && (
+                <Badge colorScheme="green" variant="subtle">
+                  Available
+                </Badge>
               )}
             </Flex>
           </Box>
@@ -408,13 +501,21 @@ export const AlphaStethMigrationForm = ({
             p={4}
             borderRadius="lg"
             border="1px solid"
-            borderColor={sourceVault === "turbo-steth" ? "purple.base" : "neutral.600"}
+            borderColor={
+              sourceVault === "turbo-steth"
+                ? "purple.base"
+                : "neutral.600"
+            }
             cursor="pointer"
             onClick={() => {
               setSourceVault("turbo-steth")
               setMigrationStep("withdraw")
             }}
-            bg={sourceVault === "turbo-steth" ? "purple.dark" : "surface.secondary"}
+            bg={
+              sourceVault === "turbo-steth"
+                ? "purple.dark"
+                : "surface.secondary"
+            }
           >
             <Flex justify="space-between" align="center">
               <HStack>
@@ -427,15 +528,29 @@ export const AlphaStethMigrationForm = ({
                 <VStack align="start" spacing={0}>
                   <Text fontWeight="semibold">Turbo stETH</Text>
                   <Text fontSize="sm" color="neutral.400">
-                    Balance: {turboStethBalance.data
-                      ? toEther(turboStethBalance.data.value, turboStethBalance.data.decimals, false, 6)
-                      : "0.00"
-                    }
+                    Balance:{" "}
+                    {turboStethBalance.data
+                      ? toEther(
+                          turboStethBalance.data.value,
+                          turboStethBalance.data.decimals,
+                          false,
+                          6
+                        )
+                      : "0.00"}
                   </Text>
                 </VStack>
               </HStack>
-              {parseFloat(toEther(turboStethBalance.data?.value, turboStethBalance.data?.decimals, false, 6)) > 0 && (
-                <Badge colorScheme="green" variant="subtle">Available</Badge>
+              {parseFloat(
+                toEther(
+                  turboStethBalance.data?.value,
+                  turboStethBalance.data?.decimals,
+                  false,
+                  6
+                )
+              ) > 0 && (
+                <Badge colorScheme="green" variant="subtle">
+                  Available
+                </Badge>
               )}
             </Flex>
           </Box>
@@ -461,9 +576,12 @@ export const AlphaStethMigrationForm = ({
       <Alert status="info" borderRadius="lg">
         <AlertIcon />
         <VStack align="start" spacing={1}>
-          <Text fontWeight="semibold">Migrating from {sourceVaultData.name} to Alpha STETH</Text>
+          <Text fontWeight="semibold">
+            Migrating from {sourceVaultData.name} to Alpha STETH
+          </Text>
           <Text fontSize="sm">
-            This will withdraw your funds and automatically deposit them into Alpha STETH
+            This will withdraw your funds and automatically deposit
+            them into Alpha STETH
           </Text>
         </VStack>
       </Alert>
@@ -509,7 +627,8 @@ export const AlphaStethMigrationForm = ({
                   required: "Enter amount",
                   valueAsNumber: true,
                   validate: {
-                    positive: (v) => v > 0 || "You must submit a positive amount.",
+                    positive: (v) =>
+                      v > 0 || "You must submit a positive amount.",
                     balance: (v) => {
                       const maxBalance = parseFloat(
                         toEther(

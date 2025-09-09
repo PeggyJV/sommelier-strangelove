@@ -58,7 +58,7 @@ export async function zrange(
   stop: number
 ) {
   const redis = getRedis()
-  return (await redis.zrange<string>(key, start, stop)) || []
+  return (await redis.zrange<string[]>(key, start, stop)) || []
 }
 
 export async function sadd(key: string, member: string) {
@@ -68,7 +68,7 @@ export async function sadd(key: string, member: string) {
 
 export async function smembers(key: string) {
   const redis = getRedis()
-  return (await redis.smembers<string>(key)) || []
+  return (await redis.smembers<string[]>(key)) || []
 }
 
 export async function incr(key: string) {
