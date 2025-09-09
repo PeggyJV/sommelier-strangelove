@@ -21,3 +21,4 @@ idea/
 yarn.lock
 src/coverage/
 coverage/
+scripts/local/snapshots/
