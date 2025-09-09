@@ -1,3 +1,10 @@
+.env.local
+.env.vercel
+Desktop/
+*.csv
+.cache/
+~/Desktop/on-chain-marketing/
+
 *.pem
 .DS_Store
 .env*
@@ -21,3 +28,6 @@ idea/
 yarn.lock
 src/coverage/
 coverage/
+# on-chain marketing artifacts
+scripts/onchain-marketing/outputs/
+scripts/onchain-marketing/logs/
