@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Center,
@@ -46,6 +48,8 @@ import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
 import { useSommNativeVaults } from "data/hooks/useSommNativeVaults"
+import { useUserBalance } from "data/hooks/useUserBalance"
+import { config as utilConfig } from "utils/config"
 import TopLaunchBanner from "components/_sections/TopLaunchBanner"
 import WithdrawalWarningBanner from "components/_sections/WithdrawalWarningBanner"
 import { sortVaultsForMainPage } from "utils/sortVaults"
@@ -53,6 +57,7 @@ import { sortVaultsForMainPage } from "utils/sortVaults"
 import SectionHeader from "components/_sections/SectionHeader"
 import { alphaSteth } from "data/strategies/alpha-steth"
 import { MigrationModal } from "components/_modals/MigrationModal"
+import { toEther } from "utils/formatCurrency"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 import dynamic from "next/dynamic"
 import { InView } from "react-intersection-observer"
@@ -124,6 +129,51 @@ export const PageHome = () => {
   const { data: userDataAllStrategies } = useUserDataAllStrategies()
   const { data: sommNativeMin, isLoading: isSommMinLoading } =
     useSommNativeVaults()
+
+  // Check user balances in migration source vaults
+  const realYieldEthConfig =
+    cellarDataMap[utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG]?.config
+  const turboStethConfig =
+    cellarDataMap[utilConfig.CONTRACT.TURBO_STETH.SLUG]?.config
+
+  const { lpToken: realYieldEthBalance } = useUserBalance(
+    realYieldEthConfig,
+    isConnected
+  )
+  const { lpToken: turboStethBalance } = useUserBalance(
+    turboStethConfig,
+    isConnected
+  )
+
+  // Check if user has balances in either vault
+  const hasRealYieldEthBalance = useMemo(() => {
+    if (!realYieldEthBalance?.data) return false
+    const balance = parseFloat(
+      toEther(
+        realYieldEthBalance.data.value,
+        realYieldEthBalance.data.decimals,
+        false,
+        6
+      )
+    )
+    return balance > 0
+  }, [realYieldEthBalance?.data])
+
+  const hasTurboStethBalance = useMemo(() => {
+    if (!turboStethBalance?.data) return false
+    const balance = parseFloat(
+      toEther(
+        turboStethBalance.data.value,
+        turboStethBalance.data.decimals,
+        false,
+        6
+      )
+    )
+    return balance > 0
+  }, [turboStethBalance?.data])
+
+  const showMigrationPrompt =
+    hasRealYieldEthBalance || hasTurboStethBalance
 
   const columns = useMemo(() => {
     return isDesktop
@@ -481,6 +531,43 @@ export const PageHome = () => {
         targetDate={bannerTargetDate}
         blogHref="https://somm.finance/blog/putting-steth-to-work-where-it-matters-most"
       />
+
+      {/* Migration Banner */}
+      {showMigrationPrompt && (
+        <Alert
+          status="info"
+          variant="subtle"
+          borderRadius="lg"
+          mb={4}
+        >
+          <AlertIcon />
+          <Box flex="1">
+            <Text fontWeight="semibold">Migrate to Alpha stETH</Text>
+            <Text fontSize="sm" mt={1}>
+              You have funds in{" "}
+              {hasRealYieldEthBalance && hasTurboStethBalance
+                ? "Real Yield ETH and Turbo stETH"
+                : hasRealYieldEthBalance
+                ? "Real Yield ETH"
+                : "Turbo stETH"}
+              . Migrate to Alpha stETH for enhanced yields.
+            </Text>
+          </Box>
+          <Button
+            size="sm"
+            colorScheme="purple"
+            onClick={() => {
+              setIsOpen({
+                id: utilConfig.CONTRACT.ALPHA_STETH.SLUG,
+                type: "migrate" as DepositModalType,
+              })
+            }}
+          >
+            Migrate Now
+          </Button>
+        </Alert>
+      )}
+
       {/*
         <InfoBanner
           text={

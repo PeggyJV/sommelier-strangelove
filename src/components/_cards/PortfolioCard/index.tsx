@@ -22,6 +22,9 @@ import ConnectButton from "components/_buttons/ConnectButton"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
+import { BaseButton } from "components/_buttons/BaseButton"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { config as utilConfig } from "utils/config"
 import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useStrategyData } from "data/hooks/useStrategyData"
@@ -49,7 +52,7 @@ import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
-import { CellarNameKey } from "data/types"
+import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 
 export const PortfolioCard = (props: BoxProps) => {
@@ -63,6 +66,43 @@ export const PortfolioCard = (props: BoxProps) => {
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
   const dashboard = cellarDataMap[id].dashboard
+  const { setIsOpen } = useDepositModalStore()
+  const isAlphaSteth = id === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+  const isRealYieldEth =
+    id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
+  const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
+
+  // Source vault configs for migration eligibility (safe lookups; use deterministic dummy)
+  const RYE_SLUG = utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
+  const TSTETH_SLUG = utilConfig.CONTRACT.TURBO_STETH.SLUG
+  const realYieldEthEntry = cellarDataMap[RYE_SLUG]
+  const turboStethEntry = cellarDataMap[TSTETH_SLUG]
+
+  const ZERO_ADDR = "0x0000000000000000000000000000000000000000"
+  const DUMMY_CONFIG: ConfigProps = {
+    id: "dummy",
+    cellarNameKey: cellarConfig.cellarNameKey,
+    lpToken: { address: ZERO_ADDR, imagePath: "" },
+    cellar: {
+      address: ZERO_ADDR,
+      abi: [] as any,
+      key: CellarKey.CELLAR_V0816,
+      decimals: 18,
+    },
+    baseAsset: {
+      src: "",
+      alt: "dummy",
+      symbol: "DUMMY",
+      address: ZERO_ADDR,
+      coinGeckoId: "",
+      decimals: 18,
+      chain: cellarConfig.chain.id,
+    },
+    chain: cellarConfig.chain,
+  }
+
+  const realYieldEthConfig = realYieldEthEntry?.config || DUMMY_CONFIG
+  const turboStethConfig = turboStethEntry?.config || DUMMY_CONFIG
 
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(
@@ -77,6 +117,16 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const { lpToken } = useUserBalance(cellarConfig)
   let { data: lpTokenData } = lpToken
+
+  // Balances in potential source vaults for migration (only when connected)
+  const { lpToken: realYieldEthBalance } = useUserBalance(
+    realYieldEthConfig,
+    isConnected && Boolean(realYieldEthEntry)
+  )
+  const { lpToken: turboStethBalance } = useUserBalance(
+    turboStethConfig,
+    isConnected && Boolean(turboStethEntry)
+  )
   const { data: strategyData, isLoading: isStrategyLoading } =
     useStrategyData(
       cellarConfig.cellar.address,
@@ -119,6 +169,22 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const isActiveWithdrawRequest =
     useWithdrawRequestStatus(cellarConfig)
+
+  // Show migration button only if on Alpha STETH page, correct chain, and user has
+  // a positive balance in either Real-Yield-ETH or Turbo-STETH
+  const realYieldEthValue = realYieldEthBalance?.data?.value ?? 0n
+  const turboStethValue = turboStethBalance?.data?.value ?? 0n
+  const hasMigrationSourceBalance =
+    realYieldEthValue > 0n || turboStethValue > 0n
+
+  // Show migration button on Alpha stETH page if user has source balances,
+  // or on source vault pages (Real Yield ETH / Turbo stETH) if user has balance there
+  const showMigrationButton = Boolean(
+    buttonsEnabled &&
+      ((isAlphaSteth && hasMigrationSourceBalance) ||
+        (isRealYieldEth && realYieldEthValue > 0n) ||
+        (isTurboSteth && turboStethValue > 0n))
+  )
 
   return (
     <TransparentCard
@@ -261,6 +327,16 @@ export const PortfolioCard = (props: BoxProps) => {
                           showTooltip={true}
                         />
                       )}
+
+                      {showMigrationButton && (
+                        <BaseButton
+                          onClick={() =>
+                            setIsOpen({ id, type: "migrate" })
+                          }
+                        >
+                          Migrate to Alpha STETH
+                        </BaseButton>
+                      )}
                     </VStack>
                   </>
                 ) : (
@@ -398,7 +474,8 @@ export const PortfolioCard = (props: BoxProps) => {
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
           <>
-            {(userStakes as any) && !(userStakes as any).userStakes?.length &&
+            {(userStakes as any) &&
+              !(userStakes as any).userStakes?.length &&
               stakingEnd?.endDate &&
               isFuture(stakingEnd?.endDate) && (
                 <>
@@ -516,9 +593,10 @@ export const PortfolioCard = (props: BoxProps) => {
                 isLoaded={!isUserDataLoading}
               >
                 {isConnected &&
-                  Boolean((userStakes as any) && (userStakes as any).userStakes?.length) && (
-                    <BondingTableCard />
-                  )}
+                  Boolean(
+                    (userStakes as any) &&
+                      (userStakes as any).userStakes?.length
+                  ) && <BondingTableCard />}
               </LighterSkeleton>
             )}
             {isConnected && isActiveWithdrawRequest && (
