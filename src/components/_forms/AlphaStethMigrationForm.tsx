@@ -34,6 +34,8 @@ import { ExternalLinkIcon } from "components/_icons"
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { config as utilConfig } from "utils/config"
+import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
+import { chainConfigMap } from "data/chainConfig"
 
 interface FormValues {
   withdrawAmount: number
@@ -78,16 +80,33 @@ export const AlphaStethMigrationForm = ({
   const turboStethEntry = cellarDataMap[TSTETH_SLUG]
   const alphaStethEntry = cellarDataMap[ALPHA_SLUG]
 
-  // Fallback config to satisfy hook argument shape; queries are gated by `enabled` flags
-  const fallbackConfig =
-    alphaStethEntry?.config ||
-    realYieldEthEntry?.config ||
-    turboStethEntry?.config ||
-    Object.values(cellarDataMap)[0]?.config
+  // Use a deterministic dummy config to keep hooks stable without risking wrong on-chain calls
+  const ZERO_ADDR = "0x0000000000000000000000000000000000000000"
+  const DUMMY_CONFIG: ConfigProps = {
+    id: "dummy",
+    cellarNameKey: CellarNameKey.ALPHA_STETH,
+    lpToken: { address: ZERO_ADDR, imagePath: "" },
+    cellar: {
+      address: ZERO_ADDR,
+      abi: [] as any,
+      key: CellarKey.CELLAR_V0816,
+      decimals: 18,
+    },
+    baseAsset: {
+      src: "",
+      alt: "dummy",
+      symbol: "DUMMY",
+      address: ZERO_ADDR,
+      coinGeckoId: "",
+      decimals: 18,
+      chain: chainConfigMap["ethereum"].id,
+    },
+    chain: chainConfigMap["ethereum"],
+  }
 
-  const realYieldEthConfig = (realYieldEthEntry?.config || fallbackConfig)!
-  const turboStethConfig = (turboStethEntry?.config || fallbackConfig)!
-  const alphaStethConfig = (alphaStethEntry?.config || fallbackConfig)!
+  const realYieldEthConfig = realYieldEthEntry?.config || DUMMY_CONFIG
+  const turboStethConfig = turboStethEntry?.config || DUMMY_CONFIG
+  const alphaStethConfig = alphaStethEntry?.config || DUMMY_CONFIG
 
   // Check user balances in both source vaults; gate queries if entry missing
   const { lpToken: realYieldEthBalance } = useUserBalance(

@@ -52,7 +52,7 @@ import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
-import { CellarNameKey } from "data/types"
+import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 
 export const PortfolioCard = (props: BoxProps) => {
@@ -72,13 +72,37 @@ export const PortfolioCard = (props: BoxProps) => {
     id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
   const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
 
-  // Source vault configs for migration eligibility (safe lookups with fallback)
+  // Source vault configs for migration eligibility (safe lookups; use deterministic dummy)
   const RYE_SLUG = utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
   const TSTETH_SLUG = utilConfig.CONTRACT.TURBO_STETH.SLUG
   const realYieldEthEntry = cellarDataMap[RYE_SLUG]
   const turboStethEntry = cellarDataMap[TSTETH_SLUG]
-  const realYieldEthConfig = (realYieldEthEntry?.config || cellarConfig)!
-  const turboStethConfig = (turboStethEntry?.config || cellarConfig)!
+
+  const ZERO_ADDR = "0x0000000000000000000000000000000000000000"
+  const DUMMY_CONFIG: ConfigProps = {
+    id: "dummy",
+    cellarNameKey: cellarConfig.cellarNameKey,
+    lpToken: { address: ZERO_ADDR, imagePath: "" },
+    cellar: {
+      address: ZERO_ADDR,
+      abi: [] as any,
+      key: CellarKey.CELLAR_V0816,
+      decimals: 18,
+    },
+    baseAsset: {
+      src: "",
+      alt: "dummy",
+      symbol: "DUMMY",
+      address: ZERO_ADDR,
+      coinGeckoId: "",
+      decimals: 18,
+      chain: cellarConfig.chain.id,
+    },
+    chain: cellarConfig.chain,
+  }
+
+  const realYieldEthConfig = realYieldEthEntry?.config || DUMMY_CONFIG
+  const turboStethConfig = turboStethEntry?.config || DUMMY_CONFIG
 
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(
