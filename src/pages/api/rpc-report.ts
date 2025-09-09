@@ -1,4 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+
+// Small helper: coerce query value to a single string (handles string | string[] | undefined)
+function scalar(
+  q: string | string[] | undefined
+): string | undefined {
+  if (typeof q === "string") return q
+  if (Array.isArray(q)) return q[0]
+  return undefined
+}
 import { getJson, zrange } from "src/lib/attribution/kv"
 
 function parseDate(s?: string) {
@@ -21,8 +30,81 @@ export default async function handler(
 ) {
   if (req.method !== "GET") return res.status(405).end()
 
-  const from = parseDate(String(req.query.from || ""))
-  const to = parseDate(String(req.query.to || ""))
+  // === TEMP DEBUG (safe): echo parsed query keys to a header
+  try {
+    const keys = Object.keys(req.query || {}).sort()
+    res.setHeader("x-somm-query-keys", keys.join(","))
+  } catch {}
+
+  const q = req.query || {}
+  const txRaw = scalar(q.tx)
+  const fromRaw = scalar(q.from)
+  const toRaw = scalar(q.to)
+  const dateRaw = scalar(q.date)
+
+  const tx = txRaw?.toLowerCase()
+  const fromQ = fromRaw?.toLowerCase()
+  const toQ = toRaw?.toLowerCase()
+
+  // If tx is provided, do NOT parse or touch date at all.
+  if (tx) {
+    res.setHeader("x-somm-date-source", "skipped-for-tx")
+    // keep existing tx-only logic below untouched; ensure none of it uses `date`/`dayStart`.
+  }
+
+  // Only when tx is NOT provided, require and parse date
+  let dayStart: Date | undefined
+  if (!tx) {
+    if (!fromQ)
+      return res
+        .status(400)
+        .json({ error: "missing 'from' (0x... address)" })
+    if (!toQ)
+      return res
+        .status(400)
+        .json({ error: "missing 'to' (0x... address)" })
+    if (!dateRaw)
+      return res
+        .status(400)
+        .json({ error: "missing 'date' (YYYY-MM-DD, UTC)" })
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateRaw)
+    if (!m)
+      return res.status(400).json({
+        error: "bad 'date' format (expected YYYY-MM-DD in UTC)",
+      })
+    dayStart = new Date(`${dateRaw}T00:00:00.000Z`)
+    if (isNaN(dayStart.getTime()))
+      return res.status(400).json({ error: "invalid 'date' value" })
+    res.setHeader("x-somm-date-source", "parsed")
+    res.setHeader(
+      "x-somm-date-iso",
+      dayStart.toISOString().slice(0, 10)
+    )
+  }
+
+  // Guarantee a non-null date for all UTC reads:
+  // - tx-only path → use today UTC
+  // - missing/invalid date in from/to/date → fall back to today UTC (and mark fallback)
+  const fallback = new Date() // today UTC
+  const dateForBuckets = dayStart ?? fallback
+  if (!dayStart) res.setHeader("x-somm-date-fallback", "1")
+  res.setHeader("x-somm-date-guard", "applied")
+  // IMPORTANT: ensure any later use of `dayStart` is non-null
+  dayStart = dateForBuckets
+
+  // Precompute parts to avoid any `.getUTC*` reads on possibly-null variables elsewhere
+  const y = dateForBuckets.getUTCFullYear()
+  const m = dateForBuckets.getUTCMonth() + 1
+  const d = dateForBuckets.getUTCDate()
+  const isoDay = `${y}-${String(m).padStart(2, "0")}-${String(
+    d
+  ).padStart(2, "0")}`
+  // Helpful header for debugging which date was actually used
+  if (!res.getHeader("x-somm-date-iso"))
+    res.setHeader("x-somm-date-iso", isoDay)
+
+  const from = parseDate(String(fromQ || ""))
+  const to = parseDate(String(toQ || ""))
   const wallet =
     (req.query.wallet as string)?.toLowerCase() || undefined
   const contract =
@@ -33,8 +115,7 @@ export default async function handler(
   const format = (req.query.format as string) || "csv"
   const domain = (req.query.domain as string) || undefined
 
-  if (!from || !to)
-    return res.status(400).json({ error: "from/to required" })
+  // (validation for fromQ/toQ/date is handled above when !tx)
 
   const days: string[] = []
   for (
@@ -153,4 +234,3 @@ export default async function handler(
     res.json(jsonRows)
   }
 }
-

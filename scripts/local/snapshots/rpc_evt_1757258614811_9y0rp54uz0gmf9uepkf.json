@@ -1,0 +1,26 @@
+{
+  "key": "rpc:evt:1757258614811:9y0rp54uz0gmf9uepkf",
+  "type": "string",
+  "exists": 1,
+  "ttl": -1,
+  "pttl": -1,
+  "expiretime": -1,
+  "memory_usage_bytes": null,
+  "object_encoding": "",
+  "object_idletime": null,
+  "length": 336,
+  "value_is_json": true,
+  "value": {
+    "stage": "submitted",
+    "domain": "localhost",
+    "pagePath": "/",
+    "sessionId": "test-sess-1",
+    "wallet": "0x1222f0baa62e2282bfd01083c7c3732a8c611584",
+    "chainId": 1,
+    "method": "eth_sendTransaction",
+    "txHash": "0xfa36cd2cbe34ed9c5727d18a7969cee25d1b7e4e281f5c00ddb14c8e153d0cb1",
+    "to": "0x0baab6db8d694e1511992b504476ef4073fe614b",
+    "timestampMs": 1757258614811
+  },
+  "captured_at": "2025-09-07T16:03:38Z"
+}

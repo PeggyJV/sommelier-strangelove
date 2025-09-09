@@ -1,0 +1,15 @@
+{
+  "key": "rpc:index:tx:0xdc8d8211eb409bc4edb13af41aaebde53976b2dd4e599d79d10c56097cc114a9",
+  "type": "none",
+  "exists": 0,
+  "ttl": -2,
+  "pttl": -2,
+  "expiretime": -2,
+  "memory_usage_bytes": null,
+  "object_encoding": "",
+  "object_idletime": null,
+  "length": null,
+  "value_is_json": false,
+  "value": null,
+  "captured_at": "2025-09-07T08:51:24Z"
+}

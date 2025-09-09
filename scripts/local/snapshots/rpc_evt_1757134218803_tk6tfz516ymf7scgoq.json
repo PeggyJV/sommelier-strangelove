@@ -1,0 +1,27 @@
+{
+  "key": "rpc:evt:1757134218803:tk6tfz516ymf7scgoq",
+  "type": "string",
+  "exists": 1,
+  "ttl": -1,
+  "pttl": -1,
+  "expiretime": -1,
+  "memory_usage_bytes": null,
+  "object_encoding": "",
+  "object_idletime": null,
+  "length": 263,
+  "value_is_json": true,
+  "value": {
+    "stage": "request",
+    "domain": "app-stage.sommelier.finance",
+    "pagePath": "/",
+    "sessionId": "d17c19ec-cd44-41d4-a7d9-2383c252b0ce",
+    "chainId": 1,
+    "method": "eth_getBalance",
+    "paramsRedacted": [
+      "0x1222f0baA62e2282Bfd01083C7C3732A8c611584",
+      "latest"
+    ],
+    "timestampMs": 1757134218803
+  },
+  "captured_at": "2025-09-07T07:25:18Z"
+}

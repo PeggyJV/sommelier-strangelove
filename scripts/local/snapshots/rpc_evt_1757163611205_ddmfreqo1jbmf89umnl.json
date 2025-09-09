@@ -1,0 +1,27 @@
+{
+  "key": "rpc:evt:1757163611205:ddmfreqo1jbmf89umnl",
+  "type": "string",
+  "exists": 1,
+  "ttl": -1,
+  "pttl": -1,
+  "expiretime": -1,
+  "memory_usage_bytes": null,
+  "object_encoding": "",
+  "object_idletime": null,
+  "length": 264,
+  "value_is_json": true,
+  "value": {
+    "stage": "request",
+    "domain": "app.somm.finance",
+    "pagePath": "/snapshot",
+    "sessionId": "facb69d8-4666-416e-84b2-44ce8c959c6f",
+    "chainId": 42161,
+    "method": "eth_getBalance",
+    "paramsRedacted": [
+      "0xe9956cE22e90d1861A0C96c6E5C158Eee479E6dB",
+      "latest"
+    ],
+    "timestampMs": 1757163611205
+  },
+  "captured_at": "2025-09-07T07:25:21Z"
+}

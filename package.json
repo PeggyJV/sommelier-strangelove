@@ -1,6 +1,9 @@
 {
   "name": "somm-boilerplate",
   "scripts": {
+    "ci:forbidden-envs": "bash scripts/ci/check-forbidden-envs.sh",
+    "env:attrib:check": "node scripts/attrib-env-check.mjs",
+    "test:submitted": "jest --config jest.json --testPathPattern=src/lib/attribution/__tests__/wallet.submitted.spec.ts",
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
     "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
@@ -62,6 +65,7 @@
     "@vanilla-extract/private": "^1.0.5",
     "@vanilla-extract/sprinkles": "^1.6.3",
     "@vercel/kv": "^1.0.1",
+    "@upstash/redis": "^1.30.0",
     "@wagmi/connectors": "^5.1.0",
     "@wagmi/core": "2.14.6",
     "analytics": "^0.8.1",

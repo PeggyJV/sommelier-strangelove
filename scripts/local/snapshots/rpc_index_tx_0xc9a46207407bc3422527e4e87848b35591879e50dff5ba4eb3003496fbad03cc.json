@@ -1,0 +1,18 @@
+{
+  "key": "rpc:index:tx:0xc9a46207407bc3422527e4e87848b35591879e50dff5ba4eb3003496fbad03cc",
+  "type": "set",
+  "exists": 1,
+  "ttl": -1,
+  "pttl": -1,
+  "expiretime": -1,
+  "memory_usage_bytes": null,
+  "object_encoding": "",
+  "object_idletime": null,
+  "length": 2,
+  "value_is_json": false,
+  "value": [
+    "rpc:evt:1757274457734:sai1mx4krgmfa3u9hi",
+    "rpc:evt:1757274515353:8mtlhp37nf7mfa3vhy1"
+  ],
+  "captured_at": "2025-09-07T19:49:57Z"
+}

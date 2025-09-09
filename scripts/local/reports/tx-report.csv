@@ -1,0 +1,2 @@
+txHash,evtCount,stages,domains,pagePaths,sessionIds,chainIds,methods,firstTimestampMs,lastTimestampMs,evtIds
+0xcliTEST,1,"submitted","app-stage.sommelier.finance","/strategies/alpha-steth","","1","eth_sendTransaction",1757107354000,1757107354000
