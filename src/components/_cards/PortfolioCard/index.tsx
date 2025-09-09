@@ -72,11 +72,13 @@ export const PortfolioCard = (props: BoxProps) => {
     id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
   const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
 
-  // Source vault configs for migration eligibility
-  const realYieldEthConfig =
-    cellarDataMap[utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG].config
-  const turboStethConfig =
-    cellarDataMap[utilConfig.CONTRACT.TURBO_STETH.SLUG].config
+  // Source vault configs for migration eligibility (safe lookups with fallback)
+  const RYE_SLUG = utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
+  const TSTETH_SLUG = utilConfig.CONTRACT.TURBO_STETH.SLUG
+  const realYieldEthEntry = cellarDataMap[RYE_SLUG]
+  const turboStethEntry = cellarDataMap[TSTETH_SLUG]
+  const realYieldEthConfig = (realYieldEthEntry?.config || cellarConfig)!
+  const turboStethConfig = (turboStethEntry?.config || cellarConfig)!
 
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(
@@ -95,11 +97,11 @@ export const PortfolioCard = (props: BoxProps) => {
   // Balances in potential source vaults for migration (only when connected)
   const { lpToken: realYieldEthBalance } = useUserBalance(
     realYieldEthConfig,
-    isConnected
+    isConnected && Boolean(realYieldEthEntry)
   )
   const { lpToken: turboStethBalance } = useUserBalance(
     turboStethConfig,
-    isConnected
+    isConnected && Boolean(turboStethEntry)
   )
   const { data: strategyData, isLoading: isStrategyLoading } =
     useStrategyData(

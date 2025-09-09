@@ -69,20 +69,35 @@ export const AlphaStethMigrationForm = ({
     "checking" | "selection" | "withdraw" | "deposit" | "complete"
   >("checking")
 
-  // Get vault configurations
-  const realYieldEthConfig =
-    cellarDataMap[utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG].config
-  const turboStethConfig =
-    cellarDataMap[utilConfig.CONTRACT.TURBO_STETH.SLUG].config
-  const alphaStethConfig =
-    cellarDataMap[utilConfig.CONTRACT.ALPHA_STETH.SLUG].config
+  // Get vault configurations safely (validate keys before access)
+  const RYE_SLUG = utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
+  const TSTETH_SLUG = utilConfig.CONTRACT.TURBO_STETH.SLUG
+  const ALPHA_SLUG = utilConfig.CONTRACT.ALPHA_STETH.SLUG
 
-  // Check user balances in both source vaults
+  const realYieldEthEntry = cellarDataMap[RYE_SLUG]
+  const turboStethEntry = cellarDataMap[TSTETH_SLUG]
+  const alphaStethEntry = cellarDataMap[ALPHA_SLUG]
+
+  // Fallback config to satisfy hook argument shape; queries are gated by `enabled` flags
+  const fallbackConfig =
+    alphaStethEntry?.config ||
+    realYieldEthEntry?.config ||
+    turboStethEntry?.config ||
+    Object.values(cellarDataMap)[0]?.config
+
+  const realYieldEthConfig = (realYieldEthEntry?.config || fallbackConfig)!
+  const turboStethConfig = (turboStethEntry?.config || fallbackConfig)!
+  const alphaStethConfig = (alphaStethEntry?.config || fallbackConfig)!
+
+  // Check user balances in both source vaults; gate queries if entry missing
   const { lpToken: realYieldEthBalance } = useUserBalance(
-    realYieldEthConfig
+    realYieldEthConfig,
+    Boolean(realYieldEthEntry)
   )
-  const { lpToken: turboStethBalance } =
-    useUserBalance(turboStethConfig)
+  const { lpToken: turboStethBalance } = useUserBalance(
+    turboStethConfig,
+    Boolean(turboStethEntry)
+  )
 
   const { cellarSigner: alphaStethSigner, boringVaultLens } =
     useCreateContracts(alphaStethConfig)
@@ -199,6 +214,29 @@ export const AlphaStethMigrationForm = ({
     if (withdrawAmount <= 0 || !sourceVault) return
 
     const sourceConfig = getSourceVaultConfig()
+
+    // Validate required configs exist for the chosen source and destination
+    if (
+      (sourceVault === "real-yield-eth" && !realYieldEthEntry) ||
+      (sourceVault === "turbo-steth" && !turboStethEntry)
+    ) {
+      addToast({
+        heading: "Unsupported Migration",
+        body: <Text>Source vault configuration unavailable.</Text>,
+        status: "error",
+        closeHandler: closeAll,
+      })
+      return
+    }
+    if (!alphaStethEntry) {
+      addToast({
+        heading: "Migration Unavailable",
+        body: <Text>Alpha STETH configuration unavailable.</Text>,
+        status: "error",
+        closeHandler: closeAll,
+      })
+      return
+    }
 
     if (!address || !publicClient) {
       addToast({
