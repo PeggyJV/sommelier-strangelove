@@ -47,11 +47,11 @@ export interface PageCellarProps {
 
 const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const cellarConfig = cellarDataMap[id].config
-  const isAlphaSteth = id === "Alpha-stETH"
+  const isAlphaSteth = id === utilConfig.CONTRACT.ALPHA_STETH.SLUG
   const isRealYieldEth =
     id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
   const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
-  const { isOpen, onClose } = useDepositModalStore()
+  const { isOpen, onClose, type } = useDepositModalStore()
   const { isConnected } = useAccount()
   const DynamicMigrationModal = useMemo(
     () =>
@@ -158,7 +158,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
           <Heading {...h2Styles} pt={12}>
             Your Portfolio
           </Heading>
-          {(isAlphaSteth || showMigrationForSourceVault) && id && (
+          {type === "migrate" && (isAlphaSteth || showMigrationForSourceVault) && id && (
             <DynamicMigrationModal
               isOpen={isOpen}
               onClose={onClose}
