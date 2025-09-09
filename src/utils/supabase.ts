@@ -25,9 +25,10 @@ export async function insertEvent(options: {
 }) {
   if (!enabled) return
 
-  const { event, address, cellar, transaction_hash } = options
+  const { event, address } = options
   const user_agent = window.navigator.userAgent
 
+  // Only handle non-deposit analytics in Supabase going forward.
   switch (event) {
     case "wallet.connect-succeeded": {
       await supabase
@@ -35,20 +36,9 @@ export async function insertEvent(options: {
         .insert({ address, user_agent })
       break
     }
-    case "deposit.started": {
-      await supabase
-        .from("event_deposit_started")
-        .insert({ address, cellar, user_agent })
-      break
-    }
-    case "deposit.succeeded": {
-      await supabase.from("event_deposit_success").insert({
-        address,
-        cellar,
-        transaction_hash,
-        user_agent,
-      })
-      break
+    default: {
+      // No-op for deposit-related events; attribution now uses Vercel KV
+      return
     }
   }
 }

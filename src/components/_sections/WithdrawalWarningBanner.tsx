@@ -78,7 +78,7 @@ export default function WithdrawalWarningBanner() {
       </Text>
       <HStack spacing={6} mb={4}>
         <Link
-          href="https://discord.com/invite/hT4FZZTBdq"
+          href="https://discord.gg/veda"
           isExternal
           color="blue.300"
         >

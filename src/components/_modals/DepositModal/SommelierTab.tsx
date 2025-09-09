@@ -39,7 +39,7 @@ import {
 } from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
-import { insertEvent } from "utils/supabase"
+// import { insertEvent } from "utils/supabase"
 import {
   InformationIcon,
   GreenCheckCircleIcon,
@@ -142,6 +142,19 @@ export const SommelierTab = ({
   const { writeContractAsync } = useWriteContract()
   const { data: waitForTransaction } = useWaitForTransactionReceipt()
   const geo = useGeo()
+
+  // Attribution (deposit started/receipt/error): send to ingestion API using Vercel KV backend
+  const sendIngest = async (evt: any) => {
+    try {
+      if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true") return
+      await fetch("/api/ingest-rpc", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ events: [evt] }),
+        keepalive: true,
+      })
+    } catch {}
+  }
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
@@ -686,6 +699,30 @@ export const SommelierTab = ({
           ...analyticsData,
         })
 
+        // Attribution (deposit user rejected)
+        try {
+          const domain = window.location.hostname
+          const pagePath = window.location.pathname + window.location.search
+          const sessionId =
+            localStorage.getItem("somm_session_id") || crypto.randomUUID()
+          localStorage.setItem("somm_session_id", sessionId)
+          const toAddress = (cellarConfig.teller?.address || cellarConfig.cellar.address) as string
+          await sendIngest({
+            stage: "error",
+            domain,
+            pagePath,
+            sessionId,
+            wallet: (address || "").toLowerCase(),
+            chainId: cellarConfig.chain.wagmiId,
+            method: "deposit",
+            to: toAddress,
+            contractMatch: true,
+            strategyKey: cellarConfig.teller ? "ALPHA_STETH" : undefined,
+            status: "user_rejected",
+            timestampMs: Date.now(),
+          })
+        } catch {}
+
         const toastBody = toastConfig.showPopupGuidance ? (
           <Text>
             {toastConfig.body}
@@ -721,11 +758,6 @@ export const SommelierTab = ({
 
     let nativeDeposit = selectedToken?.symbol === "ETH"
     if (!erc20Contract && !nativeDeposit) return
-    insertEvent({
-      event: "deposit.started",
-      address: address ?? "",
-      cellar: cellarConfig.cellar.address,
-    })
 
     // For now, assume batch calls are not supported to avoid the getCapabilities issue
     const canDoBatchCall = false
@@ -758,6 +790,35 @@ export const SommelierTab = ({
       decimals: selectedTokenBalance?.decimals,
       amtInWei: String(amtInWei),
     })
+
+    // Send attribution 'request' event (deposit initiated)
+    try {
+      const domain = window.location.hostname
+      const pagePath = window.location.pathname + window.location.search
+      const sessionId =
+        localStorage.getItem("somm_session_id") || crypto.randomUUID()
+      localStorage.setItem("somm_session_id", sessionId)
+      const toAddress = (cellarConfig.teller?.address || cellarConfig.cellar.address) as string
+      await sendIngest({
+        stage: "request",
+        domain,
+        pagePath,
+        sessionId,
+        wallet: (address || "").toLowerCase(),
+        chainId: cellarConfig.chain.wagmiId,
+        method: "deposit",
+        paramsRedacted: {
+          token: data?.selectedToken?.address,
+          amountWei: String(amtInWei),
+        },
+        to: toAddress,
+        contractMatch: true,
+        strategyKey: cellarConfig.teller ? "ALPHA_STETH" : undefined,
+        amount: String(amtInWei),
+        status: "started",
+        timestampMs: Date.now(),
+      })
+    } catch {}
 
     let needsApproval = allowance < amtInWei
     let approval = !needsApproval
@@ -797,12 +858,42 @@ export const SommelierTab = ({
           logTxDebug("deposit.success", {
             txHash: receipts![0].transactionHash,
           })
-          insertEvent({
-            event: "deposit.succeeded",
-            address: address ?? "",
-            cellar: cellarConfig.cellar.address,
-            transaction_hash: receipts![0].transactionHash,
-          })
+          // Attribution (deposit succeeded)
+          try {
+            const domain = window.location.hostname
+            const pagePath = window.location.pathname + window.location.search
+            const sessionId =
+              localStorage.getItem("somm_session_id") || crypto.randomUUID()
+            localStorage.setItem("somm_session_id", sessionId)
+            const toAddress = (cellarConfig.teller?.address || cellarConfig.cellar.address) as string
+await sendIngest({
+              stage: "receipt",
+              domain,
+              pagePath,
+              sessionId,
+              wallet: (address || "").toLowerCase(),
+              chainId: cellarConfig.chain.wagmiId,
+              method: "deposit",
+              txHash: receipts![0].transactionHash,
+              to: toAddress,
+              contractMatch: true,
+              strategyKey: cellarConfig.teller ? "ALPHA_STETH" : undefined,
+              amount: String(
+                parseUnits(
+                  depositAmount.toFixed(
+                    selectedTokenBalance?.decimals ?? 18
+                  ),
+                  selectedTokenBalance?.decimals ?? 0
+                )
+              ),
+              blockNumber: Number((receipts![0] as any)?.blockNumber ?? 0),
+              blockHash: (receipts![0] as any)?.blockHash,
+              status: "success",
+              token: tokenSymbol || (nativeDeposit ? "ETH" : data?.selectedToken?.symbol),
+              decimals: selectedTokenBalance?.decimals ?? 18,
+              timestampMs: Date.now(),
+            })
+          } catch {}
           analytics.track("deposit.succeeded", {
             ...baseAnalytics,
             stable: tokenSymbol,
@@ -909,6 +1000,30 @@ export const SommelierTab = ({
           ...baseAnalytics,
           ...analyticsData,
         })
+
+        // Attribution (deposit error)
+        try {
+          const domain = window.location.hostname
+          const pagePath = window.location.pathname + window.location.search
+          const sessionId =
+            localStorage.getItem("somm_session_id") || crypto.randomUUID()
+          localStorage.setItem("somm_session_id", sessionId)
+          const toAddress = (cellarConfig.teller?.address || cellarConfig.cellar.address) as string
+          await sendIngest({
+            stage: "error",
+            domain,
+            pagePath,
+            sessionId,
+            wallet: (address || "").toLowerCase(),
+            chainId: cellarConfig.chain.wagmiId,
+            method: "deposit",
+            to: toAddress,
+            contractMatch: true,
+            strategyKey: cellarConfig.teller ? "ALPHA_STETH" : undefined,
+            status: (normalizedError.type || "error").toLowerCase(),
+            timestampMs: Date.now(),
+          })
+        } catch {}
 
         // Show toast with popup guidance if needed
         const toastBody = toastConfig.showPopupGuidance ? (

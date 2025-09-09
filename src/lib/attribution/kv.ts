@@ -1,40 +1,15 @@
-import { Redis } from "@upstash/redis"
+import { kv } from "@vercel/kv"
 
-function getEnv(name: string): string | undefined {
-  return process.env[name]
-}
-
-let client: Redis | null = null
-
-export function getRedis(): Redis {
-  if (client) return client
-  const url =
-    getEnv("ATTRIB_KV_KV_REST_API_URL") ||
-    getEnv("KV_REST_API_URL") ||
-    ""
-  const token =
-    getEnv("ATTRIB_KV_KV_REST_API_TOKEN") ||
-    getEnv("KV_REST_API_TOKEN") ||
-    ""
-  if (!url || !token) {
-    throw new Error(
-      "Missing Redis credentials: set ATTRIB_KV_KV_REST_API_URL/TOKEN or KV_REST_API_URL/TOKEN"
-    )
-  }
-  client = new Redis({ url, token })
-  return client
-}
+// Thin wrappers around @vercel/kv to keep the existing call sites unchanged.
+// @vercel/kv reads KV_REST_API_URL and KV_REST_API_TOKEN from the environment.
+// We intentionally drop the custom ATTRIB_KV_* indirection to standardize on Vercel KV.
 
 export async function setJson(key: string, value: unknown) {
-  const redis = getRedis()
-  await redis.set(key, JSON.stringify(value))
+  await kv.set(key, JSON.stringify(value))
 }
 
-export async function getJson<T = unknown>(
-  key: string
-): Promise<T | null> {
-  const redis = getRedis()
-  const raw = await redis.get<string | null>(key)
+export async function getJson<T = unknown>(key: string): Promise<T | null> {
+  const raw = (await kv.get<string | null>(key)) as string | null
   if (!raw) return null
   try {
     return JSON.parse(raw) as T
@@ -43,40 +18,29 @@ export async function getJson<T = unknown>(
   }
 }
 
-export async function zadd(
-  key: string,
-  score: number,
-  member: string
-) {
-  const redis = getRedis()
-  await redis.zadd(key, { score, member })
+export async function zadd(key: string, score: number, member: string) {
+  // @vercel/kv expects an object { score, member }
+  await (kv as any).zadd(key, { score, member })
 }
 
-export async function zrange(
-  key: string,
-  start: number,
-  stop: number
-) {
-  const redis = getRedis()
-  return (await redis.zrange<string[]>(key, start, stop)) || []
+export async function zrange(key: string, start: number, stop: number) {
+  const res = (await (kv as any).zrange(key, start, stop)) as unknown
+  return (res as string[]) || []
 }
 
 export async function sadd(key: string, member: string) {
-  const redis = getRedis()
-  await redis.sadd(key, member)
+  await (kv as any).sadd(key, member)
 }
 
 export async function smembers(key: string) {
-  const redis = getRedis()
-  return (await redis.smembers<string[]>(key)) || []
+  const res = (await (kv as any).smembers(key)) as unknown
+  return (res as string[]) || []
 }
 
 export async function incr(key: string) {
-  const redis = getRedis()
-  return await redis.incr(key)
+  return await (kv as any).incr(key)
 }
 
 export async function expire(key: string, seconds: number) {
-  const redis = getRedis()
-  await redis.expire(key, seconds)
+  await (kv as any).expire(key, seconds)
 }
