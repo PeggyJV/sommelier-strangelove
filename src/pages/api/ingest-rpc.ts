@@ -7,6 +7,30 @@ import {
   expire,
 } from "src/lib/attribution/kv"
 
+function normalizeHost(input?: string) {
+  if (!input) return ""
+  try {
+    if (/^https?:\/\//i.test(input))
+      return new URL(input).hostname.toLowerCase()
+    return String(input).split("/")[0].split(":")[0].toLowerCase()
+  } catch {
+    return String(input).toLowerCase()
+  }
+}
+
+function parseAllowlist(envValue?: string) {
+  return (envValue || "")
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean)
+    .map((s) => (s.startsWith(".") ? s.slice(1) : s))
+}
+
+function isHostAllowed(host: string, allow: string[]) {
+  if (!host) return false
+  return allow.some((suf) => host === suf || host.endsWith(`.${suf}`))
+}
+
 type RpcEvent = {
   stage: "request" | "submitted" | "receipt" | "error"
   domain: string
@@ -30,15 +54,7 @@ type RpcEvent = {
   timestampMs: number
 }
 
-function domainAllowed(host?: string) {
-  if (!host) return false
-  const h = host.toLowerCase()
-  return (
-    h.endsWith("somm.finance") ||
-    h.endsWith("sommelier.finance") ||
-    h.endsWith(".vercel.app")
-  )
-}
+// legacy domain check removed; allowlist below is the single source of truth
 
 function keyEvent(ts: number, id: string) {
   return `rpc:evt:${ts}:${id}`
@@ -66,22 +82,91 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") return res.status(405).end()
-  const origin = req.headers["x-forwarded-host"] || req.headers.host
-  if (!domainAllowed(String(origin))) return res.status(403).end()
+  const enabled =
+    process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED === "true"
+  res.setHeader("x-somm-attrib-enabled", enabled ? "true" : "false")
+  if (!enabled) return res.status(403).json({ error: "disabled" })
 
-  const limit = parseInt(
-    process.env.ATTRIBUTION_RATE_LIMIT_PER_MINUTE || "120"
+  // Allowlist check (by host suffix)
+  const rawAllow =
+    process.env.ATTRIBUTION_ALLOW_HOST_SUFFIXES ||
+    "localhost,127.0.0.1,vercel.app,app.somm.finance,somm.finance"
+  const allow = parseAllowlist(rawAllow)
+  const rawHost =
+    (req.headers["x-forwarded-host"] as string) ||
+    (req.headers.host as string) ||
+    ""
+  const origin = req.headers.origin || ""
+  const referer = req.headers.referer || ""
+  const host = normalizeHost(rawHost)
+  const originHost = normalizeHost(
+    Array.isArray(origin) ? origin[0] : origin
   )
-  const bucket = `${req.socket.remoteAddress}`
-  const allowed = await rateLimit(bucket, limit)
-  if (!allowed)
-    return res.status(429).json({ ok: false, reason: "rate_limited" })
+  const refererHost = normalizeHost(
+    Array.isArray(referer) ? referer[0] : referer
+  )
+
+  res.setHeader("x-somm-allowed-host-suffixes", allow.join(","))
+  res.setHeader("x-somm-ingest-host", rawHost)
+  res.setHeader("x-somm-ingest-host-normalized", host)
+
+  const hostOk =
+    (!!host && isHostAllowed(host, allow)) ||
+    (!!originHost && isHostAllowed(originHost, allow)) ||
+    (!!refererHost && isHostAllowed(refererHost, allow))
+
+  if (!hostOk) {
+    res.setHeader("x-somm-ingest-deny-reason", "host-not-allowed")
+    return res.status(403).json({ error: "host not allowed" })
+  }
+
+  if (req.method !== "POST") return res.status(405).end()
+
+  try {
+    const limit = parseInt(
+      process.env.ATTRIBUTION_RATE_LIMIT_PER_MINUTE || "120"
+    )
+    const bucket = `${req.socket.remoteAddress}`
+    const rlAllowed = await rateLimit(bucket, limit)
+    if (!rlAllowed)
+      return res
+        .status(429)
+        .json({ ok: false, error: "rate limited" })
+  } catch {
+    // non-fatal
+  }
 
   const body = req.body
-  if (!body || !Array.isArray(body.events))
+  if (!body) return res.status(400).end()
+  let events: RpcEvent[] = []
+  if (Array.isArray((body as any).events)) {
+    events = (body as any).events as RpcEvent[]
+  } else if ((body as any).txHash) {
+    const txHash = String((body as any).txHash)
+    const to = (body as any).to
+      ? String((body as any).to).toLowerCase()
+      : undefined
+    const wallet = (body as any).from
+      ? String((body as any).from).toLowerCase()
+      : undefined
+    const now = Date.now()
+    events = [
+      {
+        stage: "submitted",
+        domain: "local",
+        pagePath: "/",
+        sessionId: Math.random().toString(36).slice(2),
+        wallet,
+        chainId: 1,
+        method: "eth_sendTransaction",
+        txHash,
+        to,
+        timestampMs: now,
+      },
+    ]
+  } else {
     return res.status(400).end()
-  const events: RpcEvent[] = body.events
+  }
 
   const pipeline: Array<Promise<unknown>> = []
   for (const evt of events) {
@@ -183,6 +268,18 @@ export default async function handler(
     // Best-effort enrichment; do not fail request if this part fails
     console.error("alpha-steth deposit indexing error", e)
   }
+
+  try {
+    const kvUrl =
+      process.env.ATTRIB_KV_KV_REST_API_URL ||
+      process.env.KV_REST_API_URL ||
+      ""
+    if (kvUrl) {
+      try {
+        res.setHeader("x-somm-kv-host", new URL(kvUrl).host)
+      } catch {}
+    }
+  } catch {}
 
   res.json({ ok: true, count: events.length })
 }
