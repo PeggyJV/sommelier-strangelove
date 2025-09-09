@@ -181,6 +181,19 @@ export const AlphaStethMigrationForm = ({
 
   const geo = useGeo()
 
+  // Attribution: helper to send events to ingestion API
+  const sendIngest = async (evt: any) => {
+    try {
+      if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true") return
+      await fetch("/api/ingest-rpc", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ events: [evt] }),
+        keepalive: true,
+      })
+    } catch {}
+  }
+
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) return
     if (withdrawAmount <= 0 || !sourceVault) return
@@ -345,6 +358,35 @@ export const AlphaStethMigrationForm = ({
         closeHandler: close,
       })
 
+      // Attribution: record deposit initiation
+      try {
+        const domain = window.location.hostname
+        const pagePath = window.location.pathname + window.location.search
+        const sessionId =
+          localStorage.getItem("somm_session_id") || crypto.randomUUID()
+        localStorage.setItem("somm_session_id", sessionId)
+        const toAddress = (alphaStethConfig.teller?.address || alphaStethConfig.cellar.address) as string
+        await sendIngest({
+          stage: "request",
+          domain,
+          pagePath,
+          sessionId,
+          wallet: (address || "").toLowerCase(),
+          chainId: alphaStethConfig.chain.wagmiId,
+          method: "deposit",
+          paramsRedacted: {
+            token: sourceConfig.baseAsset.address,
+            amountWei: String(amountOfBaseAsset),
+          },
+          to: toAddress,
+          contractMatch: true,
+          strategyKey: "ALPHA_STETH",
+          amount: String(amountOfBaseAsset),
+          status: "started",
+          timestampMs: Date.now(),
+        })
+      } catch {}
+
       const depositHash = await writeContractAsync({
         address: alphaStethConfig.teller?.address as `0x${string}`,
         abi: alphaStethConfig.teller?.abi!,
@@ -361,6 +403,35 @@ export const AlphaStethMigrationForm = ({
       })
 
       if (receipt.status === "success") {
+        // Attribution: record deposit receipt
+        try {
+          const domain = window.location.hostname
+          const pagePath = window.location.pathname + window.location.search
+          const sessionId =
+            localStorage.getItem("somm_session_id") || crypto.randomUUID()
+          localStorage.setItem("somm_session_id", sessionId)
+          const toAddress = (alphaStethConfig.teller?.address || alphaStethConfig.cellar.address) as string
+          await sendIngest({
+            stage: "receipt",
+            domain,
+            pagePath,
+            sessionId,
+            wallet: (address || "").toLowerCase(),
+            chainId: alphaStethConfig.chain.wagmiId,
+            method: "deposit",
+            txHash: depositHash,
+            to: toAddress,
+            contractMatch: true,
+            strategyKey: "ALPHA_STETH",
+            amount: String(amountOfBaseAsset),
+            blockNumber: Number((receipt as any)?.blockNumber ?? 0),
+            blockHash: (receipt as any)?.blockHash,
+            status: "success",
+            token: sourceConfig.baseAsset.symbol,
+            decimals: sourceConfig.baseAsset.decimals,
+            timestampMs: Date.now(),
+          })
+        } catch {}
         setMigrationStep("complete")
         addToast({
           heading: "Migration Complete!",
@@ -396,6 +467,30 @@ export const AlphaStethMigrationForm = ({
     } catch (e) {
       const error = e as Error
       const isUserRejection = error.message?.includes("User rejected")
+
+      // Attribution: record deposit error if we were in deposit phase
+      try {
+        const domain = window.location.hostname
+        const pagePath = window.location.pathname + window.location.search
+        const sessionId =
+          localStorage.getItem("somm_session_id") || crypto.randomUUID()
+        localStorage.setItem("somm_session_id", sessionId)
+        const toAddress = (alphaStethConfig.teller?.address || alphaStethConfig.cellar.address) as string
+        await sendIngest({
+          stage: "error",
+          domain,
+          pagePath,
+          sessionId,
+          wallet: (address || "").toLowerCase(),
+          chainId: alphaStethConfig.chain.wagmiId,
+          method: "deposit",
+          to: toAddress,
+          contractMatch: true,
+          strategyKey: "ALPHA_STETH",
+          status: isUserRejection ? "user_rejected" : "error",
+          timestampMs: Date.now(),
+        })
+      } catch {}
 
       addToast({
         heading: "Migration Error",
