@@ -79,21 +79,27 @@ const ChainButton = ({
           borderColor="purple.base"
           borderRadius="full"
           w="auto"
+          h="44px"
+          px={4}
+          minW="120px"
           zIndex={401}
           fontFamily="Haffer"
           fontSize={12}
           _hover={{
             bg: "purple.dark",
           }}
+          _focusVisible={{
+            boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+          }}
         >
-          <HStack>
+          <HStack spacing={2} align="center">
             <Image
               src={effectiveChain.logoPath}
               alt={effectiveChain.displayName}
               boxSize="24px"
               background={"transparent"}
             />
-            <Text>{effectiveChain.displayName}</Text>
+            <Text whiteSpace="nowrap">{effectiveChain.displayName}</Text>
             <ChevronDownIcon />
           </HStack>
         </Button>
