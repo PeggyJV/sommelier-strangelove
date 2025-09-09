@@ -172,22 +172,18 @@ export const PortfolioCard = (props: BoxProps) => {
 
   // Show migration button only if on Alpha STETH page, correct chain, and user has
   // a positive balance in either Real-Yield-ETH or Turbo-STETH
+  const realYieldEthValue = realYieldEthBalance?.data?.value ?? 0n
+  const turboStethValue = turboStethBalance?.data?.value ?? 0n
   const hasMigrationSourceBalance =
-    ((realYieldEthBalance?.data?.value as unknown as bigint) ?? 0n) >
-      0n ||
-    ((turboStethBalance?.data?.value as unknown as bigint) ?? 0n) > 0n
+    realYieldEthValue > 0n || turboStethValue > 0n
 
   // Show migration button on Alpha stETH page if user has source balances,
   // or on source vault pages (Real Yield ETH / Turbo stETH) if user has balance there
   const showMigrationButton = Boolean(
     buttonsEnabled &&
       ((isAlphaSteth && hasMigrationSourceBalance) ||
-        (isRealYieldEth &&
-          ((realYieldEthBalance?.data?.value as unknown as bigint) ??
-            0n) > 0n) ||
-        (isTurboSteth &&
-          ((turboStethBalance?.data?.value as unknown as bigint) ??
-            0n) > 0n))
+        (isRealYieldEth && realYieldEthValue > 0n) ||
+        (isTurboSteth && turboStethValue > 0n))
   )
 
   return (
