@@ -3,21 +3,8 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 })
 const { withSentryConfig } = require("@sentry/nextjs")
 
-// Attribution KV build-time guardrails
+// Attribution KV build-time guardrails (scoped for attribution only)
 ;(function guardAttribEnv() {
-  const forbidden = [
-    "KV_REST_API_URL",
-    "KV_REST_API_TOKEN",
-    "KV_REST_API_READ_ONLY_TOKEN",
-    "KV_URL",
-  ]
-  for (const name of forbidden) {
-    if (process.env[name]) {
-      throw new Error(
-        `[attrib-kv] Forbidden legacy env present at build time: ${name}`
-      )
-    }
-  }
   const reqUrl = process.env.ATTRIB_KV_KV_REST_API_URL
   const reqTok = process.env.ATTRIB_KV_KV_REST_API_TOKEN
   if (!reqUrl || !reqTok) {
