@@ -32,15 +32,46 @@ export default function WithdrawalWarningBanner() {
       <HStack spacing={3} mb={4} align="center">
         <WarningIcon color="orange.400" boxSize={5} />
         <Heading size="md" color="orange.300">
-          Withdrawals – Legacy Vaults
+          Withdrawals – Legacy Vaults Update
         </Heading>
       </HStack>
 
       <Text mb={4}>
-        These vaults are currently undergoing deleveraging due to ETH
-        liquidity constraints. They are managed by Veda (formerly
-        Seven Seas).
+        Important updates regarding legacy vault withdrawals and
+        migrations:
       </Text>
+
+      <OrderedList spacing={3} mb={4}>
+        <ListItem>
+          <Text>
+            <Text as="span" fontWeight="semibold" color="green.300">
+              Real Yield ETH
+            </Text>{" "}
+            is now fully available for withdrawal. Users are
+            encouraged to migrate to{" "}
+            <Text as="span" fontWeight="semibold">
+              AlphaStETH
+            </Text>
+            .
+          </Text>
+        </ListItem>
+        <ListItem>
+          <Text>
+            <Text as="span" fontWeight="semibold" color="yellow.300">
+              TurboStETH
+            </Text>{" "}
+            – Please enter the withdrawal queue.
+          </Text>
+        </ListItem>
+        <ListItem>
+          <Text>
+            <Text as="span" fontWeight="semibold">
+              Other vaults
+            </Text>{" "}
+            are currently being worked on.
+          </Text>
+        </ListItem>
+      </OrderedList>
 
       <Text fontWeight="semibold" mb={2}>
         For vault-specific updates, contact Veda directly:
@@ -61,8 +92,6 @@ export default function WithdrawalWarningBanner() {
           Veda X
         </Link>
       </HStack>
-
-      {/* Status list removed per request */}
 
       <Text fontWeight="semibold" mb={2}>
         For general Somm support or questions about new vaults:
