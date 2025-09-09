@@ -146,7 +146,8 @@ export const SommelierTab = ({
   // Attribution (deposit started/receipt/error): send to ingestion API using Vercel KV backend
   const sendIngest = async (evt: any) => {
     try {
-      if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true") return
+      if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true")
+        return
       await fetch("/api/ingest-rpc", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -702,11 +703,14 @@ export const SommelierTab = ({
         // Attribution (deposit user rejected)
         try {
           const domain = window.location.hostname
-          const pagePath = window.location.pathname + window.location.search
+          const pagePath =
+            window.location.pathname + window.location.search
           const sessionId =
-            localStorage.getItem("somm_session_id") || crypto.randomUUID()
+            localStorage.getItem("somm_session_id") ||
+            crypto.randomUUID()
           localStorage.setItem("somm_session_id", sessionId)
-          const toAddress = (cellarConfig.teller?.address || cellarConfig.cellar.address) as string
+          const toAddress = (cellarConfig.teller?.address ||
+            cellarConfig.cellar.address) as string
           await sendIngest({
             stage: "error",
             domain,
@@ -717,7 +721,9 @@ export const SommelierTab = ({
             method: "deposit",
             to: toAddress,
             contractMatch: true,
-            strategyKey: cellarConfig.teller ? "ALPHA_STETH" : undefined,
+            strategyKey: cellarConfig.teller
+              ? "ALPHA_STETH"
+              : undefined,
             status: "user_rejected",
             timestampMs: Date.now(),
           })
@@ -794,11 +800,13 @@ export const SommelierTab = ({
     // Send attribution 'request' event (deposit initiated)
     try {
       const domain = window.location.hostname
-      const pagePath = window.location.pathname + window.location.search
+      const pagePath =
+        window.location.pathname + window.location.search
       const sessionId =
         localStorage.getItem("somm_session_id") || crypto.randomUUID()
       localStorage.setItem("somm_session_id", sessionId)
-      const toAddress = (cellarConfig.teller?.address || cellarConfig.cellar.address) as string
+      const toAddress = (cellarConfig.teller?.address ||
+        cellarConfig.cellar.address) as string
       await sendIngest({
         stage: "request",
         domain,
@@ -861,12 +869,15 @@ export const SommelierTab = ({
           // Attribution (deposit succeeded)
           try {
             const domain = window.location.hostname
-            const pagePath = window.location.pathname + window.location.search
+            const pagePath =
+              window.location.pathname + window.location.search
             const sessionId =
-              localStorage.getItem("somm_session_id") || crypto.randomUUID()
+              localStorage.getItem("somm_session_id") ||
+              crypto.randomUUID()
             localStorage.setItem("somm_session_id", sessionId)
-            const toAddress = (cellarConfig.teller?.address || cellarConfig.cellar.address) as string
-await sendIngest({
+            const toAddress = (cellarConfig.teller?.address ||
+              cellarConfig.cellar.address) as string
+            await sendIngest({
               stage: "receipt",
               domain,
               pagePath,
@@ -877,7 +888,9 @@ await sendIngest({
               txHash: receipts![0].transactionHash,
               to: toAddress,
               contractMatch: true,
-              strategyKey: cellarConfig.teller ? "ALPHA_STETH" : undefined,
+              strategyKey: cellarConfig.teller
+                ? "ALPHA_STETH"
+                : undefined,
               amount: String(
                 parseUnits(
                   depositAmount.toFixed(
@@ -886,10 +899,14 @@ await sendIngest({
                   selectedTokenBalance?.decimals ?? 0
                 )
               ),
-              blockNumber: Number((receipts![0] as any)?.blockNumber ?? 0),
+              blockNumber: Number(
+                (receipts![0] as any)?.blockNumber ?? 0
+              ),
               blockHash: (receipts![0] as any)?.blockHash,
               status: "success",
-              token: tokenSymbol || (nativeDeposit ? "ETH" : data?.selectedToken?.symbol),
+              token:
+                tokenSymbol ||
+                (nativeDeposit ? "ETH" : data?.selectedToken?.symbol),
               decimals: selectedTokenBalance?.decimals ?? 18,
               timestampMs: Date.now(),
             })
@@ -1004,11 +1021,14 @@ await sendIngest({
         // Attribution (deposit error)
         try {
           const domain = window.location.hostname
-          const pagePath = window.location.pathname + window.location.search
+          const pagePath =
+            window.location.pathname + window.location.search
           const sessionId =
-            localStorage.getItem("somm_session_id") || crypto.randomUUID()
+            localStorage.getItem("somm_session_id") ||
+            crypto.randomUUID()
           localStorage.setItem("somm_session_id", sessionId)
-          const toAddress = (cellarConfig.teller?.address || cellarConfig.cellar.address) as string
+          const toAddress = (cellarConfig.teller?.address ||
+            cellarConfig.cellar.address) as string
           await sendIngest({
             stage: "error",
             domain,
@@ -1019,7 +1039,9 @@ await sendIngest({
             method: "deposit",
             to: toAddress,
             contractMatch: true,
-            strategyKey: cellarConfig.teller ? "ALPHA_STETH" : undefined,
+            strategyKey: cellarConfig.teller
+              ? "ALPHA_STETH"
+              : undefined,
             status: (normalizedError.type || "error").toLowerCase(),
             timestampMs: Date.now(),
           })
@@ -1065,6 +1087,11 @@ await sendIngest({
     cellarConfig.chain.id,
     selectedToken?.address
   )
+
+  const displayAsset =
+    id === config.CONTRACT.ALPHA_STETH.SLUG
+      ? cellarConfig.baseAsset
+      : currentAsset
 
   // Move active asset to top of token list.
   useEffect(() => {
@@ -1559,20 +1586,24 @@ await sendIngest({
             <Text as="span">{cellarName}</Text>
           </HStack>
           <HStack justify="space-between">
-            <Text as="span">Accounting Asset</Text>
+            <Text as="span">
+              {id === config.CONTRACT.ALPHA_STETH.SLUG
+                ? "Base asset"
+                : "Accounting Asset"}
+            </Text>
             {isLoading ? (
               <Spinner size="xs" />
             ) : (
               <HStack spacing={1}>
                 <Avatar
                   boxSize={7}
-                  src={currentAsset?.src}
-                  name={currentAsset?.alt}
+                  src={displayAsset?.src}
+                  name={displayAsset?.alt}
                   borderWidth={2}
                   borderColor="surface.bg"
                   bg="surface.bg"
                 />
-                <Text as="span">{currentAsset?.symbol}</Text>
+                <Text as="span">{displayAsset?.symbol}</Text>
               </HStack>
             )}
           </HStack>
@@ -1608,62 +1639,68 @@ await sendIngest({
           </FormControl>
           {selectedToken?.symbol !== cellarConfig.baseAsset.symbol ? (
             <>
-              <CardHeading paddingTop="2em">
-                Transaction details
-              </CardHeading>
-              <HStack justify="space-between">
-                <HStack spacing={1} align="center">
-                  <Tooltip
-                    hasArrow
-                    label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
-                  however, it may incur a small fee due to the
-                  management of positions at the smart contract level."
-                    bg="surface.bg"
-                    color="neutral.300"
-                    textAlign="center"
-                  >
+              {id !== config.CONTRACT.ALPHA_STETH.SLUG && (
+                <>
+                  <CardHeading paddingTop="2em">
+                    Transaction details
+                  </CardHeading>
+                  <HStack justify="space-between">
                     <HStack spacing={1} align="center">
-                      <CardHeading fontSize="small">
-                        Alternative Deposit Asset Fee
-                      </CardHeading>
-                      <InformationIcon
-                        color="neutral.300"
-                        boxSize={3}
-                      />
-                    </HStack>
-                  </Tooltip>
-                </HStack>
-                {cellarData.depositTokens.list.includes(
-                  selectedToken?.symbol || ""
-                ) ? (
-                  <>
-                    {isDepositFeeLoading ? (
-                      <Spinner size="md" paddingRight={"1em"} />
-                    ) : (
                       <Tooltip
                         hasArrow
-                        label={
-                          depositFee === 0 ? "No deposit fee." : null
-                        }
+                        label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
+                  however, it may incur a small fee due to the
+                  management of positions at the smart contract level."
                         bg="surface.bg"
                         color="neutral.300"
                         textAlign="center"
                       >
-                        <HStack pr={2}>
-                          {depositFee === 0 ? (
-                            <GreenCheckCircleIcon />
-                          ) : null}
-                          <Text fontFamily={"inherit"}>
-                            {depositFee === 0
-                              ? "None"
-                              : `${depositFee}%`}
-                          </Text>
+                        <HStack spacing={1} align="center">
+                          <CardHeading fontSize="small">
+                            Alternative Deposit Asset Fee
+                          </CardHeading>
+                          <InformationIcon
+                            color="neutral.300"
+                            boxSize={3}
+                          />
                         </HStack>
                       </Tooltip>
-                    )}
-                  </>
-                ) : null}
-              </HStack>
+                    </HStack>
+                    {cellarData.depositTokens.list.includes(
+                      selectedToken?.symbol || ""
+                    ) ? (
+                      <>
+                        {isDepositFeeLoading ? (
+                          <Spinner size="md" paddingRight={"1em"} />
+                        ) : (
+                          <Tooltip
+                            hasArrow
+                            label={
+                              depositFee === 0
+                                ? "No deposit fee."
+                                : null
+                            }
+                            bg="surface.bg"
+                            color="neutral.300"
+                            textAlign="center"
+                          >
+                            <HStack pr={2}>
+                              {depositFee === 0 ? (
+                                <GreenCheckCircleIcon />
+                              ) : null}
+                              <Text fontFamily={"inherit"}>
+                                {depositFee === 0
+                                  ? "None"
+                                  : `${depositFee}%`}
+                              </Text>
+                            </HStack>
+                          </Tooltip>
+                        )}
+                      </>
+                    ) : null}
+                  </HStack>
+                </>
+              )}
               <HStack
                 justifyContent={"center"}
                 p={3}
@@ -1678,12 +1715,16 @@ await sendIngest({
                 cellarConfig.baseAsset.symbol ? (
                   <Text
                     fontFamily={"inherit"}
-                    fontWeight={"bold"}
+                    fontWeight={
+                      id === config.CONTRACT.ALPHA_STETH.SLUG
+                        ? "normal"
+                        : "bold"
+                    }
                     textAlign="center"
                   >
-                    {
-                      "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."
-                    }
+                    {id === config.CONTRACT.ALPHA_STETH.SLUG
+                      ? "Deposited funds can’t be withdrawn for 24 hours after deposit.\nWithdrawals are only in wstETH, regardless of deposited asset(s)."
+                      : "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."}
                   </Text>
                 ) : null}
               </HStack>
