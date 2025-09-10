@@ -431,10 +431,10 @@ export const PortfolioCard = (props: BoxProps) => {
                   (isConnected
                     ? (lpTokenData &&
                         toEther(
-                          lpTokenData.formatted,
+                          lpTokenData.value,
                           lpTokenData.decimals,
-                          true,
-                          2
+                          false,
+                          6
                         )) ||
                       "..."
                     : "--")}
