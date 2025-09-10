@@ -1,16 +1,18 @@
 import http from "http"
 import { spawn } from "child_process"
 import path from "path"
+import os from "os"
 import fs from "fs"
 import { chromium } from "playwright"
 
 const HOST = process.env.HOST || "http://localhost:3000"
 const INTRO_PATH = "/_banners/intro"
 const OUTRO_PATH = "/_banners/outro"
+// Default to Desktop unless explicitly overridden via OUT_DIR/OUTPUT_DIR
 const OUT_DIR =
   process.env.OUT_DIR ||
   process.env.OUTPUT_DIR ||
-  path.join(process.cwd(), "public", "assets", "tutorial")
+  path.join(os.homedir(), "Desktop")
 
 async function waitForServer(url: string, timeoutMs = 30000) {
   const start = Date.now()
