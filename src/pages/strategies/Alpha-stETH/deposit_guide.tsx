@@ -9,6 +9,8 @@ import {
   ChakraProvider,
 } from "@chakra-ui/react"
 import theme from "src/theme"
+import NextLink from "next/link"
+import { ArrowLeftIcon } from "components/_icons/ArrowLeftIcon"
 
 export default function AlphaStEthDepositGuidePage() {
   return (
@@ -39,7 +41,21 @@ export default function AlphaStEthDepositGuidePage() {
         justifyContent="center"
         py={{ base: 8, md: 12 }}
       >
-        <Container maxW="7xl">
+        <Container maxW="7xl" position="relative">
+          {/* Back button top-left */}
+          <Box position="absolute" top={2} left={2}>
+            <Link
+              as={NextLink}
+              href="/strategies/Alpha-stETH/manage"
+              display="inline-flex"
+              alignItems="center"
+              gap={2}
+              color="white"
+              _hover={{ textDecoration: "underline", opacity: 0.9 }}
+            >
+              <ArrowLeftIcon boxSize={4} /> Back
+            </Link>
+          </Box>
           <Stack spacing={6} align="center" textAlign="center">
             <Text
               as="h1"
