@@ -386,11 +386,33 @@ export const PortfolioCard = (props: BoxProps) => {
                   </>
                 ) : (
                   <>
-                    <HStack paddingTop={"1em"}>
-                      <ConnectButton
-                        overridechainid={cellarConfig.chain.id}
-                      />
-                    </HStack>
+                    <VStack spacing={3} width="100%" paddingTop={"1em"} align="flex-start">
+                      <HStack>
+                        <ConnectButton
+                          overridechainid={cellarConfig.chain.id}
+                        />
+                      </HStack>
+                      {id === "Alpha-stETH" && (
+                        <Button
+                          as={NextLink}
+                          href="/strategies/Alpha-stETH/deposit_guide"
+                          size="md"
+                          height="44px"
+                          variant="outline"
+                          bg="transparent"
+                          color="cta.outline.fg"
+                          borderColor="cta.outline.br"
+                          borderWidth="2px"
+                          width={{ base: "100%", md: "auto" }}
+                          _focusVisible={{
+                            boxShadow:
+                              "0 0 0 3px var(--chakra-colors-purple-base)",
+                          }}
+                        >
+                          Watch Deposit Guide
+                        </Button>
+                      )}
+                    </VStack>
                   </>
                 ))}
             </Stack>
