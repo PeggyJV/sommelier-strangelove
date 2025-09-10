@@ -35,7 +35,6 @@
     "perf:analyze": "ANALYZE=true next build",
     "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
     "perf:report": "node scripts/generate-perf-report.js",
-    "rank:active-top100": "tsx scripts/debank-rank-top100.ts",
     "export:banners": "tsx scripts/export-banners.ts"
   },
   "dependencies": {
