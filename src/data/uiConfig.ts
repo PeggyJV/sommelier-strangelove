@@ -398,27 +398,16 @@ export const apyLabel = (config: ConfigProps) => {
       config.cellar.key !== CellarKey.CELLAR_V0816) ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH
   ) {
-    if (
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
-      config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-      config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
-      config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-      config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-      config.cellarNameKey ===
-        CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
-    ) {
-      return "Estimated APY"
+    // For Alpha stETH, show Net Rewards label
+    if (config.cellarNameKey === CellarNameKey.ALPHA_STETH) {
+      return "Net Rewards"
     }
     return "Net APY"
   }
-  return "Net APY"
+  // Legacy cellar keys use Net APY by default; Alpha stETH override above
+  return config.cellarNameKey === CellarNameKey.ALPHA_STETH
+    ? "Net Rewards"
+    : "Net APY"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
