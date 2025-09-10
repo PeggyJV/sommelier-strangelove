@@ -40,19 +40,28 @@ import { coerceNetValue, parseMoneyString } from "utils/money"
 
 const checkHasValueInVault = (
   lpTokenData: LPDataType | undefined,
-  netValue: any
+  netValue: any,
+  rowOriginal?: any
 ) => {
-  // For main page: Only enable withdrawal if Net Value > 0
+  // Existing behavior: net value present enables withdraw
   const nv = coerceNetValue(netValue)
   const hasNetValue = Number.isFinite(nv) && nv > 0
 
-  // For other pages: Check both LP tokens and net value
-  const hasLPTokens =
+  // Also enable withdraw when user has LP shares (even if net value not hydrated)
+  const hasLPTokensViaHook =
     lpTokenData &&
     Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) > 0
 
-  // On main page, we only care about net value for withdrawal buttons
-  return hasNetValue
+  // Fallback to row userStrategyData, if present
+  const lpFromRowFormatted =
+    rowOriginal?.userStrategyData?.userData?.lpToken?.formatted
+  const lpFromRowDecimals =
+    rowOriginal?.userStrategyData?.userData?.lpToken?.decimals
+  const hasLPTokensViaRow =
+    lpFromRowFormatted !== undefined &&
+    Number(toEther(lpFromRowFormatted, lpFromRowDecimals)) > 0
+
+  return hasNetValue || hasLPTokensViaHook || hasLPTokensViaRow
 }
 
 const checkIsBeforeLaunch = (launchDate: string | undefined) => {
@@ -155,7 +164,11 @@ export function DepositAndWithdrawButton({
     row.original?.userStrategyData?.userData?.netValue
 
   const lpTokenDisabled = checkLPtokenDisabled(lpTokenData)
-  const hasValueInVault = checkHasValueInVault(lpTokenData, netValue)
+  const hasValueInVault = checkHasValueInVault(
+    lpTokenData,
+    netValue,
+    row?.original
+  )
 
   const { isConnected, chain } = useAccount()
   const isBeforeLaunch = checkIsBeforeLaunch(

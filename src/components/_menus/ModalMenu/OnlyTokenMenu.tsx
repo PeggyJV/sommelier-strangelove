@@ -10,7 +10,7 @@ import {
   MenuOptionGroup,
   Text,
 } from "@chakra-ui/react"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { FaChevronDown } from "react-icons/fa"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import { useFormContext } from "react-hook-form"
@@ -52,6 +52,17 @@ export const OnlyTokenMenu = ({
     depositTokens,
     cellarConfig.chain.id
   ) as Token[]
+
+  // Avoid setState during render: set default selected token once when ready
+  useEffect(() => {
+    if (!value && activeAsset) {
+      const def = depositTokenConfig.find(
+        (t) => t.address.toUpperCase() === activeAsset.toUpperCase()
+      )
+      if (def) onChange(def)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, activeAsset, depositTokenConfig])
 
   return (
     <HStack
@@ -114,9 +125,6 @@ export const OnlyTokenMenu = ({
               const isActiveAsset =
                 token.address.toUpperCase() ===
                 activeAsset?.toUpperCase()
-
-              // Set default selected token to active asset.
-              if (isActiveAsset && !value) onChange(token)
 
               return (
                 <MenuItemOption

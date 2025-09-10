@@ -33,7 +33,7 @@ import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
 import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
-import { Token } from "data/tokenConfig"
+import { Token, getTokenConfig } from "data/tokenConfig"
 import { ModalOnlyTokenMenu } from "components/_menus/ModalMenu"
 import { InformationIcon } from "components/_icons"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
@@ -77,11 +77,12 @@ export const WithdrawQueueForm = ({
   } = useForm<FormValues>()
 
   const { id: _id } = useDepositModalStore()
+  const router = useRouter()
 
   const { addToast, update, close, closeAll } = useBrandedToast()
   const { address } = useAccount()
 
-  const id = (useRouter().query.id as string) || _id
+  const id = (router.query.id as string) || _id
   const cellarConfig = cellarDataMap[id].config
 
   const { refetch } = useUserStrategyData(
@@ -169,17 +170,26 @@ export const WithdrawQueueForm = ({
     boolean | null
   >(null)
   const [preflightMessage, setPreflightMessage] = useState<string>("")
+  // Treat isValidating as the preflight spinner for current asset+amount
   const [isValidating, setIsValidating] = useState<boolean>(false)
+  const [preflightErr, setPreflightErr] = useState<string | null>(
+    null
+  )
+  const lastPreflightKey = React.useRef<string>("")
   const [discountBpsChosen, setDiscountBpsChosen] = useState<
     number | null
   >(null)
   const [effectiveDeadlineSec, setEffectiveDeadlineSec] = useState<
     number | null
   >(null)
+  // Manual retry trigger for preflight
+  const [retryNonce, setRetryNonce] = useState<number>(0)
+  const [isDust, setIsDust] = useState<boolean>(false)
 
   // Preflight: check if queue allows withdraws for selected asset (boring queue)
   useEffect(() => {
     let cancelled = false
+    let debounceTimer: any
     const run = async () => {
       try {
         if (!boringQueue || !selectedToken?.address) {
@@ -201,9 +211,11 @@ export const WithdrawQueueForm = ({
         if (!cancelled) setIsWithdrawAllowed(null)
       }
     }
-    run()
+    // Light debounce avoids rapid flicker when user changes asset quickly
+    debounceTimer = setTimeout(run, 150)
     return () => {
       cancelled = true
+      clearTimeout(debounceTimer)
     }
   }, [boringQueue, selectedToken])
 
@@ -237,27 +249,63 @@ export const WithdrawQueueForm = ({
 
   const geo = useGeo()
 
+  // Alpha stETH: default Asset Out to wstETH and hide stETH from menu
+  useEffect(() => {
+    const isAlpha =
+      ((router.query.id as string) || _id) ===
+      config.CONTRACT.ALPHA_STETH.SLUG
+    if (!isAlpha) return
+    try {
+      const tokens = getTokenConfig(
+        ["wstETH"],
+        cellarConfig.chain.id
+      ) as Token[]
+      const wst = tokens?.[0]
+      if (wst && selectedToken?.symbol !== "wstETH") {
+        setSelectedToken(wst)
+      }
+    } catch {}
+  }, [cellarConfig?.chain?.id])
+
   // Simulate the request with current inputs to pre‑validate before enabling submit
   useEffect(() => {
     let cancelled = false
+    let debounceTimer: any
+    // Helpers: timeout & sleep
+    const withTimeout = async <T,>(p: Promise<T>, ms: number) => {
+      return await Promise.race<Promise<T | "__TIMEOUT__">>([
+        p,
+        new Promise<"__TIMEOUT__">((resolve) =>
+          setTimeout(() => resolve("__TIMEOUT__"), ms)
+        ) as any,
+      ])
+    }
+    const sleep = (ms: number) =>
+      new Promise((r) => setTimeout(r, ms))
+
     const run = async () => {
       // Only validate for boringQueue path and when an amount is present
       if (!boringQueue || !selectedToken?.address) {
         setIsRequestValid(null)
         setPreflightMessage("")
+        setPreflightErr(null)
         setDiscountBpsChosen(null)
         setEffectiveDeadlineSec(null)
+        setIsDust(false)
         return
       }
       if (isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0) {
         setIsRequestValid(null)
         setPreflightMessage("")
+        setPreflightErr(null)
         setDiscountBpsChosen(null)
         setEffectiveDeadlineSec(null)
+        setIsDust(false)
         return
       }
       try {
         setIsValidating(true)
+        setPreflightErr(null)
         // Compute shares and parameters exactly like in submit path
         const withdrawAmtInBaseDenom = parseUnits(
           `${watchWithdrawAmount}`,
@@ -286,51 +334,96 @@ export const WithdrawQueueForm = ({
           minDeadline
         )
         setEffectiveDeadlineSec(effectiveDeadlineSeconds)
-        // Probe upwards in 25 bps steps until simulation succeeds
-        const step = 25
-        const upper = maxBps && maxBps > 0 ? maxBps : startBps
-        let found: number | null = null
-        for (let bps = startBps; bps <= upper; bps += step) {
-          try {
-            if (isActiveWithdrawRequest && boringQueueWithdrawals) {
-              const request =
-                boringQueueWithdrawals.open_requests[0].metadata
-              const oldRequestTouple = [
-                request.nonce,
-                address,
-                request.assetOut,
-                request.amountOfShares,
-                request.amountOfAssets,
-                request.creationTime,
-                request.secondsToMaturity,
-                request.secondsToDeadline,
-              ]
-              await boringQueue.simulate.replaceOnChainWithdraw(
-                [
-                  oldRequestTouple,
-                  BigInt(bps),
-                  BigInt(effectiveDeadlineSeconds),
-                ],
-                { account: address }
-              )
+        // Build a unique preflight key and store it
+        const key = `${cellarConfig.chain.id}:${
+          selectedToken.address
+        }:${withdrawAmtInBaseDenom.toString()}`
+        lastPreflightKey.current = key
+
+        // Dust guard using previewAssetsOut
+        try {
+          const preview = await withTimeout(
+            boringQueue.read.previewAssetsOut([
+              selectedToken.address,
+              withdrawAmtInBaseDenom,
+              BigInt(startBps),
+            ]) as unknown as Promise<bigint>,
+            6000
+          )
+          if (!cancelled && lastPreflightKey.current === key) {
+            const amt = typeof preview === "bigint" ? preview : 0n
+            if (amt === 0n) {
+              setIsDust(true)
+              setIsRequestValid(false)
+              setPreflightErr("DUST")
+              setPreflightMessage("Amount too small to withdraw.")
+              setIsValidating(false)
+              return
             } else {
-              await boringQueue.simulate.requestOnChainWithdraw(
-                [
-                  selectedToken.address,
-                  withdrawAmtInBaseDenom,
-                  BigInt(bps),
-                  BigInt(effectiveDeadlineSeconds),
-                ],
-                { account: address }
-              )
+              setIsDust(false)
             }
-            found = bps
-            break
-          } catch (_) {
-            continue
           }
+        } catch {
+          // ignore preview failure; continue to simulate
         }
-        if (!cancelled) {
+
+        const tryScan = async (): Promise<number | null> => {
+          const step = 25
+          const upper = maxBps && maxBps > 0 ? maxBps : startBps
+          for (let bps = startBps; bps <= upper; bps += step) {
+            const doSim = async () => {
+              if (isActiveWithdrawRequest && boringQueueWithdrawals) {
+                const request =
+                  boringQueueWithdrawals.open_requests[0].metadata
+                const oldRequestTouple = [
+                  request.nonce,
+                  address,
+                  request.assetOut,
+                  request.amountOfShares,
+                  request.amountOfAssets,
+                  request.creationTime,
+                  request.secondsToMaturity,
+                  request.secondsToDeadline,
+                ]
+                await boringQueue.simulate.replaceOnChainWithdraw(
+                  [
+                    oldRequestTouple,
+                    BigInt(bps),
+                    BigInt(effectiveDeadlineSeconds),
+                  ],
+                  { account: address }
+                )
+              } else {
+                await boringQueue.simulate.requestOnChainWithdraw(
+                  [
+                    selectedToken.address,
+                    withdrawAmtInBaseDenom,
+                    BigInt(bps),
+                    BigInt(effectiveDeadlineSeconds),
+                  ],
+                  { account: address }
+                )
+              }
+            }
+            const simResult = await withTimeout(doSim(), 6000)
+            if (simResult !== "__TIMEOUT__") {
+              return bps
+            }
+            // timeout → continue trying
+          }
+          return null
+        }
+
+        // First attempt
+        let found: number | null = await tryScan()
+        // One light retry if failed or timed out
+        if (found === null) {
+          await sleep(250)
+          if (cancelled || lastPreflightKey.current !== key) return
+          found = await tryScan()
+        }
+
+        if (!cancelled && lastPreflightKey.current === key) {
           if (found !== null) {
             setIsRequestValid(true)
             setDiscountBpsChosen(found)
@@ -341,6 +434,10 @@ export const WithdrawQueueForm = ({
             )
           } else {
             setIsRequestValid(false)
+            setPreflightErr("TIMEOUT")
+            setPreflightMessage(
+              "Preflight took too long. Please retry."
+            )
           }
         }
       } catch (e) {
@@ -351,14 +448,19 @@ export const WithdrawQueueForm = ({
           ""
         ).toString()
         setIsRequestValid(false)
+        // Stash only for current key
+        setPreflightErr(
+          msg.includes("BoringOnChainQueue__BadDiscount")
+            ? "DISCOUNT"
+            : "REVERT"
+        )
         if (
           msg.includes(
             "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
           )
         ) {
-          setPreflightMessage(
-            `Withdraw queue is currently not available for ${selectedToken.symbol}.`
-          )
+          // Availability is handled by isWithdrawAllowed effect; do not show here
+          setPreflightMessage("")
         } else if (msg.includes("BoringOnChainQueue__BadDiscount")) {
           const rules: any = (cellarConfig as any)
             ?.withdrawTokenConfig?.[
@@ -367,20 +469,22 @@ export const WithdrawQueueForm = ({
           const minPct = rules?.minDiscount
           const maxPct = rules?.maxDiscount
           setPreflightMessage(
-            `Discount invalid. Allowed range for ${selectedToken.symbol}: ${minPct}%–${maxPct}%.`
+            `stETH withdrawal requires a ${minPct}%–${maxPct}% discount.`
           )
         } else {
           setPreflightMessage(
-            "Request not currently valid. Please review inputs and try again."
+            "This withdrawal cannot be simulated. Check your input."
           )
         }
       } finally {
         if (!cancelled) setIsValidating(false)
       }
     }
-    run()
+    // Debounce to avoid churn/flicker on rapid input
+    debounceTimer = setTimeout(run, 200)
     return () => {
       cancelled = true
+      clearTimeout(debounceTimer)
     }
   }, [
     boringQueue,
@@ -391,6 +495,7 @@ export const WithdrawQueueForm = ({
     boringQueueWithdrawals,
     address,
     cellarConfig,
+    retryNonce,
   ])
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
@@ -1056,8 +1161,9 @@ export const WithdrawQueueForm = ({
         isDisabled={
           isDisabled ||
           (boringQueue ? isWithdrawAllowed === false : false) ||
-          (boringQueue ? isRequestValid === false : false) ||
-          isValidating
+          isValidating ||
+          Boolean(preflightErr) ||
+          (boringQueue ? isRequestValid === false : false)
         }
         isLoading={isSubmitting}
         fontSize={21}
@@ -1075,13 +1181,37 @@ export const WithdrawQueueForm = ({
             {preflightMessage}
           </Text>
         )}
-      {boringQueue &&
-        (isWithdrawAllowed === false || isRequestValid === false) && (
+      {boringQueue && isWithdrawAllowed === false && (
+        <Text color="yellow.300" fontSize="sm">
+          {`Withdraw queue is currently not available for ${selectedToken.symbol}.`}
+        </Text>
+      )}
+      {boringQueue && isValidating && (
+        <Text color="neutral.300" fontSize="sm">
+          Calculating…
+        </Text>
+      )}
+      {boringQueue && preflightErr && isWithdrawAllowed !== false && (
+        <HStack spacing={3} align="center">
           <Text color="yellow.300" fontSize="sm">
-            {preflightMessage ||
-              `Withdraw queue is currently not available for ${selectedToken.symbol}.`}
+            {preflightMessage}
           </Text>
-        )}
+          <Button
+            variant="link"
+            color="neutral.300"
+            fontSize="sm"
+            onClick={() => {
+              setPreflightErr(null)
+              setPreflightMessage("")
+              setIsRequestValid(null)
+              setIsValidating(false)
+              setRetryNonce((n) => n + 1)
+            }}
+          >
+            Retry
+          </Button>
+        </HStack>
+      )}
       {/*waitTime(cellarConfig) !== null && (
         <Text textAlign="center">
           Please wait {waitTime(cellarConfig)} after the deposit to
