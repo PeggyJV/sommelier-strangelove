@@ -34,7 +34,6 @@ export const alphaSteth: CellarData = {
     "Balancer",
     "Lido",
     "Mellow",
-    "Unichain",
   ],
   strategyAssets: ["WETH", "stETH", "wstETH"],
   performanceSplit: {
@@ -54,13 +53,12 @@ export const alphaSteth: CellarData = {
 
     highlights: `
     - Actively shifts leverage between top lending protocols (AAVE, Morpho, Euler) based on optimal borrowing rates.
-    - Provides exposure to Unichain LP opportunities for reward diversification.
     - Allocates into Mellow vaults utilizing dvSTETH to unlock ETH-native rewards.
     - Automated strategy execution and auto-compounding.
     - Additional rewards may be enabled through Lido incentives. `,
 
     description: `
-    Alpha STETH represents the next evolution in ETH reward strategies, combining dynamic capital management with diversified blue-chip primitives. The strategy reallocates across lending markets (AAVE, Morpho, Euler), Unichain liquidity pools, and Mellow vaults (via dvSTETH), based on real-time reward signals and protocol performance. Smart automation enables seamless execution and compounding while maintaining exposure to trusted DeFi strategies.
+    Alpha STETH represents the next evolution in ETH reward strategies, combining dynamic capital management with diversified blue-chip primitives. The strategy reallocates across lending markets (AAVE, Morpho, Euler) and Mellow vaults (via dvSTETH), based on real-time reward signals and protocol performance. Smart automation enables seamless execution and compounding while maintaining exposure to trusted DeFi strategies.
 
     Note that Alpha STETH and Sommelier vaults are not open to persons or citizens of the United States and other restricted countries – for more details please refer to the Sommelier <a href="https://app.sommelier.finance/user-terms" style="textDecoration:underline"  target="_blank">User Terms</a>
     `,
