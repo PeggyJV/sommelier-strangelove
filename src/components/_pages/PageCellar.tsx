@@ -147,23 +147,27 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
               </Heading>
             </HStack>
           </VStack>
-          {isYieldStrategies && <CellarStatsYield cellarId={id} />}
+          <HStack spacing={3} align="flex-end">
+            {isYieldStrategies && <CellarStatsYield cellarId={id} />}
 
-          {isAutomatedPortfolio && (
-            <CellarStatsAutomated cellarConfig={cellarConfig} />
-          )}
+            {isAutomatedPortfolio && (
+              <CellarStatsAutomated cellarConfig={cellarConfig} />
+            )}
+          </HStack>
         </HStack>
 
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles} pt={12}>
             Your Portfolio
           </Heading>
-          {type === "migrate" && (isAlphaSteth || showMigrationForSourceVault) && id && (
-            <DynamicMigrationModal
-              isOpen={isOpen}
-              onClose={onClose}
-            />
-          )}
+          {type === "migrate" &&
+            (isAlphaSteth || showMigrationForSourceVault) &&
+            id && (
+              <DynamicMigrationModal
+                isOpen={isOpen}
+                onClose={onClose}
+              />
+            )}
           <PortfolioCard />
         </VStack>
       </Section>
