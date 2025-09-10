@@ -1,10 +1,27 @@
-import { HStack, Link, Stack, Text } from "@chakra-ui/react"
-import { BannerFrame } from "./BannerFrame"
+import { Box, HStack, Link, Stack, Text } from "@chakra-ui/react"
 import NextImage from "next/image"
+import { VideoBannerFrame } from "./VideoBannerFrame"
 
 export function OutroBanner() {
   return (
-    <BannerFrame showPill={false} contentOffsetY={-40}>
+    <VideoBannerFrame>
+      {/* Faint watermark (Ethereum alt or GG orb) */}
+      <Box
+        aria-hidden
+        position="absolute"
+        right={{ base: 16, md: 24 }}
+        top={{ base: 16, md: 24 }}
+        opacity={0.22}
+        pointerEvents="none"
+      >
+        <NextImage
+          src="/assets/icons/ethereum-alt.png"
+          alt=""
+          width={280}
+          height={280}
+        />
+      </Box>
+
       {/* Centered content */}
       <Stack
         spacing={6}
@@ -15,36 +32,17 @@ export function OutroBanner() {
         textAlign="center"
         mx="auto"
       >
-        <HStack spacing={3} bg="chip.bg" px={3} py={1} rounded="full">
-          <NextImage
-            src="/assets/icons/lido.png"
-            alt="Lido"
-            width={24}
-            height={24}
-          />
-          <Text fontSize="sm" fontWeight={600} color="chip.fg">
-            Powered by Lido
-          </Text>
-        </HStack>
         <Text
           as="h1"
           textStyle="heroTitle"
           fontSize="72px"
           color="text.primary"
         >
-          Alpha stETH Deposit Guide
+          Thank you!
         </Text>
         <Text fontSize="32px" color="text.secondary" maxW="1100px">
-          You’re ready to start.
-        </Text>
-        <Text fontSize="24px" color="text.secondary" maxW="1100px">
-          Make your first deposit today and put your stETH to work
-          with Somm + Lido. Secure, dynamic, and built on Ethereum’s
-          most trusted protocols.
-        </Text>
-        <Text fontSize="28px" fontWeight={700} color="text.primary">
-          👉 Start now at
-          app.somm.finance/strategies/Alpha-stETH/manage
+          For any questions, visit somm.finance or join us on
+          Telegram/Discord.
         </Text>
 
         {/* Community links row */}
@@ -66,7 +64,44 @@ export function OutroBanner() {
           </Link>
         </HStack>
       </Stack>
-    </BannerFrame>
+
+      {/* Bottom center Somm + Lido lockup */}
+      <HStack
+        position="absolute"
+        bottom={10}
+        left="50%"
+        transform="translateX(-50%)"
+        spacing={6}
+        bg="chip.bg"
+        px={4}
+        py={2}
+        rounded="full"
+      >
+        {/* Optional glow */}
+        <Box
+          position="absolute"
+          inset={0}
+          filter="blur(16px)"
+          opacity={0.25}
+          zIndex={0}
+        />
+        <NextImage
+          src="/assets/icons/somm.svg"
+          alt="Sommelier"
+          width={140}
+          height={34}
+        />
+        <Text color="chip.fg" fontWeight={700} fontSize="sm">
+          +
+        </Text>
+        <NextImage
+          src="/assets/icons/lido.png"
+          alt="Lido"
+          width={34}
+          height={34}
+        />
+      </HStack>
+    </VideoBannerFrame>
   )
 }
 
