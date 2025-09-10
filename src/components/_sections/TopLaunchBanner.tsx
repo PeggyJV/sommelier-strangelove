@@ -200,7 +200,7 @@ export default function TopLaunchBanner({
                   Explore Vault
                 </Button>
 
-                {/* New CTA: Watch deposit guide */}
+                {/* New CTA: Watch Deposit Guide */}
                 <Button
                   as={NextLink}
                   href="/strategies/Alpha-stETH/deposit_guide"
@@ -219,7 +219,7 @@ export default function TopLaunchBanner({
                       "0 0 0 3px var(--chakra-colors-purple-base)",
                   }}
                 >
-                  Watch deposit guide
+                  Watch Deposit Guide
                 </Button>
 
                 <Link
