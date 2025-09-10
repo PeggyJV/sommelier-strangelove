@@ -4,6 +4,7 @@ import {
   BoxProps,
   Heading,
   HStack,
+  Button,
   Icon,
   Image,
   Link,
@@ -14,6 +15,7 @@ import {
   useTheme,
   VStack,
 } from "@chakra-ui/react"
+import NextLink from "next/link"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { TokenAssets } from "components/TokenAssets"
@@ -309,7 +311,11 @@ export const PortfolioCard = (props: BoxProps) => {
                       width="100%"
                       paddingTop={"1em"}
                     >
-                      <HStack>
+                      <HStack
+                        flexWrap="wrap"
+                        rowGap={2}
+                        columnGap={3}
+                      >
                         {!strategyData?.deprecated && (
                           <DepositButton
                             disabled={
@@ -326,6 +332,25 @@ export const PortfolioCard = (props: BoxProps) => {
                               !hasValueInVault || !buttonsEnabled
                             }
                           />
+                        )}
+                        {id === "Alpha-stETH" && (
+                          <Button
+                            as={NextLink}
+                            href="/strategies/Alpha-stETH/deposit_guide"
+                            size="md"
+                            height="44px"
+                            variant="outline"
+                            bg="transparent"
+                            color="cta.outline.fg"
+                            borderColor="cta.outline.br"
+                            borderWidth="2px"
+                            _focusVisible={{
+                              boxShadow:
+                                "0 0 0 3px var(--chakra-colors-purple-base)",
+                            }}
+                          >
+                            Watch Deposit Guide
+                          </Button>
                         )}
                       </HStack>
                       {/*
