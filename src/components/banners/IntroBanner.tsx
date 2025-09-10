@@ -1,4 +1,4 @@
-import { Box, HStack, Stack, Text } from "@chakra-ui/react"
+import { Box, HStack, Stack, Text, VStack } from "@chakra-ui/react"
 import NextImage from "next/image"
 import NextLink from "next/link"
 import { VideoBannerFrame } from "./VideoBannerFrame"
@@ -49,42 +49,31 @@ export function IntroBanner() {
         mx="auto"
         px="96px"
       >
-        {/* Heading */}
-        <Text
-          as="h1"
-          textStyle="heroTitle"
-          fontSize="72px"
-          color="text.primary"
-        >
-          Alpha stETH Deposit Guide
-        </Text>
+        {/* Title + Tagline */}
+        <VStack spacing={3}>
+          <Text as="h1" textStyle="heroTitle" fontSize="72px" color="text.primary">
+            Alpha stETH Deposit Guide
+          </Text>
+          <Text textStyle="bodyMd" fontSize="28px" color="text.secondary" noOfLines={2}>
+            The simplest way to put Ethereum’s most trusted staking asset to work.
+          </Text>
+        </VStack>
 
-        {/* Subtitle */}
-        <Text fontSize="32px" color="text.secondary">
-          Dynamic leveraged stETH strategy powered by Somm + Lido.
-        </Text>
+        {/* Logos row */}
+        <VStack spacing={2}>
+          <HStack spacing={6} align="center">
+            <NextImage src="/assets/icons/somm.svg" alt="Sommelier" width={160} height={40} />
+            <NextImage src="/assets/icons/lido.png" alt="Lido" width={40} height={40} />
+          </HStack>
+          <Text fontSize="sm" color="text.secondary">Powered by Lido</Text>
+        </VStack>
 
-        {/* Chips */}
-        <HStack wrap="wrap" spacing={3}>
-          {[
-            "Blue-chip DeFi exposure",
-            "stETH rewards made simple",
-            "No legacy vault dependency",
-          ].map((k) => (
-            <Text
-              key={k}
-              as="span"
-              bg="chip.bg"
-              color="chip.fg"
-              rounded="full"
-              px={4}
-              py={2}
-              fontSize="md"
-              cursor="default"
-            >
-              {k}
-            </Text>
-          ))}
+        {/* Protocol icons row (muted) */}
+        <HStack spacing={8} opacity={0.8} display={{ base: "none", md: "flex" }}>
+          <NextImage src="/assets/icons/aave2.svg" alt="Aave" width={32} height={32} />
+          <NextImage src="/assets/icons/morpho.png" alt="Morpho" width={32} height={32} />
+          <NextImage src="/assets/icons/uniswap.png" alt="Uniswap" width={32} height={32} />
+          <NextImage src="/assets/icons/mellow.png" alt="Mellow" width={32} height={32} />
         </HStack>
 
         {/* Bottom center Somm logo */}
