@@ -78,10 +78,11 @@ export const Nav = memo((props: FlexProps) => {
       >
         {/* Desktop Navigation */}
         {isLarger992 && (
-          <HStack spacing={10}>
+          <Flex maxW="calc(100% - 360px)" overflow="hidden" align="center">
             <Link href="/">
               <LogoTextIcon w="9rem" h="2rem" />
             </Link>
+            <HStack spacing={{ lg: 6, xl: 10 }} ml={6}>
             {NAV_LINKS.map((item) => {
               const isExternalLink = item.link.startsWith("http");
               let isActive = false;
@@ -131,7 +132,8 @@ export const Nav = memo((props: FlexProps) => {
                 </Flex>
               );
             })}
-          </HStack>
+            </HStack>
+          </Flex>
         )}
 
         {/* Mobile Navigation */}
@@ -160,7 +162,7 @@ export const Nav = memo((props: FlexProps) => {
           </>
         )}
 
-        <Flex flex={1} justifyContent="flex-end">
+        <Flex flexShrink={0} minW={{ lg: "auto", xl: "320px" }} justifyContent="flex-end">
           <ConnectButton />
         </Flex>
 
