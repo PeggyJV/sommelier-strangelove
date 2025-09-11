@@ -4,6 +4,7 @@ import {
   BoxProps,
   Heading,
   HStack,
+  Button,
   Icon,
   Image,
   Link,
@@ -14,6 +15,7 @@ import {
   useTheme,
   VStack,
 } from "@chakra-ui/react"
+import NextLink from "next/link"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { TokenAssets } from "components/TokenAssets"
@@ -300,7 +302,7 @@ export const PortfolioCard = (props: BoxProps) => {
                 "--"
               )}
             </CardStat> */}
-            <Stack spacing={3} direction="row">
+            <Stack spacing={4} direction="column" align="flex-start">
               {isMounted &&
                 (isConnected ? (
                   <>
@@ -309,9 +311,16 @@ export const PortfolioCard = (props: BoxProps) => {
                       width="100%"
                       paddingTop={"1em"}
                     >
-                      <HStack>
+                      {/* Row 1: Deposit (primary) + Watch Guide (secondary) */}
+                      <Stack
+                        direction={{ base: "column", md: "row" }}
+                        spacing={{ base: 2, md: 3 }}
+                        align="flex-start"
+                        width="100%"
+                      >
                         {!strategyData?.deprecated && (
                           <DepositButton
+                            width={{ base: "100%", md: "auto" }}
                             disabled={
                               !isConnected ||
                               strategyData?.isContractNotReady ||
@@ -319,15 +328,27 @@ export const PortfolioCard = (props: BoxProps) => {
                             }
                           />
                         )}
-                        {!isWithdrawQueueEnabled(cellarConfig) && (
-                          <WithdrawButton
-                            isDeprecated={strategyData?.deprecated}
-                            disabled={
-                              !hasValueInVault || !buttonsEnabled
-                            }
-                          />
+                        {id === "Alpha-stETH" && (
+                          <Button
+                            as={NextLink}
+                            href="/strategies/Alpha-stETH/deposit_guide"
+                            size="md"
+                            height="44px"
+                            variant="outline"
+                            bg="transparent"
+                            color="cta.outline.fg"
+                            borderColor="cta.outline.br"
+                            borderWidth="2px"
+                            width={{ base: "100%", md: "auto" }}
+                            _focusVisible={{
+                              boxShadow:
+                                "0 0 0 3px var(--chakra-colors-purple-base)",
+                            }}
+                          >
+                            Watch Deposit Guide
+                          </Button>
                         )}
-                      </HStack>
+                      </Stack>
                       {/*
                       <>
                         <WithdrawQueueButton
@@ -342,35 +363,81 @@ export const PortfolioCard = (props: BoxProps) => {
                         />
                       </>
                         */}
-                      {isWithdrawQueueEnabled(cellarConfig) && (
-                        <WithdrawQueueButton
-                          chain={cellarConfig.chain}
-                          buttonLabel="Enter Withdraw Queue"
-                          disabled={
-                            !hasValueInVault || !buttonsEnabled
-                          }
-                          showTooltip={true}
-                        />
-                      )}
+                      {/* Row 2: Withdraw Queue or Withdraw + Migrate (both secondary style) */}
+                      <Stack
+                        direction={{ base: "column", md: "row" }}
+                        spacing={{ base: 2, md: 3 }}
+                        align="flex-start"
+                        mt={{ base: 2, md: 3 }}
+                        width="100%"
+                      >
+                        {isWithdrawQueueEnabled(cellarConfig) ? (
+                          <WithdrawQueueButton
+                            chain={cellarConfig.chain}
+                            buttonLabel="Enter Withdraw Queue"
+                            disabled={
+                              !hasValueInVault || !buttonsEnabled
+                            }
+                            showTooltip={true}
+                            width={{ base: "100%", md: "auto" }}
+                          />
+                        ) : (
+                          <WithdrawButton
+                            isDeprecated={strategyData?.deprecated}
+                            disabled={
+                              !hasValueInVault || !buttonsEnabled
+                            }
+                            width={{ base: "100%", md: "auto" }}
+                          />
+                        )}
 
-                      {showMigrationButton && (
-                        <BaseButton
-                          onClick={() =>
-                            setIsOpen({ id, type: "migrate" })
-                          }
-                        >
-                          Migrate to Alpha STETH
-                        </BaseButton>
-                      )}
+                        {showMigrationButton && (
+                          <BaseButton
+                            onClick={() =>
+                              setIsOpen({ id, type: "migrate" })
+                            }
+                            variant="outline"
+                            bg="transparent"
+                            color="cta.outline.fg"
+                            borderColor="cta.outline.br"
+                            borderWidth="2px"
+                            width={{ base: "100%", md: "auto" }}
+                          >
+                            Migrate to Alpha STETH
+                          </BaseButton>
+                        )}
+                      </Stack>
                     </VStack>
                   </>
                 ) : (
                   <>
-                    <HStack paddingTop={"1em"}>
-                      <ConnectButton
-                        overridechainid={cellarConfig.chain.id}
-                      />
-                    </HStack>
+                    <VStack spacing={3} width="100%" paddingTop={"1em"} align="flex-start">
+                      <HStack>
+                        <ConnectButton
+                          overridechainid={cellarConfig.chain.id}
+                        />
+                      </HStack>
+                      {id === "Alpha-stETH" && (
+                        <Button
+                          as={NextLink}
+                          href="/strategies/Alpha-stETH/deposit_guide"
+                          size="md"
+                          height="44px"
+                          variant="outline"
+                          bg="transparent"
+                          color="cta.outline.fg"
+                          borderColor="cta.outline.br"
+                          borderWidth="2px"
+                          width={{ base: "100%", md: "auto" }}
+                          _focusVisible={{
+                            boxShadow:
+                              "0 0 0 3px var(--chakra-colors-purple-base)",
+                          }}
+                        >
+                          Watch Deposit Guide
+                        </Button>
+                      )}
+                    </VStack>
                   </>
                 ))}
             </Stack>
@@ -456,10 +523,10 @@ export const PortfolioCard = (props: BoxProps) => {
                   (isConnected
                     ? (lpTokenData &&
                         toEther(
-                          lpTokenData.formatted,
+                          lpTokenData.value,
                           lpTokenData.decimals,
-                          true,
-                          2
+                          false,
+                          6
                         )) ||
                       "..."
                     : "--")}

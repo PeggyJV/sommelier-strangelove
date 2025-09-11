@@ -3,6 +3,17 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 })
 const { withSentryConfig } = require("@sentry/nextjs")
 
+// Attribution KV build-time guardrails (scoped for attribution only)
+;(function guardAttribEnv() {
+  const reqUrl = process.env.ATTRIB_KV_KV_REST_API_URL
+  const reqTok = process.env.ATTRIB_KV_KV_REST_API_TOKEN
+  if (!reqUrl || !reqTok) {
+    throw new Error(
+      "[attrib-kv] Missing ATTRIB_KV_KV_REST_API_URL or ATTRIB_KV_KV_REST_API_TOKEN"
+    )
+  }
+})()
+
 const SentryOptions = {
   silent: true,
 }
