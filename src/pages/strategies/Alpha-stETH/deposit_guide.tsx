@@ -28,6 +28,7 @@ export default function AlphaStEthDepositGuidePage() {
   const [isOpening, setIsOpening] = useState(false)
   const [showSticky, setShowSticky] = useState(false)
   const videoRef = useRef<HTMLDivElement | null>(null)
+  const videoElRef = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
     if (!videoRef.current) return
@@ -41,6 +42,21 @@ export default function AlphaStEthDepositGuidePage() {
     )
     obs.observe(el)
     return () => obs.disconnect()
+  }, [])
+
+  // Best-effort autoplay on mount (muted + inline for iOS/Safari)
+  useEffect(() => {
+    try {
+      const v = videoElRef.current
+      if (v) {
+        // Ensure muted before attempting autoplay to satisfy browser policies
+        v.muted = true
+        const p = v.play()
+        if (p && typeof p.then === "function") {
+          p.catch(() => {})
+        }
+      }
+    } catch {}
   }, [])
 
   const handleOpenDeposit = async (source: "main" | "sticky") => {
@@ -130,10 +146,13 @@ export default function AlphaStEthDepositGuidePage() {
             >
               <AspectRatio ratio={16 / 9}>
                 <video
+                  ref={videoElRef}
                   src="/assets/tutorial/ALPHA_STETH.mp4"
                   controls
                   playsInline
-                  preload="metadata"
+                  muted
+                  autoPlay
+                  preload="auto"
                   aria-label="Alpha stETH Deposit Guide video"
                   style={{
                     width: "100%",
