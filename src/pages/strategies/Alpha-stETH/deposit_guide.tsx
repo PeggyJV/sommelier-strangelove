@@ -51,10 +51,30 @@ export default function AlphaStEthDepositGuidePage() {
       if (v) {
         // Ensure muted before attempting autoplay to satisfy browser policies
         v.muted = true
+        v.volume = 1
         const p = v.play()
         if (p && typeof p.then === "function") {
           p.catch(() => {})
         }
+
+        // Auto-unmute on first user interaction (required by most browsers)
+        const onInteract = () => {
+          try {
+            v.muted = false
+            v.volume = 1
+            const p2 = v.play()
+            if (p2 && typeof p2.then === "function")
+              p2.catch(() => {})
+          } catch {}
+          window.removeEventListener("click", onInteract)
+          window.removeEventListener("touchstart", onInteract)
+          window.removeEventListener("keydown", onInteract)
+        }
+        window.addEventListener("click", onInteract, { once: true })
+        window.addEventListener("touchstart", onInteract, {
+          once: true,
+        })
+        window.addEventListener("keydown", onInteract, { once: true })
       }
     } catch {}
   }, [])
