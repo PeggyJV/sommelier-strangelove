@@ -52,3 +52,30 @@ export async function get(key: string) {
 export async function smembers(key: string) {
   return kv.smembers(key) as unknown as Promise<string[]>
 }
+
+/** Get and JSON-parse a value if possible. */
+export async function getJson<T = unknown>(key: string) {
+  const raw = (await kv.get(key)) as unknown
+  if (raw == null) return null as unknown as T | null
+  if (typeof raw === "string") {
+    try {
+      return JSON.parse(raw) as T
+    } catch {
+      return raw as unknown as T
+    }
+  }
+  return raw as unknown as T
+}
+
+/** Simple wrapper for ZRANGE start..end returning members only. */
+export async function zrange(key: string, start: number, end: number) {
+  const client: any = kv as any
+  if (typeof client.zrange === "function") {
+    return (await client.zrange(key, start, end)) as string[]
+  }
+  // Fallback: fetch all via score range if supported
+  if (typeof client.zrangebyscore === "function") {
+    return (await client.zrangebyscore(key, "-inf", "+inf")) as string[]
+  }
+  return [] as string[]
+}
