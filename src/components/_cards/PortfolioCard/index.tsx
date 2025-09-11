@@ -148,13 +148,35 @@ export const PortfolioCard = (props: BoxProps) => {
   const buttonsEnabled =
     strategyData?.config.chain.wagmiId === wagmiChain?.id
 
-  if (!buttonsEnabled) {
-    userData = undefined
-    lpTokenData = undefined
-  }
-
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
+
+  // Determine if any legacy bonded tranche is matured (ready to withdraw LP tokens)
+  const hasMaturedLegacyTranche = Boolean(
+    (((userStakes as any)?.userStakes || []) as any[]).some((t: any) => {
+      const ts = Number(t?.unbondTimestamp ?? 0)
+      return ts !== 0 && ts * 1000 < Date.now()
+    })
+  )
+
+  // Calculate combined Net Value (free LP + bonded LP) for legacy vaults
+  const bondedAmount = (userStakes as any)?.totalBondedAmount
+  const tokenPrice = parseFloat(
+    (strategyData?.tokenPrice || "0").replace("$", "")
+  ) || 0
+  const bondedValue = bondedAmount?.value
+    ? (Number(bondedAmount.formatted) * tokenPrice)
+    : 0
+  const freeNetValue = Number(netValue?.value || 0)
+  const totalNetValue = freeNetValue + bondedValue
+  const totalNetValueFormatted = totalNetValue > 0
+    ? `$${totalNetValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+    : netValue?.formatted
+
+  // For legacy vaults with bonding, show combined total; otherwise show regular net value
+  const displayNetValue = !isBondedDisabled(cellarConfig) && bondedValue > 0
+    ? totalNetValueFormatted
+    : netValue?.formatted
 
   const lpTokenDisabled =
     !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
@@ -210,10 +232,13 @@ export const PortfolioCard = (props: BoxProps) => {
           >
             <CardStat
               label="Net Value"
-              tooltip="Net value of assets in the strategy including SOMM rewards"
+              tooltip={!isBondedDisabled(cellarConfig) && bondedValue > 0
+                ? `Total value of ${freeNetValue.toFixed(2)} USD (free LP) + ${bondedValue.toFixed(2)} USD (bonded LP) in the strategy`
+                : "Net value of assets in the strategy including SOMM rewards"
+              }
             >
               {isMounted &&
-                (isConnected ? netValue?.formatted || "..." : "--")}
+                (isConnected ? displayNetValue || "..." : "--")}
             </CardStat>
 
             {showNetValueInAsset(cellarConfig) && (

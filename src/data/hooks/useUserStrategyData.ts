@@ -9,6 +9,8 @@ import { useUserBalance } from "./useUserBalance"
 import { tokenConfig } from "data/tokenConfig"
 import { formatUSD } from "utils/formatCurrency"
 import { showNetValueInAsset } from "data/uiConfig"
+import { useCreateContracts } from "./useCreateContracts"
+import { getUserStakes as fetchUserStakes } from "data/actions/CELLAR_STAKING_V0815/getUserStakes"
 
 export const useUserStrategyData = (
   strategyAddress: string,
@@ -43,6 +45,9 @@ export const useUserStrategyData = (
   const baseAsset = config.baseAsset
   const { data: baseAssetPrice } = useCoinGeckoPrice(baseAsset)
 
+  // Contracts for optional legacy staking reads
+  const { stakerContract } = useCreateContracts(config)
+
   // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
   const key =
     strategyAddress +
@@ -50,7 +55,23 @@ export const useUserStrategyData = (
   const query = useQuery({
     queryKey: ["USE_USER_DATA", strategyAddress, chain, userAddress],
     queryFn: async () => {
-      // Use the LP token data from useUserBalance instead of contract calls
+      // Attempt to read legacy staking positions regardless of LP token availability
+      let userStakesResult: any = null
+      try {
+        if (config.staker && stakerContract && userAddress) {
+          userStakesResult = await fetchUserStakes(
+            userAddress,
+            stakerContract,
+            (sommPrice.data as string) || "0",
+            config
+          )
+        }
+      } catch (e) {
+        // Non-fatal; keep staking data null on failure
+        userStakesResult = null
+      }
+
+      // Use the LP token data from useUserBalance
       const lpTokenData = lpToken.data
 
       if (!lpTokenData || !strategyData.data) {
@@ -66,7 +87,7 @@ export const useUserStrategyData = (
             },
             strategyData: strategyData.data,
           },
-          userStakes: null,
+          userStakes: userStakesResult,
         }
       }
 
@@ -112,15 +133,12 @@ export const useUserStrategyData = (
           },
           strategyData: strategyData.data,
         },
-        userStakes: null,
+        userStakes: userStakesResult,
       }
     },
     enabled:
       enabled &&
       !!userAddress &&
-      !!sommPrice.data &&
-      !!lpToken.data &&
-      !!baseAssetPrice &&
       !!strategyData.data &&
       isNoDataSource === false,
     staleTime: 120_000,
