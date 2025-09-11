@@ -9,6 +9,7 @@ import {
   Spinner,
   Text,
   Stack,
+  Box,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import truncateWalletAddress from "src/utils/truncateWalletAddress"
@@ -37,8 +38,7 @@ export const ConnectedPopover = () => {
   const { data: ensName } = useEnsName({
     address,
   })
-  const { data: ensAvatar } =
-    useEnsAvatar({ name: address })
+  const { data: ensAvatar } = useEnsAvatar({ name: address })
 
   const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)
   const sommToken = tokenConfig.find(
@@ -132,25 +132,35 @@ export const ConnectedPopover = () => {
     <Popover placement="bottom">
       <PopoverTrigger>
         <BaseButton
-          bg="none"
-          borderWidth={2}
-          borderColor="purple.base"
+          variant="sommOutline"
           borderRadius="full"
           w="auto"
+          minH="48px"
+          pl={6}
+          pr={12}
+          minW="176px"
           zIndex={401}
           isLoading={isLoading}
-          fontFamily="Haffer"
-          fontSize={12}
+          position="relative"
           _hover={{
             bg: "purple.dark",
           }}
         >
-          <HStack>
+          <HStack
+            spacing={2}
+            align="center"
+            justify="center"
+            maxW="100%"
+          >
             {isLoading ? <Spinner size="xs" /> : undefined}
-            {ensName ? ensName : truncateWalletAddress(address)}
             {walletAddressIcon()}
-            <ChevronDownIcon />
+            <Text whiteSpace="nowrap">
+              {ensName ? ensName : truncateWalletAddress(address)}
+            </Text>
           </HStack>
+          <Box position="absolute" right={7}>
+            <ChevronDownIcon />
+          </Box>
         </BaseButton>
       </PopoverTrigger>
       <PopoverContent

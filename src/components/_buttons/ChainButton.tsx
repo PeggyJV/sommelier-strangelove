@@ -9,10 +9,13 @@ import {
   HStack,
   Box,
   Image,
+  Tooltip,
+  Spinner,
 } from "@chakra-ui/react"
-import { ChevronDownIcon, CheckIcon } from "components/_icons"
+import { CheckIcon, ChevronDownIcon } from "components/_icons"
 import { useSwitchChain, useAccount } from "wagmi"
-import { useMemo } from "react"
+import { useConnectModal } from "@rainbow-me/rainbowkit"
+import { useMemo, useState } from "react"
 
 import {
   chainConfigMap,
@@ -34,29 +37,30 @@ const ChainButton = ({
   const { switchChainAsync } = useSwitchChain()
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
+  const { openConnectModal } = useConnectModal()
 
   const effectiveChain = chainConfigMap[chain.id] || placeholderChain
 
-  const filteredChainKeys= useMemo(() => {
+  const [isSwitchingNetwork, setIsSwitchingNetwork] = useState(false)
+
+  const filteredChainKeys = useMemo(() => {
     const chainKeys = Object.keys(chainConfigMap)
     const filteredChainKeys = chainKeys.filter((key) =>
       supportedChains.includes(key)
     )
-    return filteredChainKeys 
+    return filteredChainKeys
   }, [])
 
   const handleNetworkChange = async (chainId: string) => {
     try {
+      setIsSwitchingNetwork(true)
       const chainConfig = chainConfigMap[chainId]
       if (!chainConfig) {
         throw new Error("Unsupported chain")
       }
 
       await switchChainAsync({ chainId: chainConfig.wagmiId })
-      onChainChange && onChainChange(chainId)
-      if (isConnected) {
-        window.location.reload()
-      }
+      if (onChainChange) onChainChange(chainId)
     } catch (e) {
       const error = e as Error
       console.error("Failed to switch the network: ", error?.message)
@@ -67,35 +71,115 @@ const ChainButton = ({
         closeHandler: close,
         duration: null,
       })
+    } finally {
+      setIsSwitchingNetwork(false)
     }
   }
 
-  return (
-    <Popover placement="bottom" isLazy>
-      <PopoverTrigger>
+  if (!isConnected) {
+    return (
+      <Tooltip
+        hasArrow
+        label="Connect wallet to switch network"
+        placement="bottom"
+        bg="surface.bg"
+        color="neutral.300"
+        textAlign="center"
+      >
         <Button
-          bg="none"
-          borderWidth={2}
-          borderColor="purple.base"
+          onClick={() => openConnectModal?.()}
+          aria-disabled
+          title="Connect wallet to switch network"
+          variant="sommOutline"
           borderRadius="full"
           w="auto"
+          minH="48px"
+          pl={6}
+          pr={14}
+          minW="176px"
           zIndex={401}
-          fontFamily="Haffer"
-          fontSize={12}
+          position="relative"
+          cursor="not-allowed"
           _hover={{
             bg: "purple.dark",
           }}
+          _focusVisible={{
+            boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+          }}
         >
-          <HStack>
+          <HStack
+            spacing={2}
+            align="center"
+            justify="center"
+            maxW="100%"
+          >
             <Image
               src={effectiveChain.logoPath}
               alt={effectiveChain.displayName}
               boxSize="24px"
               background={"transparent"}
             />
-            <Text>{effectiveChain.displayName}</Text>
-            <ChevronDownIcon />
+            <Text whiteSpace="nowrap">
+              {effectiveChain.displayName}
+            </Text>
           </HStack>
+          <Box position="absolute" right={7}>
+            <ChevronDownIcon />
+          </Box>
+        </Button>
+      </Tooltip>
+    )
+  }
+
+  return (
+    <Popover placement="bottom" isLazy>
+      <PopoverTrigger>
+        <Button
+          variant="sommOutline"
+          borderRadius="full"
+          w="auto"
+          minH="48px"
+          pl={6}
+          pr={14}
+          minW="176px"
+          zIndex={401}
+          position="relative"
+          pointerEvents={isSwitchingNetwork ? "none" : undefined}
+          title={
+            isSwitchingNetwork
+              ? "Switching network… Confirm in your wallet"
+              : undefined
+          }
+          _hover={{
+            bg: "purple.dark",
+          }}
+          _focusVisible={{
+            boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
+          }}
+        >
+          <HStack
+            spacing={2}
+            align="center"
+            justify="center"
+            maxW="100%"
+          >
+            <Image
+              src={effectiveChain.logoPath}
+              alt={effectiveChain.displayName}
+              boxSize="24px"
+              background={"transparent"}
+            />
+            <Text whiteSpace="nowrap">
+              {effectiveChain.displayName}
+            </Text>
+          </HStack>
+          <Box position="absolute" right={7}>
+            {isSwitchingNetwork ? (
+              <Spinner size="xs" />
+            ) : (
+              <ChevronDownIcon />
+            )}
+          </Box>
         </Button>
       </PopoverTrigger>
       <PopoverContent
