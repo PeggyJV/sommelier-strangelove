@@ -29,6 +29,8 @@ import { InfoBanner } from "components/_banners/InfoBanner"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 import dynamic from "next/dynamic"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { config as utilConfig } from "utils/config"
 
@@ -51,8 +53,9 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const isRealYieldEth =
     id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
   const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
-  const { isOpen, onClose, type } = useDepositModalStore()
+  const { isOpen, onClose, type, setIsOpen } = useDepositModalStore()
   const { isConnected } = useAccount()
+  const router = useRouter()
   const DynamicMigrationModal = useMemo(
     () =>
       dynamic(
@@ -64,6 +67,15 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
       ),
     []
   )
+
+  // Deep-link: ?action=deposit → open deposit modal (after wallet/network checks on page)
+  useEffect(() => {
+    const action = router.query?.action
+    if (action === "deposit") {
+      // Open the deposit modal for this vault
+      setIsOpen({ id, type: "deposit" })
+    }
+  }, [router.query?.action, id, setIsOpen, router])
 
   // Check if user should see migration prompt for Real Yield ETH or Turbo stETH
 

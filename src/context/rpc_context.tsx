@@ -23,13 +23,8 @@ export const QUICKNODE_API_URL = {
 export async function getActiveProvider(chain: Chain) {
   let publicClient: PublicClient | null = null
 
-  if (chain.quicknodeRpcUrl && QUICKNODE_API_KEY) {
-    publicClient = createPublicClient({
-      chain: chain.viemChain,
-      transport: http(`${chain.quicknodeRpcUrl}/${QUICKNODE_API_KEY}`)
-    })
-    console.log("Attempting to connect via Quicknode...")
-  } else if (chain.alchemyRpcUrl && ALCHEMY_API_KEY) {
+  // Always prefer Alchemy, then Infura
+  if (chain.alchemyRpcUrl && ALCHEMY_API_KEY) {
     publicClient = createPublicClient({
       chain: chain.viemChain,
       transport: http(`${chain.alchemyRpcUrl}/${ALCHEMY_API_KEY}`)
@@ -40,8 +35,12 @@ export async function getActiveProvider(chain: Chain) {
       chain: chain.viemChain,
       transport: http(`${chain.infuraRpcUrl}/${INFURA_API_KEY}`)
     })
-
     console.log("Attempting to connect via Infura...")
+  } else {
+    console.error(
+      "No Alchemy or Infura keys found. Please set NEXT_PUBLIC_ALCHEMY_KEY or NEXT_PUBLIC_INFURA_API_KEY."
+    )
+    return null
   }
 
   // Attempt to connect using the configured provider

@@ -68,14 +68,22 @@ export async function getJson<T = unknown>(key: string) {
 }
 
 /** Simple wrapper for ZRANGE start..end returning members only. */
-export async function zrange(key: string, start: number, end: number) {
+export async function zrange(
+  key: string,
+  start: number,
+  end: number
+) {
   const client: any = kv as any
   if (typeof client.zrange === "function") {
     return (await client.zrange(key, start, end)) as string[]
   }
   // Fallback: fetch all via score range if supported
   if (typeof client.zrangebyscore === "function") {
-    return (await client.zrangebyscore(key, "-inf", "+inf")) as string[]
+    return (await client.zrangebyscore(
+      key,
+      "-inf",
+      "+inf"
+    )) as string[]
   }
   return [] as string[]
 }
