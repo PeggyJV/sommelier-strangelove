@@ -34,7 +34,8 @@
     "size": "size-limit",
     "perf:analyze": "ANALYZE=true next build",
     "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
-    "perf:report": "node scripts/generate-perf-report.js"
+    "perf:report": "node scripts/generate-perf-report.js",
+    "export:banners": "playwright install --with-deps && node scripts/export-banners.mjs"
   },
   "dependencies": {
     "@analytics/mixpanel": "^0.4.0",
@@ -75,6 +76,7 @@
     "next": "15.3.2",
     "next-sanity": "^1.0.0",
     "next-seo": "^5.15.0",
+    "node-fetch": "^3.3.2",
     "react": "19.1.0",
     "react-countdown": "^2.3.6",
     "react-dom": "19.1.0",
@@ -120,11 +122,13 @@
     "jest": "^29.0.1",
     "jest-environment-jsdom": "^29.7.0",
     "jest-junit": "^16.0.0",
+    "playwright": "^1.55.0",
     "prettier": "^2",
     "size-limit": "^11.2.0",
     "string-replace-loader": "^3.2.0",
     "ts-jest": "^29.4.0",
     "ts-prune": "^0",
+    "tsx": "^4.19.2",
     "typescript": "^5.4.5"
   },
   "private": true,
