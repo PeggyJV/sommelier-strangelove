@@ -4,11 +4,14 @@ import { PropsWithChildren } from "react"
 
 type VideoBannerFrameProps = PropsWithChildren<{
   id?: string
+  /** Control default corner GG orb visibility */
+  showCornerOrb?: boolean
 }>
 
 export function VideoBannerFrame({
   id = "banner-root",
   children,
+  showCornerOrb = true,
 }: VideoBannerFrameProps) {
   return (
     <Box id={id} width="1920px" height="1080px">
@@ -29,23 +32,25 @@ export function VideoBannerFrame({
           px={{ base: 10, md: 16 }}
           py={{ base: 10, md: 16 }}
         >
-          {/* Corner GG icon */}
-          <Box
-            aria-hidden
-            position="absolute"
-            right={{ base: 8, md: 12 }}
-            bottom={{ base: 8, md: 12 }}
-            pointerEvents="none"
-            opacity={0.25}
-          >
-            <NextImage
-              src="/assets/icons/GG.png"
-              alt=""
-              width={180}
-              height={180}
-              priority={false}
-            />
-          </Box>
+          {/* Corner GG icon (optional) */}
+          {showCornerOrb && (
+            <Box
+              aria-hidden
+              position="absolute"
+              right={{ base: 8, md: 12 }}
+              bottom={{ base: 8, md: 12 }}
+              pointerEvents="none"
+              opacity={0.25}
+            >
+              <NextImage
+                src="/assets/icons/GG.png"
+                alt=""
+                width={180}
+                height={180}
+                priority={false}
+              />
+            </Box>
+          )}
 
           {/* Content */}
           <Box color="text.primary">{children}</Box>

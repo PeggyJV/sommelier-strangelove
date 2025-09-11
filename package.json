@@ -35,7 +35,7 @@
     "perf:analyze": "ANALYZE=true next build",
     "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
     "perf:report": "node scripts/generate-perf-report.js",
-    "export:banners": "tsx scripts/export-banners.ts"
+    "export:banners": "playwright install --with-deps && node scripts/export-banners.mjs"
   },
   "dependencies": {
     "@analytics/mixpanel": "^0.4.0",
