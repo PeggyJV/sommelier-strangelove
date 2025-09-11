@@ -34,12 +34,8 @@
     "size": "size-limit",
     "perf:analyze": "ANALYZE=true next build",
     "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
-<<<<<<< HEAD
-    "perf:report": "node scripts/generate-perf-report.js"
-=======
     "perf:report": "node scripts/generate-perf-report.js",
     "export:banners": "playwright install --with-deps && node scripts/export-banners.mjs"
->>>>>>> 20ba2677 (upload video)
   },
   "dependencies": {
     "@analytics/mixpanel": "^0.4.0",
