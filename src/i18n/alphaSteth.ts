@@ -1,8 +1,8 @@
 export const alphaStethI18n = {
   netApyLabel: "Net APY",
   tooltipBody:
-    "APY is variable and may change over time. It includes Lido base rewards and strategy boost. Past performance does not guarantee future results.",
-  tooltipLinkText: "Learn more",
+    "7-day average APY after fees\n\nAPY is the annual percentage yield including compounding.\n\nAt Alpha stETH launch, and for the first 14 days, the daily APY will be displayed instead of the 7-day APY due to insufficient historical data.",
+  tooltipLinkText: "Learn more in Alpha stETH FAQ",
   tooltipLinkHref: "https://docs.veda.tech/alpha-steth/apy",
   estimatedTag: "Estimated",
   breakdownLink: "View breakdown",
@@ -15,5 +15,3 @@ export const alphaStethI18n = {
   breakdownPlaceholder:
     "Detailed breakdown coming soon. Values shown are placeholders.",
 }
-
-
