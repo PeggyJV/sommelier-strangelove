@@ -57,6 +57,7 @@ import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { alphaStethI18n } from "i18n/alphaSteth"
+import { NetApyBreakdownModal, useNetApyBreakdownModal } from "components/NetApyBreakdownModal"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
@@ -213,6 +214,15 @@ export const SommelierTab = ({
   )
   const isAlpha = id === config.CONTRACT.ALPHA_STETH.SLUG
   const netApy = strategyData?.baseApySumRewards?.formatted
+  const approxApy = (() => {
+    const raw = netApy
+    if (!raw) return undefined
+    const num = parseFloat(String(raw).replace(/%/g, ""))
+    if (Number.isNaN(num)) return raw
+    const oneDecimal = Math.round(num * 10) / 10
+    return `≈${oneDecimal.toFixed(1)}%`
+  })()
+  const breakdown = useNetApyBreakdownModal()
 
   const { userBalances } = useUserBalances()
 
@@ -1623,7 +1633,7 @@ export const SommelierTab = ({
           {isAlpha && (
             <VStack spacing={1} align="center">
               <Text as="span" fontSize="21px" fontWeight="bold">
-                {isLoading ? <Spinner /> : netApy ?? "--"}
+                {isLoading ? <Spinner /> : approxApy ?? netApy ?? "--"}
               </Text>
               <Tooltip
                 hasArrow
@@ -1640,14 +1650,28 @@ export const SommelierTab = ({
                 bg="surface.bg"
                 color="neutral.300"
               >
-                <HStack spacing={1} align="center">
+                <HStack spacing={2} align="center">
                   <CardHeading>{alphaStethI18n.netApyLabel}</CardHeading>
                   <InformationIcon color="neutral.300" boxSize={3} />
+                  <Text as="span" fontSize="xs" color="neutral.300">
+                    ({alphaStethI18n.estimatedTag}, variable)
+                  </Text>
                 </HStack>
               </Tooltip>
-              <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px">
-                {alphaStethI18n.footnote}
-              </Text>
+              <VStack spacing={1}>
+                <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px">
+                  {alphaStethI18n.inlineMicrocopy}
+                </Text>
+                <Text
+                  as="button"
+                  onClick={breakdown.onOpen}
+                  fontSize="xs"
+                  textDecor="underline"
+                  color="neutral.300"
+                >
+                  {alphaStethI18n.breakdownLink}
+                </Text>
+              </VStack>
             </VStack>
           )}
           <FormControl isInvalid={isError as boolean | undefined}>

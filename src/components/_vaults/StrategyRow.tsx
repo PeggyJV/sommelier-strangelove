@@ -16,6 +16,7 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import KPIBox from "components/_vaults/KPIBox"
+import { config as utilConfig } from "utils/config"
 import ActionButton from "components/ui/ActionButton"
 
 type Vault = {
@@ -49,6 +50,15 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
       ? parseFloat(vault?.baseApySumRewards?.value)
       : (vault?.baseApySumRewards?.value as number | undefined)
   const netFmt = vault?.baseApySumRewards?.formatted
+  const isAlpha = vault?.slug === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+  const approxNetFmt = (() => {
+    const raw = netFmt
+    if (!raw) return undefined
+    const num = parseFloat(String(raw).replace(/%/g, ""))
+    if (Number.isNaN(num)) return raw
+    const oneDecimal = Math.round(num * 10) / 10
+    return `≈${oneDecimal.toFixed(1)}%`
+  })()
   const chainLabel = vault?.config?.chain?.displayName ?? "—"
   const chainLogo = (vault as any)?.config?.chain?.logoPath
   const launchDate = vault?.launchDate
@@ -212,8 +222,8 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             align="center"
           />
           <KPIBox
-            label="Net Rewards"
-            value={safeValue(netFmt)}
+            label={isAlpha ? "Net APY" : "Net Rewards"}
+            value={safeValue(isAlpha ? approxNetFmt ?? netFmt : netFmt)}
             align="right"
           />
         </Grid>

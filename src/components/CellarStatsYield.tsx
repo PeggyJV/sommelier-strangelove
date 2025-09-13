@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, useMemo } from "react"
 import {
   Box,
   HStack,
@@ -18,6 +18,7 @@ import { isFuture } from "date-fns"
 import { apyHoverLabel, apyLabel } from "data/uiConfig"
 import { config as utilConfig } from "utils/config"
 import { alphaStethI18n } from "i18n/alphaSteth"
+import { NetApyBreakdownModal, useNetApyBreakdownModal } from "components/NetApyBreakdownModal"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
 // Define an interface for APY data which includes the optional 'formatted' property
@@ -70,6 +71,15 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
   const isAlpha =
     alphaStethOverrides ||
     cellarId === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+  const approxApy = useMemo(() => {
+    const raw = baseApySumRewards?.formatted
+    if (!raw) return undefined
+    const num = parseFloat(String(raw).replace(/%/g, ""))
+    if (Number.isNaN(num)) return raw
+    const oneDecimal = Math.round(num * 10) / 10
+    return `≈${oneDecimal.toFixed(1)}%`
+  }, [baseApySumRewards?.formatted])
+  const breakdown = useNetApyBreakdownModal()
 
   return (
     <HStack
@@ -105,15 +115,7 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
       </VStack>
       {baseApySumRewards && (
         <VStack spacing={1} align="center">
-          <Apy
-            apy={
-              isStrategyLoading ? (
-                <Spinner />
-              ) : (
-                baseApySumRewards?.formatted
-              )
-            }
-          />
+          <Apy apy={isStrategyLoading ? <Spinner /> : isAlpha ? approxApy ?? baseApySumRewards?.formatted : baseApySumRewards?.formatted} />
           <Box>
             <Tooltip
               hasArrow
@@ -158,20 +160,39 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
               bg="surface.bg"
               color="neutral.300"
             >
-              <HStack spacing={1} align="center">
-                <CardHeading>{isAlpha ? alphaStethI18n.netApyLabel : apyLabel(cellarConfig)}</CardHeading>
-                {!!apyLabel(cellarConfig) && (
-                  <InformationIcon color="neutral.300" boxSize={3} />
+              <HStack spacing={2} align="center">
+                <CardHeading>
+                  {isAlpha ? `${alphaStethI18n.netApyLabel}` : apyLabel(cellarConfig)}
+                </CardHeading>
+                <InformationIcon color="neutral.300" boxSize={3} />
+                {isAlpha && (
+                  <Text as="span" fontSize="xs" color="neutral.300">
+                    ({alphaStethI18n.estimatedTag}, variable)
+                  </Text>
                 )}
               </HStack>
             </Tooltip>
           </Box>
           {isAlpha && (
-            <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px">
-              {alphaStethI18n.footnote}
-            </Text>
+            <VStack spacing={1}>
+              <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px">
+                {alphaStethI18n.inlineMicrocopy}
+              </Text>
+              <Text
+                as="button"
+                onClick={breakdown.onOpen}
+                fontSize="xs"
+                textDecor="underline"
+                color="neutral.300"
+              >
+                {alphaStethI18n.breakdownLink}
+              </Text>
+            </VStack>
           )}
         </VStack>
+      )}
+      {isAlpha && (
+        <NetApyBreakdownModal isOpen={breakdown.isOpen} onClose={breakdown.onClose} />
       )}
     </HStack>
   )
