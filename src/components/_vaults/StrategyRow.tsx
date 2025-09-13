@@ -227,7 +227,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
               align="right"
             />
             {isAlpha && (
-              <Box position="absolute" top={0} right={0} transform="translateY(-50%)">
+              <Box position="absolute" top={2} right={0} zIndex={1}>
                 <AlphaApyTooltip />
               </Box>
             )}

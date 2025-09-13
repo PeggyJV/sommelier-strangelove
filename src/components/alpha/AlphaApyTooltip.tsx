@@ -12,8 +12,17 @@ export function AlphaApyTooltip() {
   return (
     <Tooltip
       hasArrow
-      placement="top"
-      openDelay={150}
+      placement="right"
+      gutter={10}
+      openDelay={120}
+      closeOnScroll
+      portalProps={{ appendToParentPortal: false }}
+      modifiers={[
+        { name: "preventOverflow", options: { padding: 12, boundary: "viewport" } },
+        { name: "flip", options: { fallbackPlacements: ["right-start", "bottom", "top"] } },
+        { name: "offset", options: { offset: [0, 8] } },
+      ]}
+      zIndex="tooltip"
       label={
         <Box maxW="300px">
           <Text fontWeight="semibold" mb={1}>
