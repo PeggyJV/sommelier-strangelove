@@ -16,6 +16,7 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import KPIBox from "components/_vaults/KPIBox"
+import { AlphaApyTooltip } from "components/alpha/AlphaApyTooltip"
 import ActionButton from "components/ui/ActionButton"
 import { config as utilConfig } from "utils/config"
 import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
@@ -88,9 +89,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     ?.userStrategyData?.userData?.netValue?.formatted
 
   const safeValue = (v?: string | number | null) =>
-    v === undefined || v === null || v === ""
-      ? "–"
-      : v
+    v === undefined || v === null || v === "" ? "–" : v
 
   // Helper text countdown (compact). Updates every second, rendered once below button
   const [remaining, setRemaining] = useState<string>("")
@@ -219,11 +218,20 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             value={safeValue(netValueFmt)}
             align="center"
           />
-          <KPIBox
-            label={isAlpha ? "Net APY" : "Net Rewards"}
-            value={safeValue(isAlpha ? approxNetFmt ?? netFmt : netFmt)}
-            align="right"
-          />
+          <Box position="relative">
+            <KPIBox
+              label={isAlpha ? "Net APY" : "Net Rewards"}
+              value={safeValue(
+                isAlpha ? approxNetFmt ?? netFmt : netFmt
+              )}
+              align="right"
+            />
+            {isAlpha && (
+              <Box position="absolute" top={0} right={0} transform="translateY(-50%)">
+                <AlphaApyTooltip />
+              </Box>
+            )}
+          </Box>
         </Grid>
 
         {/* Right column: chain + primary action with single helper */}
@@ -245,30 +253,30 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
               fullWidth
               overrideChainId={(vault as any)?.config?.chain?.id}
             >
-            {isPreLaunch ? (
-              <ActionButton
-                variantStyle="primary"
-                size={{ base: "md", md: "md" }}
-                fullWidth
-                isDisabled
-                onClick={(e) => e.stopPropagation()}
-              >
-                Deposit
-              </ActionButton>
-            ) : (
-              <ActionButton
-                variantStyle="primary"
-                size={{ base: "md", md: "md" }}
-                fullWidth
-                onClick={(e) => {
-                  e.stopPropagation()
-                  if (!vault?.slug) return
-                  setIsOpen({ id: vault.slug, type: "deposit" })
-                }}
-              >
-                Deposit
-              </ActionButton>
-            )}
+              {isPreLaunch ? (
+                <ActionButton
+                  variantStyle="primary"
+                  size={{ base: "md", md: "md" }}
+                  fullWidth
+                  isDisabled
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Deposit
+                </ActionButton>
+              ) : (
+                <ActionButton
+                  variantStyle="primary"
+                  size={{ base: "md", md: "md" }}
+                  fullWidth
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (!vault?.slug) return
+                    setIsOpen({ id: vault.slug, type: "deposit" })
+                  }}
+                >
+                  Deposit
+                </ActionButton>
+              )}
             </ConnectGate>
           </Box>
           {isPreLaunch && remaining && (

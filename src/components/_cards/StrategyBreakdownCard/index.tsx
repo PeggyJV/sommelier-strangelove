@@ -10,7 +10,7 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react"
-import { FC } from "react"
+import { FC, useEffect, useState } from "react"
 import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
@@ -32,6 +32,17 @@ export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
   const { strategyBreakdown, faq } = cellarDataMap[cellarId]
   const [isMobile] = useMediaQuery("(max-width: 768px)")
 
+  const [tabIndex, setTabIndex] = useState(0)
+  const faqTabIndex = Object.keys(strategyBreakdown).length
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const hash = window.location.hash?.slice(1).toLowerCase()
+    if (hash === "faq-fees" || hash === "faq-apy") {
+      setTabIndex(faqTabIndex)
+    }
+  }, [faqTabIndex])
+
   return (
     <InnerCard
       pt={4}
@@ -39,7 +50,7 @@ export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
       pb={8}
       borderRadius={{ base: 0, sm: 16 }}
     >
-      <Tabs>
+      <Tabs index={tabIndex} onChange={setTabIndex}>
         <TabList
           borderBottomWidth={1}
           borderColor="purple.dark"
