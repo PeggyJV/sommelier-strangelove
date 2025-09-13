@@ -10,9 +10,11 @@ import {
 } from "@chakra-ui/react"
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"
 import parse from "html-react-parser"
+import { useEffect, useMemo, useState } from "react"
 
 interface Props extends AccordionProps {
   data: {
+    id?: string
     question: string
     answer: string
   }[]
@@ -20,12 +22,85 @@ interface Props extends AccordionProps {
 
 export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
   if (!data) return null
+
+  const [expandedIndex, setExpandedIndex] = useState<
+    number[] | undefined
+  >(undefined)
+
+  const getStableId = (q?: string, provided?: string) => {
+    if (provided) return provided
+    const text = (q || "").toLowerCase()
+    if (text.includes("what fees are applied")) return "faq-fees"
+    if (text.includes("what is apy for alpha steth")) return "faq-apy"
+    return undefined
+  }
+
+  const idToIndex = useMemo(() => {
+    const map = new Map<string, number>()
+    data.forEach((item, idx) => {
+      const stable = getStableId(item?.question, item?.id)
+      if (stable) map.set(stable.toLowerCase(), idx)
+    })
+    return map
+  }, [data])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const url = new URL(window.location.href)
+    const hash = url.hash?.slice(1).toLowerCase()
+    const faqParam = url.searchParams.get("faq")?.toLowerCase()
+    const auto = url.searchParams.get("autoscroll") === "1"
+
+    const targetId =
+      hash === "faq-fees" || hash === "faq-apy"
+        ? hash
+        : faqParam === "fees"
+        ? "faq-fees"
+        : faqParam === "apy"
+        ? "faq-apy"
+        : undefined
+
+    if (!targetId) return
+    const idx = idToIndex.get(targetId)
+    if (idx !== undefined) {
+      setExpandedIndex([idx])
+      setTimeout(() => {
+        document.getElementById(targetId)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+        if (auto) {
+          setTimeout(() => {
+            window.scrollTo({
+              top: document.documentElement.scrollHeight,
+              behavior: "smooth",
+            })
+          }, 150)
+        }
+      }, 50)
+    }
+  }, [idToIndex])
+
+  const handleChange = (val: number | number[]) => {
+    if (Array.isArray(val)) setExpandedIndex(val)
+    else setExpandedIndex([val])
+  }
+
   return (
-    <Accordion allowMultiple borderColor="purple.dark" {...rest}>
+    <Accordion
+      allowMultiple
+      borderColor="purple.dark"
+      index={expandedIndex}
+      onChange={handleChange as any}
+      {...rest}
+    >
       {data.map((item, index) => {
+        const stableId = getStableId(item?.question, item?.id)
         return (
           <AccordionItem
             key={index}
+            id={stableId}
+            data-faq-id={stableId}
             py={4}
             _first={{ borderTop: "none" }}
           >

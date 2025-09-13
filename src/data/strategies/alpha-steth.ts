@@ -133,5 +133,41 @@ export const alphaSteth: CellarData = {
       question: "How is Alpha STETH different from TurboSTETH?",
       answer: `Alpha STETH leverages an upgraded vault architecture to access new reward opportunities across a broader set of DeFi protocols. While TurboSTETH primarily focused on classic leverage loops, Alpha STETH incorporates advanced strategies including Morpho and Euler lending, ETH L2 and more - offering a more flexible and diversified approach to ETH-native reward strategies.`,
     },
+    {
+      question:
+        "What is APY for Alpha stETH, and how is it calculated?",
+      answer: `
+      <div>
+        <p>
+          APY is the annual percentage yield including compounding. In the context of Alpha stETH the APY calculation is the following: the vault’s rewards are derived from growth in its net asset value (NAV) over time. The NAV can increase through multiple use cases, such as staking, lending, providing liquidity on third-party providers. The user’s accrued rewards will depend on the portion of the vault that they hold.
+        </p>
+        <p style="font-style: italic; font-size: 0.875rem; color: #9CA3AF; margin-top: 8px;">
+          Please note that APY figures are only estimates and subject to change at any time. Past performance is not a guarantee of future results. Rewards are influenced by factors outside the platform’s control, including changes to blockchain protocols and validator performance.
+        </p>
+      </div>
+      `,
+    },
+    {
+      question:
+        "What fees are applied when I deposit into Alpha stETH?",
+      answer: `
+      <div>
+        <p>
+          When you deposit your tokens, you receive Alpha stETH vault tokens that represent your share of the vault. Your vault token balance never decreases to cover fees, instead, fees are reflected in the value of each vault token:
+        </p>
+        <ul style="margin-top:8px; padding-left: 1.25rem;">
+          <li style="margin-bottom:4px;">
+            <p><strong>Platform fee:</strong> 1% annually, pro-rated for the time your deposited tokens stay in the vault, is built into the token’s price.</p>
+          </li>
+          <li>
+            <p><strong>Performance fee:</strong> 10% of the yield is deducted from gains before they’re reflected in the token’s price.</p>
+          </li>
+        </ul>
+        <p style="margin-top:8px;">
+          So, while your token balance stays the same, the value per token adjusts to account for fees and performance.
+        </p>
+      </div>
+      `,
+    },
   ],
 }

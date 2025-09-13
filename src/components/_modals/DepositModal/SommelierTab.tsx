@@ -56,6 +56,9 @@ import { waitTime, depositAssetDefaultValue } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { useStrategyData } from "data/hooks/useStrategyData"
+import { alphaStethI18n } from "i18n/alphaSteth"
+import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
+import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
@@ -210,6 +213,13 @@ export const SommelierTab = ({
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
+  const isAlpha = id === config.CONTRACT.ALPHA_STETH.SLUG
+  const netApy = strategyData?.baseApySumRewards?.formatted
+  const approxApy = (() => {
+    const raw = netApy
+    if (!raw) return undefined
+    return formatAlphaStethNetApyNoApprox(raw)
+  })()
 
   const { userBalances } = useUserBalances()
 
@@ -1616,6 +1626,25 @@ export const SommelierTab = ({
           align="stretch"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
+          {/* Alpha stETH: Net APY metric + tooltip */}
+          {isAlpha && (
+            <VStack spacing={1} align="center">
+              <Text as="span" fontSize="21px" fontWeight="bold">
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  approxApy ?? netApy ?? "--"
+                )}
+              </Text>
+              <HStack spacing={2} align="center">
+                <CardHeading>
+                  {alphaStethI18n.netApyLabel}
+                </CardHeading>
+                <AlphaApyPopover />
+              </HStack>
+              {null}
+            </VStack>
+          )}
           <FormControl isInvalid={isError as boolean | undefined}>
             <ModalMenu
               depositTokens={depositTokens}
