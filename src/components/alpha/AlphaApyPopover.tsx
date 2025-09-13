@@ -53,16 +53,24 @@ export function AlphaApyPopover() {
       </PopoverTrigger>
       <PopoverContent
         w="320px"
+        bg="neutral.800"
+        border="1px solid"
+        borderColor="neutral.600"
+        rounded="md"
+        color="neutral.100"
+        fontSize="sm"
+        fontFamily="var(--df-font-sans)"
+        shadow="lg"
         _focus={{ outline: "none" }}
         zIndex="tooltip"
       >
-        <PopoverArrow />
-        <PopoverBody>
+        <PopoverArrow bg="neutral.800" />
+        <PopoverBody px={3} py={2}>
           <Box>
             <Text fontWeight="semibold" mb={1}>
               {alphaStethI18n.netApyLabel}
             </Text>
-            <Text whiteSpace="pre-line">
+            <Text whiteSpace="pre-line" lineHeight="short">
               {alphaStethI18n.tooltipBody}
             </Text>
             <ChakraLink
@@ -75,6 +83,7 @@ export function AlphaApyPopover() {
               display="inline-block"
               mt={2}
               textDecoration="underline"
+              color="purple.base"
               onClick={d.onClose}
             >
               {alphaStethI18n.tooltipLinkText}
