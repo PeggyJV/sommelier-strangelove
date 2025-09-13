@@ -150,60 +150,51 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
             }
           />
           <Box>
-            {isAlpha ? (
-              <VStack spacing={2} align="center">
-                <AlphaApyTooltip>
-                  <KpiLabelWithInfo
-                    label={alphaStethI18n.netApyLabel}
-                    aria-label="About Net APY"
-                  />
-                </AlphaApyTooltip>
-              </VStack>
-            ) : (
-              <Tooltip
-                hasArrow
-                placement="top"
-                label={
-                  <>
-                    <Text>
-                      {apyHoverLabel(cellarConfig)} {baseApy?.formatted ?? "0.00%"}
-                    </Text>
-                    {cellarConfig.customReward?.showOnlyBaseApy !== undefined &&
-                    cellarConfig.customReward?.showOnlyBaseApy === true ? (
-                      <></>
-                    ) : (
-                      <>
-                        <Text>
-                          {cellarConfig.customReward?.showSommRewards
-                            ? `SOMM Rewards APY ${
-                                rewardsApy?.formatted ?? "0.00%"
-                              }`
-                            : null}
-                        </Text>
-                        <Text>
-                          {cellarConfig.customReward?.customRewardAPYTooltip ?? `${
-                            cellarConfig.customReward?.showAPY
-                              ? `${cellarConfig.customReward.tokenDisplayName} `
-                              : ""
-                          }Rewards APY ${
-                            extraRewardsApy?.formatted ??
-                            rewardsApy?.formatted ??
-                            "0.00%"
-                          }`}
-                        </Text>
-                      </>
-                    )}
-                  </>
-                }
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <HStack spacing={2} align="center">
-                  <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
-            )}
+            <Tooltip
+              hasArrow
+              placement="top"
+              label={
+                <>
+                  <Text>
+                    {apyHoverLabel(cellarConfig)} {baseApy?.formatted ?? "0.00%"}
+                  </Text>
+                  {cellarConfig.customReward?.showOnlyBaseApy !== undefined &&
+                  cellarConfig.customReward?.showOnlyBaseApy === true ? (
+                    <></>
+                  ) : (
+                    <>
+                      <Text>
+                        {cellarConfig.customReward?.showSommRewards
+                          ? `SOMM Rewards APY ${
+                              rewardsApy?.formatted ?? "0.00%"
+                            }`
+                          : null}
+                      </Text>
+                      <Text>
+                        {cellarConfig.customReward?.customRewardAPYTooltip ?? `${
+                          cellarConfig.customReward?.showAPY
+                            ? `${cellarConfig.customReward.tokenDisplayName} `
+                            : ""
+                        }Rewards APY ${
+                          extraRewardsApy?.formatted ??
+                          rewardsApy?.formatted ??
+                          "0.00%"
+                        }`}
+                      </Text>
+                    </>
+                  )}
+                </>
+              }
+              bg="surface.bg"
+              color="neutral.300"
+            >
+              <HStack spacing={2} align="center">
+                <CardHeading>
+                  {isAlpha ? `${alphaStethI18n.netApyLabel}` : apyLabel(cellarConfig)}
+                </CardHeading>
+                <InformationIcon color="neutral.300" boxSize={3} />
+              </HStack>
+            </Tooltip>
           </Box>
           {isAlpha && <AlphaStethBreakdown parts={alphaParts} />}
         </VStack>

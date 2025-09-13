@@ -221,9 +221,22 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
           />
           {isAlpha ? (
             <VStack spacing={2} align="end" minW={0}>
-              <AlphaApyTooltip>
-                <KpiLabelWithInfo label="Net APY" aria-label="About Net APY" />
-              </AlphaApyTooltip>
+              <Tooltip
+                hasArrow
+                placement="top"
+                label={
+                  <Text>{safeValue(approxNetFmt ?? netFmt)}</Text>
+                }
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={1} align="center">
+                  <Text fontSize="xs" color="neutral.400" isTruncated>
+                    Net APY
+                  </Text>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
               <Text
                 fontSize={{ base: "xl", md: "2xl" }}
                 fontWeight={800}
