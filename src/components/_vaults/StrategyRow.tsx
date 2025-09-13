@@ -9,6 +9,7 @@ import {
   Button,
   Avatar,
   Stack,
+  Tooltip,
 } from "@chakra-ui/react"
 import { useEffect, useMemo, useState } from "react"
 import ConnectGate from "components/wallet/ConnectGate"
@@ -21,6 +22,7 @@ import { KpiLabelWithInfo } from "components/alpha/KpiLabelWithInfo"
 import ActionButton from "components/ui/ActionButton"
 import { config as utilConfig } from "utils/config"
 import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
+import { InformationIcon } from "components/_icons"
 
 type Vault = {
   name?: string
