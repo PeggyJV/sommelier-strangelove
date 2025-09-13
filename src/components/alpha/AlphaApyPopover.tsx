@@ -53,19 +53,13 @@ export function AlphaApyPopover() {
       </PopoverTrigger>
       <PopoverContent
         w="320px"
-        bg="neutral.800"
-        border="1px solid"
-        borderColor="neutral.600"
-        rounded="md"
-        color="neutral.100"
-        fontSize="sm"
-        fontFamily="var(--df-font-sans)"
-        shadow="lg"
+        bg="surface.bg"
+        color="neutral.300"
         _focus={{ outline: "none" }}
         zIndex="tooltip"
         pointerEvents="auto"
       >
-        <PopoverArrow bg="neutral.800" />
+        <PopoverArrow bg="surface.bg" />
         <PopoverBody px={3} py={2}>
           <Box>
             <Text fontWeight="semibold" mb={1}>
@@ -77,22 +71,27 @@ export function AlphaApyPopover() {
                 as={NextLink}
                 href={{
                   pathname: "/strategies/Alpha-stETH/manage",
-                  query: { tab: "faqs", faq: "fees", autoscroll: "1" },
+                  query: {
+                    tab: "faqs",
+                    faq: "fees",
+                    autoscroll: "1",
+                  },
                   hash: "faq-fees",
                 }}
                 textDecoration="underline"
-                color="purple.base"
                 onClick={d.onClose}
               >
                 fees
               </ChakraLink>
             </Text>
             <Text mt={1} lineHeight="short">
-              APY is the annual percentage yield including compounding.
+              APY is the annual percentage yield including
+              compounding.
             </Text>
             <Text mt={1} lineHeight="short">
-              At Alpha stETH launch, and for the first 14 days, the daily APY will be displayed
-              instead of the 7-day APY due to insufficient historical data.
+              At Alpha stETH launch, and for the first 14 days, the
+              daily APY will be displayed instead of the 7-day APY due
+              to insufficient historical data.
             </Text>
             <ChakraLink
               as={NextLink}
@@ -104,7 +103,6 @@ export function AlphaApyPopover() {
               display="inline-block"
               mt={2}
               textDecoration="underline"
-              color="purple.base"
               onClick={d.onClose}
             >
               {alphaStethI18n.tooltipLinkText}
