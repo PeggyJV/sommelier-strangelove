@@ -230,38 +230,12 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
               >
                 {safeValue(approxNetFmt ?? netFmt)}
               </Text>
-              <Tooltip
-                hasArrow
-                placement="top"
-                label={
-                  <VStack align="start" spacing={1} maxW="320px">
-                    <Text fontWeight="semibold">
-                      {alphaStethI18n.netApyLabel}
-                    </Text>
-                    <Text whiteSpace="pre-line">
-                      {alphaStethI18n.tooltipBody}
-                    </Text>
-                    <Text
-                      as="a"
-                      href={alphaStethI18n.tooltipLinkHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      textDecor="underline"
-                    >
-                      {alphaStethI18n.tooltipLinkText}
-                    </Text>
-                  </VStack>
-                }
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <HStack spacing={1} align="center">
-                  <Text fontSize="xs" color="neutral.400" isTruncated>
-                    Net APY
-                  </Text>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
+              <HStack spacing={1} align="center">
+                <Text fontSize="xs" color="neutral.400" isTruncated>
+                  Net APY
+                </Text>
+                <AlphaApyPopover />
+              </HStack>
             </VStack>
           ) : (
             <KPIBox

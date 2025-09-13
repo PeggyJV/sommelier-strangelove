@@ -12,6 +12,7 @@ import {
 import { CardDivider } from "./_layout/CardDivider"
 import { CardHeading } from "./_typography/CardHeading"
 import { InformationIcon } from "./_icons"
+import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
 import { Apy } from "./Apy"
 import { cellarDataMap } from "data/cellarDataMap"
 import { isFuture } from "date-fns"
@@ -150,25 +151,16 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
             }
           />
           <Box>
-            <Tooltip
-              hasArrow
-              placement="top"
-              label={
-                isAlpha ? (
-                  <VStack align="start" spacing={1} maxW="320px">
-                    <Text fontWeight="semibold">{alphaStethI18n.netApyLabel}</Text>
-                    <Text whiteSpace="pre-line">{alphaStethI18n.tooltipBody}</Text>
-                    <Text
-                      as="a"
-                      href={alphaStethI18n.tooltipLinkHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      textDecor="underline"
-                    >
-                      {alphaStethI18n.tooltipLinkText}
-                    </Text>
-                  </VStack>
-                ) : (
+            {isAlpha ? (
+              <HStack spacing={2} align="center">
+                <CardHeading>{alphaStethI18n.netApyLabel}</CardHeading>
+                <AlphaApyPopover />
+              </HStack>
+            ) : (
+              <Tooltip
+                hasArrow
+                placement="top"
+                label={
                   <>
                     <Text>
                       {apyHoverLabel(cellarConfig)} {baseApy?.formatted ?? "0.00%"}
@@ -199,20 +191,16 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
                       </>
                     )}
                   </>
-                )
-              }
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack spacing={2} align="center">
-                <CardHeading>
-                  {isAlpha
-                    ? `${alphaStethI18n.netApyLabel}`
-                    : apyLabel(cellarConfig)}
-                </CardHeading>
-                <InformationIcon color="neutral.300" boxSize={3} />
-              </HStack>
-            </Tooltip>
+                }
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={2} align="center">
+                  <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+            )}
           </Box>
           {isAlpha && <AlphaStethBreakdown parts={alphaParts} />}
         </VStack>

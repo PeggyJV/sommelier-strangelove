@@ -57,7 +57,7 @@ import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { alphaStethI18n } from "i18n/alphaSteth"
-import { AlphaApyTooltip } from "components/alpha/AlphaApyTooltip"
+import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
 import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
@@ -1630,42 +1630,12 @@ export const SommelierTab = ({
           {isAlpha && (
             <VStack spacing={1} align="center">
               <Text as="span" fontSize="21px" fontWeight="bold">
-                {isLoading ? (
-                  <Spinner />
-                ) : (
-                  approxApy ?? netApy ?? "--"
-                )}
+                {isLoading ? <Spinner /> : approxApy ?? netApy ?? "--"}
               </Text>
-              <Tooltip
-                hasArrow
-                placement="top"
-                label={
-                  <VStack align="start" spacing={1} maxW="280px">
-                    <Text fontWeight="semibold">
-                      {alphaStethI18n.tooltipTitle}
-                    </Text>
-                    <Text>{alphaStethI18n.tooltipBody}</Text>
-                    <Text
-                      as="a"
-                      href={alphaStethI18n.tooltipLinkHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      textDecor="underline"
-                    >
-                      {alphaStethI18n.tooltipLinkText}
-                    </Text>
-                  </VStack>
-                }
-                bg="surface.bg"
-                color="neutral.300"
-              >
-                <HStack spacing={2} align="center">
-                  <CardHeading>
-                    {alphaStethI18n.netApyLabel}
-                  </CardHeading>
-                  <AlphaApyTooltip />
-                </HStack>
-              </Tooltip>
+              <HStack spacing={2} align="center">
+                <CardHeading>{alphaStethI18n.netApyLabel}</CardHeading>
+                <AlphaApyPopover />
+              </HStack>
               {null}
             </VStack>
           )}
