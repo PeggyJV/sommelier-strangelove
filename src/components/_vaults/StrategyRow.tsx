@@ -17,6 +17,7 @@ import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import KPIBox from "components/_vaults/KPIBox"
 import { AlphaApyTooltip } from "components/alpha/AlphaApyTooltip"
+import { KpiLabelWithInfo } from "components/alpha/KpiLabelWithInfo"
 import ActionButton from "components/ui/ActionButton"
 import { config as utilConfig } from "utils/config"
 import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
@@ -218,20 +219,27 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             value={safeValue(netValueFmt)}
             align="center"
           />
-          <Box position="relative">
+          {isAlpha ? (
+            <VStack spacing={2} align="end" minW={0}>
+              <AlphaApyTooltip>
+                <KpiLabelWithInfo label="Net APY" aria-label="About Net APY" />
+              </AlphaApyTooltip>
+              <Text
+                fontSize={{ base: "xl", md: "2xl" }}
+                fontWeight={800}
+                lineHeight={1}
+                isTruncated
+              >
+                {safeValue(approxNetFmt ?? netFmt)}
+              </Text>
+            </VStack>
+          ) : (
             <KPIBox
-              label={isAlpha ? "Net APY" : "Net Rewards"}
-              value={safeValue(
-                isAlpha ? approxNetFmt ?? netFmt : netFmt
-              )}
+              label="Net Rewards"
+              value={safeValue(netFmt)}
               align="right"
             />
-            {isAlpha && (
-              <Box position="absolute" top={2} right={0} zIndex={1}>
-                <AlphaApyTooltip />
-              </Box>
-            )}
-          </Box>
+          )}
         </Grid>
 
         {/* Right column: chain + primary action with single helper */}

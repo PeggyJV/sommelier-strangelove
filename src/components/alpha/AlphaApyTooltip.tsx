@@ -8,7 +8,7 @@ import {
 import { InformationIcon } from "components/_icons"
 import NextLink from "next/link"
 
-export function AlphaApyTooltip() {
+export function AlphaApyTooltip({ children }: { children?: React.ReactNode }) {
   return (
     <Tooltip
       hasArrow
@@ -18,8 +18,16 @@ export function AlphaApyTooltip() {
       closeOnScroll
       portalProps={{ appendToParentPortal: false }}
       modifiers={[
-        { name: "preventOverflow", options: { padding: 12, boundary: "viewport" } },
-        { name: "flip", options: { fallbackPlacements: ["right-start", "bottom", "top"] } },
+        {
+          name: "preventOverflow",
+          options: { padding: 12, boundary: "viewport" },
+        },
+        {
+          name: "flip",
+          options: {
+            fallbackPlacements: ["right-start", "bottom", "top"],
+          },
+        },
         { name: "offset", options: { offset: [0, 8] } },
       ]}
       zIndex="tooltip"
@@ -64,12 +72,14 @@ export function AlphaApyTooltip() {
         </Box>
       }
     >
-      <IconButton
-        aria-label="About Net APY"
-        size="xs"
-        variant="ghost"
-        icon={<InformationIcon />}
-      />
+      {children ?? (
+        <IconButton
+          aria-label="About Net APY"
+          size="xs"
+          variant="ghost"
+          icon={<InformationIcon />}
+        />
+      )}
     </Tooltip>
   )
 }
