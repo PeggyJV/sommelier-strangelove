@@ -17,12 +17,11 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import KPIBox from "components/_vaults/KPIBox"
-import { AlphaApyTooltip } from "components/alpha/AlphaApyTooltip"
-import { KpiLabelWithInfo } from "components/alpha/KpiLabelWithInfo"
 import ActionButton from "components/ui/ActionButton"
 import { config as utilConfig } from "utils/config"
 import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
 import { InformationIcon } from "components/_icons"
+import { alphaStethI18n } from "i18n/alphaSteth"
 
 type Vault = {
   name?: string
@@ -236,8 +235,12 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                 placement="top"
                 label={
                   <VStack align="start" spacing={1} maxW="320px">
-                    <Text fontWeight="semibold">{alphaStethI18n.netApyLabel}</Text>
-                    <Text whiteSpace="pre-line">{alphaStethI18n.tooltipBody}</Text>
+                    <Text fontWeight="semibold">
+                      {alphaStethI18n.netApyLabel}
+                    </Text>
+                    <Text whiteSpace="pre-line">
+                      {alphaStethI18n.tooltipBody}
+                    </Text>
                     <Text
                       as="a"
                       href={alphaStethI18n.tooltipLinkHref}
