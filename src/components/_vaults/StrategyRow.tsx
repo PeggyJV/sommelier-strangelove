@@ -22,6 +22,7 @@ import { config as utilConfig } from "utils/config"
 import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
 import { InformationIcon } from "components/_icons"
 import { alphaStethI18n } from "i18n/alphaSteth"
+import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
 
 type Vault = {
   name?: string
