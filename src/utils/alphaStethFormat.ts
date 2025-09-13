@@ -23,5 +23,3 @@ export function formatAlphaStethNetApyNoApprox(
   const rounded = Math.round(n * 10) / 10
   return `${rounded.toFixed(1)}%`
 }
-
-

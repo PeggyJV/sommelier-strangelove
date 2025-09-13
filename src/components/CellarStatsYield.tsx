@@ -153,7 +153,9 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
           <Box>
             {isAlpha ? (
               <HStack spacing={2} align="center">
-                <CardHeading>{alphaStethI18n.netApyLabel}</CardHeading>
+                <CardHeading>
+                  {alphaStethI18n.netApyLabel}
+                </CardHeading>
                 <AlphaApyPopover />
               </HStack>
             ) : (
@@ -163,10 +165,13 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
                 label={
                   <>
                     <Text>
-                      {apyHoverLabel(cellarConfig)} {baseApy?.formatted ?? "0.00%"}
+                      {apyHoverLabel(cellarConfig)}{" "}
+                      {baseApy?.formatted ?? "0.00%"}
                     </Text>
-                    {cellarConfig.customReward?.showOnlyBaseApy !== undefined &&
-                    cellarConfig.customReward?.showOnlyBaseApy === true ? (
+                    {cellarConfig.customReward?.showOnlyBaseApy !==
+                      undefined &&
+                    cellarConfig.customReward?.showOnlyBaseApy ===
+                      true ? (
                       <></>
                     ) : (
                       <>
@@ -178,15 +183,17 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
                             : null}
                         </Text>
                         <Text>
-                          {cellarConfig.customReward?.customRewardAPYTooltip ?? `${
-                            cellarConfig.customReward?.showAPY
-                              ? `${cellarConfig.customReward.tokenDisplayName} `
-                              : ""
-                          }Rewards APY ${
-                            extraRewardsApy?.formatted ??
-                            rewardsApy?.formatted ??
-                            "0.00%"
-                          }`}
+                          {cellarConfig.customReward
+                            ?.customRewardAPYTooltip ??
+                            `${
+                              cellarConfig.customReward?.showAPY
+                                ? `${cellarConfig.customReward.tokenDisplayName} `
+                                : ""
+                            }Rewards APY ${
+                              extraRewardsApy?.formatted ??
+                              rewardsApy?.formatted ??
+                              "0.00%"
+                            }`}
                         </Text>
                       </>
                     )}

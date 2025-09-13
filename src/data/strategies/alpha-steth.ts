@@ -150,7 +150,8 @@ export const alphaSteth: CellarData = {
       `,
     },
     {
-      question: "What fees are applied when I deposit into Alpha stETH?",
+      question:
+        "What fees are applied when I deposit into Alpha stETH?",
       answer: `
       <div>
         <p>

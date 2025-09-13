@@ -1630,10 +1630,16 @@ export const SommelierTab = ({
           {isAlpha && (
             <VStack spacing={1} align="center">
               <Text as="span" fontSize="21px" fontWeight="bold">
-                {isLoading ? <Spinner /> : approxApy ?? netApy ?? "--"}
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  approxApy ?? netApy ?? "--"
+                )}
               </Text>
               <HStack spacing={2} align="center">
-                <CardHeading>{alphaStethI18n.netApyLabel}</CardHeading>
+                <CardHeading>
+                  {alphaStethI18n.netApyLabel}
+                </CardHeading>
                 <AlphaApyPopover />
               </HStack>
               {null}

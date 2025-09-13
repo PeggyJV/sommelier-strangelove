@@ -20,11 +20,10 @@ export function KpiLabelWithInfo({ label, onInfo, ...a11y }: Props) {
         icon={<InformationIcon />}
         onClick={(e) => onInfo?.(e)}
         onKeyDown={(e) => {
-          if ((e as any).key === "Enter" || (e as any).key === " ") onInfo?.(e)
+          if ((e as any).key === "Enter" || (e as any).key === " ")
+            onInfo?.(e)
         }}
       />
     </HStack>
   )
 }
-
-

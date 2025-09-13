@@ -8,7 +8,11 @@ import {
 import { InformationIcon } from "components/_icons"
 import NextLink from "next/link"
 
-export function AlphaApyTooltip({ children }: { children?: React.ReactNode }) {
+export function AlphaApyTooltip({
+  children,
+}: {
+  children?: React.ReactNode
+}) {
   return (
     <Tooltip
       hasArrow
