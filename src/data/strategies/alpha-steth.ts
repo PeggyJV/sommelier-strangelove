@@ -135,5 +135,18 @@ export const alphaSteth: CellarData = {
       question: "How is Alpha STETH different from TurboSTETH?",
       answer: `Alpha STETH leverages an upgraded vault architecture to access new reward opportunities across a broader set of DeFi protocols. While TurboSTETH primarily focused on classic leverage loops, Alpha STETH incorporates advanced strategies including Morpho and Euler lending, ETH L2 and more - offering a more flexible and diversified approach to ETH-native reward strategies.`,
     },
+    {
+      question: "What is APY for Alpha stETH, and how is it calculated?",
+      answer: `
+      <div>
+        <p>
+          APY is the annual percentage yield including compounding. In the context of Alpha stETH the APY calculation is the following: the vault’s rewards are derived from growth in its net asset value (NAV) over time. The NAV can increase through multiple use cases, such as staking, lending, providing liquidity on third-party providers. The user’s accrued rewards will depend on the portion of the vault that they hold.
+        </p>
+        <p style="font-style: italic; font-size: 0.875rem; color: #9CA3AF; margin-top: 8px;">
+          Please note that APY figures are only estimates and subject to change at any time. Past performance is not a guarantee of future results. Rewards are influenced by factors outside the platform’s control, including changes to blockchain protocols and validator performance.
+        </p>
+      </div>
+      `,
+    },
   ],
 }
