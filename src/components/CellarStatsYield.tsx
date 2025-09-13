@@ -18,7 +18,8 @@ import { isFuture } from "date-fns"
 import { apyHoverLabel, apyLabel } from "data/uiConfig"
 import { config as utilConfig } from "utils/config"
 import { alphaStethI18n } from "i18n/alphaSteth"
-import { NetApyBreakdownModal, useNetApyBreakdownModal } from "components/NetApyBreakdownModal"
+import { formatAlphaStethNetApy } from "utils/alphaStethFormat"
+import { AlphaStethBreakdown, type AlphaApyParts } from "components/AlphaStethBreakdown"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
 // Define an interface for APY data which includes the optional 'formatted' property
@@ -74,12 +75,22 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
   const approxApy = useMemo(() => {
     const raw = baseApySumRewards?.formatted
     if (!raw) return undefined
-    const num = parseFloat(String(raw).replace(/%/g, ""))
-    if (Number.isNaN(num)) return raw
-    const oneDecimal = Math.round(num * 10) / 10
-    return `≈${oneDecimal.toFixed(1)}%`
+    return formatAlphaStethNetApy(raw)
   }, [baseApySumRewards?.formatted])
-  const breakdown = useNetApyBreakdownModal()
+  const alphaParts: AlphaApyParts = useMemo(() => {
+    const parsePct = (s?: string) => {
+      if (!s) return 0
+      const n = parseFloat(String(s).replace(/%/g, ""))
+      return Number.isNaN(n) ? 0 : n
+    }
+    return {
+      baseApy: parsePct(baseApy?.formatted),
+      boostApy: parsePct(extraRewardsApy?.formatted ?? rewardsApy?.formatted),
+      feesImpact: 0,
+      netApy: parsePct(baseApySumRewards?.formatted),
+      approximate: true,
+    }
+  }, [baseApy?.formatted, extraRewardsApy?.formatted, rewardsApy?.formatted, baseApySumRewards?.formatted])
 
   return (
     <HStack
@@ -174,25 +185,14 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
             </Tooltip>
           </Box>
           {isAlpha && (
-            <VStack spacing={1}>
-              <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px">
+            <VStack spacing={2} align="stretch" w="full">
+              <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px" mx="auto">
                 {alphaStethI18n.inlineMicrocopy}
               </Text>
-              <Text
-                as="button"
-                onClick={breakdown.onOpen}
-                fontSize="xs"
-                textDecor="underline"
-                color="neutral.300"
-              >
-                {alphaStethI18n.breakdownLink}
-              </Text>
+              <AlphaStethBreakdown parts={alphaParts} />
             </VStack>
           )}
         </VStack>
-      )}
-      {isAlpha && (
-        <NetApyBreakdownModal isOpen={breakdown.isOpen} onClose={breakdown.onClose} />
       )}
     </HStack>
   )

@@ -57,7 +57,7 @@ import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { alphaStethI18n } from "i18n/alphaSteth"
-import { NetApyBreakdownModal, useNetApyBreakdownModal } from "components/NetApyBreakdownModal"
+import { formatAlphaStethNetApy } from "utils/alphaStethFormat"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
@@ -217,12 +217,8 @@ export const SommelierTab = ({
   const approxApy = (() => {
     const raw = netApy
     if (!raw) return undefined
-    const num = parseFloat(String(raw).replace(/%/g, ""))
-    if (Number.isNaN(num)) return raw
-    const oneDecimal = Math.round(num * 10) / 10
-    return `≈${oneDecimal.toFixed(1)}%`
+    return formatAlphaStethNetApy(raw)
   })()
-  const breakdown = useNetApyBreakdownModal()
 
   const { userBalances } = useUserBalances()
 
@@ -1661,15 +1657,6 @@ export const SommelierTab = ({
               <VStack spacing={1}>
                 <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px">
                   {alphaStethI18n.inlineMicrocopy}
-                </Text>
-                <Text
-                  as="button"
-                  onClick={breakdown.onOpen}
-                  fontSize="xs"
-                  textDecor="underline"
-                  color="neutral.300"
-                >
-                  {alphaStethI18n.breakdownLink}
                 </Text>
               </VStack>
             </VStack>
