@@ -56,6 +56,7 @@ import { waitTime, depositAssetDefaultValue } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { useStrategyData } from "data/hooks/useStrategyData"
+import { alphaStethI18n } from "i18n/alphaSteth"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
@@ -210,6 +211,8 @@ export const SommelierTab = ({
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
+  const isAlpha = id === config.CONTRACT.ALPHA_STETH.SLUG
+  const netApy = strategyData?.baseApySumRewards?.formatted
 
   const { userBalances } = useUserBalances()
 
@@ -1616,6 +1619,37 @@ export const SommelierTab = ({
           align="stretch"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
+          {/* Alpha stETH: Net APY metric + tooltip */}
+          {isAlpha && (
+            <VStack spacing={1} align="center">
+              <Text as="span" fontSize="21px" fontWeight="bold">
+                {isLoading ? <Spinner /> : netApy ?? "--"}
+              </Text>
+              <Tooltip
+                hasArrow
+                placement="top"
+                label={
+                  <VStack align="start" spacing={1} maxW="280px">
+                    <Text fontWeight="semibold">{alphaStethI18n.tooltipTitle}</Text>
+                    <Text>{alphaStethI18n.tooltipBody}</Text>
+                    <Text as="a" href={alphaStethI18n.tooltipLinkHref} target="_blank" rel="noopener noreferrer" textDecor="underline">
+                      {alphaStethI18n.tooltipLinkText}
+                    </Text>
+                  </VStack>
+                }
+                bg="surface.bg"
+                color="neutral.300"
+              >
+                <HStack spacing={1} align="center">
+                  <CardHeading>{alphaStethI18n.netApyLabel}</CardHeading>
+                  <InformationIcon color="neutral.300" boxSize={3} />
+                </HStack>
+              </Tooltip>
+              <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px">
+                {alphaStethI18n.footnote}
+              </Text>
+            </VStack>
+          )}
           <FormControl isInvalid={isError as boolean | undefined}>
             <ModalMenu
               depositTokens={depositTokens}

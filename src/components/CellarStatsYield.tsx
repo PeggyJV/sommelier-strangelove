@@ -16,6 +16,8 @@ import { Apy } from "./Apy"
 import { cellarDataMap } from "data/cellarDataMap"
 import { isFuture } from "date-fns"
 import { apyHoverLabel, apyLabel } from "data/uiConfig"
+import { config as utilConfig } from "utils/config"
+import { alphaStethI18n } from "i18n/alphaSteth"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
 // Define an interface for APY data which includes the optional 'formatted' property
@@ -25,10 +27,13 @@ interface ApyData {
 
 interface CellarStatsYieldProps extends StackProps {
   cellarId: string
+  /** When true, applies Alpha stETH-specific label/tooltip/footnote */
+  alphaStethOverrides?: boolean
 }
 
 export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
   cellarId,
+  alphaStethOverrides,
   ...rest
 }) => {
   const cellarConfig = cellarDataMap[cellarId].config
@@ -62,6 +67,9 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
 
 
   const baseApySumRewards = strategyData?.baseApySumRewards
+  const isAlpha =
+    alphaStethOverrides ||
+    cellarId === utilConfig.CONTRACT.ALPHA_STETH.SLUG
 
   return (
     <HStack
@@ -111,59 +119,58 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
               hasArrow
               placement="top"
               label={
-                <>
-                  <Text>
-                    {apyHoverLabel(cellarConfig)}{" "}
-                    {baseApy?.formatted ?? "0.00%"}
-                  </Text>
-                  {cellarConfig.customReward?.showOnlyBaseApy !==
-                    undefined &&
-                  cellarConfig.customReward?.showOnlyBaseApy ===
-                    true ? (
-                    <></>
-                  ) : (
-                    <>
-                      <Text>
-                        {cellarConfig.customReward?.showSommRewards
-                          ? `SOMM Rewards APY ${
-                              rewardsApy?.formatted ?? "0.00%"
-                            }`
-                          : null}
-                      </Text>
-                      <Text>
-                        {cellarConfig.customReward
-                          ?.customRewardAPYTooltip ??
-                          `${
-                            cellarConfig.customReward?.showAPY
-                              ? `${cellarConfig.customReward.tokenDisplayName} `
-                              : ""
-                          }Rewards APY ${
-                            extraRewardsApy?.formatted ??
-                            rewardsApy?.formatted ??
-                            "0.00%"
-                          }`}
-                      </Text>
-                      {/* <Text>
-                        {merkleRewardsApy
-                          ? `Merkle Rewards APY ${merkleRewardsApy.toFixed(2)}%`
-                          : ''
-                          }
-                      </Text> */}
-                    </>
-                  )}
-                </>
+                isAlpha ? (
+                  <VStack align="start" spacing={1} maxW="280px">
+                    <Text fontWeight="semibold">
+                      {alphaStethI18n.tooltipTitle}
+                    </Text>
+                    <Text>{alphaStethI18n.tooltipBody}</Text>
+                    <Text as="a" href={alphaStethI18n.tooltipLinkHref} target="_blank" rel="noopener noreferrer" textDecor="underline">
+                      {alphaStethI18n.tooltipLinkText}
+                    </Text>
+                  </VStack>
+                ) : (
+                  <>
+                    <Text>
+                      {apyHoverLabel(cellarConfig)} {baseApy?.formatted ?? "0.00%"}
+                    </Text>
+                    {cellarConfig.customReward?.showOnlyBaseApy !== undefined &&
+                    cellarConfig.customReward?.showOnlyBaseApy === true ? (
+                      <></>
+                    ) : (
+                      <>
+                        <Text>
+                          {cellarConfig.customReward?.showSommRewards
+                            ? `SOMM Rewards APY ${rewardsApy?.formatted ?? "0.00%"}`
+                            : null}
+                        </Text>
+                        <Text>
+                          {cellarConfig.customReward?.customRewardAPYTooltip ??
+                            `${cellarConfig.customReward?.showAPY ? `${cellarConfig.customReward.tokenDisplayName} ` : ""}Rewards APY ${
+                              extraRewardsApy?.formatted ?? rewardsApy?.formatted ?? "0.00%"
+                            }`}
+                        </Text>
+                      </>
+                    )}
+                  </>
+                )
               }
               bg="surface.bg"
               color="neutral.300"
             >
               <HStack spacing={1} align="center">
-                <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
+                <CardHeading>{isAlpha ? alphaStethI18n.netApyLabel : apyLabel(cellarConfig)}</CardHeading>
                 {!!apyLabel(cellarConfig) && (
                   <InformationIcon color="neutral.300" boxSize={3} />
                 )}
               </HStack>
             </Tooltip>
           </Box>
+          {isAlpha && (
+            <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px">
+              {alphaStethI18n.footnote}
+            </Text>
+          )}
         </VStack>
       )}
     </HStack>

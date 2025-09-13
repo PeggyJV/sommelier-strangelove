@@ -147,7 +147,12 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
               </Heading>
             </HStack>
           </VStack>
-          {isYieldStrategies && <CellarStatsYield cellarId={id} />}
+          {isYieldStrategies && (
+            <CellarStatsYield
+              cellarId={id}
+              alphaStethOverrides={id === utilConfig.CONTRACT.ALPHA_STETH.SLUG}
+            />
+          )}
 
           {isAutomatedPortfolio && (
             <CellarStatsAutomated cellarConfig={cellarConfig} />
