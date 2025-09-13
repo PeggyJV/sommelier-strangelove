@@ -154,43 +154,61 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
               hasArrow
               placement="top"
               label={
-                <>
-                  <Text>
-                    {apyHoverLabel(cellarConfig)} {baseApy?.formatted ?? "0.00%"}
-                  </Text>
-                  {cellarConfig.customReward?.showOnlyBaseApy !== undefined &&
-                  cellarConfig.customReward?.showOnlyBaseApy === true ? (
-                    <></>
-                  ) : (
-                    <>
-                      <Text>
-                        {cellarConfig.customReward?.showSommRewards
-                          ? `SOMM Rewards APY ${
-                              rewardsApy?.formatted ?? "0.00%"
-                            }`
-                          : null}
-                      </Text>
-                      <Text>
-                        {cellarConfig.customReward?.customRewardAPYTooltip ?? `${
-                          cellarConfig.customReward?.showAPY
-                            ? `${cellarConfig.customReward.tokenDisplayName} `
-                            : ""
-                        }Rewards APY ${
-                          extraRewardsApy?.formatted ??
-                          rewardsApy?.formatted ??
-                          "0.00%"
-                        }`}
-                      </Text>
-                    </>
-                  )}
-                </>
+                isAlpha ? (
+                  <VStack align="start" spacing={1} maxW="320px">
+                    <Text fontWeight="semibold">{alphaStethI18n.netApyLabel}</Text>
+                    <Text whiteSpace="pre-line">{alphaStethI18n.tooltipBody}</Text>
+                    <Text
+                      as="a"
+                      href={alphaStethI18n.tooltipLinkHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      textDecor="underline"
+                    >
+                      {alphaStethI18n.tooltipLinkText}
+                    </Text>
+                  </VStack>
+                ) : (
+                  <>
+                    <Text>
+                      {apyHoverLabel(cellarConfig)} {baseApy?.formatted ?? "0.00%"}
+                    </Text>
+                    {cellarConfig.customReward?.showOnlyBaseApy !== undefined &&
+                    cellarConfig.customReward?.showOnlyBaseApy === true ? (
+                      <></>
+                    ) : (
+                      <>
+                        <Text>
+                          {cellarConfig.customReward?.showSommRewards
+                            ? `SOMM Rewards APY ${
+                                rewardsApy?.formatted ?? "0.00%"
+                              }`
+                            : null}
+                        </Text>
+                        <Text>
+                          {cellarConfig.customReward?.customRewardAPYTooltip ?? `${
+                            cellarConfig.customReward?.showAPY
+                              ? `${cellarConfig.customReward.tokenDisplayName} `
+                              : ""
+                          }Rewards APY ${
+                            extraRewardsApy?.formatted ??
+                            rewardsApy?.formatted ??
+                            "0.00%"
+                          }`}
+                        </Text>
+                      </>
+                    )}
+                  </>
+                )
               }
               bg="surface.bg"
               color="neutral.300"
             >
               <HStack spacing={2} align="center">
                 <CardHeading>
-                  {isAlpha ? `${alphaStethI18n.netApyLabel}` : apyLabel(cellarConfig)}
+                  {isAlpha
+                    ? `${alphaStethI18n.netApyLabel}`
+                    : apyLabel(cellarConfig)}
                 </CardHeading>
                 <InformationIcon color="neutral.300" boxSize={3} />
               </HStack>

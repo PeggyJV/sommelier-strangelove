@@ -223,11 +223,31 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
           />
           {isAlpha ? (
             <VStack spacing={2} align="end" minW={0}>
+              <Text
+                fontSize={{ base: "xl", md: "2xl" }}
+                fontWeight={800}
+                lineHeight={1}
+                isTruncated
+              >
+                {safeValue(approxNetFmt ?? netFmt)}
+              </Text>
               <Tooltip
                 hasArrow
                 placement="top"
                 label={
-                  <Text>{safeValue(approxNetFmt ?? netFmt)}</Text>
+                  <VStack align="start" spacing={1} maxW="320px">
+                    <Text fontWeight="semibold">{alphaStethI18n.netApyLabel}</Text>
+                    <Text whiteSpace="pre-line">{alphaStethI18n.tooltipBody}</Text>
+                    <Text
+                      as="a"
+                      href={alphaStethI18n.tooltipLinkHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      textDecor="underline"
+                    >
+                      {alphaStethI18n.tooltipLinkText}
+                    </Text>
+                  </VStack>
                 }
                 bg="surface.bg"
                 color="neutral.300"
@@ -239,14 +259,6 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                   <InformationIcon color="neutral.300" boxSize={3} />
                 </HStack>
               </Tooltip>
-              <Text
-                fontSize={{ base: "xl", md: "2xl" }}
-                fontWeight={800}
-                lineHeight={1}
-                isTruncated
-              >
-                {safeValue(approxNetFmt ?? netFmt)}
-              </Text>
             </VStack>
           ) : (
             <KPIBox
