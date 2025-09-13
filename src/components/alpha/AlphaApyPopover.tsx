@@ -27,8 +27,16 @@ export function AlphaApyPopover() {
       returnFocusOnClose
       isLazy
       modifiers={[
-        { name: "preventOverflow", options: { padding: 12, boundary: "viewport" } },
-        { name: "flip", options: { fallbackPlacements: ["top-start", "bottom", "right"] } },
+        {
+          name: "preventOverflow",
+          options: { padding: 12, boundary: "viewport" },
+        },
+        {
+          name: "flip",
+          options: {
+            fallbackPlacements: ["top-start", "bottom", "right"],
+          },
+        },
         { name: "offset", options: { offset: [0, 8] } },
       ]}
     >
@@ -43,17 +51,27 @@ export function AlphaApyPopover() {
           onClick={d.onOpen}
         />
       </PopoverTrigger>
-      <PopoverContent w="320px" _focus={{ outline: "none" }} zIndex="tooltip">
+      <PopoverContent
+        w="320px"
+        _focus={{ outline: "none" }}
+        zIndex="tooltip"
+      >
         <PopoverArrow />
         <PopoverBody>
           <Box>
             <Text fontWeight="semibold" mb={1}>
               {alphaStethI18n.netApyLabel}
             </Text>
-            <Text whiteSpace="pre-line">{alphaStethI18n.tooltipBody}</Text>
+            <Text whiteSpace="pre-line">
+              {alphaStethI18n.tooltipBody}
+            </Text>
             <ChakraLink
               as={NextLink}
-              href={{ pathname: "/strategies/Alpha-stETH/manage", hash: "faq-apy" }}
+              href={{
+                pathname: "/strategies/Alpha-stETH/manage",
+                query: { tab: "faqs", faq: "apy", autoscroll: "1" },
+                hash: "faq-apy",
+              }}
               display="inline-block"
               mt={2}
               textDecoration="underline"
@@ -67,5 +85,3 @@ export function AlphaApyPopover() {
     </Popover>
   )
 }
-
-

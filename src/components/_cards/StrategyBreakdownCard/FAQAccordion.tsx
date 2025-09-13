@@ -23,9 +23,9 @@ interface Props extends AccordionProps {
 export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
   if (!data) return null
 
-  const [expandedIndex, setExpandedIndex] = useState<number[] | undefined>(
-    undefined
-  )
+  const [expandedIndex, setExpandedIndex] = useState<
+    number[] | undefined
+  >(undefined)
 
   const getStableId = (q?: string, provided?: string) => {
     if (provided) return provided
@@ -46,16 +46,37 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
 
   useEffect(() => {
     if (typeof window === "undefined") return
-    const hash = window.location.hash?.slice(1).toLowerCase()
-    if (!hash) return
-    const idx = idToIndex.get(hash)
+    const url = new URL(window.location.href)
+    const hash = url.hash?.slice(1).toLowerCase()
+    const faqParam = url.searchParams.get("faq")?.toLowerCase()
+    const auto = url.searchParams.get("autoscroll") === "1"
+
+    const targetId =
+      hash === "faq-fees" || hash === "faq-apy"
+        ? hash
+        : faqParam === "fees"
+        ? "faq-fees"
+        : faqParam === "apy"
+        ? "faq-apy"
+        : undefined
+
+    if (!targetId) return
+    const idx = idToIndex.get(targetId)
     if (idx !== undefined) {
       setExpandedIndex([idx])
       setTimeout(() => {
-        document.getElementById(hash)?.scrollIntoView({
+        document.getElementById(targetId)?.scrollIntoView({
           behavior: "smooth",
           block: "start",
         })
+        if (auto) {
+          setTimeout(() => {
+            window.scrollTo({
+              top: document.documentElement.scrollHeight,
+              behavior: "smooth",
+            })
+          }, 150)
+        }
       }, 50)
     }
   }, [idToIndex])
