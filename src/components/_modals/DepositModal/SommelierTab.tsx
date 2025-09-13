@@ -57,7 +57,7 @@ import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { alphaStethI18n } from "i18n/alphaSteth"
-import { formatAlphaStethNetApy } from "utils/alphaStethFormat"
+import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
@@ -217,7 +217,7 @@ export const SommelierTab = ({
   const approxApy = (() => {
     const raw = netApy
     if (!raw) return undefined
-    return formatAlphaStethNetApy(raw)
+    return formatAlphaStethNetApyNoApprox(raw)
   })()
 
   const { userBalances } = useUserBalances()
@@ -1654,11 +1654,7 @@ export const SommelierTab = ({
                   </Text>
                 </HStack>
               </Tooltip>
-              <VStack spacing={1}>
-                <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px">
-                  {alphaStethI18n.inlineMicrocopy}
-                </Text>
-              </VStack>
+              {null}
             </VStack>
           )}
           <FormControl isInvalid={isError as boolean | undefined}>

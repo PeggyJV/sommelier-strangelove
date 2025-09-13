@@ -18,7 +18,7 @@ import { isFuture } from "date-fns"
 import { apyHoverLabel, apyLabel } from "data/uiConfig"
 import { config as utilConfig } from "utils/config"
 import { alphaStethI18n } from "i18n/alphaSteth"
-import { formatAlphaStethNetApy } from "utils/alphaStethFormat"
+import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
 import { AlphaStethBreakdown, type AlphaApyParts } from "components/AlphaStethBreakdown"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
@@ -75,7 +75,7 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
   const approxApy = useMemo(() => {
     const raw = baseApySumRewards?.formatted
     if (!raw) return undefined
-    return formatAlphaStethNetApy(raw)
+    return formatAlphaStethNetApyNoApprox(raw)
   }, [baseApySumRewards?.formatted])
   const alphaParts: AlphaApyParts = useMemo(() => {
     const parsePct = (s?: string) => {
@@ -133,11 +133,8 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
               placement="top"
               label={
                 isAlpha ? (
-                  <VStack align="start" spacing={1} maxW="280px">
-                    <Text fontWeight="semibold">
-                      {alphaStethI18n.tooltipTitle}
-                    </Text>
-                    <Text>{alphaStethI18n.tooltipBody}</Text>
+                  <VStack align="start" spacing={1} maxW="320px">
+                    <Text fontSize="sm">{alphaStethI18n.tooltipBody}</Text>
                     <Text as="a" href={alphaStethI18n.tooltipLinkHref} target="_blank" rel="noopener noreferrer" textDecor="underline">
                       {alphaStethI18n.tooltipLinkText}
                     </Text>
@@ -176,22 +173,11 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
                   {isAlpha ? `${alphaStethI18n.netApyLabel}` : apyLabel(cellarConfig)}
                 </CardHeading>
                 <InformationIcon color="neutral.300" boxSize={3} />
-                {isAlpha && (
-                  <Text as="span" fontSize="xs" color="neutral.300">
-                    ({alphaStethI18n.estimatedTag}, variable)
-                  </Text>
-                )}
+                {null}
               </HStack>
             </Tooltip>
           </Box>
-          {isAlpha && (
-            <VStack spacing={2} align="stretch" w="full">
-              <Text fontSize="xs" color="neutral.400" textAlign="center" maxW="280px" mx="auto">
-                {alphaStethI18n.inlineMicrocopy}
-              </Text>
-              <AlphaStethBreakdown parts={alphaParts} />
-            </VStack>
-          )}
+          {isAlpha && <AlphaStethBreakdown parts={alphaParts} />}
         </VStack>
       )}
     </HStack>

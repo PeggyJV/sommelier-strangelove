@@ -16,9 +16,9 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import KPIBox from "components/_vaults/KPIBox"
-import { formatAlphaStethNetApy } from "utils/alphaStethFormat"
-import { config as utilConfig } from "utils/config"
 import ActionButton from "components/ui/ActionButton"
+import { config as utilConfig } from "utils/config"
+import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
 
 type Vault = {
   name?: string
@@ -55,7 +55,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
   const approxNetFmt = (() => {
     const raw = netFmt
     if (!raw) return undefined
-    return formatAlphaStethNetApy(raw)
+    return formatAlphaStethNetApyNoApprox(raw)
   })()
   const chainLabel = vault?.config?.chain?.displayName ?? "—"
   const chainLogo = (vault as any)?.config?.chain?.logoPath

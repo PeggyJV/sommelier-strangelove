@@ -1,14 +1,9 @@
 export const alphaStethI18n = {
   netApyLabel: "Net APY",
-  tooltipTitle: "Net APY",
   tooltipBody:
-    "Includes vault performance plus any rewards where applicable. Rewards are not guaranteed.",
+    "APY is variable and may change over time. It includes Lido base rewards and strategy boost. Past performance does not guarantee future results.",
   tooltipLinkText: "Learn more",
-  tooltipLinkHref: "https://docs.veda.tech",
-  footnote:
-    "APY estimates are based on current rewards from Lido ecosystem protocols. Past rewards do not guarantee future results.",
-  inlineMicrocopy:
-    "Based on current Lido ecosystem rewards. Not guaranteed.",
+  tooltipLinkHref: "https://docs.veda.tech/alpha-steth/apy",
   estimatedTag: "Estimated",
   breakdownLink: "View breakdown",
   breakdownTitle: "Net APY breakdown",
