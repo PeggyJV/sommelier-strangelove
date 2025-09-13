@@ -24,6 +24,7 @@ import {
 } from "@tanstack/react-query"
 import { HomeProvider } from "data/context/homeContext"
 import { reportWebVitals } from "utils/webVitals"
+import { Analytics } from "@vercel/analytics/react"
 
 const ReactQueryDevtools = dynamic(
   () =>
@@ -140,6 +141,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 />
                 <DarkMode>
                   <Component {...pageProps} />
+                  <Analytics />
                 </DarkMode>
                 <AlertDialog />
               </HomeProvider>
