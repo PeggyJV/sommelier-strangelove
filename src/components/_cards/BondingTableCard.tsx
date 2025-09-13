@@ -239,17 +239,18 @@ const BondingTableCard = (props: TableProps) => {
     }
   }
   return (
-    <InnerCard
-      bg="surface.tertiary"
-      backdropFilter="none"
-      pt={6}
-      px={4}
-      pb={4}
-    >
-      <TableContainer>
-        <HStack justifyContent="space-between" px={4} pt={2} pb={4}>
-          <Heading fontSize="lg">Active Bonds</Heading>
-          <LighterSkeleton isLoaded={!isLoading} height={4}>
+    <div id="bonding-table">
+      <InnerCard
+        bg="surface.tertiary"
+        backdropFilter="none"
+        pt={6}
+        px={4}
+        pb={4}
+      >
+        <TableContainer>
+          <HStack justifyContent="space-between" px={4} pt={2} pb={4}>
+            <Heading fontSize="lg">Active Bonds</Heading>
+          </HStack>
             {stakingEnd?.endDate && isFuture(stakingEnd?.endDate) && (
               <Text fontSize="xs">
                 {stakingEnd?.endDate && isFuture(stakingEnd.endDate)
@@ -264,8 +265,6 @@ const BondingTableCard = (props: TableProps) => {
                   : "Program Ended"}
               </Text>
             )}
-          </LighterSkeleton>
-        </HStack>
 
         <Table
           variant="unstyled"
@@ -539,13 +538,8 @@ const BondingTableCard = (props: TableProps) => {
           </Tbody>
         </Table>
       </TableContainer>
-      {/* <Text fontSize="xs" textAlign="center" pt={4}>
-        After triggering 'Unbond,' you will need to wait through the
-        unbonding period you selected,
-        <br />
-        after which your LP tokens can be unstaked and withdrawn.
-      </Text> */}
     </InnerCard>
+    </div>
   )
 }
 

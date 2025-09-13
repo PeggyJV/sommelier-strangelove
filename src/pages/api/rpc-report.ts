@@ -95,7 +95,9 @@ export default async function handler(
     res.setHeader("x-somm-idx-sample", sampleIdx)
   } catch {}
 
-  // For CSV responses, write header once after successful validation
+  // Collect rows (buffered) to avoid streaming issues on some clients
+  const csvRows: string[] = []
+  const jsonRows: any[] = []
   if (format === "csv") {
     const header = [
       "timestampMs",
@@ -109,7 +111,7 @@ export default async function handler(
       "amount",
       "status",
     ]
-    res.write(header.join(",") + "\n")
+    csvRows.push(header.join(","))
   }
 
   for (const day of days) {
@@ -139,12 +141,16 @@ export default async function handler(
           csvEscape(evt.amount),
           csvEscape(evt.status),
         ]
-        res.write(row.join(",") + "\n")
+        csvRows.push(row.join(","))
       } else {
-        res.write(JSON.stringify(evt) + "\n")
+        jsonRows.push(evt)
       }
     }
   }
-
-  res.end()
+  if (format === "csv") {
+    res.send(csvRows.join("\n") + "\n")
+  } else {
+    res.json(jsonRows)
+  }
 }
+

@@ -4,6 +4,7 @@ import {
   BoxProps,
   Heading,
   HStack,
+  Button,
   Icon,
   Image,
   Link,
@@ -14,6 +15,7 @@ import {
   useTheme,
   VStack,
 } from "@chakra-ui/react"
+import NextLink from "next/link"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { TokenAssets } from "components/TokenAssets"
@@ -148,13 +150,35 @@ export const PortfolioCard = (props: BoxProps) => {
   const buttonsEnabled =
     strategyData?.config.chain.wagmiId === wagmiChain?.id
 
-  if (!buttonsEnabled) {
-    userData = undefined
-    lpTokenData = undefined
-  }
-
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
+
+  // Determine if any legacy bonded tranche is matured (ready to withdraw LP tokens)
+  const hasMaturedLegacyTranche = Boolean(
+    (((userStakes as any)?.userStakes || []) as any[]).some((t: any) => {
+      const ts = Number(t?.unbondTimestamp ?? 0)
+      return ts !== 0 && ts * 1000 < Date.now()
+    })
+  )
+
+  // Calculate combined Net Value (free LP + bonded LP) for legacy vaults
+  const bondedAmount = (userStakes as any)?.totalBondedAmount
+  const tokenPrice = parseFloat(
+    (strategyData?.tokenPrice || "0").replace("$", "")
+  ) || 0
+  const bondedValue = bondedAmount?.value
+    ? (Number(bondedAmount.formatted) * tokenPrice)
+    : 0
+  const freeNetValue = Number(netValue?.value || 0)
+  const totalNetValue = freeNetValue + bondedValue
+  const totalNetValueFormatted = totalNetValue > 0
+    ? `$${totalNetValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+    : netValue?.formatted
+
+  // For legacy vaults with bonding, show combined total; otherwise show regular net value
+  const displayNetValue = !isBondedDisabled(cellarConfig) && bondedValue > 0
+    ? totalNetValueFormatted
+    : netValue?.formatted
 
   const lpTokenDisabled =
     !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
@@ -210,10 +234,13 @@ export const PortfolioCard = (props: BoxProps) => {
           >
             <CardStat
               label="Net Value"
-              tooltip="Net value of assets in the strategy including SOMM rewards"
+              tooltip={!isBondedDisabled(cellarConfig) && bondedValue > 0
+                ? `Total value of ${freeNetValue.toFixed(2)} USD (free LP) + ${bondedValue.toFixed(2)} USD (bonded LP) in the strategy`
+                : "Net value of assets in the strategy including SOMM rewards"
+              }
             >
               {isMounted &&
-                (isConnected ? netValue?.formatted || "..." : "--")}
+                (isConnected ? displayNetValue || "..." : "--")}
             </CardStat>
 
             {showNetValueInAsset(cellarConfig) && (
@@ -275,7 +302,7 @@ export const PortfolioCard = (props: BoxProps) => {
                 "--"
               )}
             </CardStat> */}
-            <Stack spacing={3} direction="row">
+            <Stack spacing={4} direction="column" align="flex-start">
               {isMounted &&
                 (isConnected ? (
                   <>
@@ -284,9 +311,16 @@ export const PortfolioCard = (props: BoxProps) => {
                       width="100%"
                       paddingTop={"1em"}
                     >
-                      <HStack>
+                      {/* Row 1: Deposit (primary) + Watch Guide (secondary) */}
+                      <Stack
+                        direction={{ base: "column", md: "row" }}
+                        spacing={{ base: 2, md: 3 }}
+                        align="flex-start"
+                        width="100%"
+                      >
                         {!strategyData?.deprecated && (
                           <DepositButton
+                            width={{ base: "100%", md: "auto" }}
                             disabled={
                               !isConnected ||
                               strategyData?.isContractNotReady ||
@@ -294,15 +328,27 @@ export const PortfolioCard = (props: BoxProps) => {
                             }
                           />
                         )}
-                        {!isWithdrawQueueEnabled(cellarConfig) && (
-                          <WithdrawButton
-                            isDeprecated={strategyData?.deprecated}
-                            disabled={
-                              !hasValueInVault || !buttonsEnabled
-                            }
-                          />
+                        {id === "Alpha-stETH" && (
+                          <Button
+                            as={NextLink}
+                            href="/strategies/Alpha-stETH/deposit_guide"
+                            size="md"
+                            height="44px"
+                            variant="outline"
+                            bg="transparent"
+                            color="cta.outline.fg"
+                            borderColor="cta.outline.br"
+                            borderWidth="2px"
+                            width={{ base: "100%", md: "auto" }}
+                            _focusVisible={{
+                              boxShadow:
+                                "0 0 0 3px var(--chakra-colors-purple-base)",
+                            }}
+                          >
+                            Watch Deposit Guide
+                          </Button>
                         )}
-                      </HStack>
+                      </Stack>
                       {/*
                       <>
                         <WithdrawQueueButton
@@ -317,35 +363,81 @@ export const PortfolioCard = (props: BoxProps) => {
                         />
                       </>
                         */}
-                      {isWithdrawQueueEnabled(cellarConfig) && (
-                        <WithdrawQueueButton
-                          chain={cellarConfig.chain}
-                          buttonLabel="Enter Withdraw Queue"
-                          disabled={
-                            !hasValueInVault || !buttonsEnabled
-                          }
-                          showTooltip={true}
-                        />
-                      )}
+                      {/* Row 2: Withdraw Queue or Withdraw + Migrate (both secondary style) */}
+                      <Stack
+                        direction={{ base: "column", md: "row" }}
+                        spacing={{ base: 2, md: 3 }}
+                        align="flex-start"
+                        mt={{ base: 2, md: 3 }}
+                        width="100%"
+                      >
+                        {isWithdrawQueueEnabled(cellarConfig) ? (
+                          <WithdrawQueueButton
+                            chain={cellarConfig.chain}
+                            buttonLabel="Enter Withdraw Queue"
+                            disabled={
+                              !hasValueInVault || !buttonsEnabled
+                            }
+                            showTooltip={true}
+                            width={{ base: "100%", md: "auto" }}
+                          />
+                        ) : (
+                          <WithdrawButton
+                            isDeprecated={strategyData?.deprecated}
+                            disabled={
+                              !hasValueInVault || !buttonsEnabled
+                            }
+                            width={{ base: "100%", md: "auto" }}
+                          />
+                        )}
 
-                      {showMigrationButton && (
-                        <BaseButton
-                          onClick={() =>
-                            setIsOpen({ id, type: "migrate" })
-                          }
-                        >
-                          Migrate to Alpha STETH
-                        </BaseButton>
-                      )}
+                        {showMigrationButton && (
+                          <BaseButton
+                            onClick={() =>
+                              setIsOpen({ id, type: "migrate" })
+                            }
+                            variant="outline"
+                            bg="transparent"
+                            color="cta.outline.fg"
+                            borderColor="cta.outline.br"
+                            borderWidth="2px"
+                            width={{ base: "100%", md: "auto" }}
+                          >
+                            Migrate to Alpha STETH
+                          </BaseButton>
+                        )}
+                      </Stack>
                     </VStack>
                   </>
                 ) : (
                   <>
-                    <HStack paddingTop={"1em"}>
-                      <ConnectButton
-                        overridechainid={cellarConfig.chain.id}
-                      />
-                    </HStack>
+                    <VStack spacing={3} width="100%" paddingTop={"1em"} align="flex-start">
+                      <HStack>
+                        <ConnectButton
+                          overridechainid={cellarConfig.chain.id}
+                        />
+                      </HStack>
+                      {id === "Alpha-stETH" && (
+                        <Button
+                          as={NextLink}
+                          href="/strategies/Alpha-stETH/deposit_guide"
+                          size="md"
+                          height="44px"
+                          variant="outline"
+                          bg="transparent"
+                          color="cta.outline.fg"
+                          borderColor="cta.outline.br"
+                          borderWidth="2px"
+                          width={{ base: "100%", md: "auto" }}
+                          _focusVisible={{
+                            boxShadow:
+                              "0 0 0 3px var(--chakra-colors-purple-base)",
+                          }}
+                        >
+                          Watch Deposit Guide
+                        </Button>
+                      )}
+                    </VStack>
                   </>
                 ))}
             </Stack>
@@ -431,10 +523,10 @@ export const PortfolioCard = (props: BoxProps) => {
                   (isConnected
                     ? (lpTokenData &&
                         toEther(
-                          lpTokenData.formatted,
+                          lpTokenData.value,
                           lpTokenData.decimals,
-                          true,
-                          2
+                          false,
+                          6
                         )) ||
                       "..."
                     : "--")}

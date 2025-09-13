@@ -3,11 +3,16 @@ import type { NextRequest } from "next/server"
 
 export function middleware(req: NextRequest) {
   const host = (
-    req.headers.get("host") || req.nextUrl.host || ""
+    req.headers.get("host") ||
+    req.nextUrl.host ||
+    ""
   ).toLowerCase()
+  const isLocal =
+    host.includes("localhost") || host.startsWith("127.0.0.1")
   const allowed =
     host &&
-    (host.endsWith("somm.finance") ||
+    (isLocal ||
+      host.endsWith("somm.finance") ||
       host.endsWith("sommelier.finance") ||
       host.endsWith(".vercel.app"))
   if (!allowed) {

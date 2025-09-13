@@ -200,6 +200,28 @@ export default function TopLaunchBanner({
                   Explore Vault
                 </Button>
 
+                {/* New CTA: Watch Deposit Guide */}
+                <Button
+                  as={NextLink}
+                  href="/strategies/Alpha-stETH/deposit_guide"
+                  size="md"
+                  height="40px"
+                  px="20px"
+                  fontWeight={600}
+                  fontSize="sm"
+                  variant="outline"
+                  bg="transparent"
+                  color="cta.outline.fg"
+                  borderColor="cta.outline.br"
+                  borderWidth="2px"
+                  _focusVisible={{
+                    boxShadow:
+                      "0 0 0 3px var(--chakra-colors-purple-base)",
+                  }}
+                >
+                  Watch Deposit Guide
+                </Button>
+
                 <Link
                   href={blogHref}
                   isExternal
