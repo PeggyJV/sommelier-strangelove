@@ -196,10 +196,28 @@ export const PortfolioCard = (props: BoxProps) => {
       | number
       | undefined
 
+  // Compute fallback ETH amount directly from shares × per-share base-asset value
+  const perShareBase = (() => {
+    const raw = (strategyData as any)?.token?.value as unknown
+    if (typeof raw === "number") return raw
+    const parsed = parseFloat(String(raw ?? "0").replace(/,/g, ""))
+    return Number.isFinite(parsed) ? parsed : 0
+  })()
+  const sharesTokens = (() => {
+    const raw = (lpTokenData as any)?.formatted as unknown
+    const parsed = parseFloat(String(raw ?? "0").replace(/,/g, ""))
+    return Number.isFinite(parsed) ? parsed : 0
+  })()
+  const alphaEthCalc = sharesTokens * perShareBase
+
   const alphaEthValueFormatted = isAlphaSteth
-    ? (typeof baseAssetValueRaw === "number"
-        ? baseAssetValueRaw.toFixed(4)
-        : undefined)
+    ? (() => {
+        if (typeof baseAssetValueRaw === "number" && baseAssetValueRaw > 0)
+          return baseAssetValueRaw.toFixed(4)
+        if (Number.isFinite(alphaEthCalc) && alphaEthCalc > 0)
+          return alphaEthCalc.toFixed(4)
+        return undefined
+      })()
     : undefined
 
   const isActiveWithdrawRequest =

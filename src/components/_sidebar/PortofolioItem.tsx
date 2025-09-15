@@ -59,7 +59,11 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
   const router = useRouter()
 
   // Compute base-asset units directly from user's LP shares and per-share base-asset value
-  const sharesTokens = Number(lpTokenData?.formatted ?? 0)
+  const sharesTokens = (() => {
+    const raw = lpTokenData?.formatted as unknown
+    const parsed = parseFloat(String(raw ?? "0").replace(/,/g, ""))
+    return Number.isFinite(parsed) ? parsed : 0
+  })()
   const perShareInBase = (() => {
     const raw = tokenPrice?.value as unknown
     if (typeof raw === "number") return raw
