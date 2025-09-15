@@ -44,10 +44,7 @@ export function AlphaApyTooltip({
             7-day average APY after{" "}
             <Link
               as={NextLink}
-              href={{
-                pathname: "/strategies/Alpha-stETH/manage",
-                hash: "faq-fees",
-              }}
+              href="/strategies/Alpha-stETH/manage#faq-fees"
               textDecoration="underline"
             >
               fees
@@ -63,10 +60,7 @@ export function AlphaApyTooltip({
           </Text>
           <Link
             as={NextLink}
-            href={{
-              pathname: "/strategies/Alpha-stETH/manage",
-              hash: "faq-apy",
-            }}
+            href="/strategies/Alpha-stETH/manage#faq-apy"
             mt={2}
             display="inline-block"
             textDecoration="underline"
