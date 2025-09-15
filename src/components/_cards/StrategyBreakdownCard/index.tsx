@@ -37,8 +37,12 @@ export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
 
   useEffect(() => {
     if (typeof window === "undefined") return
-    const hash = window.location.hash?.slice(1).toLowerCase()
-    if (hash === "faq-fees" || hash === "faq-apy") {
+    const url = new URL(window.location.href)
+    const hash = url.hash?.slice(1).toLowerCase()
+    const q = url.searchParams.get("faq")?.toLowerCase()
+    const shouldOpen =
+      hash === "faq-fees" || hash === "faq-apy" || q === "fees" || q === "apy"
+    if (shouldOpen) {
       setTabIndex(faqTabIndex)
     }
   }, [faqTabIndex])
