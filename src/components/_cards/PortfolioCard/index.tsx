@@ -191,6 +191,17 @@ export const PortfolioCard = (props: BoxProps) => {
   const baseAssetValue =
     userData?.userStrategyData.userData?.netValueInAsset?.formatted
 
+  const baseAssetValueRaw =
+    (userData?.userStrategyData.userData?.netValueInAsset as any)?.value as
+      | number
+      | undefined
+
+  const alphaEthValueFormatted = isAlphaSteth
+    ? (typeof baseAssetValueRaw === "number"
+        ? baseAssetValueRaw.toFixed(4)
+        : undefined)
+    : undefined
+
   const isActiveWithdrawRequest =
     useWithdrawRequestStatus(cellarConfig)
 
@@ -244,26 +255,39 @@ export const PortfolioCard = (props: BoxProps) => {
             </CardStat>
 
             {showNetValueInAsset(cellarConfig) && (
-              <CardStat
-                label="Base Asset Value"
-                tooltip={
-                  <Text>
-                    Total value of assets denominated in base asset
-                    <Avatar
-                      ml="-2.5px"
-                      boxSize={6}
-                      src={activeAsset?.src}
-                      name={activeAsset?.alt}
-                      borderWidth={2}
-                      borderColor="surface.bg"
-                      bg="surface.bg"
-                    />
-                    {activeAsset?.symbol}. excluding SOMM rewards
-                  </Text>
-                }
-              >
-                {isMounted && (isConnected ? baseAssetValue : "--")}
-              </CardStat>
+              isAlphaSteth ? (
+                <CardStat
+                  label="ETH Value"
+                  tooltip={
+                    <Text>
+                      Total value denominated in ETH (stETH ≈ ETH). Excludes SOMM rewards
+                    </Text>
+                  }
+                >
+                  {isMounted && (isConnected ? alphaEthValueFormatted ?? "..." : "--")}
+                </CardStat>
+              ) : (
+                <CardStat
+                  label="Base Asset Value"
+                  tooltip={
+                    <Text>
+                      Total value of assets denominated in base asset
+                      <Avatar
+                        ml="-2.5px"
+                        boxSize={6}
+                        src={activeAsset?.src}
+                        name={activeAsset?.alt}
+                        borderWidth={2}
+                        borderColor="surface.bg"
+                        bg="surface.bg"
+                      />
+                      {activeAsset?.symbol}. excluding SOMM rewards
+                    </Text>
+                  }
+                >
+                  {isMounted && (isConnected ? baseAssetValue : "--")}
+                </CardStat>
+              )
             )}
 
             <CardStat
