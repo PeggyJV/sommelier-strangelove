@@ -18,7 +18,13 @@ export type AlphaApyParts = {
   approximate?: boolean
 }
 
-export function AlphaStethBreakdown({ parts }: { parts: AlphaApyParts }) {
+export function AlphaStethBreakdown({
+  parts,
+  showToggle = true,
+}: {
+  parts: AlphaApyParts
+  showToggle?: boolean
+}) {
   const { isOpen, onToggle } = useDisclosure()
   const totalPos = Math.max(0, parts.baseApy) + Math.max(0, parts.boostApy)
   const basePct = totalPos ? (Math.max(0, parts.baseApy) / totalPos) * 100 : 0
@@ -26,18 +32,20 @@ export function AlphaStethBreakdown({ parts }: { parts: AlphaApyParts }) {
 
   return (
     <VStack spacing={2} align="stretch">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={onToggle}
-        aria-expanded={isOpen}
-        aria-controls="alpha-apy-breakdown"
-        _hover={{ bg: "whiteAlpha.100" }}
-      >
-        {alphaStethI18n.breakdownLink}
-      </Button>
+      {showToggle && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onToggle}
+          aria-expanded={isOpen}
+          aria-controls="alpha-apy-breakdown"
+          _hover={{ bg: "whiteAlpha.100" }}
+        >
+          {alphaStethI18n.breakdownLink}
+        </Button>
+      )}
 
-      {isOpen && (
+      {showToggle && isOpen && (
         <VStack
           id="alpha-apy-breakdown"
           align="stretch"

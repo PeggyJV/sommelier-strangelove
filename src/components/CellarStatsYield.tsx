@@ -212,7 +212,7 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
               </Box>
             </>
           )}
-          {isAlpha && <AlphaStethBreakdown parts={alphaParts} />}
+          {isAlpha && <AlphaStethBreakdown parts={alphaParts} showToggle={false} />}
         </VStack>
       )}
     </HStack>
