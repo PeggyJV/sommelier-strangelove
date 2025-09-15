@@ -10,7 +10,8 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react"
-import { FC } from "react"
+import { FC, useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
@@ -32,6 +33,22 @@ export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
   const { strategyBreakdown, faq } = cellarDataMap[cellarId]
   const [isMobile] = useMediaQuery("(max-width: 768px)")
 
+  const [tabIndex, setTabIndex] = useState(0)
+  const faqTabIndex = Object.keys(strategyBreakdown).length
+  const router = useRouter()
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const url = new URL(window.location.href)
+    const hash = url.hash?.slice(1).toLowerCase()
+    const q = url.searchParams.get("faq")?.toLowerCase()
+    const shouldOpen =
+      hash === "faq-fees" || hash === "faq-apy" || q === "fees" || q === "apy"
+    if (shouldOpen) {
+      setTabIndex(faqTabIndex)
+    }
+  }, [faqTabIndex, router.asPath, router.query])
+
   return (
     <InnerCard
       pt={4}
@@ -39,7 +56,7 @@ export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
       pb={8}
       borderRadius={{ base: 0, sm: 16 }}
     >
-      <Tabs>
+      <Tabs index={tabIndex} onChange={setTabIndex}>
         <TabList
           borderBottomWidth={1}
           borderColor="purple.dark"

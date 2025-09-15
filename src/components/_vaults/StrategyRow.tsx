@@ -9,6 +9,7 @@ import {
   Button,
   Avatar,
   Stack,
+  Tooltip,
 } from "@chakra-ui/react"
 import { useEffect, useMemo, useState } from "react"
 import ConnectGate from "components/wallet/ConnectGate"
@@ -17,6 +18,11 @@ import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import KPIBox from "components/_vaults/KPIBox"
 import ActionButton from "components/ui/ActionButton"
+import { config as utilConfig } from "utils/config"
+import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
+import { InformationIcon } from "components/_icons"
+import { alphaStethI18n } from "i18n/alphaSteth"
+import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
 
 type Vault = {
   name?: string
@@ -49,6 +55,12 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
       ? parseFloat(vault?.baseApySumRewards?.value)
       : (vault?.baseApySumRewards?.value as number | undefined)
   const netFmt = vault?.baseApySumRewards?.formatted
+  const isAlpha = vault?.slug === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+  const approxNetFmt = (() => {
+    const raw = netFmt
+    if (!raw) return undefined
+    return formatAlphaStethNetApyNoApprox(raw)
+  })()
   const chainLabel = vault?.config?.chain?.displayName ?? "—"
   const chainLogo = (vault as any)?.config?.chain?.logoPath
   const launchDate = vault?.launchDate
@@ -80,9 +92,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     ?.userStrategyData?.userData?.netValue?.formatted
 
   const safeValue = (v?: string | number | null) =>
-    v === undefined || v === null || v === ""
-      ? "–"
-      : v
+    v === undefined || v === null || v === "" ? "–" : v
 
   // Helper text countdown (compact). Updates every second, rendered once below button
   const [remaining, setRemaining] = useState<string>("")
@@ -211,11 +221,30 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             value={safeValue(netValueFmt)}
             align="center"
           />
-          <KPIBox
-            label="Net Rewards"
-            value={safeValue(netFmt)}
-            align="right"
-          />
+          {isAlpha ? (
+            <VStack spacing={2} align="end" minW={0}>
+              <Text
+                fontSize={{ base: "xl", md: "2xl" }}
+                fontWeight={800}
+                lineHeight={1}
+                isTruncated
+              >
+                {safeValue(approxNetFmt ?? netFmt)}
+              </Text>
+              <HStack spacing={1} align="center" overflow="visible">
+                <Text fontSize="xs" color="neutral.400" isTruncated>
+                  Net APY
+                </Text>
+                <AlphaApyPopover />
+              </HStack>
+            </VStack>
+          ) : (
+            <KPIBox
+              label="Net Rewards"
+              value={safeValue(netFmt)}
+              align="right"
+            />
+          )}
         </Grid>
 
         {/* Right column: chain + primary action with single helper */}
@@ -237,30 +266,30 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
               fullWidth
               overrideChainId={(vault as any)?.config?.chain?.id}
             >
-            {isPreLaunch ? (
-              <ActionButton
-                variantStyle="primary"
-                size={{ base: "md", md: "md" }}
-                fullWidth
-                isDisabled
-                onClick={(e) => e.stopPropagation()}
-              >
-                Deposit
-              </ActionButton>
-            ) : (
-              <ActionButton
-                variantStyle="primary"
-                size={{ base: "md", md: "md" }}
-                fullWidth
-                onClick={(e) => {
-                  e.stopPropagation()
-                  if (!vault?.slug) return
-                  setIsOpen({ id: vault.slug, type: "deposit" })
-                }}
-              >
-                Deposit
-              </ActionButton>
-            )}
+              {isPreLaunch ? (
+                <ActionButton
+                  variantStyle="primary"
+                  size={{ base: "md", md: "md" }}
+                  fullWidth
+                  isDisabled
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Deposit
+                </ActionButton>
+              ) : (
+                <ActionButton
+                  variantStyle="primary"
+                  size={{ base: "md", md: "md" }}
+                  fullWidth
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (!vault?.slug) return
+                    setIsOpen({ id: vault.slug, type: "deposit" })
+                  }}
+                >
+                  Deposit
+                </ActionButton>
+              )}
             </ConnectGate>
           </Box>
           {isPreLaunch && remaining && (
