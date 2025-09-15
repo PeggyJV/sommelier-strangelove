@@ -26,6 +26,9 @@ const WALLETS_FILE =
 const INCLUDE_ALPHA =
   String(process.env.INCLUDE_ALPHA || "false").toLowerCase() ===
   "true"
+const ONLY_CHAIN = (process.env.ONLY_CHAIN || "").toLowerCase() as
+  | ""
+  | Chain
 
 // Minimal ABIs
 const erc20Abi = [
@@ -68,17 +71,19 @@ function buildProviders(): Partial<Record<Chain, JsonRpcProvider>> {
   }
   for (const [chain, url] of Object.entries(RPC)) {
     const c = chain as Chain
-    if (url) map[c] = new JsonRpcProvider(url, net[c])
+    if (url)
+      map[c] = new JsonRpcProvider(url, net[c], { staticNetwork: true })
   }
   return map
 }
 
 function buildTokens(): TokenDef[] {
-  const base: TokenDef[] = VAULTS.map((v) => ({
+  let base: TokenDef[] = VAULTS.map((v) => ({
     name: v.name,
     address: v.address.toLowerCase(),
     chain: v.chain,
   }))
+  if (ONLY_CHAIN) base = base.filter((t) => t.chain === ONLY_CHAIN)
   if (INCLUDE_ALPHA) {
     const alphaAddr = ALPHA_STETH[0]
     if (alphaAddr)
