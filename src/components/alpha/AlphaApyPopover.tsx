@@ -53,6 +53,7 @@ export function AlphaApyPopover() {
       </PopoverTrigger>
       <PopoverContent
         w="320px"
+        maxW="calc(100vw - 24px)"
         bg="surface.bg"
         color="neutral.300"
         borderWidth="1px"
@@ -64,7 +65,7 @@ export function AlphaApyPopover() {
         pointerEvents="auto"
       >
         <PopoverArrow bg="surface.bg" />
-        <PopoverBody px={3} py={2}>
+        <PopoverBody px={3} py={2} sx={{ wordBreak: "break-word", overflowWrap: "anywhere" }}>
           <Box>
             <Text fontWeight="semibold" mb={1}>
               {alphaStethI18n.netApyLabel}
