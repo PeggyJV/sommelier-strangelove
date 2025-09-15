@@ -22,7 +22,7 @@ export function AlphaApyPopover() {
       isOpen={d.isOpen}
       onOpen={d.onOpen}
       onClose={d.onClose}
-      placement="top"
+      placement="top-start"
       closeOnBlur
       returnFocusOnClose
       isLazy
@@ -34,7 +34,7 @@ export function AlphaApyPopover() {
         {
           name: "flip",
           options: {
-            fallbackPlacements: ["top-start", "bottom", "right"],
+            fallbackPlacements: ["top-start", "bottom-start", "right-start", "left-start"],
           },
         },
         { name: "offset", options: { offset: [0, 8] } },
@@ -60,12 +60,18 @@ export function AlphaApyPopover() {
         borderColor="purple.base"
         rounded={8}
         shadow="lg"
+        overflow="hidden"
+        boxSizing="border-box"
         _focus={{ outline: "none" }}
         zIndex="tooltip"
         pointerEvents="auto"
       >
         <PopoverArrow bg="surface.bg" />
-        <PopoverBody px={3} py={2} sx={{ wordBreak: "break-word", overflowWrap: "anywhere" }}>
+        <PopoverBody
+          px={3}
+          py={2}
+          sx={{ wordBreak: "break-word", overflowWrap: "anywhere", whiteSpace: "normal" }}
+        >
           <Box>
             <Text fontWeight="semibold" mb={1}>
               {alphaStethI18n.netApyLabel}

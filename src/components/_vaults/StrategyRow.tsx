@@ -231,7 +231,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
               >
                 {safeValue(approxNetFmt ?? netFmt)}
               </Text>
-              <HStack spacing={1} align="center" overflow="hidden">
+              <HStack spacing={1} align="center" overflow="visible">
                 <Text fontSize="xs" color="neutral.400" isTruncated>
                   Net APY
                 </Text>
