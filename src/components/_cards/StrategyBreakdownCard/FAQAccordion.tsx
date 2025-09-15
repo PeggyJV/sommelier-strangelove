@@ -49,9 +49,17 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
     const url = new URL(window.location.href)
     const hash = url.hash?.slice(1).toLowerCase()
     const faqParam = url.searchParams.get("faq")?.toLowerCase()
-    const auto = url.searchParams.get("autoscroll") === "1"
+    const autoQuery = url.searchParams.get("autoscroll") === "1"
+    const lsAuto = (() => {
+      try {
+        return localStorage.getItem("alpha-faq-autoscroll") === "1"
+      } catch {
+        return false
+      }
+    })()
+    const auto = autoQuery || lsAuto
 
-    const targetId =
+    let targetId =
       hash === "faq-fees" || hash === "faq-apy"
         ? hash
         : faqParam === "fees"
@@ -59,6 +67,15 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
         : faqParam === "apy"
         ? "faq-apy"
         : undefined
+
+    // Fallback to localStorage target if not in URL
+    if (!targetId) {
+      try {
+        const t = localStorage.getItem("alpha-faq-target")
+        if (t === "fees") targetId = "faq-fees"
+        if (t === "apy") targetId = "faq-apy"
+      } catch {}
+    }
 
     if (!targetId) return
     const idx = idToIndex.get(targetId)
@@ -77,6 +94,10 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
             })
           }, 150)
         }
+        try {
+          localStorage.removeItem("alpha-faq-autoscroll")
+          localStorage.removeItem("alpha-faq-target")
+        } catch {}
       }, 50)
     }
   }, [idToIndex])

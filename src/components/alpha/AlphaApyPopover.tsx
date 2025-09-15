@@ -90,7 +90,15 @@ export function AlphaApyPopover() {
                   hash: "faq-fees",
                 }}
                 textDecoration="underline"
-                onClick={d.onClose}
+                onClick={(e) => {
+                  try {
+                    if (typeof window !== "undefined") {
+                      localStorage.setItem("alpha-faq-autoscroll", "1")
+                      localStorage.setItem("alpha-faq-target", "fees")
+                    }
+                  } catch {}
+                  d.onClose()
+                }}
               >
                 fees
               </ChakraLink>
@@ -114,7 +122,15 @@ export function AlphaApyPopover() {
               display="inline-block"
               mt={2}
               textDecoration="underline"
-              onClick={d.onClose}
+              onClick={(e) => {
+                try {
+                  if (typeof window !== "undefined") {
+                    localStorage.setItem("alpha-faq-autoscroll", "1")
+                    localStorage.setItem("alpha-faq-target", "apy")
+                  }
+                } catch {}
+                d.onClose()
+              }}
             >
               {alphaStethI18n.tooltipLinkText}
             </ChakraLink>
