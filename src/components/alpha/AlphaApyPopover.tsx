@@ -55,6 +55,10 @@ export function AlphaApyPopover() {
         w="320px"
         bg="surface.bg"
         color="neutral.300"
+        borderWidth="1px"
+        borderColor="purple.base"
+        rounded={8}
+        shadow="lg"
         _focus={{ outline: "none" }}
         zIndex="tooltip"
         pointerEvents="auto"
