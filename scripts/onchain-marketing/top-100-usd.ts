@@ -139,7 +139,9 @@ async function main() {
           const shareErc = new Contract(t.address, erc20Abi, p)
           const shareDec = await shareErc.decimals().catch(() => 18)
           const vault = new Contract(t.address, erc4626Abi, p)
-          const underlying: string = await vault.asset().catch(() => "")
+          const underlying: string = await vault
+            .asset()
+            .catch(() => "")
           if (!underlying) return
           let undUsd = 0
           if (pr) {
@@ -218,8 +220,16 @@ async function main() {
             const p = providers.mainnet || providers["mainnet"]
             const erc = new Contract(item.share, erc20Abi, p as any)
             const shareDec = decMap.get(item.share) as number
-            const vault = new Contract(item.share, erc4626Abi, p as any)
-            const undErc = new Contract(item.underlying, erc20Abi, p as any)
+            const vault = new Contract(
+              item.share,
+              erc4626Abi,
+              p as any
+            )
+            const undErc = new Contract(
+              item.underlying,
+              erc20Abi,
+              p as any
+            )
             const undDec = await undErc.decimals().catch(() => 18)
             const oneShare = 10n ** BigInt(shareDec)
             let assets: bigint = 0n
