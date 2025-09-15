@@ -616,7 +616,10 @@ export const estimatedApyValue = (config: ConfigProps) => {
   }
 }
 export const showNetValueInAsset = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
+  if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
+  ) {
     return true
   }
   return false
