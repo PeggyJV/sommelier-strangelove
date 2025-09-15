@@ -141,19 +141,21 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
         <VStack spacing={1} align="center">
           {isAlpha ? (
             <>
+              <Apy
+                apy={
+                  isStrategyLoading ? (
+                    <Spinner />
+                  ) : (
+                    approxApy ?? baseApySumRewards?.formatted
+                  )
+                }
+              />
               <HStack spacing={2} align="center">
                 <CardHeading>
                   {alphaStethI18n.netApyLabel}
                 </CardHeading>
                 <AlphaApyPopover />
               </HStack>
-              <Apy
-                apy={
-                  isStrategyLoading
-                    ? <Spinner />
-                    : (approxApy ?? baseApySumRewards?.formatted)
-                }
-              />
             </>
           ) : (
             <>
