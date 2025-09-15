@@ -11,6 +11,7 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react"
 import { FC, useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import { InnerCard } from "../InnerCard"
 import { tabPanelProps, tabProps } from "./styles"
 import { analytics } from "utils/analytics"
@@ -34,6 +35,7 @@ export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
 
   const [tabIndex, setTabIndex] = useState(0)
   const faqTabIndex = Object.keys(strategyBreakdown).length
+  const router = useRouter()
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -45,7 +47,7 @@ export const StrategyBreakdownCard: FC<StrategyBreakdownProps> = ({
     if (shouldOpen) {
       setTabIndex(faqTabIndex)
     }
-  }, [faqTabIndex])
+  }, [faqTabIndex, router.asPath, router.query])
 
   return (
     <InnerCard
