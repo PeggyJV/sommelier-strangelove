@@ -23,7 +23,8 @@ const OUT_DIR =
   path.join(os.homedir(), "Desktop", "on-chain-marketing", "outputs")
 const WALLETS_FILE =
   process.env.WALLETS_FILE || path.join(OUT_DIR, "holders_merged.csv")
-const INCLUDE_ALPHA = String(process.env.INCLUDE_ALPHA || "false").toLowerCase() ===
+const INCLUDE_ALPHA =
+  String(process.env.INCLUDE_ALPHA || "false").toLowerCase() ===
   "true"
 
 // Minimal ABIs
@@ -49,7 +50,8 @@ function loadWallets(file: string): string[] {
   const raw = fs.readFileSync(file, "utf8").trim().split(/\r?\n/)
   // Allow either single-column CSV with header or raw list
   const header = raw[0]?.toLowerCase() || ""
-  const hasHeader = header.includes("wallet") || header.includes("address")
+  const hasHeader =
+    header.includes("wallet") || header.includes("address")
   const lines = hasHeader ? raw.slice(1) : raw
   return Array.from(
     new Set(lines.map((s) => s.trim().toLowerCase()).filter(Boolean))
@@ -58,8 +60,15 @@ function loadWallets(file: string): string[] {
 
 function buildProviders(): Partial<Record<Chain, JsonRpcProvider>> {
   const map: Partial<Record<Chain, JsonRpcProvider>> = {}
+  const net: Record<Chain, { chainId: number; name: string }> = {
+    mainnet: { chainId: 1, name: "mainnet" },
+    arbitrum: { chainId: 42161, name: "arbitrum" },
+    optimism: { chainId: 10, name: "optimism" },
+    scroll: { chainId: 534352, name: "scroll" },
+  }
   for (const [chain, url] of Object.entries(RPC)) {
-    if (url) map[chain as Chain] = new JsonRpcProvider(url)
+    const c = chain as Chain
+    if (url) map[c] = new JsonRpcProvider(url, net[c])
   }
   return map
 }
@@ -112,10 +121,11 @@ async function main() {
           const pr = routers[t.chain]
           if (!p || !pr) return
           const erc = new Contract(t.address, erc20Abi, p)
-          const [decBn, priceBn]: [number, bigint] = await Promise.all([
-            erc.decimals().catch(() => 18),
-            pr.getPriceInUSD(t.address).catch(() => 0n),
-          ])
+          const [decBn, priceBn]: [number, bigint] =
+            await Promise.all([
+              erc.decimals().catch(() => 18),
+              pr.getPriceInUSD(t.address).catch(() => 0n),
+            ])
           const price = Number(priceBn) / 1e8
           if (price > 0) {
             decMap.set(t.address, Number(decBn))
@@ -127,10 +137,15 @@ async function main() {
   )
 
   // Filter tokens we could price
-  const priced = tokens.filter((t) => usdMap.has(t.address) && decMap.has(t.address))
-  if (!priced.length) throw new Error("No tokens could be priced; check RPC and router")
+  const priced = tokens.filter(
+    (t) => usdMap.has(t.address) && decMap.has(t.address)
+  )
+  if (!priced.length)
+    throw new Error("No tokens could be priced; check RPC and router")
 
-  console.log(`Wallets: ${wallets.length}, Tokens priced: ${priced.length}`)
+  console.log(
+    `Wallets: ${wallets.length}, Tokens priced: ${priced.length}`
+  )
 
   const totalUsd = new Map<string, number>()
   const balLimit = pLimit(16)
@@ -151,7 +166,8 @@ async function main() {
             if (bal > 0n) {
               const v = Number(bal) / 10 ** dec
               const usd = v * price
-              if (usd > 0) totalUsd.set(w, (totalUsd.get(w) || 0) + usd)
+              if (usd > 0)
+                totalUsd.set(w, (totalUsd.get(w) || 0) + usd)
             }
           } catch {}
         })
@@ -174,5 +190,3 @@ main().catch((e) => {
   console.error(e)
   process.exit(1)
 })
-
-
