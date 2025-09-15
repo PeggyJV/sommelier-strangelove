@@ -35,6 +35,11 @@ const erc20Abi = [
   "function balanceOf(address) view returns (uint256)",
   "function decimals() view returns (uint8)",
 ]
+const erc4626Abi = [
+  "function asset() view returns (address)",
+  "function convertToAssets(uint256 shares) view returns (uint256)",
+  "function previewRedeem(uint256 shares) view returns (uint256)",
+]
 const priceRouterAbi = [
   "function getPriceInUSD(address token) view returns (uint256)",
 ]
@@ -72,7 +77,9 @@ function buildProviders(): Partial<Record<Chain, JsonRpcProvider>> {
   for (const [chain, url] of Object.entries(RPC)) {
     const c = chain as Chain
     if (url)
-      map[c] = new JsonRpcProvider(url, net[c], { staticNetwork: true })
+      map[c] = new JsonRpcProvider(url, net[c], {
+        staticNetwork: true,
+      })
   }
   return map
 }
@@ -113,9 +120,9 @@ async function main() {
 
   const tokens = buildTokens()
 
-  // Preload token decimals and USD prices
-  const decMap = new Map<string, number>() // address->decimals
-  const usdMap = new Map<string, number>() // address->usd price
+  // Preload share USD using ERC-4626 + price router
+  const decMap = new Map<string, number>() // share decimals
+  const usdMap = new Map<string, number>() // share USD price
 
   const preloadLimit = pLimit(8)
   await Promise.all(
@@ -125,16 +132,35 @@ async function main() {
           const p = providers[t.chain]
           const pr = routers[t.chain]
           if (!p || !pr) return
-          const erc = new Contract(t.address, erc20Abi, p)
-          const [decBn, priceBn]: [number, bigint] =
-            await Promise.all([
-              erc.decimals().catch(() => 18),
-              pr.getPriceInUSD(t.address).catch(() => 0n),
-            ])
-          const price = Number(priceBn) / 1e8
-          if (price > 0) {
-            decMap.set(t.address, Number(decBn))
-            usdMap.set(t.address, price)
+          const shareErc = new Contract(t.address, erc20Abi, p)
+          const shareDec = await shareErc.decimals().catch(() => 18)
+          const vault = new Contract(t.address, erc4626Abi, p)
+          const underlying: string = await vault.asset().catch(() => "")
+          if (!underlying) return
+          const priceBn: bigint = await pr
+            .getPriceInUSD(underlying)
+            .catch(() => 0n)
+          const undUsd = Number(priceBn) / 1e8
+          if (!(undUsd > 0)) return
+          const undErc = new Contract(underlying, erc20Abi, p)
+          const undDec = await undErc.decimals().catch(() => 18)
+          const oneShare = 10n ** BigInt(shareDec)
+          let assets: bigint = 0n
+          try {
+            assets = await vault.convertToAssets(oneShare)
+          } catch {
+            try {
+              assets = await vault.previewRedeem(oneShare)
+            } catch {
+              assets = 0n
+            }
+          }
+          if (assets <= 0n) return
+          const assetsFloat = Number(assets) / 10 ** undDec
+          const shareUsd = assetsFloat * undUsd
+          if (shareUsd > 0) {
+            decMap.set(t.address, Number(shareDec))
+            usdMap.set(t.address, shareUsd)
           }
         } catch {}
       })
