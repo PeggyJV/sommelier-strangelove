@@ -4,6 +4,8 @@ import path from "path"
 import { Contract, JsonRpcProvider } from "ethers"
 import pLimit from "p-limit"
 import { VAULTS, RPC, ALPHA_STETH, type Chain } from "./vaults"
+// Reuse app token metadata for CoinGecko ids
+import { tokenConfig } from "../../src/data/tokenConfig"
 
 /*
   Compute top 100 wallets by total Sommelier vault share value in USD (≈ USDC).
@@ -120,9 +122,11 @@ async function main() {
 
   const tokens = buildTokens()
 
-  // Preload share USD using ERC-4626 + price router
+  // Preload share USD using ERC-4626 + CoinGecko (fallback if router fails)
   const decMap = new Map<string, number>() // share decimals
   const usdMap = new Map<string, number>() // share USD price
+  const undAddrMap = new Map<string, string>() // share -> underlying address
+  const undCgIdMap = new Map<string, string>() // underlying address -> cg id
 
   const preloadLimit = pLimit(8)
   await Promise.all(
@@ -137,11 +141,15 @@ async function main() {
           const vault = new Contract(t.address, erc4626Abi, p)
           const underlying: string = await vault.asset().catch(() => "")
           if (!underlying) return
-          const priceBn: bigint = await pr
-            .getPriceInUSD(underlying)
-            .catch(() => 0n)
-          const undUsd = Number(priceBn) / 1e8
-          if (!(undUsd > 0)) return
+          let undUsd = 0
+          if (pr) {
+            const priceBn: bigint = await pr
+              .getPriceInUSD(underlying)
+              .catch(() => 0n)
+            undUsd = Number(priceBn) / 1e8
+          }
+          // If router price failed, remember to fetch via CoinGecko later
+          undAddrMap.set(t.address, underlying.toLowerCase())
           const undErc = new Contract(underlying, erc20Abi, p)
           const undDec = await undErc.decimals().catch(() => 18)
           const oneShare = 10n ** BigInt(shareDec)
@@ -157,15 +165,83 @@ async function main() {
           }
           if (assets <= 0n) return
           const assetsFloat = Number(assets) / 10 ** undDec
-          const shareUsd = assetsFloat * undUsd
-          if (shareUsd > 0) {
+          if (undUsd > 0) {
+            const shareUsd = assetsFloat * undUsd
+            if (shareUsd > 0) {
+              decMap.set(t.address, Number(shareDec))
+              usdMap.set(t.address, shareUsd)
+            }
+          } else {
+            // postpone pricing via CoinGecko
             decMap.set(t.address, Number(shareDec))
-            usdMap.set(t.address, shareUsd)
           }
         } catch {}
       })
     )
   )
+
+  // CoinGecko fallback for any underlying we could not price via router
+  const needPricing: { share: string; underlying: string }[] = []
+  for (const [share, dec] of decMap.entries()) {
+    if (!usdMap.has(share)) {
+      const und = undAddrMap.get(share)
+      if (und) needPricing.push({ share, underlying: und })
+    }
+  }
+  if (needPricing.length) {
+    // Map underlying addresses to CoinGecko ids from app tokenConfig (ethereum only)
+    const addrToCg = new Map<string, string>()
+    for (const t of tokenConfig) {
+      if (String(t.chain).toLowerCase() === "ethereum")
+        addrToCg.set(t.address.toLowerCase(), t.coinGeckoId)
+    }
+    const ids = Array.from(
+      new Set(
+        needPricing
+          .map((x) => addrToCg.get(x.underlying))
+          .filter((v): v is string => Boolean(v))
+      )
+    )
+    if (ids.length) {
+      // Batch query CoinGecko simple price
+      const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(
+        ","
+      )}&vs_currencies=usd`
+      try {
+        const resp = await fetch(url)
+        const j: any = await resp.json().catch(() => ({}))
+        for (const item of needPricing) {
+          const id = addrToCg.get(item.underlying)
+          const undUsd = id ? Number(j?.[id]?.usd || 0) : 0
+          if (undUsd > 0) {
+            // Need assets/share to compute share USD
+            const p = providers.mainnet || providers["mainnet"]
+            const erc = new Contract(item.share, erc20Abi, p as any)
+            const shareDec = decMap.get(item.share) as number
+            const vault = new Contract(item.share, erc4626Abi, p as any)
+            const undErc = new Contract(item.underlying, erc20Abi, p as any)
+            const undDec = await undErc.decimals().catch(() => 18)
+            const oneShare = 10n ** BigInt(shareDec)
+            let assets: bigint = 0n
+            try {
+              assets = await vault.convertToAssets(oneShare)
+            } catch {
+              try {
+                assets = await vault.previewRedeem(oneShare)
+              } catch {
+                assets = 0n
+              }
+            }
+            if (assets > 0n) {
+              const assetsFloat = Number(assets) / 10 ** undDec
+              const shareUsd = assetsFloat * undUsd
+              if (shareUsd > 0) usdMap.set(item.share, shareUsd)
+            }
+          }
+        }
+      } catch {}
+    }
+  }
 
   // Filter tokens we could price
   const priced = tokens.filter(
