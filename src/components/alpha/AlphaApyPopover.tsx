@@ -80,15 +80,7 @@ export function AlphaApyPopover() {
               7-day average APY after{" "}
               <ChakraLink
                 as={NextLink}
-                href={{
-                  pathname: "/strategies/Alpha-stETH/manage",
-                  query: {
-                    tab: "faqs",
-                    faq: "fees",
-                    autoscroll: "1",
-                  },
-                  hash: "faq-fees",
-                }}
+                href="/strategies/Alpha-stETH/manage?tab=faqs&faq=fees&autoscroll=1#faq-fees"
                 textDecoration="underline"
                 onClick={(e) => {
                   try {
@@ -114,11 +106,7 @@ export function AlphaApyPopover() {
             </Text>
             <ChakraLink
               as={NextLink}
-              href={{
-                pathname: "/strategies/Alpha-stETH/manage",
-                query: { tab: "faqs", faq: "apy", autoscroll: "1" },
-                hash: "faq-apy",
-              }}
+              href="/strategies/Alpha-stETH/manage?tab=faqs&faq=apy&autoscroll=1#faq-apy"
               display="inline-block"
               mt={2}
               textDecoration="underline"

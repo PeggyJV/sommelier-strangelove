@@ -115,10 +115,6 @@ export const YourPortofolio = () => {
                           strategy.userStrategyData.userData
                             ?.netValue?.formatted ?? ""
                         }
-                        netValueInAsset={
-                          strategy.userStrategyData.userData
-                            ?.netValue?.value ?? 0
-                        }
                         tokenPrice={valueAndFormatted({
                           value:
                             strategy.userStrategyData.strategyData
