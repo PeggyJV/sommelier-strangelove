@@ -23,11 +23,20 @@ const LOG_DIR = path.join(
 fs.mkdirSync(LOG_DIR, { recursive: true })
 
 const COMBINED_FILE =
-  process.env.COMBINED_FILE || path.join(OUT_DIR, "combined_top_100.csv")
+  process.env.COMBINED_FILE ||
+  path.join(OUT_DIR, "combined_top_100.csv")
 
 // Provided message content
 const MESSAGE_TEXT =
   "Thanks for using Somm vaults. Alpha stETH is our upgraded, even more adaptive stETH strategy. Be early and migrate in a click: https://app.somm.finance/strategies/alpha-steth/manage?src=debank_active_b"
+
+// Pricing controls (units are 1e4 per USD as per Debank docs)
+const MAX_OFFER_PRICE = Number(
+  process.env.DEBANK_MAX_OFFER_PRICE ?? "10000" // $1 default
+)
+const PREPAYMENT_AMOUNT = Number(
+  process.env.DEBANK_PREPAYMENT_AMOUNT ?? "10000" // $1 default
+)
 
 async function groupSend(addresses: string[]) {
   const body: any = {
@@ -40,6 +49,8 @@ async function groupSend(addresses: string[]) {
         version: "v1",
       },
     },
+    max_offer_price: MAX_OFFER_PRICE,
+    prepayment_amount: PREPAYMENT_AMOUNT,
   }
 
   const res = await fetch(
@@ -59,17 +70,25 @@ async function groupSend(addresses: string[]) {
 }
 
 function loadCombined(): string[] {
-  const raw = fs.readFileSync(COMBINED_FILE, "utf8").trim().split(/\r?\n/)
+  const raw = fs
+    .readFileSync(COMBINED_FILE, "utf8")
+    .trim()
+    .split(/\r?\n/)
   const header = raw[0]?.toLowerCase() || ""
   const hasHeader = header.includes("wallet")
   const lines = hasHeader ? raw.slice(1) : raw
-  return Array.from(new Set(lines.map((s) => s.trim()).filter(Boolean)))
+  return Array.from(
+    new Set(lines.map((s) => s.trim()).filter(Boolean))
+  )
 }
 
 ;(async () => {
   const list = loadCombined()
-  if (!list.length) throw new Error("No wallets in combined_top_100.csv")
-  console.log(`Sending to ${list.length} wallets via Debank group_send...`)
+  if (!list.length)
+    throw new Error("No wallets in combined_top_100.csv")
+  console.log(
+    `Sending to ${list.length} wallets via Debank group_send...`
+  )
 
   // One batch (100). If needed later, chunk.
   const result = await groupSend(list)
@@ -88,5 +107,3 @@ function loadCombined(): string[] {
   console.error(e)
   process.exit(1)
 })
-
-
