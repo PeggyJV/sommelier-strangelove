@@ -160,8 +160,12 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
             </HStack>
           </VStack>
           <HStack spacing={3} align="flex-end">
-            {isYieldStrategies && <CellarStatsYield cellarId={id} />}
-
+            {isYieldStrategies && (
+              <CellarStatsYield
+                cellarId={id}
+                alphaStethOverrides={id === utilConfig.CONTRACT.ALPHA_STETH.SLUG}
+              />
+            )}
             {isAutomatedPortfolio && (
               <CellarStatsAutomated cellarConfig={cellarConfig} />
             )}

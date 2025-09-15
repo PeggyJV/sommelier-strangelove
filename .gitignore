@@ -31,3 +31,7 @@ coverage/
 # on-chain marketing artifacts
 scripts/onchain-marketing/outputs/
 scripts/onchain-marketing/logs/
+
+# local PR notes and audits (ignore in VCS)
+PR_DESCRIPTION.md
+docs/audits/

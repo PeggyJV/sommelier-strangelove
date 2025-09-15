@@ -56,6 +56,7 @@ import { waitTime, depositAssetDefaultValue } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { useStrategyData } from "data/hooks/useStrategyData"
+// Alpha stETH-specific APY UI removed from deposit modal per request
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
@@ -210,6 +211,7 @@ export const SommelierTab = ({
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
+  const isAlpha = id === config.CONTRACT.ALPHA_STETH.SLUG
 
   const { userBalances } = useUserBalances()
 
@@ -1616,6 +1618,7 @@ export const SommelierTab = ({
           align="stretch"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
+          {/* Alpha stETH: Net APY display removed in deposit modal */}
           <FormControl isInvalid={isError as boolean | undefined}>
             <ModalMenu
               depositTokens={depositTokens}
