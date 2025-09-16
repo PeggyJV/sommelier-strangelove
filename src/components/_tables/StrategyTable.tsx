@@ -171,6 +171,9 @@ export const StrategyTable = memo(
             "@media (max-width: 768px)": {
               "thead th:nth-of-type(n+2)": { display: "none" },
               "tbody td:nth-of-type(n+2)": { display: "none" },
+              // Make rows and cells block-level so the first cell can span full width
+              "tbody tr": { display: "block", width: "100%" },
+              "tbody td": { display: "block", width: "100%" },
             },
             // Let rows/cells render visual effects outside cell bounds
             "tbody tr": { overflow: "visible" },
