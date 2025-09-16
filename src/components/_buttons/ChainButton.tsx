@@ -11,11 +11,19 @@ import {
   Image,
   Tooltip,
   Spinner,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  useDisclosure,
 } from "@chakra-ui/react"
 import { CheckIcon, ChevronDownIcon } from "components/_icons"
 import { useSwitchChain, useAccount } from "wagmi"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import { useMemo, useState } from "react"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 import {
   chainConfigMap,
@@ -38,6 +46,9 @@ const ChainButton = ({
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
   const { openConnectModal } = useConnectModal()
+  const isMobile = !useBetterMediaQuery("(min-width: 768px)")
+  const isMobile = !useBetterMediaQuery("(min-width: 768px)")
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const effectiveChain = chainConfigMap[chain.id] || placeholderChain
 
@@ -94,9 +105,9 @@ const ChainButton = ({
           borderRadius="full"
           w="auto"
           minH="48px"
-          pl={6}
-          pr={14}
-          minW="176px"
+          pl={{ base: 4, md: 6 }}
+          pr={{ base: 6, md: 14 }}
+          minW={{ base: "auto", md: "176px" }}
           zIndex={401}
           position="relative"
           cursor="not-allowed"
@@ -139,9 +150,9 @@ const ChainButton = ({
           borderRadius="full"
           w="auto"
           minH="48px"
-          pl={6}
-          pr={14}
-          minW="176px"
+          pl={{ base: 4, md: 6 }}
+          pr={{ base: 6, md: 14 }}
+          minW={{ base: "auto", md: "176px" }}
           zIndex={401}
           position="relative"
           pointerEvents={isSwitchingNetwork ? "none" : undefined}
