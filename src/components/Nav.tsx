@@ -50,7 +50,9 @@ export const Nav = memo((props: FlexProps) => {
     borderBottom: "1px solid",
     borderColor: "purple.dark",
   }
-  const mobileScrollHide = (!isLarger992 && `nav ${scrollDirection === "down" && "down"}`) || undefined
+  const mobileScrollHide =
+    (!isLarger992 && `nav ${scrollDirection === "down" && "down"}`) ||
+    undefined
 
   return (
     <Flex
@@ -77,7 +79,11 @@ export const Nav = memo((props: FlexProps) => {
       >
         {/* Desktop Navigation */}
         {isLarger992 && (
-          <Flex maxW="calc(100% - 360px)" overflow="hidden" align="center">
+          <Flex
+            maxW="calc(100% - 360px)"
+            overflow="hidden"
+            align="center"
+          >
             <Link href="/">
               <LogoTextIcon w="9rem" h="2rem" />
             </Link>
@@ -87,10 +93,14 @@ export const Nav = memo((props: FlexProps) => {
                 let isActive = false
 
                 if (!isExternalLink) {
-                  isActive = item.link === "/" ? routes.pathname === "/" : routes.pathname.startsWith(item.link)
+                  isActive =
+                    item.link === "/"
+                      ? routes.pathname === "/"
+                      : routes.pathname.startsWith(item.link)
                 } else {
                   // Define a function with typed parameter to normalize URLs
-                  const normalizeUrl = (url: string): string => url.replace(/^(https:\/\/)?(www\.)?/, "")
+                  const normalizeUrl = (url: string): string =>
+                    url.replace(/^(https:\/\/)?(www\.)?/, "")
 
                   const externalLinks = [
                     "https://somm.finance/",
@@ -101,7 +111,10 @@ export const Nav = memo((props: FlexProps) => {
                   const pathSegment = routes.pathname.split("/")[1]
 
                   // Ensure isActive is always a boolean
-                  isActive = externalLinks.some((link) => normalizeUrl(link) === normalizeUrl(item.link))
+                  isActive = externalLinks.some(
+                    (link) =>
+                      normalizeUrl(link) === normalizeUrl(item.link)
+                  )
                     ? false
                     : pathSegment === "strategies"
                     ? false // Set to false instead of empty string to maintain boolean type
@@ -110,10 +123,20 @@ export const Nav = memo((props: FlexProps) => {
 
                 return (
                   <Flex key={item.link} align="center">
-                    <Link href={item.link} color={isActive && !isExternalLink ? "white" : "neutral.400"} fontWeight="semibold">
+                    <Link
+                      href={item.link}
+                      color={
+                        isActive && !isExternalLink
+                          ? "white"
+                          : "neutral.400"
+                      }
+                      fontWeight="semibold"
+                    >
                       {item.title}
                     </Link>
-                    {item.isNew && <Badge status={BadgeStatus.New} ml={2} />}
+                    {item.isNew && (
+                      <Badge status={BadgeStatus.New} ml={2} />
+                    )}
                   </Flex>
                 )
               })}
@@ -124,20 +147,41 @@ export const Nav = memo((props: FlexProps) => {
         {/* Mobile Navigation */}
         {!isLarger992 && (
           <>
-            <IconButton variant="unstyled" aria-label={"menu"} display={{ base: "flex", lg: "none" }} flex={1} justifyContent="flex-start" onClick={onOpen}>
+            <IconButton
+              variant="unstyled"
+              aria-label={"menu"}
+              display={{ base: "flex", lg: "none" }}
+              flex={1}
+              justifyContent="flex-start"
+              onClick={onOpen}
+            >
               <HamburgerIcon />
             </IconButton>
             <Link href="/">
-              <Image src="/assets/images/sommelier-icon.svg" alt="somm logo1" height="2rem" />
+              <Image
+                src="/assets/images/sommelier-icon.svg"
+                alt="somm logo1"
+                height="2rem"
+              />
             </Link>
           </>
         )}
 
-        <Flex flexShrink={0} minW={{ base: "auto", xl: "320px" }} justifyContent="flex-end" overflow="visible" maxW="100%">
+        <Flex
+          flexShrink={0}
+          minW={{ base: "auto", xl: "320px" }}
+          justifyContent="flex-end"
+          overflow="visible"
+          maxW="100%"
+        >
           <ConnectButton />
         </Flex>
 
-        <Drawer placement={"left"} onClose={onClose} isOpen={isOpen && !isLarger992}>
+        <Drawer
+          placement={"left"}
+          onClose={onClose}
+          isOpen={isOpen && !isLarger992}
+        >
           <DrawerOverlay />
           <DrawerContent backgroundColor="#1E163D">
             <DrawerCloseButton size="lg" />
@@ -145,14 +189,28 @@ export const Nav = memo((props: FlexProps) => {
               <Stack alignItems="flex-end" py="160px" px="24px">
                 {NAV_LINKS.map((item) => {
                   const isExternalLink = item.link.startsWith("http")
-                  let isActive = !isExternalLink && (item.link === "/" ? routes.pathname === "/" : routes.pathname.startsWith(item.link))
+                  let isActive =
+                    !isExternalLink &&
+                    (item.link === "/"
+                      ? routes.pathname === "/"
+                      : routes.pathname.startsWith(item.link))
 
                   return (
                     <Flex key={item.link} align="center">
-                      <Link href={item.link} color={isActive && !isExternalLink ? "white" : "neutral.400"} fontWeight="semibold">
+                      <Link
+                        href={item.link}
+                        color={
+                          isActive && !isExternalLink
+                            ? "white"
+                            : "neutral.400"
+                        }
+                        fontWeight="semibold"
+                      >
                         {item.title}
                       </Link>
-                      {item.isNew && <Badge status={BadgeStatus.New} ml={2} />}
+                      {item.isNew && (
+                        <Badge status={BadgeStatus.New} ml={2} />
+                      )}
                     </Flex>
                   )
                 })}

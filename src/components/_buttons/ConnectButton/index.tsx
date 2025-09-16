@@ -40,11 +40,20 @@ const ConnectButton = (props: ConnectButtonProps) => {
     const chain = chainConfigMap[props.overridechainid]
     return (
       <ClientOnly>
-        <HStack w="auto" spacing={{ base: 2, md: "1.5em" }}>
+        <HStack
+          w="full"
+          maxW="100%"
+          spacing={{ base: 2, md: "1.5em" }}
+        >
           {isConnected ? (
             <ConnectedPopover />
           ) : (
-            <ConnectWalletPopover wagmiChainId={chain.wagmiId} width="auto" minH="44px" {...props} />
+            <ConnectWalletPopover
+              wagmiChainId={chain.wagmiId}
+              width="auto"
+              minH="44px"
+              {...props}
+            />
           )}
         </HStack>
       </ClientOnly>
@@ -53,13 +62,35 @@ const ConnectButton = (props: ConnectButtonProps) => {
 
   return (
     <ClientOnly>
-      <HStack spacing={{ base: 2, md: "1.5em" }} w="auto">
-        <ChainButton chain={currentChainConfig} onChainChange={handleNetworkChange} />
+      <HStack spacing={{ base: 2, md: "1.5em" }} w="full" maxW="100%">
+        <HStack flexShrink={0} minW={{ base: "auto", md: "auto" }}>
+          <ChainButton
+            chain={currentChainConfig}
+            onChainChange={handleNetworkChange}
+          />
+        </HStack>
 
         {isConnected ? (
-          <ConnectedPopover />
+          <HStack
+            flex={1}
+            minW={0}
+            maxW={{ base: "60%", md: "100%" }}
+          >
+            <ConnectedPopover />
+          </HStack>
         ) : (
-          <ConnectWalletPopover wagmiChainId={currentChainConfig.wagmiId} width="auto" minH="44px" {...props} />
+          <HStack
+            flex={1}
+            minW={0}
+            maxW={{ base: "60%", md: "100%" }}
+          >
+            <ConnectWalletPopover
+              wagmiChainId={currentChainConfig.wagmiId}
+              width="auto"
+              minH="44px"
+              {...props}
+            />
+          </HStack>
         )}
       </HStack>
     </ClientOnly>

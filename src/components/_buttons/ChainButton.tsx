@@ -104,38 +104,23 @@ const ChainButton = ({
           w="auto"
           minH="48px"
           pl={{ base: 4, md: 6 }}
-          pr={{ base: 6, md: 14 }}
+          pr={{ base: 4, md: 12 }}
           minW={{ base: "auto", md: "176px" }}
           zIndex={401}
           position="relative"
           cursor="not-allowed"
-          _hover={{
-            bg: "purple.dark",
-          }}
-          _focusVisible={{
-            boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
-          }}
+          _hover={{ bg: "purple.dark" }}
+          _focusVisible={{ boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)" }}
         >
-          <HStack
-            spacing={2}
-            align="center"
-            justify="space-between"
-            maxW="100%"
-            w="full"
-          >
-            <HStack spacing={2} minW={0}>
-              <Image
-                src={effectiveChain.logoPath}
-                alt={effectiveChain.displayName}
-                boxSize="24px"
-                background={"transparent"}
-              />
-              <Text whiteSpace="nowrap" isTruncated>
-                {effectiveChain.displayName}
-              </Text>
-            </HStack>
-            <ChevronDownIcon />
+          <HStack spacing={2} align="center" justify="center" maxW="100%">
+            <Image src={effectiveChain.logoPath} alt={effectiveChain.displayName} boxSize="24px" background={"transparent"} />
+            <Text whiteSpace="nowrap" isTruncated>
+              {effectiveChain.displayName}
+            </Text>
           </HStack>
+          <Box position="absolute" right={7}>
+            <ChevronDownIcon />
+          </Box>
         </Button>
       </Tooltip>
     )
