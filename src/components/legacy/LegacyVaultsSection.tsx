@@ -19,7 +19,7 @@ export default function LegacyVaultsSection({
   }
 
   return (
-    <Box as="section" id="legacy-vaults">
+    <Box as="section" id="legacy-vaults" overflow="visible">
       <SectionHeader
         title={
           <>
@@ -37,7 +37,7 @@ export default function LegacyVaultsSection({
         }
       />
       <WithdrawalWarningBanner />
-      <VStack spacing={4} align="stretch" mt={2}>
+      <VStack spacing={4} align="stretch" mt={2} overflow="visible">
         {legacyVaults
           .filter((v): v is NonNullable<typeof v> => v !== null)
           .map((v) => (

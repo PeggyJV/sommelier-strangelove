@@ -146,6 +146,7 @@ export default function LegacyVaultCard({
       rounded="xl"
       p={{ base: 4, md: 5 }}
       w="full"
+      overflow="hidden"
       cursor={href ? "pointer" : "default"}
       role={href ? "link" : undefined}
       tabIndex={href ? 0 : undefined}
@@ -171,8 +172,9 @@ export default function LegacyVaultCard({
       {/* 3-column layout: identity | KPIs | action */}
       <Grid
         templateColumns={{ base: "1fr", md: "1.2fr 1.2fr 0.9fr" }}
-        gap={{ base: 4, md: 6 }}
+        gap={{ base: 3, md: 6 }}
         alignItems="center"
+        overflow="visible"
       >
         {/* Identity */}
         <HStack spacing={3} align="center" minW={0}>
@@ -193,7 +195,7 @@ export default function LegacyVaultCard({
               {vault?.name}
             </Text>
             <HStack spacing={2} flexWrap="wrap">
-              <Text fontSize="sm" color="whiteAlpha.800">
+              <Text fontSize="sm" color="whiteAlpha.800" noOfLines={1}>
                 {providerText}
               </Text>
               {chainLogo && (
@@ -222,11 +224,11 @@ export default function LegacyVaultCard({
 
         {/* KPIs */}
         <Grid
-          templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-          gap={4}
+          templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(3, 1fr)" }}
+          gap={{ base: 2, md: 4 }}
           alignItems="center"
         >
-          <VStack spacing={1} align="flex-start">
+          <VStack spacing={1} align="flex-start" minW={0}>
             <Text
               fontSize={{ base: "xl", md: "2xl" }}
               fontWeight={800}
@@ -238,7 +240,7 @@ export default function LegacyVaultCard({
               TVL
             </Text>
           </VStack>
-          <VStack spacing={1} align="center">
+          <VStack spacing={1} align="center" minW={0}>
             <Text
               fontSize={{ base: "xl", md: "2xl" }}
               fontWeight={800}
@@ -250,7 +252,7 @@ export default function LegacyVaultCard({
               Net Value
             </Text>
           </VStack>
-          <VStack spacing={1} align="flex-end">
+          <VStack spacing={1} align="flex-end" minW={0}>
             <HStack spacing={1}>
               <Text
                 fontSize={{ base: "xl", md: "2xl" }}
@@ -280,91 +282,99 @@ export default function LegacyVaultCard({
         )}
 
         {/* Action */}
-        <VStack spacing={2} align={{ base: "stretch", md: "end" }}>
-          <ConnectGate
-            fallbackLabel="Connect wallet to withdraw"
-            fullWidth
-            overrideChainId={cellarConfig?.chain?.id}
-          >
-            {needsSwitch ? (
-              <Popover placement="bottom" isLazy>
-                <PopoverTrigger>
-                  <ActionButton
-                    variantStyle="primary"
-                    size="md"
-                    minW="180px"
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onClick={(e) => e.stopPropagation()}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.stopPropagation()
-                      }
-                    }}
-                  >
-                    Switch network to proceed
-                  </ActionButton>
-                </PopoverTrigger>
-                <PopoverContent
-                  p={2}
-                  borderWidth={1}
-                  borderColor="purple.dark"
-                  borderRadius={12}
-                  bg="surface.bg"
-                  _focus={{ outline: "unset", boxShadow: "unset" }}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <PopoverBody>
-                    <ChainSwitcherInline
-                      requiredChainId={desiredChainId}
+        <VStack
+          spacing={2}
+          align={{ base: "stretch", md: "end" }}
+          w="100%"
+          minW={0}
+          sx={{ "@media (max-width: 768px)": { minHeight: "56px" } }}
+        >
+          <Box px={{ base: 3, md: 0 }} w="100%">
+            <ConnectGate
+              fallbackLabel="Connect wallet to withdraw"
+              fullWidth
+              overrideChainId={cellarConfig?.chain?.id}
+            >
+              {needsSwitch ? (
+                <Popover placement="bottom" isLazy>
+                  <PopoverTrigger>
+                    <ActionButton
+                      variantStyle="primary"
+                      size="md"
                       fullWidth
-                      onSwitched={async () => {
-                        // after successful switch, open withdraw flow
-                        try {
-                          await switchChainAsync?.({
-                            chainId: desiredChainId!,
-                          })
-                        } catch {}
-                        if (vault?.slug) {
-                          setIsOpen({
-                            id: vault.slug,
-                            type: "withdraw" as DepositModalType,
-                          })
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onClick={(e) => e.stopPropagation()}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.stopPropagation()
                         }
                       }}
-                    />
-                  </PopoverBody>
-                </PopoverContent>
-              </Popover>
-            ) : (
-              <Tooltip
-                label={tooltipLabel}
-                isDisabled={!tooltipLabel}
-                bg="surface.bg"
-                color="neutral.300"
-                placement="top"
-              >
-                <ActionButton
-                  variantStyle={
-                    !canWithdraw || !vault?.slug ? "ghost" : "primary"
-                  }
-                  size="md"
-                  minW="180px"
-                  isDisabled={!canWithdraw || !vault?.slug}
-                  onClick={async (e) => {
-                    e.stopPropagation()
-                    if (!vault?.slug) return
-                    setIsOpen({
-                      id: vault.slug,
-                      type: "withdraw" as DepositModalType,
-                    })
-                  }}
+                    >
+                      Switch network to proceed
+                    </ActionButton>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    p={2}
+                    borderWidth={1}
+                    borderColor="purple.dark"
+                    borderRadius={12}
+                    bg="surface.bg"
+                    _focus={{ outline: "unset", boxShadow: "unset" }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <PopoverBody>
+                      <ChainSwitcherInline
+                        requiredChainId={desiredChainId}
+                        fullWidth
+                        onSwitched={async () => {
+                          // after successful switch, open withdraw flow
+                          try {
+                            await switchChainAsync?.({
+                              chainId: desiredChainId!,
+                            })
+                          } catch {}
+                          if (vault?.slug) {
+                            setIsOpen({
+                              id: vault.slug,
+                              type: "withdraw" as DepositModalType,
+                            })
+                          }
+                        }}
+                      />
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
+              ) : (
+                <Tooltip
+                  label={tooltipLabel}
+                  isDisabled={!tooltipLabel}
+                  bg="surface.bg"
+                  color="neutral.300"
+                  placement="top"
                 >
-                  Enter Withdrawal
-                </ActionButton>
-              </Tooltip>
-            )}
-          </ConnectGate>
+                  <ActionButton
+                    variantStyle={
+                      !canWithdraw || !vault?.slug ? "ghost" : "primary"
+                    }
+                    size="md"
+                    fullWidth
+                    isDisabled={!canWithdraw || !vault?.slug}
+                    onClick={async (e) => {
+                      e.stopPropagation()
+                      if (!vault?.slug) return
+                      setIsOpen({
+                        id: vault.slug,
+                        type: "withdraw" as DepositModalType,
+                      })
+                    }}
+                  >
+                    Enter Withdrawal
+                  </ActionButton>
+                </Tooltip>
+              )}
+            </ConnectGate>
+          </Box>
         </VStack>
       </Grid>
     </Box>
