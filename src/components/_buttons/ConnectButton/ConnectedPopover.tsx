@@ -135,32 +135,27 @@ export const ConnectedPopover = () => {
           variant="sommOutline"
           borderRadius="full"
           w="auto"
-          minH="48px"
-          pl={6}
-          pr={12}
-          minW="176px"
+          minH={{ base: "44px", md: "48px" }}
+          pl={{ base: 4, md: 6 }}
+          pr={{ base: 4, md: 12 }}
+          minW={{ base: "auto", md: "176px" }}
           zIndex={401}
           isLoading={isLoading}
           position="relative"
-          _hover={{
-            bg: "purple.dark",
-          }}
+          _hover={{ bg: "purple.dark" }}
         >
-          <HStack
-            spacing={2}
-            align="center"
-            justify="center"
-            maxW="100%"
-          >
-            {isLoading ? <Spinner size="xs" /> : undefined}
-            {walletAddressIcon()}
-            <Text whiteSpace="nowrap">
-              {ensName ? ensName : truncateWalletAddress(address)}
-            </Text>
+          <HStack spacing={2} align="center" justify="space-between" maxW="100%" w="full">
+            <HStack spacing={2} minW={0}>
+              {isLoading ? <Spinner size="xs" /> : undefined}
+              {walletAddressIcon()}
+              <Text whiteSpace="nowrap" isTruncated>
+                {ensName ? ensName : truncateWalletAddress(address)}
+              </Text>
+            </HStack>
+            <Box>
+              <ChevronDownIcon />
+            </Box>
           </HStack>
-          <Box position="absolute" right={7}>
-            <ChevronDownIcon />
-          </Box>
         </BaseButton>
       </PopoverTrigger>
       <PopoverContent
@@ -171,11 +166,7 @@ export const ConnectedPopover = () => {
         borderRadius={12}
         bg="surface.bg"
         fontWeight="semibold"
-        _focus={{
-          outline: "unset",
-          outlineOffset: "unset",
-          boxShadow: "unset",
-        }}
+        _focus={{ outline: "unset", outlineOffset: "unset", boxShadow: "unset" }}
       >
         <PopoverBody p={0}>
           <Stack>
@@ -185,61 +176,23 @@ export const ConnectedPopover = () => {
               py={2}
               px={4}
               fontSize="sm"
-              _hover={{
-                bg: "purple.dark",
-                borderColor: "surface.tertiary",
-              }}
+              _hover={{ bg: "purple.dark", borderColor: "surface.tertiary" }}
             >
               <LogoutCircleIcon mr={2} />
               {`View on ${chain?.blockExplorers?.default.name}`}
             </Link>
-            <HStack
-              as="button"
-              py={2}
-              px={4}
-              fontSize="sm"
-              onClick={handleCopyAddressToClipboard}
-              _hover={{
-                cursor: "pointer",
-                bg: "purple.dark",
-                borderColor: "surface.tertiary",
-              }}
-            >
+            <HStack as="button" py={2} px={4} fontSize="sm" onClick={handleCopyAddressToClipboard} _hover={{ cursor: "pointer", bg: "purple.dark", borderColor: "surface.tertiary" }}>
               <LogoutCircleIcon />
               <Text fontWeight="semibold">Copy to clipboard</Text>
             </HStack>
-            <HStack
-              as="button"
-              py={2}
-              px={4}
-              fontSize="sm"
-              onClick={onDisconnect}
-              _hover={{
-                cursor: "pointer",
-                bg: "purple.dark",
-                borderColor: "surface.tertiary",
-              }}
-            >
+            <HStack as="button" py={2} px={4} fontSize="sm" onClick={onDisconnect} _hover={{ cursor: "pointer", bg: "purple.dark", borderColor: "surface.tertiary" }}>
               <LogoutCircleIcon />
               <Text fontWeight="semibold">Disconnect Wallet</Text>
             </HStack>
-            <Stack
-              as="button"
-              py={2}
-              px={4}
-              fontSize="sm"
-              onClick={handleImportToken}
-              _hover={{
-                cursor: "pointer",
-                bg: "purple.dark",
-                borderColor: "surface.tertiary",
-              }}
-            >
+            <Stack as="button" py={2} px={4} fontSize="sm" onClick={handleImportToken} _hover={{ cursor: "pointer", bg: "purple.dark", borderColor: "surface.tertiary" }}>
               <HStack>
                 <Avatar src={avatarSrc} size="2xs" />
-                <Text fontWeight="semibold">
-                  Import SOMM token to Wallet
-                </Text>
+                <Text fontWeight="semibold">Import SOMM token to Wallet</Text>
               </HStack>
             </Stack>
           </Stack>
