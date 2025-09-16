@@ -5,7 +5,8 @@ export const styles = {
     "::selection": { background: "purple.base" },
     "html, body": {
       bgColor: "surface.bg",
-      color: "neutral.100"
+      color: "neutral.100",
+      overflowX: "hidden",
     },
     ":root": {
       colorScheme: "dark !important",

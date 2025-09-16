@@ -1,0 +1,14 @@
+{
+  "/": {
+    "error": "lighthouse exited with code 1"
+  },
+  "/strategies": {
+    "error": "lighthouse exited with code 1"
+  },
+  "/strategies/Alpha-stETH": {
+    "error": "lighthouse exited with code 1"
+  },
+  "/strategies/Alpha-stETH/manage": {
+    "error": "lighthouse exited with code 1"
+  }
+}

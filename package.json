@@ -28,6 +28,7 @@
     "ci": "pnpm run lint:ci && pnpm run typecheck && pnpm run test:ci && pnpm run build",
     "ci:full": "pnpm run lint && pnpm run typecheck && pnpm run test:ci && pnpm run build",
     "e2e": "playwright test",
+    "e2e:mobile": "playwright test e2e/mobile.spec.ts",
     "e2e:report": "playwright show-report",
     "lighthouse": "lhci autorun --collect.numberOfRuns=3 --assert.preset=lighthouse:recommended",
     "size-limit": "size-limit",
@@ -35,6 +36,7 @@
     "perf:analyze": "ANALYZE=true next build",
     "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
     "perf:report": "node scripts/generate-perf-report.js",
+    "audit:lighthouse:mobile": "node scripts/audits/lighthouse-mobile.js",
     "export:banners": "playwright install --with-deps && node scripts/export-banners.mjs"
   },
   "dependencies": {
@@ -116,6 +118,7 @@
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "babel-jest": "^30.1.2",
+    "chrome-launcher": "^1.2.0",
     "eslint": "8.57.1",
     "eslint-config-next": "15.4.6",
     "eslint-plugin-jsx-a11y": "^6.5.1",
@@ -123,6 +126,7 @@
     "jest": "^29.0.1",
     "jest-environment-jsdom": "^29.7.0",
     "jest-junit": "^16.0.0",
+    "lighthouse": "^12.8.2",
     "playwright": "^1.55.0",
     "prettier": "^2",
     "size-limit": "^11.2.0",
