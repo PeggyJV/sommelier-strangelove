@@ -40,14 +40,11 @@ const ConnectButton = (props: ConnectButtonProps) => {
     const chain = chainConfigMap[props.overridechainid]
     return (
       <ClientOnly>
-        <HStack w="100%" flexWrap="wrap" justifyContent="flex-end" spacing={{ base: 2, md: "1.5em" }}>
+        <HStack w="auto" spacing={{ base: 2, md: "1.5em" }}>
           {isConnected ? (
             <ConnectedPopover />
           ) : (
-            <ConnectWalletPopover
-              wagmiChainId={chain.wagmiId}
-              {...props}
-            />
+            <ConnectWalletPopover wagmiChainId={chain.wagmiId} width="auto" minH="44px" {...props} />
           )}
         </HStack>
       </ClientOnly>
@@ -56,19 +53,13 @@ const ConnectButton = (props: ConnectButtonProps) => {
 
   return (
     <ClientOnly>
-      <HStack spacing={{ base: 2, md: "1.5em" }} flexWrap="wrap" justifyContent="flex-end" w="full">
-        <ChainButton
-          chain={currentChainConfig}
-          onChainChange={handleNetworkChange}
-        />
+      <HStack spacing={{ base: 2, md: "1.5em" }} w="auto">
+        <ChainButton chain={currentChainConfig} onChainChange={handleNetworkChange} />
 
         {isConnected ? (
           <ConnectedPopover />
         ) : (
-          <ConnectWalletPopover
-            wagmiChainId={currentChainConfig.wagmiId}
-            {...props}
-          />
+          <ConnectWalletPopover wagmiChainId={currentChainConfig.wagmiId} width="auto" minH="44px" {...props} />
         )}
       </HStack>
     </ClientOnly>
