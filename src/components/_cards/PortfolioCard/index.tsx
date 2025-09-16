@@ -155,30 +155,36 @@ export const PortfolioCard = (props: BoxProps) => {
 
   // Determine if any legacy bonded tranche is matured (ready to withdraw LP tokens)
   const hasMaturedLegacyTranche = Boolean(
-    (((userStakes as any)?.userStakes || []) as any[]).some((t: any) => {
-      const ts = Number(t?.unbondTimestamp ?? 0)
-      return ts !== 0 && ts * 1000 < Date.now()
-    })
+    (((userStakes as any)?.userStakes || []) as any[]).some(
+      (t: any) => {
+        const ts = Number(t?.unbondTimestamp ?? 0)
+        return ts !== 0 && ts * 1000 < Date.now()
+      }
+    )
   )
 
   // Calculate combined Net Value (free LP + bonded LP) for legacy vaults
   const bondedAmount = (userStakes as any)?.totalBondedAmount
-  const tokenPrice = parseFloat(
-    (strategyData?.tokenPrice || "0").replace("$", "")
-  ) || 0
+  const tokenPrice =
+    parseFloat((strategyData?.tokenPrice || "0").replace("$", "")) ||
+    0
   const bondedValue = bondedAmount?.value
-    ? (Number(bondedAmount.formatted) * tokenPrice)
+    ? Number(bondedAmount.formatted) * tokenPrice
     : 0
   const freeNetValue = Number(netValue?.value || 0)
   const totalNetValue = freeNetValue + bondedValue
-  const totalNetValueFormatted = totalNetValue > 0
-    ? `$${totalNetValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-    : netValue?.formatted
+  const totalNetValueFormatted =
+    totalNetValue > 0
+      ? `$${totalNetValue
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+      : netValue?.formatted
 
   // For legacy vaults with bonding, show combined total; otherwise show regular net value
-  const displayNetValue = !isBondedDisabled(cellarConfig) && bondedValue > 0
-    ? totalNetValueFormatted
-    : netValue?.formatted
+  const displayNetValue =
+    !isBondedDisabled(cellarConfig) && bondedValue > 0
+      ? totalNetValueFormatted
+      : netValue?.formatted
 
   const lpTokenDisabled =
     !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
@@ -191,10 +197,9 @@ export const PortfolioCard = (props: BoxProps) => {
   const baseAssetValue =
     userData?.userStrategyData.userData?.netValueInAsset?.formatted
 
-  const baseAssetValueRaw =
-    (userData?.userStrategyData.userData?.netValueInAsset as any)?.value as
-      | number
-      | undefined
+  const baseAssetValueRaw = (
+    userData?.userStrategyData.userData?.netValueInAsset as any
+  )?.value as number | undefined
 
   // Compute fallback ETH amount directly from shares × per-share base-asset value
   const perShareBase = (() => {
@@ -212,7 +217,10 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const alphaEthValueFormatted = isAlphaSteth
     ? (() => {
-        if (typeof baseAssetValueRaw === "number" && baseAssetValueRaw > 0)
+        if (
+          typeof baseAssetValueRaw === "number" &&
+          baseAssetValueRaw > 0
+        )
           return baseAssetValueRaw.toFixed(4)
         if (Number.isFinite(alphaEthCalc) && alphaEthCalc > 0)
           return alphaEthCalc.toFixed(4)
@@ -265,26 +273,35 @@ export const PortfolioCard = (props: BoxProps) => {
           >
             <CardStat
               label="Net Value"
-              tooltip={!isBondedDisabled(cellarConfig) && bondedValue > 0
-                ? `Total value of ${freeNetValue.toFixed(2)} USD (free LP) + ${bondedValue.toFixed(2)} USD (bonded LP) in the strategy`
-                : "Net value of assets in the strategy including SOMM rewards"
+              tooltip={
+                !isBondedDisabled(cellarConfig) && bondedValue > 0
+                  ? `Total value of ${freeNetValue.toFixed(
+                      2
+                    )} USD (free LP) + ${bondedValue.toFixed(
+                      2
+                    )} USD (bonded LP) in the strategy`
+                  : "Net value of assets in the strategy including SOMM rewards"
               }
             >
               {isMounted &&
                 (isConnected ? displayNetValue || "..." : "--")}
             </CardStat>
 
-            {showNetValueInAsset(cellarConfig) && (
-              isAlphaSteth ? (
+            {showNetValueInAsset(cellarConfig) &&
+              (isAlphaSteth ? (
                 <CardStat
                   label="ETH Value"
                   tooltip={
                     <Text>
-                      Total value denominated in ETH (stETH ≈ ETH). Excludes SOMM rewards
+                      Total value denominated in ETH (stETH ≈ ETH).
+                      Excludes SOMM rewards
                     </Text>
                   }
                 >
-                  {isMounted && (isConnected ? alphaEthValueFormatted ?? "..." : "--")}
+                  {isMounted &&
+                    (isConnected
+                      ? alphaEthValueFormatted ?? "..."
+                      : "--")}
                 </CardStat>
               ) : (
                 <CardStat
@@ -307,8 +324,7 @@ export const PortfolioCard = (props: BoxProps) => {
                 >
                   {isMounted && (isConnected ? baseAssetValue : "--")}
                 </CardStat>
-              )
-            )}
+              ))}
 
             <CardStat
               label="deposit assets"
@@ -457,7 +473,12 @@ export const PortfolioCard = (props: BoxProps) => {
                   </>
                 ) : (
                   <>
-                    <VStack spacing={3} width="100%" paddingTop={"1em"} align="flex-start">
+                    <VStack
+                      spacing={3}
+                      width="100%"
+                      paddingTop={"1em"}
+                      align="flex-start"
+                    >
                       <HStack>
                         <ConnectButton
                           overridechainid={cellarConfig.chain.id}
