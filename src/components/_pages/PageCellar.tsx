@@ -24,6 +24,7 @@ import { TokenPriceChartProvider } from "data/context/tokenPriceChartContext"
 import { TokenPricePerfomanceCard } from "components/_cards/TokenPricePerfomaceCard"
 import { ApyChartProvider } from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
+import { InView } from "react-intersection-observer"
 import { isComingSoon } from "utils/isComingSoon"
 import { InfoBanner } from "components/_banners/InfoBanner"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
@@ -179,26 +180,42 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
         </HStack>
 
         {/* Mobile compact header */}
-        <VStack spacing={3} align="stretch" display={{ base: "flex", md: "none" }} px={6} pt={4}>
+        <VStack
+          spacing={3}
+          align="stretch"
+          display={{ base: "flex", md: "none" }}
+          px={6}
+          pt={4}
+        >
           <BreadCrumb cellarName={staticCellarData.name} id={id} />
           <HStack justify="space-between" align="center">
             <Heading fontSize="xl" noOfLines={1}>
               {staticCellarData.name}
             </Heading>
-            <HStack spacing={2} px={2} py={1} rounded="full" bg="whiteAlpha.100">
+            <HStack
+              spacing={2}
+              px={2}
+              py={1}
+              rounded="full"
+              bg="whiteAlpha.100"
+            >
               <Image
                 src={cellarConfig.chain.logoPath}
                 alt={cellarConfig.chain.alt}
                 boxSize={4}
                 background={"transparent"}
               />
-              <Text fontSize="xs" color="whiteAlpha.800">{cellarConfig.chain.displayName}</Text>
+              <Text fontSize="xs" color="whiteAlpha.800">
+                {cellarConfig.chain.displayName}
+              </Text>
             </HStack>
           </HStack>
           {isYieldStrategies && (
             <CellarStatsYield
               cellarId={id}
-              alphaStethOverrides={id === utilConfig.CONTRACT.ALPHA_STETH.SLUG}
+              alphaStethOverrides={
+                id === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+              }
               px={0}
             />
           )}
@@ -253,30 +270,46 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
       </Box>
       <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">
-          {!notLaunched &&
-            isApyChartEnabled(cellarConfig) &&
-            !isEstimatedApyEnable(cellarConfig) && (
-              <ApyChartProvider
-                address={cellarAddress}
-                chain={cellarConfig.chain.id}
-              >
-                <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                  Vault Perfomance
-                </Heading>
-                <ApyPerfomanceCard />
-              </ApyChartProvider>
+          <InView triggerOnce rootMargin="200px">
+            {({ inView, ref }) => (
+              <div ref={ref}>
+                {!notLaunched &&
+                  isApyChartEnabled(cellarConfig) &&
+                  !isEstimatedApyEnable(cellarConfig) &&
+                  inView && (
+                    <ApyChartProvider
+                      address={cellarAddress}
+                      chain={cellarConfig.chain.id}
+                    >
+                      <Heading
+                        pt={isLarger768 ? 12 : 0}
+                        {...h2Styles}
+                      >
+                        Vault Perfomance
+                      </Heading>
+                      <ApyPerfomanceCard />
+                    </ApyChartProvider>
+                  )}
+              </div>
             )}
-          {isTokenPriceChartEnabled(cellarConfig) && (
-            <TokenPriceChartProvider
-              address={cellarAddress}
-              chain={cellarConfig.chain.id}
-            >
-              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                Vault Perfomance
-              </Heading>
-              <TokenPricePerfomanceCard />
-            </TokenPriceChartProvider>
-          )}
+          </InView>
+          <InView triggerOnce rootMargin="200px">
+            {({ inView, ref }) => (
+              <div ref={ref}>
+                {isTokenPriceChartEnabled(cellarConfig) && inView && (
+                  <TokenPriceChartProvider
+                    address={cellarAddress}
+                    chain={cellarConfig.chain.id}
+                  >
+                    <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
+                      Vault Perfomance
+                    </Heading>
+                    <TokenPricePerfomanceCard />
+                  </TokenPriceChartProvider>
+                )}
+              </div>
+            )}
+          </InView>
 
           <Heading pt={isYieldStrategies ? 0 : 12} {...h2Styles}>
             Vault Details
