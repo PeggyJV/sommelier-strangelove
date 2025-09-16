@@ -35,3 +35,6 @@ scripts/onchain-marketing/logs/
 # local PR notes and audits (ignore in VCS)
 PR_DESCRIPTION.md
 docs/audits/
+tests/__screenshots__/
+audits/mobile/
+test-results/

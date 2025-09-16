@@ -59,9 +59,9 @@ export const Nav = memo((props: FlexProps) => {
       position="fixed"
       width="100%"
       as="nav"
-      py="36px"
+      py={{ base: "16px", md: "24px", lg: "36px" }}
       fontSize="xl"
-      zIndex="sticky"
+      zIndex={1001}
       transition="ease-in-out 200ms"
       transitionProperty="background"
       {...styles}
@@ -73,8 +73,8 @@ export const Nav = memo((props: FlexProps) => {
         justifyContent="space-between"
         alignItems="center"
         flexDir="row"
-        gap={{ base: 4, lg: 0 }}
-        px={{ base: "16px", md: "30px", lg: "40px" }}
+        gap={{ base: 2, lg: 0 }}
+        px={{ base: "8px", md: "24px", lg: "40px" }}
       >
         {/* Desktop Navigation */}
         {isLarger992 && (
@@ -162,7 +162,7 @@ export const Nav = memo((props: FlexProps) => {
           </>
         )}
 
-        <Flex flexShrink={0} minW={{ lg: "auto", xl: "320px" }} justifyContent="flex-end">
+        <Flex flexShrink={0} minW={{ base: "auto", xl: "320px" }} justifyContent="flex-end" overflow="visible">
           <ConnectButton />
         </Flex>
 
