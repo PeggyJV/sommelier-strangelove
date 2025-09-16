@@ -116,25 +116,20 @@ const ChainButton = ({
             boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
           }}
         >
-          <HStack
-            spacing={2}
-            align="center"
-            justify="center"
-            maxW="100%"
-          >
-            <Image
-              src={effectiveChain.logoPath}
-              alt={effectiveChain.displayName}
-              boxSize="24px"
-              background={"transparent"}
-            />
-            <Text whiteSpace="nowrap">
-              {effectiveChain.displayName}
-            </Text>
-          </HStack>
-          <Box position="absolute" right={7}>
+          <HStack spacing={2} align="center" justify="space-between" maxW="100%" w="full">
+            <HStack spacing={2} minW={0}>
+              <Image
+                src={effectiveChain.logoPath}
+                alt={effectiveChain.displayName}
+                boxSize="24px"
+                background={"transparent"}
+              />
+              <Text whiteSpace="nowrap" isTruncated>
+                {effectiveChain.displayName}
+              </Text>
+            </HStack>
             <ChevronDownIcon />
-          </Box>
+          </HStack>
         </Button>
       </Tooltip>
     )
