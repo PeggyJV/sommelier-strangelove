@@ -70,10 +70,7 @@ export default function LegacyVaultCard({
   const cellarConfig = vault?.slug
     ? cellarDataMap[vault.slug]?.config
     : undefined
-  const { lpToken } = useUserBalance(
-    cellarConfig as any,
-    enabled
-  )
+  const { lpToken } = useUserBalance(cellarConfig as any, enabled)
   const { data: lpTokenData } = lpToken
   const { switchChainAsync } = useSwitchChain()
   const desiredChainId = cellarConfig?.chain?.wagmiId
@@ -100,15 +97,21 @@ export default function LegacyVaultCard({
     ?.userStrategyData?.userData?.netValue?.formatted
 
   // Combine free LP net value + bonded LP value for legacy vaults
-  const bondedAmtStr: string | undefined = (userStratData as any)?.userStakes?.totalBondedAmount?.formatted
+  const bondedAmtStr: string | undefined = (userStratData as any)
+    ?.userStakes?.totalBondedAmount?.formatted
   const bondedAmt = bondedAmtStr ? parseFloat(bondedAmtStr) : 0
-  const tokenPriceStr: string = ((userStratData as any)?.userStrategyData?.strategyData?.tokenPrice || "0") as string
+  const tokenPriceStr: string = ((userStratData as any)
+    ?.userStrategyData?.strategyData?.tokenPrice || "0") as string
   const tokenPrice = parseFloat(tokenPriceStr.replace("$", "")) || 0
   const bondedValue = bondedAmt * tokenPrice
-  const combinedNetValue = (Number.isFinite(nv) ? nv : 0) + bondedValue
-  const combinedNetValueFmt = combinedNetValue > 0
-    ? `$${combinedNetValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-    : userNetValueFmt
+  const combinedNetValue =
+    (Number.isFinite(nv) ? nv : 0) + bondedValue
+  const combinedNetValueFmt =
+    combinedNetValue > 0
+      ? `$${combinedNetValue
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+      : userNetValueFmt
 
   const safeVal = (v?: string | number | null) =>
     v == null || v === "" || v === 0 || v === "0" ? "–" : v
@@ -195,7 +198,11 @@ export default function LegacyVaultCard({
               {vault?.name}
             </Text>
             <HStack spacing={2} flexWrap="wrap">
-              <Text fontSize="sm" color="whiteAlpha.800" noOfLines={1}>
+              <Text
+                fontSize="sm"
+                color="whiteAlpha.800"
+                noOfLines={1}
+              >
                 {providerText}
               </Text>
               {chainLogo && (
@@ -224,7 +231,10 @@ export default function LegacyVaultCard({
 
         {/* KPIs */}
         <Grid
-          templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(3, 1fr)" }}
+          templateColumns={{
+            base: "repeat(3, 1fr)",
+            md: "repeat(3, 1fr)",
+          }}
           gap={{ base: 2, md: 4 }}
           alignItems="center"
         >
@@ -355,7 +365,9 @@ export default function LegacyVaultCard({
                 >
                   <ActionButton
                     variantStyle={
-                      !canWithdraw || !vault?.slug ? "ghost" : "primary"
+                      !canWithdraw || !vault?.slug
+                        ? "ghost"
+                        : "primary"
                     }
                     size="md"
                     fullWidth
