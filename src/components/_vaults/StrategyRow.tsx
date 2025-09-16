@@ -214,6 +214,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
           }}
           gap={{ base: 2, md: 4 }}
           alignItems="center"
+          minW={0}
         >
           <KPIBox label="TVL" value={safeValue(tvl)} align="left" />
           <KPIBox
