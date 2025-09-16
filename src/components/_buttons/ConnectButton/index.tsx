@@ -40,7 +40,7 @@ const ConnectButton = (props: ConnectButtonProps) => {
     const chain = chainConfigMap[props.overridechainid]
     return (
       <ClientOnly>
-        <HStack w="100%">
+        <HStack w="100%" flexWrap="wrap" justifyContent="flex-end" spacing={{ base: 2, md: "1.5em" }}>
           {isConnected ? (
             <ConnectedPopover />
           ) : (
@@ -56,7 +56,7 @@ const ConnectButton = (props: ConnectButtonProps) => {
 
   return (
     <ClientOnly>
-      <HStack spacing={"1.5em"}>
+      <HStack spacing={{ base: 2, md: "1.5em" }} flexWrap="wrap" justifyContent="flex-end" w="full">
         <ChainButton
           chain={currentChainConfig}
           onChainChange={handleNetworkChange}

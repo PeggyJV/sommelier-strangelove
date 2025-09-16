@@ -175,6 +175,10 @@ export const Nav = memo((props: FlexProps) => {
           minW={{ base: "auto", xl: "320px" }}
           justifyContent="flex-end"
           overflow="visible"
+          flexWrap="wrap"
+          columnGap={{ base: 2, md: 4 }}
+          rowGap={{ base: 2, md: 0 }}
+          maxW="100%"
         >
           <ConnectButton />
         </Flex>
