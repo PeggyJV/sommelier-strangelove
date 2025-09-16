@@ -146,8 +146,10 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
         />
       )}
       <Section>
+        {/* Desktop header */}
         <HStack
-          pb={isLarger768 ? 12 : 0}
+          display={{ base: "none", md: "flex" }}
+          pb={12}
           justify="space-between"
           align="flex-end"
           wrap="wrap"
@@ -165,7 +167,9 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
             {isYieldStrategies && (
               <CellarStatsYield
                 cellarId={id}
-                alphaStethOverrides={id === utilConfig.CONTRACT.ALPHA_STETH.SLUG}
+                alphaStethOverrides={
+                  id === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+                }
               />
             )}
             {isAutomatedPortfolio && (
@@ -173,6 +177,35 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
             )}
           </HStack>
         </HStack>
+
+        {/* Mobile compact header */}
+        <VStack spacing={3} align="stretch" display={{ base: "flex", md: "none" }} px={6} pt={4}>
+          <BreadCrumb cellarName={staticCellarData.name} id={id} />
+          <HStack justify="space-between" align="center">
+            <Heading fontSize="xl" noOfLines={1}>
+              {staticCellarData.name}
+            </Heading>
+            <HStack spacing={2} px={2} py={1} rounded="full" bg="whiteAlpha.100">
+              <Image
+                src={cellarConfig.chain.logoPath}
+                alt={cellarConfig.chain.alt}
+                boxSize={4}
+                background={"transparent"}
+              />
+              <Text fontSize="xs" color="whiteAlpha.800">{cellarConfig.chain.displayName}</Text>
+            </HStack>
+          </HStack>
+          {isYieldStrategies && (
+            <CellarStatsYield
+              cellarId={id}
+              alphaStethOverrides={id === utilConfig.CONTRACT.ALPHA_STETH.SLUG}
+              px={0}
+            />
+          )}
+          {isAutomatedPortfolio && (
+            <CellarStatsAutomated cellarConfig={cellarConfig} />
+          )}
+        </VStack>
 
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles} pt={12}>
