@@ -68,7 +68,7 @@ export default function ActionButton({
     <Button
       size={size}
       height={height}
-      minW={minW}
+      minW={fullWidth ? 0 : minW}
       borderRadius={borderRadius}
       fontWeight={fontWeight}
       w={fullWidth ? "100%" : rest.w}

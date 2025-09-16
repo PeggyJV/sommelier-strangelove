@@ -135,14 +135,23 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
       }}
     >
       <Grid
-        templateColumns={{ base: "1fr", md: "1.2fr 1.1fr 1fr" }}
+        templateAreas={{
+          base: '"id" "kpi" "action"',
+          lg: '"id kpi action"',
+        }}
+        templateColumns={{ base: "1fr", lg: "1.2fr 1.1fr 1fr" }}
         gap={{ base: 3, md: 6 }}
         alignItems="center"
         // Prevent button clipping due to hidden overflow on grid/td parents
         overflow="visible"
       >
         {/* Left column: Identity */}
-        <HStack spacing={{ base: 2, md: 3 }} align="center" minW={0}>
+        <HStack
+          spacing={{ base: 2, md: 3 }}
+          align="center"
+          minW={0}
+          gridArea="id"
+        >
           <Image
             src={
               vault?.isSommNative
@@ -208,12 +217,14 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
 
         {/* Center column: KPIs in equal widths */}
         <Grid
+          gridArea="kpi"
           templateColumns={{
             base: "repeat(3, 1fr)",
-            md: "repeat(3, 1fr)",
+            lg: "repeat(3, 1fr)",
           }}
           gap={{ base: 2, md: 4 }}
           alignItems="center"
+          minW={0}
         >
           <KPIBox label="TVL" value={safeValue(tvl)} align="left" />
           <KPIBox
@@ -249,6 +260,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
 
         {/* Right column: chain + primary action with single helper */}
         <VStack
+          gridArea="action"
           spacing={2}
           align={{ base: "stretch", md: "end" }}
           // Reserve vertical space on mobile so the button never gets clipped
@@ -281,6 +293,8 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                   variantStyle="primary"
                   size={{ base: "md", md: "md" }}
                   fullWidth
+                  // Allow button to consume full width even if row has click handler
+                  onMouseDown={(e) => e.stopPropagation()}
                   onClick={(e) => {
                     e.stopPropagation()
                     if (!vault?.slug) return
@@ -306,7 +320,10 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
           mt={{ base: 2, md: 3 }}
           fontSize={{ base: "xs", md: "sm" }}
           color="neutral.300"
-          noOfLines={1}
+          noOfLines={{ base: 3, md: 1 }}
+          whiteSpace="normal"
+          wordBreak="break-word"
+          overflowWrap="anywhere"
         >
           {oneLineDesc}
         </Text>

@@ -5,7 +5,6 @@ import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
 import { ConnectWalletPopover } from "./ConnectWalletPopover"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { MobileConnectedPopover } from "./MobileConnectedPopover"
 import ChainButton from "../ChainButton"
 import {
   chainConfig,
@@ -41,16 +40,18 @@ const ConnectButton = (props: ConnectButtonProps) => {
     const chain = chainConfigMap[props.overridechainid]
     return (
       <ClientOnly>
-        <HStack w="100%">
+        <HStack
+          w="full"
+          maxW="100%"
+          spacing={{ base: 2, md: "1.5em" }}
+        >
           {isConnected ? (
-            isLarger992 ? (
-              <ConnectedPopover />
-            ) : (
-              <MobileConnectedPopover />
-            )
+            <ConnectedPopover />
           ) : (
             <ConnectWalletPopover
               wagmiChainId={chain.wagmiId}
+              width="auto"
+              minH="44px"
               {...props}
             />
           )}
@@ -61,23 +62,35 @@ const ConnectButton = (props: ConnectButtonProps) => {
 
   return (
     <ClientOnly>
-      <HStack spacing={"1.5em"}>
-        <ChainButton
-          chain={currentChainConfig}
-          onChainChange={handleNetworkChange}
-        />
+      <HStack spacing={{ base: 2, md: "1.5em" }} w="full" maxW="100%">
+        <HStack flexShrink={0} minW={{ base: "auto", md: "auto" }}>
+          <ChainButton
+            chain={currentChainConfig}
+            onChainChange={handleNetworkChange}
+          />
+        </HStack>
 
         {isConnected ? (
-          isLarger992 ? (
+          <HStack
+            flex={1}
+            minW={0}
+            maxW={{ base: "60%", md: "100%" }}
+          >
             <ConnectedPopover />
-          ) : (
-            <MobileConnectedPopover />
-          )
+          </HStack>
         ) : (
-          <ConnectWalletPopover
-            wagmiChainId={currentChainConfig.wagmiId}
-            {...props}
-          />
+          <HStack
+            flex={1}
+            minW={0}
+            maxW={{ base: "60%", md: "100%" }}
+          >
+            <ConnectWalletPopover
+              wagmiChainId={currentChainConfig.wagmiId}
+              width="auto"
+              minH="44px"
+              {...props}
+            />
+          </HStack>
         )}
       </HStack>
     </ClientOnly>

@@ -122,7 +122,11 @@ export const BorderTd: FC<TableCellProps & { href: string }> = ({
   href,
   ...props
 }) => {
-  return <Td py={7}>{props.children}</Td>
+  return (
+    <Td py={7} {...props}>
+      {props.children}
+    </Td>
+  )
 }
 
 export interface StrategyTableProps {
@@ -171,6 +175,9 @@ export const StrategyTable = memo(
             "@media (max-width: 768px)": {
               "thead th:nth-of-type(n+2)": { display: "none" },
               "tbody td:nth-of-type(n+2)": { display: "none" },
+              // Make rows and cells block-level so the first cell can span full width
+              "tbody tr": { display: "block", width: "100%" },
+              "tbody td": { display: "block", width: "100%" },
             },
             // Let rows/cells render visual effects outside cell bounds
             "tbody tr": { overflow: "visible" },
@@ -247,17 +254,29 @@ export const StrategyTable = memo(
                     name={row.original.name}
                     key={indexRow}
                   >
-                    {row.cells.map((cell, indexData) => {
-                      return (
-                        <BorderTd
-                          {...cell.getCellProps()}
-                          key={indexData}
-                          href={href}
-                        >
-                          {cell.render("Cell")}
-                        </BorderTd>
+                    {(() => {
+                      const totalColumns =
+                        headerGroups?.[0]?.headers?.length ??
+                        row.cells.length
+                      const isSomm = Boolean(
+                        row.original?.isSommNative
                       )
-                    })}
+                      return row.cells.map((cell, indexData) => {
+                        const isFirst = cell.column.id === "name"
+                        if (isSomm && !isFirst) return null
+                        const colSpan =
+                          isSomm && isFirst ? totalColumns : 1
+                        return (
+                          <BorderTd
+                            {...cell.getCellProps({ colSpan })}
+                            key={indexData}
+                            href={href}
+                          >
+                            {cell.render("Cell")}
+                          </BorderTd>
+                        )
+                      })
+                    })()}
                   </HeroTr>
                 )
               }
@@ -269,17 +288,27 @@ export const StrategyTable = memo(
                   slug={href}
                   name={row.original.name}
                 >
-                  {row.cells.map((cell, indexData) => {
-                    return (
-                      <BorderTd
-                        {...cell.getCellProps()}
-                        key={indexData}
-                        href={href}
-                      >
-                        {cell.render("Cell")}
-                      </BorderTd>
-                    )
-                  })}
+                  {(() => {
+                    const totalColumns =
+                      headerGroups?.[0]?.headers?.length ??
+                      row.cells.length
+                    const isSomm = Boolean(row.original?.isSommNative)
+                    return row.cells.map((cell, indexData) => {
+                      const isFirst = cell.column.id === "name"
+                      if (isSomm && !isFirst) return null
+                      const colSpan =
+                        isSomm && isFirst ? totalColumns : 1
+                      return (
+                        <BorderTd
+                          {...cell.getCellProps({ colSpan })}
+                          key={indexData}
+                          href={href}
+                        >
+                          {cell.render("Cell")}
+                        </BorderTd>
+                      )
+                    })
+                  })()}
                 </BorderTr>
               )
             })}

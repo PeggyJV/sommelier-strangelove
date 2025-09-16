@@ -7,6 +7,8 @@ export const components: ThemeComponents = {
     baseStyle: {
       borderRadius: 64,
       color: "text.body.dark",
+      minH: 11,
+      px: 4,
       _focusVisible: {
         boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
         outline: "none",
