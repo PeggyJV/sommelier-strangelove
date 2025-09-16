@@ -243,21 +243,23 @@ export const PortfolioCard = (props: BoxProps) => {
     <TransparentCard
       {...props}
       backgroundColor="surface.secondary"
-      p={8}
-      overflow="none"
+      p={{ base: 4, md: 8 }}
+      overflow="hidden"
       zIndex={1}
     >
       <VStack align="stretch" spacing={8}>
         <CardStatRow
-          gap={{ base: 4, md: 8, lg: 12 }}
+          gap={{ base: 3, md: 8, lg: 12 }}
           align="flex-start"
           justify="flex-start"
           direction={{ base: "column", md: "row" }}
           wrap="wrap"
         >
           <SimpleGrid
+            minW={0}
+            gap={{ base: 3, md: 4 }}
             templateColumns={{
-              base: "repeat(1, max-content)",
+              base: "1fr",
               md: "repeat(2, max-content)",
             }}
           >
