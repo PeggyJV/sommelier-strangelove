@@ -5,7 +5,6 @@ import ClientOnly from "components/ClientOnly"
 import { ConnectedPopover } from "./ConnectedPopover"
 import { ConnectWalletPopover } from "./ConnectWalletPopover"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { MobileConnectedPopover } from "./MobileConnectedPopover"
 import ChainButton from "../ChainButton"
 import {
   chainConfig,
@@ -43,11 +42,7 @@ const ConnectButton = (props: ConnectButtonProps) => {
       <ClientOnly>
         <HStack w="100%">
           {isConnected ? (
-            isLarger992 ? (
-              <ConnectedPopover />
-            ) : (
-              <MobileConnectedPopover />
-            )
+            <ConnectedPopover />
           ) : (
             <ConnectWalletPopover
               wagmiChainId={chain.wagmiId}
@@ -68,11 +63,7 @@ const ConnectButton = (props: ConnectButtonProps) => {
         />
 
         {isConnected ? (
-          isLarger992 ? (
-            <ConnectedPopover />
-          ) : (
-            <MobileConnectedPopover />
-          )
+          <ConnectedPopover />
         ) : (
           <ConnectWalletPopover
             wagmiChainId={currentChainConfig.wagmiId}
