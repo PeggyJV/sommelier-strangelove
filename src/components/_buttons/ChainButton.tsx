@@ -23,7 +23,6 @@ import { useSwitchChain, useAccount } from "wagmi"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import { useMemo, useState } from "react"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 import {
   chainConfigMap,
@@ -46,7 +45,6 @@ const ChainButton = ({
   const { isConnected } = useAccount()
   const { addToast, close } = useBrandedToast()
   const { openConnectModal } = useConnectModal()
-  const isMobile = !useBetterMediaQuery("(min-width: 768px)")
   const isMobile = !useBetterMediaQuery("(min-width: 768px)")
   const { isOpen, onOpen, onClose } = useDisclosure()
 
