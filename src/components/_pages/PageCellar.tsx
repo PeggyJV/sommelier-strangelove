@@ -96,6 +96,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
   const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
+  const showBackChip = useBetterMediaQuery("(max-width: 768px)")
 
   return (
     <Layout chainObj={cellarConfig.chain}>
@@ -320,6 +321,25 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
           />
         </VStack>
       </Section>
+
+      {/* Floating Back to Vaults chip (mobile after scroll) */}
+      {showBackChip && (
+        <Box
+          position="fixed"
+          bottom={{ base: isOpen ? "64px" : "16px", md: "16px" }}
+          left="16px"
+          zIndex={9}
+          display={{ base: "block", md: "none" }}
+        >
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => window.history.back()}
+          >
+            Back to Vaults
+          </Button>
+        </Box>
+      )}
     </Layout>
   )
 }

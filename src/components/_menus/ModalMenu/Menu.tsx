@@ -77,6 +77,33 @@ export const Menu = ({
     Token | undefined
   >(defaultToken)
 
+  // Restore last used values from sessionStorage
+  useEffect(() => {
+    try {
+      const key = `deposit:last:${cellarConfig.cellar.address}`
+      const raw = sessionStorage.getItem(key)
+      if (raw) {
+        const parsed = JSON.parse(raw) as {
+          tokenSymbol?: string
+          amount?: number
+        }
+        if (parsed?.tokenSymbol) {
+          const found = depositTokenConfig.find(
+            (t) => t.symbol === parsed.tokenSymbol
+          )
+          if (found) {
+            setSelectedToken(found)
+            onChange(found)
+          }
+        }
+        if (typeof parsed?.amount === "number" && !Number.isNaN(parsed.amount)) {
+          setValue("depositAmount", parsed.amount)
+        }
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const setMax = () => {
     // analytics.track("deposit.max-selected", {
     //   value: selectedTokenBalance?.value?.toString(),
@@ -340,6 +367,15 @@ export const Menu = ({
                 ) // Keep token decimal places as max
                 event.target.value = val
               }
+              // persist on change (debounced via browser task queue)
+              try {
+                const key = `deposit:last:${cellarConfig.cellar.address}`
+                const payload = {
+                  tokenSymbol: (selectedToken || value)?.symbol,
+                  amount: Number(val),
+                }
+                sessionStorage.setItem(key, JSON.stringify(payload))
+              } catch {}
             },
             required: "Enter amount",
             valueAsNumber: true,
@@ -375,6 +411,34 @@ export const Menu = ({
             },
           })}
         />
+        {/* Quick amount chips */}
+        <HStack spacing={2} pt={2} pr="2">
+          {([100, 500] as const).map((v) => (
+            <Button
+              key={v}
+              size="xs"
+              variant="outline"
+              onClick={() => setValue("depositAmount", v)}
+              isDisabled={isDisabled ?? false}
+            >
+              ${v}
+            </Button>
+          ))}
+          <Button
+            size="xs"
+            variant="outline"
+            onClick={() => {
+              // Safe Max: subtract a small gas reserve for native ETH deposits
+              const raw = parseFloat(availableBalance)
+              const reserve = value.symbol === "ETH" ? 0.005 : 0
+              const safe = Math.max(0, raw - reserve)
+              setValue("depositAmount", Number(safe.toFixed(6)))
+            }}
+            isDisabled={isDisabled ?? false}
+          >
+            Safe Max
+          </Button>
+        </HStack>
         <HStack spacing={0} fontSize="11px" textAlign="right" pr="2">
           <Text as="span">
             $ {Number(displayedBalance.toFixed(2)).toLocaleString()}
