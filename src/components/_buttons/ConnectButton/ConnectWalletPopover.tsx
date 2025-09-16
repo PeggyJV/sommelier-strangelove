@@ -42,9 +42,18 @@ export const ConnectWalletPopover = memo(
           openConnectModal,
           mounted,
         }) => {
+          const isAlreadyConnected = Boolean(account?.address)
+          const handleClick = () => {
+            if (isAlreadyConnected) {
+              // If already connected, open the account modal instead of attempting to connect again
+              openAccountModal?.()
+              return
+            }
+            openConnectModal?.()
+          }
           return (
             <Button
-              onClick={openConnectModal}
+              onClick={handleClick}
               variant="sommOutline"
               w={rest.w || rest.width || "100%"}
               minH={(rest as any).minH || "48px"}
