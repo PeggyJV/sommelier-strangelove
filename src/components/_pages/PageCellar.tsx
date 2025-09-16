@@ -32,6 +32,7 @@ import dynamic from "next/dynamic"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
+import { useState } from "react"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { config as utilConfig } from "utils/config"
 import { Box, Button, Image, Text } from "@chakra-ui/react"
@@ -96,7 +97,15 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
   const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
-  const showBackChip = useBetterMediaQuery("(max-width: 768px)")
+  const isMobileWidth = useBetterMediaQuery("(max-width: 768px)")
+  const [showBackChip, setShowBackChip] = useState(false)
+  useEffect(() => {
+    if (!isMobileWidth) return
+    const onScroll = () => setShowBackChip(window.scrollY > 400)
+    onScroll()
+    window.addEventListener("scroll", onScroll)
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [isMobileWidth])
 
   return (
     <Layout chainObj={cellarConfig.chain}>
@@ -323,7 +332,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
       </Section>
 
       {/* Floating Back to Vaults chip (mobile after scroll) */}
-      {showBackChip && (
+      {isMobileWidth && showBackChip && (
         <Box
           position="fixed"
           bottom={{ base: isOpen ? "64px" : "16px", md: "16px" }}
