@@ -179,13 +179,19 @@ export default function TopLaunchBanner({
               </HStack>
 
               {/* CTAs */}
-              <HStack spacing={{ base: 3, md: 4 }}>
+              <Stack
+                spacing={{ base: 2, md: 4 }}
+                direction={{ base: "column", md: "row" }}
+                w="full"
+                overflow="visible"
+              >
                 <Button
                   as={NextLink}
                   href="/strategies/Alpha-stETH/manage"
                   size="md"
-                  height="40px"
-                  px="20px"
+                  height={{ base: "44px", md: "40px" }}
+                  px={{ base: 4, md: "20px" }}
+                  w={{ base: "100%", md: "auto" }}
                   fontWeight={600}
                   fontSize="sm"
                   bg="cta.filled.bg"
@@ -205,8 +211,9 @@ export default function TopLaunchBanner({
                   as={NextLink}
                   href="/strategies/Alpha-stETH/deposit_guide"
                   size="md"
-                  height="40px"
-                  px="20px"
+                  height={{ base: "44px", md: "40px" }}
+                  px={{ base: 4, md: "20px" }}
+                  w={{ base: "100%", md: "auto" }}
                   fontWeight={600}
                   fontSize="sm"
                   variant="outline"
@@ -226,11 +233,13 @@ export default function TopLaunchBanner({
                   href={blogHref}
                   isExternal
                   _hover={{ textDecoration: "none" }}
+                  w={{ base: "100%", md: "auto" }}
                 >
                   <Button
                     size="md"
-                    height="40px"
-                    px="20px"
+                    height={{ base: "44px", md: "40px" }}
+                    px={{ base: 4, md: "20px" }}
+                    w={{ base: "100%", md: "auto" }}
                     fontWeight={600}
                     fontSize="sm"
                     variant="outline"
@@ -246,7 +255,7 @@ export default function TopLaunchBanner({
                     View Strategy Blog
                   </Button>
                 </Link>
-              </HStack>
+              </Stack>
             </Stack>
           </GridItem>
 
