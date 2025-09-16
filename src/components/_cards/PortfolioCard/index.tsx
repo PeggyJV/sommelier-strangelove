@@ -361,6 +361,7 @@ export const PortfolioCard = (props: BoxProps) => {
                         spacing={{ base: 2, md: 3 }}
                         align="flex-start"
                         width="100%"
+                        overflow="visible"
                       >
                         {!strategyData?.deprecated && (
                           <DepositButton
@@ -414,6 +415,7 @@ export const PortfolioCard = (props: BoxProps) => {
                         align="flex-start"
                         mt={{ base: 2, md: 3 }}
                         width="100%"
+                        overflow="visible"
                       >
                         {isWithdrawQueueEnabled(cellarConfig) ? (
                           <WithdrawQueueButton

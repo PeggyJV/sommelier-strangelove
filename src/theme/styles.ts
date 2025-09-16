@@ -61,7 +61,7 @@ export const styles = {
       transitionProperty: "all",
       transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
       transitionDuration: "500ms",
-      zIndex: "1 !important"
+      zIndex: "1000 !important"
     },
     ".nav.down": {
       top: "-10rem",
