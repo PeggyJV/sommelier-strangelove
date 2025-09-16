@@ -282,6 +282,8 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                   variantStyle="primary"
                   size={{ base: "md", md: "md" }}
                   fullWidth
+                  // Allow button to consume full width even if row has click handler
+                  onMouseDown={(e) => e.stopPropagation()}
                   onClick={(e) => {
                     e.stopPropagation()
                     if (!vault?.slug) return
@@ -307,7 +309,10 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
           mt={{ base: 2, md: 3 }}
           fontSize={{ base: "xs", md: "sm" }}
           color="neutral.300"
-          noOfLines={1}
+          noOfLines={{ base: 3, md: 1 }}
+          whiteSpace="normal"
+          wordBreak="break-word"
+          overflowWrap="anywhere"
         >
           {oneLineDesc}
         </Text>
