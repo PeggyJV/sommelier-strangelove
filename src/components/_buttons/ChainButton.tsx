@@ -116,7 +116,13 @@ const ChainButton = ({
             boxShadow: "0 0 0 3px var(--chakra-colors-purple-base)",
           }}
         >
-          <HStack spacing={2} align="center" justify="space-between" maxW="100%" w="full">
+          <HStack
+            spacing={2}
+            align="center"
+            justify="space-between"
+            maxW="100%"
+            w="full"
+          >
             <HStack spacing={2} minW={0}>
               <Image
                 src={effectiveChain.logoPath}
