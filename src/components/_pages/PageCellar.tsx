@@ -34,7 +34,7 @@ import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { config as utilConfig } from "utils/config"
-import { Box, Button } from "@chakra-ui/react"
+import { Box, Button, Image, Text } from "@chakra-ui/react"
 import ConnectGate from "components/wallet/ConnectGate"
 
 import { useAccount } from "wagmi"
