@@ -1,10 +1,11 @@
 /*
-  Generates MVP deposits report for Alpha stETH from Upstash Redis (snapshot).
-  Reads keys by prefix and writes:
+  Generates MVP deposits report for Alpha stETH by calling the app's
+  public API (Vercel KV-backed): /api/deposits/by-block.
+  Writes:
   - public/reports/alpha-steth-deposits.json (daily time series)
   - docs/analytics/mvp-deposits.md (brief markdown summary)
   Optionally posts a Telegram message if BOT_TOKEN + CHAT_ID are present.
-  This script is conservative: if env is missing, it exits 0 without failing CI.
+  This script is conservative: if env or data are missing, it exits 0.
 */
 import fs from "fs"
 import path from "path"
@@ -13,8 +14,9 @@ import { fileURLToPath } from "url"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const REST_URL = process.env.UPSTASH_REDIS_REST_URL
-const REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN
+const API_BASE =
+  process.env.REPORT_API_BASE || process.env.NEXT_PUBLIC_SITE_URL ||
+  "https://app.somm.finance"
 const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const TG_CHAT = process.env.TELEGRAM_CHAT_ID
 
@@ -30,48 +32,50 @@ function log(...args) {
   console.log("[alpha-deposits]", ...args)
 }
 
-async function upstashFetch(route, init = {}) {
-  if (!REST_URL || !REST_TOKEN) {
-    log("Upstash env missing; skipping fetch")
+async function apiFetch(pathAndQuery, init = {}) {
+  const base = (API_BASE || "").replace(/\/$/, "")
+  if (!base) {
+    log("API base missing; skipping fetch")
     return null
   }
-  const url = `${REST_URL}${route}`
+  const url = `${base}${pathAndQuery}`
   const res = await fetch(url, {
     ...init,
     headers: {
-      Authorization: `Bearer ${REST_TOKEN}`,
       "Content-Type": "application/json",
       ...(init.headers || {}),
     },
   })
-  if (!res.ok) throw new Error(`Upstash error ${res.status}`)
-  return res.json()
-}
-
-// Simple SCAN using Upstash REST API
-async function scanPrefix(prefix, limit = 5000) {
-  // Upstash JSON API: /scan?prefix=...&cursor=0
-  let cursor = 0
-  const keys = []
-  do {
-    const q = `?prefix=${encodeURIComponent(prefix)}&cursor=${cursor}`
-    const data = await upstashFetch(`/scan${q}`)
-    if (!data) break
-    cursor = data.cursor
-    keys.push(...(data.keys || []))
-    if (keys.length >= limit) break
-  } while (cursor && cursor !== 0)
-  return keys.slice(0, limit)
-}
-
-async function getJSON(key) {
-  const res = await upstashFetch(`/get/${encodeURIComponent(key)}`)
-  if (res && typeof res.result === "string") {
-    try {
-      return JSON.parse(res.result)
-    } catch {}
+  if (!res.ok) {
+    log("api error", res.status, url)
+    return null
   }
-  return null
+  try {
+    return await res.json()
+  } catch {
+    return null
+  }
+}
+
+// Fetch deposit events from the production API (Vercel KV-backed)
+async function fetchDepositsAll(limit = 20000) {
+  const q = `/api/deposits/by-block?fromBlock=-inf&toBlock=+inf&order=desc&limit=${limit}`
+  const data = await apiFetch(q)
+  if (!Array.isArray(data)) return []
+  return data
+}
+
+function parseAmountBase(amount, decimals) {
+  if (amount == null) return 0
+  const s = String(amount)
+  // If looks like integer and decimals provided, scale down
+  if (/^\d+$/.test(s) && typeof decimals === "number" && decimals > 0) {
+    const n = Number(s)
+    if (!Number.isFinite(n)) return 0
+    return n / Math.pow(10, decimals)
+  }
+  const n = Number(s)
+  return Number.isFinite(n) ? n : 0
 }
 
 function toDateUTC(tsMs) {
@@ -84,33 +88,22 @@ async function main() {
   fs.mkdirSync(REPORT_DIR, { recursive: true })
   fs.mkdirSync(path.dirname(DOCS_MD), { recursive: true })
 
-  // 1) Pull deposit entries
-  const prefix = "tx:alpha-steth:deposit:"
-  let keys = []
-  try {
-    keys = await scanPrefix(prefix, 10000)
-  } catch (e) {
-    log("scan failed (ok for first run):", e.message)
+  // 1) Pull deposit entries from API and normalize
+  const events = await fetchDepositsAll(20000)
+  if (!events.length) {
+    log("no deposit events from API; exiting 0")
+    return
   }
 
   const rows = []
-  for (const k of keys) {
+  for (const ev of events) {
     try {
-      const v = await getJSON(k)
-      if (!v) continue
-      const ts = Number(v.timestamp || v.ts || 0)
-      const wallet = v.wallet || v.address
-      const amountBase = Number(v.amount_base || v.amount || 0)
-      const amountUsd =
-        v.amount_usd != null ? Number(v.amount_usd) : null
+      const ts = Number(ev.timestamp || ev.timestampMs || ev.ts || 0)
+      const wallet = (ev.ethAddress || ev.wallet || ev.address || "").toLowerCase()
+      const amountBase = parseAmountBase(ev.amount, ev.decimals)
+      const amountUsd = ev.amount_usd != null ? Number(ev.amount_usd) : null
       if (!ts || !wallet || !Number.isFinite(amountBase)) continue
-      rows.push({
-        ts,
-        day: toDateUTC(ts),
-        wallet,
-        amountBase,
-        amountUsd,
-      })
+      rows.push({ ts, day: toDateUTC(ts), wallet, amountBase, amountUsd })
     } catch {}
   }
 
