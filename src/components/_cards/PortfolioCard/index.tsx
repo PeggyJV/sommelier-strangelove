@@ -322,7 +322,6 @@ export const PortfolioCard = (props: BoxProps) => {
                 </CardStat>
               )
             )}
-              ))}
 
             <CardStat
               label="deposit assets"

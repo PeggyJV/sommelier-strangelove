@@ -1,12 +1,15 @@
 import { Redis } from "@upstash/redis"
 
-// Single-source attribution KV client: read only ATTRIB_* REST envs
-const URL = process.env.ATTRIB_KV_KV_REST_API_URL || ""
-const TOKEN = process.env.ATTRIB_KV_KV_REST_API_TOKEN || ""
+// Single-source attribution KV client.
+// Prefer ATTRIB_*; fall back to standard KV_* so we don't need duplicate envs.
+const URL =
+  process.env.ATTRIB_KV_KV_REST_API_URL || process.env.KV_REST_API_URL || ""
+const TOKEN =
+  process.env.ATTRIB_KV_KV_REST_API_TOKEN || process.env.KV_REST_API_TOKEN || ""
 
 if (!URL || !TOKEN) {
   throw new Error(
-    "[attrib-kv] Missing ATTRIB_KV_KV_REST_API_URL or ATTRIB_KV_KV_REST_API_TOKEN"
+    "[attrib-kv] Missing KV REST credentials. Provide ATTRIB_KV_KV_REST_API_URL/TOKEN or KV_REST_API_URL/TOKEN"
   )
 }
 
