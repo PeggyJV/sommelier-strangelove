@@ -96,7 +96,10 @@ export const Menu = ({
             onChange(found)
           }
         }
-        if (typeof parsed?.amount === "number" && !Number.isNaN(parsed.amount)) {
+        if (
+          typeof parsed?.amount === "number" &&
+          !Number.isNaN(parsed.amount)
+        ) {
           setValue("depositAmount", parsed.amount)
         }
       }
@@ -109,16 +112,25 @@ export const Menu = ({
     //   value: selectedTokenBalance?.value?.toString(),
     // })
 
+    const amt = parseFloat(
+      toEther(
+        selectedTokenBalance?.value,
+        selectedTokenBalance?.decimals,
+        false,
+        6
+      )
+    )
+    try {
+      const key = `deposit:last:${cellarConfig.cellar.address}`
+      const payload = {
+        tokenSymbol: (selectedToken || value)?.symbol,
+        amount: amt,
+      }
+      sessionStorage.setItem(key, JSON.stringify(payload))
+    } catch {}
     return setValue(
       "depositAmount",
-      parseFloat(
-        toEther(
-          selectedTokenBalance?.value,
-          selectedTokenBalance?.decimals,
-          false,
-          6
-        )
-      )
+      amt
     )
   }
   const [displayedBalance, setDisplayedBalance] = useState(0)
@@ -263,6 +275,14 @@ export const Menu = ({
                       setSelectedToken(token)
                       setDisplayedBalance(0)
                       setValue("depositAmount", 0)
+                      try {
+                        const key = `deposit:last:${cellarConfig.cellar.address}`
+                        const payload = {
+                          tokenSymbol: token.symbol,
+                          amount: 0,
+                        }
+                        sessionStorage.setItem(key, JSON.stringify(payload))
+                      } catch {}
                     }}
                   >
                     <HStack justify="space-between">
@@ -418,7 +438,17 @@ export const Menu = ({
               key={v}
               size="xs"
               variant="outline"
-              onClick={() => setValue("depositAmount", v)}
+              onClick={() => {
+                setValue("depositAmount", v)
+                try {
+                  const key = `deposit:last:${cellarConfig.cellar.address}`
+                  const payload = {
+                    tokenSymbol: (selectedToken || value)?.symbol,
+                    amount: v,
+                  }
+                  sessionStorage.setItem(key, JSON.stringify(payload))
+                } catch {}
+              }}
               isDisabled={isDisabled ?? false}
             >
               ${v}
@@ -432,7 +462,16 @@ export const Menu = ({
               const raw = parseFloat(availableBalance)
               const reserve = value.symbol === "ETH" ? 0.005 : 0
               const safe = Math.max(0, raw - reserve)
-              setValue("depositAmount", Number(safe.toFixed(6)))
+              const amt = Number(safe.toFixed(6))
+              setValue("depositAmount", amt)
+              try {
+                const key = `deposit:last:${cellarConfig.cellar.address}`
+                const payload = {
+                  tokenSymbol: (selectedToken || value)?.symbol,
+                  amount: amt,
+                }
+                sessionStorage.setItem(key, JSON.stringify(payload))
+              } catch {}
             }}
             isDisabled={isDisabled ?? false}
           >
