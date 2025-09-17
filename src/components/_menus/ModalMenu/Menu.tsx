@@ -431,53 +431,7 @@ export const Menu = ({
             },
           })}
         />
-        {/* Quick amount chips */}
-        <HStack spacing={2} pt={2} pr="2">
-          {([100, 500] as const).map((v) => (
-            <Button
-              key={v}
-              size="xs"
-              variant="outline"
-              onClick={() => {
-                setValue("depositAmount", v)
-                try {
-                  const key = `deposit:last:${cellarConfig.cellar.address}`
-                  const payload = {
-                    tokenSymbol: (selectedToken || value)?.symbol,
-                    amount: v,
-                  }
-                  sessionStorage.setItem(key, JSON.stringify(payload))
-                } catch {}
-              }}
-              isDisabled={isDisabled ?? false}
-            >
-              ${v}
-            </Button>
-          ))}
-          <Button
-            size="xs"
-            variant="outline"
-            onClick={() => {
-              // Safe Max: subtract a small gas reserve for native ETH deposits
-              const raw = parseFloat(availableBalance)
-              const reserve = value.symbol === "ETH" ? 0.005 : 0
-              const safe = Math.max(0, raw - reserve)
-              const amt = Number(safe.toFixed(6))
-              setValue("depositAmount", amt)
-              try {
-                const key = `deposit:last:${cellarConfig.cellar.address}`
-                const payload = {
-                  tokenSymbol: (selectedToken || value)?.symbol,
-                  amount: amt,
-                }
-                sessionStorage.setItem(key, JSON.stringify(payload))
-              } catch {}
-            }}
-            isDisabled={isDisabled ?? false}
-          >
-            Safe Max
-          </Button>
-        </HStack>
+        
         <HStack spacing={0} fontSize="11px" textAlign="right" pr="2">
           <Text as="span">
             $ {Number(displayedBalance.toFixed(2)).toLocaleString()}
