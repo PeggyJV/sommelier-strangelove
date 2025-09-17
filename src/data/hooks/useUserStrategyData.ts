@@ -96,12 +96,17 @@ export const useUserStrategyData = (
       const sharesFormatted = lpTokenData.formatted
       const tokenPrice =
         parseFloat(
-          (strategyData.data.tokenPrice || "0").replace("$", "")
+          String(strategyData.data.tokenPrice || "0").replace(/[$,]/g, "")
         ) || 0
       const baseAssetPriceValue =
-        parseFloat(baseAssetPrice || "0") || 0
+        parseFloat(String(baseAssetPrice || "0").replace(/,/g, "")) || 0
 
-      const netValue = Number(sharesFormatted) * tokenPrice
+      const sharesNumber = (() => {
+        const n = parseFloat(String(sharesFormatted).replace(/,/g, ""))
+        return Number.isFinite(n) ? n : 0
+      })()
+
+      const netValue = sharesNumber * tokenPrice
 
       // Calculate net value in base asset for strategies that support it
       const netValueInAsset =
