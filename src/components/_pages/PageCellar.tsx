@@ -295,7 +295,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
                         pt={isLarger768 ? 12 : 0}
                         {...h2Styles}
                       >
-                        Vault Perfomance
+                        Performance
                       </Heading>
                       <ApyPerfomanceCard />
                     </ApyChartProvider>
@@ -312,7 +312,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
                     chain={cellarConfig.chain.id}
                   >
                     <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                      Vault Perfomance
+                      Token Price
                     </Heading>
                     <TokenPricePerfomanceCard />
                   </TokenPriceChartProvider>
