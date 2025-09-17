@@ -2,7 +2,7 @@ name: Alpha stETH Deposits Report
 
 on:
   schedule:
-    - cron: '15 5 * * *' # daily 05:15 UTC
+    - cron: "15 5 * * *" # daily 05:15 UTC
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Install deps (no scripts)
         run: |
@@ -44,5 +44,3 @@ jobs:
         if: ${{ success() }}
         run: |
           git push
-
-

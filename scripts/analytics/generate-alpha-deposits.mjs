@@ -15,7 +15,8 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const API_BASE =
-  process.env.REPORT_API_BASE || process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.REPORT_API_BASE ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
   "https://app.somm.finance"
 const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const TG_CHAT = process.env.TELEGRAM_CHAT_ID
@@ -69,7 +70,11 @@ function parseAmountBase(amount, decimals) {
   if (amount == null) return 0
   const s = String(amount)
   // If looks like integer and decimals provided, scale down
-  if (/^\d+$/.test(s) && typeof decimals === "number" && decimals > 0) {
+  if (
+    /^\d+$/.test(s) &&
+    typeof decimals === "number" &&
+    decimals > 0
+  ) {
     const n = Number(s)
     if (!Number.isFinite(n)) return 0
     return n / Math.pow(10, decimals)
@@ -99,11 +104,23 @@ async function main() {
   for (const ev of events) {
     try {
       const ts = Number(ev.timestamp || ev.timestampMs || ev.ts || 0)
-      const wallet = (ev.ethAddress || ev.wallet || ev.address || "").toLowerCase()
+      const wallet = (
+        ev.ethAddress ||
+        ev.wallet ||
+        ev.address ||
+        ""
+      ).toLowerCase()
       const amountBase = parseAmountBase(ev.amount, ev.decimals)
-      const amountUsd = ev.amount_usd != null ? Number(ev.amount_usd) : null
+      const amountUsd =
+        ev.amount_usd != null ? Number(ev.amount_usd) : null
       if (!ts || !wallet || !Number.isFinite(amountBase)) continue
-      rows.push({ ts, day: toDateUTC(ts), wallet, amountBase, amountUsd })
+      rows.push({
+        ts,
+        day: toDateUTC(ts),
+        wallet,
+        amountBase,
+        amountUsd,
+      })
     } catch {}
   }
 
@@ -180,23 +197,30 @@ async function main() {
   // Yesterday granular metrics
   const yesterdayDay = last?.day
   const rowsYesterday = rows.filter((r) => r.day === yesterdayDay)
-  const amounts = rowsYesterday.map((r) => r.amountBase).sort((a, b) => a - b)
+  const amounts = rowsYesterday
+    .map((r) => r.amountBase)
+    .sort((a, b) => a - b)
   const avg = amounts.length
     ? amounts.reduce((a, b) => a + b, 0) / amounts.length
     : 0
   const median = amounts.length
-    ? (amounts.length % 2
-        ? amounts[(amounts.length - 1) / 2]
-        : (amounts[amounts.length / 2 - 1] + amounts[amounts.length / 2]) / 2)
+    ? amounts.length % 2
+      ? amounts[(amounts.length - 1) / 2]
+      : (amounts[amounts.length / 2 - 1] +
+          amounts[amounts.length / 2]) /
+        2
     : 0
   const pIdx = Math.max(0, Math.floor(0.95 * (amounts.length - 1)))
   const p95 = amounts.length ? amounts[pIdx] : 0
 
   // New vs returning depositors
   const walletsYesterday = new Set(rowsYesterday.map((r) => r.wallet))
-  const walletsBefore = new Set(rows.filter((r) => r.day < yesterdayDay).map((r) => r.wallet))
+  const walletsBefore = new Set(
+    rows.filter((r) => r.day < yesterdayDay).map((r) => r.wallet)
+  )
   let newCount = 0
-  for (const w of walletsYesterday) if (!walletsBefore.has(w)) newCount++
+  for (const w of walletsYesterday)
+    if (!walletsBefore.has(w)) newCount++
   const returningCount = Math.max(0, walletsYesterday.size - newCount)
 
   // Top 3 deposits
@@ -226,7 +250,9 @@ async function main() {
   const deltaCount = last ? last.deposits_count - avg7 : 0
   const deltaPct = avg7 > 0 ? (deltaCount / avg7) * 100 : 0
   const baseChangePct =
-    sumPrev7.base > 0 ? ((sum7.base - sumPrev7.base) / sumPrev7.base) * 100 : 0
+    sumPrev7.base > 0
+      ? ((sum7.base - sumPrev7.base) / sumPrev7.base) * 100
+      : 0
   const trendEmoji =
     sumPrev7.base === 0
       ? "→"
@@ -240,9 +266,12 @@ async function main() {
   const alerts = []
   const whaleThreshold = Number(process.env.ALERT_WHALE_ETH || 25)
   const maxDeposit = amounts.length ? Math.max(...amounts) : 0
-  if (last && last.deposits_count < avg7 * 0.7) alerts.push("volume down")
-  if (maxDeposit >= whaleThreshold) alerts.push(`whale ≥ ${whaleThreshold} ETH`)
-  if (newCount === 0 && walletsYesterday.size > 0) alerts.push("no new users")
+  if (last && last.deposits_count < avg7 * 0.7)
+    alerts.push("volume down")
+  if (maxDeposit >= whaleThreshold)
+    alerts.push(`whale ≥ ${whaleThreshold} ETH`)
+  if (newCount === 0 && walletsYesterday.size > 0)
+    alerts.push("no new users")
 
   // Markdown report (extended)
   const last30 = series.slice(-30)
@@ -251,53 +280,127 @@ async function main() {
     last30
       .map(
         (d) =>
-          `| ${d.day} | ${d.deposits_count} | ${d.deposits_amount_base.toFixed(
-            6
-          )} | ${d.unique_wallets} |`
+          `| ${d.day} | ${
+            d.deposits_count
+          } | ${d.deposits_amount_base.toFixed(6)} | ${
+            d.unique_wallets
+          } |`
       )
       .join("\n")
 
   const md = `# Alpha stETH – Deposits (MVP)\n\nUpdated: ${new Date().toISOString()}\n\nLatest day: ${
     last ? last.day : "n/a"
-  }\n- deposits_count: ${last ? last.deposits_count : 0} (vs 7d avg: ${
-    avg7.toFixed(2)
-  }, ${deltaPct >= 0 ? "+" : ""}${deltaPct.toFixed(1)}%)\n- deposits_amount_base: ${
+  }\n- deposits_count: ${
+    last ? last.deposits_count : 0
+  } (vs 7d avg: ${avg7.toFixed(2)}, ${
+    deltaPct >= 0 ? "+" : ""
+  }${deltaPct.toFixed(1)}%)\n- deposits_amount_base: ${
     last ? last.deposits_amount_base.toFixed(6) : 0
   }\n- unique_wallets: ${
     last ? last.unique_wallets : 0
-  } (new: ${newCount}, returning: ${returningCount})\n- avg/median/p95: ${avg.toFixed(4)} / ${median.toFixed(4)} / ${p95.toFixed(
+  } (new: ${newCount}, returning: ${returningCount})\n- avg/median/p95: ${avg.toFixed(
     4
-  )} ETH\n\nLast 7 days totals:\n- count: ${sum7.count}\n- base: ${sum7.base.toFixed(6)} (vs prev 7d: ${
+  )} / ${median.toFixed(4)} / ${p95.toFixed(
+    4
+  )} ETH\n\nLast 7 days totals:\n- count: ${
+    sum7.count
+  }\n- base: ${sum7.base.toFixed(6)} (vs prev 7d: ${
     baseChangePct >= 0 ? "+" : ""
-  }${baseChangePct.toFixed(1)}% ${trendEmoji})\n\nTop deposits (yday): ${
+  }${baseChangePct.toFixed(
+    1
+  )}% ${trendEmoji})\n\nTop deposits (yday): ${
     top3.length
-      ? top3.map((t) => `${t.amount.toFixed(4)} ${t.wallet}`).join(", ")
+      ? top3
+          .map((t) => `${t.amount.toFixed(4)} ${t.wallet}`)
+          .join(", ")
       : "n/a"
-  }\nBusy hours UTC (yday): ${topHours.join(", ") || "n/a"}${table30}\n\nSee JSON time series: public/reports/alpha-steth-deposits.json\n`
+  }\nBusy hours UTC (yday): ${
+    topHours.join(", ") || "n/a"
+  }${table30}\n\nSee JSON time series: public/reports/alpha-steth-deposits.json\n`
   fs.writeFileSync(DOCS_MD, md)
   log("wrote", DOCS_MD)
 
   // 5) Telegram message (optional)
   if (TG_TOKEN && TG_CHAT && last) {
-    const text = `Alpha stETH — Daily deposits (${last.day})\n• count: ${
-      last.deposits_count
-    } (vs 7d avg: ${avg7.toFixed(2)}, ${
-      deltaPct >= 0 ? "+" : ""
-    }${deltaPct.toFixed(1)}%)\n• sum: ${last.deposits_amount_base.toFixed(6)} ETH\n• unique: ${
-      last.unique_wallets
-    } | new: ${newCount}, ret: ${returningCount}\n• avg/med/p95: ${avg
-      .toFixed(4)
-      .replace(/0+$/,'')}/${median.toFixed(4).replace(/0+$/,'')}/${p95
-      .toFixed(4)
-      .replace(/0+$/,'')} ETH\n• top: ${
-      top3.length
-        ? top3.map((t) => `${t.amount.toFixed(2)} ${t.wallet}`).join(", ")
-        : "n/a"
-    }\n• 7d: count ${sum7.count}, sum ${sum7.base.toFixed(2)} (prev7: ${
-      baseChangePct >= 0 ? "+" : ""
-    }${baseChangePct.toFixed(1)}% ${trendEmoji})\n• busy hrs UTC: ${
-      topHours.join(", ") || "n/a"
-    }\n\nAlerts: ${alerts.length ? alerts.join(", ") : "none"}`
+    // Build token-by-timestamp map to split ETH/WETH
+    const tokenByTs = new Map()
+    for (const ev of events) {
+      const t = Number(ev.timestamp || ev.timestampMs || ev.ts || 0)
+      const tok = String(ev?.token || "ETH").toUpperCase()
+      tokenByTs.set(t, tok === "WETH" ? "WETH" : "ETH")
+    }
+
+    // ALL totals
+    const allTotals = rows.reduce(
+      (acc, r) => {
+        const asset = tokenByTs.get(r.ts) || "ETH"
+        acc.count += 1
+        acc.base += r.amountBase || 0
+        if (r.amountUsd != null)
+          acc.usd = (acc.usd == null ? 0 : acc.usd) + r.amountUsd
+        const cur = acc.assets[asset] || { count: 0, base: 0 }
+        cur.count += 1
+        cur.base += r.amountBase || 0
+        acc.assets[asset] = cur
+        return acc
+      },
+      { count: 0, base: 0, usd: null, assets: {} }
+    )
+
+    // BY DAY (last 30d)
+    const byDayAssets = new Map()
+    for (const r of rows) {
+      const day = r.day
+      let d = byDayAssets.get(day)
+      if (!d)
+        d = {
+          count: 0,
+          base: 0,
+          usd: null,
+          assets: {
+            ETH: { count: 0, base: 0 },
+            WETH: { count: 0, base: 0 },
+          },
+        }
+      d.count += 1
+      d.base += r.amountBase || 0
+      if (r.amountUsd != null)
+        d.usd = (d.usd == null ? 0 : d.usd) + r.amountUsd
+      const asset = tokenByTs.get(r.ts) || "ETH"
+      d.assets[asset].count += 1
+      d.assets[asset].base += r.amountBase || 0
+      byDayAssets.set(day, d)
+    }
+    const dayLines = Array.from(byDayAssets.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .slice(-30)
+      .map(([day, v]) => {
+        const eth = v.assets.ETH
+        const weth = v.assets.WETH
+        const usdStr =
+          v.usd != null ? ` (≈ $${v.usd.toFixed(2)})` : ""
+        return `${day}: ${v.count} | ${v.base.toFixed(
+          6
+        )} ETH${usdStr} | assets: ETH ${eth.count}/${eth.base.toFixed(
+          2
+        )}, WETH ${weth.count}/${weth.base.toFixed(2)}`
+      })
+
+    const header = `Alpha stETH — Deposits (${last.day}, UTC)`
+    const allUsdStr =
+      allTotals.usd != null ? ` (≈ $${allTotals.usd.toFixed(2)})` : ""
+    const allLine = `ALL\n- total: ${
+      allTotals.count
+    } | ${allTotals.base.toFixed(6)} ETH${allUsdStr}\n- assets: ETH ${
+      allTotals.assets.ETH?.count || 0
+    }/${(allTotals.assets.ETH?.base || 0).toFixed(2)}, WETH ${
+      allTotals.assets.WETH?.count || 0
+    }/${(allTotals.assets.WETH?.base || 0).toFixed(2)}`
+    const byDayHeader = `\n\nBY DAY (last 30d)`
+    const text = [header, allLine, byDayHeader, ...dayLines].join(
+      "\n"
+    )
+
     try {
       const r = await fetch(
         `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,

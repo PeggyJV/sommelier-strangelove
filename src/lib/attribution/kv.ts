@@ -3,9 +3,13 @@ import { Redis } from "@upstash/redis"
 // Single-source attribution KV client.
 // Prefer ATTRIB_*; fall back to standard KV_* so we don't need duplicate envs.
 const URL =
-  process.env.ATTRIB_KV_KV_REST_API_URL || process.env.KV_REST_API_URL || ""
+  process.env.ATTRIB_KV_KV_REST_API_URL ||
+  process.env.KV_REST_API_URL ||
+  ""
 const TOKEN =
-  process.env.ATTRIB_KV_KV_REST_API_TOKEN || process.env.KV_REST_API_TOKEN || ""
+  process.env.ATTRIB_KV_KV_REST_API_TOKEN ||
+  process.env.KV_REST_API_TOKEN ||
+  ""
 
 if (!URL || !TOKEN) {
   throw new Error(
