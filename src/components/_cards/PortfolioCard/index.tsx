@@ -47,6 +47,7 @@ import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
 import { FaExternalLinkAlt } from "react-icons/fa"
 import { toEther, formatUSD } from "utils/formatCurrency"
+import { useBrandedToast } from "hooks/chakra"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { formatDistance } from "utils/formatDistance"
 import { useAccount } from "wagmi"
@@ -270,6 +271,26 @@ export const PortfolioCard = (props: BoxProps) => {
     if (!Number.isFinite(num)) return maybeCurrency
     return formatUSD(String(num))
   }
+  const { addToast } = useBrandedToast()
+  const copyToClipboard = async (text?: string) => {
+    if (!text) return
+    try {
+      await navigator.clipboard.writeText(text)
+      addToast({
+        heading: "Copied",
+        body: <Text>{text}</Text>,
+        status: "success",
+        duration: 2000,
+      })
+    } catch {}
+  }
+
+  // Mobile-friendly button labels
+  const withdrawQueueLabel = isMobile
+    ? "Withdraw Queue"
+    : "Enter Withdraw Queue"
+  const migrateLabel = isMobile ? "Migrate" : "Migrate to Alpha STETH"
+  const depositGuideLabel = isMobile ? "Deposit Guide" : "Watch Deposit Guide"
   return (
     <TransparentCard
       {...props}
@@ -306,12 +327,17 @@ export const PortfolioCard = (props: BoxProps) => {
                   : "Net value of assets in the strategy including SOMM rewards"
               }
             >
-              {isMounted &&
-                (isConnected
-                  ? (isMobile
-                      ? compactUSD(displayNetValue)
-                      : displayNetValue) || "..."
-                  : "--")}
+              <HStack
+                onClick={() => copyToClipboard(displayNetValue)}
+                cursor="pointer"
+              >
+                {isMounted &&
+                  (isConnected
+                    ? (isMobile
+                        ? compactUSD(displayNetValue)
+                        : displayNetValue) || "..."
+                    : "--")}
+              </HStack>
             </CardStat>
 
             {showNetValueInAsset(cellarConfig) &&
@@ -325,10 +351,17 @@ export const PortfolioCard = (props: BoxProps) => {
                     </Text>
                   }
                 >
-                  {isMounted &&
-                    (isConnected
-                      ? alphaEthValueFormatted ?? "..."
-                      : "--")}
+                  <HStack
+                    onClick={() =>
+                      copyToClipboard(alphaEthValueFormatted)
+                    }
+                    cursor="pointer"
+                  >
+                    {isMounted &&
+                      (isConnected
+                        ? alphaEthValueFormatted ?? "..."
+                        : "--")}
+                  </HStack>
                 </CardStat>
               ) : (
                 <CardStat
@@ -349,12 +382,17 @@ export const PortfolioCard = (props: BoxProps) => {
                     </Text>
                   }
                 >
-                  {isMounted &&
-                    (isConnected
-                      ? isMobile
-                        ? compactUSD(baseAssetValue)
-                        : baseAssetValue
-                      : "--")}
+                  <HStack
+                    onClick={() => copyToClipboard(baseAssetValue)}
+                    cursor="pointer"
+                  >
+                    {isMounted &&
+                      (isConnected
+                        ? isMobile
+                          ? compactUSD(baseAssetValue)
+                          : baseAssetValue
+                        : "--")}
+                  </HStack>
                 </CardStat>
               ))}
 
@@ -381,16 +419,28 @@ export const PortfolioCard = (props: BoxProps) => {
                   </Button>
                 )}
               </HStack>
-              <Modal isOpen={isAssetsOpen} onClose={() => setAssetsOpen(false)} isCentered>
+              <Modal
+                isOpen={isAssetsOpen}
+                onClose={() => setAssetsOpen(false)}
+                isCentered
+              >
                 <ModalOverlay />
-                <ModalContent bg="surface.primary" borderColor="surface.secondary" borderWidth={1}>
+                <ModalContent
+                  bg="surface.primary"
+                  borderColor="surface.secondary"
+                  borderWidth={1}
+                >
                   <ModalHeader>Accepted deposit assets</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
                     <VStack align="stretch" spacing={3}>
                       {depositTokenConfig.map((t) => (
                         <HStack key={t.address} spacing={2}>
-                          <Image boxSize={6} src={t.src} alt={t.alt} />
+                          <Image
+                            boxSize={6}
+                            src={t.src}
+                            alt={t.alt}
+                          />
                           <Text>{t.symbol}</Text>
                           <Text color="neutral.400" fontSize="sm">
                             {t.chain.toUpperCase()}
@@ -465,12 +515,13 @@ export const PortfolioCard = (props: BoxProps) => {
                             borderColor="cta.outline.br"
                             borderWidth="2px"
                             width={{ base: "100%", md: "auto" }}
+                            sx={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}
                             _focusVisible={{
                               boxShadow:
                                 "0 0 0 3px var(--chakra-colors-purple-base)",
                             }}
                           >
-                            Watch Deposit Guide
+                            {depositGuideLabel}
                           </Button>
                         )}
                       </Stack>
@@ -504,9 +555,9 @@ export const PortfolioCard = (props: BoxProps) => {
                           flexWrap="wrap"
                         >
                           {isWithdrawQueueEnabled(cellarConfig) ? (
-                            <WithdrawQueueButton
+                          <WithdrawQueueButton
                               chain={cellarConfig.chain}
-                              buttonLabel="Enter Withdraw Queue"
+                            buttonLabel={withdrawQueueLabel}
                               disabled={
                                 !hasValueInVault || !buttonsEnabled
                               }
@@ -524,7 +575,7 @@ export const PortfolioCard = (props: BoxProps) => {
                           )}
 
                           {showMigrationButton && (
-                            <BaseButton
+                          <BaseButton
                               onClick={() =>
                                 setIsOpen({ id, type: "migrate" })
                               }
@@ -534,8 +585,9 @@ export const PortfolioCard = (props: BoxProps) => {
                               borderColor="cta.outline.br"
                               borderWidth="2px"
                               width={{ base: "48%", md: "auto" }}
+                            sx={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}
                             >
-                              Migrate to Alpha STETH
+                            {migrateLabel}
                             </BaseButton>
                           )}
                         </Stack>
