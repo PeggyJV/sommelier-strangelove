@@ -31,3 +31,11 @@ Monitoring & Alerting
 - [ ] 4xx/5xx rate on `/api/events` in Vercel logs/alerts.
 - [ ] Dead-letter queue or error store for failed relays.
 - [ ] Dashboard: conversion funnel and error rate by reason.
+
+Stage 1.5 – MVP Deposits Report (using Upstash “snapshot”)
+
+- [ ] Confirm what deposit/tx data exists in the `snapshot` Upstash DB (key patterns, fields).
+- [ ] If present, write a small script/notebook to scan by prefix and aggregate to daily series.
+- [ ] If not present, backfill Alpha stETH deposit events from chain into CSV or Upstash keys.
+- [ ] Compute: daily deposits_count, deposits_amount_base, unique_wallets; optional USD using hourly price.
+- [ ] Export CSV/JSON and create `docs/analytics/mvp-deposits.md` with chart(s) and notes.
