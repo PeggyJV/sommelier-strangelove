@@ -8,6 +8,41 @@ Scope: Implementation plan proposals only. No code changes made.
 
 ---
 
+### Two‑stage rollout (what we can do right now vs. improvements)
+
+Stage 1 – Use what exists today (no code changes)
+- Turn on existing client instrumentation via env only:
+  - In Vercel Project Settings → Env, set `NEXT_PUBLIC_ANALYTICS_ENABLED=true` (Preview/Prod).
+  - Ensure `NEXT_PUBLIC_GTM_ID` is present (it is referenced in `_document.tsx`).
+- Configure GTM to forward existing events to GA4:
+  - Create a GA4 tag and a trigger for Custom Event = any of the emitted names (e.g., `deposit.succeeded`, `approve.rejected`, `wallet.disconnected`).
+  - Map properties from `dataLayer` to GA4 event params (chain_id, token_symbol, vault_name, etc., when present).
+- Keep `@vercel/analytics` for page-level web analytics and basic performance.
+- Reporting: build GA4 Explorations for the Manage funnel and error rates; rely on Vercel Analytics for high-level traffic/perf.
+
+What you get now
+- Manage conversion and drop-off between approve → deposit.
+- Error distributions from reject events.
+- Per-network/per-token breakdowns (as available in payloads).
+
+Limitations in Stage 1
+- Client-only; ad blockers may suppress some GTM/GA hits.
+- No attribution persistence (UTM) and limited user-level stitching.
+- No wallet hashing or server enrichment.
+
+Stage 2 – Improvements (server relay + attribution + privacy)
+- Add first‑party `/api/events` relay with schema validation and retries.
+- Add UTM middleware to set first‑party `somm_attrib` cookie.
+- Hash wallet addresses server-side; add build id, chain id, route context.
+- Optionally relay to PostHog/Mixpanel and/or GA4. Keep GTM for marketing pixels under consent.
+- Add dashboards for funnel, error reasons, and attribution.
+
+Effort
+- Stage 1: 0.5–1 day (GTM+GA4 config and env toggle).
+- Stage 2: 3–5 days (API route, middleware, relay, QA, dashboards).
+
+---
+
 ### Option A – GA4 + server-side collector + UTM middleware
 
 - Architecture
