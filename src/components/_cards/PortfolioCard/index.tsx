@@ -46,7 +46,8 @@ import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { toEther } from "utils/formatCurrency"
+import { toEther, formatUSD } from "utils/formatCurrency"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { formatDistance } from "utils/formatDistance"
 import { useAccount } from "wagmi"
 import BondingTableCard from "../BondingTableCard"
@@ -56,6 +57,15 @@ import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
+import { WrongNetworkBanner } from "components/_banners/WrongNetworkBanner"
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+} from "@chakra-ui/react"
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
@@ -149,6 +159,10 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const buttonsEnabled =
     strategyData?.config.chain.wagmiId === wagmiChain?.id
+  const isWrongNetwork = Boolean(
+    strategyData &&
+      strategyData?.config?.chain?.wagmiId !== wagmiChain?.id
+  )
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
@@ -247,6 +261,15 @@ export const PortfolioCard = (props: BoxProps) => {
         (isTurboSteth && turboStethValue > 0n))
   )
 
+  const isMobile = useBetterMediaQuery("(max-width: 768px)")
+  const [isAssetsOpen, setAssetsOpen] = useState(false)
+
+  const compactUSD = (maybeCurrency?: string) => {
+    if (!maybeCurrency) return maybeCurrency
+    const num = Number(String(maybeCurrency).replace(/[$,]/g, ""))
+    if (!Number.isFinite(num)) return maybeCurrency
+    return formatUSD(String(num))
+  }
   return (
     <TransparentCard
       {...props}
@@ -284,7 +307,11 @@ export const PortfolioCard = (props: BoxProps) => {
               }
             >
               {isMounted &&
-                (isConnected ? displayNetValue || "..." : "--")}
+                (isConnected
+                  ? (isMobile
+                      ? compactUSD(displayNetValue)
+                      : displayNetValue) || "..."
+                  : "--")}
             </CardStat>
 
             {showNetValueInAsset(cellarConfig) &&
@@ -322,7 +349,12 @@ export const PortfolioCard = (props: BoxProps) => {
                     </Text>
                   }
                 >
-                  {isMounted && (isConnected ? baseAssetValue : "--")}
+                  {isMounted &&
+                    (isConnected
+                      ? isMobile
+                        ? compactUSD(baseAssetValue)
+                        : baseAssetValue
+                      : "--")}
                 </CardStat>
               ))}
 
@@ -332,11 +364,43 @@ export const PortfolioCard = (props: BoxProps) => {
               alignSelf="flex-start"
               spacing={0}
             >
-              <TokenAssets
-                tokens={depositTokenConfig}
-                activeAsset={activeAsset?.address || ""}
-                displaySymbol
-              />
+              <HStack spacing={2} overflowX="auto" w="100%">
+                {depositTokenConfig.slice(0, 5).map((t) => (
+                  <HStack key={t.address} spacing={1} flexShrink={0}>
+                    <Image boxSize={5} src={t.src} alt={t.alt} />
+                    <Text fontSize="sm">{t.symbol}</Text>
+                  </HStack>
+                ))}
+                {depositTokenConfig.length > 5 && (
+                  <Button
+                    size="xs"
+                    variant="outline"
+                    onClick={() => setAssetsOpen(true)}
+                  >
+                    +{depositTokenConfig.length - 5} more
+                  </Button>
+                )}
+              </HStack>
+              <Modal isOpen={isAssetsOpen} onClose={() => setAssetsOpen(false)} isCentered>
+                <ModalOverlay />
+                <ModalContent bg="surface.primary" borderColor="surface.secondary" borderWidth={1}>
+                  <ModalHeader>Accepted deposit assets</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <VStack align="stretch" spacing={3}>
+                      {depositTokenConfig.map((t) => (
+                        <HStack key={t.address} spacing={2}>
+                          <Image boxSize={6} src={t.src} alt={t.alt} />
+                          <Text>{t.symbol}</Text>
+                          <Text color="neutral.400" fontSize="sm">
+                            {t.chain.toUpperCase()}
+                          </Text>
+                        </HStack>
+                      ))}
+                    </VStack>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
             </CardStat>
             {/* TODO: Verify PNL result */}
             {/* <CardStat
@@ -424,51 +488,58 @@ export const PortfolioCard = (props: BoxProps) => {
                         />
                       </>
                         */}
-                      {/* Row 2: Withdraw Queue or Withdraw + Migrate (both secondary style) */}
-                      <Stack
-                        direction={{ base: "column", md: "row" }}
-                        spacing={{ base: 2, md: 3 }}
-                        align="flex-start"
-                        mt={{ base: 2, md: 3 }}
-                        width="100%"
-                        overflow="visible"
-                      >
-                        {isWithdrawQueueEnabled(cellarConfig) ? (
-                          <WithdrawQueueButton
-                            chain={cellarConfig.chain}
-                            buttonLabel="Enter Withdraw Queue"
-                            disabled={
-                              !hasValueInVault || !buttonsEnabled
-                            }
-                            showTooltip={true}
-                            width={{ base: "100%", md: "auto" }}
-                          />
-                        ) : (
-                          <WithdrawButton
-                            isDeprecated={strategyData?.deprecated}
-                            disabled={
-                              !hasValueInVault || !buttonsEnabled
-                            }
-                            width={{ base: "100%", md: "auto" }}
-                          />
-                        )}
+                      {/* Row 2: network CTA or Withdraw/Migrate */}
+                      {isWrongNetwork ? (
+                        <WrongNetworkBanner
+                          chain={cellarConfig.chain}
+                        />
+                      ) : (
+                        <Stack
+                          direction={{ base: "row", md: "row" }}
+                          spacing={{ base: 2, md: 3 }}
+                          align="stretch"
+                          mt={{ base: 2, md: 3 }}
+                          width="100%"
+                          overflow="visible"
+                          flexWrap="wrap"
+                        >
+                          {isWithdrawQueueEnabled(cellarConfig) ? (
+                            <WithdrawQueueButton
+                              chain={cellarConfig.chain}
+                              buttonLabel="Enter Withdraw Queue"
+                              disabled={
+                                !hasValueInVault || !buttonsEnabled
+                              }
+                              showTooltip={true}
+                              width={{ base: "48%", md: "auto" }}
+                            />
+                          ) : (
+                            <WithdrawButton
+                              isDeprecated={strategyData?.deprecated}
+                              disabled={
+                                !hasValueInVault || !buttonsEnabled
+                              }
+                              width={{ base: "48%", md: "auto" }}
+                            />
+                          )}
 
-                        {showMigrationButton && (
-                          <BaseButton
-                            onClick={() =>
-                              setIsOpen({ id, type: "migrate" })
-                            }
-                            variant="outline"
-                            bg="transparent"
-                            color="cta.outline.fg"
-                            borderColor="cta.outline.br"
-                            borderWidth="2px"
-                            width={{ base: "100%", md: "auto" }}
-                          >
-                            Migrate to Alpha STETH
-                          </BaseButton>
-                        )}
-                      </Stack>
+                          {showMigrationButton && (
+                            <BaseButton
+                              onClick={() =>
+                                setIsOpen({ id, type: "migrate" })
+                              }
+                              variant="outline"
+                              bg="transparent"
+                              color="cta.outline.fg"
+                              borderColor="cta.outline.br"
+                              borderWidth="2px"
+                              width={{ base: "48%", md: "auto" }}
+                            >
+                              Migrate to Alpha STETH
+                            </BaseButton>
+                          )}
+                        </Stack>
+                      )}
                     </VStack>
                   </>
                 ) : (
