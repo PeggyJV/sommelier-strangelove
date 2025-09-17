@@ -53,7 +53,16 @@ export const useUserStrategyData = (
     strategyAddress +
     (config.chain.id !== "ethereum" ? "-" + chain : "")
   const query = useQuery({
-    queryKey: ["USE_USER_DATA", strategyAddress, chain, userAddress],
+    queryKey: [
+      "USE_USER_DATA",
+      strategyAddress,
+      chain,
+      userAddress,
+      // Recompute when LP balance, token price or base-asset price change
+      String(lpToken.data?.formatted ?? ""),
+      String(strategyData.data?.tokenPrice ?? ""),
+      String(baseAssetPrice ?? ""),
+    ],
     queryFn: async () => {
       // Attempt to read legacy staking positions regardless of LP token availability
       let userStakesResult: any = null
