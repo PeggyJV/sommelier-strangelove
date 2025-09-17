@@ -1,0 +1,49 @@
+name: Alpha stETH Deposits Report
+
+on:
+  schedule:
+    - cron: '15 5 * * *' # daily 05:15 UTC
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install deps (no scripts)
+        run: |
+          corepack enable
+          pnpm -v || npm i -g pnpm@9
+          pnpm install --frozen-lockfile=false --ignore-scripts
+
+      - name: Generate deposits report
+        env:
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          node scripts/analytics/generate-alpha-deposits.mjs
+
+      - name: Commit artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "chore(analytics): update Alpha stETH deposits report"
+
+      - name: Push
+        if: ${{ success() }}
+        run: |
+          git push
+
+
