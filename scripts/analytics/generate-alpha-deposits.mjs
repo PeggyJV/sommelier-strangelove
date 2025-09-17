@@ -113,6 +113,8 @@ async function main() {
       const amountBase = parseAmountBase(ev.amount, ev.decimals)
       const amountUsd =
         ev.amount_usd != null ? Number(ev.amount_usd) : null
+      const token = String(ev?.token || "ETH").toUpperCase()
+      const asset = token === "WETH" ? "WETH" : "ETH"
       if (!ts || !wallet || !Number.isFinite(amountBase)) continue
       rows.push({
         ts,
@@ -120,6 +122,7 @@ async function main() {
         wallet,
         amountBase,
         amountUsd,
+        asset,
       })
     } catch {}
   }
@@ -322,18 +325,11 @@ async function main() {
 
   // 5) Telegram message (optional)
   if (TG_TOKEN && TG_CHAT && last) {
-    // Build token-by-timestamp map to split ETH/WETH
-    const tokenByTs = new Map()
-    for (const ev of events) {
-      const t = Number(ev.timestamp || ev.timestampMs || ev.ts || 0)
-      const tok = String(ev?.token || "ETH").toUpperCase()
-      tokenByTs.set(t, tok === "WETH" ? "WETH" : "ETH")
-    }
 
     // ALL totals
     const allTotals = rows.reduce(
       (acc, r) => {
-        const asset = tokenByTs.get(r.ts) || "ETH"
+        const asset = r.asset || "ETH"
         acc.count += 1
         acc.base += r.amountBase || 0
         if (r.amountUsd != null)
@@ -366,7 +362,7 @@ async function main() {
       d.base += r.amountBase || 0
       if (r.amountUsd != null)
         d.usd = (d.usd == null ? 0 : d.usd) + r.amountUsd
-      const asset = tokenByTs.get(r.ts) || "ETH"
+      const asset = r.asset || "ETH"
       d.assets[asset].count += 1
       d.assets[asset].base += r.amountBase || 0
       byDayAssets.set(day, d)
