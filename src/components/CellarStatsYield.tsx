@@ -159,7 +159,15 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
             </>
           ) : (
             <>
-              <Apy apy={isStrategyLoading ? <Spinner /> : baseApySumRewards?.formatted} />
+              <Apy
+                apy={
+                  isStrategyLoading ? (
+                    <Spinner />
+                  ) : (
+                    baseApySumRewards?.formatted
+                  )
+                }
+              />
               <Box>
                 <Tooltip
                   hasArrow
@@ -178,7 +186,8 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
                       ) : (
                         <>
                           <Text>
-                            {cellarConfig.customReward?.showSommRewards
+                            {cellarConfig.customReward
+                              ?.showSommRewards
                               ? `SOMM Rewards APY ${
                                   rewardsApy?.formatted ?? "0.00%"
                                 }`
@@ -205,8 +214,13 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
                   color="neutral.300"
                 >
                   <HStack spacing={2} align="center">
-                    <CardHeading>{apyLabel(cellarConfig)}</CardHeading>
-                    <InformationIcon color="neutral.300" boxSize={3} />
+                    <CardHeading>
+                      {apyLabel(cellarConfig)}
+                    </CardHeading>
+                    <InformationIcon
+                      color="neutral.300"
+                      boxSize={3}
+                    />
                   </HStack>
                 </Tooltip>
               </Box>
@@ -214,7 +228,10 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
           )}
           {isAlpha && (
             <Box display={{ base: "none", md: "block" }}>
-              <AlphaStethBreakdown parts={alphaParts} showToggle={false} />
+              <AlphaStethBreakdown
+                parts={alphaParts}
+                showToggle={false}
+              />
             </Box>
           )}
         </VStack>

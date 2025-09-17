@@ -126,11 +126,21 @@ const CellarDetailsCard: FC<CellarDetailsProps> = ({
         align={{ sm: "unset", md: "stretch" }}
       >
         {/* Mobile: wrap details in accordions for scannability */}
-        <Accordion allowMultiple display={{ base: "block", md: "none" }} px={6}>
+        <Accordion
+          allowMultiple
+          display={{ base: "block", md: "none" }}
+          px={6}
+        >
           <AccordionItem border="none">
             <AccordionButton px={0} _hover={{ bg: "transparent" }}>
-              <HStack flex="1" textAlign="left" justify="space-between">
-                <Text as="span" fontWeight="bold">About</Text>
+              <HStack
+                flex="1"
+                textAlign="left"
+                justify="space-between"
+              >
+                <Text as="span" fontWeight="bold">
+                  About
+                </Text>
               </HStack>
               <AccordionIcon />
             </AccordionButton>
@@ -158,7 +168,9 @@ const CellarDetailsCard: FC<CellarDetailsProps> = ({
                   {strategyType}
                 </CardStat>
                 {strategyProvider && (
-                  <StrategyProvider strategyProvider={strategyProvider} />
+                  <StrategyProvider
+                    strategyProvider={strategyProvider}
+                  />
                 )}
                 <CardStat
                   label="protocols"
@@ -167,23 +179,33 @@ const CellarDetailsCard: FC<CellarDetailsProps> = ({
                   pr={{ sm: 2, lg: 8 }}
                 >
                   {isManyProtocols ? (
-                    <HStack spacing={3} overflowX="auto" pb={1}>
-                      {(protocolData as ProtocolDataType[]).map((v, i) => (
-                        <HStack key={i} spacing={2} flexShrink={0}>
-                          <Image src={v.icon} alt="Protocol Icon" boxSize={6} />
-                          <Text>{v.title}</Text>
-                        </HStack>
-                      ))}
-                    </HStack>
+                    <Wrap spacing={3} maxW="100%">
+                      {(protocolData as ProtocolDataType[]).map(
+                        (v, i) => (
+                          <Image
+                            key={i}
+                            src={v.icon}
+                            alt={v.title}
+                            title={v.title}
+                            boxSize={6}
+                          />
+                        )
+                      )}
+                    </Wrap>
                   ) : (
                     <HStack>
                       <Image
-                        src={(protocolData as ProtocolDataType).icon as string}
+                        src={
+                          (protocolData as ProtocolDataType)
+                            .icon as string
+                        }
                         alt="Protocol Icon"
                         boxSize={6}
                         mr={2}
                       />
-                      <Text>{(protocolData as ProtocolDataType).title}</Text>
+                      <Text>
+                        {(protocolData as ProtocolDataType).title}
+                      </Text>
                     </HStack>
                   )}
                 </CardStat>
@@ -192,29 +214,38 @@ const CellarDetailsCard: FC<CellarDetailsProps> = ({
           </AccordionItem>
           <AccordionItem border="none">
             <AccordionButton px={0} _hover={{ bg: "transparent" }}>
-              <HStack flex="1" textAlign="left" justify="space-between">
-                <Text as="span" fontWeight="bold">Fees</Text>
+              <HStack
+                flex="1"
+                textAlign="left"
+                justify="space-between"
+              >
+                <Text as="span" fontWeight="bold">
+                  Fees
+                </Text>
               </HStack>
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel px={0} pt={4}>
-              <Stack direction={{ base: "column", lg: "row" }} spacing={4}>
-                <VStack>
-                  <HStack width="100%">
-                    <CardStat label="Platform Fee" flex={0} tooltip={managementFeeTooltip || "Platform management fee"}>
-                      {managementFee}
-                    </CardStat>
-                    <CardStat label="Performance fee" flex={0} tooltip={`Strategy earned performance fee split: Protocol ${
-                      performanceSplit["protocol"] ?? 0
-                    }%, Strategy Provider ${
-                      performanceSplit["strategy provider"] ?? 0
-                    }%`}>
-                      {performanceFee}.00%
-                    </CardStat>
-                    <CardStat label="Exit Fees" flex={0}>0.00%</CardStat>
-                  </HStack>
-                </VStack>
-              </Stack>
+              <SimpleGrid columns={{ base: 2, sm: 3 }} spacing={4}>
+                <CardStat
+                  label="Platform Fee"
+                  tooltip={
+                    managementFeeTooltip || "Platform management fee"
+                  }
+                >
+                  {managementFee}
+                </CardStat>
+                <CardStat
+                  label="Performance fee"
+                  tooltip={`Strategy earned performance fee split: Protocol ${
+                    performanceSplit["protocol"] ?? 0
+                  }%, Strategy Provider ${
+                    performanceSplit["strategy provider"] ?? 0
+                  }%`}
+                >
+                  {performanceFee}.00%
+                </CardStat>
+              </SimpleGrid>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
@@ -283,44 +314,31 @@ const CellarDetailsCard: FC<CellarDetailsProps> = ({
               </>
             )}
           </CardStat>
-          <Stack
-            direction={{ base: "column", lg: "row" }}
-            spacing={4}
-            justifyContent="normal"
-          >
-            <VStack>
-              <HStack width="100%">
-                <CardStat
-                  label="Platform Fee"
-                  flex={0}
-                  tooltip={
-                    managementFeeTooltip || "Platform management fee"
-                  }
-                >
-                  {managementFee}
-                </CardStat>
-                <CardStat
-                  label="Performance fee"
-                  flex={0}
-                  tooltip={`Strategy earned performance fee split: Protocol ${
-                    performanceSplit["protocol"] ?? 0
-                  }%, Strategy Provider ${
-                    performanceSplit["strategy provider"] ?? 0
-                  }%`}
-                >
-                  {performanceFee}.00%
-                </CardStat>
-                <CardStat label="Exit Fees" flex={0}>
-                  0.00%
-                </CardStat>
-              </HStack>
-              {cellarConfig.feePromotion && (
-                <Text fontSize="sm" fontWeight="bold">
-                  {cellarConfig.feePromotion}
-                </Text>
-              )}
-            </VStack>
-          </Stack>
+          <SimpleGrid columns={{ base: 3 }} spacing={4}>
+            <CardStat
+              label="Platform Fee"
+              tooltip={
+                managementFeeTooltip || "Platform management fee"
+              }
+            >
+              {managementFee}
+            </CardStat>
+            <CardStat
+              label="Performance fee"
+              tooltip={`Strategy earned performance fee split: Protocol ${
+                performanceSplit["protocol"] ?? 0
+              }%, Strategy Provider ${
+                performanceSplit["strategy provider"] ?? 0
+              }%`}
+            >
+              {performanceFee}.00%
+            </CardStat>
+          </SimpleGrid>
+          {cellarConfig.feePromotion && (
+            <Text fontSize="sm" fontWeight="bold">
+              {cellarConfig.feePromotion}
+            </Text>
+          )}
           {isMobile ? <br /> : <></>}
           <CardStat
             label="strategy assets"

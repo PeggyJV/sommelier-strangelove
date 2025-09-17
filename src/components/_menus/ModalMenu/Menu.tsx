@@ -128,10 +128,7 @@ export const Menu = ({
       }
       sessionStorage.setItem(key, JSON.stringify(payload))
     } catch {}
-    return setValue(
-      "depositAmount",
-      amt
-    )
+    return setValue("depositAmount", amt)
   }
   const [displayedBalance, setDisplayedBalance] = useState(0)
   useEffect(() => {
@@ -281,7 +278,10 @@ export const Menu = ({
                           tokenSymbol: token.symbol,
                           amount: 0,
                         }
-                        sessionStorage.setItem(key, JSON.stringify(payload))
+                        sessionStorage.setItem(
+                          key,
+                          JSON.stringify(payload)
+                        )
                       } catch {}
                     }}
                   >

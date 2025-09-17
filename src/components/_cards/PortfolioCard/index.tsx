@@ -271,6 +271,11 @@ export const PortfolioCard = (props: BoxProps) => {
     if (!Number.isFinite(num)) return maybeCurrency
     return formatUSD(String(num))
   }
+  const netValueCompactMobile = (() => {
+    const n = Number(netValue?.value ?? 0)
+    if (!Number.isFinite(n) || n <= 0) return displayNetValue
+    return formatUSD(String(n))
+  })()
   const { addToast } = useBrandedToast()
   const copyToClipboard = async (text?: string) => {
     if (!text) return
@@ -287,10 +292,27 @@ export const PortfolioCard = (props: BoxProps) => {
 
   // Mobile-friendly button labels
   const withdrawQueueLabel = isMobile
-    ? "Withdraw Queue"
+    ? "Withdraw"
     : "Enter Withdraw Queue"
   const migrateLabel = isMobile ? "Migrate" : "Migrate to Alpha STETH"
-  const depositGuideLabel = isMobile ? "Deposit Guide" : "Watch Deposit Guide"
+  const depositGuideLabel = isMobile
+    ? "Deposit Guide"
+    : "Watch Deposit Guide"
+  const hasSecondaryValue = showNetValueInAsset(cellarConfig)
+  const showDeposit = !strategyData?.deprecated
+  const showGuide = id === "Alpha-stETH"
+  const DISCONNECTED_PLACEHOLDER = "--"
+
+  // Resolve display strings with a strict disconnected placeholder
+  const resolvedNetValue = isConnected
+    ? (isMobile ? netValueCompactMobile : displayNetValue) || "--"
+    : DISCONNECTED_PLACEHOLDER
+  const resolvedEthValue = isConnected
+    ? alphaEthValueFormatted ??
+      (sharesTokens > 0 && perShareBase > 0
+        ? (sharesTokens * perShareBase).toFixed(4)
+        : "--")
+    : DISCONNECTED_PLACEHOLDER
   return (
     <TransparentCard
       {...props}
@@ -311,7 +333,9 @@ export const PortfolioCard = (props: BoxProps) => {
             minW={0}
             gap={{ base: 3, md: 4 }}
             templateColumns={{
-              base: "1fr",
+              base: hasSecondaryValue
+                ? "repeat(2, minmax(0, 1fr))"
+                : "1fr",
               md: "repeat(2, max-content)",
             }}
           >
@@ -328,19 +352,19 @@ export const PortfolioCard = (props: BoxProps) => {
               }
             >
               <HStack
-                onClick={() => copyToClipboard(displayNetValue)}
+                onClick={() =>
+                  resolvedNetValue !== DISCONNECTED_PLACEHOLDER &&
+                  copyToClipboard(resolvedNetValue)
+                }
                 cursor="pointer"
               >
-                {isMounted &&
-                  (isConnected
-                    ? (isMobile
-                        ? compactUSD(displayNetValue)
-                        : displayNetValue) || "..."
-                    : "--")}
+                {isMounted && (
+                  <Text as="span">{resolvedNetValue}</Text>
+                )}
               </HStack>
             </CardStat>
 
-            {showNetValueInAsset(cellarConfig) &&
+            {hasSecondaryValue &&
               (isAlphaSteth ? (
                 <CardStat
                   label="ETH Value"
@@ -353,14 +377,14 @@ export const PortfolioCard = (props: BoxProps) => {
                 >
                   <HStack
                     onClick={() =>
-                      copyToClipboard(alphaEthValueFormatted)
+                      resolvedEthValue !== DISCONNECTED_PLACEHOLDER &&
+                      copyToClipboard(resolvedEthValue)
                     }
                     cursor="pointer"
                   >
-                    {isMounted &&
-                      (isConnected
-                        ? alphaEthValueFormatted ?? "..."
-                        : "--")}
+                    {isMounted && (
+                      <Text as="span">{resolvedEthValue}</Text>
+                    )}
                   </HStack>
                 </CardStat>
               ) : (
@@ -387,11 +411,15 @@ export const PortfolioCard = (props: BoxProps) => {
                     cursor="pointer"
                   >
                     {isMounted &&
-                      (isConnected
-                        ? isMobile
-                          ? compactUSD(baseAssetValue)
-                          : baseAssetValue
-                        : "--")}
+                      (isConnected ? (
+                        <Text as="span">
+                          {isMobile
+                            ? compactUSD(baseAssetValue)
+                            : baseAssetValue}
+                        </Text>
+                      ) : (
+                        "--"
+                      ))}
                   </HStack>
                 </CardStat>
               ))}
@@ -401,56 +429,16 @@ export const PortfolioCard = (props: BoxProps) => {
               tooltip="Accepted deposit assets"
               alignSelf="flex-start"
               spacing={0}
+              gridColumn={{
+                base: hasSecondaryValue ? "1 / -1" : "auto",
+                md: "1 / -1",
+              }}
             >
-              <HStack spacing={2} overflowX="auto" w="100%">
-                {depositTokenConfig.slice(0, 5).map((t) => (
-                  <HStack key={t.address} spacing={1} flexShrink={0}>
-                    <Image boxSize={5} src={t.src} alt={t.alt} />
-                    <Text fontSize="sm">{t.symbol}</Text>
-                  </HStack>
-                ))}
-                {depositTokenConfig.length > 5 && (
-                  <Button
-                    size="xs"
-                    variant="outline"
-                    onClick={() => setAssetsOpen(true)}
-                  >
-                    +{depositTokenConfig.length - 5} more
-                  </Button>
-                )}
-              </HStack>
-              <Modal
-                isOpen={isAssetsOpen}
-                onClose={() => setAssetsOpen(false)}
-                isCentered
-              >
-                <ModalOverlay />
-                <ModalContent
-                  bg="surface.primary"
-                  borderColor="surface.secondary"
-                  borderWidth={1}
-                >
-                  <ModalHeader>Accepted deposit assets</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-                    <VStack align="stretch" spacing={3}>
-                      {depositTokenConfig.map((t) => (
-                        <HStack key={t.address} spacing={2}>
-                          <Image
-                            boxSize={6}
-                            src={t.src}
-                            alt={t.alt}
-                          />
-                          <Text>{t.symbol}</Text>
-                          <Text color="neutral.400" fontSize="sm">
-                            {t.chain.toUpperCase()}
-                          </Text>
-                        </HStack>
-                      ))}
-                    </VStack>
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
+              <TokenAssets
+                tokens={depositTokenConfig}
+                activeAsset={activeAsset?.address || ""}
+                displaySymbol
+              />
             </CardStat>
             {/* TODO: Verify PNL result */}
             {/* <CardStat
@@ -486,16 +474,19 @@ export const PortfolioCard = (props: BoxProps) => {
                       paddingTop={"1em"}
                     >
                       {/* Row 1: Deposit (primary) + Watch Guide (secondary) */}
-                      <Stack
-                        direction={{ base: "column", md: "row" }}
-                        spacing={{ base: 2, md: 3 }}
-                        align="flex-start"
+                      <SimpleGrid
+                        columns={{
+                          base: 1,
+                          sm: showDeposit && showGuide ? 2 : 1,
+                          md: 2,
+                        }}
+                        gap={{ base: 2, md: 3 }}
                         width="100%"
                         overflow="visible"
                       >
-                        {!strategyData?.deprecated && (
+                        {showDeposit && (
                           <DepositButton
-                            width={{ base: "100%", md: "auto" }}
+                            width={{ base: "100%", md: "100%" }}
                             disabled={
                               !isConnected ||
                               strategyData?.isContractNotReady ||
@@ -503,19 +494,25 @@ export const PortfolioCard = (props: BoxProps) => {
                             }
                           />
                         )}
-                        {id === "Alpha-stETH" && (
+                        {showGuide && (
                           <Button
                             as={NextLink}
                             href="/strategies/Alpha-stETH/deposit_guide"
-                            size="md"
-                            height="44px"
+                            size={{ base: "sm", md: "md" }}
+                            height={{ base: "40px", md: "44px" }}
                             variant="outline"
                             bg="transparent"
                             color="cta.outline.fg"
                             borderColor="cta.outline.br"
                             borderWidth="2px"
-                            width={{ base: "100%", md: "auto" }}
-                            sx={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}
+                            width={{ base: "100%", md: "100%" }}
+                            sx={{
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                              overflow: "hidden",
+                              fontSize: { base: "sm", md: "md" },
+                              px: { base: 3, md: 4 },
+                            }}
                             _focusVisible={{
                               boxShadow:
                                 "0 0 0 3px var(--chakra-colors-purple-base)",
@@ -524,7 +521,7 @@ export const PortfolioCard = (props: BoxProps) => {
                             {depositGuideLabel}
                           </Button>
                         )}
-                      </Stack>
+                      </SimpleGrid>
                       {/*
                       <>
                         <WithdrawQueueButton
@@ -545,24 +542,22 @@ export const PortfolioCard = (props: BoxProps) => {
                           chain={cellarConfig.chain}
                         />
                       ) : (
-                        <Stack
-                          direction={{ base: "row", md: "row" }}
-                          spacing={{ base: 2, md: 3 }}
-                          align="stretch"
+                        <SimpleGrid
+                          columns={{ base: 1, sm: 2, md: 2 }}
+                          gap={{ base: 2, md: 3 }}
                           mt={{ base: 2, md: 3 }}
                           width="100%"
-                          overflow="visible"
-                          flexWrap="wrap"
+                          minW={0}
                         >
                           {isWithdrawQueueEnabled(cellarConfig) ? (
-                          <WithdrawQueueButton
+                            <WithdrawQueueButton
                               chain={cellarConfig.chain}
-                            buttonLabel={withdrawQueueLabel}
+                              buttonLabel={withdrawQueueLabel}
                               disabled={
                                 !hasValueInVault || !buttonsEnabled
                               }
                               showTooltip={true}
-                              width={{ base: "48%", md: "auto" }}
+                              width={{ base: "100%", md: "100%" }}
                             />
                           ) : (
                             <WithdrawButton
@@ -570,12 +565,12 @@ export const PortfolioCard = (props: BoxProps) => {
                               disabled={
                                 !hasValueInVault || !buttonsEnabled
                               }
-                              width={{ base: "48%", md: "auto" }}
+                              width={{ base: "100%", md: "100%" }}
                             />
                           )}
 
                           {showMigrationButton && (
-                          <BaseButton
+                            <BaseButton
                               onClick={() =>
                                 setIsOpen({ id, type: "migrate" })
                               }
@@ -584,13 +579,17 @@ export const PortfolioCard = (props: BoxProps) => {
                               color="cta.outline.fg"
                               borderColor="cta.outline.br"
                               borderWidth="2px"
-                              width={{ base: "48%", md: "auto" }}
-                            sx={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}
+                              width={{ base: "100%", md: "100%" }}
+                              sx={{
+                                whiteSpace: "nowrap",
+                                textOverflow: "ellipsis",
+                                overflow: "hidden",
+                              }}
                             >
-                            {migrateLabel}
+                              {migrateLabel}
                             </BaseButton>
                           )}
-                        </Stack>
+                        </SimpleGrid>
                       )}
                     </VStack>
                   </>

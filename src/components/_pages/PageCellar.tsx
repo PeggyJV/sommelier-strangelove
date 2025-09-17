@@ -35,8 +35,7 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { config as utilConfig } from "utils/config"
-import { Box, Button, Image, Text } from "@chakra-ui/react"
-import ConnectGate from "components/wallet/ConnectGate"
+import { Box, Image, Text, Button } from "@chakra-ui/react"
 
 import { useAccount } from "wagmi"
 
@@ -250,34 +249,6 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
         </VStack>
       </Section>
 
-      {/* Sticky mobile action bar */}
-      <Box
-        display={{ base: isOpen ? "none" : "block", md: "none" }}
-        position="sticky"
-        bottom={0}
-        zIndex={10}
-        bg="surface.primary"
-        borderTop="1px solid"
-        borderColor="surface.secondary"
-        px={4}
-        py={3}
-      >
-        <ConnectGate
-          fallbackLabel="Connect wallet to deposit"
-          fullWidth
-          overrideChainId={cellarConfig.chain.id}
-        >
-          <Button
-            width="100%"
-            height="48px"
-            variant="solid"
-            colorScheme="purple"
-            onClick={() => setIsOpen({ id, type: "deposit" })}
-          >
-            Deposit
-          </Button>
-        </ConnectGate>
-      </Box>
       <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">
           <InView triggerOnce rootMargin="200px">
