@@ -431,7 +431,7 @@ export const Menu = ({
             },
           })}
         />
-        
+
         <HStack spacing={0} fontSize="11px" textAlign="right" pr="2">
           <Text as="span">
             $ {Number(displayedBalance.toFixed(2)).toLocaleString()}
