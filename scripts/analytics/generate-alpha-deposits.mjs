@@ -325,47 +325,60 @@ async function main() {
 
   // 5) Telegram message (optional)
   if (TG_TOKEN && TG_CHAT && last) {
+    // Normalize events once to avoid timestamp collisions and compute per-asset splits directly
+    const norm = events
+      .map((ev) => {
+        const ts = Number(
+          ev.timestamp || ev.timestampMs || ev.ts || 0
+        )
+        const assetRaw = String(ev?.token || "ETH").toUpperCase()
+        const asset = assetRaw === "WETH" ? "WETH" : "ETH"
+        return {
+          ts,
+          day: toDateUTC(ts),
+          amountBase: parseAmountBase(ev.amount, ev.decimals),
+          amountUsd:
+            ev.amount_usd != null ? Number(ev.amount_usd) : null,
+          asset,
+        }
+      })
+      .filter((e) => Number.isFinite(e.ts) && e.ts > 0)
 
     // ALL totals
-    const allTotals = rows.reduce(
+    const allTotals = norm.reduce(
       (acc, r) => {
-        const asset = r.asset || "ETH"
         acc.count += 1
         acc.base += r.amountBase || 0
         if (r.amountUsd != null)
           acc.usd = (acc.usd == null ? 0 : acc.usd) + r.amountUsd
-        const cur = acc.assets[asset] || { count: 0, base: 0 }
+        const cur = acc.assets[r.asset] || { count: 0, base: 0 }
         cur.count += 1
         cur.base += r.amountBase || 0
-        acc.assets[asset] = cur
+        acc.assets[r.asset] = cur
         return acc
       },
       { count: 0, base: 0, usd: null, assets: {} }
     )
 
-    // BY DAY (last 30d)
+    // BY DAY (last 30d) with per-asset split
     const byDayAssets = new Map()
-    for (const r of rows) {
-      const day = r.day
-      let d = byDayAssets.get(day)
-      if (!d)
-        d = {
-          count: 0,
-          base: 0,
-          usd: null,
-          assets: {
-            ETH: { count: 0, base: 0 },
-            WETH: { count: 0, base: 0 },
-          },
-        }
+    for (const r of norm) {
+      const d = byDayAssets.get(r.day) || {
+        count: 0,
+        base: 0,
+        usd: null,
+        assets: {
+          ETH: { count: 0, base: 0 },
+          WETH: { count: 0, base: 0 },
+        },
+      }
       d.count += 1
       d.base += r.amountBase || 0
       if (r.amountUsd != null)
         d.usd = (d.usd == null ? 0 : d.usd) + r.amountUsd
-      const asset = r.asset || "ETH"
-      d.assets[asset].count += 1
-      d.assets[asset].base += r.amountBase || 0
-      byDayAssets.set(day, d)
+      d.assets[r.asset].count += 1
+      d.assets[r.asset].base += r.amountBase || 0
+      byDayAssets.set(r.day, d)
     }
     const dayLines = Array.from(byDayAssets.entries())
       .sort((a, b) => a[0].localeCompare(b[0]))
