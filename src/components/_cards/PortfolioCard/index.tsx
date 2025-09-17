@@ -216,7 +216,6 @@ export const PortfolioCard = (props: BoxProps) => {
     userData?.userStrategyData.userData?.netValueInAsset as any
   )?.value as number | undefined
 
-
   // Compute fallback ETH amount directly from shares × per-share base-asset value
   const perShareBase = (() => {
     const raw = (strategyData as any)?.token?.value as unknown
@@ -423,7 +422,6 @@ export const PortfolioCard = (props: BoxProps) => {
                       ))}
                   </HStack>
                 </CardStat>
-              ))}
               ))}
 
             <CardStat
