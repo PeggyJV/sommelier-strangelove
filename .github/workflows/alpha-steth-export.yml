@@ -1,0 +1,69 @@
+name: Alpha stETH - Export transactions
+
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: tg-alpha-steth
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    env:
+      REPORT_API_BASE: ${{ secrets.REPORT_API_BASE }}
+      KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+      KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+      NEXT_PUBLIC_ATTRIBUTION_ENABLED: "true"
+      START_BLOCK_ALPHA_STETH: ${{ secrets.START_BLOCK_ALPHA_STETH }}
+      ALLOWED_API_HOSTS: ".somm.finance,.sommelier.finance"
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      TELEGRAM_MODE: "strict"
+      EXPORT_LIMIT: "5000"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          pnpm -v || npm i -g pnpm@9
+          pnpm install --frozen-lockfile=false --ignore-scripts
+
+      - name: Export real transactions (files only)
+        run: pnpm export:alpha:all
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: alpha-steth-exports
+          path: |
+            public/reports/alpha-steth-deposits.json
+            public/reports/alpha-steth-deposits.csv
+            docs/analytics/alpha-steth-deposits.md
+          retention-days: 30
+
+      # Optional: uncomment to post to Telegram too
+      # - name: Post to Telegram
+      #   run: pnpm export:alpha:tg
+
+      - name: Commit artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/reports/ docs/analytics/
+          git diff --cached --quiet || git commit -m "chore(analytics): export Alpha stETH deposits"
+
+      - name: Push
+        if: ${{ success() }}
+        run: |
+          git push
