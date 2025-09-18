@@ -1,6 +1,17 @@
 ## Alpha stETH Manage – Analytics Checklist
 
-Phase 1 – Foundations
+### ✅ COMPLETED - Stage 1.5 MVP Deposits Report
+
+- [x] **Vercel KV-backed API**: `/api/deposits/by-block` endpoint implemented
+- [x] **Production Data Validation**: Strict validation layer with start block enforcement
+- [x] **Telegram Integration**: Automated reporting with idempotency protection
+- [x] **Multiple Export Formats**: JSON, CSV, and Markdown reports generated
+- [x] **GitHub Actions Workflows**: Automated daily reports and manual export
+- [x] **Alpha stETH Deposits Analytics**: Complete production-ready system
+- [x] **Generated Reports**: All three formats (JSON, CSV, MD) working
+- [x] **Command Line Interface**: `pnpm export:alpha:*` commands available
+
+### 🚀 NEXT - Phase 1 – Foundations (Manage View Analytics)
 
 - [ ] Add `/api/events` server route with JSON schema validation and request IP/user-agent capture.
 - [ ] Add UTM middleware to set `somm_attrib` httpOnly cookie (TTL 30d, SameSite=Lax).
@@ -32,10 +43,37 @@ Monitoring & Alerting
 - [ ] Dead-letter queue or error store for failed relays.
 - [ ] Dashboard: conversion funnel and error rate by reason.
 
-Stage 1.5 – MVP Deposits Report (using Upstash “snapshot”)
+---
 
-- [ ] Confirm what deposit/tx data exists in the `snapshot` Upstash DB (key patterns, fields).
-- [ ] If present, write a small script/notebook to scan by prefix and aggregate to daily series.
-- [ ] If not present, backfill Alpha stETH deposit events from chain into CSV or Upstash keys.
-- [ ] Compute: daily deposits_count, deposits_amount_base, unique_wallets; optional USD using hourly price.
-- [ ] Export CSV/JSON and create `docs/analytics/mvp-deposits.md` with chart(s) and notes.
+## 📋 Next PR Tasks - Manage View Analytics Implementation
+
+### Priority 1: Server-Side Event Collection
+- [ ] Create `/api/events` endpoint with JSON schema validation
+- [ ] Implement request IP/user-agent capture and enrichment
+- [ ] Add server-side wallet address hashing (sha256 with salt)
+- [ ] Set up environment flags for analytics configuration
+
+### Priority 2: Attribution & Privacy
+- [ ] Implement UTM middleware for first-party cookie (`somm_attrib`)
+- [ ] Add consent management for marketing pixels
+- [ ] Create privacy-compliant data handling pipeline
+- [ ] Set up data retention and deletion procedures
+
+### Priority 3: Manage View Instrumentation
+- [ ] Instrument wallet connect/disconnect events
+- [ ] Track chain switching flows (opened/attempted/succeeded/failed)
+- [ ] Add token selection and amount input tracking
+- [ ] Implement approve/deposit flow analytics
+- [ ] Wire error tracking to centralized handler
+
+### Priority 4: Testing & QA
+- [ ] Add Playwright e2e tests for analytics events
+- [ ] Test ad-blocker resilience with server-side collection
+- [ ] Verify UTM attribution persistence across routes
+- [ ] Set up monitoring and alerting for event collection
+
+### Priority 5: Dashboard & Reporting
+- [ ] Create conversion funnel dashboards
+- [ ] Set up error rate monitoring
+- [ ] Build attribution and campaign tracking
+- [ ] Implement performance correlation analytics

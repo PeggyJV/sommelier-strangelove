@@ -1,6 +1,32 @@
 ## Alpha stETH Manage – Analytics Proposal
 
-Scope: Implementation plan proposals only. No code changes made.
+**Status Update**: This proposal has been partially implemented. See "Completed Implementation" section below.
+
+### ✅ Completed Implementation (Stage 1.5 - MVP Deposits Report)
+
+The following has been successfully implemented and merged to main:
+
+- **Alpha stETH Deposits Analytics System**: Complete production-ready analytics system with:
+  - **Vercel KV-backed API**: `/api/deposits/by-block` endpoint for fetching deposit data
+  - **Production Data Validation**: Strict validation layer ensuring only real on-chain events
+  - **Telegram Integration**: Automated reporting with idempotency protection
+  - **Multiple Export Formats**: JSON, CSV, and Markdown reports
+  - **GitHub Actions Workflows**: Automated daily reports and manual export capabilities
+  - **Start Block Enforcement**: Prevents processing events before contract deployment
+
+- **Generated Reports**: 
+  - `public/reports/alpha-steth-deposits.json` - Raw transaction data
+  - `public/reports/alpha-steth-deposits.csv` - CSV export for analysis  
+  - `docs/analytics/mvp-deposits.md` - Human-readable summary
+
+- **Available Commands**:
+  - `pnpm export:alpha:all` - Export all data (no Telegram)
+  - `pnpm export:alpha:tg` - Export + send to Telegram
+  - `pnpm export:alpha:limit` - Export limited data
+
+### 🚀 Next Steps - Manage View Analytics (Stage 2)
+
+The following recommendations remain to be implemented for comprehensive Manage view analytics:
 
 ### Recommendation summary
 
