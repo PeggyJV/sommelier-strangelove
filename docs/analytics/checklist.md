@@ -11,12 +11,18 @@
 - [x] **Generated Reports**: All three formats (JSON, CSV, MD) working
 - [x] **Command Line Interface**: `pnpm export:alpha:*` commands available
 
-### 🚀 NEXT - Phase 1 – Foundations (Manage View Analytics)
+### ✅ COMPLETED - Priority 1: Server-Side Event Collection
 
-- [ ] Add `/api/events` server route with JSON schema validation and request IP/user-agent capture.
-- [ ] Add UTM middleware to set `somm_attrib` httpOnly cookie (TTL 30d, SameSite=Lax).
-- [ ] Hash wallet addresses (sha256 with salt) server-side before forwarding.
-- [ ] Env flags: `NEXT_PUBLIC_ANALYTICS_ENABLED`, `PRODUCT_ANALYTICS_WRITE_KEY`, `GA4_MEASUREMENT_ID`, `GA4_API_SECRET` (if GA4 relay), `EVENTS_SALT`.
+- [x] **Add `/api/events` server route** with JSON schema validation and request IP/user-agent capture
+- [x] **Add UTM middleware** to set `somm_attrib` httpOnly cookie (TTL 30d, SameSite=Lax)
+- [x] **Hash wallet addresses** (sha256 with salt) server-side before forwarding
+- [x] **Env flags setup**: `NEXT_PUBLIC_ANALYTICS_ENABLED`, `EVENTS_SALT`, `PRODUCT_ANALYTICS_WRITE_KEY`
+- [x] **Client-side analytics utility** for sending events to server
+- [x] **Privacy-compliant data handling** with secure hashing
+- [x] **Unit tests** for API endpoint validation
+- [x] **Environment documentation** for setup and configuration
+
+### 🚀 NEXT - Phase 2 – Attribution & Privacy (Priority 2)
 
 Phase 2 – Instrument Manage view
 
@@ -47,11 +53,11 @@ Monitoring & Alerting
 
 ## 📋 Next PR Tasks - Manage View Analytics Implementation
 
-### Priority 1: Server-Side Event Collection
-- [ ] Create `/api/events` endpoint with JSON schema validation
-- [ ] Implement request IP/user-agent capture and enrichment
-- [ ] Add server-side wallet address hashing (sha256 with salt)
-- [ ] Set up environment flags for analytics configuration
+### ✅ Priority 1: Server-Side Event Collection (COMPLETED - PR #1856)
+- [x] Create `/api/events` endpoint with JSON schema validation
+- [x] Implement request IP/user-agent capture and enrichment
+- [x] Add server-side wallet address hashing (sha256 with salt)
+- [x] Set up environment flags for analytics configuration
 
 ### Priority 2: Attribution & Privacy
 - [ ] Implement UTM middleware for first-party cookie (`somm_attrib`)

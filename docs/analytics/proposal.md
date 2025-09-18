@@ -24,7 +24,19 @@ The following has been successfully implemented and merged to main:
   - `pnpm export:alpha:tg` - Export + send to Telegram
   - `pnpm export:alpha:limit` - Export limited data
 
-### 🚀 Next Steps - Manage View Analytics (Stage 2)
+### ✅ Completed Implementation (Priority 1 - Server-Side Event Collection)
+
+The following has been successfully implemented in [PR #1856](https://github.com/PeggyJV/sommelier-strangelove/pull/1856):
+
+- **✅ `/api/events` endpoint**: JSON schema validation and event processing
+- **✅ Request enrichment**: IP address, user-agent, and build ID capture  
+- **✅ Privacy-compliant hashing**: SHA256 with salt for sensitive data
+- **✅ UTM middleware**: First-party cookie (`somm_attrib`) for attribution
+- **✅ Client-side utility**: Clean interface for sending events to server
+- **✅ Environment configuration**: Comprehensive setup documentation
+- **✅ Unit tests**: API endpoint validation and error handling
+
+### 🚀 Next Steps - Manage View Analytics (Priority 2-5)
 
 The following recommendations remain to be implemented for comprehensive Manage view analytics:
 
