@@ -22,13 +22,7 @@ const API_BASE =
   process.env.REPORT_API_BASE ||
   process.env.NEXT_PUBLIC_SITE_URL ||
   "https://app.somm.finance"
-// Telegram posting disabled - use export-alpha-deposits.mjs instead
-if (process.env.TELEGRAM_MODE !== "strict") {
-  console.log(
-    "TG disabled: Use export-alpha-deposits.mjs for Telegram posting"
-  )
-  process.exit(0)
-}
+// Telegram configuration (only used if --post-telegram flag is provided)
 const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const TG_CHAT = process.env.TELEGRAM_CHAT_ID
 
@@ -127,6 +121,14 @@ async function main() {
   const postTelegram = args.includes("--post-telegram")
 
   log("running with flags:", { validateOnly, postTelegram })
+
+  // Check Telegram mode only if Telegram posting is requested
+  if (postTelegram && process.env.TELEGRAM_MODE !== "strict") {
+    console.log(
+      "TG disabled: Use export-alpha-deposits.mjs for Telegram posting"
+    )
+    process.exit(0)
+  }
 
   // Ensure dirs
   fs.mkdirSync(REPORT_DIR, { recursive: true })
