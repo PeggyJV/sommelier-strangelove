@@ -1,14 +1,19 @@
 # Alpha stETH deposits (real, validated)
 
-**Total transactions:** 2
-**Total amount:** 15.683488 ETH
+**Total transactions:** 7
+**Total amount:** 67.685782 ETH (≈ $311540.73)
 **Start block:** 23300000
-**Export date:** 2025-09-18T13:47:03.724Z
+**Export date:** 2025-09-18T15:48:28.040Z
 
 | txHash | Date | Amount (ETH) | Block | Wallet | Token |
 |--------|------|--------------|-------|--------|-------|
 | `0x13bd3a513182be7a0569c2abaf8497b866774a9df2a27c30de14386f4d9b1d71` | 2025-09-18 | 11 | 23390169 | `0xadba5bb3850921bea4e12ab1e740f4ae08f0e27f` | WETH |
 | `0x6ef3b606dc9f3229fd597fc0a890772dce87f5554e80ea3d1008cefcfad7485d` | 2025-09-11 | 4.683487905049129829 | 23338231 | `0x4bce8d45dcce58e704c1c58dbc094750f5119118` | WETH |
+| `0x4d43a9a3ea7bdfd3fe3e05fb51a3f4fd757d39ec2650f308a096edc31b5e2b93` | 2025-09-10 | 0.000001 | 23332076 | `0x1222f0baa62e2282bfd01083c7c3732a8c611584` | WETH |
+| `0x09867d2e6e72de1310474531c1fbca8db68e548e7af778ebf5f612ead0c8f10b` | 2025-09-09 | 42 | 23326676 | `0xf67d9569af280e1f8c1aeb5377ae67659b4881d6` | WETH |
+| `0x5f5004c80c30b28219051b89eb6e6bde00302a4069f459197ea88185024302e6` | 2025-09-09 | 10 | 23323482 | `0x15fbaed545ea1de34ffef8254d8e5cc6f8be1329` | WETH |
+| `0x235b01b4561c8ab6d2f31614c26a8392c7b13158b02c57bc112517b49e03fcb7` | 2025-09-08 | 0.000001 | 23319932 | `0x1222f0baa62e2282bfd01083c7c3732a8c611584` | ETH |
+| `0x9992b69d3ba1e44065560cae77b2c0f3d57c07ae9ddb7d2a4952deae0f5f807d` | 2025-09-08 | 0.002292 | 23319772 | `0x0b5943294f11599e2bd0728659d1cdd69704e0ec` | WETH |
 
 ## Files
 
