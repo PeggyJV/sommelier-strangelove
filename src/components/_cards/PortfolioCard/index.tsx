@@ -46,7 +46,9 @@ import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { toEther } from "utils/formatCurrency"
+import { toEther, formatUSD } from "utils/formatCurrency"
+import { useBrandedToast } from "hooks/chakra"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { formatDistance } from "utils/formatDistance"
 import { useAccount } from "wagmi"
 import BondingTableCard from "../BondingTableCard"
@@ -56,6 +58,15 @@ import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
 import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
+import { WrongNetworkBanner } from "components/_banners/WrongNetworkBanner"
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+} from "@chakra-ui/react"
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
@@ -149,6 +160,10 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const buttonsEnabled =
     strategyData?.config.chain.wagmiId === wagmiChain?.id
+  const isWrongNetwork = Boolean(
+    strategyData &&
+      strategyData?.config?.chain?.wagmiId !== wagmiChain?.id
+  )
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
@@ -247,6 +262,57 @@ export const PortfolioCard = (props: BoxProps) => {
         (isTurboSteth && turboStethValue > 0n))
   )
 
+  const isMobile = useBetterMediaQuery("(max-width: 768px)")
+  const [isAssetsOpen, setAssetsOpen] = useState(false)
+
+  const compactUSD = (maybeCurrency?: string) => {
+    if (!maybeCurrency) return maybeCurrency
+    const num = Number(String(maybeCurrency).replace(/[$,]/g, ""))
+    if (!Number.isFinite(num)) return maybeCurrency
+    return formatUSD(String(num))
+  }
+  const netValueCompactMobile = (() => {
+    const n = Number(netValue?.value ?? 0)
+    if (!Number.isFinite(n) || n <= 0) return displayNetValue
+    return formatUSD(String(n))
+  })()
+  const { addToast } = useBrandedToast()
+  const copyToClipboard = async (text?: string) => {
+    if (!text) return
+    try {
+      await navigator.clipboard.writeText(text)
+      addToast({
+        heading: "Copied",
+        body: <Text>{text}</Text>,
+        status: "success",
+        duration: 2000,
+      })
+    } catch {}
+  }
+
+  // Mobile-friendly button labels
+  const withdrawQueueLabel = isMobile
+    ? "Withdraw"
+    : "Enter Withdraw Queue"
+  const migrateLabel = isMobile ? "Migrate" : "Migrate to Alpha STETH"
+  const depositGuideLabel = isMobile
+    ? "Deposit Guide"
+    : "Watch Deposit Guide"
+  const hasSecondaryValue = showNetValueInAsset(cellarConfig)
+  const showDeposit = !strategyData?.deprecated
+  const showGuide = id === "Alpha-stETH"
+  const DISCONNECTED_PLACEHOLDER = "--"
+
+  // Resolve display strings with a strict disconnected placeholder
+  const resolvedNetValue = isConnected
+    ? (isMobile ? netValueCompactMobile : displayNetValue) || "--"
+    : DISCONNECTED_PLACEHOLDER
+  const resolvedEthValue = isConnected
+    ? alphaEthValueFormatted ??
+      (sharesTokens > 0 && perShareBase > 0
+        ? (sharesTokens * perShareBase).toFixed(4)
+        : "--")
+    : DISCONNECTED_PLACEHOLDER
   return (
     <TransparentCard
       {...props}
@@ -267,7 +333,9 @@ export const PortfolioCard = (props: BoxProps) => {
             minW={0}
             gap={{ base: 3, md: 4 }}
             templateColumns={{
-              base: "1fr",
+              base: hasSecondaryValue
+                ? "repeat(2, minmax(0, 1fr))"
+                : "1fr",
               md: "repeat(2, max-content)",
             }}
           >
@@ -283,11 +351,20 @@ export const PortfolioCard = (props: BoxProps) => {
                   : "Net value of assets in the strategy including SOMM rewards"
               }
             >
-              {isMounted &&
-                (isConnected ? displayNetValue || "..." : "--")}
+              <HStack
+                onClick={() =>
+                  resolvedNetValue !== DISCONNECTED_PLACEHOLDER &&
+                  copyToClipboard(resolvedNetValue)
+                }
+                cursor="pointer"
+              >
+                {isMounted && (
+                  <Text as="span">{resolvedNetValue}</Text>
+                )}
+              </HStack>
             </CardStat>
 
-            {showNetValueInAsset(cellarConfig) &&
+            {hasSecondaryValue &&
               (isAlphaSteth ? (
                 <CardStat
                   label="ETH Value"
@@ -298,10 +375,17 @@ export const PortfolioCard = (props: BoxProps) => {
                     </Text>
                   }
                 >
-                  {isMounted &&
-                    (isConnected
-                      ? alphaEthValueFormatted ?? "..."
-                      : "--")}
+                  <HStack
+                    onClick={() =>
+                      resolvedEthValue !== DISCONNECTED_PLACEHOLDER &&
+                      copyToClipboard(resolvedEthValue)
+                    }
+                    cursor="pointer"
+                  >
+                    {isMounted && (
+                      <Text as="span">{resolvedEthValue}</Text>
+                    )}
+                  </HStack>
                 </CardStat>
               ) : (
                 <CardStat
@@ -322,7 +406,21 @@ export const PortfolioCard = (props: BoxProps) => {
                     </Text>
                   }
                 >
-                  {isMounted && (isConnected ? baseAssetValue : "--")}
+                  <HStack
+                    onClick={() => copyToClipboard(baseAssetValue)}
+                    cursor="pointer"
+                  >
+                    {isMounted &&
+                      (isConnected ? (
+                        <Text as="span">
+                          {isMobile
+                            ? compactUSD(baseAssetValue)
+                            : baseAssetValue}
+                        </Text>
+                      ) : (
+                        "--"
+                      ))}
+                  </HStack>
                 </CardStat>
               ))}
 
@@ -331,6 +429,10 @@ export const PortfolioCard = (props: BoxProps) => {
               tooltip="Accepted deposit assets"
               alignSelf="flex-start"
               spacing={0}
+              gridColumn={{
+                base: hasSecondaryValue ? "1 / -1" : "auto",
+                md: "1 / -1",
+              }}
             >
               <TokenAssets
                 tokens={depositTokenConfig}
@@ -372,16 +474,19 @@ export const PortfolioCard = (props: BoxProps) => {
                       paddingTop={"1em"}
                     >
                       {/* Row 1: Deposit (primary) + Watch Guide (secondary) */}
-                      <Stack
-                        direction={{ base: "column", md: "row" }}
-                        spacing={{ base: 2, md: 3 }}
-                        align="flex-start"
+                      <SimpleGrid
+                        columns={{
+                          base: 1,
+                          sm: showDeposit && showGuide ? 2 : 1,
+                          md: 2,
+                        }}
+                        gap={{ base: 2, md: 3 }}
                         width="100%"
                         overflow="visible"
                       >
-                        {!strategyData?.deprecated && (
+                        {showDeposit && (
                           <DepositButton
-                            width={{ base: "100%", md: "auto" }}
+                            width={{ base: "100%", md: "100%" }}
                             disabled={
                               !isConnected ||
                               strategyData?.isContractNotReady ||
@@ -389,27 +494,34 @@ export const PortfolioCard = (props: BoxProps) => {
                             }
                           />
                         )}
-                        {id === "Alpha-stETH" && (
+                        {showGuide && (
                           <Button
                             as={NextLink}
                             href="/strategies/Alpha-stETH/deposit_guide"
-                            size="md"
-                            height="44px"
+                            size={{ base: "sm", md: "md" }}
+                            height={{ base: "40px", md: "44px" }}
                             variant="outline"
                             bg="transparent"
                             color="cta.outline.fg"
                             borderColor="cta.outline.br"
                             borderWidth="2px"
-                            width={{ base: "100%", md: "auto" }}
+                            width={{ base: "100%", md: "100%" }}
+                            sx={{
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                              overflow: "hidden",
+                              fontSize: { base: "sm", md: "md" },
+                              px: { base: 3, md: 4 },
+                            }}
                             _focusVisible={{
                               boxShadow:
                                 "0 0 0 3px var(--chakra-colors-purple-base)",
                             }}
                           >
-                            Watch Deposit Guide
+                            {depositGuideLabel}
                           </Button>
                         )}
-                      </Stack>
+                      </SimpleGrid>
                       {/*
                       <>
                         <WithdrawQueueButton
@@ -424,51 +536,61 @@ export const PortfolioCard = (props: BoxProps) => {
                         />
                       </>
                         */}
-                      {/* Row 2: Withdraw Queue or Withdraw + Migrate (both secondary style) */}
-                      <Stack
-                        direction={{ base: "column", md: "row" }}
-                        spacing={{ base: 2, md: 3 }}
-                        align="flex-start"
-                        mt={{ base: 2, md: 3 }}
-                        width="100%"
-                        overflow="visible"
-                      >
-                        {isWithdrawQueueEnabled(cellarConfig) ? (
-                          <WithdrawQueueButton
-                            chain={cellarConfig.chain}
-                            buttonLabel="Enter Withdraw Queue"
-                            disabled={
-                              !hasValueInVault || !buttonsEnabled
-                            }
-                            showTooltip={true}
-                            width={{ base: "100%", md: "auto" }}
-                          />
-                        ) : (
-                          <WithdrawButton
-                            isDeprecated={strategyData?.deprecated}
-                            disabled={
-                              !hasValueInVault || !buttonsEnabled
-                            }
-                            width={{ base: "100%", md: "auto" }}
-                          />
-                        )}
+                      {/* Row 2: network CTA or Withdraw/Migrate */}
+                      {isWrongNetwork ? (
+                        <WrongNetworkBanner
+                          chain={cellarConfig.chain}
+                        />
+                      ) : (
+                        <SimpleGrid
+                          columns={{ base: 1, sm: 2, md: 2 }}
+                          gap={{ base: 2, md: 3 }}
+                          mt={{ base: 2, md: 3 }}
+                          width="100%"
+                          minW={0}
+                        >
+                          {isWithdrawQueueEnabled(cellarConfig) ? (
+                            <WithdrawQueueButton
+                              chain={cellarConfig.chain}
+                              buttonLabel={withdrawQueueLabel}
+                              disabled={
+                                !hasValueInVault || !buttonsEnabled
+                              }
+                              showTooltip={true}
+                              width={{ base: "100%", md: "100%" }}
+                            />
+                          ) : (
+                            <WithdrawButton
+                              isDeprecated={strategyData?.deprecated}
+                              disabled={
+                                !hasValueInVault || !buttonsEnabled
+                              }
+                              width={{ base: "100%", md: "100%" }}
+                            />
+                          )}
 
-                        {showMigrationButton && (
-                          <BaseButton
-                            onClick={() =>
-                              setIsOpen({ id, type: "migrate" })
-                            }
-                            variant="outline"
-                            bg="transparent"
-                            color="cta.outline.fg"
-                            borderColor="cta.outline.br"
-                            borderWidth="2px"
-                            width={{ base: "100%", md: "auto" }}
-                          >
-                            Migrate to Alpha STETH
-                          </BaseButton>
-                        )}
-                      </Stack>
+                          {showMigrationButton && (
+                            <BaseButton
+                              onClick={() =>
+                                setIsOpen({ id, type: "migrate" })
+                              }
+                              variant="outline"
+                              bg="transparent"
+                              color="cta.outline.fg"
+                              borderColor="cta.outline.br"
+                              borderWidth="2px"
+                              width={{ base: "100%", md: "100%" }}
+                              sx={{
+                                whiteSpace: "nowrap",
+                                textOverflow: "ellipsis",
+                                overflow: "hidden",
+                              }}
+                            >
+                              {migrateLabel}
+                            </BaseButton>
+                          )}
+                        </SimpleGrid>
+                      )}
                     </VStack>
                   </>
                 ) : (
