@@ -10,6 +10,10 @@
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
+import {
+  validateEvents,
+  generateValidationReport,
+} from "./validate-events.mjs"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -18,6 +22,13 @@ const API_BASE =
   process.env.REPORT_API_BASE ||
   process.env.NEXT_PUBLIC_SITE_URL ||
   "https://app.somm.finance"
+// Telegram posting disabled - use export-alpha-deposits.mjs instead
+if (process.env.TELEGRAM_MODE !== "strict") {
+  console.log(
+    "TG disabled: Use export-alpha-deposits.mjs for Telegram posting"
+  )
+  process.exit(0)
+}
 const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const TG_CHAT = process.env.TELEGRAM_CHAT_ID
 
@@ -66,6 +77,20 @@ async function fetchDepositsAll(limit = 20000) {
   return data
 }
 
+// Fetch current ETH price for USD calculations
+async function fetchETHPrice() {
+  try {
+    const response = await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+    )
+    const data = await response.json()
+    return data.ethereum?.usd || null
+  } catch (e) {
+    log("Failed to fetch ETH price:", e.message)
+    return null
+  }
+}
+
 function parseAmountBase(amount, decimals) {
   if (amount == null) return 0
   const s = String(amount)
@@ -85,10 +110,24 @@ function parseAmountBase(amount, decimals) {
 
 function toDateUTC(tsMs) {
   const d = new Date(tsMs)
-  return d.toISOString().slice(0, 10) // YYYY-MM-DD
+  let dateStr = d.toISOString().slice(0, 10) // YYYY-MM-DD
+
+  // Fix year typo: if date is 2024 but contract was deployed in 2025, assume it's 2025
+  if (dateStr.startsWith("2024-")) {
+    dateStr = dateStr.replace("2024-", "2025-")
+  }
+
+  return dateStr
 }
 
 async function main() {
+  // Parse command line arguments
+  const args = process.argv.slice(2)
+  const validateOnly = args.includes("--validate-only")
+  const postTelegram = args.includes("--post-telegram")
+
+  log("running with flags:", { validateOnly, postTelegram })
+
   // Ensure dirs
   fs.mkdirSync(REPORT_DIR, { recursive: true })
   fs.mkdirSync(path.dirname(DOCS_MD), { recursive: true })
@@ -99,6 +138,59 @@ async function main() {
     log("no deposit events from API; exiting 0")
     return
   }
+
+  // 1.5) Validate production data before processing
+  log("validating production data...")
+  const latestBlock = Number(process.env.LATEST_BLOCK || 0)
+  const minBlock = latestBlock ? latestBlock - 1_000_000 : undefined
+
+  const validationResult = validateEvents(events, {
+    apiBase: API_BASE,
+    latestBlock,
+    minBlock,
+  })
+
+  if (!validationResult.ok) {
+    log("validation failed:", validationResult.summary)
+
+    // Write validation failure report
+    const report = generateValidationReport(validationResult)
+    const validationFailPath = path.join(
+      __dirname,
+      "../../docs/analytics/validation-fail.md"
+    )
+    fs.mkdirSync(path.dirname(validationFailPath), {
+      recursive: true,
+    })
+    fs.writeFileSync(validationFailPath, report)
+    log("wrote validation failure report:", validationFailPath)
+
+    // Log summary of violations
+    validationResult.violations.forEach((violation, i) => {
+      log(
+        `violation ${i + 1}:`,
+        violation.event.txHash,
+        violation.errors[0]
+      )
+    })
+
+    console.error(
+      "Production data validation failed. Aborting Telegram and report generation."
+    )
+    process.exit(1)
+  }
+
+  log("validation passed:", validationResult.summary)
+
+  // If validate-only mode, exit here
+  if (validateOnly) {
+    log("validation-only mode: exiting successfully")
+    process.exit(0)
+  }
+
+  // 2) Fetch current ETH price for USD calculations
+  const ethPrice = await fetchETHPrice()
+  log("ETH price:", ethPrice ? `$${ethPrice}` : "unavailable")
 
   const rows = []
   for (const ev of events) {
@@ -111,8 +203,7 @@ async function main() {
         ""
       ).toLowerCase()
       const amountBase = parseAmountBase(ev.amount, ev.decimals)
-      const amountUsd =
-        ev.amount_usd != null ? Number(ev.amount_usd) : null
+      const amountUsd = ethPrice ? amountBase * ethPrice : null
       const token = String(ev?.token || "ETH").toUpperCase()
       const asset = token === "WETH" ? "WETH" : "ETH"
       if (!ts || !wallet || !Number.isFinite(amountBase)) continue
@@ -324,7 +415,12 @@ async function main() {
   log("wrote", DOCS_MD)
 
   // 5) Telegram message (optional)
-  if (TG_TOKEN && TG_CHAT && last) {
+  if (
+    TG_TOKEN &&
+    TG_CHAT &&
+    last &&
+    (postTelegram || !validateOnly)
+  ) {
     // Normalize events once to avoid timestamp collisions and compute per-asset splits directly
     const norm = events
       .map((ev) => {
@@ -333,12 +429,12 @@ async function main() {
         )
         const assetRaw = String(ev?.token || "ETH").toUpperCase()
         const asset = assetRaw === "WETH" ? "WETH" : "ETH"
+        const amountBase = parseAmountBase(ev.amount, ev.decimals)
         return {
           ts,
           day: toDateUTC(ts),
-          amountBase: parseAmountBase(ev.amount, ev.decimals),
-          amountUsd:
-            ev.amount_usd != null ? Number(ev.amount_usd) : null,
+          amountBase,
+          amountUsd: ethPrice ? amountBase * ethPrice : null,
           asset,
         }
       })
@@ -381,8 +477,8 @@ async function main() {
       byDayAssets.set(r.day, d)
     }
     const dayLines = Array.from(byDayAssets.entries())
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .slice(-30)
+      .sort((a, b) => b[0].localeCompare(a[0])) // Most recent first (reverse chronological order)
+      .slice(0, 30) // Take first 30 (most recent 30 days)
       .map(([day, v]) => {
         const eth = v.assets.ETH
         const weth = v.assets.WETH
@@ -390,17 +486,18 @@ async function main() {
           v.usd != null ? ` (≈ $${v.usd.toFixed(2)})` : ""
         return `${day}: ${v.count} | ${v.base.toFixed(
           6
-        )} ETH${usdStr} | assets: ETH ${eth.count}/${eth.base.toFixed(
+        )} ETH${usdStr} | ETH ${eth.count}/${eth.base.toFixed(
           2
         )}, WETH ${weth.count}/${weth.base.toFixed(2)}`
       })
 
-    const header = `Alpha stETH — Deposits (${last.day}, UTC)`
+    const today = new Date().toISOString().slice(0, 10)
+    const header = `Alpha stETH — Deposits (${today}, UTC)`
     const allUsdStr =
       allTotals.usd != null ? ` (≈ $${allTotals.usd.toFixed(2)})` : ""
-    const allLine = `ALL\n- total: ${
+    const allLine = `ALL: ${
       allTotals.count
-    } | ${allTotals.base.toFixed(6)} ETH${allUsdStr}\n- assets: ETH ${
+    } | ${allTotals.base.toFixed(6)} ETH${allUsdStr} | ETH ${
       allTotals.assets.ETH?.count || 0
     }/${(allTotals.assets.ETH?.base || 0).toFixed(2)}, WETH ${
       allTotals.assets.WETH?.count || 0
