@@ -53,7 +53,16 @@ export const useUserStrategyData = (
     strategyAddress +
     (config.chain.id !== "ethereum" ? "-" + chain : "")
   const query = useQuery({
-    queryKey: ["USE_USER_DATA", strategyAddress, chain, userAddress],
+    queryKey: [
+      "USE_USER_DATA",
+      strategyAddress,
+      chain,
+      userAddress,
+      // Recompute when LP balance, token price or base-asset price change
+      String(lpToken.data?.formatted ?? ""),
+      String(strategyData.data?.tokenPrice ?? ""),
+      String(baseAssetPrice ?? ""),
+    ],
     queryFn: async () => {
       // Attempt to read legacy staking positions regardless of LP token availability
       let userStakesResult: any = null
@@ -96,12 +105,17 @@ export const useUserStrategyData = (
       const sharesFormatted = lpTokenData.formatted
       const tokenPrice =
         parseFloat(
-          (strategyData.data.tokenPrice || "0").replace("$", "")
+          String(strategyData.data.tokenPrice || "0").replace(/[$,]/g, "")
         ) || 0
       const baseAssetPriceValue =
-        parseFloat(baseAssetPrice || "0") || 0
+        parseFloat(String(baseAssetPrice || "0").replace(/,/g, "")) || 0
 
-      const netValue = Number(sharesFormatted) * tokenPrice
+      const sharesNumber = (() => {
+        const n = parseFloat(String(sharesFormatted).replace(/,/g, ""))
+        return Number.isFinite(n) ? n : 0
+      })()
+
+      const netValue = sharesNumber * tokenPrice
 
       // Calculate net value in base asset for strategies that support it
       const netValueInAsset =
