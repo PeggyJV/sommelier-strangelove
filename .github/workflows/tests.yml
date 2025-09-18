@@ -51,7 +51,7 @@ jobs:
         run: |
           for i in 1 2 3; do
             echo "Installation attempt $i..."
-            pnpm install --frozen-lockfile --network-timeout 300000 && echo "Installation successful" && break || echo "pnpm install failed (attempt $i), retrying in 10s" && sleep 10;
+            pnpm install --frozen-lockfile && echo "Installation successful" && break || echo "pnpm install failed (attempt $i), retrying in 10s" && sleep 10;
           done
       - name: Verify installation
         run: |
