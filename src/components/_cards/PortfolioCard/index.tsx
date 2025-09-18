@@ -197,11 +197,9 @@ export const PortfolioCard = (props: BoxProps) => {
   const baseAssetValue =
     userData?.userStrategyData.userData?.netValueInAsset?.formatted
 
-  const baseAssetValueRaw =
-    (userData?.userStrategyData.userData?.netValueInAsset as any)?.value as
-      | number
-      | undefined
-
+  const baseAssetValueRaw = (
+    userData?.userStrategyData.userData?.netValueInAsset as any
+  )?.value as number | undefined
 
   // Compute fallback ETH amount directly from shares × per-share base-asset value
   const perShareBase = (() => {
@@ -219,7 +217,10 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const alphaEthValueFormatted = isAlphaSteth
     ? (() => {
-        if (typeof baseAssetValueRaw === "number" && baseAssetValueRaw > 0)
+        if (
+          typeof baseAssetValueRaw === "number" &&
+          baseAssetValueRaw > 0
+        )
           return baseAssetValueRaw.toFixed(4)
         if (Number.isFinite(alphaEthCalc) && alphaEthCalc > 0)
           return alphaEthCalc.toFixed(4)
@@ -286,18 +287,21 @@ export const PortfolioCard = (props: BoxProps) => {
                 (isConnected ? displayNetValue || "..." : "--")}
             </CardStat>
 
-            {showNetValueInAsset(cellarConfig) && (
-              isAlphaSteth ? (
-
+            {showNetValueInAsset(cellarConfig) &&
+              (isAlphaSteth ? (
                 <CardStat
                   label="ETH Value"
                   tooltip={
                     <Text>
-                      Total value denominated in ETH (stETH ≈ ETH). Excludes SOMM rewards
+                      Total value denominated in ETH (stETH ≈ ETH).
+                      Excludes SOMM rewards
                     </Text>
                   }
                 >
-                  {isMounted && (isConnected ? alphaEthValueFormatted ?? "..." : "--")}
+                  {isMounted &&
+                    (isConnected
+                      ? alphaEthValueFormatted ?? "..."
+                      : "--")}
                 </CardStat>
               ) : (
                 <CardStat
@@ -320,8 +324,6 @@ export const PortfolioCard = (props: BoxProps) => {
                 >
                   {isMounted && (isConnected ? baseAssetValue : "--")}
                 </CardStat>
-              )
-            )}
               ))}
 
             <CardStat
