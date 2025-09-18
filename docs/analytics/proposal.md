@@ -7,6 +7,7 @@
 The following has been successfully implemented and merged to main:
 
 - **Alpha stETH Deposits Analytics System**: Complete production-ready analytics system with:
+
   - **Vercel KV-backed API**: `/api/deposits/by-block` endpoint for fetching deposit data
   - **Production Data Validation**: Strict validation layer ensuring only real on-chain events
   - **Telegram Integration**: Automated reporting with idempotency protection
@@ -14,9 +15,10 @@ The following has been successfully implemented and merged to main:
   - **GitHub Actions Workflows**: Automated daily reports and manual export capabilities
   - **Start Block Enforcement**: Prevents processing events before contract deployment
 
-- **Generated Reports**: 
+- **Generated Reports**:
+
   - `public/reports/alpha-steth-deposits.json` - Raw transaction data
-  - `public/reports/alpha-steth-deposits.csv` - CSV export for analysis  
+  - `public/reports/alpha-steth-deposits.csv` - CSV export for analysis
   - `docs/analytics/mvp-deposits.md` - Human-readable summary
 
 - **Available Commands**:
@@ -29,7 +31,7 @@ The following has been successfully implemented and merged to main:
 The following has been successfully implemented in [PR #1856](https://github.com/PeggyJV/sommelier-strangelove/pull/1856):
 
 - **✅ `/api/events` endpoint**: JSON schema validation and event processing
-- **✅ Request enrichment**: IP address, user-agent, and build ID capture  
+- **✅ Request enrichment**: IP address, user-agent, and build ID capture
 - **✅ Privacy-compliant hashing**: SHA256 with salt for sensitive data
 - **✅ UTM middleware**: First-party cookie (`somm_attrib`) for attribution
 - **✅ Client-side utility**: Clean interface for sending events to server

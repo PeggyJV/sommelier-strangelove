@@ -65,18 +65,21 @@ Monitoring & Alerting
 ## 📋 Next PR Tasks - Manage View Analytics Implementation
 
 ### ✅ Priority 1: Server-Side Event Collection (COMPLETED - PR #1856)
+
 - [x] Create `/api/events` endpoint with JSON schema validation
 - [x] Implement request IP/user-agent capture and enrichment
 - [x] Add server-side wallet address hashing (sha256 with salt)
 - [x] Set up environment flags for analytics configuration
 
 ### ✅ Priority 2: Attribution & Privacy (COMPLETED - PR #1857)
+
 - [x] Implement UTM middleware for first-party cookie (`somm_attrib`)
 - [x] Add consent management for marketing pixels
 - [x] Create privacy-compliant data handling pipeline
 - [x] Set up data retention and deletion procedures
 
 ### Priority 3: Manage View Instrumentation
+
 - [ ] Instrument wallet connect/disconnect events
 - [ ] Track chain switching flows (opened/attempted/succeeded/failed)
 - [ ] Add token selection and amount input tracking
@@ -84,12 +87,14 @@ Monitoring & Alerting
 - [ ] Wire error tracking to centralized handler
 
 ### Priority 4: Testing & QA
+
 - [ ] Add Playwright e2e tests for analytics events
 - [ ] Test ad-blocker resilience with server-side collection
 - [ ] Verify UTM attribution persistence across routes
 - [ ] Set up monitoring and alerting for event collection
 
 ### Priority 5: Dashboard & Reporting
+
 - [ ] Create conversion funnel dashboards
 - [ ] Set up error rate monitoring
 - [ ] Build attribution and campaign tracking
