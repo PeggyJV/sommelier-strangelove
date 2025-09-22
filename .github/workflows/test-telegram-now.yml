@@ -1,7 +1,8 @@
 name: Test Telegram Bot Now
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ test-telegram-now ]
 
 jobs:
   test-telegram:
