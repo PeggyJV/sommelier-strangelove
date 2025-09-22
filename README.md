@@ -7,6 +7,7 @@
   - [Getting the data](#getting-the-data)
     - [Data flow](#data-flow-1)
 - [Displaying/Branching UI output](#displayingbranching-ui-output)
+- [Analytics Validation](#analytics-validation)
 
 ## Getting Started
 
@@ -127,6 +128,116 @@ export const isRewardsEnabled = (config: ConfigProps) => {
 // somewhere in ui component
 isRewardsEnabled(cellarConfig) && <RewardsCard />
 ```
+
+## Analytics Validation
+
+The Alpha stETH deposits report includes strict validation to ensure only real production data is used. The system validates all events against production data requirements and blocks Telegram messages if any violations are detected.
+
+### Quick Health Checks
+
+```bash
+# Count last 30 days of deposits
+curl -fsS https://app.somm.finance/api/deposits/by-block?days=30 | jq 'length'
+
+# Check for test/mock patterns (should return 0)
+curl -fsS https://app.somm.finance/api/deposits/by-block?days=30 \
+| jq '[ .[] | select((.txHash|test("deadbeef";"i")) or (.domain|test("localhost|vercel\\.app";"i")) or (.sessionId|test("test|mock|local|dev";"i"))) ] | length' \
+| grep '^0$'
+
+# Spot check by-hash API
+TX=$(curl -fsS https://app.somm.finance/api/deposits/by-block?days=30 | jq -r '.[0].txHash')
+curl -fsS "https://app.somm.finance/api/deposits/by-hash?tx=$TX" | jq .
+echo "Etherscan: https://etherscan.io/tx/$TX"
+```
+
+### Manual Validation
+
+```bash
+# Run comprehensive validation
+./scripts/analytics/validate-prod-data.sh
+
+# Validate only (no Telegram)
+node scripts/analytics/generate-alpha-deposits.mjs --validate-only
+
+# Generate report and send Telegram
+node scripts/analytics/generate-alpha-deposits.mjs --post-telegram
+```
+
+### Validation Rules
+
+- **Transaction Hash**: 66-char hex, no test patterns (`deadbeef`, `cafe`, etc.)
+- **Address**: 40-char hex, no repeating patterns (`1111...`, `4444...`)
+- **Domain**: Must be production (`.somm.finance`, `.sommelier.finance`)
+- **Session ID**: No test/mock/local/dev patterns
+- **Chain ID**: Must equal 1 (Ethereum mainnet)
+- **Block Number**: Positive integer, not in future, within report window
+- **Amount**: Finite, > 0, valid decimals
+- **Token**: Must be ETH, WETH, or stETH
+- **Timestamp**: Valid, not in future, consistent with block time
+
+For detailed validation documentation, see [docs/analytics/validation-guide.md](docs/analytics/validation-guide.md).
+
+### Alpha stETH Start Block
+
+We enforce a start block so reports never include pre-deployment data.
+
+#### 1. Discover the start block (one-time setup)
+
+```bash
+# Set your mainnet RPC URL and discover the start block
+ETH_RPC_URL=$YOUR_MAINNET_RPC pnpm discover:startblock:alpha
+
+# Print the discovered start block
+pnpm print:startblock:alpha
+```
+
+#### 2. Set CI secret
+
+Set the GitHub Actions secret `START_BLOCK_ALPHA_STETH` to the printed number.
+
+#### 3. Health checks
+
+```bash
+# Verify all events are after the start block
+curl -fsS "$REPORT_API_BASE/api/deposits/by-block?days=3650" | jq 'min_by(.blockNumber).blockNumber'
+# Should be >= START_BLOCK_ALPHA_STETH
+```
+
+### Alpha stETH Transaction Export
+
+One-shot files for Telegram or analysis:
+
+```bash
+# Export to files only (JSON, CSV, Markdown)
+pnpm export:alpha:all
+
+# Export and post to Telegram (chunked)
+pnpm export:alpha:tg
+
+# Export with custom limit (e.g., 100 transactions)
+pnpm export:alpha:all --limit=100
+pnpm export:alpha:tg --limit=50
+```
+
+**Outputs:**
+
+- `public/reports/alpha-steth-deposits.json` - Full transaction data
+- `public/reports/alpha-steth-deposits.csv` - CSV format for analysis
+- `docs/analytics/alpha-steth-deposits.md` - Human-readable summary
+
+**Required environment variables:**
+
+- `REPORT_API_BASE` - Production API endpoint
+- `START_BLOCK_ALPHA_STETH` - Contract deployment block
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` - Only for Telegram export
+
+**Features:**
+
+- ✅ **Production data only** - Uses existing validation and start-block enforcement
+- ✅ **Chunked Telegram** - Sends large exports in readable chunks
+- ✅ **Multiple formats** - JSON, CSV, and Markdown outputs
+- ✅ **Safety limits** - Configurable export limits (default: 5000 transactions)
+- ✅ **Comprehensive data** - Includes txHash, date, amount, block, wallet, token
 
 # Learn More
 
