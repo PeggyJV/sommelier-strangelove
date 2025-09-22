@@ -6,6 +6,7 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import crypto from 'crypto'
+import { setJson, zadd } from 'src/lib/attribution/kv'
 
 // Environment configuration
 const ANALYTICS_ENABLED = process.env.NEXT_PUBLIC_ANALYTICS_ENABLED === 'true'
@@ -34,6 +35,8 @@ interface EnrichedEvent extends AnalyticsEvent {
     utm_campaign?: string
     utm_content?: string
     referrer?: string
+    // session_id is captured in cookie by middleware; not required but helpful if present
+    session_id?: string
   }
 }
 
@@ -71,6 +74,25 @@ function getAttribution(req: NextApiRequest) {
     return JSON.parse(decoded)
   } catch {
     return {}
+  }
+}
+
+// Generate a simple unique id (ulid-like) for KV keys
+function ulidLike(): string {
+  return Math.random().toString(36).slice(2) + Date.now().toString(36)
+}
+
+function dayFromTs(ts: number): string {
+  const d = new Date(ts)
+  return d.toISOString().slice(0, 10)
+}
+
+function safeSegment(input?: string): string {
+  if (!input) return 'none'
+  try {
+    return encodeURIComponent(input.toLowerCase())
+  } catch {
+    return 'none'
   }
 }
 
@@ -125,6 +147,47 @@ async function forwardEvent(event: EnrichedEvent) {
   console.log('Analytics: Event would be forwarded:', event.event, event.properties)
 }
 
+// Persist analytics event and add indices for marketing analytics
+async function persistAnalyticsEvent(event: EnrichedEvent) {
+  const ts = event.server_timestamp || Date.now()
+  const id = ulidLike()
+  const key = `analytics:event:${ts}:${id}`
+
+  // Store full enriched event JSON
+  await setJson(key, event)
+
+  const day = dayFromTs(ts)
+
+  // Indices
+  // 1) By session
+  const sessionId = event.session_id || event.attribution?.session_id || 'unknown'
+  if (sessionId && sessionId !== 'unknown') {
+    await zadd(`analytics:index:session:${safeSegment(sessionId)}:${day}`, ts, key)
+  }
+
+  // 2) By event name
+  const evt = safeSegment(event.event)
+  await zadd(`analytics:index:event:${evt}:${day}`, ts, key)
+
+  // 3) By UTM source + campaign
+  const src = safeSegment(event.attribution?.utm_source)
+  const camp = safeSegment(event.attribution?.utm_campaign)
+  await zadd(`analytics:index:utm:${src}:${camp}:${day}`, ts, key)
+
+  // 4) By page path (if provided in properties)
+  const page = safeSegment(
+    (event.properties?.page as string) || (event.properties?.pagePath as string)
+  )
+  if (page !== 'none') {
+    await zadd(`analytics:index:page:${page}:${day}`, ts, key)
+  }
+
+  // 5) By wallet hash (if present)
+  if (event.wallet_hash) {
+    await zadd(`analytics:index:wallet:${event.wallet_hash}:${day}`, ts, key)
+  }
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -151,6 +214,14 @@ export default async function handler(
 
     // Forward to analytics service
     await forwardEvent(enrichedEvent)
+
+    // Persist to KV for marketing analytics
+    try {
+      await persistAnalyticsEvent(enrichedEvent)
+    } catch (e) {
+      // Non-fatal: do not block response if KV write fails
+      console.error('Analytics KV persist error:', e)
+    }
 
     // Log for debugging (remove in production)
     console.log('Analytics event collected:', {
