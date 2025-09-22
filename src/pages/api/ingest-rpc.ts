@@ -138,6 +138,36 @@ export default async function handler(
 
   const body = req.body
   if (!body) return res.status(400).end()
+
+  // Parse attribution cookie once per request (for UTM/session linking)
+  function getAttrib() {
+    try {
+      const cookies = req.headers.cookie || ""
+      const m = cookies.match(/somm_attrib=([^;]+)/)
+      if (!m) return {}
+      const decoded = decodeURIComponent(m[1])
+      const obj = JSON.parse(decoded)
+      return obj && typeof obj === "object" ? obj : {}
+    } catch {
+      return {}
+    }
+  }
+  function safeSeg(input?: string) {
+    if (!input) return "none"
+    try {
+      return encodeURIComponent(String(input).toLowerCase())
+    } catch {
+      return "none"
+    }
+  }
+  const attribution = getAttrib() as {
+    utm_source?: string
+    utm_medium?: string
+    utm_campaign?: string
+    utm_content?: string
+    referrer?: string
+    session_id?: string
+  }
   let events: RpcEvent[] = []
   if (Array.isArray((body as any).events)) {
     events = (body as any).events as RpcEvent[]
@@ -244,6 +274,14 @@ export default async function handler(
         pagePath: evt.pagePath,
         sessionId: evt.sessionId,
         status: evt.status || "success",
+        attribution: {
+          utm_source: attribution.utm_source || null,
+          utm_medium: attribution.utm_medium || null,
+          utm_campaign: attribution.utm_campaign || null,
+          utm_content: attribution.utm_content || null,
+          referrer: attribution.referrer || null,
+          session_id: attribution.session_id || null,
+        },
       }
 
       depositWrites.push(setJson(eventKey, record))
@@ -261,6 +299,30 @@ export default async function handler(
           eventId
         )
       )
+
+      // Additional indices for marketing analytics (no duplication of event data)
+      const utmSrc = safeSeg(attribution.utm_source)
+      const utmCamp = safeSeg(attribution.utm_campaign)
+      if (utmSrc !== "none" || utmCamp !== "none") {
+        depositWrites.push(
+          zadd(
+            `alpha-steth:deposit:index:utm:${utmSrc}:${utmCamp}:by_block`,
+            blockNumber,
+            eventId
+          )
+        )
+      }
+      if (evt.sessionId) {
+        depositWrites.push(
+          zadd(
+            `alpha-steth:deposit:index:session:${safeSeg(
+              evt.sessionId
+            )}:by_block`,
+            blockNumber,
+            eventId
+          )
+        )
+      }
     }
 
     if (depositWrites.length) await Promise.all(depositWrites)
