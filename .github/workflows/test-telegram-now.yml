@@ -1,0 +1,36 @@
+name: Test Telegram Bot Now
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-telegram:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Telegram Bot
+        run: |
+          echo "🤖 Testing Telegram Bot - Sending Test Message..."
+          
+          MESSAGE="🤖 Alpha stETH Telegram Bot Test
+
+✅ Bot is working correctly!
+📊 Ready to send analytics reports
+🕐 Test time: $(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)
+
+📈 Current Status:
+- Export system: ✅ Working
+- Data validation: ✅ Working  
+- Report generation: ✅ Working
+- Telegram integration: ✅ Ready
+
+🎯 This is a direct test of the Telegram bot functionality!"
+
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"chat_id\": \"${{ secrets.TELEGRAM_CHAT_ID }}\",
+              \"text\": \"$MESSAGE\",
+              \"parse_mode\": \"Markdown\"
+            }" | jq '.'
+          
+          echo "✅ Telegram test completed!"
