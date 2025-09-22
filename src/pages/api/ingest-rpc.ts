@@ -315,7 +315,9 @@ export default async function handler(
       if (evt.sessionId) {
         depositWrites.push(
           zadd(
-            `alpha-steth:deposit:index:session:${safeSeg(evt.sessionId)}:by_block`,
+            `alpha-steth:deposit:index:session:${safeSeg(
+              evt.sessionId
+            )}:by_block`,
             blockNumber,
             eventId
           )
