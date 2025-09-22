@@ -9,6 +9,10 @@ on:
 jobs:
   performance:
     runs-on: ubuntu-latest
+    env:
+      KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+      KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+      NEXT_PUBLIC_ATTRIBUTION_ENABLED: "true"
     
     steps:
     - uses: actions/checkout@v4
