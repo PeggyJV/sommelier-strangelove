@@ -46,3 +46,13 @@ Scheduler → env-check → sender → `export-alpha-deposits.mjs --post-telegra
 
 - Env schema enforced locally and in CI
 - Sender logs UTC/Tallinn start, chat id, decisions, HTTP status
+
+## Go Live Note
+
+- Date: 2025-09-23
+- Test chat: <add id or @handle>
+- Manual runs:
+  - Dry: `ENV_MODE=dry pnpm send:daily:live` (no post)
+  - Live (override): `TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID_TEST pnpm send:daily:live`
+- CI manual rehearsal via workflow_dispatch: use inputs `mode=dry|live`, optional `chat_id` override
+- Cron: `5 6 * * *` (UTC) → 09:05 Europe/Tallinn (currently UTC+3)

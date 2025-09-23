@@ -4,6 +4,14 @@ on:
   schedule:
     - cron: "5 6 * * *"
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode (dry or live)"
+        required: false
+        default: "dry"
+      chat_id:
+        description: "Override Telegram chat id for this run"
+        required: false
 
 jobs:
   env-check:
@@ -32,9 +40,10 @@ jobs:
       - name: Run daily sender
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_CHAT_ID: ${{ github.event.inputs.chat_id || secrets.TELEGRAM_CHAT_ID }}
           START_BLOCK_ALPHA_STETH: ${{ vars.START_BLOCK_ALPHA_STETH || secrets.START_BLOCK_ALPHA_STETH }}
           UPSTASH_REST_URL: ${{ secrets.UPSTASH_REST_URL }}
           UPSTASH_REST_TOKEN: ${{ secrets.UPSTASH_REST_TOKEN }}
           NODE_ENV: production
+          ENV_MODE: ${{ github.event.inputs.mode || 'dry' }}
         run: pnpm send:daily:live

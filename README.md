@@ -13,6 +13,12 @@ Notes:
 - `START_BLOCK_ALPHA_STETH` must be an integer.
 - CI uses GitHub Secrets; local `.env` is ignored in CI.
 
+Live test to a safe test chat (override chat id just for this run):
+
+```bash
+TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID_TEST pnpm send:daily:live
+```
+
 # somm-boilerplate
 
 - [Getting Started](#getting-started)
