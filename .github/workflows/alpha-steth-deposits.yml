@@ -13,7 +13,13 @@ jobs:
   report:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+    env:
+      REPORT_API_BASE: ${{ secrets.REPORT_API_BASE }}
+      START_BLOCK_ALPHA_STETH: ${{ secrets.START_BLOCK_ALPHA_STETH }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      TELEGRAM_MODE: "strict"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,11 +37,9 @@ jobs:
 
       - name: Validate production data
         env:
-          REPORT_API_BASE: ${{ secrets.REPORT_API_BASE }}
           KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
           KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
           NEXT_PUBLIC_ATTRIBUTION_ENABLED: "true"
-          START_BLOCK_ALPHA_STETH: ${{ secrets.START_BLOCK_ALPHA_STETH }}
           ALLOWED_API_HOSTS: ".somm.finance,.sommelier.finance"
         run: |
           echo "Validating production data source..."
@@ -50,24 +54,8 @@ jobs:
           path: docs/analytics/validation-fail.md
           retention-days: 30
 
-      - name: Generate deposits report (no Telegram)
+      - name: Generate deposits report & post to Telegram
         if: success()
-        env:
-          REPORT_API_BASE: ${{ secrets.REPORT_API_BASE }}
-          START_BLOCK_ALPHA_STETH: ${{ secrets.START_BLOCK_ALPHA_STETH }}
-          # TELEGRAM_MODE not set - will disable Telegram posting
         run: |
-          echo "Validation passed. Generating report (Telegram disabled)..."
-          node scripts/analytics/generate-alpha-deposits.mjs
-
-      - name: Commit artifacts
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git diff --cached --quiet || git commit -m "chore(analytics): update Alpha stETH deposits report"
-
-      - name: Push
-        if: ${{ success() }}
-        run: |
-          git push
+          echo "Validation passed. Exporting and posting to Telegram..."
+          node scripts/analytics/export-alpha-deposits.mjs --post-telegram
