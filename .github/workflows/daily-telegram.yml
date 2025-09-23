@@ -46,12 +46,13 @@ jobs:
           UPSTASH_REST_TOKEN: ${{ secrets.UPSTASH_REST_TOKEN }}
           NODE_ENV: production
           ENV_MODE: ${{ github.event.inputs.mode || 'dry' }}
-        run: pnpm send:daily:live
+        run: pnpm send:daily:live 2>&1 | tee daily-telegram.log
       - name: Save logs
         if: always()
         run: |
           mkdir -p proof/ci
           (ls -1 *.log || true) | while read f; do cp -f "$f" proof/ci/ || true; done
+          cp -f public/reports/alpha-steth-deposits.json proof/ci/ 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:

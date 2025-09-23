@@ -9,6 +9,7 @@ pnpm send:daily:dry
 ```
 
 Notes:
+
 - `TELEGRAM_CHAT_ID` may be numeric or an `@handle`. Channel ids are often negative (e.g., `-100...`).
 - `START_BLOCK_ALPHA_STETH` must be an integer.
 - CI uses GitHub Secrets; local `.env` is ignored in CI.
