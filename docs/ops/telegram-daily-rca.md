@@ -56,3 +56,13 @@ Scheduler → env-check → sender → `export-alpha-deposits.mjs --post-telegra
   - Live (override): `TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID_TEST pnpm send:daily:live`
 - CI manual rehearsal via workflow_dispatch: use inputs `mode=dry|live`, optional `chat_id` override
 - Cron: `5 6 * * *` (UTC) → 09:05 Europe/Tallinn (currently UTC+3)
+
+## Proof of Delivery
+
+- Local proof is generated under `proof/local/*` (git-ignored). Key files:
+  - `env-audit.txt`, `env-check.txt`, `send-dry.txt`, `send-live.txt`
+- CI proof is attached as the `daily-telegram-proof` artifact on the workflow runs.
+- Look for:
+  - `Daily sender start UTC=… Tallinn=…` line for timestamps
+  - `Telegram HTTP 200 ok=true` and JSON with a `message_id`
+  - Any retry note: `Telegram: retrying once with plain text`

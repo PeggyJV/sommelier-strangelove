@@ -47,3 +47,14 @@ jobs:
           NODE_ENV: production
           ENV_MODE: ${{ github.event.inputs.mode || 'dry' }}
         run: pnpm send:daily:live
+      - name: Save logs
+        if: always()
+        run: |
+          mkdir -p proof/ci
+          (ls -1 *.log || true) | while read f; do cp -f "$f" proof/ci/ || true; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-telegram-proof
+          path: proof/ci
+          if-no-files-found: warn

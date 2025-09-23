@@ -21,6 +21,56 @@ function logStart() {
 
 async function main() {
   logStart()
+  // Wrap global fetch to log Telegram responses and provide minimal retry/trim
+  const originalFetch: typeof fetch = globalThis.fetch as any
+  globalThis.fetch = (async (input: any, init?: any) => {
+    const url = typeof input === "string" ? input : input?.url
+    const isTelegram = typeof url === "string" && url.includes("api.telegram.org") && url.includes("/sendMessage")
+    if (!isTelegram) {
+      return originalFetch(input as any, init)
+    }
+    try {
+      let bodyObj: any = {}
+      if (init?.body) {
+        try { bodyObj = JSON.parse(init.body) } catch {}
+      }
+      const originalText: string = String(bodyObj?.text ?? "")
+      let textToSend = originalText
+      const maxLen = 3800
+      if (textToSend.length > maxLen) {
+        console.log(`Telegram: trimming message ${textToSend.length} -> ${maxLen}`)
+        textToSend = textToSend.slice(0, maxLen)
+        bodyObj.text = textToSend
+        init = { ...(init || {}), body: JSON.stringify(bodyObj) }
+      }
+      // First attempt (as-is)
+      let resp = await originalFetch(input as any, init)
+      const status = resp.status
+      const ok = resp.ok
+      const bodyText = await resp.text()
+      console.log(`Telegram HTTP ${status} ok=${ok}`)
+      if (ok) {
+        // Return a fresh Response so downstream can read
+        return new Response(bodyText, { status: resp.status, headers: resp.headers as any })
+      }
+      // Retry once: plain text, no parse_mode
+      console.log("Telegram: retrying once with plain text")
+      const retryBody = { chat_id: bodyObj.chat_id, text: textToSend }
+      resp = await originalFetch(input as any, {
+        ...(init || {}),
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(retryBody),
+      })
+      const retryStatus = resp.status
+      const retryOk = resp.ok
+      const retryText = await resp.text()
+      console.log(`Telegram retry HTTP ${retryStatus} ok=${retryOk}`)
+      return new Response(retryText, { status: retryStatus, headers: resp.headers as any })
+    } catch (e: any) {
+      console.error("Telegram wrapper error:", e?.message || e)
+      return originalFetch(input as any, init)
+    }
+  }) as any
   // Reuse existing exporter; live mode posts, dry mode only writes files
   const args = [
     "scripts/analytics/export-alpha-deposits.mjs",
