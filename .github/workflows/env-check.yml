@@ -1,0 +1,28 @@
+name: Env Check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  env-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile=false --ignore-scripts
+      - name: Validate ENV presence for daily sender
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          START_BLOCK_ALPHA_STETH: ${{ vars.START_BLOCK_ALPHA_STETH || secrets.START_BLOCK_ALPHA_STETH }}
+          UPSTASH_REST_URL: ${{ secrets.UPSTASH_REST_URL }}
+          UPSTASH_REST_TOKEN: ${{ secrets.UPSTASH_REST_TOKEN }}
+          NODE_ENV: production
+        run: pnpm env:check

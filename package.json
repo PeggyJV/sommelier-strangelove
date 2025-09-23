@@ -1,6 +1,10 @@
 {
   "name": "somm-boilerplate",
   "scripts": {
+    "env:check": "tsx scripts/env/check-env.mts",
+    "send:daily:dry": "ENV_MODE=dry tsx scripts/telegram/send-daily.mts",
+    "send:daily:live": "tsx scripts/telegram/send-daily.mts",
+    "env:audit": "node -e \"console.log('TELEGRAM_BOT_TOKEN', process.env.TELEGRAM_BOT_TOKEN ? '<set>' : '<missing>');console.log('TELEGRAM_CHAT_ID', process.env.TELEGRAM_CHAT_ID ? '<set>' : '<missing>');console.log('START_BLOCK_ALPHA_STETH', process.env.START_BLOCK_ALPHA_STETH ?? '<missing>');console.log('UPSTASH_REST_URL', process.env.UPSTASH_REST_URL ? '<set>' : '<missing>');console.log('UPSTASH_REST_TOKEN', process.env.UPSTASH_REST_TOKEN ? '<set>' : '<missing>');console.log('NODE_ENV', process.env.NODE_ENV ?? '<missing>');\""
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
     "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
