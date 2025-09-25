@@ -1,0 +1,12 @@
+HTTP/2 200 
+age: 0
+cache-control: public, max-age=0, must-revalidate
+content-type: application/json
+date: Wed, 24 Sep 2025 11:27:38 GMT
+server: Vercel
+strict-transport-security: max-age=63072000
+x-frame-options: DENY
+x-matched-path: /api/daily-telegram
+x-vercel-cache: MISS
+x-vercel-id: arn1::iad1::hp6r6-1758713257053-5c672f09905b
+

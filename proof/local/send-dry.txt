@@ -1,0 +1,32 @@
+
+> somm-boilerplate@ send:daily:live /Users/henriots/Desktop/SOMM/sommelier-strangelove
+> tsx scripts/telegram/send-daily.mts
+
+Daily sender start UTC=2025-09-23T15:35:24.482Z Tallinn=2025-09-23T15:35:24.482Z
+Chat ID: -1001234567890
+Mode: dry
+🚀 Alpha stETH Deposit Exporter
+   API: https://app.somm.finance
+   Start Block: 23300000
+   Telegram: No
+   Limit: 5000
+
+🔍 Fetching Alpha stETH deposits from block 23300000...
+   API: https://app.somm.finance/api/deposits/by-block?fromBlock=23300000&toBlock=+inf&order=desc&limit=10000
+   ✅ Fetched 11 events
+🔍 Validating 11 events...
+⚠️  Found 1 test data violations (will be filtered out)
+   ✅ Validation passed
+   ✅ Filtered to 10 valid events (removed test data)
+📝 Writing export files...
+   ✅ JSON: public/reports/alpha-steth-deposits.json
+   ✅ CSV: public/reports/alpha-steth-deposits.csv
+   ✅ Markdown: docs/analytics/alpha-steth-deposits.md
+
+📁 Files written:
+   public/reports/alpha-steth-deposits.json
+   public/reports/alpha-steth-deposits.csv
+   docs/analytics/alpha-steth-deposits.md
+📊 Total rows: 10
+
+🎉 Export completed successfully!

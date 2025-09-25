@@ -38,6 +38,3 @@ docs/audits/
 tests/__screenshots__/
 audits/mobile/
 test-results/
-
-# local proof artifacts
-proof/

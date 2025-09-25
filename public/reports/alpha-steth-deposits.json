@@ -1,32 +1,5 @@
 [
   {
-    "txHash": "0x968dd6f44cd5edd7a030cf8e252227d17bd5511aeac583643338ee103f404cf8",
-    "date": "2025-09-20",
-    "isoUTC": "2025-09-20T12:20:16.715Z",
-    "amountETH": "0.000832489975124089",
-    "blockNumber": 23404237,
-    "wallet": "0xc149701eb565de8f94b9b7ef35e7017029cf1cb7",
-    "token": "WETH"
-  },
-  {
-    "txHash": "0x2045426d1ede2cffe2252a74dd1ec808e511557449cce223c3367a6942809cb6",
-    "date": "2025-09-20",
-    "isoUTC": "2025-09-20T04:48:52.633Z",
-    "amountETH": "0.016302050525530088",
-    "blockNumber": 23401999,
-    "wallet": "0x684bdb65c6d7558252eb7cb08d84efcfea86034a",
-    "token": "WETH"
-  },
-  {
-    "txHash": "0xe82730f762667b66ecc6d67dff06fd7f064efc5413be8e29a57b484209e9f86b",
-    "date": "2025-09-18",
-    "isoUTC": "2025-09-18T17:05:04.355Z",
-    "amountETH": "322.517188999999973475",
-    "blockNumber": 23391339,
-    "wallet": "0x4d6b30a075dd69d19e717d0969d351796faeb950",
-    "token": "WETH"
-  },
-  {
     "txHash": "0x13bd3a513182be7a0569c2abaf8497b866774a9df2a27c30de14386f4d9b1d71",
     "date": "2025-09-18",
     "isoUTC": "2025-09-18T13:10:03.570Z",

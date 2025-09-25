@@ -1,25 +1,3 @@
-## Local ENV setup for Daily Telegram
-
-Quickstart:
-
-```bash
-cp .env.example .env
-pnpm env:check
-pnpm send:daily:dry
-```
-
-Notes:
-
-- `TELEGRAM_CHAT_ID` may be numeric or an `@handle`. Channel ids are often negative (e.g., `-100...`).
-- `START_BLOCK_ALPHA_STETH` must be an integer.
-- CI uses GitHub Secrets; local `.env` is ignored in CI.
-
-Live test to a safe test chat (override chat id just for this run):
-
-```bash
-TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID_TEST pnpm send:daily:live
-```
-
 # somm-boilerplate
 
 - [Getting Started](#getting-started)
