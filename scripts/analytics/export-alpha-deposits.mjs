@@ -536,19 +536,18 @@ async function main() {
       )
     }
 
-    // 4) Write artifacts
+    // 4) Preview-only path: compose and print without writing files
+    if (process.env.TELEGRAM_PREVIEW === "1") {
+      await postTelegramPreview(minRows)
+      return
+    }
+
+    // 5) Write artifacts (live and CI contexts only)
     const files = await writeFiles(minRows, events)
     console.log("")
     console.log(`📁 Files written:`)
     console.log(`   ${Object.values(files).join("\n   ")}`)
     console.log(`📊 Total rows: ${minRows.length}`)
-
-    // 5) Preview or Telegram
-    if (process.env.TELEGRAM_PREVIEW === "1") {
-      console.log("")
-      await postTelegramPreview(minRows)
-      return
-    }
     if (POST_TG) {
       console.log("")
       await postTelegramPreview(minRows)
