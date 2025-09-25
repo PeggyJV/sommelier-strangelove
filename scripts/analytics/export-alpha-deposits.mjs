@@ -131,11 +131,13 @@ async function maybePostOnce(
     return false
   }
   await sendFn(text)
-  await fs.mkdir(path.dirname(cachePath), { recursive: true })
-  await fs.writeFile(
-    cachePath,
-    JSON.stringify({ digest, at: new Date().toISOString() }, null, 2)
-  )
+  try {
+    await fs.mkdir(path.dirname(cachePath), { recursive: true })
+    await fs.writeFile(
+      cachePath,
+      JSON.stringify({ digest, at: new Date().toISOString() }, null, 2)
+    )
+  } catch {}
   return true
 }
 
