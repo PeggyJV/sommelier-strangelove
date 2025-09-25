@@ -1,70 +1,61 @@
 export const runtime = "nodejs"
 
-import { buildDailyMessage } from "../../../src/lib/telegram/buildDailyMessage"
+import { spawn } from "node:child_process"
+import { resolve } from "node:path"
 
-function trimSafe(s: string) {
-  return s.length > 3800 ? s.slice(0, 3800) : s
-}
-
-async function sendTelegram(
-  token: string,
-  chatId: string,
-  text: string
-) {
-  const url = `https://api.telegram.org/bot${token}/sendMessage`
-  const body = new URLSearchParams({ chat_id: chatId, text })
-  const res = await fetch(url, { method: "POST", body })
-  let payload: any = null
-  try {
-    payload = await res.json()
-  } catch {}
-  return { ok: res.ok, status: res.status, payload }
+async function run(cmd: string, args: string[], env: Record<string, string>) {
+  return await new Promise<{ code: number; stdout: string; stderr: string }>(
+    (resolveP) => {
+      const p = spawn(cmd, args, {
+        env: { ...process.env, ...env },
+        stdio: ["ignore", "pipe", "pipe"],
+      })
+      let out = "",
+        err = ""
+      p.stdout.on("data", (d) => (out += d.toString()))
+      p.stderr.on("data", (d) => (err += d.toString()))
+      p.on("close", (code) =>
+        resolveP({ code: (code ?? 0) as number, stdout: out.trim(), stderr: err.trim() })
+      )
+    }
+  )
 }
 
 export async function GET(req: Request) {
-  const url = new URL(req.url)
-  const mode = (url.searchParams.get("mode") || "live").toLowerCase()
-  const forDate = url.searchParams.get("forDate") || undefined
-  const tz = url.searchParams.get("tz") || "Europe/Tallinn"
+  const u = new URL(req.url)
+  const mode = (u.searchParams.get("mode") || "live").toLowerCase() // preview | live
+  const forDate = u.searchParams.get("forDate") || undefined
+  const tz = u.searchParams.get("tz") || "Europe/Tallinn"
 
-  const token = process.env.TELEGRAM_BOT_TOKEN || ""
-  const chatId = (process.env.TELEGRAM_CHAT_ID || "").trim()
-  if (!token || !chatId) {
-    return Response.json(
-      { ok: false, error: "Missing TELEGRAM_* envs", tokenSet: !!token, chatId },
-      { status: 500 }
-    )
-  }
-
-  // Build the REAL message via shared builder (same as cron path)
-  let text = await buildDailyMessage({ forDate, tz })
-  text = trimSafe(text)
+  const script = resolve("scripts/analytics/export-alpha-deposits.mjs")
+  const args = [script]
+  if (forDate) args.push("--forDate", forDate)
+  if (tz) args.push("--tz", tz)
 
   if (mode === "preview") {
-    return Response.json(
-      { ok: true, preview: true, forDate: forDate ?? "now", tz, text },
-      { status: 200 }
-    )
+    const { code, stdout, stderr } = await run(process.execPath, args, {
+      TELEGRAM_PREVIEW: "1",
+      TELEGRAM_MODE: "strict",
+    })
+    if (code !== 0) {
+      return Response.json(
+        { ok: false, status: 500, error: "preview_failed", stderr },
+        { status: 500 }
+      )
+    }
+    return Response.json({ ok: true, preview: true, text: stdout }, { status: 200 })
   }
 
-  // Live send
-  const { ok, status, payload } = await sendTelegram(token, chatId, text)
-  if (!ok) {
-    console.error("TELEGRAM_SEND_FAIL", { status, payload })
+  // live
+  const liveArgs = [...args, "--post-telegram"]
+  const { code, stdout, stderr } = await run(process.execPath, liveArgs, {
+    TELEGRAM_MODE: "strict",
+  })
+  if (code !== 0) {
     return Response.json(
-      { ok: false, status, payload },
+      { ok: false, status: 502, error: "send_failed", stderr },
       { status: 502 }
     )
   }
-  console.log("TELEGRAM_SEND_OK", {
-    status,
-    message_id: payload?.result?.message_id,
-    chat: payload?.result?.chat?.id,
-  })
-  return Response.json({
-    ok: true,
-    status,
-    message_id: payload?.result?.message_id,
-    text,
-  })
+  return Response.json({ ok: true, status: 200, message: "sent" }, { status: 200 })
 }

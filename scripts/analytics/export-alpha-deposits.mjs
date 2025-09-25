@@ -265,6 +265,12 @@ async function postZeroRowsMessage() {
     startBlock: START_BLOCK,
   })
 
+  // Preview mode: print exact message and exit without posting
+  if (process.env.TELEGRAM_PREVIEW === "1") {
+    console.log(String(text ?? ""))
+    process.exit(0)
+  }
+
   // Post with idempotency using stable data
   const stableData = {
     rows: [],
@@ -342,6 +348,12 @@ async function postTelegramPreview(minRows) {
     totalUsd: totalUSD,
     startBlock: START_BLOCK,
   })
+
+  // Preview mode: print exact message and exit without posting
+  if (process.env.TELEGRAM_PREVIEW === "1") {
+    console.log(String(text ?? ""))
+    process.exit(0)
+  }
 
   // Post with idempotency using stable data
   const stableData = {
