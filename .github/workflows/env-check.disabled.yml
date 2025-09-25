@@ -1,0 +1,11 @@
+# DEPRECATED: superseded by Vercel Cron (ops/poc/vercel-cron). Left here for reference.
+name: Env Check (disabled)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This workflow is deprecated. Use Vercel Cron."

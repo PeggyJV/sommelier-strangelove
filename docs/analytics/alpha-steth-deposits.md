@@ -1,9 +1,9 @@
 # Alpha stETH deposits (real, validated)
 
 **Total transactions:** 10
-**Total amount:** 390.220105 ETH (≈ $1637453.31)
+**Total amount:** 390.220105 ETH (≈ $1634909.08)
 **Start block:** 23300000
-**Export date:** 2025-09-23T13:27:57.804Z
+**Export date:** 2025-09-23T15:38:27.433Z
 
 | txHash | Date | Amount (ETH) | Block | Wallet | Token |
 |--------|------|--------------|-------|--------|-------|

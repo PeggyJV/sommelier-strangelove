@@ -11,7 +11,7 @@ const ENV_MODE = (process.env.ENV_MODE || "live").toLowerCase()
 
 function logStart() {
   const now = new Date()
-  const { isoUTC } = toTallinnISO(now.toISOString())
+  const { isoUTC } = toTallinnISO(now.getTime())
   console.log(
     `Daily sender start UTC=${now.toISOString()} Tallinn=${isoUTC}`
   )
@@ -25,20 +25,27 @@ async function main() {
   const originalFetch: typeof fetch = globalThis.fetch as any
   globalThis.fetch = (async (input: any, init?: any) => {
     const url = typeof input === "string" ? input : input?.url
-    const isTelegram = typeof url === "string" && url.includes("api.telegram.org") && url.includes("/sendMessage")
+    const isTelegram =
+      typeof url === "string" &&
+      url.includes("api.telegram.org") &&
+      url.includes("/sendMessage")
     if (!isTelegram) {
       return originalFetch(input as any, init)
     }
     try {
       let bodyObj: any = {}
       if (init?.body) {
-        try { bodyObj = JSON.parse(init.body) } catch {}
+        try {
+          bodyObj = JSON.parse(init.body)
+        } catch {}
       }
       const originalText: string = String(bodyObj?.text ?? "")
       let textToSend = originalText
       const maxLen = 3800
       if (textToSend.length > maxLen) {
-        console.log(`Telegram: trimming message ${textToSend.length} -> ${maxLen}`)
+        console.log(
+          `Telegram: trimming message ${textToSend.length} -> ${maxLen}`
+        )
         textToSend = textToSend.slice(0, maxLen)
         bodyObj.text = textToSend
         init = { ...(init || {}), body: JSON.stringify(bodyObj) }
@@ -51,7 +58,10 @@ async function main() {
       console.log(`Telegram HTTP ${status} ok=${ok}`)
       if (ok) {
         // Return a fresh Response so downstream can read
-        return new Response(bodyText, { status: resp.status, headers: resp.headers as any })
+        return new Response(bodyText, {
+          status: resp.status,
+          headers: resp.headers as any,
+        })
       }
       // Retry once: plain text, no parse_mode
       console.log("Telegram: retrying once with plain text")
@@ -65,7 +75,10 @@ async function main() {
       const retryOk = resp.ok
       const retryText = await resp.text()
       console.log(`Telegram retry HTTP ${retryStatus} ok=${retryOk}`)
-      return new Response(retryText, { status: retryStatus, headers: resp.headers as any })
+      return new Response(retryText, {
+        status: retryStatus,
+        headers: resp.headers as any,
+      })
     } catch (e: any) {
       console.error("Telegram wrapper error:", e?.message || e)
       return originalFetch(input as any, init)

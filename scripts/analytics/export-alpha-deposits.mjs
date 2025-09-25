@@ -88,6 +88,22 @@ export function renderStrictMessage({
   return text
 }
 
+function isPlaceholder(text) {
+  return typeof text === "string" && /^Alpha daily ping\b/i.test(text)
+}
+
+function ensureStrictText(text) {
+  if (process.env.TELEGRAM_MODE === "strict") {
+    const t = String(text ?? "")
+    if (!t.trim())
+      throw new Error("compose_empty: no message content")
+    if (isPlaceholder(t))
+      throw new Error(
+        "compose_placeholder: placeholder message detected"
+      )
+  }
+}
+
 // Idempotency check and post
 async function maybePostOnce(
   text,
@@ -265,6 +281,8 @@ async function postZeroRowsMessage() {
     startBlock: START_BLOCK,
   })
 
+  ensureStrictText(text)
+
   // Preview mode: print exact message and exit without posting
   if (process.env.TELEGRAM_PREVIEW === "1") {
     console.log(String(text ?? ""))
@@ -348,6 +366,8 @@ async function postTelegramPreview(minRows) {
     totalUsd: totalUSD,
     startBlock: START_BLOCK,
   })
+
+  ensureStrictText(text)
 
   // Preview mode: print exact message and exit without posting
   if (process.env.TELEGRAM_PREVIEW === "1") {

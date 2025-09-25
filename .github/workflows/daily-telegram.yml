@@ -1,4 +1,4 @@
-name: Daily Telegram
+name: Daily Telegram (DEPRECATED)
 
 on:
   schedule:
