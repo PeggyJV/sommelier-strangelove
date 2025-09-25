@@ -269,9 +269,6 @@ async function postZeroRowsMessage() {
     process.exit(0)
   }
 
-  const token = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
-
   // Use strict template for zero rows
   const text = renderStrictMessage({
     rows: [], // Empty rows
@@ -288,6 +285,9 @@ async function postZeroRowsMessage() {
     console.log(String(text ?? ""))
     process.exit(0)
   }
+
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  const chatId = process.env.TELEGRAM_CHAT_ID
 
   // Post with idempotency using stable data
   const stableData = {
@@ -331,20 +331,16 @@ async function postTelegramPreview(minRows) {
     process.exit(0)
   }
 
-  const token = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
-  if (!token || !chatId) {
-    console.error(
-      "❌ TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID required for --post-telegram"
-    )
-    process.exit(1)
+  const previewOnly = process.env.TELEGRAM_PREVIEW === "1"
+  if (!previewOnly) {
+    console.log(`📱 Posting to Telegram...`)
   }
-
-  console.log(`📱 Posting to Telegram...`)
 
   // Fetch ETH price for USD calculations
   const ethPrice = await fetchETHPrice()
-  console.log(`   💱 ETH Price: $${ethPrice || "N/A"}`)
+  if (!previewOnly) {
+    console.log(`   💱 ETH Price: $${ethPrice || "N/A"}`)
+  }
 
   // Calculate totals
   const totalAmount = minRows.reduce(
@@ -373,6 +369,15 @@ async function postTelegramPreview(minRows) {
   if (process.env.TELEGRAM_PREVIEW === "1") {
     console.log(String(text ?? ""))
     process.exit(0)
+  }
+
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  const chatId = process.env.TELEGRAM_CHAT_ID
+  if (!token || !chatId) {
+    console.error(
+      "❌ TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID required for --post-telegram"
+    )
+    process.exit(1)
   }
 
   // Post with idempotency using stable data
