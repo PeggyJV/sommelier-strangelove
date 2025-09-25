@@ -98,7 +98,7 @@ export async function GET(req: Request) {
   const { code, stdout, stderr } = await run(
     process.execPath,
     liveArgs,
-    { TELEGRAM_MODE: "strict" }
+    { TELEGRAM_MODE: "strict", ARTIFACTS_DISABLED: "1" }
   )
   if (code !== 0) {
     return Response.json(

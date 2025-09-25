@@ -542,12 +542,17 @@ async function main() {
       return
     }
 
-    // 5) Write artifacts (live and CI contexts only)
-    const files = await writeFiles(minRows, events)
-    console.log("")
-    console.log(`📁 Files written:`)
-    console.log(`   ${Object.values(files).join("\n   ")}`)
-    console.log(`📊 Total rows: ${minRows.length}`)
+    // 5) Write artifacts (skip when disabled for serverless runs)
+    const artifactsDisabled = process.env.ARTIFACTS_DISABLED === "1"
+    if (!artifactsDisabled) {
+      const files = await writeFiles(minRows, events)
+      console.log("")
+      console.log(`📁 Files written:`)
+      console.log(`   ${Object.values(files).join("\n   ")}`)
+      console.log(`📊 Total rows: ${minRows.length}`)
+    } else {
+      console.log("🧪 Artifacts disabled for this run (serverless)")
+    }
     if (POST_TG) {
       console.log("")
       await postTelegramPreview(minRows)
