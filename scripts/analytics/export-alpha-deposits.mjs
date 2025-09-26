@@ -88,6 +88,22 @@ export function renderStrictMessage({
   return text
 }
 
+function isPlaceholder(text) {
+  return typeof text === "string" && /^Alpha daily ping\b/i.test(text)
+}
+
+function ensureStrictText(text) {
+  if (process.env.TELEGRAM_MODE === "strict") {
+    const t = String(text ?? "")
+    if (!t.trim())
+      throw new Error("compose_empty: no message content")
+    if (isPlaceholder(t))
+      throw new Error(
+        "compose_placeholder: placeholder message detected"
+      )
+  }
+}
+
 // Idempotency check and post
 async function maybePostOnce(
   text,
@@ -115,11 +131,13 @@ async function maybePostOnce(
     return false
   }
   await sendFn(text)
-  await fs.mkdir(path.dirname(cachePath), { recursive: true })
-  await fs.writeFile(
-    cachePath,
-    JSON.stringify({ digest, at: new Date().toISOString() }, null, 2)
-  )
+  try {
+    await fs.mkdir(path.dirname(cachePath), { recursive: true })
+    await fs.writeFile(
+      cachePath,
+      JSON.stringify({ digest, at: new Date().toISOString() }, null, 2)
+    )
+  } catch {}
   return true
 }
 
@@ -253,9 +271,6 @@ async function postZeroRowsMessage() {
     process.exit(0)
   }
 
-  const token = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
-
   // Use strict template for zero rows
   const text = renderStrictMessage({
     rows: [], // Empty rows
@@ -264,6 +279,17 @@ async function postZeroRowsMessage() {
     totalUsd: 0,
     startBlock: START_BLOCK,
   })
+
+  ensureStrictText(text)
+
+  // Preview mode: print exact message and exit without posting
+  if (process.env.TELEGRAM_PREVIEW === "1") {
+    console.log(String(text ?? ""))
+    process.exit(0)
+  }
+
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  const chatId = process.env.TELEGRAM_CHAT_ID
 
   // Post with idempotency using stable data
   const stableData = {
@@ -307,20 +333,16 @@ async function postTelegramPreview(minRows) {
     process.exit(0)
   }
 
-  const token = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
-  if (!token || !chatId) {
-    console.error(
-      "❌ TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID required for --post-telegram"
-    )
-    process.exit(1)
+  const previewOnly = process.env.TELEGRAM_PREVIEW === "1"
+  if (!previewOnly) {
+    console.log(`📱 Posting to Telegram...`)
   }
-
-  console.log(`📱 Posting to Telegram...`)
 
   // Fetch ETH price for USD calculations
   const ethPrice = await fetchETHPrice()
-  console.log(`   💱 ETH Price: $${ethPrice || "N/A"}`)
+  if (!previewOnly) {
+    console.log(`   💱 ETH Price: $${ethPrice || "N/A"}`)
+  }
 
   // Calculate totals
   const totalAmount = minRows.reduce(
@@ -342,6 +364,23 @@ async function postTelegramPreview(minRows) {
     totalUsd: totalUSD,
     startBlock: START_BLOCK,
   })
+
+  ensureStrictText(text)
+
+  // Preview mode: print exact message and exit without posting
+  if (process.env.TELEGRAM_PREVIEW === "1") {
+    console.log(String(text ?? ""))
+    process.exit(0)
+  }
+
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  const chatId = process.env.TELEGRAM_CHAT_ID
+  if (!token || !chatId) {
+    console.error(
+      "❌ TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID required for --post-telegram"
+    )
+    process.exit(1)
+  }
 
   // Post with idempotency using stable data
   const stableData = {
@@ -499,14 +538,23 @@ async function main() {
       )
     }
 
-    // 4) Write artifacts
-    const files = await writeFiles(minRows, events)
-    console.log("")
-    console.log(`📁 Files written:`)
-    console.log(`   ${Object.values(files).join("\n   ")}`)
-    console.log(`📊 Total rows: ${minRows.length}`)
+    // 4) Preview-only path: compose and print without writing files
+    if (process.env.TELEGRAM_PREVIEW === "1") {
+      await postTelegramPreview(minRows)
+      return
+    }
 
-    // 5) Optional Telegram
+    // 5) Write artifacts (skip when disabled for serverless runs)
+    const artifactsDisabled = process.env.ARTIFACTS_DISABLED === "1"
+    if (!artifactsDisabled) {
+      const files = await writeFiles(minRows, events)
+      console.log("")
+      console.log(`📁 Files written:`)
+      console.log(`   ${Object.values(files).join("\n   ")}`)
+      console.log(`📊 Total rows: ${minRows.length}`)
+    } else {
+      console.log("🧪 Artifacts disabled for this run (serverless)")
+    }
     if (POST_TG) {
       console.log("")
       await postTelegramPreview(minRows)
