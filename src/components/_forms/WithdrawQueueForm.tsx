@@ -164,6 +164,12 @@ export const WithdrawQueueForm = ({
     boolean | null
   >(null)
 
+  // Store actual on-chain discount ranges from contract
+  const [contractMinDiscountBps, setContractMinDiscountBps] =
+    useState<number | null>(null)
+  const [contractMaxDiscountBps, setContractMaxDiscountBps] =
+    useState<number | null>(null)
+
   // Pre-validation of request: simulate on-chain call before enabling Submit
   const [isRequestValid, setIsRequestValid] = useState<
     boolean | null
@@ -184,6 +190,8 @@ export const WithdrawQueueForm = ({
       try {
         if (!boringQueue || !selectedToken?.address) {
           setIsWithdrawAllowed(null)
+          setContractMinDiscountBps(null)
+          setContractMaxDiscountBps(null)
           return
         }
         const res = await boringQueue.read.withdrawAssets([
@@ -195,18 +203,41 @@ export const WithdrawQueueForm = ({
           rawResponse: res,
           isArray: Array.isArray(res),
         })
+
+        // Parse the tuple: [allowWithdraws, secondsToMaturity, minimumSecondsToDeadline, minDiscount, maxDiscount, minimumShares]
         const allow = Array.isArray(res)
           ? Boolean(res[0])
           : Boolean(res)
-        console.log("withdrawAssets parsed allow:", allow)
-        if (!cancelled) setIsWithdrawAllowed(allow)
+        const minDiscount =
+          Array.isArray(res) && res.length > 3 ? Number(res[3]) : null
+        const maxDiscount =
+          Array.isArray(res) && res.length > 4 ? Number(res[4]) : null
+
+        console.log("withdrawAssets parsed values:", {
+          allow,
+          minDiscount,
+          maxDiscount,
+        })
+
+        if (!cancelled) {
+          setIsWithdrawAllowed(allow)
+          setContractMinDiscountBps(minDiscount)
+          setContractMaxDiscountBps(maxDiscount)
+        }
+
         logTxDebug("withdraw.preflight", {
           assetOut: selectedToken.address,
           allow,
+          minDiscount,
+          maxDiscount,
           rawResponse: res,
         })
       } catch (e) {
-        if (!cancelled) setIsWithdrawAllowed(null)
+        if (!cancelled) {
+          setIsWithdrawAllowed(null)
+          setContractMinDiscountBps(null)
+          setContractMaxDiscountBps(null)
+        }
       }
     }
     run()
@@ -276,8 +307,16 @@ export const WithdrawQueueForm = ({
           "") as string
         const configuredRules: any = (cellarConfig as any)
           ?.withdrawTokenConfig?.[tokenSymbolForRules]
-        const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
-        const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
+
+        // Use on-chain values if available, otherwise fall back to config
+        const minBps =
+          contractMinDiscountBps !== null
+            ? contractMinDiscountBps
+            : Number(configuredRules?.minDiscount ?? 0) * 100
+        const maxBps =
+          contractMaxDiscountBps !== null
+            ? contractMaxDiscountBps
+            : Number(configuredRules?.maxDiscount ?? 0) * 100
         const desiredBps = DISCOUNT_BPS
         const startBps =
           minBps && maxBps
@@ -306,6 +345,11 @@ export const WithdrawQueueForm = ({
           step,
           minBps,
           maxBps,
+          contractMinDiscountBps,
+          contractMaxDiscountBps,
+          usingContractValues:
+            contractMinDiscountBps !== null &&
+            contractMaxDiscountBps !== null,
           token: selectedToken.symbol,
         })
         for (let bps = startBps; bps <= upper; bps += step) {
@@ -426,10 +470,14 @@ export const WithdrawQueueForm = ({
               ) {
                 const minPct = minBps / 100
                 const maxPct = maxBps / 100
+                const source =
+                  contractMinDiscountBps !== null
+                    ? "on-chain"
+                    : "config"
                 setPreflightMessage(
-                  `Discount validation failed. Expected range: ${minPct}%–${maxPct}%. Error: ${errorMsg.slice(
+                  `Discount validation failed. Expected range (${source}): ${minPct}%–${maxPct}%. The contract may have different values. Error: ${errorMsg.slice(
                     0,
-                    100
+                    80
                   )}`
                 )
               } else if (
@@ -523,6 +571,8 @@ export const WithdrawQueueForm = ({
     boringQueueWithdrawals,
     address,
     cellarConfig,
+    contractMinDiscountBps,
+    contractMaxDiscountBps,
   ])
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
