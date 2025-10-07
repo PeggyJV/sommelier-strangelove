@@ -299,6 +299,15 @@ export const WithdrawQueueForm = ({
         const upper = maxBps && maxBps > 0 ? maxBps : startBps
         let found: number | null = null
         let lastError: any = null
+        let firstError: any = null
+        console.log("Starting discount simulation loop:", {
+          startBps,
+          upper,
+          step,
+          minBps,
+          maxBps,
+          token: selectedToken.symbol,
+        })
         for (let bps = startBps; bps <= upper; bps += step) {
           try {
             if (isActiveWithdrawRequest && boringQueueWithdrawals) {
@@ -334,9 +343,20 @@ export const WithdrawQueueForm = ({
               )
             }
             found = bps
+            console.log(`Discount ${bps} BPS succeeded`)
             break
           } catch (err) {
+            if (!firstError) firstError = err
             lastError = err
+            const errMsg = (
+              (err as any)?.cause?.message ||
+              (err as Error).message ||
+              ""
+            ).toString()
+            console.log(
+              `Discount ${bps} BPS failed:`,
+              errMsg.slice(0, 200)
+            )
             continue
           }
         }
@@ -351,20 +371,27 @@ export const WithdrawQueueForm = ({
             )
           } else {
             setIsRequestValid(false)
-            // Analyze the last error to provide a helpful message
-            if (lastError) {
+            // Analyze the first error to provide a helpful message (most informative)
+            const errorToAnalyze = firstError || lastError
+            if (errorToAnalyze) {
               const errorMsg = (
-                (lastError as any)?.cause?.message ||
-                (lastError as Error).message ||
+                (errorToAnalyze as any)?.cause?.message ||
+                (errorToAnalyze as Error).message ||
                 ""
               ).toString()
-              console.error("Withdraw simulation failed:", errorMsg, {
-                token: selectedToken.symbol,
-                address: selectedToken.address,
-                amount: watchWithdrawAmount,
-                minBps,
-                maxBps,
-              })
+              console.error(
+                "All withdraw simulations failed. First error:",
+                errorMsg,
+                {
+                  token: selectedToken.symbol,
+                  address: selectedToken.address,
+                  amount: watchWithdrawAmount,
+                  minBps,
+                  maxBps,
+                  startBps,
+                  upper,
+                }
+              )
 
               if (
                 errorMsg.includes(
@@ -375,12 +402,35 @@ export const WithdrawQueueForm = ({
                   `Withdraw queue is currently not available for ${selectedToken.symbol}.`
                 )
               } else if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__BadShareAmount"
+                )
+              ) {
+                setPreflightMessage(
+                  `Invalid share amount. Check your withdrawal amount.`
+                )
+              } else if (
+                errorMsg.includes("BoringOnChainQueue__Paused")
+              ) {
+                setPreflightMessage(
+                  `Withdraw queue is currently paused. Please try again later.`
+                )
+              } else if (
+                errorMsg.includes("BoringOnChainQueue__BadDeadline")
+              ) {
+                setPreflightMessage(
+                  `Invalid deadline configuration. Please contact support.`
+                )
+              } else if (
                 errorMsg.includes("BoringOnChainQueue__BadDiscount")
               ) {
                 const minPct = minBps / 100
                 const maxPct = maxBps / 100
                 setPreflightMessage(
-                  `Discount invalid. Allowed range for ${selectedToken.symbol}: ${minPct}%–${maxPct}%.`
+                  `Discount validation failed. Expected range: ${minPct}%–${maxPct}%. Error: ${errorMsg.slice(
+                    0,
+                    100
+                  )}`
                 )
               } else if (
                 errorMsg.includes(
