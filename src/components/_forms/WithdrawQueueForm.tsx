@@ -303,6 +303,34 @@ export const WithdrawQueueForm = ({
           cellarConfig.cellar.decimals
         )
 
+        // Check if approval is needed before simulating
+        if (cellarContract && address) {
+          try {
+            const allowance = (await cellarContract.read.allowance([
+              address,
+              cellarConfig.boringQueue
+                ? cellarConfig.boringQueue.address
+                : cellarConfig.chain.withdrawQueueAddress,
+            ])) as bigint
+
+            if (allowance < withdrawAmtInBaseDenom) {
+              setIsRequestValid(false)
+              setPreflightMessage(
+                `Approval required. Click "Withdraw" to approve and proceed.`
+              )
+              setDiscountBpsChosen(null)
+              setEffectiveDeadlineSec(null)
+              setIsValidating(false)
+              return
+            }
+          } catch (approvalCheckError) {
+            console.warn(
+              "Could not check approval, continuing with simulation:",
+              approvalCheckError
+            )
+          }
+        }
+
         const tokenSymbolForRules = (selectedToken?.symbol ||
           "") as string
         const configuredRules: any = (cellarConfig as any)
@@ -508,6 +536,13 @@ export const WithdrawQueueForm = ({
                 setPreflightMessage(
                   `Insufficient balance or shares to complete this withdrawal.`
                 )
+              } else if (
+                errorMsg.includes("TRANSFER_FROM_FAILED") ||
+                errorMsg.includes("TransferFromFailed")
+              ) {
+                setPreflightMessage(
+                  `Token transfer failed. You may need to approve the contract first. Click "Withdraw" to proceed with approval.`
+                )
               } else {
                 setPreflightMessage(
                   `Unable to validate withdrawal: ${errorMsg.slice(
@@ -573,6 +608,7 @@ export const WithdrawQueueForm = ({
     cellarConfig,
     contractMinDiscountBps,
     contractMaxDiscountBps,
+    cellarContract,
   ])
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
@@ -1238,7 +1274,10 @@ export const WithdrawQueueForm = ({
         isDisabled={
           isDisabled ||
           (boringQueue ? isWithdrawAllowed === false : false) ||
-          (boringQueue ? isRequestValid === false : false) ||
+          (boringQueue
+            ? isRequestValid === false &&
+              !preflightMessage?.includes("Approval required")
+            : false) ||
           isValidating
         }
         isLoading={isSubmitting}
@@ -1246,7 +1285,13 @@ export const WithdrawQueueForm = ({
         py={6}
         px={12}
       >
-        Submit
+        {boringQueue &&
+        isRequestValid === false &&
+        preflightMessage?.includes("Approval required")
+          ? "Approve & Withdraw"
+          : isActiveWithdrawRequest && boringQueue
+          ? "Replace Request"
+          : "Submit"}
       </BaseButton>
       {((useRouter().query.id as string) || _id) ===
         config.CONTRACT.ALPHA_STETH.SLUG &&
@@ -1266,7 +1311,14 @@ export const WithdrawQueueForm = ({
       {boringQueue &&
         isWithdrawAllowed !== false &&
         isRequestValid === false && (
-          <Text color="yellow.300" fontSize="sm">
+          <Text
+            color={
+              preflightMessage?.includes("Approval required")
+                ? "blue.300"
+                : "yellow.300"
+            }
+            fontSize="sm"
+          >
             {preflightMessage ||
               `Request not currently valid. Please review inputs and try again.`}
           </Text>
