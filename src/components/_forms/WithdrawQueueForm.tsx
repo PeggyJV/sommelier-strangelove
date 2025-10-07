@@ -189,13 +189,21 @@ export const WithdrawQueueForm = ({
         const res = await boringQueue.read.withdrawAssets([
           selectedToken.address,
         ])
+        console.log("withdrawAssets response:", {
+          token: selectedToken.symbol,
+          address: selectedToken.address,
+          rawResponse: res,
+          isArray: Array.isArray(res),
+        })
         const allow = Array.isArray(res)
           ? Boolean(res[0])
           : Boolean(res)
+        console.log("withdrawAssets parsed allow:", allow)
         if (!cancelled) setIsWithdrawAllowed(allow)
         logTxDebug("withdraw.preflight", {
           assetOut: selectedToken.address,
           allow,
+          rawResponse: res,
         })
       } catch (e) {
         if (!cancelled) setIsWithdrawAllowed(null)
@@ -290,6 +298,7 @@ export const WithdrawQueueForm = ({
         const step = 25
         const upper = maxBps && maxBps > 0 ? maxBps : startBps
         let found: number | null = null
+        let lastError: any = null
         for (let bps = startBps; bps <= upper; bps += step) {
           try {
             if (isActiveWithdrawRequest && boringQueueWithdrawals) {
@@ -326,7 +335,8 @@ export const WithdrawQueueForm = ({
             }
             found = bps
             break
-          } catch (_) {
+          } catch (err) {
+            lastError = err
             continue
           }
         }
@@ -341,6 +351,78 @@ export const WithdrawQueueForm = ({
             )
           } else {
             setIsRequestValid(false)
+            // Analyze the last error to provide a helpful message
+            if (lastError) {
+              const errorMsg = (
+                (lastError as any)?.cause?.message ||
+                (lastError as Error).message ||
+                ""
+              ).toString()
+              console.error("Withdraw simulation failed:", errorMsg, {
+                token: selectedToken.symbol,
+                address: selectedToken.address,
+                amount: watchWithdrawAmount,
+                minBps,
+                maxBps,
+              })
+
+              if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
+                )
+              ) {
+                setPreflightMessage(
+                  `Withdraw queue is currently not available for ${selectedToken.symbol}.`
+                )
+              } else if (
+                errorMsg.includes("BoringOnChainQueue__BadDiscount")
+              ) {
+                const minPct = minBps / 100
+                const maxPct = maxBps / 100
+                setPreflightMessage(
+                  `Discount invalid. Allowed range for ${selectedToken.symbol}: ${minPct}%–${maxPct}%.`
+                )
+              } else if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__RequestDeadlineExceeded"
+                )
+              ) {
+                setPreflightMessage(
+                  `Request deadline has been exceeded. Please try again.`
+                )
+              } else if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__UserRepeatedlyCallingCancelOnWithdraw"
+                )
+              ) {
+                setPreflightMessage(
+                  `Too many cancel attempts. Please wait before trying again.`
+                )
+              } else if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__NoWithdrawRequest"
+                )
+              ) {
+                setPreflightMessage(
+                  `No active withdraw request found to replace.`
+                )
+              } else if (errorMsg.includes("insufficient")) {
+                setPreflightMessage(
+                  `Insufficient balance or shares to complete this withdrawal.`
+                )
+              } else {
+                setPreflightMessage(
+                  `Unable to validate withdrawal: ${errorMsg.slice(
+                    0,
+                    100
+                  )}`
+                )
+              }
+            } else {
+              setPreflightMessage(
+                `No valid discount rate found. Try a different amount or asset.`
+              )
+            }
           }
         }
       } catch (e) {
