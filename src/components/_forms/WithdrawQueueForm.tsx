@@ -1075,11 +1075,18 @@ export const WithdrawQueueForm = ({
             {preflightMessage}
           </Text>
         )}
+      {boringQueue && isWithdrawAllowed === false && (
+        <Text color="yellow.300" fontSize="sm">
+          {preflightMessage ||
+            `Withdraw queue is currently not available for ${selectedToken.symbol}.`}
+        </Text>
+      )}
       {boringQueue &&
-        (isWithdrawAllowed === false || isRequestValid === false) && (
+        isWithdrawAllowed !== false &&
+        isRequestValid === false && (
           <Text color="yellow.300" fontSize="sm">
             {preflightMessage ||
-              `Withdraw queue is currently not available for ${selectedToken.symbol}.`}
+              `Request not currently valid. Please review inputs and try again.`}
           </Text>
         )}
       {/*waitTime(cellarConfig) !== null && (
