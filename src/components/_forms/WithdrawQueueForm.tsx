@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -117,8 +117,8 @@ export const WithdrawQueueForm = ({
 
   const { boringQueue } = useCreateContracts(cellarConfig)
 
-  const cellarContract = (() => {
-    if (!paidClient) return
+  const cellarContract = useMemo(() => {
+    if (!paidClient) return null
     return getContract({
       address: cellarConfig.cellar.address as `0x${string}`,
       abi: cellarConfig.cellar.abi,
@@ -127,10 +127,15 @@ export const WithdrawQueueForm = ({
         wallet: walletClient,
       },
     })
-  })()
+  }, [
+    paidClient,
+    walletClient,
+    cellarConfig.cellar.address,
+    cellarConfig.cellar.abi,
+  ])
 
-  const withdrawQueueContract = (() => {
-    if (!paidClient) return
+  const withdrawQueueContract = useMemo(() => {
+    if (!paidClient) return null
     return (
       boringQueue ??
       getContract({
@@ -143,7 +148,12 @@ export const WithdrawQueueForm = ({
         },
       })
     )
-  })()
+  }, [
+    boringQueue,
+    paidClient,
+    walletClient,
+    cellarConfig.chain.withdrawQueueAddress,
+  ])
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -182,6 +192,10 @@ export const WithdrawQueueForm = ({
   const [effectiveDeadlineSec, setEffectiveDeadlineSec] = useState<
     number | null
   >(null)
+
+  // Track last validation key to prevent unnecessary re-runs
+  const [lastValidationKey, setLastValidationKey] =
+    useState<string>("")
 
   // Preflight: check if queue allows withdraws for selected asset (boring queue)
   useEffect(() => {
@@ -276,23 +290,47 @@ export const WithdrawQueueForm = ({
 
   const geo = useGeo()
 
+  // Create stable validation key to prevent unnecessary re-runs
+  const validationKey = useMemo(() => {
+    if (
+      !boringQueue ||
+      !selectedToken?.address ||
+      isNaN(watchWithdrawAmount) ||
+      watchWithdrawAmount <= 0
+    ) {
+      return ""
+    }
+    return `${selectedToken.address}-${watchWithdrawAmount}-${contractMinDiscountBps}-${contractMaxDiscountBps}-${isActiveWithdrawRequest}`
+  }, [
+    boringQueue,
+    selectedToken?.address,
+    watchWithdrawAmount,
+    contractMinDiscountBps,
+    contractMaxDiscountBps,
+    isActiveWithdrawRequest,
+  ])
+
   // Simulate the request with current inputs to pre‑validate before enabling submit
   useEffect(() => {
     let cancelled = false
+
+    // Skip if validation key hasn't changed
+    if (!validationKey || validationKey === lastValidationKey) {
+      if (!validationKey) {
+        setIsRequestValid(null)
+        setPreflightMessage("")
+        setDiscountBpsChosen(null)
+        setEffectiveDeadlineSec(null)
+      }
+      return
+    }
+
     const run = async () => {
       // Only validate for boringQueue path and when an amount is present
       if (!boringQueue || !selectedToken?.address) {
-        setIsRequestValid(null)
-        setPreflightMessage("")
-        setDiscountBpsChosen(null)
-        setEffectiveDeadlineSec(null)
         return
       }
       if (isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0) {
-        setIsRequestValid(null)
-        setPreflightMessage("")
-        setDiscountBpsChosen(null)
-        setEffectiveDeadlineSec(null)
         return
       }
       try {
@@ -304,7 +342,12 @@ export const WithdrawQueueForm = ({
         )
 
         // Check if approval is needed before simulating
-        if (cellarContract && address) {
+        // Only check if we have a valid amount to avoid unnecessary API calls
+        if (
+          cellarContract &&
+          address &&
+          withdrawAmtInBaseDenom > 0n
+        ) {
           try {
             const allowance = (await cellarContract.read.allowance([
               address,
@@ -314,13 +357,16 @@ export const WithdrawQueueForm = ({
             ])) as bigint
 
             if (allowance < withdrawAmtInBaseDenom) {
-              setIsRequestValid(false)
-              setPreflightMessage(
-                `Approval required. Click "Withdraw" to approve and proceed.`
-              )
-              setDiscountBpsChosen(null)
-              setEffectiveDeadlineSec(null)
-              setIsValidating(false)
+              if (!cancelled) {
+                setIsRequestValid(false)
+                setPreflightMessage(
+                  `Approval required. Click "Withdraw" to approve and proceed.`
+                )
+                setDiscountBpsChosen(null)
+                setEffectiveDeadlineSec(null)
+                setIsValidating(false)
+                setLastValidationKey(validationKey)
+              }
               return
             }
           } catch (approvalCheckError) {
@@ -416,6 +462,7 @@ export const WithdrawQueueForm = ({
             }
             found = bps
             console.log(`Discount ${bps} BPS succeeded`)
+            // Exit the loop immediately when found
             break
           } catch (err) {
             if (!firstError) firstError = err
@@ -590,26 +637,24 @@ export const WithdrawQueueForm = ({
           )
         }
       } finally {
-        if (!cancelled) setIsValidating(false)
+        if (!cancelled) {
+          setIsValidating(false)
+          setLastValidationKey(validationKey)
+        }
       }
     }
-    run()
+
+    // Only run if we have a new validation key
+    if (validationKey && validationKey !== lastValidationKey) {
+      run()
+    }
+
     return () => {
       cancelled = true
     }
-  }, [
-    boringQueue,
-    selectedToken?.address,
-    selectedToken?.symbol,
-    watchWithdrawAmount,
-    isActiveWithdrawRequest,
-    boringQueueWithdrawals,
-    address,
-    cellarConfig,
-    contractMinDiscountBps,
-    contractMaxDiscountBps,
-    cellarContract,
-  ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Intentionally only watching validationKey changes to prevent excessive re-validation loops
+  }, [validationKey, lastValidationKey])
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -1280,7 +1325,7 @@ export const WithdrawQueueForm = ({
             : false) ||
           isValidating
         }
-        isLoading={isSubmitting}
+        isLoading={isSubmitting || isValidating}
         fontSize={21}
         py={6}
         px={12}
