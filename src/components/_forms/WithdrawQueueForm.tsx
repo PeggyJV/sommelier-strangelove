@@ -315,13 +315,23 @@ export const WithdrawQueueForm = ({
     let cancelled = false
 
     // Skip if validation key hasn't changed
-    if (!validationKey || validationKey === lastValidationKey) {
-      if (!validationKey) {
-        setIsRequestValid(null)
-        setPreflightMessage("")
-        setDiscountBpsChosen(null)
-        setEffectiveDeadlineSec(null)
-      }
+    if (validationKey === lastValidationKey) {
+      return
+    }
+
+    console.log("Validation key changed:", {
+      old: lastValidationKey,
+      new: validationKey,
+    })
+
+    // If validation key is empty, clear state and update last key
+    if (!validationKey) {
+      console.log("Clearing validation state (empty validation key)")
+      setIsRequestValid(null)
+      setPreflightMessage("")
+      setDiscountBpsChosen(null)
+      setEffectiveDeadlineSec(null)
+      setLastValidationKey("")
       return
     }
 
@@ -351,9 +361,11 @@ export const WithdrawQueueForm = ({
           try {
             const allowance = (await cellarContract.read.allowance([
               address,
-              cellarConfig.boringQueue
-                ? cellarConfig.boringQueue.address
-                : cellarConfig.chain.withdrawQueueAddress,
+              getAddress(
+                cellarConfig.boringQueue
+                  ? cellarConfig.boringQueue.address
+                  : cellarConfig.chain.withdrawQueueAddress
+              ),
             ])) as bigint
 
             if (allowance < withdrawAmtInBaseDenom) {
@@ -481,6 +493,11 @@ export const WithdrawQueueForm = ({
         }
         if (!cancelled) {
           if (found !== null) {
+            console.log("Validation successful:", {
+              validationKey,
+              discountBps: found,
+              discountPct: `${(found / 100).toFixed(2)}%`,
+            })
             setIsRequestValid(true)
             setDiscountBpsChosen(found)
             setPreflightMessage(
@@ -638,16 +655,18 @@ export const WithdrawQueueForm = ({
         }
       } finally {
         if (!cancelled) {
+          console.log("Validation complete:", {
+            validationKey,
+            isValidating: false,
+          })
           setIsValidating(false)
           setLastValidationKey(validationKey)
         }
       }
     }
 
-    // Only run if we have a new validation key
-    if (validationKey && validationKey !== lastValidationKey) {
-      run()
-    }
+    // Run validation since we have a new non-empty validation key
+    run()
 
     return () => {
       cancelled = true
