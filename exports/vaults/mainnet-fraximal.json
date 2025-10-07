@@ -1,0 +1,506 @@
+[
+  {
+    "wallet": "0x9e25880652f31e86b8edab7381b732a69ada67e0",
+    "amount": "266.458266",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "266458266027239932887",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x290a42e913083edf5aefb241f8a12b306c19f8f9",
+    "amount": "123.445201",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "123445201000000000000",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xeef7b7205caf2bcd71437d9acde3874c3388c138",
+    "amount": "100",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "100000000000000000000",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xddb0277e2031b97d60b3b99476311056f8e9af4b",
+    "amount": "47.486454",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "47486454498091997911",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4e2f395de08c11d28be37fb2f19f6f5869136567",
+    "amount": "34.493935",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "34493935652579960206",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4d05b7d8b81933d1c467ec30ef4d0b7423364d27",
+    "amount": "5.763656",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "5763656000000000000",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x9d30672eed8d514cd1ad009cfe85ea8f0019d37f",
+    "amount": "1",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "1000000000000000000",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4204fdd868ffe0e62f57e6a626f8c9530f7d5ad1",
+    "amount": "0.996377",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "996377198126481968",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x65c8b1562033a324359c1eceb1f4837a642669e7",
+    "amount": "0.290720",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "290720212077440002",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdd192892dcb1d1f92e8856d8100daf549f509045",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "987860987213",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdb611d682cb1ad72fcbacd944a8a6e2606a6d158",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "969825940680",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa66aa61a67ee8dbd4a0dccd6fa6e3b0aaad49bc0",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "897036185328",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe3d37b1b353fee1e7bba0f09963bd6802ff2f1e9",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "886339987417",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4cf9bb91ea8a1aac9f387b0e409b0fbbd79e8f76",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "876713564035",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xce797cebf1ef66dc6db093256f1b086bf7176dbb",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "864779543754",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1572a9bb16a624bd9748c0f365c55935b91aefbf",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "850240926603",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1980475c3a279935ca611c9a41f17974ebc2e050",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "821807538398",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5ac342c4ae3d656193a2bb9a683fde9777c94ba2",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "821807538398",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x58d3d0aac31b61471fb38676556569f46b3519d2",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "793874169755",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x62a79a8fbb36cac23fbbb921aaccaa3d70214542",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "755969907890",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf958bb5671f792a15ffd4f0cdb08cd0baf4850bc",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "738699918995",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc365926c71dae2c7e39d176c9406239318301a3c",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "716209076917",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x2eee44780e129ce48436e2a669828773d5b6e4da",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "694269561303",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3c5faaf770511e403fd907e6d77ac8f5bc699cbe",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "605991100585",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x62dd6ca9d9facf38a39c470c99b9e26b2046acf2",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "602532610838",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8075df8a555048bff338b04e7af5de5ee9565f73",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "596454263502",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x37baa0937e750a22227627404d1a0ad5d4e29299",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "554929406484",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x31a05ebfe951394bec83c1eb47c80d49e45b1b93",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "548729878714",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe9bd9bce3b1ab61f380547ebac49b4d0bfae1c0c",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "539454675460",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x754a68b2facac412bb48c4a810971756dc039aab",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "469334983930",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x11677c5bbee323368f2e3f3655b7ad8656b78897",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "437311817875",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xcfaba3994c45aa03e479000300801ae35b39c388",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "425560020745",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xef585cf8cacb909edaa23e8e8d596b338cb72403",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "422698500313",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8e100ca591bba6ce8b1d174f14312d3dbc066c3c",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "376365456286",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x0773d827fc413535a033cbf0f3fe27440d2826a1",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "365440146385",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7bfee91193d9df2ac0bfe90191d40f23c773c060",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "358276271598",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb46698a692162a35b67deffe327807015ea7c3d9",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "343308699981",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x270d2fa547a6aa19a95c48ad1d7929354e924e1a",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "319302213336",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd3ff664c4a2e505fca9ff9200f9191db3009c8a1",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "312314773007",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x82b2292bb56b2bfd9350defb06f4378c2e5d945c",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "302555802940",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa8ddc541d443d29d61375a3e4e190ac81fb88608",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "301579452186",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x273c90a6e64fa5acb2955c776de0e9002b37f30b",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "246363892009",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd697787787d48888ffb54f333f491f9ebd6a2705",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "237266794038",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x08cce1a81d8c1bad66573d211c2f52fa01c7378a",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "218147449099",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xbb9f14855c91a737ee103f34148a89ef3ee72720",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "213646193627",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc47fae56f3702737b69ed615950c01217ec5c7c8",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "184730783041",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb08d90d1b3fe182674dd2b9f131f8dcb92c36778",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "179543456251",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7f2fccaf717128bdf5efabd67a8ea9a812d5813e",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "177538582141",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xcf3c96b0f299208b085fd3746ffb9a6fe5482523",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "109111485340",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdee7028101832cca78f1fa7331f4c9def10ccf85",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "89873046197",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x2c8e43496a34c430969a42bc88f2f664fea2c8f7",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "89751445962",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3a8315e25378ce9fc0d3279b26ec0576de52c0ff",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "81046717838",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x91414c1b38c7566ed2c833972b08c1d8f3d96aef",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "57494530406",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf93a5f0a4925eec32cd585641c88a498523f383c",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "53976678771",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa9719c3d3df92eb21fc1fdeb0b37c15c5dac47a5",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "12039755776",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8a26f190450fae772baa63f933cfdaf4dd5750af",
+    "amount": "0.000000",
+    "deposit_asset": "FRAXI",
+    "amountRaw": "10389164618",
+    "assetAddress": "0xdbe19d1c3f21b1bb250ca7bdae0687a97b5f77e6",
+    "vault": "Fraximal",
+    "chainId": 1
+  }
+]

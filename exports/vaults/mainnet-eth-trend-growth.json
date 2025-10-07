@@ -1,0 +1,47 @@
+[
+  {
+    "wallet": "0x4e2f395de08c11d28be37fb2f19f6f5869136567",
+    "amount": "15.145239",
+    "deposit_asset": "ETHGROWTH",
+    "amountRaw": "15145239",
+    "assetAddress": "0x6c51041a91c91c86f3f08a72cb4d3f67f1208897",
+    "vault": "ETH-Trend-Growth",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe8af5e8a7dc2b6b88805cff1bb3d63b8ba5d6d30",
+    "amount": "4",
+    "deposit_asset": "ETHGROWTH",
+    "amountRaw": "4000000",
+    "assetAddress": "0x6c51041a91c91c86f3f08a72cb4d3f67f1208897",
+    "vault": "ETH-Trend-Growth",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x65c8b1562033a324359c1eceb1f4837a642669e7",
+    "amount": "1.300000",
+    "deposit_asset": "ETHGROWTH",
+    "amountRaw": "1300000",
+    "assetAddress": "0x6c51041a91c91c86f3f08a72cb4d3f67f1208897",
+    "vault": "ETH-Trend-Growth",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb1d3948f4dcd7aa5e89449080f3d88870ad0137a",
+    "amount": "1.100000",
+    "deposit_asset": "ETHGROWTH",
+    "amountRaw": "1100000",
+    "assetAddress": "0x6c51041a91c91c86f3f08a72cb4d3f67f1208897",
+    "vault": "ETH-Trend-Growth",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa4513032d8fff6128f9b6aacaa420cfad363dc37",
+    "amount": "1",
+    "deposit_asset": "ETHGROWTH",
+    "amountRaw": "1000000",
+    "assetAddress": "0x6c51041a91c91c86f3f08a72cb4d3f67f1208897",
+    "vault": "ETH-Trend-Growth",
+    "chainId": 1
+  }
+]

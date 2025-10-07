@@ -1,0 +1,28 @@
+{
+  "name": "somm-remotion",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:assets": "node scripts/prepare-assets.mjs",
+    "render:stat": "pnpm run prepare:assets && remotion render src/index.tsx AlphaStatCardMotion ../public/assets/social/alpha-stat.mp4 --codec=h264 --crf=18 --pixel-format=yuv420p $npm_config_props",
+    "render:stat:desktop": "pnpm run prepare:assets && remotion render AlphaStatCardMotion $HOME/Desktop/alpha-stat.mp4 --codec=h264 --crf=20 --pixel-format=yuv420p --frames-per-thumbnail=1",
+    "thumb:stat": "pnpm run prepare:assets && remotion still src/index.tsx AlphaStatCardMotion ../public/assets/social/alpha-stat.jpg --frame=1 --image-format=jpeg",
+    "render:thread": "pnpm run prepare:assets && remotion render src/index.tsx AlphaStatCardThread ../public/assets/social/alpha-steth-thread.mp4 --codec=h264 --crf=18 --pixel-format=yuv420p $npm_config_props",
+    "thumb:thread": "pnpm run prepare:assets && remotion still src/index.tsx AlphaStatCardThread ../public/assets/social/alpha-steth-thread.png --frame=96 --image-format=png",
+    "gif:thread": "pnpm run prepare:assets && remotion render src/index.tsx AlphaStatCardThread ../public/assets/social/alpha-steth-thread.gif --codec=gif --width=800 --height=450 --every-nth-frame=2 $npm_config_props",
+    "render:one": "pnpm run prepare:assets && remotion render src/index.tsx AlphaOneClip ../public/assets/social/alpha-one.mp4 --codec=h264 --crf=18 --pixel-format=yuv420p $npm_config_props",
+    "thumb:one": "pnpm run prepare:assets && remotion still src/index.tsx AlphaOneClip ../public/assets/social/alpha-one.jpg --frame=1 --image-format=jpeg",
+    "render:tweet": "pnpm run prepare:assets && remotion render src/index.tsx AlphaStethTweetClip ../public/assets/social/alpha-steth-tweet.mp4 --codec=h264 --crf=18 --pixel-format=yuv420p $npm_config_props"
+  },
+  "dependencies": {
+    "remotion": "^4.0.145",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@remotion/cli": "^4.0.145",
+    "typescript": "^5.4.5",
+    "@types/react": "18.2.61",
+    "@types/react-dom": "18.2.19"
+  }
+}

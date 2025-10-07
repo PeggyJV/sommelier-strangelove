@@ -1,0 +1,632 @@
+[
+  {
+    "wallet": "0x92009a1886ab6cbb80253d0224382ab5e39d80d0",
+    "amount": "28155.447536",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "28155447536",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x1306e209951b1bbb150eddd894b7ebdf29fd0066",
+    "amount": "5835.801037",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "5835801037",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x623987d3cc0d504782bc99bbac7965fe54917d7d",
+    "amount": "2659.159937",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "2659159937",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x6fd57d1902b4bea7add33c87263f879d5a3c0374",
+    "amount": "496.577903",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "496577903",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xa58627a29bb59743ce1d781b1072c59bb1dda86d",
+    "amount": "388.960793",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "388960793",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xafdb0482ff46ae0cda62368f11fe0d79be1d326f",
+    "amount": "244.714637",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "244714637",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xb7911c63824bd5cf0d3263466b94f0f8efdc5312",
+    "amount": "106.442668",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "106442668",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xeef7b7205caf2bcd71437d9acde3874c3388c138",
+    "amount": "100.022983",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "100022983",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x4cd6b970f42b41ee58c2e4b7ab99863d5ae52a23",
+    "amount": "99.104346",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "99104346",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x07365a8e6a9a29d2acb86ec0c55a1b74cc420933",
+    "amount": "97.063203",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "97063203",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xe7d3fb0608e3009658ca4f900f64d93e99bf553e",
+    "amount": "66.599419",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "66599419",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x4e8f87472b690855ece548a0e937a8a486569df1",
+    "amount": "58.094547",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "58094547",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x583921a189436ee33fdac5e1c599d8e0c021baf3",
+    "amount": "46.684150",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "46684150",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x096991d5fd06eaf1fcceaa5c59a951e964743dd8",
+    "amount": "18.783936",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "18783936",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x3749b9ead3681b11317b470a0375d3b4a8182b7f",
+    "amount": "17.698436",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "17698436",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x99bfa37e6700904a8c6602903429ec4d91dfec96",
+    "amount": "16.403769",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "16403769",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xadeed59f446cb0a141837e8f7c22710d759cba65",
+    "amount": "10.127031",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "10127031",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xd248ff403b722e2c6b62ce1e0683d037c3262cc2",
+    "amount": "9.866917",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "9866917",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x10cd831e13211f5c1f2030b6dbd20e5196e3184a",
+    "amount": "9.724019",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "9724019",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xf38876c582ecf41fee76ae8e1274ac30158b69b5",
+    "amount": "9.448184",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "9448184",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xf4847f0646f6ab5261e28ca28a5199283e2f99e0",
+    "amount": "7.784408",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "7784408",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x031fb098e07790fdc989905914166a2352f0f58e",
+    "amount": "3.889011",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "3889011",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x5e70d8385c66cbd79d0ad2fab198ee47ce72fc63",
+    "amount": "3.477175",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "3477175",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x347702366451deb014dbe31348fd23a4f3b989e6",
+    "amount": "3.391405",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "3391405",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xaeceb942f7147b18c418fa417b3d38faac43d547",
+    "amount": "2.314101",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "2314101",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x4f7bee53c1345bf5f1724825e22d00d5a065125b",
+    "amount": "1.948674",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "1948674",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x40c194a49bfe444ac2a56ce9e9e9de2b1bd83a03",
+    "amount": "1.912928",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "1912928",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x083203353fdb14b7195e80c05f38ec8100626a84",
+    "amount": "1.315170",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "1315170",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x8bffe30294b26e5a897d828e310ebf90cf617a14",
+    "amount": "1.007592",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "1007592",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x259be8284691ff9f6fe9f1e09ee46b58a45e55bd",
+    "amount": "0.984295",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "984295",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x8806dafceb42318ef002a94fe0644949464a2a96",
+    "amount": "0.974337",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "974337",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x2b2b623d5b40e8d5d0932abf4bb383b2b42f69c5",
+    "amount": "0.972252",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "972252",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x1222f0baa62e2282bfd01083c7c3732a8c611584",
+    "amount": "0.958035",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "958035",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x0e70ec361649784968f664750b09ab277ab7814d",
+    "amount": "0.884420",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "884420",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xc25a74f2dc4f2b504867b4ee728c53a838db72bd",
+    "amount": "0.519968",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "519968",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x09be92066402ff0e1668d1b6c24a3e9a2a5bb20d",
+    "amount": "0.491495",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "491495",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xbf9ed5a97f1f6563879f964f830fa750d3ecbed4",
+    "amount": "0.388813",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "388813",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x4bd78324ba5a88c8b5ec40c44b9ac33edf4bc4e8",
+    "amount": "0.257438",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "257438",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xe8af5e8a7dc2b6b88805cff1bb3d63b8ba5d6d30",
+    "amount": "0.200000",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "200000",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x4b9cf9153935e17000d896e78f4230ecd3d9d997",
+    "amount": "0.198378",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "198378",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x4b47052498d469ac9521606a67d6f02afeb0985a",
+    "amount": "0.196858",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "196858",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xf4ff772c9b471a5b10c7250e907779e7519106b3",
+    "amount": "0.194833",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "194833",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x6877bb79f680216bbdf01704939037f22193e771",
+    "amount": "0.186733",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "186733",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xbbc219fd3fa9caddaf81e3ee739cd80211c5fb40",
+    "amount": "0.170690",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "170690",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xecec63d08056f157350b2e28ba17d2f5c2a1d5fd",
+    "amount": "0.168162",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "168162",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x46c6715c3d15e427fa138983079bcf73257b1a53",
+    "amount": "0.134865",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "134865",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x7dbd0f75aa91c757ae6564d41dd59669023d57a4",
+    "amount": "0.104848",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "104848",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x0c8025faffca0a11a43d0b13702df48b4c56f6ca",
+    "amount": "0.100000",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "100000",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xc25d79fc4970479b88068ce8891ed9be5799210d",
+    "amount": "0.098846",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "98846",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x78db3729e58ecb6bdfd32e13801e197399b55d45",
+    "amount": "0.097433",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "97433",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xa358b8d0d382ee175c63e9a56f5b1806b8dfecc3",
+    "amount": "0.097383",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "97383",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xe5cb8552a6f00b4bd4973e929145716e5590ca64",
+    "amount": "0.096566",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "96566",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x2b8441ef13333ffa955c9ea5ab5b3692da95260d",
+    "amount": "0.094804",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "94804",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xc332cb1cbdf161601e483b2aa9832219778c9a19",
+    "amount": "0.059359",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "59359",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x4727b513ccfe314859d1ee76b4500131af872465",
+    "amount": "0.048527",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "48527",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x20dee132267ec1eb371a14d19ddc3d3d4276ea3d",
+    "amount": "0.028038",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "28038",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x07ab1fad5f25308fed59975d7147351f4297abf9",
+    "amount": "0.012650",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "12650",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x150dfd58964bb69a6167df8a4c6e34d69d3442a6",
+    "amount": "0.012590",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "12590",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x0027079289dda0197b25aef65d9b49ccfc605ceb",
+    "amount": "0.009912",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "9912",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xfbba5754fb428a9e8d01c4f3106b436c8e924b8e",
+    "amount": "0.009728",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "9728",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x3c4d52965f77731c3fd5753955beb7caab2fe50c",
+    "amount": "0.007625",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "7625",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x158635b9bc4f9a188f138f2640f1561f34c31eeb",
+    "amount": "0.005204",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "5204",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x88613dc163caf52ab920472ac69493123be61a2c",
+    "amount": "0.004671",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "4671",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x156ac784bae328f6afb6403460145ba8b029d3b5",
+    "amount": "0.000693",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "693",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x8db7a537d8478df3c6d95ff33b4270342862957f",
+    "amount": "0.000160",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "160",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xb191efa7ebd03aa9cf1654638f0092f24821248b",
+    "amount": "0.000009",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "9",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x436587a4a539b6c6bfc73e51134fe3aa23d4bbeb",
+    "amount": "0.000001",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "1",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0xe21b06cb9db1cef6b7f4d1cfe55e733cc0160e94",
+    "amount": "0.000001",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "1",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x5c8c26f0f0b772c65ec9ac5b1ba5bccc26812ca7",
+    "amount": "0.000001",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "1",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  },
+  {
+    "wallet": "0x186b12ceaf08fde22e32647fcc800e45876f5bd0",
+    "amount": "0.000001",
+    "deposit_asset": "RYUSD",
+    "amountRaw": "1",
+    "assetAddress": "0x392B1E6905bb8449d26af701Cdea6Ff47bF6e5A8",
+    "vault": "real-yield-usd-arb",
+    "chainId": 42161
+  }
+]

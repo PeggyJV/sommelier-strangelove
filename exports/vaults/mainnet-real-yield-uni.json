@@ -1,0 +1,20 @@
+[
+  {
+    "wallet": "0x425fa07c84752359a4ea146f9bf482e2cd0df636",
+    "amount": "19",
+    "deposit_asset": "RYUNI",
+    "amountRaw": "19000000000000000000",
+    "assetAddress": "0x6a6af5393dc23d7e3db28d28ef422db7c40932b6",
+    "vault": "Real-Yield-UNI",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x69eeae3a39d5365a93081a3d95ee473ba317ad81",
+    "amount": "10",
+    "deposit_asset": "RYUNI",
+    "amountRaw": "10000000000000000000",
+    "assetAddress": "0x6a6af5393dc23d7e3db28d28ef422db7c40932b6",
+    "vault": "Real-Yield-UNI",
+    "chainId": 1
+  }
+]
