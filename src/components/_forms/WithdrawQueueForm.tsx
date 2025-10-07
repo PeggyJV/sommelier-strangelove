@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import {
   FormControl,
   FormErrorMessage,
@@ -117,8 +117,8 @@ export const WithdrawQueueForm = ({
 
   const { boringQueue } = useCreateContracts(cellarConfig)
 
-  const cellarContract = (() => {
-    if (!paidClient) return
+  const cellarContract = useMemo(() => {
+    if (!paidClient) return null
     return getContract({
       address: cellarConfig.cellar.address as `0x${string}`,
       abi: cellarConfig.cellar.abi,
@@ -127,10 +127,15 @@ export const WithdrawQueueForm = ({
         wallet: walletClient,
       },
     })
-  })()
+  }, [
+    paidClient,
+    walletClient,
+    cellarConfig.cellar.address,
+    cellarConfig.cellar.abi,
+  ])
 
-  const withdrawQueueContract = (() => {
-    if (!paidClient) return
+  const withdrawQueueContract = useMemo(() => {
+    if (!paidClient) return null
     return (
       boringQueue ??
       getContract({
@@ -143,7 +148,12 @@ export const WithdrawQueueForm = ({
         },
       })
     )
-  })()
+  }, [
+    boringQueue,
+    paidClient,
+    walletClient,
+    cellarConfig.chain.withdrawQueueAddress,
+  ])
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -164,6 +174,12 @@ export const WithdrawQueueForm = ({
     boolean | null
   >(null)
 
+  // Store actual on-chain discount ranges from contract
+  const [contractMinDiscountBps, setContractMinDiscountBps] =
+    useState<number | null>(null)
+  const [contractMaxDiscountBps, setContractMaxDiscountBps] =
+    useState<number | null>(null)
+
   // Pre-validation of request: simulate on-chain call before enabling Submit
   const [isRequestValid, setIsRequestValid] = useState<
     boolean | null
@@ -177,6 +193,10 @@ export const WithdrawQueueForm = ({
     number | null
   >(null)
 
+  // Track last validation key to prevent unnecessary re-runs
+  const [lastValidationKey, setLastValidationKey] =
+    useState<string>("")
+
   // Preflight: check if queue allows withdraws for selected asset (boring queue)
   useEffect(() => {
     let cancelled = false
@@ -184,21 +204,54 @@ export const WithdrawQueueForm = ({
       try {
         if (!boringQueue || !selectedToken?.address) {
           setIsWithdrawAllowed(null)
+          setContractMinDiscountBps(null)
+          setContractMaxDiscountBps(null)
           return
         }
         const res = await boringQueue.read.withdrawAssets([
           selectedToken.address,
         ])
+        console.log("withdrawAssets response:", {
+          token: selectedToken.symbol,
+          address: selectedToken.address,
+          rawResponse: res,
+          isArray: Array.isArray(res),
+        })
+
+        // Parse the tuple: [allowWithdraws, secondsToMaturity, minimumSecondsToDeadline, minDiscount, maxDiscount, minimumShares]
         const allow = Array.isArray(res)
           ? Boolean(res[0])
           : Boolean(res)
-        if (!cancelled) setIsWithdrawAllowed(allow)
+        const minDiscount =
+          Array.isArray(res) && res.length > 3 ? Number(res[3]) : null
+        const maxDiscount =
+          Array.isArray(res) && res.length > 4 ? Number(res[4]) : null
+
+        console.log("withdrawAssets parsed values:", {
+          allow,
+          minDiscount,
+          maxDiscount,
+        })
+
+        if (!cancelled) {
+          setIsWithdrawAllowed(allow)
+          setContractMinDiscountBps(minDiscount)
+          setContractMaxDiscountBps(maxDiscount)
+        }
+
         logTxDebug("withdraw.preflight", {
           assetOut: selectedToken.address,
           allow,
+          minDiscount,
+          maxDiscount,
+          rawResponse: res,
         })
       } catch (e) {
-        if (!cancelled) setIsWithdrawAllowed(null)
+        if (!cancelled) {
+          setIsWithdrawAllowed(null)
+          setContractMinDiscountBps(null)
+          setContractMaxDiscountBps(null)
+        }
       }
     }
     run()
@@ -237,23 +290,57 @@ export const WithdrawQueueForm = ({
 
   const geo = useGeo()
 
+  // Create stable validation key to prevent unnecessary re-runs
+  const validationKey = useMemo(() => {
+    if (
+      !boringQueue ||
+      !selectedToken?.address ||
+      isNaN(watchWithdrawAmount) ||
+      watchWithdrawAmount <= 0
+    ) {
+      return ""
+    }
+    return `${selectedToken.address}-${watchWithdrawAmount}-${contractMinDiscountBps}-${contractMaxDiscountBps}-${isActiveWithdrawRequest}`
+  }, [
+    boringQueue,
+    selectedToken?.address,
+    watchWithdrawAmount,
+    contractMinDiscountBps,
+    contractMaxDiscountBps,
+    isActiveWithdrawRequest,
+  ])
+
   // Simulate the request with current inputs to pre‑validate before enabling submit
   useEffect(() => {
     let cancelled = false
+
+    // Skip if validation key hasn't changed
+    if (validationKey === lastValidationKey) {
+      return
+    }
+
+    console.log("Validation key changed:", {
+      old: lastValidationKey,
+      new: validationKey,
+    })
+
+    // If validation key is empty, clear state and update last key
+    if (!validationKey) {
+      console.log("Clearing validation state (empty validation key)")
+      setIsRequestValid(null)
+      setPreflightMessage("")
+      setDiscountBpsChosen(null)
+      setEffectiveDeadlineSec(null)
+      setLastValidationKey("")
+      return
+    }
+
     const run = async () => {
       // Only validate for boringQueue path and when an amount is present
       if (!boringQueue || !selectedToken?.address) {
-        setIsRequestValid(null)
-        setPreflightMessage("")
-        setDiscountBpsChosen(null)
-        setEffectiveDeadlineSec(null)
         return
       }
       if (isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0) {
-        setIsRequestValid(null)
-        setPreflightMessage("")
-        setDiscountBpsChosen(null)
-        setEffectiveDeadlineSec(null)
         return
       }
       try {
@@ -264,12 +351,58 @@ export const WithdrawQueueForm = ({
           cellarConfig.cellar.decimals
         )
 
+        // Check if approval is needed before simulating
+        // Only check if we have a valid amount to avoid unnecessary API calls
+        if (
+          cellarContract &&
+          address &&
+          withdrawAmtInBaseDenom > 0n
+        ) {
+          try {
+            const allowance = (await cellarContract.read.allowance([
+              address,
+              getAddress(
+                cellarConfig.boringQueue
+                  ? cellarConfig.boringQueue.address
+                  : cellarConfig.chain.withdrawQueueAddress
+              ),
+            ])) as bigint
+
+            if (allowance < withdrawAmtInBaseDenom) {
+              if (!cancelled) {
+                setIsRequestValid(false)
+                setPreflightMessage(
+                  `Approval required. Click "Withdraw" to approve and proceed.`
+                )
+                setDiscountBpsChosen(null)
+                setEffectiveDeadlineSec(null)
+                setIsValidating(false)
+                setLastValidationKey(validationKey)
+              }
+              return
+            }
+          } catch (approvalCheckError) {
+            console.warn(
+              "Could not check approval, continuing with simulation:",
+              approvalCheckError
+            )
+          }
+        }
+
         const tokenSymbolForRules = (selectedToken?.symbol ||
           "") as string
         const configuredRules: any = (cellarConfig as any)
           ?.withdrawTokenConfig?.[tokenSymbolForRules]
-        const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
-        const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
+
+        // Use on-chain values if available, otherwise fall back to config
+        const minBps =
+          contractMinDiscountBps !== null
+            ? contractMinDiscountBps
+            : Number(configuredRules?.minDiscount ?? 0) * 100
+        const maxBps =
+          contractMaxDiscountBps !== null
+            ? contractMaxDiscountBps
+            : Number(configuredRules?.maxDiscount ?? 0) * 100
         const desiredBps = DISCOUNT_BPS
         const startBps =
           minBps && maxBps
@@ -290,6 +423,21 @@ export const WithdrawQueueForm = ({
         const step = 25
         const upper = maxBps && maxBps > 0 ? maxBps : startBps
         let found: number | null = null
+        let lastError: any = null
+        let firstError: any = null
+        console.log("Starting discount simulation loop:", {
+          startBps,
+          upper,
+          step,
+          minBps,
+          maxBps,
+          contractMinDiscountBps,
+          contractMaxDiscountBps,
+          usingContractValues:
+            contractMinDiscountBps !== null &&
+            contractMaxDiscountBps !== null,
+          token: selectedToken.symbol,
+        })
         for (let bps = startBps; bps <= upper; bps += step) {
           try {
             if (isActiveWithdrawRequest && boringQueueWithdrawals) {
@@ -325,13 +473,31 @@ export const WithdrawQueueForm = ({
               )
             }
             found = bps
+            console.log(`Discount ${bps} BPS succeeded`)
+            // Exit the loop immediately when found
             break
-          } catch (_) {
+          } catch (err) {
+            if (!firstError) firstError = err
+            lastError = err
+            const errMsg = (
+              (err as any)?.cause?.message ||
+              (err as Error).message ||
+              ""
+            ).toString()
+            console.log(
+              `Discount ${bps} BPS failed:`,
+              errMsg.slice(0, 200)
+            )
             continue
           }
         }
         if (!cancelled) {
           if (found !== null) {
+            console.log("Validation successful:", {
+              validationKey,
+              discountBps: found,
+              discountPct: `${(found / 100).toFixed(2)}%`,
+            })
             setIsRequestValid(true)
             setDiscountBpsChosen(found)
             setPreflightMessage(
@@ -341,6 +507,119 @@ export const WithdrawQueueForm = ({
             )
           } else {
             setIsRequestValid(false)
+            // Analyze the first error to provide a helpful message (most informative)
+            const errorToAnalyze = firstError || lastError
+            if (errorToAnalyze) {
+              const errorMsg = (
+                (errorToAnalyze as any)?.cause?.message ||
+                (errorToAnalyze as Error).message ||
+                ""
+              ).toString()
+              console.error(
+                "All withdraw simulations failed. First error:",
+                errorMsg,
+                {
+                  token: selectedToken.symbol,
+                  address: selectedToken.address,
+                  amount: watchWithdrawAmount,
+                  minBps,
+                  maxBps,
+                  startBps,
+                  upper,
+                }
+              )
+
+              if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
+                )
+              ) {
+                setPreflightMessage(
+                  `Withdraw queue is currently not available for ${selectedToken.symbol}.`
+                )
+              } else if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__BadShareAmount"
+                )
+              ) {
+                setPreflightMessage(
+                  `Invalid share amount. Check your withdrawal amount.`
+                )
+              } else if (
+                errorMsg.includes("BoringOnChainQueue__Paused")
+              ) {
+                setPreflightMessage(
+                  `Withdraw queue is currently paused. Please try again later.`
+                )
+              } else if (
+                errorMsg.includes("BoringOnChainQueue__BadDeadline")
+              ) {
+                setPreflightMessage(
+                  `Invalid deadline configuration. Please contact support.`
+                )
+              } else if (
+                errorMsg.includes("BoringOnChainQueue__BadDiscount")
+              ) {
+                const minPct = minBps / 100
+                const maxPct = maxBps / 100
+                const source =
+                  contractMinDiscountBps !== null
+                    ? "on-chain"
+                    : "config"
+                setPreflightMessage(
+                  `Discount validation failed. Expected range (${source}): ${minPct}%–${maxPct}%. The contract may have different values. Error: ${errorMsg.slice(
+                    0,
+                    80
+                  )}`
+                )
+              } else if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__RequestDeadlineExceeded"
+                )
+              ) {
+                setPreflightMessage(
+                  `Request deadline has been exceeded. Please try again.`
+                )
+              } else if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__UserRepeatedlyCallingCancelOnWithdraw"
+                )
+              ) {
+                setPreflightMessage(
+                  `Too many cancel attempts. Please wait before trying again.`
+                )
+              } else if (
+                errorMsg.includes(
+                  "BoringOnChainQueue__NoWithdrawRequest"
+                )
+              ) {
+                setPreflightMessage(
+                  `No active withdraw request found to replace.`
+                )
+              } else if (errorMsg.includes("insufficient")) {
+                setPreflightMessage(
+                  `Insufficient balance or shares to complete this withdrawal.`
+                )
+              } else if (
+                errorMsg.includes("TRANSFER_FROM_FAILED") ||
+                errorMsg.includes("TransferFromFailed")
+              ) {
+                setPreflightMessage(
+                  `Token transfer failed. You may need to approve the contract first. Click "Withdraw" to proceed with approval.`
+                )
+              } else {
+                setPreflightMessage(
+                  `Unable to validate withdrawal: ${errorMsg.slice(
+                    0,
+                    100
+                  )}`
+                )
+              }
+            } else {
+              setPreflightMessage(
+                `No valid discount rate found. Try a different amount or asset.`
+              )
+            }
           }
         }
       } catch (e) {
@@ -375,23 +654,26 @@ export const WithdrawQueueForm = ({
           )
         }
       } finally {
-        if (!cancelled) setIsValidating(false)
+        if (!cancelled) {
+          console.log("Validation complete:", {
+            validationKey,
+            isValidating: false,
+          })
+          setIsValidating(false)
+          setLastValidationKey(validationKey)
+        }
       }
     }
+
+    // Run validation since we have a new non-empty validation key
     run()
+
     return () => {
       cancelled = true
     }
-  }, [
-    boringQueue,
-    selectedToken?.address,
-    selectedToken?.symbol,
-    watchWithdrawAmount,
-    isActiveWithdrawRequest,
-    boringQueueWithdrawals,
-    address,
-    cellarConfig,
-  ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Intentionally only watching validationKey changes to prevent excessive re-validation loops
+  }, [validationKey, lastValidationKey])
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
@@ -1056,15 +1338,24 @@ export const WithdrawQueueForm = ({
         isDisabled={
           isDisabled ||
           (boringQueue ? isWithdrawAllowed === false : false) ||
-          (boringQueue ? isRequestValid === false : false) ||
+          (boringQueue
+            ? isRequestValid === false &&
+              !preflightMessage?.includes("Approval required")
+            : false) ||
           isValidating
         }
-        isLoading={isSubmitting}
+        isLoading={isSubmitting || isValidating}
         fontSize={21}
         py={6}
         px={12}
       >
-        Submit
+        {boringQueue &&
+        isRequestValid === false &&
+        preflightMessage?.includes("Approval required")
+          ? "Approve & Withdraw"
+          : isActiveWithdrawRequest && boringQueue
+          ? "Replace Request"
+          : "Submit"}
       </BaseButton>
       {((useRouter().query.id as string) || _id) ===
         config.CONTRACT.ALPHA_STETH.SLUG &&
@@ -1075,11 +1366,25 @@ export const WithdrawQueueForm = ({
             {preflightMessage}
           </Text>
         )}
+      {boringQueue && isWithdrawAllowed === false && (
+        <Text color="yellow.300" fontSize="sm">
+          {preflightMessage ||
+            `Withdraw queue is currently not available for ${selectedToken.symbol}.`}
+        </Text>
+      )}
       {boringQueue &&
-        (isWithdrawAllowed === false || isRequestValid === false) && (
-          <Text color="yellow.300" fontSize="sm">
+        isWithdrawAllowed !== false &&
+        isRequestValid === false && (
+          <Text
+            color={
+              preflightMessage?.includes("Approval required")
+                ? "blue.300"
+                : "yellow.300"
+            }
+            fontSize="sm"
+          >
             {preflightMessage ||
-              `Withdraw queue is currently not available for ${selectedToken.symbol}.`}
+              `Request not currently valid. Please review inputs and try again.`}
           </Text>
         )}
       {/*waitTime(cellarConfig) !== null && (
