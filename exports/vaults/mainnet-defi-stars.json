@@ -1,0 +1,245 @@
+[
+  {
+    "wallet": "0x0349b3c56adb9e39b5d75fc1df52eee313dd80d1",
+    "amount": "237.164537",
+    "deposit_asset": "STARS",
+    "amountRaw": "237164537000000000000",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8e892a0d75d42c01d477a28b4b6ec6897bf99dc6",
+    "amount": "11.578571",
+    "deposit_asset": "STARS",
+    "amountRaw": "11578571323801187956",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6532a7078ecc95220db3ca4896a9c346accba3b5",
+    "amount": "7.543555",
+    "deposit_asset": "STARS",
+    "amountRaw": "7543555574807843293",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3222d0ab7626f4f9bc9f1070ce1de322b481bda5",
+    "amount": "1.436741",
+    "deposit_asset": "STARS",
+    "amountRaw": "1436741791839770760",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x9d30672eed8d514cd1ad009cfe85ea8f0019d37f",
+    "amount": "1",
+    "deposit_asset": "STARS",
+    "amountRaw": "1000000000000000000",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1cb6868652a00766f30c1ff2202d335e5cea32d1",
+    "amount": "0.500000",
+    "deposit_asset": "STARS",
+    "amountRaw": "500000000000000000",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x65c8b1562033a324359c1eceb1f4837a642669e7",
+    "amount": "0.150330",
+    "deposit_asset": "STARS",
+    "amountRaw": "150330432164197350",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x2598424a05273ca84c8568f9211b911feab8aae2",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "769848322638",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3d95c463726b48c5b8cb0db51994acee7b8e5304",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "761687756723",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x2c87bdf6fd1fa88fc7d2df78c9b1ffd8afbf59a4",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "652413053952",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4fc0aecee8802baa7fb13f623329ffbb9be0036a",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "603258135406",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7637e64b67dc8689ccc109c6e78517636ea977a3",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "501393293627",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf3b055cce606522a7eba65c72d3a3b20db58cda6",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "498974140805",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb3903ad9a6147e0ab9c6ef2a1401344bcda42126",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "365300381123",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5ec74b7e153e46a373b19ddd0b5b00939e49b686",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "299963206644",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc467c9347e74b2c49f41c3c5d1ebc770df594872",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "280602438952",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x67e4dd33541c33d8375eaf8966f51fb0f84f5a46",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "143010742138",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1430d75d2e061d5d42f49fbd299895c88c2aafdc",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "140717986954",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf4bab4898d95bdeb4475c5472ce84b1f8b214150",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "125228203998",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf41ad43f7750bca982b34812eb5298c2c64302da",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "117081901495",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5c95a4c6f66964df324cc95418f8cc9ed6d25d7c",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "93359051875",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x49e52a437d0bb993f612eabf3a9dc55d53e31700",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "62509407125",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf93a5f0a4925eec32cd585641c88a498523f383c",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "61006464757",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x64f89b9de720227851f07cc9208d10358cc2a4ad",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "59813186564",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4f6a473e66c16e29105f89e72105a304677bbfd3",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "51327943587",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5b7bb5402974a672f20577261360c5b5fcba71f8",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "12061927096",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8a474fd1b929306a6827630aefeade443128ec68",
+    "amount": "0.000000",
+    "deposit_asset": "STARS",
+    "amountRaw": "1186160422",
+    "assetAddress": "0x03df2a53cbed19b824347d6a45d09016c2d1676a",
+    "vault": "DeFi-Stars",
+    "chainId": 1
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "target": "es2020",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "public/*": ["../public/*"],
+      "theme/*": ["../src/theme/*"]
+    }
+  },
+  "include": ["src/**/*", "remotion.config.ts"]
+}

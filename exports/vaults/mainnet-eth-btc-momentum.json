@@ -1,0 +1,641 @@
+[
+  {
+    "wallet": "0x60fdafe48d27145cd904bec200283da508bfc8d3",
+    "amount": "1403.951460",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "1403951460874439433577",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc8884ede1ae44bdff60da4b9c542c34a69648a87",
+    "amount": "555.059198",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "555059198278003820620",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x9aa2ffa85103bc5465136d951eacc884060f832e",
+    "amount": "335.746265",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "335746265579617829544",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6ab791754298d6d6d7c182dc1572126b4ed24897",
+    "amount": "322.135704",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "322135704516314143182",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6ce314c39f30488b4a86b8892c81a5b7af83e337",
+    "amount": "205.768000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "205768000000000000000",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4f68532ff32da031c467d4b5529cc1910d0e7348",
+    "amount": "39.347566",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "39347566014517930638",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x40a40469314ca4fd9a075c1ee8a5e5c11ce50bcd",
+    "amount": "21.835276",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "21835276475173453170",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xff0db36bdf740ce4190892e0d930bc411420ef44",
+    "amount": "17.447878",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "17447878379932356904",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x88c3cdf79f47ab7af8efcb081771487ff13bf029",
+    "amount": "15.772944",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "15772944974387178001",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8ce0597e7930d591ff6c870f4c4a38b0ab8a4bae",
+    "amount": "10.044678",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "10044678370434623766",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4bb7277d106c58e6c4c07cb6c3661567c542fd32",
+    "amount": "9.669160",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "9669160174627760218",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3110a855333bfb922aecb1b3542ba2fde28d204f",
+    "amount": "6.264092",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "6264092564031271423",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe043557e0fc2d70fa93c95d569588b031c1e7ffc",
+    "amount": "5.745592",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "5745592062032804297",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe8af5e8a7dc2b6b88805cff1bb3d63b8ba5d6d30",
+    "amount": "4.574716",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "4574716844713378723",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xfcfa39fbb580a72ce0df232f48c5581d64952c01",
+    "amount": "2.947884",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "2947884945710468015",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x65c8b1562033a324359c1eceb1f4837a642669e7",
+    "amount": "2.102714",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "2102714816919533786",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe073800aa8ed7c9185e64c102f083710af78cb0d",
+    "amount": "2.019645",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "2019645367680656332",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf392a5bcbb4b9403c12e4711a20e08261a113596",
+    "amount": "1.369869",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "1369869225995943602",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x52539ccdb0ff2fa0528f41ea6c3628e92d96d812",
+    "amount": "1.157249",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "1157249068943047567",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x91bcaacf3a997e467c8a16fb8c56a80413d0c207",
+    "amount": "1",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "1000000000000000000",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x14e10b89db876cd6ec6081018933e7de9aa75a47",
+    "amount": "0.999999",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "999999999999737856",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdc79ffb2042dccac85a4f79979f8ecdc9cece984",
+    "amount": "0.383708",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "383708421018880712",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa1a94702d5a9519a5ee17729d9fc3fb40de0453c",
+    "amount": "0.178431",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "178431440022754951",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1e18b8b6f27568023e0b577cbee1889391b2f444",
+    "amount": "0.000493",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "493116781066226",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3b9d4c77d8ad59c870acd9a836abdc06165236a9",
+    "amount": "0.000486",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "486322646112193",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x513e7e4ee75abac7f9ba3e8424669386c41be3b8",
+    "amount": "0.000481",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "481612183385084",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc46c7f9bf381c95d83e146fa8d1e7de2e554e2ab",
+    "amount": "0.000317",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "317870757969449",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5b8f8fb66d4ccaf3c4fb056bf69fbd9c2a0f8d9a",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "990009569376",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x341a38b69a6b8f00fad4eed3a2b8528e3fed07ff",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "950000000000",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4d05b7d8b81933d1c467ec30ef4d0b7423364d27",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "944259650519",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x97b5a7a1603829492de6e8593ed4f956f4ee980f",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "922123481562",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xcfaba3994c45aa03e479000300801ae35b39c388",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "905763240182",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf2cd4f73becca0040320ac579d8ac39d996c74f3",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "900075294009",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc451b0191351ce308fdfd779d73814c910fc5ecb",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "780000000000",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x82aba8d820e07a679fb99221d752fa5d359fcaee",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "765539051446",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe7e21d548e8938209aa710ebd468dc02a9573fb3",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "722962249735",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6a4d361b7d0dadf8146dcfe6258a8699ea35eb81",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "707686307234",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x17e75722d23d26756df06bf5a0cab203fbb6cf61",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "679047714336",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x095c2c8824b25da22d9d41232d5444f06d2e1c68",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "650342980517",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb612ec3909f4ba5bda1afe0fe99f4564fa83ac17",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "614102101044",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x096ca3674329bb66dd7cc14d1511dfb7728b9193",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "613099523071",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5de394c5753588e3b88f0f913266dfd8d831aa9b",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "606182434011",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x39888cc1f82eab6daa53dd91e57a1439561ce1f8",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "523938307899",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4e264ee6080bfc6ec89bca450938b42f89e2ff98",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "475758028013",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf61d1d0768f5d61907a5f697a64b39065ad50892",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "462363495549",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd8544f6d70da5c2c286fe2fd8912f420fe7621b2",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "421553731541",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe601043c33d78eaebc8e27e0436e7a0d11efe1b0",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "420262464912",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb709f3c921f94ba26f0dc42932e77b8f076f04c2",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "409086250324",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x92f092d7c8540f97b61c28aa9b8c14c3e42922ce",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "401711305253",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x01c60d4573a900069b11a038fbff7bdd43c92b6c",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "399732058305",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x485f5df0654c8405d6124821e95f093adec1b16b",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "389328328149",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x2cf1dae5e529f3025d5d0036d59da06a024fb706",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "345149954315",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc573fda8a220a974a91a065e81f9aaaf09bf01c0",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "340143062571",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7b2248d6051ff913c6eda77f05be64106290c71e",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "337819360025",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xeccd7127ed5c291fb1e91ef5aa62113d30769345",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "270000000000",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x09ee9497ebb73d66f9a91d50d5a0930dcd30a364",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "260142604237",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1c35d660df34d693233c2f20f3662d69d130edef",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "258137589217",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdab6f20e51a770e776e62c3dbe695683d45cf859",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "236675479524",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc97a4bdcebfcd1e3b0495691fc7a2e91d53e249d",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "210732620002",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x9a406bc8b390ff784b10edb0ba730f5f41f8d41d",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "188665300008",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x752c6ca477c77ef7a3e045e3e08226abaebfc751",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "170099274096",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf6ea9bb57e517a881a1200ae239ea031fa5bb961",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "116889469054",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x527966d40c3b57da9501e4e0a255f3202479f533",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "86263033884",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x40c39193569186ef37774d595c1c1fb3948d7d45",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "73348249512",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf67d9569af280e1f8c1aeb5377ae67659b4881d6",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "58038883764",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd4852b7419f58793ebbe66f2c1382a10c8f6a9ff",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "20800681615",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xbe27f39c86fd998edca078e296e95ca88c05eae9",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "20218607325",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xffd96cda41d3b28f0b58ce5dcb02bc51224c1331",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "555",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x00000000008c4fb1c916e0c88fd4cc402d935e7d",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "2",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7122db0ebe4eb9b434a9f2ffe6760bc03bfbd0e0",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "1",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x0000000099cb7fc48a935bceb9f05bbae54e8987",
+    "amount": "0.000000",
+    "deposit_asset": "ETHBTCMom",
+    "amountRaw": "1",
+    "assetAddress": "0x6e2dac3b9e9adc0cbbae2d0b9fd81952a8d33872",
+    "vault": "ETH-BTC-Momentum",
+    "chainId": 1
+  }
+]
