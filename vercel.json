@@ -1,0 +1,37 @@
+{
+  "functions": {
+    "pages/**/*.tsx": {
+      "maxDuration": 30,
+      "memory": 3008
+    },
+    "pages/**/*.ts": {
+      "maxDuration": 30,
+      "memory": 3008
+    },
+    "pages/api/*.ts": {
+      "maxDuration": 30,
+      "memory": 3008
+    }
+  },
+  "env": {
+    "NODE_OPTIONS": "--max-old-space-size=8192 --max-http-header-size=16384",
+    "UV_THREADPOOL_SIZE": "128",
+    "SKIP_ENV_VALIDATION": "1"
+  },
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--max-old-space-size=8192 --max-http-header-size=16384",
+      "UV_THREADPOOL_SIZE": "128",
+      "NEXT_TELEMETRY_DISABLED": "1",
+      "SKIP_ENV_VALIDATION": "1"
+    }
+  },
+  "framework": "nextjs",
+  "installCommand": "npx pnpm@9 install --no-frozen-lockfile --config.strict-peer-dependencies=false",
+  "github": {
+    "silent": true
+  },
+  "crons": [
+    { "path": "/api/daily-telegram", "schedule": "5 6 * * *" }
+  ]
+}

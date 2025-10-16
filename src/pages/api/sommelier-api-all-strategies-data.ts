@@ -39,54 +39,42 @@ const sommelierAPIAllStrategiesData = async (
 
     //! Whenever theres a new chain supported this needs to be updated
     let allEthereumStrategyData = `https://api.sommelier.finance/dailyData/ethereum/allCellars/${monthAgoEpoch}/latest`
-let allArbitrumStrategyData = `https://api.sommelier.finance/dailyData/arbitrum/allCellars/${monthAgoEpoch}/latest`
-let allOptimismStrategyData = `https://api.sommelier.finance/dailyData/optimism/allCellars/${monthAgoEpoch}/latest`
-let allScrollStrategyData = `https://api.sommelier.finance/dailyData/scroll/allCellars/${monthAgoEpoch}/latest`
-let tvlData = `https://api.sommelier.finance/tvl`
+    let allArbitrumStrategyData = `https://api.sommelier.finance/dailyData/arbitrum/allCellars/${monthAgoEpoch}/latest`
+    let allOptimismStrategyData = `https://api.sommelier.finance/dailyData/optimism/allCellars/${monthAgoEpoch}/latest`
+    // Scroll disabled
+    // let allScrollStrategyData = `https://api.sommelier.finance/dailyData/scroll/allCellars/${monthAgoEpoch}/latest`
+    let tvlData = `https://api.sommelier.finance/tvl`
 
     const [
       allEthereumStrategyDataResponse,
       allArbitrumStrategyDataResponse,
       allOptimismStrategyDataResponse,
-      allScrollStrategyDataResponse,
+      // allScrollStrategyDataResponse,
       tvlDataResponse,
     ] = await Promise.all([
       fetchData(allEthereumStrategyData),
       fetchData(allArbitrumStrategyData),
       fetchData(allOptimismStrategyData),
-      fetchData(allScrollStrategyData),
+      // fetchData(allScrollStrategyData),
       fetchData(tvlData),
     ])
 
-    if (
-      allEthereumStrategyDataResponse.status !== 200 ||
-      allArbitrumStrategyDataResponse.status !== 200 ||
-      allOptimismStrategyDataResponse.status !== 200 ||
-      allScrollStrategyDataResponse.status !== 200 ||
-      tvlDataResponse.status !== 200
-    ) {
-      throw new Error(
-        "failed to fetch data: ETH Strategy Response code: " +
-          allEthereumStrategyDataResponse.status +
-          " Arbitrum Strategy Response code: " +
-          allArbitrumStrategyDataResponse.status +
-          " Optimism Strategy Response code: " +
-          allOptimismStrategyDataResponse.status +
-          " Scroll Strategy Response code: " +
-          allScrollStrategyDataResponse.status +
-          " Tvl Response code:" +
-          tvlDataResponse.status
-      )
-    }
+    // Proceed even if one chain fails; use empty responses for non-200
+    const okEth = allEthereumStrategyDataResponse.status === 200
+    const okArb = allArbitrumStrategyDataResponse.status === 200
+    const okOp = allOptimismStrategyDataResponse.status === 200
+    const okTvl = tvlDataResponse.status === 200
 
-    const fetchedEthData =
-      await allEthereumStrategyDataResponse.json()
-    const fetchedArbitrumData =
-      await allArbitrumStrategyDataResponse.json()
-    const fetchedOptimismData =
-      await allOptimismStrategyDataResponse.json()
-    const fetchedScrollData =
-      await allScrollStrategyDataResponse.json()
+    const fetchedEthData = okEth
+      ? await allEthereumStrategyDataResponse.json()
+      : { Response: {} }
+    const fetchedArbitrumData = okArb
+      ? await allArbitrumStrategyDataResponse.json()
+      : { Response: {} }
+    const fetchedOptimismData = okOp
+      ? await allOptimismStrategyDataResponse.json()
+      : { Response: {} }
+    const fetchedScrollData = { Response: {} as any }
 
     let returnObj = {
       result: {
@@ -96,7 +84,9 @@ let tvlData = `https://api.sommelier.finance/tvl`
       },
     }
 
-    const fetchedTVL = await tvlDataResponse.json()
+    const fetchedTVL = okTvl
+      ? await tvlDataResponse.json()
+      : { Response: {} }
 
     // Do this loop per chain
     // For each key perform transformation
@@ -131,7 +121,10 @@ let tvlData = `https://api.sommelier.finance/tvl`
       transformedData.sort((a: any, b: any) => b.date - a.date)
 
       // Get tvl
-      let tvl = fetchedTVL.Response[cellarAddress]
+      let tvl =
+        fetchedTVL?.Response?.[cellarAddress] ??
+        fetchedTVL?.Response?.[cellarAddress?.toLowerCase?.()] ??
+        0
 
       if (tvl === undefined) {
         tvl = 0
@@ -139,9 +132,7 @@ let tvlData = `https://api.sommelier.finance/tvl`
 
       let shareValue = 0
       if (transformedData.length === 0) {
-        console.warn(
-          `No data found for ${cellarAddress} on Ethereum`
-        )
+        console.warn(`No data found for ${cellarAddress} on Ethereum`)
       } else {
         shareValue = transformedData[0].shareValue
       }
@@ -190,7 +181,12 @@ let tvlData = `https://api.sommelier.finance/tvl`
         transformedData.sort((a: any, b: any) => b.date - a.date)
 
         // Get tvl
-        let tvl = fetchedTVL.Response[cellarAddress + "-arbitrum"]
+        let tvl =
+          fetchedTVL?.Response?.[cellarAddress + "-arbitrum"] ??
+          fetchedTVL?.Response?.[
+            cellarAddress?.toLowerCase?.() + "-arbitrum"
+          ] ??
+          0
 
         if (tvl === undefined) {
           tvl = 0
@@ -198,7 +194,9 @@ let tvlData = `https://api.sommelier.finance/tvl`
 
         let shareValue = 0
         if (transformedData.length === 0) {
-          console.warn(`No data found for ${cellarAddress} on Arbitrum`)
+          console.warn(
+            `No data found for ${cellarAddress} on Arbitrum`
+          )
         } else {
           shareValue = transformedData[0].shareValue
         }
@@ -248,7 +246,12 @@ let tvlData = `https://api.sommelier.finance/tvl`
         transformedData.sort((a: any, b: any) => b.date - a.date)
 
         // Get tvl
-        let tvl = fetchedTVL.Response[cellarAddress + "-optimism"]
+        let tvl =
+          fetchedTVL?.Response?.[cellarAddress + "-optimism"] ??
+          fetchedTVL?.Response?.[
+            cellarAddress?.toLowerCase?.() + "-optimism"
+          ] ??
+          0
 
         if (tvl === undefined) {
           tvl = 0
@@ -256,7 +259,9 @@ let tvlData = `https://api.sommelier.finance/tvl`
 
         let shareValue = 0
         if (transformedData.length === 0) {
-          console.warn(`No data found for ${cellarAddress} on Optimism`)
+          console.warn(
+            `No data found for ${cellarAddress} on Optimism`
+          )
         } else {
           shareValue = transformedData[0].shareValue
         }
@@ -268,57 +273,6 @@ let tvlData = `https://api.sommelier.finance/tvl`
           shareValue: shareValue,
           tvlTotal: tvl,
           chain: chainSlugMap.OPTIMISM.id,
-        }
-
-        returnObj.result.data.cellars.push(cellarObj)
-      }
-    )
-
-    // ! Scroll transform
-    Object.keys(fetchedScrollData.Response).forEach(
-      (cellarAddress) => {
-        // If the cellar address is not in the CellaAddressDataMap skip it
-        if (
-          CellaAddressDataMap[
-            cellarAddress!.toString().toLowerCase() + "-scroll"
-          ] === undefined
-        ) {
-          console.warn(`${cellarAddress} not a valid cellar address`)
-          return
-        }
-
-        let cellarDecimals =
-          CellaAddressDataMap[
-            cellarAddress!.toString().toLowerCase() + "-scroll"
-          ].config.cellar.decimals
-
-        let transformedData = fetchedScrollData.Response[
-          cellarAddress
-        ].map((dayData: any) => ({
-          date: dayData.unix_seconds,
-          // Multiply by cellarDecimals and drop any decimals
-          shareValue: Math.floor(
-            dayData.share_price * 10 ** cellarDecimals
-          ).toString(),
-        }))
-
-        // Order by descending date
-        transformedData.sort((a: any, b: any) => b.date - a.date)
-
-        // Get tvl
-        let tvl = fetchedTVL.Response[cellarAddress + "-scroll"]
-
-        if (tvl === undefined) {
-          tvl = 0
-        }
-
-        // Create a new response object with the transformed data
-        let cellarObj = {
-          id: cellarAddress.toLowerCase() + "-scroll",
-          dayDatas: transformedData,
-          shareValue: transformedData[0].shareValue,
-          tvlTotal: tvl,
-          chain: chainSlugMap.SCROLL.id,
         }
 
         returnObj.result.data.cellars.push(cellarObj)

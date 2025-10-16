@@ -98,7 +98,6 @@ export const createApyChangeDatum = ({
     apyValues = rollingAverage(apyValues, smoothDuration)
     //}
   } else {
-    console.log("Not smoothing")
     // Calculate overall (non daily) APY values without smoothing
     apyValues = data.map((item) => {
       const current = new Date(item.date * 1000)

@@ -39,6 +39,9 @@ export const depositAssetDefaultValue = (config: ConfigProps) => {
   ) {
     return "USDT"
   }
+  if (config.cellarNameKey === CellarNameKey.ALPHA_STETH) {
+    return "WETH"
+  }
   return "USDC"
 }
 
@@ -53,7 +56,8 @@ export const isBondedDisabled = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
   )
 }
 
@@ -94,7 +98,8 @@ export const isAPYEnabled = (config: ConfigProps) => {
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey ===
-      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD
+      CellarNameKey.TEST_ARBITRUM_REAL_YIELD_USD ||
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
   )
 }
 
@@ -384,33 +389,25 @@ export const isUseBigBacktestingModal = (config: ConfigProps) => {
   return "2xl"
 }
 
+// Launch dates and UI toggles
+export const LAUNCH_DATE_ALPHA_STETH = "2025-08-19T00:00:00Z"
+
 export const apyLabel = (config: ConfigProps) => {
   if (
     (config.cellar.key !== CellarKey.CELLAR_V0815 &&
       config.cellar.key !== CellarKey.CELLAR_V0816) ||
     config.cellarNameKey === CellarNameKey.TURBO_SWETH
   ) {
-    if (
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-      config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
-      config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-      config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
-      config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-      config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-      config.cellarNameKey ===
-        CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
-    ) {
-      return "Estimated APY"
+    // For Alpha stETH, show Net Rewards label
+    if (config.cellarNameKey === CellarNameKey.ALPHA_STETH) {
+      return "Net Rewards"
     }
     return "Net APY"
   }
-  return "Net APY"
+  // Legacy cellar keys use Net APY by default; Alpha stETH override above
+  return config.cellarNameKey === CellarNameKey.ALPHA_STETH
+    ? "Net Rewards"
+    : "Net APY"
 }
 
 // TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
@@ -483,6 +480,16 @@ export const isEstimatedApyEnable = (config: ConfigProps) => {
     config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
     config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
     config.cellarNameKey === CellarNameKey.TURBO_SOMM
+  ) {
+    return true
+  }
+  return false
+}
+
+export const isWithdrawQueueEnabled = (config: ConfigProps) => {
+  if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_LINK ||
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
   ) {
     return true
   }
@@ -601,9 +608,18 @@ export const estimatedApyValue = (config: ConfigProps) => {
       formatted: "6.0%",
     }
   }
+
+  // Default return for unmatched cases
+  return {
+    value: 0,
+    formatted: "0.00%",
+  }
 }
 export const showNetValueInAsset = (config: ConfigProps) => {
-  if (config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH) {
+  if (
+    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH ||
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH
+  ) {
     return true
   }
   return false

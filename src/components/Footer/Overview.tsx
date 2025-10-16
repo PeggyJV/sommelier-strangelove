@@ -11,7 +11,6 @@ export const Overview = () => {
   const [tvlData, setTotalTVL] = useState<GetTVLDataQuery | null>(
     null
   )
-  const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoadingTVL] = useState(false) // Added isLoadingTVL state
 
   useEffect(() => {
@@ -22,7 +21,6 @@ export const Overview = () => {
       })
       .catch((error) => {
         console.log("Error from fetchTVLData", error) // Log errors
-        setError(error)
       })
       .finally(() => {
         setIsLoadingTVL(false) // Reset loading state in either case (success/failure)

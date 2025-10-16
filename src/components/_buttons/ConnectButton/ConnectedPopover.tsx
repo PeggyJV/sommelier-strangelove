@@ -9,6 +9,14 @@ import {
   Spinner,
   Text,
   Stack,
+  Box,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  useDisclosure,
+  Button,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import truncateWalletAddress from "src/utils/truncateWalletAddress"
@@ -29,6 +37,7 @@ import { chainConfig } from "data/chainConfig"
 import { tokenConfig, tokenConfigMap } from "data/tokenConfig"
 import { useImportToken } from "hooks/web3/useImportToken"
 import { getAddress } from "viem"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 export const ConnectedPopover = () => {
   const { addToast, close } = useBrandedToast()
@@ -37,8 +46,7 @@ export const ConnectedPopover = () => {
   const { data: ensName } = useEnsName({
     address,
   })
-  const { data: ensAvatar } =
-    useEnsAvatar({ name: address })
+  const { data: ensAvatar } = useEnsAvatar({ name: address })
 
   const chainObj = chainConfig.find((c) => c.wagmiId === chain?.id)
   const sommToken = tokenConfig.find(
@@ -92,7 +100,6 @@ export const ConnectedPopover = () => {
       account: address,
     })
     disconnect()
-    window.location.reload()
   }
 
   const walletAddressIcon = () => {
@@ -129,28 +136,154 @@ export const ConnectedPopover = () => {
 
   const isLoading = isConnecting && !address
 
+  const shortAddress = address
+    ? `${address.slice(0, 6)}...${address.slice(-4)}`
+    : ""
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const isMobile = !useBetterMediaQuery("(min-width: 768px)")
+
+  if (isMobile) {
+    return (
+      <>
+        <BaseButton
+          variant="sommOutline"
+          borderRadius="full"
+          w="full"
+          minH={{ base: "44px", md: "48px" }}
+          pl={{ base: 3, md: 6 }}
+          pr={{ base: 3, md: 12 }}
+          minW={{ base: 0, md: "176px" }}
+          maxW="100%"
+          zIndex={401}
+          isLoading={isLoading}
+          position="relative"
+          _hover={{ bg: "purple.dark" }}
+          onClick={onOpen}
+        >
+          <HStack
+            spacing={2}
+            align="center"
+            justify="space-between"
+            maxW="100%"
+            w="full"
+          >
+            <HStack spacing={2} minW={0} flex={1}>
+              {isLoading ? <Spinner size="xs" /> : undefined}
+              {walletAddressIcon()}
+              <Text whiteSpace="nowrap" isTruncated maxW="100%">
+                {ensName ? ensName : shortAddress}
+              </Text>
+            </HStack>
+            <Box>
+              <ChevronDownIcon />
+            </Box>
+          </HStack>
+        </BaseButton>
+
+        <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
+          <DrawerOverlay />
+          <DrawerContent bg="surface.bg" borderTopRadius={16}>
+            <DrawerHeader
+              borderBottomWidth="1px"
+              borderColor="surface.tertiary"
+            >
+              Wallet
+            </DrawerHeader>
+            <DrawerBody>
+              <Stack spacing={2}>
+                <Button
+                  variant="ghost"
+                  height="48px"
+                  justifyContent="flex-start"
+                  onClick={() => {
+                    window.open(
+                      `${chain?.blockExplorers?.default.url}/address/${address}`,
+                      "_blank"
+                    )
+                    onClose()
+                  }}
+                  _hover={{ bg: "purple.dark" }}
+                >
+                  {`View on ${chain?.blockExplorers?.default.name}`}
+                </Button>
+                <Button
+                  variant="ghost"
+                  height="48px"
+                  justifyContent="flex-start"
+                  onClick={() => {
+                    handleCopyAddressToClipboard()
+                    onClose()
+                  }}
+                  _hover={{ bg: "purple.dark" }}
+                >
+                  Copy to clipboard
+                </Button>
+                <Button
+                  variant="ghost"
+                  height="48px"
+                  justifyContent="flex-start"
+                  onClick={() => {
+                    onDisconnect()
+                    onClose()
+                  }}
+                  _hover={{ bg: "purple.dark" }}
+                >
+                  Disconnect Wallet
+                </Button>
+                <Button
+                  variant="ghost"
+                  height="48px"
+                  justifyContent="flex-start"
+                  onClick={() => {
+                    handleImportToken()
+                    onClose()
+                  }}
+                  _hover={{ bg: "purple.dark" }}
+                >
+                  Import SOMM token to Wallet
+                </Button>
+              </Stack>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      </>
+    )
+  }
+
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
         <BaseButton
-          bg="none"
-          borderWidth={2}
-          borderColor="purple.base"
+          variant="sommOutline"
           borderRadius="full"
-          w="auto"
+          w="full"
+          minH={{ base: "44px", md: "48px" }}
+          pl={{ base: 3, md: 6 }}
+          pr={{ base: 3, md: 12 }}
+          minW={{ base: 0, md: "176px" }}
+          maxW="100%"
           zIndex={401}
           isLoading={isLoading}
-          fontFamily="Haffer"
-          fontSize={12}
-          _hover={{
-            bg: "purple.dark",
-          }}
+          position="relative"
+          _hover={{ bg: "purple.dark" }}
         >
-          <HStack>
-            {isLoading ? <Spinner size="xs" /> : undefined}
-            {ensName ? ensName : truncateWalletAddress(address)}
-            {walletAddressIcon()}
-            <ChevronDownIcon />
+          <HStack
+            spacing={2}
+            align="center"
+            justify="space-between"
+            maxW="100%"
+            w="full"
+          >
+            <HStack spacing={2} minW={0} flex={1}>
+              {isLoading ? <Spinner size="xs" /> : undefined}
+              {walletAddressIcon()}
+              <Text whiteSpace="nowrap" isTruncated maxW="100%">
+                {ensName ? ensName : shortAddress}
+              </Text>
+            </HStack>
+            <Box>
+              <ChevronDownIcon />
+            </Box>
           </HStack>
         </BaseButton>
       </PopoverTrigger>

@@ -10,7 +10,8 @@ import {
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
 import { ExternalLinkIcon, InformationIcon } from "components/_icons"
-import { getKeplr, mainnetChains, useAccount } from "graz"
+import { getKeplr, useAccount } from "graz"
+import { SOMMELIER_CHAIN_ID } from "utils/grazChains"
 import { useBrandedToast } from "hooks/chakra"
 import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
@@ -31,7 +32,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
   const onAutofillClick = async (isValidateAddress?: boolean) => {
     try {
       const keplr = getKeplr()
-      const key = await keplr.getKey(mainnetChains.sommelier.chainId)
+      const key = await keplr.getKey(SOMMELIER_CHAIN_ID)
       if (!key.bech32Address) throw new Error("Address not defined")
       setValue(
         "address",

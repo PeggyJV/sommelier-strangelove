@@ -13,8 +13,8 @@ import {
   MenuOptionGroup,
   Text,
   useTheme,
+  useSize,
 } from "@chakra-ui/react"
-import { useSize } from "@chakra-ui/react-use-size"
 import { useRef, useState, useEffect, ChangeEvent } from "react"
 import { FaChevronDown } from "react-icons/fa"
 import { getTokenConfig, Token } from "data/tokenConfig"
@@ -25,6 +25,7 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
+import { depositAssetDefaultValue } from "data/uiConfig"
 import {
   ActiveAssetIcon,
   CellarGradientIcon,
@@ -43,7 +44,7 @@ export const Menu = ({
   value,
   onChange,
   isDisabled,
-} : MenuProps) => {
+}: MenuProps) => {
   const { colors } = useTheme()
   const menuRef = useRef(null)
   const { width } = useSize(menuRef) ?? { width: 0 }
@@ -64,47 +65,85 @@ export const Menu = ({
     depositTokens,
     cellarConfig.chain.id
   ) as Token[]
+
+  // Get the default deposit asset for this cellar
+  const defaultAssetSymbol = depositAssetDefaultValue(cellarConfig)
+  const defaultToken =
+    depositTokenConfig.find(
+      (token) => token.symbol === defaultAssetSymbol
+    ) || depositTokenConfig[0]
+
   const [selectedToken, setSelectedToken] = useState<
     Token | undefined
-  >(depositTokenConfig[0]) // First one is always active asset
+  >(defaultToken)
+
+  // Restore last used values from sessionStorage
+  useEffect(() => {
+    try {
+      const key = `deposit:last:${cellarConfig.cellar.address}`
+      const raw = sessionStorage.getItem(key)
+      if (raw) {
+        const parsed = JSON.parse(raw) as {
+          tokenSymbol?: string
+          amount?: number
+        }
+        if (parsed?.tokenSymbol) {
+          const found = depositTokenConfig.find(
+            (t) => t.symbol === parsed.tokenSymbol
+          )
+          if (found) {
+            setSelectedToken(found)
+            onChange(found)
+          }
+        }
+        if (
+          typeof parsed?.amount === "number" &&
+          !Number.isNaN(parsed.amount)
+        ) {
+          setValue("depositAmount", parsed.amount)
+        }
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const setMax = () => {
     // analytics.track("deposit.max-selected", {
     //   value: selectedTokenBalance?.value?.toString(),
     // })
 
-    return setValue(
-      "depositAmount",
-      parseFloat(
-        toEther(
-          selectedTokenBalance?.value,
-          selectedTokenBalance?.decimals,
-          false,
-          6
-        )
+    const amt = parseFloat(
+      toEther(
+        selectedTokenBalance?.value,
+        selectedTokenBalance?.decimals,
+        false,
+        6
       )
     )
+    try {
+      const key = `deposit:last:${cellarConfig.cellar.address}`
+      const payload = {
+        tokenSymbol: (selectedToken || value)?.symbol,
+        amount: amt,
+      }
+      sessionStorage.setItem(key, JSON.stringify(payload))
+    } catch {}
+    return setValue("depositAmount", amt)
   }
   const [displayedBalance, setDisplayedBalance] = useState(0)
-  const [isLoadingPrice, setIsLoadingPrice] = useState(false) // TODO: if coingecko ends up being kinda slow use this to render loading icon
   useEffect(() => {
     const fetchAndUpdateBalance = async () => {
       if (rawDepositAmount) {
-        setIsLoadingPrice(true) // Start the loading state
-
         try {
           const price = await fetchCoingeckoPrice(
             selectedToken!,
             "usd"
           )
-          console.log("price", price)
           const newBalance = rawDepositAmount * Number(price || 0)
           setDisplayedBalance(newBalance)
         } catch (error) {
           console.error("Error fetching price:", error)
         }
-
-        setIsLoadingPrice(false) // End the loading state
       } else {
         setDisplayedBalance(0)
       }
@@ -233,6 +272,17 @@ export const Menu = ({
                       setSelectedToken(token)
                       setDisplayedBalance(0)
                       setValue("depositAmount", 0)
+                      try {
+                        const key = `deposit:last:${cellarConfig.cellar.address}`
+                        const payload = {
+                          tokenSymbol: token.symbol,
+                          amount: 0,
+                        }
+                        sessionStorage.setItem(
+                          key,
+                          JSON.stringify(payload)
+                        )
+                      } catch {}
                     }}
                   >
                     <HStack justify="space-between">
@@ -337,6 +387,15 @@ export const Menu = ({
                 ) // Keep token decimal places as max
                 event.target.value = val
               }
+              // persist on change (debounced via browser task queue)
+              try {
+                const key = `deposit:last:${cellarConfig.cellar.address}`
+                const payload = {
+                  tokenSymbol: (selectedToken || value)?.symbol,
+                  amount: Number(val),
+                }
+                sessionStorage.setItem(key, JSON.stringify(payload))
+              } catch {}
             },
             required: "Enter amount",
             valueAsNumber: true,
@@ -372,6 +431,7 @@ export const Menu = ({
             },
           })}
         />
+
         <HStack spacing={0} fontSize="11px" textAlign="right" pr="2">
           <Text as="span">
             $ {Number(displayedBalance.toFixed(2)).toLocaleString()}

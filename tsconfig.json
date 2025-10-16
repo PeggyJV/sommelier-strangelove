@@ -8,34 +8,77 @@
     "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
     "paths": {
-      "data/*": ["src/data/*"],
-      "components/*": ["src/components/*"],
-      "context/*": ["src/context/*"],
-      "hooks/*": ["src/hooks/*"],
-      "pages/*": ["src/pages/*"],
-      "public/*": ["public/*"],
-      "generated/*": ["src/generated/*"],
-      "queries/*": ["src/queries/*"],
-      "theme/*": ["src/theme/*"],
-      "types/*": ["src/types/*"],
-      "utils/*": ["src/utils/*"]
+      "data/*": [
+        "src/data/*"
+      ],
+      "components/*": [
+        "src/components/*"
+      ],
+      "context/*": [
+        "src/context/*"
+      ],
+      "providers/*": [
+        "src/providers/*"
+      ],
+      "hooks/*": [
+        "src/hooks/*"
+      ],
+      "pages/*": [
+        "src/pages/*"
+      ],
+      "public/*": [
+        "public/*"
+      ],
+      "generated/*": [
+        "src/generated/*"
+      ],
+      "queries/*": [
+        "src/queries/*"
+      ],
+      "theme/*": [
+        "src/theme/*"
+      ],
+      "types/*": [
+        "src/types/*"
+      ],
+      "utils/*": [
+        "src/utils/*"
+      ],
+      "i18n/*": [
+        "src/i18n/*"
+      ]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2020"
+    "target": "es2020",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/**/*",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ],
   "include": [
-    "next-env.d.ts",
     "env.d.ts",
+    "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "types.d.ts"
+    "types.d.ts",
+    ".next/types/**/*.ts"
   ]
 }

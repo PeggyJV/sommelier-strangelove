@@ -29,7 +29,7 @@ export const CardStat: FC<CardStatProps> = ({
     <VStack
       flex={1}
       align="flex-start"
-      whiteSpace="nowrap"
+      minW={0}
       spacing={0}
       {...rest}
     >
@@ -51,12 +51,16 @@ export const CardStat: FC<CardStatProps> = ({
           )}
         </HStack>
       </Tooltip>
-      <HStack spacing={1} align="center">
+      <HStack spacing={1} align="center" minW={0} w="full">
         <Flex
           align="center"
-          whiteSpace="break-spaces"
           fontSize="20px"
           fontWeight="bold"
+          minW={0}
+          w="full"
+          overflow="hidden"
+          textOverflow="ellipsis"
+          whiteSpace={{ base: "nowrap", md: "normal" }}
         >
           {children}
         </Flex>

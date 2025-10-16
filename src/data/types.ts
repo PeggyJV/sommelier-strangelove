@@ -14,6 +14,7 @@ export enum CellarKey {
   CELLAR_V2 = "CELLAR_V2",
   CELLAR_V2PT5 = "CELLAR_V2PT5",
   CELLAR_V2PT6 = "CELLAR_V2PT6",
+  BORING_VAULT = "BORING_VAULT",
 }
 export enum CellarRouterKey {
   CELLAR_ROUTER_V0815 = "CELLAR_ROUTER_V0815",
@@ -22,6 +23,7 @@ export enum CellarRouterKey {
 
 export enum CellarNameKey {
   AAVE = "AAVE",
+  ALPHA_STETH = "ALPHA_STETH",
   ETH_BTC_MOM = "ETH_BTC_MOM",
   ETH_BTC_TREND = "ETH_BTC_TREND",
   STEADY_ETH = "STEADY_ETH",
@@ -57,7 +59,6 @@ export enum CellarNameKey {
   REAL_YIELD_ETH_OPT = "REAL_YIELD_ETH_OPT",
   TURBO_EZETH = "TURBO_EZETH",
   REAL_YIELD_ETH_SCROLL = "REAL_YIELD_ETH_SCROLL",
-
 }
 
 export interface Badge {
@@ -74,7 +75,7 @@ export interface ConfigProps {
     address: string
     imagePath: string
   }
-  cellarRouter: {
+  cellarRouter?: {
     address: string
     abi: Abi
     key: CellarRouterKey
@@ -90,6 +91,31 @@ export interface ConfigProps {
     address: string
     abi: Abi
     key: StakerKey
+  }
+  lens?: {
+    address: string
+    abi: Abi
+  }
+  teller?: {
+    address: string
+    abi: Abi
+  }
+  boringQueue?: {
+    address: string
+    abi: Abi
+  }
+  boringVault?: boolean
+  accountant?: {
+    address: string
+    abi: Abi
+  }
+  withdrawTokenConfig?: {
+    [key: string]: {
+      minDiscount: number
+      maxDiscount: number
+      minimumSecondsToDeadline: number
+      minimumShares: number
+    }
   }
   customReward?: CustomReward
   badges?: Badge[]
@@ -146,6 +172,7 @@ export interface CustomReward {
 export interface CellarData {
   isContractNotReady?: boolean
   deprecated?: boolean
+  isHero?: boolean
   name: string
   slug: string
   dashboard: string
@@ -187,6 +214,34 @@ export interface CellarData {
     question: string
     answer: string
   }[]
+}
+
+export interface BoringCellarData extends CellarData {
+  lens?: {
+    address: string
+    abi: Abi
+  }
+  teller?: {
+    address: string
+    abi: Abi
+  }
+  boringQueue?: {
+    address: string
+    abi: Abi
+  }
+  boringVault?: boolean
+  accountant?: {
+    address: string
+    abi: Abi
+  }
+  withdrawTokenConfig?: {
+    [key: string]: {
+      minDiscount: number
+      maxDiscount: number
+      minimumSecondsToDeadline: number
+      minimumShares: number
+    }
+  }
 }
 export interface CellarDataMap {
   [key: string]: CellarData

@@ -2,46 +2,57 @@ import { useQuery } from "@tanstack/react-query"
 import { getAllContracts } from "data/actions/common/getAllContracts"
 import { http, usePublicClient, useWalletClient } from "wagmi"
 import { chainConfig } from "data/chainConfig"
-import { INFURA_API_KEY } from "src/context/rpc_context"
+import {
+  INFURA_API_KEY,
+  ALCHEMY_API_KEY,
+} from "src/context/rpc_context"
 import { createPublicClient } from "viem"
 
 export const useAllContracts = () => {
-  const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
-
-  // Prepare the providers and signers map
-  const providerMap = new Map()
-  const signerMap = new Map()
-
-  // Current chain
-  let chainId = publicClient?.chain.id
-
-  chainConfig.forEach((chain) => {
-    // Only set provider for the current chain
-    if (chain.wagmiId !== chainId) {
-      // Create a new provider for the non-current chain
-      providerMap.set(
-        chain.id,
-        createPublicClient({
-          chain: chain.viemChain,
-          transport: http(`${chain.infuraRpcUrl}/${INFURA_API_KEY}`)
-        })
-      )
-    } else {
-      // Only set signer for the current chain
-      providerMap.set(chain.id, publicClient)
-      signerMap.set(chain.id, walletClient)
-    }
-  })
+  const walletClient = useWalletClient()
 
   const query = useQuery({
     queryKey: [
       "USE_ALL_STRATEGIES_CONTRACTS",
-      { signer: walletClient, provider: publicClient },
+      publicClient?.chain?.id,
     ],
-    queryFn:() => getAllContracts(providerMap, signerMap)
-  }
-  )
+    queryFn: () => {
+      const providerMap = new Map()
+      const signerMap = new Map()
+
+      const chainId = publicClient?.chain?.id
+
+      chainConfig.forEach((chain) => {
+        // Always use paid RPC providers for reads instead of wallet's public client
+        // Priority: Alchemy > Infura > fallback to public RPC
+        let rpcUrl: string | undefined
+
+        if (chain.alchemyRpcUrl && ALCHEMY_API_KEY) {
+          rpcUrl = `${chain.alchemyRpcUrl}/${ALCHEMY_API_KEY}`
+        } else if (chain.infuraRpcUrl && INFURA_API_KEY) {
+          rpcUrl = `${chain.infuraRpcUrl}/${INFURA_API_KEY}`
+        }
+        // If neither paid provider is available, http() without URL will use public RPCs
+
+        providerMap.set(
+          chain.id,
+          createPublicClient({
+            chain: chain.viemChain,
+            transport: http(rpcUrl),
+          })
+        )
+
+        // Only set signer when chain matches the connected wallet
+        if (chain.wagmiId === chainId) {
+          signerMap.set(chain.id, walletClient)
+        }
+      })
+
+      return getAllContracts(providerMap, signerMap)
+    },
+    enabled: !!publicClient?.chain?.id,
+  })
 
   return query
 }

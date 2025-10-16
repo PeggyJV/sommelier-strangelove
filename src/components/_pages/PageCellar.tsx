@@ -24,8 +24,20 @@ import { TokenPriceChartProvider } from "data/context/tokenPriceChartContext"
 import { TokenPricePerfomanceCard } from "components/_cards/TokenPricePerfomaceCard"
 import { ApyChartProvider } from "data/context/apyChartContext"
 import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
+import { InView } from "react-intersection-observer"
 import { isComingSoon } from "utils/isComingSoon"
 import { InfoBanner } from "components/_banners/InfoBanner"
+import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
+import dynamic from "next/dynamic"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
+import { useState } from "react"
+import { useUserBalance } from "data/hooks/useUserBalance"
+import { config as utilConfig } from "utils/config"
+import { Box, Image, Text, Button } from "@chakra-ui/react"
+
+import { useAccount } from "wagmi"
 
 const h2Styles: HeadingProps = {
   as: "h2",
@@ -40,6 +52,42 @@ export interface PageCellarProps {
 
 const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const cellarConfig = cellarDataMap[id].config
+  const isAlphaSteth = id === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+  const isRealYieldEth =
+    id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
+  const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
+  const { isOpen, onClose, type, setIsOpen } = useDepositModalStore()
+  const { isConnected } = useAccount()
+  const router = useRouter()
+  const DynamicMigrationModal = useMemo(
+    () =>
+      dynamic(
+        () =>
+          import("components/_modals/MigrationModal").then((m) => ({
+            default: m.MigrationModal,
+          })),
+        { ssr: false, loading: () => null }
+      ),
+    []
+  )
+
+  // Deep-link: ?action=deposit → open deposit modal (after wallet/network checks on page)
+  useEffect(() => {
+    const action = router.query?.action
+    if (action === "deposit") {
+      // Open the deposit modal for this vault
+      setIsOpen({ id, type: "deposit" })
+    }
+  }, [router.query?.action, id, setIsOpen, router])
+
+  // Check if user should see migration prompt for Real Yield ETH or Turbo stETH
+
+  // Check if Alpha stETH vault has available capacity (not at max TVL)
+  const showMigrationForSourceVault = useMemo(() => {
+    if (!isRealYieldEth && !isTurboSteth) return false
+    // You could add additional checks here for Alpha stETH capacity if needed
+    return true
+  }, [isRealYieldEth, isTurboSteth])
   const staticCellarData = cellarDataMap[id]
   const cellarAddress = cellarDataMap[id].config.id
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
@@ -48,57 +96,19 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
   const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
-  const isRealYield =
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-
-  const dateRange = useMemo(() => {
-    const now = new Date()
-    const currentDay = now.getDay()
-
-    // Adjust the current date to the most recent Wednesday
-    const wednesday = new Date(now)
-    if (currentDay !== 3) {
-      // Calculate the offset to find the previous or the same Wednesday
-      const offset =
-        currentDay < 3 ? -(currentDay + 4) : -(currentDay - 3)
-      wednesday.setDate(now.getDate() + offset)
-    }
-
-    // Set the next Tuesday date by adding 6 days to Wednesday
-    const nextTuesday = new Date(wednesday.getTime())
-    nextTuesday.setDate(wednesday.getDate() + 6)
-
-    return {
-      start: wednesday.toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      }),
-      end: nextTuesday.toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      }),
-    }
-  }, [])
-  
+  const isMobileWidth = useBetterMediaQuery("(max-width: 768px)")
+  const [showBackChip, setShowBackChip] = useState(false)
+  useEffect(() => {
+    if (!isMobileWidth) return
+    const onScroll = () => setShowBackChip(window.scrollY > 400)
+    onScroll()
+    window.addEventListener("scroll", onScroll)
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [isMobileWidth])
 
   return (
     <Layout chainObj={cellarConfig.chain}>
-      {/* {cellarConfig.cellarNameKey ===
-        CellarNameKey.REAL_YIELD_ETH_OPT && (
-        <InfoBanner
-          text={
-            <>
-              <strong>
-                Merkle OP Rewards for Real Yield ETH OP - Batch
-                Period: {dateRange.start} - {dateRange.end}
-              </strong>
-            </>
-          }
-        />
-      )} */}
+      <WalletHealthBanner />
       {cellarConfig.cellarNameKey === CellarNameKey.TURBO_EETH && (
         <InfoBanner
           text={
@@ -146,8 +156,10 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
         />
       )}
       <Section>
+        {/* Desktop header */}
         <HStack
-          pb={isLarger768 ? 12 : 0}
+          display={{ base: "none", md: "flex" }}
+          pb={12}
           justify="space-between"
           align="flex-end"
           wrap="wrap"
@@ -161,46 +173,124 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
               </Heading>
             </HStack>
           </VStack>
-          {isYieldStrategies && <CellarStatsYield cellarId={id} />}
+          <HStack spacing={3} align="flex-end">
+            {isYieldStrategies && (
+              <CellarStatsYield
+                cellarId={id}
+                alphaStethOverrides={
+                  id === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+                }
+              />
+            )}
+            {isAutomatedPortfolio && (
+              <CellarStatsAutomated cellarConfig={cellarConfig} />
+            )}
+          </HStack>
+        </HStack>
 
+        {/* Mobile compact header */}
+        <VStack
+          spacing={3}
+          align="stretch"
+          display={{ base: "flex", md: "none" }}
+          px={6}
+          pt={4}
+        >
+          <BreadCrumb cellarName={staticCellarData.name} id={id} />
+          <HStack justify="space-between" align="center">
+            <Heading fontSize="xl" noOfLines={1}>
+              {staticCellarData.name}
+            </Heading>
+            <HStack
+              spacing={2}
+              px={2}
+              py={1}
+              rounded="full"
+              bg="whiteAlpha.100"
+            >
+              <Image
+                src={cellarConfig.chain.logoPath}
+                alt={cellarConfig.chain.alt}
+                boxSize={4}
+                background={"transparent"}
+              />
+              <Text fontSize="xs" color="whiteAlpha.800">
+                {cellarConfig.chain.displayName}
+              </Text>
+            </HStack>
+          </HStack>
+          {isYieldStrategies && (
+            <CellarStatsYield
+              cellarId={id}
+              alphaStethOverrides={
+                id === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+              }
+              px={0}
+            />
+          )}
           {isAutomatedPortfolio && (
             <CellarStatsAutomated cellarConfig={cellarConfig} />
           )}
-        </HStack>
+        </VStack>
 
         <VStack spacing={4} align="stretch">
           <Heading {...h2Styles} pt={12}>
             Your Portfolio
           </Heading>
+          {type === "migrate" &&
+            (isAlphaSteth || showMigrationForSourceVault) &&
+            id && (
+              <DynamicMigrationModal
+                isOpen={isOpen}
+                onClose={onClose}
+              />
+            )}
           <PortfolioCard />
         </VStack>
       </Section>
+
       <Section px={{ base: 0, md: 4 }}>
         <VStack spacing={6} align="stretch">
-          {!notLaunched &&
-            isApyChartEnabled(cellarConfig) &&
-            !isEstimatedApyEnable(cellarConfig) && (
-              <ApyChartProvider
-                address={cellarAddress}
-                chain={cellarConfig.chain.id}
-              >
-                <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                  Vault Perfomance
-                </Heading>
-                <ApyPerfomanceCard />
-              </ApyChartProvider>
+          <InView triggerOnce rootMargin="200px">
+            {({ inView, ref }) => (
+              <div ref={ref}>
+                {!notLaunched &&
+                  isApyChartEnabled(cellarConfig) &&
+                  !isEstimatedApyEnable(cellarConfig) &&
+                  inView && (
+                    <ApyChartProvider
+                      address={cellarAddress}
+                      chain={cellarConfig.chain.id}
+                    >
+                      <Heading
+                        pt={isLarger768 ? 12 : 0}
+                        {...h2Styles}
+                      >
+                        Performance
+                      </Heading>
+                      <ApyPerfomanceCard />
+                    </ApyChartProvider>
+                  )}
+              </div>
             )}
-          {isTokenPriceChartEnabled(cellarConfig) && (
-            <TokenPriceChartProvider
-              address={cellarAddress}
-              chain={cellarConfig.chain.id}
-            >
-              <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
-                Vault Perfomance
-              </Heading>
-              <TokenPricePerfomanceCard />
-            </TokenPriceChartProvider>
-          )}
+          </InView>
+          <InView triggerOnce rootMargin="200px">
+            {({ inView, ref }) => (
+              <div ref={ref}>
+                {isTokenPriceChartEnabled(cellarConfig) && inView && (
+                  <TokenPriceChartProvider
+                    address={cellarAddress}
+                    chain={cellarConfig.chain.id}
+                  >
+                    <Heading pt={isLarger768 ? 12 : 0} {...h2Styles}>
+                      Token Price
+                    </Heading>
+                    <TokenPricePerfomanceCard />
+                  </TokenPriceChartProvider>
+                )}
+              </div>
+            )}
+          </InView>
 
           <Heading pt={isYieldStrategies ? 0 : 12} {...h2Styles}>
             Vault Details
@@ -211,6 +301,25 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
           />
         </VStack>
       </Section>
+
+      {/* Floating Back to Vaults chip (mobile after scroll) */}
+      {isMobileWidth && showBackChip && (
+        <Box
+          position="fixed"
+          bottom={{ base: isOpen ? "64px" : "16px", md: "16px" }}
+          left="16px"
+          zIndex={9}
+          display={{ base: "block", md: "none" }}
+        >
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => window.history.back()}
+          >
+            Back to Vaults
+          </Button>
+        </Box>
+      )}
     </Layout>
   )
 }

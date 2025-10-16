@@ -1,13 +1,12 @@
-import { Styles } from "@chakra-ui/theme-tools"
-
-export const styles: Styles = {
+export const styles = {
   global: {
     MozSelection: { background: "purple.base" },
     WebKitSelection: { background: "purple.base" },
     "::selection": { background: "purple.base" },
     "html, body": {
       bgColor: "surface.bg",
-      color: "neutral.100"
+      color: "neutral.100",
+      overflowX: "hidden",
     },
     ":root": {
       colorScheme: "dark !important",
@@ -37,7 +36,7 @@ export const styles: Styles = {
     },
     ".slick-dots li button:before": {
       color: "#EDE8FC",
-      "marginTop": "10px !important",
+      marginTop: "10px !important",
     },
     ".slick-dots li.slick-active button:before": {
       color: "#6C4ED9 !important",
@@ -62,7 +61,7 @@ export const styles: Styles = {
       transitionProperty: "all",
       transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
       transitionDuration: "500ms",
-      zIndex: "1 !important"
+      zIndex: "1000 !important",
     },
     ".nav.down": {
       top: "-10rem",

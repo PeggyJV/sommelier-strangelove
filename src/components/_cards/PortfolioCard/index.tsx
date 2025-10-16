@@ -4,6 +4,7 @@ import {
   BoxProps,
   Heading,
   HStack,
+  Button,
   Icon,
   Image,
   Link,
@@ -14,6 +15,7 @@ import {
   useTheme,
   VStack,
 } from "@chakra-ui/react"
+import NextLink from "next/link"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { TokenAssets } from "components/TokenAssets"
@@ -22,18 +24,21 @@ import ConnectButton from "components/_buttons/ConnectButton"
 import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
+import { BaseButton } from "components/_buttons/BaseButton"
+import { useDepositModalStore } from "data/hooks/useDepositModalStore"
+import { config as utilConfig } from "utils/config"
 import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useGetPreviewRedeem } from "data/hooks/useGetPreviewRedeem"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
+import { useWithdrawRequestStatus } from "data/hooks/useWithdrawRequestStatus"
 import { getTokenConfig, Token } from "data/tokenConfig"
 import {
-  bondingPeriodOptions,
   isBondedDisabled,
   isBondingEnabled,
   isRewardsEnabled,
+  isWithdrawQueueEnabled,
   lpTokenTooltipContent,
   showNetValueInAsset,
 } from "data/uiConfig"
@@ -41,18 +46,27 @@ import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
 import { FaExternalLinkAlt } from "react-icons/fa"
-import { toEther } from "utils/formatCurrency"
+import { toEther, formatUSD } from "utils/formatCurrency"
+import { useBrandedToast } from "hooks/chakra"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import { formatDistance } from "utils/formatDistance"
-import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { getAddress, getContract } from "viem"
+import { useAccount } from "wagmi"
 import BondingTableCard from "../BondingTableCard"
 import { InnerCard } from "../InnerCard"
 import { TransparentCard } from "../TransparentCard"
 import { Rewards } from "./Rewards"
 import WithdrawQueueCard from "../WithdrawQueueCard"
-import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
-import { CellarNameKey, ConfigProps } from "data/types"
+import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
+import { WrongNetworkBanner } from "components/_banners/WrongNetworkBanner"
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+} from "@chakra-ui/react"
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
@@ -64,8 +78,44 @@ export const PortfolioCard = (props: BoxProps) => {
   } = useAccount()
   const id = useRouter().query.id as string
   const cellarConfig = cellarDataMap[id].config
-  const slug = cellarDataMap[id].slug
   const dashboard = cellarDataMap[id].dashboard
+  const { setIsOpen } = useDepositModalStore()
+  const isAlphaSteth = id === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+  const isRealYieldEth =
+    id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
+  const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
+
+  // Source vault configs for migration eligibility (safe lookups; use deterministic dummy)
+  const RYE_SLUG = utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
+  const TSTETH_SLUG = utilConfig.CONTRACT.TURBO_STETH.SLUG
+  const realYieldEthEntry = cellarDataMap[RYE_SLUG]
+  const turboStethEntry = cellarDataMap[TSTETH_SLUG]
+
+  const ZERO_ADDR = "0x0000000000000000000000000000000000000000"
+  const DUMMY_CONFIG: ConfigProps = {
+    id: "dummy",
+    cellarNameKey: cellarConfig.cellarNameKey,
+    lpToken: { address: ZERO_ADDR, imagePath: "" },
+    cellar: {
+      address: ZERO_ADDR,
+      abi: [] as any,
+      key: CellarKey.CELLAR_V0816,
+      decimals: 18,
+    },
+    baseAsset: {
+      src: "",
+      alt: "dummy",
+      symbol: "DUMMY",
+      address: ZERO_ADDR,
+      coinGeckoId: "",
+      decimals: 18,
+      chain: cellarConfig.chain.id,
+    },
+    chain: cellarConfig.chain,
+  }
+
+  const realYieldEthConfig = realYieldEthEntry?.config || DUMMY_CONFIG
+  const turboStethConfig = turboStethEntry?.config || DUMMY_CONFIG
 
   const depositTokens = cellarDataMap[id].depositTokens.list
   const depositTokenConfig = getTokenConfig(
@@ -80,9 +130,16 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const { lpToken } = useUserBalance(cellarConfig)
   let { data: lpTokenData } = lpToken
-  const lpTokenDisabled =
-    !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
 
+  // Balances in potential source vaults for migration (only when connected)
+  const { lpToken: realYieldEthBalance } = useUserBalance(
+    realYieldEthConfig,
+    isConnected && Boolean(realYieldEthEntry)
+  )
+  const { lpToken: turboStethBalance } = useUserBalance(
+    turboStethConfig,
+    isConnected && Boolean(turboStethEntry)
+  )
   const { data: strategyData, isLoading: isStrategyLoading } =
     useStrategyData(
       cellarConfig.cellar.address,
@@ -96,153 +153,286 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const activeAsset = strategyData?.activeAsset
   const stakingEnd = strategyData?.stakingEnd
-  const bondingPeriods = bondingPeriodOptions(cellarConfig)
-  const maxMultiplier = bondingPeriods[
-    bondingPeriods.length - 1
-  ]?.amount.replace("SOMM", "")
 
   const isStakingAllowed = stakingEnd?.endDate
     ? isFuture(stakingEnd.endDate)
     : false
 
-  let buttonsEnabled = true
-  if (strategyData?.config.chain.wagmiId !== wagmiChain?.id!) {
-    userData = undefined
-    lpTokenData = undefined
-    buttonsEnabled = false
-  }
+  const buttonsEnabled =
+    strategyData?.config.chain.wagmiId === wagmiChain?.id
+  const isWrongNetwork = Boolean(
+    strategyData &&
+      strategyData?.config?.chain?.wagmiId !== wagmiChain?.id
+  )
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
 
-  const staticCelarConfig = cellarConfig
+  // Determine if any legacy bonded tranche is matured (ready to withdraw LP tokens)
+  const hasMaturedLegacyTranche = Boolean(
+    (((userStakes as any)?.userStakes || []) as any[]).some(
+      (t: any) => {
+        const ts = Number(t?.unbondTimestamp ?? 0)
+        return ts !== 0 && ts * 1000 < Date.now()
+      }
+    )
+  )
 
-  const totalShares =
-    userData?.userStrategyData.userData?.totalShares.value
+  // Calculate combined Net Value (free LP + bonded LP) for legacy vaults
+  const bondedAmount = (userStakes as any)?.totalBondedAmount
+  const tokenPrice =
+    parseFloat((strategyData?.tokenPrice || "0").replace("$", "")) ||
+    0
+  const bondedValue = bondedAmount?.value
+    ? Number(bondedAmount.formatted) * tokenPrice
+    : 0
+  const freeNetValue = Number(netValue?.value || 0)
+  const totalNetValue = freeNetValue + bondedValue
+  const totalNetValueFormatted =
+    totalNetValue > 0
+      ? `$${totalNetValue
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+      : netValue?.formatted
+
+  // For legacy vaults with bonding, show combined total; otherwise show regular net value
+  const displayNetValue =
+    !isBondedDisabled(cellarConfig) && bondedValue > 0
+      ? totalNetValueFormatted
+      : netValue?.formatted
+
+  const lpTokenDisabled =
+    !lpTokenData || Number(lpTokenData?.value ?? "0") <= 0
+
+  // Check if user has any value in the vault (either LP tokens or net value)
+  const hasValueInVault =
+    (lpTokenData && Number(lpTokenData?.value ?? "0") > 0) ||
+    (netValue && Number(netValue?.value ?? "0") > 0)
 
   const baseAssetValue =
-    userData?.userStrategyData.userData?.netValueInAsset.formatted
-  const { data, isLoading } = useGetPreviewRedeem({
-    cellarConfig: staticCelarConfig,
-    value: totalShares?.toString(),
-  })
+    userData?.userStrategyData.userData?.netValueInAsset?.formatted
 
-  const { data: walletClient } = useWalletClient()
-  const publicClient = usePublicClient()
+  const baseAssetValueRaw = (
+    userData?.userStrategyData.userData?.netValueInAsset as any
+  )?.value as number | undefined
 
-  const withdrawQueueContract =
-    publicClient &&
-    getContract({
-      address: getAddress(cellarConfig.chain.withdrawQueueAddress),
-      abi: withdrawQueueV0821,
-      client: {
-        wallet: walletClient,
-        public: publicClient,
-      },
-    })
+  // Compute fallback ETH amount directly from shares × per-share base-asset value
+  const perShareBase = (() => {
+    const raw = (strategyData as any)?.token?.value as unknown
+    if (typeof raw === "number") return raw
+    const parsed = parseFloat(String(raw ?? "0").replace(/,/g, ""))
+    return Number.isFinite(parsed) ? parsed : 0
+  })()
+  const sharesTokens = (() => {
+    const raw = (lpTokenData as any)?.formatted as unknown
+    const parsed = parseFloat(String(raw ?? "0").replace(/,/g, ""))
+    return Number.isFinite(parsed) ? parsed : 0
+  })()
+  const alphaEthCalc = sharesTokens * perShareBase
 
-  const [isActiveWithdrawRequest, setIsActiveWithdrawRequest] =
-    useState(false)
+  const alphaEthValueFormatted = isAlphaSteth
+    ? (() => {
+        if (
+          typeof baseAssetValueRaw === "number" &&
+          baseAssetValueRaw > 0
+        )
+          return baseAssetValueRaw.toFixed(4)
+        if (Number.isFinite(alphaEthCalc) && alphaEthCalc > 0)
+          return alphaEthCalc.toFixed(4)
+        return undefined
+      })()
+    : undefined
 
-  const checkWithdrawRequest = async () => {
-    try {
-      if (
-        walletClient &&
-        withdrawQueueContract &&
-        address &&
-        cellarConfig
-      ) {
-        const withdrawRequest =
-          await withdrawQueueContract?.read.getUserWithdrawRequest([
-            address,
-            cellarConfig.cellar.address,
-          ])
+  const isActiveWithdrawRequest =
+    useWithdrawRequestStatus(cellarConfig)
 
-        const isWithdrawRequestValid =
-          (await withdrawQueueContract?.read.isWithdrawRequestValid([
-            cellarConfig.cellar.address,
-            address,
-            withdrawRequest,
-          ])) as unknown as boolean
-        setIsActiveWithdrawRequest(isWithdrawRequestValid)
-      } else {
-        setIsActiveWithdrawRequest(false)
-      }
-    } catch (error) {
-      console.log(error)
-      setIsActiveWithdrawRequest(false)
-    }
+  // Show migration button only if on Alpha STETH page, correct chain, and user has
+  // a positive balance in either Real-Yield-ETH or Turbo-STETH
+  const realYieldEthValue = realYieldEthBalance?.data?.value ?? 0n
+  const turboStethValue = turboStethBalance?.data?.value ?? 0n
+  const hasMigrationSourceBalance =
+    realYieldEthValue > 0n || turboStethValue > 0n
+
+  // Show migration button on Alpha stETH page if user has source balances,
+  // or on source vault pages (Real Yield ETH / Turbo stETH) if user has balance there
+  const showMigrationButton = Boolean(
+    buttonsEnabled &&
+      ((isAlphaSteth && hasMigrationSourceBalance) ||
+        (isRealYieldEth && realYieldEthValue > 0n) ||
+        (isTurboSteth && turboStethValue > 0n))
+  )
+
+  const isMobile = useBetterMediaQuery("(max-width: 768px)")
+  const [isAssetsOpen, setAssetsOpen] = useState(false)
+
+  const compactUSD = (maybeCurrency?: string) => {
+    if (!maybeCurrency) return maybeCurrency
+    const num = Number(String(maybeCurrency).replace(/[$,]/g, ""))
+    if (!Number.isFinite(num)) return maybeCurrency
+    return formatUSD(String(num))
   }
-  // const isMerkleRewardsException = (config: ConfigProps) => {
-  //   return (
-  //     config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-  //     config.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB
-  //   )
-  // }
+  const netValueCompactMobile = (() => {
+    const n = Number(netValue?.value ?? 0)
+    if (!Number.isFinite(n) || n <= 0) return displayNetValue
+    return formatUSD(String(n))
+  })()
+  const { addToast } = useBrandedToast()
+  const copyToClipboard = async (text?: string) => {
+    if (!text) return
+    try {
+      await navigator.clipboard.writeText(text)
+      addToast({
+        heading: "Copied",
+        body: <Text>{text}</Text>,
+        status: "success",
+        duration: 2000,
+      })
+    } catch {}
+  }
 
-  useEffect(() => {
-    checkWithdrawRequest()
-  }, [withdrawQueueContract, address, cellarConfig])
+  // Mobile-friendly button labels
+  const withdrawQueueLabel = isMobile
+    ? "Withdraw"
+    : "Enter Withdraw Queue"
+  const migrateLabel = isMobile ? "Migrate" : "Migrate to Alpha STETH"
+  const depositGuideLabel = isMobile
+    ? "Deposit Guide"
+    : "Watch Deposit Guide"
+  const hasSecondaryValue = showNetValueInAsset(cellarConfig)
+  const showDeposit = !strategyData?.deprecated
+  const showGuide = id === "Alpha-stETH"
+  const DISCONNECTED_PLACEHOLDER = "--"
 
+  // Resolve display strings with a strict disconnected placeholder
+  const resolvedNetValue = isConnected
+    ? (isMobile ? netValueCompactMobile : displayNetValue) || "--"
+    : DISCONNECTED_PLACEHOLDER
+  const resolvedEthValue = isConnected
+    ? alphaEthValueFormatted ??
+      (sharesTokens > 0 && perShareBase > 0
+        ? (sharesTokens * perShareBase).toFixed(4)
+        : "--")
+    : DISCONNECTED_PLACEHOLDER
   return (
     <TransparentCard
       {...props}
       backgroundColor="surface.secondary"
-      p={8}
-      overflow="none"
+      p={{ base: 4, md: 8 }}
+      overflow="hidden"
       zIndex={1}
     >
       <VStack align="stretch" spacing={8}>
         <CardStatRow
-          gap={{ base: 4, md: 8, lg: 12 }}
+          gap={{ base: 3, md: 8, lg: 12 }}
           align="flex-start"
           justify="flex-start"
           direction={{ base: "column", md: "row" }}
           wrap="wrap"
         >
           <SimpleGrid
+            minW={0}
+            gap={{ base: 3, md: 4 }}
             templateColumns={{
-              base: "repeat(1, max-content)",
+              base: hasSecondaryValue
+                ? "repeat(2, minmax(0, 1fr))"
+                : "1fr",
               md: "repeat(2, max-content)",
             }}
           >
             <CardStat
               label="Net Value"
-              tooltip="Net value of assets in the strategy including SOMM rewards"
+              tooltip={
+                !isBondedDisabled(cellarConfig) && bondedValue > 0
+                  ? `Total value of ${freeNetValue.toFixed(
+                      2
+                    )} USD (free LP) + ${bondedValue.toFixed(
+                      2
+                    )} USD (bonded LP) in the strategy`
+                  : "Net value of assets in the strategy including SOMM rewards"
+              }
             >
-              {isMounted &&
-                (isConnected ? netValue?.formatted || "..." : "--")}
+              <HStack
+                onClick={() =>
+                  resolvedNetValue !== DISCONNECTED_PLACEHOLDER &&
+                  copyToClipboard(resolvedNetValue)
+                }
+                cursor="pointer"
+              >
+                {isMounted && (
+                  <Text as="span">{resolvedNetValue}</Text>
+                )}
+              </HStack>
             </CardStat>
 
-            {showNetValueInAsset(cellarConfig) && (
-              <CardStat
-                label="Base Asset Value"
-                tooltip={
-                  <Text>
-                    Total value of assets denominated in base asset
-                    <Avatar
-                      ml="-2.5px"
-                      boxSize={6}
-                      src={activeAsset?.src}
-                      name={activeAsset?.alt}
-                      borderWidth={2}
-                      borderColor="surface.bg"
-                      bg="surface.bg"
-                    />
-                    {activeAsset?.symbol}. excluding SOMM rewards
-                  </Text>
-                }
-              >
-                {isMounted &&
-                  (isConnected && !isLoading ? baseAssetValue : "--")}
-              </CardStat>
-            )}
+            {hasSecondaryValue &&
+              (isAlphaSteth ? (
+                <CardStat
+                  label="ETH Value"
+                  tooltip={
+                    <Text>
+                      Total value denominated in ETH (stETH ≈ ETH).
+                      Excludes SOMM rewards
+                    </Text>
+                  }
+                >
+                  <HStack
+                    onClick={() =>
+                      resolvedEthValue !== DISCONNECTED_PLACEHOLDER &&
+                      copyToClipboard(resolvedEthValue)
+                    }
+                    cursor="pointer"
+                  >
+                    {isMounted && (
+                      <Text as="span">{resolvedEthValue}</Text>
+                    )}
+                  </HStack>
+                </CardStat>
+              ) : (
+                <CardStat
+                  label="Base Asset Value"
+                  tooltip={
+                    <Text>
+                      Total value of assets denominated in base asset
+                      <Avatar
+                        ml="-2.5px"
+                        boxSize={6}
+                        src={activeAsset?.src}
+                        name={activeAsset?.alt}
+                        borderWidth={2}
+                        borderColor="surface.bg"
+                        bg="surface.bg"
+                      />
+                      {activeAsset?.symbol}. excluding SOMM rewards
+                    </Text>
+                  }
+                >
+                  <HStack
+                    onClick={() => copyToClipboard(baseAssetValue)}
+                    cursor="pointer"
+                  >
+                    {isMounted &&
+                      (isConnected ? (
+                        <Text as="span">
+                          {isMobile
+                            ? compactUSD(baseAssetValue)
+                            : baseAssetValue}
+                        </Text>
+                      ) : (
+                        "--"
+                      ))}
+                  </HStack>
+                </CardStat>
+              ))}
 
             <CardStat
               label="deposit assets"
               tooltip="Accepted deposit assets"
               alignSelf="flex-start"
               spacing={0}
+              gridColumn={{
+                base: hasSecondaryValue ? "1 / -1" : "auto",
+                md: "1 / -1",
+              }}
             >
               <TokenAssets
                 tokens={depositTokenConfig}
@@ -274,7 +464,7 @@ export const PortfolioCard = (props: BoxProps) => {
                 "--"
               )}
             </CardStat> */}
-            <Stack spacing={3} direction="row">
+            <Stack spacing={4} direction="column" align="flex-start">
               {isMounted &&
                 (isConnected ? (
                   <>
@@ -283,9 +473,20 @@ export const PortfolioCard = (props: BoxProps) => {
                       width="100%"
                       paddingTop={"1em"}
                     >
-                      <HStack>
-                        {!strategyData?.deprecated && (
+                      {/* Row 1: Deposit (primary) + Watch Guide (secondary) */}
+                      <SimpleGrid
+                        columns={{
+                          base: 1,
+                          sm: showDeposit && showGuide ? 2 : 1,
+                          md: 2,
+                        }}
+                        gap={{ base: 2, md: 3 }}
+                        width="100%"
+                        overflow="visible"
+                      >
+                        {showDeposit && (
                           <DepositButton
+                            width={{ base: "100%", md: "100%" }}
                             disabled={
                               !isConnected ||
                               strategyData?.isContractNotReady ||
@@ -293,16 +494,34 @@ export const PortfolioCard = (props: BoxProps) => {
                             }
                           />
                         )}
-                        {cellarConfig.cellarNameKey !==
-                          CellarNameKey.REAL_YIELD_LINK && (
-                          <WithdrawButton
-                            isDeprecated={strategyData?.deprecated}
-                            disabled={
-                              lpTokenDisabled || !buttonsEnabled
-                            }
-                          />
+                        {showGuide && (
+                          <Button
+                            as={NextLink}
+                            href="/strategies/Alpha-stETH/deposit_guide"
+                            size={{ base: "sm", md: "md" }}
+                            height={{ base: "40px", md: "44px" }}
+                            variant="outline"
+                            bg="transparent"
+                            color="cta.outline.fg"
+                            borderColor="cta.outline.br"
+                            borderWidth="2px"
+                            width={{ base: "100%", md: "100%" }}
+                            sx={{
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                              overflow: "hidden",
+                              fontSize: { base: "sm", md: "md" },
+                              px: { base: 3, md: 4 },
+                            }}
+                            _focusVisible={{
+                              boxShadow:
+                                "0 0 0 3px var(--chakra-colors-purple-base)",
+                            }}
+                          >
+                            {depositGuideLabel}
+                          </Button>
                         )}
-                      </HStack>
+                      </SimpleGrid>
                       {/*
                       <>
                         <WithdrawQueueButton
@@ -317,24 +536,97 @@ export const PortfolioCard = (props: BoxProps) => {
                         />
                       </>
                         */}
-                      {cellarConfig.cellarNameKey ===
-                        CellarNameKey.REAL_YIELD_LINK && (
-                        <WithdrawQueueButton
+                      {/* Row 2: network CTA or Withdraw/Migrate */}
+                      {isWrongNetwork ? (
+                        <WrongNetworkBanner
                           chain={cellarConfig.chain}
-                          buttonLabel="Enter Withdraw Queue"
-                          showTooltip={true}
                         />
+                      ) : (
+                        <SimpleGrid
+                          columns={{ base: 1, sm: 2, md: 2 }}
+                          gap={{ base: 2, md: 3 }}
+                          mt={{ base: 2, md: 3 }}
+                          width="100%"
+                          minW={0}
+                        >
+                          {isWithdrawQueueEnabled(cellarConfig) ? (
+                            <WithdrawQueueButton
+                              chain={cellarConfig.chain}
+                              buttonLabel={withdrawQueueLabel}
+                              disabled={
+                                !hasValueInVault || !buttonsEnabled
+                              }
+                              showTooltip={true}
+                              width={{ base: "100%", md: "100%" }}
+                            />
+                          ) : (
+                            <WithdrawButton
+                              isDeprecated={strategyData?.deprecated}
+                              disabled={
+                                !hasValueInVault || !buttonsEnabled
+                              }
+                              width={{ base: "100%", md: "100%" }}
+                            />
+                          )}
+
+                          {showMigrationButton && (
+                            <BaseButton
+                              onClick={() =>
+                                setIsOpen({ id, type: "migrate" })
+                              }
+                              variant="outline"
+                              bg="transparent"
+                              color="cta.outline.fg"
+                              borderColor="cta.outline.br"
+                              borderWidth="2px"
+                              width={{ base: "100%", md: "100%" }}
+                              sx={{
+                                whiteSpace: "nowrap",
+                                textOverflow: "ellipsis",
+                                overflow: "hidden",
+                              }}
+                            >
+                              {migrateLabel}
+                            </BaseButton>
+                          )}
+                        </SimpleGrid>
                       )}
                     </VStack>
                   </>
                 ) : (
                   <>
-                    <HStack paddingTop={"1em"}>
-                      <ConnectButton
-                        overridechainid={cellarConfig.chain.id}
-                        unstyled
-                      />
-                    </HStack>
+                    <VStack
+                      spacing={3}
+                      width="100%"
+                      paddingTop={"1em"}
+                      align="flex-start"
+                    >
+                      <HStack>
+                        <ConnectButton
+                          overridechainid={cellarConfig.chain.id}
+                        />
+                      </HStack>
+                      {id === "Alpha-stETH" && (
+                        <Button
+                          as={NextLink}
+                          href="/strategies/Alpha-stETH/deposit_guide"
+                          size="md"
+                          height="44px"
+                          variant="outline"
+                          bg="transparent"
+                          color="cta.outline.fg"
+                          borderColor="cta.outline.br"
+                          borderWidth="2px"
+                          width={{ base: "100%", md: "auto" }}
+                          _focusVisible={{
+                            boxShadow:
+                              "0 0 0 3px var(--chakra-colors-purple-base)",
+                          }}
+                        >
+                          Watch Deposit Guide
+                        </Button>
+                      )}
+                    </VStack>
                   </>
                 ))}
             </Stack>
@@ -382,8 +674,8 @@ export const PortfolioCard = (props: BoxProps) => {
                       >
                         {isMounted &&
                           (isConnected
-                            ? userStakes?.totalBondedAmount
-                                .formatted || "..."
+                            ? (userStakes as any)?.totalBondedAmount
+                                ?.formatted || "..."
                             : "--")}
                       </CardStat>
                     </VStack>
@@ -420,10 +712,10 @@ export const PortfolioCard = (props: BoxProps) => {
                   (isConnected
                     ? (lpTokenData &&
                         toEther(
-                          lpTokenData.formatted,
+                          lpTokenData.value,
                           lpTokenData.decimals,
-                          true,
-                          2
+                          false,
+                          6
                         )) ||
                       "..."
                     : "--")}
@@ -431,15 +723,17 @@ export const PortfolioCard = (props: BoxProps) => {
             </VStack>
           )}
 
-{
-  (cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_ARB ||
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD_ARB ||
-    cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_OPT) && (
-    <MerklePoints
-      userAddress={address}
-      cellarConfig={cellarConfig}
-    />
-)}
+          {(cellarConfig.cellarNameKey ===
+            CellarNameKey.REAL_YIELD_ETH_ARB ||
+            cellarConfig.cellarNameKey ===
+              CellarNameKey.REAL_YIELD_USD_ARB ||
+            cellarConfig.cellarNameKey ===
+              CellarNameKey.REAL_YIELD_ETH_OPT) && (
+            <MerklePoints
+              userAddress={address}
+              cellarConfig={cellarConfig}
+            />
+          )}
 
           <CardStat label="Strategy Dashboard">
             {strategyData ? (
@@ -461,7 +755,8 @@ export const PortfolioCard = (props: BoxProps) => {
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
           <>
-            {!userStakes?.userStakes.length &&
+            {(userStakes as any) &&
+              !(userStakes as any).userStakes?.length &&
               stakingEnd?.endDate &&
               isFuture(stakingEnd?.endDate) && (
                 <>
@@ -579,9 +874,10 @@ export const PortfolioCard = (props: BoxProps) => {
                 isLoaded={!isUserDataLoading}
               >
                 {isConnected &&
-                  Boolean(userStakes?.userStakes.length) && (
-                    <BondingTableCard />
-                  )}
+                  Boolean(
+                    (userStakes as any) &&
+                      (userStakes as any).userStakes?.length
+                  ) && <BondingTableCard />}
               </LighterSkeleton>
             )}
             {isConnected && isActiveWithdrawRequest && (

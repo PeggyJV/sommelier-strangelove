@@ -51,8 +51,6 @@ export const MobileConnectedPopover = () => {
     })
 
     disconnect()
-    // Refresh window
-    window.location.reload()
   }
 
   const walletAddressIcon = () => {
@@ -64,6 +62,7 @@ export const MobileConnectedPopover = () => {
         <Jazzicon diameter={16} seed={jsNumberForAddress(address)} />
       )
     }
+    return null
   }
 
   const handleCopyAddressToClipboard = () => {
@@ -100,10 +99,8 @@ export const MobileConnectedPopover = () => {
           }}
         >
           <HStack>
-            {
-            ((isLoading || isEnsLoading) && <Spinner size="xs" />) ||
-            undefined
-          }
+            {((isLoading || isEnsLoading) && <Spinner size="xs" />) ||
+              undefined}
 
             {ensName
               ? isLarger480

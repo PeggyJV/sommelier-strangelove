@@ -1,0 +1,58 @@
+name: Performance Validation
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  performance:
+    runs-on: ubuntu-latest
+    env:
+      KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+      KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+      NEXT_PUBLIC_ATTRIBUTION_ENABLED: "true"
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+    
+    - name: Install dependencies
+      run: pnpm install
+    
+    - name: Build application
+      run: pnpm build
+    
+    - name: Run size-limit
+      run: pnpm size-limit
+    
+    - name: Start server
+      run: pnpm start &
+    
+    - name: Wait for server
+      run: sleep 10
+    
+    - name: Run Lighthouse CI
+      run: pnpm lighthouse
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+    
+    - name: Upload Lighthouse results
+      uses: actions/upload-artifact@v4
+      with:
+        name: lighthouse-results
+        path: ./artifacts/lhci/
+    
+    - name: Run tests
+      run: pnpm test:all

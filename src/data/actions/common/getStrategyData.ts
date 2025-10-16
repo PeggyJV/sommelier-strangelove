@@ -16,6 +16,16 @@ import { getTokenByAddress, getTokenBySymbol } from "./getToken"
 import { getTvm } from "./getTvm"
 import { getTokenPrice } from "./getTokenPrice"
 import { createApyChangeDatum } from "src/utils/chartHelper"
+import { config as utilConfig } from "src/utils/config"
+
+// Normalize helper for robust matching
+const norm = (s?: string) =>
+  (s ?? "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/_/g, "-")
+    .replace(/-+/g, "-")
+    .trim()
 
 export const getStrategyData = async ({
   address,
@@ -36,13 +46,19 @@ export const getStrategyData = async ({
         ({ config }) =>
           config.cellar.address.toLowerCase() ===
             address.toLowerCase() &&
-          config.chain.id === contracts.chain
-      )!
+          config.chain.id === (contracts as any)?.chain
+      )
+      if (!strategy) {
+        throw new Error(
+          `Strategy not found for address ${address} on chain ${
+            (contracts as any)?.chain
+          }`
+        )
+      }
       const config: ConfigProps = strategy.config!
-      const decimals = config.baseAsset.decimals
       const symbol = config.baseAsset.symbol
 
-      const { stakerContract, cellarContract } = contracts
+      const { stakerContract } = contracts
       const strategyData = stratData
       const dayDatas = strategyData?.dayDatas
       const deprecated = strategy.deprecated
@@ -60,6 +76,8 @@ export const getStrategyData = async ({
         isBefore(launchDate, add(new Date(), { weeks: 4 }))
       const isContractNotReady = strategy.isContractNotReady
 
+      const isHero = strategy.isHero
+
       const hideValue =
         isComingSoon(launchDate) &&
         process.env.NEXT_PUBLIC_SHOW_ALL_MANAGE_PAGE === "false"
@@ -74,7 +92,7 @@ export const getStrategyData = async ({
 
       let tvm = hideValue
         ? undefined
-        : getTvm(String(Number(strategyData?.tvlTotal)))
+        : getTvm(String(Number(strategyData?.tvlTotal ?? 0)))
 
       const tradedAssets = (() => {
         const assets = strategy.tradedAssets
@@ -86,10 +104,8 @@ export const getStrategyData = async ({
 
         return tokens
       })()
-      const depositTokens = strategy.depositTokens.list;
-      const stakingEnd = await getStakingEnd(
-        stakerContract
-      )
+      const depositTokens = strategy.depositTokens.list
+      const stakingEnd = await getStakingEnd(stakerContract)
       const isStakingOngoing =
         stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
 
@@ -136,7 +152,7 @@ export const getStrategyData = async ({
         return apyRes
       })()
 
-      let merkleRewardsApy;
+      let merkleRewardsApy
 
       // if (strategy.slug === utilConfig.CONTRACT.REAL_YIELD_ETH_OPT.SLUG) {
       //   merkleRewardsApy = await getMerkleRewardsApy(cellarContract, config);
@@ -201,7 +217,7 @@ export const getStrategyData = async ({
       //   }
       // }
 
-      const baseApy = (() => {
+      const baseApy = await (async () => {
         if (config.show7DayAPYTooltip === true) {
           if (dayDatas === undefined || dayDatas.length < 8) {
             return {
@@ -215,11 +231,10 @@ export const getStrategyData = async ({
           for (let i = 0; i < 7; i++) {
             // Get annualized apy for each shareValue
             let nowValue = BigInt(dayDatas![i].shareValue)
-            let startValue = BigInt(
-              dayDatas![i + 1].shareValue
-            )
+            let startValue = BigInt(dayDatas![i + 1].shareValue)
 
-            let yieldGain = Number(nowValue - startValue) / Number(startValue)
+            let yieldGain =
+              Number(nowValue - startValue) / Number(startValue)
 
             // Take the gains since inception and annualize it to get APY since inception
             let dailyApy = yieldGain * 365 * 100
@@ -254,6 +269,90 @@ export const getStrategyData = async ({
           return baseAPY
         }
         **/
+
+        // Custom APY calculation for Alpha stETH vault
+        if (strategy.slug === utilConfig.CONTRACT.ALPHA_STETH.SLUG) {
+          try {
+            // Determine if we are within the first 3 months after launch
+            const inFirst3Months =
+              !!launchDate && isBefore(new Date(), add(launchDate, { months: 3 }))
+
+            // Helper: compute 24h APR from the two most recent dayDatas entries
+            const get24hAPR = (): number | undefined => {
+              if (!dayDatas || dayDatas.length < 2) return undefined
+              try {
+                const nowValue = BigInt(dayDatas[0].shareValue)
+                const prevValue = BigInt(dayDatas[1].shareValue)
+                if (prevValue === BigInt(0)) return undefined
+                const gain = Number(nowValue - prevValue) / Number(prevValue)
+                const apr = gain * 365 * 100
+                return Number.isFinite(apr) ? apr : undefined
+              } catch {
+                return undefined
+              }
+            }
+
+            // Helper: compute incentive APR from BoringVault lens + monthly incentive assumption
+            const getIncentiveAPR = async (): Promise<number | undefined> => {
+              if (!(contracts.boringVaultLens && config.accountant)) return undefined
+              const total_monthly_stETH = 57.5 // Manual input; adjust as needed
+              try {
+                const [, totalAssets] = await (
+                  contracts.boringVaultLens as any
+                ).read.totalAssets([
+                  config.cellar.address as `0x${string}`,
+                  config.accountant.address as `0x${string}`,
+                ])
+                const totalAssetsInStETH = Number(totalAssets) / 1e18
+                if (totalAssetsInStETH <= 0) return undefined
+                const incentiveAPR = ((total_monthly_stETH / 30) / totalAssetsInStETH) * 365 * 100
+                return Number.isFinite(incentiveAPR) ? incentiveAPR : undefined
+              } catch (err) {
+                console.error("Alpha stETH incentive APR error:", err)
+                return undefined
+              }
+            }
+
+            if (inFirst3Months) {
+              const [incentiveAPR, dailyAPR] = await Promise.all([
+                getIncentiveAPR(),
+                Promise.resolve(get24hAPR()),
+              ])
+              const selected = Math.max(
+                incentiveAPR ?? Number.NEGATIVE_INFINITY,
+                dailyAPR ?? Number.NEGATIVE_INFINITY
+              )
+              const value = Number.isFinite(selected) ? selected : (config.baseApy ?? 0)
+              return {
+                formatted: value.toFixed(2) + "%",
+                value,
+              }
+            } else {
+              // Use 7-day trailing average APR after the first 3 months
+              let value: number
+              if (dayDatas && dayDatas.length >= 8) {
+                let movingAvg7D = 0
+                for (let i = 0; i < 7; i++) {
+                  const nowValue = BigInt(dayDatas[i].shareValue)
+                  const startValue = BigInt(dayDatas[i + 1].shareValue)
+                  const yieldGain = Number(nowValue - startValue) / Number(startValue)
+                  const dailyApy = yieldGain * 365 * 100
+                  movingAvg7D += dailyApy
+                }
+                value = movingAvg7D / 7
+              } else {
+                value = config.baseApy || 0
+              }
+              return {
+                formatted: value.toFixed(2) + "%",
+                value,
+              }
+            }
+          } catch (error) {
+            console.error("Error calculating Alpha stETH APY:", error)
+            // Fall through to default calculation
+          }
+        }
 
         if (hideValue) return
         if (!isAPYEnabled(config)) return
@@ -312,9 +411,29 @@ export const getStrategyData = async ({
       // TODO: Rewards APY should be a list of APYs for each rewards token, this is incurred tech debt
       const baseApySumRewards = {
         formatted:
-          (Number(baseApyValue?.value ?? 0) + Number(rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0))
-            .toFixed(2) + "%",
-        value: Number(baseApyValue?.value ?? 0) + (rewardsApy?.value ?? 0) + (merkleRewardsApy ?? 0)
+          (
+            Number(baseApyValue?.value ?? 0) +
+            Number(rewardsApy?.value ?? 0) +
+            (merkleRewardsApy ?? 0)
+          ).toFixed(2) + "%",
+        value:
+          Number(baseApyValue?.value ?? 0) +
+          (rewardsApy?.value ?? 0) +
+          (merkleRewardsApy ?? 0),
+      }
+
+      // Determine Somm-native status (in-house strategies)
+      const s = norm(slug || name)
+      const providerName = norm(provider?.title)
+      const isSommNative =
+        providerName.includes("somm") || s.includes("alpha-steth")
+
+      if (
+        process.env.NODE_ENV !== "production" &&
+        s.includes("alpha-steth")
+      ) {
+        // eslint-disable-next-line no-console
+        console.log("[strategy]", s, { providerName, isSommNative })
       }
       return {
         activeAsset,
@@ -325,6 +444,7 @@ export const getStrategyData = async ({
         depositTokens,
         description,
         isNew,
+        isHero,
         isStakingOngoing,
         isContractNotReady,
         launchDate,
@@ -344,11 +464,12 @@ export const getStrategyData = async ({
         token,
         config,
         extraRewardsApy,
-        merkleRewardsApy
+        merkleRewardsApy,
+        isSommNative,
       }
-    } catch (e) {
-      console.error("Error fetching strategy data")
-      console.error(address, e)
+    } catch (error) {
+      console.error(error)
+      return null
     }
   })()
 

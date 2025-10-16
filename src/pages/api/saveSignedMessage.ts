@@ -36,8 +36,12 @@ export default async function handler(
     })
 
     // Decode the public key and signature from Base64
-    const decodedPubKey = Buffer.from(pubKey, "base64")
-    const decodedSignature = Buffer.from(signature, "base64")
+    const decodedPubKey = new Uint8Array(
+      Buffer.from(pubKey, "base64")
+    )
+    const decodedSignature = new Uint8Array(
+      Buffer.from(signature, "base64")
+    )
 
     // Verify the signature against the reconstructed message
     const isValidSignature = await verifyADR36Amino(

@@ -9,14 +9,17 @@ import { fetchIndividualCellarStrategyData } from "queries/get-individual-strate
 import { useState, useEffect } from "react"
 import { tokenConfig } from "data/tokenConfig"
 
-export const useStrategyData = (address: string, chain: string) => {
+export const useStrategyData = (
+  address: string,
+  chain: string,
+  enabled: boolean = true
+) => {
   const publicClient = usePublicClient()
 
   const { data: allContracts } = useAllContracts()
   const sommToken = tokenConfig.find(
     (token) =>
-      token.coinGeckoId === "sommelier" &&
-      token.chain === chain
+      token.coinGeckoId === "sommelier" && token.chain === chain
   )!
 
   const { data: sommPrice } = useCoinGeckoPrice(sommToken)
@@ -54,9 +57,7 @@ export const useStrategyData = (address: string, chain: string) => {
   )!.config
   const isNoDataSource = Boolean(config!.isNoDataSource)
   const baseAsset = config.baseAsset
-  const { data: baseAssetPrice } = useCoinGeckoPrice(
-    baseAsset
-  )
+  const { data: baseAssetPrice } = useCoinGeckoPrice(baseAsset)
 
   // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
   const key =
@@ -69,23 +70,27 @@ export const useStrategyData = (address: string, chain: string) => {
       { provider: publicClient?.uid, address: key },
     ],
     queryFn: async () => {
+      const contractsForKey = allContracts?.[key]
+      if (!contractsForKey) {
+        return null
+      }
       const result = await getStrategyData({
         address,
-        contracts: allContracts![key]!,
+        contracts: contractsForKey as any,
         sommPrice: sommPrice ?? "0",
         stratData: structuredClone(stratData?.cellar),
         baseAssetPrice: baseAssetPrice ?? "0",
       })
-
       return result
     },
     enabled:
+      enabled &&
       !!allContracts &&
+      !!allContracts[key] &&
       !!sommPrice &&
       (isNoDataSource || !!stratData) &&
       !!baseAssetPrice,
-    }
-  )
+  })
 
   return {
     ...query,

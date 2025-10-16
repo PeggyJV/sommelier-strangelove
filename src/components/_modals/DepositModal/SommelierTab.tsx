@@ -12,35 +12,38 @@ import {
   UseDisclosureProps,
 } from "@chakra-ui/react"
 
-import { useEffect, useMemo, useState, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import {
   depositAssetTokenConfig,
   Token as TokenType,
   tokenConfig,
+  getTokenConfig,
 } from "data/tokenConfig"
 import { Link } from "components/Link"
 import { config } from "utils/config"
 import {
   useAccount,
-  useBalance,
-  useBlockNumber,
-  usePublicClient,
-  useWalletClient,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useSwitchChain,
 } from "wagmi"
-import { erc20Abi, getContract, parseUnits } from "viem"
-import { getAddress } from "viem"
+import {
+  erc20Abi,
+  getContract,
+  parseUnits,
+  getAddress,
+  PublicClient,
+} from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
-import { insertEvent } from "utils/supabase"
+// import { insertEvent } from "utils/supabase"
 import {
   InformationIcon,
   GreenCheckCircleIcon,
 } from "components/_icons"
-import { fetchCoingeckoPrice } from "queries/get-coingecko-price"
 import { CardHeading } from "components/_typography/CardHeading"
 import { getCurrentAsset } from "utils/getCurrentAsset"
 import { ExternalLinkIcon } from "components/_icons"
@@ -49,22 +52,25 @@ import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
-import { waitTime } from "data/uiConfig"
+import { waitTime, depositAssetDefaultValue } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
 import { useImportToken } from "hooks/web3/useImportToken"
-import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
-import { CellarNameKey } from "data/types"
 import { useStrategyData } from "data/hooks/useStrategyData"
+// Alpha stETH-specific APY UI removed from deposit modal per request
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { FaExternalLinkAlt } from "react-icons/fa"
+import { BaseButton } from "components/_buttons/BaseButton"
+import { useUserBalances } from "data/hooks/useUserBalances"
 import {
-  useEnsoRoutes,
-  EnsoRouteConfig,
-} from "data/hooks/useEnsoRoutes"
-import { config as contractConfig } from "src/utils/config"
-import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
-import { useQueryClient } from "@tanstack/react-query"
+  handleTransactionError,
+  getTransactionErrorToast,
+  getTransactionErrorAnalytics,
+  type TransactionErrorContext,
+} from "utils/handleTransactionError"
+import { logTxDebug } from "utils/txDebug"
+import { getActiveProvider } from "context/rpc_context"
+import { chainConfigMap } from "data/chainConfig"
 
 interface FormValues {
   depositAmount: number
@@ -75,30 +81,6 @@ interface FormValues {
 interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
   notifyModal?: UseDisclosureProps
-}
-
-function scientificToDecimalString(num: number) {
-  // If the number is in scientific notation, split it into base and exponent
-  const sign = Math.sign(num)
-  let [base, exponent] = num
-    .toString()
-    .split("e")
-    .map((item) => parseInt(item, 10))
-
-  // Adjust for negative exponent
-  if (exponent < 0) {
-    let decimalString = Math.abs(base).toString()
-    let padding = Math.abs(exponent) - 1
-    return (
-      (sign < 0 ? "-" : "") +
-      "0." +
-      "0".repeat(padding) +
-      decimalString
-    )
-  }
-
-  // Handle positive exponent or non-scientific numbers (which won't be split)
-  return num.toString()
 }
 
 //! This handles all deposits, not just the tab
@@ -112,21 +94,6 @@ export const SommelierTab = ({
   const cellarConfig = cellarData.config
   const cellarName = cellarData.name
   const cellarAddress = cellarConfig.id
-  const [slippageValue, setSlippageValue] = useState("3")
-
-  // TODO: Clean and enable below for enso
-  /*
-  // Drop active asset from deposit tokens to put active asset at the top of the token list
-  if (cellarConfig.chain.id === chainSlugMap.ETHEREUM.id) {
-    acceptedDepositTokenMap = acceptedETHDepositTokenMap
-  } else if (cellarConfig.chain.id === chainSlugMap.ARBITRUM.id) {
-    acceptedDepositTokenMap = acceptedARBDepositTokenMap
-  } else {
-    throw new Error(
-      `Need to create new accepted token map for chain: ${cellarConfig.chain.id}`
-    )
-  }
-  */
 
   let depositTokens: string[] = cellarData.depositTokens.list
   // Drop base asset from deposit token list
@@ -171,10 +138,25 @@ export const SommelierTab = ({
     cellarAddress,
   }
 
-  const { data: walletClient } = useWalletClient()
-  const publicClient = usePublicClient()
-  const { address } = useAccount()
-  const queryClient = useQueryClient()
+  const { address, chain } = useAccount()
+  const { switchChainAsync } = useSwitchChain()
+  const { writeContractAsync } = useWriteContract()
+  const { data: waitForTransaction } = useWaitForTransactionReceipt()
+  const geo = useGeo()
+
+  // Attribution (deposit started/receipt/error): send to ingestion API using Vercel KV backend
+  const sendIngest = async (evt: any) => {
+    try {
+      if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true")
+        return
+      await fetch("/api/ingest-rpc", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ events: [evt] }),
+        keepalive: true,
+      })
+    } catch {}
+  }
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
@@ -183,9 +165,32 @@ export const SommelierTab = ({
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
+  const [isDepositFeeLoading, setIsDepositFeeLoading] =
+    useState(false)
+  const [depositFee, setDepositFee] = useState(0)
   const methods = useForm<FormValues>({
     defaultValues: { slippage: config.SWAP.SLIPPAGE },
   })
+
+  // Set default selected token when component mounts
+  useEffect(() => {
+    if (!selectedToken && depositTokens.length > 0) {
+      const depositTokenConfig = getTokenConfig(
+        depositTokens,
+        cellarConfig.chain.id
+      ) as TokenType[]
+
+      // Get the default deposit asset for this cellar
+      const defaultAssetSymbol =
+        depositAssetDefaultValue(cellarConfig)
+      const defaultToken =
+        depositTokenConfig.find(
+          (token) => token.symbol === defaultAssetSymbol
+        ) || depositTokenConfig[0]
+
+      setSelectedToken(defaultToken)
+    }
+  }, [selectedToken, depositTokens, cellarConfig])
   const {
     watch,
     handleSubmit,
@@ -195,203 +200,560 @@ export const SommelierTab = ({
   const isError =
     errors.depositAmount !== undefined ||
     errors.slippage !== undefined
-  const isDisabled =
-    isNaN(watchDepositAmount) || watchDepositAmount <= 0 || isError
+  // Balance/chain guards
+  const desiredChainId = cellarConfig?.chain?.wagmiId
+  const needsSwitch = !!desiredChainId && chain?.id !== desiredChainId
 
-  function trackedSetSelectedToken(value: TokenType | null) {
-    if (value && value !== selectedToken) {
-      // analytics.track("deposit.stable-selected", {
-      //   ...baseAnalytics,
-      //   stable: value.symbol,
-      // })
-    }
-    setSelectedToken(value)
-  }
-
-  const { cellarSigner } = useCreateContracts(cellarConfig)
+  const { cellarSigner, boringVaultLens } =
+    useCreateContracts(cellarConfig)
 
   const { data: strategyData, isLoading } = useStrategyData(
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
+  const isAlpha = id === config.CONTRACT.ALPHA_STETH.SLUG
 
-  const activeAsset = strategyData?.activeAsset
+  const { userBalances } = useUserBalances()
 
-  const [_, wait] = useWaitForTransaction({
-    skip: true,
+  const selectedTokenBalance = userBalances.data?.find(
+    (b) => b.symbol === selectedToken?.symbol
+  )
+
+  const availableAmount = Number(selectedTokenBalance?.formatted ?? 0)
+  const insufficientBalance =
+    Number.isFinite(availableAmount) &&
+    Number(watchDepositAmount) > availableAmount
+  const isDisabled =
+    isNaN(watchDepositAmount) ||
+    watchDepositAmount <= 0 ||
+    isError ||
+    insufficientBalance ||
+    needsSwitch
+
+  // Debug snapshot
+  logTxDebug("deposit.ui_state", {
+    id,
+    cellarName,
+    chainId: chain?.id,
+    desiredChainId,
+    needsSwitch,
+    selectedToken: selectedToken?.symbol,
+    selectedTokenAddress: selectedToken?.address,
+    depositAmount: watchDepositAmount,
+    availableAmount,
+    insufficientBalance,
+    isDisabled,
   })
 
-  const { data: blockNumber } = useBlockNumber({ watch: true })
-
-  const { data: selectedTokenBalance, queryKey } = useBalance({
-    address: address,
-    token: getAddress(
-      selectedToken?.address ||
-        "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-    ), //WETH Address
-    unit: "wei",
-  })
+  // Get paid RPC client
+  const [paidClient, setPaidClient] = useState<PublicClient | null>(
+    null
+  )
 
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey })
-  }, [blockNumber, queryClient])
+    const initializePaidClient = async () => {
+      if (cellarConfig?.chain?.id) {
+        const chainConfig = chainConfigMap[cellarConfig.chain.id]
+        if (chainConfig) {
+          const client = await getActiveProvider(chainConfig)
+          setPaidClient(client)
+        }
+      }
+    }
+    initializePaidClient()
+  }, [cellarConfig?.chain?.id])
 
+  // ERC20 contract for the currently selected token (not always base asset)
   const erc20Contract =
     selectedToken?.address &&
-    publicClient &&
+    paidClient &&
     getContract({
-      address: getAddress(selectedToken?.address),
+      address: getAddress(selectedToken.address),
       abi: erc20Abi,
       client: {
-        wallet: walletClient,
-        public: publicClient,
+        public: paidClient,
       },
     })
 
-  // New enso route config
-  // TODO: Actually get the enso route config for the watched values if the active asset is not the selected token
-  const ensoRouteConfig: EnsoRouteConfig = useMemo(
-    () => ({
-      fromAddress: address!,
-      tokensIn: [
-        {
-          address:
-            selectedToken?.address ||
-            strategyData?.activeAsset.address.toLowerCase() ||
-            "",
-          amountBaseDenom:
-            watchDepositAmount * 10 ** (selectedToken?.decimals || 0),
-        },
-      ],
-      tokenOut: cellarAddress,
-      slippage: Number(slippageValue),
-    }),
-    [
-      address,
-      cellarAddress,
-      selectedToken?.address,
-      selectedToken?.decimals,
-      strategyData?.activeAsset.address,
-      watchDepositAmount,
-      slippageValue,
-    ]
-  )
-
-  const [lastEnsoResponse, setLastEnsoResponse] = useState<any>(null)
-
-  const { ensoResponse, ensoError, ensoLoading } = useEnsoRoutes(
-    ensoRouteConfig,
-    !isSubmitting,
-    lastEnsoResponse
-  )
-  useEffect(() => {
-    if (ensoResponse) {
-      setLastEnsoResponse(ensoResponse)
-    }
-  }, [ensoResponse])
-
-  const ensoRouterContract =
-    publicClient &&
+  const cellarContract =
+    paidClient &&
     getContract({
-      address: getAddress(
-        contractConfig.CONTRACT.ENSO_ROUTER.ADDRESS
-      ),
-      abi: contractConfig.CONTRACT.ENSO_ROUTER.ABI,
+      address: getAddress(cellarConfig.cellar.address),
+      abi: cellarConfig.cellar.abi,
       client: {
-        wallet: walletClient,
-        public: publicClient,
+        public: paidClient,
       },
     })
-
-  const isActiveAsset =
-    selectedToken?.address?.toLowerCase() ===
-    strategyData?.activeAsset?.address?.toLowerCase()
-
-  const geo = useGeo()
 
   const queryDepositFeePercent = async (assetAddress: string) => {
-    if (assetAddress === cellarConfig.baseAsset.address) {
+    if (
+      assetAddress === cellarConfig.baseAsset.address ||
+      cellarConfig.boringVault
+    ) {
       return 0
     }
 
-    const [isSupported, holdingPosition, depositFee] =
-      (await cellarSigner?.read.alternativeAssetData([
-        assetAddress,
-      ])) as [boolean, number, number]
+    const result = await cellarSigner?.read.alternativeAssetData([
+      assetAddress,
+    ])
+    if (!result) return 0
 
-    if (!isSupported) {
-      throw new Error("Asset is not supported")
-    }
+    const [isSupported, _, depositFee] = result as [boolean, any, any]
 
-    // 6 decimal place precision
-    return depositFee / 10 ** 6
+    return isSupported ? Number(depositFee) : 0
   }
 
-  const [depositFee, setDepositFee] = useState<number>(0) // Use lowercase 'number'
-  const [isDepositFeeLoading, setIsDepositFeeLoading] =
-    useState<boolean>(false)
-
-  useEffect(() => {
-    // Define an async function inside the useEffect
-    const fetchDepositFee = async () => {
-      setIsDepositFeeLoading(true)
-
-      if (selectedToken?.address) {
-        try {
-          const depositFee = await queryDepositFeePercent(
-            selectedToken.address
-          )
-          setDepositFee(depositFee)
-        } catch (error) {
-          console.error("Error fetching deposit fee:", error)
-          throw error
-        }
+  // Helper: wrap writeContractAsync and swallow user-rejected with toast, returning undefined
+  const safeWriteContract = async (
+    params: Parameters<typeof writeContractAsync>[0],
+    context: TransactionErrorContext
+  ): Promise<string | undefined> => {
+    try {
+      logTxDebug("write.request", {
+        to: (params as any)?.address,
+        fn: (params as any)?.functionName,
+        args: (params as any)?.args,
+        value: (params as any)?.value,
+        context,
+      })
+      const hash = await writeContractAsync(params)
+      logTxDebug("write.submitted", { hash })
+      return hash
+    } catch (e) {
+      logTxDebug("write.error", { message: (e as Error)?.message })
+      const normalized = handleTransactionError(e as Error, context)
+      if (normalized.type === "USER_REJECTED") {
+        logTxDebug("write.rejected", { context })
+        const toastConfig = getTransactionErrorToast(
+          normalized,
+          context
+        )
+        const analyticsData = getTransactionErrorAnalytics(
+          normalized,
+          context
+        )
+        analytics.track(`${context.transactionType}.rejected`, {
+          ...baseAnalytics,
+          ...analyticsData,
+        })
+        const toastBody = toastConfig.showPopupGuidance ? (
+          <Text>
+            {toastConfig.body}
+            <br />
+            Enable popups for MetaMask and retry.
+          </Text>
+        ) : (
+          <Text>{toastConfig.body}</Text>
+        )
+        addToast({
+          heading: toastConfig.heading,
+          body: toastBody,
+          status: toastConfig.status,
+          closeHandler: closeAll,
+        })
+        return undefined
       }
-
-      setIsDepositFeeLoading(false)
+      throw e
     }
+  }
 
-    // Call the async function
-    fetchDepositFee()
-  }, [selectedToken])
-
-  const deposit = async (
+  const doDepositTx = async (
+    nativeDeposit: boolean,
     amtInWei: bigint,
-    address?: string,
-    assetAddress?: string
-  ) => {
-    if (
+    assetAddress: string
+  ): Promise<any> => {
+    let fnName: string
+    let args: any[]
+    let value: bigint
+
+    if (cellarConfig.boringVault) {
+      const minimumMint = await boringVaultLens?.read.previewDeposit([
+        assetAddress,
+        amtInWei,
+        cellarConfig.cellar.address,
+        cellarConfig.accountant?.address,
+      ])
+      fnName = "deposit"
+      args = [assetAddress, amtInWei, minimumMint]
+      value = nativeDeposit ? amtInWei : BigInt(0)
+    } else if (
       assetAddress !== undefined &&
       assetAddress.toLowerCase() !==
         cellarConfig.baseAsset.address.toLowerCase()
     ) {
-      // @ts-ignore
-      return cellarSigner?.write.multiAssetDeposit(
-        [assetAddress, amtInWei, address],
-        { account: address }
-      )
+      const minimumMint = await cellarSigner?.read.previewDeposit([
+        assetAddress,
+        amtInWei,
+      ])
+      fnName = "deposit"
+      args = [assetAddress, amtInWei, minimumMint]
+      value = BigInt(0)
     } else {
-      if (
-        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_USD ||
-        cellarConfig.cellarNameKey === CellarNameKey.REAL_YIELD_ETH
-      ) {
-        const gasLimitEstimated = await estimateGasLimitWithRetry(
-          cellarSigner?.estimateGas.deposit,
-          cellarSigner?.simulate.deposit,
-          [amtInWei, address],
-          1000000,
-          address
-        )
-        // @ts-ignore
-        return cellarSigner?.write.deposit([amtInWei, address], {
-          gas: gasLimitEstimated,
-          account: address,
-        })
+      const minimumMint = await cellarSigner?.read.previewDeposit([
+        amtInWei,
+      ])
+      fnName = "deposit"
+      args = [amtInWei, address]
+      value = BigInt(0)
+    }
+
+    try {
+      const contractParams: any = {
+        address: cellarSigner?.address as `0x${string}`,
+        abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
+        functionName: fnName,
+        args: args,
       }
-      // @ts-ignore
-      return cellarSigner?.write.deposit([amtInWei, address], {
-        account: address,
+
+      if (value > 0) {
+        contractParams.value = value
+      }
+
+      const hash = await safeWriteContract(contractParams, {
+        vaultName: cellarName,
+        tokenSymbol: selectedToken?.symbol,
+        transactionType: "deposit",
+        chainId: cellarConfig.chain.wagmiId,
       })
+
+      if (hash) {
+        addToast({
+          heading: "Deposit in Progress",
+          body: <Text>Your deposit is being processed.</Text>,
+          status: "info",
+          closeHandler: close,
+        })
+
+        const receipt = await paidClient?.waitForTransactionReceipt({
+          hash: hash as `0x${string}`,
+        })
+
+        if (receipt?.status === "success") {
+          addToast({
+            heading: "Deposit Successful",
+            body: (
+              <Text>
+                Your deposit has been completed successfully.
+              </Text>
+            ),
+            status: "success",
+            closeHandler: close,
+          })
+          return [receipt]
+        } else {
+          addToast({
+            heading: "Deposit Failed",
+            body: <Text>Deposit failed. Please try again.</Text>,
+            status: "error",
+            closeHandler: close,
+          })
+          throw new Error("Deposit failed")
+        }
+      }
+    } catch (error) {
+      console.error("Deposit error:", error)
+      throw error
+    }
+  }
+
+  const doApprovalTx = async (
+    amtInWei: bigint,
+    tokenAddress: string,
+    spender: string
+  ): Promise<boolean> => {
+    try {
+      const hash = await safeWriteContract(
+        {
+          address: tokenAddress as `0x${string}`,
+          abi: erc20Abi,
+          functionName: "approve",
+          args: [spender as `0x${string}`, amtInWei],
+        },
+        {
+          vaultName: cellarName,
+          tokenSymbol: selectedToken?.symbol,
+          transactionType: "approve",
+          chainId: cellarConfig.chain.wagmiId,
+        }
+      )
+
+      if (hash) {
+        addToast({
+          heading: "Approving Token",
+          body: <Text>Please approve the token transfer.</Text>,
+          status: "info",
+          closeHandler: close,
+        })
+
+        const receipt = await paidClient?.waitForTransactionReceipt({
+          hash: hash as `0x${string}`,
+        })
+
+        if (receipt?.status === "success") {
+          addToast({
+            heading: "Token Approved",
+            body: <Text>Token approval successful.</Text>,
+            status: "success",
+            closeHandler: close,
+          })
+          return true
+        } else {
+          addToast({
+            heading: "Approval Failed",
+            body: <Text>Token approval failed.</Text>,
+            status: "error",
+            closeHandler: close,
+          })
+          return false
+        }
+      }
+      return false
+    } catch (error) {
+      console.error("Approval error:", error)
+
+      // Use centralized error handling for approval
+      const errorContext: TransactionErrorContext = {
+        vaultName: cellarName,
+        tokenSymbol: selectedToken?.symbol,
+        transactionType: "approve",
+        chainId: cellarConfig.chain.wagmiId,
+      }
+
+      const normalizedError = handleTransactionError(
+        error as Error,
+        errorContext
+      )
+      const toastConfig = getTransactionErrorToast(
+        normalizedError,
+        errorContext
+      )
+      const analyticsData = getTransactionErrorAnalytics(
+        normalizedError,
+        errorContext
+      )
+
+      // Track analytics
+      analytics.track("approval.rejected", {
+        ...analyticsData,
+      })
+
+      // Show toast with popup guidance if needed
+      const toastBody = toastConfig.showPopupGuidance ? (
+        <Text>
+          {toastConfig.body}
+          <br />
+          Enable popups for MetaMask and retry.
+        </Text>
+      ) : (
+        <Text>{toastConfig.body}</Text>
+      )
+
+      addToast({
+        heading: toastConfig.heading,
+        body: toastBody,
+        status: toastConfig.status,
+        closeHandler: close,
+      })
+      return false
+    }
+  }
+
+  const deposit = async (
+    amtInWei: bigint,
+    tokenAddress: string,
+    approval: boolean,
+    canDoBatchCall: boolean,
+    isNativeDeposit: boolean
+  ): Promise<any[]> => {
+    try {
+      let hash: string
+
+      // For BoringVault (like Alpha STETH), use the teller contract
+      if (cellarConfig.teller) {
+        // Calculate minimum mint amount (0 for now, can be enhanced later)
+        const minimumMint = 0n
+
+        if (isNativeDeposit) {
+          // Native ETH deposit
+          const tellerParams: any = {
+            address: cellarConfig.teller.address as `0x${string}`,
+            abi: cellarConfig.teller.abi,
+            functionName: "deposit",
+            args: [tokenAddress, amtInWei, minimumMint],
+          }
+
+          if (amtInWei > 0) {
+            tellerParams.value = amtInWei
+          }
+
+          hash = (await safeWriteContract(tellerParams, {
+            vaultName: cellarName,
+            tokenSymbol: selectedToken?.symbol,
+            transactionType: "deposit",
+            chainId: cellarConfig.chain.wagmiId,
+          })) as string
+        } else {
+          // ERC20 token deposit
+          hash = (await safeWriteContract(
+            {
+              address: cellarConfig.teller.address as `0x${string}`,
+              abi: cellarConfig.teller.abi,
+              functionName: "deposit",
+              args: [tokenAddress, amtInWei, minimumMint],
+            },
+            {
+              vaultName: cellarName,
+              tokenSymbol: selectedToken?.symbol,
+              transactionType: "deposit",
+              chainId: cellarConfig.chain.wagmiId,
+            }
+          )) as string
+        }
+      } else {
+        // Standard cellar deposit
+        if (isNativeDeposit) {
+          // Native ETH deposit
+          const cellarParams: any = {
+            address: cellarConfig.cellar.address as `0x${string}`,
+            abi: cellarConfig.cellar.abi,
+            functionName: "deposit",
+            args: [amtInWei, address],
+          }
+
+          if (amtInWei > 0) {
+            cellarParams.value = amtInWei
+          }
+
+          hash = (await safeWriteContract(cellarParams, {
+            vaultName: cellarName,
+            tokenSymbol: selectedToken?.symbol,
+            transactionType: "deposit",
+            chainId: cellarConfig.chain.wagmiId,
+          })) as string
+        } else {
+          // ERC20 token deposit
+          hash = (await safeWriteContract(
+            {
+              address: cellarConfig.cellar.address as `0x${string}`,
+              abi: cellarConfig.cellar.abi,
+              functionName: "deposit",
+              args: [amtInWei, address],
+            },
+            {
+              vaultName: cellarName,
+              tokenSymbol: selectedToken?.symbol,
+              transactionType: "deposit",
+              chainId: cellarConfig.chain.wagmiId,
+            }
+          )) as string
+        }
+      }
+
+      if (hash) {
+        const receipt = await paidClient?.waitForTransactionReceipt({
+          hash: hash as `0x${string}`,
+        })
+
+        // Show a confirmation toast for BoringVault (e.g., Alpha STETH) deposits
+        if (receipt?.status === "success" && cellarConfig.teller) {
+          addToast({
+            heading: "Deposit Successful",
+            body: (
+              <Text>
+                Your deposit has been completed successfully.
+              </Text>
+            ),
+            status: "success",
+            closeHandler: close,
+          })
+        }
+
+        return [receipt]
+      }
+
+      return []
+    } catch (error) {
+      console.error("Deposit error:", error)
+
+      // Normalize and handle user-rejected errors gracefully to avoid dev overlay
+      const errorContext: TransactionErrorContext = {
+        vaultName: cellarName,
+        tokenSymbol: selectedToken?.symbol,
+        transactionType: "deposit",
+        chainId: cellarConfig.chain.wagmiId,
+      }
+      const normalizedError = handleTransactionError(
+        error as Error,
+        errorContext
+      )
+
+      if (normalizedError.type === "USER_REJECTED") {
+        const toastConfig = getTransactionErrorToast(
+          normalizedError,
+          errorContext
+        )
+        const analyticsData = getTransactionErrorAnalytics(
+          normalizedError,
+          errorContext
+        )
+
+        analytics.track("deposit.rejected", {
+          ...baseAnalytics,
+          ...analyticsData,
+        })
+
+        // Attribution (deposit user rejected)
+        try {
+          const domain = window.location.hostname
+          const pagePath =
+            window.location.pathname + window.location.search
+          const sessionId =
+            localStorage.getItem("somm_session_id") ||
+            crypto.randomUUID()
+          localStorage.setItem("somm_session_id", sessionId)
+          const toAddress = (cellarConfig.teller?.address ||
+            cellarConfig.cellar.address) as string
+          await sendIngest({
+            stage: "error",
+            domain,
+            pagePath,
+            sessionId,
+            wallet: (address || "").toLowerCase(),
+            chainId: cellarConfig.chain.wagmiId,
+            method: "deposit",
+            to: toAddress,
+            contractMatch: true,
+            strategyKey: cellarConfig.teller
+              ? "ALPHA_STETH"
+              : undefined,
+            status: "user_rejected",
+            timestampMs: Date.now(),
+          })
+        } catch {}
+
+        const toastBody = toastConfig.showPopupGuidance ? (
+          <Text>
+            {toastConfig.body}
+            <br />
+            Enable popups for MetaMask and retry.
+          </Text>
+        ) : (
+          <Text>{toastConfig.body}</Text>
+        )
+
+        addToast({
+          heading: toastConfig.heading,
+          body: toastBody,
+          status: toastConfig.status,
+          closeHandler: closeAll,
+        })
+
+        // Do not rethrow user-rejected to prevent red runtime overlay
+        return []
+      }
+
+      // For all other errors, rethrow to be handled by caller
+      throw error
     }
   }
 
@@ -402,164 +764,160 @@ export const SommelierTab = ({
     const tokenSymbol = data?.selectedToken?.symbol
     const depositAmount = data?.depositAmount
 
-    // if swap slippage is not set, use default value
-    const slippage = data?.slippage
+    let nativeDeposit = selectedToken?.symbol === "ETH"
+    if (!erc20Contract && !nativeDeposit) return
 
-    if (!erc20Contract) return
-    insertEvent({
-      event: "deposit.started",
-      address: address ?? "",
-      cellar: cellarConfig.cellar.address,
-    })
-    // analytics.track("deposit.started", {
-    //   ...baseAnalytics,
-    //   stable: tokenSymbol,
-    //   value: depositAmount,
-    // })
+    // For now, assume batch calls are not supported to avoid the getCapabilities issue
+    const canDoBatchCall = false
 
-    // check if approval exists
-    // @ts-ignore
-    const allowance = await erc20Contract.read.allowance(
-      [
-        getAddress(address ?? ""),
-        getAddress(cellarConfig.cellar.address),
-      ],
-      { account: address }
-    )
-
-    const amtInWei = parseUnits(
-      depositAmount.toString(),
-      selectedTokenBalance?.decimals ?? 0
-    )
-
-    let needsApproval
-    try {
-      needsApproval = allowance < amtInWei
-    } catch (e) {
-      const error = e as Error
-      console.error("Invalid Input: ", error.message)
-      return
-    }
-
-    let approval = !needsApproval
-    if (needsApproval) {
-      /* analytics.track("deposit.approval-required", {
-        ...baseAnalytics,
-       stable: tokenSymbol,
-        value: depositAmount,
-      })*/
-
-      try {
+    const allowance = nativeDeposit
+      ? Number.MAX_SAFE_INTEGER
+      : // For ERC20, check allowance of the selected token to the correct spender
+        // BoringVault (Alpha STETH): spender is Teller; Legacy cellar: spender is Cellar
         // @ts-ignore
-        const hash = await erc20Contract.write.approve(
-          [cellarConfig.cellar.address, amtInWei],
+        await erc20Contract.read.allowance(
+          [
+            getAddress(address ?? ""),
+            getAddress(cellarConfig.cellar.address),
+          ],
           { account: address }
         )
-        addToast({
-          heading: "ERC20 Approval",
-          status: "default",
-          body: <Text>Approving ERC20</Text>,
-          isLoading: true,
-          closeHandler: close,
-          duration: null,
-        })
-        const waitForApproval = wait({ confirmations: 1, hash })
-        const result = await waitForApproval
-        if (result?.data?.transactionHash) {
-          // analytics.track("deposit.approval-granted", {
-          //   ...baseAnalytics,
-          //   stable: tokenSymbol,
-          //   value: depositAmount,
-          // })
-          approval = true
+    logTxDebug("deposit.allowance", {
+      nativeDeposit,
+      allowance: nativeDeposit
+        ? "MAX_SAFE_INTEGER"
+        : String(allowance),
+    })
 
-          update({
-            heading: "ERC20 Approval",
-            body: <Text>ERC20 Approved</Text>,
-            status: "success",
-            closeHandler: closeAll,
-          })
-        } else if (result?.error) {
-          // analytics.track("deposit.approval-failed", {
-          //   ...baseAnalytics,
-          //   stable: tokenSymbol,
-          //   value: depositAmount,
-          // })
+    const amtInWei = parseUnits(
+      depositAmount.toFixed(selectedTokenBalance?.decimals ?? 18),
+      selectedTokenBalance?.decimals ?? 0
+    )
+    logTxDebug("deposit.amountParsed", {
+      depositAmount,
+      decimals: selectedTokenBalance?.decimals,
+      amtInWei: String(amtInWei),
+    })
 
-          update({
-            heading: "ERC20 Approval",
-            body: <Text>Approval Failed</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
-        }
-      } catch (e) {
-        const error = e as Error
-        console.error(error.message)
-        // analytics.track("deposit.approval-cancelled", {
-        //   ...baseAnalytics,
-        //   stable: tokenSymbol,
-        //   value: depositAmount,
-        // })
+    // Send attribution 'request' event (deposit initiated)
+    try {
+      const domain = window.location.hostname
+      const pagePath =
+        window.location.pathname + window.location.search
+      const sessionId =
+        localStorage.getItem("somm_session_id") || crypto.randomUUID()
+      localStorage.setItem("somm_session_id", sessionId)
+      const toAddress = (cellarConfig.teller?.address ||
+        cellarConfig.cellar.address) as string
+      await sendIngest({
+        stage: "request",
+        domain,
+        pagePath,
+        sessionId,
+        wallet: (address || "").toLowerCase(),
+        chainId: cellarConfig.chain.wagmiId,
+        method: "deposit",
+        paramsRedacted: {
+          token: data?.selectedToken?.address,
+          amountWei: String(amtInWei),
+        },
+        to: toAddress,
+        contractMatch: true,
+        strategyKey: cellarConfig.teller ? "ALPHA_STETH" : undefined,
+        amount: String(amtInWei),
+        status: "started",
+        timestampMs: Date.now(),
+      })
+    } catch {}
 
-        addToast({
-          heading: "ERC20 Approval",
-          body: <Text>Approval Cancelled</Text>,
-          status: "error",
-          closeHandler: closeAll,
-        })
-      }
+    let needsApproval = allowance < amtInWei
+    let approval = !needsApproval
+
+    if (needsApproval && !canDoBatchCall && !nativeDeposit) {
+      approval = await doApprovalTx(
+        amtInWei,
+        getAddress(selectedToken!.address),
+        getAddress(cellarConfig.cellar.address)
+      )
     }
-    if (approval) {
+
+    if (approval || canDoBatchCall) {
       try {
-        // If selected token is cellar's current asset, it is cheaper to deposit into the cellar
-        // directly rather than through the router. Should only use router when swapping into the
-        // cellar's current asset.
+        // Add a small delay to prevent spam filter triggers
+        await new Promise((resolve) => setTimeout(resolve, 1000))
 
-        const hash =
-          isActiveAsset ||
-          cellarData.depositTokens.list.includes(tokenSymbol)
-            ? await deposit(
-                amtInWei,
-                address,
-                data?.selectedToken?.address
-              )
-            : await walletClient!.sendTransaction({
-                account: address,
-                to: ensoRouterContract?.address,
-                value: ensoResponse.tx.data,
-              })
+        const receipts = await deposit(
+          amtInWei,
+          data?.selectedToken?.address,
+          approval,
+          canDoBatchCall,
+          nativeDeposit
+        )
 
-        if (!hash) throw new Error("response is undefined")
-        addToast({
-          heading: cellarName + " Cellar Deposit",
-          status: "default",
-          body: <Text>Depositing {selectedToken?.symbol}</Text>,
-          isLoading: true,
-          closeHandler: close,
-          duration: null,
-        })
-        const waitForDeposit = wait({
-          confirmations: 1,
-          hash: hash,
-        })
-
-        const depositResult = await waitForDeposit
+        // If no receipts, likely user canceled; a toast was already shown by error handler
+        if (!receipts || receipts.length === 0) {
+          logTxDebug("deposit.no_receipt", {
+            reason: "likely user cancel",
+          })
+          return
+        }
 
         refetch()
 
-        if (depositResult?.data?.transactionHash) {
-          insertEvent({
-            event: "deposit.succeeded",
-            address: address ?? "",
-            cellar: cellarConfig.cellar.address,
-            transaction_hash: depositResult.data.transactionHash,
+        if (receipts?.[0]?.status === "success") {
+          logTxDebug("deposit.success", {
+            txHash: receipts![0].transactionHash,
           })
+          // Attribution (deposit succeeded)
+          try {
+            const domain = window.location.hostname
+            const pagePath =
+              window.location.pathname + window.location.search
+            const sessionId =
+              localStorage.getItem("somm_session_id") ||
+              crypto.randomUUID()
+            localStorage.setItem("somm_session_id", sessionId)
+            const toAddress = (cellarConfig.teller?.address ||
+              cellarConfig.cellar.address) as string
+            await sendIngest({
+              stage: "receipt",
+              domain,
+              pagePath,
+              sessionId,
+              wallet: (address || "").toLowerCase(),
+              chainId: cellarConfig.chain.wagmiId,
+              method: "deposit",
+              txHash: receipts![0].transactionHash,
+              to: toAddress,
+              contractMatch: true,
+              strategyKey: cellarConfig.teller
+                ? "ALPHA_STETH"
+                : undefined,
+              amount: String(
+                parseUnits(
+                  depositAmount.toFixed(
+                    selectedTokenBalance?.decimals ?? 18
+                  ),
+                  selectedTokenBalance?.decimals ?? 0
+                )
+              ),
+              blockNumber: Number(
+                (receipts![0] as any)?.blockNumber ?? 0
+              ),
+              blockHash: (receipts![0] as any)?.blockHash,
+              status: "success",
+              token:
+                tokenSymbol ||
+                (nativeDeposit ? "ETH" : data?.selectedToken?.symbol),
+              decimals: selectedTokenBalance?.decimals ?? 18,
+              timestampMs: Date.now(),
+            })
+          } catch {}
           analytics.track("deposit.succeeded", {
             ...baseAnalytics,
             stable: tokenSymbol,
             value: depositAmount,
-            transaction_hash: depositResult.data.transactionHash,
+            transaction_hash: receipts![0].transactionHash,
           })
 
           update({
@@ -570,7 +928,9 @@ export const SommelierTab = ({
                 <Link
                   display="flex"
                   alignItems="center"
-                  href={`${cellarConfig.chain.blockExplorer.url}/tx/${depositResult?.data?.transactionHash}`}
+                  href={`${cellarConfig.chain.blockExplorer.url}/tx/${
+                    receipts![0].transactionHash
+                  }`}
                   isExternal
                   textDecor="underline"
                 >
@@ -579,15 +939,29 @@ export const SommelierTab = ({
                 </Link>
                 <Text
                   onClick={() => {
-                    importToken.mutate({
-                      address: cellarAddress,
-                      chain: cellarConfig.chain.id,
-                    })
+                    if (!importToken.isPending) {
+                      console.log(
+                        "Importing token with address:",
+                        cellarAddress
+                      )
+                      console.log(
+                        "Importing token with image:",
+                        `${window.origin}${cellarConfig.lpToken.imagePath}`
+                      )
+                      importToken.mutate({
+                        address: cellarAddress,
+                        chain: cellarConfig.chain.id,
+                        imageUrl: `${window.origin}${cellarConfig.lpToken.imagePath}`,
+                      })
+                    }
                   }}
                   textDecor="underline"
                   as="button"
+                  disabled={importToken.isPending}
                 >
-                  Import tokens to wallet
+                  {importToken.isPending
+                    ? "Importing..."
+                    : "Import tokens to wallet"}
                 </Text>
                 {waitTime(cellarConfig) !== null && (
                   <Text textAlign="center">
@@ -614,67 +988,84 @@ export const SommelierTab = ({
           //@ts-ignore
           notifyModal?.onOpen()
         }
-
-        if (depositResult?.error) {
-          analytics.track("deposit.failed", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-          })
-
-          update({
-            heading: cellarName + " Cellar Deposit",
-            body: <Text>Deposit Failed</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
-        }
       } catch (e) {
         const error = e as Error
-        if (error.message === "GAS_LIMIT_ERROR") {
-          analytics.track("deposit.failed", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-            message: "GAS_LIMIT_ERROR",
-          })
-          addToast({
-            heading: "Transaction not submitted",
-            body: (
-              <Text>
-                Your transaction has failed, if it does not work after
-                waiting some time and retrying please send a message
-                in our{" "}
-                {
-                  <Link
-                    href="https://discord.com/channels/814266181267619840/814279703622844426"
-                    isExternal
-                    textDecoration="underline"
-                  >
-                    Discord Support channel
-                  </Link>
-                }{" "}
-                tagging a member of the front end team.
-              </Text>
-            ),
-            status: "info",
-            closeHandler: closeAll,
-          })
-        } else {
-          console.error(error.message)
-          analytics.track("deposit.rejected", {
-            ...baseAnalytics,
-            stable: tokenSymbol,
-            value: depositAmount,
-          })
+        console.error("Deposit error:", error)
 
-          addToast({
-            heading: cellarName + " Deposit",
-            body: <Text>Deposit Cancelled</Text>,
-            status: "error",
-            closeHandler: closeAll,
-          })
+        // Use centralized error handling
+        const errorContext: TransactionErrorContext = {
+          vaultName: cellarName,
+          tokenSymbol,
+          transactionType: "deposit",
+          value: depositAmount,
+          chainId: cellarConfig.chain.wagmiId,
         }
+
+        const normalizedError = handleTransactionError(
+          error,
+          errorContext
+        )
+        const toastConfig = getTransactionErrorToast(
+          normalizedError,
+          errorContext
+        )
+        const analyticsData = getTransactionErrorAnalytics(
+          normalizedError,
+          errorContext
+        )
+
+        // Track analytics
+        analytics.track("deposit.rejected", {
+          ...baseAnalytics,
+          ...analyticsData,
+        })
+
+        // Attribution (deposit error)
+        try {
+          const domain = window.location.hostname
+          const pagePath =
+            window.location.pathname + window.location.search
+          const sessionId =
+            localStorage.getItem("somm_session_id") ||
+            crypto.randomUUID()
+          localStorage.setItem("somm_session_id", sessionId)
+          const toAddress = (cellarConfig.teller?.address ||
+            cellarConfig.cellar.address) as string
+          await sendIngest({
+            stage: "error",
+            domain,
+            pagePath,
+            sessionId,
+            wallet: (address || "").toLowerCase(),
+            chainId: cellarConfig.chain.wagmiId,
+            method: "deposit",
+            to: toAddress,
+            contractMatch: true,
+            strategyKey: cellarConfig.teller
+              ? "ALPHA_STETH"
+              : undefined,
+            status: (normalizedError.type || "error").toLowerCase(),
+            timestampMs: Date.now(),
+          })
+        } catch {}
+
+        // Show toast with popup guidance if needed
+        const toastBody = toastConfig.showPopupGuidance ? (
+          <Text>
+            {toastConfig.body}
+            <br />
+            Enable popups for MetaMask and retry.
+          </Text>
+        ) : (
+          <Text>{toastConfig.body}</Text>
+        )
+
+        addToast({
+          heading: toastConfig.heading,
+          body: toastBody,
+          status: toastConfig.status,
+          closeHandler: closeAll,
+        })
 
         console.warn("failed to deposit", e)
       }
@@ -696,8 +1087,13 @@ export const SommelierTab = ({
   const currentAsset = getCurrentAsset(
     tokenConfig,
     cellarConfig.chain.id,
-    activeAsset?.address
+    selectedToken?.address
   )
+
+  const displayAsset =
+    id === config.CONTRACT.ALPHA_STETH.SLUG
+      ? cellarConfig.baseAsset
+      : currentAsset
 
   // Move active asset to top of token list.
   useEffect(() => {
@@ -712,68 +1108,7 @@ export const SommelierTab = ({
       0,
       depositAssetTokenConfig.splice(indexOfActiveAsset, 1)[0]
     )
-  }, [activeAsset, currentAsset])
-
-  const [ensoSharesOut, setEnsoSharesOut] = useState<number>(0)
-
-  const [cellarSharePreviewRedeem, setCellarSharePreviewRedeem] =
-    useState<number>(0)
-
-  useEffect(() => {
-    const fetchCellarSharePreviewRedeem = async () => {
-      try {
-        const previewRedeem = await fetchCellarPreviewRedeem(
-          cellarData.slug,
-          BigInt(10 ** cellarConfig.cellar.decimals)
-        )
-        setCellarSharePreviewRedeem(
-          previewRedeem / 10 ** cellarConfig.cellar.decimals
-        )
-      } catch (error) {
-        console.error(
-          "Error fetching cellar share preview redeem: ",
-          error
-        )
-      }
-    }
-
-    fetchCellarSharePreviewRedeem()
-  }, [cellarConfig.cellar.address, cellarConfig.cellar.decimals])
-
-  useEffect(() => {
-    if (
-      watchDepositAmount === undefined ||
-      watchDepositAmount <= 0 ||
-      Number.isNaN(watchDepositAmount)
-    ) {
-      setEnsoSharesOut(0)
-    } else {
-      setEnsoSharesOut(
-        Number(ensoResponse?.amountOut || 0) /
-          10 ** cellarConfig.cellar.decimals
-      )
-    }
-  }, [watchDepositAmount, ensoResponse, cellarConfig])
-
-  const [baseAssetPrice, setBaseAssetPrice] = useState<number>(0)
-
-  useEffect(() => {
-    const fetchBaseAssetPrice = async () => {
-      try {
-        const price = await fetchCoingeckoPrice(
-          cellarConfig.baseAsset,
-          "usd"
-        )
-
-        setBaseAssetPrice(Number(price || 0))
-      } catch (error) {
-        console.log(error)
-        console.error("Error fetching base asset price: ", error)
-      }
-    }
-
-    fetchBaseAssetPrice()
-  }, [cellarConfig])
+  }, [selectedToken, currentAsset])
 
   const strategyMessages: Record<string, () => JSX.Element> = {
     "Real Yield ETH": () => (
@@ -1253,20 +1588,24 @@ export const SommelierTab = ({
             <Text as="span">{cellarName}</Text>
           </HStack>
           <HStack justify="space-between">
-            <Text as="span">Accounting Asset</Text>
+            <Text as="span">
+              {id === config.CONTRACT.ALPHA_STETH.SLUG
+                ? "Base asset"
+                : "Accounting Asset"}
+            </Text>
             {isLoading ? (
               <Spinner size="xs" />
             ) : (
               <HStack spacing={1}>
                 <Avatar
                   boxSize={7}
-                  src={currentAsset?.src}
-                  name={currentAsset?.alt}
+                  src={displayAsset?.src}
+                  name={displayAsset?.alt}
                   borderWidth={2}
                   borderColor="surface.bg"
                   bg="surface.bg"
                 />
-                <Text as="span">{currentAsset?.symbol}</Text>
+                <Text as="span">{displayAsset?.symbol}</Text>
               </HStack>
             )}
           </HStack>
@@ -1279,11 +1618,12 @@ export const SommelierTab = ({
           align="stretch"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
+          {/* Alpha stETH: Net APY display removed in deposit modal */}
           <FormControl isInvalid={isError as boolean | undefined}>
             <ModalMenu
               depositTokens={depositTokens}
-              setSelectedToken={trackedSetSelectedToken}
-              activeAsset={activeAsset?.address}
+              setSelectedToken={setSelectedToken}
+              activeAsset={selectedToken?.address}
               selectedTokenBalance={selectedTokenBalance}
               isDisabled={isSubmitting}
             />
@@ -1300,178 +1640,70 @@ export const SommelierTab = ({
                 errors.slippage?.message}
             </FormErrorMessage>
           </FormControl>
-          {/* selectedToken?.symbol !== activeAsset?.symbol ? (
-            <Tooltip
-              hasArrow
-              //label=""
-              bg="surface.bg"
-              color="neutral.300"
-            >
-              <HStack pr={2} textAlign="center">
-                <Text fontFamily={"inherit"}>
-                  Non accounting asset deposits go through a router
-                  and bundle a series of swaps and subsequent vault
-                  deposit.
-                </Text>
-              </HStack>
-            </Tooltip>
-          ) : null*/}
-          {selectedToken?.symbol !== activeAsset?.symbol ? (
+          {selectedToken?.symbol !== cellarConfig.baseAsset.symbol ? (
             <>
-              <CardHeading paddingTop="2em">
-                Transaction details
-              </CardHeading>
-              {/*
-          <HStack justify="space-between">
-            <HStack spacing={1} align="center">
-              <Tooltip
-                hasArrow
-                label="Percent of price slippage you are willing to accept for a trade. Higher slippage tolerance means your transaction is more likely to succeed, but you may get a worse price."
-                bg="surface.bg"
-                color="neutral.300"
-                textAlign="center"
-              >
-                <HStack spacing={1} align="center">
-                  <CardHeading fontSize="small">
-                    Slippage Tolerance
+              {id !== config.CONTRACT.ALPHA_STETH.SLUG && (
+                <>
+                  <CardHeading paddingTop="2em">
+                    Transaction details
                   </CardHeading>
-                  <InformationIcon color="neutral.300" boxSize={3} />
-                </HStack>
-              </Tooltip>
-            </HStack>
-            {cellarData.depositTokens.list.includes(
-              selectedToken?.symbol || ""
-            ) ? (
-              <Tooltip
-                hasArrow
-                label="No slippage when depositing directly into a vault."
-                bg="surface.bg"
-                color="neutral.300"
-                textAlign="center"
-              >
-                <HStack pr={2}>
-                  <GreenCheckCircleIcon></GreenCheckCircleIcon>
-                  <Text fontFamily={"inherit"}>None</Text>
-                </HStack>
-              </Tooltip>
-            ) : (
-              <Box maxW="200px">
-                <InputGroup>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={20}
-                    placeholder="0"
-                    width="4.5em"
-                    disabled={isSubmitting ?? false}
-                    value={
-                      slippageValue !== undefined ? slippageValue : ""
-                    }
-                    onChange={(e) => {
-                      const inputValue = e.target.value
-
-                      // If input is empty, set state to an empty string and return
-                      if (inputValue === "") {
-                        setSlippageValue("")
-                        return
-                      }
-
-                      // Parse the input value to a float with 2 decimal places
-                      const num = parseFloat(inputValue)
-
-                      // If number is between 0 and 20, update the state
-                      if (!isNaN(num) && num >= 0 && num <= 20) {
-                        setSlippageValue(String(num))
-                      } else {
-                        addToast({
-                          heading: "Invalid Slippage Tolerance",
-                          body: (
-                            <Text>
-                              Slippage tolerance must be between 0 and
-                              20%
-                            </Text>
-                          ),
-                          status: "warning",
-                          closeHandler: closeAll,
-                        })
-
-                        // Clamp the value to the 0-20 range
-                        const clampedValue = Math.min(
-                          Math.max(num, 0),
-                          20
-                        )
-                        setSlippageValue(String(clampedValue))
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const inputValue = e.target.value
-                      if (
-                        !inputValue ||
-                        isNaN(parseFloat(inputValue))
-                      ) {
-                        setSlippageValue("0")
-                      }
-                    }}
-                  />
-                  <InputRightAddon>%</InputRightAddon>
-                </InputGroup>
-              </Box>
-            )}
-          </HStack>
-                  */}
-              <HStack justify="space-between">
-                <HStack spacing={1} align="center">
-                  <Tooltip
-                    hasArrow
-                    label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
-                  however, it may incur a small fee due to the
-                  management of positions at the smart contract level."
-                    bg="surface.bg"
-                    color="neutral.300"
-                    textAlign="center"
-                  >
+                  <HStack justify="space-between">
                     <HStack spacing={1} align="center">
-                      <CardHeading fontSize="small">
-                        Alternative Deposit Asset Fee
-                      </CardHeading>
-                      <InformationIcon
-                        color="neutral.300"
-                        boxSize={3}
-                      />
-                    </HStack>
-                  </Tooltip>
-                </HStack>
-                {cellarData.depositTokens.list.includes(
-                  selectedToken?.symbol || ""
-                ) ? (
-                  <>
-                    {isDepositFeeLoading ? (
-                      <Spinner size="md" paddingRight={"1em"} />
-                    ) : (
                       <Tooltip
                         hasArrow
-                        label={
-                          depositFee === 0 ? "No deposit fee." : null
-                        }
+                        label="The percentage fee you will pay to deposit into the vault. This asset is deposited directly into the vault;
+                  however, it may incur a small fee due to the
+                  management of positions at the smart contract level."
                         bg="surface.bg"
                         color="neutral.300"
                         textAlign="center"
                       >
-                        <HStack pr={2}>
-                          {depositFee === 0 ? (
-                            <GreenCheckCircleIcon />
-                          ) : null}
-                          <Text fontFamily={"inherit"}>
-                            {depositFee === 0
-                              ? "None"
-                              : `${depositFee}%`}
-                          </Text>
+                        <HStack spacing={1} align="center">
+                          <CardHeading fontSize="small">
+                            Alternative Deposit Asset Fee
+                          </CardHeading>
+                          <InformationIcon
+                            color="neutral.300"
+                            boxSize={3}
+                          />
                         </HStack>
                       </Tooltip>
-                    )}
-                  </>
-                ) : null}
-              </HStack>
+                    </HStack>
+                    {cellarData.depositTokens.list.includes(
+                      selectedToken?.symbol || ""
+                    ) ? (
+                      <>
+                        {isDepositFeeLoading ? (
+                          <Spinner size="md" paddingRight={"1em"} />
+                        ) : (
+                          <Tooltip
+                            hasArrow
+                            label={
+                              depositFee === 0
+                                ? "No deposit fee."
+                                : null
+                            }
+                            bg="surface.bg"
+                            color="neutral.300"
+                            textAlign="center"
+                          >
+                            <HStack pr={2}>
+                              {depositFee === 0 ? (
+                                <GreenCheckCircleIcon />
+                              ) : null}
+                              <Text fontFamily={"inherit"}>
+                                {depositFee === 0
+                                  ? "None"
+                                  : `${depositFee}%`}
+                              </Text>
+                            </HStack>
+                          </Tooltip>
+                        )}
+                      </>
+                    ) : null}
+                  </HStack>
+                </>
+              )}
               <HStack
                 justifyContent={"center"}
                 p={3}
@@ -1482,150 +1714,67 @@ export const SommelierTab = ({
                 borderRadius={16}
                 borderColor="purple.base"
               >
-                {selectedToken?.symbol !== activeAsset?.symbol ? (
+                {selectedToken?.symbol !==
+                cellarConfig.baseAsset.symbol ? (
                   <Text
                     fontFamily={"inherit"}
-                    fontWeight={"bold"}
+                    fontWeight={
+                      id === config.CONTRACT.ALPHA_STETH.SLUG
+                        ? "normal"
+                        : "bold"
+                    }
                     textAlign="center"
                   >
-                    {
-                      "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."
-                    }
+                    {id === config.CONTRACT.ALPHA_STETH.SLUG
+                      ? "Deposited funds can’t be withdrawn for 24 hours after deposit.\nWithdrawals are only in wstETH, regardless of deposited asset(s)."
+                      : "If you deposit an asset other than the accounting asset, there is no guarantee that you will receive the same asset upon withdrawal."}
                   </Text>
                 ) : null}
               </HStack>
             </>
           ) : null}
-          {!cellarData.depositTokens.list.includes(
-            selectedToken?.symbol || ""
-          ) ? (
-            ensoError !== null &&
-            watchDepositAmount !== 0 &&
-            !isNaN(watchDepositAmount) ? (
-              <Text
-                pr="2"
-                fontSize="lg"
-                fontWeight={700}
-                textAlign="center"
-                width="100%"
-              >
-                {ensoError}
-              </Text>
-            ) : (
-              <HStack justify="space-between" align="center">
-                <HStack spacing={1} align="center">
-                  <Tooltip
-                    hasArrow
-                    label="Amount of strategy tokens you will receive. This is an estimate and may change based on the price at the time of your transaction, and will vary according to your configured slippage tolerance."
-                    bg="surface.bg"
-                    color="neutral.300"
-                    textAlign="center"
-                  >
-                    <HStack spacing={1} align="center">
-                      <CardHeading fontSize="small">
-                        Estimated Tokens Out
-                      </CardHeading>
-                      <InformationIcon
-                        color="neutral.300"
-                        boxSize={3}
-                      />
-                    </HStack>
-                  </Tooltip>
-                </HStack>
-                {ensoLoading ? (
-                  <>
-                    <Spinner size="md" paddingRight={"1em"} />
-                  </>
-                ) : (
-                  <VStack spacing={0} align="flex-end">
-                    <Text
-                      pr="2"
-                      fontSize="lg"
-                      fontWeight={700}
-                      textAlign="right"
-                      width="100%"
-                    >
-                      ≈ {ensoSharesOut.toFixed(4).toLocaleString()}
-                    </Text>
-                    <HStack
-                      spacing={0}
-                      fontSize="11px"
-                      textAlign="right"
-                      pr="2"
-                    >
-                      <Text as="span">
-                        ${" "}
-                        {(
-                          ensoSharesOut *
-                          cellarSharePreviewRedeem *
-                          baseAssetPrice
-                        )
-                          .toFixed(2)
-                          .toLocaleString()}
-                      </Text>
-                    </HStack>
-                  </VStack>
-                )}
-              </HStack>
-            )
-          ) : (
-            <></>
+          {needsSwitch && (
+            <BaseButton
+              type="button"
+              isDisabled={isSubmitting}
+              onClick={async () => {
+                try {
+                  if (desiredChainId) {
+                    await switchChainAsync?.({
+                      chainId: desiredChainId,
+                    })
+                  }
+                } catch {}
+              }}
+              fontSize={18}
+              py={4}
+              px={8}
+            >
+              Switch network to proceed
+            </BaseButton>
           )}
           <BaseButton
             type="submit"
             isDisabled={
               isDisabled ||
-              (selectedToken?.symbol !== activeAsset?.symbol &&
+              (selectedToken?.symbol !==
+                cellarConfig.baseAsset.symbol &&
                 !cellarData.depositTokens.list.includes(
                   selectedToken?.symbol || ""
-                ) &&
-                (isDisabled ||
-                  ensoLoading ||
-                  (!ensoLoading && ensoError !== null)))
+                ))
             }
             isLoading={isSubmitting}
             fontSize={21}
             py={8}
             px={12}
           >
-            Submit
+            {isSubmitting ? "Waiting for wallet…" : "Submit"}
           </BaseButton>
-          {/* <Text textAlign="center">
-            Depositing active asset (
-            <Avatar
-              ml="-2.5px"
-              boxSize={6}
-              src={activeAsset?.src}
-              name={activeAsset?.alt}
-              borderWidth={2}
-              borderColor="surface.bg"
-              bg="surface.bg"
-            />
-            {activeAsset?.symbol}) will save gas fees
-          </Text> */}
-          {/*depositTokens.length > 1 && (
-            <Text textAlign="center">
-              <Text textAlign="center">
-                Current Base asset is (
-                <Avatar
-                  ml="-2.5px"
-                  boxSize={6}
-                  src={activeAsset?.src}
-                  name={activeAsset?.alt}
-                  borderWidth={2}
-                  borderColor="surface.bg"
-                  bg="surface.bg"
-                />
-                {activeAsset?.symbol}).
-                <br />
-                <br />
-              </Text>
-              <Text>
-                There could be high slippage when depositing non base
-                assets. Please swap outside our app for better rates.
-              </Text>
+          {insufficientBalance && (
+            <Text color="red.base" fontSize="sm">
+              Insufficient balance for the entered amount.
             </Text>
-                )*/}
+          )}
           {strategyMessages[currentStrategies] ? (
             strategyMessages[currentStrategies]()
           ) : (

@@ -22,7 +22,6 @@ interface PortofolioItemProps extends StackProps {
   icon: string
   title: string
   netValueUsd: string
-  netValueInAsset: number
   tokenPrice: {
     value: number | string
     formatted: string
@@ -37,7 +36,6 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
   icon,
   title,
   netValueUsd,
-  netValueInAsset,
   tokenPrice,
   slug,
   description,
@@ -59,6 +57,26 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
   )
 
   const router = useRouter()
+
+  // Compute base-asset units directly from user's LP shares and per-share base-asset value
+  const sharesTokens = (() => {
+    const raw = lpTokenData?.formatted as unknown
+    const parsed = parseFloat(String(raw ?? "0").replace(/,/g, ""))
+    return Number.isFinite(parsed) ? parsed : 0
+  })()
+  const perShareInBase = (() => {
+    const raw = tokenPrice?.value as unknown
+    if (typeof raw === "number") return raw
+    const parsed = parseFloat(String(raw ?? "0").replace(/,/g, ""))
+    return Number.isFinite(parsed) ? parsed : 0
+  })()
+  const baseUnits = sharesTokens * perShareInBase
+  const isAlpha = slug === "Alpha-stETH"
+  const baseUnitsText = Number.isFinite(baseUnits)
+    ? baseUnits.toFixed(isAlpha ? 4 : 5)
+    : "0"
+  const assetLabel = isAlpha ? "ETH" : symbol
+
   return (
     <Tooltip
       label={description}
@@ -138,7 +156,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
                 ).toLocaleString()} Tokens`}
             </Text>
             <Text fontWeight={500} fontSize={12} color="neutral.400">
-              1 token = {Number(tokenPrice.value).toFixed(3)} {symbol}{" "}
+              1 token = {parseFloat(String(tokenPrice.value).replace(/,/g, "")).toFixed(3)} {symbol}{" "}
               ({formatUSD(coinGeckoPrice?.toString(), 4)})
             </Text>
           </VStack>
@@ -154,10 +172,9 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
             {netValueUsd}
           </Text>
           <Text fontWeight={500} fontSize={12} color="neutral.400">
-            {(netValueInAsset).toFixed(
-              showNetValueInAsset(cellarData.config) ? 5 : 2
-            )}
-            {` ${symbol}`}
+            {showNetValueInAsset(cellarData.config)
+              ? `${baseUnitsText} ${assetLabel}`
+              : ""}
           </Text>
         </VStack>
       </HStack>

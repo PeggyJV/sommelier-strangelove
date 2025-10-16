@@ -1,103 +1,89 @@
+import { erc20Abi } from "viem"
+import { usePublicClient } from "wagmi"
 import { useMutation } from "@tanstack/react-query"
-import { cellarDataMap } from "data/cellarDataMap"
-import { MutationEventArgs } from "types/hooks"
-import { readContracts } from "@wagmi/core"
-import { Address, erc20Abi, getAddress } from "viem"
-import { chainConfigMap } from "data/chainConfig"
-import { wagmiConfig } from "context/wagmiContext"
 
-type Args = {
+interface ImportTokenParams {
   address: string
   imageUrl?: string
-  chain: string
+  chain?: string
 }
 
-type UseImportTokenArgs = MutationEventArgs<
-  Args,
-  Awaited<ReturnType<typeof readContracts>>
->
-
-type DoImportToken = (
-  args: Args
-) => Promise<Awaited<ReturnType<typeof readContracts>>>
-
-export const doImportToken: DoImportToken = async ({
-  address,
-  imageUrl,
-  chain,
-}) => {
-  try {
-    if (typeof window.ethereum === "undefined") {
-      throw new Error("No wallet installed")
-    }
-    // Get chain from chainConfigMap
-    const chainObj = chainConfigMap[chain]
-
-    const tokenData = await readContracts(wagmiConfig, {
-      allowFailure: false,
-      contracts: [
-        {
-          address: getAddress(address),
-          abi: erc20Abi,
-          functionName: 'decimals',
-        },
-        {
-          address: getAddress(address),
-          abi: erc20Abi,
-          functionName: 'name',
-        },
-        {
-          address: getAddress(address),
-          abi: erc20Abi,
-          functionName: 'symbol',
-        },
-        {
-          address: getAddress(address),
-          abi: erc20Abi,
-          functionName: 'totalSupply',
-        },
-      ]
-    })
-    if (!tokenData) {
-      throw new Error("Token data is undefined")
-    }
-    const imgUrl = Object.values(cellarDataMap).find(
-      (item) =>
-        item.config.lpToken.address === address &&
-        item.config.chain.id === chainObj.id
-    )?.config.lpToken.imagePath
-    const fullImageUrl = `${window.origin}${imgUrl}`
-    const res = await window.ethereum.request({
-      method: "wallet_watchAsset",
-      params: {
-        type: "ERC20",
-        options: {
-          address: address as Address,
-          symbol: tokenData[2],
-          decimals: tokenData[0],
-          image: imageUrl || fullImageUrl,
-        },
-      },
-    })
-    if (!res) {
-      throw new Error("Failed to import token")
-    }
-    return tokenData
-  } catch (e) {
-    const error = e as Error
-    throw error
-  }
+interface ImportTokenCallbacks {
+  onSuccess?: (data: any) => void
+  onError?: (error: Error) => void
 }
-export const useImportToken = ({
-  onSuccess,
-  onError,
-  onMutate,
-}: UseImportTokenArgs = {}) => {
+
+export const useImportToken = (callbacks?: ImportTokenCallbacks) => {
+  const publicClient = usePublicClient()
+
   return useMutation({
-    mutationKey: ["USE_IMPORT_TOKEN"],
-    mutationFn: doImportToken,
-    onSuccess,
-    onError,
-    onMutate,
+    mutationFn: async (params: ImportTokenParams) => {
+      // Get token data
+      if (!publicClient) return
+      
+      const tokenData = await publicClient.multicall({
+        contracts: [
+          {
+            address: params.address as `0x${string}`,
+            abi: erc20Abi,
+            functionName: "name",
+          },
+          {
+            address: params.address as `0x${string}`,
+            abi: erc20Abi,
+            functionName: "symbol",
+          },
+          {
+            address: params.address as `0x${string}`,
+            abi: erc20Abi,
+            functionName: "decimals",
+          },
+        ],
+      })
+
+      const tokenInfo = {
+        name: tokenData[0].result,
+        symbol: tokenData[1].result,
+        decimals: tokenData[2].result,
+        address: params.address,
+        imageUrl: params.imageUrl,
+      }
+
+      // Try to import to wallet (MetaMask)
+      if (typeof window !== "undefined" && window.ethereum) {
+        try {
+          console.log("Attempting to import token to MetaMask:", {
+            address: params.address,
+            symbol: tokenData[1].result,
+            decimals: tokenData[2].result,
+            image: params.imageUrl,
+          })
+          
+          await window.ethereum.request({
+            method: "wallet_watchAsset",
+            params: {
+              type: "ERC20",
+              options: {
+                address: params.address,
+                symbol: tokenData[1].result,
+                decimals: tokenData[2].result,
+                image: params.imageUrl,
+              },
+            },
+          })
+          
+          console.log("Token import to MetaMask successful")
+        } catch (error) {
+          console.error("Failed to import token to wallet:", error)
+          throw error
+        }
+      } else {
+        console.warn("MetaMask not available for token import")
+      }
+
+      return tokenInfo
+    },
+    onSuccess: callbacks?.onSuccess,
+    onError: callbacks?.onError,
   })
 }

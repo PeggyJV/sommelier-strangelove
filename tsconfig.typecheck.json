@@ -1,0 +1,39 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "paths": {
+      "ox": ["src/types/ox/index.d.ts"],
+      "ox/*": ["src/types/ox/wildcard.d.ts"]
+    },
+    "moduleResolution": "bundler"
+  },
+  "include": [
+    "src/types/**/*.d.ts",
+    "src/providers/WagmiClientProvider.tsx",
+    "src/utils/sortVaults.ts",
+    "src/utils/wallet/initOnce.ts",
+    "src/constants/withdraw.ts",
+    "src/components/_common/Countdown.tsx",
+    "src/components/_buttons/VaultActionButton.tsx",
+    "src/components/_vaults/KPIBox.tsx",
+    "src/components/_sections/TopLaunchBanner.tsx",
+    "src/components/wallet/NetworkSelector.tsx",
+    "src/components/_pages/PageHome.tsx",
+    "src/pages/api/cellar-preview-redeem.ts",
+    "src/pages/api/coingecko-simple-price.ts",
+    "src/pages/api/sommelier-api-individual-strat-data.ts",
+    "src/data/hooks/useCreateContracts.tsx",
+    "src/data/actions/common/getAllContracts.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "src/legacy/**",
+    "scripts/**",
+    "**/*.test.*"
+  ]
+}

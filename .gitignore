@@ -1,3 +1,10 @@
+.env.local
+.env.vercel
+Desktop/
+*.csv
+.cache/
+~/Desktop/on-chain-marketing/
+
 *.pem
 .DS_Store
 .env*
@@ -18,3 +25,16 @@ studio/node_modules
 .env*.local
 idea/
 .idea
+yarn.lock
+src/coverage/
+coverage/
+# on-chain marketing artifacts
+scripts/onchain-marketing/outputs/
+scripts/onchain-marketing/logs/
+
+# local PR notes and audits (ignore in VCS)
+PR_DESCRIPTION.md
+docs/audits/
+tests/__screenshots__/
+audits/mobile/
+test-results/

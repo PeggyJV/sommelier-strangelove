@@ -1,7 +1,8 @@
-import PageCellar from "components/_pages/PageCellar"
+import dynamic from "next/dynamic"
 import { cellarDataMap } from "data/cellarDataMap"
-import { GetServerSideProps, NextPage } from "next"
+import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
+import { ParsedUrlQuery } from "querystring"
 import { origin } from "utils/origin"
 import { useRouter } from "next/router"
 import { isComingSoon } from "utils/isComingSoon"
@@ -11,6 +12,17 @@ export interface CellarPageProps {
   id: string
   blocked: boolean
 }
+
+export type Params = ParsedUrlQuery & { id: string }
+
+// Defer heavy client-only modules (charts, d3, viem ENS, etc.) to the browser
+const PageCellar = dynamic(
+  () => import("components/_pages/PageCellar"),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+)
 
 const CellarPage: NextPage<CellarPageProps> = ({ id, blocked }) => {
   const router = useRouter()
@@ -48,9 +60,19 @@ const CellarPage: NextPage<CellarPageProps> = ({ id, blocked }) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  params,
-}) => {
+export const getStaticPaths: GetStaticPaths<Params> = async () => {
+  const cellars = Object.keys(cellarDataMap)
+  const paths = cellars.map((cellar) => {
+    return { params: { id: cellar } }
+  })
+
+  return {
+    paths,
+    fallback: false,
+  }
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params || {}
   const launchDate = cellarDataMap[id as string].launchDate
   const blocked =
@@ -63,6 +85,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       id,
       blocked,
     },
+    revalidate: 60, // Revalidate every 60 seconds
   }
 }
 

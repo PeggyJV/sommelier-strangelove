@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react"
 import { LogoIcon } from "components/_icons"
 import { CellarType, Badge } from "data/types"
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { StrategyDate } from "./StrategyDate"
 import React from "react"
 
@@ -29,6 +29,8 @@ interface StrategySectionProps extends StackProps {
   rewards?: string
   isDeprecated?: boolean
   badges?: Badge[]
+  isHero?: boolean
+  isSommNative?: boolean
 }
 
 export const formatText = (text: string, isMobile: boolean) => {
@@ -70,11 +72,11 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
   rewards,
   isDeprecated,
   badges,
+  isHero,
+  isSommNative,
   ...props
 }) => {
-  const [isMobile, setIsMobile] = useState(
-    window.innerWidth <= 767
-  )
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767)
 
   useEffect(() => {
     const handleResize = () => {
@@ -111,6 +113,9 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
       >
         <Image
           boxSize="40px"
+          boxShadow={
+            isHero ? "0 0 15px 5px rgba(147, 51, 234, 0.3)" : "none"
+          }
           src={icon}
           rounded="full"
           alt="strategy icon"
@@ -122,7 +127,9 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             fontSize="0.75rem"
             fontWeight={600}
           >
-            <Heading fontSize="1rem">{title}</Heading>{" "}
+            <Heading fontSize={isHero ? "2rem" : "1rem"}>
+              {title}
+            </Heading>{" "}
           </Flex>
           <Flex
             gap={1}
@@ -132,6 +139,26 @@ export const StrategySection: React.FC<StrategySectionProps> = ({
             paddingTop={".2em"}
           >
             <StrategyDate date={date} deprecated={isDeprecated} />
+            {/* Somm-native badge first when present */}
+            {isSommNative && (
+              <Text
+                as="span"
+                aria-label="Somm-native"
+                title="Somm-native"
+                bg="#2ECC71"
+                color="#FFFFFF"
+                fontSize="11px"
+                fontWeight={600}
+                px="10px"
+                py="4px"
+                borderRadius="9999px"
+                lineHeight="1"
+                display="inline-flex"
+                alignItems="center"
+              >
+                Somm-native
+              </Text>
+            )}
             {badges && badges.length > 0 && (
               <Wrap
                 spacing="2"

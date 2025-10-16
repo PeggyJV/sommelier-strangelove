@@ -1,8 +1,18 @@
-import { useAccount, usePublicClient, useWalletClient } from "wagmi"
-import { Address, erc20Abi, getAddress, getContract, parseUnits } from "viem"
+import { useAccount, useWalletClient } from "wagmi"
+import {
+  Address,
+  erc20Abi,
+  getAddress,
+  getContract,
+  parseUnits,
+  PublicClient,
+} from "viem"
 import { Text } from "@chakra-ui/react"
 import { useBrandedToast } from "hooks/chakra"
 import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
+import { useEffect, useState } from "react"
+import { getActiveProvider } from "context/rpc_context"
+import { chainConfigMap } from "data/chainConfig"
 
 export const useApproveERC20 = ({
   tokenAddress,
@@ -13,19 +23,39 @@ export const useApproveERC20 = ({
 }) => {
   const { addToast, update, close, closeAll } = useBrandedToast()
 
-  const { address } = useAccount()
+  const { address, chain } = useAccount()
 
   const { data: walletClient } = useWalletClient()
-  const publicClient = usePublicClient()
+  // Get paid RPC client
+  const [paidClient, setPaidClient] = useState<PublicClient | null>(
+    null
+  )
 
-  const erc20Contract = publicClient && getContract({
-    address: getAddress(tokenAddress),
-    abi: erc20Abi,
-    client: {
-      wallet: walletClient,
-      public: publicClient
-    },
-  })!
+  useEffect(() => {
+    const initializePaidClient = async () => {
+      if (chain?.id) {
+        const chainConfigData = Object.values(chainConfigMap).find(
+          (c) => c.wagmiId === chain.id
+        )
+        if (chainConfigData) {
+          const client = await getActiveProvider(chainConfigData)
+          setPaidClient(client)
+        }
+      }
+    }
+    initializePaidClient()
+  }, [chain?.id])
+
+  const erc20Contract =
+    paidClient &&
+    getContract({
+      address: getAddress(tokenAddress),
+      abi: erc20Abi,
+      client: {
+        wallet: walletClient,
+        public: paidClient,
+      },
+    })!
 
   const [_, wait] = useWaitForTransaction({
     skip: true,
@@ -38,15 +68,12 @@ export const useApproveERC20 = ({
       onError?: (error: Error) => void
     }
   ) => {
-    const allowance = await erc20Contract?.read.allowance([
-      address as Address,
-      spender as Address
-      ]
-    ) ?? BigInt(0)
-    const amtInWei = parseUnits(
-      amount.toString(),
-      18
-    )
+    const allowance =
+      (await erc20Contract?.read.allowance([
+        address as Address,
+        spender as Address,
+      ])) ?? BigInt(0)
+    const amtInWei = parseUnits(amount.toString(), 18)
 
     let needsApproval
     try {
@@ -57,11 +84,9 @@ export const useApproveERC20 = ({
     if (needsApproval) {
       try {
         // @ts-ignore
-        const hash = await erc20Contract?.write.approve([
-          spender,
-          amtInWei
-          ],
-          { account: address}
+        const hash = await erc20Contract?.write.approve(
+          [spender, amtInWei],
+          { account: address }
         )
 
         addToast({
