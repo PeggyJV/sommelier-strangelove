@@ -358,7 +358,8 @@ export const config = {
       ABI: AccountantWithRateProviders,
     },
     ALPHA_STETH_TELLER: {
-      ADDRESS: "0x0baAb6db8d694E1511992b504476ef4073fe614B",
+      ADDRESS: "0x4C74ccA483A278Bcb90Aea3f8F565e56202D82B2",
+      REFERRED: "0x7566D348038d881475b5FE0638c00B391f9B33E6",
       ABI: TellerWithLayerZero,
     },
     ALPHA_STETH_BORING_QUEUE: {

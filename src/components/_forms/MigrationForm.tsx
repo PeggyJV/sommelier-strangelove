@@ -17,7 +17,12 @@ import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
-import { useAccount, usePublicClient, useWriteContract, useWaitForTransactionReceipt } from "wagmi"
+import {
+  useAccount,
+  usePublicClient,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi"
 import { toEther } from "utils/formatCurrency"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
@@ -27,7 +32,13 @@ import { useUserBalance } from "data/hooks/useUserBalance"
 import { useGeo } from "context/geoContext"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
-import { erc20Abi, getAddress, getContract, parseUnits } from "viem"
+import {
+  erc20Abi,
+  getAddress,
+  getContract,
+  parseUnits,
+  zeroAddress,
+} from "viem"
 import { ExternalLinkIcon } from "components/_icons"
 
 interface FormValues {
@@ -58,6 +69,8 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
   const cellarConfig = cellarDataMap[id].config
 
   const alphaStEth = cellarDataMap["Alpha-stETH"]
+  const referredAddress = (alphaStEth.config.teller?.referred ??
+    zeroAddress) as `0x${string}`
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
@@ -167,7 +180,9 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
             closeHandler: close,
           })
 
-          await publicClient.waitForTransactionReceipt({ hash: approvalHash })
+          await publicClient.waitForTransactionReceipt({
+            hash: approvalHash,
+          })
         }
       }
 
@@ -188,6 +203,7 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
           cellarConfig.baseAsset.address,
           amountOfBaseAsset,
           minimumMint,
+          referredAddress,
         ],
       })
 
@@ -199,14 +215,18 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
           closeHandler: close,
         })
 
-        const receipt = await publicClient.waitForTransactionReceipt({ 
-          hash: migrationHash 
+        const receipt = await publicClient.waitForTransactionReceipt({
+          hash: migrationHash,
         })
 
         if (receipt.status === "success") {
           addToast({
             heading: "Migration Successful",
-            body: <Text>Your migration has been completed successfully.</Text>,
+            body: (
+              <Text>
+                Your migration has been completed successfully.
+              </Text>
+            ),
             status: "success",
             closeHandler: close,
           })

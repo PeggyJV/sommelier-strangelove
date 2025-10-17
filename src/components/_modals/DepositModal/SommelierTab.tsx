@@ -36,6 +36,7 @@ import {
   parseUnits,
   getAddress,
   PublicClient,
+  zeroAddress,
 } from "viem"
 
 import { useBrandedToast } from "hooks/chakra"
@@ -374,7 +375,9 @@ export const SommelierTab = ({
         cellarConfig.accountant?.address,
       ])
       fnName = "deposit"
-      args = [assetAddress, amtInWei, minimumMint]
+      const referredAddress = (cellarConfig.teller?.referred ??
+        zeroAddress) as `0x${string}`
+      args = [assetAddress, amtInWei, minimumMint, referredAddress]
       value = nativeDeposit ? amtInWei : BigInt(0)
     } else if (
       assetAddress !== undefined &&
@@ -572,6 +575,8 @@ export const SommelierTab = ({
       if (cellarConfig.teller) {
         // Calculate minimum mint amount (0 for now, can be enhanced later)
         const minimumMint = 0n
+        const referredAddress = (cellarConfig.teller.referred ??
+          zeroAddress) as `0x${string}`
 
         if (isNativeDeposit) {
           // Native ETH deposit
@@ -579,7 +584,12 @@ export const SommelierTab = ({
             address: cellarConfig.teller.address as `0x${string}`,
             abi: cellarConfig.teller.abi,
             functionName: "deposit",
-            args: [tokenAddress, amtInWei, minimumMint],
+            args: [
+              tokenAddress,
+              amtInWei,
+              minimumMint,
+              referredAddress,
+            ],
           }
 
           if (amtInWei > 0) {
@@ -599,7 +609,12 @@ export const SommelierTab = ({
               address: cellarConfig.teller.address as `0x${string}`,
               abi: cellarConfig.teller.abi,
               functionName: "deposit",
-              args: [tokenAddress, amtInWei, minimumMint],
+              args: [
+                tokenAddress,
+                amtInWei,
+                minimumMint,
+                referredAddress,
+              ],
             },
             {
               vaultName: cellarName,

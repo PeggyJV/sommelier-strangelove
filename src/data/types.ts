@@ -99,6 +99,7 @@ export interface ConfigProps {
   teller?: {
     address: string
     abi: Abi
+    referred?: string
   }
   boringQueue?: {
     address: string
