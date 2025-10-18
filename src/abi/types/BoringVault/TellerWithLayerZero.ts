@@ -1,211 +1,310 @@
 export const TellerWithLayerZero = [
   {
     inputs: [
-      { internalType: "address", name: "_owner", type: "address" },
-      { internalType: "address", name: "_vault", type: "address" },
+      {
+        internalType: "address",
+        name: "_owner",
+        type: "address"
+      },
+      {
+        internalType: "address",
+        name: "_vault",
+        type: "address"
+      },
       {
         internalType: "address",
         name: "_accountant",
-        type: "address",
+        type: "address"
       },
-      { internalType: "address", name: "_weth", type: "address" },
+      {
+        internalType: "address",
+        name: "_weth",
+        type: "address"
+      },
       {
         internalType: "address",
         name: "_lzEndPoint",
-        type: "address",
+        type: "address"
       },
-      { internalType: "address", name: "_delegate", type: "address" },
-      { internalType: "address", name: "_lzToken", type: "address" },
+      {
+        internalType: "address",
+        name: "_delegate",
+        type: "address"
+      },
+      {
+        internalType: "address",
+        name: "_lzToken",
+        type: "address"
+      }
     ],
     stateMutability: "nonpayable",
-    type: "constructor",
+    type: "constructor"
   },
   {
     inputs: [],
     name: "CrossChainTellerWithGenericBridge__UnsafeCastToUint96",
-    type: "error",
+    type: "error"
   },
-  { inputs: [], name: "InvalidDelegate", type: "error" },
-  { inputs: [], name: "InvalidEndpointCall", type: "error" },
+  {
+    inputs: [],
+    name: "InvalidDelegate",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidEndpointCall",
+    type: "error"
+  },
   {
     inputs: [
-      { internalType: "uint16", name: "optionType", type: "uint16" },
+      {
+        internalType: "uint16",
+        name: "optionType",
+        type: "uint16"
+      }
     ],
     name: "InvalidOptionType",
-    type: "error",
+    type: "error"
   },
-  { inputs: [], name: "LayerZeroTeller__BadFeeToken", type: "error" },
+  {
+    inputs: [],
+    name: "LayerZeroTeller__BadFeeToken",
+    type: "error"
+  },
   {
     inputs: [
       {
         internalType: "uint256",
         name: "chainSelector",
-        type: "uint256",
+        type: "uint256"
       },
-      { internalType: "uint256", name: "fee", type: "uint256" },
-      { internalType: "uint256", name: "maxFee", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "fee",
+        type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "maxFee",
+        type: "uint256"
+      }
     ],
     name: "LayerZeroTeller__FeeExceedsMax",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [
       {
         internalType: "uint256",
         name: "chainSelector",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     name: "LayerZeroTeller__MessagesNotAllowedFrom",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [
       {
         internalType: "uint256",
         name: "chainSelector",
-        type: "uint256",
+        type: "uint256"
       },
-      { internalType: "address", name: "sender", type: "address" },
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address"
+      }
     ],
     name: "LayerZeroTeller__MessagesNotAllowedFromSender",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [
       {
         internalType: "uint256",
         name: "chainSelector",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     name: "LayerZeroTeller__MessagesNotAllowedTo",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "LayerZeroTeller__ZeroMessageGasLimit",
-    type: "error",
+    type: "error"
   },
-  { inputs: [], name: "LzTokenUnavailable", type: "error" },
+  {
+    inputs: [],
+    name: "LzTokenUnavailable",
+    type: "error"
+  },
   {
     inputs: [],
     name: "MessageLib__ShareAmountOverflow",
-    type: "error",
-  },
-  {
-    inputs: [{ internalType: "uint32", name: "eid", type: "uint32" }],
-    name: "NoPeer",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [
-      { internalType: "uint256", name: "msgValue", type: "uint256" },
+      {
+        internalType: "uint32",
+        name: "eid",
+        type: "uint32"
+      }
+    ],
+    name: "NoPeer",
+    type: "error"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "msgValue",
+        type: "uint256"
+      }
     ],
     name: "NotEnoughNative",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [
-      { internalType: "address", name: "addr", type: "address" },
+      {
+        internalType: "address",
+        name: "addr",
+        type: "address"
+      }
     ],
     name: "OnlyEndpoint",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "eid", type: "uint32" },
-      { internalType: "bytes32", name: "sender", type: "bytes32" },
+      {
+        internalType: "uint32",
+        name: "eid",
+        type: "uint32"
+      },
+      {
+        internalType: "bytes32",
+        name: "sender",
+        type: "bytes32"
+      }
     ],
     name: "OnlyPeer",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [
-      { internalType: "uint8", name: "bits", type: "uint8" },
-      { internalType: "uint256", name: "value", type: "uint256" },
+      {
+        internalType: "uint8",
+        name: "bits",
+        type: "uint8"
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256"
+      }
     ],
     name: "SafeCastOverflowedUintDowncast",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__AssetNotSupported",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__BadDepositHash",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__CannotDepositNative",
-    type: "error",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "TellerWithMultiAssetSupport__DepositExceedsCap",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__DualDeposit",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__MinimumAssetsNotMet",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__MinimumMintNotMet",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__Paused",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__PermitFailedAndAllowanceTooLow",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__ShareLockPeriodTooLong",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__SharePremiumTooLarge",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__SharesAreLocked",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__SharesAreUnLocked",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [
-      { internalType: "address", name: "from", type: "address" },
-      { internalType: "address", name: "to", type: "address" },
-      { internalType: "address", name: "operator", type: "address" },
+      {
+        internalType: "address",
+        name: "from",
+        type: "address"
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address"
+      }
     ],
     name: "TellerWithMultiAssetSupport__TransferDenied",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__ZeroAssets",
-    type: "error",
+    type: "error"
   },
   {
     inputs: [],
     name: "TellerWithMultiAssetSupport__ZeroShares",
-    type: "error",
+    type: "error"
   },
   {
     anonymous: false,
@@ -214,11 +313,11 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "user",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "AllowFrom",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -227,11 +326,24 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "user",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "AllowOperator",
-    type: "event",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "operator",
+        type: "address"
+      }
+    ],
+    name: "AllowPermissionedOperator",
+    type: "event"
   },
   {
     anonymous: false,
@@ -240,11 +352,11 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "user",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "AllowTo",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -253,29 +365,29 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "asset",
-        type: "address",
+        type: "address"
       },
       {
         indexed: false,
         internalType: "bool",
         name: "allowDeposits",
-        type: "bool",
+        type: "bool"
       },
       {
         indexed: false,
         internalType: "bool",
         name: "allowWithdraws",
-        type: "bool",
+        type: "bool"
       },
       {
         indexed: false,
         internalType: "uint16",
         name: "sharePremium",
-        type: "uint16",
-      },
+        type: "uint16"
+      }
     ],
     name: "AssetDataUpdated",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -284,17 +396,17 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "user",
-        type: "address",
+        type: "address"
       },
       {
         indexed: true,
         internalType: "contract Authority",
         name: "newAuthority",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "AuthorityUpdated",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -303,17 +415,17 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "asset",
-        type: "address",
+        type: "address"
       },
       {
         indexed: false,
         internalType: "uint256",
         name: "depositAmount",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     name: "BulkDeposit",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -322,17 +434,17 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "asset",
-        type: "address",
+        type: "address"
       },
       {
         indexed: false,
         internalType: "uint256",
         name: "shareAmount",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     name: "BulkWithdraw",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -341,29 +453,29 @@ export const TellerWithLayerZero = [
         indexed: false,
         internalType: "uint256",
         name: "chainId",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: false,
         internalType: "bool",
         name: "allowMessagesFrom",
-        type: "bool",
+        type: "bool"
       },
       {
         indexed: false,
         internalType: "bool",
         name: "allowMessagesTo",
-        type: "bool",
+        type: "bool"
       },
       {
         indexed: false,
         internalType: "address",
         name: "targetTeller",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "ChainAdded",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -372,17 +484,17 @@ export const TellerWithLayerZero = [
         indexed: false,
         internalType: "uint256",
         name: "chainId",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: false,
         internalType: "address",
         name: "targetTeller",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "ChainAllowMessagesFrom",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -391,17 +503,17 @@ export const TellerWithLayerZero = [
         indexed: false,
         internalType: "uint256",
         name: "chainId",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: false,
         internalType: "address",
         name: "targetTeller",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "ChainAllowMessagesTo",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -410,11 +522,11 @@ export const TellerWithLayerZero = [
         indexed: false,
         internalType: "uint256",
         name: "chainId",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     name: "ChainRemoved",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -423,17 +535,17 @@ export const TellerWithLayerZero = [
         indexed: false,
         internalType: "uint256",
         name: "chainId",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: false,
         internalType: "uint128",
         name: "messageGasLimit",
-        type: "uint128",
-      },
+        type: "uint128"
+      }
     ],
     name: "ChainSetGasLimit",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -442,11 +554,11 @@ export const TellerWithLayerZero = [
         indexed: false,
         internalType: "uint256",
         name: "chainId",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     name: "ChainStopMessagesFrom",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -455,11 +567,11 @@ export const TellerWithLayerZero = [
         indexed: false,
         internalType: "uint256",
         name: "chainId",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     name: "ChainStopMessagesTo",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -468,11 +580,11 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "user",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "DenyFrom",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -481,11 +593,24 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "user",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "DenyOperator",
-    type: "event",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "operator",
+        type: "address"
+      }
+    ],
+    name: "DenyPermissionedOperator",
+    type: "event"
   },
   {
     anonymous: false,
@@ -494,60 +619,79 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "user",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "DenyTo",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
         name: "nonce",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: true,
         internalType: "address",
         name: "receiver",
-        type: "address",
+        type: "address"
       },
       {
         indexed: true,
         internalType: "address",
         name: "depositAsset",
-        type: "address",
+        type: "address"
       },
       {
         indexed: false,
         internalType: "uint256",
         name: "depositAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: false,
         internalType: "uint256",
         name: "shareAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: false,
         internalType: "uint256",
         name: "depositTimestamp",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: false,
         internalType: "uint256",
         name: "shareLockPeriodAtTimeOfDeposit",
-        type: "uint256",
+        type: "uint256"
       },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "referralAddress",
+        type: "address"
+      }
     ],
     name: "Deposit",
-    type: "event",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint112",
+        name: "cap",
+        type: "uint112"
+      }
+    ],
+    name: "DepositCapSet",
+    type: "event"
   },
   {
     anonymous: false,
@@ -556,23 +700,23 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "uint256",
         name: "nonce",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: false,
         internalType: "bytes32",
         name: "depositHash",
-        type: "bytes32",
+        type: "bytes32"
       },
       {
         indexed: true,
         internalType: "address",
         name: "user",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "DepositRefunded",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -581,23 +725,23 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "bytes32",
         name: "messageId",
-        type: "bytes32",
+        type: "bytes32"
       },
       {
         indexed: false,
         internalType: "uint256",
         name: "shareAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: true,
         internalType: "address",
         name: "to",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "MessageReceived",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -606,23 +750,23 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "bytes32",
         name: "messageId",
-        type: "bytes32",
+        type: "bytes32"
       },
       {
         indexed: false,
         internalType: "uint256",
         name: "shareAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         indexed: true,
         internalType: "address",
         name: "to",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "MessageSent",
-    type: "event",
+    type: "event"
   },
   {
     anonymous: false,
@@ -631,19 +775,24 @@ export const TellerWithLayerZero = [
         indexed: true,
         internalType: "address",
         name: "user",
-        type: "address",
+        type: "address"
       },
       {
         indexed: true,
         internalType: "address",
         name: "newOwner",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "OwnershipTransferred",
-    type: "event",
+    type: "event"
   },
-  { anonymous: false, inputs: [], name: "Paused", type: "event" },
+  {
+    anonymous: false,
+    inputs: [],
+    name: "Paused",
+    type: "event"
+  },
   {
     anonymous: false,
     inputs: [
@@ -651,19 +800,56 @@ export const TellerWithLayerZero = [
         indexed: false,
         internalType: "uint32",
         name: "eid",
-        type: "uint32",
+        type: "uint32"
       },
       {
         indexed: false,
         internalType: "bytes32",
         name: "peer",
-        type: "bytes32",
-      },
+        type: "bytes32"
+      }
     ],
     name: "PeerSet",
-    type: "event",
+    type: "event"
   },
-  { anonymous: false, inputs: [], name: "Unpaused", type: "event" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "permissionedTransfers",
+        type: "bool"
+      }
+    ],
+    name: "PermissionedTransfersSet",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [],
+    name: "Unpaused",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "asset",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "shareAmount",
+        type: "uint256"
+      }
+    ],
+    name: "Withdraw",
+    type: "event"
+  },
   {
     inputs: [],
     name: "accountant",
@@ -671,144 +857,215 @@ export const TellerWithLayerZero = [
       {
         internalType: "contract AccountantWithRateProviders",
         name: "",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "chainId", type: "uint32" },
+      {
+        internalType: "uint32",
+        name: "chainId",
+        type: "uint32"
+      },
       {
         internalType: "bool",
         name: "allowMessagesFrom",
-        type: "bool",
+        type: "bool"
       },
-      { internalType: "bool", name: "allowMessagesTo", type: "bool" },
+      {
+        internalType: "bool",
+        name: "allowMessagesTo",
+        type: "bool"
+      },
       {
         internalType: "address",
         name: "targetTeller",
-        type: "address",
+        type: "address"
       },
       {
         internalType: "uint128",
         name: "messageGasLimit",
-        type: "uint128",
-      },
+        type: "uint128"
+      }
     ],
     name: "addChain",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "user", type: "address" },
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
     ],
     name: "allowAll",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "user", type: "address" },
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
     ],
     name: "allowFrom",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "srcEid", type: "uint32" },
+          {
+            internalType: "uint32",
+            name: "srcEid",
+            type: "uint32"
+          },
           {
             internalType: "bytes32",
             name: "sender",
-            type: "bytes32",
+            type: "bytes32"
           },
-          { internalType: "uint64", name: "nonce", type: "uint64" },
+          {
+            internalType: "uint64",
+            name: "nonce",
+            type: "uint64"
+          }
         ],
         internalType: "struct Origin",
         name: "origin",
-        type: "tuple",
-      },
+        type: "tuple"
+      }
     ],
     name: "allowInitializePath",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool"
+      }
+    ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "chainId", type: "uint32" },
+      {
+        internalType: "uint32",
+        name: "chainId",
+        type: "uint32"
+      },
       {
         internalType: "address",
         name: "targetTeller",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "allowMessagesFromChain",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "chainId", type: "uint32" },
+      {
+        internalType: "uint32",
+        name: "chainId",
+        type: "uint32"
+      },
       {
         internalType: "address",
         name: "targetTeller",
-        type: "address",
+        type: "address"
       },
       {
         internalType: "uint128",
         name: "messageGasLimit",
-        type: "uint128",
-      },
+        type: "uint128"
+      }
     ],
     name: "allowMessagesToChain",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "user", type: "address" },
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
     ],
     name: "allowOperator",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "user", type: "address" },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address"
+      }
+    ],
+    name: "allowPermissionedOperator",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
     ],
     name: "allowTo",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "contract ERC20", name: "", type: "address" },
+      {
+        internalType: "contract ERC20",
+        name: "",
+        type: "address"
+      }
     ],
     name: "assetData",
     outputs: [
-      { internalType: "bool", name: "allowDeposits", type: "bool" },
-      { internalType: "bool", name: "allowWithdraws", type: "bool" },
+      {
+        internalType: "bool",
+        name: "allowDeposits",
+        type: "bool"
+      },
+      {
+        internalType: "bool",
+        name: "allowWithdraws",
+        type: "bool"
+      },
       {
         internalType: "uint16",
         name: "sharePremium",
-        type: "uint16",
-      },
+        type: "uint16"
+      }
     ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
@@ -817,287 +1074,514 @@ export const TellerWithLayerZero = [
       {
         internalType: "contract Authority",
         name: "",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "from", type: "address" },
-      { internalType: "address", name: "to", type: "address" },
-      { internalType: "address", name: "operator", type: "address" },
+      {
+        internalType: "address",
+        name: "from",
+        type: "address"
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address"
+      }
     ],
     name: "beforeTransfer",
     outputs: [],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint96", name: "shareAmount", type: "uint96" },
-      { internalType: "address", name: "to", type: "address" },
+      {
+        internalType: "address",
+        name: "from",
+        type: "address"
+      }
+    ],
+    name: "beforeTransfer",
+    outputs: [],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address"
+      }
+    ],
+    name: "beforeTransferData",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "denyFrom",
+        type: "bool"
+      },
+      {
+        internalType: "bool",
+        name: "denyTo",
+        type: "bool"
+      },
+      {
+        internalType: "bool",
+        name: "denyOperator",
+        type: "bool"
+      },
+      {
+        internalType: "bool",
+        name: "permissionedOperator",
+        type: "bool"
+      },
+      {
+        internalType: "uint256",
+        name: "shareUnlockTime",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint96",
+        name: "shareAmount",
+        type: "uint96"
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      },
       {
         internalType: "bytes",
         name: "bridgeWildCard",
-        type: "bytes",
+        type: "bytes"
       },
       {
         internalType: "contract ERC20",
         name: "feeToken",
-        type: "address",
+        type: "address"
       },
-      { internalType: "uint256", name: "maxFee", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "maxFee",
+        type: "uint256"
+      }
     ],
     name: "bridge",
     outputs: [],
     stateMutability: "payable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         internalType: "contract ERC20",
         name: "depositAsset",
-        type: "address",
+        type: "address"
       },
       {
         internalType: "uint256",
         name: "depositAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         internalType: "uint256",
         name: "minimumMint",
-        type: "uint256",
+        type: "uint256"
       },
-      { internalType: "address", name: "to", type: "address" },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      }
     ],
     name: "bulkDeposit",
     outputs: [
-      { internalType: "uint256", name: "shares", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "shares",
+        type: "uint256"
+      }
     ],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         internalType: "contract ERC20",
         name: "withdrawAsset",
-        type: "address",
+        type: "address"
       },
       {
         internalType: "uint256",
         name: "shareAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         internalType: "uint256",
         name: "minimumAssets",
-        type: "uint256",
+        type: "uint256"
       },
-      { internalType: "address", name: "to", type: "address" },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      }
     ],
     name: "bulkWithdraw",
     outputs: [
-      { internalType: "uint256", name: "assetsOut", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "assetsOut",
+        type: "uint256"
+      }
     ],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
     name: "composeMsgSender",
     outputs: [
-      { internalType: "address", name: "sender", type: "address" },
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address"
+      }
     ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "user", type: "address" },
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
     ],
     name: "denyAll",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "user", type: "address" },
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
     ],
     name: "denyFrom",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "user", type: "address" },
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
     ],
     name: "denyOperator",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "user", type: "address" },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address"
+      }
+    ],
+    name: "denyPermissionedOperator",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
     ],
     name: "denyTo",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         internalType: "contract ERC20",
         name: "depositAsset",
-        type: "address",
+        type: "address"
       },
       {
         internalType: "uint256",
         name: "depositAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         internalType: "uint256",
         name: "minimumMint",
-        type: "uint256",
+        type: "uint256"
       },
+      {
+        internalType: "address",
+        name: "referralAddress",
+        type: "address"
+      }
     ],
     name: "deposit",
     outputs: [
-      { internalType: "uint256", name: "shares", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "shares",
+        type: "uint256"
+      }
     ],
     stateMutability: "payable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         internalType: "contract ERC20",
         name: "depositAsset",
-        type: "address",
+        type: "address"
       },
       {
         internalType: "uint256",
         name: "depositAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         internalType: "uint256",
         name: "minimumMint",
-        type: "uint256",
+        type: "uint256"
       },
-      { internalType: "address", name: "to", type: "address" },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      },
       {
         internalType: "bytes",
         name: "bridgeWildCard",
-        type: "bytes",
+        type: "bytes"
       },
       {
         internalType: "contract ERC20",
         name: "feeToken",
-        type: "address",
+        type: "address"
       },
-      { internalType: "uint256", name: "maxFee", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "maxFee",
+        type: "uint256"
+      },
+      {
+        internalType: "address",
+        name: "referralAddress",
+        type: "address"
+      }
     ],
     name: "depositAndBridge",
     outputs: [
       {
         internalType: "uint256",
         name: "sharesBridged",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     stateMutability: "payable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
-        internalType: "contract ERC20",
-        name: "depositAsset",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "depositAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "minimumMint",
-        type: "uint256",
-      },
-      { internalType: "uint256", name: "deadline", type: "uint256" },
-      { internalType: "uint8", name: "v", type: "uint8" },
-      { internalType: "bytes32", name: "r", type: "bytes32" },
-      { internalType: "bytes32", name: "s", type: "bytes32" },
-      { internalType: "address", name: "to", type: "address" },
-      {
-        internalType: "bytes",
-        name: "bridgeWildCard",
-        type: "bytes",
-      },
-      {
-        internalType: "contract ERC20",
-        name: "feeToken",
-        type: "address",
-      },
-      { internalType: "uint256", name: "maxFee", type: "uint256" },
+        components: [
+          {
+            internalType: "contract ERC20",
+            name: "depositAsset",
+            type: "address"
+          },
+          {
+            internalType: "uint256",
+            name: "depositAmount",
+            type: "uint256"
+          },
+          {
+            internalType: "uint256",
+            name: "minimumMint",
+            type: "uint256"
+          },
+          {
+            internalType: "uint256",
+            name: "deadline",
+            type: "uint256"
+          },
+          {
+            internalType: "uint8",
+            name: "v",
+            type: "uint8"
+          },
+          {
+            internalType: "bytes32",
+            name: "r",
+            type: "bytes32"
+          },
+          {
+            internalType: "bytes32",
+            name: "s",
+            type: "bytes32"
+          },
+          {
+            internalType: "address",
+            name: "to",
+            type: "address"
+          },
+          {
+            internalType: "bytes",
+            name: "bridgeWildCard",
+            type: "bytes"
+          },
+          {
+            internalType: "contract ERC20",
+            name: "feeToken",
+            type: "address"
+          },
+          {
+            internalType: "uint256",
+            name: "maxFee",
+            type: "uint256"
+          },
+          {
+            internalType: "address",
+            name: "referralAddress",
+            type: "address"
+          }
+        ],
+        internalType: "struct CrossChainTellerWithGenericBridge.DepositAndBridgeWithPermitParams",
+        name: "params",
+        type: "tuple"
+      }
     ],
     name: "depositAndBridgeWithPermit",
     outputs: [
       {
         internalType: "uint256",
         name: "sharesBridged",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     stateMutability: "payable",
-    type: "function",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "depositCap",
+    outputs: [
+      {
+        internalType: "uint112",
+        name: "",
+        type: "uint112"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
   },
   {
     inputs: [],
     name: "depositNonce",
-    outputs: [{ internalType: "uint96", name: "", type: "uint96" }],
+    outputs: [
+      {
+        internalType: "uint64",
+        name: "",
+        type: "uint64"
+      }
+    ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         internalType: "contract ERC20",
         name: "depositAsset",
-        type: "address",
+        type: "address"
       },
       {
         internalType: "uint256",
         name: "depositAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         internalType: "uint256",
         name: "minimumMint",
-        type: "uint256",
+        type: "uint256"
       },
-      { internalType: "uint256", name: "deadline", type: "uint256" },
-      { internalType: "uint8", name: "v", type: "uint8" },
-      { internalType: "bytes32", name: "r", type: "bytes32" },
-      { internalType: "bytes32", name: "s", type: "bytes32" },
+      {
+        internalType: "uint256",
+        name: "deadline",
+        type: "uint256"
+      },
+      {
+        internalType: "uint8",
+        name: "v",
+        type: "uint8"
+      },
+      {
+        internalType: "bytes32",
+        name: "r",
+        type: "bytes32"
+      },
+      {
+        internalType: "bytes32",
+        name: "s",
+        type: "bytes32"
+      },
+      {
+        internalType: "address",
+        name: "referralAddress",
+        type: "address"
+      }
     ],
     name: "depositWithPermit",
     outputs: [
-      { internalType: "uint256", name: "shares", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "shares",
+        type: "uint256"
+      }
     ],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
@@ -1106,91 +1590,140 @@ export const TellerWithLayerZero = [
       {
         internalType: "contract ILayerZeroEndpointV2",
         name: "",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "fromDenyList",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint32", name: "", type: "uint32" }],
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32"
+      }
+    ],
     name: "idToChains",
     outputs: [
       {
         internalType: "bool",
         name: "allowMessagesFrom",
-        type: "bool",
+        type: "bool"
       },
-      { internalType: "bool", name: "allowMessagesTo", type: "bool" },
+      {
+        internalType: "bool",
+        name: "allowMessagesTo",
+        type: "bool"
+      },
       {
         internalType: "uint128",
         name: "messageGasLimit",
-        type: "uint128",
-      },
+        type: "uint128"
+      }
     ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
     name: "isPaused",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool"
+      }
+    ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "srcEid", type: "uint32" },
+          {
+            internalType: "uint32",
+            name: "srcEid",
+            type: "uint32"
+          },
           {
             internalType: "bytes32",
             name: "sender",
-            type: "bytes32",
+            type: "bytes32"
           },
-          { internalType: "uint64", name: "nonce", type: "uint64" },
+          {
+            internalType: "uint64",
+            name: "nonce",
+            type: "uint64"
+          }
         ],
         internalType: "struct Origin",
         name: "_origin",
-        type: "tuple",
+        type: "tuple"
       },
-      { internalType: "bytes32", name: "_guid", type: "bytes32" },
-      { internalType: "bytes", name: "_message", type: "bytes" },
-      { internalType: "address", name: "_executor", type: "address" },
-      { internalType: "bytes", name: "_extraData", type: "bytes" },
+      {
+        internalType: "bytes32",
+        name: "_guid",
+        type: "bytes32"
+      },
+      {
+        internalType: "bytes",
+        name: "_message",
+        type: "bytes"
+      },
+      {
+        internalType: "address",
+        name: "_executor",
+        type: "address"
+      },
+      {
+        internalType: "bytes",
+        name: "_extraData",
+        type: "bytes"
+      }
     ],
     name: "lzReceive",
     outputs: [],
     stateMutability: "payable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
     name: "nativeWrapper",
     outputs: [
-      { internalType: "contract WETH", name: "", type: "address" },
+      {
+        internalType: "contract WETH",
+        name: "",
+        type: "address"
+      }
     ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "", type: "uint32" },
-      { internalType: "bytes32", name: "", type: "bytes32" },
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32"
+      },
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32"
+      }
     ],
     name: "nextNonce",
     outputs: [
-      { internalType: "uint64", name: "nonce", type: "uint64" },
+      {
+        internalType: "uint64",
+        name: "nonce",
+        type: "uint64"
+      }
     ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
@@ -1199,253 +1732,370 @@ export const TellerWithLayerZero = [
       {
         internalType: "uint64",
         name: "senderVersion",
-        type: "uint64",
+        type: "uint64"
       },
       {
         internalType: "uint64",
         name: "receiverVersion",
-        type: "uint64",
-      },
+        type: "uint64"
+      }
     ],
     stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "operatorDenyList",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
     name: "owner",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address"
+      }
+    ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
     name: "pause",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint32", name: "eid", type: "uint32" }],
-    name: "peers",
-    outputs: [
-      { internalType: "bytes32", name: "peer", type: "bytes32" },
-    ],
-    stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint96", name: "shareAmount", type: "uint96" },
-      { internalType: "address", name: "to", type: "address" },
+      {
+        internalType: "uint32",
+        name: "eid",
+        type: "uint32"
+      }
+    ],
+    name: "peers",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "peer",
+        type: "bytes32"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "permissionedTransfers",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint96",
+        name: "shareAmount",
+        type: "uint96"
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      },
       {
         internalType: "bytes",
         name: "bridgeWildCard",
-        type: "bytes",
+        type: "bytes"
       },
       {
         internalType: "contract ERC20",
         name: "feeToken",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "previewFee",
     outputs: [
-      { internalType: "uint256", name: "fee", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "fee",
+        type: "uint256"
+      }
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "publicDepositHistory",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint256", name: "nonce", type: "uint256" },
-      { internalType: "address", name: "receiver", type: "address" },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    name: "publicDepositHistory",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "nonce",
+        type: "uint256"
+      },
+      {
+        internalType: "address",
+        name: "receiver",
+        type: "address"
+      },
       {
         internalType: "address",
         name: "depositAsset",
-        type: "address",
+        type: "address"
       },
       {
         internalType: "uint256",
         name: "depositAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         internalType: "uint256",
         name: "shareAmount",
-        type: "uint256",
+        type: "uint256"
       },
       {
         internalType: "uint256",
         name: "depositTimestamp",
-        type: "uint256",
+        type: "uint256"
       },
       {
         internalType: "uint256",
         name: "shareLockUpPeriodAtTimeOfDeposit",
-        type: "uint256",
+        type: "uint256"
       },
+      {
+        internalType: "address",
+        name: "referralAddress",
+        type: "address"
+      }
     ],
     name: "refundDeposit",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "chainId", type: "uint32" },
+      {
+        internalType: "uint32",
+        name: "chainId",
+        type: "uint32"
+      }
     ],
     name: "removeChain",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         internalType: "contract Authority",
         name: "newAuthority",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "chainId", type: "uint32" },
+      {
+        internalType: "uint32",
+        name: "chainId",
+        type: "uint32"
+      },
       {
         internalType: "uint128",
         name: "messageGasLimit",
-        type: "uint128",
-      },
+        type: "uint128"
+      }
     ],
     name: "setChainGasLimit",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "_delegate", type: "address" },
+      {
+        internalType: "address",
+        name: "_delegate",
+        type: "address"
+      }
     ],
     name: "setDelegate",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "_eid", type: "uint32" },
-      { internalType: "bytes32", name: "_peer", type: "bytes32" },
+      {
+        internalType: "uint112",
+        name: "cap",
+        type: "uint112"
+      }
+    ],
+    name: "setDepositCap",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "_eid",
+        type: "uint32"
+      },
+      {
+        internalType: "bytes32",
+        name: "_peer",
+        type: "bytes32"
+      }
     ],
     name: "setPeer",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "_permissionedTransfers",
+        type: "bool"
+      }
+    ],
+    name: "setPermissionedTransfers",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
   },
   {
     inputs: [
       {
         internalType: "uint64",
         name: "_shareLockPeriod",
-        type: "uint64",
-      },
+        type: "uint64"
+      }
     ],
     name: "setShareLockPeriod",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
     name: "shareLockPeriod",
-    outputs: [{ internalType: "uint64", name: "", type: "uint64" }],
+    outputs: [
+      {
+        internalType: "uint64",
+        name: "",
+        type: "uint64"
+      }
+    ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "shareUnlockTime",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "chainId", type: "uint32" },
+      {
+        internalType: "uint32",
+        name: "chainId",
+        type: "uint32"
+      }
     ],
     name: "stopMessagesFromChain",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "uint32", name: "chainId", type: "uint32" },
+      {
+        internalType: "uint32",
+        name: "chainId",
+        type: "uint32"
+      }
     ],
     name: "stopMessagesToChain",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "toDenyList",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
-      { internalType: "address", name: "newOwner", type: "address" },
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address"
+      }
     ],
     name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
     name: "unpause",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         internalType: "contract ERC20",
         name: "asset",
-        type: "address",
+        type: "address"
       },
-      { internalType: "bool", name: "allowDeposits", type: "bool" },
-      { internalType: "bool", name: "allowWithdraws", type: "bool" },
+      {
+        internalType: "bool",
+        name: "allowDeposits",
+        type: "bool"
+      },
+      {
+        internalType: "bool",
+        name: "allowWithdraws",
+        type: "bool"
+      },
       {
         internalType: "uint16",
         name: "sharePremium",
-        type: "uint16",
-      },
+        type: "uint16"
+      }
     ],
     name: "updateAssetData",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
   {
     inputs: [],
@@ -1454,11 +2104,57 @@ export const TellerWithLayerZero = [
       {
         internalType: "contract BoringVault",
         name: "",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     stateMutability: "view",
-    type: "function",
+    type: "function"
   },
+  {
+    inputs: [],
+    name: "version",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string"
+      }
+    ],
+    stateMutability: "pure",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract ERC20",
+        name: "withdrawAsset",
+        type: "address"
+      },
+      {
+        internalType: "uint256",
+        name: "shareAmount",
+        type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "minimumAssets",
+        type: "uint256"
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      }
+    ],
+    name: "withdraw",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "assetsOut",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "nonpayable",
+    type: "function"
+  }
 ] as const
-
