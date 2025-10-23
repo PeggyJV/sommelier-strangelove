@@ -643,8 +643,15 @@ export const WithdrawQueueForm = ({
             ?.withdrawTokenConfig?.[
             (selectedToken?.symbol || "") as string
           ]
-          const minPct = rules?.minDiscount
-          const maxPct = rules?.maxDiscount
+          // Use on-chain values if available, otherwise fall back to config
+          const minPct =
+            contractMinDiscountBps !== null
+              ? contractMinDiscountBps / 100
+              : rules?.minDiscount
+          const maxPct =
+            contractMaxDiscountBps !== null
+              ? contractMaxDiscountBps / 100
+              : rules?.maxDiscount
           setPreflightMessage(
             `Discount invalid. Allowed range for ${selectedToken.symbol}: ${minPct}%–${maxPct}%.`
           )
@@ -892,8 +899,15 @@ export const WithdrawQueueForm = ({
           const tokenSymbol = (selectedToken?.symbol || "") as string
           const rules: any = (cellarConfig as any)
             ?.withdrawTokenConfig?.[tokenSymbol]
-          const minPct = rules?.minDiscount ?? undefined
-          const maxPct = rules?.maxDiscount ?? undefined
+          // Use on-chain values if available, otherwise fall back to config
+          const minPct =
+            contractMinDiscountBps !== null
+              ? contractMinDiscountBps / 100
+              : rules?.minDiscount ?? undefined
+          const maxPct =
+            contractMaxDiscountBps !== null
+              ? contractMaxDiscountBps / 100
+              : rules?.maxDiscount ?? undefined
           addToast({
             heading: "Withdraw Queue",
             body: (
@@ -957,8 +971,15 @@ export const WithdrawQueueForm = ({
       "") as string
     const configuredRules: any = (cellarConfig as any)
       ?.withdrawTokenConfig?.[tokenSymbolForRules]
-    const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
-    const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
+    // Use on-chain values if available, otherwise fall back to config
+    const minBps =
+      contractMinDiscountBps !== null
+        ? contractMinDiscountBps
+        : Number(configuredRules?.minDiscount ?? 0) * 100
+    const maxBps =
+      contractMaxDiscountBps !== null
+        ? contractMaxDiscountBps
+        : Number(configuredRules?.maxDiscount ?? 0) * 100
     // Our desired default is 25 bps; clamp to per-asset rules if present
     const desiredBps = DISCOUNT_BPS
     // Prefer the pre‑validated/auto‑selected discount if available
