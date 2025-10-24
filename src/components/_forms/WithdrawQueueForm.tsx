@@ -1014,7 +1014,58 @@ export const WithdrawQueueForm = ({
         isActiveWithdrawRequest,
         boringQueue: !!boringQueue,
         cellarAddress: cellarConfig.cellar.address,
+        secondsToMaturity: contractSecondsToMaturity,
       })
+
+      // Check if shares are still in maturity period (can't be transferred yet)
+      if (
+        boringQueue &&
+        contractSecondsToMaturity !== null &&
+        contractSecondsToMaturity > 0
+      ) {
+        const hours = Math.floor(contractSecondsToMaturity / 3600)
+        const minutes = Math.floor((contractSecondsToMaturity % 3600) / 60)
+        let maturityMsg = `Your deposit is still maturing. Please wait before withdrawing.`
+
+        if (hours > 24) {
+          const days = Math.floor(hours / 24)
+          const remainingHours = hours % 24
+          maturityMsg = `Your deposit is still maturing. Wait ${days} day${
+            days !== 1 ? "s" : ""
+          }${
+            remainingHours > 0
+              ? ` and ${remainingHours} hour${
+                  remainingHours !== 1 ? "s" : ""
+                }`
+              : ""
+          } before withdrawing.`
+        } else if (hours > 0) {
+          maturityMsg = `Your deposit is still maturing. Wait ${hours} hour${
+            hours !== 1 ? "s" : ""
+          }${
+            minutes > 0
+              ? ` and ${minutes} minute${minutes !== 1 ? "s" : ""}`
+              : ""
+          } before withdrawing.`
+        } else if (minutes > 0) {
+          maturityMsg = `Your deposit is still maturing. Wait ${minutes} minute${
+            minutes !== 1 ? "s" : ""
+          } before withdrawing.`
+        }
+
+        console.error("Withdrawal blocked: shares still maturing", {
+          secondsToMaturity: contractSecondsToMaturity,
+          message: maturityMsg,
+        })
+
+        addToast({
+          heading: "Deposit Maturing",
+          status: "info",
+          body: <Text>{maturityMsg}</Text>,
+          closeHandler: closeAll,
+        })
+        return
+      }
 
       // Guard: if boring queue and asset disabled, show UI and stop
       if (boringQueue && isWithdrawAllowed === false) {
