@@ -844,6 +844,7 @@ export const WithdrawQueueForm = ({
             status: "error",
             closeHandler: closeAll,
           })
+          return
         }
       } catch (e) {
         const error = e as Error
@@ -860,6 +861,7 @@ export const WithdrawQueueForm = ({
           status: "error",
           closeHandler: closeAll,
         })
+        return
       }
     }
 
