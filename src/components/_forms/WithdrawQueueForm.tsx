@@ -387,16 +387,29 @@ export const WithdrawQueueForm = ({
                 ? cellarConfig.boringQueue.address
                 : cellarConfig.chain.withdrawQueueAddress
             )
+
+            console.log("Preflight: Checking allowance on contract:", {
+              contractAddress: cellarConfig.cellar.address,
+              contractName: "cellarContract (vault shares)",
+              owner: address,
+              spender: spenderAddress,
+              spenderName: cellarConfig.boringQueue ? "BoringQueue" : "WithdrawQueue",
+            })
+
             const allowance = (await cellarContract.read.allowance([
               address,
               spenderAddress,
             ])) as bigint
 
-            console.log("Approval check:", {
+            console.log("Preflight: Approval check:", {
               userAddress: address,
               spenderAddress,
+              allowanceRaw: allowance,
               allowance: allowance.toString(),
+              allowanceType: typeof allowance,
               needed: withdrawAmtInBaseDenom.toString(),
+              neededType: typeof withdrawAmtInBaseDenom,
+              comparison: `${allowance.toString()} < ${withdrawAmtInBaseDenom.toString()}`,
               needsApproval: allowance < withdrawAmtInBaseDenom,
             })
 
@@ -830,15 +843,29 @@ export const WithdrawQueueForm = ({
 
     let allowance: bigint
     try {
+      console.log("Checking allowance on contract:", {
+        contractAddress: cellarConfig.cellar.address,
+        contractName: "cellarContract (vault shares)",
+        owner: address,
+        spender: spenderAddress,
+        spenderName: cellarConfig.boringQueue ? "BoringQueue" : "WithdrawQueue",
+      })
+
       allowance = (await cellarContract.read.allowance([
         address!,
         spenderAddress,
       ])) as bigint
+
       console.log("Approval check in onSubmit:", {
         userAddress: address,
         spenderAddress,
+        allowanceRaw: allowance,
         allowance: allowance.toString(),
+        allowanceType: typeof allowance,
         needed: withdrawAmtInBaseDenom.toString(),
+        neededType: typeof withdrawAmtInBaseDenom,
+        comparison: `${allowance.toString()} < ${withdrawAmtInBaseDenom.toString()}`,
+        result: allowance < withdrawAmtInBaseDenom,
       })
     } catch (e) {
       const error = e as Error
@@ -853,7 +880,11 @@ export const WithdrawQueueForm = ({
     }
 
     const needsApproval = allowance < withdrawAmtInBaseDenom
-    console.log("Needs approval:", needsApproval)
+    console.log("Needs approval:", needsApproval, {
+      allowance: allowance.toString(),
+      needed: withdrawAmtInBaseDenom.toString(),
+      allowanceIsLess: allowance < withdrawAmtInBaseDenom,
+    })
 
     if (needsApproval) {
       console.log("Approval needed, initiating approval transaction")
